@@ -156,7 +156,7 @@ Stat:SetScript("OnMouseUp", function(self, btn)
 
 	for i = 1, #guildTable do
 		info = guildTable[i]
-		if info[7] and info[1] ~= R.myname then
+		if info[7] and info[1] ~= DB.myname then
 			local classc, levelc = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[info[9]], GetQuestDifficultyColor(info[3])
 
 			if UnitInParty(info[1]) or UnitInRaid(info[1]) then
