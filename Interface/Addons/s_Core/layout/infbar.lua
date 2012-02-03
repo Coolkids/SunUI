@@ -426,7 +426,6 @@ function Module:OnEnable()
 	XP:SetWidth(C["BottomWidth"])
 	XP:SetPoint("BOTTOM", BottomInfoPanelPos, "BOTTOM", 0, 0)
 	XP.Shaodw = S.MakeShadow(XP, 3)
-	S.MakeBG(XP, 0)
 	XP:SetFrameLevel(10)
 	end
 	
