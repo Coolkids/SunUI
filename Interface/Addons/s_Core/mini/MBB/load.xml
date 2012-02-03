@@ -1,0 +1,7 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+	<Script file ="localization-zhTW.lua"/>
+	<Script file ="localization-zhCN.lua"/>
+	<Include file="MBB.xml"/>
+
+</Ui>

@@ -1,0 +1,7 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="chat.lua"/>
+	<Script file="ChatFilter.lua"/>
+	<Script file="damagemeters.lua"/>
+	<Script file="rollcolector.lua"/>
+	<Script file="spam.lua"/>
+</Ui>

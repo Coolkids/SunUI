@@ -1,0 +1,5 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+	<Include file ="Traditionalize.xml"/>
+	<Include file ="Bindings.xml"/>
+</Ui>

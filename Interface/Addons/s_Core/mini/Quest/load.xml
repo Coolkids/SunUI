@@ -1,0 +1,13 @@
+﻿
+
+
+
+
+
+
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file ="idQuestAutomation.lua"/>
+	<Script file ="QuestPrice.lua"/>
+</Ui>
+
+<!--	<Script file="Load.lua"/>  -->

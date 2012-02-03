@@ -1,0 +1,15 @@
+﻿<!-- -->
+
+
+
+
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+	
+
+	<Script file="tip.lua"/>	
+	<Script file="TipTacTalents.lua"/>
+	<Script file="ilevel.lua"/>
+	<Script file="SpellID.lua"/>
+	<Script file="PowerSource.lua"/>
+</Ui>

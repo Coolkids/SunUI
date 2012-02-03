@@ -1,0 +1,19 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file ="Settings.lua"/>
+	<Include file ="Announce\load.xml"/>
+	<Include file ="blzhook\load.xml"/>
+	<Include file ="Class\load.xml"/>
+	<Include file ="FriendsMenuXP\load.xml"/>
+	<Include file ="Icicle\load.xml"/>
+	<Include file ="MBB\load.xml"/>
+	<Include file ="modules\load.xml"/>
+	<Include file ="Quest\load.xml"/>
+	<Include file ="Ratings\load.xml"/>
+	<Include file ="RETabBinder\load.xml"/>
+	<Include file ="Script\load.xml"/>
+	<Include file ="TheBurningTrade\load.xml"/>
+	<Include file ="Traditionalize\load.xml"/>
+
+</Ui>
+
+<!--	<Script file="Load.lua"/>  -->
