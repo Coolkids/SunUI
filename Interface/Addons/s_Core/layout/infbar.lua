@@ -412,7 +412,7 @@ end
 
 function Module:OnEnable()
 	local InfoPanelPos = CreateFrame("Frame", nil, UIParent)
-	InfoPanelPos:SetSize(760, 20)
+	InfoPanelPos:SetSize(772, 20)
 	InfoPanelPos:Hide()
 	MoveHandle.InfoPanel = S.MakeMoveHandle(InfoPanelPos, L["信息面板"], "InfoPanel")
 	local BottomInfoPanelPos = CreateFrame("Frame", nil, UIParent)
