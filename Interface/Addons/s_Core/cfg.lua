@@ -217,6 +217,8 @@ DB.Ratings = true  --装备属性转换
 DB.ShadowPetOpen = true
 
 
+Advanced_UseUIScale:Hide()
+Advanced_UIScaleSlider:Hide()
 --对大脚,魔盒say good bye
 local Launch = CreateFrame("Frame")
 Launch:RegisterEvent("PLAYER_ENTERING_WORLD")
