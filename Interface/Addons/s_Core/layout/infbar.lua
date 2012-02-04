@@ -118,7 +118,7 @@ local function BuildMemory(Anchor)
 	StatusBar:SetHeight(6)	
 	StatusBar:SetWidth(80)
 	StatusBar:SetStatusBarTexture(DB.Statusbar)
-	StatusBar:SetMinMaxValues(0, 20000)
+	StatusBar:SetMinMaxValues(0, 30000)
 	StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
 	StatusBar:SetPoint("RIGHT", Anchor, "LEFT", -20, 0)
 	StatusBar.Shaodw = S.MakeShadow(StatusBar, 3)
@@ -140,7 +140,7 @@ local function BuildMemory(Anchor)
 			local total = UpdateMemory()
 			self.Text:SetText(S.FormatMemory(total))
 			StatusBar:SetValue(total)
-			local r, g, b = S.ColorGradient(total/20000, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
+			local r, g, b = S.ColorGradient((30000-total)/30000, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
 																					InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
 																					InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
 			self:SetStatusBarColor(r, g, b)
@@ -171,7 +171,7 @@ local function BuildPing(Anchor)
 	StatusBar:SetHeight(6)	
 	StatusBar:SetWidth(80)
 	StatusBar:SetStatusBarTexture(DB.Statusbar)
-	StatusBar:SetMinMaxValues(0, 3000)
+	StatusBar:SetMinMaxValues(0, 300)
 	StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
 	StatusBar:SetPoint("RIGHT", Anchor, "LEFT", -20, 0)
 	StatusBar.Shaodw = S.MakeShadow(StatusBar, 3)
@@ -187,13 +187,10 @@ local function BuildPing(Anchor)
 			local value = (latencyHome > latencyWorld) and latencyHome or latencyWorld	
 			self:SetValue(value)
 			self.Text:SetText("Ping: "..value)			
-			if value > 499 then
-				self:SetStatusBarColor(1, 0, 0, 0.6)
-			elseif value > 249 then
-				self:SetStatusBarColor(1, 1, 0, 0.6)
-			else
-				self:SetStatusBarColor(0, 0.4, 1, 0.6)
-			end
+			local r, g, b = S.ColorGradient((300-value)/300, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
+																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
+																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
+			self:SetStatusBarColor(r, g, b)
 			self.Timer = 0
 		end
 	end)
@@ -239,7 +236,7 @@ local function BuildDurability(Anchor)
 		end
 		table.sort(Slots, function(a, b) return a[3] < b[3] end)
 		local value = floor(Slots[1][3]*100)
-		self:SetValue(value)
+		self:SetValue(100-value)
 		self.Text:SetText("D: "..value.."%")
 		local r, g, b = S.ColorGradient(value/100, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
 																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],

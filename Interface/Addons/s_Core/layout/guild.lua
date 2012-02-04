@@ -108,7 +108,7 @@ local function Update(self, event, ...)
 		Guild:SetMinMaxValues(0, total)
 		Guild:SetValue(online)
 	else
-		Guild:SetText(noGuildString)
+		Guild:SetText(L["没有工会"])
 	end
 	self:SetAllPoints(Guild)
 end
