@@ -4,7 +4,7 @@ n.windowsettings = {
 	-- pos = { "TOPLEFT", 4, -4 },
 	pos = { "BOTTOMRIGHT", nil, "BOTTOMRIGHT", -15, 30 },
 	width = 290,
-	maxlines = 9,
+	maxlines = 8,
 	backgroundalpha = 0,
 	scrollbar = true,
 
