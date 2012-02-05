@@ -31,9 +31,11 @@ function Module:BuildExpBar()
 	ExpBar:SetStatusBarTexture(DB.Statusbar)
 	ExpBar:SetScript("OnEnter",function(self)
 		self.Text:SetAlpha(1)
+		ExpBar:SetFrameLevel(11)
 	end)
 	ExpBar:SetScript("OnLeave",function(self)
 		self.Text:SetAlpha(0)
+		ExpBar:SetFrameLevel(9)
 	end)
 end
 

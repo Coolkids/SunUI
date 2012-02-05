@@ -49,14 +49,6 @@ Event:SetScript("OnEvent", function()
 						spark:SetTexture(nil)
 						spark.killed = true
 					end
-		
-					local spar =  tbar:CreateTexture(nil, "OVERLAY")
-					spar:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
-					spar:SetBlendMode("ADD")
-					spar:SetAlpha(.8)
-					spar:SetPoint("TOPLEFT", tbar:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
-					spar:SetPoint("BOTTOMRIGHT", tbar:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
-					
 
 					if not icon1.styled then
 						icon1.Shadow = S.MakeTexShadow(frame, icon1, 3)

@@ -11,11 +11,11 @@ function Module:OnEnable()
 	Stat:SetFrameStrata("MEDIUM")
 	Stat:SetFrameLevel(3)
 
-	local Text  = XP:CreateFontString(nil, "OVERLAY")
+	local Text  = XP:CreateFontString(nil, "BORDER")
 	Text:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")
 	Text:SetShadowOffset(1.25, -1.25)
 	Text:SetShadowColor(0, 0, 0, 0.4)
-	Text:SetPoint("BOTTOM", XP, "TOP", 0, -3)
+	Text:SetPoint("BOTTOM", XP, "BOTTOM", 0, -8)
 	Stat:SetParent(Text:GetParent())
 
 	local format = string.format

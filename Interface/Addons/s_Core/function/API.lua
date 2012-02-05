@@ -323,7 +323,7 @@ function S.SetBD(f, x, y, x2, y2)
 	end
 	bg:SetFrameLevel(0)
 	--(parent, size, r, g, b, alpha, offset)
-	CreateBD(bg, 0.3)
+	CreateBD(bg, 0.5)
 	CreateSD(bg)
 end
 function S.MakeMoveHandle(Frame, Text, key)

@@ -1,6 +1,6 @@
 ﻿-- Engines
 local S, C, L, DB = unpack(select(2, ...))
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("MiniMap")
+local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("MiniMap", "AceTimer-3.0")
 
 Minimap:SetMaskTexture("Interface\\ChatFrame\\ChatFrameBackground")
 Minimap:SetFrameStrata("BACKGROUND")
@@ -124,5 +124,3 @@ Minimap:SetScript("OnMouseUp", function(self, button)
 		Minimap_OnClick(self)
 	end
 end)
-
-

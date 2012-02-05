@@ -24,7 +24,7 @@ function Module.LoadSettings()
 		["Combatpoint"] = {"CENTER","UIParent","CENTER",226,-297},
 		["CooldownFlash"] = {"BOTTOM", "UIParent", "CENTER", 0, 150},
 		["InfoPanel"] = {"TOPLEFT", "UIParent", "TOPLEFT", 5, -5},
-		["InfoPanel2"] = {"BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -5, 5},
+		["InfoPanel2"] = {"TOPRIGHT", "Minimap", "BOTTOMRIGHT", 0, -5},
 	}
 	if not MoveHandleDB then MoveHandleDB = {} end
 	for key, value in pairs(Default) do
