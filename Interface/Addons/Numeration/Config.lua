@@ -8,7 +8,7 @@ n.windowsettings = {
 	backgroundalpha = 0,
 	scrollbar = true,
 
-	titleheight = 16,
+	titleheight = 15,
 	titlealpha = 0,
 	titlefont = ChatFrame1:GetFont(),
 	titlefontsize = 16,
