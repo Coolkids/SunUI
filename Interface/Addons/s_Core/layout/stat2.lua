@@ -55,13 +55,13 @@ function Module:OnEnable()
 		
 		if DB.Role == "Tank" then
 			AddTooltipHeader(L["等级缓和"]..": ")
-			local lv = R.level +3
+			local lv = DB.level +3
 			for i = 1, 4 do
 				GameTooltip:AddDoubleLine(lv,format(chanceString, CalculateMitigation(lv, effectiveArmor) * 100),1,1,1)
 				lv = lv - 1
 			end
 			lv = UnitLevel("target")
-			if lv and lv > 0 and (lv > R.level + 3 or lv < R.level) then
+			if lv and lv > 0 and (lv > DB.level + 3 or lv < DB.level) then
 				GameTooltip:AddDoubleLine(lv, format(chanceString, CalculateMitigation(lv, effectiveArmor) * 100),1,1,1)
 			end	
 		elseif DB.Role == "Caster" or DB.Role == "Melee" then
@@ -92,8 +92,13 @@ function Module:OnEnable()
 
 	local function UpdateCaster(self)
 		local spellcrit = GetSpellCritChance(1)
-
+				haste = UnitSpellHaste("player")
+		num = max(spellcrit, haste)
+		if num == spellcrit then
 		Text:SetFormattedText(displayFloatString, SPELL_CRIT_CHANCE..": ", spellcrit)
+		else
+		Text:SetFormattedText(displayFloatString, STAT_HASTE..": ", haste)
+		end
 		--Setup Tooltip
 		self:SetAllPoints(Text)
 	end

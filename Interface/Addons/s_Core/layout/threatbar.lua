@@ -22,6 +22,12 @@ function Module:OnEnable()
 	frame:RegisterEvent("ZONE_CHANGED_INDOORS")
 	frame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	frame:RegisterEvent("PLAYER_LOGIN BAG_UPDATE")
+	frame:RegisterEvent("CLOSE_INBOX_ITEM")
+	frame:RegisterEvent("CLOSE_WORLD_MAP")
+	frame:RegisterEvent("CHANNEL_COUNT_UPDATE")
+	frame:RegisterEvent("MAIL_INBOX_UPDATE")
+	frame:RegisterEvent("MAIL_CLOSED")
+	
 	local threatbar = CreateFrame("StatusBar", "ThreatBar", frame)
 	threatbar:SetPoint("TOPLEFT", frame, "TOPLEFT", 0, 0)
 	threatbar:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 0, 0)
@@ -354,6 +360,7 @@ end
 	end
 	
 	local function Bag()
+
 		local free, total = 0, 0
 		for i = 0, NUM_BAG_SLOTS do
 				free, total = free + GetContainerNumFreeSlots(i), total + GetContainerNumSlots(i)

@@ -72,7 +72,7 @@ local function FilterLine(event, source, message, ...)
 				local elapsed = curTime - j.time
 				if j.source == source and j.event == event and elapsed < 1 then
 					newID = i
-					return true, true, string.format("|HRayUIDamegeMeters:%1$d|h|cFFFFFF00[%2$s]|r|h", newID or 0, message or "nil")
+					return true, true, string.format("|HSunUIDamegeMeters:%1$d|h|cFFFFFF00[%2$s]|r|h", newID or 0, message or "nil")
 				end
 			end
 			
@@ -90,7 +90,7 @@ local function FilterLine(event, source, message, ...)
 				end
 			end
 			
-			return true, true, string.format("|HRayUIDamegeMeters:%1$d|h|cFFFFFF00[%2$s]|r|h", newID or 0, message or "nil")
+			return true, true, string.format("|HSunUIDamegeMeters:%1$d|h|cFFFFFF00[%2$s]|r|h", newID or 0, message or "nil")
 		end
 	end
 	return false, false, nil
@@ -99,7 +99,7 @@ end
 local orig2 = SetItemRef
 function SetItemRef(link, text, button, frame)
 	local linkType, id = strsplit(":", link)
-	if linkType == "RayUIDamegeMeters" then
+	if linkType == "SunUIDamegeMeters" then
 		local meterID = tonumber(id)
 		ShowUIPanel(ItemRefTooltip)
 		if not ItemRefTooltip:IsShown() then
