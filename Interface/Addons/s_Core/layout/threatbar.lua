@@ -36,11 +36,11 @@ function Module:OnEnable()
 	S.MakeBG(threatbar, 0)
 	threatbar:SetMinMaxValues(0, 100)
 	text = S.MakeFontString(threatbar, 10)
-	text:SetPoint("CENTER", 50, 0)
+	text:SetPoint("TOPRIGHT", -15, 8)
 	text2 = S.MakeFontString(threatbar, 10)
 	text2:SetPoint("TOPLEFT", 15, -8)
 	text2:SetText("")
-	text3 = S.MakeFontString(threatbar, 10)
+	text3 = S.MakeFontString(threatbar, 11)
 	text3:SetPoint("TOP", 0, -8)
 	text3:SetText("")
 	text4 = S.MakeFontString(threatbar, 10)
@@ -279,7 +279,8 @@ function Module:OnEnable()
 		then
 			threatValuediff = ((unitThreatValue - playerThreatValue) / 100000 )
 			threatbar:SetValue(threatpct)
-			local r, g, b = S.ColorGradient((100-threatpct)/100, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
+			text:SetText(string.format("%2.1fk | %d %%", threatValuediff, threatpct ))
+			local r, g, b = S.ColorGradient(threatValuediff/100, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
 																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
 																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
 			threatbar:SetStatusBarColor(r, g, b)
@@ -297,8 +298,8 @@ function Module:OnEnable()
 		then
 			threatValuediff = ((unitThreatValue - playerThreatValue) / 100000 )
 			threatbar:SetValue(threatpct)
-			text:SetText(threatpct.."%")
-			local r, g, b = S.ColorGradient((100-threatpct)/100, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
+			text:SetText(string.format("%2.1fk | %d %%", threatValuediff, threatpct ))
+			local r, g, b = S.ColorGradient(threatValuediff/100, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
 																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
 																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
 			threatbar:SetStatusBarColor(r, g, b)
@@ -317,8 +318,8 @@ function Module:OnEnable()
 			threatValuediff = ((playerThreatValue - unitThreatValue) / 100000 )
 			threatdiff = (100 - highThreat)
 			threatbar:SetValue(threatdiff)
-			text:SetText(threatpct.."%")
-			local r, g, b = S.ColorGradient((100-threatpct)/100, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
+			text:SetText(string.format("%2.1fk | %d %%", threatValuediff, threatpct ))
+			local r, g, b = S.ColorGradient(threatValuediff/100, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
 																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
 																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
 			threatbar:SetStatusBarColor(r, g, b)
@@ -337,8 +338,8 @@ function Module:OnEnable()
 			threatValuediff = ((playerThreatValue - unitThreatValue) / 100000 )
 			threatdiff = (100 - highThreat)
 			threatbar:SetValue(threatdiff)
-			text:SetText(threatpct.."%")
-			local r, g, b = S.ColorGradient((100-threatpct)/100, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
+			text:SetText(string.format("%2.1fk | %d %%", threatValuediff, threatpct ))
+			local r, g, b = S.ColorGradient(threatValuediff/100, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
 																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
 																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
 			threatbar:SetStatusBarColor(r, g, b)
