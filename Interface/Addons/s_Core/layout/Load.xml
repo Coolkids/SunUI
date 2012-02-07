@@ -7,4 +7,7 @@
 	<Script file = "stat2.lua"/>
 	<Script file = "expbar.lua"/>
 	<Script file = "threatbar.lua"/>
+	<Script file = "bag.lua"/>
+	<Script file = "zone.lua"/>
+	<Script file = "mail.lua"/>
 </Ui>

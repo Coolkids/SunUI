@@ -367,11 +367,11 @@ function S.UpdateSize(obj, width, height)
 	if height then obj:SetHeight(height) end
 end
 local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/MiniDB["uiScale"]
-function S.Scale(x)
+local function scale(x)
 	return (mult*math.floor(x/mult+.5)) --(1/GetCVar("uiScale"))*x
 end
 S.mult = mult
-
+S.Scale = scale
 function S.Kill(object)
 	if object.IsProtected then 
 		if object:IsProtected() then
@@ -456,3 +456,47 @@ RoleUpdater:RegisterEvent("UNIT_INVENTORY_CHANGED")
 RoleUpdater:RegisterEvent("UPDATE_BONUS_ACTIONBAR")
 RoleUpdater:SetScript("OnEvent", CheckRole)
 CheckRole()
+local function Size(frame, width, height)
+	frame:SetSize(scale(width), scale(height or width))
+end
+
+local function Width(frame, width)
+	frame:SetWidth(scale(width))
+end
+
+local function Height(frame, height)
+	frame:SetHeight(scale(height))
+end
+
+local function Point(obj, arg1, arg2, arg3, arg4, arg5)
+	-- anyone has a more elegant way for this?
+	if type(arg1)=="number" then arg1 = scale(arg1) end
+	if type(arg2)=="number" then arg2 = scale(arg2) end
+	if type(arg3)=="number" then arg3 = scale(arg3) end
+	if type(arg4)=="number" then arg4 = scale(arg4) end
+	if type(arg5)=="number" then arg5 = scale(arg5) end
+
+	obj:SetPoint(arg1, arg2, arg3, arg4, arg5)
+end
+
+local function addapi(object)
+	local mt = getmetatable(object).__index
+	if not object.Size then mt.Size = Size end
+	if not object.Point then mt.Point = Point end
+	if not object.Width then mt.Width = Width end
+	if not object.Height then mt.Height = Height end
+end
+local handled = {["Frame"] = true}
+local object = CreateFrame("Frame")
+addapi(object)
+addapi(object:CreateTexture())
+addapi(object:CreateFontString())
+object = EnumerateFrames()
+while object do
+	if not handled[object:GetObjectType()] then
+		addapi(object)
+		handled[object:GetObjectType()] = true
+	end
+
+	object = EnumerateFrames(object)
+end

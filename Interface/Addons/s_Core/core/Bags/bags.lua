@@ -59,25 +59,28 @@ MyButton:Scaffold("Default")
 
 function MyButton:OnCreate()
 	self:SetNormalTexture(nil)
-	self:SetSize(32, 32)
+	self:Size(32, 32)
 	
 	self.Icon:SetAllPoints()
 	self.Icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
-	
+
 	self.Count:SetPoint("BOTTOMRIGHT", 3, 1)
 	self.Count:SetFont( DB.Font, 10*S.Scale(1), "THINOUTLINE")
 	
 	self.Border = CreateFrame("Frame", nil, self)
-	self.Border:SetAllPoints(self.Icon)
-	self.Border:SetBackdrop({edgeFile = DB.Solid, edgeSize = S.mult})
-	self.Border:SetBackdropBorderColor(0, 0, 0, 0)	
-	
+	--self.Border:SetAllPoints(self.Icon)
+	self.Border:SetPoint("CENTER", point or self.Icon)
+	self.Border:SetBackdrop({edgeFile = DB.GlowTex, edgeSize = S.Scale(4)})
+	self.Border:SetBackdropBorderColor(0, 0, 0, 0)
+	self.Border:Size(37, 37)
+
 	self.BG = CreateFrame("Frame", nil, self)
 	self.BG:SetPoint("TOPLEFT", self.Icon, 0, 0)
 	self.BG:SetPoint("BOTTOMRIGHT", self.Icon, 0, 0)
 	self.BG:SetBackdrop({bgFile = DB.Solid, insets = { left = S.mult, right = S.mult, top = S.mult, bottom = S.mult }})
 	self.BG:SetBackdropColor(0.2, 0.2, 0.2, 0.5)
 	self.BG:SetFrameLevel(0)
+
 
 	_G[self:GetName().."IconQuestTexture"]:SetSize(0.01, 0.01)
 end
@@ -112,7 +115,7 @@ end
 local MyContainer = Bags:GetContainerClass()
 function MyContainer:OnContentsChanged()
 	self:SortButtons("bagSlot")
-	local width, height = self:LayoutButtons("grid", self.Settings.Columns, 4, 10, -10)
+	local width, height = self:LayoutButtons("grid", self.Settings.Columns, 5, 10, -10)
 	self:SetSize(width + 20, height + 10)
 	if self.UpdateDimensions then
 		self:UpdateDimensions()

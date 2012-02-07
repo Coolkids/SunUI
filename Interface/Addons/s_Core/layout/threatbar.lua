@@ -9,25 +9,14 @@ function Module:OnEnable()
 	bottomleftbarpos:SetHeight(C["BottomHeight"])	
 	bottomleftbarpos:SetWidth(C["BottomWidth"])
 	bottomleftbarpos:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 5 , 5)--]]
-	local frame = CreateFrame("Frame", nil, UIParent)
-	frame:SetHeight(C["BottomHeight"])	
-	frame:SetWidth(ChatFrame1:GetWidth()) --C["BottomWidth"]
+	local frame = CreateFrame("Frame", "BottomLeftBar", UIParent)
+	
 	frame:SetPoint("TOPLEFT", ChatFrame1, "BOTTOMLEFT", 0 , -5)
 	frame:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE")
 	frame:RegisterEvent("UNIT_THREAT_LIST_UPDATE")
 	frame:RegisterEvent("PLAYER_TARGET_CHANGED")
 	frame:RegisterEvent("PARTY_MEMBERS_CHANGED")
-	frame:RegisterEvent("PLAYER_ENTERING_WORLD")
-	frame:RegisterEvent("ZONE_CHANGED")
-	frame:RegisterEvent("ZONE_CHANGED_INDOORS")
-	frame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-	frame:RegisterEvent("PLAYER_LOGIN BAG_UPDATE")
-	frame:RegisterEvent("CLOSE_INBOX_ITEM")
-	frame:RegisterEvent("CLOSE_WORLD_MAP")
-	frame:RegisterEvent("CHANNEL_COUNT_UPDATE")
-	frame:RegisterEvent("MAIL_INBOX_UPDATE")
-	frame:RegisterEvent("MAIL_CLOSED")
-	
+
 	local threatbar = CreateFrame("StatusBar", "ThreatBar", frame)
 	threatbar:SetPoint("TOPLEFT", frame, "TOPLEFT", 0, 0)
 	threatbar:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 0, 0)
@@ -37,15 +26,7 @@ function Module:OnEnable()
 	threatbar:SetMinMaxValues(0, 100)
 	text = S.MakeFontString(threatbar, 10)
 	text:SetPoint("TOPRIGHT", -15, 8)
-	text2 = S.MakeFontString(threatbar, 10)
-	text2:SetPoint("TOPLEFT", 15, -8)
-	text2:SetText("")
-	text3 = S.MakeFontString(threatbar, 11)
-	text3:SetPoint("TOP", 0, -8)
-	text3:SetText("")
-	text4 = S.MakeFontString(threatbar, 10)
-	text4:SetPoint("TOPRIGHT", -15, -8)
-	text4:SetText("")
+
 	local function GetThreat(unitId, mobId)
 	local _, _, threatpct, _, _ = UnitDetailedThreatSituation(unitId, mobId)
 	if not threatpct then threatpct = 0 end
@@ -70,6 +51,8 @@ function Module:OnEnable()
 	end
 
 	local function UpdateDisplay()
+	frame:SetHeight(C["BottomHeight"])	
+	frame:SetWidth(ChatFrame1:GetWidth()) --C["BottomWidth"]
 	threatbar:SetValue(0)
 	text:SetText("")
 	local status = nil
@@ -346,28 +329,6 @@ function Module:OnEnable()
 		end
 	end
 end
-
-	local function Getmail()
-		local mail = HasNewMail()
-		if mail == 1 then text2:SetText("New Mail") else text2:SetText("No Mail") end
-	end
 	
-	local function Location()
-
-		pvp,_,_ = GetZonePVPInfo()
-		if pvp == "friendly" then r,g,b = 0.1,1,0.1 elseif pvp == "sanctuary" then r,g,b = 0.41,0.8,0.94 elseif pvp =="arena" then r,g,b = 1,0.1,0.1 elseif pvp == "hostile" then r,g,b = 1,0.1,0.1 elseif pvp == "contested" then r,g,b = 1,0.7,0 elseif pvp == "combat" then r,g,b = 1,0.1,0.1 else r,g,b = 1,1,1 end
-		text3:SetText(GetMinimapZoneText())
-		text3:SetTextColor(r,g,b)
-	end
-	
-	local function Bag()
-
-		local free, total = 0, 0
-		for i = 0, NUM_BAG_SLOTS do
-				free, total = free + GetContainerNumFreeSlots(i), total + GetContainerNumSlots(i)
-		end
-		text4:SetText(free.."/"..total)
-	end
-	
-frame:SetScript("OnEvent", function() UpdateDisplay()  Getmail() Location() Bag() end)
+frame:SetScript("OnEvent", function() UpdateDisplay() end)
 end

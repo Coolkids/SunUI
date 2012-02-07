@@ -13,5 +13,4 @@
 	<Script file ="tekKompare.lua"/>
 	<Script file ="TooltipItemIcon.lua"/>
 	<Script file ="TradeTab.lua"/>
-	
 </Ui>

@@ -423,7 +423,7 @@ function makeQuality(frame, slot)
 		end
 	end
 	
-	iQuality:Show()
+	iQuality:Hide()  --Show()
 end
 
 function makeDurability(frame, slot)
