@@ -459,7 +459,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- [[ Dropdowns ]]
 
-		local dropdowns = {"FriendsFrameStatusDropDown", "LFDQueueFrameTypeDropDown", "LFRBrowseFrameRaidDropDown", "WhoFrameDropDown", "FriendsFriendsFrameDropDown", "RaidFinderQueueFrameSelectionDropDown", "WorldMapShowDropDown"}
+		local dropdowns = {"FriendsFrameStatusDropDown", "LFDQueueFrameTypeDropDown", "LFRBrowseFrameRaidDropDown", "WhoFrameDropDown", "FriendsFriendsFrameDropDown", "RaidFinderQueueFrameSelectionDropDown", "WorldMapShowDropDown", "Advanced_GraphicsAPIDropDown"}
 		for i = 1, #dropdowns do
 			button = _G[dropdowns[i]]
 			F.ReskinDropDown(button)
@@ -1485,7 +1485,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			F.CreateBD(line)
 		end
 
-		hooksecurefunc("QuestLog_Update", function()
+		local function updateQuest()
 			local numEntries = GetNumQuestLogEntries()
 
 			local buttons = QuestLogScrollFrame.buttons
@@ -1550,7 +1550,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					end
 				end
 			end
-		end)
+		end
+
+		hooksecurefunc("QuestLog_Update", updateQuest)
+		QuestLogScrollFrame:HookScript("OnVerticalScroll", updateQuest)
+		QuestLogScrollFrame:HookScript("OnMouseWheel", updateQuest)
 
 		-- PVP Frame
 
@@ -1826,8 +1830,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			_G["TradeRecipientItem"..i.."NameFrame"]:Hide()
 
 			bu1:SetNormalTexture("")
+			bu1:SetPushedTexture("")
 			bu1.icon:SetTexCoord(.08, .92, .08, .92)
 			bu2:SetNormalTexture("")
+			bu2:SetPushedTexture("")
 			bu2.icon:SetTexCoord(.08, .92, .08, .92)
 
 			local bg1 = CreateFrame("Frame", nil, bu1)
@@ -2294,6 +2300,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		FriendsFrameTitleText:SetPoint("TOP", FriendsFrame, "TOP", 0, -8)
 		VideoOptionsFrameOkay:SetPoint("BOTTOMRIGHT", VideoOptionsFrameCancel, "BOTTOMLEFT", -1, 0)
 		InterfaceOptionsFrameOkay:SetPoint("BOTTOMRIGHT", InterfaceOptionsFrameCancel, "BOTTOMLEFT", -1, 0)
+		RaidFrameRaidInfoButton:SetPoint("LEFT", RaidFrameConvertToRaidButton, "RIGHT", 67, 12)
 
 		hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, portrait, text, name, x, y)
 			local parent = parentFrame:GetName()
@@ -2472,7 +2479,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		AuctionProgressBarIcon:SetTexCoord(.08, .92, .08, .92)
 		F.CreateBG(AuctionProgressBarIcon)
 
-		AuctionProgressBarText:SetPoint("CENTER")
+		AuctionProgressBarText:ClearAllPoints()
+		AuctionProgressBarText:SetPoint("CENTER", 0, 1)
 
 		F.ReskinClose(AuctionProgressFrameCancelButton, "LEFT", AuctionProgressBar, "RIGHT", 4, 0)
 		select(15, AuctionProgressFrameCancelButton:GetRegions()):SetPoint("CENTER", 0, 2)
@@ -3069,6 +3077,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		CalendarCreateEventInviteButton:SetPoint("TOPLEFT", CalendarCreateEventInviteEdit, "TOPRIGHT", 1, 1)
 		CalendarClassButton1:SetPoint("TOPLEFT", CalendarClassButtonContainer, "TOPLEFT", 5, 0)
 
+		CalendarCreateEventHourDropDown:SetWidth(80)
+		CalendarCreateEventMinuteDropDown:SetWidth(80)
+		CalendarCreateEventAMPMDropDown:SetWidth(90)
+
 		local cbuttons = {"CalendarViewEventAcceptButton", "CalendarViewEventTentativeButton", "CalendarViewEventDeclineButton", "CalendarViewEventRemoveButton", "CalendarCreateEventMassInviteButton", "CalendarCreateEventCreateButton", "CalendarCreateEventInviteButton", "CalendarEventPickerCloseButton", "CalendarCreateEventRaidInviteButton", "CalendarTexturePickerAcceptButton", "CalendarTexturePickerCancelButton", "CalendarFilterButton"}
 		for i = 1, #cbuttons do
 			local cbutton = _G[cbuttons[i]]
@@ -3086,6 +3098,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinDropDown(CalendarCreateEventTypeDropDown)
 		F.ReskinDropDown(CalendarCreateEventHourDropDown)
 		F.ReskinDropDown(CalendarCreateEventMinuteDropDown)
+		F.ReskinDropDown(CalendarCreateEventAMPMDropDown)
 		F.ReskinInput(CalendarCreateEventTitleEdit)
 		F.ReskinInput(CalendarCreateEventInviteEdit)
 		F.ReskinArrow(CalendarPrevMonthButton, 1)
@@ -3829,15 +3842,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
-		for i = 1, 16 do
-			local bu = _G["GuildRosterContainerButton"..i]
-			local ic = _G["GuildRosterContainerButton"..i.."Icon"]
-
+		local function createButtonBg(bu)
 			bu:SetHighlightTexture(C.media.backdrop)
 			bu:GetHighlightTexture():SetVertexColor(r, g, b, .2)
 
-			bu.bg = F.CreateBG(ic)
-		end
+			bu.bg = F.CreateBG(bu.icon)
+		end			
 
 		local tcoords = {
 			["WARRIOR"]     = {0.02, 0.23, 0.02, 0.23},
@@ -3864,6 +3874,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			for i = 1, numbuttons do
 				local button = GuildRosterContainer.buttons[i]
+
+				if not button.bg then
+					createButtonBg(button)
+				end
+
 				index = offset + i
 				local name, _, _, _, _, _, _, _, _, _, classFileName  = GetGuildRosterInfo(index)
 				if name and index <= visibleMembers then

@@ -3,4 +3,6 @@
 	<Script file="ChatFilter.lua"/>
 	<Script file="damagemeters.lua"/>
 	<Script file="rollcolector.lua"/>
+	<Script file="ChatEmotion.lua"/>
+	<Script file="TabChannel.lua"/>
 </Ui>
