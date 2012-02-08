@@ -1,6 +1,6 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
 
-
+CHAT_FONT_HEIGHTS = {5, 6, 7, 8, 9,10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28}
 
 local LinkHover = {}; LinkHover.show = {	-- enable (true) or disable (false) LinkHover functionality for different things in chat
 	["achievement"] = true,
@@ -129,17 +129,21 @@ do
 		local eb = _G['ChatFrame'..i..'EditBox']
 		local cf = _G[format("%s%d", "ChatFrame", i)]
 		for _, ebPart in ipairs(ebParts) do
-			_G['ChatFrame'..i..'EditBox'..ebPart]:SetTexture(0, 0, 0, 0)
+			_G['ChatFrame'..i..'EditBox'..ebPart]:SetTexture(nil)
 			local ebed = _G['ChatFrame'..i..'EditBoxFocus'..ebPart]
-			ebed:SetTexture(0,0,0,0.8)
+			--ebed:SetTexture(0,0,0,0.8)
+			ebed:SetTexture(nil)
 			ebed:SetHeight(18)
 		end
 		eb:SetAltArrowKeyMode(false)
 		eb:ClearAllPoints()
-		eb:SetPoint("BOTTOMLEFT", cf, "TOPLEFT",  0, 0)
+		eb:SetPoint("BOTTOMLEFT", cf, "TOPLEFT",  0, 2)
 		--eb:SetPoint("BOTTOMLEFT", UIParent, eb_point[1], eb_point[2], eb_point[3])
-		eb:SetPoint("BOTTOMRIGHT", cf, "TOPRIGHT", 0, 0)
+		eb:SetPoint("BOTTOMRIGHT", cf, "TOPRIGHT", 0, 2)
 		--eb:SetPoint("BOTTOMRIGHT", UIParent, eb_point[1], eb_point[2]+eb_width, eb_point[3])
+		eb:SetHeight(18)
+		S.MakeShadow(eb, 3)
+		S.MakeBG(eb, 0)
 		eb:EnableMouse(false)
 	
 	--Remove scroll buttons
@@ -185,22 +189,22 @@ local newAddMsg = {}
 local chn, rplc
 do
 	rplc = {
-		"[綜合]", --General
-		"[交易]", --Trade
-		"[世界防務]", --WorldDefense
-		"[本地防務]", --LocalDefense
-		"[尋求組隊]", --LookingForGroup
-		"[工會招募]", --GuildRecruitment
-		"[戰場]", --Battleground
-		"[戰場領袖]", --Battleground Leader
-		"[工會]", --Guild
-		"[小隊]", --Party
-		"[小隊隊長]", --Party Leader
-		"[小隊隊長]", --Party Leader (Guide)
-		"[官員]", --Officer
-		"[團隊]", --Raid
-		"[團隊領袖]", --Raid Leader
-		"[團隊警告]", --Raid Warning
+		L["综合"], --General
+		L["交易"], --Trade
+		L["世界防务"], --WorldDefense
+		L["本地防御"], --LocalDefense
+		L["寻求组队"], --LookingForGroup
+		L["工会招募"], --GuildRecruitment
+		L["战场"], --Battleground
+		L["战场领袖"], --Battleground Leader
+		L["工会"], --Guild
+		L["小队"], --Party
+		L["小队队长"], --Party Leader
+		L["地城领袖"], --Party Leader (Guide)
+		L["官员"], --Officer
+		L["团队"], --Raid
+		L["团队领袖"], --Raid Leader
+		L["团队警告"], --Raid Warning
 	}
 	chn = {
 		"%[%d+%. General.-%]",
@@ -220,8 +224,8 @@ do
 		gsub(CHAT_RAID_LEADER_GET, ".*%[(.*)%].*", "%%[%1%%]"),
 		gsub(CHAT_RAID_WARNING_GET, ".*%[(.*)%].*", "%%[%1%%]"),
 	}
-	local L = GetLocale()
-	if L == "ruRU" then --Russian
+	local Lo = GetLocale()
+	if Lo == "ruRU" then --Russian
 		chn[1] = "%[%d+%. Общий.-%]"
 		chn[2] = "%[%d+%. Торговля.-%]"
 		chn[3] = "%[%d+%. Оборона: глобальный%]" --Defense: Global
@@ -341,7 +345,7 @@ do
 	frame:SetPoint("CENTER", UIParent, "CENTER")
 	frame:Hide()
 	frame:SetFrameStrata("DIALOG")
-
+	
 	local scrollArea = CreateFrame("ScrollFrame", "BCMCopyScroll", frame, "UIPanelScrollFrameTemplate")
 	scrollArea:SetPoint("TOPLEFT", frame, "TOPLEFT", 8, -30)
 	scrollArea:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -30, 8)
@@ -356,9 +360,11 @@ do
 	editBox:SetHeight(270)
 	editBox:SetScript("OnEscapePressed", function(f) f:GetParent():GetParent():Hide() f:SetText("") end)
 	scrollArea:SetScrollChild(editBox)
-
+	S.MakeShadow(editBox, 3)
+	
 	local close = CreateFrame("Button", "BCMCloseButton", frame, "UIPanelCloseButton")
 	close:SetPoint("TOPRIGHT", frame, "TOPRIGHT")
+	S.Reskin(close)
 	local copyFunc = function(frame, btn)
 		local cf = _G[format("%s%d", "ChatFrame", frame:GetID())]
 		local _, size = cf:GetFont()

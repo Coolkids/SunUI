@@ -9,12 +9,12 @@ Stat:EnableMouse(true)
 Stat:SetFrameStrata("MEDIUM")
 Stat:SetFrameLevel(3)
 
-local text  = BottomLeftBar:CreateFontString(nil, "OVERLAY")
+local text  = Stat:CreateFontString(nil, "OVERLAY")
 text:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")
 text:SetShadowOffset(1.25, -1.25)
 text:SetShadowColor(0, 0, 0, 0.4)
 text:SetPoint("BOTTOMRIGHT", BottomLeftBar, "BOTTOMRIGHT",-15, -8)
-Stat:SetParent(text:GetParent())
+Stat:SetParent(BottomLeftBar)
 
 local function Update(self)	
 	local free, total = 0, 0
