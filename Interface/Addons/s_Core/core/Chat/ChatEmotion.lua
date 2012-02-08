@@ -2,7 +2,7 @@
 local _, _, _, DB = unpack(select(2, ...))
 
 local IconSize = 20					 -- 表情IconSize
-local fdir = "Interface\\Addons\\s_Core\\core\\Chat"			 -- 表情材质路径
+local fdir = "Interface\\Addons\\s_Core\\core\\Chat\\Icon\\"			 -- 表情材质路径
 ----------------------------------------------------------------------------------------
 local customEmoteStartIndex = 9
 local emotes = {

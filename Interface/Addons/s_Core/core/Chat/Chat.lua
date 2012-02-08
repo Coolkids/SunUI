@@ -137,15 +137,16 @@ do
 		end
 		eb:SetAltArrowKeyMode(false)
 		eb:ClearAllPoints()
-		eb:SetPoint("BOTTOMLEFT", cf, "TOPLEFT",  0, 2)
+		eb:SetPoint("BOTTOMLEFT", cf, "TOPLEFT",  0, 3)
 		--eb:SetPoint("BOTTOMLEFT", UIParent, eb_point[1], eb_point[2], eb_point[3])
-		eb:SetPoint("BOTTOMRIGHT", cf, "TOPRIGHT", 0, 2)
+		eb:SetPoint("BOTTOMRIGHT", cf, "TOPRIGHT", 0, 3)
 		--eb:SetPoint("BOTTOMRIGHT", UIParent, eb_point[1], eb_point[2]+eb_width, eb_point[3])
 		eb:SetHeight(18)
 		S.MakeShadow(eb, 3)
 		S.MakeBG(eb, 0)
 		eb:EnableMouse(false)
-	
+		eb:SetFont(DB.Font, 13*S.Scale(1), "OUTLINE")
+
 	--Remove scroll buttons
 		local bf = _G['ChatFrame'..i..'ButtonFrame']
 		bf:Hide()

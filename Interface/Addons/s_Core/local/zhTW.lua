@@ -249,7 +249,19 @@ L["官员"] = "[官員]"
 L["团队"] = "[團隊]"
 L["团队领袖"] = "[團隊領袖]"
 L["团队警告"] = "[團隊警告]"
-
-
-
+--staddonmanage
+L["Search"] = "搜索"
+L["ReloadUI"] = "重載介面"
+L["Profiles"] = "配置文件"
+L["New_Profile"] = "新配置文件"
+L["Enable_All"] = "全部開啟"
+L["Disable_All"] = "全部關閉"
+L["Profile_Name"] = "配置文件名字"
+L["Set_To"] = "設置"
+L["Add_To"] = "應用"
+L["Remove_From"] = "撤銷"
+L["Delete_Profile"] = "刪除"
+L["Confirm_Delete"] = "您確定要刪除這個配置麼? 確定請按住shift點擊刪除按鈕"
+L["Dependencies"] = "依賴於:"
+L["Optional Dependencies"] = "可選依賴於:"
 
