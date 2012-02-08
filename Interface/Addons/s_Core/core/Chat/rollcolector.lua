@@ -77,7 +77,7 @@ f:SetScript("OnEvent", function(self, event)
 		local player, selection, link = msg:match(L["(.*) has?v?e? selected (.+) for: (.+)"])
 		if player and player ~= "" then
 			player = player == YOU and UnitName("player") or player
-			FindRoll(link, player)[player] = coloredwords[selection]
+			FindRoll(link, player)[player] = {selection, nil}
 			return
 		end
 
