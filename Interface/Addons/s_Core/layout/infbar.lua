@@ -199,12 +199,18 @@ local function BuildPing(Anchor)
 	StatusBar:SetScript("OnEnter", function(self)
 		local _, _, latencyHome, latencyWorld = GetNetStats()
 		local bandwidth = GetAvailableBandwidth()
+		local r1, g1, b1 = S.ColorGradient((300-latencyHome)/300, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
+																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
+																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
+		local r2, g2, b2 = S.ColorGradient((300-latencyWorld)/300, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
+																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
+																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 		GameTooltip:ClearLines()
 			GameTooltip:AddLine(L["延迟"], 0.4, 0.78, 1)
 			GameTooltip:AddLine(" ")
-		GameTooltip:AddDoubleLine(L["本地延迟"], latencyHome, 0.75, 0.9, 1, 1, 1, 1)
-		GameTooltip:AddDoubleLine(L["世界延迟"], latencyWorld, 0.75, 0.9, 1, 1, 1, 1)
+		GameTooltip:AddDoubleLine(L["本地延迟"], latencyHome, 0.75, 0.9, 1, r1, g1, b1)
+		GameTooltip:AddDoubleLine(L["世界延迟"], latencyWorld, 0.75, 0.9, 1, r2, g2, b2)
 		if bandwidth ~= 0 then
 		GameTooltip:AddDoubleLine(L["带宽"]..": " , string.format(bandwidthString, bandwidth),0.69, 0.31, 0.31,0.84, 0.75, 0.65)
 		GameTooltip:AddDoubleLine(L["下载"]..": " , string.format(percentageString, GetDownloadedPercentage() *100),0.69, 0.31, 0.31, 0.84, 0.75, 0.65)
@@ -257,11 +263,18 @@ local function BuildDurability(Anchor)
 			GameTooltip:ClearLines()
 			GameTooltip:AddLine(L["耐久度"], 0.4, 0.78, 1)
 			GameTooltip:AddLine(" ")
-			for i = 1, 11 do
+			--[[for i = 1, 11 do
 				if Slots[i][3] ~= 1000 then
 					green = Slots[i][3]*2
 					red = 1-green
 					GameTooltip:AddDoubleLine(Slots[i][2], format("%d %%", floor(Slots[i][3]*100)), 1 , 1 , 1, red + 1, green, 0)
+				end
+			end--]]
+			for i = 1, 11 do
+				if Slots[i][3] ~= 1000 then
+					green = Slots[i][3]/1
+					red = 1-green
+					GameTooltip:AddDoubleLine(Slots[i][2], format("%d %%", floor(Slots[i][3]*100)), 1 , 1 , 1, red, green, 0)
 				end
 			end
 			GameTooltip:Show()
@@ -381,6 +394,22 @@ local StatusBar = CreateFrame("StatusBar", "FPS", UIParent)
 		self.LastUpdate = 1
 		end
 	end)
+	StatusBar:SetScript("OnEnter", function(self)
+		local value = floor(GetFramerate())
+		local r, g, b = S.ColorGradient(value/60, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
+																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
+																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
+		if not InCombatLockdown() then
+			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT", 0, 0)
+			GameTooltip:ClearLines()
+			GameTooltip:AddLine("FPS", 0.4, 0.78, 1)
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddDoubleLine("FPS",value, 0.4, 0.78, 1, r, g, b)
+			GameTooltip:AddLine(" ")
+			GameTooltip:Show()
+		end
+	end)
+	StatusBar:SetScript("OnLeave", function() GameTooltip:Hide() end)
 end
 
 --BuildFriend
