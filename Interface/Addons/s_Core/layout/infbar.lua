@@ -5,6 +5,8 @@ local Core = LibStub("AceAddon-3.0"):GetAddon("Core")
 local Module = Core:NewModule("InfoPanel")
 local InfoBarStatusColor = {{1, 0, 0}, {1, 1, 0}, {0, 0.4, 1}}
 local CurrencyTable = {}
+local bandwidthString = "%.2f Mbps"
+local percentageString = "%.2f%%"
 local Slots = {
 	[1] = {1, L["头部"], 1000},
 	[2] = {3, L["肩部"], 1000},
@@ -203,12 +205,12 @@ local function BuildPing(Anchor)
 			GameTooltip:AddLine(" ")
 		GameTooltip:AddDoubleLine(L["本地延迟"], latencyHome, 0.75, 0.9, 1, 1, 1, 1)
 		GameTooltip:AddDoubleLine(L["世界延迟"], latencyWorld, 0.75, 0.9, 1, 1, 1, 1)
-		GameTooltip:Show()
 		if bandwidth ~= 0 then
 		GameTooltip:AddDoubleLine(L["带宽"]..": " , string.format(bandwidthString, bandwidth),0.69, 0.31, 0.31,0.84, 0.75, 0.65)
 		GameTooltip:AddDoubleLine(L["下载"]..": " , string.format(percentageString, GetDownloadedPercentage() *100),0.69, 0.31, 0.31, 0.84, 0.75, 0.65)
 		GameTooltip:AddLine(" ")
 	end
+		GameTooltip:Show()
 	end)
 	StatusBar:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 	return StatusBar
