@@ -23,7 +23,7 @@ local castbars = false
 local auras = true               
 
 local bossframes = C["Bossframes"]
-local auraborders = true
+local auraborders = false
 
 local classColorbars = C["ClassColorbars"]
 local powerColor = C["PowerColor"]
@@ -485,7 +485,7 @@ local func = function(self, unit)
 
     hp.bg = hpbg
     self.Health = hp
-    local mhpb = CreateFrame('StatusBar', nil, self.Health)
+    --[[local mhpb = CreateFrame('StatusBar', nil, self.Health)
 	mhpb:SetPoint('TOPLEFT', self.Health:GetStatusBarTexture(), 'TOPRIGHT', 0, 0)
 	mhpb:SetPoint('BOTTOMLEFT', self.Health:GetStatusBarTexture(), 'BOTTOMRIGHT', 0, 0)
 	mhpb:SetWidth(width)

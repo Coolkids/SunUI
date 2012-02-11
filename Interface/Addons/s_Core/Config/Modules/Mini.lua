@@ -28,6 +28,7 @@ function Module.LoadSettings()
 		["ClassCDWidth"] = 140,
 		["ClassCDHeight"] = 20,
 		["ClassFontSize"] = 15,
+		["FontScale"] = 0.8,
 		
 	}
 	if not MiniDB then MiniDB = {} end
@@ -175,7 +176,18 @@ function Module.BuildGUI()
 					disabled = not MiniDB.UIscale,
 					get = function() return MiniDB.LockUIscale end,
 					set = function(_, value) MiniDB.LockUIscale = value end,
-				},			
+				},	
+				NewLine = {
+					type = "description", order = 7,
+					name = "\n",					
+				},
+				FontScale = {
+					type = "range", order = 8,
+					name = L["全局字体大小"], desc = L["全局字体大小"],
+					min = 0.20, max = 2.50, step = 0.01,
+					get = function() return MiniDB.FontScale end,
+					set = function(_, value) MiniDB.FontScale = value end,
+				},				
 			}
 		}
 		DB["Config"]["ClassCD"] =  {

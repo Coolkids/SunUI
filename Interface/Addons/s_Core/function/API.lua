@@ -478,13 +478,24 @@ local function Point(obj, arg1, arg2, arg3, arg4, arg5)
 
 	obj:SetPoint(arg1, arg2, arg3, arg4, arg5)
 end
-
+local function SetTemplate(f, t, texture)
+	f:SetBackdrop({
+	  bgFile = DB.Statusbar,
+	})
+	if t == "Transparent" then 
+		f:SetBackdropColor(0.05, 0.05, 0.05, 0.6)
+	else
+		f:SetBackdropColor( .05, .05, .05, .9)
+	end
+	f:SetBackdropBorderColor (0, 0, 0, 1)
+end
 local function addapi(object)
 	local mt = getmetatable(object).__index
 	if not object.Size then mt.Size = Size end
 	if not object.Point then mt.Point = Point end
 	if not object.Width then mt.Width = Width end
 	if not object.Height then mt.Height = Height end
+	if not object.SetTemplate then mt.SetTemplate = SetTemplate end
 end
 local handled = {["Frame"] = true}
 local object = CreateFrame("Frame")

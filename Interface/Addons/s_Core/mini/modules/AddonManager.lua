@@ -423,13 +423,20 @@ function stAddonManager:LoadWindow()
 		button:SetScript("OnEnter", function(self)
 			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMLEFT", -3, self:GetHeight())
 			GameTooltip:ClearLines()
-			
-			if addon.version then GameTooltip:AddDoubleLine(addon.title, addon.version)
-			else GameTooltip:AddLine(addon.title) end
+			local mem = GetAddOnMemoryUsage(i)
+			local usage = GetAddOnCPUUsage(i)
+			local InfoBarStatusColor = {{1, 0, 0}, {1, 1, 0}, {0, 1, 0}}
+			local r, g, b = S.ColorGradient((3000-mem)/3000, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
+																					InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
+																					InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
+			if addon.version then GameTooltip:AddDoubleLine(addon.title, addon.version, 0.40, 0.78, 1, 1, 1, 1)
+			else GameTooltip:AddLine(addon.title, 0.40, 0.78, 1) end
 			if addon.notes then	GameTooltip:AddLine(addon.notes, nil, nil, nil, true) end
-			if addon.dependencies then GameTooltip:AddLine(L["Dependencies"]..unpack(addon.dependencies), 1, .5, 0, true) end
-			if addon.optionaldependencies then GameTooltip:AddLine(L["Optional Dependencies"]..unpack(addon.optionaldependencies), 1, .5, 0, true) end
-			
+			if addon.dependencies then GameTooltip:AddLine(L["Dependencies"]..unpack(addon.dependencies), 1, .5, 0) end
+			if addon.optionaldependencies then GameTooltip:AddLine(L["Optional Dependencies"]..unpack(addon.optionaldependencies), 1, .5, 0) end
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddDoubleLine(L["内存占用"], S.FormatMemory(mem), 1, 1, 1, r, g, b)
+			GameTooltip:AddDoubleLine(L["处理器占用"], usage.."%", 1, 1, 1, 1, 1, 1)
 			GameTooltip:Show()
 		end)
 		button:SetScript("OnLeave", function(self) GameTooltip:Hide() end)

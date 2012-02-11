@@ -135,6 +135,17 @@ do
 			ebed:SetTexture(nil)
 			ebed:SetHeight(18)
 		end
+		for i = 1, NUM_CHAT_WINDOWS do
+				local chat = format("ChatFrame%s",i)
+				_G[chat.."EditBoxLanguage"]:ClearAllPoints()
+				_G[chat.."EditBoxLanguage"]:SetPoint("LEFT", _G[chat.."EditBox"], "RIGHT", S.Scale(5), 0)
+				_G[chat.."EditBoxLanguage"]:SetSize(_G[chat.."EditBox"]:GetHeight(),_G[chat.."EditBox"]:GetHeight()+1)
+				S.StripTextures(_G[chat.."EditBoxLanguage"])
+				--_G[chat.."EditBoxLanguage"]:SetTemplate("Default", true)
+				--S.MakeShadow(_G[chat.."EditBoxLanguage"], 2)
+				--S.MakeBG(_G[chat.."EditBoxLanguage"], 0)
+				S.CreateBD(_G[chat.."EditBoxLanguage"],0.4)
+			end
 		eb:SetAltArrowKeyMode(false)
 		eb:ClearAllPoints()
 		eb:SetPoint("BOTTOMLEFT", cf, "TOPLEFT",  0, 3)
@@ -145,7 +156,7 @@ do
 		S.MakeShadow(eb, 3)
 		S.MakeBG(eb, 0)
 		eb:EnableMouse(false)
-		eb:SetFont(DB.Font, 13*S.Scale(1), "OUTLINE")
+		eb:SetFont(DB.Font, 12*S.Scale(1), "OUTLINE")
 
 	--Remove scroll buttons
 		local bf = _G['ChatFrame'..i..'ButtonFrame']

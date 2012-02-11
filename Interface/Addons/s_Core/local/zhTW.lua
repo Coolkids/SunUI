@@ -264,4 +264,4 @@ L["Delete_Profile"] = "刪除"
 L["Confirm_Delete"] = "您確定要刪除這個配置麼? 確定請按住shift點擊刪除按鈕"
 L["Dependencies"] = "依賴於:"
 L["Optional Dependencies"] = "可選依賴於:"
-
+L["全局字体大小"] = "全局字體大小系數"

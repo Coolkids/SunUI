@@ -34,7 +34,7 @@ function Module:OnInitialize()
 		["FilterRepeat"] = true, --Filter the repeat messages. // 过滤重复聊天信息
 		["RepeatAlike"] = 60, --Set the similarity between the messages. // 设定重复信息相似度
 		["RepeatInterval"] = 60, --Set the interval between the messages. // 设定重复信息间隔时间
-		["RepeatMaxCache"] = 200, --Set the max cache from the messages. // 设定最多缓存多少条消息
+		["RepeatMaxCache"] = 100, --Set the max cache from the messages. // 设定最多缓存多少条消息
 		
 		["SafeWords"] = {
 			"recruit",

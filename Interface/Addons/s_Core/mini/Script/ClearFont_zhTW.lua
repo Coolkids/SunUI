@@ -18,8 +18,8 @@ if not (GetLocale() == "zhTW") then return end
 -- =============================================================================
 -- /////////////////////////////////////////////////////////////////////////////
 
-
-
+local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ClearFont_zhTW", "AceEvent-3.0")
+function Module:OnInitialize()
 
 -- =============================================================================
 --  A. ClearFont 框架 及為了以後代碼的簡潔而預先定義字體位置
@@ -55,7 +55,7 @@ if not (GetLocale() == "zhTW") then return end
 --  範例：你想把所有字體縮小到80%，那麼可以將"1.0"改成"0.8"
 -- -----------------------------------------------------------------------------
 
-	local CF_SCALE = 0.81*S.Scale(1)
+	local CF_SCALE = MiniDB["FontScale"]*S.Scale(1)
 
 
 -- -----------------------------------------------------------------------------
@@ -590,3 +590,4 @@ if not (GetLocale() == "zhTW") then return end
 -- =============================================================================
 
 	ClearFont:ApplySystemFonts()
+end

@@ -264,6 +264,7 @@ SkinDB = {
 	["EnableRecountSkin"] = true,
 }
 MiniDB = {
+	["FontScale"] = 0.8,
 	["ClassCDWidth"] = 140,
 	["AutoSell"] = true,
 	["uiScale"] = 0.6999999880790701,

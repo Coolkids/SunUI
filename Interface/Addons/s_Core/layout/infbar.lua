@@ -157,9 +157,8 @@ local function BuildMemory(Anchor)
 		GameTooltip:AddLine(" ")
 		for i = 1, #MemoryTable do
 			if MemoryTable[i][4] then
-				local red = MemoryTable[i][3]/TotalMemory
-				local green = 1-red
-				GameTooltip:AddDoubleLine(MemoryTable[i][2], S.FormatMemory(MemoryTable[i][3]), 1, 1, 1, red, green + .5, 0)
+			local r, g, b = S.ColorGradient((3000-MemoryTable[i][3])/3000, 1, 0, 0, 1, 1, 0, 0, 1, 0)
+				GameTooltip:AddDoubleLine(MemoryTable[i][2], S.FormatMemory(MemoryTable[i][3]), 1, 1, 1, r, g, b)
 			end						
 		end
 		GameTooltip:Show()
@@ -387,7 +386,7 @@ local StatusBar = CreateFrame("StatusBar", "FPS", UIParent)
 		local max = GetCVar("MaxFPS")
 		self:SetValue(value)
 		self.Text:SetText("FPS: "..value)
-		local r, g, b = S.ColorGradient(value/60, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
+		local r, g, b = S.ColorGradient(value/100, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
 																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
 																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
 		self:SetStatusBarColor(r, g, b)
@@ -396,16 +395,13 @@ local StatusBar = CreateFrame("StatusBar", "FPS", UIParent)
 	end)
 	StatusBar:SetScript("OnEnter", function(self)
 		local value = floor(GetFramerate())
-		local r, g, b = S.ColorGradient(value/60, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
-																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
-																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
+		local r, g, b = S.ColorGradient(value/100, 1, 0, 0, 0, 1, 0, 0, 0.4, 1)
 		if not InCombatLockdown() then
 			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT", 0, 0)
 			GameTooltip:ClearLines()
 			GameTooltip:AddLine("FPS", 0.4, 0.78, 1)
 			GameTooltip:AddLine(" ")
 			GameTooltip:AddDoubleLine("FPS",value, 0.4, 0.78, 1, r, g, b)
-			GameTooltip:AddLine(" ")
 			GameTooltip:Show()
 		end
 	end)
