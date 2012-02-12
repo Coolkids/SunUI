@@ -122,8 +122,8 @@ local SkinBoss=function()
 
 		if not bar.styled then
 			bar:SetHeight(10)
-			background:SetHeight(10)
-			S.MakeShadow(background, 3)
+			S.Kill(background)
+			--S.MakeTexShadow(bar, background, 3)
 			background:SetNormalTexture(nil)
 			bar.styled=true
 		end	

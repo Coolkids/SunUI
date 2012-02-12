@@ -5,7 +5,7 @@ local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("MiniMap", "Ac
 Minimap:SetMaskTexture("Interface\\ChatFrame\\ChatFrameBackground")
 Minimap:SetFrameStrata("BACKGROUND")
 Minimap:ClearAllPoints()
-Minimap:SetSize(100*S.Scale(1), 100*S.Scale(1))
+Minimap:SetSize(S.Scale(145), S.Scale(145))
 Minimap.Shadow = S.MakeShadow(Minimap, 4)
 
 function Module:OnInitialize()
