@@ -121,6 +121,7 @@ SetCVar("bloatthreat",0)
 SetCVar("bloatnameplates", 0.0)
 SetCVar("screenshotQuality", SCREENSHOT_QUALITY)
 
+
 ---------------- > ALT+RightClick to buy a stack
 hooksecurefunc("MerchantItemButton_OnModifiedClick", function(self, button)
     if MerchantFrame.selectedTab == 1 then

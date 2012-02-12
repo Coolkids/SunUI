@@ -367,7 +367,7 @@ anchor:SetScript("OnEvent", function(frame, event, addon)
 	anchor:SetScript("OnEvent", function(frame, event, ...) if event == "CHAT_MSG_LOOT" then return CHAT_MSG_LOOT(...) else return START_LOOT_ROLL(...) end end)
 	
 	local anchorholder = CreateFrame("Frame", "AnchorHolder", UIParent)
-	anchorholder:SetPoint("TOP", UIParent, "TOP", 0, -200)
+	anchorholder:SetPoint("TOPLEFT", RollFrame, "TOPLEFT", 0, 35)
 	anchorholder:SetWidth(anchor:GetWidth())
 	anchorholder:SetHeight(anchor:GetHeight())
 	

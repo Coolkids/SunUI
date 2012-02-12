@@ -42,12 +42,25 @@ end
 local ThreatUpdate = function(self, elapsed)
 	self.elapsed = self.elapsed + elapsed
 	if self.elapsed >= 0.2 then
-	
+	if DB.Role == "Tank" then
+		if not self.oldglow:IsShown() then
+			self.healthBar.hpGlow:SetBackdropBorderColor(0, 0, 0)
+		else
+			 r, g, b, a = self.oldglow:GetVertexColor()
+			if g+b == 0  then --have Threat
+			self.healthBar.hpGlow:SetBackdropBorderColor(0, 0, 0, 0.8)
+			else 
+			self.healthBar.hpGlow:SetBackdropBorderColor(1, 0, 0, 1)
+			end
+		end
+	else
 		if not self.oldglow:IsShown() then
 			self.healthBar.hpGlow:SetBackdropBorderColor(0, 0, 0)
 		else
 			self.healthBar.hpGlow:SetBackdropBorderColor(self.oldglow:GetVertexColor())
 		end
+	end
+
 
 		self.healthBar:SetStatusBarColor(self.r, self.g, self.b)
 		
@@ -64,23 +77,23 @@ end
 
 local UpdateFrame = function(self)
 	local r, g, b = self.healthBar:GetStatusBarColor()
-
 	local newr, newg, newb
-	if g + b == 0 then
-		newr, newg, newb = 0.69, 0.31, 0.31
-		self.healthBar:SetStatusBarColor(0.69, 0.31, 0.31)
-	elseif r + b == 0 then
-		newr, newg, newb = 0.33, 0.59, 0.33
-		self.healthBar:SetStatusBarColor(0.33, 0.59, 0.33)
-	elseif r + g == 0 then
-		newr, newg, newb = 0.31, 0.45, 0.63
-		self.healthBar:SetStatusBarColor(0.31, 0.45, 0.63)
-	elseif 2 - (r + g) < 0.05 and b == 0 then
-		newr, newg, newb = 0.65, 0.63, 0.35
-		self.healthBar:SetStatusBarColor(0.65, 0.63, 0.35)
-	else
-		newr, newg, newb = r, g, b
-	end
+	
+		if g + b == 0 then  --Have Threat
+			newr, newg, newb = 0.69, 0.31, 0.31 --红色
+			self.healthBar:SetStatusBarColor(0.69, 0.31, 0.31)
+		elseif r + b == 0 then  ----  墨绿色
+			newr, newg, newb = 0.33, 0.59, 0.33
+			self.healthBar:SetStatusBarColor(0.33, 0.59, 0.33)
+		elseif r + g == 0 then  --蓝色
+			newr, newg, newb = 0.31, 0.45, 0.63
+			self.healthBar:SetStatusBarColor(0.31, 0.45, 0.63)
+		elseif 2 - (r + g) < 0.05 and b == 0 then  --默认
+			newr, newg, newb = 0.65, 0.63, 0.35
+			self.healthBar:SetStatusBarColor(0.65, 0.63, 0.35)
+		else
+			newr, newg, newb = r, g, b
+		end
 
 	self.r, self.g, self.b = newr, newg, newb
 

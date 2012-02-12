@@ -25,6 +25,7 @@ function Module.LoadSettings()
 		["CooldownFlash"] = {"BOTTOM", "UIParent", "CENTER", 0, 150},
 		["InfoPanel"] = {"TOPLEFT", "UIParent", "TOPLEFT", 5, -5},
 		["InfoPanel2"] = {"TOPRIGHT", "Minimap", "BOTTOMRIGHT", 0, -5},
+		["RollFrame"] = {"TOP", "UIParent", "TOP", 0, -200},
 	}
 	if not MoveHandleDB then MoveHandleDB = {} end
 	for key, value in pairs(Default) do
