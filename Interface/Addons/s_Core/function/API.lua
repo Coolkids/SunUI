@@ -8,8 +8,6 @@ function S.MakeShadow(Parent, Size)
 	Shadow:SetFrameLevel(0)
 	Shadow:SetPoint("TOPLEFT", -Size, Size)
 	Shadow:SetPoint("BOTTOMRIGHT", Size, -Size)
-	Shadow:SetPoint("TOPRIGHT", Size, Size)
-	Shadow:SetPoint("BOTTOMLEFT", -Size, -Size)
 	Shadow:SetBackdrop({edgeFile = DB.GlowTex, edgeSize = Size})
 	Shadow:SetBackdropColor( .05, .05, .05, .9)
 	Shadow:SetBackdropBorderColor(0, 0, 0, 1)
@@ -42,10 +40,10 @@ end
 
 function S.MakeTexShadow(Parent, Anchor, Size)
 	local Shadow = CreateFrame("Frame", nil, Parent)
-	Shadow:SetPoint("TOPLEFT", Anchor, -Size, Size)
-	Shadow:SetPoint("BOTTOMRIGHT", Anchor, Size, -Size)
+	Shadow:SetPoint("TOPLEFT", Anchor, -Size or 3, Size or 3)
+	Shadow:SetPoint("BOTTOMRIGHT", Anchor, Size or 3, -Size or 3)
 	Shadow:SetFrameLevel(1)
-	Shadow:SetBackdrop({edgeFile = DB.GlowTex, edgeSize = Size})
+	Shadow:SetBackdrop({edgeFile = DB.GlowTex, edgeSize = Size or 3})
 	Shadow:SetBackdropBorderColor(0, 0, 0, 1)
 	return Shadow
 end

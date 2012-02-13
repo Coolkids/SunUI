@@ -102,19 +102,19 @@ end)
 
 local menuFrame = CreateFrame("Frame", "m_MinimapRightClickMenu", UIParent, "UIDropDownMenuTemplate")
 local menuList = {
-    {text = "角色信息", func = function() ToggleCharacter("PaperDollFrame") end},
-    {text = "法術書", func = function() ToggleSpellBook("spell") end},
-    {text = "天賦", func = function() ToggleTalentFrame() end},
-    {text = "成就", func = function() ToggleAchievementFrame() end},
-    {text = "任務日誌", func = function() ToggleFrame(QuestLogFrame) end},
-    {text = "社交", func = function() ToggleFriendsFrame(1) end},
-    {text = "公會", func = function() ToggleGuildFrame(1) end},
+    {text = L["角色信息"], func = function() ToggleCharacter("PaperDollFrame") end},
+    {text = L["法术书"], func = function() ToggleSpellBook("spell") end},
+    {text = L["天赋"], func = function() ToggleTalentFrame() end},
+    {text = L["成就"], func = function() ToggleAchievementFrame() end},
+    {text = L["任务日志"], func = function() ToggleFrame(QuestLogFrame) end},
+    {text = L["社交"], func = function() ToggleFriendsFrame(1) end},
+    {text = L["公会"], func = function() ToggleGuildFrame(1) end},
     {text = "PvP", func = function() ToggleFrame(PVPFrame) end},
-    {text = "地城查找器", func = function() ToggleFrame(LFDParentFrame) end},
-	{text = "團隊查找器", func = function() ToggleFrame(RaidParentFrame) end},
-    {text = "幫助", func = function() ToggleHelpFrame() end},
-    {text = "行事歷", func = function() if(not CalendarFrame) then LoadAddOn("Blizzard_Calendar") end Calendar_Toggle() end},
-	{text = "地城手冊",func = function() ToggleEncounterJournal() end},
+    {text = L["地城查找器"], func = function() ToggleFrame(LFDParentFrame) end},
+	{text = L["团队查找器"], func = function() ToggleFrame(RaidParentFrame) end},
+    {text = L["帮助"], func = function() ToggleHelpFrame() end},
+    {text = L["行事历"], func = function() if(not CalendarFrame) then LoadAddOn("Blizzard_Calendar") end Calendar_Toggle() end},
+	{text = L["地城手册"],func = function() ToggleEncounterJournal() end},
 }
 
 Minimap:SetScript("OnMouseUp", function(self, button)

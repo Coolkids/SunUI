@@ -280,6 +280,8 @@ local function BuildDurability(Anchor)
 		end
 	end)
 	StatusBar:SetScript("OnLeave", function() GameTooltip:Hide() end)
+	StatusBar:SetScript("OnMouseDown", function(self, button)
+	ToggleCharacter("PaperDollFrame") end)
 	return StatusBar
 end
 

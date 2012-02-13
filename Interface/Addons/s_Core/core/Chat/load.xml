@@ -5,4 +5,5 @@
 	<Script file="rollcolector.lua"/>
 	<Script file="ChatEmotion.lua"/>
 	<Script file="TabChannel.lua"/>
+	<Script file="channel.lua"/>
 </Ui>

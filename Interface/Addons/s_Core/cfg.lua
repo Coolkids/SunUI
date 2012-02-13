@@ -3,6 +3,7 @@
 
 local Media = "Interface\\Addons\\s_Core\\media\\"
 dummy = function() return end
+DB.zone = GetLocale()
 DB.level = UnitLevel("player")
 DB.myrealm = GetRealmName()
 DB.MyClass = select(2, UnitClass("player"))

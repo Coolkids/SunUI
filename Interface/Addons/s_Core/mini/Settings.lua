@@ -202,6 +202,10 @@ BNToastFrame:HookScript("OnShow", function(self)
 	self:ClearAllPoints()
 	self:SetPoint("BOTTOMLEFT", ChatFrame1Tab, "TOPLEFT", 0, 25)
 end)
+--装备红人
+DurabilityFrame = _G["DurabilityFrame"]
+DurabilityFrame:Hide()
+DurabilityFrame:UnregisterAllEvents()
 ---------------- > Disband Group
 local GroupDisband = function()
 	local pName = UnitName("player")
