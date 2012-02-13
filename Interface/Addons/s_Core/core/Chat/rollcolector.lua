@@ -3,7 +3,7 @@
 	["%s|HSunUILootCollector:%d|h[%s roll]|h|r %s won %s "] = "%s|HSunUILootCollector:%d|h[%s]|h|r %s 赢得了 %s ",
 	["(.*) has?v?e? selected (.+) for: (.+)"]        = "(.+)选择了(.+)取向：(.+)",
 	["(.+) Roll . (%d+) for (.+) by (.+)"]           = "（(.+)）(%d+)点：(.+)（(.+)）",
-	["(.+) Roll - (%d+) for (.+) by (.+) + Role Bonus"]	 = "（(.+)%+职责加成）(%d+)點:(.+)（(.+)）",
+	["(.+) Roll - (%d+) for (.+) by (.+) + Role Bonus"]	 = "（(.+)%+职责加成）(%d+)点:(.+)（(.+)）",
 	[" passed on: "]                                 = "放弃了：",
 	[" automatically passed on: "]                   = "自动放弃了",
 	["You passed on: "]                              = "你放弃了：",
