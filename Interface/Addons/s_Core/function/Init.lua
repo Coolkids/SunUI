@@ -5,3 +5,4 @@ ns[2] = {} -- C, Config
 ns[3] = {} -- L, Locale
 ns[4] = {} -- DB, DataBase
 
+s_Core = ns
