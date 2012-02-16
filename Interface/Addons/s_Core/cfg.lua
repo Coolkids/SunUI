@@ -1,6 +1,19 @@
 ﻿local S, _, _, DB = unpack(select(2, ...))
 --全局设置
-
+local Launch = CreateFrame("Frame")
+Launch:RegisterEvent("PLAYER_ENTERING_WORLD")
+Launch:SetScript("OnEvent", function(self, event)
+	for i = 1, GetNumAddOns() do
+		if IsAddOnLoaded(i) then
+			for _, v in pairs({GetAddOnInfo(i)}) do
+				if v and type(v) == 'string' and (v:lower():find("BigFoot") or v:lower():find("Duowan") or v:lower():find("163UI") or v:lower():find("FishUI")) then
+					print("侦测到您正在使用大脚或者魔盒,为了让您用的舒适所以插件自我关闭掉.如想使用本插件请完全删除大脚或者魔盒")
+					return end
+				end
+			end
+		end
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD" )
+end)
 local Media = "Interface\\Addons\\s_Core\\media\\"
 dummy = function() return end
 DB.zone = GetLocale()
@@ -220,18 +233,3 @@ DB.ShadowPetOpen = true
 
 --Advanced_UseUIScale:Hide()
 --Advanced_UIScaleSlider:Hide()
---对大脚,魔盒say good bye
-local Launch = CreateFrame("Frame")
-Launch:RegisterEvent("PLAYER_ENTERING_WORLD")
-Launch:SetScript("OnEvent", function(self, event)
-	for i = 1, GetNumAddOns() do
-		if IsAddOnLoaded(i) then
-			for _, v in pairs({GetAddOnInfo(i)}) do
-				if v and type(v) == 'string' and (v:lower():find("BigFoot") or v:lower():find("Duowan") or v:lower():find("163UI") or v:lower():find("FishUI")) then
-					print("侦测到您正在使用大脚或者魔盒,为了让您用的舒适所以插件自我关闭掉.如想使用本插件请完全删除大脚或者魔盒")
-					return end
-				end
-			end
-		end
-	self:UnregisterEvent("PLAYER_ENTERING_WORLD" )
-end)
