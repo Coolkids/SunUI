@@ -179,20 +179,6 @@ do
 	end
 end
 
----------------- > TellTarget function
-local function telltarget(msg)
-	if not UnitExists("target") or not (msg and msg:len()>0) or not UnitIsFriend("player","target") then return end
-	local name, realm = UnitName("target")
-	if realm and not UnitIsSameServer("player", "target") then
-		name = ("%s-%s"):format(name, realm)
-	end
-	SendChatMessage(msg, "WHISPER", nil, name)
-end
-SlashCmdList["TELLTARGET"] = telltarget
-SLASH_TELLTARGET1 = "/tt"
-SLASH_TELLTARGET2 = "/ее"
-SLASH_TELLTARGET3 = "/wt"
-
 ---------------- > Channel names
 local gsub = _G.string.gsub
 local time = _G.time
@@ -430,7 +416,7 @@ if DB.TimeStampsCopy then
 	end
 end
 
----------------- > URL copy Module
+--[[---------------- > URL copy Module
 local tlds = {
 	"[Cc][Oo][Mm]", "[Uu][Kk]", "[Nn][Ee][Tt]", "[Dd][Ee]", "[Ff][Rr]", "[Ee][Ss]",
 	"[Bb][Ee]", "[Cc][Cc]", "[Uu][Ss]", "[Kk][Oo]", "[Cc][Hh]", "[Tt][Ww]",
@@ -512,3 +498,4 @@ SetItemRef = function(link, text, ...)
 	end
 	return SetIRef(link, text, ...)
 end
+--]]
