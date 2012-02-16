@@ -73,13 +73,23 @@ wf:ClearAllPoints()
 wf:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -35, -200)
 wf:SetWidth(250)
 wf:SetHeight(500)
+
 wf:SetUserPlaced(true)
 wf.SetPoint = function() end
-
+wfg = CreateFrame("Frame")
+wfg:SetPoint("TOPLEFT", wf, "TOPLEFT")
+wfg:SetPoint("BOTTOMRIGHT", wf, "BOTTOMRIGHT")
+wfg.text = S.MakeFontString(wfg, 10)
+wfg.text:SetText("点我拖动")
+wfg.text:SetPoint("TOP", wfg, "TOP")
+S.MakeShadow(wfg, 3)
+S.MakeBG(wfg, 0)
+wfg:Hide()
 local function WATCHFRAMELOCK()
 	if wfmove == false then
 		wfmove = true
-		print("WatchFrame unlocked for drag")
+		wfg:Show()
+		print("|cffFFD700任务追踪框|r |cff228B22解锁|r")
 		wf:EnableMouse(true);
 		wf:RegisterForDrag("LeftButton"); 
 		wf:SetScript("OnDragStart", wf.StartMoving); 
@@ -87,7 +97,8 @@ local function WATCHFRAMELOCK()
 	elseif wfmove == true then
 		wf:EnableMouse(false);
 		wfmove = false
-		print("WatchFrame locked")
+		wfg:Hide()
+		print("|cffFFD700任务追踪框|r |cffFF0000锁定|r")
 	end
 end
 
