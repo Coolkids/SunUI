@@ -35,9 +35,11 @@ v1.12 - Elchizen's localisation had bug and forced it to be in French
 
 v1.13 - Update for patch 4.2
 
+v1.20 - Update for patch 4.3
+
 --]]
 
-MBB_Version = "1.13";
+MBB_Version = "1.20";
 MBB_DebugFlag = 0;
 MBB_DragFlag = 0;
 MBB_ShowTimeout = -1;
@@ -48,10 +50,10 @@ MBB_Buttons = {};
 MBB_Exclude = {};
 MBB_DebugInfo = {};
 MBB_DefaultOptions = {
-	["ButtonPos"] = {-18, -100},
+	["ButtonPos"] = {0, 0},
 	["AttachToMinimap"] = 1,
 	["CollapseTimeout"] = 1,
-	["ExpandDirection"] = 1,
+	["ExpandDirection"] = 3,
 	["MaxButtonsPerLine"] = 0,
 	["AltExpandDirection"] = 4
 };

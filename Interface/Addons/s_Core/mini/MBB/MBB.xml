@@ -25,7 +25,7 @@
 		</Anchors>
 		<Layers>
 			<Layer level="BACKGROUND">
-				<Texture name="$parent_Texture" file="Interface\Addons\s_Core\mini\MBB\icon">
+				<Texture name="$parent_Texture" file="Interface\AddOns\MBB\icon">
 					<Size>
 						<AbsDimension x="17" y="17"/>
 					</Size>

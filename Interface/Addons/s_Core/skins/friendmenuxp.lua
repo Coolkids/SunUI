@@ -4,7 +4,7 @@ local Delay = CreateFrame("Frame")
 Delay:RegisterEvent("PLAYER_ENTERING_WORLD")
 Delay:SetScript("OnEvent", function()
 	Delay:UnregisterEvent("PLAYER_ENTERING_WORLD")
-	SetCVar("UnitNameNPC", 0)  --给我不显示任何NPC名字
+	--SetCVar("UnitNameNPC", 0)  --给我不显示任何NPC名字
 	if FriendsMenuXPSecure then
 		S.StripTextures(FriendsMenuXPSecureMenuBackdrop)
 		S.MakeShadow(FriendsMenuXPSecure, 3)
