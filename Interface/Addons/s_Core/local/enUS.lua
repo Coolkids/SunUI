@@ -67,6 +67,7 @@ L["BUFF增长方向"] = "Set Buff Direction："
 L["从右向左"] = "right to left"
 L["从左向右"] = "left to right"
 L["DEBUFF增长方向"] = "Set DeBuff Direction："
+L["每行图标数"] = "Icon Per Row"
 --仇恨监视
 L["仇恨监视"] = "Threat"
 L["仇恨条宽度"] = "Threat bat Width："

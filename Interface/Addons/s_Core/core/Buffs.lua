@@ -1,13 +1,12 @@
 ﻿-- Engines
 local S, C, L, DB = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Buff")
-local IconPerRow = 16
+
 local BuffPos, DebuffPos = nil, nil
 local tinsert, _G, tsort = tinsert, _G, table.sort
 local BuffTable = {["Time"] = {}, ["None"] = {}}
 
 function Module:Style(buttonName, i)
-
 	if not _G[buttonName..i] then return end
 	
 	local Button	= _G[buttonName..i]
@@ -78,12 +77,12 @@ end
 function Module:UpdateBuffPos()
 	for key, value in pairs(BuffTable["None"]) do
 		local Pre = BuffTable["None"][key-1]
-		local PreRow = BuffTable["None"][key-IconPerRow]
+		local PreRow = BuffTable["None"][key-C["IconPerRow"]]
 		value:ClearAllPoints()
 		if C["BuffDirection"] == 1 then
 			if key == 1 then
 				value:SetPoint("CENTER", BuffPos)
-			elseif key%IconPerRow == 1 then
+			elseif key%C["IconPerRow"] == 1 then
 				value:SetPoint("TOP", PreRow, "BOTTOM", 0, -15)
 			else
 				value:SetPoint("RIGHT", Pre, "LEFT", -8, 0)
@@ -92,7 +91,7 @@ function Module:UpdateBuffPos()
 		if C["BuffDirection"] == 2 then
 			if key == 1 then
 				value:SetPoint("CENTER", BuffPos)
-			elseif key%IconPerRow == 1 then
+			elseif key%C["IconPerRow"] == 1 then
 				value:SetPoint("TOP", PreRow, "BOTTOM", 0, -15)
 			else
 				value:SetPoint("LEFT", Pre, "RIGHT", 8, 0)
@@ -137,12 +136,12 @@ hooksecurefunc("DebuffButton_UpdateAnchors", function(buttonName, i)
 	Module:Style(buttonName, i)
 	local Aura = _G[buttonName..i]
 	local Pre = _G[buttonName..(i-1)]
-	local PreRow = _G[buttonName..(i-IconPerRow)]
+	local PreRow = _G[buttonName..(i-C["IconPerRow"])]
 	Aura:ClearAllPoints()
 	if C["DebuffDirection"] == 1 then
 		if i == 1 then
 			Aura:SetPoint("CENTER", DebuffPos)
-		elseif i%IconPerRow == 1 then
+		elseif i%C["IconPerRow"] == 1 then
 			Aura:SetPoint("TOP", PreRow, "BOTTOM", 0, -15)
 		else
 			Aura:SetPoint("RIGHT", Pre, "LEFT", -8, 0)
@@ -151,7 +150,7 @@ hooksecurefunc("DebuffButton_UpdateAnchors", function(buttonName, i)
 	if C["DebuffDirection"] == 2 then
 		if i == 1 then
 			Aura:SetPoint("CENTER", DebuffPos)
-		elseif i%IconPerRow == 1 then
+		elseif i%C["IconPerRow"] == 1 then
 			Aura:SetPoint("TOP", PreRow, "BOTTOM", 0, -15)
 		else
 			Aura:SetPoint("LEFT", Pre, "RIGHT", 8, 0)

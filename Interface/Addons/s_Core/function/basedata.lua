@@ -93,12 +93,10 @@ ActionBarDB = {
 	},
 }
 BuffDB = {
-	["WarningTime"] = 15,
 	["BuffDirection"] = 1,
 	["DebuffDirection"] = 1,
-	["Spacing"] = 8,
 	["IconSize"] = 36,
-	["IconsPerRow"] = 12,
+	["IconPerRow"] = 16,
 }
 NameplateDB = {
 	["HPHeight"] = 6,

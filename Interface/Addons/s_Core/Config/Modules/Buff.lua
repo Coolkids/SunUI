@@ -10,11 +10,9 @@ local Module = DB["Modules"]["Buff"]
 function Module.LoadSettings()
 	local Default = {
 		["IconSize"] = 36,
-		["Spacing"] = 8,
-		["IconsPerRow"] = 12,
 		["BuffDirection"] = 1,
 		["DebuffDirection"] = 1,
-		["WarningTime"] = 15,
+		["IconPerRow"] = 16,
 	}
 	if not BuffDB then BuffDB = {} end
 	for key, value in pairs(Default) do
@@ -43,11 +41,19 @@ function Module.BuildGUI()
 					get = function() return tostring(BuffDB.IconSize) end,
 					set = function(_, value) BuffDB.IconSize = tonumber(value) end,
 				},
+				IconPerRow = {
+					type = "input",
+					name = L["每行图标数"],
+					desc = L["每行图标数"],
+					order = 2,
+					get = function() return tostring(BuffDB.IconPerRow) end,
+					set = function(_, value) BuffDB.IconPerRow = tonumber(value) end,
+				},
 				BuffDirection = {
 					type = "select",
 					name = L["BUFF增长方向"],
 					desc = L["BUFF增长方向"],
-					order = 2,
+					order = 3,
 					values = {[1] = L["从右向左"], [2] = L["从左向右"]},
 					get = function() return BuffDB.BuffDirection end,
 					set = function(_, value) BuffDB.BuffDirection = value end,
@@ -56,7 +62,7 @@ function Module.BuildGUI()
 					type = "select",
 					name = L["DEBUFF增长方向"],
 					desc = L["DEBUFF增长方向"],
-					order = 3,
+					order = 4,
 					values = {[1] = L["从右向左"], [2] = L["从左向右"]},
 					get = function() return BuffDB.DebuffDirection end,
 					set = function(_, value) BuffDB.DebuffDirection = value end,
