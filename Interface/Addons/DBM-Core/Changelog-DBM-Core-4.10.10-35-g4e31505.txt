@@ -1,0 +1,45 @@
+subversion:
+	- thiagovfar via svn r7360: ptBR update
+	Some triggers for dragon soul, end time and hour of twilight.
+	
+	I'm also updating the "translation by" string, Since I have lost my toon's
+	name on a realm transfer.
+	- nbluewiz via svn r7359: # DSTrash : Performance tweak + Removed sync stuff. (As I watched, UNIT_DIED event not related combat log range. It seems that blizz's bug. And Omega's overkill hack works very good with not syncing.) # Blackhorn, Morchok, Spine of Deathwing : Remove useless variables like SPELL_DAMAGE event. # Occuthar : Changed overkill hack like DSTrash. # Ragnaros, Shannox : Sometimes trap target returns "Unknown" or "none". Filter this. + And GetPartyAssignment function not needs 3rd parameter if 2nd parameter is uId. Remove that.
+	- Omega via svn r7358: Add blood warning for phase 2 madness
+	- Omega via svn r7357: Move the parasite dps warning to the right place, so it actually doesn't fire 3-4 seconds late
+	- Omega via svn r7356: ok this should fix the errors. i guess RANGE_DAMAGE has same args as spell events, not melee events. ok then.
+	- Omega via svn r7355: comment this out for now, will fix after raid when i have more time
+	- Omega via svn r7354: Forgot something, NOW it should be working heh
+	- Omega via svn r7353: Fix a small bug in that though. because SPELL_PERIODIC_DAMAGE does NOT equal SWING_DAMAGE. Oops
+	- Omega via svn r7352: Confirmed overkill method works, add more events for tracking it.
+	- Omega via svn r7351: oops forgot to register swing damage
+	- Omega via svn r7350: *Fix skyrim drakes same way we fix same problem on occuthar. If they fail to fire UNIT_DIED< then we'll just track overkill damage as well *Disabled EoE portal timer. It's only reliable if the FIRST Person up there is running latest alpha, otherwise it utterly fails. The problem is the RP event is indvidualized, it starts when YOU get up there, not when first person gets up there, so it's wrong for 24 out of 25 people or 9 out of 10 people, it's only right for FIRST person up there. We cannot control whether that person is running DBM or not though, if they aren't then it's worthless :(
+	- Omega via svn r7349: Try this trash fix.
+	- nbluewiz via svn r7348: # DSTrash : comment update
+	- nbluewiz via svn r7347: # DSTrash : 1. Adjust portal timer. 2. Fix portal sync problem. 3. Updated drake stuff comment. # Hagara : 1. Added count to Assault warning and timer. 2. Next Ice Lance and Assault timer not shows when these spells not coming. # Spine of Deathwing : Also reduces delay of Absorbed Blood stack warning to 1.25.
+	- Snamor via svn r7346: esES update
+	- Omega via svn r7345: *Remove health check from tank checks, it's not going to scale well with any accuracy, it'll reduce tank detection when people don't set roles but that's on them. *Improvements to trapscanners for rag and shannox, rag mainly to prevent the kind of breaking shannox mod got in case blizzard ever removes boss1 from him too, and shannox just a slight code tweak.
+	- ultrashining via svn r7344: zhTW update
+	- ebmor via svn r7343: deDE update (Core, WorldEvents)
+	- nbluewiz via svn r7342: # koKR update (core)
+	- DiabloHu via svn r7341: zhCN update
+	- Omega via svn r7340: update last to use quest progress if available otherwise post generic message if not
+	- Omega via svn r7339: Start of point tracking for Whack a Gnoll, todo, figure out how to track how many points PLAYER has earned out of that max total. cannot find an event at least tracked by transcriptor. COuld possibly register and watch quest progress update events, BUT what if you aren't on quest, and just want to free for all practice? Gotta be another way to track this besides quests.
+	- tandanu via svn r7338: Add best guess for lowest boss health in the current fight to the combat end message.
+	The following localization variables have been renamed and modified:
+	DBM_CORE_COMBAT_ENDED --> DBM_CORE_COMBAT_ENDED_AT
+	DBM_CORE_WHISPER_COMBAT_END_WIPE --> DBM_CORE_WHISPER_COMBAT_END_WIPE_AT
+	
+	Both have a new parameter %s for the boss status.
+	- nbluewiz via svn r7337: # Morchok : typo
+	- ebmor via svn r7336: fix lua error
+	- Omega via svn r7335: change the vortex to also use anti spam instead of CiD, the rest have to stay the way they are though. because that's how encounter is designed, if you pull twin out of range of morchok, you're just not going to get the 5-6 second mimic timer. But you'll get the cast warnings still so you'll live.
+	- nbluewiz via svn r7334: # DSTrash : oops forgot to remove old one.
+	- nbluewiz via svn r7333: # Morchok : fix lua error.
+	- nbluewiz via svn r7332: # DSTrash : do not not warn when Drakes count below 0.
+	- Omega via svn r7331: Madness updates
+	- Omega via svn r7330: Fix shannox trap scanning hopefully, it seems shannox is no longer boss1 (or any boss, his boss unit id was removed, wtf?)
+	- Snamor via svn r7329: esES update
+	- ebmor via svn r7328: deDE update (DragonSoul)
+	- Omega via svn r7327: The timer should cancel after 15 drakes die, the secondary checks probably won't be needed now that drake count is changed to sync, but leaving em anyways as redundancy doesn't hurt anything.
+	- nbluewiz via svn r7326: # Morchok : prevent double warn on Furious warning.
