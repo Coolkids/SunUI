@@ -324,6 +324,37 @@ function S.SetBD(f, x, y, x2, y2)
 	CreateBD(bg, 0.4)
 	CreateSD(bg)
 end
+S.ReskinClose = function(f, a1, p, a2, x, y)
+	f:SetSize(17, 17)
+
+	if not a1 then
+		f:SetPoint("TOPRIGHT", -4, -4)
+	else
+		f:ClearAllPoints()
+		f:SetPoint(a1, p, a2, x, y)
+	end
+
+	f:SetNormalTexture("")
+	f:SetHighlightTexture("")
+	f:SetPushedTexture("")
+	f:SetDisabledTexture("")
+
+	CreateBD(f, 0)
+
+	local tex = f:CreateTexture(nil, "BACKGROUND")
+	tex:SetPoint("TOPLEFT")
+	tex:SetPoint("BOTTOMRIGHT")
+	tex:SetTexture("Interface\\ChatFrame\\ChatFrameBackground")
+	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+
+	local text = f:CreateFontString(nil, "OVERLAY")
+	text:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
+	text:SetPoint("CENTER", 1, 1)
+	text:SetText("x")
+
+	f:HookScript("OnEnter", function(self) text:SetTextColor(1, .1, .1) end)
+ 	f:HookScript("OnLeave", function(self) text:SetTextColor(1, 1, 1) end)
+end
 function S.MakeMoveHandle(Frame, Text, key)
 	local MoveHandle = CreateFrame("Frame", nil, UIParent)
 	MoveHandle:SetSize(Frame:GetWidth(), Frame:GetHeight())
