@@ -54,6 +54,7 @@ function Module:OnEnable()
 	frame:SetHeight(C["BottomHeight"])	
 	frame:SetWidth(ChatFrame1:GetWidth()) --C["BottomWidth"]
 	threatbar:SetValue(0)
+	text:SetText("")
 	local status = nil
 	local highUnit = ""
 	local unitThreat = 0
