@@ -42,7 +42,7 @@
 --  Globals/Default Options  --
 -------------------------------
 DBM = {
-	Revision = tonumber(("$Revision: 7360 $"):sub(12, -3)),
+	Revision = tonumber(("$Revision: 7392 $"):sub(12, -3)),
 	DisplayVersion = "4.10.11 alpha", -- the string that is shown as version
 	ReleaseRevision = 7325 -- the revision of the latest stable version that is available
 }
@@ -373,6 +373,23 @@ do
 				registeredEvents[event] = nil
 				mainFrame:UnregisterEvent(event)
 			end
+		end
+	end
+
+	function DBM:UnregisterShortTermEvents()
+		if self.shortTermRegisterEvents then
+			for event, mods in pairs(registeredEvents) do
+				for i = #mods, 1, -1 do
+					if mods[i] == self and checkEntry(self.shortTermRegisterEvents, event)  then
+						tremove(mods, i)
+					end
+				end
+				if #mods == 0 then
+					registeredEvents[event] = nil
+					mainFrame:UnregisterEvent(event)
+				end
+			end
+			self.shortTermRegisterEvents = nil
 		end
 	end
 
@@ -2463,6 +2480,9 @@ function DBM:EndCombat(mod, wipe)
 				mod.combatInfo.killMobs[i] = true
 			end
 		end
+		if not savedDifficulty then -- prevent error when timer recovery function worked and etc (StartCombat not called)
+			savedDifficulty = ""
+		end
 		if wipe then
 			local thisTime = GetTime() - mod.combatInfo.pull
 			if thisTime < 15 then
@@ -3144,6 +3164,7 @@ end
 bossModPrototype.RegisterEvents = DBM.RegisterEvents
 bossModPrototype.UnregisterInCombatEvents = DBM.UnregisterInCombatEvents
 bossModPrototype.AddMsg = DBM.AddMsg
+bossModPrototype.UnregisterShortTermEvents = DBM.UnregisterShortTermEvents
 
 function bossModPrototype:SetZone(...)
 	if select("#", ...) == 0 then
@@ -3177,6 +3198,21 @@ function bossModPrototype:RegisterEventsInCombat(...)
 			local ev = select(i, ...)
 			tinsert(self.inCombatOnlyEvents, ev)
 		end
+	end
+end
+
+function bossModPrototype:RegisterShortTermEvents(...)
+	if not self.shortTermRegisterEvents then
+		self.shortTermRegisterEvents = {...}
+	else
+		for i = 1, select("#", ...) do
+			local ev = select(i, ...)
+			tinsert(self.shortTermRegisterEvents, ev)
+		end
+	end
+	if self.shortTermRegisterEvents and not self.shortTermEventsRegistered then
+		self.shortTermEventsRegistered = 1
+		self:RegisterEvents(unpack(self.shortTermRegisterEvents))
 	end
 end
 

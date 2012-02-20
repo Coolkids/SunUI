@@ -2,7 +2,7 @@
 local mod	= DBM:NewMod("ValionaTheralion", "DBM-BastionTwilight")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7266 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7386 $"):sub(12, -3))
 mod:SetCreatureID(45992, 45993)
 mod:SetModelID(34812)
 mod:SetZone()
@@ -380,9 +380,9 @@ function mod:UNIT_AURA(uId)
 end
 
 --Good worked for 10 man-heroic
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, spellName)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 	if not (uId == "boss1" or uId == "boss2") then return end
-	if spellName == GetSpellInfo(86497) and not ValionaLanded then--Anti spam because UNIT events fire for ALL valid UNITIDs, ie Boss1, target, focus, mouseover. It's possible to get as much as 4 events.
+	if spellId == 86497 and not ValionaLanded then--Anti spam because UNIT events fire for ALL valid UNITIDs, ie Boss1, target, focus, mouseover. It's possible to get as much as 4 events.
 		self:ScheduleMethod(0.1, "FabFlamesTarget")--Might need a timing tweak but should work.
 		timerNextFabFlames:Start()
 		lastFab = GetTime()

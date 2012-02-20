@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(332, "DBM-DragonSoul", nil, 187)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7359 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7390 $"):sub(12, -3))
 mod:SetCreatureID(56598)--56427 is Boss, but engage trigger needs the ship which is 56598
 mod:SetMainBossID(56427)
 mod:SetModelID(39399)
@@ -58,7 +58,7 @@ local timerSapperCD					= mod:NewNextTimer(40, "ej4200", nil, nil, nil, 107752)
 local timerDegenerationCD			= mod:NewCDTimer(8.5, 109208, nil, mod:IsTank())--8.5-9.5 variation.
 local timerBladeRushCD				= mod:NewCDTimer(15.5, 107595)
 local timerBroadsideCD				= mod:NewNextTimer(90, 110153)
-local timerRoarCD					= mod:NewCDTimer(19, 109228)--19~22 variables (i haven't seen any logs where this wasn't always 21.5, are 19s on WoL somewhere?)
+local timerRoarCD					= mod:NewCDTimer(19, 109228)--19~24 variables
 local timerTwilightFlamesCD			= mod:NewNextTimer(8, 108051)
 local timerShockwaveCD				= mod:NewCDTimer(23, 108046)
 local timerDevastateCD				= mod:NewCDTimer(8.5, 108042, nil, mod:IsTank())
@@ -118,15 +118,6 @@ function mod:AddsRepeat() -- it seems to be adds summon only 3 times. needs more
 		specWarnElites:Show()
 		timerAdd:Start()
 		self:ScheduleMethod(61, "AddsRepeat")
-		--Confirmed behavior for harpoons, only problem is, sometimes the add timer itself is off. :\ For example in this log it's 22.9, 60.8, 62.6
-		--We can't safetly use 60603 to fix it either cause we can't tell the trades apart in DBM. I only know mine are right because I personally targeted the drake that drops first add all 3 times.
---		"<1.0> [INSTANCE_ENCOUNTER_ENGAGE_UNIT] Fake Args:#1#1#The Skyfire#0xF130DD1600021854#elite#4000000#nil#nil#nil#nil#normal#0#nil#nil#nil#nil#normal#0#nil#nil#nil#nil#normal#0#Real Args:", -- [24]
---		"<23.9> [UNIT_SPELLCAST_SUCCEEDED] Twilight Assault Drake [[target:Eject Passenger 1::0:60603]]", -- [142]
---		"<43.8> [CLEU] SPELL_AURA_APPLIED#false#0xF150DD6900021857#Skyfire Harpoon Gun#2584#0#0xF150DE1700021DDF#Twilight Assault Drake#133704#0#108038#Harpoon#1#BUFF", -- [1309]
---		"<84.7> [UNIT_SPELLCAST_SUCCEEDED] Twilight Assault Drake [[target:Eject Passenger 1::0:60603]]", -- [3524]
---		"<91.8> [CLEU] SPELL_AURA_APPLIED#false#0xF150DD6900021857#Skyfire Harpoon Gun#2584#0#0xF150DE1700022081#Twilight Assault Drake#2632#0#108038#Harpoon#1#BUFF", -- [3857]
---		"<147.3> [UNIT_SPELLCAST_SUCCEEDED] Twilight Assault Drake [[target:Eject Passenger 1::0:60603]]", -- [7445]
---		"<154.2> [CLEU] SPELL_AURA_APPLIED#false#0xF150DD6900021857#Skyfire Harpoon Gun#2584#0#0xF150DE17000222C0#Twilight Assault Drake#2632#0#108038#Harpoon#1#BUFF", -- [7868]
 		if addsCount == 1 then
 			timerHarpoonCD:Start(20)--20 seconds after first elites (Confirmed)
 		else--6-7 seconds after sets 2 and 3.
@@ -210,7 +201,7 @@ function mod:SPELL_AURA_APPLIED(args)
 				specWarnSunder:Show(args.amount)
 			end
 		else
-			if (args.amount or 1) >= 2 and not UnitDebuff("player", GetSpellInfo(108043)) then--Other tank has 2 or more sunders and you have none.
+			if (args.amount or 1) >= 2 and not UnitDebuff("player", GetSpellInfo(108043)) and not UnitIsDeadOrGhost("player") then--Other tank has 2 or more sunders and you have none.
 				specWarnSunderOther:Show(args.destName)--So nudge you to taunt it off other tank already.
 			end
 		end
@@ -289,8 +280,8 @@ function mod:UNIT_DIED(args)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, spellName)
-	if spellName == GetSpellInfo(107594) then--Blade Rush, cast start is not detectable, only cast finish, can't use target scanning, or pre warn (ie when the lines go out), only able to detect when they actually finish rush
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+	if spellId == 107594 then--Blade Rush, cast start is not detectable, only cast finish, can't use target scanning, or pre warn (ie when the lines go out), only able to detect when they actually finish rush
 		self:SendSync("BladeRush", UnitGUID(uId))
 	end
 end

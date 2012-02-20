@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(333, "DBM-DragonSoul", nil, 187)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7358 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7389 $"):sub(12, -3))
 mod:SetCreatureID(56173)
 mod:SetModelID(40087)
 mod:SetZone()
@@ -30,8 +30,10 @@ local warnCataclysm				= mod:NewCastAnnounce(106523, 4)
 local warnPhase2				= mod:NewPhaseAnnounce(2, 3)
 local warnFragments				= mod:NewSpellAnnounce("ej4115", 4, 106708)--This needs a custom spell icon, EJ doesn't have icons for entires that are mobs
 local warnTerror				= mod:NewSpellAnnounce("ej4117", 4, 106765)--This needs a fitting spell icon, trigger spell only has a gear.
-local warnShrapnel				= mod:NewTargetAnnounce(109598, 3)
+local warnShrapnel				= mod:NewTargetAnnounce(109598, 3, nil, false)
 local warnParasite				= mod:NewTargetAnnounce(108649, 4)
+local warnTetanus				= mod:NewStackAnnounce(109605, 4, nil, false)
+local warnCongealingBloodSoon	= mod:NewSoonAnnounce("ej4350", 4, 109089)--15%, 10%, 5% on heroic. spellid is 109089.
 
 local specWarnMutated			= mod:NewSpecialWarningSwitch("ej4112", not mod:IsHealer())--Because tanks need to switch to it too.
 local specWarnImpale			= mod:NewSpecialWarningYou(106400)
@@ -39,7 +41,7 @@ local specWarnImpaleOther		= mod:NewSpecialWarningTarget(106400, mod:IsTank() or
 local specWarnElementiumBolt	= mod:NewSpecialWarningSpell(105651, nil, nil, nil, true)--Cast, helps you find the mark on ground and get into positions
 local specWarnElementiumBoltDPS	= mod:NewSpecialWarningSwitch(105651, mod:IsDps())--Warning for when to switch to dps it, because i really felt one warning didn't serve both meanings, one is an aoe/damage warning for cast, other should be specifically yelling at dps to kill it.
 local specWarnTentacle			= mod:NewSpecialWarningSwitch("ej4103", mod:IsDps())--Tanks not included in this one cause they may still have adds.
-local specWarnHemorrhage		= mod:NewSpecialWarningSwitch(105863, not mod:IsHealer())--Because tanks need to switch to it too.
+local specWarnHemorrhage		= mod:NewSpecialWarningSpell(105863, not mod:IsHealer())--Because tanks need to switch to it too.
 local specWarnFragments			= mod:NewSpecialWarningSpell("ej4115", mod:IsDps())--Not a "switch" warning because on normal a lot of groups choose to ignore these if they can burn boss and just pop dream. Let the raid leader decide strat on this one, not DBM.
 local specWarnTerror			= mod:NewSpecialWarningSpell("ej4117")--Same as fragments.
 local specWarnShrapnel			= mod:NewSpecialWarningYou(109598)
@@ -47,22 +49,26 @@ local specWarnParasite			= mod:NewSpecialWarningYou(108649)
 local specWarnParasiteDPS		= mod:NewSpecialWarningSwitch("ej4347", mod:IsDps())
 local yellParasite				= mod:NewYell(108649)
 local specWarnCongealingBlood	= mod:NewSpecialWarningSwitch("ej4350", mod:IsDps())--15%, 10%, 5% on heroic. spellid is 109089.
+local specWarnTetanus			= mod:NewSpecialWarningStack(109605, mod:IsTank(), 4)
+local specWarnTetanusOther		= mod:NewSpecialWarningTarget(109605, mod:IsTank())
 
 local timerMutated				= mod:NewNextTimer(17, "ej4112", nil, nil, nil, 467)--use druid spell Thorns icon temporarily.
 local timerImpale				= mod:NewTargetTimer(49.5, 106400, nil, mod:IsTank() or mod:IsHealer())--45 plus 4 second cast plus .5 delay between debuff ID swap.
 local timerImpaleCD				= mod:NewCDTimer(35, 106400, nil, mod:IsTank() or mod:IsHealer())
 local timerElementiumCast		= mod:NewCastTimer(7.5, 105651)
-local timerElementiumBlast		= mod:NewCastTimer(8, 109600)--8-10 variation depending on where it's actually going to land. Use the min time on variance to make sure healer Cds aren't up late.
+local timerElementiumBlast		= mod:NewCastTimer(8, 109600)--8-10 variation depending on where it's actually going to land. Use the min time.
 local timerElementiumBoltCD		= mod:NewNextTimer(55.5, 105651)
 local timerHemorrhageCD			= mod:NewCDTimer(100.5, 105863)
 local timerCataclysm			= mod:NewCastTimer(60, 106523)
 local timerCataclysmCD			= mod:NewCDTimer(130.5, 106523)--130.5-131.5 variations
 local timerFragmentsCD			= mod:NewNextTimer(90, "ej4115", nil, nil, nil, 106708)--Gear icon for now til i find something more suitable
 local timerTerrorCD				= mod:NewNextTimer(90, "ej4117", nil, nil, nil, 106765)--^
-local timerShrapnel				= mod:NewCastTimer(6, 109598)
+local timerShrapnel				= mod:NewBuffFadesTimer(6, 109598)
 local timerParasite				= mod:NewTargetTimer(10, 108649)
 local timerParasiteCD			= mod:NewCDTimer(60, 108649)
 local timerUnstableCorruption	= mod:NewCastTimer(10, 108813)
+local timerTetanus				= mod:NewTargetTimer(6, 109605, nil, mod:IsHealer())
+local timerTetanusCD			= mod:NewCDTimer(3.5, 109605, nil, mod:IsTank())
 
 local berserkTimer				= mod:NewBerserkTimer(900)
 
@@ -74,10 +80,13 @@ mod:AddBoolOption("SetIconOnParasite", true)
 
 local firstAspect = true
 local engageCount = 0
-local phase2 = false
 local playerGUID = 0
 local shrapnelTargets = {}
 local antiSpam = 0
+local warnedCount = 0
+local hemorrhage = GetSpellInfo(105863)
+local fragment = GetSpellInfo(109568)
+local activateTetanusTimers = false
 
 local debuffFilter
 do
@@ -97,15 +106,15 @@ end
 
 local function warnShrapnelTargets()
 	warnShrapnel:Show(table.concat(shrapnelTargets, "<, >"))
-	timerShrapnel:Start()
 	table.wipe(shrapnelTargets)
 end
 
 function mod:OnCombatStart(delay)
 	firstAspect = true
+	activateTetanusTimers = false
 	engageCount = 0
-	phase2 = false
 	antiSpam = 0
+	warnedCount = 0
 	table.wipe(shrapnelTargets)
 	berserkTimer:Start(-delay)
 end
@@ -114,6 +123,7 @@ function mod:OnCombatEnd()
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
 	end
+	self:UnregisterShortTermEvents()
 end
 
 function mod:SPELL_CAST_START(args)
@@ -171,13 +181,27 @@ function mod:SPELL_CAST_SUCCESS(args)
 			timerElementiumBlast:Start(20)
 			specWarnElementiumBoltDPS:Schedule(7.5)
 		end
-	elseif args:IsSpellID(110063) and phase2 and self:IsInCombat() then--Astral Recall. Thrall teleports off back platform back to front on defeat.
+	elseif args:IsSpellID(110063) then--Astral Recall. Thrall teleports off back platform back to front on defeat.
 		self:SendSync("MadnessDown")
 	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(106400) then
+	if args:IsSpellID(106548) then--Arm/Wing Transition
+		timerElementiumBoltCD:Cancel()
+		timerHemorrhageCD:Cancel()--Does this one cancel in event you super overgear this and stomp his ass this fast?
+		timerCataclysm:Cancel()
+		timerCataclysmCD:Cancel()
+	elseif args:IsSpellID(109592, 109593, 106834, 109594) then--Phase 2
+		warnPhase2:Show()
+		timerFragmentsCD:Start(10.5)
+		timerTerrorCD:Start(35.5)
+		if self:IsDifficulty("heroic10", "heroic25") then--Only register on heroic, we don't need on normal.
+			self:RegisterShortTermEvents(
+				"UNIT_HEALTH_FREQUENT"
+			)
+		end
+	elseif args:IsSpellID(106400) then
 		warnImpale:Show(args.destName)
 		timerImpale:Start(args.destName)
 		timerImpaleCD:Start()
@@ -191,6 +215,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		self:Unschedule(warnShrapnelTargets)
 		if args:IsPlayer() then
 			specWarnShrapnel:Show()
+			timerShrapnel:Start() -- Shrapnel debuff lasts 7 secs. But Shrapnel damages 1 sec early before debuff fades. So 6 sec timer will be more good.
 			ShrapnelCountdown:Start(6)
 		end
 		if (self:IsDifficulty("normal10", "heroic10") and #shrapnelTargets >= 3) or (self:IsDifficulty("normal25", "heroic25", "lfr25") and #shrapnelTargets >= 8) then
@@ -211,15 +236,32 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.SetIconOnParasite then
 			self:SetIcon(args.destName, 8)
 		end
+	elseif args:IsSpellID(106730, 109603, 109604, 109605) then -- Debuffs from adds
+		warnTetanus:Show(args.destName, args.amount or 1)
+		timerTetanus:Start(args.destName)
+		if (args.amount or 1) >= 4 then
+			if args:IsPlayer() then
+				specWarnTetanus:Show(args.amount)
+			else
+				if not UnitIsDeadOrGhost("player") and not UnitDebuff("player", GetSpellInfo(109603)) then--You have no debuff and not dead
+					specWarnTetanusOther:Show(args.destName)--So stop being a tool and taunt off other tank who has 4 stacks.
+				end
+			end
+		end
+		if activateTetanusTimers then -- Only track them when there is no Time Zone down (since we have no way to accurate track/detect whether or not they are tanked in it, ie slowed)
+			timerTetanusCD:Start(args.sourceGUID)
+		end
 	end
 end
-
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
 
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(106444, 109631, 109632, 109633) then
 		timerImpale:Cancel(args.destName)
+	elseif args:IsSpellID(106794, 110139, 110140, 110141) and args:IsPlayer() then
+		timerShrapnel:Cancel()
+		ShrapnelCountdown:Cancel()
 	elseif args:IsSpellID(108649) then
 		specWarnParasiteDPS:Show()
 		if self.Options.SetIconOnParasite then
@@ -240,41 +282,36 @@ end
 
 function mod:UNIT_DIED(args)
 	local cid = self:GetCIDFromGUID(args.destGUID)
-	if cid == 56167 or cid == 56168 or cid == 56846 then--Wings and Arms.
-		timerElementiumBoltCD:Cancel()
-		timerHemorrhageCD:Cancel()--Does this one cancel in event you super overgear this and stomp his ass this fast?
-		timerCataclysm:Cancel()
-		timerCataclysmCD:Cancel()
-	elseif cid == 56471 then--Mutated Corruption
+	if cid == 56471 then--Mutated Corruption
 		timerImpaleCD:Cancel()
 		timerParasiteCD:Cancel()
 		timerImpale:Cancel()--Cancel impale debuff timers since they don't matter anymore until next platform (well after they cleared)
+	elseif cid == 56311 then --Phase 2 Time Zone bubbles (yes it's an npc heh)
+		activateTetanusTimers = true
+	elseif cid == 56710 then
+		timerTetanusCD:Cancel(args.destGUID)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, spellName)
-	if spellName == GetSpellInfo(110663) then--Elementium Meteor Transform (apparently this doesn't fire UNIT_DIED anymore, need to use this alternate method)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, spellName, _, _, spellId)
+	if spellId == 110663 then--Elementium Meteor Transform (apparently this doesn't fire UNIT_DIED anymore, need to use this alternate method)
 		self:SendSync("BoltDied")--Send sync because Elementium bolts do not have a bossN arg, which means event only fires if it's current target/focus.
 	end
 	if not uId:find("boss") then return end--Anti spam to ignore all other args (like target/focus/mouseover)
-	if spellName == GetSpellInfo(105853) then
+	if spellName == hemorrhage then
 		warnHemorrhage:Show()
 		specWarnHemorrhage:Show()
-	elseif spellName == GetSpellInfo(105551) then--Spawn Blistering Tentacles
-		if not UnitBuff("player", GetSpellInfo(106028)) and not UnitIsDeadOrGhost("player") then--Check for Alexstrasza's Presence
+	elseif spellId == 105551 then--Spawn Blistering Tentacles
+		if not UnitBuff("player", GetSpellInfo(106028)) then--Check for Alexstrasza's Presence
 			warnTentacle:Show()
 			specWarnTentacle:Show()
 		end
-	elseif spellName == GetSpellInfo(106708) and not phase2 then--Slump (Phase 2 start), sometimes it's double warned. bliz bug??
-		phase2 = true 
-		warnPhase2:Show()
-		timerFragmentsCD:Start(11)
-		timerTerrorCD:Start(36)
-	elseif spellName == GetSpellInfo(109568) then--Summon Impaling Tentacle (Fragments summon)
+	elseif spellName == fragment then--Summon Impaling Tentacle (Fragments summon)
 		warnFragments:Show()
 		specWarnFragments:Show()
 		timerFragmentsCD:Start()
-	elseif spellName == GetSpellInfo(106765) then--Summon Elementium Terror (Big angry add)
+	elseif spellId == 106765 then--Summon Elementium Terror (Big angry add)
+		activateTetanusTimers = false
 		warnTerror:Show()
 		specWarnTerror:Show()
 		timerTerrorCD:Start()
@@ -284,7 +321,24 @@ end
 function mod:OnSync(msg)
 	if msg == "BoltDied" then
 		timerElementiumBlast:Cancel()--Lot of work just to cancel a timer, why the heck did blizz break this mob firing UNIT_DIED when it dies? Sigh.
-	elseif msg == "MadnessDown" then
+	elseif msg == "MadnessDown" and self:IsInCombat() then
 		DBM:EndCombat(self)
+	end
+end
+
+function mod:UNIT_HEALTH_FREQUENT(uId)
+	if uId == "boss1" then
+		local hp = UnitHealth(uId) / UnitHealthMax(uId) * 100
+		if hp > 15 and hp < 16.5 and warnedCount == 0 then
+			warnedCount = 1
+			warnCongealingBloodSoon:Show()
+		elseif hp > 10 and hp < 11.5 and warnedCount == 1 then
+			warnedCount = 2
+			warnCongealingBloodSoon:Show()
+		elseif hp > 5 and hp < 6.5 and warnedCount == 2 then
+			warnedCount = 3
+			warnCongealingBloodSoon:Show()
+			self:UnregisterShortTermEvents()
+		end
 	end
 end

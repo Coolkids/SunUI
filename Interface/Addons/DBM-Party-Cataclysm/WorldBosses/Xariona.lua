@@ -1,14 +1,14 @@
 local mod	= DBM:NewMod("Xariona", "DBM-Party-Cataclysm", 15)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 6723 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7378 $"):sub(12, -3))
 mod:SetCreatureID(50061)
 mod:SetModelID(32229)
 mod:SetZone(640)--Deepholm
 
 mod:RegisterCombat("combat")
 
-mod:RegisterEvents(
+mod:RegisterEventsInCombat(
 	"SPELL_CAST_START",
 	"SPELL_CAST_SUCCESS",
 	"SPELL_AURA_APPLIED",

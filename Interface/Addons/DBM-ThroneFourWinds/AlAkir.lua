@@ -2,7 +2,7 @@
 local mod	= DBM:NewMod("AlAkir", "DBM-ThroneFourWinds")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7276 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7386 $"):sub(12, -3))
 mod:SetCreatureID(46753)
 mod:SetModelID(35248)
 mod:SetZone()
@@ -15,14 +15,12 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED_DOSE",
 	"SPELL_AURA_REMOVED",
 	"SPELL_CAST_START",
-	"SPELL_DAMAGE",
-	"SPELL_MISSED",
-	"SPELL_PERIODIC_DAMAGE",
-	"SPELL_PERIODIC_MISSED",
 	"UNIT_SPELLCAST_SUCCEEDED"
 )
 
-local isDeathKnight = select(2, UnitClass("player")) == "DEATHKNIGHT"
+--Classes that can drop stacks of acid rain, but only if they can time AMS/bubble right, they use it wrong and they do no good.
+local isDKorPaly	= select(2, UnitClass("player")) == "DEATHKNIGHT"
+					or select(2, UnitClass("player")) == "PALADIN"
 
 local warnIceStorm			= mod:NewSpellAnnounce(88239, 3)
 local warnSquallLine		= mod:NewSpellAnnounce(91129, 4)
@@ -45,7 +43,7 @@ local timerWindBurst		= mod:NewCastTimer(5, 87770)
 local timerWindBurstCD		= mod:NewCDTimer(25, 87770)		-- 25-30 Variation
 local timerAddCD			= mod:NewCDTimer(20, 88272)
 local timerFeedback			= mod:NewTimer(20, "TimerFeedback", 87904)
-local timerAcidRainStack	= mod:NewNextTimer(15, 93281, nil, isDeathKnight)
+local timerAcidRainStack	= mod:NewNextTimer(15, 93281, nil, isDKorPaly)
 local timerLightningRod		= mod:NewTargetTimer(5, 89668)
 local timerLightningRodCD	= mod:NewNextTimer(15, 89668)
 local timerLightningCloudCD	= mod:NewNextTimer(15, 89588)
@@ -67,6 +65,11 @@ local phase2Started = false
 local strikeStarted = false
 local spamIce = 0
 local spamCloud = 0
+local squallName = GetSpellInfo(91129)
+local iceName = GetSpellInfo(88239)
+local stormlingName = GetSpellInfo(88272)
+local acidName = GetSpellInfo(101452)
+local cloudsName = GetSpellInfo(93304)
 
 function mod:CloudRepeat()
 	self:UnscheduleMethod("CloudRepeat")
@@ -95,12 +98,18 @@ function mod:OnCombatStart(delay)
 	timerWindBurstCD:Start(20-delay)
 	timerLightningStrikeCD:Start(8.5-delay)
 	timerIceStormCD:Start(6-delay)
+	--Only needed in phase 1
+	self:RegisterShortTermEvents(
+		"SPELL_PERIODIC_DAMAGE",
+		"SPELL_PERIODIC_MISSED"
+	)
 end
 
 function mod:OnCombatEnd()
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
 	end
+	self:UnregisterShortTermEvents()
 end
 
 function mod:SPELL_AURA_APPLIED(args)
@@ -186,10 +195,10 @@ function mod:SPELL_PERIODIC_DAMAGE(sourceGUID, sourceName, sourceFlags, sourceRa
 end
 mod.SPELL_PERIODIC_MISSED = mod.SPELL_PERIODIC_DAMAGE
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, spellName)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, spellName, _, _, spellId)
 	if uId ~= "boss1" then return end--Anti spam to ignore all other args
 --	"<42.5> [CAST_SUCCEEDED] Al'Akir:Possible Target<Erej>:boss1:Squall Line::0:91129", -- [870]
-	if spellName == GetSpellInfo(91129) then -- Squall Line (Tornados)
+	if spellName == squallName then -- Squall Line (Tornados)
 		warnSquallLine:Show()
 		if not phase2Started then
 			timerSquallLineCD:Start(30)--Seems like a longer CD in phase 1? That or had some electrocute and windburst delays, need more data.
@@ -197,15 +206,15 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, spellName)
 			timerSquallLineCD:Start()
 		end
 --	"<37.6> [CAST_SUCCEEDED] Al'Akir:Possible Target<Erej>:boss1:Ice Storm::0:88239", -- [462]
-	elseif spellName == GetSpellInfo(88239) then -- Ice Storm (Phase 1)
+	elseif spellName == iceName then -- Ice Storm (Phase 1)
 		warnIceStorm:Show()
 		timerIceStormCD:Start()
 --	"<94.2> [CAST_SUCCEEDED] Al'Akir:Possible Target<Erej>:boss1:Stormling::0:88272", -- [5155]
-	elseif spellName == GetSpellInfo(88272) then -- Summon Stormling (Phase 2 add)
+	elseif spellName == stormlingName then -- Summon Stormling (Phase 2 add)
 		warnAdd:Show()
 		timerAddCD:Start()
 --	"<83.2> [CAST_SUCCEEDED] Al'Akir:Possible Target<Erej>:boss1:Acid Rain::0:101452", -- [4307]
-	elseif spellName == GetSpellInfo(101452) then -- Acid Rain
+	elseif spellName == acidName then -- Acid Rain
 		if self:IsDifficulty("normal10", "normal25") then
 			timerAcidRainStack:Start(20)
 		else
@@ -218,15 +227,21 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, spellName)
 			timerIceStormCD:Cancel()
 		end
 --	"<229.0> [CAST_SUCCEEDED] Al'Akir:Possible Target<Erej>:boss1:Relentless Storm Initial Vehicle Ride Trigger::0:89528", -- [18459]
-	elseif spellName == GetSpellInfo(89528) then -- Relentless Storm Initial Vehicle Ride Trigger (phase 3 start trigger)
+	elseif spellId == 89528 then -- Relentless Storm Initial Vehicle Ride Trigger (phase 3 start trigger)
 		warnPhase3:Show()
 		timerLightningCloudCD:Start(15.5)
 		timerWindBurstCD:Start(25)
 		timerLightningRodCD:Start(20)
 		timerAddCD:Cancel()
 		timerAcidRainStack:Cancel()
+		self:UnregisterShortTermEvents()
 --	"<244.5> [CAST_SUCCEEDED] Al'Akir:Possible Target<nil>:boss1:Lightning Clouds::0:93304", -- [19368]
-	elseif spellName == GetSpellInfo(93304) then -- Phase 3 Lightning cloud trigger (only cast once)
+	elseif spellName == cloudsName then -- Phase 3 Lightning cloud trigger (only cast once)
 		self:CloudRepeat()
+		--Only needed in phase 2
+		self:RegisterShortTermEvents(
+			"SPELL_DAMAGE",
+			"SPELL_MISSED"
+		)
 	end
 end

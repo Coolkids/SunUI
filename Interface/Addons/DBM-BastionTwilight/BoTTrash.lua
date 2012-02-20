@@ -1,16 +1,15 @@
 local mod	= DBM:NewMod("BoTrash", "DBM-BastionTwilight")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7266 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7387 $"):sub(12, -3))
 mod:SetModelID(37193)
+mod:SetZone()
 
 mod:RegisterEvents(
 	"SPELL_CAST_SUCCESS",
 	"SPELL_AURA_APPLIED",
 	"SPELL_AURA_REMOVED",
-	"SPELL_CAST_START",
-	"SPELL_DAMAGE",
-	"SPELL_MISSED"
+	"SPELL_CAST_START"
 )
 
 local warnVolcanicWrath		= mod:NewSpellAnnounce(87903, 4)--This is nasty volcano aoe that's channeled that will wipe raid on trash if not interrupted.
@@ -28,6 +27,22 @@ local timerVolcanicWrath	= mod:NewBuffActiveTimer(9, 87903)--Maybe need a Guid b
 
 mod:RemoveOption("HealthFrame")
 mod:RemoveOption("SpeedKillTimer")
+
+local flamestrikeRunning = false
+
+function mod:SetFlamestrike(CouncilPull)
+	if CouncilPull and flamestrikeRunning then
+		self:UnregisterShortTermEvents()
+		flamestrikeRunning = false
+	end
+	if not flamestrikeRunning and not CouncilPull then
+		self:RegisterShortTermEvents(
+			"SPELL_DAMAGE",
+			"SPELL_MISSED"
+		)
+		flamestrikeRunning = true
+	end
+end
 
 function mod:RuptureTarget(sGUID)
 	local targetname = nil
@@ -82,6 +97,7 @@ end
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(93383, 93362) then--Are both IDs used?
 		self:ScheduleMethod(0.2, "FlameStrikeTarget", args.sourceGUID)
+		self:SetFlamestrike()
 	elseif args:IsSpellID(93377) then
 		specWarnRupture:Show()
 		self:ScheduleMethod(0.2, "RuptureTarget", args.sourceGUID)

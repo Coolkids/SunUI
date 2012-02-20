@@ -1,14 +1,14 @@
 local mod	= DBM:NewMod("Mobus", "DBM-Party-Cataclysm", 15)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 6476 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7378 $"):sub(12, -3))
 mod:SetCreatureID(50009)
 mod:SetModelID(37338)
 mod:SetZone(614, 613)--Abyssal depths, or Vashjir Main map
 
 mod:RegisterCombat("combat")
 
-mod:RegisterEvents(
+mod:RegisterEventsInCombat(
 	"SPELL_CAST_START",
 	"SPELL_AURA_APPLIED"
 )

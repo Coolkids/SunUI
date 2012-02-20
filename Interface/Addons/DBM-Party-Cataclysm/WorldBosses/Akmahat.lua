@@ -1,14 +1,14 @@
 local mod	= DBM:NewMod("Akmahat", "DBM-Party-Cataclysm", 15)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7220 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7378 $"):sub(12, -3))
 mod:SetCreatureID(50063)
 mod:SetModelID(34573)
 mod:SetZone(748, 720)--Uldum (both versions of it)
 
 mod:RegisterCombat("combat")
 
-mod:RegisterEvents(
+mod:RegisterEventsInCombat(
 	"SPELL_CAST_START",
 	"SPELL_AURA_APPLIED",
 	"SPELL_AURA_REMOVED"

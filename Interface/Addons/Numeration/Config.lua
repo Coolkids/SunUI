@@ -2,7 +2,7 @@ local n = select(2, ...)
 -- window settings
 n.windowsettings = {
 	-- pos = { "TOPLEFT", 4, -4 },
-	pos = { "BOTTOMRIGHT", nil, "BOTTOMRIGHT", -15, 30 },
+	pos = { "BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -5, 0 },
 	width = 290,
 	maxlines = 8,
 	backgroundalpha = 0,

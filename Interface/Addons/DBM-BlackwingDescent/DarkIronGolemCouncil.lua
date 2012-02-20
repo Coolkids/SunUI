@@ -2,7 +2,7 @@
 local mod	= DBM:NewMod("DarkIronGolemCouncil", "DBM-BlackwingDescent")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7271 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7382 $"):sub(12, -3))
 mod:SetCreatureID(42180, 42178, 42179, 42166)
 mod:SetModelID(32688)
 mod:SetZone()
@@ -177,9 +177,9 @@ local bossInactive = function(boss)
 end
 
 function mod:CheckEncasing() -- prevent two yells at a time
-	if encasing and self.Options.YellOnTargetLock then
+	if encasing then
 		yellEncasingShadows:Yell()
-	elseif not encasing then
+	else
 		yellAcquiringTarget:Yell()
 	end
 	encasing = false

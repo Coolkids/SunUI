@@ -23,7 +23,7 @@
 ## DefaultState: enabled
 ## Author: Nitram and Tandanu
 ## URL: http://www.deadlybossmods.com
-## X-Curse-Packaged-Version: 4.10.10-35-g4e31505
+## X-Curse-Packaged-Version: 4.10.10-67-g8e3a9e7
 ## X-Curse-Project-Name: Deadly Boss Mods
 ## X-Curse-Project-ID: deadly-boss-mods
 ## X-Curse-Repository-ID: wow/deadly-boss-mods/mainline

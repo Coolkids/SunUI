@@ -1,4 +1,42 @@
 subversion:
+	- nbluewiz via svn r7392: # Core : Fix rare nil savedDifficulty error. # Firelands/Baleroc : Fix strike spellName error.
+	- nbluewiz via svn r7391: # koKR update (core)
+	- nbluewiz via svn r7390: # Blackhorn : fix spellId case to match other mods.
+	- Omega via svn r7389: even more tank debuff stuff.
+	- Omega via svn r7388: Add some phase 2 tank debuff tracking
+	- Omega via svn r7387: ah fix more stuff, some of the trash mods weren't limited to their proper zone, this is now fixed too.
+	- Omega via svn r7386: More of the same
+	- Omega via svn r7385: Reduce needless function usage when there is only one spellid for a UNIT event (ie, don't call GetSpellInfo if we don't need to). In events we DO need to GetSpellInfo call it only once. Trivial things, but better code/cpu usage none the less :)
+	Fights in current tier cause extraodordinary hit on even some of the most decent computers with how many mods are overwhelmed by their data. Improving the game one function at a time, one mod at a time ;)
+	- Snamor via svn r7384: esES update
+	- thiagovfar via svn r7383: ptBR update
+	Adding/removing localizations strings that I've missed on r7368.
+	- ebmor via svn r7382: BWD Omnotron Defense System: fix Encasing Shadows yell (seems to be broken since r5518)
+	- ebmor via svn r7381: deDe update
+	- nbluewiz via svn r7380: # Madness of Deathwing : Remove Parasite canceling. I have bad log. sorry. (-
+	- Omega via svn r7379: no reason to check difficulty when canceling timers, that's just extra code. I'm not even sure why you'd need to cancel parasite here to be honest. That timer is canceled when corruption dies, and corruption ALWAYS dies before arm/wing? Unless maybe a bug where the cast can show in combat log after it dies? guess that's probably why.
+	- Omega via svn r7378: *Comment cleanup. *Changed 3 world bosses to only register events in combat, since they have no mobs even remotely near em that could possibly mess up combat regen pull detection. *Event tweaks on al'akir (another particularly brutal fight on combat log/fps on 25 man)
+	- nbluewiz via svn r7377: # Madness of Deathwing : Also cancels Parasite timer on heroic.
+	- nbluewiz via svn r7376: # Madness of Deathwing : Change phase 1 timer canceling. If wing or arm dies same time on Cataclysm casting, Cataclysm timer not cancels. This fix will fix this problem (hopefully).
+	- nbluewiz via svn r7375: # Madness of Deathwing : Change Shrapnel timer to personal timer. Also Shrapnel target warning off by default (too spammy on 25-man). And cancels countdown and timer when Shrapnel fades from player.
+	- Omega via svn r7374: chamge hemorage back to spell warning, you don't actively switch to them on heroic, you keep them up on purpose to gimmick spellweave onto parasites and corruption, then kill them. So for this one, we'll leave the "switch" call to the raid leader.
+	- Omega via svn r7373: oops, only register health update on heroic, since we don't need it on normal. no reason to add heroic check to health event then either since it won't even be activated there ;)
+	- Omega via svn r7372: Add a pre warn for congealingblood. Make sure it's faster by using FREQUENT health method (as a result, using short term events to register it so it's not being used entire fight)
+	- ultrashining via svn r7371: zhTW update (blank clean up, pvp update)
+	- nbluewiz via svn r7370: # Core : RegisterEventsShortTerm -> RegisterShortTermEvents
+	- Omega via svn r7369: Remove un-needed checks from sending sync kill sync, that spell is a unique spellid that's only ever cast at one point in fight, the end. he uses a different spellid at beginning of fight. Instead just make sure we're in combat before trying to end combat (otherwise there is no point)
+	- thiagovfar via svn r7368: ptBR update
+	Wild localization strings appeared (some others got away), while I was
+	away.
+	
+	I'm also cleaning up my locals, as Omega did just now.
+	- nbluewiz via svn r7367: # koKR update (remove blank)
+	- Omega via svn r7366: More trash stuff. Kill off first charge timer on BWD trash, it's an ugly hack/hog with no clean workaround Disable flamestrike when council is pulled and only register it on flamestrike casts for BoT trash
+	- Omega via svn r7365: rename Partly to ShortTerm. "Partly" signifies something that's only partially registered, but that's not true, it's fully registered, just only temporarily. "Short Term" is a more accurate description of the function. Applied short term event registeration usage to firelands trash mods as well. Did some useless locals cleanup to reduce locals size and loading time. No sense in having a ton of empty tables. Removed firelands trash range finder. that's just silly. Like no one uses it, and to even make it work we have to do all kinds of ugly hacking. It's better off gone.
+	- nbluewiz via svn r7364: # koKR update
+	- nbluewiz via svn r7363: # DSTrash : Oops, forgot to remove debug code.
+	- nbluewiz via svn r7362: # Core : Added partly register event support. Refer to DSTrash. # DSTrash : High volume events (SPELL_DAMAGE, SWING_DAMAGE, ...) now using Drake event only. It will resolve performance issue.
+	- DiabloHu via svn r7361: zhCN update
 	- thiagovfar via svn r7360: ptBR update
 	Some triggers for dragon soul, end time and hour of twilight.
 	
