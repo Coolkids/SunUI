@@ -21,7 +21,7 @@ function Module.LoadSettings()
 		["LockUIscale"] = false,
 		["Autoinvite"] = false,
 		["INVITE_WORD"] = "SunUI",
-		["igonoreOld "] = false,
+		["igonoreOld"] = false,
 		["uiScale"] = 0.69999998807907,
 		["ClassCDOpen"] = false,
 		["ClassCDDirection"] = 1,
@@ -29,6 +29,7 @@ function Module.LoadSettings()
 		["ClassCDHeight"] = 20,
 		["ClassFontSize"] = 15,
 		["FontScale"] = 0.8,
+		["Flump"] = true,
 		
 	}
 	if not MiniDB then MiniDB = {} end
@@ -248,7 +249,20 @@ function Module.BuildGUI()
 							get = function() return MiniDB.ClassCDDirection end,
 							set = function(_, value) MiniDB.ClassCDDirection = value end,
 						},
-					}
+					}		
+				},
+			}
+		}
+		DB["Config"]["Script"] =  {
+			type = "group", order = 13,
+			name = "SunUI Script",
+			args = {
+				Flump = {
+					type = "toggle",
+					name = L["启用施法通告"],
+					order = 1,
+					get = function() return MiniDB.Flump end,
+					set = function(_, value) MiniDB.Flump = value end,
 				},
 			}
 		}
