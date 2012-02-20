@@ -13,7 +13,7 @@
 	<Include file="bags\load.xml"/>
 	<Script file = "Buffs.lua"/>
 	<Include file = "Chat\load.xml"/>
-	<Script file = "caelNamePlates.lua"/>
+	<Script file = "NamePlates.lua"/>
 	<Script file = "Loot.lua"/>
 	<Script file = "roll.lua"/>
 	<Script file = "Minimap.lua"/>
