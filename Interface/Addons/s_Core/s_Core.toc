@@ -1,7 +1,7 @@
 ## Interface: 40300
 ## Title: |cffDDA0DDSun|r|cff44CCFFUI|r
 ## Notes: 孫小貓超級整合插件
-## Author:Neavo, dtzy,Ray, Coolkid
+## Author:Neavo, dtzy, Ray, 楼上的你妈妈叫你吃饭, Coolkid
 ## SavedVariables: bb08df87101dd7f2161e5b77cf750f753c58ef1b, MiniDB, stAddonProfiles, stLockedAddons
 ## SavedVariablesPerCharacter:ActionBarDB, BuffDB, NameplateDB, ReminderDB, ThreatDB, TooltipDB, UnitFrameDB, MoveHandleDB, SkinDB, CoreVersion, InfoPanelDB
 core.xml
