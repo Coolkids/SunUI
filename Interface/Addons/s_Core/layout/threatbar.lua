@@ -24,7 +24,7 @@ function Module:OnEnable()
 	S.MakeShadow(threatbar, 3)
 	S.MakeBG(threatbar, 0)
 	threatbar:SetMinMaxValues(0, 100)
-	text = S.MakeFontString(threatbar, 10)
+	text = S.MakeFontString(frame, 10)
 	text:SetPoint("TOPRIGHT", -15, 8)
 
 	local function GetThreat(unitId, mobId)
