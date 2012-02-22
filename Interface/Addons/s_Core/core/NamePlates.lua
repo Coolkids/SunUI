@@ -51,7 +51,7 @@ local DebuffWhiteList = {
 		[GetSpellInfo(20066)] = true, --Repentance
 		[GetSpellInfo(10326)] = true, --Turn Evil
 		[GetSpellInfo(853)] = true, --Hammer of Justice
-	-- Priest 
+	-- Priest
 		[GetSpellInfo(605)] = true, --Mind Control
 		[GetSpellInfo(64044)] = true, --Psychic Horror
 		[GetSpellInfo(8122)] = true, --Psychic Scream
@@ -337,7 +337,7 @@ end
 local function UpdateCastbar(frame)
 	frame:ClearAllPoints()
 	frame:SetSize(cbWidth, cbHeight)
-	frame:SetPoint('TOPLEFT', frame:GetParent().hp, 'BOTTOMLEFT', 0, -5)
+	frame:SetPoint('TOP', frame:GetParent().hp, 'BOTTOM', 0, -8)
 	frame:GetStatusBarTexture():SetHorizTile(true)
 	if(frame.shield:IsShown()) then
 		frame:SetStatusBarColor(1, 0, 0)
@@ -544,7 +544,7 @@ local function SkinObjects(frame)
 	
 	--Setup CastBar Icon
 	cbicon:ClearAllPoints()
-	cbicon:SetPoint("TOPRIGHT", hp, "TOPLEFT", -5, 0)		
+	cbicon:SetPoint("TOPRIGHT", hp, "TOPLEFT", -3, 0)		
 	cbicon:SetSize(iconSize, iconSize)
 	cbicon:SetTexCoord(.07, .93, .07, .93)
 	cbicon:SetDrawLayer("OVERLAY")
@@ -588,7 +588,7 @@ local function SkinObjects(frame)
 	raidicon:ClearAllPoints()
 	raidicon:SetPoint("BOTTOM", hp, "TOP", 0, 2)
 	raidicon:SetSize(iconSize*1.4, iconSize*1.4)
-	raidicon:SetTexture([[Interface\AddOns\!RayUI\media\raidicons.blp]])	
+	raidicon:SetTexture("Interface\\AddOns\\s_Core\\Media\\raidicons.blp")	
 	frame.raidicon = raidicon
 	
 	--Hide Old Stuff
