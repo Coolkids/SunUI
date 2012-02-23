@@ -184,11 +184,11 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 
     if GameTooltipStatusBar:IsShown() then
         GameTooltipStatusBar:ClearAllPoints()
-		GameTooltipStatusBar:SetHeight(S.Scale(6))
+		GameTooltipStatusBar:SetHeight(S.Scale(8))
 		GameTooltipStatusBar:Point("BOTTOMLEFT", GameTooltipStatusBar:GetParent(), "TOPLEFT", 4.5, 4)
 		GameTooltipStatusBar:Point("BOTTOMRIGHT", GameTooltipStatusBar:GetParent(), "TOPRIGHT", -4.5, 4)
 		if not GameTooltipStatusBar.Shadow then
-			GameTooltipStatusBar.Shadow = S.MakeShadow(GameTooltipStatusBar, 3)
+			GameTooltipStatusBar.Shadow = S.MakeShadow(GameTooltipStatusBar, 4)
 			S.MakeBG(GameTooltipStatusBar, 0)
 		end
     end
@@ -221,7 +221,7 @@ GameTooltipStatusBar:SetScript("OnValueChanged", function(self, value)
         if not self.text then
             self.text = self:CreateFontString(nil, "OVERLAY")
             self.text:SetPoint("CENTER", GameTooltipStatusBar)
-            self.text:SetFont(cfg.font, 14, cfg.outline)
+            self.text:SetFont(cfg.font, 9*S.Scale(1), cfg.outline)
         end
         self.text:Show()
         local hp = numberize(min).." / "..numberize(max)
