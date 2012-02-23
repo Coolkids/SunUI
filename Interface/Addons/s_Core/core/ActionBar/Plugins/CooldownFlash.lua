@@ -1,4 +1,5 @@
 local S, C, L, DB = unpack(select(2, ...))
+if DB.Nuke == true then return end
 local lib = LibStub("LibCooldown")
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("CooldownFlash")
 function Module:OnInitialize()

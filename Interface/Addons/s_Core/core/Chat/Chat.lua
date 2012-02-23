@@ -1,7 +1,7 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
 
 CHAT_FONT_HEIGHTS = {5, 6, 7, 8, 9,10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28}
-
+if DB.Nuke == true then return end
 local LinkHover = {}; LinkHover.show = {	-- enable (true) or disable (false) LinkHover functionality for different things in chat
 	["achievement"] = true,
 	["enchant"]     = true,

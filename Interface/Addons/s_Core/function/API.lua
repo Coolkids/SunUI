@@ -402,7 +402,7 @@ function S.UpdateSize(obj, width, height)
 end
 local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/MiniDB["uiScale"]
 local function scale(x)
-	return (mult*math.floor(x/mult+.5)) --(1/GetCVar("uiScale"))*x
+	return (mult*math.floor(x/mult+.5)) 
 end
 S.mult = mult
 S.Scale = scale

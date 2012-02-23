@@ -13,6 +13,7 @@
     "rABS_TotemBar",
     "rABS_ExtraActionBar",
   }
+
 DB.applyDragFunctionality = function(f,userplaced,locked)
     --f:SetScript("OnDragStart", function(s) if IsAltKeyDown() and IsShiftKeyDown() then s:StartMoving() end end)
 	f:SetScript("OnDragStart", function(s) s:StartMoving() end)
@@ -20,8 +21,8 @@ DB.applyDragFunctionality = function(f,userplaced,locked)
     
     local t = f:CreateTexture(nil,"OVERLAY",nil,6)
     t:SetAllPoints(f)
-    t:SetTexture(0,1,0)
-    t:SetAlpha(0)
+    t:SetTexture(0,0,0)
+    t:SetAlpha(1)
     f.dragtexture = t    
     f:SetHitRectInsets(-15,-15,-15,-15)
     f:SetClampedToScreen(true)
@@ -32,7 +33,7 @@ DB.applyDragFunctionality = function(f,userplaced,locked)
       f:SetMovable(true)
       f:SetUserPlaced(true)
       if not locked then
-        f.dragtexture:SetAlpha(0.2)
+        f.dragtexture:SetAlpha(1)
         f:EnableMouse(true)
         f:RegisterForDrag("LeftButton")
         f:SetScript("OnEnter", function(s) 
@@ -62,7 +63,7 @@ DB.applyDragFunctionality = function(f,userplaced,locked)
           f.state = "hidden"
           f:Show()
         end
-        f.dragtexture:SetAlpha(0.2)
+        f.dragtexture:SetAlpha(1)
         f:EnableMouse(true)
         f:RegisterForDrag("LeftButton")
         f:SetScript("OnEnter", function(s)

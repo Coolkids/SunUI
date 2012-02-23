@@ -1,5 +1,6 @@
 ﻿-- Engines
 local S, C, L, DB = unpack(select(2, ...))
+if DB.Nuke == true then return end
 local Core = LibStub("AceAddon-3.0"):GetAddon("Core")
 local Module = Core:NewModule("ClassBuffReminder", "AceEvent-3.0")
 local ClassBuff, BuffFrame = {}, {}

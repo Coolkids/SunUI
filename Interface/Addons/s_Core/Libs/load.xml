@@ -12,6 +12,7 @@
 	<Include file="cargBags\embed.xml"/>
 	<Include file="LibSharedMedia-3.0\lib.xml"/>
 	<Include file="ACE3\load.xml"/>
+	<Include file="oUF_Plugins\load.xml"/>
 	<Script file="LibCooldown.lua"/>
 </Ui>
 

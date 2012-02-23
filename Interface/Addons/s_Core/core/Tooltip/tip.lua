@@ -1,4 +1,5 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
+if DB.Nuke == true then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Tooltips")
 local _, ns = ...
 function Module:OnInitialize()
@@ -182,18 +183,19 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
     end
 
     if GameTooltipStatusBar:IsShown() then
-        self:AddLine(" ")
         GameTooltipStatusBar:ClearAllPoints()
-        GameTooltipStatusBar:SetPoint("TOPLEFT", self:GetName().."TextLeft"..self:NumLines(), "TOPLEFT", 0, -4)
-        GameTooltipStatusBar:SetPoint("TOPRIGHT", self, -10, 0)
+		GameTooltipStatusBar:SetHeight(S.Scale(6))
+		GameTooltipStatusBar:Point("BOTTOMLEFT", GameTooltipStatusBar:GetParent(), "TOPLEFT", 4.5, 4)
+		GameTooltipStatusBar:Point("BOTTOMRIGHT", GameTooltipStatusBar:GetParent(), "TOPRIGHT", -4.5, 4)
+		if not GameTooltipStatusBar.Shadow then
+			GameTooltipStatusBar.Shadow = S.MakeShadow(GameTooltipStatusBar, 3)
+			S.MakeBG(GameTooltipStatusBar, 0)
+		end
     end
 end)
 
-GameTooltipStatusBar:SetStatusBarTexture(cfg.tex)
-local bg = GameTooltipStatusBar:CreateTexture(nil, "BACKGROUND")
-bg:SetAllPoints(GameTooltipStatusBar)
-bg:SetTexture(cfg.tex)
-bg:SetVertexColor(0.5, 0.5, 0.5, 0.5)
+GameTooltipStatusBar:SetStatusBarTexture(DB.Statusbar)
+
 
 local numberize = function(val)
     if (val >= 1e6) then

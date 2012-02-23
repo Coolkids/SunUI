@@ -1,13 +1,14 @@
 local S, C, L, DB = unpack(select(2, ...))
+if DB.Nuke == true then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("stancebar", "AceEvent-3.0")
 local barDB = DB.bars.totembar  
 function Module:OnInitialize()
 C = ActionBarDB  
 
     local num = NUM_SHAPESHIFT_SLOTS
-    
+
     local bar = CreateFrame("Frame","rABS_StanceBar",UIParent, "SecureHandlerStateTemplate")
-    bar:SetWidth(C["ButtonSize"]*num+C["ButtonSpacing"]*(num-1))
+    bar:SetWidth(C["ButtonSize"]*6+C["ButtonSpacing"]*(6-1))
     bar:SetHeight(C["ButtonSize"])
     bar:SetPoint(C["stancebar"].a1,C["stancebar"].af,C["stancebar"].a2,C["stancebar"].x,C["stancebar"].y)
     bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)

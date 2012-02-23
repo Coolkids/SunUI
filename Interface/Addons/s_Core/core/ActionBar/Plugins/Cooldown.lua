@@ -1,4 +1,5 @@
 local _, _, _, DB = unpack(select(2, ...))
+if DB.Nuke == true then return end
 -- want hex color instead of RGB?
 RGBToHex = function(r, g, b)
 	r = r <= 1 and r >= 0 and r or 0

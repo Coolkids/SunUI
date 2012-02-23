@@ -1,4 +1,5 @@
-﻿local Event = CreateFrame("Frame")
+﻿
+local Event = CreateFrame("Frame")
 Event:RegisterEvent("PLAYER_ENTERING_WORLD")
 Event:SetScript("OnEvent", function(self, elasped)
 	local Timer = 0

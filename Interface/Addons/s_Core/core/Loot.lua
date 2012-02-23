@@ -1,5 +1,5 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
-
+if DB.Nuke == true then return end
 
 local L = {
 	fish = "Fishy loot",

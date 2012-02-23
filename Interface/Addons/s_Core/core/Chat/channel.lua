@@ -1,4 +1,5 @@
 ﻿local S, _, L, DB = unpack(select(2, ...))
+if DB.Nuke == true then return end
 if DB.zone ~= "zhTW" and DB.zone ~= "zhCN" then return end
 local button = CreateFrame("Button", nil, UIParent)
 		button:SetPoint("TOPRIGHT", ChatFrame1, "TOPRIGHT", 24, -24)

@@ -1,0 +1,12 @@
+﻿
+
+
+
+
+
+
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="oUF_BarFader.lua"/>
+</Ui>
+
+<!--	<Script file="Load.lua"/>  -->

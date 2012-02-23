@@ -70,6 +70,7 @@ DB.buttonTex = Media.."buttontex"
 DB.bars = {
     bar1 = {     
 	    uselayout2x6    = false,
+		showonmouseover = false,
       userplaced      = true, --want to place the bar somewhere else?
       locked          = true, --frame locked
       testmode        = false,
@@ -280,7 +281,6 @@ Launch:SetScript("OnEvent", function(self, event)
 		if IsAddOnLoaded(i) then
 			for _, v in pairs({GetAddOnInfo(i)}) do
 				if v and type(v) == 'string' and (v:lower():find("BigFoot") or v:lower():find("Duowan") or v:lower():find("163UI") or v:lower():find("FishUI") or v:lower():find("大脚") or v:lower():find("大腳") or v:lower():find("多玩")) then
-					print("侦测到您正在使用大脚或者魔盒,为了让您用的舒适所以插件自我关闭掉.如想使用本插件请完全删除大脚或者魔盒")
 					DB.Nuke = true else DB.Nuke = false  end
 				end
 			end

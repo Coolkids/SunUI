@@ -1,4 +1,5 @@
 local S, C, L, DB = unpack(select(2, ...))
+if DB.Nuke == true then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Bar4", "AceEvent-3.0")
 local barDB = DB.bars.bar4  
   local bar = CreateFrame("Frame","rABS_MultiBarRight",UIParent, "SecureHandlerStateTemplate")

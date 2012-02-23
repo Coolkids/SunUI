@@ -3,7 +3,7 @@ local oUF = ns.oUF or oUF or Freeb
 local S, C, L, DB = unpack(select(2, ...))
 local Core = LibStub("AceAddon-3.0"):GetAddon("Core")
 local Module = Core:NewModule("UnitFrame")
-
+if DB.Nuke == true then return end
 function Module:OnInitialize()
 C = UnitFrameDB
 

@@ -1,6 +1,6 @@
 local S, C, L, DB = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("NamePlates")
-
+if DB.Nuke == true then return end
 
 function Module:OnInitialize()
 C = NameplateDB
@@ -337,7 +337,7 @@ end
 local function UpdateCastbar(frame)
 	frame:ClearAllPoints()
 	frame:SetSize(cbWidth, cbHeight)
-	frame:SetPoint('TOP', frame:GetParent().hp, 'BOTTOM', 0, -8)
+	frame:SetPoint('TOPLEFT', frame:GetParent().hp, 'BOTTOMLEFT', 0, -5)
 	frame:GetStatusBarTexture():SetHorizTile(true)
 	if(frame.shield:IsShown()) then
 		frame:SetStatusBarColor(1, 0, 0)
@@ -544,7 +544,7 @@ local function SkinObjects(frame)
 	
 	--Setup CastBar Icon
 	cbicon:ClearAllPoints()
-	cbicon:SetPoint("TOPRIGHT", hp, "TOPLEFT", -3, 0)		
+	cbicon:SetPoint("BOTTOMRIGHT", cb, "BOTTOMLEFT", -5, 0)		
 	cbicon:SetSize(iconSize, iconSize)
 	cbicon:SetTexCoord(.07, .93, .07, .93)
 	cbicon:SetDrawLayer("OVERLAY")

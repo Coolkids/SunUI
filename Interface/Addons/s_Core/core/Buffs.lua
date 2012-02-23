@@ -1,5 +1,6 @@
 ﻿-- Engines
 local S, C, L, DB = unpack(select(2, ...))
+if DB.Nuke == true then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Buff")
 
 local BuffPos, DebuffPos = nil, nil

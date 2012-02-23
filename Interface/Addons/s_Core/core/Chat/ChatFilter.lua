@@ -1,6 +1,6 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ChatFilter")
-
+if DB.Nuke == true then return end
 function Module:OnInitialize()
 	C = MiniDB
 	if C["ChatFilter"] ~= true then return end

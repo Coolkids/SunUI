@@ -299,8 +299,8 @@ do
 
 	function frame:VARIABLES_LOADED()
 		-- I honestly don't trust the load order of SVs.
-		_DB = bb08df87101dd7f2161e5b77cf750f753c58ef1b or {}
-		bb08df87101dd7f2161e5b77cf750f753c58ef1b = _DB
+		_DB = oUF_Move or {}
+		oUF_Move = _DB
 		-- Got to catch them all!
 		for _, obj in next, oUF.objects do
 			restorePosition(obj)
@@ -372,8 +372,8 @@ do
 		backdrop.obj = obj
 		backdrop.header = isHeader
 
-		backdrop:SetBackdropBorderColor(0, .9, 0)
-		backdrop:SetBackdropColor(0, .9, 0)
+		backdrop:SetBackdropBorderColor(0, 0, 0)
+		backdrop:SetBackdropColor(0, 0, 0, 1)
 
 		-- Work around the fact that headers with no units displayed are 0 in height.
 		if(isHeader and math.floor(isHeader:GetHeight()) == 0) then
@@ -461,7 +461,7 @@ do
 					if(not data[numStyles]) then
 						local box = CreateFrame('Frame', nil, scrollchild)
 						box:SetBackdrop(backdrop)
-						box:SetBackdropColor(.1, .1, .1, .5)
+						box:SetBackdropColor(.1, .1, .1, 1)
 						box:SetBackdropBorderColor(.3, .3, .3, 1)
 
 						if(numStyles == 1) then
@@ -491,7 +491,7 @@ do
 
 							row:SetBackdrop(backdrop)
 							row:SetBackdropBorderColor(.3, .3, .3)
-							row:SetBackdropColor(.1, .1, .1, .5)
+							row:SetBackdropColor(.1, .1, .1, 1)
 
 							if(numFrames == 1) then
 								row:SetPoint('TOP', 0, -8)

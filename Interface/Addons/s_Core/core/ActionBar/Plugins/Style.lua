@@ -1,5 +1,6 @@
 ﻿-- Engines
 local S, C, L, DB = unpack(select(2, ...))
+if DB.Nuke == true then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Style")
 function Module:OnInitialize()
 if ActionBarDB.Style == 1 then
