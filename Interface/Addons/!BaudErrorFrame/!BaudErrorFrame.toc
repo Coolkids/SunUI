@@ -1,0 +1,7 @@
+## Interface: 40300
+## Title: Baud Error Frame
+## Notes: Improved error reporting
+## Author: Baudzilla, wolftankk, Affli@RU-Howling Fjord
+## Version: 1.4
+
+BaudErrorFrame.xml
