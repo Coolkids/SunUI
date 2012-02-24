@@ -10,25 +10,34 @@ local Module = DB["Modules"]["UnitFrame"]
 function Module.LoadSettings()
 	local Default = {
 		["FontSize"] = 10,
+--size		
 		["Width"] = 240,
 		["Height"] = 25,
-		["PowerHeight"] = 0.75,            
-		["Bossframes"] = true,		--boss框体	
-		["ClassColorbars"] = false,  --血条职业颜色
-		["PowerColor"] = true,		--蓝条颜色
-		["PowerClass"] = false,     --蓝条职业颜色
-		["Portraits"] = false,		--头像
-		["OnlyShowPlayer"] = false, -- only show player debuffs on target
 		["Scale"] = 1,
-		["PlayerCastBarHeight"] = 10,
+		["PetWidth"] = 123,
+		["PetHeight"] = 15,
+		["PetScale"] = 0.9,
+		["BossWidth"] = 196,
+		["BossHeight"] = 22,	
+		["BossScale"] = 1,		
+-- true or false		
+		["ReverseHPbars"] = false,	 --fill health bars from right to left instead of standard left -> right direction
+		["showtot"] = true,				-- Target of Target
+		["showpet"] = true,				-- Player's pet
+		["showfocus"] = true,				-- Focus target + target of focus target
+		["showparty"] = false,				-- Party frames
+		["showboss"] = true,				-- Boss frames
+		["showarena"] = true,			-- Arena frames
+--castbar
+		["playerCBuserplaced"] = false,	-- false to lock player cast bar to the player frame
+		["PlayerCastBarHeight"] = 20,
 		["PlayerCastBarWidth"] = 460,
-		["TargetCastBarHeight"] = 10,
+		["targetCBuserplaced"] = false,	-- false to lock target cast bar to the target frame
+		["TargetCastBarHeight"] = 20,
 		["TargetCastBarWidth"] = 240,
-		["FocusCastBarHeight"] = 10,
+		["focusCBuserplaced"] = true,		-- false to lock focus cast bar to the focus frame
+		["FocusCastBarHeight"] = 20,
 		["FocusCastBarWidth"] = 200,
-		["PetCastBarHeight"] = 10,
-		["PetCastBarWidth"] = 180,
-		["Icon"] = 24,
 	}
 	if not UnitFrameDB then UnitFrameDB = {} end
 	for key, value in pairs(Default) do
@@ -51,58 +60,16 @@ function Module.BuildGUI()
 			args = {
 				group1 = {
 					type = "group", order = 1,
-					name = " ",guiInline = true,
-					args = {
-						Bossframes = {
-							type = "toggle", order = 1,
-							name = L["开启boss框体"],			
-							get = function() return UnitFrameDB.Bossframes end,
-							set = function(_, value) UnitFrameDB.Bossframes = value end,
-						},
-						ClassColorbars = {
-							type = "toggle", order = 2,
-							name = L["血条职业颜色"],			
-							get = function() return UnitFrameDB.ClassColorbars end,
-							set = function(_, value) UnitFrameDB.ClassColorbars = value end,
-						},
-						PowerColor = {
-							type = "toggle", order = 3,
-							name = L["蓝条颜色"],			
-							get = function() return UnitFrameDB.PowerColor end,
-							set = function(_, value) UnitFrameDB.PowerColor = value end,
-						},
-						PowerClass = {
-							type = "toggle", order = 4,
-							name = L["蓝条职业颜色"],			
-							get = function() return UnitFrameDB.PowerClass end,
-							set = function(_, value) UnitFrameDB.PowerClass = value end,
-						},
-						Portraits = {
-							type = "toggle", order = 5,
-							name = L["是否开启头像"],			
-							get = function() return UnitFrameDB.Portraits end,
-							set = function(_, value) UnitFrameDB.Portraits = value end,
-						},
-						OnlyShowPlayer = {
-							type = "toggle", order = 6,
-							name = L["是否只显示你释放的debuff"],			
-							get = function() return UnitFrameDB.OnlyShowPlayer end,
-							set = function(_, value) UnitFrameDB.OnlyShowPlayer = value end,
-						},
-					}
-				},
-				group2 = {
-					type = "group", order = 2,
-					name = " ",guiInline = true,
+					name = "大小",guiInline = true,
 					args = {
 						FontSize = {
 							type = "range", order = 1,
-							name = L["头像字体大小"], desc = L["法力条高度"],
-							min = 8, max = 28, step = 1,
+							name = L["头像字体大小"],
+							min = 2, max = 28, step = 1,
 							get = function() return UnitFrameDB.FontSize end,
 							set = function(_, value) UnitFrameDB.FontSize = value end,
 						},
-						--[[Width = {
+						Width = {
 							type = "input",
 							name = "框体宽度：",
 							desc = "请输入框体宽度",
@@ -117,21 +84,105 @@ function Module.BuildGUI()
 							order = 3,
 							get = function() return tostring(UnitFrameDB.Height) end,
 							set = function(_, value) UnitFrameDB.Height = tonumber(value) end,
-						},--]]
-						PowerHeight = {
-							type = "range", order = 2,
-							name = L["法力条高度"], desc = L["法力条高度"],
-							min = 0.7, max = 0.95, step = 0.01,
-							get = function() return UnitFrameDB.PowerHeight end,
-							set = function(_, value) UnitFrameDB.PowerHeight = value end,
 						},
-						
 						Scale = {
-							type = "range", order = 3,
+							type = "range", order = 4,
 							name = L["头像缩放大小"], desc = L["头像缩放大小"],
 							min = 0.2, max = 2, step = 0.1,
 							get = function() return UnitFrameDB.Scale end,
 							set = function(_, value) UnitFrameDB.Scale = value end,
+						},
+						PetWidth = {
+							type = "input",
+							name = "宠物ToT焦点框体宽度：",
+							order = 5,
+							get = function() return tostring(UnitFrameDB.PetWidth) end,
+							set = function(_, value) UnitFrameDB.PetWidth = tonumber(value) end,
+						},
+						PetHeight = {
+							type = "input",
+							name = "宠物ToT焦点框体高度：",
+							order = 6,
+							get = function() return tostring(UnitFrameDB.Height) end,
+							set = function(_, value) UnitFrameDB.Height = tonumber(value) end,
+						},
+						PetScale = {
+							type = "range", order = 7,
+							name = "宠物ToT焦点缩放大小",
+							min = 0.2, max = 2, step = 0.1,
+							get = function() return UnitFrameDB.Scale end,
+							set = function(_, value) UnitFrameDB.Scale = value end,
+						},
+						BossWidth = {
+							type = "input",
+							name = "Boss小队竞技场框体宽度：",
+							desc = "Boss小队竞技场框体宽度",
+							order = 8,
+							get = function() return tostring(UnitFrameDB.BossWidth) end,
+							set = function(_, value) UnitFrameDB.BossWidth = tonumber(value) end,
+						},
+						BossHeight = {
+							type = "input",
+							name = "Boss小队竞技场框体高度：",
+							desc = "Boss小队竞技场框体高度",
+							order = 9,
+							get = function() return tostring(UnitFrameDB.BossHeight) end,
+							set = function(_, value) UnitFrameDB.BossHeight = tonumber(value) end,
+						},
+						BossScale = {
+							type = "range", order = 10,
+							name = "Boss小队竞技场缩放大小",
+							min = 0.2, max = 2, step = 0.1,
+							get = function() return UnitFrameDB.BossScale end,
+							set = function(_, value) UnitFrameDB.BossScale = value end,
+						},
+					}
+				},
+				group2 = {
+					type = "group", order = 2,
+					name = " ",guiInline = true,
+					args = {
+						ReverseHPbars = {
+							type = "toggle", order = 1,
+							name = "反转血条",			
+							get = function() return UnitFrameDB.ReverseHPbars end,
+							set = function(_, value) UnitFrameDB.ReverseHPbars = value end,
+						},
+						showtot = {
+							type = "toggle", order = 2,
+							name = "开启目标的目标",			
+							get = function() return UnitFrameDB.showtot end,
+							set = function(_, value) UnitFrameDB.showtot = value end,
+						},
+						showpet = {
+							type = "toggle", order = 3,
+							name = "开启宠物框体",			
+							get = function() return UnitFrameDB.showpet end,
+							set = function(_, value) UnitFrameDB.showpet = value end,
+						},
+						showfocus = {
+							type = "toggle", order = 4,
+							name = "开启焦点框体",			
+							get = function() return UnitFrameDB.showfocus end,
+							set = function(_, value) UnitFrameDB.showfocus = value end,
+						},
+						showparty = {
+							type = "toggle", order = 5,
+							name = "开启小队框体",			
+							get = function() return UnitFrameDB.showparty end,
+							set = function(_, value) UnitFrameDB.showparty = value end,
+						},
+						showboss = {
+							type = "toggle", order = 6,
+							name = "开启boss框体",			
+							get = function() return UnitFrameDB.showboss end,
+							set = function(_, value) UnitFrameDB.showboss = value end,
+						},
+						showarena = {
+							type = "toggle", order = 7,
+							name = "开启竞技场框体",			
+							get = function() return UnitFrameDB.showarena end,
+							set = function(_, value) UnitFrameDB.showarena = value end,
 						},
 					}
 				},
@@ -139,11 +190,17 @@ function Module.BuildGUI()
 					type = "group", order = 3,
 					name = " ",guiInline = true,
 					args = {
+						playerCBuserplaced = {
+							type = "toggle", order = 1,
+							name = "锁定玩家施法条到玩家头像",			
+							get = function() return UnitFrameDB.playerCBuserplaced end,
+							set = function(_, value) UnitFrameDB.playerCBuserplaced = value end,
+						},
 						PlayerCastBarWidth = {
 							type = "input",
 							name = L["玩家施法条宽度"],
 							desc = L["玩家施法条宽度"],
-							order = 1,
+							order = 2,
 							get = function() return tostring(UnitFrameDB.PlayerCastBarWidth) end,
 							set = function(_, value) UnitFrameDB.PlayerCastBarWidth = tonumber(value) end,
 						},
@@ -151,19 +208,25 @@ function Module.BuildGUI()
 							type = "input",
 							name = L["玩家施法条高度"],
 							desc = L["玩家施法条高度"],
-							order = 2,
+							order = 3,
 							get = function() return tostring(UnitFrameDB.PlayerCastBarHeight) end,
 							set = function(_, value) UnitFrameDB.PlayerCastBarHeight = tonumber(value) end,
 						},
 						NewLine = {
-							type = "description", order = 3,
+							type = "description", order = 4,
 							name = "\n",					
+						},
+						targetCBuserplaced = {
+							type = "toggle", order = 5,
+							name = "锁定目标施法条到目标框体",			
+							get = function() return UnitFrameDB.targetCBuserplaced end,
+							set = function(_, value) UnitFrameDB.targetCBuserplaced = value end,
 						},
 						TargetCastBarWidth = {
 							type = "input",
 							name = L["目标施法条宽度"],
 							desc = L["目标施法条宽度"],
-							order = 4,
+							order = 6,
 							get = function() return tostring(UnitFrameDB.TargetCastBarWidth) end,
 							set = function(_, value) UnitFrameDB.TargetCastBarWidth = tonumber(value) end,
 						},
@@ -171,19 +234,25 @@ function Module.BuildGUI()
 							type = "input",
 							name = L["目标施法条高度"],
 							desc = L["目标施法条高度"],
-							order = 5,
+							order = 7,
 							get = function() return tostring(UnitFrameDB.TargetCastBarHeight) end,
 							set = function(_, value) UnitFrameDB.TargetCastBarHeight = tonumber(value) end,
 						},
 						NewLine = {
-							type = "description", order = 6,
+							type = "description", order = 8,
 							name = "\n",					
+						},
+						focusCBuserplaced = {
+							type = "toggle", order = 9,
+							name = "锁定焦点施法条到焦点框体",			
+							get = function() return UnitFrameDB.focusCBuserplaced end,
+							set = function(_, value) UnitFrameDB.focusCBuserplaced = value end,
 						},
 						FocusCastBarWidth = {
 							type = "input",
 							name = L["焦点施法条宽度"],
 							desc = L["焦点施法条宽度"],
-							order = 7,
+							order = 10,
 							get = function() return tostring(UnitFrameDB.FocusCastBarWidth) end,
 							set = function(_, value) UnitFrameDB.FocusCastBarWidth = tonumber(value) end,
 						},
@@ -191,40 +260,9 @@ function Module.BuildGUI()
 							type = "input",
 							name = L["焦点施法条高度"],
 							desc = L["焦点施法条高度"],
-							order = 8,
-							get = function() return tostring(UnitFrameDB.TargetCastBarHeight) end,
-							set = function(_, value) UnitFrameDB.TargetCastBarHeight = tonumber(value) end,
-						},
-						NewLine = {
-							type = "description", order = 9,
-							name = "\n",					
-						},
-						PetCastBarWidth = {
-							type = "input",
-							name = L["宠物施法条宽度"],
-							desc = L["宠物施法条宽度"],
-							order = 10,
-							get = function() return tostring(UnitFrameDB.PetCastBarWidth) end,
-							set = function(_, value) UnitFrameDB.PetCastBarWidth = tonumber(value) end,
-						},
-						PetCastBarHeight = {
-							type = "input",
-							name = L["宠物施法条高度"],
-							desc = L["宠物施法条高度"],
 							order = 11,
-							get = function() return tostring(UnitFrameDB.PetCastBarHeight) end,
-							set = function(_, value) UnitFrameDB.PetCastBarHeightt = tonumber(value) end,
-						},
-						NewLine = {
-							type = "description", order = 12,
-							name = "\n",					
-						},
-						Icon = {
-							type = "range", order = 13,
-							name = L["施法条图标大小"], desc = L["施法条图标大小"],
-							min = 12, max = 64, step = 1,
-							get = function() return UnitFrameDB.Icon end,
-							set = function(_, value) UnitFrameDB.Icon = value end,
+							get = function() return tostring(UnitFrameDB.FocusCastBarHeight) end,
+							set = function(_, value) UnitFrameDB.FocusCastBarHeight = tonumber(value) end,
 						},
 					}
 				},

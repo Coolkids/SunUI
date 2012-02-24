@@ -13,7 +13,7 @@
 ---------------------------------------------------------------------------------------------------
 
 local _, ns = ...
-local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/0.68
+local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/0.8
 function Scale(x)
 	return (mult*math.floor(x/mult+.5))
 end
@@ -28,8 +28,6 @@ ns.watchers ={
 			direction = "RIGHT",
 			setpoint =  {"CENTER", UIParent, "CENTER", -75, -175},
 			size = 28,
-				-- 狂怒
-				{ spellID = 5229, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 节能施法
 				{ spellID = 16870, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 自然之赐
@@ -40,10 +38,10 @@ ns.watchers ={
 				{ spellID = 48518, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 狂暴(猫&熊)
 				{ spellID = 50334, unitId = "player", caster = "player", filter = "BUFF" },
+				-- 狂怒
+				{ spellID = 5229, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 野蛮咆哮(猫)
 				{ spellID = 52610, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 时间扭曲
-				{ spellID = 80353, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 粉碎
 				{ spellID = 80951, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 月光淋漓
@@ -535,7 +533,7 @@ ns.watchers ={
 		{
 			name = "玩家框體下方",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", -185, -255},
+			setpoint = {"CENTER", UIParent, "CENTER", -185, -265},
 			mode = "ICON",
 			size = 45,
 				-- 暗影宝珠
@@ -835,7 +833,8 @@ ns.watchers ={
 				{ spellID = 105841, unitId = "player", caster = "all", filter = "DEBUFF" },  -- Degenerative Bite(退化咬擊)
 				{ spellID = 105445, unitId = "player", caster = "all", filter = "DEBUFF" },  -- Blistering Heat(極熾高熱)
 				{ spellID = 106444, unitId = "player", caster = "all", filter = "DEBUFF" },  -- Impale(刺穿)
-				
+				--凋零之光
+				{ spellID = 110079, unitId = "player", caster = "all", filter = "DEBUFF" },
 		},
 		{
 			name = "玩家PVPDebuff",
@@ -1125,17 +1124,27 @@ ns.watchers ={
 				-- 光之澎湃
 				{ spellID = 88688, unitId = "player", caster = "player", filter = "BUFF" }, 
 				--聖盾術
-				{ spellID = 642, unitId = "player", caster = "all", filter = "DEBUFF" },  
+				{ spellID = 642, unitId = "player", caster = "player", filter = "DEBUFF" },  
 				--寒冰屏障
-				{ spellID = 45438, unitId = "player", caster = "all", filter = "DEBUFF" },  
+				{ spellID = 45438, unitId = "player", caster = "player", filter = "DEBUFF" },  
 				--獸心
-				{ spellID = 34692, unitId = "player", caster = "all", filter = "DEBUFF" }, 
+				{ spellID = 34692, unitId = "player", caster = "player", filter = "DEBUFF" }, 
 				--猎人4T13
 				{ spellID = 105919, unitId = "player", caster = "player", filter = "BUFF" },
 				--保护韧性
 				{ spellID = 33143, unitId = "player", caster = "player", filter = "BUFF" },
 				--移星换月
 				{ spellID = 105864, unitId = "player", caster = "player", filter = "BUFF" },
+				--求生本能
+				{ spellID = 61336, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--狂怒
+				{ spellID = 5229, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--狂暴恢复
+				{ spellID = 22842, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--狂暴
+				{ spellID = 50334, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--树皮术
+				{ spellID = 22812, unitId = "player", caster = "player", filter = "BUFF" }, 
 		},
 				{
 			name = "玩家饰品附魔触发buff",
@@ -1212,6 +1221,8 @@ ns.watchers ={
 				{ spellID =109779, unitId = "player", caster = "player", filter = "BUFF" },   
 				--無縛之怒  觸發buff名字:作戰狀態 X
 				{ spellID =107960, unitId = "player", caster = "player", filter = "BUFF" },  
+				--淨縛之意志  觸發buff名字:鬥心 X
+				{ spellID =107970, unitId = "player", caster = "player", filter = "BUFF" },  
 				--無命之心  觸發buff名字:開闊思維 X
 				{ spellID =107962, unitId = "player", caster = "player", filter = "BUFF" }, 
 				--壞滅之眼  觸發buff名字:泰坦之力 X
@@ -1262,6 +1273,8 @@ ns.watchers ={
 				{ spellID =109780, unitId = "player", caster = "player", filter = "BUFF" }, 
 				-- 暗月卡片:海啸
 				{ spellID = 89182, unitId = "player", caster = "player", filter = "BUFF" },
+				--偷取时间
+				{ spellID = 105785, unitId = "player", caster = "player", filter = "BUFF" },
 		},
 	},
 }

@@ -3,6 +3,9 @@
 
 --全局设置
 local Media = "Interface\\Addons\\s_Core\\media\\"
+local MediaPath = "Interface\\Addons\\s_Core\\Media\\UnitFrame\\"
+DB.UnitFrameTexture = MediaPath.."statusbar"
+DB.Auratex = MediaPath.."iconborder" 
 dummy = function() return end
 DB.zone = GetLocale()
 DB.level = UnitLevel("player")
@@ -23,6 +26,7 @@ DB.loottex =		"Interface\\QuestFrame\\UI-QuestLogTitleHighlight"
 DB.aurobackdrop = "Interface\\ChatFrame\\ChatFrameBackground"
 DB.barinset = 10
 DB.bfont = Media.."ROADWAY.ttf"
+DB.onepx = "Interface\\Buttons\\WHITE8x8"
 DB.backdrop = { 
     bgFile = "Interface\\Tooltips\\UI-Tooltip-Background", 
     edgeFile = "",
@@ -218,8 +222,10 @@ DB.Ratings = true  --装备属性转换
 
 --暗影魔計時
 DB.ShadowPetOpen = true
-
-
+-- 头像
+DB.playerauras = "DEBUFFS"  		-- small aura frame for player, available options: "BUFFS", "DEBUFFS", "AURAS", "NONE"
+DB.EnableCombatFeedback = false	-- enables CombatFeedback on player and target unit frames
+DB.EnableSwingTimer = false		-- enables oUF_Swing module for player's auto attack/shot timer
 --Advanced_UseUIScale:Hide()
 --Advanced_UIScaleSlider:Hide()
 DB.colors = {

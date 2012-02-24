@@ -46,7 +46,7 @@ local BarUpdate = function(self, elapsed)
 --		StopTimer(self)
 --		return
 --	end
-	if not oUF_FreebPet:IsShown() then
+	if not oUF_monoPetFrame:IsShown() then
 		StopTimer(self)
 		return
 	end
@@ -126,7 +126,7 @@ end
 
 local EuiPriestPetOnUpdate = function(self)
 	if DB.MyClass ~= "PRIEST" then return end
-	if oUF_FreebPet:IsShown() and self.havePet == false then
+	if oUF_monoPetFrame:IsShown() and self.havePet == false then
 		StartTimer(spellname, 34433);
 		self.havePet = true;
 	end

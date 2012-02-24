@@ -1,17 +1,15 @@
 local _, ns = ...
-local oUF = ns.oUF or oUF or Freeb
+local oUF = ns.oUF or oUF
 assert(oUF, "<name> was unable to locate oUF install.")
 
 local smoothing = {}
 local function Smooth(self, value)
-	local _, max = self:GetMinMaxValues()
-	if value == self:GetValue() or (self._max and self._max ~= max) then
+	if value ~= self:GetValue() then
+		smoothing[self] = value
+	else
 		smoothing[self] = nil
 		self:SetValue_(value)
-	else
-		smoothing[self] = value
 	end
-	self._max = max
 end
 
 local function SmoothBar(self, bar)

@@ -1,7 +1,8 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	
-	
-	<Script file="freeb.lua"/>
-	<Script file="ftags.lua"/>
-	<Include file="plugins\plugins.xml"/>
+	<Script file="Castbar.lua"/>
+	<Script file="lib.lua"/>
+	<Script file="tags.lua"/>
+	<Script file="core.lua"/>
+	<Include file="plugins\load.xml"/>
 </Ui>
