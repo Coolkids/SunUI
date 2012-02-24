@@ -279,7 +279,7 @@ C = UnitFrameDB
   lib.gen_castbar = function(f)
     local s = CreateFrame("StatusBar", "oUF_monoCastbar"..f.mystyle, f)
     s:SetSize(f.width-(f.height/1.5+4),f.height/1.5)
-    s:SetStatusBarTexture(DB.UnitFrameTexture)
+    s:SetStatusBarTexture(DB.bar_texture)
     s:SetStatusBarColor(.3, .45, .65,1)
     s:SetFrameLevel(9)
     --color

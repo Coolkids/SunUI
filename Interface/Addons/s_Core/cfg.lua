@@ -60,15 +60,6 @@ DB.TimeStampsCopy = true					-- 时间戳
 DB.OpenThreat = true
 DB.ArrowT = Media.."ArrowT"
 DB.Arrow = Media.."Arrow"
-
-
---头像
-
-DB.thrtex = Media.."threat"
-DB.buttonTex = Media.."buttontex"
-
-		
-
 --动作条
 
 DB.bars = {

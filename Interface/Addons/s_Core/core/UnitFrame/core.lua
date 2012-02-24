@@ -238,7 +238,7 @@ oUF:Factory(function(self)
   if C["showtot"] then
     self:SetActiveStyle("monoToT")
     local tot = self:Spawn("targettarget", "oUF_mono_ToTFrame")
-	tot:SetPoint("CENTER", "UIParent", "CENTER", 0, -210)
+	tot:SetPoint("TOPLEFT", "oUF_monoTargetFrame", "TOPRIGHT", 10, 0)
 	tot:SetScale(C["PetScale"])
   end
   
@@ -249,7 +249,7 @@ oUF:Factory(function(self)
 	focus:SetScale(C["PetScale"])
 	self:SetActiveStyle("monoToT")
 	local focust = self:Spawn("focustarget", "oUF_monoFocusTargetFrame")
-	focust:SetPoint("TOPLEFT", "oUF_monoTargetFrame", "BOTTOMLEFT", 0, -38)
+	focust:SetPoint("TOPLEFT", "oUF_monoFocusFrame", "BOTTOMLEFT", 0, -38)
 	focust:SetScale(C["PetScale"])
   else
     oUF:DisableBlizzard'focus'
