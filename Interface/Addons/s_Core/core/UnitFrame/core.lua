@@ -9,7 +9,7 @@ local showfaketarget = false -- fake target bars that spawn if you don't have an
 function Module:OnInitialize()
 C = UnitFrameDB
   -- compatibility with older versions cfg
-  if not FTpos then FTpos = {"TOPLEFT", "oUF_monoTargetFrame", "BOTTOMLEFT", 0, -37} end
+--if not FTpos then FTpos = {"TOPLEFT", "oUF_monoTargetFrame", "BOTTOMLEFT", 0, -37} end
   -----------------------------
   -- STYLE FUNCTIONS
   -----------------------------
@@ -238,7 +238,7 @@ oUF:Factory(function(self)
   if C["showtot"] then
     self:SetActiveStyle("monoToT")
     local tot = self:Spawn("targettarget", "oUF_mono_ToTFrame")
-	tot:SetPoint("TOPLEFT", "oUF_monoTargetFrame", "TOPRIGHT", 10, 0)
+	tot:SetPoint("CENTER", "oUF_monoTargetFrame", "CENTER", -250, 0)
 	tot:SetScale(C["PetScale"])
   end
   

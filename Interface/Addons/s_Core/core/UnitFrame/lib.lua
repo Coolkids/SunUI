@@ -6,7 +6,7 @@ local Core = LibStub("AceAddon-3.0"):GetAddon("Core")
 local Module = Core:NewModule("UnitFrameLib")
 local lib = CreateFrame("Frame")  
 if DB.Nuke == true then return end
-
+local PlayerTimersOnly = false 
 function Module:OnInitialize()
 C = UnitFrameDB
   -----------------------------
@@ -473,7 +473,7 @@ C = UnitFrameDB
     end
     -- Creating aura timers
     if duration and duration > 0 then
-      if unitCaster ~= 'player' then 
+      if PlayerTimersOnly and unitCaster ~= 'player' then 
 		if unit=='player' and icon.debuff then icon.remaining:Show() else icon.remaining:Hide() end
 	  else 
 		icon.remaining:Show() 
@@ -533,10 +533,10 @@ C = UnitFrameDB
   --auras for certain frames
   lib.createAuras = function(f)
     a = CreateFrame('Frame', nil, f)
-    a:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 1.5, 4)
+    a:SetPoint('TOPLEFT', f, 'TOPRIGHT', 2, -1.5)
     a['growth-x'] = 'RIGHT'
-    a['growth-y'] = 'UP' 
-    a.initialAnchor = 'BOTTOMLEFT'
+    a['growth-y'] = 'DOWN' 
+    a.initialAnchor = 'TOPLEFT'
     a.gap = true
     a.spacing = 6
     a.size = 23
@@ -571,7 +571,7 @@ C = UnitFrameDB
     b = CreateFrame("Frame", nil, f)
     b.initialAnchor = "TOPLEFT"
     b["growth-y"] = "DOWN"
-    b.num = 5
+    b.num = 8
     b.size = 19
     b.spacing = 6
     b:SetHeight((b.size+b.spacing)*2)
@@ -602,7 +602,7 @@ C = UnitFrameDB
 	  b['growth-x'] = 'LEFT'
       b['growth-y'] = 'DOWN' 
       b.initialAnchor = 'TOPRIGHT'
-	  b.num = 15
+	  b.num = 8
 	  b.size = 23
       b:SetHeight((b.size+b.spacing)*2)
       b:SetWidth((b.size+b.spacing)*8)
@@ -617,8 +617,9 @@ C = UnitFrameDB
   lib.createDebuffs = function(f)
     d = CreateFrame("Frame", nil, f)
     d.initialAnchor = "TOPRIGHT"
+	d['growth-x'] = 'RIGHT'
     d["growth-y"] = "DOWN"
-    d.num = 4
+    d.num = 10
     d.size = 19
     d.spacing = 6
     d:SetHeight((d.size+d.spacing)*2)
@@ -635,7 +636,7 @@ C = UnitFrameDB
       d.initialAnchor = "TOPLEFT"
       d.num = 4
 	  d.size = 18
-	  d:SetPoint("TOPLEFT", f, "TOPRIGHT", d.spacing, -d.size-d.spacing*2)
+	  d:SetPoint('TOPLEFT', f, 'TOPRIGHT', 2, 0)
       d:SetWidth((d.size+d.spacing)*4)
 --[[     elseif f.mystyle=="boss" then
       d.showDebuffType = false

@@ -132,7 +132,8 @@ oUF.Tags['mono:hp']  = function(u) -- THIS IS FUCKING MADNESS!!!
     local min, max = UnitHealth(u), UnitHealthMax(u)
     if u == "player" then
       if min~=max then 
-        return SVal(min).." | |cffe15f8b"..-def.."|r"
+        --return SVal(min).." | |cffe15f8b"..-def.."|r"
+		return SVal(min).." | |cffe15f8b"..per.."|r"
       else
         return SVal(min).." | "..per 
       end
@@ -142,7 +143,7 @@ oUF.Tags['mono:hp']  = function(u) -- THIS IS FUCKING MADNESS!!!
           if UnitIsEnemy("player","target") then
             return per.." | "..min
           else
-            if def then return "|cffe15f8b"..-def.."|r | "..SVal(min) end
+            if def then return "|cffe15f8b"..per.."|r | "..SVal(min) end
           end
         else
           return per.." | "..SVal(min)
