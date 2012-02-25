@@ -325,11 +325,11 @@ oUF.TagEvents['mono:cp'] = 'UNIT_COMBO_POINTS'
 oUF.Tags['mono:orbs'] = function(u)
 	local name, _, _, count, _, duration = UnitBuff("player",GetSpellInfo(77487))
 	if count == 1 then
-		return "|cffFF6161_|r"
+		return "|cffFF6161▁|r"
 	elseif count == 2 then
-		return "|cffFFF130_ _|r"
+		return "|cffFFF130▁ ▁|r"
 	elseif count == 3 then
-		return "|cff8AFF30_ _ _|r"
+		return "|cff8AFF30▁ ▁ ▁|r"
 	end
 end
 oUF.TagEvents['mono:orbs'] = 'UNIT_AURA'

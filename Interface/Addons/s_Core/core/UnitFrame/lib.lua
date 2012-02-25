@@ -173,7 +173,7 @@ C = UnitFrameDB
     p:SetWidth(f.width-2)
     p:SetHeight(f.height-2)
     p:SetPoint("TOP", s, "TOP", 0, -2)
-	p:SetAlpha(.25)
+	p:SetAlpha(.9)
 	p.PostUpdate = lib.PortraitPostUpdate	
     f.Portrait = p
   end
@@ -290,31 +290,42 @@ C = UnitFrameDB
     --helper
     local h = CreateFrame("Frame", nil, s)
     h:SetFrameLevel(0)
-    h:SetPoint("TOPLEFT",-4,4)
-    h:SetPoint("BOTTOMRIGHT",4,-4)
-    lib.gen_backdrop(h)
-    --backdrop
+    h:SetPoint("TOPLEFT",0,0)
+    h:SetPoint("BOTTOMRIGHT",0,0)
+    --lib.gen_backdrop(h)
+    --[[--backdrop
     local b = s:CreateTexture(nil, "BACKGROUND")
     b:SetTexture(DB.UnitFrameTexture)
     b:SetAllPoints(s)
-    b:SetVertexColor(0.3*0.2, 0.45*0.2, 0.65*0.2, 0.7)
-    --spark
+    b:SetVertexColor(0.3*0.2, 0.45*0.2, 0.65*0.2, 0.7)--]]
+	--backdrop
+	S.MakeTexShadow(s, h, 3)
+	S.MakeBG(s, 0)
+    --[[spark
     sp = s:CreateTexture(nil, "OVERLAY")
     sp:SetBlendMode("ADD")
     sp:SetAlpha(0.5)
-    sp:SetHeight(s:GetHeight()*2.5)
+    sp:SetHeight(s:GetHeight()*2.5)--]]
+	--spark
+	local sp =  s:CreateTexture(nil, "OVERLAY")
+	sp:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
+	sp:SetBlendMode("ADD")
+	sp:SetAlpha(.8)
+	sp:SetPoint("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
+	sp:SetPoint("BOTTOMRIGHT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
     --spell text
-    local txt = lib.gen_fontstring(s, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
-    txt:SetPoint("LEFT", 2, 0)
+    local txt = lib.gen_fontstring(s, DB.Font, (C["FontSize"]+1)*S.Scale(1), "THINOUTLINE")
+    txt:SetPoint("LEFT", 2, s:GetHeight()/2)
     txt:SetJustifyH("LEFT")
     --time
     local t = lib.gen_fontstring(s, DB.Font, (C["FontSize"]+1)*S.Scale(1), "THINOUTLINE")
-    t:SetPoint("RIGHT", -2, 0)
+    t:SetPoint("RIGHT", -2, s:GetHeight()/2)
     txt:SetPoint("RIGHT", t, "LEFT", -5, 0)
     --icon
     local i = s:CreateTexture(nil, "ARTWORK")
-    i:SetSize(s:GetHeight()-2,s:GetHeight()-2)
-    i:SetPoint("RIGHT", s, "LEFT", -4.5, 0)
+    --i:SetSize(s:GetHeight()+4,s:GetHeight()+4)
+	i:SetSize(24,24)
+    i:SetPoint("BOTTOMRIGHT", s, "BOTTOMLEFT", -4.5, 0)
     i:SetTexCoord(0.1, 0.9, 0.1, 0.9)
     --helper2 for icon
     local h2 = CreateFrame("Frame", nil, s)
@@ -325,7 +336,7 @@ C = UnitFrameDB
     if f.mystyle == "focus" and not C["focusCBuserplaced"] then
       s:SetPoint("BOTTOM", "Castbarfouce", "BOTTOM", 0, 0)
       s:SetSize(C["FocusCastBarWidth"],C["FocusCastBarHeight"])
-      i:SetSize(s:GetHeight()-2,s:GetHeight()-2)
+      i:SetSize(s:GetHeight(),s:GetHeight())
       sp:SetHeight(s:GetHeight()*2.5)
     elseif f.mystyle == "pet" then
       s:SetPoint("BOTTOMRIGHT",f.Power,"BOTTOMRIGHT",0,0)
@@ -338,12 +349,12 @@ C = UnitFrameDB
       s:SetSize(f.width-(f.height/1.4+4),f.height/1.4)
       s:SetPoint("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
       i:SetPoint("RIGHT", s, "LEFT", -4, 0)
-      i:SetSize(s:GetHeight()-2,s:GetHeight()-2)
+      i:SetSize(s:GetHeight(),s:GetHeight())
     elseif f.mystyle == "player" then
 	  if not C["playerCBuserplaced"] then
 		s:SetSize(C["PlayerCastBarWidth"],C["PlayerCastBarHeight"])
 		s:SetPoint("BOTTOM", "Castbarplay", "BOTTOM", 0, 0)
-		i:SetSize(s:GetHeight()-2,s:GetHeight()-2)
+		i:SetSize(s:GetHeight()*2,s:GetHeight()*2)
 		sp:SetHeight(s:GetHeight()*2.5)
 	  else
 		s:SetPoint("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
@@ -360,14 +371,14 @@ C = UnitFrameDB
       s.SafeZone = z
       --custom latency display
       local l = lib.gen_fontstring(s, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
-      l:SetPoint("CENTER", -2, 16)
+      l:SetPoint("RIGHT", 0, -s:GetHeight())
       l:SetJustifyH("RIGHT")
       s.Lag = l
       f:RegisterEvent("UNIT_SPELLCAST_SENT", cast.OnCastSent)
 	elseif f.mystyle == "target" and not C["targetCBuserplaced"] then
 	  s:SetSize(C["TargetCastBarWidth"],C["TargetCastBarHeight"])
 	  s:SetPoint("BOTTOM", "Castbartarget", "BOTTOM", 0, 0)
-	  i:SetSize(s:GetHeight()-2,s:GetHeight()-2)
+	  i:SetSize(s:GetHeight()*2,s:GetHeight()*2)
       sp:SetHeight(s:GetHeight()*2.5)
 	else
       s:SetPoint("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
@@ -806,8 +817,11 @@ C = UnitFrameDB
 		end
 	end
 	if f.mystyle == "player" then
-		local sp = lib.gen_fontstring(h, DB.Font, 30, "MONOCHROMEOUTLINE")
-		sp:SetPoint("CENTER", f.Health, "CENTER",0,3)
+		local sp = lib.gen_fontstring(h, DB.Font, 30*S.Scale(1), "OUTLINE")
+		sp:SetPoint("TOPLEFT", f.Health, "BOTTOMLEFT",0,0)
+		sp:SetPoint("BOTTOMRIGHT", f.Health, "BOTTOMRIGHT",0,-5)
+		sp:SetWidth(f.Health:GetWidth())
+		sp:SetJustifyH("LEFT")
 		if class == "DRUID" then
 			f:Tag(sp, '[mono:wm1][mono:wm2][mono:wm3]')
 		elseif class == "PRIEST" then
@@ -824,8 +838,11 @@ C = UnitFrameDB
     local h = CreateFrame("Frame", nil, f)
     h:SetAllPoints(f.Health)
     h:SetFrameLevel(10)
-    local cp = lib.gen_fontstring(h, DB.Font, (C["FontSize"]+8)*S.Scale(1), "THINOUTLINE")
-    cp:SetPoint("CENTER", f.Health, "CENTER",0,3)
+    local cp = lib.gen_fontstring(h, DB.Font, 30*S.Scale(1), "THINOUTLINE")
+    cp:SetPoint("TOPLEFT", f.Health, "BOTTOMLEFT",0,0)
+	cp:SetPoint("BOTTOMRIGHT", f.Health, "BOTTOMRIGHT",0,-5)
+	cp:SetWidth(f.Health:GetWidth())
+	cp:SetJustifyH("LEFT")
     f:Tag(cp, '[mono:cp]')
   end
   --gen LFD role indicator
