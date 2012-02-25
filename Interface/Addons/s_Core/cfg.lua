@@ -216,7 +216,7 @@ DB.ShadowPetOpen = true
 -- 头像
 DB.playerauras = "DEBUFFS"  		-- small aura frame for player, available options: "BUFFS", "DEBUFFS", "AURAS", "NONE"
 DB.EnableCombatFeedback = false	-- enables CombatFeedback on player and target unit frames
-DB.EnableSwingTimer = false		-- enables oUF_Swing module for player's auto attack/shot timer
+
 --Advanced_UseUIScale:Hide()
 --Advanced_UIScaleSlider:Hide()
 DB.colors = {

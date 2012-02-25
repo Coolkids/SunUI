@@ -42,7 +42,7 @@ C = UnitFrameDB
   --backdrop func
   lib.gen_backdrop = function(f)
     f:SetBackdrop(backdrop_tab);
-    f:SetBackdropColor(.1,.1,.2,1)
+    f:SetBackdropColor(0,0,0,0.3)
     f:SetBackdropBorderColor(0,0,0,1)
   end
   
@@ -122,10 +122,10 @@ C = UnitFrameDB
 	if not C["ReverseHPbars"] then 
 		s = ReverseBar(f) 
 		s.PostUpdate = lib.PostUpdateHealth  
-		s:SetAlpha(0.9)
+		s:SetAlpha(1)
 	else 
 		s = CreateFrame("StatusBar", nil, f) 
-		s:SetAlpha(0.7)
+		s:SetAlpha(1)
 	end
     --local s = ReverseBar(f)--CreateFrame("StatusBar", nil, f)--
     s:SetStatusBarTexture(DB.UnitFrameTexture)
@@ -133,21 +133,24 @@ C = UnitFrameDB
     s:SetHeight(f.height)
     s:SetWidth(f.width)
     s:SetPoint("TOPLEFT",0,0)
-    --s:SetAlpha(0.9)
+    --s:SetAlpha(0.5)
     s:SetOrientation("HORIZONTAL") 
 	s:SetFrameLevel(5)
     --shadow backdrop
     local h = CreateFrame("Frame", nil, s)
     h:SetFrameLevel(0)
-    h:SetPoint("TOPLEFT",-4,4)
-    h:SetPoint("BOTTOMRIGHT",4,-4)
-    lib.gen_backdrop(h)
+    h:SetPoint("TOPLEFT",0,0)
+    h:SetPoint("BOTTOMRIGHT",0,0)
+	S.MakeShadow(h, 6)
+	S.MakeBG(h, 0)
+    --lib.gen_backdrop(h)
     --bar bg
 	local bg = CreateFrame("Frame", nil, s)
 	bg:SetFrameLevel(s:GetFrameLevel()-2)
     bg:SetAllPoints(s)
     local b = bg:CreateTexture(nil, "BACKGROUND")
     b:SetTexture(DB.UnitFrameTexture)
+	b:SetAlpha(0)
     b:SetAllPoints(s)
 	-- threat border
 	if f.mystyle == "party" then
@@ -173,7 +176,7 @@ C = UnitFrameDB
     p:SetWidth(f.width-2)
     p:SetHeight(f.height-2)
     p:SetPoint("TOP", s, "TOP", 0, -2)
-	p:SetAlpha(.45)
+	p:SetAlpha(.0)
 	p.PostUpdate = lib.PortraitPostUpdate	
     f.Portrait = p
   end
@@ -226,16 +229,19 @@ C = UnitFrameDB
     --helper
     local h = CreateFrame("Frame", nil, s)
     h:SetFrameLevel(0)
-    h:SetPoint("TOPLEFT",-4,4)
-    h:SetPoint("BOTTOMRIGHT",4,-4)
-    lib.gen_backdrop(h)
+    h:SetPoint("TOPLEFT",0,0)
+    h:SetPoint("BOTTOMRIGHT",0,0)
+    --lib.gen_backdrop(h)
     --bg
     local b = s:CreateTexture(nil, "BACKGROUND")
     b:SetTexture(DB.UnitFrameTexture)
+	b:SetAlpha(.0)
     b:SetAllPoints(s)
     if f.mystyle=="tot" or f.mystyle=="pet" then
       s:SetHeight(f.height/3)
     end
+	S.MakeShadow(h, 6)
+	S.MakeBG(h, 0)
     f.Power = s
     f.Power.bg = b
   end
@@ -525,11 +531,12 @@ C = UnitFrameDB
 	--button.remaining:SetShadowColor(0, 0, 0)--button.remaining:SetShadowOffset(2, -1)
     button.remaining:SetPoint("TOPLEFT", 0, -0.5)
     --overlay texture for debuff types display
-    button.overlay:SetTexture(DB.Auratex)
+    --button.overlay:SetTexture(DB.Auratex)
     button.overlay:SetPoint("TOPLEFT", button, "TOPLEFT", -1, 1)
     button.overlay:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 1, -1)
     button.overlay:SetTexCoord(0.04, 0.96, 0.04, 0.96)
     button.overlay.Hide = function(self) self:SetVertexColor(0, 0, 0) end
+	S.MakeTexShadow(button, button.overlay, 3)
   end
   -- position update for certain class/specs
 --[[   lib.PreSetPosition = function(self, num)
@@ -544,7 +551,7 @@ C = UnitFrameDB
   --auras for certain frames
   lib.createAuras = function(f)
     a = CreateFrame('Frame', nil, f)
-    a:SetPoint('TOPLEFT', f, 'TOPRIGHT', 2, -1.5)
+    a:SetPoint('TOPLEFT', f, 'TOPRIGHT', 7, 0)
     a['growth-x'] = 'RIGHT'
     a['growth-y'] = 'DOWN' 
     a.initialAnchor = 'TOPLEFT'
@@ -597,7 +604,7 @@ C = UnitFrameDB
       b.showBuffType = true
       b:SetPoint("TOPLEFT", f, "TOPRIGHT", b.spacing, -2)
 	  b.size = 18
-      b.num = 4
+      b.num = 5
       b:SetWidth((b.size+b.spacing)*4)
 	elseif f.mystyle=="boss" then
       b.showBuffType = true
@@ -632,7 +639,7 @@ C = UnitFrameDB
     d["growth-y"] = "DOWN"
     d.num = 10
     d.size = 19
-    d.spacing = 6
+    d.spacing = 5
     d:SetHeight((d.size+d.spacing)*2)
     d:SetWidth((d.size+d.spacing)*5)
     d.showDebuffType = true
@@ -756,7 +763,7 @@ C = UnitFrameDB
   --gen TotemBar for shamans
   lib.gen_TotemBar = function(f)
     if class ~= "SHAMAN" then return
-    elseif IsAddOnLoaded("oUF_boring_TotemBar") then
+    else
 		local width = (f.width + 4) / 4 - 4
 		local height = f.height/3
 		local TotemBar = CreateFrame("Frame", nil, f)
@@ -1018,8 +1025,7 @@ C = UnitFrameDB
   end
   -- oUF_Swing
   lib.gen_swing_timer = function(f)
-	if not IsAddOnLoaded("oUF_Swing") then return end
-	if DB.EnableSwingTimer then
+	if C["EnableSwingTimer"] then
 		sw = CreateFrame("StatusBar", f:GetName().."_Swing", f)
 		sw:SetStatusBarTexture(DB.UnitFrameTexture)
 		sw:SetStatusBarColor(.3, .3, .3)

@@ -37,6 +37,19 @@ function S.MakeBG(Parent, Size)
 	BG:SetBackdropBorderColor(0, 0, 0, 1)
 	return BG
 end
+function S.MakeUnitBG(Parent)
+	local BG = CreateFrame("Frame", nil, Parent)
+	BG:SetFrameLevel(0)
+	BG:SetPoint("TOPLEFT", 0, 0)
+	BG:SetPoint("BOTTOMRIGHT", 0, 0)
+	BG:SetBackdrop({
+		bgFile = DB.bgFile, insets = {left = 0, right = 0, top = 0, bottom = 0},
+		edgeFile = DB.GlowTex, edgeSize = -1,
+	})
+	BG:SetBackdropColor(0, 0, 0, 0.3)
+	BG:SetBackdropBorderColor(0, 0, 0, 1)
+	return BG
+end
 
 function S.MakeTexShadow(Parent, Anchor, Size)
 	local Shadow = CreateFrame("Frame", nil, Parent)

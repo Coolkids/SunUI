@@ -28,6 +28,8 @@ function Module.LoadSettings()
 		["showparty"] = false,				-- Party frames
 		["showboss"] = true,				-- Boss frames
 		["showarena"] = true,			-- Arena frames
+		["EnableSwingTimer"] = false,
+		["EnableBarFader"] = false,
 --castbar
 		["playerCBuserplaced"] = false,	-- false to lock player cast bar to the player frame
 		["PlayerCastBarHeight"] = 20,
@@ -183,6 +185,18 @@ function Module.BuildGUI()
 							name = "开启竞技场框体",			
 							get = function() return UnitFrameDB.showarena end,
 							set = function(_, value) UnitFrameDB.showarena = value end,
+						},
+						EnableSwingTimer = {
+							type = "toggle", order = 8,
+							name = "开启物理攻击计时条",			
+							get = function() return UnitFrameDB.EnableSwingTimer end,
+							set = function(_, value) UnitFrameDB.EnableSwingTimer = value end,
+						},
+						EnableBarFader = {
+							type = "toggle", order = 9,
+							name = "开启头像动作条渐隐",			
+							get = function() return UnitFrameDB.EnableBarFader end,
+							set = function(_, value) UnitFrameDB.EnableBarFader = value end,
 						},
 					}
 				},
