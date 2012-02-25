@@ -652,14 +652,14 @@ C = UnitFrameDB
       d["growth-x"] = "LEFT"
       d:SetWidth((d.size+d.spacing)*4)
 	elseif f.mystyle=="player" and DB.playerauras=="DEBUFFS" then
-	  d['growth-x'] = 'LEFT'
-      d['growth-y'] = 'DOWN' 
-      d.initialAnchor = 'TOPRIGHT'
+	  d['growth-x'] = 'RIGHT'
+      d['growth-y'] = 'UP' 
+      d.initialAnchor = 'BOTTOMLEFT'
 	  d.num = 15
 	  d.size = 23
       d:SetHeight((d.size+d.spacing)*2)
       d:SetWidth((d.size+d.spacing)*8)
-	  d:SetPoint("TOPRIGHT", f, "TOPLEFT", -5, -1)
+	  d:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
 	  --d.PreSetPosition = lib.PreSetPosition
     end
     d.PostCreateIcon = lib.PostCreateIcon

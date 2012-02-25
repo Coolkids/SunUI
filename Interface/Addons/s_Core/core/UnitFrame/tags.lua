@@ -1,4 +1,4 @@
-local addon, ns = ...
+﻿local addon, ns = ...
 local oUF = ns.oUF or oUF 
 -- shorten value
 local SVal = function(val)
@@ -146,22 +146,22 @@ oUF.Tags['mono:hp']  = function(u) -- THIS IS FUCKING MADNESS!!!
             if def then return "|cffe15f8b"..per.."|r | "..SVal(min) end
           end
         else
-          return per.." | "..SVal(min)
+          return  "|cffe15f8b"..per.."|r | "..SVal(min)
         end
       else
-        return per.." | "..SVal(min)
+        return  per.." | "..SVal(min)
       end
     elseif u == "focus" or u == "pet" or u == "focustarget" or u == "targettarget" then
       return per
     else
       if UnitIsPlayer(u) and not UnitIsEnemy("player",u) then
         if min~=max then 
-          return SVal(min).." | |cffe15f8b"..-def.."|r"
+          return SVal(min).. "|cffe15f8b"..per.."|r | "
         else
-          return SVal(min).." | "..per 
+          return SVal(min).." | ".. per
         end
       else    
-        return SVal(min).." | "..per
+        return SVal(min).." | ".."|cffe15f8b"..per.."|r | "
       end
     end
   end
@@ -195,7 +195,11 @@ oUF.Tags['mono:pp'] = function(u)
 	local _, str = UnitPowerType(u)
 	local per = oUF.Tags['perpp'](u).."%" or 0
 	if str then
-		return hex(pcolors.power[str] or {250/255,  75/255,  60/255})..SVal(UnitPower(u)).." | "..per
+		if str == "MANA" then 
+ 		return hex(pcolors.power[str] or {250/255,  75/255,  60/255})..SVal(UnitPower(u)).." | "..per
+		else
+		return hex(pcolors.power[str] or {250/255,  75/255,  60/255})..SVal(UnitPower(u))
+		end
 	end
 end
 oUF.TagEvents['mono:pp'] = 'UNIT_POWER UNIT_MAXPOWER'
@@ -235,11 +239,11 @@ oUF.TagEvents['mono:gridname'] = 'UNIT_NAME_UPDATE UNIT_CONNECTION'
 -- unit status tag
 oUF.Tags['mono:DDG'] = function(u)
 	if not UnitIsConnected(u) then
-		return "|cffCFCFCF D/C|r"
+		return "|cffCFCFCF 离线|r"
 	elseif UnitIsGhost(u) then
-		return "|cffCFCFCF Ghost|r"
+		return "|cffCFCFCF 灵魂|r"
 	elseif UnitIsDead(u) then
-		return "|cffCFCFCF Dead|r"
+		return "|cffCFCFCF 死亡|r"
 	end
 end
 oUF.TagEvents['mono:DDG'] = 'UNIT_NAME_UPDATE UNIT_HEALTH UNIT_CONNECTION'--'UNIT_MAXHEALTH'
