@@ -8,26 +8,30 @@ M = ReminderDB
 A = UnitFrameDB
 B = MiniDB
 E = ActionBarDB
-local Castbarplay = CreateFrame("Frame", "Castbarplay", UIParent) 
-Castbarplay:SetWidth(A["PlayerCastBarWidth"]) 
-Castbarplay:SetHeight(A["PlayerCastBarHeight"]) 
-Castbarplay:SetPoint(unpack(C["PlayerCastbar"]))
-Castbarplay:Hide()
-local Castbartarget = CreateFrame("Frame", "Castbartarget", UIParent) 
-Castbartarget:SetWidth(A["TargetCastBarWidth"]) 
-Castbartarget:SetHeight(A["TargetCastBarHeight"]) 
-Castbartarget:SetPoint(unpack(C["TargetCastbar"]))
-Castbartarget:Hide()
-local Castbarfouce = CreateFrame("Frame", "Castbarfouce", UIParent) 
-Castbarfouce:SetWidth(A["FocusCastBarWidth"]) 
-Castbarfouce:SetHeight(A["FocusCastBarHeight"]) 
-Castbarfouce:SetPoint(unpack(C["FocusCastbar"]))
-Castbarfouce:Hide()
-local Castbarpet = CreateFrame("Frame", "Castbarpet", UIParent) 
-Castbarpet:SetWidth(A["PetCastBarWidth"]) 
-Castbarpet:SetHeight(A["PetCastBarHeight"]) 
-Castbarpet:SetPoint(unpack(C["PetCastbar"]))
-Castbarpet:Hide()
+if not A["playerCBuserplaced"] then 
+	local Castbarplay = CreateFrame("Frame", "Castbarplay", UIParent) 
+	Castbarplay:SetWidth(A["PlayerCastBarWidth"]) 
+	Castbarplay:SetHeight(A["PlayerCastBarHeight"]) 
+	Castbarplay:SetPoint(unpack(C["PlayerCastbar"]))
+	Castbarplay:Hide()
+	MoveHandle.Castbarplay = S.MakeMoveHandle(Castbarplay, L["玩家施法条"], "PlayerCastbar")
+end
+if not A["targetCBuserplaced"] then 
+	local Castbartarget = CreateFrame("Frame", "Castbartarget", UIParent) 
+	Castbartarget:SetWidth(A["TargetCastBarWidth"]) 
+	Castbartarget:SetHeight(A["TargetCastBarHeight"]) 
+	Castbartarget:SetPoint(unpack(C["TargetCastbar"]))
+	Castbartarget:Hide()
+	MoveHandle.Castbartarget = S.MakeMoveHandle(Castbartarget, L["目标施法条"], "TargetCastbar")
+end
+if not A["focusCBuserplaced"] then 
+	local Castbarfouce = CreateFrame("Frame", "Castbarfouce", UIParent) 
+	Castbarfouce:SetWidth(A["FocusCastBarWidth"]) 
+	Castbarfouce:SetHeight(A["FocusCastBarHeight"]) 
+	Castbarfouce:SetPoint(unpack(C["FocusCastbar"]))
+	Castbarfouce:Hide()
+	MoveHandle.Castbarfouce = S.MakeMoveHandle(Castbarfouce, L["焦点施法条"], "FocusCastbar")
+end
 local ShadowPet = CreateFrame("Frame", "ShadowPet", UIParent) 
 ShadowPet:SetWidth(140) 
 ShadowPet:SetHeight(20) 
@@ -77,10 +81,9 @@ CooldownFlash:Hide()
 		Combatpoint:Hide()
 	end
 
-	MoveHandle.Castbarplay = S.MakeMoveHandle(Castbarplay, L["玩家施法条"], "PlayerCastbar")
-	MoveHandle.Castbartarget = S.MakeMoveHandle(Castbartarget, L["目标施法条"], "TargetCastbar")
-	MoveHandle.Castbarfouce = S.MakeMoveHandle(Castbarfouce, L["焦点施法条"], "FocusCastbar")
-	MoveHandle.Castbarpet = S.MakeMoveHandle(Castbarpet, L["宠物施法条"], "PetCastbar")
+	
+	
+	
 	
 	MoveHandle.ClassCD = S.MakeMoveHandle(ClassCD, L["内置CD监视"], "ClassCD")
 	MoveHandle.Threat = S.MakeMoveHandle(Threat, L["仇恨监视"], "Threat")
