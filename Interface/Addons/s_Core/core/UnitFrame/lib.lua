@@ -173,7 +173,7 @@ C = UnitFrameDB
     p:SetWidth(f.width-2)
     p:SetHeight(f.height-2)
     p:SetPoint("TOP", s, "TOP", 0, -2)
-	p:SetAlpha(.9)
+	p:SetAlpha(.45)
 	p.PostUpdate = lib.PortraitPostUpdate	
     f.Portrait = p
   end
@@ -555,8 +555,8 @@ C = UnitFrameDB
     if f.mystyle=="target" then
       a:SetHeight((a.size+a.spacing)*2)
       a:SetWidth((a.size+a.spacing)*8)
-      a.numBuffs = 15 
-      a.numDebuffs = 15
+      a.numBuffs = 8 
+      a.numDebuffs = 8
 	elseif f.mystyle=="player" and DB.playerauras=="AURAS" then
 	  a.gap = false
       a['growth-x'] = 'LEFT'
@@ -666,11 +666,11 @@ C = UnitFrameDB
 	  d['growth-x'] = 'RIGHT'
       d['growth-y'] = 'UP' 
       d.initialAnchor = 'BOTTOMLEFT'
-	  d.num = 15
+	  d.num = 8
 	  d.size = 23
       d:SetHeight((d.size+d.spacing)*2)
       d:SetWidth((d.size+d.spacing)*8)
-	  d:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+	  d:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 10)
 	  --d.PreSetPosition = lib.PreSetPosition
     end
     d.PostCreateIcon = lib.PostCreateIcon
@@ -883,10 +883,10 @@ C = UnitFrameDB
     local h = CreateFrame("Frame", nil, f)
     h:SetAllPoints(f)
     h:SetFrameLevel(10)
-    h:SetAlpha(0.6)
+    h:SetAlpha(1)
     local ri = h:CreateTexture(nil,'OVERLAY',h)
     ri:SetPoint("CENTER", f, "CENTER", 0, 0)
-    ri:SetSize(S.Scale(16), S.Scale(16))
+    ri:SetSize(S.Scale(20), S.Scale(20))
     f.RaidIcon = ri
   end
   --gen hilight texture
