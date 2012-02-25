@@ -5,4 +5,5 @@
 	<Script file="Smooth.lua"/>
 	<Script file="Trinkets.lua"/>
 	<Include file="PartyPets.xml"/>
+	<Script file="combatpoint.lua"/>
 </Ui>
