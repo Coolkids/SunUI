@@ -10,7 +10,7 @@ local hpHeight = C["HPHeight"]
 local hpWidth = C["HPWidth"]
 local iconSize = C["CastBarIconSize"]		--Size of all Icons, RaidIcon/ClassIcon/Castbar Icon
 local cbHeight = C["CastBarHeight"]
-local cbWidth = C["CastBarWidth"]
+local cbWidth = C["CastBarWidth"]-10
 local blankTex = "Interface\\Buttons\\WHITE8x8"	
 local OVERLAY = [=[Interface\TargetingFrame\UI-TargetingFrame-Flash]=]
 local numChildren = -1
@@ -848,15 +848,10 @@ function NamePlates:PLAYER_ENTERING_WORLD()
 	if C["Combat"]	then
 		if InCombatLockdown() then 
 			SetCVar("nameplateShowEnemies", 1) 
-		else 
-			SetCVar("nameplateShowEnemies", 0) 
 		end
 	end
 end
 
-function NamePlates:PLAYER_REGEN_ENABLED()
-	SetCVar("nameplateShowEnemies", 0)
-end
 
 function NamePlates:PLAYER_REGEN_DISABLED()
 	SetCVar("nameplateShowEnemies", 1)
@@ -866,7 +861,6 @@ NamePlates:SetScript("OnEvent", function(self, event, ...) self[event](self, ...
 NamePlates:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 NamePlates:RegisterEvent("PLAYER_ENTERING_WORLD")
 if C["Combat"] then
-	NamePlates:RegisterEvent("PLAYER_REGEN_ENABLED")
 	NamePlates:RegisterEvent("PLAYER_REGEN_DISABLED")
 end
 end

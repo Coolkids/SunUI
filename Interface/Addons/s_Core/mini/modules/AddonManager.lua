@@ -22,8 +22,11 @@ stAddonManager:SetPoint("TOP", stAddonManager.header, "TOP", 0, 0)
 -- FUNCTIONS -----------------------------------------
 ------------------------------------------------------
 local function SkinFrame(frame, transparent)
-	S.MakeShadow(frame, 3) 
-	S.MakeBG(frame, 0) 
+	if transparent == true then
+	frame:CreateShadow("Background")
+	else
+	frame:CreateShadow()
+	end
 end
 
 
@@ -343,7 +346,7 @@ function stAddonManager:LoadWindow()
 	header:SetSize(window:GetWidth(),20)
 	
 	SkinFrame(window, true)
-	SkinFrame(header)
+	--SkinFrame(header)
 	
 	header:EnableMouse(true)
 	header:SetMovable(true)
@@ -367,7 +370,7 @@ function stAddonManager:LoadWindow()
 	addonListBG:SetPoint("TOPLEFT", header, "TOPLEFT", 10, -50)
 	addonListBG:SetWidth(window:GetWidth()-20)
 	addonListBG:SetHeight(window:GetHeight()-60)
-	SkinFrame(addonListBG)
+	--SkinFrame(addonListBG)
 	
 	--Create scroll frame (God damn these things are a pain)
 	local scrollFrame = CreateFrame("ScrollFrame", window:GetName().."_ScrollFrame", window, "UIPanelScrollFrameTemplate")

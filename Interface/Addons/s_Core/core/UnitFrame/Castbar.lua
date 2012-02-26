@@ -109,7 +109,7 @@ cast.PostCastStart = function(self, unit, name, rank, text)
 			cast.setBarTicks(self, self.channelingTicks)
 		end
 	elseif (unit == "target" or unit == "focus" or (unit and unit:find("boss%d"))) and self.interrupt then
-		self:SetStatusBarColor(1, .49, 0, 1)
+		self:SetStatusBarColor(1.0, 0.09, 0, 1)
 	else
 		self:SetStatusBarColor(.3, .45, .65, 1)
 	end

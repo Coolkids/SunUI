@@ -330,7 +330,7 @@ C = UnitFrameDB
     --icon
     local i = s:CreateTexture(nil, "ARTWORK")
     --i:SetSize(s:GetHeight()+4,s:GetHeight()+4)
-	i:SetSize(s:GetHeight()*2,s:GetHeight()*2)
+	i:SetSize(s:GetHeight(),s:GetHeight())
     i:Point("BOTTOMRIGHT", s, "BOTTOMLEFT", -6, 0)
     i:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	S.MakeTexShadow(s, i, 3)
@@ -343,7 +343,7 @@ C = UnitFrameDB
     if f.mystyle == "focus" and not C["focusCBuserplaced"] then
       s:SetPoint("BOTTOM", "Castbarfouce", "BOTTOM", 0, 0)
       s:SetSize(C["FocusCastBarWidth"],C["FocusCastBarHeight"])
-      i:SetSize(s:GetHeight(),s:GetHeight())
+      i:SetPoint("RIGHT", s, "LEFT", 0, 0)
       sp:SetHeight(s:GetHeight()*2.5)
     elseif f.mystyle == "pet" then
       s:SetPoint("BOTTOMRIGHT",f.Power,"BOTTOMRIGHT",0,0)
@@ -361,7 +361,7 @@ C = UnitFrameDB
 	  if not C["playerCBuserplaced"] then
 		s:SetSize(C["PlayerCastBarWidth"],C["PlayerCastBarHeight"])
 		s:SetPoint("BOTTOM", "Castbarplay", "BOTTOM", 0, 0)
-		i:SetSize(s:GetHeight()*2,s:GetHeight()*2)
+		i:SetSize((s:GetHeight()+2)*2,(s:GetHeight()+2)*2)
 		sp:SetHeight(s:GetHeight()*2.5)
 	  else
 		s:SetPoint("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
@@ -380,6 +380,7 @@ C = UnitFrameDB
       local l = lib.gen_fontstring(s, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
       l:SetPoint("RIGHT", 0, -s:GetHeight())
       l:SetJustifyH("RIGHT")
+	  l:SetTextColor(.8,.31,.45)
       s.Lag = l
       f:RegisterEvent("UNIT_SPELLCAST_SENT", cast.OnCastSent)
 	elseif f.mystyle == "target" and not C["targetCBuserplaced"] then
@@ -846,11 +847,9 @@ C = UnitFrameDB
     local h = CreateFrame("Frame", nil, f)
     h:SetAllPoints(f.Health)
     h:SetFrameLevel(10)
-    local cp = lib.gen_fontstring(h, DB.Font, 30*S.Scale(1), "THINOUTLINE")
-    cp:SetPoint("TOPLEFT", f.Health, "BOTTOMLEFT",0,0)
-	cp:SetPoint("BOTTOMRIGHT", f.Health, "BOTTOMRIGHT",0,-5)
-	cp:SetWidth(f.Health:GetWidth())
-	cp:SetJustifyH("LEFT")
+    local cp = lib.gen_fontstring(h, DB.Font, 20*S.Scale(1), "THINOUTLINE")
+    cp:SetPoint("CENTER", f.Health, "CENTER",0,0)
+	cp:SetJustifyH("CENTER")
     f:Tag(cp, '[mono:cp]')
   end
   --gen LFD role indicator
