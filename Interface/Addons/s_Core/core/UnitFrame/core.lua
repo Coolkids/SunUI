@@ -14,7 +14,7 @@ C = UnitFrameDB
   -- STYLE FUNCTIONS
   -----------------------------
 	local BarFader = function(self) 
-         self.BarFader = C["EnableBarFader"] 
+         self.BarFade = C["EnableBarFader"]
          self.BarFaderMinAlpha = 0--渐隐时的最小透明度。要么在cfg.lua中添加此项，或者可以改为0到1之间的数字。 
          self.BarFaderMaxAlpha = 1 
 	end
