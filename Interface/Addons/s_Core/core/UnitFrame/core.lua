@@ -31,7 +31,19 @@ C = UnitFrameDB
     lib.gen_highlight(self)
     lib.gen_RaidMark(self)
 	self.Health.frequentUpdates = true
-	if C["ReverseHPbars"] then self.colors.smooth = {.8,.2,.2, .7,.4,.4, .5,.5,.5} else self.colors.smooth = {1,0,0, .7,.41,.44, .3,.3,.3} end
+	if C["ReverseHPbars"] then 
+		if C["ClassColor"] then 
+			self.colors.smooth = {DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b}
+		else
+			self.colors.smooth = {.8,.2,.2, .7,.4,.4, .5,.5,.5} 
+		end
+	else 
+		if C["ClassColor"] then 
+			self.colors.smooth = {DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b}
+		else
+			self.colors.smooth = {1,0,0, .7,.41,.44, .3,.3,.3}
+		end
+	end
     self.Health.colorSmooth = true
 	--self.Health.colorHealth = true self.colors.health = {.6,.3,.3}
 	self.Health.bg.multiplier = 0.3

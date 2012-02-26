@@ -30,6 +30,7 @@ function Module.LoadSettings()
 		["showarena"] = true,			-- Arena frames
 		["EnableSwingTimer"] = false,
 		["EnableBarFader"] = false,
+		["ClassColor"] = false,
 --castbar
 		["playerCBuserplaced"] = false,	-- false to lock player cast bar to the player frame
 		["PlayerCastBarHeight"] = 20,
@@ -197,6 +198,12 @@ function Module.BuildGUI()
 							name = "开启头像动作条渐隐",			
 							get = function() return UnitFrameDB.EnableBarFader end,
 							set = function(_, value) UnitFrameDB.EnableBarFader = value end,
+						},
+						ClassColor = {
+							type = "toggle", order = 10,
+							name = "开启头像职业血条颜色",			
+							get = function() return UnitFrameDB.ClassColor end,
+							set = function(_, value) UnitFrameDB.ClassColor = value end,
 						},
 					}
 				},
