@@ -95,12 +95,12 @@ local CreateBar = function()
 	bar.icon = CreateFrame("Button", nil, bar)
 	bar.icon:SetSize(20, 20)
 	bar.icon:SetPoint("BOTTOMRIGHT", bar, "BOTTOMLEFT", -6, 0)
-	S.MakeShadow(bar.icon, 3)
+	bar.icon:CreateShadow()
 	bar.icon.backdrop = CreateFrame("Frame", nil, bar.icon)
 	bar.icon.backdrop:SetPoint("TOPLEFT", -2, 2)
 	bar.icon.backdrop:SetPoint("BOTTOMRIGHT", 2, -2)
 	bar.icon.backdrop:SetFrameStrata("BACKGROUND")
-	S.MakeShadow(bar, 3)
+	bar:CreateShadow("")
 	return bar
 end
 

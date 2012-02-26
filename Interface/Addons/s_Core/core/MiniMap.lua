@@ -6,7 +6,7 @@ Minimap:SetMaskTexture("Interface\\ChatFrame\\ChatFrameBackground")
 Minimap:SetFrameStrata("BACKGROUND")
 Minimap:ClearAllPoints()
 Minimap:SetSize(S.Scale(145), S.Scale(145))
-Minimap.Shadow = S.MakeShadow(Minimap, 4)
+Minimap:CreateShadow()
 
 function Module:OnInitialize()
 	MoveHandle.Minimap = S.MakeMoveHandle(Minimap, L["小地图"], "Minimap")

@@ -15,11 +15,7 @@ local LinkHover = {}; LinkHover.show = {	-- enable (true) or disable (false) Lin
 for i = 1, NUM_CHAT_WINDOWS do
   local cf = _G['ChatFrame'..i]
   cf:SetFading(true)  --渐隐
-  S.MakeShadow(cf, 3) 
-	cf:SetBackdrop({
-		bgFile = DB.bgFile, insets = {left = 0, right = 0, top = 0, bottom = 0},
-	})
-	cf:SetBackdropColor(0, 0, 0, 0.6)
+  cf:CreateShadow("Background")
   if cf then 
     cf:SetFont(NAMEPLATE_FONT, 10*S.Scale(1), "OUTLINE") 
     cf:SetFrameStrata("LOW")
@@ -78,11 +74,7 @@ SetChat = function()
     ChatFrame1:SetUserPlaced(true)
 	for i=1,10 do 
 	local cf = _G["ChatFrame"..i] 
-	S.MakeShadow(cf, 3) 
-	cf:SetBackdrop({
-		bgFile = DB.bgFile, insets = {left = 0, right = 0, top = 0, bottom = 0},
-	})
-	cf:SetBackdropColor(0, 0, 0, 0.6)
+	cf:CreateShadow("Background")
 	--FCF_SetWindowAlpha(cf, 0.8) 
 	end 
     FCF_SavePositionAndDimensions(ChatFrame1)
@@ -144,7 +136,7 @@ do
 				--_G[chat.."EditBoxLanguage"]:SetTemplate("Default", true)
 				--S.MakeShadow(_G[chat.."EditBoxLanguage"], 2)
 				--S.MakeBG(_G[chat.."EditBoxLanguage"], 0)
-				S.CreateBD(_G[chat.."EditBoxLanguage"],0.4)
+				_G[chat.."EditBoxLanguage"]:CreateShadow("Background")
 			end
 		eb:SetAltArrowKeyMode(false)
 		eb:ClearAllPoints()
@@ -153,10 +145,9 @@ do
 		eb:SetPoint("BOTTOMRIGHT", cf, "TOPRIGHT", 0, 3)
 		--eb:SetPoint("BOTTOMRIGHT", UIParent, eb_point[1], eb_point[2]+eb_width, eb_point[3])
 		eb:SetHeight(18)
-		S.MakeShadow(eb, 3)
-		S.MakeBG(eb, 0)
+		eb:CreateShadow("Background")
 		eb:EnableMouse(false)
-		eb:SetFont(DB.Font, 12*S.Scale(1), "OUTLINE")
+		eb:SetFont(DB.Font, 14*MiniDB["FontScale"]*S.Scale(1), "OUTLINE")
 
 	--Remove scroll buttons
 		local bf = _G['ChatFrame'..i..'ButtonFrame']
@@ -333,13 +324,9 @@ local lines = {}
 do
 	--Create Frames/Objects
 	local frame = CreateFrame("Frame", "BCMCopyFrame", UIParent)
-	frame:SetBackdrop({bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
-		edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
-		tile = true, tileSize = 16, edgeSize = 16,
-		insets = {left = 3, right = 3, top = 5, bottom = 3}})
-	frame:SetBackdropColor(0,0,0,1)
-	frame:SetWidth(500)
-	frame:SetHeight(400)
+	frame:CreateShadow("Background")
+	frame:SetWidth(600)
+	frame:SetHeight(500)
 	frame:SetPoint("CENTER", UIParent, "CENTER")
 	frame:Hide()
 	frame:SetFrameStrata("DIALOG")
@@ -358,7 +345,7 @@ do
 	editBox:SetHeight(270)
 	editBox:SetScript("OnEscapePressed", function(f) f:GetParent():GetParent():Hide() f:SetText("") end)
 	scrollArea:SetScrollChild(editBox)
-	S.MakeShadow(editBox, 3)
+	editBox:CreateShadow("Background")
 	
 	local close = CreateFrame("Button", "BCMCloseButton", frame, "UIPanelCloseButton")
 	close:SetPoint("TOPRIGHT", frame, "TOPRIGHT")

@@ -5,10 +5,11 @@ local r, g, b = DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b
 
 function S.MakeShadow(Parent, Size)
 	local Shadow = CreateFrame("Frame", nil, Parent)
+	x = S.Scale(Size)
 	Shadow:SetFrameLevel(0)
-	Shadow:SetPoint("TOPLEFT", -Size, Size)
-	Shadow:SetPoint("BOTTOMRIGHT", Size, -Size)
-	Shadow:SetBackdrop({edgeFile = DB.GlowTex, edgeSize = Size})
+	Shadow:SetPoint("TOPLEFT", -x, x)
+	Shadow:SetPoint("BOTTOMRIGHT", x, -x)
+	Shadow:SetBackdrop({edgeFile = DB.GlowTex, edgeSize = x})
 	Shadow:SetBackdropColor( .05, .05, .05, .9)
 	Shadow:SetBackdropBorderColor(0, 0, 0, 1)
 	return Shadow
@@ -16,47 +17,37 @@ end
 
 function S.MakeBorder(Parent, Size)
 	local Border = CreateFrame("Frame", nil, Parent)
+	x = S.Scale(Size)
 	Border:SetFrameLevel(0)
-	Border:SetPoint("TOPLEFT", -Size, Size)
-	Border:SetPoint("BOTTOMRIGHT", Size, -Size)
-	Border:SetBackdrop({edgeFile = DB.Solid, edgeSize = Size})
+	Border:SetPoint("TOPLEFT", -x, x)
+	Border:SetPoint("BOTTOMRIGHT", x, -x)
+	Border:SetBackdrop({edgeFile = DB.Solid, edgeSize = x})
 	Border:SetBackdropBorderColor(0, 0, 0, 1)
 	return Border
 end
 
 function S.MakeBG(Parent, Size)
 	local BG = CreateFrame("Frame", nil, Parent)
+	x = S.Scale(Size)
 	BG:SetFrameLevel(0)
-	BG:SetPoint("TOPLEFT", -Size, Size)
-	BG:SetPoint("BOTTOMRIGHT", Size, -Size)
+	BG:SetPoint("TOPLEFT", -x, x)
+	BG:SetPoint("BOTTOMRIGHT", x, -x)
 	BG:SetBackdrop({
-		bgFile = DB.bgFile, insets = {left = Size, right = Size, top = Size, bottom = Size},
-		edgeFile = DB.GlowTex, edgeSize = Size-1,
+		bgFile = DB.bgFile, insets = {left = x, right = x, top = x, bottom = x},
+		edgeFile = DB.GlowTex, edgeSize = S.Scale(Size-1),
 	})
 	BG:SetBackdropColor(0, 0, 0, 0.6)
-	BG:SetBackdropBorderColor(0, 0, 0, 1)
-	return BG
-end
-function S.MakeUnitBG(Parent)
-	local BG = CreateFrame("Frame", nil, Parent)
-	BG:SetFrameLevel(0)
-	BG:SetPoint("TOPLEFT", 0, 0)
-	BG:SetPoint("BOTTOMRIGHT", 0, 0)
-	BG:SetBackdrop({
-		bgFile = DB.bgFile, insets = {left = 0, right = 0, top = 0, bottom = 0},
-		edgeFile = DB.GlowTex, edgeSize = -1,
-	})
-	BG:SetBackdropColor(0, 0, 0, 0.3)
 	BG:SetBackdropBorderColor(0, 0, 0, 1)
 	return BG
 end
 
 function S.MakeTexShadow(Parent, Anchor, Size)
 	local Shadow = CreateFrame("Frame", nil, Parent)
-	Shadow:SetPoint("TOPLEFT", Anchor, -Size or 3, Size or 3)
-	Shadow:SetPoint("BOTTOMRIGHT", Anchor, Size or 3, -Size or 3)
+	x = S.Scale(Size)
+	Shadow:SetPoint("TOPLEFT", Anchor, -Size, Size)
+	Shadow:SetPoint("BOTTOMRIGHT", Anchor, Size, -Size)
 	Shadow:SetFrameLevel(1)
-	Shadow:SetBackdrop({edgeFile = DB.GlowTex, edgeSize = Size or 3})
+	Shadow:SetBackdrop({edgeFile = DB.GlowTex, edgeSize = Size})
 	Shadow:SetBackdropBorderColor(0, 0, 0, 1)
 	return Shadow
 end
@@ -525,6 +516,53 @@ local function Point(obj, arg1, arg2, arg3, arg4, arg5)
 
 	obj:SetPoint(arg1, arg2, arg3, arg4, arg5)
 end
+
+local function CreateBorder(f, r, g, b, a)
+	f:SetBackdrop({
+		edgeFile = DB.Solid, 
+		edgeSize = mult,
+		insets = { left = -mult, right = -mult, top = -mult, bottom = -mult }
+	})
+	f:SetBackdropBorderColor(r or 0, g or 0, b or 0, a or 1)
+end
+local function CreateShadow(f, t, offset, thickness, texture)
+	if f.shadow then return end
+	
+	local borderr, borderg, borderb, bordera = 0, 0, 0, 1
+	local backdropr, backdropg, backdropb, backdropa =  .05, .05, .05, .9
+	
+	if t == "Background" then
+		backdropa = 0.6
+	else
+		backdropa = 0
+	end
+	
+	local border = CreateFrame("Frame", nil, f)
+	border:SetFrameLevel(1)
+	border:Point("TOPLEFT", -1, 1)
+	border:Point("TOPRIGHT", 1, 1)
+	border:Point("BOTTOMRIGHT", 1, -1)
+	border:Point("BOTTOMLEFT", -1, -1)
+	border:CreateBorder()
+	f.border = border
+	
+	local shadow = CreateFrame("Frame", nil, border)
+	shadow:SetFrameLevel(0)
+	shadow:Point("TOPLEFT", -3, 3)
+	shadow:Point("TOPRIGHT", 3, 3)
+	shadow:Point("BOTTOMRIGHT", 3, -3)
+	shadow:Point("BOTTOMLEFT", -3, -3)
+	shadow:SetBackdrop( { 
+		edgeFile = DB.GlowTex,
+		bgFile =DB.Solid,
+		edgeSize = S.Scale(4),
+		insets = {left = S.Scale(4), right = S.Scale(4), top = S.Scale(4), bottom = S.Scale(4)},
+	})
+	shadow:SetBackdropColor( backdropr, backdropg, backdropb, backdropa )
+	shadow:SetBackdropBorderColor( borderr, borderg, borderb, bordera )
+	f.shadow = shadow
+end
+
 local function SetTemplate(f, t, texture)
 	f:SetBackdrop({
 	  bgFile = DB.Statusbar,
@@ -532,17 +570,73 @@ local function SetTemplate(f, t, texture)
 	if t == "Transparent" then 
 		f:SetBackdropColor(0.05, 0.05, 0.05, 0.6)
 	else
-		f:SetBackdropColor( .05, .05, .05, .9)
+		f:SetBackdropColor(0.05, 0.05, 0.05, 0.9)
 	end
-	f:SetBackdropBorderColor (0, 0, 0, 1)
+	f:SetBackdropBorderColor(0, 0, 0, 1)
 end
+
+local function StyleButton(button, setallpoints)
+	if button.SetHighlightTexture and not button.hover then
+		local hover = button:CreateTexture(nil, "OVERLAY")
+		hover:SetTexture(1, 1, 1, 0.3)
+		if setallpoints then
+			hover:SetAllPoints()
+		else
+			hover:Point('TOPLEFT', 2, -2)
+			hover:Point('BOTTOMRIGHT', -2, 2)
+		end
+		button.hover = hover
+		button:SetHighlightTexture(hover)
+	end
+	
+	if button.SetPushedTexture and not button.pushed then
+		local pushed = button:CreateTexture(nil, "OVERLAY")
+		pushed:SetTexture(0.9, 0.8, 0.1, 0.3)
+		if setallpoints then
+			pushed:SetAllPoints()
+		else
+			pushed:Point('TOPLEFT', 2, -2)
+			pushed:Point('BOTTOMRIGHT', -2, 2)
+		end
+		button.pushed = pushed
+		button:SetPushedTexture(pushed)
+	end
+	
+	if button.SetCheckedTexture and not button.checked then
+		local checked = button:CreateTexture(nil, "OVERLAY")
+		checked:SetTexture(23/255,132/255,209/255,0.5)
+		if setallpoints then
+			checked:SetAllPoints()
+		else
+			checked:Point('TOPLEFT', 2, -2)
+			checked:Point('BOTTOMRIGHT', -2, 2)
+		end
+		button.checked = checked
+		button:SetCheckedTexture(checked)
+	end
+
+	if button:GetName() and _G[button:GetName().."Cooldown"] then
+		local cooldown = _G[button:GetName().."Cooldown"]
+		cooldown:ClearAllPoints()
+		if setallpoints then
+			cooldown:SetAllPoints()
+		else
+			cooldown:Point('TOPLEFT', 2, -2)
+			cooldown:Point('BOTTOMRIGHT', -2, 2)
+		end
+	end
+end
+
 local function addapi(object)
 	local mt = getmetatable(object).__index
 	if not object.Size then mt.Size = Size end
 	if not object.Point then mt.Point = Point end
 	if not object.Width then mt.Width = Width end
 	if not object.Height then mt.Height = Height end
+	if not object.CreateBorder then mt.CreateBorder = CreateBorder end
+	if not object.CreateShadow then mt.CreateShadow = CreateShadow end
 	if not object.SetTemplate then mt.SetTemplate = SetTemplate end
+	if not object.StyleButton then mt.StyleButton = StyleButton end
 end
 local handled = {["Frame"] = true}
 local object = CreateFrame("Frame")

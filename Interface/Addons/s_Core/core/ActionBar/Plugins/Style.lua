@@ -92,7 +92,7 @@ local function StyleActionButton(self)
 		CheckedTexture:SetPoint("BOTTOMRIGHT", -2, 2)
 		Button:SetCheckedTexture(CheckedTexture)
 		
-		Button.Shadow = S.MakeTexShadow(Button, Icon, 5)
+		Button.Shadow = CreateShadow(Button, "Background")
 	end
 end
  
@@ -139,7 +139,8 @@ local function StyleShapeShiftButton()
 			CheckedTexture:SetPoint("BOTTOMRIGHT", -2, 2)
 			Button:SetCheckedTexture(CheckedTexture)
 			
-			Button.Shadow = S.MakeTexShadow(Button, Icon, 5)
+			--Button.Shadow = S.MakeTexShadow(Button, Icon, 5)
+			Button.Shadow = CreateShadow(Button, "Background")
 		end
 	end
 end
@@ -201,7 +202,8 @@ local function StylePetButton()
 			CheckedTexture:SetPoint("BOTTOMRIGHT", -2, 2)
 			Button:SetCheckedTexture(CheckedTexture)
 			
-			Button.Shadow = S.MakeTexShadow(Button, Icon, 4)
+			--Button.Shadow = S.MakeTexShadow(Button, Icon, 4)
+			Button.Shadow = CreateShadow(Button, "Background")
 		end
 	end
 end

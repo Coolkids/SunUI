@@ -188,8 +188,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 		GameTooltipStatusBar:Point("BOTTOMLEFT", GameTooltipStatusBar:GetParent(), "TOPLEFT", 4.5, 4)
 		GameTooltipStatusBar:Point("BOTTOMRIGHT", GameTooltipStatusBar:GetParent(), "TOPRIGHT", -4.5, 4)
 		if not GameTooltipStatusBar.Shadow then
-			GameTooltipStatusBar.Shadow = S.MakeShadow(GameTooltipStatusBar, 4)
-			S.MakeBG(GameTooltipStatusBar, 0)
+			GameTooltipStatusBar:CreateShadow("Background")
 		end
     end
 end)
@@ -251,7 +250,7 @@ end
 local function style(frame)
     if not frame.freebBak then
         --setBakdrop(frame)
-		S.MakeShadow(frame, 3)
+		frame:CreateShadow("Background")
     end
 
     frame:SetBackdropColor(cfg.bgcolor.r, cfg.bgcolor.g, cfg.bgcolor.b, cfg.bgcolor.t)

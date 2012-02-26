@@ -211,14 +211,9 @@ addon:RegisterForClicks"anyup"
 addon:SetParent(UIParent)
 addon:SetUserPlaced(true)
 addon:SetPoint("TOPLEFT", 0, -104)
-addon:SetBackdrop{
-	bgFile = "Interface\\Tooltips\\UI-Tooltip-Background", tile = true, tileSize = 16,
-	edgeFile = DB.edgetex, edgeSize = 10,
-	insets = {left = 2, right = 2, top = 2, bottom = 2},
-}
 addon:SetWidth(256)
 addon:SetHeight(64)
-addon:SetBackdropColor(0, 0, 0, 1)
+addon:CreateShadow("Background")
 
 
 

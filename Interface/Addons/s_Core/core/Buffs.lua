@@ -34,8 +34,8 @@ function Module:Style(buttonName, i)
 		Border:Hide()
 	end
 	
-	if not Button.Shadow then
-		Button.Shadow = S.MakeShadow(Button, 5)
+	if not Button.shadow then
+		Button:CreateShadow()
 	end	
 end
 

@@ -340,7 +340,7 @@ local function OnEvent_ACTIVE_TALENT_GROUP_CHANGED(event, ...)
 	for key, value in pairs(ClassBuff) do
 		local Button = CreateFrame("Frame", nil, UIParent)
 		Button:SetSize(ReminderDB.ClassBuffSize, ReminderDB.ClassBuffSize)
-		Button.Shadow = S.MakeShadow(Button, 3)
+		Button:CreateShadow()
 		Button.Icon = Button:CreateTexture(nil, "ARTWORK")
 		Button.Icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 		Button.Icon:SetAllPoints()

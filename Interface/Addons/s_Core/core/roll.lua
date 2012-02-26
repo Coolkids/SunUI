@@ -142,7 +142,7 @@ local function CreateRollFrame()
 	buttonborder2:SetHeight(22)
 	buttonborder2:SetFrameLevel(buttonborder:GetFrameLevel()+1)
 	buttonborder2:SetPoint("CENTER", button, "CENTER")
-    S.MakeShadow(buttonborder2, 3)
+    buttonborder2:CreateShadow()
 
 	
 
@@ -159,7 +159,7 @@ local function CreateRollFrame()
 	status:SetWidth(326)
 	status:SetHeight(5)
 	status:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", 2, 1)
-	 S.MakeShadow(status, 3)
+	status:CreateShadow("Background")
 	status:SetScript("OnUpdate", StatusUpdate)
 	status:SetFrameLevel(status:GetFrameLevel()-1)
 	status:SetStatusBarTexture(DB.Statusbar)

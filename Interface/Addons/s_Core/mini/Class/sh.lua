@@ -7,9 +7,7 @@ local Frame = CreateFrame("Frame")
 	  Frame.Cooldown:SetAllPoints()
 	  Frame.Cooldown:SetReverse(true)
 	  
-	  Frame.Border = S.MakeBorder(Frame, 1.5)
-	  Frame.bgFile = S.MakeBG(Frame, 1.5)
-	  Frame.Shadow = S.MakeShadow(Frame, 3)
+	  Frame:CreateShadow("Background")
 	  Frame:Hide()
 local function UpdateCDFrame(index, name, icon, start, duration)
 	if Frame.Cooldown then

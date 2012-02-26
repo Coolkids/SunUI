@@ -9,6 +9,6 @@ Map:UnregisterEvent("PLAYER_ENTERING_WORLD")
 		WorldMapFrame.backdrop = CreateFrame("Frame", nil, WorldMapFrame)
 		WorldMapFrame.backdrop:SetPoint("TOPLEFT", -2, 2)
 		WorldMapFrame.backdrop:SetPoint("BOTTOMRIGHT", 2, -2)
-		S.SetBD(WorldMapFrame.backdrop)
+		WorldMapFrame:CreateShadow("Background")
 	end
 end)

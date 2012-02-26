@@ -7,10 +7,6 @@ Delay:SetScript("OnEvent", function()
 	--SetCVar("UnitNameNPC", 0)  --给我不显示任何NPC名字
 	if FriendsMenuXPSecure then
 		S.StripTextures(FriendsMenuXPSecureMenuBackdrop)
-		S.MakeShadow(FriendsMenuXPSecure, 3)
-		FriendsMenuXPSecure:SetBackdrop({
-		bgFile = DB.bgFile, insets = {left = 0, right = 0, top = 0, bottom = 0},
-	})
-	FriendsMenuXPSecure:SetBackdropColor(0, 0, 0, 0.9)
+		FriendsMenuXPSecure:CreateShadow("Background")
 	end
 end)

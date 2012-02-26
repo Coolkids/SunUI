@@ -7,7 +7,7 @@ Chatbar:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	if WorldMapFrame then
 		S.StripTextures(ChatBarFrame, Kill)
 		S.StripTextures(ChatBarFrameBackground, Kill)
-		S.SetBD(ChatBarFrameBackground)
+		ChatBarFrameBackground:CreateShadow("Background")
 	end
 	if DB.Nuke == true then
 		for i = 1,20 do

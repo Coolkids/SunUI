@@ -141,8 +141,9 @@ C = UnitFrameDB
     h:SetFrameLevel(0)
     h:SetPoint("TOPLEFT",0,0)
     h:SetPoint("BOTTOMRIGHT",0,0)
-	S.MakeShadow(h, 6)
-	S.MakeBG(h, 0)
+	--S.MakeShadow(h, 6)
+	--S.MakeBG(h, 0)
+	h:CreateShadow("Background")
     --lib.gen_backdrop(h)
     --bar bg
 	local bg = CreateFrame("Frame", nil, s)
@@ -229,8 +230,8 @@ C = UnitFrameDB
     --helper
     local h = CreateFrame("Frame", nil, s)
     h:SetFrameLevel(0)
-    h:SetPoint("TOPLEFT",0,0)
-    h:SetPoint("BOTTOMRIGHT",0,0)
+    h:SetPoint("TOPLEFT",-1,0)
+    h:SetPoint("BOTTOMRIGHT",0,-1)
     --lib.gen_backdrop(h)
     --bg
     local b = s:CreateTexture(nil, "BACKGROUND")
@@ -240,8 +241,7 @@ C = UnitFrameDB
     if f.mystyle=="tot" or f.mystyle=="pet" then
       s:SetHeight(f.height/3)
     end
-	S.MakeShadow(h, 6)
-	S.MakeBG(h, 0)
+	h:CreateShadow("Background")
     f.Power = s
     f.Power.bg = b
   end
@@ -305,8 +305,8 @@ C = UnitFrameDB
     b:SetAllPoints(s)
     b:SetVertexColor(0.3*0.2, 0.45*0.2, 0.65*0.2, 0.7)--]]
 	--backdrop
-	S.MakeTexShadow(s, h, 3)
-	S.MakeBG(s, 0)
+	h:CreateShadow("Background")
+
     --[[spark
     sp = s:CreateTexture(nil, "OVERLAY")
     sp:SetBlendMode("ADD")
@@ -330,9 +330,10 @@ C = UnitFrameDB
     --icon
     local i = s:CreateTexture(nil, "ARTWORK")
     --i:SetSize(s:GetHeight()+4,s:GetHeight()+4)
-	i:SetSize(24,24)
-    i:SetPoint("BOTTOMRIGHT", s, "BOTTOMLEFT", -4.5, 0)
+	i:SetSize(s:GetHeight()*2,s:GetHeight()*2)
+    i:Point("BOTTOMRIGHT", s, "BOTTOMLEFT", -6, 0)
     i:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+	S.MakeTexShadow(s, i, 3)
     --helper2 for icon
     local h2 = CreateFrame("Frame", nil, s)
     h2:SetFrameLevel(0)
