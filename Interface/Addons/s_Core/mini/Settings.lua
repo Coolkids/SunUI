@@ -1,11 +1,6 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Settings")
 
-
-
-
-local SCREENSHOT_QUALITY = 7
-
 ---------------- > Some slash commands
 SlashCmdList['RELOADUI'] = function() ReloadUI() end
 SLASH_RELOADUI1 = '/rl'
@@ -82,8 +77,7 @@ wfg:SetPoint("BOTTOMRIGHT", wf, "BOTTOMRIGHT")
 wfg.text = S.MakeFontString(wfg, 10)
 wfg.text:SetText("点我拖动")
 wfg.text:SetPoint("TOP", wfg, "TOP")
-S.MakeShadow(wfg, 3)
-S.MakeBG(wfg, 0)
+wfg:CreateShadow("Background")
 wfg:Hide()
 local function WATCHFRAMELOCK()
 	if wfmove == false then
@@ -140,7 +134,7 @@ hooksecurefunc("ShowReadyCheck", ShowReadyCheckHook)
 
 
 ---------------- > SetupUI
-SetCVar("scriptErrors", 1)
+--[[ SetCVar("scriptErrors", 1)
 SetCVar("buffDurations", 1)
 SetCVar("consolidateBuffs",0)
 SetCVar("autoLootDefault", 1)
@@ -150,8 +144,8 @@ SetCVar("nameplateShowEnemies", 1)
 SetCVar("ShowClassColorInNameplate", 1)
 SetCVar("bloattest", 0)
 SetCVar("bloatthreat",0)
-SetCVar("bloatnameplates", 0.0)
-SetCVar("screenshotQuality", SCREENSHOT_QUALITY)
+SetCVar("bloatnameplates", 0.0) ]]
+SetCVar("screenshotQuality", 10)
 
 
 ---------------- > ALT+RightClick to buy a stack

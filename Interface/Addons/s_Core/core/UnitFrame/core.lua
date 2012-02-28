@@ -35,13 +35,14 @@ C = UnitFrameDB
 		if C["ClassColor"] then 
 			self.colors.smooth = {DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b}
 		else
-			self.colors.smooth = {.8,.2,.2, .7,.4,.4, .5,.5,.5} 
+			self.colors.smooth = {1,0,0,0.77,0.12,0.23, 0.05,0.05,0.05} 
 		end
 	else 
 		if C["ClassColor"] then 
 			self.colors.smooth = {DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b}
 		else
-			self.colors.smooth = {1,0,0, .7,.41,.44, .3,.3,.3}
+			--self.colors.smooth = {1,0,0, .7,.41,.44, .3,.3,.3}
+			self.colors.smooth = {1,0,0,1,0,0,1,0,0}
 		end
 	end
     self.Health.colorSmooth = true
@@ -125,7 +126,6 @@ C = UnitFrameDB
     self.mystyle = "pet"
     self.disallowVehicleSwap = true
     genStyle(self)
-	BarFader(self)
     self.Power.frequentUpdates = true
     self.Power.colorPower = true
     self.Power.bg.multiplier = 0.3

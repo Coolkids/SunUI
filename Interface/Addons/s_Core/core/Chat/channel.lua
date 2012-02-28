@@ -1,9 +1,9 @@
 ﻿local S, _, L, DB = unpack(select(2, ...))
 if DB.Nuke == true then return end
 if DB.zone ~= "zhTW" and DB.zone ~= "zhCN" then return end
-local button = CreateFrame("Button", nil, UIParent)
-		button:SetPoint("TOPRIGHT", ChatFrame1, "TOPRIGHT", 24, -24)
-		button:SetSize(S.Scale(20), S.Scale(20))
+local button = CreateFrame("Button", "ButtonP", ChatFrame1)
+		button:Point("TOP", ButtonE, "BOTTOM", 0, -5)
+		button:Size(20)
 		button.text = button:CreateFontString(nil, 'OVERLAY')
 		button.text:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")
 		button.text:SetText("P")

@@ -10,7 +10,7 @@ local hpHeight = C["HPHeight"]
 local hpWidth = C["HPWidth"]
 local iconSize = C["CastBarIconSize"]		--Size of all Icons, RaidIcon/ClassIcon/Castbar Icon
 local cbHeight = C["CastBarHeight"]
-local cbWidth = C["CastBarWidth"]-10
+local cbWidth = C["CastBarWidth"]
 local blankTex = "Interface\\Buttons\\WHITE8x8"	
 local OVERLAY = [=[Interface\TargetingFrame\UI-TargetingFrame-Flash]=]
 local numChildren = -1
@@ -764,9 +764,9 @@ end
 --Update settings for nameplate to match config
 local function CheckSettings(frame, ...)
 	--Width
-	if frame.hp:GetWidth() ~= 110 then
-		frame.hp:Width(110)
-		hpWidth = 110
+	if cbWidth ~= hpWidth then
+		cbWidth = hpWidth
+
 	end
 end
 

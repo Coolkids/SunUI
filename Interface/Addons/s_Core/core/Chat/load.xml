@@ -6,4 +6,5 @@
 	<Script file="ChatEmotion.lua"/>
 	<Script file="TabChannel.lua"/>
 	<Script file="channel.lua"/>
+	<Script file="hide.lua"/>
 </Ui>

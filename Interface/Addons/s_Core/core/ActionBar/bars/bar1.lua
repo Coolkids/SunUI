@@ -96,5 +96,11 @@ end
     else
        MainMenuBar_OnEvent(self, event, ...)
     end
+--[[ 	bar:SetScript("OnEnter", function(self, event, ...)
+	UIFrameFadeIn(rABS_MainMenuBar, 0.8, 0, 1)
+	end)
+	bar:SetScript("OnLeave", function(self, event, ...)
+	UIFrameFadeOut(rABS_MainMenuBar, 1.5, 1,  0)
+	end) ]]
   end)
  

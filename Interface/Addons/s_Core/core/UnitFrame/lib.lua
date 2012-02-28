@@ -42,7 +42,7 @@ C = UnitFrameDB
   --backdrop func
   lib.gen_backdrop = function(f)
     f:SetBackdrop(backdrop_tab);
-    f:SetBackdropColor(0,0,0,0.3)
+    f:SetBackdropColor(0,0,0,0)
     f:SetBackdropBorderColor(0,0,0,1)
   end
   
@@ -128,7 +128,7 @@ C = UnitFrameDB
 		s:SetAlpha(1)
 	end
     --local s = ReverseBar(f)--CreateFrame("StatusBar", nil, f)--
-    s:SetStatusBarTexture(DB.UnitFrameTexture)
+    s:SetStatusBarTexture(DB.Statusbar)
     fixStatusbar(s)
     s:SetHeight(f.height)
     s:SetWidth(f.width)
@@ -150,7 +150,7 @@ C = UnitFrameDB
 	bg:SetFrameLevel(s:GetFrameLevel()-2)
     bg:SetAllPoints(s)
     local b = bg:CreateTexture(nil, "BACKGROUND")
-    b:SetTexture(DB.UnitFrameTexture)
+    b:SetTexture(DB.Statusbar)
 	b:SetAlpha(0)
     b:SetAllPoints(s)
 	-- threat border
@@ -219,7 +219,7 @@ C = UnitFrameDB
   lib.gen_ppbar = function(f)
     --statusbar
     local s = CreateFrame("StatusBar", nil, f)
-    s:SetStatusBarTexture(DB.UnitFrameTexture)
+    s:SetStatusBarTexture(DB.Statusbar)
     fixStatusbar(s)
     s:SetHeight(f.height/3)
     s:SetWidth(f.width-1)
@@ -235,7 +235,7 @@ C = UnitFrameDB
     --lib.gen_backdrop(h)
     --bg
     local b = s:CreateTexture(nil, "BACKGROUND")
-    b:SetTexture(DB.UnitFrameTexture)
+    b:SetTexture(DB.Statusbar)
 	b:SetAlpha(.0)
     b:SetAllPoints(s)
     if f.mystyle=="tot" or f.mystyle=="pet" then
@@ -301,7 +301,7 @@ C = UnitFrameDB
     --lib.gen_backdrop(h)
     --[[--backdrop
     local b = s:CreateTexture(nil, "BACKGROUND")
-    b:SetTexture(DB.UnitFrameTexture)
+    b:SetTexture(DB.Statusbar)
     b:SetAllPoints(s)
     b:SetVertexColor(0.3*0.2, 0.45*0.2, 0.65*0.2, 0.7)--]]
 	--backdrop
@@ -369,7 +369,7 @@ C = UnitFrameDB
       --latency only for player unit
 	  local z = s:CreateTexture(nil, "OVERLAY")
 	  z:SetBlendMode("ADD")
-      z:SetTexture(DB.UnitFrameTexture)
+      z:SetTexture(DB.Statusbar)
 	  --z:SetWidth(1) -- it should never fill the entire castbar when GetNetStats() returns 0
       z:SetVertexColor(.8,.31,.45)
       z:SetPoint("TOPRIGHT")
@@ -421,7 +421,7 @@ C = UnitFrameDB
       _G[bar]:SetHeight(16)
       _G[bar]:SetBackdropColor(.1,.1,.1)
       _G[bar..'Background'] = _G[bar]:CreateTexture(bar..'Background', 'BACKGROUND', _G[bar])
-      _G[bar..'Background']:SetTexture(DB.UnitFrameTexture)
+      _G[bar..'Background']:SetTexture(DB.Statusbar)
       _G[bar..'Background']:SetAllPoints(bar)
       _G[bar..'Background']:SetVertexColor(.15,.15,.15,1)
       _G[bar..'Text']:SetFont(DB.Font, (C["FontSize"]+2)*S.Scale(1))
@@ -708,12 +708,12 @@ C = UnitFrameDB
         else
           r:SetPoint("TOPLEFT", f.Runes[i-1], "TOPRIGHT", 2, 0)
         end
-        r:SetStatusBarTexture(DB.UnitFrameTexture)
+        r:SetStatusBarTexture(DB.Statusbar)
         r:GetStatusBarTexture():SetHorizTile(false)
         r:SetStatusBarColor(unpack(runeloadcolors[i]))
         r.bd = r:CreateTexture(nil, "BORDER")
         r.bd:SetAllPoints()
-        r.bd:SetTexture(DB.UnitFrameTexture)
+        r.bd:SetTexture(DB.Statusbar)
         r.bd:SetVertexColor(0.15, 0.15, 0.15)
         f.b = CreateFrame("Frame", nil, r)
         f.b:SetPoint("TOPLEFT", r, "TOPLEFT", -4, 4)
@@ -735,13 +735,13 @@ C = UnitFrameDB
 	local lb = CreateFrame('StatusBar', nil, eb)
 	lb:SetPoint('LEFT', eb, 'LEFT', 4, 0)
 	lb:SetSize(f.width-2, 10)
-	lb:SetStatusBarTexture(DB.UnitFrameTexture)
+	lb:SetStatusBarTexture(DB.Statusbar)
 	lb:SetStatusBarColor(0.27, 0.47, 0.74)
 	eb.LunarBar = lb
 	local sb = CreateFrame('StatusBar', nil, eb)
 	sb:SetPoint('LEFT', lb:GetStatusBarTexture(), 'RIGHT', 0, 0)
 	sb:SetSize(f.width-2, 10)
-	sb:SetStatusBarTexture(DB.UnitFrameTexture)
+	sb:SetStatusBarTexture(DB.Statusbar)
 	sb:SetStatusBarColor(0.9, 0.6, 0.3)
 	eb.SolarBar = sb
   	local h = CreateFrame("Frame", nil, eb)
@@ -974,7 +974,7 @@ C = UnitFrameDB
     fhp:SetSize(f.width,f.height)
     fhp:SetPoint("TOPLEFT",oUF_monoTargetFrame,"TOPLEFT",0,0)
     fhp.bg = fhp:CreateTexture(nil, "PARENT")
-    fhp.bg:SetTexture(DB.UnitFrameTexture)
+    fhp.bg:SetTexture(DB.Statusbar)
     fhp.bg:ClearAllPoints()
     fhp.bg:SetAllPoints(fhp)
     fhp.bg:SetVertexColor(.3,.3,.3)
@@ -990,7 +990,7 @@ C = UnitFrameDB
     fpp:SetHeight(f.height/3)
     fpp:SetPoint("TOPLEFT",FakeHealthBar,"BOTTOMLEFT",0,-2)
     fpp.bg = fpp:CreateTexture(nil, "PARENT")
-    fpp.bg:SetTexture(DB.UnitFrameTexture)
+    fpp.bg:SetTexture(DB.Statusbar)
     fpp.bg:ClearAllPoints()
     fpp.bg:SetAllPoints(fpp)
     fpp.bg:SetVertexColor(.30,.45,.65)
@@ -1027,14 +1027,14 @@ C = UnitFrameDB
   lib.gen_swing_timer = function(f)
 	if C["EnableSwingTimer"] then
 		sw = CreateFrame("StatusBar", f:GetName().."_Swing", f)
-		sw:SetStatusBarTexture(DB.UnitFrameTexture)
+		sw:SetStatusBarTexture(DB.Statusbar)
 		sw:SetStatusBarColor(.3, .3, .3)
 		sw:SetHeight(4)
 		sw:SetWidth(f.width)
 		sw:SetPoint("TOP", f.Power, "BOTTOM", 0, -3)
 		sw.bg = sw:CreateTexture(nil, "BORDER")
 		sw.bg:SetAllPoints(sw)
-		sw.bg:SetTexture(DB.UnitFrameTexture)
+		sw.bg:SetTexture(DB.Statusbar)
 		sw.bg:SetVertexColor(.1, .1, .1, 0.25)
 		sw.bd = CreateFrame("Frame", nil, sw)
 		sw.bd:SetFrameLevel(1)
@@ -1052,14 +1052,14 @@ C = UnitFrameDB
 	local apb = CreateFrame("StatusBar", nil, f)
 	apb:SetFrameLevel(f.Health:GetFrameLevel() + 2)
 	apb:SetSize(f.width/2.2, f.height/3)
-	apb:SetStatusBarTexture(DB.UnitFrameTexture)
+	apb:SetStatusBarTexture(DB.Statusbar)
 	apb:GetStatusBarTexture():SetHorizTile(false)
 	apb:SetStatusBarColor(1, 0, 0)
 	apb:SetPoint("BOTTOM", f, "TOP", 0, -f.height/6)
 
 	apb.bg = apb:CreateTexture(nil, "BORDER")
 	apb.bg:SetAllPoints(apb)
-	apb.bg:SetTexture(DB.UnitFrameTexture)
+	apb.bg:SetTexture(DB.Statusbar)
 	apb.bg:SetVertexColor(.18, .18, .18, 1)
 	f.AltPowerBar = apb
 	

@@ -28,6 +28,7 @@ local function ShowTooltip(self)
 	GameTooltip:ClearLines()
 		GameTooltip:AddLine(L["邮件"], 0.4, 0.78, 1)
 		GameTooltip:AddLine(" ")
+	local mail = HasNewMail()
 	if mail == 1 then
 		GameTooltip:AddLine(L["新邮件"],  0.75, 0.9, 1)
 	else
