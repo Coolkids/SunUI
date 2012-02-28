@@ -100,15 +100,15 @@ SLASH_WATCHFRAMELOCK1 = "/wf"
 SlashCmdList["WATCHFRAMELOCK"] = WATCHFRAMELOCK
 --任务追踪字体
 local WFT = _G["WatchFrameTitle"]
-   WFT:SetFont(DB.Font, 17*MiniDB["FontScale"]*S.Scale(1), "OUTLINE")
+   WFT:SetFont(DB.Font, 17*MiniDB["FontScale"]*S.Scale(1), "THINOUTLINE")
    WFT:SetShadowOffset(0, 0)
    WFT:SetShadowColor(0, 0, 0, 1)
    hooksecurefunc("WatchFrame_SetLine", function(line)
-      line.text:SetFont(DB.Font, 14*MiniDB["FontScale"]*S.Scale(1), "OUTLINE")
+      line.text:SetFont(DB.Font, 14*MiniDB["FontScale"]*S.Scale(1), "THINOUTLINE")
       line.text:SetShadowOffset(0, 0)
       line.text:SetShadowColor(0, 0, 0, 1)
       if line.dash then
-         line.dash:SetFont(DB.Font, 14*MiniDB["FontScale"]*S.Scale(1), "OUTLINE")
+         line.dash:SetFont(DB.Font, 14*MiniDB["FontScale"]*S.Scale(1), "THINOUTLINE")
          line.text:SetShadowOffset(0, 0)
          line.text:SetShadowColor(0, 0, 0, 1)
       end

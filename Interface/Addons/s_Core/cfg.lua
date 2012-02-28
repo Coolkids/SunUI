@@ -3,8 +3,6 @@
 
 --全局设置
 local Media = "Interface\\Addons\\s_Core\\media\\"
-local MediaPath = "Interface\\Addons\\s_Core\\Media\\UnitFrame\\"
-DB.Auratex = MediaPath.."iconborder" 
 DB.dummy = function() return end
 DB.zone = GetLocale()
 DB.level = UnitLevel("player")

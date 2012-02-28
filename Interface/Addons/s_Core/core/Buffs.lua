@@ -36,6 +36,7 @@ function Module:Style(buttonName, i)
 	
 	if not Button.shadow then
 		Button:CreateShadow()
+		Button:StyleButton(true)
 	end	
 end
 

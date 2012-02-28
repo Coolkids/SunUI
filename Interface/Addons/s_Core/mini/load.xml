@@ -5,7 +5,6 @@
 	<Include file ="Class\load.xml"/>
 	<Include file ="FriendsMenuXP\load.xml"/>
 	<Include file ="Icicle\load.xml"/>
-	<Include file ="MBB\load.xml"/>
 	<Include file ="modules\load.xml"/>
 	<Include file ="Quest\load.xml"/>
 	<Include file ="Ratings\load.xml"/>
