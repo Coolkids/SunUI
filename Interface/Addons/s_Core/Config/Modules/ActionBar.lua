@@ -12,6 +12,7 @@ function Module.LoadSettings()
 		["HideHotKey"] = false,
 		["HideMacroName"] = false,
 		["CooldownFlash"] = true,
+		["EnableBarFader"] = false,
 		["CooldownFlashSize"] = 64,
 		["Bar1Layout"] = 1,
 		["Bar2Layout"] = 1,
@@ -135,6 +136,12 @@ function Module.BuildGUI()
 							name = L["冷却闪光"],		
 							get = function() return ActionBarDB.CooldownFlash end,
 							set = function(_, value) ActionBarDB.CooldownFlash = value end,
+						},
+						EnableBarFader = {
+							type = "toggle", order = 4,
+							name = "动作条渐隐",		
+							get = function() return ActionBarDB.EnableBarFader end,
+							set = function(_, value) ActionBarDB.EnableBarFader = value end,
 						},
 					}
 				},

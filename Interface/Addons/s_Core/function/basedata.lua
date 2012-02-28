@@ -11,6 +11,7 @@ ActionBarDB = {
 	["FontSize"] = 11,
 	["MFontSize"] = 10,
 	["PetBarSacle"] = 0.7,
+	["HideMacroName"] = false,
 	["ButtonSpacing"] = 2,
 	["ExtraBarSacle"] = 1.5,
 	["CooldownFlashSize"] = 76,
@@ -33,22 +34,10 @@ ActionBarDB = {
 	},
 	["Bar3Layout"] = 1,
 	["Bar5Layout"] = 1,
-	["stancebar"] = {
-		["y"] = 170,
-		["x"] = 0,
-		["a2"] = "BOTTOM",
-		["a1"] = "BOTTOM",
-		["af"] = "UIParent",
-	},
+	["HideHotKey"] = false,
 	["Bar2Layout"] = 1,
-	["Bar4Layout"] = 1,
-	["bar2"] = {
-		["y"] = 60,
-		["x"] = 0,
-		["a2"] = "BOTTOM",
-		["a1"] = "BOTTOM",
-		["af"] = "UIParent",
-	},
+	["MainBarSacle"] = 1,
+	["ButtonSize"] = 34,
 	["bar1"] = {
 		["y"] = 24,
 		["x"] = 0,
@@ -56,7 +45,7 @@ ActionBarDB = {
 		["a1"] = "BOTTOM",
 		["af"] = "UIParent",
 	},
-	["StanceBarSacle"] = 1.3,
+	["StanceBarSacle"] = 0.7000000000000001,
 	["bar5"] = {
 		["y"] = 0,
 		["x"] = -38,
@@ -64,12 +53,24 @@ ActionBarDB = {
 		["a1"] = "RIGHT",
 		["af"] = "UIParent",
 	},
-	["HideHotKey"] = false,
-	["MainBarSacle"] = 1,
+	["stancebar"] = {
+		["y"] = 170,
+		["x"] = 0,
+		["a2"] = "BOTTOM",
+		["a1"] = "BOTTOM",
+		["af"] = "UIParent",
+	},
+	["Bar4Layout"] = 1,
 	["Bar1Layout"] = 1,
 	["Style"] = 1,
-	["ButtonSize"] = 34,
-	["HideMacroName"] = false,
+	["bar2"] = {
+		["y"] = 60,
+		["x"] = 0,
+		["a2"] = "BOTTOM",
+		["a1"] = "BOTTOM",
+		["af"] = "UIParent",
+	},
+	["EnableBarFader"] = false,
 	["petbar"] = {
 		["y"] = 189,
 		["x"] = 123,
@@ -103,16 +104,16 @@ BuffDB = {
 }
 NameplateDB = {
 	["CastBarHeight"] = 6,
-	["HPWidth"] = 130,
+	["HPWidth"] = 120,
 	["enable"] = true,
 	["CCAuraTrack"] = true,
 	["HPHeight"] = 10,
 	["CastBarIconSize"] = 23,
 	["Fontsize"] = 9,
 	["AuraTrack"] = true,
-	["CastBarWidth"] = 130,
+	["CastBarWidth"] = 110,
 	["Showdebuff"] = true,
-	["Combat"] = true,
+	["Combat"] = false,
 }
 ReminderDB = {
 	["RaidBuffDirection"] = 1,
@@ -136,32 +137,46 @@ TooltipDB = {
 	["HideTitles"] = true,
 }
 UnitFrameDB = {
-		["FontSize"] = 10,
-		["Width"] = 240,
-		["Height"] = 25,
-		["Scale"] = 1,
-		["PetWidth"] = 123,
-		["PetHeight"] = 15,
-		["PetScale"] = 0.9,
-		["BossWidth"] = 196,
-		["BossHeight"] = 22,	
-		["BossScale"] = 1,		
-		["ReverseHPbars"] = false,	 
-		["showtot"] = true,				
-		["showpet"] = true,				
-		["showfocus"] = true,			
-		["showparty"] = false,			
-		["showboss"] = true,		
-		["showarena"] = true,			
-		["playerCBuserplaced"] = false,	
-		["PlayerCastBarHeight"] = 20,
-		["PlayerCastBarWidth"] = 460,
-		["targetCBuserplaced"] = false,	
-		["TargetCastBarHeight"] = 20,
-		["TargetCastBarWidth"] = 240,
-		["focusCBuserplaced"] = true,		
-		["FocusCastBarHeight"] = 20,
-		["FocusCastBarWidth"] = 200,
+	["FontSize"] = 10,
+	["BossHeight"] = 22,
+	["Scale"] = 1,
+	["PetHeight"] = 15,
+	["PowerHeight"] = 0.7999999999999999,
+	["Fontsize"] = 10,
+	["OnlyShowPlayer"] = false,
+	["showpet"] = true,
+	["playerCBuserplaced"] = false,
+	["Width"] = 240,
+	["ClassColor"] = false,
+	["Bossframes"] = true,
+	["TargetCastBarHeight"] = 10,
+	["EnableBarFader"] = false,
+	["showarena"] = true,
+	["PetWidth"] = 123,
+	["BossScale"] = 1,
+	["FocusCastBarWidth"] = 123,
+	["ReverseHPbars"] = false,
+	["TargetCastBarWidth"] = 240,
+	["showparty"] = false,
+	["PetCastBarWidth"] = 180,
+	["Icon"] = 24,
+	["FocusCastBarHeight"] = 20,
+	["PlayerCastBarHeight"] = 10,
+	["PlayerCastBarWidth"] = 460,
+	["PowerClass"] = false,
+	["ClassColorbars"] = false,
+	["showfocus"] = true,
+	["PetScale"] = 0.9,
+	["showboss"] = true,
+	["showtot"] = true,
+	["focusCBuserplaced"] = true,
+	["PowerColor"] = true,
+	["targetCBuserplaced"] = false,
+	["Height"] = 25,
+	["Portraits"] = false,
+	["BossWidth"] = 196,
+	["EnableSwingTimer"] = false,
+	["PetCastBarHeight"] = 10,
 }
 MoveHandleDB = {
 	["TargetCastbar"] = {
@@ -231,15 +246,15 @@ MoveHandleDB = {
 		"RIGHT", -- [1]
 		"UIParent", -- [2]
 		"RIGHT", -- [3]
-		-99, -- [4]
-		-165, -- [5]
+		-129.5705050016035, -- [4]
+		-142.9213204588798, -- [5]
 	},
 	["ClassCD"] = {
-		"CENTER", -- [1]
+		"BOTTOM", -- [1]
 		"UIParent", -- [2]
-		"CENTER", -- [3]
-		415, -- [4]
-		-380, -- [5]
+		"BOTTOM", -- [3]
+		408.206208976697, -- [4]
+		153.4767991105221, -- [5]
 	},
 	["InfoPanel"] = {
 		"TOPLEFT", -- [1]
@@ -259,8 +274,8 @@ MoveHandleDB = {
 		"CENTER", -- [1]
 		"UIParent", -- [2]
 		"CENTER", -- [3]
-		-423.31500029745, -- [4]
-		-221.2541982493533, -- [5]
+		-423.3149652872511, -- [4]
+		-231.4441966834675, -- [5]
 	},
 	["Class"] = {
 		"TOPLEFT", -- [1]
@@ -293,12 +308,14 @@ SkinDB = {
 	["EnableBigWigsSkin"] = true,
 	["EnableRecountSkin"] = true,
 }
+CoreVersion = 1204
 InfoPanelDB = {
 	["BottomHeight"] = 13,
 	["OpenTop"] = true,
 	["OpenBottom"] = true,
 	["BottomWidth"] = 440,
 }
+
 
 MiniDB = {
 	["ClassCDWidth"] = 140,

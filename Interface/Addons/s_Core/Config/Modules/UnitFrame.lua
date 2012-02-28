@@ -195,7 +195,7 @@ function Module.BuildGUI()
 						},
 						EnableBarFader = {
 							type = "toggle", order = 9,
-							name = "开启头像动作条渐隐",			
+							name = "开启头像渐隐",			
 							get = function() return UnitFrameDB.EnableBarFader end,
 							set = function(_, value) UnitFrameDB.EnableBarFader = value end,
 						},

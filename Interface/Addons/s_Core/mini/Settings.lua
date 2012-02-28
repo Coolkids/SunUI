@@ -98,7 +98,17 @@ end
 
 SLASH_WATCHFRAMELOCK1 = "/wf"
 SlashCmdList["WATCHFRAMELOCK"] = WATCHFRAMELOCK
-
+--隐藏团队
+CompactRaidFrameManager:UnregisterAllEvents()
+CompactRaidFrameManager.Show = function() end
+CompactRaidFrameManager:Hide()
+CompactRaidFrameContainer:UnregisterAllEvents()
+CompactRaidFrameContainer.Show = function() end
+CompactRaidFrameContainer:Hide()	
+--隐藏团队报警
+--RaidBossEmoteFrame:UnregisterEvent("RAID_BOSS_EMOTE")  --Disable Boss Emote Frame
+--RaidBossEmoteFrame:UnregisterEvent("RAID_BOSS_WHISPER") --Disable Boss Whisper Frame
+RaidWarningFrame:UnregisterEvent("CHAT_MSG_RAID_WARNING") --Disable Raid Warning Frame
 -- simple spec and equipment switching
 SlashCmdList["SPEC"] = function() 
 	if GetActiveTalentGroup()==1 then SetActiveTalentGroup(2) elseif GetActiveTalentGroup()==2 then SetActiveTalentGroup(1) end

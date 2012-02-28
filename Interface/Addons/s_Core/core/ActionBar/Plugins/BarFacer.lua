@@ -5,13 +5,13 @@ function Module:OnInitialize()
 local autohide = CreateFrame("Frame")
 local rabs = {}
 
-if rABS_StanceBar and UnitFrameDB["EnableBarFader"] then table.insert(rabs, "rABS_StanceBar") end
-if rABS_PetBar and UnitFrameDB["EnableBarFader"] then table.insert(rabs, "rABS_PetBar") end
-if rABS_MainMenuBar and UnitFrameDB["EnableBarFader"] then table.insert(rabs, "rABS_MainMenuBar") end
-if rABS_MultiBarBottomLeft and UnitFrameDB["EnableBarFader"] then table.insert(rabs, "rABS_MultiBarBottomLeft") end
-if rABS_MultiBarBottomRight and UnitFrameDB["EnableBarFader"] then table.insert(rabs, "rABS_MultiBarBottomRight") end
-if rABS_MultiBarLeft and UnitFrameDB["EnableBarFader"] then table.insert(rabs, "rABS_MultiBarLeft") end
-if rABS_MultiBarRight and UnitFrameDB["EnableBarFader"] then table.insert(rabs, "rABS_MultiBarRight") end
+if rABS_StanceBar and ActionBarDB["EnableBarFader"] then table.insert(rabs, "rABS_StanceBar") end
+if rABS_PetBar and ActionBarDB["EnableBarFader"] then table.insert(rabs, "rABS_PetBar") end
+if rABS_MainMenuBar and ActionBarDB["EnableBarFader"] then table.insert(rabs, "rABS_MainMenuBar") end
+if rABS_MultiBarBottomLeft and ActionBarDB["EnableBarFader"] then table.insert(rabs, "rABS_MultiBarBottomLeft") end
+if rABS_MultiBarBottomRight and ActionBarDB["EnableBarFader"] then table.insert(rabs, "rABS_MultiBarBottomRight") end
+if rABS_MultiBarLeft and ActionBarDB["EnableBarFader"] then table.insert(rabs, "rABS_MultiBarLeft") end
+if rABS_MultiBarRight and ActionBarDB["EnableBarFader"] then table.insert(rabs, "rABS_MultiBarRight") end
 
 if #rabs == 0 then return end
 

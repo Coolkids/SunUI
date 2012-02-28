@@ -87,11 +87,16 @@ C = UnitFrameDB
     self.height = C["Height"]
     self.mystyle = "target"
     genStyle(self)
+	if C["ClassColor"] then
+	self.Health.colorClass = true
+	self.Health.colorReaction = true
+	end
     self.Health.Smooth = true
     self.Power.frequentUpdates = true
     self.Power.Smooth = true
     self.Power.colorPower = true
     self.Power.bg.multiplier = 0.3
+	self.Health.colorTapping = true
     lib.gen_castbar(self)
     lib.gen_portrait(self)
     lib.createAuras(self)
@@ -109,7 +114,10 @@ C = UnitFrameDB
     self.height = C["PetHeight"]
     self.mystyle = "tot"
     genStyle(self)
-    self.Health.colorClass = false
+    if C["ClassColor"] then
+	self.Health.colorClass = true
+	self.Health.colorReaction = true
+	end
     self.Power.colorPower = true
     self.Power.bg.multiplier = 0.3
     if unit == "targettarget" then 
@@ -169,6 +177,10 @@ C = UnitFrameDB
     self.height = C["BossHeight"]
     self.mystyle = "party"
     genStyle(self)
+	if C["ClassColor"] then
+	self.Health.colorClass = true
+	self.Health.colorReaction = true
+	end
     self.Health.Smooth = true
     self.Power.frequentUpdates = true
     self.Power.colorPower = true

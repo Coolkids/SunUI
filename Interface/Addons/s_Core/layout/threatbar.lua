@@ -23,8 +23,8 @@ function Module:OnEnable()
 	threatbar:SetStatusBarTexture(DB.Statusbar)
 	threatbar:CreateShadow("Background")
 	threatbar:SetMinMaxValues(0, 100)
-	text = S.MakeFontString(frame, 10)
-	text:SetPoint("TOPRIGHT", -15, 8)
+	threatbar.text = S.MakeFontString(threatbar, 10)
+	threatbar.text:SetPoint("TOPRIGHT", -15, 8)
 
 	local function GetThreat(unitId, mobId)
 	local _, _, threatpct, _, _ = UnitDetailedThreatSituation(unitId, mobId)
@@ -53,7 +53,7 @@ function Module:OnEnable()
 	frame:SetHeight(C["BottomHeight"])	
 	frame:SetWidth(ChatFrame1:GetWidth()) --C["BottomWidth"]
 	threatbar:SetValue(0)
-	text:SetText("")
+	threatbar.text:SetText("")
 	local status = nil
 	local highUnit = ""
 	local unitThreat = 0
@@ -251,7 +251,7 @@ function Module:OnEnable()
 	then
 		--icon:SetTexCoord(GetTexCoordsForRoleSmallCircle("DAMAGER"))
 		threatbar:SetValue(threatpct)
-		text:SetText(threatpct.."%")
+		threatbar.text:SetText(threatpct.."%")
 		local r, g, b = S.ColorGradient((100-threatpct)/100, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
 																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
 																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
@@ -261,7 +261,7 @@ function Module:OnEnable()
 		then
 			threatValuediff = ((unitThreatValue - playerThreatValue) / 100000 )
 			threatbar:SetValue(threatpct)
-			text:SetText(string.format("%2.1fk | %d %%", threatValuediff, threatpct ))
+			threatbar.text:SetText(string.format("%2.1fk | %d %%", threatValuediff, threatpct ))
 			local r, g, b = S.ColorGradient(threatValuediff/100, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
 																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
 																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
@@ -271,7 +271,7 @@ function Module:OnEnable()
 	then
 		--icon:SetTexCoord(GetTexCoordsForRoleSmallCircle("DAMAGER"))
 		threatbar:SetValue(threatpct)
-		text:SetText(threatpct.."%")
+		threatbar.text:SetText(threatpct.."%")
 		local r, g, b = S.ColorGradient((100-threatpct)/100, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
 																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
 																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
@@ -280,7 +280,7 @@ function Module:OnEnable()
 		then
 			threatValuediff = ((unitThreatValue - playerThreatValue) / 100000 )
 			threatbar:SetValue(threatpct)
-			text:SetText(string.format("%2.1fk | %d %%", threatValuediff, threatpct ))
+			threatbar.text:SetText(string.format("%2.1fk | %d %%", threatValuediff, threatpct ))
 			local r, g, b = S.ColorGradient(threatValuediff/100, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
 																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
 																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
@@ -290,7 +290,7 @@ function Module:OnEnable()
 	then
 		--icon:SetTexCoord(GetTexCoordsForRoleSmallCircle("TANK"))
 		threatbar:SetValue(threatpct)
-		text:SetText(threatpct.."%")
+		threatbar.text:SetText(threatpct.."%")
 		local r, g, b = S.ColorGradient((100-threatpct)/100, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
 																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
 																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
@@ -300,7 +300,7 @@ function Module:OnEnable()
 			threatValuediff = ((playerThreatValue - unitThreatValue) / 100000 )
 			threatdiff = (100 - highThreat)
 			threatbar:SetValue(threatdiff)
-			text:SetText(string.format("%2.1fk | %d %%", threatValuediff, threatpct ))
+			threatbar.text:SetText(string.format("%2.1fk | %d %%", threatValuediff, threatpct ))
 			local r, g, b = S.ColorGradient(threatValuediff/100, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
 																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
 																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
@@ -310,7 +310,7 @@ function Module:OnEnable()
 	then
 		--icon:SetTexCoord(GetTexCoordsForRoleSmallCircle("TANK"))
 		threatbar:SetValue(threatpct)
-		text:SetText(threatpct.."%")
+		threatbar.text:SetText(threatpct.."%")
 		local r, g, b = S.ColorGradient((100-threatpct)/100, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
 																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
 																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
@@ -320,7 +320,7 @@ function Module:OnEnable()
 			threatValuediff = ((playerThreatValue - unitThreatValue) / 100000 )
 			threatdiff = (100 - highThreat)
 			threatbar:SetValue(threatdiff)
-			text:SetText(string.format("%2.1fk | %d %%", threatValuediff, threatpct ))
+			threatbar.text:SetText(string.format("%2.1fk | %d %%", threatValuediff, threatpct ))
 			local r, g, b = S.ColorGradient(threatValuediff/100, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
 																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
 																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
