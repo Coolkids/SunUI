@@ -184,7 +184,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 
     if GameTooltipStatusBar:IsShown() then
         GameTooltipStatusBar:ClearAllPoints()
-		GameTooltipStatusBar:SetHeight(S.Scale(8))
+		GameTooltipStatusBar:Height(8)
 		GameTooltipStatusBar:Point("BOTTOMLEFT", GameTooltipStatusBar:GetParent(), "TOPLEFT", 4.5, 4)
 		GameTooltipStatusBar:Point("BOTTOMRIGHT", GameTooltipStatusBar:GetParent(), "TOPRIGHT", -4.5, 4)
 		if not GameTooltipStatusBar.Shadow then

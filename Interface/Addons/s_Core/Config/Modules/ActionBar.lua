@@ -26,7 +26,7 @@ function Module.LoadSettings()
 		["MainBarSacle"] = 1,
 		["ExtraBarSacle"] = 1.5,
 		["PetBarSacle"] = 0.7,
-		["StanceBarSacle"] = 1,
+		["StanceBarSacle"] = 0.7,
 		["TotemBarSacle"] = 1,
 		["Big4Layout"] = 1,
 		["Style"] = 1,

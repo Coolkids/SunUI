@@ -7,11 +7,11 @@ function Module:OnInitialize()
 	C = ActionBarDB
 	local a1, af, a2, x, y = unpack(MoveHandleDB["bar1"]) 
   if C["Bar1Layout"] == 2 then
-    bar:Width(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
-    bar:Height(C["ButtonSize"]*2+C["ButtonSpacing"])
+    bar:SetWidth(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
+    bar:SetHeight(C["ButtonSize"]*2+C["ButtonSpacing"])
   else
-    bar:Width(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
-    bar:Height(C["ButtonSize"])
+    bar:SetWidth(C["ButtonSize"]*12+C["ButtonSpacing"]*11+10)
+    bar:SetHeight(C["ButtonSize"])
   end
   bar:SetScale(C["MainBarSacle"])
   if C["Bar1Layout"] == 2 then

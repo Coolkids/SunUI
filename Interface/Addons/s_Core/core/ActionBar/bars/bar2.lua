@@ -10,7 +10,7 @@ C = ActionBarDB
     bar:Width(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
     bar:Height(C["ButtonSize"]*2+C["ButtonSpacing"])
   else  
-    bar:Width(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
+    bar:Width(C["ButtonSize"]*12+C["ButtonSpacing"]*11+10)
     bar:Height(C["ButtonSize"])
   end
   bar:SetScale(C["MainBarSacle"])
