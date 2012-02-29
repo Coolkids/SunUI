@@ -7,16 +7,16 @@ local barDB = DB.bars.bar3
   C = ActionBarDB
 
   if C["Bar3Layout"] == 2 then
-    bar:SetWidth(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
-    bar:SetHeight(C["ButtonSize"]*2+C["ButtonSpacing"])
+    bar:Width(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
+    bar:Height(C["ButtonSize"]*2+C["ButtonSpacing"])
   else  
-    bar:SetWidth(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
-    bar:SetHeight(C["ButtonSize"])
+    bar:Width(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
+    bar:Height(C["ButtonSize"])
   end
   if C["Bar3Layout"] == 2 then
-    bar:SetPoint(C["bar3"].a1,C["bar3"].af,C["bar3"].a2,C["bar3"].x-((C["ButtonSize"]*6+C["ButtonSpacing"]*6)/2),C["bar3"].y)
+    bar:Point(C["bar3"].a1,C["bar3"].af,C["bar3"].a2,C["bar3"].x-((C["ButtonSize"]*6+C["ButtonSpacing"]*6)/2),C["bar3"].y)
   else 
-    bar:SetPoint(C["bar3"].a1,C["bar3"].af,C["bar3"].a2,C["bar3"].x,C["bar3"].y)
+    bar:Point(C["bar3"].a1,C["bar3"].af,C["bar3"].a2,C["bar3"].x,C["bar3"].y)
   end
   bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
   
@@ -32,17 +32,17 @@ local barDB = DB.bars.bar3
  
   for i=1, 12 do
     local button = _G["MultiBarBottomRightButton"..i]
-    button:SetSize(C["ButtonSize"], C["ButtonSize"])
+    button:Size(C["ButtonSize"], C["ButtonSize"])
     button:ClearAllPoints()
     if i == 1 then
-      button:SetPoint("BOTTOMLEFT", bar, 0,0)
+      button:Point("BOTTOMLEFT", bar, 0,0)
     else
       local previous = _G["MultiBarBottomRightButton"..i-1]      
       if C["Bar3Layout"] == 2 and i == 7 then
         previous = _G["MultiBarBottomRightButton1"]
-        button:SetPoint("BOTTOMLEFT", previous, "TOPLEFT", 0, C["ButtonSpacing"])
+        button:Point("BOTTOMLEFT", previous, "TOPLEFT", 0, C["ButtonSpacing"])
       else
-        button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
+        button:Point("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
       end
       
     end

@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(193, "DBM-Firelands", nil, 78)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7261 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7414 $"):sub(12, -3))
 mod:SetCreatureID(52558)--or does 53772 die instead?didn't actually varify this fires right unit_died event yet so we'll see tonight
 mod:SetModelID(38414)
 mod:SetZone()
@@ -42,7 +42,7 @@ local timerSuperheated		= mod:NewNextTimer(10, 101305)		--Add the 10 second part
 local timerMoltenSpew		= mod:NewNextTimer(6, 98034)		--6secs after Drinking Magma
 local timerMagmaFlowActive	= mod:NewBuffActiveTimer(10, 97225)	--10 second buff volcano has, after which the magma line explodes.
 
-local StompCountown			= mod:NewCountdown(30.5, 97282, false)
+local countdownStomp		= mod:NewCountdown(30.5, 97282, false)
 
 local spamAdds = 0
 local phase2Started = false
@@ -53,9 +53,9 @@ local prewarnedPhase2 = false
 
 function mod:OnCombatStart(delay)
 	timerFragmentCD:Start(-delay)
-	timerHeatedVolcano:Start(-delay)
+	timerHeatedVolcano:Start(30-delay)
 	timerFlameStomp:Start(16-delay)--Actually found an old log, maybe this is right.
-	StompCountown:Start(16-delay)--^^
+	countdownStomp:Start(16-delay)--^^
 	if self:IsDifficulty("heroic10", "heroic25") then
 		timerSuperheated:Start(300-delay)--5 min on heroic
 	else
@@ -74,9 +74,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		phase2Started = true
 		warnPhase2:Show()
 		if timerFlameStomp:GetTime() > 0 then--This only happens if it was still on CD going into phase
-			StompCountown:Cancel()
+			countdownStomp:Cancel()
 			timerFlameStomp:Cancel()
-			StompCountown:Start(7)
+			countdownStomp:Start(7)
 			timerFlameStomp:Start(7)
 		else--Else, he uses it right away
 			timerFlameStomp:Start(1)
@@ -99,10 +99,10 @@ function mod:SPELL_CAST_START(args)
 		specWarnFlameStomp:Show()
 		if not phase2Started then
 			timerFlameStomp:Start()
-			StompCountown:Start(30.5)
+			countdownStomp:Start(30.5)
 		else--13sec cd in phase 2
 			timerFlameStomp:Start(13)
-			StompCountown:Start(13)
+			countdownStomp:Start(13)
 		end
 	end
 end

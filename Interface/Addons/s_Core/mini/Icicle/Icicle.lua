@@ -41,13 +41,13 @@ local addicons = function(name, f)
 	end
 	for i = 1, #db[name] do
 		db[name][i]:ClearAllPoints()
-		db[name][i]:SetWidth(size)
-		db[name][i]:SetHeight(size)
+		db[name][i]:Width(size)
+		db[name][i]:Height(size)
 		db[name][i].cooldown:SetFont(DB.Font ,Sfont, "OUTLINE")
 		if i == 1 then
-			db[name][i]:SetPoint("TOPLEFT", f, xoff, yoff)
+			db[name][i]:Point("TOPLEFT", f, xoff, yoff)
 		else
-			db[name][i]:SetPoint("TOPLEFT", db[name][i-1], size + 2, 0)
+			db[name][i]:Point("TOPLEFT", db[name][i-1], size + 2, 0)
 		end
 	end
 end

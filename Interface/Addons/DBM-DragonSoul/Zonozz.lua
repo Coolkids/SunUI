@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(324, "DBM-DragonSoul", nil, 187)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7385 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7402 $"):sub(12, -3))
 mod:SetCreatureID(55308)
 mod:SetModelID(39138)
 mod:SetZone()
@@ -81,7 +81,7 @@ function mod:OnCombatStart(delay)
 	table.wipe(shadowsTargets)
 	timerVoidofUnmakingCD:Start(5.5-delay)
 	timerFocusedAngerCD:Start(10.5-delay)
-	timerPsychicDrainCD:Start(16.5-delay)
+	timerPsychicDrainCD:Start(13-delay)
 	timerShadowsCD:Start(-delay)
 	self:updateRangeFrame()
 	if not self:IsDifficulty("lfr25") then

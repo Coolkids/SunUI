@@ -1,4 +1,28 @@
 subversion:
+	- Omega via svn r7414: naming convention updates. Also added an optional countdown for grip timers (off by default for obvious reasons, users who want it will need to turn it on and probably disable the roll countdown on their own)
+	- Snamor via svn r7413: esES update
+	- tandanu via svn r7412: fix warsong/twin peaks flag carrier coloring and targeting
+	- ebmor via svn r7411: deDE update (Core)
+	- thiagovfar via svn r7410: ptBR update (core)
+	- nbluewiz via svn r7409: # koKR update (re-update)
+	- nbluewiz via svn r7408: # koKR update (core)
+	- ultrashining via svn r7407: zhTW update (Core)
+	- Omega via svn r7406: fix () error in last
+	- Omega via svn r7405: actually i'll just do this, so i can enable the kill stuff too, it won't break error other locals now being enabled already, they just won't be translated until renamed/updated
+	- Omega via svn r7404: kills and wipes will now report totals in local message (note the whispers are NOT changed, this feature in no way impacts your privacy, it's just a nifty local message :) )
+	- DiabloHu via svn r7403: zhCN update
+	- nbluewiz via svn r7402: # Zonozz : Fix first Psychic Drain timer.
+	- nbluewiz via svn r7401: # Blackhorn : Fix for harpoons bug. Change harpoon timer to cd timer. (see comments)
+	- nbluewiz via svn r7400: # Fandral Staghelm : Update ability timer (18 stack at 3.7) # Rhyolith : Fix first Heated Volcano timer (seems to changed in 4.3)
+	- nbluewiz via svn r7399: # Yorsahj : fix error.
+	- Omega via svn r7398: Update yorsahj special warning to warn at 2 stacks not 3. there is no reason for a tank to have more then 2 stacks post nerf (unless you're just solo tanking in which case you probably want to just turn this warning off) Also added a warning for other tank to taunt at 2 stacks also. even if youre debuff isn't clear yet, you taunt when other tank is at 2 stacks, because it WILL be clear before next cast, trust me. 2, 2, 2, 2, 2 is flawless post 12 second debuff duration nerf.
+	- nbluewiz via svn r7397: # Hagara : Fix Shattering CD bar not canceling on special phase. # Yorsahj : Added Mana Void debuff fades bar.
+	- Omega via svn r7396: add unit role filtering so it doesn't actually call out healers or tanks that are doing something else. It will only name damagers or undefined (so if you want it to be more accurate, do a roll check outside LFR for this feature)
+	- Omega via svn r7395: Add info frame that can detect who's not targeting something they should be. Usage:
+	/script DBM.InfoFrame:Show(5, "playertargets", 56188)
+	Show all players not targeting blistering tentacles
+	- Omega via svn r7394: for good measure, lets just say savedDifficulty = "" on load vs making it a nil value to begin with.
+	- Omega via svn r7393: when doing difficulty recovery, lets find out what it actually is. also, shortened and simplified the normal10 difficulty check to figure out player size in a cleaner way.
 	- nbluewiz via svn r7392: # Core : Fix rare nil savedDifficulty error. # Firelands/Baleroc : Fix strike spellName error.
 	- nbluewiz via svn r7391: # koKR update (core)
 	- nbluewiz via svn r7390: # Blackhorn : fix spellId case to match other mods.

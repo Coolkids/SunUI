@@ -14,9 +14,9 @@ C=MoveHandleDB
 
 local PRIESTAnchor = CreateFrame("Frame", "PRIESTAnchor", UIParent)
 
-PRIESTAnchor:SetSize(140, 20)
+PRIESTAnchor:Size(140, 20)
 
-PRIESTAnchor:SetPoint("BOTTOM","ShadowPet","BOTTOM", 0, 0)
+PRIESTAnchor:Point("BOTTOM","ShadowPet","BOTTOM", 0, 0)
 end
 
 local FormatTime = function(time)
@@ -63,13 +63,13 @@ end
 local CreateBar = function()
 	local bar = CreateFrame("Statusbar", nil, UIParent)
 	bar:SetFrameStrata("LOW")
-	bar:SetSize(140, 20)
+	bar:Size(140, 20)
 	bar:SetStatusBarTexture(DB.Statusbar)
 	bar:SetMinMaxValues(0, 100)
 
 	bar.backdrop = CreateFrame("Frame", nil, bar)
-	bar.backdrop:SetPoint("TOPLEFT", -2, 2)
-	bar.backdrop:SetPoint("BOTTOMRIGHT", 2, -2)
+	bar.backdrop:Point("TOPLEFT", -2, 2)
+	bar.backdrop:Point("BOTTOMRIGHT", 2, -2)
 	bar.backdrop:SetFrameStrata("BACKGROUND")
 	bar.backdrop:SetBackdrop({
 	bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
@@ -84,21 +84,21 @@ local CreateBar = function()
 	bar.bg:SetTexture(DB.Statusbar)
 
 	bar.left = CreateFS(bar)
-	bar.left:SetPoint("LEFT", 2, 0)
+	bar.left:Point("LEFT", 2, 0)
 	bar.left:SetJustifyH("LEFT")
-	bar.left:SetSize(140, 20)
+	bar.left:Size(140, 20)
 
 	bar.right = CreateFS(bar)
-	bar.right:SetPoint("RIGHT", 1, 0)
+	bar.right:Point("RIGHT", 1, 0)
 	bar.right:SetJustifyH("RIGHT")
 
 	bar.icon = CreateFrame("Button", nil, bar)
-	bar.icon:SetSize(20, 20)
-	bar.icon:SetPoint("BOTTOMRIGHT", bar, "BOTTOMLEFT", -6, 0)
+	bar.icon:Size(20, 20)
+	bar.icon:Point("BOTTOMRIGHT", bar, "BOTTOMLEFT", -6, 0)
 	bar.icon:CreateShadow()
 	bar.icon.backdrop = CreateFrame("Frame", nil, bar.icon)
-	bar.icon.backdrop:SetPoint("TOPLEFT", -2, 2)
-	bar.icon.backdrop:SetPoint("BOTTOMRIGHT", 2, -2)
+	bar.icon.backdrop:Point("TOPLEFT", -2, 2)
+	bar.icon.backdrop:Point("BOTTOMRIGHT", 2, -2)
 	bar.icon.backdrop:SetFrameStrata("BACKGROUND")
 	bar:CreateShadow("")
 	return bar

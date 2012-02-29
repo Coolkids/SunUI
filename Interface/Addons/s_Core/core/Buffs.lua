@@ -16,18 +16,18 @@ function Module:Style(buttonName, i)
 	local Count 	= _G[buttonName..i.."Count"]
 	local Border = _G[buttonName..i.."Border"]
 
-	Button:SetSize(C["IconSize"], C["IconSize"])
+	Button:Size(C["IconSize"], C["IconSize"])
 	
 	Icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 	
 	Duration:ClearAllPoints()
 	Duration:SetParent(Button)
-	Duration:SetPoint("TOP", Button, "BOTTOM", 2, 5)
+	Duration:Point("TOP", Button, "BOTTOM", 2, 5)
 	Duration:SetFont(DB.bfont, 12*S.Scale(1), "THINOUTLINE")
 	
 	Count:ClearAllPoints()
 	Count:SetParent(Button)
-	Count:SetPoint("TOPRIGHT", Button, 3, -1)
+	Count:Point("TOPRIGHT", Button, 3, -1)
 	Count:SetFont(DB.bfont, 12*S.Scale(1), "THINOUTLINE")
 	
 	if Border then
@@ -48,10 +48,10 @@ end
 
 function Module:OnEnable()
 	BuffPos = CreateFrame("Frame", nil, UIParent)
-	BuffPos:SetSize(C["IconSize"], C["IconSize"])
+	BuffPos:Size(C["IconSize"], C["IconSize"])
 	MoveHandle.Buff = S.MakeMoveHandle(BuffPos, "Buff", "Buff")
 	DebuffPos = CreateFrame("Frame", nil, UIParent)
-	DebuffPos:SetSize(C["IconSize"], C["IconSize"])
+	DebuffPos:Size(C["IconSize"], C["IconSize"])
 	MoveHandle.Debuff = S.MakeMoveHandle(DebuffPos, "Debuff", "Debuff")
 end
 
@@ -83,20 +83,20 @@ function Module:UpdateBuffPos()
 		value:ClearAllPoints()
 		if C["BuffDirection"] == 1 then
 			if key == 1 then
-				value:SetPoint("CENTER", BuffPos)
+				value:Point("CENTER", BuffPos)
 			elseif key%C["IconPerRow"] == 1 then
-				value:SetPoint("TOP", PreRow, "BOTTOM", 0, -15)
+				value:Point("TOP", PreRow, "BOTTOM", 0, -15)
 			else
-				value:SetPoint("RIGHT", Pre, "LEFT", -8, 0)
+				value:Point("RIGHT", Pre, "LEFT", -8, 0)
 			end
 		end
 		if C["BuffDirection"] == 2 then
 			if key == 1 then
-				value:SetPoint("CENTER", BuffPos)
+				value:Point("CENTER", BuffPos)
 			elseif key%C["IconPerRow"] == 1 then
-				value:SetPoint("TOP", PreRow, "BOTTOM", 0, -15)
+				value:Point("TOP", PreRow, "BOTTOM", 0, -15)
 			else
-				value:SetPoint("LEFT", Pre, "RIGHT", 8, 0)
+				value:Point("LEFT", Pre, "RIGHT", 8, 0)
 			end
 		end
 	end
@@ -142,20 +142,20 @@ hooksecurefunc("DebuffButton_UpdateAnchors", function(buttonName, i)
 	Aura:ClearAllPoints()
 	if C["DebuffDirection"] == 1 then
 		if i == 1 then
-			Aura:SetPoint("CENTER", DebuffPos)
+			Aura:Point("CENTER", DebuffPos)
 		elseif i%C["IconPerRow"] == 1 then
-			Aura:SetPoint("TOP", PreRow, "BOTTOM", 0, -15)
+			Aura:Point("TOP", PreRow, "BOTTOM", 0, -15)
 		else
-			Aura:SetPoint("RIGHT", Pre, "LEFT", -8, 0)
+			Aura:Point("RIGHT", Pre, "LEFT", -8, 0)
 		end
 	end
 	if C["DebuffDirection"] == 2 then
 		if i == 1 then
-			Aura:SetPoint("CENTER", DebuffPos)
+			Aura:Point("CENTER", DebuffPos)
 		elseif i%C["IconPerRow"] == 1 then
-			Aura:SetPoint("TOP", PreRow, "BOTTOM", 0, -15)
+			Aura:Point("TOP", PreRow, "BOTTOM", 0, -15)
 		else
-			Aura:SetPoint("LEFT", Pre, "RIGHT", 8, 0)
+			Aura:Point("LEFT", Pre, "RIGHT", 8, 0)
 		end
 	end
 end)

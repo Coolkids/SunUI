@@ -7,9 +7,9 @@ function Module:OnInitialize()
     local num = NUM_PET_ACTION_SLOTS
     
     local bar = CreateFrame("Frame","rABS_PetBar",UIParent, "SecureHandlerStateTemplate")
-    bar:SetWidth(C["ButtonSize"]*num+C["ButtonSpacing"]*(num-1))
-    bar:SetHeight(C["ButtonSize"])
-    bar:SetPoint(C["petbar"].a1,C["petbar"].af,C["petbar"].a2,C["petbar"].x,C["petbar"].y)
+    bar:Width(C["ButtonSize"]*num+C["ButtonSpacing"]*(num-1))
+    bar:Height(C["ButtonSize"])
+    bar:Point(C["petbar"].a1,C["petbar"].af,C["petbar"].a2,C["petbar"].x,C["petbar"].y)
     bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
     
     if barDB.testmode then
@@ -118,11 +118,11 @@ PetActionBarFrame.showgrid = 1
 			button:ClearAllPoints()
 			button:SetParent(bar)
 
-			button:SetSize(C["ButtonSize"], C["ButtonSize"])
+			button:Size(C["ButtonSize"], C["ButtonSize"])
 			if i == 1 then
-				button:SetPoint("BOTTOMLEFT", bar, 0,0)
+				button:Point("BOTTOMLEFT", bar, 0,0)
 			else
-				button:SetPoint("LEFT", _G["PetActionButton"..(i - 1)], "RIGHT", C["ButtonSpacing"], 0)
+				button:Point("LEFT", _G["PetActionButton"..(i - 1)], "RIGHT", C["ButtonSpacing"], 0)
 			end
 		 
 			button:Show()

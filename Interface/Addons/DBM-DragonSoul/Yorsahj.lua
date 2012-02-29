@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(325, "DBM-DragonSoul", nil, 187)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7385 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7399 $"):sub(12, -3))
 mod:SetCreatureID(55312)
 mod:SetModelID(39101)
 mod:SetZone()
@@ -26,7 +26,8 @@ local warnManaVoid			= mod:NewSpellAnnounce(105530, 3)
 local warnDeepCorruption	= mod:NewSpellAnnounce(105171, 4)
 
 local specWarnOozes			= mod:NewSpecialWarningSpell("ej3978")
-local specWarnVoidBolt		= mod:NewSpecialWarningStack(108383, mod:IsTank(), 3)
+local specWarnVoidBolt		= mod:NewSpecialWarningStack(108383, mod:IsTank(), 2)
+local specWarnVoidBoltOther	= mod:NewSpecialWarningTarget(108383, mod:IsTank())
 local specWarnManaVoid		= mod:NewSpecialWarningSpell(105530, mod:IsManaUser())
 local specWarnPurple		= mod:NewSpecialWarningSpell(104896, mod:IsTank() or mod:IsHealer())
 
@@ -36,6 +37,7 @@ local timerAcidCD			= mod:NewNextTimer(8.3, 108352)--Green ooze aoe
 local timerSearingCD		= mod:NewNextTimer(6, 108358)--Red ooze aoe
 local timerVoidBoltCD		= mod:NewNextTimer(6, 108383, nil, mod:IsTank())
 local timerVoidBolt			= mod:NewTargetTimer(12, 108383, nil, mod:IsTank() or mod:IsHealer())--Nerfed yet again, its now 12. Good thing dbm timers were already right since i dbm pulls duration from aura heh.
+local timerManaVoid			= mod:NewBuffFadesTimer(4, 105530, nil, mod:IsManaUser())
 local timerDeepCorruption	= mod:NewBuffFadesTimer(25, 105171, nil, mod:IsTank() or mod:IsHealer())
 
 local berserkTimer		= mod:NewBerserkTimer(600)
@@ -90,6 +92,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 	elseif args:IsSpellID(105530) then
 		warnManaVoid:Show()
 		specWarnManaVoid:Show()
+		timerManaVoid:Start()
 	elseif args:IsSpellID(105573, 108350, 108351, 108352) and self:IsInCombat() then
 		if yellowActive then
 			timerAcidCD:Start(3.5)--Strangely, this is 3.5 even though base CD is 8.3-8.5
@@ -118,10 +121,16 @@ Ooze Absorption and granted abilities expression (black adds only fire UNIT_SPEL
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(104849, 108383, 108384, 108385) then
 		warnVoidBolt:Show(args.destName, args.amount or 1)
-		local _, _, _, _, _, duration, expires, _, _ = UnitDebuff(args.destName, args.spellName)--Try to fix some stupidness in this timer having a 20-22second variation.
+		local _, _, _, _, _, duration, expires = UnitDebuff(args.destName, args.spellName)--This is now consistently 12 seconds, but it's been nerfed twice without warning, i'm just gonna leave this here to make the mod continue to auto correct it when/if it changes more.
 		timerVoidBolt:Start(duration, args.destName)
-		if (args.amount or 1) >= 3 and args:IsPlayer() then
-			specWarnVoidBolt:Show(args.amount)
+		if (args.amount or 1) >= 2 then
+			if args:IsPlayer() then
+				specWarnVoidBolt:Show(args.amount)
+			else
+				if not UnitIsDeadOrGhost("player") then--You're not dead and other tank has 2 stacks (meaning it's your turn).
+					specWarnVoidBoltOther:Show(args.destName)
+				end
+			end
 		end
 	elseif args:IsSpellID(104901) and args:GetDestCreatureID() == 55312 then--Yellow
 		table.insert(oozesHitTable, L.Yellow)

@@ -42,7 +42,7 @@
 --  Globals/Default Options  --
 -------------------------------
 DBM = {
-	Revision = tonumber(("$Revision: 7392 $"):sub(12, -3)),
+	Revision = tonumber(("$Revision: 7414 $"):sub(12, -3)),
 	DisplayVersion = "4.10.11 alpha", -- the string that is shown as version
 	ReleaseRevision = 7325 -- the revision of the latest stable version that is available
 }
@@ -74,7 +74,7 @@ DBM.DefaultOptions = {
 	RaidWarningPosition = {
 		Point = "TOP",
 		X = 0,
-		Y = -185,
+		Y = 2185,
 	},
 	StatusEnabled = true,
 	AutoRespond = true,
@@ -173,7 +173,7 @@ local fireEvent
 local _, class = UnitClass("player")
 local LastZoneText = ""
 local LastZoneMapID = -1
-local savedDifficulty
+local savedDifficulty = ""
 local queuedBattlefield = {}
 
 local enableIcons = true -- set to false when a raid leader or a promoted player has a newer version of DBM
@@ -1277,7 +1277,7 @@ do
 	local function setRaidWarningPositon()
 		RaidWarningFrame:ClearAllPoints()
 		RaidWarningFrame:Hide()
-		--RaidWarningFrame:SetPoint(DBM.Options.RaidWarningPosition.Point, UIParent, DBM.Options.RaidWarningPosition.Point, DBM.Options.RaidWarningPosition.X, DBM.Options.RaidWarningPosition.Y)
+		RaidWarningFrame:UnregisterAllEvents()
 	end
 	
 	function loadOptions()
@@ -2373,15 +2373,7 @@ function DBM:StartCombat(mod, delay, synced)
 			mod.stats.normalPulls = mod.stats.normalPulls + 1
 			local _, _, _, _, maxPlayers = GetInstanceInfo()
 			--Because classic raids that don't have variable sizes all return 1.
-			if maxPlayers == 40 then
-				savedDifficulty = PLAYER_DIFFICULTY1.." (40) - "
-			elseif maxPlayers == 25 then
-				savedDifficulty = PLAYER_DIFFICULTY1.." (25) - "
-			elseif maxPlayers == 20 then
-				savedDifficulty = PLAYER_DIFFICULTY1.." (20) - "
-			else
-				savedDifficulty = PLAYER_DIFFICULTY1.." (10) - "
-			end
+			savedDifficulty = PLAYER_DIFFICULTY1.." ("..maxPlayers..") - "
 		elseif mod:IsDifficulty("heroic10") then
 			mod.stats.heroicPulls = mod.stats.heroicPulls + 1
 			savedDifficulty = PLAYER_DIFFICULTY2.." (10) - "
@@ -2481,10 +2473,29 @@ function DBM:EndCombat(mod, wipe)
 			end
 		end
 		if not savedDifficulty then -- prevent error when timer recovery function worked and etc (StartCombat not called)
-			savedDifficulty = ""
+			local _, instanceType, difficulty, _, maxPlayers = GetInstanceInfo()
+			if difficulty > 2 then--Just neatly combines both heroic raids into 1
+				savedDifficulty = PLAYER_DIFFICULTY2.." ("..maxPlayers..") - "
+			elseif difficulty < 3 and instanceType == "raid" and not IsPartyLFG() then--Combine non heroic raids into 1
+				savedDifficulty = PLAYER_DIFFICULTY1.." ("..maxPlayers..") - "
+			elseif IsPartyLFG() and IsInLFGDungeon() and instanceType == "raid" then
+				savedDifficulty = PLAYER_DIFFICULTY3.." - "
+			elseif difficulty == 1 and instanceType == "party" then
+				if IsInInstance() then
+					savedDifficulty = PLAYER_DIFFICULTY1.." - "
+				else
+					savedDifficulty = ""
+				end
+			elseif difficulty == 2 and instanceType == "party" then
+				savedDifficulty = PLAYER_DIFFICULTY2.." - "
+			else
+				savedDifficulty = ""
+			end
 		end
 		if wipe then
 			local thisTime = GetTime() - mod.combatInfo.pull
+			local wipeHP = ("%d%%"):format(lowestBossHealth * 100)
+			local totalPulls = (mod:IsDifficulty("lfr25") and mod.stats.lfr25Pulls) or (mod:IsDifficulty("normal5", "normal10") and mod.stats.normalPulls) or (mod:IsDifficulty("heroic5", "heroic10") and mod.stats.heroicPulls) or (mod:IsDifficulty("normal25") and mod.stats.normal25Pulls) or (mod:IsDifficulty("heroic25") and mod.stats.heroic25Pulls)
 			if thisTime < 15 then
 				if mod:IsDifficulty("lfr25") then
 					mod.stats.lfr25Pulls = mod.stats.lfr25Pulls - 1
@@ -2497,9 +2508,11 @@ function DBM:EndCombat(mod, wipe)
 				elseif mod:IsDifficulty("heroic25") then
 					mod.stats.heroic25Pulls = mod.stats.heroic25Pulls - 1
 				end
+				self:AddMsg(DBM_CORE_COMBAT_ENDED_AT:format(savedDifficulty..mod.combatInfo.name, wipeHP, strFromTime(thisTime)))
+			else
+				self:AddMsg(DBM_CORE_COMBAT_ENDED_AT_LONG:format(savedDifficulty..mod.combatInfo.name, wipeHP, strFromTime(thisTime), totalPulls))
 			end
-			local wipeHP = ("%d%%"):format(lowestBossHealth * 100)
-			self:AddMsg(DBM_CORE_COMBAT_ENDED_AT:format(savedDifficulty..mod.combatInfo.name, wipeHP, strFromTime(thisTime)))
+
 			local msg
 			for k, v in pairs(autoRespondSpam) do
 				msg = msg or chatPrefixShort..DBM_CORE_WHISPER_COMBAT_END_WIPE_AT:format(UnitName("player"), savedDifficulty..(mod.combatInfo.name or ""), wipeHP)
@@ -2559,12 +2572,13 @@ function DBM:EndCombat(mod, wipe)
 					mod.stats.heroic25BestTime = math.min(bestTime or math.huge, thisTime)
 				end
 			end
+			local totalKills = (mod:IsDifficulty("lfr25") and mod.stats.lfr25Kills) or (mod:IsDifficulty("normal5", "normal10") and mod.stats.normalKills) or (mod:IsDifficulty("heroic5", "heroic10") and mod.stats.heroicKills) or (mod:IsDifficulty("normal25") and mod.stats.normal25Kills) or (mod:IsDifficulty("heroic25") and mod.stats.heroic25Kills)
 			if not lastTime then
 				self:AddMsg(DBM_CORE_BOSS_DOWN:format(savedDifficulty..mod.combatInfo.name, strFromTime(thisTime)))
 			elseif thisTime < (bestTime or math.huge) then
-				self:AddMsg(DBM_CORE_BOSS_DOWN_NEW_RECORD:format(savedDifficulty..mod.combatInfo.name, strFromTime(thisTime), strFromTime(bestTime)))
+				self:AddMsg(DBM_CORE_BOSS_DOWN_NR:format(savedDifficulty..mod.combatInfo.name, strFromTime(thisTime), strFromTime(bestTime), totalKills))
 			else
-				self:AddMsg(DBM_CORE_BOSS_DOWN_LONG:format(savedDifficulty..mod.combatInfo.name, strFromTime(thisTime), strFromTime(lastTime), strFromTime(bestTime)))
+				self:AddMsg(DBM_CORE_BOSS_DOWN_L:format(savedDifficulty..mod.combatInfo.name, strFromTime(thisTime), strFromTime(lastTime), strFromTime(bestTime), totalKills))
 			end
 			local msg
 			for k, v in pairs(autoRespondSpam) do

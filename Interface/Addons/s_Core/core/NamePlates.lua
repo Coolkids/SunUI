@@ -135,7 +135,7 @@ local function HideObjects(parent)
 		elseif (object:GetObjectType() == 'FontString') then
 			object.ClearAllPoints = function() return end
 			object.SetFont = function() return end
-			object.SetPoint = function() return end
+			object.Point = function() return end
 			object:Hide()
 			object.Show = function() return end
 			object.SetText = function() return end
@@ -163,8 +163,8 @@ local function CreateVirtualFrame(parent, point)
 			top = 3*noscalemult, left = 3*noscalemult, bottom = 3*noscalemult, right = 3*noscalemult
 		}
 	})
-	parent.backdrop:SetPoint('TOPLEFT', point, -3*noscalemult, 3*noscalemult)
-	parent.backdrop:SetPoint('BOTTOMRIGHT', point, 3*noscalemult, -3*noscalemult)
+	parent.backdrop:Point('TOPLEFT', point, -3*noscalemult, 3*noscalemult)
+	parent.backdrop:Point('BOTTOMRIGHT', point, 3*noscalemult, -3*noscalemult)
 	parent.backdrop:SetBackdropColor(.05, .05, .05, .9)
 	parent.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 	if parent:GetFrameLevel() - 1 >0 then
@@ -178,9 +178,9 @@ local function UpdateAuraAnchors(frame)
 	for i = 1, 5 do
 		if frame.icons and frame.icons[i] and frame.icons[i]:IsShown() then
 			if frame.icons.lastShown then 
-				frame.icons[i]:SetPoint("RIGHT", frame.icons.lastShown, "LEFT", -2, 0)
+				frame.icons[i]:Point("RIGHT", frame.icons.lastShown, "LEFT", -2, 0)
 			else
-				frame.icons[i]:SetPoint("RIGHT",frame.icons,"RIGHT")
+				frame.icons[i]:Point("RIGHT",frame.icons,"RIGHT")
 			end
 			frame.icons.lastShown = frame.icons[i]
 		end
@@ -193,8 +193,8 @@ end
 local function CreateAuraIcon(parent)
 	local button = CreateFrame("Frame",nil,parent)
 	button:SetScript("OnHide", function(self) UpdateAuraAnchors(self:GetParent()) end)
-	button:SetWidth(20)
-	button:SetHeight(20)
+	button:Width(20)
+	button:Height(20)
 
 	button.shadow = CreateFrame("Frame", nil, button)
 	button.shadow:SetFrameLevel(0)
@@ -211,17 +211,17 @@ local function CreateAuraIcon(parent)
 	
 	button.bord = button:CreateTexture(nil, "BORDER")
 	button.bord:SetTexture(0, 0, 0, 1)
-	button.bord:SetPoint("TOPLEFT",button,"TOPLEFT", noscalemult,-noscalemult)
-	button.bord:SetPoint("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult,noscalemult)
+	button.bord:Point("TOPLEFT",button,"TOPLEFT", noscalemult,-noscalemult)
+	button.bord:Point("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult,noscalemult)
 	
 	button.bg2 = button:CreateTexture(nil, "ARTWORK")
 	button.bg2:SetTexture( .05, .05, .05, .9)
-	button.bg2:SetPoint("TOPLEFT",button,"TOPLEFT", noscalemult*2,-noscalemult*2)
-	button.bg2:SetPoint("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult*2,noscalemult*2)	
+	button.bg2:Point("TOPLEFT",button,"TOPLEFT", noscalemult*2,-noscalemult*2)
+	button.bg2:Point("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult*2,noscalemult*2)	
 	
 	button.icon = button:CreateTexture(nil, "OVERLAY")
-	button.icon:SetPoint("TOPLEFT",button,"TOPLEFT", noscalemult*3,-noscalemult*3)
-	button.icon:SetPoint("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult*3,noscalemult*3)
+	button.icon:Point("TOPLEFT",button,"TOPLEFT", noscalemult*3,-noscalemult*3)
+	button.icon:Point("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult*3,noscalemult*3)
 	button.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 
 	button.text = button:CreateFontString(nil, 'OVERLAY')
@@ -233,7 +233,7 @@ local function CreateAuraIcon(parent)
 	button.count = button:CreateFontString(nil,"OVERLAY")
 	button.count:SetFont(DB.Font,9,"THINOUTLINE")
 	button.count:SetShadowColor(0, 0, 0, 0.4)
-	button.count:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 2, 0)
+	button.count:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 2, 0)
 	return button
 end
 
@@ -323,8 +323,8 @@ local function OnAura(frame, unit)
 		if duration and match == true then
 			if not frame.icons[i] then frame.icons[i] = CreateAuraIcon(frame) end
 			local icon = frame.icons[i]
-			if i == 1 then icon:SetPoint("RIGHT",frame.icons,"RIGHT") end
-			if i ~= 1 and i <= 5 then icon:SetPoint("RIGHT", frame.icons[i-1], "LEFT", -2, 0) end
+			if i == 1 then icon:Point("RIGHT",frame.icons,"RIGHT") end
+			if i ~= 1 and i <= 5 then icon:Point("RIGHT", frame.icons[i-1], "LEFT", -2, 0) end
 			i = i + 1
 			UpdateAuraIcon(icon, frame.unit, index, "HARMFUL")
 		end
@@ -336,8 +336,8 @@ end
 --also resize it as nameplates somehow manage to resize some frames when they reappear after being hidden
 local function UpdateCastbar(frame)
 	frame:ClearAllPoints()
-	frame:SetSize(cbWidth, cbHeight)
-	frame:SetPoint('TOPLEFT', frame:GetParent().hp, 'BOTTOMLEFT', 0, -5)
+	frame:Size(cbWidth, cbHeight)
+	frame:Point('TOPLEFT', frame:GetParent().hp, 'BOTTOMLEFT', 0, -5)
 	frame:GetStatusBarTexture():SetHorizTile(true)
 	if(frame.shield:IsShown()) then
 		frame:SetStatusBarColor(1, 0, 0)
@@ -440,8 +440,8 @@ local function UpdateObjects(frame)
 	
 	--Have to reposition this here so it doesnt resize after being hidden
 	frame.hp:ClearAllPoints()
-	frame.hp:SetSize(hpWidth, hpHeight)	
-	frame.hp:SetPoint('TOP', frame, 'TOP', 0, -15)
+	frame.hp:Size(hpWidth, hpHeight)	
+	frame.hp:Point('TOP', frame, 'TOP', 0, -15)
 	frame.hp:GetStatusBarTexture():SetHorizTile(true)
 	
 	frame.hp:SetMinMaxValues(frame.healthOriginal:GetMinMaxValues())
@@ -467,9 +467,9 @@ local function UpdateObjects(frame)
 	
 	if frame.icons then return end
 	frame.icons = CreateFrame("Frame",nil,frame)
-	frame.icons:SetPoint("BOTTOMRIGHT",frame.hp,"TOPRIGHT", 0, FONTSIZE)
-	frame.icons:SetWidth(20 + hpWidth)
-	frame.icons:SetHeight(25)
+	frame.icons:Point("BOTTOMRIGHT",frame.hp,"TOPRIGHT", 0, FONTSIZE)
+	frame.icons:Width(20 + hpWidth)
+	frame.icons:Height(25)
 	frame.icons:SetFrameLevel(frame.hp:GetFrameLevel()+2)
 	frame:RegisterEvent("UNIT_AURA")
 	frame:HookScript("OnEvent", OnAura)
@@ -498,15 +498,15 @@ local function SkinObjects(frame)
 	hp.value = frame:CreateFontString(nil, "OVERLAY")	
 	hp.value:SetFont(DB.Font, FONTSIZE, "THINOUTLINE")
 	hp.value:SetShadowColor(0, 0, 0, 0.4)
-	hp.value:SetPoint("BOTTOMRIGHT", hp, "TOPRIGHT", 0, -4)
+	hp.value:Point("BOTTOMRIGHT", hp, "TOPRIGHT", 0, -4)
 	hp.value:SetJustifyH("RIGHT")
 	hp.value:SetTextColor(1,1,1)
 	hp.value:SetShadowOffset(S.mult, -S.mult)
 	
 	--Create Name Text
 	hp.name = frame:CreateFontString(nil, 'OVERLAY')
-	hp.name:SetPoint("BOTTOMLEFT", hp, "TOPLEFT", 0, -4)
-	hp.name:SetPoint("BOTTOMRIGHT", hp, "TOPRIGHT", -20, -4)
+	hp.name:Point("BOTTOMLEFT", hp, "TOPLEFT", 0, -4)
+	hp.name:Point("BOTTOMRIGHT", hp, "TOPRIGHT", -20, -4)
 	hp.name:SetFont(DB.Font, FONTSIZE, "THINOUTLINE")
 	hp.name:SetJustifyH("LEFT")
 	hp.name:SetShadowColor(0, 0, 0, 0.4)
@@ -526,7 +526,7 @@ local function SkinObjects(frame)
 	
 	--Create Cast Time Text
 	cb.time = cb:CreateFontString(nil, "ARTWORK")
-	cb.time:SetPoint("TOPRIGHT", cb, "BOTTOMRIGHT", 0, -1)
+	cb.time:Point("TOPRIGHT", cb, "BOTTOMRIGHT", 0, -1)
 	cb.time:SetFont(DB.Font, FONTSIZE, "THINOUTLINE")
 	cb.time:SetJustifyH("RIGHT")
 	cb.time:SetShadowColor(0, 0, 0, 0.4)
@@ -535,7 +535,7 @@ local function SkinObjects(frame)
 
 	--Create Cast Name Text
 	cb.name = cb:CreateFontString(nil, "ARTWORK")
-	cb.name:SetPoint("TOPLEFT", cb, "BOTTOMLEFT", 0, -1)
+	cb.name:Point("TOPLEFT", cb, "BOTTOMLEFT", 0, -1)
 	cb.name:SetFont(DB.Font, FONTSIZE, "THINOUTLINE")
 	cb.name:SetJustifyH("LEFT")
 	cb.name:SetTextColor(1, 1, 1)
@@ -544,8 +544,8 @@ local function SkinObjects(frame)
 	
 	--Setup CastBar Icon
 	cbicon:ClearAllPoints()
-	cbicon:SetPoint("BOTTOMRIGHT", cb, "BOTTOMLEFT", -5, 0)		
-	cbicon:SetSize(iconSize, iconSize)
+	cbicon:Point("BOTTOMRIGHT", cb, "BOTTOMLEFT", -5, 0)		
+	cbicon:Size(iconSize, iconSize)
 	cbicon:SetTexCoord(.07, .93, .07, .93)
 	cbicon:SetDrawLayer("OVERLAY")
 	cb.icon = cbicon
@@ -560,8 +560,8 @@ local function SkinObjects(frame)
 				top = 3*noscalemult, left = 3*noscalemult, bottom = 3*noscalemult, right = 3*noscalemult
 			}
 		})
-		cbicon.backdrop:SetPoint('TOPLEFT', cbicon, -3*noscalemult, 3*noscalemult)
-		cbicon.backdrop:SetPoint('BOTTOMRIGHT', cbicon, 3*noscalemult, -3*noscalemult)
+		cbicon.backdrop:Point('TOPLEFT', cbicon, -3*noscalemult, 3*noscalemult)
+		cbicon.backdrop:Point('BOTTOMRIGHT', cbicon, 3*noscalemult, -3*noscalemult)
 		cbicon.backdrop:SetBackdropColor(.05, .05, .05, .9)
 		cbicon.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 		if cb:GetFrameLevel() - 1 >0 then
@@ -573,7 +573,7 @@ local function SkinObjects(frame)
 	
 	cb.shield = cbshield
 	cbshield:ClearAllPoints()
-	cbshield:SetPoint("TOP", cb, "BOTTOM")
+	cbshield:Point("TOP", cb, "BOTTOM")
 	cb:HookScript('OnShow', UpdateCastbar)
 	cb:HookScript('OnSizeChanged', OnSizeChanged)
 	cb:HookScript('OnValueChanged', OnValueChanged)			
@@ -586,8 +586,8 @@ local function SkinObjects(frame)
 
 	--Reposition and Resize RaidIcon
 	raidicon:ClearAllPoints()
-	raidicon:SetPoint("BOTTOM", hp, "TOP", 0, 2)
-	raidicon:SetSize(iconSize*1.4, iconSize*1.4)
+	raidicon:Point("BOTTOM", hp, "TOP", 0, 2)
+	raidicon:Size(iconSize*1.4, iconSize*1.4)
 	raidicon:SetTexture("Interface\\AddOns\\s_Core\\Media\\raidicons.blp")	
 	frame.raidicon = raidicon
 	

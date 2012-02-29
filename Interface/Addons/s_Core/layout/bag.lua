@@ -13,7 +13,7 @@ local text  = Stat:CreateFontString(nil, "OVERLAY")
 text:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")
 text:SetShadowOffset(1.25, -1.25)
 text:SetShadowColor(0, 0, 0, 0.4)
-text:SetPoint("BOTTOMRIGHT", BottomLeftBar, "BOTTOMRIGHT",-15, -8)
+text:Point("BOTTOMRIGHT", BottomLeftBar, "BOTTOMRIGHT",-15, -8)
 Stat:SetParent(BottomLeftBar)
 
 local function Update(self)	

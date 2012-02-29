@@ -15,7 +15,7 @@ function Module:OnEnable()
 	Text:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")
 	Text:SetShadowOffset(1.25, -1.25)
 	Text:SetShadowColor(0, 0, 0, 0.4)
-	Text:SetPoint("BOTTOM", XP, "BOTTOM", 0, -8)
+	Text:Point("BOTTOM", XP, "BOTTOM", 0, -8)
 	Stat:SetParent(Text:GetParent())
 
 	local format = string.format

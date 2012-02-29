@@ -9,9 +9,9 @@ local barDB = DB.bars.totembar
 	C = ActionBarDB
     local f = _G['MultiCastActionBarFrame']
     local bar = CreateFrame("Frame","rABS_TotemBar",UIParent,"SecureHandlerStateTemplate")
-    bar:SetWidth(f:GetWidth())
-    bar:SetHeight(f:GetHeight())
-    bar:SetPoint(C["totembar"].a1,C["totembar"].af,C["totembar"].a2,C["totembar"].x,C["totembar"].y)
+    bar:Width(f:GetWidth())
+    bar:Height(f:GetHeight())
+    bar:Point(C["totembar"].a1,C["totembar"].af,C["totembar"].a2,C["totembar"].x,C["totembar"].y)
     bar:SetScale(C["TotemBarSacle"])
     DB.applyDragFunctionality(bar,barDB.userplaced,barDB.locked)
 	
@@ -26,14 +26,14 @@ local barDB = DB.bars.totembar
     RegisterStateDriver(bar, "vis", "[bonusbar:5][@player,dead][flying][mounted][stance]hide;show")
     f:SetParent(bar)
     f:ClearAllPoints()
-    f:SetPoint("CENTER",0,0)
+    f:Point("CENTER",0,0)
     f:EnableMouse(false)
     local moveTotem = function(self,a,b,c,d,e)
       if a == "CENTER" then return end
       self:ClearAllPoints()
-      self:SetPoint("CENTER",0,0)
+      self:Point("CENTER",0,0)
     end
-    hooksecurefunc(f, "SetPoint", moveTotem)
+    hooksecurefunc(f, "Point", moveTotem)
     f.ignoreFramePositionManager = true
 
     --[[--------------------------------------------------------------------
@@ -122,7 +122,7 @@ local barDB = DB.bars.totembar
       timerFrame:SetAllPoints(button)
       timerFrame:Hide()
       timerFrame.text = timerFrame:CreateFontString(nil, "OVERLAY")
-      timerFrame.text:SetPoint("CENTER", 0, 0)
+      timerFrame.text:Point("CENTER", 0, 0)
       timerFrame.text:SetFont(STANDARD_TEXT_FONT, button:GetWidth()*16/36, "THINOUTLINE")
       timerFrame.text:SetShadowOffset(1,-2)
       timerFrame.text:SetShadowColor(0,0,0,0.6)
@@ -167,8 +167,8 @@ local barDB = DB.bars.totembar
       local b = CreateFrame("Button", nil, UIParent)
       b:SetFrameStrata(mcab:GetFrameStrata())
       b:SetFrameLevel(mcab:GetFrameLevel() + 3)
-      b:SetPoint("TOPLEFT", mcab, -1, 1)
-      b:SetPoint("BOTTOMRIGHT", mcab, 1, -1)
+      b:Point("TOPLEFT", mcab, -1, 1)
+      b:Point("BOTTOMRIGHT", mcab, 1, -1)
 
       b:SetBackdrop(backdrop)
       b:SetBackdropColor(1, 0, 0)

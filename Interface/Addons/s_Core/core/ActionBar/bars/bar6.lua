@@ -9,16 +9,16 @@ if C["Big4Layout"] == 2 then
 
 
   if C["Bar5Layout"] == 2 then
-    bar:SetWidth(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
-    bar:SetHeight(C["ButtonSize"]*2+C["ButtonSpacing"])
+    bar:Width(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
+    bar:Height(C["ButtonSize"]*2+C["ButtonSpacing"])
   else  
-    bar:SetWidth(C["ButtonSize"])
-    bar:SetHeight(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
+    bar:Width(C["ButtonSize"])
+    bar:Height(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
   end
   if C["Bar5Layout"] == 2 then
-    bar:SetPoint(C["bar5"].a1,C["bar5"].af,C["bar5"].a2,C["bar5"].x+((C["ButtonSize"]*6+C["ButtonSpacing"]*6)/2),C["bar5"].y-(C["ButtonSize"]*1+C["ButtonSpacing"]*1)+0.5)
+    bar:Point(C["bar5"].a1,C["bar5"].af,C["bar5"].a2,C["bar5"].x+((C["ButtonSize"]*6+C["ButtonSpacing"]*6)/2),C["bar5"].y-(C["ButtonSize"]*1+C["ButtonSpacing"]*1)+0.5)
   else 
-    bar:SetPoint(C["bar5"].a1,C["bar5"].af,C["bar5"].a2,C["bar5"].x,C["bar5"].y)
+    bar:Point(C["bar5"].a1,C["bar5"].af,C["bar5"].a2,C["bar5"].x,C["bar5"].y)
   end
   bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
   
@@ -35,12 +35,12 @@ if C["Big4Layout"] == 2 then
 	  for i=1, 12 do
 		local button = _G["MultiBarLeftButton"..i]
 		button:ClearAllPoints()
-		button:SetSize(C["ButtonSize"], C["ButtonSize"])
+		button:Size(C["ButtonSize"], C["ButtonSize"])
 		if i == 1 then
-		  button:SetPoint("TOPLEFT", bar, 0,0)
+		  button:Point("TOPLEFT", bar, 0,0)
 		else
 		  local previous = _G["MultiBarLeftButton"..i-1]
-		  button:SetPoint("TOP", previous, "BOTTOM", 0, -C["ButtonSpacing"])
+		  button:Point("TOP", previous, "BOTTOM", 0, -C["ButtonSpacing"])
 		end
 	  end
   end
@@ -48,16 +48,16 @@ if C["Big4Layout"] == 2 then
 	  for i=1, 12 do
 		local button = _G["MultiBarLeftButton"..i]
 		button:ClearAllPoints()
-		button:SetSize(C["ButtonSize"], C["ButtonSize"])
+		button:Size(C["ButtonSize"], C["ButtonSize"])
 			if i == 1 then
-				button:SetPoint("TOPLEFT", bar, 0,0)	
+				button:Point("TOPLEFT", bar, 0,0)	
 			else
 				local previous = _G["MultiBarLeftButton"..i-1]
 				if  i == 7 then
 				previous = _G["MultiBarLeftButton1"]
-				button:SetPoint("TOPLEFT", previous, "BOTTOMLEFT", 0, -C["ButtonSpacing"])
+				button:Point("TOPLEFT", previous, "BOTTOMLEFT", 0, -C["ButtonSpacing"])
 				else
-				button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
+				button:Point("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
 				end
 			end
 	end

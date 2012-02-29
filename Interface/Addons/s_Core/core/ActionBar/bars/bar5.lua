@@ -7,9 +7,9 @@ if C["Big4Layout"] == 1 then
 
 local barDB = DB.bars.bar5  
   local bar = CreateFrame("Frame","rABS_MultiBarLeft",UIParent, "SecureHandlerStateTemplate")
-  bar:SetHeight(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
-  bar:SetWidth(C["ButtonSize"])
-  bar:SetPoint(C["bar5"].a1,C["bar5"].af,C["bar5"].a2,C["bar5"].x,C["bar5"].y)
+  bar:Height(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
+  bar:Width(C["ButtonSize"])
+  bar:Point(C["bar5"].a1,C["bar5"].af,C["bar5"].a2,C["bar5"].x,C["bar5"].y)
   bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
   
   if barDB.testmode then
@@ -25,13 +25,13 @@ local barDB = DB.bars.bar5
 for i=1, 2 do
     local button = _G["MultiBarLeftButton"..i]
     button:ClearAllPoints()
-    button:SetSize(C["ButtonSize"], C["ButtonSize"])
+    button:Size(C["ButtonSize"], C["ButtonSize"])
     button:SetScale(C["MainBarSacle"]+S.Scale(1)/2+0.1)
     if i == 1 then
-      button:SetPoint("RIGHT", MultiBarBottomLeftButton1, "LEFT", -C["ButtonSpacing"],(C["ButtonSize"]+C["ButtonSpacing"])/2)
+      button:Point("RIGHT", MultiBarBottomLeftButton1, "LEFT", -C["ButtonSpacing"],(C["ButtonSize"]+C["ButtonSpacing"])/2)
     else
       local previous = _G["MultiBarLeftButton"..i-1]      
-      button:SetPoint("TOP", previous, "BOTTOM", 0, -C["ButtonSpacing"])
+      button:Point("TOP", previous, "BOTTOM", 0, -C["ButtonSpacing"])
     end
   end
   
@@ -43,13 +43,13 @@ for i=1, 2 do
   for i=11, 12 do
     local button = _G["MultiBarLeftButton"..i]
     button:ClearAllPoints()
-    button:SetSize(C["ButtonSize"], C["ButtonSize"])
+    button:Size(C["ButtonSize"], C["ButtonSize"])
     button:SetScale(C["MainBarSacle"]+S.Scale(1)/2+0.1)
     if i == 11 then
-      button:SetPoint("LEFT", MultiBarBottomLeftButton12, "RIGHT", C["ButtonSpacing"],(C["ButtonSize"]+C["ButtonSpacing"])/2)
+      button:Point("LEFT", MultiBarBottomLeftButton12, "RIGHT", C["ButtonSpacing"],(C["ButtonSize"]+C["ButtonSpacing"])/2)
     else
       local previous = _G["MultiBarLeftButton"..i-1]      
-      button:SetPoint("TOP", previous, "BOTTOM", 0, -C["ButtonSpacing"])
+      button:Point("TOP", previous, "BOTTOM", 0, -C["ButtonSpacing"])
     end
   end
   if barDB.showonmouseover then    

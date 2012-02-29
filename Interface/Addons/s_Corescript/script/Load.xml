@@ -1,0 +1,13 @@
+﻿<!-- -->
+
+
+
+
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file = "Fane.lua"/>
+	<Script file = "iRoster.lua"/>
+	<Script file = "OCES.lua"/>
+	<Script file = "PFCTC.lua"/>
+	<Script file = "SocialTabs.lua"/>
+	<Script file = "LazyAFK.lua"/>
+</Ui>

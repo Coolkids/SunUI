@@ -1,0 +1,12 @@
+﻿<!-- -->
+
+
+
+
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file = "ambutton.lua"/>
+	<Script file = "configbutton.lua"/>
+	<Script file = "hide.lua"/>
+	<Script file = "MBB.lua"/>
+	<Script file = "StatReport.lua"/>
+</Ui>

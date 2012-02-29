@@ -1,4 +1,4 @@
-local S, C, L, DB = unpack(select(2, ...))
+﻿local S, C, L, DB = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Combatpoint")
 if DB.combatpointOpen ~= true then return end
 if (DB.MyClass ~= "ROGUE" and DB.MyClass ~= "DRUID") then return end
@@ -27,8 +27,8 @@ local texScale = pawWidth / origPawWidth
 
 combo = CreateFrame("Frame", nil, UIParent)
 combo:SetFrameLevel(12)
-combo:SetPoint(unpack(anchorPoint))
-combo:SetSize(origPawWidth * texScale, origPawHeight * texScale)
+combo:Point(unpack(anchorPoint))
+combo:Size(origPawWidth * texScale, origPawHeight * texScale)
 combo:SetAlpha(0.5)
 local t = combo:CreateTexture(nil, "ARTWORK", self, -5)
 t:SetTexture([[Interface\AddOns\s_Core\Media\pawsCombo]])
@@ -36,8 +36,8 @@ t:SetTexCoord(0, 1.0, 0, 0.268)
 t:SetAllPoints()
 
 combo.glow = CreateFrame("Frame", nil, UIParent)
-combo:SetPoint(unpack(anchorPoint))
-combo:SetSize(origPawWidth * texScale, origPawHeight * texScale)
+combo:Point(unpack(anchorPoint))
+combo:Size(origPawWidth * texScale, origPawHeight * texScale)
 combo.glow:SetAlpha(0)
 local t2 = combo.glow:CreateTexture(nil, "ARTWORK", self, -1)
 t2:SetTexture([[Interface\AddOns\s_Core\Media\pawsCombo]])
@@ -50,8 +50,8 @@ combo.animHide = {}
 local xary = { 15, 109, 203, 297, 395 } -- Position of combo paws
 for i = 1, MAX_COMBO_POINTS do
 	combo[i] = CreateFrame("Frame", nil, combo)
-	combo[i]:SetPoint("LEFT", xary[i] * texScale, 0)
-	combo[i]:SetSize(101 * texScale, 108 * texScale) -- 101,108 (29, 32)
+	combo[i]:Point("LEFT", xary[i] * texScale, 0)
+	combo[i]:Size(101 * texScale, 108 * texScale) -- 101,108 (29, 32)
 	combo[i]:SetAlpha(0)
 
 	local r = combo[i]:CreateTexture(nil, "OVERLAY")  

@@ -15,7 +15,7 @@ function Module:OnEnable()
 	Text:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")
 	Text:SetShadowOffset(1.25, -1.25)
 	Text:SetShadowColor(0, 0, 0, 0.4)
-	Text:SetPoint("BOTTOMRIGHT", XP, "BOTTOMRIGHT", -10, -8)
+	Text:Point("BOTTOMRIGHT", XP, "BOTTOMRIGHT", -10, -8)
 	Stat:SetParent(Text:GetParent())
 
 	local _G = getfenv(0)

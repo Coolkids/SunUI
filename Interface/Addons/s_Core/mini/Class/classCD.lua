@@ -160,9 +160,9 @@ local bars = {}
 
 local ClassCDAnchor = CreateFrame("Frame", "ClassCDAnchor", UIParent)
 
-ClassCDAnchor:SetSize(C["ClassCDWidth"], C["ClassCDHeight"])
+ClassCDAnchor:Size(C["ClassCDWidth"], C["ClassCDHeight"])
 
-ClassCDAnchor:SetPoint("BOTTOM","ClassCD","BOTTOM", 0, 0)
+ClassCDAnchor:Point("BOTTOM","ClassCD","BOTTOM", 0, 0)
 
 local FormatTime = function(time)
 	if time >= 60 then
@@ -182,12 +182,12 @@ local UpdatePositions = function()
 	for i = 1, #bars do
 		bars[i]:ClearAllPoints()
 		if i == 1 then
-			bars[i]:SetPoint("TOPLEFT", ClassCDAnchor, "TOPLEFT", 26, 0)
+			bars[i]:Point("TOPLEFT", ClassCDAnchor, "TOPLEFT", 26, 0)
 		else
 			if C["ClassCDDirection"] == "1" then
-				bars[i]:SetPoint("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, 5)
+				bars[i]:Point("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, 5)
 			else
-				bars[i]:SetPoint("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -5)
+				bars[i]:Point("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -5)
 			end
 		end
 		bars[i].id = i
@@ -239,13 +239,13 @@ end
 local CreateBar = function()
 	local bar = CreateFrame("Statusbar", nil, UIParent)
 	bar:SetFrameStrata("LOW")
-	bar:SetSize(C["ClassCDWidth"], C["ClassCDHeight"])
+	bar:Size(C["ClassCDWidth"], C["ClassCDHeight"])
 	bar:SetStatusBarTexture(DB.Statusbar)
 	bar:SetMinMaxValues(0, 100)
     
 	bar.backdrop = CreateFrame("Frame", nil, bar)
-	bar.backdrop:SetPoint("TOPLEFT", -2, 2)
-	bar.backdrop:SetPoint("BOTTOMRIGHT", 2, -2)
+	bar.backdrop:Point("TOPLEFT", -2, 2)
+	bar.backdrop:Point("BOTTOMRIGHT", 2, -2)
 	bar.backdrop:SetFrameStrata("BACKGROUND")
 	bar.backdrop:SetBackdrop({
 	bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
@@ -260,22 +260,22 @@ local CreateBar = function()
 	bar.bg:SetTexture(DB.Statusbar)
 	
 	bar.left = CreateFS(bar)
-	bar.left:SetPoint("LEFT", 2, 0)
+	bar.left:Point("LEFT", 2, 0)
 	bar.left:SetJustifyH("LEFT")
-	bar.left:SetSize(C["ClassCDWidth"], C["ClassCDHeight"])
+	bar.left:Size(C["ClassCDWidth"], C["ClassCDHeight"])
 
 	bar.right = CreateFS(bar)
-	bar.right:SetPoint("RIGHT", 1, 0)
+	bar.right:Point("RIGHT", 1, 0)
 	bar.right:SetJustifyH("RIGHT")
 
 	bar.icon = CreateFrame("Button", nil, bar)
-	bar.icon:SetWidth(20)
-	bar.icon:SetHeight(20)
-	bar.icon:SetPoint("BOTTOMRIGHT", bar, "BOTTOMLEFT", -6, 0)
+	bar.icon:Width(20)
+	bar.icon:Height(20)
+	bar.icon:Point("BOTTOMRIGHT", bar, "BOTTOMLEFT", -6, 0)
 	bar.icon:CreateShadow()
 	bar.icon.backdrop = CreateFrame("Frame", nil, bar.icon)
-	bar.icon.backdrop:SetPoint("TOPLEFT", -2, 2)
-	bar.icon.backdrop:SetPoint("BOTTOMRIGHT", 2, -2)
+	bar.icon.backdrop:Point("TOPLEFT", -2, 2)
+	bar.icon.backdrop:Point("BOTTOMRIGHT", 2, -2)
 	bar.icon.backdrop:SetFrameStrata("BACKGROUND")
     bar:CreateShadow()
 	return bar

@@ -8,9 +8,9 @@ C = ActionBarDB
     local num = NUM_SHAPESHIFT_SLOTS
 
     local bar = CreateFrame("Frame","rABS_StanceBar",UIParent, "SecureHandlerStateTemplate")
-    bar:SetWidth(C["ButtonSize"]*6+C["ButtonSpacing"]*(6-1))
-    bar:SetHeight(C["ButtonSize"])
-    bar:SetPoint(C["stancebar"].a1,C["stancebar"].af,C["stancebar"].a2,C["stancebar"].x,C["stancebar"].y)
+    bar:Width(C["ButtonSize"]*6+C["ButtonSpacing"]*(6-1))
+    bar:Height(C["ButtonSize"])
+    bar:Point(C["stancebar"].a1,C["stancebar"].af,C["stancebar"].a2,C["stancebar"].x,C["stancebar"].y)
     bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
     
     if barDB.testmode then
@@ -26,18 +26,18 @@ C = ActionBarDB
     
     for i=1, num do
       local button = _G["ShapeshiftButton"..i]
-      button:SetSize(C["ButtonSize"], C["ButtonSize"])
+      button:Size(C["ButtonSize"], C["ButtonSize"])
       button:ClearAllPoints()
       if i == 1 then
-        button:SetPoint("BOTTOMLEFT", bar, 0,0)
+        button:Point("BOTTOMLEFT", bar, 0,0)
       else
         local previous = _G["ShapeshiftButton"..i-1]      
-        button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
+        button:Point("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
       end
     end
     
     local function rABS_MoveShapeshift()
-      ShapeshiftButton1:SetPoint("BOTTOMLEFT", bar, 0,0)
+      ShapeshiftButton1:Point("BOTTOMLEFT", bar, 0,0)
     end
     hooksecurefunc("ShapeshiftBar_Update", rABS_MoveShapeshift);
     

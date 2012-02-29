@@ -219,7 +219,7 @@ GameTooltipStatusBar:SetScript("OnValueChanged", function(self, value)
         min, max = UnitHealth(unit), UnitHealthMax(unit)
         if not self.text then
             self.text = self:CreateFontString(nil, "OVERLAY")
-            self.text:SetPoint("CENTER", GameTooltipStatusBar)
+            self.text:Point("CENTER", GameTooltipStatusBar)
             self.text:SetFont(cfg.font, 9*S.Scale(1), cfg.outline)
         end
         self.text:Show()
@@ -235,7 +235,7 @@ hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
 		
     else
         tooltip:SetOwner(parent, "ANCHOR_NONE")	
-        tooltip:SetPoint(cfg.point[1], UIParent, cfg.point[2], cfg.point[3], cfg.point[4])
+        tooltip:Point(cfg.point[1], UIParent, cfg.point[2], cfg.point[3], cfg.point[4])
     end
 
     tooltip.default = 1

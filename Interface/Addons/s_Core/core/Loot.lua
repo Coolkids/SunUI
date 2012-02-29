@@ -124,9 +124,9 @@ end
 
 local createSlot = function(id)
 	local frame = CreateFrame("Button", 'm_LootSlot'..id, addon)
-	frame:SetPoint("LEFT", 8, 0)
-	frame:SetPoint("RIGHT", -8, 0)
-	frame:SetHeight(DB.iconsize-2)
+	frame:Point("LEFT", 8, 0)
+	frame:Point("RIGHT", -8, 0)
+	frame:Height(DB.iconsize-2)
 	frame:SetID(id)
 	
 	frame:SetScript("OnEnter", OnEnter)
@@ -135,10 +135,10 @@ local createSlot = function(id)
 	frame:SetScript("OnUpdate", OnUpdate)
 
 	local iconFrame = CreateFrame("Frame", nil, frame)
-	iconFrame:SetHeight(DB.iconsize+2)
-	iconFrame:SetWidth(DB.iconsize+2)
+	iconFrame:Height(DB.iconsize+2)
+	iconFrame:Width(DB.iconsize+2)
 	iconFrame:ClearAllPoints()
-	iconFrame:SetPoint("LEFT", frame, 3,0)
+	iconFrame:Point("LEFT", frame, 3,0)
 	
 	local icon = iconFrame:CreateTexture(nil, "BACKGROUND")
 	icon:SetAlpha(.8)
@@ -148,15 +148,15 @@ local createSlot = function(id)
     
 	local overlay = iconFrame:CreateTexture(nil, "OVERLAY")
     overlay:SetTexture(DB.bordertex)
-	overlay:SetPoint("TOPLEFT",iconFrame,"TOPLEFT",-3,3)
-	overlay:SetPoint("BOTTOMRIGHT",iconFrame,"BOTTOMRIGHT",3,-3)
+	overlay:Point("TOPLEFT",iconFrame,"TOPLEFT",-3,3)
+	overlay:Point("BOTTOMRIGHT",iconFrame,"BOTTOMRIGHT",3,-3)
 	overlay:SetVertexColor(0.35, 0.35, 0.35, 1);
 	frame.overlay = overlay
 	
 	local count = iconFrame:CreateFontString(nil, "OVERLAY")
 	count:ClearAllPoints()
 	count:SetJustifyH"RIGHT"
-	count:SetPoint("BOTTOMRIGHT", iconFrame, 2, 2)
+	count:Point("BOTTOMRIGHT", iconFrame, 2, 2)
 	count:SetFontObject(NumberFontNormal)
 	count:SetShadowOffset(.8, -.8)
 	count:SetShadowColor(0, 0, 0, 1)
@@ -166,25 +166,25 @@ local createSlot = function(id)
 	local name = frame:CreateFontString(nil, "OVERLAY")
 	name:SetJustifyH"LEFT"
 	name:ClearAllPoints()
-	name:SetPoint("RIGHT", frame)
-	name:SetPoint("LEFT", icon, "RIGHT",8,0)
+	name:Point("RIGHT", frame)
+	name:Point("LEFT", icon, "RIGHT",8,0)
 	name:SetNonSpaceWrap(true)
 	name:SetFont(DB.Font, 17, "OUTLINE")
 	--name:SetFontObject(GameFontWhite)GameTooltipHeaderText
 
-	name:SetWidth(120)
+	name:Width(120)
 	frame.name = name
 	
 	local drop = frame:CreateTexture(nil, "ARTWORK")
 	drop:SetTexture(DB.loottex)
-	drop:SetPoint("LEFT", icon, "RIGHT", 0, 0)
-	drop:SetPoint("RIGHT", frame, "RIGHT", -3, 0)
-	drop:SetPoint("TOP", frame,"TOP",0,-3)
-	drop:SetPoint("BOTTOM", frame,"BOTTOM",0,3)
+	drop:Point("LEFT", icon, "RIGHT", 0, 0)
+	drop:Point("RIGHT", frame, "RIGHT", -3, 0)
+	drop:Point("TOP", frame,"TOP",0,-3)
+	drop:Point("BOTTOM", frame,"BOTTOM",0,3)
 	--drop:SetAllPoints(frame)
 	drop:SetAlpha(.5)
 	frame.drop = drop
-	frame:SetPoint("TOP", addon, 8, (-5+DB.iconsize)-(id*(DB.iconsize+10))-10)
+	frame:Point("TOP", addon, 8, (-5+DB.iconsize)-(id*(DB.iconsize+10))-10)
 	frame:SetBackdrop{
 	edgeFile = DB.edgetex, edgeSize = 10,
 	--insets = {left = 0, right = 0, top = 0, bottom = 0},
@@ -197,7 +197,7 @@ end
 
 title:SetFont(DB.Font, 16, "OUTLINE")
 title:SetJustifyH"LEFT"
-title:SetPoint("TOPLEFT", addon, "TOPLEFT", 6, -4)
+title:Point("TOPLEFT", addon, "TOPLEFT", 6, -4)
 
 addon:SetScript("OnMouseDown", function(self) if(IsAltKeyDown()) then self:StartMoving() end end)
 addon:SetScript("OnMouseUp", function(self) self:StopMovingOrSizing() end)
@@ -210,9 +210,9 @@ addon:RegisterForClicks"anyup"
 
 addon:SetParent(UIParent)
 addon:SetUserPlaced(true)
-addon:SetPoint("TOPLEFT", 0, -104)
-addon:SetWidth(256)
-addon:SetHeight(64)
+addon:Point("TOPLEFT", 0, -104)
+addon:Width(256)
+addon:Height(64)
 addon:CreateShadow("Background")
 
 
@@ -224,10 +224,10 @@ addon:SetFrameStrata"HIGH"
 addon:SetToplevel(true)
 
 lb:ClearAllPoints()
-lb:SetWidth(20)
-lb:SetHeight(14)
+lb:Width(20)
+lb:Height(14)
 lb:SetScale(0.85)
-lb:SetPoint("TOPRIGHT", addon, "TOPRIGHT", -35, -9)
+lb:Point("TOPRIGHT", addon, "TOPRIGHT", -35, -9)
 lb:SetFrameStrata("TOOLTIP")
 lb:RegisterForClicks("RightButtonUp", "LeftButtonUp")
 lb:SetScript("OnClick", OnLinkClick)
@@ -268,7 +268,7 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 		y = y / self:GetEffectiveScale()
 
 		self:ClearAllPoints()
-		self:SetPoint("TOPLEFT", nil, "BOTTOMLEFT", x-40, y+20)
+		self:Point("TOPLEFT", nil, "BOTTOMLEFT", x-40, y+20)
 		self:GetCenter()
 		self:Raise()
 	end
@@ -324,30 +324,30 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 
 	local color = ITEM_QUALITY_COLORS[m]
 	self:SetBackdropBorderColor(color.r, color.g, color.b, .8)
-	self:SetHeight(math.max((items*(DB.iconsize+10))+27), 20)
-	self:SetWidth(250)
-	title:SetWidth(220)
-	title:SetHeight(16)
+	self:Height(math.max((items*(DB.iconsize+10))+27), 20)
+	self:Width(250)
+	title:Width(220)
+	title:Height(16)
 	
 --[[	local close = CreateFrame("Button", nil, addon, "UIPanelCloseButton" )
-	close:SetPoint("TOPRIGHT", 0, 2)
+	close:Point("TOPRIGHT", 0, 2)
 	close:SetScale(0.87)
 	close:SetScript("OnClick", function(self) self:GetParent():Hide() end)]]
 
 	local close = self:CreateTexture(nil, "ARTWORK")
 	close:SetTexture(DB.closebtex)
 	close:SetTexCoord(0, .7, 0, 1)
-	close:SetWidth(20)
-	close:SetHeight(14)
+	close:Width(20)
+	close:Height(14)
 	close:SetVertexColor(0.5, 0.5, 0.4)
-	close:SetPoint("TOPRIGHT", self, "TOPRIGHT", -6, -7)
+	close:Point("TOPRIGHT", self, "TOPRIGHT", -6, -7)
 	
 	local closebutton = CreateFrame("Button", nil)
 	closebutton:SetParent( self )
-	closebutton:SetWidth(20)
-	closebutton:SetHeight(14)
+	closebutton:Width(20)
+	closebutton:Height(14)
 	closebutton:SetScale(0.9)
-	closebutton:SetPoint("CENTER", close, "CENTER")
+	closebutton:Point("CENTER", close, "CENTER")
 	closebutton:SetScript("OnClick", function(self) self:GetParent():Hide() end)
 	closebutton:SetScript( "OnLeave", function() close:SetVertexColor(0.5, 0.5, 0.4) end )
 	closebutton:SetScript( "OnEnter", function() close:SetVertexColor(0.7, 0.2, 0.2) end )

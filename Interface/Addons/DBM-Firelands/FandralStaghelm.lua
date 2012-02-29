@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(197, "DBM-Firelands", nil, 78)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7386 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7400 $"):sub(12, -3))
 mod:SetCreatureID(52571)
 mod:SetModelID(37953)
 mod:SetZone()
@@ -72,8 +72,9 @@ local abilityTimers = {
 	[14]= 4.9,
 	[15]= 4.9,
 	[16]= 4.9,
+	[17]= 4.9,
 }
---Don't know at what point it caps at 3.7
+--caps to 3.7 at 18 stacks.
 
 local function clearLeapWarned()
 	recentlyJumped = false

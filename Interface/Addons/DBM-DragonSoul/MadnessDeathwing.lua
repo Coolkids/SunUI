@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(333, "DBM-DragonSoul", nil, 187)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7389 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7414 $"):sub(12, -3))
 mod:SetCreatureID(56173)
 mod:SetModelID(40087)
 mod:SetZone()
@@ -66,21 +66,21 @@ local timerTerrorCD				= mod:NewNextTimer(90, "ej4117", nil, nil, nil, 106765)--
 local timerShrapnel				= mod:NewBuffFadesTimer(6, 109598)
 local timerParasite				= mod:NewTargetTimer(10, 108649)
 local timerParasiteCD			= mod:NewCDTimer(60, 108649)
-local timerUnstableCorruption	= mod:NewCastTimer(10, 108813)
+--local timerUnstableCorruption	= mod:NewCastTimer(10, 108813)
 local timerTetanus				= mod:NewTargetTimer(6, 109605, nil, mod:IsHealer())
 local timerTetanusCD			= mod:NewCDTimer(3.5, 109605, nil, mod:IsTank())
 
 local berserkTimer				= mod:NewBerserkTimer(900)
 
-local boltBlastCount			= mod:NewCountdown(8, 109600)
-local ShrapnelCountdown			= mod:NewCountdown(6, 109598, not mod:IsTank())
+local countdownBoltBlast		= mod:NewCountdown(8, 109600)
+local countdownShrapnel			= mod:NewCountdown(6, 109598, not mod:IsTank())
 
 mod:AddBoolOption("RangeFrame", true)--For heroic parasites, with debuff filtering.
 mod:AddBoolOption("SetIconOnParasite", true)
 
 local firstAspect = true
 local engageCount = 0
-local playerGUID = 0
+--local playerGUID = 0
 local shrapnelTargets = {}
 local antiSpam = 0
 local warnedCount = 0
@@ -159,12 +159,12 @@ function mod:SPELL_CAST_START(args)
 	elseif args:IsSpellID(106523, 110042, 110043, 110044) then
 		warnCataclysm:Show()
 		timerCataclysm:Start()
-	elseif args:IsSpellID(108813) then
+--[[	elseif args:IsSpellID(108813) then
 		if UnitDebuff(playerGUID, GetSpellInfo(108646)) then--Check if player that got the debuff is in nozdormu's bubble at time of cast.
 			timerUnstableCorruption:Start(15.5)
 		else
 			timerUnstableCorruption:Start()
-		end
+		end--]]
 	end
 end
 
@@ -174,7 +174,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 		specWarnElementiumBolt:Show()
 		if not UnitBuff("player", GetSpellInfo(109624)) and not UnitIsDeadOrGhost("player") then--Check for Nozdormu's Presence
 			timerElementiumBlast:Start()
-			boltBlastCount:Start()
+			countdownBoltBlast:Start()
 			specWarnElementiumBoltDPS:Schedule(10)
 		else
 			timerElementiumCast:Start()
@@ -216,7 +216,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnShrapnel:Show()
 			timerShrapnel:Start() -- Shrapnel debuff lasts 7 secs. But Shrapnel damages 1 sec early before debuff fades. So 6 sec timer will be more good.
-			ShrapnelCountdown:Start(6)
+			countdownShrapnel:Start(6)
 		end
 		if (self:IsDifficulty("normal10", "heroic10") and #shrapnelTargets >= 3) or (self:IsDifficulty("normal25", "heroic25", "lfr25") and #shrapnelTargets >= 8) then
 			warnShrapnelTargets()
@@ -232,7 +232,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnParasite:Show()
 			yellParasite:Yell()
 		end
-		playerGUID = args.destGUID
+--		playerGUID = args.destGUID
 		if self.Options.SetIconOnParasite then
 			self:SetIcon(args.destName, 8)
 		end
@@ -261,7 +261,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		timerImpale:Cancel(args.destName)
 	elseif args:IsSpellID(106794, 110139, 110140, 110141) and args:IsPlayer() then
 		timerShrapnel:Cancel()
-		ShrapnelCountdown:Cancel()
+		countdownShrapnel:Cancel()
 	elseif args:IsSpellID(108649) then
 		specWarnParasiteDPS:Show()
 		if self.Options.SetIconOnParasite then

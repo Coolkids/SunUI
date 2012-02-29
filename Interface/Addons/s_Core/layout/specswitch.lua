@@ -14,7 +14,7 @@ local Text  = XP:CreateFontString(nil, "BORDER")
 			Text:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")
 			Text:SetShadowOffset(1.25, -1.25)
 			Text:SetShadowColor(0, 0, 0, 0.4)
-			Text:SetPoint("BOTTOMLEFT", XP, "BOTTOMLEFT", 10, -8)
+			Text:Point("BOTTOMLEFT", XP, "BOTTOMLEFT", 10, -8)
 			Text:SetText(NONE..TALENTS)
 			Stat:SetParent(Text:GetParent())
 

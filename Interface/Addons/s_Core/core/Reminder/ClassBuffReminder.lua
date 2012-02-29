@@ -339,17 +339,17 @@ local function OnEvent_ACTIVE_TALENT_GROUP_CHANGED(event, ...)
 	ClassBuff = ClassBuffList[DB.MyClass][GetPrimaryTalentTree() or 1]
 	for key, value in pairs(ClassBuff) do
 		local Button = CreateFrame("Frame", nil, UIParent)
-		Button:SetSize(ReminderDB.ClassBuffSize, ReminderDB.ClassBuffSize)
+		Button:Size(ReminderDB.ClassBuffSize, ReminderDB.ClassBuffSize)
 		Button:CreateShadow()
 		Button.Icon = Button:CreateTexture(nil, "ARTWORK")
 		Button.Icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 		Button.Icon:SetAllPoints()
 		Button.Text = S.MakeFontString(Button, 10*S.Scale(1))
-		Button.Text:SetPoint("TOP", Button, "BOTTOM", 0, -10)
+		Button.Text:Point("TOP", Button, "BOTTOM", 0, -10)
 		if key == 1 then
-			Button:SetPoint("BOTTOM","Class","BOTTOM",0,0)
+			Button:Point("BOTTOM","Class","BOTTOM",0,0)
 		else
-			Button:SetPoint("LEFT", BuffFrame[key-1], "RIGHT", ReminderDB.ClassBuffSpace, 0)
+			Button:Point("LEFT", BuffFrame[key-1], "RIGHT", ReminderDB.ClassBuffSpace, 0)
 		end
 		Button:SetAlpha(0)	
 		tinsert(BuffFrame, Button)

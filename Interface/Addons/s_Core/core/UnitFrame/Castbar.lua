@@ -28,11 +28,11 @@ cast.setBarTicks = function(castBar, ticknum)
 				ticks[k] = castBar:CreateTexture(nil, 'OVERLAY')
 				ticks[k]:SetTexture(DB.bar_texture)
 				ticks[k]:SetVertexColor(0.8, 0.6, 0.6)
-				ticks[k]:SetWidth(4)
-				ticks[k]:SetHeight(castBar:GetHeight())
+				ticks[k]:Width(4)
+				ticks[k]:Height(castBar:GetHeight())
 			end
 			ticks[k]:ClearAllPoints()
-			ticks[k]:SetPoint("CENTER", castBar, "LEFT", delta * k, 0 )
+			ticks[k]:Point("CENTER", castBar, "LEFT", delta * k, 0 )
 			ticks[k]:Show()
 		end
 	else
@@ -66,7 +66,7 @@ if GetNetStats() == 0 then return end -- test
 		end
 		self.duration = duration
 		self:SetValue(duration)
-		self.Spark:SetPoint('CENTER', self, 'LEFT', (duration / self.max) * self:GetWidth(), 0)
+		self.Spark:Point('CENTER', self, 'LEFT', (duration / self.max) * self:GetWidth(), 0)
 	elseif self.fadeOut then
 		self.Spark:Hide()
 		local alpha = self:GetAlpha() - 0.02
@@ -98,7 +98,7 @@ cast.PostCastStart = function(self, unit, name, rank, text)
 		if not sf.sendTime then sf.sendTime = GetTime() end
 		sf.timeDiff = GetTime() - sf.sendTime
 		sf.timeDiff = sf.timeDiff > self.max and self.max or sf.timeDiff
-		sf:SetWidth(self:GetWidth() * sf.timeDiff / self.max)
+		sf:Width(self:GetWidth() * sf.timeDiff / self.max)
 		sf:Show()
 		if not UnitInVehicle("player") then sf:Show() else sf:Hide() end
 		if self.casting then

@@ -5,8 +5,8 @@ local barDB = DB.bars.extrabar
   function Module:OnInitialize()
   C = ActionBarDB
 
-  bar:SetSize(C["ButtonSize"],C["ButtonSize"])
-  bar:SetPoint(C["extrabar"].a1,C["extrabar"].af,C["extrabar"].a2,C["extrabar"].x,C["extrabar"].y)
+  bar:Size(C["ButtonSize"],C["ButtonSize"])
+  bar:Point(C["extrabar"].a1,C["extrabar"].af,C["extrabar"].a2,C["extrabar"].x,C["extrabar"].y)
   bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
   bar:SetScale(C["ExtraBarSacle"])
   DB.applyDragFunctionality(bar,barDB.userplaced,barDB.locked)
@@ -15,12 +15,12 @@ local barDB = DB.bars.extrabar
   local f = ExtraActionBarFrame
   f:SetParent(bar)
   f:ClearAllPoints()
-  f:SetPoint("CENTER", 0, 0)
+  f:Point("CENTER", 0, 0)
   f.ignoreFramePositionManager = true
 
   --the button
   local b = ExtraActionButton1
-  b:SetSize(C["ButtonSize"],C["ButtonSize"])
+  b:Size(C["ButtonSize"],C["ButtonSize"])
   bar.button = b
 
   --style texture

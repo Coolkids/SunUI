@@ -130,17 +130,17 @@ C = UnitFrameDB
     --local s = ReverseBar(f)--CreateFrame("StatusBar", nil, f)--
     s:SetStatusBarTexture(DB.Statusbar)
     fixStatusbar(s)
-    s:SetHeight(f.height)
-    s:SetWidth(f.width)
-    s:SetPoint("TOPLEFT",0,0)
+    s:Height(f.height)
+    s:Width(f.width)
+    s:Point("TOPLEFT",0,0)
     --s:SetAlpha(0.5)
     s:SetOrientation("HORIZONTAL") 
 	s:SetFrameLevel(5)
     --shadow backdrop
     local h = CreateFrame("Frame", nil, s)
     h:SetFrameLevel(0)
-    h:SetPoint("TOPLEFT",0,0)
-    h:SetPoint("BOTTOMRIGHT",0,0)
+    h:Point("TOPLEFT",0,0)
+    h:Point("BOTTOMRIGHT",0,0)
 	--S.MakeShadow(h, 6)
 	--S.MakeBG(h, 0)
 	h:CreateShadow("Background")
@@ -156,8 +156,8 @@ C = UnitFrameDB
 	-- threat border
 	if f.mystyle == "party" then
 		bg.t = CreateFrame("Frame", nil,bg)
-		bg.t:SetPoint("TOPLEFT", bg, "TOPLEFT", -1, 1)
-		bg.t:SetPoint("BOTTOMRIGHT", bg, "BOTTOMRIGHT", 1, -1)
+		bg.t:Point("TOPLEFT", bg, "TOPLEFT", -1, 1)
+		bg.t:Point("BOTTOMRIGHT", bg, "BOTTOMRIGHT", 1, -1)
 		bg.t:SetBackdrop({edgeFile = "Interface\\ChatFrame\\ChatFrameBackground", edgeSize = .5,
 							insets = {left = 6, right = -6, top = -6, bottom = 6}})
 		bg.t:SetBackdropColor(0, 0, 0, 0)
@@ -174,9 +174,9 @@ C = UnitFrameDB
     s = f.Health
 	local p = CreateFrame("PlayerModel", nil, f)
 	p:SetFrameLevel(s:GetFrameLevel()-1)
-    p:SetWidth(f.width-2)
-    p:SetHeight(f.height-2)
-    p:SetPoint("TOP", s, "TOP", 0, -2)
+    p:Width(f.width-2)
+    p:Height(f.height-2)
+    p:Point("TOP", s, "TOP", 0, -2)
 	p:SetAlpha(.0)
 	p.PostUpdate = lib.PortraitPostUpdate	
     f.Portrait = p
@@ -192,19 +192,19 @@ C = UnitFrameDB
     local name = lib.gen_fontstring(h, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
     local hpval = lib.gen_fontstring(h, DB.Font,C["FontSize"]*S.Scale(1), "THINOUTLINE")
     if f.mystyle == "target" or f.mystyle == "tot" then
-      name:SetPoint("RIGHT", f.Health, "RIGHT",-3,0)
-      hpval:SetPoint("LEFT", f.Health, "LEFT",3,0)
+      name:Point("RIGHT", f.Health, "RIGHT",-3,0)
+      hpval:Point("LEFT", f.Health, "LEFT",3,0)
       name:SetJustifyH("RIGHT")
-      name:SetPoint("LEFT", hpval, "RIGHT", 5, 0)
+      name:Point("LEFT", hpval, "RIGHT", 5, 0)
     elseif f.mystyle == "arenatarget" or f.mystyle == "partypet" then
-      name:SetPoint("CENTER", f.Health, "CENTER",0,6)
+      name:Point("CENTER", f.Health, "CENTER",0,6)
       name:SetJustifyH("LEFT")
-      hpval:SetPoint("CENTER", f.Health, "CENTER",0,-6)
+      hpval:Point("CENTER", f.Health, "CENTER",0,-6)
     else
-      name:SetPoint("LEFT", f.Health, "LEFT",3,0)
-      hpval:SetPoint("RIGHT", f.Health, "RIGHT",-3,0)
+      name:Point("LEFT", f.Health, "LEFT",3,0)
+      hpval:Point("RIGHT", f.Health, "RIGHT",-3,0)
       name:SetJustifyH("LEFT")
-      name:SetPoint("RIGHT", hpval, "LEFT", -5, 0)
+      name:Point("RIGHT", hpval, "LEFT", -5, 0)
     end
     if f.mystyle == "arenatarget" or f.mystyle == "partypet" then
       f:Tag(name, '[mono:color][mono:shortname]')
@@ -221,17 +221,17 @@ C = UnitFrameDB
     local s = CreateFrame("StatusBar", nil, f)
     s:SetStatusBarTexture(DB.Statusbar)
     fixStatusbar(s)
-    s:SetHeight(f.height/3)
-    s:SetWidth(f.width-1)
-    s:SetPoint("TOP",f,"BOTTOM",0,-2)
+    s:Height(f.height/3)
+    s:Width(f.width-1)
+    s:Point("TOPLEFT",f,"BOTTOMLEFT",2,-2)
     if f.mystyle == "partypet" or f.mystyle == "arenatarget" then
       s:Hide()
     end
     --helper
     local h = CreateFrame("Frame", nil, s)
     h:SetFrameLevel(0)
-    h:SetPoint("TOPLEFT",-1,0)
-    h:SetPoint("BOTTOMRIGHT",0,-1)
+    h:Point("TOPLEFT",-2,0)
+    h:Point("BOTTOMRIGHT",0,2)
     --lib.gen_backdrop(h)
     --bg
     local b = s:CreateTexture(nil, "BACKGROUND")
@@ -239,7 +239,7 @@ C = UnitFrameDB
 	b:SetAlpha(.0)
     b:SetAllPoints(s)
     if f.mystyle=="tot" or f.mystyle=="pet" then
-      s:SetHeight(f.height/3)
+      s:Height(f.height/3)
     end
 	h:CreateShadow("Background")
     f.Power = s
@@ -256,18 +256,18 @@ C = UnitFrameDB
     local pp = lib.gen_fontstring(h, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
     local info = lib.gen_fontstring(h, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
     if f.mystyle == "target" or f.mystyle == "tot" then
-        info:SetPoint("RIGHT", f.Power, "RIGHT",-3,0)
-        pp:SetPoint("LEFT", f.Power, "LEFT",3,0)
+        info:Point("RIGHT", f.Power, "RIGHT",-3,0)
+        pp:Point("LEFT", f.Power, "LEFT",3,0)
         info:SetJustifyH("RIGHT")
     else
-        info:SetPoint("LEFT", f.Power, "LEFT",3,0)
-        pp:SetPoint("RIGHT", f.Power, "RIGHT",-5,0)
+        info:Point("LEFT", f.Power, "LEFT",3,0)
+        pp:Point("RIGHT", f.Power, "RIGHT",-5,0)
         info:SetJustifyH("LEFT")
     end
 	--resting indicator for player frame
 	if f.mystyle == "player" then
 		local ri = lib.gen_fontstring(f.Power, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
-		ri:SetPoint("LEFT", info, "RIGHT",2,0)
+		ri:Point("LEFT", info, "RIGHT",2,0)
 		ri:SetText("|cff8AFF30Zzz|r")
 		f.Resting = ri
 	end
@@ -284,7 +284,7 @@ C = UnitFrameDB
   --gen castbar
   lib.gen_castbar = function(f)
     local s = CreateFrame("StatusBar", "oUF_monoCastbar"..f.mystyle, f)
-    s:SetSize(f.width-(f.height/1.5+4),f.height/1.5)
+    s:Size(f.width-(f.height/1.5+4),f.height/1.5)
     s:SetStatusBarTexture(DB.bar_texture)
     s:SetStatusBarColor(.3, .45, .65,1)
     s:SetFrameLevel(9)
@@ -296,8 +296,8 @@ C = UnitFrameDB
     --helper
     local h = CreateFrame("Frame", nil, s)
     h:SetFrameLevel(0)
-    h:SetPoint("TOPLEFT",0,0)
-    h:SetPoint("BOTTOMRIGHT",0,0)
+    h:Point("TOPLEFT",0,0)
+    h:Point("BOTTOMRIGHT",0,0)
     --lib.gen_backdrop(h)
     --[[--backdrop
     local b = s:CreateTexture(nil, "BACKGROUND")
@@ -311,85 +311,85 @@ C = UnitFrameDB
     sp = s:CreateTexture(nil, "OVERLAY")
     sp:SetBlendMode("ADD")
     sp:SetAlpha(0.5)
-    sp:SetHeight(s:GetHeight()*2.5)--]]
+    sp:Height(s:GetHeight()*2.5)--]]
 	--spark
 	local sp =  s:CreateTexture(nil, "OVERLAY")
 	sp:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
 	sp:SetBlendMode("ADD")
 	sp:SetAlpha(.8)
-	sp:SetPoint("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
-	sp:SetPoint("BOTTOMRIGHT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
+	sp:Point("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
+	sp:Point("BOTTOMRIGHT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
     --spell text
     local txt = lib.gen_fontstring(s, DB.Font, (C["FontSize"]+1)*S.Scale(1), "THINOUTLINE")
-    txt:SetPoint("LEFT", 2, s:GetHeight()/2)
+    txt:Point("LEFT", 2, s:GetHeight()/2)
     txt:SetJustifyH("LEFT")
     --time
     local t = lib.gen_fontstring(s, DB.Font, (C["FontSize"]+1)*S.Scale(1), "THINOUTLINE")
-    t:SetPoint("RIGHT", -2, s:GetHeight()/2)
-    txt:SetPoint("RIGHT", t, "LEFT", -5, 0)
+    t:Point("RIGHT", -2, s:GetHeight()/2)
+    txt:Point("RIGHT", t, "LEFT", -5, 0)
     --icon
     local i = s:CreateTexture(nil, "ARTWORK")
-    --i:SetSize(s:GetHeight()+4,s:GetHeight()+4)
-	i:SetSize(s:GetHeight(),s:GetHeight())
+    --i:Size(s:GetHeight()+4,s:GetHeight()+4)
+	i:Size(s:GetHeight(),s:GetHeight())
     i:Point("BOTTOMRIGHT", s, "BOTTOMLEFT", -6, 0)
     i:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	S.MakeTexShadow(s, i, 3)
     --helper2 for icon
     local h2 = CreateFrame("Frame", nil, s)
     h2:SetFrameLevel(0)
-    h2:SetPoint("TOPLEFT",i,"TOPLEFT",-5,5)
-    h2:SetPoint("BOTTOMRIGHT",i,"BOTTOMRIGHT",5,-5)
+    h2:Point("TOPLEFT",i,"TOPLEFT",-5,5)
+    h2:Point("BOTTOMRIGHT",i,"BOTTOMRIGHT",5,-5)
     lib.gen_backdrop(h2)
     if f.mystyle == "focus" and not C["focusCBuserplaced"] then
-      s:SetPoint("BOTTOM", "Castbarfouce", "BOTTOM", 0, 0)
-      s:SetSize(C["FocusCastBarWidth"],C["FocusCastBarHeight"])
-      i:SetPoint("RIGHT", s, "LEFT", 0, 0)
-      sp:SetHeight(s:GetHeight()*2.5)
+      s:Point("BOTTOM", "Castbarfouce", "BOTTOM", 0, 0)
+      s:Size(C["FocusCastBarWidth"],C["FocusCastBarHeight"])
+      i:Point("RIGHT", s, "LEFT", 0, 0)
+      sp:Height(s:GetHeight()*2.5)
     elseif f.mystyle == "pet" then
-      s:SetPoint("BOTTOMRIGHT",f.Power,"BOTTOMRIGHT",0,0)
+      s:Point("BOTTOMRIGHT",f.Power,"BOTTOMRIGHT",0,0)
       s:SetScale(f:GetScale())
-      s:SetSize(f.width-f.height/2,f.height/2.5)
-      i:SetPoint("RIGHT", s, "LEFT", -2, 0)
+      s:Size(f.width-f.height/2,f.height/2.5)
+      i:Point("RIGHT", s, "LEFT", -2, 0)
       h2:SetFrameLevel(9)
       b:Hide() txt:Hide() t:Hide() h:Hide()
     elseif f.mystyle == "arena" then
-      s:SetSize(f.width-(f.height/1.4+4),f.height/1.4)
-      s:SetPoint("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
-      i:SetPoint("RIGHT", s, "LEFT", -4, 0)
-      i:SetSize(s:GetHeight(),s:GetHeight())
+      s:Size(f.width-(f.height/1.4+4),f.height/1.4)
+      s:Point("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
+      i:Point("RIGHT", s, "LEFT", -4, 0)
+      i:Size(s:GetHeight(),s:GetHeight())
     elseif f.mystyle == "player" then
 	  if not C["playerCBuserplaced"] then
-		s:SetSize(C["PlayerCastBarWidth"],C["PlayerCastBarHeight"])
-		s:SetPoint("BOTTOM", "Castbarplay", "BOTTOM", 0, 0)
-		i:SetSize((s:GetHeight()+2)*2,(s:GetHeight()+2)*2)
-		sp:SetHeight(s:GetHeight()*2.5)
+		s:Size(C["PlayerCastBarWidth"],C["PlayerCastBarHeight"])
+		s:Point("BOTTOM", "Castbarplay", "BOTTOM", 0, 0)
+		i:Size((s:GetHeight()+2)*2,(s:GetHeight()+2)*2)
+		sp:Height(s:GetHeight()*2.5)
 	  else
-		s:SetPoint("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
+		s:Point("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
 	  end
       --latency only for player unit
 	  local z = s:CreateTexture(nil, "OVERLAY")
 	  z:SetBlendMode("ADD")
       z:SetTexture(DB.Statusbar)
-	  --z:SetWidth(1) -- it should never fill the entire castbar when GetNetStats() returns 0
+	  --z:Width(1) -- it should never fill the entire castbar when GetNetStats() returns 0
       z:SetVertexColor(.8,.31,.45)
-      z:SetPoint("TOPRIGHT")
-      z:SetPoint("BOTTOMRIGHT")
+      z:Point("TOPRIGHT")
+      z:Point("BOTTOMRIGHT")
 	  --if UnitInVehicle("player") then z:Hide() end
       s.SafeZone = z
       --custom latency display
       local l = lib.gen_fontstring(s, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
-      l:SetPoint("RIGHT", 0, -s:GetHeight())
+      l:Point("RIGHT", 0, -s:GetHeight())
       l:SetJustifyH("RIGHT")
 	  l:SetTextColor(.8,.31,.45)
       s.Lag = l
       f:RegisterEvent("UNIT_SPELLCAST_SENT", cast.OnCastSent)
 	elseif f.mystyle == "target" and not C["targetCBuserplaced"] then
-	  s:SetSize(C["TargetCastBarWidth"],C["TargetCastBarHeight"])
-	  s:SetPoint("BOTTOM", "Castbartarget", "BOTTOM", 0, 0)
-	  i:SetSize(s:GetHeight()*2,s:GetHeight()*2)
-      sp:SetHeight(s:GetHeight()*2.5)
+	  s:Size(C["TargetCastBarWidth"],C["TargetCastBarHeight"])
+	  s:Point("BOTTOM", "Castbartarget", "BOTTOM", 0, 0)
+	  i:Size(s:GetHeight()*2,s:GetHeight()*2)
+      sp:Height(s:GetHeight()*2.5)
 	else
-      s:SetPoint("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
+      s:Point("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
     end
 
 	s.OnUpdate = cast.OnCastbarUpdate
@@ -418,7 +418,7 @@ C = UnitFrameDB
       _G[bar..'Border']:Hide()
       _G[bar]:SetParent(UIParent)
       _G[bar]:SetScale(1)
-      _G[bar]:SetHeight(16)
+      _G[bar]:Height(16)
       _G[bar]:SetBackdropColor(.1,.1,.1)
       _G[bar..'Background'] = _G[bar]:CreateTexture(bar..'Background', 'BACKGROUND', _G[bar])
       _G[bar..'Background']:SetTexture(DB.Statusbar)
@@ -426,13 +426,13 @@ C = UnitFrameDB
       _G[bar..'Background']:SetVertexColor(.15,.15,.15,1)
       _G[bar..'Text']:SetFont(DB.Font, (C["FontSize"]+2)*S.Scale(1))
       _G[bar..'Text']:ClearAllPoints()
-      _G[bar..'Text']:SetPoint('CENTER', _G[bar..'StatusBar'], 0, 0)
+      _G[bar..'Text']:Point('CENTER', _G[bar..'StatusBar'], 0, 0)
 	  _G[bar..'StatusBar']:SetAllPoints(_G[bar])
       --glowing borders
       local h = CreateFrame("Frame", nil, _G[bar])
       h:SetFrameLevel(0)
-      h:SetPoint("TOPLEFT",-4,4)
-      h:SetPoint("BOTTOMRIGHT",4,-4)
+      h:Point("TOPLEFT",-4,4)
+      h:Point("BOTTOMRIGHT",4,-4)
       lib.gen_backdrop(h)
     end
   end
@@ -517,13 +517,13 @@ C = UnitFrameDB
     --count
     button.count:ClearAllPoints()
     button.count:SetJustifyH("RIGHT")
-    button.count:SetPoint("BOTTOMRIGHT", 2, -2)
+    button.count:Point("BOTTOMRIGHT", 2, -2)
     button.count:SetTextColor(1,1,1)
     --helper
     local h = CreateFrame("Frame", nil, button)
     h:SetFrameLevel(0)
-    h:SetPoint("TOPLEFT",-4,4)
-    h:SetPoint("BOTTOMRIGHT",4,-4)
+    h:Point("TOPLEFT",-4,4)
+    h:Point("BOTTOMRIGHT",4,-4)
     lib.gen_backdrop(h)
     --another helper frame for our fontstring to overlap the cd frame
     local h2 = CreateFrame("Frame", nil, button)
@@ -531,11 +531,11 @@ C = UnitFrameDB
     h2:SetFrameLevel(10)
     button.remaining = lib.gen_fontstring(h2, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
 	--button.remaining:SetShadowColor(0, 0, 0)--button.remaining:SetShadowOffset(2, -1)
-    button.remaining:SetPoint("TOPLEFT", 0, -0.5)
+    button.remaining:Point("TOPLEFT", 0, -0.5)
     --overlay texture for debuff types display
     --button.overlay:SetTexture(DB.Auratex)
-    button.overlay:SetPoint("TOPLEFT", button, "TOPLEFT", -1, 1)
-    button.overlay:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 1, -1)
+    button.overlay:Point("TOPLEFT", button, "TOPLEFT", -1, 1)
+    button.overlay:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 1, -1)
     button.overlay:SetTexCoord(0.04, 0.96, 0.04, 0.96)
     button.overlay.Hide = function(self) self:SetVertexColor(0, 0, 0) end
 	S.MakeTexShadow(button, button.overlay, 3)
@@ -545,15 +545,15 @@ C = UnitFrameDB
 	local f = self:GetParent()
 	local pttree = GetPrimaryTalentTree(false, false, GetActiveTalentGroup())
 	if f.mystyle=="player" and ((class=="DRUID" and pttree == 1) or class == "DEATHKNIGHT" or (class == "SHAMAN" and IsAddOnLoaded("oUF_boring_totembar"))) then
-		self:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 1, 6+f.height/3)
+		self:Point('BOTTOMLEFT', f, 'TOPLEFT', 1, 6+f.height/3)
 	else
-		self:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 1.5, 4)
+		self:Point('BOTTOMLEFT', f, 'TOPLEFT', 1.5, 4)
 	end
   end ]]
   --auras for certain frames
   lib.createAuras = function(f)
     a = CreateFrame('Frame', nil, f)
-    a:SetPoint('TOPLEFT', f, 'TOPRIGHT', 7, 0)
+    a:Point('TOPLEFT', f, 'TOPRIGHT', 7, 0)
     a['growth-x'] = 'RIGHT'
     a['growth-y'] = 'DOWN' 
     a.initialAnchor = 'TOPLEFT'
@@ -562,8 +562,8 @@ C = UnitFrameDB
     a.size = 23
     a.showDebuffType = true
     if f.mystyle=="target" then
-      a:SetHeight((a.size+a.spacing)*2)
-      a:SetWidth((a.size+a.spacing)*8)
+      a:Height((a.size+a.spacing)*2)
+      a:Width((a.size+a.spacing)*8)
       a.numBuffs = 8 
       a.numDebuffs = 8
 	elseif f.mystyle=="player" and DB.playerauras=="AURAS" then
@@ -571,14 +571,14 @@ C = UnitFrameDB
       a['growth-x'] = 'LEFT'
       a['growth-y'] = 'DOWN' 
       a.initialAnchor = 'TOPLEFT'
-      a:SetHeight((a.size+a.spacing)*2)
-      a:SetWidth((a.size+a.spacing)*8)
+      a:Height((a.size+a.spacing)*2)
+      a:Width((a.size+a.spacing)*8)
       a.numBuffs = 15 
       a.numDebuffs = 15
-	  a:SetPoint('TOPLEFT', f, 'TOPLEFT', -a.size-5, -1)
+	  a:Point('TOPLEFT', f, 'TOPLEFT', -a.size-5, -1)
     elseif f.mystyle=="focus" then
-      a:SetHeight((a.size+a.spacing)*2)
-      a:SetWidth((a.size+a.spacing)*4)
+      a:Height((a.size+a.spacing)*2)
+      a:Width((a.size+a.spacing)*4)
       a.numBuffs = 8
       a.numDebuffs = 8
     end
@@ -594,28 +594,28 @@ C = UnitFrameDB
     b.num = 8
     b.size = 19
     b.spacing = 6
-    b:SetHeight((b.size+b.spacing)*2)
-    b:SetWidth((b.size+b.spacing)*12)
+    b:Height((b.size+b.spacing)*2)
+    b:Width((b.size+b.spacing)*12)
     if f.mystyle=="tot" then
       b.initialAnchor = "TOPRIGHT"
-      b:SetPoint("TOPRIGHT", f, "TOPLEFT", -b.spacing, -2)
+      b:Point("TOPRIGHT", f, "TOPLEFT", -b.spacing, -2)
       b["growth-x"] = "LEFT"
     elseif f.mystyle=="pet" then
-      b:SetPoint("TOPLEFT", f, "TOPRIGHT", b.spacing, -2)
+      b:Point("TOPLEFT", f, "TOPRIGHT", b.spacing, -2)
     elseif f.mystyle=="arena" then
       b.showBuffType = true
-      b:SetPoint("TOPLEFT", f, "TOPRIGHT", b.spacing, -2)
+      b:Point("TOPLEFT", f, "TOPRIGHT", b.spacing, -2)
 	  b.size = 18
       b.num = 5
-      b:SetWidth((b.size+b.spacing)*4)
+      b:Width((b.size+b.spacing)*4)
 	elseif f.mystyle=="boss" then
       b.showBuffType = true
-      b:SetPoint("TOPLEFT", f, "TOPRIGHT", b.spacing, -2)
+      b:Point("TOPLEFT", f, "TOPRIGHT", b.spacing, -2)
 	  b.size = 18
       b.num = 4
-      b:SetWidth((b.size+b.spacing)*4)
+      b:Width((b.size+b.spacing)*4)
     elseif f.mystyle=='party' then
-      b:SetPoint("TOPLEFT", f.Power, "BOTTOMLEFT", 0, -b.spacing)
+      b:Point("TOPLEFT", f.Power, "BOTTOMLEFT", 0, -b.spacing)
 	  b.size = 19
       b.num = 8
 	elseif f.mystyle=="player" and DB.playerauras=="BUFFS" then
@@ -624,9 +624,9 @@ C = UnitFrameDB
       b.initialAnchor = 'TOPRIGHT'
 	  b.num = 8
 	  b.size = 23
-      b:SetHeight((b.size+b.spacing)*2)
-      b:SetWidth((b.size+b.spacing)*8)
-	  b:SetPoint("TOPRIGHT", f, "TOPLEFT", -5, -1)
+      b:Height((b.size+b.spacing)*2)
+      b:Width((b.size+b.spacing)*8)
+	  b:Point("TOPRIGHT", f, "TOPLEFT", -5, -1)
 	  --b.PreSetPosition = lib.PreSetPosition
     end
     b.PostCreateIcon = lib.PostCreateIcon
@@ -642,44 +642,44 @@ C = UnitFrameDB
     d.num = 10
     d.size = 19
     d.spacing = 5
-    d:SetHeight((d.size+d.spacing)*2)
-    d:SetWidth((d.size+d.spacing)*5)
+    d:Height((d.size+d.spacing)*2)
+    d:Width((d.size+d.spacing)*5)
     d.showDebuffType = true
     if f.mystyle=="tot" then
-      d:SetPoint("TOPLEFT", f, "TOPRIGHT", d.spacing, -2)
+      d:Point("TOPLEFT", f, "TOPRIGHT", d.spacing, -2)
       d.initialAnchor = "TOPLEFT"
     elseif f.mystyle=="pet" then
-      d:SetPoint("TOPRIGHT", f, "TOPLEFT", -d.spacing, -2)
+      d:Point("TOPRIGHT", f, "TOPLEFT", -d.spacing, -2)
       d["growth-x"] = "LEFT"
     elseif f.mystyle=="arena" then
       d.showDebuffType = false
       d.initialAnchor = "TOPLEFT"
       d.num = 4
 	  d.size = 18
-	  d:SetPoint('TOPLEFT', f, 'TOPRIGHT', 2, 0)
-      d:SetWidth((d.size+d.spacing)*4)
+	  d:Point('TOPLEFT', f, 'TOPRIGHT', 2, 0)
+      d:Width((d.size+d.spacing)*4)
 --[[     elseif f.mystyle=="boss" then
       d.showDebuffType = false
       d.initialAnchor = "TOPLEFT"
       d.num = 4
 	  d.size = 18
-	  d:SetPoint("TOPRIGHT", f, "TOPLEFT", d.spacing, -2)
-      d:SetWidth((d.size+d.spacing)*4) ]]
+	  d:Point("TOPRIGHT", f, "TOPLEFT", d.spacing, -2)
+      d:Width((d.size+d.spacing)*4) ]]
     elseif f.mystyle=='party' then
-      d:SetPoint("TOPRIGHT", f, "TOPLEFT", -d.spacing, -2)
+      d:Point("TOPRIGHT", f, "TOPLEFT", -d.spacing, -2)
 	  d.num = 8
 	  d.size = 18
       d["growth-x"] = "LEFT"
-      d:SetWidth((d.size+d.spacing)*4)
+      d:Width((d.size+d.spacing)*4)
 	elseif f.mystyle=="player" and DB.playerauras=="DEBUFFS" then
 	  d['growth-x'] = 'RIGHT'
       d['growth-y'] = 'UP' 
       d.initialAnchor = 'BOTTOMLEFT'
 	  d.num = 8
 	  d.size = 23
-      d:SetHeight((d.size+d.spacing)*2)
-      d:SetWidth((d.size+d.spacing)*8)
-	  d:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 10)
+      d:Height((d.size+d.spacing)*2)
+      d:Width((d.size+d.spacing)*8)
+	  d:Point("BOTTOMLEFT", f, "TOPLEFT", 0, 10)
 	  --d.PreSetPosition = lib.PreSetPosition
     end
     d.PostCreateIcon = lib.PostCreateIcon
@@ -702,11 +702,11 @@ C = UnitFrameDB
       f.Runes = CreateFrame("Frame", nil, f)
       for i = 1, 6 do
         r = CreateFrame("StatusBar", f:GetName().."_Runes"..i, f)
-        r:SetSize(f.width/6 - 2, f.height/3)
+        r:Size(f.width/6 - 2, f.height/3)
         if (i == 1) then
-          r:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 1, 3)
+          r:Point("BOTTOMLEFT", f, "TOPLEFT", 1, 3)
         else
-          r:SetPoint("TOPLEFT", f.Runes[i-1], "TOPRIGHT", 2, 0)
+          r:Point("TOPLEFT", f.Runes[i-1], "TOPRIGHT", 2, 0)
         end
         r:SetStatusBarTexture(DB.Statusbar)
         r:GetStatusBarTexture():SetHorizTile(false)
@@ -716,8 +716,8 @@ C = UnitFrameDB
         r.bd:SetTexture(DB.Statusbar)
         r.bd:SetVertexColor(0.15, 0.15, 0.15)
         f.b = CreateFrame("Frame", nil, r)
-        f.b:SetPoint("TOPLEFT", r, "TOPLEFT", -4, 4)
-        f.b:SetPoint("BOTTOMRIGHT", r, "BOTTOMRIGHT", 4, -5)
+        f.b:Point("TOPLEFT", r, "TOPLEFT", -4, 4)
+        f.b:Point("BOTTOMRIGHT", r, "BOTTOMRIGHT", 4, -5)
         f.b:SetBackdrop(backdrop_tab)
         f.b:SetBackdropColor(0, 0, 0, 0)
         f.b:SetBackdropBorderColor(0,0,0,1)
@@ -729,18 +729,18 @@ C = UnitFrameDB
   lib.gen_EclipseBar = function(f)
 	if class ~= "DRUID" then return end
 	local eb = CreateFrame('Frame', nil, f)
-	eb:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', -3, -1)
-	eb:SetSize(f.width+7, 20)
+	eb:Point('BOTTOMLEFT', f, 'TOPLEFT', -3, -1)
+	eb:Size(f.width+7, 20)
 	lib.gen_backdrop(eb)
 	local lb = CreateFrame('StatusBar', nil, eb)
-	lb:SetPoint('LEFT', eb, 'LEFT', 4, 0)
-	lb:SetSize(f.width-2, 10)
+	lb:Point('LEFT', eb, 'LEFT', 4, 0)
+	lb:Size(f.width-2, 10)
 	lb:SetStatusBarTexture(DB.Statusbar)
 	lb:SetStatusBarColor(0.27, 0.47, 0.74)
 	eb.LunarBar = lb
 	local sb = CreateFrame('StatusBar', nil, eb)
-	sb:SetPoint('LEFT', lb:GetStatusBarTexture(), 'RIGHT', 0, 0)
-	sb:SetSize(f.width-2, 10)
+	sb:Point('LEFT', lb:GetStatusBarTexture(), 'RIGHT', 0, 0)
+	sb:Size(f.width-2, 10)
 	sb:SetStatusBarTexture(DB.Statusbar)
 	sb:SetStatusBarColor(0.9, 0.6, 0.3)
 	eb.SolarBar = sb
@@ -748,11 +748,11 @@ C = UnitFrameDB
 	h:SetAllPoints(eb)
 	h:SetFrameLevel(30)
  	--[[local ebText = lib.gen_fontstring(h, DB.Font, 20, "THINOUTLINE")
-	ebText:SetPoint('CENTER', eb, 'CENTER', 0, 0)
+	ebText:Point('CENTER', eb, 'CENTER', 0, 0)
 	eb.Text = ebText]]
 	f.EclipseBar = eb
 	local ebInd = lib.gen_fontstring(h, DB.Font, (C["FontSize"]+4)*S.Scale(1), "THINOUTLINE")
-	ebInd:SetPoint('CENTER', eb, 'CENTER', 0, 0)
+	ebInd:Point('CENTER', eb, 'CENTER', 0, 0)
 	f.EclipseBar.PostDirectionChange = function(element, unit)
 		local dir = GetEclipseDirection()
 		if dir=="sun" then
@@ -769,34 +769,34 @@ C = UnitFrameDB
 		local width = (f.width + 4) / 4 - 4
 		local height = f.height/3
 		local TotemBar = CreateFrame("Frame", nil, f)
-		TotemBar:SetSize(width,height)
-		TotemBar:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 1, 3)
+		TotemBar:Size(width,height)
+		TotemBar:Point("BOTTOMLEFT", f, "TOPLEFT", 1, 3)
 		TotemBar.Destroy = true
 		TotemBar.UpdateColors = true
 		TotemBar.AbbreviateNames = true
 		for i = 1, 4 do
 			local t = CreateFrame("Frame", nil, TotemBar)
-			t:SetPoint("LEFT", (i - 1) * (width + 3.5), 0)
-			t:SetWidth(width)
-			t:SetHeight(height)
+			t:Point("LEFT", (i - 1) * (width + 3.5), 0)
+			t:Width(width)
+			t:Height(height)
 			local bar = CreateFrame("StatusBar", nil, t)
-			bar:SetWidth(width)
-			bar:SetPoint"BOTTOM"
-			bar:SetHeight(8)
+			bar:Width(width)
+			bar:Point"BOTTOM"
+			bar:Height(8)
 			t.StatusBar = bar
 			local h = CreateFrame("Frame",nil,t)
 			h:SetFrameLevel(10)
 			local time = lib.gen_fontstring(h, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
-			time:SetPoint("BOTTOMRIGHT",t,"TOPRIGHT", 0, -1)
+			time:Point("BOTTOMRIGHT",t,"TOPRIGHT", 0, -1)
 			time:SetFontObject"GameFontNormal"
 			t.Time = time
 			local text = lib.gen_fontstring(h, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
-			text:SetPoint("BOTTOMLEFT", t, "TOPLEFT", 0, -1)
+			text:Point("BOTTOMLEFT", t, "TOPLEFT", 0, -1)
 			--text:SetFontObject"GameFontNormal"
 			t.Text = text
 	        t.bg = CreateFrame("Frame", nil, t)
-			t.bg:SetPoint("TOPLEFT", t, "TOPLEFT", -4, 5)
-			t.bg:SetPoint("BOTTOMRIGHT", t, "BOTTOMRIGHT", 4, -5)
+			t.bg:Point("TOPLEFT", t, "TOPLEFT", -4, 5)
+			t.bg:Point("BOTTOMRIGHT", t, "BOTTOMRIGHT", 4, -5)
 			t.bg:SetBackdrop(backdrop_tab)
 			t.bg:SetBackdropColor(0,0,0,0)
 			t.bg:SetBackdropBorderColor(0,0,0,1)
@@ -816,7 +816,7 @@ C = UnitFrameDB
     h:SetFrameLevel(10)
 	if f.mystyle == "party" then
 		local es = lib.gen_fontstring(h, DB.Font, (C["FontSize"]+2)*S.Scale(1), "THINOUTLINE")
-		es:SetPoint("CENTER", f.Power, "BOTTOMRIGHT",0,0)	
+		es:Point("CENTER", f.Power, "BOTTOMRIGHT",0,0)	
 		if class == "SHAMAN" then
 			f:Tag(es, '[raid:earth]')
 		elseif class == "DRUID" then
@@ -827,9 +827,9 @@ C = UnitFrameDB
 	end
 	if f.mystyle == "player" then
 		local sp = lib.gen_fontstring(h, DB.Font, 30*S.Scale(1), "OUTLINE")
-		sp:SetPoint("TOPLEFT", f.Health, "BOTTOMLEFT",0,0)
-		sp:SetPoint("BOTTOMRIGHT", f.Health, "BOTTOMRIGHT",0,-5)
-		sp:SetWidth(f.Health:GetWidth())
+		sp:Point("TOPLEFT", f.Health, "BOTTOMLEFT",0,0)
+		sp:Point("BOTTOMRIGHT", f.Health, "BOTTOMRIGHT",0,-5)
+		sp:Width(f.Health:GetWidth())
 		sp:SetJustifyH("LEFT")
 		if class == "DRUID" then
 			f:Tag(sp, '[mono:wm1][mono:wm2][mono:wm3]')
@@ -848,14 +848,14 @@ C = UnitFrameDB
     h:SetAllPoints(f.Health)
     h:SetFrameLevel(10)
     local cp = lib.gen_fontstring(h, DB.Font, 20*S.Scale(1), "THINOUTLINE")
-    cp:SetPoint("CENTER", f.Health, "CENTER",0,0)
+    cp:Point("CENTER", f.Health, "CENTER",0,0)
 	cp:SetJustifyH("CENTER")
     f:Tag(cp, '[mono:cp]')
   end
   --gen LFD role indicator
   lib.gen_LFDindicator = function(f)
     local lfdi = lib.gen_fontstring(f.Power, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
-    lfdi:SetPoint("LEFT", f.Power, "LEFT",1,0)
+    lfdi:Point("LEFT", f.Power, "LEFT",1,0)
     f:Tag(lfdi, '[mono:LFD]')
   end
   --gen combat and leader icons
@@ -866,23 +866,23 @@ C = UnitFrameDB
     --combat icon
     if f.mystyle == 'player' then
 		f.Combat = h:CreateTexture(nil, 'OVERLAY')
-		f.Combat:SetSize(20,20)
-		f.Combat:SetPoint('TOPRIGHT', 3, 9)
+		f.Combat:Size(20,20)
+		f.Combat:Point('TOPRIGHT', 3, 9)
     end
     --Leader icon
     li = h:CreateTexture(nil, "OVERLAY")
-    li:SetPoint("TOPLEFT", f, 0, 6)
-    li:SetSize(12,12)
+    li:Point("TOPLEFT", f, 0, 6)
+    li:Size(12,12)
     f.Leader = li
     --Assist icon
     ai = h:CreateTexture(nil, "OVERLAY")
-    ai:SetPoint("TOPLEFT", f, 0, 6)
-    ai:SetSize(12,12)
+    ai:Point("TOPLEFT", f, 0, 6)
+    ai:Size(12,12)
     f.Assistant = ai
     --ML icon
     local ml = h:CreateTexture(nil, 'OVERLAY')
-    ml:SetSize(12,12)
-    ml:SetPoint('LEFT', f.Leader, 'RIGHT')
+    ml:Size(12,12)
+    ml:Point('LEFT', f.Leader, 'RIGHT')
     f.MasterLooter = ml
   end
   --gen raid mark icons
@@ -892,8 +892,8 @@ C = UnitFrameDB
     h:SetFrameLevel(10)
     h:SetAlpha(1)
     local ri = h:CreateTexture(nil,'OVERLAY',h)
-    ri:SetPoint("CENTER", f, "CENTER", 0, 0)
-    ri:SetSize(S.Scale(20), S.Scale(20))
+    ri:Point("CENTER", f, "CENTER", 0, 0)
+    ri:Size(S.Scale(20), S.Scale(20))
     f.RaidIcon = ri
   end
   --gen hilight texture
@@ -934,14 +934,14 @@ C = UnitFrameDB
   end
   lib.gen_arenatracker = function(f)
     t = CreateFrame("Frame", nil, f)
-    t:SetSize(21,21)
-    t:SetPoint("CENTER", f.Power, "CENTER", 0, 0)
+    t:Size(21,21)
+    t:Point("CENTER", f.Power, "CENTER", 0, 0)
     t:SetFrameLevel(30)
     t:SetAlpha(0.8)
     t.trinketUseAnnounce = true
     t.bg = CreateFrame("Frame", nil, t)
-    t.bg:SetPoint("TOPLEFT",-4,4)
-    t.bg:SetPoint("BOTTOMRIGHT",4,-4)
+    t.bg:Point("TOPLEFT",-4,4)
+    t.bg:Point("BOTTOMRIGHT",4,-4)
     t.bg:SetBackdrop(backdrop_tab);
     t.bg:SetBackdropColor(0,0,0,0)
     t.bg:SetBackdropBorderColor(0,0,0,1)
@@ -953,7 +953,7 @@ C = UnitFrameDB
 	at.icon:SetAllPoints(at)
 	at.icon:SetTexCoord(0.07,0.93,0.07,0.93)
 	at.text = lib.gen_fontstring(at, DB.Font, (C["FontSize"]-1)*S.Scale(1), "THINOUTLINE")
-	at.text:SetPoint('CENTER', at, 0, 0)
+	at.text:Point('CENTER', at, 0, 0)
 	at:SetScript('OnUpdate', lib.UpdateAuraTracker)
 	f.AuraTracker = at
   end
@@ -963,7 +963,7 @@ C = UnitFrameDB
     h:SetAllPoints(f.Health)
     h:SetFrameLevel(10)
     local ti = lib.gen_fontstring(h, DB.Font, C["FontSize"], "THINOUTLINE")
-    ti:SetPoint("LEFT", f.Health, "BOTTOMLEFT",-5,0)
+    ti:Point("LEFT", f.Health, "BOTTOMLEFT",-5,0)
     ti:SetJustifyH("LEFT")
     f:Tag(ti, '[mono:targeticon]')
   end
@@ -971,8 +971,8 @@ C = UnitFrameDB
   lib.gen_faketarget = function(f)
     local fhp = CreateFrame("frame","FakeHealthBar",UIParent) 
     fhp:SetAlpha(.6)
-    fhp:SetSize(f.width,f.height)
-    fhp:SetPoint("TOPLEFT",oUF_monoTargetFrame,"TOPLEFT",0,0)
+    fhp:Size(f.width,f.height)
+    fhp:Point("TOPLEFT",oUF_monoTargetFrame,"TOPLEFT",0,0)
     fhp.bg = fhp:CreateTexture(nil, "PARENT")
     fhp.bg:SetTexture(DB.Statusbar)
     fhp.bg:ClearAllPoints()
@@ -980,15 +980,15 @@ C = UnitFrameDB
     fhp.bg:SetVertexColor(.3,.3,.3)
     local h = CreateFrame("Frame",nil,fhp)
     h:SetBackdrop(backdrop_tab)
-    h:SetPoint("TOPLEFT",-3.5,3.5)
-    h:SetPoint("BOTTOMRIGHT",3.5,-3.5)
+    h:Point("TOPLEFT",-3.5,3.5)
+    h:Point("BOTTOMRIGHT",3.5,-3.5)
     h:SetBackdropColor(0,0,0,0)
     h:SetBackdropBorderColor(0,0,0,.7)
 
     local fpp = CreateFrame("frame","FakeManaBar",fhp)
-    fpp:SetWidth(fhp:GetWidth())
-    fpp:SetHeight(f.height/3)
-    fpp:SetPoint("TOPLEFT",FakeHealthBar,"BOTTOMLEFT",0,-2)
+    fpp:Width(fhp:GetWidth())
+    fpp:Height(f.height/3)
+    fpp:Point("TOPLEFT",FakeHealthBar,"BOTTOMLEFT",0,-2)
     fpp.bg = fpp:CreateTexture(nil, "PARENT")
     fpp.bg:SetTexture(DB.Statusbar)
     fpp.bg:ClearAllPoints()
@@ -996,8 +996,8 @@ C = UnitFrameDB
     fpp.bg:SetVertexColor(.30,.45,.65)
     local h2 = CreateFrame("Frame",nil,fpp)
     h2:SetBackdrop(backdrop_tab)
-    h2:SetPoint("TOPLEFT",-3.5,5)
-    h2:SetPoint("BOTTOMRIGHT",3.5,-5)
+    h2:Point("TOPLEFT",-3.5,5)
+    h2:Point("BOTTOMRIGHT",3.5,-5)
     h2:SetBackdropColor(0,0,0,0)
     h2:SetBackdropBorderColor(0,0,0,1)
 
@@ -1017,7 +1017,7 @@ C = UnitFrameDB
 		h:SetAllPoints(f.Health)
 		h:SetFrameLevel(30)
 		local cfbt = lib.gen_fontstring(h, DB.Font, (C["FontSize"]+4)*S.Scale(1), "THINOUTLINE")
-		cfbt:SetPoint("CENTER", f.Health, "BOTTOM", 0, -1)
+		cfbt:Point("CENTER", f.Health, "BOTTOM", 0, -1)
 		cfbt.maxAlpha = 0.75
 		cfbt.ignoreEnergize = true
 		f.CombatFeedbackText = cfbt
@@ -1029,20 +1029,20 @@ C = UnitFrameDB
 		sw = CreateFrame("StatusBar", f:GetName().."_Swing", f)
 		sw:SetStatusBarTexture(DB.Statusbar)
 		sw:SetStatusBarColor(.3, .3, .3)
-		sw:SetHeight(4)
-		sw:SetWidth(f.width)
-		sw:SetPoint("TOP", f.Power, "BOTTOM", 0, -3)
+		sw:Height(4)
+		sw:Width(f.width)
+		sw:Point("TOP", f.Power, "BOTTOM", 0, -3)
 		sw.bg = sw:CreateTexture(nil, "BORDER")
 		sw.bg:SetAllPoints(sw)
 		sw.bg:SetTexture(DB.Statusbar)
 		sw.bg:SetVertexColor(.1, .1, .1, 0.25)
 		sw.bd = CreateFrame("Frame", nil, sw)
 		sw.bd:SetFrameLevel(1)
-		sw.bd:SetPoint("TOPLEFT", -4, 4)
-		sw.bd:SetPoint("BOTTOMRIGHT", 4, -4)
+		sw.bd:Point("TOPLEFT", -4, 4)
+		sw.bd:Point("BOTTOMRIGHT", 4, -4)
 		lib.gen_backdrop(sw.bd)
 		sw.Text = lib.gen_fontstring(sw, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
-		sw.Text:SetPoint("CENTER", 0, 0)
+		sw.Text:Point("CENTER", 0, 0)
 		sw.Text:SetTextColor(1, 1, 1)
 		f.Swing = sw
 	end
@@ -1051,11 +1051,11 @@ C = UnitFrameDB
   lib.gen_alt_powerbar = function(f)
 	local apb = CreateFrame("StatusBar", nil, f)
 	apb:SetFrameLevel(f.Health:GetFrameLevel() + 2)
-	apb:SetSize(f.width/2.2, f.height/3)
+	apb:Size(f.width/2.2, f.height/3)
 	apb:SetStatusBarTexture(DB.Statusbar)
 	apb:GetStatusBarTexture():SetHorizTile(false)
 	apb:SetStatusBarColor(1, 0, 0)
-	apb:SetPoint("BOTTOM", f, "TOP", 0, -f.height/6)
+	apb:Point("BOTTOM", f, "TOP", 0, -f.height/6)
 
 	apb.bg = apb:CreateTexture(nil, "BORDER")
 	apb.bg:SetAllPoints(apb)
@@ -1065,14 +1065,14 @@ C = UnitFrameDB
 	
 	apb.b = CreateFrame("Frame", nil, apb)
 	apb.b:SetFrameLevel(f.Health:GetFrameLevel() + 1)
-	apb.b:SetPoint("TOPLEFT", apb, "TOPLEFT", -4, 4)
-	apb.b:SetPoint("BOTTOMRIGHT", apb, "BOTTOMRIGHT", 4, -5)
+	apb.b:Point("TOPLEFT", apb, "TOPLEFT", -4, 4)
+	apb.b:Point("BOTTOMRIGHT", apb, "BOTTOMRIGHT", 4, -5)
 	apb.b:SetBackdrop(backdrop_tab)
 	apb.b:SetBackdropColor(0, 0, 0, 0)
 	apb.b:SetBackdropBorderColor(0,0,0,1)
 	
 	apb.v = lib.gen_fontstring(apb, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
-	apb.v:SetPoint("CENTER", apb, "CENTER", 0, 0)
+	apb.v:Point("CENTER", apb, "CENTER", 0, 0)
 	f:Tag(apb.v, '[mono:altpower]')
   end
     end

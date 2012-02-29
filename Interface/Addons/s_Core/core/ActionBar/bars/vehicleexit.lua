@@ -5,9 +5,9 @@ local barDB = DB.bars.vehicleexit
 function Module:OnInitialize()
 C = ActionBarDB
 
-  bar:SetHeight(C["ButtonSize"])
-  bar:SetWidth(C["ButtonSize"])
-  bar:SetPoint(C["vehicleexit"].a1,C["vehicleexit"].af,C["vehicleexit"].a2,C["vehicleexit"].x,C["vehicleexit"].y)
+  bar:Height(C["ButtonSize"])
+  bar:Width(C["ButtonSize"])
+  bar:Point(C["vehicleexit"].a1,C["vehicleexit"].af,C["vehicleexit"].a2,C["vehicleexit"].x,C["vehicleexit"].y)
   bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
 
   if barDB.testmode then
