@@ -1,11 +1,11 @@
-local S, C, L, DB = unpack(select(2, ...))
+﻿local S, C, L, DB = unpack(select(2, ...))
 if DB.Nuke == true then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Bar4", "AceEvent-3.0")
 local barDB = DB.bars.bar4  
-  local bar = CreateFrame("Frame","rABS_MultiBarRight",UIParent, "SecureHandlerStateTemplate")
+  local bar = CreateFrame("Frame","SunUIActionBar4",UIParent, "SecureHandlerStateTemplate")
   function Module:OnInitialize()
   C = ActionBarDB
-
+	local a1, af, a2, x, y = unpack(MoveHandleDB["bar4"]) 
   if C["Bar4Layout"] == 2 then
     bar:Width(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
     bar:Height(C["ButtonSize"]*2+C["ButtonSpacing"])
@@ -13,20 +13,18 @@ local barDB = DB.bars.bar4
     bar:Width(C["ButtonSize"])
     bar:Height(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
   end
+   bar:SetScale(C["MainBarSacle"])
   if C["Bar4Layout"] == 2 then
-    bar:Point(C["bar4"].a1,C["bar4"].af,C["bar4"].a2,C["bar4"].x+((C["ButtonSize"]*6+C["ButtonSpacing"]*6)/2),C["bar4"].y-(C["ButtonSize"]*1+C["ButtonSpacing"]*1)+0.5)
+    --bar:Point(a1,af,a2,x+((C["ButtonSize"]*6+C["ButtonSpacing"]*6)/2),y-(C["ButtonSize"]*1+C["ButtonSpacing"]*1)+0.5)
+   MoveHandle.SunUIActionBar4 = S.MakeMove(bar, "SunUIActionBar4", "bar4", C["MainBarSacle"])
   else 
-    bar:Point(C["bar4"].a1,C["bar4"].af,C["bar4"].a2,C["bar4"].x,C["bar4"].y)
+   MoveHandle.SunUIActionBar4 = S.MakeMove(bar, "SunUIActionBar4", "bar4", C["MainBarSacle"])
   end
   bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
   
-  if barDB.testmode then
-    bar:SetBackdrop(DB.backdrop)
-    bar:SetBackdropColor(1,0.8,1,0.6)
-  end
-  bar:SetScale(C["MainBarSacle"])
+ 
 
-  DB.applyDragFunctionality(bar,barDB.userplaced,barDB.locked)
+  
 
   MultiBarRight:SetParent(bar)
 

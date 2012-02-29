@@ -30,16 +30,6 @@ function Module.LoadSettings()
 		["TotemBarSacle"] = 1,
 		["Big4Layout"] = 1,
 		["Style"] = 1,
-		["bar1"] = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 0, y = 15 },
-		["bar2"] = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 0, y = 50 },
-		["bar3"] = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 0, y = 86 }, 
-		["bar4"] = { a1 = "RIGHT", a2 = "RIGHT", af = "UIParent", x = -10, y = 0 }, 
-		["bar5"] = { a1 = "RIGHT", a2 = "RIGHT", af = "UIParent", x = -38, y = 0 }, 
-		["stancebar"] = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 0, y = 170 }, 
-		["petbar"] = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 123, y = 179 }, 
-		["extrabar"] = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = -210, y = 135 },
-		["totembar"] = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 0, y = 166 }, 
-		["vehicleexit"] = { a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 170, y = 130 }, 
 	}
 	if not ActionBarDB then ActionBarDB = {} end
 	for key, value in pairs(Default) do

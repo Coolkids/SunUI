@@ -1,15 +1,15 @@
-local S, C, L, DB = unpack(select(2, ...))
+﻿local S, C, L, DB = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("extra", "AceEvent-3.0")
 local barDB = DB.bars.extrabar
-  local bar = CreateFrame("Frame","rABS_ExtraActionBar",UIParent,"SecureHandlerStateTemplate")
+  local bar = CreateFrame("Frame","SunUIExtraActionBar",UIParent,"SecureHandlerStateTemplate")
   function Module:OnInitialize()
   C = ActionBarDB
-
+  local a1, af, a2, x, y = unpack(MoveHandleDB["extrabar"]) 
   bar:Size(C["ButtonSize"],C["ButtonSize"])
-  bar:Point(C["extrabar"].a1,C["extrabar"].af,C["extrabar"].a2,C["extrabar"].x,C["extrabar"].y)
   bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
   bar:SetScale(C["ExtraBarSacle"])
-  DB.applyDragFunctionality(bar,barDB.userplaced,barDB.locked)
+ 
+  MoveHandle.SunUIExtraActionBar = S.MakeMove(bar, "SunUI特殊按钮", "extrabar", C["ExtraBarSacle"])
 
   --the frame
   local f = ExtraActionBarFrame

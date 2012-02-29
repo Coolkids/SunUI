@@ -1,11 +1,11 @@
-local S, C, L, DB = unpack(select(2, ...))
+﻿local S, C, L, DB = unpack(select(2, ...))
 if DB.Nuke == true then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Bar3", "AceEvent-3.0")
 local barDB = DB.bars.bar3  
-  local bar = CreateFrame("Frame","rABS_MultiBarBottomRight",UIParent, "SecureHandlerStateTemplate")
+  local bar = CreateFrame("Frame","SunUIActionBar3",UIParent, "SecureHandlerStateTemplate")
   function Module:OnInitialize()
   C = ActionBarDB
-
+	local a1, af, a2, x, y = unpack(MoveHandleDB["bar3"]) 
   if C["Bar3Layout"] == 2 then
     bar:Width(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
     bar:Height(C["ButtonSize"]*2+C["ButtonSpacing"])
@@ -13,21 +13,17 @@ local barDB = DB.bars.bar3
     bar:Width(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
     bar:Height(C["ButtonSize"])
   end
+  bar:SetScale(C["MainBarSacle"])
   if C["Bar3Layout"] == 2 then
-    bar:Point(C["bar3"].a1,C["bar3"].af,C["bar3"].a2,C["bar3"].x-((C["ButtonSize"]*6+C["ButtonSpacing"]*6)/2),C["bar3"].y)
+    --bar:Point(a1,af,a2,x-((C["ButtonSize"]*6+C["ButtonSpacing"]*6)/2),y)
+	MoveHandle.SunUIActionBar3 = S.MakeMove(bar, "SunUIActionBar3", "bar3", C["MainBarSacle"])
   else 
-    bar:Point(C["bar3"].a1,C["bar3"].af,C["bar3"].a2,C["bar3"].x,C["bar3"].y)
+   MoveHandle.SunUIActionBar3 = S.MakeMove(bar, "SunUIActionBar3", "bar3", C["MainBarSacle"])
   end
   bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
   
-  if barDB.testmode then
-    bar:SetBackdrop(DB.backdrop)
-    bar:SetBackdropColor(1,0.8,1,0.6)
-  end
-  bar:SetScale(C["MainBarSacle"])
-
-  DB.applyDragFunctionality(bar,barDB.userplaced,barDB.locked)
-
+  
+  
   MultiBarBottomRight:SetParent(bar)
  
   for i=1, 12 do

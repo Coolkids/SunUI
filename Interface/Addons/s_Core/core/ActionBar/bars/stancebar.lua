@@ -1,25 +1,20 @@
-local S, C, L, DB = unpack(select(2, ...))
+﻿local S, C, L, DB = unpack(select(2, ...))
 if DB.Nuke == true then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("stancebar", "AceEvent-3.0")
 local barDB = DB.bars.totembar  
 function Module:OnInitialize()
 C = ActionBarDB  
-
+	local a1, af, a2, x, y = unpack(MoveHandleDB["stancebar"]) 
     local num = NUM_SHAPESHIFT_SLOTS
 
-    local bar = CreateFrame("Frame","rABS_StanceBar",UIParent, "SecureHandlerStateTemplate")
+    local bar = CreateFrame("Frame","SunUIStanceBar",UIParent, "SecureHandlerStateTemplate")
     bar:Width(C["ButtonSize"]*6+C["ButtonSpacing"]*(6-1))
     bar:Height(C["ButtonSize"])
-    bar:Point(C["stancebar"].a1,C["stancebar"].af,C["stancebar"].a2,C["stancebar"].x,C["stancebar"].y)
-    bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
+    --bar:Point(a1,af,a2,x,y)
+    --bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
     
-    if barDB.testmode then
-      bar:SetBackdrop(DB.backdrop)
-      bar:SetBackdropColor(1,0.8,1,0.6)
-    end
     bar:SetScale(C["StanceBarSacle"])
-  
-    DB.applyDragFunctionality(bar,barDB.userplaced,barDB.locked)
+    MoveHandle.SunUIStanceBar = S.MakeMove(bar, "SunUI姿态栏", "stancebar", C["StanceBarSacle"])
 
     ShapeshiftBarFrame:SetParent(bar)
     ShapeshiftBarFrame:EnableMouse(false)

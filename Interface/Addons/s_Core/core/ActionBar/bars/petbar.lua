@@ -1,24 +1,19 @@
-local S, C, L, DB = unpack(select(2, ...))
+﻿local S, C, L, DB = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("petbar ", "AceEvent-3.0")
 local barDB = DB.bars.petbar 
 function Module:OnInitialize()
  C = ActionBarDB 
-
+	local a1, af, a2, x, y = unpack(MoveHandleDB["petbar"]) 
     local num = NUM_PET_ACTION_SLOTS
     
-    local bar = CreateFrame("Frame","rABS_PetBar",UIParent, "SecureHandlerStateTemplate")
+    local bar = CreateFrame("Frame","SunUIPetBar",UIParent, "SecureHandlerStateTemplate")
     bar:Width(C["ButtonSize"]*num+C["ButtonSpacing"]*(num-1))
     bar:Height(C["ButtonSize"])
-    bar:Point(C["petbar"].a1,C["petbar"].af,C["petbar"].a2,C["petbar"].x,C["petbar"].y)
     bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
     
-    if barDB.testmode then
-      bar:SetBackdrop(DB.backdrop)
-      bar:SetBackdropColor(1,0.8,1,0.6)
-    end
     bar:SetScale(C["PetBarSacle"])
   
-    DB.applyDragFunctionality(bar,barDB.userplaced,barDB.locked)
+    MoveHandle.SunUIPetBar = S.MakeMove(bar, "SunUI宠物条", "petbar", C["PetBarSacle"])
 
     PetActionBarFrame:SetParent(bar)
     PetActionBarFrame:EnableMouse(false)

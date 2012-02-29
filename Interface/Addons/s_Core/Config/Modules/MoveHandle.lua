@@ -26,6 +26,16 @@ function Module.LoadSettings()
 		["InfoPanel"] = {"TOPLEFT", "UIParent", "TOPLEFT", 5, -5},
 		["InfoPanel2"] = {"TOPRIGHT", "Minimap", "BOTTOMRIGHT", 0, -5},
 		["RollFrame"] = {"TOP", "UIParent", "TOP", 0, -200},
+		["bar1"] = {"BOTTOM", "UIParent", "BOTTOM", 0, 15 },
+		["bar2"] = {"BOTTOM", "UIParent", "BOTTOM", 0, 50 },
+		["bar3"] = {"BOTTOM", "UIParent", "BOTTOM", 0, 86 }, 
+		["bar4"] = {"RIGHT", "UIParent", "RIGHT", -10, 0 }, 
+		["bar5"] = {"RIGHT", "UIParent", "RIGHT", -38, 0 }, 
+		["stancebar"] = {"BOTTOM", "UIParent", "BOTTOM", 0, 170 }, 
+		["petbar"] = {"BOTTOM", "UIParent", "BOTTOM", 123, 179 }, 
+		["extrabar"] = {"BOTTOM", "UIParent", "BOTTOM", -210, 135 },
+		["totembar"] = {"BOTTOM", "UIParent", "BOTTOM", 0, 166 }, 
+		["vehicleexit"] = {"BOTTOM", "UIParent", "BOTTOM", 170, 130 }, 
 	}
 	if not MoveHandleDB then MoveHandleDB = {} end
 	for key, value in pairs(Default) do

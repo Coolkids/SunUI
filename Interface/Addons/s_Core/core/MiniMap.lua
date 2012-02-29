@@ -5,7 +5,7 @@ if DB.Nuke == true then return end
 Minimap:SetMaskTexture("Interface\\ChatFrame\\ChatFrameBackground")
 Minimap:SetFrameStrata("BACKGROUND")
 Minimap:ClearAllPoints()
-Minimap:Size(S.Scale(145), S.Scale(145))
+Minimap:Size(145)
 Minimap:CreateShadow()
 
 function Module:OnInitialize()

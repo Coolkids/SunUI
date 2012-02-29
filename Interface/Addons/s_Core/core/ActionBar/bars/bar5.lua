@@ -1,4 +1,4 @@
-local S, C, L, DB = unpack(select(2, ...))
+﻿local S, C, L, DB = unpack(select(2, ...))
 if DB.Nuke == true then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Bar5", "AceEvent-3.0")
 function Module:OnInitialize()
@@ -7,18 +7,8 @@ if C["Big4Layout"] == 1 then
 
 local barDB = DB.bars.bar5  
   local bar = CreateFrame("Frame","rABS_MultiBarLeft",UIParent, "SecureHandlerStateTemplate")
-  bar:Height(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
-  bar:Width(C["ButtonSize"])
-  bar:Point(C["bar5"].a1,C["bar5"].af,C["bar5"].a2,C["bar5"].x,C["bar5"].y)
-  bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
-  
-  if barDB.testmode then
-    bar:SetBackdrop(DB.backdrop)
-    bar:SetBackdropColor(1,0.8,1,0.6)
-  end
-  bar:SetScale(C["MainBarSacle"])
 
-  DB.applyDragFunctionality(bar,barDB.userplaced,barDB.locked)
+  bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
 
   MultiBarLeft:SetParent(bar)
 

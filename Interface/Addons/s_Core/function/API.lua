@@ -387,6 +387,36 @@ function S.MakeMoveHandle(Frame, Text, key)
 	Frame:SetPoint("CENTER", MoveHandle)
 	return MoveHandle
 end
+function S.MakeMove(Frame, Text, key, a)
+	local MoveHandle = CreateFrame("Frame", nil, UIParent)
+	MoveHandle:SetSize(Frame:GetWidth(), Frame:GetHeight())
+	MoveHandle:SetScale(a)
+	MoveHandle:SetFrameStrata("HIGH")
+	MoveHandle:SetBackdrop({bgFile = DB.Solid})
+	MoveHandle:SetBackdropColor(0, 0, 0, 0.9)
+	if a < 1 then
+	MoveHandle.Text = S.MakeFontString(MoveHandle, 10*(1+a))
+	elseif a <= 1.5 and a >= 1 then
+	MoveHandle.Text = S.MakeFontString(MoveHandle, 11)
+	elseif a > 1.5 then
+	MoveHandle.Text = S.MakeFontString(MoveHandle, 8)
+	end
+	MoveHandle.Text:SetPoint("CENTER")
+	MoveHandle.Text:SetText(Text)
+	MoveHandle:SetPoint(unpack(MoveHandleDB[key]))
+	MoveHandle:EnableMouse(true)
+	MoveHandle:SetMovable(true)
+	MoveHandle:RegisterForDrag("LeftButton")
+	MoveHandle:SetScript("OnDragStart", function(self) MoveHandle:StartMoving() end)
+	MoveHandle:SetScript("OnDragStop", function(self)
+		self:StopMovingOrSizing()
+		local AnchorF, _, AnchorT, X, Y = self:GetPoint()
+		MoveHandleDB[key] = {AnchorF, "UIParent", AnchorT, X, Y}
+	end)
+	MoveHandle:Hide()
+	Frame:SetPoint("CENTER", MoveHandle)
+	return MoveHandle
+end
  function S.StripTextures(object, kill)
 	for i=1, object:GetNumRegions() do
 		local region = select(i, object:GetRegions())

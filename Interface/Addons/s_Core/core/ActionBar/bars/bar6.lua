@@ -5,8 +5,8 @@ function Module:OnInitialize()
 C = ActionBarDB 
 if C["Big4Layout"] == 2 then
   local barDB = DB.bars.bar5
-  local bar = CreateFrame("Frame","rABS_MultiBarLeft",UIParent, "SecureHandlerStateTemplate")
-
+  local bar = CreateFrame("Frame","SunUIActionBar5",UIParent, "SecureHandlerStateTemplate")
+	local a1, af, a2, x, y = unpack(MoveHandleDB["bar5"]) 
 
   if C["Bar5Layout"] == 2 then
     bar:Width(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
@@ -16,19 +16,16 @@ if C["Big4Layout"] == 2 then
     bar:Height(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
   end
   if C["Bar5Layout"] == 2 then
-    bar:Point(C["bar5"].a1,C["bar5"].af,C["bar5"].a2,C["bar5"].x+((C["ButtonSize"]*6+C["ButtonSpacing"]*6)/2),C["bar5"].y-(C["ButtonSize"]*1+C["ButtonSpacing"]*1)+0.5)
+    --bar:Point(a1,af,a2,x+((C["ButtonSize"]*6+C["ButtonSpacing"]*6)/2),y-(C["ButtonSize"]*1+C["ButtonSpacing"]*1)+0.5)
+	MoveHandle.SunUIActionBar5 = S.MakeMove(bar, "SunUIActionBar5", "bar5", C["MainBarSacle"])
   else 
-    bar:Point(C["bar5"].a1,C["bar5"].af,C["bar5"].a2,C["bar5"].x,C["bar5"].y)
+    MoveHandle.SunUIActionBar5 = S.MakeMove(bar, "SunUIActionBar5", "bar5", C["MainBarSacle"])
   end
   bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
   
-  if barDB.testmode then
-    bar:SetBackdrop(DB.backdrop)
-    bar:SetBackdropColor(1,0.8,1,0.6)
-  end
   bar:SetScale(C["MainBarSacle"])
 
-  DB.applyDragFunctionality(bar,barDB.userplaced,barDB.locked)
+  
 
   MultiBarLeft:SetParent(bar)
  if C["Bar5Layout"] == 1 then 

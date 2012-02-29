@@ -1,11 +1,11 @@
-local S, C, L, DB = unpack(select(2, ...))
+﻿local S, C, L, DB = unpack(select(2, ...))
 if DB.Nuke == true then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Bar1", "AceEvent-3.0")
 local barDB = DB.bars.bar1
-  local bar = CreateFrame("Frame","rABS_MainMenuBar",UIParent, "SecureHandlerStateTemplate")
+local bar = CreateFrame("Frame","SunUIActionBar1",UIParent, "SecureHandlerStateTemplate")
 function Module:OnInitialize()
 	C = ActionBarDB
-
+	local a1, af, a2, x, y = unpack(MoveHandleDB["bar1"]) 
   if C["Bar1Layout"] == 2 then
     bar:Width(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
     bar:Height(C["ButtonSize"]*2+C["ButtonSpacing"])
@@ -13,21 +13,16 @@ function Module:OnInitialize()
     bar:Width(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
     bar:Height(C["ButtonSize"])
   end
+  bar:SetScale(C["MainBarSacle"])
   if C["Bar1Layout"] == 2 then
-    bar:Point(C["bar1"].a1,C["bar1"].af,C["bar1"].a2,C["bar1"].x-((C["ButtonSize"]*6+C["ButtonSpacing"]*6)/2),C["bar1"].y)
+    --bar:Point(a1,af,a2,x-((C["ButtonSize"]*6+C["ButtonSpacing"]*6)/2),y)
+	 MoveHandle.SunUIActionBar1 = S.MakeMove(SunUIActionBar1, "SunUIActionBar1", "bar1", C["MainBarSacle"])
+
   else
-    bar:Point(C["bar1"].a1,C["bar1"].af,C["bar1"].a2,C["bar1"].x,C["bar1"].y)
+    MoveHandle.SunUIActionBar1 = S.MakeMove(SunUIActionBar1, "SunUIActionBar1", "bar1", C["MainBarSacle"])
   end
   bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
 
-  if barDB.testmode then
-    bar:SetBackdrop(DB.backdrop)
-    bar:SetBackdropColor(1,0.8,1,0.6)
-  end
-  bar:SetScale(C["MainBarSacle"])
-
-  DB.applyDragFunctionality(bar,barDB.userplaced,barDB.locked)
-end
   local Page = {
     ["DRUID"] = "[bonusbar:1,nostealth] 7; [bonusbar:1,stealth] 8; [bonusbar:2] 8; [bonusbar:3] 9; [bonusbar:4] 10;",
     ["WARRIOR"] = "[bonusbar:1] 7; [bonusbar:2] 8; [bonusbar:3] 9;",
@@ -96,11 +91,6 @@ end
     else
        MainMenuBar_OnEvent(self, event, ...)
     end
---[[ 	bar:SetScript("OnEnter", function(self, event, ...)
-	UIFrameFadeIn(rABS_MainMenuBar, 0.8, 0, 1)
-	end)
-	bar:SetScript("OnLeave", function(self, event, ...)
-	UIFrameFadeOut(rABS_MainMenuBar, 1.5, 1,  0)
-	end) ]]
+
   end)
- 
+ end

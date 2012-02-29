@@ -7,13 +7,13 @@ local barDB = DB.bars.totembar
   if DB.MyClass == "SHAMAN" then
   function Module:OnInitialize()
 	C = ActionBarDB
+	local a1, af, a2, x, y = unpack(MoveHandleDB["totembar"]) 
     local f = _G['MultiCastActionBarFrame']
-    local bar = CreateFrame("Frame","rABS_TotemBar",UIParent,"SecureHandlerStateTemplate")
+    local bar = CreateFrame("Frame","SunUITotemBar",UIParent,"SecureHandlerStateTemplate")
     bar:Width(f:GetWidth())
     bar:Height(f:GetHeight())
-    bar:Point(C["totembar"].a1,C["totembar"].af,C["totembar"].a2,C["totembar"].x,C["totembar"].y)
     bar:SetScale(C["TotemBarSacle"])
-    DB.applyDragFunctionality(bar,barDB.userplaced,barDB.locked)
+    MoveHandle.SunUITotemBar = S.MakeMove(bar, "SunUI图腾栏", "totembar", C["TotemBarSacle"])
 	
     bar:SetAttribute("_onstate-vis", [[
       if not newstate then return end
