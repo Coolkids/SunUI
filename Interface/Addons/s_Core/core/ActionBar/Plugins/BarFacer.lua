@@ -5,13 +5,13 @@ function Module:OnInitialize()
 local autohide = CreateFrame("Frame")
 local rabs = {}
 
-if rABS_StanceBar and ActionBarDB["EnableBarFader"] then table.insert(rabs, "rABS_StanceBar") end
-if rABS_PetBar and ActionBarDB["EnableBarFader"] then table.insert(rabs, "rABS_PetBar") end
-if rABS_MainMenuBar and ActionBarDB["EnableBarFader"] then table.insert(rabs, "rABS_MainMenuBar") end
-if rABS_MultiBarBottomLeft and ActionBarDB["EnableBarFader"] then table.insert(rabs, "rABS_MultiBarBottomLeft") end
-if rABS_MultiBarBottomRight and ActionBarDB["EnableBarFader"] then table.insert(rabs, "rABS_MultiBarBottomRight") end
-if rABS_MultiBarLeft and ActionBarDB["EnableBarFader"] then table.insert(rabs, "rABS_MultiBarLeft") end
-if rABS_MultiBarRight and ActionBarDB["EnableBarFader"] then table.insert(rabs, "rABS_MultiBarRight") end
+if SunUIStanceBar and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIStanceBar") end
+if SunUIPetBar and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIPetBar") end
+if SunUIActionBar1 and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIActionBar1") end
+if SunUIActionBar2 and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIActionBar2") end
+if SunUIActionBar3 and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIActionBar3") end
+if SunUIActionBar4 and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIActionBar4") end
+if SunUIActionBar5 and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIActionBar5") end
 
 if #rabs == 0 then return end
 
@@ -70,20 +70,20 @@ local function SetUpFlyout()
 		local button = _G["SpellFlyoutButton"..i]
 		if button then
 			if button:GetParent():GetParent():GetParent() == MultiBarLeft  then
-				button:SetScript("OnEnter", function(self) UIFrameFadeIn(rABS_MultiBarRight,0.5,rABS_MultiBarRight:GetAlpha(),1) end)
-				button:SetScript("OnLeave", function(self) UIFrameFadeOut(rABS_MultiBarRight,0.5,rABS_MultiBarRight:GetAlpha(),0) end)
+				button:SetScript("OnEnter", function(self) UIFrameFadeIn(SunUIActionBar5,0.5,SunUIActionBar5:GetAlpha(),1) end)
+				button:SetScript("OnLeave", function(self) UIFrameFadeOut(SunUIActionBar5,0.5,SunUIActionBar5:GetAlpha(),0) end)
 			end
 			if button:GetParent():GetParent():GetParent() == MultiBarRight then
-				button:SetScript("OnEnter", function(self) UIFrameFadeIn(rABS_MultiBarLeft,0.5,rABS_MultiBarLeft:GetAlpha(),1) end)
-				button:SetScript("OnLeave", function(self) UIFrameFadeOut(rABS_MultiBarLeft,0.5,rABS_MultiBarLeft:GetAlpha(),0) end)
+				button:SetScript("OnEnter", function(self) UIFrameFadeIn(SunUIActionBar4,0.5,SunUIActionBar4:GetAlpha(),1) end)
+				button:SetScript("OnLeave", function(self) UIFrameFadeOut(SunUIActionBar4,0.5,SunUIActionBar4:GetAlpha(),0) end)
 			end
 			if button:GetParent():GetParent():GetParent() == MultiBarBottomRight then
-				button:SetScript("OnEnter", function(self) UIFrameFadeIn(rABS_MultiBarBottomRight,0.5,rABS_MultiBarBottomRight:GetAlpha(),1) end)
-				button:SetScript("OnLeave", function(self) UIFrameFadeOut(rABS_MultiBarBottomRight,0.5,rABS_MultiBarBottomRight:GetAlpha(),0) end)
+				button:SetScript("OnEnter", function(self) UIFrameFadeIn(SunUIActionBar3,0.5,SunUIActionBar3:GetAlpha(),1) end)
+				button:SetScript("OnLeave", function(self) UIFrameFadeOut(SunUIActionBar3,0.5,SunUIActionBar3:GetAlpha(),0) end)
 			end
 			if button:GetParent():GetParent():GetParent() == MultiBarBottomLeft then
-				button:SetScript("OnEnter", function(self) UIFrameFadeIn(rABS_MultiBarBottomLeft,0.5,rABS_MultiBarBottomLeft:GetAlpha(),1) end)
-				button:SetScript("OnLeave", function(self) UIFrameFadeOut(rABS_MultiBarBottomLeft,0.5,rABS_MultiBarBottomLeft:GetAlpha(),0) end)
+				button:SetScript("OnEnter", function(self) UIFrameFadeIn(SunUIActionBar2,0.5,SunUIActionBar2:GetAlpha(),1) end)
+				button:SetScript("OnLeave", function(self) UIFrameFadeOut(SunUIActionBar2,0.5,SunUIActionBar2:GetAlpha(),0) end)
 			end
 		end
 	end
