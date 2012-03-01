@@ -58,10 +58,16 @@ local function BuildGuildTable()
 	for i = 1, GetNumGuildMembers() do
 		name, rank, rankIndex, level, _, zone, note, officernote, connected, status, class = GetGuildRosterInfo(i)
 		-- we are only interested in online members
-		
+		if status == 0 then
+                           sflag = ""
+                        elseif status == 1 then
+                           sflag = "|cffFFFFFF [|r|cffFF0000"..'AFK'.."|r|cffFFFFFF]|r"
+                        else
+                           sflag = "|cffFFFFFF [|r|cffFF0000"..'DND'.."|r|cffFFFFFF]|r"
+          end
 		if connected then 
 			count = count + 1
-			guildTable[count] = { name, rank, level, zone, note, officernote, connected, status, class, rankIndex }
+			guildTable[count] = { name, rank, level, zone, note, officernote, connected, sflag, class, rankIndex }
 		end
 	end
 	SortGuildTable(IsShiftKeyDown())
@@ -206,8 +212,8 @@ Stat:SetScript("OnEnter", function(self)
 			local currentXP, nextLevelXP, percentTotal = unpack(guildXP[0])
 			local dailyXP, maxDailyXP, percentDaily = unpack(guildXP[1])
 					
-			GameTooltip:AddLine(format(guildXpCurrentString, R.ShortValue(currentXP), R.ShortValue(nextLevelXP), percentTotal))
-			GameTooltip:AddLine(format(guildXpDailyString, R.ShortValue(dailyXP), R.ShortValue(maxDailyXP), percentDaily))
+			GameTooltip:AddLine(format(guildXpCurrentString, S.ShortValue(currentXP), S.ShortValue(nextLevelXP), percentTotal))
+			GameTooltip:AddLine(format(guildXpDailyString, S.ShortValue(dailyXP), S.ShortValue(maxDailyXP), percentDaily))
 		end
 	end
 	
