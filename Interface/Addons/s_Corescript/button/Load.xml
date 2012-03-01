@@ -9,4 +9,5 @@
 	<Script file = "hide.lua"/>
 	<Script file = "MBB.lua"/>
 	<Script file = "StatReport.lua"/>
+	<Script file = "RaidCheck.lua"/>
 </Ui>

@@ -10,7 +10,7 @@ Stat:SetFrameStrata("MEDIUM")
 Stat:SetFrameLevel(3)
 
 local text  = Stat:CreateFontString(nil, "OVERLAY")
-text:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")
+text:SetFont(DB.Font, 12*S.Scale(1)*MiniDB["FontScale"], "THINOUTLINE")
 text:SetShadowOffset(1.25, -1.25)
 text:SetShadowColor(0, 0, 0, 0.4)
 text:Point("BOTTOMRIGHT", BottomLeftBar, "BOTTOMRIGHT",-15, -8)
