@@ -7,7 +7,7 @@ function Module:OnInitialize()
     local num = NUM_PET_ACTION_SLOTS
     
     local bar = CreateFrame("Frame","SunUIPetBar",UIParent, "SecureHandlerStateTemplate")
-    bar:Width(C["ButtonSize"]*num+C["ButtonSpacing"]*(num-1)+10)
+    bar:Width(C["ButtonSize"]*num+C["ButtonSpacing"]*(num-1))
     bar:Height(C["ButtonSize"])
     bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
     

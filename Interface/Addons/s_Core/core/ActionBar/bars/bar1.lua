@@ -10,7 +10,7 @@ function Module:OnInitialize()
     bar:SetWidth(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
     bar:SetHeight(C["ButtonSize"]*2+C["ButtonSpacing"])
   else
-    bar:SetWidth(C["ButtonSize"]*12+C["ButtonSpacing"]*11+10)
+    bar:SetWidth(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
     bar:SetHeight(C["ButtonSize"])
   end
   bar:SetScale(C["MainBarSacle"])
