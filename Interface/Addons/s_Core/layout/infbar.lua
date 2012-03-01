@@ -283,49 +283,8 @@ local function BuildDurability(Anchor)
 end
 
 -- BuildCurrency
-local function BuildCurrencyTable(Anchor)
-	for _, value in ipairs(tokens) do
-		local CurrencyID, CurrencyMax = unpack(value)
-		local name, amount, icon = GetCurrencyInfo(CurrencyID)
-		if name and amount > 0 then
-			local StatusBar = CreateFrame("StatusBar", nil, UIParent)
-			StatusBar:Height(6)	
-			StatusBar:Width(120)
-			StatusBar:SetStatusBarTexture(DB.Statusbar)
-			StatusBar:SetMinMaxValues(0, CurrencyMax)
-			StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
-			StatusBar:CreateShadow("Background")
-			StatusBar.Text = S.MakeFontString(StatusBar, 10)
-			StatusBar.Text:SetPoint("RIGHT")
-			StatusBar.Icon = StatusBar:CreateTexture(nil, "OVERLAY")
-			StatusBar.Icon:Point("RIGHT", StatusBar, "LEFT", -5, 0)
-			StatusBar.Icon:Width(16)
-			StatusBar.Icon:Height(16)
-			StatusBar.Icon.Shaodow = S.MakeTexShadow(StatusBar, StatusBar.Icon, 3)
-			StatusBar.CurrencyID = CurrencyID
-			StatusBar.CurrencyMax = CurrencyMax
-			StatusBar:Hide()
-			tinsert(CurrencyTable, StatusBar)
-		end
-	end
-	for key, value in ipairs(CurrencyTable) do
-		if key == 1 then
-			value:Point("TOP", Anchor, "BOTTOM", 8, -30)
-		else
-			value:Point("TOP", CurrencyTable[key-1], "BOTTOM", 0, -20)
-		end
-	end
-end
-local function UpdateCurrencyData()
-	for _, value in ipairs(CurrencyTable) do
-		local _, amount, texture = GetCurrencyInfo(value.CurrencyID)
-		value:SetValue(amount)
-		value.Text:SetText(format("%s / %s", amount, value.CurrencyMax))
-		value.Icon:SetTexture("Interface\\Icons\\"..texture)
-	end
-end
 local function BuildCurrency(Anchor)
-	local StatusBar = CreateFrame("StatusBar", nil, UIParent)
+	local StatusBar = CreateFrame("StatusBar", "Currency", UIParent)
 	StatusBar:Height(6)	
 	StatusBar:Width(80)
 	StatusBar:SetStatusBarTexture(DB.Statusbar)
@@ -340,24 +299,10 @@ local function BuildCurrency(Anchor)
 		self.Timer = self.Timer + elapsed
 		if self.Timer > 1 then
 			self.Timer = 0
-			local Gold = GetMoney()
-			self.Text:SetText(("%d |cffffd700G|r %d |cffc7c7cfS|r"):format(floor(Gold/10000), floor((Gold-floor(Gold/10000)*10000)/100)))	
+			local Gold = GetMoney()	
 			self:SetValue(Gold/100/100)
 		end
 	end)
-	StatusBar:SetScript("OnEnter", function(self)
-		UpdateCurrencyData()
-		for _, value in pairs(CurrencyTable) do
-			if value and not value:IsShown() then value:Show() end
-		end
-	end)
-	StatusBar:SetScript("OnLeave", function(self)
-		UpdateCurrencyData()
-		for _, value in pairs(CurrencyTable) do
-			if value and value:IsShown() then value:Hide() end
-		end
-	end)
-	BuildCurrencyTable(StatusBar)
 	return StatusBar
 end
 

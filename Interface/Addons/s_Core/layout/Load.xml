@@ -1,5 +1,6 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file = "infbar.lua"/>
+	<Script file = "Gold.lua"/>
 	<Script file = "friend.lua"/>
 	<Script file = "guild.lua"/>
 	<Script file = "specswitch.lua"/>
