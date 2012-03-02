@@ -400,7 +400,7 @@ local whisper
 function window:ShowWhisperWindow()
 	if not whisper then
 		whisper = CreateFrame("Frame", nil, window)
-		whisperCreateShadow("Background")
+		whisper:CreateShadow("Background")
 
 		whisper:SetWidth(200)
 		whisper:SetHeight(45)
