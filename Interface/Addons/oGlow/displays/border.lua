@@ -19,7 +19,7 @@ local createBorder = function(self, point)
 		--bc:SetBlendMode("ADD")
 		--bc:SetAlpha(.9)
 		bc:SetBackdrop({
-			edgeFile = "Interface\\Addons\\s_Core\\media\\glowTex",   --"Interface\\ChatFrame\\ChatFrameBackground", 
+			edgeFile = "Interface\\Addons\\!SunUI\\media\\glowTex",   --"Interface\\ChatFrame\\ChatFrameBackground", 
 			edgeSize = 4, 
 		})
 

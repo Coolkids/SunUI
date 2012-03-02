@@ -1,32 +1,10 @@
-local F, C = unpack(Aurora)
+local S, _, L, DB = unpack(SunUI)
 local addon = select(2, ...)
-function MakeShadow(Parent, Size)
-	local Shadow = CreateFrame("Frame", nil, Parent)
-	Shadow:SetFrameLevel(0)
-	Shadow:SetPoint("TOPLEFT", -Size, Size)
-	Shadow:SetPoint("BOTTOMRIGHT", Size, -Size)
-	Shadow:SetPoint("TOPRIGHT", Size, Size)
-	Shadow:SetPoint("BOTTOMLEFT", -Size, -Size)
-	Shadow:SetBackdrop({edgeFile = "Interface\\Addons\\s_Core\\Media\\glowTex", edgeSize = Size})
-	Shadow:SetBackdropColor( .05, .05, .05, .9)
-	Shadow:SetBackdropBorderColor(0, 0, 0, 1)
-	return Shadow
-end
+
 local window = CreateFrame("Frame", "NumerationFrame", UIParent)
-window.bg = CreateFrame("Frame", nil, window)
-window.bg:SetFrameLevel(1)
-window.bg:SetFrameStrata(window:GetFrameStrata())
-window.bg:SetPoint("TOPLEFT")
-window.bg:SetPoint("BOTTOMRIGHT")
-window.bg:SetBackdrop({
-	bgFile = "Interface\\ChatFrame\\ChatFrameBackground", 
-	edgeFile = "Interface\\ChatFrame\\ChatFrameBackground", 
-	edgeSize = 1,
-})
-window.bg:SetBackdropColor( 0, 0, 0, 0.6 )
-window.bg:SetBackdropBorderColor( .05,.05,.05, .9 )
+window:CreateShadow("Background")
 addon.window = window
-MakeShadow(window, 3)
+
 local lines = {}
 
 local noop = function() end
@@ -56,7 +34,7 @@ local reportFunction = function(f, chatType, channel)
 	CloseDropDownMenus()
 end
 local dropdown = CreateFrame("Frame", "NumerationMenuFrame", nil, "UIDropDownMenuTemplate")
-MakeShadow(dropdown, 3)
+dropdown:CreateShadow("Background")
 local menuTable = {
 	{ text = "Numeration", isTitle = true, notCheckable = true, notClickable = true },
 	{ text = "报告", notCheckable = true, hasArrow = true,
@@ -170,7 +148,7 @@ function window:OnInitialize()
 		end)
 		reset:SetScript("OnEnter", function() reset:SetBackdropColor(s.buttonhighlightcolor[1], s.buttonhighlightcolor[2], s.buttonhighlightcolor[3], .3) end)
 		reset:SetScript("OnLeave", function() reset:SetBackdropColor(0, 0, 0, s.titlealpha) end)
-	F.Reskin(reset)
+	S.Reskin(reset)
 	local segment = CreateFrame("Button", nil, self)
 	self.segment = segment
 		segment:SetBackdrop(backdrop)
@@ -197,7 +175,7 @@ function window:OnInitialize()
 			GameTooltip:Show()
 		end)
 		segment:SetScript("OnLeave", function() segment:SetBackdropColor(0, 0, 0, s.titlealpha/2) GameTooltip:Hide() end)
-	F.Reskin(segment)
+	S.Reskin(segment)
 	local title = self:CreateTexture(nil, "ARTWORK")
 	self.title = title
 		title:SetTexture([[Interface\TargetingFrame\UI-StatusBar]])
@@ -364,19 +342,7 @@ local reset
 function window:ShowResetWindow()
 	if not reset then
 		reset = CreateFrame("Frame", nil, window)
-		MakeShadow(reset, 3)
-		reset.bg = CreateFrame("Frame", nil, reset)
-		reset.bg:SetFrameLevel(1)
-		reset.bg:SetFrameStrata(reset:GetFrameStrata())
-		reset.bg:SetPoint("TOPLEFT")
-		reset.bg:SetPoint("BOTTOMRIGHT")
-		reset.bg:SetBackdrop({
-			bgFile = "Interface\\ChatFrame\\ChatFrameBackground", 
-			edgeFile = "Interface\\Addons\\Numeration\\glow", 
-			edgeSize = 1,
-		})
-		reset.bg:SetBackdropColor( 0, 0, 0, 0.6 )
-		reset.bg:SetBackdropBorderColor( 0, 0, 0 )
+		reset:CreateShadow("Background")
 		reset:SetWidth(200)
 		reset:SetHeight(45)
 		reset:SetPoint("CENTER", UIParent, "CENTER", 0, 200)
@@ -399,7 +365,7 @@ function window:ShowResetWindow()
 			edgeSize = 1, 
 		})
 		reset.yes:SetBackdropBorderColor(0, 0, 0)
-		F.Reskin(reset.yes)
+		S.Reskin(reset.yes)
 		local tex = reset.yes:CreateTexture(nil, "BACKGROUND")
 		tex:SetPoint("TOPLEFT")
 		tex:SetPoint("BOTTOMRIGHT")
@@ -424,7 +390,7 @@ function window:ShowResetWindow()
 		tex2:SetPoint("BOTTOMRIGHT")
 		tex2:SetTexture("Interface\\ChatFrame\\ChatFrameBackground")
 		tex2:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
-		F.Reskin(reset.no)
+		S.Reskin(reset.no)
 	end
 
 	reset:Show()
@@ -434,19 +400,8 @@ local whisper
 function window:ShowWhisperWindow()
 	if not whisper then
 		whisper = CreateFrame("Frame", nil, window)
-		MakeShadow(whisper, 3)
-		whisper.bg = CreateFrame("Frame", nil, whisper)
-		whisper.bg:SetFrameLevel(1)
-		whisper.bg:SetFrameStrata(whisper:GetFrameStrata())
-		whisper.bg:SetPoint("TOPLEFT")
-		whisper.bg:SetPoint("BOTTOMRIGHT")
-		whisper.bg:SetBackdrop({
-			bgFile = "Interface\\ChatFrame\\ChatFrameBackground", 
-			edgeFile = "Interface\\ChatFrame\\ChatFrameBackground", 
-			edgeSize = 1,
-		})
-		whisper.bg:SetBackdropColor( 0, 0, 0, 0.6 )
-		whisper.bg:SetBackdropBorderColor( 0, 0, 0 )
+		whisperCreateShadow("Background")
+
 		whisper:SetWidth(200)
 		whisper:SetHeight(45)
 		whisper:SetPoint("CENTER", UIParent, "CENTER", 0, 200)
@@ -482,7 +437,7 @@ function window:ShowWhisperWindow()
 			edgeSize = 1, 
 		})
 		whisper.yes:SetBackdropBorderColor(0, 0, 0)
-		F.Reskin(whisper.yes)
+		S.Reskin(whisper.yes)
 		local tex = whisper.yes:CreateTexture(nil, "BACKGROUND")
 		tex:SetPoint("TOPLEFT")
 		tex:SetPoint("BOTTOMRIGHT")

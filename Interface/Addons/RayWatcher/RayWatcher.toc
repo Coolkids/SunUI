@@ -1,8 +1,9 @@
 ﻿## Interface: 40300
 ## Title: |cff7aa6d6Ray|r|cffff0000W|r|cff7aa6d6atcher|r
-## Version: 2.0 beta
+## Version: 2.1
 ## Author: Ray
 ## SavedVariables: RayWatcherDB
+## RequiredDeps: !SunUI
 
 libs\libs.xml
 locale\locale.xml

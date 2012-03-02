@@ -13,7 +13,14 @@
 ---------------------------------------------------------------------------------------------------
 
 local _, ns = ...
-local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/0.8
+local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/0.7
+local reloadborder = CreateFrame("Frame")   
+reloadborder:RegisterEvent("PLAYER_ENTERING_WORLD")
+reloadborder:RegisterEvent("UI_SCALE_CHANGED")
+reloadborder:SetScript("OnEvent", function()
+   reloadborder:UnregisterEvent("PLAYER_ENTERING_WORLD")
+   mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/UIParent:GetEffectiveScale()
+end)
 function Scale(x)
 	return (mult*math.floor(x/mult+.5))
 end
@@ -468,11 +475,11 @@ ns.watchers ={
 				-- 佈道
 				{ spellID = 81661, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 心靈意志
-				{ spellID = 73413, unitId = "player", caster = "player", filter = "BUFF" },
+				--{ spellID = 73413, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 心靈之火
-				{ spellID =   588, unitId = "player", caster = "player", filter = "BUFF" },
+				--{ spellID =   588, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 吸血鬼的擁抱
-				{ spellID = 15286, unitId = "player", caster = "player", filter = "BUFF" },
+				--{ spellID = 15286, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 守护圣灵
 				{ spellID = 47788, unitId = "target", caster = "player", filter = "BUFF" },
 				-- 预支时间

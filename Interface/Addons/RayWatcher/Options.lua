@@ -46,6 +46,7 @@ function RayWatcherConfig:Load()
 	db.RayWatcher.filterinput = nil
 	db.RayWatcher.unitidinput = nil
 	db.RayWatcher.casterinput = nil
+	db.RayWatcher.fuzzy = nil
 	self:SetupOptions()
 end
 
@@ -87,13 +88,21 @@ function RayWatcherConfig.GenerateOptionsInternal()
 		wipe(cooldowns)
 		wipe(itemcooldowns)
 		for i in pairs(ns.modules[current].BUFF or {}) do
-			if i ~= "unitIDs" and ns.modules[current].BUFF[i] then
-				buffs[i] = GetSpellInfo(i) .. " (" .. i .. ")"
+			if i ~= "unitIDs" and ns.modules[current].BUFF[i] and next(ns.modules[current].BUFF[i]) then
+				if type(i) == "number" then
+					buffs[i] = GetSpellInfo(i) .. " (" .. i .. ")"
+				elseif type(i) == "string" then
+					buffs[ns.modules[current].BUFF[i].spellID] = i .. " (" .. ns.modules[current].BUFF[i].spellID .. ")"
+				end
 			end
 		end
 		for i in pairs(ns.modules[current].DEBUFF or {}) do
-			if i ~= "unitIDs" and ns.modules[current].DEBUFF[i] then
-				debuffs[i] = GetSpellInfo(i) .. " (" .. i .. ")"
+			if i ~= "unitIDs" and ns.modules[current].DEBUFF[i] and next(ns.modules[current].DEBUFF[i]) then
+				if type(i) == "number" then
+					debuffs[i] = GetSpellInfo(i) .. " (" .. i .. ")"
+				elseif type(i) == "string" then
+					debuffs[ns.modules[current].DEBUFF[i].spellID] = i .. " (" .. ns.modules[current].DEBUFF[i].spellID .. ")"
+				end
 			end
 		end
 		for i in pairs(ns.modules[current].CD or {}) do
@@ -129,11 +138,15 @@ function RayWatcherConfig.GenerateOptionsInternal()
 	end
 	
 	local function UpdateInput(id, filter)
-		db.RayWatcher.idinput = tostring(id)
+		db.RayWatcher.idinput = tostring(id)		
 		db.RayWatcher.filterinput = filter
 		local current = db.RayWatcher.GroupSelect
+		if not ns.modules[current][filter][id] then
+			id = GetSpellInfo(id)
+		end
 		db.RayWatcher.unitidinput = ns.modules[current][filter][id].unitID
 		db.RayWatcher.casterinput = ns.modules[current][filter][id].caster
+		db.RayWatcher.fuzzy = ns.modules[current][filter][id].fuzzy
 	end
 
 	StaticPopupDialogs["CFG_RELOAD"] = {
@@ -161,6 +174,8 @@ function RayWatcherConfig.GenerateOptionsInternal()
 				name = L["解锁锚点"],
 				func = function()
 					ns.TestMode()
+					ACD["Close"](ACD,"RayWatcherConfig") 
+					GameTooltip_Hide()
 					testing = not testing
 				end,
 			},
@@ -406,31 +421,52 @@ function RayWatcherConfig.GenerateOptionsInternal()
 							["all"] = L["任何人"],
 						},
 					},
+					fuzzy = {
+						order = 21,
+						type = "toggle",
+						name = L["模糊匹配"],
+						desc = L["匹配所有相同名字的法术"],
+						get = function(info, value) return db.RayWatcher[ info[#info] ] end,
+						set = function(info, value) db.RayWatcher[ info[#info] ] = value end,
+						hidden = function(info) return(db.RayWatcher.filterinput~="BUFF" and db.RayWatcher.filterinput~="DEBUFF") or db[db.RayWatcher.GroupSelect].disabled end,
+						width = "half",
+					},
 					spacer7 = {
 						type = 'description',
 						name = '',
 						desc = '',
 						width = "full",
-						order = 21,
+						order = 22,
 					},
 					addbutton = {
-						order = 22,
+						order = 23,
 						type = "execute",
-						name = L["添加"],
-						desc = L["添加到当前分组"],
+						name = L["添加/编辑"],
+						desc = L["添加到当前分组或编辑当前列表中已有法术"],
 						width = "half",
 						disabled = function(info) return (not db.RayWatcher.filterinput or not db.RayWatcher.idinput) or db[db.RayWatcher.GroupSelect].disabled end,
-						func = function()
+						func = function()							
+							local id = db.RayWatcher.fuzzy and GetSpellInfo(tonumber(db.RayWatcher.idinput)) or tonumber(db.RayWatcher.idinput)
 							db[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput] = db[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput] or {}
-							db[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput][tonumber(db.RayWatcher.idinput)] = {
-								["caster"] = db.RayWatcher.casterinput,
-								["unitID"] = db.RayWatcher.unitidinput,
-							}
 							ns.modules[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput] = ns.modules[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput] or {}
-							ns.modules[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput][tonumber(db.RayWatcher.idinput)] = {
+							if db.RayWatcher.filterinput == "BUFF" or db.RayWatcher.filterinput == "DEBUFF" then
+								ns.modules[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput][tonumber(db.RayWatcher.idinput)] = false
+								db[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput][tonumber(db.RayWatcher.idinput)] = false
+								ns.modules[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput][GetSpellInfo(tonumber(db.RayWatcher.idinput))] = false
+								db[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput][GetSpellInfo(tonumber(db.RayWatcher.idinput))] = false			
+							end							
+							db[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput][id] = {
 								["caster"] = db.RayWatcher.casterinput,
 								["unitID"] = db.RayWatcher.unitidinput,
-							}
+								["fuzzy"] = db.RayWatcher.fuzzy and true or nil,
+								["spellID"] = db.RayWatcher.fuzzy and tonumber(db.RayWatcher.idinput) or nil,
+							}							
+							ns.modules[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput][id] = {
+								["caster"] = db.RayWatcher.casterinput,
+								["unitID"] = db.RayWatcher.unitidinput,
+								["fuzzy"] = db.RayWatcher.fuzzy and true or nil,
+								["spellID"] = db.RayWatcher.fuzzy and tonumber(db.RayWatcher.idinput) or nil,
+							}							
 							UpdateGroup()
 							if not testing then
 								ns.modules[db.RayWatcher.GroupSelect]:Update()
@@ -438,17 +474,21 @@ function RayWatcherConfig.GenerateOptionsInternal()
 						end,
 					},
 					deletebutton = {
-						order = 23,
+						order = 24,
 						type = "execute",
 						name = L["删除"],
 						desc = L["从当前分组删除"],
 						width = "half",
-						disabled = function(info) return (not db.RayWatcher.idinput or not db.RayWatcher.filterinput or not ns.modules[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput] or not ns.modules[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput][tonumber(db.RayWatcher.idinput)]) or db[db.RayWatcher.GroupSelect].disabled end,
+						disabled = function(info) return (not db.RayWatcher.idinput or not db.RayWatcher.filterinput or not ns.modules[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput] or (not ns.modules[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput][tonumber(db.RayWatcher.idinput)] and not ns.modules[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput][GetSpellInfo(tonumber(db.RayWatcher.idinput))])) or db[db.RayWatcher.GroupSelect].disabled end,
 						func = function()
 							db[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput] = db[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput] or {}
-							db[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput][tonumber(db.RayWatcher.idinput)] = false
 							ns.modules[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput] = ns.modules[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput] or {}
+							db[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput][tonumber(db.RayWatcher.idinput)] = false
 							ns.modules[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput][tonumber(db.RayWatcher.idinput)] = false
+							if db.RayWatcher.filterinput == "BUFF" or db.RayWatcher.filterinput == "DEBUFF" then
+								db[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput][GetSpellInfo(tonumber(db.RayWatcher.idinput))] = false
+								ns.modules[db.RayWatcher.GroupSelect][db.RayWatcher.filterinput][GetSpellInfo(tonumber(db.RayWatcher.idinput))] = false
+							end
 							UpdateGroup()
 							if not testing then
 								ns.modules[db.RayWatcher.GroupSelect]:Update()
