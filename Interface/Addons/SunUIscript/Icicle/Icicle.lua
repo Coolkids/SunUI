@@ -1,4 +1,4 @@
-local S, _, _, DB = unpack(select(2, ...))
+local S, C, L, DB = unpack(SunUI)
 local Module = LibStub("AceAddon-3.0"):NewAddon("Icicle")
 
 function Module:OnInitialize()

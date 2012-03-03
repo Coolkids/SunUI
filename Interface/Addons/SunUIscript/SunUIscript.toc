@@ -1,5 +1,5 @@
 ## Interface: 40300
-## Title: |cffDDA0DDSun|r|cff44CCFFscript|r
+## Title: |cffDDA0DDSunUI|r |cff44CCFFScript|r
 ## Notes: 孫小貓超級整合插件
 ## Author:All Thanks, Coolkid
 ## RequiredDeps: !SunUI

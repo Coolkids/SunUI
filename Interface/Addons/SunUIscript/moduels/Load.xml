@@ -6,6 +6,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file = "BiggerTradeSkillUI.lua"/>
 	<Script file = "calculator.lua"/>
+	<Script file = "classCD.lua"/>
 	<Script file = "CombatNotification.lua"/>
 	<Script file = "ColorPickerPlus.lua"/>
 	<Script file = "Flump.lua"/>

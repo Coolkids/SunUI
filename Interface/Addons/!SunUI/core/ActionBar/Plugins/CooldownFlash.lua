@@ -27,7 +27,7 @@ function Module:OnInitialize()
 			flash.icon:SetPoint("TOPLEFT", scale(2), scale(-2))
 			flash.icon:SetPoint("BOTTOMRIGHT", scale(-2), scale(2))
 			flash.icon:SetTexCoord(.08, .92, .08, .92)
-			S.MakeTexShadow(flash, flash.icon, 4*scale(1))
+			CreateShadow(flash, flash.icon)
 			flash:Hide()
 			flash:SetScript("OnUpdate", function(self, e)
 				flash.e = flash.e + e

@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
+﻿local S, C, L, DB = unpack(SunUI)
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ClassCD")
 
 function Module:OnInitialize()
@@ -172,7 +172,7 @@ local ClassCDAnchor = CreateFrame("Frame", "ClassCDAnchor", UIParent)
 
 ClassCDAnchor:Size(C["ClassCDWidth"], C["ClassCDHeight"])
 
-ClassCDAnchor:Point("BOTTOM","ClassCD","BOTTOM", 0, 0)
+ClassCDAnchor:Point("BOTTOMLEFT","ClassCD","BOTTOMLEFT", 0, 0)
 
 local FormatTime = function(time)
 	if time >= 60 then
@@ -195,9 +195,9 @@ local UpdatePositions = function()
 			bars[i]:Point("TOPLEFT", ClassCDAnchor, "TOPLEFT", 26, 0)
 		else
 			if C["ClassCDDirection"] == "1" then
-				bars[i]:Point("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, 5)
+				bars[i]:Point("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, C["ClassCDHeight"]*2+5)
 			else
-				bars[i]:Point("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -5)
+				bars[i]:Point("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -C["ClassCDHeight"]*2+5)
 			end
 		end
 		bars[i].id = i
@@ -252,7 +252,14 @@ local CreateBar = function()
 	bar:Size(C["ClassCDWidth"], C["ClassCDHeight"])
 	bar:SetStatusBarTexture(DB.Statusbar)
 	bar:SetMinMaxValues(0, 100)
-    
+	
+    spar =  bar:CreateTexture(nil, "OVERLAY")
+	spar:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
+	spar:SetBlendMode("ADD")
+	spar:SetAlpha(.8)
+	spar:SetPoint("TOPLEFT", bar:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
+	spar:SetPoint("BOTTOMRIGHT", bar:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
+	
 	bar.backdrop = CreateFrame("Frame", nil, bar)
 	bar.backdrop:Point("TOPLEFT", -2, 2)
 	bar.backdrop:Point("BOTTOMRIGHT", 2, -2)
@@ -270,18 +277,18 @@ local CreateBar = function()
 	bar.bg:SetTexture(DB.Statusbar)
 	
 	bar.left = CreateFS(bar)
-	bar.left:Point("LEFT", 2, 0)
+	bar.left:Point("LEFT", 2, C["ClassCDHeight"])
 	bar.left:SetJustifyH("LEFT")
 	bar.left:Size(C["ClassCDWidth"], C["ClassCDHeight"])
 
 	bar.right = CreateFS(bar)
-	bar.right:Point("RIGHT", 1, 0)
+	bar.right:Point("RIGHT", 1, C["ClassCDHeight"])
 	bar.right:SetJustifyH("RIGHT")
 
 	bar.icon = CreateFrame("Button", nil, bar)
-	bar.icon:Width(20)
-	bar.icon:Height(20)
-	bar.icon:Point("BOTTOMRIGHT", bar, "BOTTOMLEFT", -6, 0)
+	bar.icon:Width(C["ClassCDHeight"]*2)
+	bar.icon:Height(C["ClassCDHeight"]*2)
+	bar.icon:Point("BOTTOMRIGHT", bar, "BOTTOMLEFT", -5, 0)
 	bar.icon:CreateShadow()
 	bar.icon.backdrop = CreateFrame("Frame", nil, bar.icon)
 	bar.icon.backdrop:Point("TOPLEFT", -2, 2)

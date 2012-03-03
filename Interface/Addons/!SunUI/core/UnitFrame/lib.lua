@@ -222,8 +222,8 @@ C = UnitFrameDB
     s:SetStatusBarTexture(DB.Statusbar)
     fixStatusbar(s)
     s:Height(f.height/3)
-    s:Width(f.width-1)
-    s:Point("TOPLEFT",f,"BOTTOMLEFT",2,-2)
+    s:Width(f.width)
+    s:Point("TOPLEFT",f,"BOTTOMLEFT",0,-4)
     if f.mystyle == "partypet" or f.mystyle == "arenatarget" then
       s:Hide()
     end
@@ -241,7 +241,8 @@ C = UnitFrameDB
     if f.mystyle=="tot" or f.mystyle=="pet" then
       s:Height(f.height/3)
     end
-	h:CreateShadow("Background")
+	--h:CreateShadow("Background")
+	CreateShadow(s, b, "Background")
     f.Power = s
     f.Power.bg = b
   end

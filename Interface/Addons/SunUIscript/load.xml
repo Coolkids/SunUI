@@ -10,7 +10,8 @@
 	<Include file="button\load.xml"/>
 	<Include file="moduels\load.xml"/>
 	<Include file="script\load.xml"/>
-
+	<Include file ="Icicle\load.xml"/>
+	<Include file ="Traditionalize\load.xml"/>
 </Ui>
 
 <!--	<Script file="Load.lua"/>  -->

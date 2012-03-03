@@ -1,4 +1,4 @@
-local S, C, L, DB = unpack(select(2, ...))
+local S, C, L, DB = unpack(SunUI)
 
 
 	if (GetLocale()=="zhCN") then
