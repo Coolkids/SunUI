@@ -105,10 +105,10 @@ if f.shadow then return end
 	
 	local shadow = CreateFrame("Frame", nil, border)
 	shadow:SetFrameLevel(0)
-	shadow:Point("TOPLEFT", -4, 4)
-	shadow:Point("TOPRIGHT", 4, 4)
-	shadow:Point("BOTTOMRIGHT", 4, -4)
-	shadow:Point("BOTTOMLEFT", -4, -4)
+	shadow:Point("TOPLEFT", -3, 3)
+	shadow:Point("TOPRIGHT", 3, 3)
+	shadow:Point("BOTTOMRIGHT", 3, -3)
+	shadow:Point("BOTTOMLEFT", -3, -3)
 	shadow:SetBackdrop( { 
 		edgeFile = DB.GlowTex,
 		bgFile =DB.Solid,
