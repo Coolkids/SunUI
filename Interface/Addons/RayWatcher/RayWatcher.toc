@@ -3,7 +3,7 @@
 ## Version: 2.1
 ## Author: Ray
 ## SavedVariables: RayWatcherDB
-
+## RequiredDeps: !SunUI
 
 libs\libs.xml
 locale\locale.xml

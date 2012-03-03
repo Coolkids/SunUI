@@ -15,13 +15,12 @@ local barDB = DB.bars.bar5
 for i=1, 2 do
     local button = _G["MultiBarLeftButton"..i]
     button:ClearAllPoints()
-    button:Size(C["ButtonSize"], C["ButtonSize"])
-    button:SetScale(C["MainBarSacle"]+S.Scale(1)/2+0.1)
+    button:Size(C["ButtonSize"]*2)
     if i == 1 then
-      button:Point("RIGHT", MultiBarBottomLeftButton1, "LEFT", -C["ButtonSpacing"],(C["ButtonSize"]+C["ButtonSpacing"])/2)
+      button:Point("BOTTOMRIGHT", MultiBarBottomLeftButton1, "BOTTOMLEFT", -C["ButtonSpacing"]-2,0)
     else
       local previous = _G["MultiBarLeftButton"..i-1]      
-      button:Point("TOP", previous, "BOTTOM", 0, -C["ButtonSpacing"])
+      button:Point("RIGHT", previous, "LEFT", -C["ButtonSpacing"]-2, 0 )
     end
   end
   
@@ -33,13 +32,12 @@ for i=1, 2 do
   for i=11, 12 do
     local button = _G["MultiBarLeftButton"..i]
     button:ClearAllPoints()
-    button:Size(C["ButtonSize"], C["ButtonSize"])
-    button:SetScale(C["MainBarSacle"]+S.Scale(1)/2+0.1)
+    button:Size(C["ButtonSize"]*2)
     if i == 11 then
-      button:Point("LEFT", MultiBarBottomLeftButton12, "RIGHT", C["ButtonSpacing"],(C["ButtonSize"]+C["ButtonSpacing"])/2)
+      button:Point("TOPLEFT", MultiBarBottomRightButton12, "TOPRIGHT", C["ButtonSpacing"]+2,0)
     else
       local previous = _G["MultiBarLeftButton"..i-1]      
-      button:Point("TOP", previous, "BOTTOM", 0, -C["ButtonSpacing"])
+      button:Point("LEFT", previous, "RIGHT", C["ButtonSpacing"]+2, 0)
     end
   end
   if barDB.showonmouseover then    

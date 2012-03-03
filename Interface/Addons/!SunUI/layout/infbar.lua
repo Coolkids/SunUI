@@ -394,7 +394,6 @@ function Module:OnEnable()
 	XP:Height(C["BottomHeight"])	
 	XP:Width(C["BottomWidth"])
 	XP:Point("BOTTOM", BottomInfoPanelPos, "BOTTOM", 0, 0)
-	XP:CreateShadow("Background")
 	XP:SetFrameLevel(10)
 	end
 	

@@ -14,6 +14,7 @@ local FactionInfo = {
 }
 function Module:BuildExpBar()
 	ExpBar = CreateFrame("StatusBar", nil, XP)
+	ExpBar:CreateShadow("Background")
 	ExpBar:SetStatusBarTexture(DB.Statusbar)
 	ExpBar:Height(C["BottomHeight"])	
 	ExpBar:Width(C["BottomWidth"])

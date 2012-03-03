@@ -13,19 +13,9 @@
 ---------------------------------------------------------------------------------------------------
 
 local _, ns = ...
-local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/0.7
-local reloadborder = CreateFrame("Frame")   
-reloadborder:RegisterEvent("PLAYER_ENTERING_WORLD")
-reloadborder:RegisterEvent("UI_SCALE_CHANGED")
-reloadborder:SetScript("OnEvent", function()
-   reloadborder:UnregisterEvent("PLAYER_ENTERING_WORLD")
-   mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/UIParent:GetEffectiveScale()
-end)
-function Scale(x)
-	return (mult*math.floor(x/mult+.5))
-end
-ns.font = ChatFrame1:GetFont()
-ns.fontsize = 11*Scale(1)
+local S, C, L, DB = unpack(SunUI)
+ns.font = DB.Font
+ns.fontsize = 11*S.Scale(1)
 ns.fontflag = "OUTLINE"
 
 ns.watchers ={
