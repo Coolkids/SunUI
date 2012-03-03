@@ -211,8 +211,8 @@ local function CreateAuraIcon(parent)
 	
 	button.bord = button:CreateTexture(nil, "BORDER")
 	button.bord:SetTexture(0, 0, 0, 1)
-	button.bord:Point("TOPLEFT",button,"TOPLEFT", noscalemult,-noscalemult)
-	button.bord:Point("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult,noscalemult)
+	button.bord:SetPoint("TOPLEFT",button,"TOPLEFT", noscalemult,-noscalemult)
+	button.bord:SetPoint("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult,noscalemult)
 	
 	button.bg2 = button:CreateTexture(nil, "ARTWORK")
 	button.bg2:SetTexture( .05, .05, .05, .9)

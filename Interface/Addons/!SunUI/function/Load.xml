@@ -7,7 +7,6 @@
 	<Script file = "Init.lua"/>
 	<Script file = "..\cfg.lua"/>
 	<Script file = "basedata.lua"/>
-	<Script file = "autoset.lua"/>
 	<Script file = "API.lua"/>
 	<Script file = "API2.lua"/>
 	<Script file = "move.lua"/>	

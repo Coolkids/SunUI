@@ -5,7 +5,6 @@
 
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="Style.lua"/>
-	<Script file="Style2.lua"/>
 	<Script file="tullaRange.lua"/>
 	<Script file="HoverBind.lua"/>
 	<Script file="Cooldown.lua"/>

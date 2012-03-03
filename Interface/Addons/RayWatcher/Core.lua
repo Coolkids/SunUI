@@ -1,19 +1,88 @@
 local RayUIWatcher = LibStub("AceAddon-3.0"):NewAddon("RayWatcher", "AceEvent-3.0")
 
-local S, C, L, DB = unpack(SunUI)
+
+local _,L = ...
 local _, ns = ...
 local _, myclass = UnitClass("player")
+local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/0.68
 local colors = RAID_CLASS_COLORS
 ns.modules = {}
 abc = ns.modules
 local testing = false
 local ACD = LibStub("AceConfigDialog-3.0")
-
 local watcherPrototype = {}
 local _G = _G
 local UnitBuff = UnitBuff
 local UnitDebuff = UnitDebuff
 local CooldownFrame_SetTimer = CooldownFrame_SetTimer
+
+local function Scale(x)
+	return (mult*math.floor(x/mult+.5))
+end
+function MakeShadow(Parent, Size)
+   local Shadow = CreateFrame("Frame", nil, Parent)
+   Shadow:SetFrameLevel(0)
+   Shadow:SetPoint("TOPLEFT", -Size, Size)
+   Shadow:SetPoint("BOTTOMRIGHT", Size, -Size)
+   Shadow:SetPoint("TOPRIGHT", Size, Size)
+   Shadow:SetPoint("BOTTOMLEFT", -Size, -Size)
+   Shadow:SetBackdrop({edgeFile = "Interface\\Addons\\RayWatcher\\media\\GlowTex", edgeSize = Size})   
+   Shadow:SetBackdropColor( .05, .05, .05, .9)
+   Shadow:SetBackdropBorderColor(0, 0, 0, 1)
+   return Shadow
+end
+
+local function StyleButton(button, setallpoints)
+	if button.SetHighlightTexture and not button.hover then
+		local hover = button:CreateTexture(nil, "OVERLAY")
+		hover:SetTexture(1, 1, 1, 0.3)
+		if setallpoints then
+			hover:SetAllPoints()
+		else
+			hover:SetPoint('TOPLEFT', 2, -2)
+			hover:SetPoint('BOTTOMRIGHT', -2, 2)
+		end
+		button.hover = hover
+		button:SetHighlightTexture(hover)
+	end
+	
+	if button.SetPushedTexture and not button.pushed then
+		local pushed = button:CreateTexture(nil, "OVERLAY")
+		pushed:SetTexture(0.9, 0.8, 0.1, 0.3)
+		if setallpoints then
+			pushed:SetAllPoints()
+		else
+			pushed:SetPoint('TOPLEFT', 2, -2)
+			pushed:SetPoint('BOTTOMRIGHT', -2, 2)
+		end
+		button.pushed = pushed
+		button:SetPushedTexture(pushed)
+	end
+	
+	if button.SetCheckedTexture and not button.checked then
+		local checked = button:CreateTexture(nil, "OVERLAY")
+		checked:SetTexture(23/255,132/255,209/255,0.5)
+		if setallpoints then
+			checked:SetAllPoints()
+		else
+			checked:SetPoint('TOPLEFT', 2, -2)
+			checked:SetPoint('BOTTOMRIGHT', -2, 2)
+		end
+		button.checked = checked
+		button:SetCheckedTexture(checked)
+	end
+
+	if button:GetName() and _G[button:GetName().."Cooldown"] then
+		local cooldown = _G[button:GetName().."Cooldown"]
+		cooldown:ClearAllPoints()
+		if setallpoints then
+			cooldown:SetAllPoints()
+		else
+			cooldown:SetPoint('TOPLEFT', 2, -2)
+			cooldown:SetPoint('BOTTOMRIGHT', -2, 2)
+		end
+	end
+end
 
 local function CreatePopup()
 	local f = CreateFrame("Frame", "RayUIWatcherMoverPopupWindow", UIParent)
@@ -24,6 +93,14 @@ local function CreatePopup()
 	f:SetWidth(360)
 	f:SetHeight(110)
 	f:SetPoint("TOP", 0, -50)
+	f:SetBackdrop({
+		bgFile = "Interface\\ChatFrame\\ChatFrameBackground", 
+		insets = {left = 3, right = 3, top = 3, bottom =3},
+		edgeFile = "Interface\\Addons\\RayWatcher\\media\\GlowTex", 
+		edgeSize = 1, 
+	})
+	f:SetBackdropColor( 0, 0, 0, 0.6 )
+	f:SetBackdropBorderColor( 0, 0, 0 )
 	f:Hide()
 	f:SetMovable(true)
 	f:RegisterForDrag("LeftButton")
@@ -31,23 +108,23 @@ local function CreatePopup()
 	f:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
 	f:SetScript("OnShow", function() PlaySound("igMainMenuOption") end)
 	f:SetScript("OnHide", function() PlaySound("gsTitleOptionExit") end)
-	S.SetBD(f)
-
+	
+	
 	local title = f:CreateFontString("OVERLAY")
 	title:SetFontObject(GameFontNormal)
-	title:SetShadowOffset(S.mult, -S.mult)
+	title:SetShadowOffset(mult, -mult)
 	title:SetShadowColor(0, 0, 0)
 	title:SetPoint("TOP", f, "TOP", 0, -10)
 	title:SetJustifyH("CENTER")
 	title:SetText("RayUIWatcher")
 		
-	local desc = f:CreateFontString("ARTWORK")
-	desc:SetFontObject("GameFontHighlight")
+	local desc = f:CreateFontString("OVERLAY")
+	desc:SetFontObject(GameFontNormal)
 	desc:SetJustifyV("TOP")
 	desc:SetJustifyH("LEFT")
 	desc:SetPoint("TOPLEFT", 18, -32)
 	desc:SetPoint("BOTTOMRIGHT", -18, 48)
-	desc:SetText(L["锚点已解锁，拖动锚点移动位置，完成后点击锁定按钮。"])
+	desc:SetText(L["锚点已解锁"])
 
 	local lock = CreateFrame("Button", "RayUIWatcherLock", f, "OptionsButtonTemplate")
 	_G[lock:GetName() .. "Text"]:SetText(L["锁定"])
@@ -58,7 +135,6 @@ local function CreatePopup()
 	end)
 	
 	lock:SetPoint("BOTTOMRIGHT", -14, 14)
-	S.Reskin(lock)
 	
 	f:RegisterEvent('PLAYER_REGEN_DISABLED')
 	f:SetScript('OnEvent', function(self)
@@ -89,8 +165,8 @@ end
 
 function watcherPrototype:CreateButton(mode)
 	local button=CreateFrame("Button", nil, self.parent)
-	button:CreateShadow("Background")
-	button:StyleButton(true)
+	MakeShadow(button, 4)
+	StyleButton(button, true)
 	button:SetPushedTexture(nil)
 	button:SetSize(self.size, self.size)
 	self.parent:SetSize(self.size, self.size)
@@ -121,7 +197,7 @@ function watcherPrototype:CreateButton(mode)
 	if mode=="BAR" then
 		button.statusbar = CreateFrame("StatusBar", nil, button)
 		button.statusbar:SetFrameStrata("BACKGROUND")
-		button.statusbar:CreateShadow("Background")
+		MakeShadow(button.statusbar, 3)
 		button.statusbar:SetWidth(self.barwidth - 6)
 		button.statusbar:SetHeight(5)
 		button.statusbar:SetStatusBarTexture([[Interface\AddOns\RayWatcher\media\statusbar.tga]])
@@ -365,7 +441,7 @@ function watcherPrototype:ApplyStyle()
 				local shadow = CreateFrame("Frame", nil, button.statusbar)
 				shadow:SetPoint("TOPLEFT", -2, 2)
 				shadow:SetPoint("BOTTOMRIGHT", 2, -2)
-				shadow:CreateShadow("Background")
+				MakeShadow(shadow, 3)
 				button.statusbar:SetWidth(self.barwidth - 6)
 				button.statusbar:SetHeight(5)
 				button.statusbar:SetStatusBarTexture([[Interface\AddOns\RayWatcher\media\statusbar.tga]])

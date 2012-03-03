@@ -524,7 +524,7 @@ C = UnitFrameDB
     h:SetFrameLevel(0)
     h:Point("TOPLEFT",-4,4)
     h:Point("BOTTOMRIGHT",4,-4)
-    lib.gen_backdrop(h)
+    --lib.gen_backdrop(h)
     --another helper frame for our fontstring to overlap the cd frame
     local h2 = CreateFrame("Frame", nil, button)
     h2:SetAllPoints(button)
@@ -538,7 +538,7 @@ C = UnitFrameDB
     button.overlay:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 1, -1)
     button.overlay:SetTexCoord(0.04, 0.96, 0.04, 0.96)
     button.overlay.Hide = function(self) self:SetVertexColor(0, 0, 0) end
-	S.MakeTexShadow(button, button.overlay, 3)
+	button:CreateShadow()
   end
   -- position update for certain class/specs
 --[[   lib.PreSetPosition = function(self, num)

@@ -5,7 +5,6 @@ local Module = Core:NewModule("Congig", "AceConsole-3.0")
 local Version = 1204
 if DB.Nuke == true then return end
 function Module:SetDefault()
-	SlashCmdList.AutoSet()
 	CoreVersion = Version
 	-- 聊天频道职业染色
 	ToggleChatColorNamesByClassGroup(true, "SAY")
@@ -128,6 +127,10 @@ function Module:OnEnable()
 			button1 = OKAY,
 			OnAccept = function()
 				Module:SetDefault()
+				SetCVar("useUiScale", 1)
+				SetCVar("uiScale", 0.7)
+				SetCVar("cameraDistanceMax", 50)
+				SetCVar("cameraDistanceMaxFactor", 3.4)
 				ReloadUI()
 			end,
 			timeout = 0,

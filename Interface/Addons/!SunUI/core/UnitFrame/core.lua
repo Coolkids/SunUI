@@ -124,6 +124,7 @@ C = UnitFrameDB
 		--lib.createBuffs(self)
 		--lib.createDebuffs(self) 
 	end
+	
 	self:Size(self.width,self.height)
   end 
   
@@ -153,7 +154,7 @@ C = UnitFrameDB
     self.Power.colorPower = true
     self.Power.bg.multiplier = 0.3
     lib.gen_castbar(self)
-    --lib.createAuras(self)
+    lib.createAuras(self)
 	self:Size(self.width,self.height)
   end
   
