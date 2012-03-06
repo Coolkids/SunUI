@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
+﻿44local S, C, L, DB = unpack(select(2, ...))
 
 if GetLocale() ~= "zhTW" then  return end
 -- 控制台

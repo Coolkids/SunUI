@@ -178,22 +178,22 @@ local newAddMsg = {}
 local chn, rplc
 do
 	rplc = {
-		L["综合"], --General
-		L["交易"], --Trade
-		L["世界防务"], --WorldDefense
-		L["本地防御"], --LocalDefense
-		L["寻求组队"], --LookingForGroup
-		L["工会招募"], --GuildRecruitment
-		L["战场"], --Battleground
-		L["战场领袖"], --Battleground Leader
-		L["工会"], --Guild
-		L["小队"], --Party
-		L["小队队长"], --Party Leader
-		L["地城领袖"], --Party Leader (Guide)
-		L["官员"], --Officer
-		L["团队"], --Raid
-		L["团队领袖"], --Raid Leader
-		L["团队警告"], --Raid Warning
+		"综合", --General
+		"交易", --Trade
+		"世界防务", --WorldDefense
+		"本地防御", --LocalDefense
+		"寻求组队", --LookingForGroup
+		"工会招募", --GuildRecruitment
+		"战场", --Battleground
+		"战场领袖", --Battleground Leader
+		"工会", --Guild
+		"小队", --Party
+		"小队队长", --Party Leader
+		"地城领袖", --Party Leader (Guide)
+		"官员", --Officer
+		"团队", --Raid
+		"团队领袖", --Raid Leader
+		"团队警告", --Raid Warning
 	}
 	chn = {
 		"%[%d+%. General.-%]",
