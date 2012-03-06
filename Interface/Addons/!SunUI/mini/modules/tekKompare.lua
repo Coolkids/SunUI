@@ -28,7 +28,7 @@ ItemRefTooltip:SetScript("OnDragStop", function(self)
 end)
 
 --ÓïÑÔ¹ýÂË
-local SetCVar, BNGetMatureLanguageFilter, BNSetMatureLanguageFilter = 
+--[[ local SetCVar, BNGetMatureLanguageFilter, BNSetMatureLanguageFilter = 
 	  SetCVar, BNGetMatureLanguageFilter, BNSetMatureLanguageFilter
 local eventFr=CreateFrame("Frame")
 local function set() SetCVar("profanityFilter","0") if BNGetMatureLanguageFilter() then BNSetMatureLanguageFilter(false) end end
@@ -36,7 +36,7 @@ eventFr:SetScript("OnEvent",set)
 eventFr:RegisterEvent("CVAR_UPDATE")
 eventFr:RegisterEvent("VARIABLES_LOADED")
 eventFr:RegisterEvent("BN_MATURE_LANGUAGE_FILTER")
-set()
+set() ]]
 ---------------- > SetupUI
 
 --[[ SetCVar("profanityFilter", 0)
