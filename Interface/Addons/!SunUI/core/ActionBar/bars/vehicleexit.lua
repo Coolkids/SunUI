@@ -9,7 +9,7 @@ C = ActionBarDB
   bar:Width(C["ButtonSize"])
    bar:SetScale(1)
   MoveHandle.Vehicle = S.MakeMoveHandle(bar, "SunUI离开载具按钮", "vehicleexit")
-  bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
+  bar:SetHitRectInsets(-10, -10, -10, -10)
  
   
 

@@ -1,13 +1,11 @@
-﻿--a. 地图玩家圆点标志显示小组编号，闪动红色表示交战状态，闪动灰色表示等待复活。
---b. 增强地图鼠标提示：按职业彩色显示玩家姓名，且在姓名前显示其组号和/或职业。
---取自iTiny
+﻿local S, C, L, DB = unpack(SunUI)
 for i = 1, 4 do
-	_G["WorldMapParty"..i]:SetWidth(24)
-	_G["WorldMapParty"..i]:SetHeight(24)
+	_G["WorldMapParty"..i]:Width(30)
+	_G["WorldMapParty"..i]:Height(30)
 end
 for i = 1, 40 do
-	_G["WorldMapRaid"..i]:SetWidth(27)
-	_G["WorldMapRaid"..i]:SetHeight(27)
+	_G["WorldMapRaid"..i]:Width(32)
+	_G["WorldMapRaid"..i]:Height(32)
 end
 
 hooksecurefunc("WorldMapUnit_Update", function(self)
@@ -62,10 +60,10 @@ local function MapUnit_OnEnter(self, motion, map)
 	if ( map == "WorldMap" and WorldMapPlayer:IsMouseOver() ) then
 		name = UnitName(WorldMapPlayer.unit)
 		if ( PlayerIsPVPInactive(WorldMapPlayer.unit) ) then
-			tooltipText = format(PLAYER_IS_PVP_AFK, "---> "..name.." <---")
+			tooltipText = format(PLAYER_IS_PVP_AFK, "-> "..name.." <-")
 		else
 			_, fileName = UnitClass(WorldMapPlayer.unit)
-			tooltipText = "---> "..colorCode(fileName)..name.."|r".." <---"
+			tooltipText = "-> "..colorCode(fileName)..name.."|r".." <-"
 		end
 		newLineString = "\n"
 	end

@@ -14,7 +14,7 @@ local barDB = DB.bars.totembar
     bar:Height(f:GetHeight())
     bar:SetScale(C["TotemBarSacle"])
     MoveHandle.SunUITotemBar = S.MakeMove(bar, "SunUI图腾栏", "totembar", C["TotemBarSacle"])
-	
+	bar:SetHitRectInsets(-10, -10, -10, -10)
     bar:SetAttribute("_onstate-vis", [[
       if not newstate then return end
       if newstate == "show" then

@@ -10,7 +10,7 @@ C = ActionBarDB
     bar:Width(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
     bar:Height(C["ButtonSize"]*2+C["ButtonSpacing"])
   else  
-    bar:Width(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
+    bar:Width(C["ButtonSize"]*12+C["ButtonSpacing"]*13)
     bar:Height(C["ButtonSize"])
   end
   bar:SetScale(C["MainBarSacle"])
@@ -20,7 +20,7 @@ C = ActionBarDB
   else 
    MoveHandle.SunUIActionBar2 = S.MakeMove(bar, "SunUIActionBar2", "bar2", C["MainBarSacle"])
   end
-  bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
+  bar:SetHitRectInsets(-10, -10, -10, -10)
 
   MultiBarBottomLeft:SetParent(bar)
 

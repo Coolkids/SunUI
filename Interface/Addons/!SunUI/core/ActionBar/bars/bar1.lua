@@ -7,11 +7,11 @@ function Module:OnInitialize()
 	C = ActionBarDB
 	local a1, af, a2, x, y = unpack(MoveHandleDB["bar1"]) 
   if C["Bar1Layout"] == 2 then
-    bar:SetWidth(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
-    bar:SetHeight(C["ButtonSize"]*2+C["ButtonSpacing"])
+    bar:Width(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
+    bar:Height(C["ButtonSize"]*2+C["ButtonSpacing"])
   else
-    bar:SetWidth(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
-    bar:SetHeight(C["ButtonSize"])
+    bar:Width(C["ButtonSize"]*12+C["ButtonSpacing"]*13)
+    bar:Height(C["ButtonSize"])
   end
   bar:SetScale(C["MainBarSacle"])
   if C["Bar1Layout"] == 2 then
@@ -21,7 +21,7 @@ function Module:OnInitialize()
   else
     MoveHandle.SunUIActionBar1 = S.MakeMove(SunUIActionBar1, "SunUIActionBar1", "bar1", C["MainBarSacle"])
   end
-  bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
+  bar:SetHitRectInsets(-10, -10, -10, -10)
 
   local Page = {
     ["DRUID"] = "[bonusbar:1,nostealth] 7; [bonusbar:1,stealth] 8; [bonusbar:2] 8; [bonusbar:3] 9; [bonusbar:4] 10;",

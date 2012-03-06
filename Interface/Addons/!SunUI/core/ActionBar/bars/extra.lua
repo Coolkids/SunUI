@@ -6,7 +6,7 @@ local barDB = DB.bars.extrabar
   C = ActionBarDB
   local a1, af, a2, x, y = unpack(MoveHandleDB["extrabar"]) 
   bar:Size(C["ButtonSize"],C["ButtonSize"])
-  bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
+  bar:SetHitRectInsets(-10, -10, -10, -10)
   bar:SetScale(C["ExtraBarSacle"])
  
   MoveHandle.SunUIExtraActionBar = S.MakeMove(bar, "SunUI特殊按钮", "extrabar", C["ExtraBarSacle"])

@@ -6,43 +6,57 @@ local barDB = DB.bars.bar3
   function Module:OnInitialize()
   C = ActionBarDB
 	local a1, af, a2, x, y = unpack(MoveHandleDB["bar3"]) 
-  if C["Bar3Layout"] == 2 then
-    bar:Width(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
-    bar:Height(C["ButtonSize"]*2+C["ButtonSpacing"])
-  else  
-    bar:Width(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
+  if C["Bar3Layout"] == 1 then
+    bar:Width(C["ButtonSize"]*12+C["ButtonSpacing"]*13)
     bar:Height(C["ButtonSize"])
   end
   bar:SetScale(C["MainBarSacle"])
-  if C["Bar3Layout"] == 2 then
+  if C["Bar3Layout"] == 1 then
     --bar:Point(a1,af,a2,x-((C["ButtonSize"]*6+C["ButtonSpacing"]*6)/2),y)
-	MoveHandle.SunUIActionBar3 = S.MakeMove(bar, "SunUIActionBar3", "bar3", C["MainBarSacle"])
-  else 
    MoveHandle.SunUIActionBar3 = S.MakeMove(bar, "SunUIActionBar3", "bar3", C["MainBarSacle"])
   end
-  bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
+  bar:SetHitRectInsets(-10, -10, -10, -10)
   
   
   
   MultiBarBottomRight:SetParent(bar)
- 
-  for i=1, 12 do
-    local button = _G["MultiBarBottomRightButton"..i]
-    button:Size(C["ButtonSize"], C["ButtonSize"])
-    button:ClearAllPoints()
-    if i == 1 then
-      button:Point("BOTTOMLEFT", bar, 0,0)
-    else
-      local previous = _G["MultiBarBottomRightButton"..i-1]      
-      if C["Bar3Layout"] == 2 and i == 7 then
-        previous = _G["MultiBarBottomRightButton1"]
-        button:Point("BOTTOMLEFT", previous, "TOPLEFT", 0, C["ButtonSpacing"])
-      else
-        button:Point("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
-      end
-      
-    end
+ if C["Bar3Layout"] == 1 then
+	  for i=1, 12 do
+		local button = _G["MultiBarBottomRightButton"..i]
+		button:Size(C["ButtonSize"], C["ButtonSize"])
+		button:ClearAllPoints()
+		if i == 1 then
+		  button:Point("BOTTOMLEFT", bar, 0,0)
+		else
+		  local previous = _G["MultiBarBottomRightButton"..i-1]     
+		  button:Point("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0) 
+		end
+	  end
   end
+	if C["Bar3Layout"] == 2 then
+	for i = 1, 12 do
+		Button = _G["MultiBarBottomRightButton"..i]
+		Button:Size(C["ButtonSize"], C["ButtonSize"])
+		Button:ClearAllPoints()
+		if i == 1 then
+				Button:Point("BOTTOMRIGHT", SunUIActionBar1, "BOTTOMLEFT", -C["ButtonSpacing"], 0)
+			elseif i <= 3 then
+				Button:Point("RIGHT", _G["MultiBarBottomRightButton"..i-1], "LEFT", -C["ButtonSpacing"], 0)
+			elseif i == 4 then
+				Button:Point("BOTTOMLEFT", _G["MultiBarBottomRightButton1"], "TOPLEFT", 0, C["ButtonSpacing"])
+			elseif i <= 6 then
+				Button:Point("RIGHT", _G["MultiBarBottomRightButton"..i-1], "LEFT", -C["ButtonSpacing"], 0)	
+			elseif i == 7 then
+				Button:Point("BOTTOMLEFT", SunUIActionBar1, "BOTTOMRIGHT", C["ButtonSpacing"], 0)
+			elseif i <= 9 then
+				Button:Point("LEFT", _G["MultiBarBottomRightButton"..i-1], "RIGHT", C["ButtonSpacing"], 0)
+			elseif i == 10 then
+				Button:Point("BOTTOMLEFT", _G["MultiBarBottomRightButton7"], "TOPLEFT", 0, C["ButtonSpacing"])
+			elseif i <= 12 then
+				Button:Point("LEFT", _G["MultiBarBottomRightButton"..i-1], "RIGHT", C["ButtonSpacing"], 0)	
+			end
+		end
+	end
    end 
   if barDB.showonmouseover then    
     local function lighton(alpha)

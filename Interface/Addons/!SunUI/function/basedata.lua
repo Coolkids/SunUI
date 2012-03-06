@@ -14,13 +14,13 @@ ActionBarDB = {
 	["Bar3Layout"] = 2,
 	["Bar5Layout"] = 1,
 	["ButtonSize"] = 34,
-	["Bar2Layout"] = 2,
+	["Bar2Layout"] = 1,
 	["StanceBarSacle"] = 1,
 	["HideHotKey"] = false,
 	["Bar4Layout"] = 1,
 	["MainBarSacle"] = 1,
 	["Style"] = 1,
-	["Bar1Layout"] = 2,
+	["Bar1Layout"] = 1,
 	["EnableBarFader"] = false,
 	["HideMacroName"] = false,
 }	
@@ -73,6 +73,7 @@ UnitFrameDB = {
 	["Scale"] = 1,
 	["PetHeight"] = 15,
 	["PowerHeight"] = 0.7999999999999999,
+	["Alpha3D"] = 0,
 	["Fontsize"] = 10,
 	["OnlyShowPlayer"] = false,
 	["showpet"] = true,
@@ -109,20 +110,33 @@ UnitFrameDB = {
 	["EnableSwingTimer"] = false,
 	["PetCastBarHeight"] = 10,
 }
+
+SkinDB = {
+	["EnableDBMSkin"] = true,
+	["HideRaidWarn"] = true,
+}
+
+InfoPanelDB = {
+	["BottomHeight"] = 13,
+	["OpenTop"] = true,
+	["OpenBottom"] = true,
+	["BottomWidth"] = 440,
+	["MemNum"] = 5,
+}
 MoveHandleDB = {
 	["bar3"] = {
-		"BOTTOMLEFT", -- [1]
-		"SunUIActionBar1", -- [2]
-		"BOTTOMRIGHT", -- [3]
-		5, -- [4]
-		0, -- [5]
+		"BOTTOM", -- [1]
+		"SunUIActionBar2", -- [2]
+		"TOP", -- [3]
+		0, -- [4]
+		5, -- [5]
 	},
 	["TargetCastbar"] = {
-		"CENTER", -- [1]
+		"BOTTOM", -- [1]
 		"UIParent", -- [2]
-		"CENTER", -- [3]
-		224.3019060728335, -- [4]
-		-263.7934803077889, -- [5]
+		"BOTTOM", -- [3]
+		227.6981404250867, -- [4]
+		199.9548160562789, -- [5]
 	},
 	["Buff"] = {
 		"TOPRIGHT", -- [1]
@@ -131,96 +145,19 @@ MoveHandleDB = {
 		-5, -- [4]
 		-5, -- [5]
 	},
-	["Class"] = {
-		"CENTER", -- [1]
+	["PlayerCastbar"] = {
+		"BOTTOM", -- [1]
 		"UIParent", -- [2]
-		"CENTER", -- [3]
-		-150, -- [4]
-		150, -- [5]
+		"BOTTOM", -- [3]
+		-1.69824901140635, -- [4]
+		140.6366511650806, -- [5]
 	},
 	["Minimap"] = {
 		"BOTTOMRIGHT", -- [1]
 		"UIParent", -- [2]
 		"BOTTOMRIGHT", -- [3]
-		-20, -- [4]
-		27, -- [5]
-	},
-	["InfoPanel2"] = {
-		"TOPRIGHT", -- [1]
-		"Minimap", -- [2]
-		"BOTTOMRIGHT", -- [3]
-		0, -- [4]
-		-5, -- [5]
-	},
-	["CooldownFlash"] = {
-		"BOTTOM", -- [1]
-		"UIParent", -- [2]
-		"CENTER", -- [3]
-		0, -- [4]
-		150, -- [5]
-	},
-	["Combatpoint"] = {
-		"CENTER", -- [1]
-		"UIParent", -- [2]
-		"CENTER", -- [3]
-		226, -- [4]
-		-297, -- [5]
-	},
-	["Reminder"] = {
-		"BOTTOMRIGHT", -- [1]
-		"UIParent", -- [2]
-		"BOTTOMRIGHT", -- [3]
-		-29.42652938839508, -- [4]
-		194.7041614954825, -- [5]
-	},
-	["RollFrame"] = {
-		"TOP", -- [1]
-		"UIParent", -- [2]
-		"TOP", -- [3]
-		0, -- [4]
-		-200, -- [5]
-	},
-	["vehicleexit"] = {
-		"BOTTOM", -- [1]
-		"UIParent", -- [2]
-		"BOTTOM", -- [3]
-		385.7280158858777, -- [4]
-		85.80958581977544, -- [5]
-	},
-	["Debuff"] = {
-		"TOPRIGHT", -- [1]
-		"UIParent", -- [2]
-		"TOPRIGHT", -- [3]
-		-5, -- [4]
-		-140, -- [5]
-	},
-	["Threat"] = {
-		"CENTER", -- [1]
-		"UIParent", -- [2]
-		"CENTER", -- [3]
-		-226.4285480819266, -- [4]
-		-111.2436812403457, -- [5]
-	},
-	["FocusCastbar"] = {
-		"RIGHT", -- [1]
-		"UIParent", -- [2]
-		"RIGHT", -- [3]
-		-136.3633763233958, -- [4]
-		-214.2525786173843, -- [5]
-	},
-	["bar2"] = {
-		"BOTTOMRIGHT", -- [1]
-		"SunUIActionBar1", -- [2]
-		"BOTTOMLEFT", -- [3]
-		-5, -- [4]
-		0, -- [5]
-	},
-	["bar1"] = {
-		"BOTTOM", -- [1]
-		"UIParent", -- [2]
-		"BOTTOM", -- [3]
-		0, -- [4]
-		15, -- [5]
+		-10, -- [4]
+		29, -- [5]
 	},
 	["totembar"] = {
 		"BOTTOM", -- [1]
@@ -229,26 +166,82 @@ MoveHandleDB = {
 		0, -- [4]
 		166, -- [5]
 	},
+	["Debuff"] = {
+		"TOPRIGHT", -- [1]
+		"UIParent", -- [2]
+		"TOPRIGHT", -- [3]
+		-5, -- [4]
+		-140, -- [5]
+	},
+	["Combatpoint"] = {
+		"CENTER", -- [1]
+		"UIParent", -- [2]
+		"CENTER", -- [3]
+		226, -- [4]
+		-297, -- [5]
+	},
+	["vehicleexit"] = {
+		"BOTTOM", -- [1]
+		"UIParent", -- [2]
+		"BOTTOM", -- [3]
+		431.5837790637644, -- [4]
+		85.80951579937789, -- [5]
+	},
+	["RollFrame"] = {
+		"TOP", -- [1]
+		"UIParent", -- [2]
+		"TOP", -- [3]
+		0, -- [4]
+		-200, -- [5]
+	},
+	["Class"] = {
+		"TOPLEFT", -- [1]
+		"UIParent", -- [2]
+		"TOPLEFT", -- [3]
+		307.2003851121865, -- [4]
+		-224.8297548397155, -- [5]
+	},
+	["Threat"] = {
+		"CENTER", -- [1]
+		"UIParent", -- [2]
+		"CENTER", -- [3]
+		-225, -- [4]
+		-133, -- [5]
+	},
+	["FocusCastbar"] = {
+		"RIGHT", -- [1]
+		"UIParent", -- [2]
+		"RIGHT", -- [3]
+		-99, -- [4]
+		-165, -- [5]
+	},
+	["bar2"] = {
+		"BOTTOM", -- [1]
+		"SunUIActionBar1", -- [2]
+		"TOP", -- [3]
+		0, -- [4]
+		5, -- [5]
+	},
+	["bar1"] = {
+		"BOTTOM", -- [1]
+		"UIParent", -- [2]
+		"BOTTOM", -- [3]
+		0, -- [4]
+		10, -- [5]
+	},
+	["extrabar"] = {
+		"BOTTOM", -- [1]
+		"UIParent", -- [2]
+		"BOTTOM", -- [3]
+		-259.1991969535657, -- [4]
+		59.38035613304149, -- [5]
+	},
 	["ClassCD"] = {
 		"BOTTOM", -- [1]
 		"UIParent", -- [2]
 		"BOTTOM", -- [3]
-		-405.309570160917, -- [4]
-		216.315554580011, -- [5]
-	},
-	["PlayerCastbar"] = {
-		"BOTTOM", -- [1]
-		"UIParent", -- [2]
-		"BOTTOM", -- [3]
-		0.0002668734015805703, -- [4]
-		189.8893138889972, -- [5]
-	},
-	["InfoPanel"] = {
-		"TOPLEFT", -- [1]
-		"UIParent", -- [2]
-		"TOPLEFT", -- [3]
-		5, -- [4]
-		-5, -- [5]
+		-434.1817458738224, -- [4]
+		229.9032052794286, -- [5]
 	},
 	["ShadowPet"] = {
 		"CENTER", -- [1]
@@ -257,19 +250,26 @@ MoveHandleDB = {
 		-423, -- [4]
 		-223, -- [5]
 	},
+	["InfoPanel"] = {
+		"TOPLEFT", -- [1]
+		"UIParent", -- [2]
+		"TOPLEFT", -- [3]
+		5, -- [4]
+		-5, -- [5]
+	},
+	["Reminder"] = {
+		"BOTTOMRIGHT", -- [1]
+		"UIParent", -- [2]
+		"BOTTOMRIGHT", -- [3]
+		-52, -- [4]
+		211, -- [5]
+	},
 	["stancebar"] = {
 		"BOTTOMLEFT", -- [1]
-		"SunUIActionBar2", -- [2]
+		"MultiBarBottomRightButton6", -- [2]
 		"TOPLEFT", -- [3]
 		0, -- [4]
 		5, -- [5]
-	},
-	["PetCastbar"] = {
-		"CENTER", -- [1]
-		"UIParent", -- [2]
-		"CENTER", -- [3]
-		-441.139252655339, -- [4]
-		-227.4918253237247, -- [5]
 	},
 	["bar5"] = {
 		"RIGHT", -- [1]
@@ -278,19 +278,26 @@ MoveHandleDB = {
 		-38, -- [4]
 		0, -- [5]
 	},
+	["CooldownFlash"] = {
+		"BOTTOM", -- [1]
+		"UIParent", -- [2]
+		"CENTER", -- [3]
+		0, -- [4]
+		150, -- [5]
+	},
 	["petbar"] = {
 		"BOTTOMRIGHT", -- [1]
-		"SunUIActionBar3", -- [2]
+		"MultiBarBottomRightButton12", -- [2]
 		"TOPRIGHT", -- [3]
 		0, -- [4]
 		5, -- [5]
 	},
-	["extrabar"] = {
-		"BOTTOM", -- [1]
-		"UIParent", -- [2]
-		"BOTTOM", -- [3]
-		-14.63489436424693, -- [4]
-		57.11589210020849, -- [5]
+	["InfoPanel2"] = {
+		"TOPRIGHT", -- [1]
+		"Minimap", -- [2]
+		"BOTTOMRIGHT", -- [3]
+		0, -- [4]
+		-5, -- [5]
 	},
 	["bar4"] = {
 		"RIGHT", -- [1]
@@ -300,23 +307,6 @@ MoveHandleDB = {
 		0, -- [5]
 	},
 }
-SkinDB = {
-	["EnableDBMSkin"] = true,
-	["EnableSkadaSkin"] = true,
-	["EnablePallyPowerSkin"] = true,
-	["EnableOmenSkin"] = true,
-	["EnableQuartzSkin"] = true,
-	["EnableBigWigsSkin"] = true,
-	["EnableRecountSkin"] = true,
-}
-
-InfoPanelDB = {
-	["BottomHeight"] = 13,
-	["OpenTop"] = true,
-	["OpenBottom"] = true,
-	["BottomWidth"] = 440,
-}
-
 
 MiniDB = {
 	["ClassCDWidth"] = 140,

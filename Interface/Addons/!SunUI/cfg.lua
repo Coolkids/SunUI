@@ -21,22 +21,9 @@ DB.bgFile = "Interface\\Tooltips\\UI-Tooltip-Background"
 DB.edgetex = 	"Interface\\Tooltips\\UI-Tooltip-Border"
 DB.loottex =		"Interface\\QuestFrame\\UI-QuestLogTitleHighlight"
 DB.aurobackdrop = "Interface\\ChatFrame\\ChatFrameBackground"
-DB.barinset = 10
 DB.bfont = Media.."ROADWAY.ttf"
 DB.onepx = "Interface\\Buttons\\WHITE8x8"
-DB.backdrop = { 
-    bgFile = "Interface\\Tooltips\\UI-Tooltip-Background", 
-    edgeFile = "",
-    tile = false,
-    tileSize = 0, 
-    edgeSize = 0, 
-    insets = { 
-      left = -DB.barinset, 
-      right = -DB.barinset, 
-      top = -DB.barinset, 
-      bottom = -DB.barinset,
-    },
-  }
+
 
 -- 聊天设置
 DB.AutoApply = false									--聊天设置锁定		

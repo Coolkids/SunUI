@@ -11,7 +11,7 @@ local barDB = DB.bars.bar4
     bar:Height(C["ButtonSize"]*2+C["ButtonSpacing"])
   else  
     bar:Width(C["ButtonSize"])
-    bar:Height(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
+    bar:Height(C["ButtonSize"]*12+C["ButtonSpacing"]*13)
   end
    bar:SetScale(C["MainBarSacle"])
   if C["Bar4Layout"] == 2 then
@@ -20,7 +20,7 @@ local barDB = DB.bars.bar4
   else 
    MoveHandle.SunUIActionBar4 = S.MakeMove(bar, "SunUIActionBar4", "bar4", C["MainBarSacle"])
   end
-  bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
+  bar:SetHitRectInsets(-10, -10, -10, -10)
   
  
 

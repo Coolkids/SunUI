@@ -177,7 +177,7 @@ C = UnitFrameDB
     p:Width(f.width-2)
     p:Height(f.height-2)
     p:Point("TOP", s, "TOP", 0, -2)
-	p:SetAlpha(.0)
+	p:SetAlpha(C["Alpha3D"])
 	p.PostUpdate = lib.PortraitPostUpdate	
     f.Portrait = p
   end
@@ -501,7 +501,7 @@ C = UnitFrameDB
     else
       icon.remaining:Hide()
     end
-    if unit == 'player' or unit == 'target' or (unit:match'(boss)%d?$' == 'boss') then
+    if unit == 'player' or unit == 'target' or (unit:match'(boss)%d?$' == 'boss') or unit == 'focus' then
       icon.duration = duration
       icon.timeLeft = expirationTime
       icon.first = true
@@ -534,12 +534,13 @@ C = UnitFrameDB
 	--button.remaining:SetShadowColor(0, 0, 0)--button.remaining:SetShadowOffset(2, -1)
     button.remaining:Point("TOPLEFT", 0, -0.5)
     --overlay texture for debuff types display
-    --button.overlay:SetTexture(DB.Auratex)
+	
+    button.overlay:SetTexture(DB.bordertex)
     button.overlay:Point("TOPLEFT", button, "TOPLEFT", -1, 1)
     button.overlay:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 1, -1)
     button.overlay:SetTexCoord(0.04, 0.96, 0.04, 0.96)
     button.overlay.Hide = function(self) self:SetVertexColor(0, 0, 0) end
-	button:CreateShadow()
+	--button.overlay:CreateShadow()
   end
   -- position update for certain class/specs
 --[[   lib.PreSetPosition = function(self, num)
@@ -640,7 +641,7 @@ C = UnitFrameDB
     d.initialAnchor = "TOPRIGHT"
 	d['growth-x'] = 'RIGHT'
     d["growth-y"] = "DOWN"
-    d.num = 10
+    d.num = 16
     d.size = 19
     d.spacing = 5
     d:Height((d.size+d.spacing)*2)
@@ -682,6 +683,12 @@ C = UnitFrameDB
       d:Width((d.size+d.spacing)*8)
 	  d:Point("BOTTOMLEFT", f, "TOPLEFT", 0, 10)
 	  --d.PreSetPosition = lib.PreSetPosition
+	  elseif f.mystyle=="focus" then
+	  d:Point("RIGHT", f, "LEFT", -d.spacing, 0)
+      d["growth-x"] = "LEFT"
+	  d['growth-y'] = 'DOWN' 
+	  d.initialAnchor = 'RIGHT'
+	  d.num = 16
     end
     d.PostCreateIcon = lib.PostCreateIcon
     d.PostUpdateIcon = lib.PostUpdateIcon

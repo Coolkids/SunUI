@@ -16,6 +16,7 @@ function Module.LoadSettings()
 		["Interrupt"] = true,
 		["Icicle"] = false,
 		["MiniMapPanels"] = true,
+		["HideRaid"] = true,
 		["UIscale"] = false,
 		["AutoUIscale"] = false,
 		["LockUIscale"] = false,
@@ -132,6 +133,13 @@ function Module.BuildGUI()
 					order = 11,
 					get = function() return MiniDB.igonoreOld end,
 					set = function(_, value) MiniDB.igonoreOld = value end,
+				},
+				HideRaid = {
+					type = "toggle",
+					name = "隐藏Blz团队框架",
+					order = 12,
+					get = function() return MiniDB.HideRaid end,
+					set = function(_, value) MiniDB.HideRaid = value end,
 				},
 			}
 		}

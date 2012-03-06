@@ -11,7 +11,7 @@ C = ActionBarDB
     bar:Width(C["ButtonSize"]*6+C["ButtonSpacing"]*(6-1))
     bar:Height(C["ButtonSize"])
     --bar:Point(a1,af,a2,x,y)
-    --bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
+    bar:SetHitRectInsets(-10, -10, -10, -10)
     
     bar:SetScale(C["StanceBarSacle"])
     MoveHandle.SunUIStanceBar = S.MakeMove(bar, "SunUI姿态栏", "stancebar", C["StanceBarSacle"])

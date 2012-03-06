@@ -97,7 +97,9 @@ local function RebuildAddonList(self)
 	local addOnCount = GetNumAddOns()
 	if addOnCount == #MemoryTable then return end
 	MemoryTable = {}
+	local a = 0
 	for i = 1, addOnCount do MemoryTable[i] = {i, select(2, GetAddOnInfo(i)), 0, IsAddOnLoaded(i)} end
+	
 end
 local function UpdateMemory()
 	UpdateAddOnMemoryUsage()
@@ -151,15 +153,45 @@ local function BuildMemory(Anchor)
 	StatusBar:SetScript("OnEnter", function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 		GameTooltip:ClearLines()
+		local maxadd = 0
+		maxadd = #MemoryTable
+		if IsAltKeyDown() then
+				maxAddOns = #MemoryTable
+				
+			else
+				maxAddOns = InfoPanelDB["MemNum"]
+		end
 		local TotalMemory = UpdateMemory()
 		GameTooltip:AddDoubleLine(L["总共内存使用"], S.FormatMemory(TotalMemory), 0.4, 0.78, 1, 0.84, 0.75, 0.65)
 		GameTooltip:AddLine(" ")
-		for i = 1, #MemoryTable do
+		local more = 0
+		for i = 1, maxAddOns do
 			if MemoryTable[i][4] then
-			local r, g, b = S.ColorGradient((3000-MemoryTable[i][3])/3000, 1, 0, 0, 1, 1, 0, 0, 1, 0)
+			if  MemoryTable[i][3] <= 102.4 then r, g, b = 0, 1, 0 -- 0 - 100
+				elseif  MemoryTable[i][3] <= 512 then r, g, b = 0.75, 1, 0 -- 100 - 512
+				elseif  MemoryTable[i][3] <= 1024 then r, g, b = 1, 1, 0 -- 512 - 1mb
+				elseif  MemoryTable[i][3] <= 2560 then r, g, b = 1, 0.75, 0 -- 1mb - 2.5mb
+				elseif  MemoryTable[i][3] <= 5120 then r, g, b = 1, 0.5, 0 -- 2.5mb - 5mb
+			end
+			more = more + 1
 				GameTooltip:AddDoubleLine(MemoryTable[i][2], S.FormatMemory(MemoryTable[i][3]), 1, 1, 1, r, g, b)
 			end						
 		end
+		local moreMem = 0
+			if not IsAltKeyDown() then
+				for i = 11, GetNumAddOns() do
+					if  MemoryTable[i][3] then
+						moreMem = moreMem +  MemoryTable[i][3]
+					end
+				end
+				local mor = 0
+				print(maxadd)
+				mor = maxadd - more
+				GameTooltip:AddDoubleLine(format("%d %s (%s)",mor,L["Hidden"],L["Alt"]),S.FormatMemory(moreMem),.6,.8,1,.6,.8,1)
+			end
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddDoubleLine(L["Default UI Memory Usage:"],S.FormatMemory(gcinfo() - TotalMemory),.6,.8,1,1,1,1)
+			GameTooltip:AddDoubleLine(L["Total Memory Usage:"],S.FormatMemory(collectgarbage'count'),.6,.8,1,1,1,1)
 		GameTooltip:Show()
 	end)
 	StatusBar:SetScript("OnLeave", function() GameTooltip:Hide() end)

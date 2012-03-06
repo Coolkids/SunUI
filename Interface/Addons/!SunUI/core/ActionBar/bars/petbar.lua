@@ -9,7 +9,7 @@ function Module:OnInitialize()
     local bar = CreateFrame("Frame","SunUIPetBar",UIParent, "SecureHandlerStateTemplate")
     bar:Width(C["ButtonSize"]*num+C["ButtonSpacing"]*(num-1))
     bar:Height(C["ButtonSize"])
-    bar:SetHitRectInsets(-DB.barinset, -DB.barinset, -DB.barinset, -DB.barinset)
+    bar:SetHitRectInsets(-10, -10, -10, -10)
     
     bar:SetScale(C["PetBarSacle"])
   
