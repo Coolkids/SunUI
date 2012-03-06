@@ -1,6 +1,6 @@
-﻿44local S, C, L, DB = unpack(select(2, ...))
+﻿local S, C, L, DB = unpack(select(2, ...))
 
-if GetLocale() ~= "zhTW" then  return end
+if GetLocale() ~= "zhCN" then  return end
 -- 控制台
 --标语
 L["恢复默认标语"] = "|cffDDA0DDSun|r|cff44CCFFUI|r\n|cffFFD700确认恢复默认设置|r\n"
@@ -243,22 +243,22 @@ L["Alt"] = "Alt展开"
 L["Default UI Memory Usage:"] = "暴雪插件资源耗用:"
 L["Total Memory Usage:"] = "总资源耗用:"
 --聊天
-L["综合"] = true
-L["交易"] = true
-L["世界防务"] = true
-L["本地防御"] = true
-L["寻求组队"] = true
-L["工会招募"] = true
-L["战场"] = true
-L["战场领袖"] = true
-L["工会"] = true
-L["小队"] = true
-L["小队队长"] = true
-L["地城领袖"] = true
-L["官员"] = true
-L["团队"] = true
-L["团队领袖"] = true
-L["团队警告"] = true
+L["综合"] = 综合
+L["交易"] = 交易
+L["世界防务"] = 世界防务
+L["本地防御"] = "本地防御"
+L["寻求组队"] = "寻求组队"
+L["工会招募"] = "工会招募"
+L["战场"] = "战场"
+L["战场领袖"] = "战场领袖"
+L["工会"] = "工会"
+L["小队"] = "小队"
+L["小队队长"] = "小队队长"
+L["地城领袖"] = "地城领袖"
+L["官员"] = "官员"
+L["团队"] = "团队"
+L["团队领袖"] = "团队领袖"
+L["团队警告"] = "团队警告"
 --staddonmanage
 L["Search"] = "搜索"
 L["ReloadUI"] = "重载介面"
