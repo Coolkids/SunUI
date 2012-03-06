@@ -38,7 +38,8 @@ eventFr:RegisterEvent("VARIABLES_LOADED")
 eventFr:RegisterEvent("BN_MATURE_LANGUAGE_FILTER")
 set()
 ---------------- > SetupUI
-SetCVar("profanityFilter", 0)
+
+--[[ SetCVar("profanityFilter", 0)
 SetCVar("scriptErrors", 1)
 SetCVar("buffDurations", 1)
 SetCVar("consolidateBuffs",0)
@@ -48,7 +49,7 @@ SetCVar("autoSelfCast", 1)
 SetCVar("ShowClassColorInNameplate", 1)
 SetCVar("cameraDistanceMax", 50)
 SetCVar("cameraDistanceMaxFactor", 3.4)
-SetCVar("screenshotQuality", SCREENSHOT_QUALITY)
+SetCVar("screenshotQuality", 10)
 SetCVar("cameraSmoothStyle", 0)
 SetCVar("chatStyle", "classic")
 
@@ -73,9 +74,9 @@ SetCVar("fctHonorGains", 1)
 SetCVar("fctAuras", 1)
 SetCVar("showNewbieTips", 0)
 SetCVar("threatShowNumeric", 1)
-SetCVar("showTutorials", 0)
+SetCVar("showTutorials", 0) ]]
 --分解不必再点确定
-local aotuClick = CreateFrame("Frame")
+--[[ local aotuClick = CreateFrame("Frame")
 aotuClick:RegisterEvent("CONFIRM_DISENCHANT_ROLL")
 aotuClick:RegisterEvent("CONFIRM_LOOT_ROLL")
 aotuClick:RegisterEvent("LOOT_BIND_CONFIRM")      
@@ -86,7 +87,7 @@ aotuClick:SetScript("OnEvent", function(self, event, ...)
       StaticPopup_OnClick(frame, 1) 
       end
    end
-end)
+end) ]]
 ---Hide Instance Difficulty flag 隐藏难度标志
 MiniMapInstanceDifficulty:ClearAllPoints()
 MiniMapInstanceDifficulty:Hide()
