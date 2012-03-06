@@ -11,7 +11,7 @@ local barDB = DB.bars.bar4
     bar:Height(C["ButtonSize"]*2+C["ButtonSpacing"])
   else  
     bar:Width(C["ButtonSize"])
-    bar:Height(C["ButtonSize"]*12+C["ButtonSpacing"]*13)
+    bar:Height(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
   end
    bar:SetScale(C["MainBarSacle"])
   if C["Bar4Layout"] == 2 then

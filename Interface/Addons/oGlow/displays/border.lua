@@ -1,6 +1,6 @@
 local _, ns = ...
 local oGlow = ns.oGlow
-
+local S, _, _, _ = unpack(SunUI)
 local argcheck = oGlow.argcheck
 local colorTable = ns.colorTable
 
@@ -19,16 +19,15 @@ local createBorder = function(self, point)
 		--bc:SetBlendMode("ADD")
 		--bc:SetAlpha(.9)
 		bc:SetBackdrop({
-			edgeFile = "Interface\\Addons\\!SunUI\\media\\glowTex",   --"Interface\\ChatFrame\\ChatFrameBackground", 
-			edgeSize = 4, 
+			edgeFile = "Interface\\ChatFrame\\ChatFrameBackground",   --, 
+			edgeSize = S.Scale(1), 
 		})
 
-		bc:SetWidth(44)
-		bc:SetHeight(44)
+		
 
-		bc:SetPoint("CENTER", point or self)
-		--bc:SetPoint("TOPLEFT", -1, point or 1)
-		--bc:SetPoint("BOTTOMRIGHT", 1, point or -1)
+		--bc:SetPoint("CENTER", point or self)
+		bc:SetPoint("TOPLEFT", -1, point or 1)
+		bc:SetPoint("BOTTOMRIGHT", 1, point or -1)
 		self.oGlowBorder = bc
 	end
 

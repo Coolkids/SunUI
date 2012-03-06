@@ -20,19 +20,7 @@ local Slots = {
 	[10] = {17, L["副手"], 1000}, 
 	[11] = {18, L["远程"], 1000}
 }
-local tokens = {
-	{61, 250},	 -- Dalaran Jewelcrafter's Token
-	{81, 250},	 -- Dalaran Cooking Award
-	{241, 250},	 -- Champion Seal
-	{361, 200},  -- Illustrious Jewelcrafter's Token
-	{390, 3000}, -- Conquest Points
-	{391, 2000},  -- Tol Barad Commendation
-	{392, 4000}, -- Honor Points
-	{395, 4000}, -- Justice Points
-	{396, 9999}, -- Valor Points
-	{402, 10},	 -- Chef's Award 
-	{416, 300}, -- Mark of the World Tree
-}
+
 -- BuildClock
 local function BuildClock()
 	local Clock = CreateFrame("Frame", nil, UIParent)
@@ -185,7 +173,6 @@ local function BuildMemory(Anchor)
 					end
 				end
 				local mor = 0
-				print(maxadd)
 				mor = maxadd - more
 				GameTooltip:AddDoubleLine(format("%d %s (%s)",mor,L["Hidden"],L["Alt"]),S.FormatMemory(moreMem),.6,.8,1,.6,.8,1)
 			end

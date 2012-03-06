@@ -13,7 +13,7 @@ if C["Big4Layout"] == 2 then
     bar:Height(C["ButtonSize"]*2+C["ButtonSpacing"])
   else  
     bar:Width(C["ButtonSize"])
-    bar:Height(C["ButtonSize"]*12+C["ButtonSpacing"]*13)
+    bar:Height(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
   end
   if C["Bar5Layout"] == 2 then
     --bar:Point(a1,af,a2,x+((C["ButtonSize"]*6+C["ButtonSpacing"]*6)/2),y-(C["ButtonSize"]*1+C["ButtonSpacing"]*1)+0.5)

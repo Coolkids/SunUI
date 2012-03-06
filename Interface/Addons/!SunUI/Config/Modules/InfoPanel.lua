@@ -68,8 +68,8 @@ function Module.BuildGUI()
 				},
 				BottomHeight = {
 					type = "input",
-					name = L["底部信息条宽度"],
-					desc = L["底部信息条宽度"],
+					name = L["底部信息条高度"],
+					desc = L["底部信息条高度"],
 					disabled = not InfoPanelDB.OpenBottom,
 					order = 5,
 					get = function() return tostring(InfoPanelDB.BottomHeight) end,

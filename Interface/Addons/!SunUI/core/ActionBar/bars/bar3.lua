@@ -7,7 +7,7 @@ local barDB = DB.bars.bar3
   C = ActionBarDB
 	local a1, af, a2, x, y = unpack(MoveHandleDB["bar3"]) 
   if C["Bar3Layout"] == 1 then
-    bar:Width(C["ButtonSize"]*12+C["ButtonSpacing"]*13)
+    bar:Width(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
     bar:Height(C["ButtonSize"])
   end
   bar:SetScale(C["MainBarSacle"])
@@ -39,7 +39,7 @@ local barDB = DB.bars.bar3
 		Button:Size(C["ButtonSize"], C["ButtonSize"])
 		Button:ClearAllPoints()
 		if i == 1 then
-				Button:Point("BOTTOMRIGHT", SunUIActionBar1, "BOTTOMLEFT", -C["ButtonSpacing"], 0)
+				Button:Point("BOTTOMRIGHT", _G["ActionButton1"], "BOTTOMLEFT", -C["ButtonSpacing"], 0)
 			elseif i <= 3 then
 				Button:Point("RIGHT", _G["MultiBarBottomRightButton"..i-1], "LEFT", -C["ButtonSpacing"], 0)
 			elseif i == 4 then
@@ -47,7 +47,7 @@ local barDB = DB.bars.bar3
 			elseif i <= 6 then
 				Button:Point("RIGHT", _G["MultiBarBottomRightButton"..i-1], "LEFT", -C["ButtonSpacing"], 0)	
 			elseif i == 7 then
-				Button:Point("BOTTOMLEFT", SunUIActionBar1, "BOTTOMRIGHT", C["ButtonSpacing"], 0)
+				Button:Point("BOTTOMLEFT", _G["ActionButton12"], "BOTTOMRIGHT", C["ButtonSpacing"], 0)
 			elseif i <= 9 then
 				Button:Point("LEFT", _G["MultiBarBottomRightButton"..i-1], "RIGHT", C["ButtonSpacing"], 0)
 			elseif i == 10 then
