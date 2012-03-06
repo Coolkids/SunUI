@@ -79,6 +79,7 @@ UnitFrameDB = {
 	["showpet"] = true,
 	["playerCBuserplaced"] = false,
 	["Width"] = 240,
+	["Alpha3D"] = 0,
 	["ClassColor"] = false,
 	["Bossframes"] = true,
 	["TargetCastBarHeight"] = 10,
@@ -309,7 +310,7 @@ MoveHandleDB = {
 }
 
 MiniDB = {
-	["ClassCDWidth"] = 140,
+	["ClassCDWidth"] = 100,
 	["uiScale"] = 0.7,
 	["AutoRepair"] = false,
 	["Icicle"] = false,
@@ -330,4 +331,5 @@ MiniDB = {
 	["ChatFilter"] = true,
 	["FontScale"] = 0.8600000000000001,
 	["igonoreOld"] = false,
+	["HideRaid"] = true,
 }
