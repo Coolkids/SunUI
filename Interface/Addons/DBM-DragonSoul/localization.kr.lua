@@ -31,7 +31,7 @@ L= DBM:GetModLocalization(324)
 L:SetOptionLocalization({
 	ShadowYell			= "$spell:104600 주문의 영향을 받은 경우 대화로 알리기 (영웅 난이도)",
 	CustomRangeFrame	= "교란의 그림자 주문에 대한 거리 프레임 설정 (영웅 난이도)",
-	Never				= "사용안함",
+	Never				= "거리 프레임 사용안함",
 	Normal				= "일반 거리 프레임",
 	DynamicPhase2		= "고라스의 검은 피 도중에만 필터링 사용",
 	DynamicAlways		= "항상 디버프 필터링 사용"
@@ -105,26 +105,27 @@ L:SetMiscLocalization({
 L= DBM:GetModLocalization(331)
 
 L:SetWarningLocalization({
-	specWarnHourofTwilightN		= "5초 후 %s! (%d)"--spellname Count
+	specWarnHourofTwilightN		= "5초 후 %s! (%d)"
 })
 
 L:SetTimerLocalization({
 	TimerCombatStart	= "울트락시온 활성화",
-	timerRaidCDs		= "%s 대기시간 : %s"--spellname CD Castername
+	timerRaidCDs		= "%s 대기시간 : %s"
 })
 
 L:SetOptionLocalization({
 	TimerCombatStart	= "울트락시온 활성화 바 표시",
 	ResetHoTCounter		= "황혼의 시간 시전 횟수 재시작 설정",--$spell doesn't work in this function apparently so use typed spellname for now.
 	Never				= "사용 안함",
-	Reset3				= "일반 3회, 영웅 2회 단위로 재시작",
+	ResetDynamic		= "일반 2회, 영웅 3회 단위로 재시작",
 	Reset3Always		= "난이도 구분 없이 3회 단위로 재시작",
-	SpecWarnHoTN		= "황혼의 시간 시전 5초 전 특수 경고 보기 (3회 단위 재시작에서만 작동)",
-	One					= "첫번째 (예: 1 4 7)",
-	Two					= "두번째 (예: 2 5)",
-	Three				= "세번째 (예: 3 6)",
-	ShowRaidCDs			= "공격대 재사용 대기시간 바 표시",
-	ShowRaidCDsSelf		= "자신의 재사용 대기시간 바만 표시 (공격대 재사용 대기시간 바 활성화 필요)"
+	SpecWarnHoTN		= "황혼의 시간 5초 전 특수 경고 설정 (시전 횟수 재시작 설정에 영향 받음)",
+	One					= "시전 횟수가 1일때 보기 (또는 1, 4, 7 일때)",
+	Two					= "시전 횟수가 2일때 보기 (또는 2, 5 일때)",
+	Three				= "시전 횟수가 3일때 보기 (또는 3, 6 일때)",
+	dropdownRaidCDs		= "공격대 재사용 대기시간 바 표시",
+	ShowRaidCDs			= "모두",
+	ShowRaidCDsSelf		= "자신 것만"
 })
 
 L:SetMiscLocalization({

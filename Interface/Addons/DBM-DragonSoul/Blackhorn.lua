@@ -1,10 +1,11 @@
 local mod	= DBM:NewMod(332, "DBM-DragonSoul", nil, 187)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7414 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7431 $"):sub(12, -3))
 mod:SetCreatureID(56598)--56427 is Boss, but engage trigger needs the ship which is 56598
 mod:SetMainBossID(56427)
 mod:SetModelID(39399)
+mod:SetModelSound("sound\\CREATURE\\WarmasterBlackhorn\\VO_DS_BLACKHORN_INTRO_01.OGG", "sound\\CREATURE\\WarmasterBlackhorn\\VO_DS_BLACKHORN_SLAY_01.OGG")
 mod:SetZone()
 mod:SetUsedIcons()
 
@@ -37,6 +38,7 @@ local warnConsumingShroud			= mod:NewTargetAnnounce(110598)
 
 local specWarnHarpoon				= mod:NewSpecialWarningTarget(108038, false)
 local specWarnTwilightOnslaught		= mod:NewSpecialWarningSpell(107588, nil, nil, nil, true)
+local specWarnSapper				= mod:NewSpecialWarningSpell("ej4200", false)
 local specWarnDeckFireCast			= mod:NewSpecialWarningSpell(110095, false, nil, nil, true)
 local specWarnDeckFire				= mod:NewSpecialWarningMove(110095)
 local specWarnElites				= mod:NewSpecialWarning("SpecWarnElites", mod:IsTank())
@@ -58,7 +60,7 @@ local timerSapperCD					= mod:NewNextTimer(40, "ej4200", nil, nil, nil, 107752)
 local timerDegenerationCD			= mod:NewCDTimer(8.5, 109208, nil, mod:IsTank())--8.5-9.5 variation.
 local timerBladeRushCD				= mod:NewCDTimer(15.5, 107595)
 local timerBroadsideCD				= mod:NewNextTimer(90, 110153)
-local timerRoarCD					= mod:NewCDTimer(19, 109228)--19~24 variables
+local timerRoarCD					= mod:NewCDTimer(18.5, 109228)--18.5~24 variables
 local timerTwilightFlamesCD			= mod:NewNextTimer(8, 108051)
 local timerShockwaveCD				= mod:NewCDTimer(23, 108046)
 local timerDevastateCD				= mod:NewCDTimer(8.5, 108042, nil, mod:IsTank())
@@ -81,10 +83,6 @@ local CVAR = false
 
 local function Phase2Delay()
 	mod:UnscheduleMethod("AddsRepeat")
-	timerAdd:Cancel()
-	timerTwilightOnslaughtCD:Cancel()
-	countdownTwilightOnslaught:Cancel()
-	timerBroadsideCD:Cancel()
 	timerSapperCD:Cancel()
 	timerRoarCD:Start(10)
 	timerTwilightFlamesCD:Start(12)
@@ -239,7 +237,10 @@ function mod:SPELL_AURA_APPLIED(args)
 			timerHarpoonActive:Start(25, args.destGUID)
 		end
 	elseif args:IsSpellID(108040) and not phase2Started then--Goriona is being shot by the ships Artillery Barrage (phase 2 trigger)
-		self:Schedule(10, Phase2Delay)--It seems you can still get phase 1 crap until blackhorn's yell 10 seconds after this trigger, so we delay canceling timers.
+		timerTwilightOnslaughtCD:Cancel()
+		countdownTwilightOnslaught:Cancel()
+		timerBroadsideCD:Cancel()
+		self:Schedule(10, Phase2Delay)--seems to only sapper comes even phase2 started. so delays only sapper stuff.
 		phase2Started = true
 		warnPhase2:Show()--We still warn phase 2 here though to get into position, especially since he can land on deck up to 5 seconds before his yell.
 		timerCombatStart:Start(5)--5-8 seems variation, we use shortest.
@@ -274,6 +275,7 @@ mod.SPELL_MISSED = mod.SPELL_DAMAGE
 function mod:RAID_BOSS_EMOTE(msg)
 	if msg == L.SapperEmote or msg:find(L.SapperEmote) then
 		timerSapperCD:Start()
+		specWarnSapper:Show()
 	elseif msg == L.Broadside or msg:find(L.Broadside) then
 		timerBroadsideCD:Start()
 	elseif msg == L.DeckFire or msg:find(L.DeckFire) then
@@ -297,6 +299,7 @@ function mod:UNIT_DIED(args)
 	elseif cid == 56855 or cid == 56587 then--Drakes
 		drakesCount = drakesCount - 1
 		warnDrakesLeft:Show(drakesCount)
+		timerReloadingCast:Cancel(args.sourceGUID)
 		timerHarpoonActive:Cancel(args.sourceGUID)
 	end
 end

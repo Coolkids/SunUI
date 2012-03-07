@@ -119,14 +119,15 @@ L:SetOptionLocalization({
 	TimerCombatStart	= "Mostrar tiempo para el inicio del combate",
 	ResetHoTCounter		= "Reiniciar contador de Hora del crepusculo",--$spell doesn't work in this function apparently so use typed spellname for now.
 	Never				= "Nunca",
-	Reset3				= "En series de 3/2 (heroico/normal)",
+	ResetDynamic		= "En series de 3/2 (heroico/normal)",
 	Reset3Always		= "Siempre reiniciar en series de 3",
 	SpecWarnHoTN		= "Mostrar aviso especial 5s antes de Hora del Crepusculo (solo en series de 3)",
 	One					= "1 (ej: 1 4 7)",
 	Two					= "2 (ej: 2 5)",
 	Three				= "3 (ej: 3 6)",
-	ShowRaidCDs			= "Mostrar tiempos de CDs de Banda",
-	ShowRaidCDsSelf		= "Pero solo mostrar los CDs propios\n(Requiere 'Mostrar tiempos de CDs de Banda' activado)"
+	dropdownRaidCDs		= "Mostrar tiempos para CDs de Banda",
+	ShowRaidCDs			= "Todos",
+	ShowRaidCDsSelf		= "Solo los mios"
 })
 
 L:SetMiscLocalization({

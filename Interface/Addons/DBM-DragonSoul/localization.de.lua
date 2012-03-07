@@ -117,14 +117,15 @@ L:SetOptionLocalization({
 	TimerCombatStart	= "Zeige Dauer des Rollenspiels bevor Ultraxion aktiv wird",
 	ResetHoTCounter		= "Neustart der Stunde des Zwielichts Zählung",
 	Never				= "Nie",
-	Reset3				= "In 3er/2er-Gruppen (heroisch/normal)",
+	ResetDynamic		= "In 3er/2er-Gruppen (heroisch/normal)",
 	Reset3Always		= "Immer in 3er-Gruppen",
-	SpecWarnHoTN		= "Spezialvorwarnung für Stunde des Zwielichts (nur für Neustart in 3er-Gruppen ausgelegt)",
+	SpecWarnHoTN		= "Spezialvorwarnung für Stunde des Zwielichts (bei Neustart auf \"Nie\" nach 3er-Gruppenregel)",
 	One					= "5 Sekunden vor Zählerstand 1 (1 4 7 ...)",
 	Two					= "5 Sekunden vor Zählerstand 2 (2 5 ...)",
 	Three				= "5 Sekunden vor Zählerstand 3 (3 6 ...)",
-	ShowRaidCDs			= "Zeige Timer für \"Raid-Cooldowns\"",
-	ShowRaidCDsSelf		= "Zeige jedoch nur Timer für eigene \"Raid-Cooldowns\"\n(benötigt aktivierte Timer für \"Raid-Cooldowns\")"
+	dropdownRaidCDs		= "Zeige Timer für \"Raid-Cooldowns\"",
+	ShowRaidCDs			= "Alle",
+	ShowRaidCDsSelf		= "Nur meine"
 })
 
 L:SetMiscLocalization({

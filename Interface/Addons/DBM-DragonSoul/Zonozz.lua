@@ -1,9 +1,10 @@
 local mod	= DBM:NewMod(324, "DBM-DragonSoul", nil, 187)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7402 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7425 $"):sub(12, -3))
 mod:SetCreatureID(55308)
 mod:SetModelID(39138)
+mod:SetModelSound("sound\\CREATURE\\WarlordZonozz\\VO_DS_ZONOZZ_INTRO_01.OGG", "sound\\CREATURE\\WarlordZonozz\\VO_DS_ZONOZZ_SPELL_05.OGG")
 mod:SetZone()
 mod:SetUsedIcons()
 

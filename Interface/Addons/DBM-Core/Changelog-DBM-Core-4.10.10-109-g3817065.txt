@@ -1,4 +1,30 @@
 subversion:
+	- ebmor via svn r7434: deDE update (DragonSoul)
+	- Snamor via svn r7433: esES update
+	- ultrashining via svn r7432: zhTW update
+	- nbluewiz via svn r7431: # Blackhorn : Added optional special warning for Sapper. # koKR update
+	- Omega via svn r7430: That commit actually didn't fix the issues, it just made more. it broke the function completely for normal. HoT warnings are supposed to work on normal even if it's set to reset in 2s.
+	Ultraxion:
+	*Re-did HoT code to cover more users.
+	-If reset is set to always3, spec warns will work on 1 2 or 3.
+	-if normal and dynamic, it will alert for 1 and 2 as intended, if they set it to 3 then oops on them. They should know 3 > 2
+	-iF reset is never, it will alert in 3s, and still fully support special warnings based on that setting inteligently (ie 1= 1 4 7)
+	*Re-did raid CDs to use a popdown menu
+	- nbluewiz via svn r7429: # Ultraxion : improved specWarnHourofTwilightN works on only 3 set.
+	- Omega via svn r7428: Fix a bug where you can get messages from someone else in your part doing DMF dailies near you. Now the mods will ignore non "player" unitid casts.
+	- nbluewiz via svn r7427: # koKR update
+	- nbluewiz via svn r7426: # koKR update
+	- Omega via svn r7425: Model viewer sounds for DS bosses and alizabal
+	- Omega via svn r7424: actually, a simpler way to do same thing.
+	- Omega via svn r7423: Small tweak for the future ;)
+	- DiabloHu via svn r7422: zhCN update
+	- nbluewiz via svn r7421: # Core : Fix ShortTerm events not registering on 2nd pull.
+	- nbluewiz via svn r7420: # Blackhorn, Hagara : Adjusted min cooldown. Try to fix bubble options (why this stuff working randomly?......)
+	- Omega via svn r7419: small tweak and additional commentation
+	- nbluewiz via svn r7418: # Ragnaros : Comment update.
+	- Omega via svn r7417: Try to fix rag and shannox trap scanners, particularly rag one, which hasn't worked AT ALL since i changed it in 7345, even with blu's changes, it fails to announce meteors 100% of the time when they are on a pet, uId just fails for this so lets just return to targetname, heck i don't even thnk i've seen it successfully announce a player for that matter either, so hopefully the revert in isTank fixes that problem as well.
+	- nbluewiz via svn r7416: # koKR update
+	- nbluewiz via svn r7415: # Core : Fix all combat end stuff. Because you can see kill or wipe message not instances. (i.e: Tomb) # Blackhorn : Updated Phase 2 timer canceling. Also cancels reload timer when drake dies.
 	- Omega via svn r7414: naming convention updates. Also added an optional countdown for grip timers (off by default for obvious reasons, users who want it will need to turn it on and probably disable the roll countdown on their own)
 	- Snamor via svn r7413: esES update
 	- tandanu via svn r7412: fix warsong/twin peaks flag carrier coloring and targeting

@@ -24,7 +24,7 @@
 ## X-DBM-Mod-Name-ptBR: Trono dos Quatro Ventos
 ## X-DBM-Mod-Sort: 105
 ## X-DBM-Mod-LoadZoneID: 773
-## X-Curse-Packaged-Version: 4.10.10-89-g25dc2a7
+## X-Curse-Packaged-Version: 4.10.10-109-g3817065
 ## X-Curse-Project-Name: Deadly Boss Mods
 ## X-Curse-Project-ID: deadly-boss-mods
 ## X-Curse-Repository-ID: wow/deadly-boss-mods/mainline

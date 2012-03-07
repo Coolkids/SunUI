@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Gnoll", "DBM-WorldEvents", 2)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7340 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7428 $"):sub(12, -3))
 mod:SetZone()
 
 mod:RegisterEvents(
@@ -55,6 +55,7 @@ end
 do 
 	local antiSpam = 0
 	function mod:UNIT_SPELLCAST_SUCCEEDED(uId, spellName, _, _, spellID)
+		if uId ~= "player" then return end
 		if spellID == 102044 then--Hogger
 			gameMaxPoints = gameMaxPoints + 3
 			warnHogger:Show()
