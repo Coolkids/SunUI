@@ -194,6 +194,16 @@ CompactRaidFrameContainer:UnregisterAllEvents()
 CompactRaidFrameContainer.Show = function() end
 CompactRaidFrameContainer:Hide()	
 end
+-- 隐藏小队框体
+if not UnitFrameDB["showparty"] then
+for i = 1, MAX_PARTY_MEMBERS do
+	local PartyMemberFrame = _G["PartyMemberFrame"..i]
+	PartyMemberFrame:UnregisterAllEvents()
+	PartyMemberFrame:Hide()
+	PartyMemberFrame.Show = function() end
+end
+UIParent:UnregisterEvent("RAID_ROSTER_UPDATE")
+end
 ---------------- > Autoinvite by whisper
 if C["Autoinvite"] then
 local f = CreateFrame("frame")
@@ -206,14 +216,7 @@ end)
 end
 end
 
--- 隐藏小队框体
-for i = 1, MAX_PARTY_MEMBERS do
-	local PartyMemberFrame = _G["PartyMemberFrame"..i]
-	PartyMemberFrame:UnregisterAllEvents()
-	PartyMemberFrame:Hide()
-	PartyMemberFrame.Show = function() end
-end
-UIParent:UnregisterEvent("RAID_ROSTER_UPDATE")
+
 
 -- 实名好友弹窗位置修正
 BNToastFrame:HookScript("OnShow", function(self)

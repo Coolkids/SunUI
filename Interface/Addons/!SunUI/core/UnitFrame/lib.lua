@@ -681,7 +681,7 @@ C = UnitFrameDB
 	  d.size = 23
       d:Height((d.size+d.spacing)*2)
       d:Width((d.size+d.spacing)*8)
-	  d:Point("BOTTOMLEFT", f, "TOPLEFT", 0, 10)
+	  d:Point("BOTTOMLEFT", f, "TOPLEFT", 0, 15)
 	  --d.PreSetPosition = lib.PreSetPosition
 	  elseif f.mystyle=="focus" then
 	  d:Point("RIGHT", f, "LEFT", -d.spacing, 0)
@@ -712,7 +712,7 @@ C = UnitFrameDB
         r = CreateFrame("StatusBar", f:GetName().."_Runes"..i, f)
         r:Size(f.width/6 - 2, f.height/3)
         if (i == 1) then
-          r:Point("BOTTOMLEFT", f, "TOPLEFT", 1, 3)
+          r:Point("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
         else
           r:Point("TOPLEFT", f.Runes[i-1], "TOPRIGHT", 2, 0)
         end
