@@ -2,7 +2,7 @@
 local Core = LibStub("AceAddon-3.0"):GetAddon("Core")
 local Module = Core:GetModule("Congig", "AceConsole-3.0")
 local AceConfigDialog = LibStub and LibStub("AceConfigDialog-3.0", true)
-local button = CreateFrame("Button", "ButtonS", ChatFrame1)
+local button = CreateFrame("Button", "ButtonS", UIParent)
 		button:Point("BOTTOMLEFT", ChatFrame1, "BOTTOMRIGHT", 5, 25)
 		button:Size(20)
 		button.text = button:CreateFontString(nil, 'OVERLAY')

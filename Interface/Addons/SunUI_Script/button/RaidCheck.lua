@@ -319,7 +319,7 @@ function RC:CheckRaidStatus()
 	end
 end
 
-	local RaidCheckFrameLeft = CreateFrame("Button", "RaidCheckFrameLeft", ChatFrame1)
+	local RaidCheckFrameLeft = CreateFrame("Button", "RaidCheckFrameLeft", UIParent)
 	RaidCheckFrameLeft:Size(20)
 	RaidCheckFrameLeft:Point("BOTTOMLEFT", ChatFrame1, "BOTTOMRIGHT", 5, 75)
 	RaidCheckFrameLeft.text = RaidCheckFrameLeft:CreateFontString(nil, 'OVERLAY')
@@ -341,7 +341,7 @@ end
 	end)
 
 
-	local RaidCheckFrameRight = CreateFrame("Button", "RaidCheckFrameRight", ChatFrame1)
+	local RaidCheckFrameRight = CreateFrame("Button", "RaidCheckFrameRight", UIParent)
 	RaidCheckFrameRight:Size(20)
 	RaidCheckFrameRight:Point("BOTTOMLEFT", ChatFrame1, "BOTTOMRIGHT", 5, 100)
 	RaidCheckFrameRight.text = RaidCheckFrameRight:CreateFontString(nil, 'OVERLAY')

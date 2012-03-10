@@ -1,6 +1,6 @@
 ﻿local S, _, L, DB = unpack(SunUI)
 if DB.Nuke == true then return end
-local button = CreateFrame("Button", "ButtonA", ChatFrame1)
+local button = CreateFrame("Button", "ButtonA", UIParent)
 		button:Point("BOTTOMLEFT", ChatFrame1, "BOTTOMRIGHT", 5, 50)
 		button:Size(20)
 		button.text = button:CreateFontString(nil, 'OVERLAY')
