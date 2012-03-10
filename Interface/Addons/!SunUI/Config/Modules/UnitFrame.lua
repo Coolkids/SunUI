@@ -297,5 +297,26 @@ function Module.BuildGUI()
 				},
 			}
 		}
+		DB["Config"]["Raid"] =  {
+			type = "group", order = 10,
+			name = "团队框架",
+			args = {
+					UnlockRiad = {
+					type = "execute",
+					name = "团队设置",
+					order = 5,
+					func = function()
+						if not UnitAffectingCombat("player") then
+							if IsAddOnLoaded("oUF_Freebgrid") then 
+								LoadAddOn('oUF_Freebgrid_Config')
+								local RF = LibStub and LibStub("AceConfigDialog-3.0", true)
+										RF:Open("oUF_Freebgrid")
+										RF:Close("SunUI Config")
+							end
+						end
+					end
+					},
+			}
+		}
 	end
 end

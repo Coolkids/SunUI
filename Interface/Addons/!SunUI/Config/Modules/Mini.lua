@@ -49,7 +49,7 @@ end
 function Module.BuildGUI()
 	if DB["Config"] then
 		DB["Config"]["Mini"] =  {
-			type = "group", order = 10,
+			type = "group", order = 11,
 			name = L["小东西设置"],
 			args = {
 				AutoSell = {
@@ -144,7 +144,7 @@ function Module.BuildGUI()
 			}
 		}
 			DB["Config"]["UI"] =  {
-			type = "group", order = 11,
+			type = "group", order = 12,
 			name = L["UI缩放"],
 			args = {
 				uiScale = {
@@ -200,7 +200,7 @@ function Module.BuildGUI()
 			}
 		}
 		DB["Config"]["ClassCD"] =  {
-			type = "group", order = 12,
+			type = "group", order = 13,
 			name = L["内置CD"],
 			args = {
 				ClassCDOpen = {
@@ -262,7 +262,7 @@ function Module.BuildGUI()
 			}
 		}
 		DB["Config"]["Script"] =  {
-			type = "group", order = 13,
+			type = "group", order = 14,
 			name = "SunUI Script",
 			args = {
 				Flump = {

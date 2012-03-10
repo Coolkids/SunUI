@@ -4,26 +4,21 @@
 
 
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file = "Init.lua"/>
-	<Script file = "..\cfg.lua"/>
-	<Script file = "basedata.lua"/>
-	<Script file = "autoset.lua"/>
-	<Script file = "API.lua"/>
-	<Script file = "move.lua"/>
+	<Include file="ActionBar\Load.xml"/>
 	<Include file="bags\load.xml"/>
 	<Script file = "Buffs.lua"/>
 	<Include file = "Chat\load.xml"/>
-	<Script file = "NamePlates.lua"/>
-	<Script file = "Loot.lua"/>
-	<Script file = "roll.lua"/>
-	<Script file = "Minimap.lua"/>
-	<Script file = "Threat.lua"/>
-	<Include file="ActionBar\Load.xml"/>
-	<Include file="stExperienceBar\Load.xml"/>
-	<Include file="Tooltip\Load.xml"/>
 	<Include file="UnitFrame\load.xml"/>
 	<Script file="oUF_MovableFrames\movable.lua"/>
+	<Script file = "Minimap.lua"/>
+	<Script file = "Loot.lua"/>
+	<Script file = "roll.lua"/>
 	<Include file="Reminder\Load.xml"/>
+	<Script file = "Threat.lua"/>
+	
+	<Include file="Tooltip\Load.xml"/>
+
+	
 	
 
 	

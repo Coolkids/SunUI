@@ -3,8 +3,8 @@
 if GetLocale() ~= "zhTW" then  return end
 -- 控制台
 --标语
-L["恢复默认标语"] = "|cffDDA0DDSun|r|cff44CCFFUI|r\n|cffFFD700确认恢复默认设置|r\n"
-L["欢迎标语"] = "欢迎使用|cffDDA0DDSun|r|cff44CCFFUI|r\n\n请点击确定按钮加载默认配置\n"
+L["恢复默认标语"] = "|cffDDA0DDSun|r|cff44CCFFUI|r\n|cffFFD700確認恢復初始設置|r\n"
+L["欢迎标语"] = "欢迎使用|cffDDA0DDSun|r|cff44CCFFUI|r\n\n點擊確認載入初始設置\n"
 L["警告"] = "|cffDDA0DDSun|r|cff44CCFFUI|r\n|cffFFD700開啟此功能會導致戰鬥中內存暴漲,請量力開啟.|r"
 --总
 L["恢复默认设置"] = "恢復默認設置"

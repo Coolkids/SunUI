@@ -31,7 +31,7 @@ end
 function Module.BuildGUI()
 	if DB["Config"] then
 		DB["Config"]["InfoPanel"] =  {
-			type = "group", order = 14,
+			type = "group", order = 15,
 			name = L["信息面板"],
 			args = {
 				OpenTop = {
