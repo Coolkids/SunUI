@@ -4,7 +4,7 @@ local Chatbar = CreateFrame("Frame")
 Chatbar:RegisterEvent("PLAYER_ENTERING_WORLD")
 Chatbar:SetScript("OnEvent", function()
 Chatbar:UnregisterEvent("PLAYER_ENTERING_WORLD")
-	if WorldMapFrame then
+	if ChatBarFrameBackground then
 		S.StripTextures(ChatBarFrame, Kill)
 		S.StripTextures(ChatBarFrameBackground, Kill)
 		ChatBarFrameBackground:CreateShadow("Background")

@@ -301,11 +301,11 @@ oUF.Tags['mono:sp'] = function(u)
 		spcol = {"FF6161","FFF130","8AFF30"}
 	end
 	if SP == 1 then
-		return "|cff"..spcol[1].."_|r"
+		return ">".."|cff"..spcol[1].."1|r".."<"
 	elseif SP == 2 then
-		return "|cff"..spcol[2].."_ _|r"
+		return ">".."|cff"..spcol[2].."2|r".."<"
 	elseif SP == 3 then
-		return "|cff"..spcol[3].."_ _ _|r"
+		return ">".."|cff"..spcol[3].."3|r".."<"
 	end
 end
 oUF.TagEvents['mono:sp'] = 'UNIT_POWER'
@@ -313,11 +313,11 @@ oUF.TagEvents['mono:sp'] = 'UNIT_POWER'
 oUF.Tags['mono:cp'] = function(u)
 	local cp = UnitExists("vehicle") and GetComboPoints("vehicle", "target") or GetComboPoints("player", "target")
 	cpcol = {"8AFF30","FFF130","FF6161"}
-	if cp == 1 then		return "|cff"..cpcol[1].."_|r" 
-	elseif cp == 2 then	return "|cff"..cpcol[1].."_ _|r"
-	elseif cp == 3 then	return "|cff"..cpcol[1].."_ _|r |cff"..cpcol[2].."_|r" 
-	elseif cp == 4 then	return "|cff"..cpcol[1].."_ _|r |cff"..cpcol[2].."_ _|r" 
-	elseif cp == 5 then	return "|cff"..cpcol[1].."_ _|r |cff"..cpcol[2].."_ _|r |cff"..cpcol[3].."_|r"
+	if       cp == 1 then	return ">".."|cff"..cpcol[1].."1|r".."<"
+	elseif cp == 2 then	return ">".."|cff"..cpcol[1].."2|r".."<"
+	elseif cp == 3 then	return ">".."|cff"..cpcol[2].."3|r".."<"
+	elseif cp == 4 then	return ">".."|cff"..cpcol[2].."4|r".."<"
+	elseif cp == 5 then	return ">".."|cff"..cpcol[3].."5|r".."<"
 	end
 end
 oUF.TagEvents['mono:cp'] = 'UNIT_COMBO_POINTS'
@@ -325,11 +325,11 @@ oUF.TagEvents['mono:cp'] = 'UNIT_COMBO_POINTS'
 oUF.Tags['mono:orbs'] = function(u)
 	local name, _, _, count, _, duration = UnitBuff("player",GetSpellInfo(77487))
 	if count == 1 then
-		return "|cffFF6161▁|r"
+		return ">".."|cffFF61611|r".."<"
 	elseif count == 2 then
-		return "|cffFFF130▁ ▁|r"
+		return ">".."|cffFFF1302|r".."<"
 	elseif count == 3 then
-		return "|cff8AFF30▁ ▁ ▁|r"
+		return ">".."|cff8AFF303|r".."<"
 	end
 end
 oUF.TagEvents['mono:orbs'] = 'UNIT_AURA'
@@ -337,11 +337,11 @@ oUF.TagEvents['mono:orbs'] = 'UNIT_AURA'
 oUF.Tags['mono:ws'] = function(u)
 	local name, _, _, count, _, duration = UnitBuff("player",GetSpellInfo(52127)) 
 	if count == 1 then
-		return "|cffFF6161_|r"
+		return ">".."|cffFF61611|r".."<"
 	elseif count == 2 then
-		return "|cff8AFF30_ _|r"
+		return ">".."|cff8AFF302|r".."<"
 	elseif count == 3 then
-		return "|cff8AFF30_ _ _|r"
+		return ">".."|cff8AFF303|r".."<"
 	end
 end
 oUF.TagEvents['mono:ws'] = 'UNIT_AURA'
@@ -351,29 +351,29 @@ oUF.Tags['mono:ls'] = function(u)
 	local mw, _, _, mwc = UnitBuff("player",GetSpellInfo(53817))
 	if mw and not UnitBuff("player",GetSpellInfo(52127)) then
 		if mwc == 1 then
-			return "|cff8AFF30_|r"
+			return ">".."|cff8AFF301|r".."<"
 		elseif mwc == 2 then
-			return "|cff8AFF30_ _|r"
+			return ">".."|cff8AFF302|r".."<"
 		elseif mwc == 3 then
-			return "|cff8AFF30_ _|r |cffFFF130_ _|r"
+			return ">".."|cffFFF1303|r".."<"
 		elseif mwc == 4 then
-			return "|cff8AFF30_ _|r |cffFFF130_ _|r"
+			return ">".."|cffFFF1304|r".."<"
 		elseif mwc == 5 then
-			return "|cffFF6161_ _ _ _ _|r"
+			return ">".."|cffFF61615|r".."<"
 		end
 	else
 		if lsc == 1 then
-			return "|cff434343_|r"
+			return ">".."|cff4343431|r".."<"
 		elseif lsc == 2 then
-			return "|cff434343_ _|r"
+			return ">".."|cff4343432|r".."<"
 		elseif lsc == 7 then
-			return "|cffFFF130_|r |cff434343_ _|r"
+			return ">".."|cff4343437|r".."<"
 		elseif lsc == 8 then
-			return "|cffFF6161_ _|r |cff434343_|r"
+			return ">".."|cff4343438|r".."<"
 		elseif lsc == 9 then
-			return "|cffFF6161_ _ _|r"
+			return ">".."|cffFF61619|r".."<"
 		elseif lsc then
-			return "|cff434343_ _ _|r"
+			return ">".."|cff4343433|r".."<"
 		end
 	end
 end
@@ -409,7 +409,7 @@ if select(2, UnitClass("player")) == "DRUID" then
 		oUF.Tags['mono:wm'..i] = function(u)
 			_,_,_,dur = GetTotemInfo(i)
 			if dur > 0 then
-				return "|cffFF6161_ |r"
+				return "|cffFF6161❤ |r"
 			end
 		end
 		oUF.TagEvents['mono:wm'..i] = 'PLAYER_TOTEM_UPDATE'

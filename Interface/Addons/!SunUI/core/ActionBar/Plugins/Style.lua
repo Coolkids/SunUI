@@ -296,7 +296,36 @@ C = ActionBarDB
       end
     end
   end
-
+  
+  --style extraactionbutton
+local function styleExtraActionButton(bu)
+    if not bu or (bu and bu.rabs_styled) then return end
+    local name = bu:GetName()
+    local ho = _G[name.."HotKey"]
+    --remove the style background theme
+    bu.style:SetTexture(nil)
+    hooksecurefunc(bu.style, "SetTexture", function(self, texture)
+      if texture and string.sub(texture,1,9) == "Interface" then
+        self:SetTexture(nil)
+      end
+    end)
+    --icon
+    bu.icon:SetTexCoord(0.1,0.9,0.1,0.9)
+    bu.icon:SetAllPoints(bu)
+    --cooldown
+    bu.cooldown:SetAllPoints(bu.icon)
+    --hotkey
+    ho:Hide()
+    --add button normaltexture
+    bu:SetNormalTexture(DB.textures.normal)
+    local nt = bu:GetNormalTexture()
+    nt:SetVertexColor(DB.color.normal.r,DB.color.normal.g,DB.color.normal.b,1)
+    nt:SetAllPoints(bu)
+    --apply background
+    if not bu.bg then applyBackground(bu) end
+    bu.rabs_styled = true
+  end
+  
   --initial style func
   local function rActionButtonStyler_AB_style(self)
     if self.rABS_Styled then return end
@@ -397,7 +426,7 @@ C = ActionBarDB
 
     --shadows+background
     if not bu.bg then applyBackground(bu) end
-
+	styleExtraActionButton(_G["ExtraActionButton1"]) --新的哦,亲~~
     self.rABS_Styled = true
 
   end
@@ -475,5 +504,6 @@ C = ActionBarDB
   hooksecurefunc("ShapeshiftBar_Update",        rActionButtonStyler_AB_styleshapeshift)
   hooksecurefunc("ShapeshiftBar_UpdateState",   rActionButtonStyler_AB_styleshapeshift)
   hooksecurefunc("PetActionBar_Update",         rActionButtonStyler_AB_stylepet)
+  
   end
 end

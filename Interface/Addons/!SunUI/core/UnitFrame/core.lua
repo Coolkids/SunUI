@@ -263,29 +263,29 @@ C = UnitFrameDB
 oUF:Factory(function(self)
   self:SetActiveStyle("monoPlayer")
   local player = self:Spawn("player", "oUF_monoPlayerFrame")
-  player:Point("CENTER", "UIParent", "CENTER", -225, -208)
+  player:SetPoint("CENTER", "UIParent", "CENTER", -225, -208)
   player:SetScale(C["Scale"])
   
   self:SetActiveStyle("monoTarget")
   local target = self:Spawn("target", "oUF_monoTargetFrame")
-  target:Point("CENTER", "UIParent", "CENTER", 225, -208)
+  target:SetPoint("CENTER", "UIParent", "CENTER", 225, -208)
   target:SetScale(C["Scale"])
   
   if C["showtot"] then
     self:SetActiveStyle("monoToT")
     local tot = self:Spawn("targettarget", "oUF_mono_ToTFrame")
-	tot:Point("CENTER", "oUF_monoTargetFrame", "CENTER", -250, 0)
+	tot:SetPoint("CENTER", "oUF_monoTargetFrame", "CENTER", -250, 0)
 	tot:SetScale(C["PetScale"])
   end
   
   if C["showfocus"] then
     self:SetActiveStyle("monoFocus")
     local focus = self:Spawn("focus", "oUF_monoFocusFrame")
-	focus:Point("RIGHT", "UIParent", "RIGHT", -150, -100)
+	focus:SetPoint("RIGHT", "UIParent", "RIGHT", -150, -100)
 	focus:SetScale(C["PetScale"])
 	self:SetActiveStyle("monoToT")
 	local focust = self:Spawn("focustarget", "oUF_monoFocusTargetFrame")
-	focust:Point("TOPLEFT", "oUF_monoFocusFrame", "BOTTOMLEFT", 0, -38)
+	focust:SetPoint("TOPLEFT", "oUF_monoFocusFrame", "BOTTOMLEFT", 0, -38)
 	focust:SetScale(C["PetScale"])
   else
     oUF:DisableBlizzard'focus'
@@ -294,7 +294,7 @@ oUF:Factory(function(self)
   if C["showpet"] then
     self:SetActiveStyle("monoPet")
     local pet = self:Spawn("pet", "oUF_monoPetFrame")
-	pet:Point("TOPRIGHT", "oUF_monoPlayerFrame", "TOPLEFT", -5, 0)
+	pet:SetPoint("TOPRIGHT", "oUF_monoPlayerFrame", "TOPLEFT", -5, 0)
 	pet:SetScale(C["PetScale"])
   end
   
@@ -304,12 +304,12 @@ oUF:Factory(function(self)
   local ph = 1.5*h+3
 
   local init = [[
-	self:Width(%d)
-	self:Height(%d)
+	self:SetWidth(%d)
+	self:SetHeight(%d)
 	self:SetScale(%f)
 	if self:GetAttribute("unitsuffix") == "pet" then
-		self:Width(%d)
-		self:Height(%d)
+		self:SetWidth(%d)
+		self:SetHeight(%d)
     end
   ]]
   local visible = 'custom [group:party,nogroup:raid][@raid6,noexists,group:raid] show;hide'
@@ -322,7 +322,7 @@ oUF:Factory(function(self)
 	'template','oUF_monoPartyPet',
 	--'useOwnerUnit', true, 
 	'yOffset', -40)
-    party:Point("BOTTOMLEFT", "UIParent", "BOTTOMLEFT", 120, 362)
+    party:SetPoint("BOTTOMLEFT", "UIParent", "BOTTOMLEFT", 120, 362)
   else
     oUF:DisableBlizzard'party'
   end
@@ -337,15 +337,15 @@ oUF:Factory(function(self)
       arena[i] = self:Spawn("arena"..i, "oUF_Arena"..i)
 	  arena[i]:SetScale(C["BossScale"])
       if i == 1 then
-        arena[i]:Point("BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -120, 362)
+        arena[i]:SetPoint("BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -120, 362)
       else
-        arena[i]:Point("BOTTOMRIGHT", arena[i-1], "BOTTOMRIGHT", 0, gap)
+        arena[i]:SetPoint("BOTTOMRIGHT", arena[i-1], "BOTTOMRIGHT", 0, gap)
       end
     end
     self:SetActiveStyle("monoArenaTarget")
     for i = 1, 5 do
       arenatarget[i] = self:Spawn("arena"..i.."target", "oUF_Arena"..i.."target")
-	  arenatarget[i]:Point("TOPRIGHT",arena[i], "TOPLEFT", -4, 0)
+	  arenatarget[i]:SetPoint("TOPRIGHT",arena[i], "TOPLEFT", -4, 0)
 	  arenatarget[i]:SetScale(C["BossScale"])
     end
   end
@@ -357,9 +357,9 @@ oUF:Factory(function(self)
       boss[i] = self:Spawn("boss"..i, "oUF_Boss"..i)
 	  boss[i]:SetScale(C["BossScale"])
       if i == 1 then
-        boss[i]:Point("BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -120, 362)
+        boss[i]:SetPoint("BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -120, 362)
       else
-        boss[i]:Point("BOTTOMRIGHT", boss[i-1], "BOTTOMRIGHT", 0, gap)
+        boss[i]:SetPoint("BOTTOMRIGHT", boss[i-1], "BOTTOMRIGHT", 0, gap)
       end
     end
   end

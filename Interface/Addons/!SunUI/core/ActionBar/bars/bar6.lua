@@ -9,14 +9,14 @@ if C["Big4Layout"] == 2 then
 	local a1, af, a2, x, y = unpack(MoveHandleDB["bar5"]) 
 
   if C["Bar5Layout"] == 2 then
-    bar:Width(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
-    bar:Height(C["ButtonSize"]*2+C["ButtonSpacing"])
+    bar:SetWidth(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
+    bar:SetHeight(C["ButtonSize"]*2+C["ButtonSpacing"])
   else  
-    bar:Width(C["ButtonSize"])
-    bar:Height(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
+    bar:SetWidth(C["ButtonSize"])
+    bar:SetHeight(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
   end
   if C["Bar5Layout"] == 2 then
-    --bar:Point(a1,af,a2,x+((C["ButtonSize"]*6+C["ButtonSpacing"]*6)/2),y-(C["ButtonSize"]*1+C["ButtonSpacing"]*1)+0.5)
+    --bar:SetPoint(a1,af,a2,x+((C["ButtonSize"]*6+C["ButtonSpacing"]*6)/2),y-(C["ButtonSize"]*1+C["ButtonSpacing"]*1)+0.5)
 	MoveHandle.SunUIActionBar5 = S.MakeMove(bar, "SunUIActionBar5", "bar5", C["MainBarSacle"])
   else 
     MoveHandle.SunUIActionBar5 = S.MakeMove(bar, "SunUIActionBar5", "bar5", C["MainBarSacle"])
@@ -32,12 +32,12 @@ if C["Big4Layout"] == 2 then
 	  for i=1, 12 do
 		local button = _G["MultiBarLeftButton"..i]
 		button:ClearAllPoints()
-		button:Size(C["ButtonSize"], C["ButtonSize"])
+		button:SetSize(C["ButtonSize"], C["ButtonSize"])
 		if i == 1 then
-		  button:Point("TOPLEFT", bar, 0,0)
+		  button:SetPoint("TOPLEFT", bar, 0,0)
 		else
 		  local previous = _G["MultiBarLeftButton"..i-1]
-		  button:Point("TOP", previous, "BOTTOM", 0, -C["ButtonSpacing"])
+		  button:SetPoint("TOP", previous, "BOTTOM", 0, -C["ButtonSpacing"])
 		end
 	  end
   end
@@ -45,16 +45,16 @@ if C["Big4Layout"] == 2 then
 	  for i=1, 12 do
 		local button = _G["MultiBarLeftButton"..i]
 		button:ClearAllPoints()
-		button:Size(C["ButtonSize"], C["ButtonSize"])
+		button:SetSize(C["ButtonSize"], C["ButtonSize"])
 			if i == 1 then
-				button:Point("TOPLEFT", bar, 0,0)	
+				button:SetPoint("TOPLEFT", bar, 0,0)	
 			else
 				local previous = _G["MultiBarLeftButton"..i-1]
 				if  i == 7 then
 				previous = _G["MultiBarLeftButton1"]
-				button:Point("TOPLEFT", previous, "BOTTOMLEFT", 0, -C["ButtonSpacing"])
+				button:SetPoint("TOPLEFT", previous, "BOTTOMLEFT", 0, -C["ButtonSpacing"])
 				else
-				button:Point("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
+				button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
 				end
 			end
 	end

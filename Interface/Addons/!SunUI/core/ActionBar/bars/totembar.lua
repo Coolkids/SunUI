@@ -26,14 +26,14 @@ local barDB = DB.bars.totembar
     RegisterStateDriver(bar, "vis", "[bonusbar:5][@player,dead][flying][mounted][stance]hide;show")
     f:SetParent(bar)
     f:ClearAllPoints()
-    f:Point("CENTER",0,0)
+    f:SetPoint("CENTER",0,0)
     f:EnableMouse(false)
     local moveTotem = function(self,a,b,c,d,e)
       if a == "CENTER" then return end
       self:ClearAllPoints()
-      self:Point("CENTER",0,0)
+      self:SetPoint("CENTER",0,0)
     end
-    hooksecurefunc(f, "Point", moveTotem)
+    hooksecurefunc(f, "SetPoint", moveTotem)
     f.ignoreFramePositionManager = true
 
     --[[--------------------------------------------------------------------
@@ -122,7 +122,7 @@ local barDB = DB.bars.totembar
       timerFrame:SetAllPoints(button)
       timerFrame:Hide()
       timerFrame.text = timerFrame:CreateFontString(nil, "OVERLAY")
-      timerFrame.text:Point("CENTER", 0, 0)
+      timerFrame.text:SetPoint("CENTER", 0, 0)
       timerFrame.text:SetFont(STANDARD_TEXT_FONT, button:GetWidth()*16/36, "THINOUTLINE")
       timerFrame.text:SetShadowOffset(1,-2)
       timerFrame.text:SetShadowColor(0,0,0,0.6)
@@ -167,11 +167,10 @@ local barDB = DB.bars.totembar
       local b = CreateFrame("Button", nil, UIParent)
       b:SetFrameStrata(mcab:GetFrameStrata())
       b:SetFrameLevel(mcab:GetFrameLevel() + 3)
-      b:Point("TOPLEFT", mcab, -1, 1)
-      b:Point("BOTTOMRIGHT", mcab, 1, -1)
+      b:SetPoint("TOPLEFT", mcab, -1, 1)
+      b:SetPoint("BOTTOMRIGHT", mcab, 1, -1)
 
-      b:SetBackdrop(backdrop)
-      b:SetBackdropColor(1, 0, 0)
+      b:CreateShadow()
 
       b:Hide()
       b:RegisterEvent("MODIFIER_STATE_CHANGED")

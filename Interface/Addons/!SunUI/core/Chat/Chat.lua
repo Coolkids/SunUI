@@ -15,11 +15,11 @@ local LinkHover = {}; LinkHover.show = {	-- enable (true) or disable (false) Lin
 for i = 1, NUM_CHAT_WINDOWS do
   local cf = _G['ChatFrame'..i]
   cf:SetFading(true)  --渐隐
-  cf:CreateShadow("Background")
   if cf then 
     cf:SetFont(NAMEPLATE_FONT, 10*S.Scale(1), "OUTLINE") 
     cf:SetFrameStrata("LOW")
     cf:SetFrameLevel(2)
+	cf:CreateShadow("Background")
   end
   local tab = _G['ChatFrame'..i..'Tab']
   if tab then

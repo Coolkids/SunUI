@@ -7,15 +7,15 @@ function Module:OnInitialize()
 	C = ActionBarDB
 	local a1, af, a2, x, y = unpack(MoveHandleDB["bar1"]) 
   if C["Bar1Layout"] == 2 then
-    bar:Width(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
-    bar:Height(C["ButtonSize"]*2+C["ButtonSpacing"])
+    bar:SetWidth(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
+    bar:SetHeight(C["ButtonSize"]*2+C["ButtonSpacing"])
   else
-    bar:Width(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
-    bar:Height(C["ButtonSize"])
+    bar:SetWidth(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
+    bar:SetHeight(C["ButtonSize"])
   end
   bar:SetScale(C["MainBarSacle"])
   if C["Bar1Layout"] == 2 then
-    --bar:Point(a1,af,a2,x-((C["ButtonSize"]*6+C["ButtonSpacing"]*6)/2),y)
+    --bar:SetPoint(a1,af,a2,x-((C["ButtonSize"]*6+C["ButtonSpacing"]*6)/2),y)
 	 MoveHandle.SunUIActionBar1 = S.MakeMove(SunUIActionBar1, "SunUIActionBar1", "bar1", C["MainBarSacle"])
 
   else
@@ -73,18 +73,18 @@ function Module:OnInitialize()
       local button
       for i = 1, 12 do
         button = _G["ActionButton"..i]
-        button:Size(C["ButtonSize"], C["ButtonSize"])
+        button:SetSize(C["ButtonSize"], C["ButtonSize"])
         button:ClearAllPoints()
         button:SetParent(self)
         if i == 1 then
-          button:Point("BOTTOMLEFT", bar, 0,0)
+          button:SetPoint("BOTTOMLEFT", bar, 0,0)
         else
           local previous = _G["ActionButton"..i-1]
           if C["Bar1Layout"] == 2 and i == 7 then
             previous = _G["ActionButton1"]
-            button:Point("BOTTOMLEFT", previous, "TOPLEFT", 0, C["ButtonSpacing"])
+            button:SetPoint("BOTTOMLEFT", previous, "TOPLEFT", 0, C["ButtonSpacing"])
           else
-            button:Point("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
+            button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
           end
         end
       end

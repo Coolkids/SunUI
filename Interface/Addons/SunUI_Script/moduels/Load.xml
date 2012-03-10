@@ -11,6 +11,5 @@
 	<Script file = "ColorPickerPlus.lua"/>
 	<Script file = "Flump.lua"/>
 	<Script file = "GemCounter.lua"/>
-	<Script file = "LargerMacroIconSelection.lua"/>
 	<Script file = "Link.lua"/>
 </Ui>

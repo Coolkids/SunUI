@@ -7,8 +7,8 @@ function Module:OnInitialize()
     local num = NUM_PET_ACTION_SLOTS
     
     local bar = CreateFrame("Frame","SunUIPetBar",UIParent, "SecureHandlerStateTemplate")
-    bar:Width(C["ButtonSize"]*num+C["ButtonSpacing"]*(num-1))
-    bar:Height(C["ButtonSize"])
+    bar:SetWidth(C["ButtonSize"]*num+C["ButtonSpacing"]*(num-1))
+    bar:SetHeight(C["ButtonSize"])
     bar:SetHitRectInsets(-10, -10, -10, -10)
     
     bar:SetScale(C["PetBarSacle"])
@@ -113,11 +113,11 @@ PetActionBarFrame.showgrid = 1
 			button:ClearAllPoints()
 			button:SetParent(bar)
 
-			button:Size(C["ButtonSize"], C["ButtonSize"])
+			button:SetSize(C["ButtonSize"], C["ButtonSize"])
 			if i == 1 then
-				button:Point("BOTTOMLEFT", bar, 0,0)
+				button:SetPoint("BOTTOMLEFT", bar, 0,0)
 			else
-				button:Point("LEFT", _G["PetActionButton"..(i - 1)], "RIGHT", C["ButtonSpacing"], 0)
+				button:SetPoint("LEFT", _G["PetActionButton"..(i - 1)], "RIGHT", C["ButtonSpacing"], 0)
 			end
 		 
 			button:Show()

@@ -7,15 +7,15 @@ local barDB = DB.bars.bar4
   C = ActionBarDB
 	local a1, af, a2, x, y = unpack(MoveHandleDB["bar4"]) 
   if C["Bar4Layout"] == 2 then
-    bar:Width(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
-    bar:Height(C["ButtonSize"]*2+C["ButtonSpacing"])
+    bar:SetWidth(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
+    bar:SetHeight(C["ButtonSize"]*2+C["ButtonSpacing"])
   else  
-    bar:Width(C["ButtonSize"])
-    bar:Height(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
+    bar:SetWidth(C["ButtonSize"])
+    bar:SetHeight(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
   end
    bar:SetScale(C["MainBarSacle"])
   if C["Bar4Layout"] == 2 then
-    --bar:Point(a1,af,a2,x+((C["ButtonSize"]*6+C["ButtonSpacing"]*6)/2),y-(C["ButtonSize"]*1+C["ButtonSpacing"]*1)+0.5)
+    --bar:SetPoint(a1,af,a2,x+((C["ButtonSize"]*6+C["ButtonSpacing"]*6)/2),y-(C["ButtonSize"]*1+C["ButtonSpacing"]*1)+0.5)
    MoveHandle.SunUIActionBar4 = S.MakeMove(bar, "SunUIActionBar4", "bar4", C["MainBarSacle"])
   else 
    MoveHandle.SunUIActionBar4 = S.MakeMove(bar, "SunUIActionBar4", "bar4", C["MainBarSacle"])
@@ -32,12 +32,12 @@ local barDB = DB.bars.bar4
 	 for i=1, 12 do
 		local button = _G["MultiBarRightButton"..i]
 		button:ClearAllPoints()
-		button:Size(C["ButtonSize"], C["ButtonSize"])
+		button:SetSize(C["ButtonSize"], C["ButtonSize"])
 			if i == 1 then
-			  button:Point("TOPLEFT", bar, 0,0)
+			  button:SetPoint("TOPLEFT", bar, 0,0)
 			else
 			 local previous = _G["MultiBarRightButton"..i-1]
-			 button:Point("TOP", previous, "BOTTOM", 0, -C["ButtonSpacing"])
+			 button:SetPoint("TOP", previous, "BOTTOM", 0, -C["ButtonSpacing"])
 			end
 	 end
  end 
@@ -45,16 +45,16 @@ if C["Bar4Layout"] == 2 then
 	  for i=1, 12 do
 		local button = _G["MultiBarRightButton"..i]
 		button:ClearAllPoints()
-		button:Size(C["ButtonSize"], C["ButtonSize"])
+		button:SetSize(C["ButtonSize"], C["ButtonSize"])
 			if i == 1 then
-				button:Point("TOPLEFT", bar, 0,0)	
+				button:SetPoint("TOPLEFT", bar, 0,0)	
 			else
 				local previous = _G["MultiBarRightButton"..i-1]
 				if  i == 7 then
 				previous = _G["MultiBarRightButton1"]
-				button:Point("TOPLEFT", previous, "BOTTOMLEFT", 0, -C["ButtonSpacing"])
+				button:SetPoint("TOPLEFT", previous, "BOTTOMLEFT", 0, -C["ButtonSpacing"])
 				else
-				button:Point("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
+				button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
 				end
 			end
 	end

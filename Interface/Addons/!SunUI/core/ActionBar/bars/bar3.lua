@@ -3,17 +3,28 @@ if DB.Nuke == true then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Bar3", "AceEvent-3.0")
 local barDB = DB.bars.bar3  
   local bar = CreateFrame("Frame","SunUIActionBar3",UIParent, "SecureHandlerStateTemplate")
+  local bar2 = CreateFrame("Frame","SunUIActionBar32",UIParent, "SecureHandlerStateTemplate")
   function Module:OnInitialize()
   C = ActionBarDB
 	local a1, af, a2, x, y = unpack(MoveHandleDB["bar3"]) 
   if C["Bar3Layout"] == 1 then
-    bar:Width(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
-    bar:Height(C["ButtonSize"])
+    bar:SetWidth(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
+    bar:SetHeight(C["ButtonSize"])
+	else
+	bar:SetWidth(C["ButtonSize"]*3+C["ButtonSpacing"]*2)
+    bar:SetHeight(C["ButtonSize"]*2+C["ButtonSpacing"])
+	bar2:SetWidth(C["ButtonSize"]*3+C["ButtonSpacing"]*2)
+    bar2:SetHeight(C["ButtonSize"]*2+C["ButtonSpacing"])
+	bar2:SetScale(C["MainBarSacle"])
   end
   bar:SetScale(C["MainBarSacle"])
+  
   if C["Bar3Layout"] == 1 then
-    --bar:Point(a1,af,a2,x-((C["ButtonSize"]*6+C["ButtonSpacing"]*6)/2),y)
+    --bar:SetPoint(a1,af,a2,x-((C["ButtonSize"]*6+C["ButtonSpacing"]*6)/2),y)
    MoveHandle.SunUIActionBar3 = S.MakeMove(bar, "SunUIActionBar3", "bar3", C["MainBarSacle"])
+   else
+   MoveHandle.SunUIActionBar3 = S.MakeMove(bar, "SunUIActionBar3", "bar3", C["MainBarSacle"])
+   MoveHandle.SunUIActionBar32 = S.MakeMove(bar2, "SunUIActionBar32", "bar32", C["MainBarSacle"])
   end
   bar:SetHitRectInsets(-10, -10, -10, -10)
   
@@ -23,37 +34,37 @@ local barDB = DB.bars.bar3
  if C["Bar3Layout"] == 1 then
 	  for i=1, 12 do
 		local button = _G["MultiBarBottomRightButton"..i]
-		button:Size(C["ButtonSize"], C["ButtonSize"])
+		button:SetSize(C["ButtonSize"], C["ButtonSize"])
 		button:ClearAllPoints()
 		if i == 1 then
-		  button:Point("BOTTOMLEFT", bar, 0,0)
+		  button:SetPoint("BOTTOMLEFT", bar, 0,0)
 		else
 		  local previous = _G["MultiBarBottomRightButton"..i-1]     
-		  button:Point("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0) 
+		  button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0) 
 		end
 	  end
   end
 	if C["Bar3Layout"] == 2 then
 	for i = 1, 12 do
 		Button = _G["MultiBarBottomRightButton"..i]
-		Button:Size(C["ButtonSize"], C["ButtonSize"])
+		Button:SetSize(C["ButtonSize"], C["ButtonSize"])
 		Button:ClearAllPoints()
 		if i == 1 then
-				Button:Point("BOTTOMRIGHT", _G["ActionButton1"], "BOTTOMLEFT", -C["ButtonSpacing"], 0)
+				Button:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", 0, 0)
 			elseif i <= 3 then
-				Button:Point("RIGHT", _G["MultiBarBottomRightButton"..i-1], "LEFT", -C["ButtonSpacing"], 0)
+				Button:SetPoint("RIGHT", _G["MultiBarBottomRightButton"..i-1], "LEFT", -C["ButtonSpacing"], 0)
 			elseif i == 4 then
-				Button:Point("BOTTOMLEFT", _G["MultiBarBottomRightButton1"], "TOPLEFT", 0, C["ButtonSpacing"])
+				Button:SetPoint("BOTTOMLEFT", _G["MultiBarBottomRightButton1"], "TOPLEFT", 0, C["ButtonSpacing"])
 			elseif i <= 6 then
-				Button:Point("RIGHT", _G["MultiBarBottomRightButton"..i-1], "LEFT", -C["ButtonSpacing"], 0)	
+				Button:SetPoint("RIGHT", _G["MultiBarBottomRightButton"..i-1], "LEFT", -C["ButtonSpacing"], 0)	
 			elseif i == 7 then
-				Button:Point("BOTTOMLEFT", _G["ActionButton12"], "BOTTOMRIGHT", C["ButtonSpacing"], 0)
+				Button:SetPoint("BOTTOMLEFT", bar2, "BOTTOMLEFT", 0, 0)
 			elseif i <= 9 then
-				Button:Point("LEFT", _G["MultiBarBottomRightButton"..i-1], "RIGHT", C["ButtonSpacing"], 0)
+				Button:SetPoint("LEFT", _G["MultiBarBottomRightButton"..i-1], "RIGHT", C["ButtonSpacing"], 0)
 			elseif i == 10 then
-				Button:Point("BOTTOMLEFT", _G["MultiBarBottomRightButton7"], "TOPLEFT", 0, C["ButtonSpacing"])
+				Button:SetPoint("BOTTOMLEFT", _G["MultiBarBottomRightButton7"], "TOPLEFT", 0, C["ButtonSpacing"])
 			elseif i <= 12 then
-				Button:Point("LEFT", _G["MultiBarBottomRightButton"..i-1], "RIGHT", C["ButtonSpacing"], 0)	
+				Button:SetPoint("LEFT", _G["MultiBarBottomRightButton"..i-1], "RIGHT", C["ButtonSpacing"], 0)	
 			end
 		end
 	end
