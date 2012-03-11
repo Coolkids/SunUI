@@ -304,7 +304,7 @@ function Module.BuildGUI()
 					UnlockRiad = {
 					type = "execute",
 					name = "团队设置",
-					order = 5,
+					order = 1,
 					func = function()
 						if not UnitAffectingCombat("player") then
 							if IsAddOnLoaded("oUF_Freebgrid") then 

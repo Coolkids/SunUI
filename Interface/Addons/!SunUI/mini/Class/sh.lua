@@ -71,3 +71,18 @@ Frame:SetScript("OnEvent", function(self, event)
 		end
    end
 end)	
+
+
+if DB.MyClass=="PRIEST" then
+	local sp=CreateFrame("Frame")
+	sp:SetScript("OnEvent",function(self)
+		if GetShapeshiftForm() == 1 then
+				SetCVar('CombatHealing',0)
+		else
+				SetCVar('CombatHealing',1)
+		end
+	end)
+	sp:RegisterEvent("PLAYER_ENTERING_WORLD")	
+	sp:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
+	sp:RegisterEvent("UPDATE_SHAPESHIFT_FORMS")
+end

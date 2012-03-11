@@ -77,6 +77,26 @@ function Module.BuildGUI()
 				},
 			}
 		}
+		DB["Config"]["Filgter"] =  {
+			type = "group", order = 16,
+			name = "技能监视",
+			args = {
+					UnlockRiad = {
+					type = "execute",
+					name = "技能监视",
+					order = 1,
+					func = function()
+						if not UnitAffectingCombat("player") then
+							if IsAddOnLoaded("RayWatcher") then 
+								local bF = LibStub and LibStub("AceConfigDialog-3.0", true)
+										bF:Open("RayWatcherConfig")
+										bF:Close("SunUI Config")
+							end
+						end
+					end
+					},
+			}
+		}
 	end
 end
 
