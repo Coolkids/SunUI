@@ -1082,6 +1082,11 @@ ns.watchers ={
 				{ spellID = 64904, unitId = "player", caster = "all", filter = "BUFF" }, 
 				-- 希望禮頌
 				{ spellID = 64901, unitId = "player", caster = "all", filter = "BUFF" }, 
+				-- 守护圣灵
+				{ spellID = 47788, unitId = "player", caster = "all", filter = "BUFF" },
+				--战士4T13防御
+				{ spellID = 105914, unitId = "player", caster = "all", filter = "BUFF" },
+
 		},
 		{
 			name = "玩家重要Buff",

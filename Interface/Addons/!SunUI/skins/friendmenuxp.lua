@@ -9,4 +9,10 @@ Delay:SetScript("OnEvent", function()
 		S.StripTextures(FriendsMenuXPSecureMenuBackdrop)
 		FriendsMenuXPSecure:CreateShadow("Background")
 	end
+	if BaudErrorFrame then
+		S.StripTextures(BaudErrorFrame)
+		S.Reskin(BaudErrorFrameCloseButton)
+		S.Reskin(BaudErrorFrameClearButton)
+		BaudErrorFrame:CreateShadow("Background") 
+	end
 end)

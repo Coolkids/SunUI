@@ -179,8 +179,17 @@ function RayWatcherConfig.GenerateOptionsInternal()
 					testing = not testing
 				end,
 			},
-			RayWatcher = {
+			BackSunUI = {
 				order = 3,
+				type = "execute",
+				name = "回到SunUI",
+				func = function()
+					ACD["Close"](ACD,"RayWatcherConfig")
+					ACD["Open"](ACD,"SunUI Config")
+				end,
+			},
+			RayWatcher = {
+				order = 4,
 				type = "group",
 				name = L["选项"],
 				get = function(info) UpdateGroup() return (db.RayWatcher[ info[#info] ] or next(groupname)) end,

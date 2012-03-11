@@ -474,11 +474,13 @@ ns.auras = {
 		  [GetSpellInfo(107558)] = 62, --Degeneration
 		  [GetSpellInfo(107567)] = 64, --残忍打击
 		  [GetSpellInfo(108046)] = 63, --Shockwave
-
+		  [GetSpellInfo(109204)] = 66, --暗影弹幕
 		  --Spine of Deathwing
 		  [GetSpellInfo(105563)] = 71, --Grasping Tendrils
 		  [GetSpellInfo(105479)] = 72, --灼热血浆
 		  [GetSpellInfo(105490)] = 73, --灼热之握
+		  [GetSpellInfo(106199)] = 74, --死亡
+		  [GetSpellInfo(106200)] = 74, --大地
 
 		  --Madness of Deathwing
 		  [GetSpellInfo(105445)] = 81, --炽热

@@ -1,5 +1,4 @@
 local ADDON_NAME, ns = "oUF_Freebgrid", Freebgrid_NS
-
 local indicator = ns.mediapath.."squares.ttf"
 local symbols = ns.mediapath.."PIZZADUDEBULLETS.ttf"
 
@@ -170,7 +169,9 @@ if (GetLocale() == "zhCN") then
 	L.optionsreloaddesc = "多数的选项更改需要重载UI后才能生效."
 	L.optionsdefault = "恢复默认设置"
 	L.optionsdefaultdesc = "还原所有设置为默认选项,可能需要重载UI以使设定生效."
+	L.suredefault = "|cffDDA0DDSun|r|cff44CCFFUI|r\n|cffFFD700确认恢复默认设置|r\n"
 elseif (GetLocale() == "zhTW") then
+	L.suredefault = "|cffDDA0DDSun|r|cff44CCFFUI|r\n|cffFFD700確認恢復初始設置|r\n"
 	L.none = "無"
 	L.left = "左"
 	L.right = "右"
@@ -331,7 +332,7 @@ elseif (GetLocale() == "zhTW") then
 	L.ClickCastmacro = "  宏編輯窗口."
 	L.ClickCastmacrodesc = "注意:這只是一個簡單的宏編輯窗口,不會檢測你的宏的正確性,也不會改變當前目標,所以請使用@mouseover條件方式讓你的法術對點擊的目標使用.如:'/cast [@mouseover,help,nodead,exists]強效治療波'."
 	
-	L.optionsunlock = "解鎖錨點"
+	L.optionsunlock = "解鎖"
 	L.optionsreload = "重載UI"
 	L.optionsreloaddesc = "多數的選項更改需要重載UI後才能生效."
 	L.optionsdefault = "恢復默認設置"
@@ -2022,22 +2023,44 @@ local options = {
             func = function() ReloadUI(); end,
             order = 2,
         },
+		cancel = {
+            name = "回到SunUI",
+            type = "execute",
+            desc = "回到SunUI",
+            func = function()
+			local RT = LibStub('AceConfigDialog-3.0')
+				RT:Open("SunUI Config")
+				RT:Close("oUF_Freebgrid")
+			end,
+            order = 3,
+        },
 		default = {
             name = L.optionsdefault,
             type = "execute",
             desc = L.optionsdefaultdesc,
             func = function() 
-				for k, v in pairs(ns.defaults) do
-					ns.db[k] = v 
-				end
-
-				ns.db.ClickCastsetchange = true
-				ns.ClickSetDefault()
-				ns.ApplyClickSetting()
-				ns.updateFrameSetting()
-				ns.restoreDefaultPosition()
+				StaticPopupDialogs["sure2"] = {
+				text = L.suredefault,
+					button1 = OKAY,
+					button2 = CANCEL,
+				OnAccept = function()
+					for k, v in pairs(ns.defaults) do
+						ns.db[k] = v 
+					end
+					ns.db.ClickCastsetchange = true
+					ns.ClickSetDefault()
+					ns.ApplyClickSetting()
+					ns.updateFrameSetting()
+					ns.restoreDefaultPosition()
+					end,
+				OnCancel = function()
+					end,
+				timeout = 0,
+				hideOnEscape = 0,
+				}
+				StaticPopup_Show("sure2")
 			end,
-            order = 3,
+            order = 4,
         },
         general = generalopts,
         statusbar = statusbaropts,

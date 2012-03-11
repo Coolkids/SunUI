@@ -364,7 +364,7 @@ end
 oUF.TagEvents['freebgrid:ss'] = "UNIT_AURA"
 
 -- Mage
-oUF.Tags['freebgrid:int'] = function(u) if not(UnitAura(u, GetSpellInfo(1459))) then return "|cff00A1DE"..x.."|r" end end
+oUF.Tags['freebgrid:int'] = function(u) if not(UnitAura(u, GetSpellInfo(1459))) and not UnitAura(u, GetSpellInfo(79038))then return "|cff00A1DE"..x.."|r" end end
 oUF.TagEvents['freebgrid:int'] = "UNIT_AURA"
 
 oUF.Tags['freebgrid:fmagic'] = function(u) if UnitAura(u, GetSpellInfo(54648)) then return "|cffCC00FF"..x.."|r" end end
