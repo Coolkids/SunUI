@@ -158,13 +158,12 @@ local function CreateVirtualFrame(parent, point)
 	parent.backdrop:SetBackdrop({
 		bgFile = DB.Solid,
 		edgeFile = DB.GlowTex,
-		edgeSize = 8*noscalemult,
-		insets = {
-			top = 4*noscalemult, left = 4*noscalemult, bottom = 4*noscalemult, right = 4*noscalemult
-		}
+		edgeSize = 5,
+		insets = {left = 3, right = 3, top = 3, bottom = 3}
 	})
-	parent.backdrop:Point('TOPLEFT', point, -3*noscalemult, 3*noscalemult)
-	parent.backdrop:Point('BOTTOMRIGHT', point, 3*noscalemult, -3*noscalemult)
+
+	parent.backdrop:SetPoint('TOPLEFT', point, -4, 4)
+	parent.backdrop:SetPoint('BOTTOMRIGHT', point, 4, -4)
 	parent.backdrop:SetBackdropColor(.05, .05, .05, .9)
 	parent.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 	if parent:GetFrameLevel() - 1 >0 then
@@ -498,15 +497,15 @@ local function SkinObjects(frame)
 	hp.value = frame:CreateFontString(nil, "OVERLAY")	
 	hp.value:SetFont(DB.Font, FONTSIZE, "THINOUTLINE")
 	hp.value:SetShadowColor(0, 0, 0, 0.4)
-	hp.value:Point("BOTTOMRIGHT", hp, "TOPRIGHT", 0, -4)
+	hp.value:Point("BOTTOMRIGHT", hp, "TOPRIGHT", 0, 2)
 	hp.value:SetJustifyH("RIGHT")
 	hp.value:SetTextColor(1,1,1)
 	hp.value:SetShadowOffset(S.mult, -S.mult)
 	
 	--Create Name Text
 	hp.name = frame:CreateFontString(nil, 'OVERLAY')
-	hp.name:Point("BOTTOMLEFT", hp, "TOPLEFT", 0, -4)
-	hp.name:Point("BOTTOMRIGHT", hp, "TOPRIGHT", -20, -4)
+	hp.name:Point("BOTTOMLEFT", hp, "TOPLEFT", 0, 2)
+	hp.name:Point("BOTTOMRIGHT", hp, "TOPRIGHT", -20, 2)
 	hp.name:SetFont(DB.Font, FONTSIZE, "THINOUTLINE")
 	hp.name:SetJustifyH("LEFT")
 	hp.name:SetShadowColor(0, 0, 0, 0.4)
