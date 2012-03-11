@@ -158,9 +158,9 @@ local function CreateVirtualFrame(parent, point)
 	parent.backdrop:SetBackdrop({
 		bgFile = DB.Solid,
 		edgeFile = DB.GlowTex,
-		edgeSize = 3*noscalemult,
+		edgeSize = 8*noscalemult,
 		insets = {
-			top = 3*noscalemult, left = 3*noscalemult, bottom = 3*noscalemult, right = 3*noscalemult
+			top = 4*noscalemult, left = 4*noscalemult, bottom = 4*noscalemult, right = 4*noscalemult
 		}
 	})
 	parent.backdrop:Point('TOPLEFT', point, -3*noscalemult, 3*noscalemult)
@@ -617,19 +617,19 @@ local function UpdateThreat(frame, elapsed)
 		if InCombatLockdown() and frame.isFriendly ~= true then
 			--No Threat
 			if DB.Role == "Tank" then
-				frame.hp:SetStatusBarColor(badR, badG, badB)
-				frame.hp.hpbg:SetTexture(badR, badG, badB, 0.1)
-				frame.hp.backdrop:SetBackdropBorderColor(badR, badG, badB, 1)
+				frame.hp.backdrop:SetBackdropBorderColor(1, 0, 0,1)--(badR, badG, badB)  --红
+				frame.hp.hpbg:SetTexture(badR, badG, badB, 0.1) --红
+				--frame.hp.backdrop:SetBackdropBorderColor(badR, badG, badB, 1)
 				frame.threatStatus = "BAD"
 			else
-				frame.hp:SetStatusBarColor(goodR, goodG, goodB)
+				frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)--(goodR, goodG, goodB, 0.1)
 				frame.hp.hpbg:SetTexture(goodR, goodG, goodB, 0.1)
-				frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
+				--frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 				frame.threatStatus = "GOOD"
 			end		
 		else
 			--Set colors to their original, not in combat
-			frame.hp:SetStatusBarColor(frame.hp.rcolor, frame.hp.gcolor, frame.hp.bcolor)
+			--frame.hp.backdrop:SetBackdropBorderColor(frame.hp.rcolor, frame.hp.gcolor, frame.hp.bcolor)
 			frame.hp.hpbg:SetTexture(frame.hp.rcolor, frame.hp.gcolor, frame.hp.bcolor, 0.1)
 			frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 			frame.threatStatus = nil
@@ -640,14 +640,14 @@ local function UpdateThreat(frame, elapsed)
 		if g + b == 0 then
 			--Have Threat
 			if DB.Role == "Tank" then
-				frame.hp:SetStatusBarColor(goodR, goodG, goodB)
-				frame.hp.hpbg:SetTexture(goodR, goodG, goodB, 0.1)
-				frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
+				frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)--(goodR, goodG, goodB, 0.1)
+				frame.hp.hpbg:SetTexture(goodR, goodG, goodB, 0.1)  --绿
+				--frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 				frame.threatStatus = "GOOD"
 			else
-				frame.hp:SetStatusBarColor(badR, badG, badB)
+				frame.hp.backdrop:SetBackdropBorderColor(1, 0, 0,1)--(badR, badG, badB)有仇恨时的红色边框
 				frame.hp.hpbg:SetTexture(badR, badG, badB, 0.1)
-				frame.hp.backdrop:SetBackdropBorderColor(badR, badG, badB, 1)
+				--frame.hp.backdrop:SetBackdropBorderColor(badR, badG, badB, 1)
 				frame.threatStatus = "BAD"
 			end
 		else
@@ -655,26 +655,26 @@ local function UpdateThreat(frame, elapsed)
 			if DB.Role == "Tank" then
 				if frame.threatStatus == "GOOD" then
 					--Losing Threat
-					frame.hp:SetStatusBarColor(transitionR2, transitionG2, transitionB2)
-					frame.hp.hpbg:SetTexture(transitionR2, transitionG2, transitionB2, 0.1)
-					frame.hp.backdrop:SetBackdropBorderColor(badR, badG, badB, 1)
+					frame.hp.backdrop:SetBackdropBorderColor(1, 1, 0, 1)--(transitionR2, transitionG2, transitionB2, 0.1)--橘黄
+					frame.hp.hpbg:SetTexture(1, 1, 0, 0.1)--(transitionR2, transitionG2, transitionB2, 0.1)--橘黄
+					--frame.hp.backdrop:SetBackdropBorderColor(badR, badG, badB, 1)
 				else
 					--Gaining Threat
-					frame.hp:SetStatusBarColor(transitionR, transitionG, transitionB)
-					frame.hp.hpbg:SetTexture(transitionR, transitionG, transitionB, 0.1)
-					frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
+					frame.hp.backdrop:SetBackdropBorderColor(1, 1, 0, 1)--(transitionR, transitionG, transitionB)--深黄
+					frame.hp.hpbg:SetTexture(1, 1, 0, 0.1)--(transitionR, transitionG, transitionB, 0.1)
+					--frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 				end
 			else
 				if frame.threatStatus == "GOOD" then
 					--Losing Threat
-					frame.hp:SetStatusBarColor(transitionR, transitionG, transitionB)
-					frame.hp.hpbg:SetTexture(transitionR, transitionG, transitionB, 0.1)
-					frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
+					frame.hp.backdrop:SetBackdropBorderColor(1, 1, 0, 1)--(transitionR, transitionG, transitionB, 0.1) --深黄
+					frame.hp.hpbg:SetTexture(1, 1, 0, 0.1)--(transitionR, transitionG, transitionB, 0.1)
+					--frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 				else
 					--Gaining Threat
-					frame.hp:SetStatusBarColor(transitionR2, transitionG2, transitionB2)	
-					frame.hp.hpbg:SetTexture(transitionR2, transitionG2, transitionB2, 0.1)	
-					frame.hp.backdrop:SetBackdropBorderColor(badR, badG, badB, 1)
+					frame.hp.backdrop:SetBackdropBorderColor(1, 1, 0, 1)--(transitionR2, transitionG2, transitionB2)	--橘黄
+					frame.hp.hpbg:SetTexture(1, 1, 0, 0.1)--(transitionR2, transitionG2, transitionB2, 0.1)	
+					--frame.hp.backdrop:SetBackdropBorderColor(badR, badG, badB, 1)
 				end				
 			end
 		end
@@ -741,7 +741,7 @@ local function ShowHealth(frame, ...)
 			frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 		end
 	elseif (frame.hasClass ~= true and frame.isFriendly ~= true) then
-		frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
+		--frame.hp.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 	end
 end
 
