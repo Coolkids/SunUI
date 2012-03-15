@@ -38,14 +38,7 @@ function Module.BuildGUI()
 					get = function() return SkinDB.EnableDBMSkin end,
 					set = function(_, value) SkinDB.EnableDBMSkin = value end,
 				},
-				HideRaidWarn = {
-					type = "toggle",
-					name = L["隐藏团队警告"],
-					order = 2,
-					get = function() return SkinDB.HideRaidWarn end,
-					set = function(_, value) SkinDB.HideRaidWarn = value end,
-				},
-			},
+			}
 		}
 	end
 end

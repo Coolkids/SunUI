@@ -382,7 +382,7 @@ end
 
 
 if GetLocale() ~= 'zhCN' or GetLocale() ~= 'zhTW' then
-			local statreport = CreateFrame("Button", "ButtonST", UIParent)
+			local statreport = CreateFrame("Button", "ButtonST", ColectorButton)
 			statreport:Size(20)
 			statreport:Point("TOP", ButtonP, "BOTTOM", 0, -5)
 			statreport.text = statreport:CreateFontString(nil, 'OVERLAY')

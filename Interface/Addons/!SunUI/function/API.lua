@@ -417,6 +417,18 @@ function S.MakeMove(Frame, Text, key, a)
 	Frame:SetPoint("CENTER", MoveHandle)
 	return MoveHandle
 end
+function S.Kill(object)
+	if object.IsProtected then 
+		if object:IsProtected() then
+			error("Attempted to kill a protected object: <"..object:GetName()..">")
+		end
+	end
+	if object.UnregisterAllEvents then
+		object:UnregisterAllEvents()
+	end
+	object.Show = function() return end
+	object:Hide()
+end
  function S.StripTextures(object, kill)
 	for i=1, object:GetNumRegions() do
 		local region = select(i, object:GetRegions())
@@ -440,18 +452,7 @@ local function scale(x)
 end
 S.mult = mult
 S.Scale = scale
-function S.Kill(object)
-	if object.IsProtected then 
-		if object:IsProtected() then
-			error("Attempted to kill a protected object: <"..object:GetName()..">")
-		end
-	end
-	if object.UnregisterAllEvents then
-		object:UnregisterAllEvents()
-	end
-	object.Show = function() return end
-	object:Hide()
-end
+
 function S.ColorGradient(perc, ...)
 	if perc >= 1 then
 		local r, g, b = select(select('#', ...) - 2, ...)

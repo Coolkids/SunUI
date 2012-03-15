@@ -4,7 +4,6 @@ local Delay = CreateFrame("Frame")
 Delay:RegisterEvent("PLAYER_ENTERING_WORLD")
 Delay:SetScript("OnEvent", function()
 	Delay:UnregisterEvent("PLAYER_ENTERING_WORLD")
-	--SetCVar("UnitNameNPC", 0)  --给我不显示任何NPC名字
 	if FriendsMenuXPSecure then
 		S.StripTextures(FriendsMenuXPSecureMenuBackdrop)
 		FriendsMenuXPSecure:CreateShadow("Background")
@@ -14,5 +13,13 @@ Delay:SetScript("OnEvent", function()
 		S.Reskin(BaudErrorFrameCloseButton)
 		S.Reskin(BaudErrorFrameClearButton)
 		BaudErrorFrame:CreateShadow("Background") 
+	end
+	if BuyEmAllFrame then
+		S.StripTextures(BuyEmAllFrame)
+		S.Reskin(BuyEmAllStackButton)
+		S.Reskin(BuyEmAllMaxButton)
+		S.Reskin(BuyEmAllOkayButton)
+		S.Reskin(BuyEmAllCancelButton)
+		BuyEmAllFrame:CreateShadow("Background") 
 	end
 end)

@@ -118,6 +118,7 @@ local PlateBlacklist = {
 	["Lava Parasite"] = true,
 	["熔岩蟲"] = true,
 	["熔岩寄生虫"] = true,
+	["腐化之血"] = true,
 }
 
 local NamePlates = CreateFrame("Frame")

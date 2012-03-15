@@ -1,6 +1,7 @@
 local addon, ns = ...
 local _, settings = ...
 local S, _, _, DB = unpack(select(2, ...))
+if not DB.mirrorbars then return end
 local _DEFAULTS = { 
    width = 252, 
    height = 18, 

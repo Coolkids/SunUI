@@ -8,12 +8,6 @@ function Module:OnInitialize()
 	Event:SetScript("OnEvent", function()
 		if IsAddOnLoaded("DBM-Core") then
 			if not SkinDB["EnableDBMSkin"] then return end
-			if SkinDB["HideRaidWarn"] then
-			RaidWarningFrame:ClearAllPoints()
-			RaidWarningFrame:Hide()
-			RaidWarningFrame:UnregisterAllEvents()
-			RaidWarningFrame:UnregisterEvent("CHAT_MSG_RAID_WARNING") --Disable Raid Warning Frame
-			end
 			hooksecurefunc(DBT, "CreateBar", function(self)
 				for bar in self:GetBarIterator() do
 					if not bar.injected then

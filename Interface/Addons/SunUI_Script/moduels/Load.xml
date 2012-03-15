@@ -13,4 +13,5 @@
 	<Script file = "Flump.lua"/>
 	<Script file = "GemCounter.lua"/>
 	<Script file = "Link.lua"/>
+	<Script file = "showme.lua"/>
 </Ui>

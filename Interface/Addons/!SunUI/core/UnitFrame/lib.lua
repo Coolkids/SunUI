@@ -419,22 +419,23 @@ C = UnitFrameDB
       _G[bar..'Border']:Hide()
       _G[bar]:SetParent(UIParent)
       _G[bar]:SetScale(1)
-      _G[bar]:Height(16)
-      _G[bar]:SetBackdropColor(.1,.1,.1)
+      _G[bar]:SetHeight(16)
+      --_G[bar]:SetBackdropColor(.1,.1,.1)
       _G[bar..'Background'] = _G[bar]:CreateTexture(bar..'Background', 'BACKGROUND', _G[bar])
-      _G[bar..'Background']:SetTexture(DB.Statusbar)
       _G[bar..'Background']:SetAllPoints(bar)
-      _G[bar..'Background']:SetVertexColor(.15,.15,.15,1)
+      _G[bar..'Background']:SetVertexColor(.15,.15,.15, 0)
       _G[bar..'Text']:SetFont(DB.Font, (C["FontSize"]+2)*S.Scale(1))
       _G[bar..'Text']:ClearAllPoints()
-      _G[bar..'Text']:Point('CENTER', _G[bar..'StatusBar'], 0, 0)
+      _G[bar..'Text']:SetPoint('CENTER', _G[bar..'StatusBar'], 0, 0)
 	  _G[bar..'StatusBar']:SetAllPoints(_G[bar])
+
       --glowing borders
       local h = CreateFrame("Frame", nil, _G[bar])
       h:SetFrameLevel(0)
-      h:Point("TOPLEFT",-4,4)
-      h:Point("BOTTOMRIGHT",4,-4)
-      lib.gen_backdrop(h)
+      h:SetPoint("TOPLEFT")
+      h:SetPoint("BOTTOMRIGHT")
+      --lib.gen_backdrop(h)
+	  h:CreateShadow("Background")
     end
   end
   

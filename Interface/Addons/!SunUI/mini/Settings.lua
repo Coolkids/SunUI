@@ -214,6 +214,16 @@ f:SetScript("OnEvent", function(self,event,arg1,arg2)
     end
 end)
 end
+
+if C["HideRaidWarn"] then
+	hooksecurefunc(RaidWarningFrame, function(self)
+	RaidWarningFrame:ClearAllPoints()
+	RaidWarningFrame:Hide()
+	RaidWarningFrame:UnregisterAllEvents()
+	RaidWarningFrame.Show = function() end
+	RaidWarningFrame.SetPoint = function() end
+	end)
+end
 end
 
 

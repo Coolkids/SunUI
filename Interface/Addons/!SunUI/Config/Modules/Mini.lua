@@ -141,6 +141,13 @@ function Module.BuildGUI()
 					get = function() return MiniDB.HideRaid end,
 					set = function(_, value) MiniDB.HideRaid = value end,
 				},
+				HideRaidWarn = {
+					type = "toggle",
+					name = L["隐藏团队警告"],
+					order = 13,
+					get = function() return MiniDB.HideRaidWarn end,
+					set = function(_, value) MiniDB.HideRaidWarn = value end,
+				},
 			}
 		}
 			DB["Config"]["UI"] =  {

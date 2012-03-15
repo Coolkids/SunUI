@@ -192,7 +192,6 @@ DB.bar_texture = Media.."Statusbar7"
 
 ---mini功能
 DB.combatpointOpen = true --盗贼连击点显示
-DB.caelNamePlatesOpen = true  --开启姓名板美化
 DB.Ratings = true  --装备属性转换
 
 --暗影魔計時
@@ -255,6 +254,8 @@ DB.colors = {
 		["WARRIOR"]     = { 199/255, 156/255, 110/255 },
 	},
 }
+
+
 local Launch = CreateFrame("Frame")
 Launch:RegisterEvent("PLAYER_ENTERING_WORLD")
 Launch:SetScript("OnEvent", function(self, event)
@@ -262,9 +263,17 @@ Launch:SetScript("OnEvent", function(self, event)
 		if IsAddOnLoaded(i) then
 			for _, v in pairs({GetAddOnInfo(i)}) do
 				if v and type(v) == 'string' and (v:lower():find("BigFoot") or v:lower():find("Duowan") or v:lower():find("163UI") or v:lower():find("FishUI") or v:lower():find("大脚") or v:lower():find("大腳") or v:lower():find("多玩")) then
-					DB.Nuke = true else DB.Nuke = false  end
+					DB.Nuke = true else DB.Nuke = false  
 				end
 			end
 		end
+		if IsAddOnLoaded(i) then
+			for _, v in pairs({GetAddOnInfo(i)}) do
+				if v and type(v) == 'string' and (v:lower():find("RatingBuster")) then
+					DB.Ratings = false 
+				end
+			end
+		end
+	end
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD" )
 end)

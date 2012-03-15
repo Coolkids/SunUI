@@ -238,8 +238,8 @@ function EmoteIconMouseUp(self, button)
 	--ToggleEmoteTable()
 end
 
-local button = CreateFrame("Button", "ButtonE", UIParent)
-		button:Point("TOPLEFT", ChatFrame1, "TOPRIGHT", 5, 0)
+local button = CreateFrame("Button", "ButtonE", ColectorButton)
+		button:Point("TOPLEFT", ColectorButton, "TOPLEFT", 5, -5)
 		button:Size(20)
 		button.text = button:CreateFontString(nil, 'OVERLAY')
 		button.text:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")

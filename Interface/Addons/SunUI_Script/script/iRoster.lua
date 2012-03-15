@@ -11,12 +11,13 @@ end
 hooksecurefunc("WorldMapUnit_Update", function(self)
 	if not self.group then
 		self.group = self:CreateFontString(nil, "OVERLAY", "TextStatusBarText")
-		self.group:Point("CENTER")
+		self.group:SetPoint("CENTER")
 	end
 	self.group:SetText("")
 	if self.unit then
 		if string.find(self.unit, "raid") then
-			self.group:SetText(select(3, GetRaidRosterInfo(string.sub(self.unit, 5))))
+			--self.group:SetText(select(3, GetRaidRosterInfo(string.sub(self.unit, 5))))
+			self.group:SetText("")
 		end
 		if UnitAffectingCombat(self.unit) then
 			self.icon:SetVertexColor(0.8, 0, 0)

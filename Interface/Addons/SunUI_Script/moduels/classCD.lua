@@ -260,7 +260,7 @@ local CreateBar = function()
 	spar:SetPoint("TOPLEFT", bar:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
 	spar:SetPoint("BOTTOMRIGHT", bar:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
 	
-	bar.backdrop = CreateFrame("Frame", nil, bar)
+--[[ 	bar.backdrop = CreateFrame("Frame", nil, bar)
 	bar.backdrop:Point("TOPLEFT", -2, 2)
 	bar.backdrop:Point("BOTTOMRIGHT", 2, -2)
 	bar.backdrop:SetFrameStrata("BACKGROUND")
@@ -270,11 +270,9 @@ local CreateBar = function()
 	insets = {top = 3, left = 3, bottom = 3, right = 3},
     })
 	bar.backdrop:SetBackdropColor(0, 0, 0, 0.2)
-    bar.backdrop:SetBackdropBorderColor(0, 0, 0)
+    bar.backdrop:SetBackdropBorderColor(0, 0, 0) ]]
 	
-	bar.bg = bar:CreateTexture(nil, "BACKGROUND")
-	bar.bg:SetAllPoints(bar)
-	bar.bg:SetTexture(DB.Statusbar)
+
 	
 	bar.left = CreateFS(bar)
 	bar.left:Point("LEFT", 2, C["ClassCDHeight"])
@@ -294,7 +292,7 @@ local CreateBar = function()
 	bar.icon.backdrop:Point("TOPLEFT", -2, 2)
 	bar.icon.backdrop:Point("BOTTOMRIGHT", 2, -2)
 	bar.icon.backdrop:SetFrameStrata("BACKGROUND")
-    bar:CreateShadow()
+    bar:CreateShadow("Background")
 	return bar
 end
 
@@ -312,10 +310,8 @@ local StartTimer = function(name, spellId)
 	local color = RAID_CLASS_COLORS[select(2, UnitClass(name))]
 	if color then
 		bar:SetStatusBarColor(color.r, color.g, color.b)
-		bar.bg:SetVertexColor(color.r, color.g, color.b, 0.25)
 	else
 		bar:SetStatusBarColor(0.3, 0.7, 0.3)
-		bar.bg:SetVertexColor(0.3, 0.7, 0.3, 0.25)
 	end
 	bar:SetScript("OnUpdate", BarUpdate)
 	bar:EnableMouse(true)
