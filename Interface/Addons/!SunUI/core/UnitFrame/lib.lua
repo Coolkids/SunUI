@@ -690,6 +690,15 @@ C = UnitFrameDB
 	  d['growth-y'] = 'DOWN' 
 	  d.initialAnchor = 'RIGHT'
 	  d.num = 16
+	  elseif f.mystyle=="pet" then
+	  d['growth-x'] = 'RIGHT'
+      d['growth-y'] = 'UP' 
+      d.initialAnchor = 'BOTTOMLEFT'
+	  d.num = 8
+	  d.size = 23
+      d:Height((d.size+d.spacing)*2)
+      d:Width((d.size+d.spacing)*8)
+	  d:Point("BOTTOMLEFT", f, "TOPLEFT", 0, 15)
     end
     d.PostCreateIcon = lib.PostCreateIcon
     d.PostUpdateIcon = lib.PostUpdateIcon

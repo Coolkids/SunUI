@@ -24,14 +24,13 @@ local spellIDs = {
 } 
 local function UpdateCDFrame() 
 		local start, duration = GetSpellCooldown(spellIDs[class])
-		if start and duration > 1.5 then
+		if event == "SPELL_UPDATE_COOLDOWN" then
+			CooldownFrame_SetTimer(Frame.Cooldown, 0, 0, 0)
+		elseif start and duration > 1.5 then
 			if Frame.Cooldown then
 				Frame.Cooldown:SetReverse(false)
 				CooldownFrame_SetTimer(Frame.Cooldown, start, duration, 1)
 			end
-		end
-		if event == "SPELL_UPDATE_COOLDOWN" then
-			CooldownFrame_SetTimer(Frame.Cooldown, start, 0, 1)
 		end
 end
 local function  UpdateMakeIcon()
@@ -50,16 +49,14 @@ Frame:SetScript("OnEvent", function(self, event)
 			UpdateCDFrame()
 		else self:Hide()
 		end
-	end
-   if class == "HUNTER" and UnitLevel("player") == 85 then 
+	elseif class == "HUNTER" and UnitLevel("player") == 85 then 
 		if ( UnitCanAttack("player", "target") and not UnitIsDead("target") and ( UnitHealth("target")/UnitHealthMax("target") < 0.2 ) ) then
 			UpdateMakeIcon()
 			self:Show()
 			UpdateCDFrame()
 		else self:Hide()
 		end
-   end
-   if class == "MAGE" and UnitLevel("player") == 85 then 
+   elseif class == "MAGE" and UnitLevel("player") == 85 then 
 		if ( UnitPower("player")/UnitPowerMax("player") < 0.4 ) then
 			UpdateMakeIcon()
 			self:Show()

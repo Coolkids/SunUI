@@ -136,6 +136,7 @@ C = UnitFrameDB
     self.disallowVehicleSwap = true
     genStyle(self)
     self.Power.frequentUpdates = true
+	self.Power.Smooth = true
     self.Power.colorPower = true
     self.Power.bg.multiplier = 0.3
     lib.gen_castbar(self)

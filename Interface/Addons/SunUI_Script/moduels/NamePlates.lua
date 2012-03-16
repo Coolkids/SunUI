@@ -495,7 +495,7 @@ local function SkinObjects(frame)
 	hp.boss = bossicon
 	hp.elite = elite
 	
-	hp.value = frame:CreateFontString(nil, "OVERLAY")	
+	hp.value = hp:CreateFontString(nil, "OVERLAY")	
 	hp.value:SetFont(DB.Font, FONTSIZE, "THINOUTLINE")
 	hp.value:SetShadowColor(0, 0, 0, 0.4)
 	hp.value:Point("BOTTOMRIGHT", hp, "TOPRIGHT", 0, 2)
@@ -504,7 +504,7 @@ local function SkinObjects(frame)
 	hp.value:SetShadowOffset(S.mult, -S.mult)
 	
 	--Create Name Text
-	hp.name = frame:CreateFontString(nil, 'OVERLAY')
+	hp.name = hp:CreateFontString(nil, 'OVERLAY')
 	hp.name:Point("BOTTOMLEFT", hp, "TOPLEFT", 0, 2)
 	hp.name:Point("BOTTOMRIGHT", hp, "TOPRIGHT", -20, 2)
 	hp.name:SetFont(DB.Font, FONTSIZE, "THINOUTLINE")

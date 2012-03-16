@@ -93,17 +93,19 @@ local function UpdateMemory()
 	UpdateAddOnMemoryUsage()
 	local addOnMem = 0
 	local TotalMemory = 0
+	local num = 0
 	for i = 1, #MemoryTable do
 		addOnMem = GetAddOnMemoryUsage(MemoryTable[i][1])
 		MemoryTable[i][3] = addOnMem
 		TotalMemory = TotalMemory + addOnMem
+		num = num + 1
 	end
 	table.sort(MemoryTable, function(a, b)
 		if a and b then
 			return a[3] > b[3]
 		end
 	end)
-	return TotalMemory
+	return TotalMemory, num
 end
 local function BuildMemory(Anchor)
 	local StatusBar = CreateFrame("StatusBar", nil, UIParent)
@@ -149,7 +151,7 @@ local function BuildMemory(Anchor)
 			else
 				maxAddOns = InfoPanelDB["MemNum"]
 		end
-		local TotalMemory = UpdateMemory()
+		local TotalMemory, num = UpdateMemory()
 		GameTooltip:AddDoubleLine(L["总共内存使用"], S.FormatMemory(TotalMemory), 0.4, 0.78, 1, 0.84, 0.75, 0.65)
 		GameTooltip:AddLine(" ")
 		local more = 0
@@ -167,13 +169,13 @@ local function BuildMemory(Anchor)
 		end
 		local moreMem = 0
 			if not IsAltKeyDown() then
-				for i = 11, GetNumAddOns() do
+				for i = 1, GetNumAddOns() do
 					if  MemoryTable[i][3] then
 						moreMem = moreMem +  MemoryTable[i][3]
 					end
 				end
 				local mor = 0
-				mor = maxadd - more
+				mor = num - more
 				GameTooltip:AddDoubleLine(format("%d %s (%s)",mor,L["Hidden"],L["Alt"]),S.FormatMemory(moreMem),.6,.8,1,.6,.8,1)
 			end
 			GameTooltip:AddLine(" ")
