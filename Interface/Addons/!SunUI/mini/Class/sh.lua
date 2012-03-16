@@ -44,7 +44,7 @@ end
 
 Frame:SetScript("OnEvent", function(self, event)
 	if class == "PRIEST" and UnitLevel("player") == 85 then 
-		if ( UnitCanAttack("player", "target") and not UnitIsDead("target") and ( UnitHealth("target")/UnitHealthMax("target") < 1.25 ) ) then
+		if ( UnitCanAttack("player", "target") and not UnitIsDead("target") and ( UnitHealth("target")/UnitHealthMax("target") < 0.25 ) ) then
 			UpdateMakeIcon()
 			self:Show()
 			UpdateCDFrame()
