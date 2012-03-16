@@ -109,9 +109,9 @@ function S.FormatTime(Time, Short)
 		elseif Time >= 3600 then
 			return format('%dh', floor(Time/3600 + 0.5))
 		elseif Time >= 60 then
-			return format('%dm', floor(Time/60 + 0.5))
+			return format('%dm', floor(Time/60))
 		elseif Time >= 0 then 
-			return format('%ds', floor(Time + 0.5))
+			return format('%ds', floor(Time))
 		else
 			return "N/A"
 		end
