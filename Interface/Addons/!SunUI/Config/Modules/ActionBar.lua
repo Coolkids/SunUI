@@ -30,6 +30,10 @@ function Module.LoadSettings()
 		["TotemBarSacle"] = 1,
 		["Big4Layout"] = 1,
 		["Style"] = 1,
+		["BigSize1"] = 34,
+		["BigSize2"] = 34,
+		["BigSize3"] = 34,
+		["BigSize4"] = 34,
 	}
 	if not ActionBarDB then ActionBarDB = {} end
 	for key, value in pairs(Default) do
@@ -205,7 +209,7 @@ function Module.BuildGUI()
 					}
 				},
 				group4 = {
-					type = "group", order = 3,
+					type = "group", order = 4,
 					name = " ",guiInline = true, disabled = not ActionBarDB.CooldownFlash,
 					args = {
 						CooldownFlashSize = {
@@ -215,6 +219,40 @@ function Module.BuildGUI()
 							order = 1,
 							get = function() return tostring(ActionBarDB.CooldownFlashSize) end,
 							set = function(_, value) ActionBarDB.CooldownFlashSize = tonumber(value) end,
+						},
+					}
+				},
+				group5 = {
+					type = "group", order = 5,
+					name = " ",guiInline = true, disabled = (ActionBarDB.Big4Layout ~= 1),
+					args = {
+						BigSize1 = {
+							type = "range", order = 1,
+							name = "Big1大小", desc = L["动作条按钮大小"],
+							min = 6, max = 80, step = 1,
+							get = function() return ActionBarDB.BigSize1 end,
+							set = function(_, value) ActionBarDB.BigSize1 = value end,
+						},
+						BigSize2 = {
+							type = "range", order = 2,
+							name = "Big2大小", desc = L["动作条按钮大小"],
+							min = 6, max = 80, step = 1,
+							get = function() return ActionBarDB.BigSize2 end,
+							set = function(_, value) ActionBarDB.BigSize2 = value end,
+						},
+						BigSize3 = {
+							type = "range", order = 3,
+							name = "Big3大小", desc = L["动作条按钮大小"],
+							min = 6, max = 80, step = 1,
+							get = function() return ActionBarDB.BigSize3 end,
+							set = function(_, value) ActionBarDB.BigSize3 = value end,
+						},
+						BigSize4 = {
+							type = "range", order = 4,
+							name = "Big4大小", desc = L["动作条按钮大小"],
+							min = 6, max = 80, step = 1,
+							get = function() return ActionBarDB.BigSize4 end,
+							set = function(_, value) ActionBarDB.BigSize4 = value end,
 						},
 					}
 				},

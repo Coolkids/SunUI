@@ -82,12 +82,12 @@ function Module:BuildBar()
 		-- ºt«Ú≤ø∑›
 		local expirationtime = select(7,UnitBuff("player", rspn))
 		if expirationtime then
-			rbar:Show()
+			rbar:SetAlpha(1)
 			timer = expirationtime - GetTime()
 			makespar()
 		else
 			timer = 0
-			rbar:Hide()
+			rbar:SetAlpha(0)
 		end
 		self:SetValue(timer)
 		
@@ -141,8 +141,10 @@ function Module:BuildBar()
 	helper:SetScript("OnEvent",function()
 		if GetTelent() ~= 3 then
 			bar:Hide()
+			bar.shadow:Hide()
 		else
 			bar:Show()
+			bar.shadow:Show()
 		end
 	end)
 end

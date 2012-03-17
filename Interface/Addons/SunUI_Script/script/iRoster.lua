@@ -1,17 +1,17 @@
 ﻿local S, C, L, DB = unpack(SunUI)
 for i = 1, 4 do
-	_G["WorldMapParty"..i]:Width(32)
-	_G["WorldMapParty"..i]:Height(32)
+	_G["WorldMapParty"..i]:SetWidth(32)
+	_G["WorldMapParty"..i]:SetHeight(32)
 end
 for i = 1, 40 do
-	_G["WorldMapRaid"..i]:Width(32)
-	_G["WorldMapRaid"..i]:Height(32)
+	_G["WorldMapRaid"..i]:SetWidth(32)
+	_G["WorldMapRaid"..i]:SetHeight(32)
 end
 
 hooksecurefunc("WorldMapUnit_Update", function(self)
 	if not self.group then
-		self.group = self:CreateFontString(nil, "OVERLAY", "TextStatusBarText")
-		self.group:SetPoint("CENTER")
+		self.group = S.MakeFontString(self, 7)
+		self.group:SetPoint("CENTER", 2, 2)
 	end
 	self.group:SetText("")
 	if self.unit then

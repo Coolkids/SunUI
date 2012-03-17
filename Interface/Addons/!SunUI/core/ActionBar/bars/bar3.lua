@@ -24,7 +24,7 @@ local barDB = DB.bars.bar3
    MoveHandle.SunUIActionBar3 = S.MakeMove(bar, "SunUIActionBar3", "bar3", C["MainBarSacle"])
    else
    MoveHandle.SunUIActionBar3 = S.MakeMove(bar, "SunUIActionBar3", "bar3", C["MainBarSacle"])
-   MoveHandle.SunUIActionBar32 = S.MakeMove(bar2, "SunUIActionBar32", "bar32", C["MainBarSacle"])
+   MoveHandle.SunUIActionBar32 = S.MakeMove(bar2, "SunUIActionBar3", "bar32", C["MainBarSacle"])
   end
   bar:SetHitRectInsets(-10, -10, -10, -10)
   

@@ -6,21 +6,40 @@ C = ActionBarDB
 if C["Big4Layout"] == 1 then
 
 	local barDB = DB.bars.bar5  
-	  local bar = CreateFrame("Frame","rABS_MultiBarLeft",UIParent, "SecureHandlerStateTemplate")
+	  local bar51 = CreateFrame("Frame","SunUIMultiBarLeft1",UIParent, "SecureHandlerStateTemplate")
+	  local bar52 = CreateFrame("Frame","SunUIMultiBarLeft2",UIParent, "SecureHandlerStateTemplate")
+	  local bar53 = CreateFrame("Frame","SunUIMultiBarLeft3",UIParent, "SecureHandlerStateTemplate")
+	  local bar54 = CreateFrame("Frame","SunUIMultiBarLeft4",UIParent, "SecureHandlerStateTemplate")
+	
+		bar51:SetWidth(C["BigSize1"])
+		bar51:SetHeight(C["BigSize1"])
+		bar51:SetHitRectInsets(-10, -10, -10, -10)
+		MoveHandle.SunUIMultiBarLeft1 = S.MakeMove(bar51, "SunUIBigActionBar1", "bar51", 1)
+		
+		bar52:SetWidth(C["BigSize2"])
+		bar52:SetHeight(C["BigSize2"])
+		bar52:SetHitRectInsets(-10, -10, -10, -10)
+		MoveHandle.SunUIMultiBarLeft2 = S.MakeMove(bar52, "SunUIBigActionBar2", "bar52", 1)
+		
+		bar53:SetWidth(C["BigSize3"])
+		bar53:SetHeight(C["BigSize3"])
+		bar53:SetHitRectInsets(-10, -10, -10, -10)
+		MoveHandle.SunUIMultiBarLeft3 = S.MakeMove(bar53, "SunUIBigActionBar3", "bar53", 1)
+		
+		bar54:SetWidth(C["BigSize4"])
+		bar54:SetHeight(C["BigSize4"])
+		bar54:SetHitRectInsets(-10, -10, -10, -10)
+		MoveHandle.SunUIMultiBarLeft4 = S.MakeMove(bar54, "SunUIBigActionBar4", "bar54", 1)
 
-	  bar:SetHitRectInsets(-10, -10, -10, -10)
-
-	  MultiBarLeft:SetParent(bar)
-	if C["Bar3Layout"] == 2 then
+	  MultiBarLeft:SetParent(bar51)
 	for i=1, 2 do
 		local button = _G["MultiBarLeftButton"..i]
 		button:ClearAllPoints()
-		button:SetSize(C["ButtonSize"]*2+C["ButtonSpacing"], C["ButtonSize"]*2+C["ButtonSpacing"])
+		button:SetSize(C["BigSize"..i], C["BigSize"..i])
 		if i == 1 then
-		  button:SetPoint("BOTTOMRIGHT", MultiBarBottomRightButton3, "BOTTOMLEFT", -C["ButtonSpacing"]-2,0)
+		  button:SetAllPoints(bar51)
 		else
-		  local previous = _G["MultiBarLeftButton"..i-1]      
-		  button:SetPoint("RIGHT", previous, "LEFT", -C["ButtonSpacing"]-2, 0 )
+		  button:SetAllPoints(bar52)
 		end
 	  end
 	  
@@ -32,44 +51,17 @@ if C["Big4Layout"] == 1 then
 	  for i=11, 12 do
 		local button = _G["MultiBarLeftButton"..i]
 		button:ClearAllPoints()
-		button:SetSize(C["ButtonSize"]*2+C["ButtonSpacing"], C["ButtonSize"]*2+C["ButtonSpacing"])
+		local a = 8
+		local b = 0
+		b = i - a
+		button:SetSize(C["BigSize"..b], C["BigSize"..b])
 		if i == 11 then
-		  button:SetPoint("BOTTOMLEFT", MultiBarBottomRightButton9, "BOTTOMRIGHT", C["ButtonSpacing"]+2,0)
+		  button:SetAllPoints(bar53)
 		else
-		  local previous = _G["MultiBarLeftButton"..i-1]      
-		  button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"]+2, 0)
+		  button:SetAllPoints(bar54)
 		end
 	  end
-	else
-		for i=1, 2 do
-			local button = _G["MultiBarLeftButton"..i]
-			button:ClearAllPoints()
-			button:SetSize(C["ButtonSize"]*1.8, C["ButtonSize"]*1.8)
-			if i == 1 then
-			  button:SetPoint("BOTTOMRIGHT", MultiBarBottomLeftButton1, "LEFT", -C["ButtonSpacing"],0)
-			else
-			  local previous = _G["MultiBarLeftButton"..i-1]      
-			  button:SetPoint("TOP", previous, "BOTTOM", 0, -C["ButtonSpacing"])
-			end
-		  end
-		  
-		 for i=3, 10 do
-			local button = _G["MultiBarLeftButton"..i]
-			button:ClearAllPoints()
-		 end
-		  
-		for i=11, 12 do
-			local button = _G["MultiBarLeftButton"..i]
-			button:ClearAllPoints()
-			button:SetSize(C["ButtonSize"]*1.8, C["ButtonSize"]*1.8)
-			if i == 11 then
-			  button:SetPoint("BOTTOMLEFT", MultiBarBottomLeftButton12, "RIGHT", C["ButtonSpacing"],0)
-			else
-			  local previous = _G["MultiBarLeftButton"..i-1]      
-			  button:SetPoint("TOP", previous, "BOTTOM", 0, -C["ButtonSpacing"])
-			end
-		  end
-	 end
+	
 	  if barDB.showonmouseover then    
 		local function lighton(alpha)
 		  if MultiBarLeft:IsShown() then
