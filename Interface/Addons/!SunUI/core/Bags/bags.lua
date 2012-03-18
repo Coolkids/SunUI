@@ -65,17 +65,19 @@ function MyButton:OnCreate()
 	self.Icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 
 	self.Count:SetPoint("BOTTOMRIGHT", 3, 1)
-	self.Count:SetFont( DB.Font, 10*S.Scale(1), "THINOUTLINE")
+	self.Count:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")
 	
 	self.Border = CreateFrame("Frame", nil, self)
-	self.Border:SetAllPoints(self.Icon)
+	--self.Border:SetAllPoints(self.Icon)
 	--self.Border:SetPoint("CENTER", point or self.Icon)
-	self.Border:SetBackdrop({edgeFile = DB.Solid, edgeSize = S.Scale(1)})
+	self.Border:Point("TOPLEFT", point or self.Icon, 0, 0)
+	self.Border:Point("BOTTOMRIGHT", point or self.Icon, 0, 0)
+	self.Border:SetBackdrop({edgeFile = DB.Solid, edgeSize = S.mult+0.12})
 	self.Border:SetBackdropBorderColor(0, 0, 0, 0)
 
 	self.BG = CreateFrame("Frame", nil, self)
-	self.BG:SetPoint("TOPLEFT", self.Icon, 0, 0)
-	self.BG:SetPoint("BOTTOMRIGHT", self.Icon, 0, 0)
+	self.BG:Point("TOPLEFT", self.Icon, 0, 0)
+	self.BG:Point("BOTTOMRIGHT", self.Icon, 0, 0)
 	self.BG:SetBackdrop({bgFile = DB.Solid, insets = { left = S.mult, right = S.mult, top = S.mult, bottom = S.mult }})
 	self.BG:SetBackdropColor(0.2, 0.2, 0.2, 0.5)
 	self.BG:SetFrameLevel(0)
@@ -114,7 +116,7 @@ end
 local MyContainer = Bags:GetContainerClass()
 function MyContainer:OnContentsChanged()
 	self:SortButtons("bagSlot")
-	local width, height = self:LayoutButtons("grid", self.Settings.Columns, 5, 10, -10)
+	local width, height = self:LayoutButtons("grid", self.Settings.Columns, 4, 10, -10)
 	self:SetSize(width + 20, height + 10)
 	if self.UpdateDimensions then
 		self:UpdateDimensions()
@@ -126,12 +128,13 @@ function MyContainer:OnCreate(name, settings)
     self.Settings = settings
 	self.UpdateDimensions = UpdateDimensions
 	
-	self:SetBackdrop({ 
+	--[[ self:SetBackdrop({ 
 		bgFile = DB.bgFile, insets = {left = 4, right = 4, top = 4, bottom = 4},
 		edgeFile = DB.GlowTex, edgeSize = 3, 
 	})
 	self:SetBackdropColor(0, 0, 0, 0.8)
-	self:SetBackdropBorderColor(0, 0, 0, 1)
+	self:SetBackdropBorderColor(0, 0, 0, 1) ]]
+	self:CreateShadow("Background")
 
 	self:SetParent(settings.Parent or Bags)
 	self:SetFrameStrata("HIGH")

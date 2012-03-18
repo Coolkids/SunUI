@@ -18,7 +18,7 @@ AceGUI.RegisterAsWidget = function(self, widget)
 			widget.skinnedCheckBG = CreateFrame('Frame', nil, widget.frame)
 			widget.skinnedCheckBG:SetPoint('TOPLEFT', widget.checkbg, 'TOPLEFT', 4, -4)
 			widget.skinnedCheckBG:SetPoint('BOTTOMRIGHT', widget.checkbg, 'BOTTOMRIGHT', -4, 4)
-			S.CreateBD(widget.skinnedCheckBG)
+			widget.skinnedCheckBG:CreateBD()
 		end
 
 		if widget.skinnedCheckBG.oborder then
@@ -35,7 +35,7 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		bg:SetPoint("TOPLEFT", 16, 0)
 		bg:SetPoint("BOTTOMRIGHT", -20, 0)
 		bg:SetFrameLevel(frame:GetFrameLevel()-1)
-		S.CreateBD(bg, 0)
+		bg:CreateBD(0)
 
 		local tex = bg:CreateTexture(nil, "BACKGROUND")
 		tex:SetPoint("TOPLEFT")
@@ -61,7 +61,7 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		text:SetParent(bg)
 		button:HookScript('OnClick', function(this)
 			local self = this.obj
-			S.CreateBD(self.pullout.frame)
+			self.pullout.frame:CreateBD()
 		end)
 	elseif TYPE == "LSM30_Font" or TYPE == "LSM30_Sound" or TYPE == "LSM30_Border" or TYPE == "LSM30_Background" or TYPE == "LSM30_Statusbar" then
 		local frame = widget.frame
@@ -97,7 +97,7 @@ AceGUI.RegisterAsWidget = function(self, widget)
 			tex:SetPoint("BOTTOMRIGHT")
 			tex:SetTexture(DB.aurobackdrop)
 			tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
-			S.CreateBD(frame.backdrop)
+			frame.backdrop:CreateBD()
 			if frame:GetFrameLevel() - 1 >= 0 then
 				frame.backdrop:SetFrameLevel(frame:GetFrameLevel() - 1)
 			else
@@ -127,7 +127,7 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		button:HookScript('OnClick', function(this, button)
 			local self = this.obj
 			if self.dropdown then
-				S.CreateBD(self.dropdown)
+				self.dropdown:CreateBD()
 			end
 		end)		
 	elseif TYPE == "EditBox" then
@@ -153,7 +153,7 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		local HEIGHT = 12
 
 		S.StripTextures(frame)
-		S.CreateBD(frame, 0)
+		frame:CreateBD(0)
 		frame:SetHeight(HEIGHT)
 		-- local slider = CreateFrame("Frame", nil, frame)
 		-- slider:SetPoint("TOPLEFT", frame:GetThumbTexture())
@@ -167,7 +167,7 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		-- frame:GetThumbTexture():SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 		-- frame:GetThumbTexture():SetSize(HEIGHT-2,HEIGHT-2)
 
-		S.CreateBD(editbox, 0)
+		editbox:CreateBD(0)
 		editbox.SetBackdropColor = dummy
 		editbox.SetBackdropBorderColor = dummy
 		editbox:SetHeight(15)
@@ -201,7 +201,7 @@ AceGUI.RegisterAsContainer = function(self, widget)
 		S.ReskinScroll(frame)
 	elseif TYPE == "InlineGroup" or TYPE == "TreeGroup" or TYPE == "TabGroup" or TYPE == "SimpleGroup" or TYPE == "Frame" or TYPE == "DropdownGroup" then
 		local frame = widget.content:GetParent()
-		S.CreateBD(frame, 0)
+		frame:CreateBD(0)
 		if TYPE == "Frame" then
 			S.StripTextures(frame)
 			for i=1, frame:GetNumChildren() do
@@ -212,12 +212,12 @@ AceGUI.RegisterAsContainer = function(self, widget)
 					S.StripTextures(child)
 				end
 			end
-			S.CreateSD(frame)
-			S.CreateBD(frame)
+			frame:CreateSD()
+			frame:CreateBD()
 		end		
 		
 		if widget.treeframe then
-			S.CreateBD(widget.treeframe, .0)
+			widget.treeframe:CreateBD(.0)
 			frame:SetPoint("TOPLEFT", widget.treeframe, "TOPRIGHT", 1, 0)
 		end
 

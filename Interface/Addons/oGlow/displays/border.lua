@@ -20,14 +20,14 @@ local createBorder = function(self, point)
 		--bc:SetAlpha(.9)
 		bc:SetBackdrop({
 			edgeFile = "Interface\\ChatFrame\\ChatFrameBackground",   --, 
-			edgeSize = S.Scale(1), 
+			edgeSize = S.mult+0.18, 
 		})
 
 		
 
-		--bc:SetPoint("CENTER", point or self)
-		bc:SetPoint("TOPLEFT", -1, point or 1)
-		bc:SetPoint("BOTTOMRIGHT", 1, point or -1)
+		--bc:SetAllPoints(self)
+		bc:Point("TOPLEFT", -1, point or 1)
+		bc:Point("BOTTOMRIGHT", 1, point or -1)
 		self.oGlowBorder = bc
 	end
 

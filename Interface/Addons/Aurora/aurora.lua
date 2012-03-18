@@ -10,7 +10,7 @@ core[2] = {} -- C, constants/config
 Aurora = core
 
 local F, C = unpack(select(2, ...))
-
+local S, _, _, DB = unpack(SunUI)
 C.classcolours = {
 	["HUNTER"] = { r = 0.58, g = 0.86, b = 0.49 },
 	["WARLOCK"] = { r = 0.6, g = 0.47, b = 0.85 },
@@ -36,7 +36,7 @@ F.CreateBD = function(f, a)
 	f:SetBackdrop({
 		bgFile = C.media.backdrop, 
 		edgeFile = C.media.backdrop, 
-		edgeSize = 1, 
+		edgeSize = S.mult, 
 	})
 	f:SetBackdropColor(0, 0, 0, a or alpha)
 	f:SetBackdropBorderColor(0, 0, 0)
@@ -47,8 +47,8 @@ F.CreateBG = function(frame)
 	if frame:GetObjectType() == "Texture" then f = frame:GetParent() end
 
 	local bg = f:CreateTexture(nil, "BACKGROUND")
-	bg:SetPoint("TOPLEFT", frame, -1, 1)
-	bg:SetPoint("BOTTOMRIGHT", frame, 1, -1)
+	bg:Point("TOPLEFT", frame, -1, 1)
+	bg:Point("BOTTOMRIGHT", frame, 1, -1)
 	bg:SetTexture(C.media.backdrop)
 	bg:SetVertexColor(0, 0, 0)
 
@@ -58,20 +58,19 @@ end
 F.CreateSD = function(parent, size, r, g, b, alpha, offset)
 	local sd = CreateFrame("Frame", nil, parent)
 	sd.size = size or 5
-	sd.offset = offset or 0
-	sd:SetBackdrop({
-		edgeFile = C.media.glow,
-		edgeSize = sd.size,
-	})
-	sd:SetPoint("TOPLEFT", parent, -sd.size - 1 - sd.offset, sd.size + 1 + sd.offset)
-	sd:SetPoint("BOTTOMRIGHT", parent, sd.size + 1 + sd.offset, -sd.size - 1 - sd.offset)
-	sd:SetBackdropBorderColor(r or 0, g or 0, b or 0)
+	sd.size = sd.size - 5
+	sd.offset = offset or S.mult
+	sd:Point("TOPLEFT", parent, -sd.size - 1 - sd.offset, sd.size + 1 + sd.offset)
+	sd:Point("BOTTOMRIGHT", parent, sd.size + 1 + sd.offset, -sd.size - 1 - sd.offset)
+	sd:CreateShadow()
+	sd.shadow:SetBackdropBorderColor(r or 0, g or 0, b or 0)
+	sd.border:SetBackdropBorderColor(r or 0, g or 0, b or 0)
 	sd:SetAlpha(alpha or 1)
 end
 
 F.CreatePulse = function(frame, speed, mult, alpha)
 	frame.speed = speed or .05
-	frame.mult = mult or 1
+	frame.mult = mult or S.mult
 	frame.alpha = alpha or 1
 	frame.tslu = 0
 	frame:SetScript("OnUpdate", function(self, elapsed)
@@ -143,10 +142,10 @@ F.Reskin = function(f, noGlow)
 		f.glow = CreateFrame("Frame", nil, f)
 		f.glow:SetBackdrop({
 			edgeFile = C.media.glow,
-			edgeSize = 5,
+			edgeSize = S.Scale(5),
 		})
-		f.glow:SetPoint("TOPLEFT", -6, 6)
-		f.glow:SetPoint("BOTTOMRIGHT", 6, -6)
+		f.glow:Point("TOPLEFT", -6, 6)
+		f.glow:Point("BOTTOMRIGHT", 6, -6)
 		f.glow:SetBackdropBorderColor(r, g, b)
 		f.glow:SetAlpha(0)
 
@@ -159,15 +158,15 @@ F.CreateTab = function(f)
 	f:DisableDrawLayer("BACKGROUND")
 
 	local bg = CreateFrame("Frame", nil, f)
-	bg:SetPoint("TOPLEFT", 8, -3)
-	bg:SetPoint("BOTTOMRIGHT", -8, 0)
+	bg:Point("TOPLEFT", 8, -3)
+	bg:Point("BOTTOMRIGHT", -8, 0)
 	bg:SetFrameLevel(f:GetFrameLevel()-1)
 	F.CreateBD(bg)
 
 	f:SetHighlightTexture(C.media.backdrop)
 	local hl = f:GetHighlightTexture()
-	hl:SetPoint("TOPLEFT", 9, -4)
-	hl:SetPoint("BOTTOMRIGHT", -9, 1)
+	hl:Point("TOPLEFT", 10, -4)
+	hl:Point("BOTTOMRIGHT", -10, 1)
 	hl:SetVertexColor(r, g, b, .25)
 end
 
@@ -182,24 +181,24 @@ F.ReskinScroll = function(f)
 
 	local bu = _G[frame.."ThumbTexture"]
 	bu:SetAlpha(0)
-	bu:SetWidth(17)
+	bu:Width(17)
 
 	bu.bg = CreateFrame("Frame", nil, f)
-	bu.bg:SetPoint("TOPLEFT", bu, 0, -2)
-	bu.bg:SetPoint("BOTTOMRIGHT", bu, 0, 4)
+	bu.bg:Point("TOPLEFT", bu, 0, -2)
+	bu.bg:Point("BOTTOMRIGHT", bu, 0, 4)
 	F.CreateBD(bu.bg, 0)
 
 	local tex = f:CreateTexture(nil, "BACKGROUND")
-	tex:SetPoint("TOPLEFT", bu.bg)
-	tex:SetPoint("BOTTOMRIGHT", bu.bg)
+	tex:Point("TOPLEFT", bu.bg)
+	tex:Point("BOTTOMRIGHT", bu.bg)
 	tex:SetTexture(C.media.backdrop)
 	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
 	local up = _G[frame.."ScrollUpButton"]
 	local down = _G[frame.."ScrollDownButton"]
 
-	up:SetWidth(17)
-	down:SetWidth(17)
+	up:Width(17)
+	down:Width(17)
 	
 	F.Reskin(up)
 	F.Reskin(down)
@@ -216,13 +215,13 @@ F.ReskinScroll = function(f)
 
 	local uptex = up:CreateTexture(nil, "ARTWORK")
 	uptex:SetTexture("Interface\\AddOns\\Aurora\\arrow-up-active")
-	uptex:SetSize(8, 8)
+	uptex:Size(8, 8)
 	uptex:SetPoint("CENTER")
 	uptex:SetVertexColor(1, 1, 1)
 
 	local downtex = down:CreateTexture(nil, "ARTWORK")
 	downtex:SetTexture("Interface\\AddOns\\Aurora\\arrow-down-active")
-	downtex:SetSize(8, 8)
+	downtex:Size(8, 8)
 	downtex:SetPoint("CENTER")
 	downtex:SetVertexColor(1, 1, 1)
 end
@@ -240,9 +239,10 @@ F.ReskinDropDown = function(f)
 
 	local down = _G[frame.."Button"]
 
-	down:SetSize(20, 20)
 	down:ClearAllPoints()
-	down:SetPoint("RIGHT", -18, 2)
+	down:Point("TOPRIGHT", -18, -4)
+	down:Point("BOTTOMRIGHT", -18, 8)
+	down:SetWidth(19)
 
 	F.Reskin(down)
 	
@@ -259,8 +259,8 @@ F.ReskinDropDown = function(f)
 	downtex:SetVertexColor(1, 1, 1)
 
 	local bg = CreateFrame("Frame", nil, f)
-	bg:SetPoint("TOPLEFT", 16, -4)
-	bg:SetPoint("BOTTOMRIGHT", -18, 8)
+	bg:Point("TOPLEFT", 16, -4)
+	bg:Point("BOTTOMRIGHT", -18, 8)
 	bg:SetFrameLevel(f:GetFrameLevel()-1)
 	F.CreateBD(bg, 0)
 
@@ -272,13 +272,13 @@ F.ReskinDropDown = function(f)
 end
 
 F.ReskinClose = function(f, a1, p, a2, x, y)
-	f:SetSize(17, 17)
+	f:Size(17, 17)
 
 	if not a1 then
-		f:SetPoint("TOPRIGHT", -4, -4)
+		f:Point("TOPRIGHT", -4, -4)
 	else
 		f:ClearAllPoints()
-		f:SetPoint(a1, p, a2, x, y)
+		f:Point(a1, p, a2, x, y)
 	end
 
 	f:SetNormalTexture("")
@@ -295,8 +295,8 @@ F.ReskinClose = function(f, a1, p, a2, x, y)
 	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
 	local text = f:CreateFontString(nil, "OVERLAY")
-	text:SetFont("Fonts\\ARIALN.TTF", 14, "THINOUTLINE")
-	text:SetPoint("CENTER", 1, 1)
+	text:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")
+	text:Point("CENTER", 2, 1)
 	text:SetText("x")
 
 	f:HookScript("OnEnter", function(self) text:SetTextColor(1, .1, .1) end)
@@ -317,12 +317,12 @@ F.ReskinInput = function(f, height, width)
 	tex:SetTexture(C.media.backdrop)
 	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
-	if height then f:SetHeight(height) end
-	if width then f:SetWidth(width) end
+	if height then f:Height(height) end
+	if width then f:Width(width) end
 end
 
 F.ReskinArrow = function(f, direction)
-	f:SetSize(18, 18)
+	f:Size(18, 18)
 	F.Reskin(f)
 	
 	f:SetDisabledTexture(C.media.backdrop)
@@ -331,7 +331,7 @@ F.ReskinArrow = function(f, direction)
 	dis:SetDrawLayer("OVERLAY")
 
 	local tex = f:CreateTexture(nil, "ARTWORK")
-	tex:SetSize(8, 8)
+	tex:Size(8, 8)
 	tex:SetPoint("CENTER")
 	
 	if direction == 1 then
@@ -346,21 +346,23 @@ F.ReskinCheck = function(f)
 	f:SetPushedTexture("")
 	f:SetHighlightTexture(C.media.backdrop)
 	local hl = f:GetHighlightTexture()
-	hl:SetPoint("TOPLEFT", 5, -5)
-	hl:SetPoint("BOTTOMRIGHT", -5, 5)
+	hl:Point("TOPLEFT", 5, -5)
+	hl:Point("BOTTOMRIGHT", -5, 5)
 	hl:SetVertexColor(r, g, b, .2)
+	
+	local tex = f:CreateTexture(nil, "BACKGROUND")
+	tex:Point("TOPLEFT", 5, -5)
+	tex:Point("BOTTOMRIGHT", -5, 5)
+	tex:SetTexture(C.media.backdrop)
+	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
 	local bd = CreateFrame("Frame", nil, f)
-	bd:SetPoint("TOPLEFT", 4, -4)
-	bd:SetPoint("BOTTOMRIGHT", -4, 4)
+	bd:Point("TOPLEFT", tex, -1, 1)
+	bd:Point("BOTTOMRIGHT", tex, 1, -1)
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	F.CreateBD(bd, 0)
 
-	local tex = f:CreateTexture(nil, "BACKGROUND")
-	tex:SetPoint("TOPLEFT", 5, -5)
-	tex:SetPoint("BOTTOMRIGHT", -5, 5)
-	tex:SetTexture(C.media.backdrop)
-	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+	
 end
 
 F.ReskinSlider = function(f)
@@ -368,8 +370,8 @@ F.ReskinSlider = function(f)
 	f.SetBackdrop = F.dummy
 
 	local bd = CreateFrame("Frame", nil, f)
-	bd:SetPoint("TOPLEFT", 1, -2)
-	bd:SetPoint("BOTTOMRIGHT", -1, 3)
+	bd:Point("TOPLEFT", 1, -2)
+	bd:Point("BOTTOMRIGHT", -1, 3)
 	bd:SetFrameStrata("BACKGROUND")
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	F.CreateBD(bd, 0)
@@ -408,8 +410,8 @@ F.SetBD = function(f, x, y, x2, y2)
 		bg:SetPoint("TOPLEFT")
 		bg:SetPoint("BOTTOMRIGHT")
 	else
-		bg:SetPoint("TOPLEFT", x, y)
-		bg:SetPoint("BOTTOMRIGHT", x2, y2)
+		bg:Point("TOPLEFT", x, y)
+		bg:Point("BOTTOMRIGHT", x2, y2)
 	end
 	bg:SetFrameLevel(0)
 	F.CreateBD(bg)
@@ -4833,8 +4835,7 @@ local Delay = CreateFrame("Frame")
 Delay:RegisterEvent("PLAYER_ENTERING_WORLD")
 Delay:SetScript("OnEvent", function()
 	Delay:UnregisterEvent("PLAYER_ENTERING_WORLD")
-
-	if not(IsAddOnLoaded("CowTip") or IsAddOnLoaded("TipTac") or IsAddOnLoaded("s_Core") or IsAddOnLoaded("lolTip") or IsAddOnLoaded("StarTip") or IsAddOnLoaded("TipTop")) then
+	if not(IsAddOnLoaded("CowTip") or IsAddOnLoaded("TipTac") or IsAddOnLoaded("FreebTip") or IsAddOnLoaded("lolTip") or IsAddOnLoaded("StarTip") or IsAddOnLoaded("TipTop")) then
 		local tooltips = {
 			"GameTooltip",
 			"ItemRefTooltip",
@@ -4874,7 +4875,6 @@ Delay:SetScript("OnEvent", function()
 
 		F.CreateBD(FriendsTooltip)
 	end
-
 	if not(IsAddOnLoaded("MetaMap") or IsAddOnLoaded("m_Map") or IsAddOnLoaded("Mapster")) then
 		WorldMapFrameMiniBorderLeft:SetAlpha(0)
 		WorldMapFrameMiniBorderRight:SetAlpha(0)

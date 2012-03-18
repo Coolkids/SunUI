@@ -133,35 +133,35 @@ oUF.Tags['mono:hp']  = function(u) -- THIS IS FUCKING MADNESS!!!
     if u == "player" then
       if min~=max then 
         --return SVal(min).." | |cffe15f8b"..-def.."|r"
-		return SVal(min).." | |cffe15f8b"..per.."|r"
+		return SVal(min).." - |cffe15f8b"..per.."|r"
       else
-        return SVal(min).." | "..per 
+        return SVal(min).." - "..per 
       end
     elseif u == "target" then
       if min~=max then 
         if UnitIsPlayer("target") then
           if UnitIsEnemy("player","target") then
-            return per.." | "..min
+            return per.." - "..min
           else
-            if def then return "|cffe15f8b"..per.."|r | "..SVal(min) end
+            if def then return "|cffe15f8b"..per.."|r - "..SVal(min) end
           end
         else
-          return  "|cffe15f8b"..per.."|r | "..SVal(min)
+          return  "|cffe15f8b"..per.."|r - "..SVal(min)
         end
       else
-        return  per.." | "..SVal(min)
+        return  per.." - "..SVal(min)
       end
     elseif u == "focus" or u == "pet" or u == "focustarget" or u == "targettarget" then
       return per
     else
       if UnitIsPlayer(u) and not UnitIsEnemy("player",u) then
         if min~=max then 
-          return SVal(min).. "|cffe15f8b"..per.."|r | "
+          return SVal(min).. "|cffe15f8b"..per.."|r - "
         else
-          return SVal(min).." | ".. per
+          return SVal(min).." - ".. per
         end
       else    
-        return SVal(min).." | ".."|cffe15f8b"..per.."|r | "
+        return SVal(min).." - ".."|cffe15f8b"..per.."|r - "
       end
     end
   end
@@ -185,7 +185,7 @@ oUF.Tags['mono:hpraid']  = function(u)
 	if UnitIsDead(u) or UnitIsGhost(u) or not UnitIsConnected(u) then
 		return oUF.Tags['mono:DDG'](u)
 	elseif min~=max and per < 90 then
-		return "|cffe15f8b-"..SVal(def).."|r"
+		return "|cffe15f8b - "..SVal(def).."|r"
 	end
 end
 oUF.TagEvents['mono:hpraid'] = 'UNIT_HEALTH UNIT_CONNECTION'
@@ -196,7 +196,7 @@ oUF.Tags['mono:pp'] = function(u)
 	local per = oUF.Tags['perpp'](u).."%" or 0
 	if str then
 		if str == "MANA" then 
- 		return hex(pcolors.power[str] or {250/255,  75/255,  60/255})..SVal(UnitPower(u)).." | "..per
+ 		return hex(pcolors.power[str] or {250/255,  75/255,  60/255})..SVal(UnitPower(u)).." - "..per
 		else
 		return hex(pcolors.power[str] or {250/255,  75/255,  60/255})..SVal(UnitPower(u))
 		end

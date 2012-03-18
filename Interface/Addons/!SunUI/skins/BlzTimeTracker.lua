@@ -14,15 +14,15 @@ local function SkinIt(bar)
 		end
 	end
 	
-	bar:SetStatusBarTexture(C.normal)
+	bar:SetStatusBarTexture(DB.Statusbar)
 	--bar:SetStatusBarColor(95/255, 182/255, 255/255)
 	
 	local spark = bar:CreateTexture(nil, "OVERLAY")
 	spark:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
 	spark:SetBlendMode("ADD")
 	spark:SetAlpha(.8)
-	spark:Point("TOPLEFT", bar:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
-	spark:Point("BOTTOMRIGHT", bar:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
+	spark:SetPoint("TOPLEFT", bar:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
+	spark:SetPoint("BOTTOMRIGHT", bar:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
 	
 	bar:CreateShadow("Background")
 end

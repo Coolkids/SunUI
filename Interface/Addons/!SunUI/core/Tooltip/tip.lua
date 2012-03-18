@@ -245,7 +245,7 @@ end)
 local function style(frame)
     if not frame.shadow then
         --setBakdrop(frame)
-		frame:CreateShadow() --"Background"
+		--frame:CreateShadow("Background")
 		frame:SetScale(cfg.scale)
     end
 
@@ -298,9 +298,8 @@ local tooltips = {
 }
 
 for i, frame in ipairs(tooltips) do
-    frame:SetScript("OnShow", function(frame) style(frame) end)
+    frame:SetScript("OnShow", function(frame) style(frame)   end)
 end
-
 local itemrefScripts = {
     "OnTooltipSetItem",
     "OnTooltipSetAchievement",
@@ -315,7 +314,7 @@ for i, script in ipairs(itemrefScripts) do
 end
 
 if IsAddOnLoaded("ManyItemTooltips") then
-    MIT:AddHook("FreebTip", "OnShow", function(frame) style(frame) end)
+    MIT:AddHook("FreebTip", "OnShow", function(frame)  style(frame)   end)
 end
 
 local f = CreateFrame"Frame"
@@ -326,8 +325,9 @@ function ns:UnregisterEvent(...) for i=1,select("#", ...) do f:UnregisterEvent((
 ns:RegisterEvent"PLAYER_LOGIN"
 function ns:PLAYER_LOGIN()
     for i, frame in ipairs(tooltips) do
-        frame:CreateShadow()            --"Background"
-    end
+        --frame:CreateShadow()
+		style(frame)
+		end
 
     ns:UnregisterEvent"PLAYER_LOGIN"
 end

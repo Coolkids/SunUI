@@ -35,7 +35,7 @@ S.ReskinDropDown = function(f)
 	bg:SetPoint("TOPLEFT", 16, -4)
 	bg:SetPoint("BOTTOMRIGHT", -18, 8)
 	bg:SetFrameLevel(f:GetFrameLevel()-1)
-	S.CreateBD(bg, 0)
+	bg:CreateBD(0)
 
 	local tex = bg:CreateTexture(nil, "BACKGROUND")
 	tex:SetPoint("TOPLEFT")
@@ -57,7 +57,7 @@ S.ReskinCheck = function(f)
 	bd:SetPoint("TOPLEFT", 4, -4)
 	bd:SetPoint("BOTTOMRIGHT", -4, 4)
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
-	S.CreateBD(bd, 0)
+	bd:CreateBD(0)
 
 	local tex = f:CreateTexture(nil, "BACKGROUND")
 	tex:SetPoint("TOPLEFT", 5, -5)
@@ -72,7 +72,7 @@ S.ReskinInput = function(f, height, width)
 	if _G[frame.."Middle"] then _G[frame.."Middle"]:Hide() end
 	if _G[frame.."Mid"] then _G[frame.."Mid"]:Hide() end
 	_G[frame.."Right"]:Hide()
-	S.CreateBD(f, 0)
+	f:CreateBD(0)
 
 	local tex = f:CreateTexture(nil, "BACKGROUND")
 	tex:SetPoint("TOPLEFT")
@@ -92,6 +92,8 @@ if f.shadow then return end
 	
 	if t == "Background" then
 		backdropa = 0.6
+	elseif t == "UnitFrame" then 
+		backdropa = 0.3
 	else
 		backdropa = 0
 	end
