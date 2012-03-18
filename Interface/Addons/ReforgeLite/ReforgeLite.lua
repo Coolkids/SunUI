@@ -702,8 +702,8 @@ function ReforgeLite:CreateFrame (title, width, height)
   else
     self:SetPoint ("CENTER")
   end
-  self:CreateShadow("Background")
-
+  --self:CreateShadow("Background")
+  S.SetBD(self)
   self:EnableMouse (true)
   self:SetMovable (true)
   self:SetResizable (true)

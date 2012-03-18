@@ -301,8 +301,8 @@ end
 function S.SetBD(f, x, y, x2, y2)
 	local bg = CreateFrame("Frame", nil, f)
 	if not x then
-		bg:Point("TOPLEFT")
-		bg:Point("BOTTOMRIGHT")
+		bg:SetPoint("TOPLEFT")
+		bg:SetPoint("BOTTOMRIGHT")
 	else
 		bg:Point("TOPLEFT", x, y)
 		bg:Point("BOTTOMRIGHT", x2, y2)
