@@ -43,21 +43,21 @@ end
 
 Frame:SetScript("OnEvent", function(self, event)
 	if class == "PRIEST" and UnitLevel("player") == 85 then 
-		if ( UnitCanAttack("player", "target") and not UnitIsDead("target") and ( UnitHealth("target")/UnitHealthMax("target") < 0.25 ) ) then
+		if ( UnitCanAttack("player", "target") and not UnitIsDead("target") and ( UnitHealth("target")/UnitHealthMax("target") < 0.25 ) and not UnitIsDead("player") ) then
 			UpdateMakeIcon()
 			self:Show()
 			UpdateCDFrame()
 		else self:Hide()
 		end
 	elseif class == "HUNTER" and UnitLevel("player") == 85 then 
-		if ( UnitCanAttack("player", "target") and not UnitIsDead("target") and ( UnitHealth("target")/UnitHealthMax("target") < 0.2 ) ) then
+		if ( UnitCanAttack("player", "target") and not UnitIsDead("target") and ( UnitHealth("target")/UnitHealthMax("target") < 0.2 ) and not UnitIsDead("player") ) then
 			UpdateMakeIcon()
 			self:Show()
 			UpdateCDFrame()
 		else self:Hide()
 		end
    elseif class == "MAGE" and UnitLevel("player") == 85 then 
-		if ( UnitPower("player")/UnitPowerMax("player") < 0.4 ) then
+		if (( UnitPower("player")/UnitPowerMax("player") < 0.4 ) and not UnitIsDead("player") ) then
 			UpdateMakeIcon()
 			self:Show()
 			UpdateCDFrame()

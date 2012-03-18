@@ -31,6 +31,7 @@ function Module.LoadSettings()
 		["ClassFontSize"] = 15,
 		["FontScale"] = 0.8,
 		["Flump"] = true,
+		["BagScale"] = 1,
 		
 	}
 	if not MiniDB then MiniDB = {} end
@@ -147,6 +148,14 @@ function Module.BuildGUI()
 					order = 13,
 					get = function() return MiniDB.HideRaidWarn end,
 					set = function(_, value) MiniDB.HideRaidWarn = value end,
+				},
+				BagScale = {
+					type = "range",
+					name = "背包缩放大小",
+					order = 14,
+					min = 0.2, max = 2, step = 0.1,
+					get = function() return MiniDB.BagScale end,
+					set = function(_, value) MiniDB.BagScale = value end,
 				},
 			}
 		}

@@ -25,7 +25,7 @@ function Bags:OnInit()
 	-- 玩家背包
 	f.main = MyContainer:New("Main", {
 			Columns = 10, 
-			Scale = 1, 
+			Scale = MiniDB["BagScale"], 
 			Bags = "bags", 
 			Movable = true, 
 	})
@@ -35,7 +35,7 @@ function Bags:OnInit()
 	-- 银行
 	f.bank = MyContainer:New("Bank", {
 			Columns = 13, 
-			Scale = 1, 
+			Scale = MiniDB["BagScale"], 
 			Bags = "bank", 
 			Movable = true, 
 	})

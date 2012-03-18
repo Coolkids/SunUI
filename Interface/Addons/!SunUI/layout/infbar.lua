@@ -98,7 +98,9 @@ local function UpdateMemory()
 		addOnMem = GetAddOnMemoryUsage(MemoryTable[i][1])
 		MemoryTable[i][3] = addOnMem
 		TotalMemory = TotalMemory + addOnMem
+		if IsAddOnLoaded(i) then
 		num = num + 1
+		end
 	end
 	table.sort(MemoryTable, function(a, b)
 		if a and b then
@@ -167,7 +169,6 @@ local function BuildMemory(Anchor)
 				elseif  MemoryTable[i][3] <= 2560 then r, g, b = 1, 0.75, 0 -- 1mb - 2.5mb
 				elseif  MemoryTable[i][3] <= 5120 then r, g, b = 1, 0.5, 0 -- 2.5mb - 5mb
 			end
-			more = more + 1
 				GameTooltip:AddDoubleLine(MemoryTable[i][2], S.FormatMemory(MemoryTable[i][3]), 1, 1, 1, r, g, b)
 			end						
 		end
@@ -179,7 +180,7 @@ local function BuildMemory(Anchor)
 					end
 				end
 				local mor = 0
-				mor = num - more
+				mor = num - maxAddOns
 				GameTooltip:AddDoubleLine(format("%d %s (%s)",mor,L["Hidden"],L["Alt"]),S.FormatMemory(moreMem),.6,.8,1,.6,.8,1)
 			end
 			GameTooltip:AddLine(" ")
