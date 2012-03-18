@@ -118,12 +118,16 @@ local function BuildMemory(Anchor)
 	StatusBar:CreateShadow("Background")
 	StatusBar.Text = S.MakeFontString(StatusBar, 10)
 	StatusBar.Text:Point("CENTER", 0, -5)
-	StatusBar:SetScript("OnMouseDown", function(self)
-		UpdateAddOnMemoryUsage()
-		local Before = gcinfo()
-		collectgarbage()
-		UpdateAddOnMemoryUsage()
-		print(format("|cff66C6FF%s:|r %s", L["共释放内存"], S.FormatMemory(Before - gcinfo())))
+	StatusBar:SetScript("OnMouseDown", function(self, button)
+		if button == "LeftButton" then 
+			UpdateAddOnMemoryUsage()
+			local Before = gcinfo()
+			collectgarbage()
+			UpdateAddOnMemoryUsage()
+			print(format("|cff66C6FF%s:|r %s", L["共释放内存"], S.FormatMemory(Before - gcinfo())))
+		else
+		stAddonManager:LoadWindow()
+		end
 	end)
 	StatusBar.Timer = 0
 	StatusBar:SetScript("OnUpdate", function(self, elapsed)

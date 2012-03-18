@@ -65,7 +65,7 @@ C = UnitFrameDB
     self.Power.bg.multiplier = 0.3
     lib.gen_castbar(self)
     lib.gen_portrait(self)
-    lib.gen_mirrorcb(self)
+    --lib.gen_mirrorcb(self)
     lib.gen_ppstrings(self)
     lib.gen_Runes(self)
     lib.gen_TotemBar(self)
@@ -101,6 +101,7 @@ C = UnitFrameDB
     lib.gen_portrait(self)
     lib.createAuras(self)
     lib.gen_ppstrings(self)
+	lib.gen_alt_powerbar(self)
     lib.gen_cp(self)
 	lib.gen_combat_feedback(self)
     if showfaketarget then lib.gen_faketarget(self) end

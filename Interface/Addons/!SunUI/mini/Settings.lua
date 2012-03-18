@@ -99,6 +99,46 @@ end
 SLASH_WATCHFRAMELOCK1 = "/wf"
 SlashCmdList["WATCHFRAMELOCK"] = WATCHFRAMELOCK
 
+-- VS移动(by Tukz)
+local vs = VehicleSeatIndicator
+local vsmove = false 
+
+vs:SetMovable(true);
+vs:SetClampedToScreen(false);
+vs:ClearAllPoints()
+vs:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -150, 250)
+
+
+vs:SetUserPlaced(true)
+vs.SetPoint = function() end
+vsg = CreateFrame("Frame")
+vsg:SetPoint("TOPLEFT", vs, "TOPLEFT")
+vsg:SetPoint("BOTTOMRIGHT", vs, "BOTTOMRIGHT")
+vsg.text = S.MakeFontString(vsg, 10)
+vsg.text:SetText("点我拖动")
+vsg.text:SetPoint("TOP", vsg, "TOP")
+vsg:CreateShadow("Background")
+vsg:Hide()
+local function VSLOCK()
+	if vsmove == false then
+		vsmove = true
+		vsg:Show()
+		print("|cffFFD700载具框|r |cff228B22解锁|r")
+		vs:EnableMouse(true);
+		vs:RegisterForDrag("LeftButton"); 
+		vs:SetScript("OnDragStart", vs.StartMoving); 
+		vs:SetScript("OnDragStop", vs.StopMovingOrSizing);
+	elseif vsmove == true then
+		vs:EnableMouse(false);
+		vsmove = false
+		vsg:Hide()
+		print("|cffFFD700载具框|r |cffFF0000锁定|r")
+	end
+end
+
+SLASH_WATCHFRAMELOCK1 = "/vs"
+SlashCmdList["WATCHFRAMELOCK"] = VSLOCK
+
 --隐藏团队报警
 --RaidBossEmoteFrame:UnregisterEvent("RAID_BOSS_EMOTE")  --Disable Boss Emote Frame
 --RaidBossEmoteFrame:UnregisterEvent("RAID_BOSS_WHISPER") --Disable Boss Whisper Frame

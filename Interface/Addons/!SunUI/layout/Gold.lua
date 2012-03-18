@@ -122,6 +122,12 @@ function Module:OnEnable()
 	Stat:RegisterEvent("PLAYER_TRADE_MONEY")
 	Stat:RegisterEvent("TRADE_MONEY_CHANGED")
 	Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
-	Stat:SetScript("OnMouseDown", function() ToggleCharacter("TokenFrame") end)
+	Stat:SetScript("OnMouseDown", function(self, button) 
+		if button == "LeftButton" then
+			OpenAllBags()
+		else
+			ToggleCharacter("TokenFrame")
+		end
+	end)
 	Stat:SetScript("OnEvent", OnEvent)
 end

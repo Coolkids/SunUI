@@ -12,6 +12,10 @@ if SunUIActionBar2 and ActionBarDB["EnableBarFader"] then table.insert(rabs, "Su
 if SunUIActionBar3 and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIActionBar3") end
 if SunUIActionBar4 and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIActionBar4") end
 if SunUIActionBar5 and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIActionBar5") end
+if SunUIMultiBarLeft1 and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIMultiBarLeft1") end
+if SunUIMultiBarLeft2 and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIMultiBarLeft2") end
+if SunUIMultiBarLeft3 and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIMultiBarLeft3") end
+if SunUIMultiBarLeft4 and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIMultiBarLeft4") end
 
 if #rabs == 0 then return end
 
