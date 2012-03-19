@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Azshara", "DBM-Party-Cataclysm", 13)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 6818 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7442 $"):sub(12, -3))
 mod:SetCreatureID(54853)
 mod:SetModelID(39391)
 mod:SetZone()
@@ -51,9 +51,8 @@ function mod:SPELL_CAST_START(args)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, spellName)
-	if uId ~= "boss1" then return end--Anti spam to ignore all other args (like target/focus/mouseover)
-	if spellName == GetSpellInfo(102334) then
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+	if spellId == 102334 and self:AntiSpam() then
 		warnServant:Show()
 		specWarnServant:Show()
 --		timerServantCD:Start()

@@ -1,4 +1,4 @@
-﻿local F, C = unpack(Aurora)
+﻿local S, _, _, _ = unpack(SunUI)
 local Postal = LibStub("AceAddon-3.0"):GetAddon("Postal")
 local Postal_OpenAll = Postal:NewModule("OpenAll", "AceEvent-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("Postal")
@@ -91,14 +91,17 @@ function Postal_OpenAll:OnEnable()
 		button:SetText(L["Open All"])
 		button:SetScript("OnClick", function() Postal_OpenAll:OpenAll() end)
 		button:SetFrameLevel(button:GetFrameLevel() + 1)
-		F.Reskin(button)
+		S.Reskin(button)
 	end
 	if not Postal_OpenAllMenuButton then
 		-- Create the Menu Button
 		Postal_OpenAllMenuButton = CreateFrame("Button", "Postal_OpenAllMenuButton", InboxFrame);
+		Postal_OpenAllMenuButton.Text = S.MakeFontString(Postal_ModuleMenuButton, 10)
 		Postal_OpenAllMenuButton:SetWidth(25);
 		Postal_OpenAllMenuButton:SetHeight(25);
 		Postal_OpenAllMenuButton:SetPoint("LEFT", button, "RIGHT", -2, 0);
+		Postal_OpenAllMenuButton.Text:SetAllPoints()
+		Postal_OpenAllMenuButton.Text:SetText("M")
 		Postal_OpenAllMenuButton:SetScript("OnClick", function(self, button, down)
 			if Postal_DropDownMenu.initialize ~= Postal_OpenAll.ModuleMenu then
 				CloseDropDownMenus()
@@ -107,7 +110,7 @@ function Postal_OpenAll:OnEnable()
 			ToggleDropDownMenu(1, nil, Postal_DropDownMenu, self:GetName(), 0, 0)
 		end)
 		Postal_OpenAllMenuButton:SetFrameLevel(Postal_OpenAllMenuButton:GetFrameLevel() + 1)
-		F.Reskin(Postal_OpenAllMenuButton)
+		S.Reskin(Postal_OpenAllMenuButton)
 	end
 
 	self:RegisterEvent("MAIL_SHOW")

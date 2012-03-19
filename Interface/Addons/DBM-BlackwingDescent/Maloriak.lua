@@ -2,7 +2,7 @@
 local mod	= DBM:NewMod("Maloriak", "DBM-BlackwingDescent")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7187 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7448 $"):sub(12, -3))
 mod:SetCreatureID(41378)
 mod:SetModelID(33186)
 mod:SetZone()
@@ -73,8 +73,6 @@ mod:AddBoolOption("SetTextures", true)--Just about ALL friendly spells cover dar
 
 local adds = 18
 local AddsInterrupted = false
-local spamSlime = 0
-local spamSludge = 0
 local bitingChillTargets = {}
 local flashFreezeTargets = {}
 local bitingChillIcon = 6
@@ -112,8 +110,6 @@ function mod:OnCombatStart(delay)
 	end
 	adds = 18
 	AddsInterrupted = false
-	spamSlime = 0
-	spamSludge = 0
 	bitingChillIcon = 6
 	flashFreezeIcon = 8
 	prewarnedPhase2 = false
@@ -169,12 +165,10 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnConsumingFlames:Show()
 		end
-	elseif args:IsSpellID(77615) and GetTime() - spamSlime >= 4 then
-		spamSlime = GetTime()
+	elseif args:IsSpellID(77615) and self:AntiSpam(3, 1) then
 		warnDebilitatingSlime:Show()
 		timerDebilitatingSlime:Start()
-	elseif args:IsSpellID(92930, 92986, 92987, 92988) and GetTime() - spamSludge >= 2 and args:IsPlayer() then
-		spamSludge = GetTime()
+	elseif args:IsSpellID(92930, 92986, 92987, 92988) and args:IsPlayer() and self:AntiSpam(3, 2) then
 		specWarnSludge:Show()
 	end
 end
@@ -216,7 +210,7 @@ function mod:SPELL_CAST_START(args)
 	elseif args:IsSpellID(92754) then
 		warnEngulfingDarkness:Show()
 		timerEngulfingDarknessCD:Start()
-		if self:GetUnitCreatureId("target") == 41378 or self:GetBossTarget(33186) == UnitName("target") then--Add tank doesn't need this spam, just tank on mal and healers healing that tank.
+		if self:GetUnitCreatureId("target") == 41378 or self:GetBossTarget(33186) == UnitName("target") then--First check is for tank (tank is targeting boss), second check is for HEALER< IE, the HEALER is targeting the bosses TARGET
 			specWarnEngulfingDarkness:Show()
 		end
 	elseif args:IsSpellID(77896) then

@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("ForgemasterThrongus", "DBM-Party-Cataclysm", 3)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 6499 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7445 $"):sub(12, -3))
 mod:SetCreatureID(40177)
 mod:SetModelID(33429)
 mod:SetZone()
@@ -28,8 +28,6 @@ local timerEncumbered		= mod:NewBuffActiveTimer(30, 75007)
 local timerPhalanx			= mod:NewBuffActiveTimer(30, 74908)
 local timerImpalingSlam		= mod:NewTargetTimer(5, 75056)
 
-local spamRoar = 0
-
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(74981) then
 		warnDualBlades:Show()
@@ -43,9 +41,8 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif args:IsSpellID(75056, 90756) then
 		warnImpalingSlam:Show(args.destName)
 		timerImpalingSlam:Start(args.destName)
-	elseif args:IsSpellID(90737) and GetTime() - spamRoar >= 10 then
+	elseif args:IsSpellID(90737) and self:AntiSpam(10) then
 		warnDisorientingRoar:Show()
-		spamRoar = GetTime()
 	elseif args:IsSpellID(74987) and args:IsPlayer() then
 		specWarnCaveIn:Show()
 	end

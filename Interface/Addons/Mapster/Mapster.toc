@@ -5,6 +5,7 @@
 ## Title: Mapster
 ## Author: Nevcairiel
 ## SavedVariables: MapsterDB
+## RequiredDeps: !SunUI
 ## X-Category: Map
 ## Version: 1.4.3
 ## X-License: All rights reserved.

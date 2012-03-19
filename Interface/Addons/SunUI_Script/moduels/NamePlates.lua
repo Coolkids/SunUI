@@ -415,13 +415,13 @@ local function Colorize(frame)
 		r,g,b = unpack(DB.colors.reaction[1])
 		frame.isFriendly = false
 	elseif r+b == 0 then -- friendly npc
-		r,g,b = unpack(DB.colors.power["MANA"])
+		r,g,b = unpack(DB.colors.reaction[5])
 		frame.isFriendly = true
 	elseif r+g > 1.95 then -- neutral
 		r,g,b = unpack(DB.colors.reaction[4])
 		frame.isFriendly = false
 	elseif r+g == 0 then -- friendly player
-		r,g,b = unpack(DB.colors.reaction[5])
+		r,g,b = unpack(DB.colors.power["MANA"])
 		frame.isFriendly = true
 	else -- enemy player
 		frame.isFriendly = false

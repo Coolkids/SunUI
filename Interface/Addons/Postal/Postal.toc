@@ -4,6 +4,7 @@
 ## Author: Xinhuan
 ## X-Credits: Ammo, Rabbit, Grennon, Mikk
 ## X-Category: Mail
+## RequiredDeps: !SunUI
 ## Notes: Postal: Enhanced Mailbox support
 ## Notes-ruRU: Postal: Расширенная поддержка почтового ящика
 ## Notes-frFR: Postal: améliorations diverses de l'interface d'envoi/réception de courriers.

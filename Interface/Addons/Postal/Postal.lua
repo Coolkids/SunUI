@@ -1,4 +1,4 @@
-﻿local F, C = unpack(Aurora)
+﻿local S, _, _, _ = unpack(SunUI)
 local Postal = LibStub("AceAddon-3.0"):NewAddon("Postal", "AceEvent-3.0", "AceHook-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("Postal")
 _G["Postal"] = Postal
@@ -121,9 +121,12 @@ function Postal:OnInitialize()
 
 	-- Create the Menu Button
 	local Postal_ModuleMenuButton = CreateFrame("Button", "Postal_ModuleMenuButton", MailFrame)
+	Postal_ModuleMenuButton.Text = S.MakeFontString(Postal_ModuleMenuButton, 10)
 	Postal_ModuleMenuButton:SetWidth(20)
 	Postal_ModuleMenuButton:SetHeight(20)
 	Postal_ModuleMenuButton:SetPoint("TOPRIGHT", -60, -15)
+	Postal_ModuleMenuButton.Text:SetAllPoints()
+	Postal_ModuleMenuButton.Text:SetText("S")
 	Postal_ModuleMenuButton:SetScript("OnClick", function(self, button, down)
 		if Postal_DropDownMenu.initialize ~= Postal.Menu then
 			CloseDropDownMenus()
@@ -132,8 +135,7 @@ function Postal:OnInitialize()
 		ToggleDropDownMenu(1, nil, Postal_DropDownMenu, self:GetName(), 0, 0)
 	end)
 	Postal_ModuleMenuButton:SetScript("OnHide", Postal_DropDownMenu.HideMenu)
-	Postal_ModuleMenuButton:SetText("S")
-	F.Reskin(Postal_ModuleMenuButton)
+	S.Reskin(Postal_ModuleMenuButton)
 	
 	-- Create 7 buttons for mouseover on long subject lines
 	for i = 1, 7 do

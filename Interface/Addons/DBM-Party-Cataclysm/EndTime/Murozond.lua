@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Murozond", "DBM-Party-Cataclysm", 12)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 6773 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7444 $"):sub(12, -3))
 mod:SetCreatureID(54432)
 mod:SetModelID(38931)
 mod:SetZone()
@@ -21,17 +21,13 @@ local warnRewind		= mod:NewSpellAnnounce(101591, 3)
 local timerBlastCD		= mod:NewNextTimer(12, 102381)
 local timerBreathCD		= mod:NewNextTimer(22, 102569)
 
-local rewindSpam = 0
-
 function mod:OnCombatStart(delay)
-	rewindSpam = 0
 	timerBlastCD:Start(-delay)
 	timerBreathCD:Start(-delay)
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(101591) and GetTime() - rewindSpam >= 3 then
-		rewindSpam = GetTime()
+	if args:IsSpellID(101591) and self:AntiSpam() then
 		warnRewind:Show()
 		timerBlastCD:Cancel()
 		timerBreathCD:Cancel()

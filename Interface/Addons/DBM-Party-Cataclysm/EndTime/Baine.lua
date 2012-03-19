@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("EchoBaine", "DBM-Party-Cataclysm", 12)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 6810 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7445 $"):sub(12, -3))
 mod:SetCreatureID(54431)
 mod:SetModelID(38791)
 mod:SetZone()
@@ -39,10 +39,9 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(101840) and GetTime() - spamBlast > 3 then
+	if args:IsSpellID(101840) and self:AntiSpam(3, 1) then
 		warnMoltenBlast:Show(args.destName)
 		timerMoltenBlast:Start(args.destName)
-		spamBlast = GetTime()
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
@@ -54,10 +53,9 @@ function mod:SPELL_AURA_REMOVED(args)
 end
 
 function mod:SPELL_CAST_SUCCESS(args)
-	if args:IsSpellID(101625) and GetTime() - spamPulverize > 3 then
+	if args:IsSpellID(101625) and self:AntiSpam(3, 2) then
 		warnPulverize:Show()
 		timerPulverize:Start()
-		spamPulverize = GetTime()
 	end
 end
 

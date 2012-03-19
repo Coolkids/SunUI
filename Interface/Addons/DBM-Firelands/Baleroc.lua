@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(196, "DBM-Firelands", nil, 78)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7414 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7445 $"):sub(12, -3))
 mod:SetCreatureID(53494)
 mod:SetModelID(38621)
 mod:SetZone()
@@ -55,9 +55,9 @@ mod:AddBoolOption("SetIconOnTorment")
 mod:AddBoolOption("ArrowOnCountdown")
 
 local bladesName = nil
-local lastStrike = 0
-local currentStrike = 0
-local lastStrikeDiff = 0
+local lastStrike = 0--Custom, no prototype
+local currentStrike = 0--^^
+local lastStrikeDiff = 0--^^
 local strikeCount = 0
 local shardCount = 0
 local tormentIcon = 8

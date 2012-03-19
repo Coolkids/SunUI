@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(331, "DBM-DragonSoul", nil, 187)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7430 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7444 $"):sub(12, -3))
 mod:SetCreatureID(55294)
 mod:SetModelID(39099)
 mod:SetModelSound("sound\\CREATURE\\ULTRAXION\\VO_DS_ULTRAXION_INTRO_01.OGG", "sound\\CREATURE\\ULTRAXION\\VO_DS_ULTRAXION_AGGRO_01.OGG")
@@ -42,15 +42,13 @@ local timerGiftofLight				= mod:NewNextTimer(80, 105896, nil, mod:IsHealer())
 local timerEssenceofDreams			= mod:NewNextTimer(155, 105900, nil, mod:IsHealer())
 local timerSourceofMagic			= mod:NewNextTimer(215, 105903, nil, mod:IsHealer())
 local timerLoomingDarkness			= mod:NewBuffFadesTimer(120, 106498)
-local timerRaidCDs					= mod:NewTimer(60, "timerRaidCDs", 2565, nil, false)--Does not need to be localized, has no option, uses ShowRaidCDs bool
+local timerRaidCDs					= mod:NewTimer(60, "timerRaidCDs", 2565, nil, false)
 
-local berserkTimer					= mod:NewBerserkTimer(360)--some players regard as Ultraxian mod not shows berserk Timer. so it will be better to use Generic Berserk Timer..
+local berserkTimer					= mod:NewBerserkTimer(360)
 
 local countdownFadingLight			= mod:NewCountdown(10, 110080)
 local countdownHourofTwilight		= mod:NewCountdown(45.5, 109416, mod:IsHealer())--can be confusing with Fading Light, only enable for healer. (healers no dot affect by Fading Light)
 
---mod:AddBoolOption("ShowRaidCDs", false, "timer")--Off by default. This is for RAID cds not personal CDs. Shield wall is added because of 4pc bonus, it's assumed on heroic ultraxion you're tanks have 4pc.
---mod:AddBoolOption("ShowRaidCDsSelf", false, "timer")--TODO, make a popup optiopn and combine this with other booleane
 --Raid CDs will have following options: Don't show Raid CDs, Show only My Raid CDs, Show all raid CDs
 mod:AddDropdownOption("dropdownRaidCDs", {"Never", "ShowRaidCDs", "ShowRaidCDsSelf"}, "Never", "timer")
 
@@ -58,13 +56,12 @@ mod:AddDropdownOption("ResetHoTCounter", {"Never", "ResetDynamic", "Reset3Always
 --ResetDynamic = 3s on heroic and 2s on normal.
 --Reset3Always = 3s on both heroic and normal.
 mod:AddDropdownOption("SpecWarnHoTN", {"Never", "One", "Two", "Three"}, "Never", "announce")
---If ResetDynamic, SpecWarnHoTN WILL work for 1-2, if set to 3 it'll just be ignored.
---If Never, SpecWarnHoTN will work in 3 counts still ie 1 4 7, 2 5, 3 6
+--If ResetDynamic, SpecWarnHoTN will work for 1-2, if set to 3 on normal it'll just be ignored.
+--If ResetHoTCounter is Never, SpecWarnHoTN will work in 3 counts still ie 1 4 7, 2 5, 3 6
 
 local hourOfTwilightCount = 0
 local fadingLightCount = 0
 local fadingLightTargets = {}
-local fadingLightSpam = 0
 
 local function warnFadingLightTargets()
 	warnFadingLight:Show(fadingLightCount, table.concat(fadingLightTargets, "<, >"))
@@ -75,7 +72,6 @@ function mod:OnCombatStart(delay)
 	table.wipe(fadingLightTargets)
 	hourOfTwilightCount = 0
 	fadingLightCount = 0
-	fadingLightSpam = 0
 	warnHourofTwilightSoon:Schedule(30.5)
 	if self.Options.SpecWarnHoTN == "One" then--Don't filter here, this is supposed to work for everyone. IF they don't want special warning they set SpecWarnHoTN to Never (it's default)
 		specWarnHourofTwilightN:Schedule(40.5, GetSpellInfo(109416), hourOfTwilightCount+1)
@@ -102,7 +98,7 @@ function mod:SPELL_CAST_START(args)
 		or self.Options.ResetHoTCounter == "ResetDynamic" and self:IsDifficulty("normal10", "normal25", "lfr25") and hourOfTwilightCount == 2 then
 			hourOfTwilightCount = 0
 		end
-		-- If reset is set to never, then we still schedule specail warnings for 4-7 on a 3 set rule
+		-- If reset is set to never, then we still schedule special warnings for 4-7 on a 3 set rule
 		if self.Options.SpecWarnHoTN == "One" and (hourOfTwilightCount == 0 or hourOfTwilightCount == 3 or hourOfTwilightCount == 6)--All use this..
 		or self.Options.SpecWarnHoTN == "Two" and (hourOfTwilightCount == 1 or hourOfTwilightCount == 4)--All use this
 		or self.Options.SpecWarnHoTN == "Three" and (hourOfTwilightCount == 2 or hourOfTwilightCount == 5) then--ResetDynamic doesn't use this on normal, however, no reason to filter it here as hourOfTwilightCount was already reset before this ran. Never also uses this safely.
@@ -173,12 +169,11 @@ function mod:SPELL_AURA_APPLIED(args)
 		elseif self:IsDifficulty("normal10", "normal25", "lfr25") and fadingLightCount < 2 then
 			timerFadingLightCD:Start(15)
 		end
-		if (args:IsPlayer() or UnitDebuff("player", GetSpellInfo(105925))) and GetTime() - fadingLightSpam > 2 then--Sometimes the combatlog doesn't report all fading lights, so we perform an additional aura check 
+		if (args:IsPlayer() or UnitDebuff("player", GetSpellInfo(105925))) and self:AntiSpam(2) then--Sometimes the combatlog doesn't report all fading lights, so we perform an additional aura check 
 			local _, _, _, _, _, duration, expires = UnitDebuff("player", args.spellName)--Find out what our specific fading light is
 			specWarnFadingLight:Show()
 			countdownFadingLight:Start(duration-1)--For some reason need to offset it by 1 second to make it accurate but otherwise it's perfect
 			timerFadingLight:Start(duration-1)
-			fadingLightSpam = GetTime()
 		else
 			specWarnFadingLightOther:Show(args.destName)
 		end
@@ -190,12 +185,11 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif args:IsSpellID(109075, 110078, 110079, 110080) then--Non Tank IDs
 		fadingLightTargets[#fadingLightTargets + 1] = args.destName
-		if (args:IsPlayer() or UnitDebuff("player", GetSpellInfo(109075))) and GetTime() - fadingLightSpam > 2 then
+		if (args:IsPlayer() or UnitDebuff("player", GetSpellInfo(109075))) and self:AntiSpam(2) then
 			local _, _, _, _, _, duration, expires = UnitDebuff("player", args.spellName)
 			specWarnFadingLight:Show()
 			countdownFadingLight:Start(duration-1)
 			timerFadingLight:Start(duration-1)
-			fadingLightSpam = GetTime()
 		end
 		self:Unschedule(warnFadingLightTargets)
 		if self:IsDifficulty("heroic25") and #fadingLightTargets >= 7 or self:IsDifficulty("normal25") and #fadingLightTargets >= 4 or self:IsDifficulty("heroic10") and #fadingLightTargets >= 3 or self:IsDifficulty("normal10") and #fadingLightTargets >= 2 then

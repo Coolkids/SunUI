@@ -2,7 +2,7 @@
 local mod	= DBM:NewMod("Conclave", "DBM-ThroneFourWinds")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7276 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7445 $"):sub(12, -3))
 mod:SetCreatureID(45870, 45871, 45872)
 mod:SetModelID(35232)
 mod:SetZone()
@@ -28,7 +28,7 @@ mod:RegisterEventsInCombat(
 )
 
 local warnNurture			= mod:NewSpellAnnounce(85422, 3)
-local warnSoothingBreeze	= mod:NewSpellAnnounce(86207, 3)	-- using a spellID here with a better description of the spell
+local warnSoothingBreeze	= mod:NewTargetAnnounce(86207, 3)	-- using a spellID here with a better description of the spell
 local warnSummonTornados	= mod:NewSpellAnnounce(86192, 3)
 local warnWindBlast			= mod:NewSpellAnnounce(86193, 3)
 local warnStormShield		= mod:NewSpellAnnounce(95865, 3)
@@ -62,22 +62,16 @@ mod:AddBoolOption("OnlyWarnforMyTarget", false, "announce")--Default off do to t
 mod:AddBoolOption("HealthFrame", false)
 
 local windBlastCounter = 0
-local specialSpam = 0
-local specialsEnded = 0
 local poisonCounter = 0
 local breezeCounter = 0
-local poisonSpam = 0
-local iceSpam = 0
+local scansDone = 0
 local GatherStrengthwarned = false
 
 function mod:OnCombatStart(delay)
 	windBlastCounter = 0
 	breezeCounter = 0
 	poisonCounter = 0
-	specialSpam = 0
-	specialsEnded = 0
-	iceSpam = 0
-	poisonSpam = 0
+	scansDone = 0
 	GatherStrengthwarned = false
 	warnSpecialSoon:Schedule(80-delay)
 	timerSpecial:Start(90-delay)
@@ -98,17 +92,35 @@ function mod:OnCombatStart(delay)
 
 end
 
+function mod:BreezeTarget()
+	scansDone = scansDone + 1
+	local targetname, uId = self:GetBossTarget(45870)
+--	print(targetname, uId)
+	if targetname and uId then
+		if UnitIsFriend("player", uId) then--He's targeting a friendly unit, he doesn't cast this on players, so it's wrong target.
+			if scansDone < 15 then--Make sure no infinite loop.
+				self:ScheduleMethod(0.1, "BreezeTarget")--Check multiple times to find a target that isn't a player.
+			end
+		else--He's not targeting a player, it's definitely breeze target.
+			warnSoothingBreeze:Show(targetname)
+		end
+	else--target was nil, lets schedule a rescan here too.
+		if scansDone < 15 then--Make sure not to infinite loop here as well.
+			self:ScheduleMethod(0.1, "BreezeTarget")
+		end
+	end
+end
+
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(93057, 93058) then
 		if args:IsPlayer() then
 			timerSlicingGale:Start()
 		end
-	elseif args:IsSpellID(84651, 93117, 93118, 93119) and args:GetDestCreatureID() == 45870 and GetTime() - specialsEnded >= 3 then--Zephyr stacks on Anshal
+	elseif args:IsSpellID(84651, 93117, 93118, 93119) and args:GetDestCreatureID() == 45870 and self:AntiSpam(3, 1) then--Zephyr stacks on Anshal
 		if (args.amount or 1) >= 15 then--Special has ended when he's at 15 stacks.
 			warnSpecialSoon:Cancel()
 			warnSpecialSoon:Schedule(85)
 			timerSpecial:Start()
-			specialsEnded = GetTime()
 			if self:GetUnitCreatureId("target") == 45870 or self:GetUnitCreatureId("focus") == 45870 or self:GetUnitCreatureId("target") == 45812 or not self.Options.OnlyWarnforMyTarget then--Anshal and his flowers
 				timerSoothingBreezeCD:Start(16)
 				timerNurture:Start()
@@ -122,11 +134,10 @@ end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
 function mod:SPELL_AURA_REMOVED(args)
-	if args:IsSpellID(84644, 84643) and GetTime() - specialsEnded >= 3 then--Sleet Storm, Hurricane.
+	if args:IsSpellID(84644, 84643) and self:AntiSpam(3, 1) then--Sleet Storm, Hurricane.
 		warnSpecialSoon:Cancel()
 		warnSpecialSoon:Schedule(85)
 		timerSpecial:Start()
-		specialsEnded = GetTime()
 		if self:GetUnitCreatureId("target") == 45870 or self:GetUnitCreatureId("focus") == 45870 or self:GetUnitCreatureId("target") == 45812 or not self.Options.OnlyWarnforMyTarget then--Anshal and his flowers
 			timerSoothingBreezeCD:Start(16)
 			timerNurture:Start()
@@ -138,8 +149,7 @@ function mod:SPELL_AURA_REMOVED(args)
 end
 
 function mod:SPELL_DAMAGE(sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId)
-	if (spellId == 86111 or spellId == 93129 or spellId == 93130 or spellId == 93131) and destGUID == UnitGUID("player") and GetTime() - iceSpam >= 3 then
-		iceSpam = GetTime()
+	if (spellId == 86111 or spellId == 93129 or spellId == 93130 or spellId == 93131) and destGUID == UnitGUID("player") and self:AntiSpam(3, 2) then
 		specWarnIcePatch:Show()
 	end
 end
@@ -148,8 +158,10 @@ mod.SPELL_MISSED = mod.SPELL_DAMAGE
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(86205) then
 		breezeCounter = breezeCounter + 1
+		scansDone = 0
 		if self:GetUnitCreatureId("target") == 45870 or self:GetUnitCreatureId("focus") == 45870 or self:GetUnitCreatureId("target") == 45812 or not self.Options.OnlyWarnforMyTarget then--Anshal and his flowers
-			warnSoothingBreeze:Show()--possibly change to target scanning and announce whether he's casting it on himself or one of his flowers.
+			self:BreezeTarget()
+--			warnSoothingBreeze:Show()--possibly change to target scanning and announce whether he's casting it on himself or one of his flowers.
 			if breezeCounter < 3 then--Make sure it doesn't start another bar just before special.
 				timerSoothingBreezeCD:Start()
 			end
@@ -173,11 +185,10 @@ function mod:SPELL_CAST_SUCCESS(args)
 		if self:GetUnitCreatureId("target") == 45871 or self:GetUnitCreatureId("focus") == 45871 or not self.Options.OnlyWarnforMyTarget then--Nezir
 			timerPermaFrostCD:Start()
 		end
-	elseif args:IsSpellID(84644, 84638, 84643) and GetTime() - specialSpam > 3 then
+	elseif args:IsSpellID(84644, 84638, 84643) and self:AntiSpam(3, 4) then
 		warnSpecial:Show()
 		specWarnSpecial:Show()
 		timerSpecialActive:Start()
-		specialSpam = GetTime()--Trigger it off any of 3 spells, but only once.
 		poisonCounter = 0
 		breezeCounter = 0
 		if self:GetUnitCreatureId("target") == 45871 or self:GetUnitCreatureId("focus") == 45871 or not self.Options.OnlyWarnforMyTarget then--Nezir
@@ -188,8 +199,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 			warnStormShield:Show()
 			specWarnShield:Show()
 		end
-	elseif args:IsSpellID(86281) and GetTime() - poisonSpam > 3 then-- Poison Toxic Warning (at Heroic, Poison Toxic damage is too high, so warning needed)
-		poisonSpam = GetTime()
+	elseif args:IsSpellID(86281) and self:AntiSpam(3, 3) then-- Poison Toxic Warning (at Heroic, Poison Toxic damage is too high, so warning needed)
 		if self:GetUnitCreatureId("target") == 45870 or self:GetUnitCreatureId("focus") == 45870 or self:GetUnitCreatureId("target") == 45812 or not self.Options.OnlyWarnforMyTarget then
 			warnPoisonToxic:Show()
 			timerPoisonToxic:Show()

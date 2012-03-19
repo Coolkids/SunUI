@@ -1,0 +1,24 @@
+﻿<!-- -->
+
+
+
+
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Include file="ActionBar\Load.xml"/>
+	<Include file="bags\load.xml"/>
+	<Script file = "Buffs.lua"/>
+	<Include file = "Chat\load.xml"/>
+	<Include file="UnitFrame\load.xml"/>
+	<Script file = "Minimap.lua"/>
+	<Script file = "Loot.lua"/>
+	<Script file = "roll.lua"/>
+	<Include file="Reminder\Load.xml"/>
+	<Script file = "Threat.lua"/>
+	
+	<Include file="Tooltip\Load.xml"/>
+
+	
+	
+
+	
+</Ui>

@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("JulakDoom", "DBM-Party-Cataclysm", 15)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7270 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7445 $"):sub(12, -3))
 mod:SetCreatureID(50089)
 mod:SetModelID(24301)
 mod:SetUsedIcons(8, 7)
@@ -30,12 +30,10 @@ mod:AddBoolOption("SetIconOnMC", true)
 
 local warnMCTargets = {}
 local mcIcon = 8
-local lastBreath = 0
 
 function mod:OnCombatStart(delay)
 	table.wipe(warnMCTargets)
 	mcIcon = 8
-	lastBreath = 0
 	timerShockwaveCD:Start(10-delay)
 	timerMCCD:Start(-delay)
 end
@@ -78,9 +76,8 @@ function mod:SPELL_AURA_REMOVED(args)
 end
 
 function mod:SPELL_DAMAGE(sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId)
-	if spellId == 93612 and destGUID == UnitGUID("player") and GetTime() - lastBreath > 3 then
+	if spellId == 93612 and destGUID == UnitGUID("player") and self:AntiSpam(3) then
 		specWarnBreath:Show()
-		lastBreath = GetTime()
 	end
 end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE

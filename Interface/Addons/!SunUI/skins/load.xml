@@ -1,11 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file='BW.lua' />
 	<Script file='DBM.lua' />
-	<Script file='map.lua' />
-	<Script file='friendmenuxp.lua' />
-	<Script file='UIParentFade.lua' />
+	<Script file='skins.lua' />
 	<Script file='ace3.lua' />
-	<Script file='chatbar.lua' />
 	<Script file='BlzTime.lua' />
 	<Script file='BlzTimeTracker.lua' />
 </Ui>

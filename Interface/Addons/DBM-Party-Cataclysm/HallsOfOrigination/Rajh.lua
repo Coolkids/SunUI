@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Rajh", "DBM-Party-Cataclysm", 4)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 6499 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7444 $"):sub(12, -3))
 mod:SetCreatureID(39378)
 mod:SetModelID(33177)
 mod:SetZone()
@@ -24,15 +24,11 @@ local timerSunStrike	= mod:NewCDTimer(27, 73872)
 
 local specWarnSunOrb	= mod:NewSpecialWarningInterrupt(80352)
 
-local spamBlessing = 0
-
 function mod:OnCombatStart(delay)
-	spamBlessing = 0
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(76355, 89879) and GetTime() - spamBlessing > 5 then
-		spamBlessing = GetTime()
+	if args:IsSpellID(76355, 89879) and self:AntiSpam(5) then
 		warnBlessing:Show()
 		timerBlessing:Start()
 		timerSunStrike:Start(50)	-- or hack it into SPELL_AURA_REMOVED

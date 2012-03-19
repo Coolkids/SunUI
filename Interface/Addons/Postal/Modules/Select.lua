@@ -1,4 +1,4 @@
-﻿local F, C = unpack(Aurora)
+﻿local S, _, _, _ = unpack(SunUI)
 local Postal = LibStub("AceAddon-3.0"):GetAddon("Postal")
 local Postal_Select = Postal:NewModule("Select", "AceEvent-3.0", "AceHook-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("Postal")
@@ -81,7 +81,7 @@ function Postal_Select:OnEnable()
 		openButton:SetText(L["Open"])
 		openButton:SetScript("OnClick", function() Postal_Select:HandleSelect(1) end)
 		openButton:SetFrameLevel(openButton:GetFrameLevel() + 1)
-		F.Reskin(openButton)
+		S.Reskin(openButton)
 	end
 
 	--create the return button
@@ -93,7 +93,7 @@ function Postal_Select:OnEnable()
 		returnButton:SetText(L["Return"])
 		returnButton:SetScript("OnClick", function() Postal_Select:HandleSelect(2) end)
 		returnButton:SetFrameLevel(returnButton:GetFrameLevel() + 1)
-		F.Reskin(returnButton)
+		S.Reskin(returnButton)
 	end
 
 	--indent to make room for the checkboxes

@@ -3,18 +3,6 @@ local S, _, _, DB = unpack(select(2, ...))
 if DB.Nuke == true then return end
 local r, g, b = DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b
 
-function S.MakeShadow(Parent, Size)
-	local Shadow = CreateFrame("Frame", nil, Parent)
-	x = S.Scale(Size)
-	Shadow:SetFrameLevel(0)
-	Shadow:SetPoint("TOPLEFT", -x, x)
-	Shadow:SetPoint("BOTTOMRIGHT", x, -x)
-	Shadow:SetBackdrop({edgeFile = DB.GlowTex, edgeSize = x})
-	Shadow:SetBackdropColor( .05, .05, .05, .9)
-	Shadow:SetBackdropBorderColor(0, 0, 0, 1)
-	return Shadow
-end
-
 function S.MakeBorder(Parent, Size)
 	local Border = CreateFrame("Frame", nil, Parent)
 	x = S.Scale(Size)
@@ -39,17 +27,6 @@ function S.MakeBG(Parent, Size)
 	BG:SetBackdropColor(0, 0, 0, 0.6)
 	BG:SetBackdropBorderColor(0, 0, 0, 1)
 	return BG
-end
-
-function S.MakeTexShadow(Parent, Anchor, Size)
-	local Shadow = CreateFrame("Frame", nil, Parent)
-	x = S.Scale(Size)
-	Shadow:SetPoint("TOPLEFT", Anchor, -Size, Size)
-	Shadow:SetPoint("BOTTOMRIGHT", Anchor, Size, -Size)
-	Shadow:SetFrameLevel(1)
-	Shadow:SetBackdrop({edgeFile = DB.GlowTex, edgeSize = Size})
-	Shadow:SetBackdropBorderColor(0, 0, 0, 1)
-	return Shadow
 end
 
 function S.MakeFontString(Parent, FontSize)
@@ -139,7 +116,7 @@ local function CreateBD(f, a)
 	f:SetBackdropColor(0, 0, 0, a or 0.6)
 	f:SetBackdropBorderColor(0, 0, 0)
 end
-
+S.CreateBD = CreateBD
 local function CreatePulse(frame, speed, mult, alpha)
 	frame.speed = speed or .05
 	frame.mult = mult or 1
@@ -160,6 +137,7 @@ local function CreatePulse(frame, speed, mult, alpha)
 		end
 	end)
 end
+S.CreatePulse = CreatePulse
 local function CreateSD(parent, size, r, g, b, alpha, offset)
 	local sd = CreateFrame("Frame", nil, parent)
 	sd.size = size or 5
@@ -172,7 +150,7 @@ local function CreateSD(parent, size, r, g, b, alpha, offset)
 	sd.border:SetBackdropBorderColor(r or 0, g or 0, b or 0)
 	sd:SetAlpha(0.7 or 1)
 end
-
+S.CreateSD = CreateSD
 local function StartGlow(f)
 	f:SetBackdropColor(r, g, b, .1)
 	f:SetBackdropBorderColor(r, g, b)
@@ -299,6 +277,7 @@ function S.MakeButton(Parent)
 	return Button
 end
 function S.SetBD(f, x, y, x2, y2)
+	if not f then return end
 	local bg = CreateFrame("Frame", nil, f)
 	if not x then
 		bg:SetPoint("TOPLEFT")
@@ -308,7 +287,7 @@ function S.SetBD(f, x, y, x2, y2)
 		bg:Point("BOTTOMRIGHT", x2, y2)
 	end
 	bg:SetFrameLevel(0)
-	CreateBD(bg, 0.4)
+	CreateBD(bg)
 	CreateSD(bg)
 end
 S.ReskinClose = function(f, a1, p, a2, x, y)

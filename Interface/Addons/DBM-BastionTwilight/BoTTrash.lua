@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("BoTrash", "DBM-BastionTwilight")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7387 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7445 $"):sub(12, -3))
 mod:SetModelID(37193)
 mod:SetZone()
 
@@ -104,13 +104,9 @@ function mod:SPELL_CAST_START(args)
 	end
 end
 
-do 
-	local lastFlamestrike = 0
-	function mod:SPELL_DAMAGE(sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId)
-		if (spellId == 93383 or spellId == 93362) and destGUID == UnitGUID("player") and GetTime() - lastFlamestrike > 3 then
-			specWarnFlameStrike:Show()
-			lastFlamestrike = GetTime()
-		end
+function mod:SPELL_DAMAGE(sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId)
+	if (spellId == 93383 or spellId == 93362) and destGUID == UnitGUID("player") and self:AntiSpam() then
+		specWarnFlameStrike:Show()
 	end
-	mod.SPELL_MISSED = mod.SPELL_DAMAGE
 end
+mod.SPELL_MISSED = mod.SPELL_DAMAGE

@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Gnoll", "DBM-WorldEvents", 2)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7428 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7446 $"):sub(12, -3))
 mod:SetZone()
 
 mod:RegisterEvents(
@@ -52,21 +52,21 @@ function mod:SPELL_AURA_REMOVED(args)
 	end
 end
 
-do 
-	local antiSpam = 0
-	function mod:UNIT_SPELLCAST_SUCCEEDED(uId, spellName, _, _, spellID)
-		if uId ~= "player" then return end
-		if spellID == 102044 then--Hogger
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, spellName, _, _, spellID)
+	if uId ~= "player" then return end
+	if spellID == 102044 then--Hogger
+		if gameEarnedPoints < 30 then--You earned 30 points in first game, stop counting points you didn't earn so you get more accurate depiction of hwo many you missed, not how many you ignored when you finished.
 			gameMaxPoints = gameMaxPoints + 3
-			warnHogger:Show()
-			if GetTime() - antiSpam > 2 then
-				specWarnHogger:Show()
-			end
-			antiSpam = GetTime()
-		elseif spellID == 102036 then--Gnoll
-			gameMaxPoints = gameMaxPoints + 1
-			warnGnoll:Show()
 		end
+		warnHogger:Show()
+		if self:AntiSpam() then
+			specWarnHogger:Show()
+		end
+	elseif spellID == 102036 then--Gnoll
+		if gameEarnedPoints < 30 then
+			gameMaxPoints = gameMaxPoints + 1
+		end
+		warnGnoll:Show()
 	end
 end
 

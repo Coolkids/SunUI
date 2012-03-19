@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("HeadlessHorseman", "DBM-WorldEvents", 1)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7125 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7445 $"):sub(12, -3))
 mod:SetCreatureID(23682, 23775)
 --mod:SetModelID(22351)--Model doesn't work/render for some reason.
 mod:RegisterCombat("combat")
@@ -73,13 +73,9 @@ function mod:CHAT_MSG_MONSTER_SAY(msg)
 	end
 end
 
-do 
-	local lastSummon = 0
-	function mod:CHAT_MSG_SAY(msg)
-		if msg == L.HorsemanSummon and GetTime() - lastSummon > 5 then		-- Summoned
-			timerCombatStart:Start()
-			lastSummon = GetTime()
-		end
+function mod:CHAT_MSG_SAY(msg)
+	if msg == L.HorsemanSummon and self:AntiSpam(5) then		-- Summoned
+		timerCombatStart:Start()
 	end
 end
 

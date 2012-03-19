@@ -2,7 +2,7 @@
 Copyright (c) 2009-2010, Hendrik "Nevcairiel" Leppkes < h.leppkes@gmail.com >
 All rights reserved.
 ]]
-local F, C = unpack(Aurora)
+
 local Mapster = LibStub("AceAddon-3.0"):NewAddon("Mapster", "AceEvent-3.0", "AceHook-3.0")
 
 local LibWindow = LibStub("LibWindow-1.1")

@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Springvale", "DBM-Party-Cataclysm", 6)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7270 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7444 $"):sub(12, -3))
 mod:SetCreatureID(4278)
 mod:SetModelID(37287)
 mod:SetZone()
@@ -56,13 +56,9 @@ function mod:SPELL_CAST_SUCCESS(args)
 	end
 end
 
-do 
-	local lastdesecration = 0
-	function mod:SPELL_DAMAGE(sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId)
-		if spellId == 94370 and destGUID == UnitGUID("player") and GetTime() - lastdesecration > 4 then
-			specWarnDesecration:Show()
-			lastdesecration = GetTime()
-		end
+function mod:SPELL_DAMAGE(sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId)
+	if spellId == 94370 and destGUID == UnitGUID("player") and self:AntiSpam(4) then
+		specWarnDesecration:Show()
 	end
 end
 

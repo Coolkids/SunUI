@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(195, "DBM-Firelands", nil, 78)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7419 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7453 $"):sub(12, -3))
 mod:SetCreatureID(53691)
 mod:SetModelID(38448)
 mod:SetZone()
@@ -114,33 +114,28 @@ end
 local function isTank(unit)
 	-- 1. check blizzard tanks first
 	-- 2. check blizzard roles second
-	-- 3. check boss1's highest threat target
 	if GetPartyAssignment("MAINTANK", unit, 1) then
 		return true
 	end
 	if UnitGroupRolesAssigned(unit) == "TANK" then
 		return true
 	end
-	if UnitExists("boss1target") and UnitDetailedThreatSituation(unit, "boss1") then
-		return true
-	end
 	return false
 end
 
---This fails if you're already incombat before pulling boss, my transcriptor bugged and didn't log it so I don't know why, because the boss still engaged, registered event, and detected kill fine.
---I can only speculate that somehow he wasn't boss1 but maybe 2-4? Will be hard to reproduce since it's not customary to purposely pull shannox with trash.
---Oh why blizz would you remove the boss1 flag from shannox. sigh. Workaround sucks, as it won't tell a tank from another tank, so it'l delay warning riplim tank too, but at least it'll warn again.
 function mod:TrapHandler(SpellID, ScansDone)
 	trapScansDone = trapScansDone + 1
 	local targetname, uId = self:GetBossTarget(53691)
-	if targetname and uId then--Better way to check if target exists and prevent nil errors at same time, without stopping scans from starting still. so even if target is nil, we stil do more checks instead of just blowing off a trap warning.
-		if isTank(uId) and not ScansDone then--He's targeting his highest threat target.
+	-- UnitExists also accepts not unit id but unitname. so we can use unitname as UnitExists parameter. and it also works with player controlled pet.
+--	print(targetname, uId)
+	if UnitExists(targetname) then--Better way to check if target exists and prevent nil errors at same time, without stopping scans from starting still. so even if target is nil, we stil do more checks instead of just blowing off a trap warning.
+		if isTank(uId) and not ScansDone then--He's targeting a tank.
 			if trapScansDone < 12 then--Make sure no infinite loop.
 				self:ScheduleMethod(0.05, "TrapHandler", SpellID)--Check multiple times to be sure it's not on something other then tank.
 			else
 				self:TrapHandler(SpellID, true)--It's still on tank, force true isTank and activate else rule and warn trap is on tank.
 			end
-		else--He's not targeting highest threat target (or isTank was set to true after 12 scans) so this has to be right target.
+		else--He's not targeting a tank target (or isTank was set to true after 12 scans) so this has to be right target.
 			self:UnscheduleMethod("TrapHandler")--Unschedule all checks just to be sure none are running, we are done.
 			if SpellID == 99836 then
 				self:CrystalTrapTarget(targetname)

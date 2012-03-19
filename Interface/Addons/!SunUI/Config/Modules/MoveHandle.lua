@@ -40,6 +40,15 @@ function Module.LoadSettings()
 		["extrabar"] = {"BOTTOM", "UIParent", "BOTTOM", -189, 39 },
 		["totembar"] = {"BOTTOM", "UIParent", "BOTTOM", 0, 166 }, 
 		["vehicleexit"] = {"BOTTOM", "UIParent", "BOTTOM", 311, 96 }, 
+		["PlayerFrame"] = {"BOTTOM", "UIParent", "BOTTOM", -225, 250},
+		["TargetFrame"] = {"BOTTOM", "UIParent", "BOTTOM", 225, 250},
+		["ToTFrame"] = {"CENTER", "oUF_SunUITarget", "CENTER", -250, 0},
+		["FocusFrame"] = {"RIGHT", "UIParent", "RIGHT", -150, -100},
+		["FocusTFrame"] = {"TOP", "oUF_SunUIFocus", "BOTTOM", 0, -10},
+		["PetFrame"] = {"TOPRIGHT", "oUF_SunUIPlayer", "TOPLEFT", -5, 0},
+		["PartyFrame"] = {"BOTTOMLEFT", "UIParent", "BOTTOMLEFT", 120, 362},
+		["ArenaFrame"] = {"BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -120, 362},
+		["BossFrame"] = {"BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -120, 362},
 	}
 	if not MoveHandleDB then MoveHandleDB = {} end
 	for key, value in pairs(Default) do

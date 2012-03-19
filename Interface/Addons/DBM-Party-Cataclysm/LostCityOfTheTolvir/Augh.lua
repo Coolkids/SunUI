@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Augh", "DBM-Party-Cataclysm", 5)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 6499 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7445 $"):sub(12, -3))
 mod:SetCreatureID(49045)
 mod:SetModelID(37339)
 mod:SetZone()
@@ -19,16 +19,12 @@ local warnWhirlWind		= mod:NewSpellAnnounce(84784, 3)
 
 local timerParalyticDart	= mod:NewTargetTimer(9, 84799)
 
-local spamSmokeBomb = 0
-
 function mod:OnCombatStart(delay)
-	spamSmokeBomb = 0
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(84768) and GetTime() - spamSmokeBomb > 5 then
+	if args:IsSpellID(84768) and self:AntiSpam(5) then
 		warnSmokeBomb:Show()
-		spamSmokeBomb = GetTime()
 	elseif args:IsSpellID(84799) then
 		warnParalyticDart:Show(args.destName)
 		timerParalyticDart:Start(args.destName)

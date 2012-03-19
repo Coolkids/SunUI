@@ -1,7 +1,7 @@
 ﻿local mod	= DBM:NewMod("Nalorakk5", "DBM-Party-Cataclysm", 10)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 6521 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7444 $"):sub(12, -3))
 mod:SetCreatureID(23576)
 mod:SetModelID(21631)
 mod:SetZone()
@@ -28,10 +28,7 @@ local berserkTimer		= mod:NewBerserkTimer(600)
 
 mod:AddBoolOption("InfoFrame")
 
-local silenceSpam = 0
-
 function mod:OnCombatStart(delay)
-	silenceSpam = 0
 	timerSurgeCD:Start(-delay)
 	timerBear:Start()
 	warnBearSoon:Schedule(25)
@@ -49,9 +46,8 @@ function mod:OnCombatEnd()
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(42398) and GetTime() - silenceSpam > 4 then
+	if args:IsSpellID(42398) and self:AntiSpam(4) then
 		warnSilence:Show()
-		silenceSpam = GetTime()
 	elseif args:IsSpellID(42402) then
 		warnSurge:Show(args.destName)
 		timerSurgeCD:Start()

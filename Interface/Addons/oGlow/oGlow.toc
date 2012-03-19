@@ -2,6 +2,7 @@
 ## Title: oGlow
 ## Author: Haste
 ## Version: 2.2.0
+## RequiredDeps: !SunUI
 ## SavedVariables: oGlowDB
 ## X-eMail: troeks@gmail.com
 ## Notes: Make your shiny items... glow in the dark!

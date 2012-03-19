@@ -2,7 +2,7 @@
 Copyright (c) 2009-2010, Hendrik "Nevcairiel" Leppkes < h.leppkes@gmail.com >
 All rights reserved.
 ]]
-local F, C = unpack(Aurora)
+local S, _, _, _ = unpack(SunUI)
 local Mapster = LibStub("AceAddon-3.0"):GetAddon("Mapster")
 local L = LibStub("AceLocale-3.0"):GetLocale("Mapster")
 
@@ -191,7 +191,7 @@ function Mapster:SetupMapButton()
 	self.optionsButton = CreateFrame("Button", "MapsterOptionsButton", WorldMapFrame, "UIPanelButtonTemplate")
 	self.optionsButton:SetWidth(95)
 	self.optionsButton:SetHeight(18)
-	F.Reskin(MapsterOptionsButton)
+	S.Reskin(MapsterOptionsButton)
 	self.optionsButton:SetText("Mapster")
 	self.optionsButton:ClearAllPoints()
 	self.optionsButton:SetPoint("TOPRIGHT", WorldMapPositioningGuide, "TOPRIGHT", -43, -4)

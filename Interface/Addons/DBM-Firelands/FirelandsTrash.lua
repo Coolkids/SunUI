@@ -35,7 +35,6 @@ local timerMoltenBoltCD		= mod:NewNextTimer(15.5, 99579)--The worm gyser things 
 local timerLavaSpawnCD		= mod:NewNextTimer(16, 99575)--The worm gyser things that always kill people for not moving.
 
 local lavaRunning = false
-local antiSpam = 0
 
 function mod:LeapTarget(sGUID)
 	local targetname = nil
@@ -45,17 +44,18 @@ function mod:LeapTarget(sGUID)
 			break
 		end
 	end
-	if not targetname then return end
-	warnDruidLeap:Show(targetname)
-	if targetname == UnitName("player") then
-		specWarnDruidLeap:Show()
-		yelldruidLeap:Yell()
-	else
-		local uId = DBM:GetRaidUnitId(targetname)
-		if uId then
-			local inRange = CheckInteractDistance(uId, 2)
-			if inRange then
-				specWarnDruidLeapNear:Show(targetname)
+	if targetname and self:AntiSpam(2, targetname) then--Sometimes mod bugs, multiple leaps too close to same time, and it results in double or even tripple announces on one person (and no announce for 1-2 of the real targets). this will at least filter 1 target spam
+		warnDruidLeap:Show(targetname)
+		if targetname == UnitName("player") then
+			specWarnDruidLeap:Show()
+			yelldruidLeap:Yell()
+		else
+			local uId = DBM:GetRaidUnitId(targetname)
+			if uId then
+				local inRange = CheckInteractDistance(uId, 2)
+				if inRange then
+					specWarnDruidLeapNear:Show(targetname)
+				end
 			end
 		end
 	end
@@ -102,8 +102,7 @@ function mod:SPELL_CAST_START(args)
 end
 
 function mod:SPELL_CAST_SUCCESS(args)
-	if args:IsSpellID(99579) and GetTime() - antiSpam >= 4 then
-		antiSpam = GetTime()
+	if args:IsSpellID(99579) and self:AntiSpam(4) then
 		warnMoltenBolt:Show()
 		timerMoltenBoltCD:Start()
 	elseif args:IsSpellID(99575) then
@@ -113,9 +112,8 @@ function mod:SPELL_CAST_SUCCESS(args)
 end
 
 function mod:SPELL_DAMAGE(sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId)
-	if spellId == 99510 and destGUID == UnitGUID("player") and GetTime() - antiSpam >= 3 then
+	if spellId == 99510 and destGUID == UnitGUID("player") and self:AntiSpam(3) then
 		specWarnLava:Show()
-		antiSpam = GetTime()
 	end
 end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE

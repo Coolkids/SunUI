@@ -1,14 +1,13 @@
 local mod	= DBM:NewMod("DSTrash", "DBM-DragonSoul")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7385 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7453 $"):sub(12, -3))
 mod:SetModelID(39378)
 mod:SetZone()
 
 mod:RegisterEvents(
 	"SPELL_CAST_START",
 	"CHAT_MSG_MONSTER_YELL",
---	"CHAT_MSG_MONSTER_SAY",
 	"UNIT_SPELLCAST_SUCCEEDED"
 )
 
@@ -20,7 +19,6 @@ local specWarnBoulderNear	= mod:NewSpecialWarningClose(107597)
 local yellBoulder			= mod:NewYell(107597)
 local specWarnFlames		= mod:NewSpecialWarningMove(105579)
 
---local timerEoE				= mod:NewCastTimer(80, 46811, nil, nil, nil, 84358)
 local timerDrakes			= mod:NewTimer(253, "TimerDrakes", 61248)
 --Leave this timer for now, I think this is the same.
 --it still seems timed, just ends earlier if you kill 15 drakes.
@@ -30,8 +28,6 @@ local timerDrakes			= mod:NewTimer(253, "TimerDrakes", 61248)
 mod:RemoveOption("HealthFrame")
 mod:RemoveOption("SpeedKillTimer")
 
-local antiSpam = 0
---local syncTime = 0
 local drakeRunning = false
 local drakesCount = 15
 local drakeguid = {}
@@ -57,23 +53,24 @@ function mod:BoulderTarget(sGUID)
 			break
 		end
 	end
-	if not targetname then return end
-	if realm then targetname = targetname.."-"..realm end
-	warnBoulder:Show(targetname)
-	if targetname == UnitName("player") then
-		specWarnBoulder:Show()
-		yellBoulder:Yell()
-	else
-		local uId = DBM:GetRaidUnitId(targetname)
-		if uId then
-			local x, y = GetPlayerMapPosition(uId)
-			if x == 0 and y == 0 then
-				SetMapToCurrentZone()
-				x, y = GetPlayerMapPosition(uId)
-			end
-			local inRange = DBM.RangeCheck:GetDistance("player", x, y)
-			if inRange and inRange < 6 then--Guessed, unknown, spelltip isn't informative.
-				specWarnBoulderNear:Show(targetname)
+	if targetname and self:AntiSpam(2, targetname) then--Anti spam using targetname as an identifier, will prevent same target being announced double/tripple but NOT prevent multiple targets being announced at once :)
+		if realm then targetname = targetname.."-"..realm end
+		warnBoulder:Show(targetname)
+		if targetname == UnitName("player") then
+			specWarnBoulder:Show()
+			yellBoulder:Yell()
+		else
+			local uId = DBM:GetRaidUnitId(targetname)
+			if uId then
+				local x, y = GetPlayerMapPosition(uId)
+				if x == 0 and y == 0 then
+					SetMapToCurrentZone()
+					x, y = GetPlayerMapPosition(uId)
+				end
+				local inRange = DBM.RangeCheck:GetDistance("player", x, y)
+				if inRange and inRange < 6 then--Guessed, unknown, spelltip isn't informative.
+					specWarnBoulderNear:Show(targetname)
+				end
 			end
 		end
 	end
@@ -86,9 +83,8 @@ function mod:SPELL_CAST_START(args)
 end
 
 function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId, _, _, _, overkill)
-	if spellId == 105579 and destGUID == UnitGUID("player") and GetTime() - antiSpam >= 3 then
+	if spellId == 105579 and destGUID == UnitGUID("player") and self:AntiSpam(3) then
 		specWarnFlames:Show()
-		antiSpam = GetTime()
 	elseif (overkill or 0) > 0 then -- prevent to waste cpu. only pharse cid when event have overkill parameter.
 		local cid = self:GetCIDFromGUID(destGUID)
 		if (cid == 56249 or cid == 56250 or cid == 56251 or cid == 56252 or cid == 57281 or cid == 57795) then--Hack for mobs that don't fire UNIT_DIED event.
@@ -100,9 +96,8 @@ mod.SPELL_PERIODIC_DAMAGE = mod.SPELL_DAMAGE
 mod.RANGE_DAMAGE = mod.SPELL_DAMAGE
 
 function mod:SPELL_MISSED(_, _, _, _, destGUID, _, _, _, spellId)
-	if spellId == 105579 and destGUID == UnitGUID("player") and GetTime() - antiSpam >= 3 then
+	if spellId == 105579 and destGUID == UnitGUID("player") and self:AntiSpam(3) then
 		specWarnFlames:Show()
-		antiSpam = GetTime()
 	end
 end
 
@@ -147,13 +142,6 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 	end
 end
 
---[[
-function mod:CHAT_MSG_MONSTER_SAY(msg)
-	if msg == L.EoEEvent or msg:find(L.EoEEvent) then
-		self:SendSync("EoEPortal")--because SAY has a much smaller range then YELL, we sync it.
-	end
-end--]]
-
 --	"<101.5> CHAT_MSG_MONSTER_YELL#It is good to see you again, Alexstrasza. I have been busy in my absence.#Deathwing###Vounelli##0#0##0#3093##0#false", -- [1]
 --	"<133.3> [UNIT_SPELLCAST_SUCCEEDED] Thrall:Possible Target<nil>:target:Ward of Earth::0:108161", -- [875]
 function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
@@ -184,8 +172,5 @@ function mod:OnSync(msg, GUID)
 		drakeRunning = false
 		self:UnregisterShortTermEvents()
 		timerDrakes:Cancel()
---[[	elseif msg == "EoEPortal" and GetTime() - syncTime > 300 then -- Sometimes event starts already portal opened (timer expires). So ignore sync for 5 min. I hopefully fixed all problems from this method...
-		syncTime = GetTime()
-		timerEoE:Start()--]]
 	end
 end

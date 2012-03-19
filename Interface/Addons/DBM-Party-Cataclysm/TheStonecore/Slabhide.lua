@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Slabhide", "DBM-Party-Cataclysm", 7)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7270 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7444 $"):sub(12, -3))
 mod:SetCreatureID(43214)
 mod:SetModelID(36476)
 mod:SetZone()
@@ -29,8 +29,6 @@ local timerCrystalStorm		= mod:NewBuffActiveTimer(8.5, 92265)
 local timerAirphase			= mod:NewTimer(50, "TimerAirphase", "Interface\\AddOns\\DBM-Core\\textures\\CryptFiendUnBurrow.blp")
 local timerGroundphase		= mod:NewTimer(10, "TimerGroundphase", "Interface\\AddOns\\DBM-Core\\textures\\CryptFiendBurrow.blp")
 
-local spamEruption = 0
-
 function mod:groundphase()
 	warnGroundphase:Show()
 --	timerFissureCD:Start()
@@ -53,9 +51,8 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:SPELL_DAMAGE(sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId)
-	if (spellId == 80800 or spellId == 80801 or spellId == 92657 or spellId == 92658) and destGUID == UnitGUID("player") and GetTime() - spamEruption > 3 then
+	if (spellId == 80800 or spellId == 80801 or spellId == 92657 or spellId == 92658) and destGUID == UnitGUID("player") and self:AntiSpam() then
 		specWarnEruption:Show()
-		spamEruption = GetTime()
 	end
 end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE--Because we still want people to move out of stuff before they eat up an entire PWS in it.
@@ -74,8 +71,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 end
 
 function mod:UNIT_SPELLCAST_SUCCEEDED(uId, spellName)
-	if uId ~= "boss1" then return end--Anti spam to ignore all other args (like target/focus/mouseover)
-	if spellName == GetSpellInfo(80803) then--Lava Fissure
+	if spellName == GetSpellInfo(80803) and self:AntiSpam() then--Lava Fissure
 		warnFissure:Show()
 		timerFissureCD:Start()
 	end

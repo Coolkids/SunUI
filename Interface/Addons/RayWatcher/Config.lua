@@ -51,7 +51,7 @@ ns.watchers ={
 		{
 			name = "目标debuff",
 			direction = "RIGHT",
-			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 105, 285},
+			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 102, 282},
 			size = 48,
 				-- 挫志咆哮(熊)
 				{ spellID =    99, unitId = "target", caster = "player", filter = "DEBUFF" },
@@ -83,7 +83,7 @@ ns.watchers ={
 		{
 			name = "目标框上方",
 			direction = "RIGHT",
-			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 105, 285},
+			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 102, 282},
 			size = 48,
 				-- 毒蛇钉刺
 				{ spellID =  1978 ,unitId = "target", caster = "player", filter = "DEBUFF" },
@@ -162,7 +162,7 @@ ns.watchers ={
 		{
 			name = "目标框上方",
 			direction = "RIGHT",
-			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 105, 285},
+			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 102, 282},
 			size = 48,
 			
 				-- 点燃
@@ -306,7 +306,7 @@ ns.watchers ={
 		{
 			name = "目标Debuff",
 			direction = "RIGHT",
-			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 105, 285},
+			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 102, 282},
 			size = 48,
 			
 			-- Charge Stun / Sturmangriffsbetäubung
@@ -364,7 +364,7 @@ ns.watchers ={
 		{
 			name = "目标debuff",
 			direction = "RIGHT",
-			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 105, 285},
+			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 102, 282},
 			size = 48,
 				-- 大地震击
 				{ spellID =  8042, unitId = "target", caster = "player", filter = "DEBUFF" },
@@ -498,7 +498,7 @@ ns.watchers ={
 		{
 			name = "目标框體上方",
 			direction = "RIGHT",
-			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 105, 285},
+			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 102, 282},
 			size = 48,
 				--心灵尖刺
 				{ spellID = 87178, unitId = "target", caster = "player", filter = "DEBUFF" },
@@ -529,8 +529,8 @@ ns.watchers ={
 		},
 		{
 			name = "玩家框體下方",
-			direction = "LEFT",
-			setpoint = {"TOPRIGHT", oUF_monoPlayerFrame, "BOTTOMRIGHT", 0, -5},
+			direction = "RIGHT",
+			setpoint = {"BOTTOM", UIParent, "BOTTOM", -172.5, 197},
 			--setpoint = {"CENTER", UIParent, "CENTER", -185, -265},
 			mode = "ICON",
 			size = 45,
@@ -584,7 +584,7 @@ ns.watchers ={
 		},
 		{
 			name = "目标debuff",
-			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 105, 285},
+			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 102, 282},
 			direction = "RIGHT",
 			mode = "ICON",
 			size = 48,
@@ -717,7 +717,7 @@ ns.watchers ={
 		{
 			name = "目标debuff",
 			direction = "RIGHT",
-			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 105, 285},
+			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 102, 282},
 			size = 48,
 				-- 血之疫病
 				{ spellID = 55078, unitId = "target", caster = "player", filter = "DEBUFF" },
