@@ -351,8 +351,10 @@ function S.MakeMove(Frame, Text, key, a)
 	MoveHandle:SetFrameStrata("HIGH")
 	MoveHandle:SetBackdrop({bgFile = DB.Solid})
 	MoveHandle:SetBackdropColor(0, 0, 0, 0.9)
-	if a < 1 then
+	if a < 0.5 then
 	MoveHandle.Text = S.MakeFontString(MoveHandle, 10*(1+a))
+	elseif a >= 0.5 and a < 1 then 
+	MoveHandle.Text = S.MakeFontString(MoveHandle, 9)
 	elseif a <= 1.5 and a >= 1 then
 	MoveHandle.Text = S.MakeFontString(MoveHandle, 11)
 	elseif a > 1.5 then
