@@ -32,6 +32,7 @@ function Module.LoadSettings()
 		["EnableSwingTimer"] = false,
 		["EnableBarFader"] = false,
 		["ClassColor"] = false,
+		["TargetAura"] = 1,
 --castbar
 		["playerCBuserplaced"] = false,	-- false to lock player cast bar to the player frame
 		["PlayerCastBarHeight"] = 20,
@@ -212,6 +213,13 @@ function Module.BuildGUI()
 							name = L["开启头像职业血条颜色"],			
 							get = function() return UnitFrameDB.ClassColor end,
 							set = function(_, value) UnitFrameDB.ClassColor = value end,
+						},
+						TargetAura = {
+							type = "select", order = 11,
+							name = L["目标增减益"],
+							values = {[1] = L["显示"], [2] =L["不显示"]},
+							get = function() return UnitFrameDB.TargetAura end,
+							set = function(_, value) UnitFrameDB.TargetAura = value end,
 						},
 					}
 				},

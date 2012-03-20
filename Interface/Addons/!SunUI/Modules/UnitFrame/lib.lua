@@ -447,12 +447,7 @@ C = UnitFrameDB
     elseif s >= hour then
       return format("%dh", floor(s/hour + 0.5)), s % hour
     elseif s >= minute then
-      if s <= minute * 5 then
-        return format('%d:%02d', floor(s/60), s % minute), s - floor(s)
-      end
       return format("%dm", floor(s/minute + 0.5)), s % minute
-    elseif s >= minute / 12 then
-      return floor(s + 0.5), (s * 100 - floor(s * 100))/100
     end
     return format("%.1f", s), (s * 100 - floor(s * 100))/100
   end

@@ -218,7 +218,6 @@ DB.colors = {
 	},
 }
 
-
 local Launch = CreateFrame("Frame")
 Launch:RegisterEvent("PLAYER_ENTERING_WORLD")
 Launch:SetScript("OnEvent", function(self, event)

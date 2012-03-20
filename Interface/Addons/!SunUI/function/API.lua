@@ -405,7 +405,8 @@ function S.UpdateSize(obj, width, height)
 	if width then obj:SetWidth(width) end
 	if height then obj:SetHeight(height) end
 end
-local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/MiniDB["uiScale"]
+
+local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/DB.scale
 local function scale(x)
 	return (mult*math.floor(x/mult+.5)) 
 end
@@ -485,24 +486,24 @@ RoleUpdater:RegisterEvent("UPDATE_BONUS_ACTIONBAR")
 RoleUpdater:SetScript("OnEvent", CheckRole)
 CheckRole()
 local function Size(frame, width, height)
-	frame:SetSize(scale(width), scale(height or width))
+	frame:SetSize(S.Scale(width), S.Scale(height or width))
 end
 
 local function Width(frame, width)
-	frame:SetWidth(scale(width))
+	frame:SetWidth(S.Scale(width))
 end
 
 local function Height(frame, height)
-	frame:SetHeight(scale(height))
+	frame:SetHeight(S.Scale(height))
 end
 
 local function Point(obj, arg1, arg2, arg3, arg4, arg5)
 	-- anyone has a more elegant way for this?
-	if type(arg1)=="number" then arg1 = scale(arg1) end
-	if type(arg2)=="number" then arg2 = scale(arg2) end
-	if type(arg3)=="number" then arg3 = scale(arg3) end
-	if type(arg4)=="number" then arg4 = scale(arg4) end
-	if type(arg5)=="number" then arg5 = scale(arg5) end
+	if type(arg1)=="number" then arg1 = S.Scale(arg1) end
+	if type(arg2)=="number" then arg2 = S.Scale(arg2) end
+	if type(arg3)=="number" then arg3 = S.Scale(arg3) end
+	if type(arg4)=="number" then arg4 = S.Scale(arg4) end
+	if type(arg5)=="number" then arg5 = S.Scale(arg5) end
 
 	obj:SetPoint(arg1, arg2, arg3, arg4, arg5)
 end
@@ -510,8 +511,8 @@ end
 local function CreateBorder(f, r, g, b, a)
 	f:SetBackdrop({
 		edgeFile = DB.Solid, 
-		edgeSize = mult,
-		insets = { left = -mult, right = -mult, top = -mult, bottom = -mult }
+		edgeSize = S.mult,
+		insets = { left = -S.mult, right = -S.mult, top = -S.mult, bottom = -S.mult }
 	})
 	f:SetBackdropBorderColor(r or 0, g or 0, b or 0, a or 1)
 end

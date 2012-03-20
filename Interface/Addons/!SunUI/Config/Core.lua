@@ -1,7 +1,7 @@
 ﻿-- Engines
 local S, C, L, DB = unpack(select(2, ...))
 local Core = LibStub("AceAddon-3.0"):GetAddon("Core")
-local Module = Core:NewModule("Congig", "AceConsole-3.0")
+local Module = Core:NewModule("Config", "AceConsole-3.0")
 local Version = 1204
 if DB.Nuke == true then return end
 function Module:SetDefault()
