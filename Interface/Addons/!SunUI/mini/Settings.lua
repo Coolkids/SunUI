@@ -136,8 +136,8 @@ local function VSLOCK()
 	end
 end
 
-SLASH_WATCHFRAMELOCK1 = "/vs"
-SlashCmdList["WATCHFRAMELOCK"] = VSLOCK
+SLASH_VehicleSeatIndicatorLOCK1 = "/vs"
+SlashCmdList["VehicleSeatIndicatorLOCK"] = VSLOCK
 
 --隐藏团队报警
 --RaidBossEmoteFrame:UnregisterEvent("RAID_BOSS_EMOTE")  --Disable Boss Emote Frame
