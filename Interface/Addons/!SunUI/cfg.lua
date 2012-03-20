@@ -23,7 +23,7 @@ DB.loottex =		"Interface\\QuestFrame\\UI-QuestLogTitleHighlight"
 DB.aurobackdrop = "Interface\\ChatFrame\\ChatFrameBackground"
 DB.bfont = Media.."ROADWAY.ttf"
 DB.onepx = "Interface\\Buttons\\WHITE8x8"
-
+DB.Warning = Media.."Warning.mp3"
 
 -- 聊天设置
 DB.AutoApply = false									--聊天设置锁定		
