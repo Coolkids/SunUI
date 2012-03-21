@@ -75,11 +75,9 @@ C = UnitFrameDB
     lib.gen_combat_feedback(self)
 	lib.gen_EclipseBar(self)
 	lib.gen_alt_powerbar(self)
-	if C["TargetAura"] == 1 then
     lib.createAuras(self)
 	lib.createBuffs(self)
     lib.createDebuffs(self)
-	end
 	lib.gen_swing_timer(self)
     self:Size(self.width,self.height)
   end  
@@ -102,7 +100,9 @@ C = UnitFrameDB
 	self.Health.colorTapping = true
     lib.gen_castbar(self)
     lib.gen_portrait(self)
+	if C["TargetAura"] == 1 then
     lib.createAuras(self)
+	end
     lib.gen_ppstrings(self)
 	lib.gen_alt_powerbar(self)
     lib.gen_cp(self)
