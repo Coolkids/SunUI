@@ -96,7 +96,7 @@ function Postal_OpenAll:OnEnable()
 	if not Postal_OpenAllMenuButton then
 		-- Create the Menu Button
 		Postal_OpenAllMenuButton = CreateFrame("Button", "Postal_OpenAllMenuButton", InboxFrame);
-		Postal_OpenAllMenuButton.Text = S.MakeFontString(Postal_ModuleMenuButton, 10)
+		Postal_OpenAllMenuButton.Text = S.MakeFontString(Postal_OpenAllMenuButton, 10)
 		Postal_OpenAllMenuButton:SetWidth(25);
 		Postal_OpenAllMenuButton:SetHeight(25);
 		Postal_OpenAllMenuButton:SetPoint("LEFT", button, "RIGHT", -2, 0);
