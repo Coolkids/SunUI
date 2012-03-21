@@ -153,7 +153,7 @@ Event:RegisterEvent("PLAYER_TARGET_CHANGED")
 Event:SetScript("OnEvent", function(self, event, ...)
 	if event == "PLAYER_ENTERING_WORLD" then
 		Init()
-		MainFrame:SetPoint("BOTTOM","Threat","BOTTOM", 0, 0)
+		MoveHandle.Threat = S.MakeMoveHandle(MainFrame, L["仇恨监视"], "Threat")
 		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	elseif event == "UNIT_THREAT_LIST_UPDATE" then
 		UpdateThreat()

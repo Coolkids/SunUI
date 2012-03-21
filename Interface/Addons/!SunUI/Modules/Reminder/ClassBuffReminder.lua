@@ -347,7 +347,7 @@ local function OnEvent_ACTIVE_TALENT_GROUP_CHANGED(event, ...)
 		Button.Text = S.MakeFontString(Button, 10*S.Scale(1))
 		Button.Text:Point("TOP", Button, "BOTTOM", 0, -10)
 		if key == 1 then
-			Button:Point("BOTTOM","Class","BOTTOM",0,0)
+			MoveHandle.Class = S.MakeMoveHandle(Button, L["缺少药剂buff提示"], "Class")
 		else
 			Button:Point("LEFT", BuffFrame[key-1], "RIGHT", ReminderDB.ClassBuffSpace, 0)
 		end

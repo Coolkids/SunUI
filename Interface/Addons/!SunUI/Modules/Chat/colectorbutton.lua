@@ -7,7 +7,7 @@ colectorbutton:Point("TOPLEFT", ChatFrame1, "TOPRIGHT", 5, 0)
 local colector = CreateFrame("Frame", "ColectorButton", colectorbutton)
 colector:Width(60)
 colector:Height(105)
-colector:Point("TOPLEFT", colectorbutton, "BOTTOMLEFT", 0, -5)
+colector:SetPoint("TOPLEFT", colectorbutton, "BOTTOMLEFT", -5, -5)
 colector:Hide()
 
 colectorbutton.text = colectorbutton:CreateFontString(nil, 'OVERLAY')

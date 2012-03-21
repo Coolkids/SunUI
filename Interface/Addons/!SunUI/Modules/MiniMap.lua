@@ -1,16 +1,17 @@
 ﻿-- Engines
 local S, C, L, DB = unpack(select(2, ...))
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("MiniMap", "AceTimer-3.0")
+
 if DB.Nuke == true then return end
+local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("MiniMap", "AceTimer-3.0")
+function Module:OnInitialize()
 Minimap:SetMaskTexture("Interface\\ChatFrame\\ChatFrameBackground")
 Minimap:SetFrameStrata("BACKGROUND")
 Minimap:ClearAllPoints()
 Minimap:Size(145)
 Minimap:CreateShadow()
 
-function Module:OnInitialize()
-	MoveHandle.Minimap = S.MakeMoveHandle(Minimap, L["小地图"], "Minimap")
-end
+MoveHandle.Minimap = S.MakeMoveHandle(Minimap, L["小地图"], "Minimap")
+
 
 LFGSearchStatus:SetClampedToScreen(true)
 LFGDungeonReadyStatus:SetClampedToScreen(true)
@@ -124,3 +125,4 @@ Minimap:SetScript("OnMouseUp", function(self, button)
 		Minimap_OnClick(self)
 	end
 end)
+end

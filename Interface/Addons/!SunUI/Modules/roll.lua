@@ -80,14 +80,14 @@ local function StatusUpdate(frame)
 	if not frame.parent.rollid then return end
 	local t = GetLootRollTimeLeft(frame.parent.rollid)
 	local perc = t / frame.parent.time
-	frame.spark:Point("CENTER", frame, "LEFT", perc * frame:GetWidth(), 0)
+	frame.spark:SetPoint("CENTER", frame, "LEFT", perc * frame:GetWidth(), 0)
 	frame:SetValue(t)
 end
 
 
 local function CreateRollButton(parent, ntex, ptex, htex, rolltype, tiptext, ...)
 	local f = CreateFrame("Button", nil, parent)
-	f:Point(...)
+	f:SetPoint(...)
 	f:Width(28)
 	f:Height(28)
 	f:SetNormalTexture(ntex)
@@ -108,7 +108,7 @@ local function CreateRollButton(parent, ntex, ptex, htex, rolltype, tiptext, ...
 	f:SetMotionScriptsWhileDisabled(true)
 	local txt = f:CreateFontString(nil, nil)
 	txt:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
-	txt:Point("CENTER", 0, rolltype == 2 and 1 or rolltype == 0 and -1.2 or 0)
+	txt:SetPoint("CENTER", 0, rolltype == 2 and 1 or rolltype == 0 and -1.2 or 0)
 	return f, txt
 end
 
@@ -123,7 +123,7 @@ local function CreateRollFrame()
 	frame:Hide()
 
 	local button = CreateFrame("Button", nil, frame)
-	button:Point("LEFT", -24, 0)
+	button:SetPoint("LEFT", -24, 0)
 	button:Width(22)
 	button:Height(22)
 	button:SetScript("OnEnter", SetItemTip)
@@ -136,14 +136,14 @@ local function CreateRollFrame()
 	local buttonborder = CreateFrame("Frame", nil, button)
 	buttonborder:Width(22)
 	buttonborder:Height(22)
-	buttonborder:Point("CENTER", button, "CENTER")
+	buttonborder:SetPoint("CENTER", button, "CENTER")
 	buttonborder:SetBackdropColor(1, 1, 1, 0)
 	
 	local buttonborder2 = CreateFrame("Frame", nil, button)
 	buttonborder2:Width(22)
 	buttonborder2:Height(22)
 	buttonborder2:SetFrameLevel(buttonborder:GetFrameLevel()+1)
-	buttonborder2:Point("CENTER", button, "CENTER")
+	buttonborder2:SetPoint("CENTER", button, "CENTER")
     buttonborder2:CreateShadow()
 
 	
@@ -151,8 +151,8 @@ local function CreateRollFrame()
 	frame.buttonborder = buttonborder
 
 	local tfade = frame:CreateTexture(nil, "BORDER")
-	tfade:Point("TOPLEFT", frame, "TOPLEFT", 4, 0)
-	tfade:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -4, 0)
+	tfade:SetPoint("TOPLEFT", frame, "TOPLEFT", 4, 0)
+	tfade:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -4, 0)
 	tfade:SetTexture("Interface\\ChatFrame\\ChatFrameBackground")
 	tfade:SetBlendMode("ADD")
 	tfade:SetGradientAlpha("VERTICAL", .1, .1, .1, 0, .1, .1, .1, 0)
@@ -160,7 +160,7 @@ local function CreateRollFrame()
 	local status = CreateFrame("StatusBar", nil, frame)
 	status:Width(326)
 	status:Height(5)
-	status:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", 2, 1)
+	status:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", 2, 1)
 	status:CreateShadow("Background")
 	status:SetScript("OnUpdate", StatusUpdate)
 	status:SetFrameLevel(status:GetFrameLevel()-1)
@@ -185,14 +185,14 @@ local function CreateRollFrame()
 	frame.need, frame.greed, frame.pass, frame.disenchant = needtext, greedtext, passtext, detext
 
 	local bind = frame:CreateFontString()
-	bind:Point("LEFT", pass, "RIGHT", S.Scale(3), S.Scale(1))
+	bind:SetPoint("LEFT", pass, "RIGHT", S.Scale(3), S.Scale(1))
 	bind:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
 	frame.fsbind = bind
 
 	local loot = frame:CreateFontString(nil, "ARTWORK")
 	loot:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
-	loot:Point("LEFT", bind, "RIGHT", 0, S.Scale(0.12))
-	loot:Point("RIGHT", frame, "RIGHT", S.Scale(-5), 0)
+	loot:SetPoint("LEFT", bind, "RIGHT", 0, S.Scale(0.12))
+	loot:SetPoint("RIGHT", frame, "RIGHT", S.Scale(-5), 0)
 	loot:Height(10)
 	loot:Width(200)
 	loot:SetJustifyH("LEFT")
@@ -228,7 +228,7 @@ anchor:Hide()
 local frames = {}
 
 local f = CreateRollFrame() -- Create one for good measure
-f:Point("TOPLEFT", next(frames) and frames[#frames] or anchor, "BOTTOMLEFT", 0, S.Scale(-10))
+f:SetPoint("TOPLEFT", next(frames) and frames[#frames] or anchor, "BOTTOMLEFT", 0, S.Scale(-10))
 table.insert(frames, f)
 
 
@@ -239,9 +239,9 @@ local function GetFrame()
 
 	local f = CreateRollFrame()
 	if pos == "TOP" then
-		f:Point("TOPLEFT", next(frames) and frames[#frames] or anchor, "BOTTOMLEFT", 0, S.Scale(-10))
+		f:SetPoint("TOPLEFT", next(frames) and frames[#frames] or anchor, "BOTTOMLEFT", 0, S.Scale(-10))
 	else
-		f:Point("BOTTOMLEFT", next(frames) and frames[#frames] or anchor, "TOPLEFT", 0, S.Scale(10))
+		f:SetPoint("BOTTOMLEFT", next(frames) and frames[#frames] or anchor, "TOPLEFT", 0, S.Scale(10))
 	end
 	table.insert(frames, f)
 	return f
@@ -287,7 +287,7 @@ local function START_LOOT_ROLL(rollid, time)
 	f.status:SetMinMaxValues(0, time)
 	f.status:SetValue(time)
 
-	f:Point("CENTER", WorldFrame, "CENTER")
+	f:SetPoint("CENTER", WorldFrame, "CENTER")
 	f:Show()
 end
 
@@ -367,13 +367,7 @@ anchor:SetScript("OnEvent", function(frame, event, addon)
 	UIParent:UnregisterEvent("START_LOOT_ROLL")
 	UIParent:UnregisterEvent("CANCEL_LOOT_ROLL")
 	anchor:SetScript("OnEvent", function(frame, event, ...) if event == "CHAT_MSG_LOOT" then return CHAT_MSG_LOOT(...) else return START_LOOT_ROLL(...) end end)
-	
-	local anchorholder = CreateFrame("Frame", "AnchorHolder", UIParent)
-	anchorholder:SetAllPoints(RollFrame)
-	anchorholder:Width(anchor:GetWidth())
-	anchorholder:Height(anchor:GetHeight())
-	
-	anchor:SetPoint("TOP", anchorholder, "TOP", 0, 0)	
+	MoveHandle.RollFrame = S.MakeMoveHandle(anchor, "Roll", "RollFrame")
 end)
 
 SlashCmdList["LFrames"] = function(msg) 

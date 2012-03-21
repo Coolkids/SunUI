@@ -8,5 +8,4 @@
 	<Script file = "uiscale.lua"/>
 	<Script file = "API.lua"/>
 	<Script file = "API2.lua"/>
-	<Script file = "move.lua"/>	
 </Ui>

@@ -1,6 +1,7 @@
 ﻿-- Engines
 local S, _, _, DB = unpack(select(2, ...))
 if DB.Nuke == true then return end
+
 local r, g, b = DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b
 
 function S.MakeBorder(Parent, Size)
@@ -139,6 +140,7 @@ local function CreatePulse(frame, speed, mult, alpha)
 end
 S.CreatePulse = CreatePulse
 local function CreateSD(parent, size, r, g, b, alpha, offset)
+	if parent.sd then return end
 	local sd = CreateFrame("Frame", nil, parent)
 	sd.size = size or 5
 	sd.size = sd.size - 5
@@ -149,6 +151,7 @@ local function CreateSD(parent, size, r, g, b, alpha, offset)
 	sd.shadow:SetBackdropBorderColor(r or 0, g or 0, b or 0)
 	sd.border:SetBackdropBorderColor(r or 0, g or 0, b or 0)
 	sd:SetAlpha(alpha or 1)
+	parent.sd = sd
 end
 S.CreateSD = CreateSD
 local function StartGlow(f)
@@ -260,13 +263,13 @@ end
 	dis2:SetDrawLayer("OVERLAY")
 
 	local uptex = up:CreateTexture(nil, "ARTWORK")
-	uptex:SetTexture("Interface\\AddOns\\s_Core\\Media\\arrow-up-active")
+	uptex:SetTexture("Interface\\AddOns\\!SunUI\\Media\\arrow-up-active")
 	uptex:Size(8, 8)
 	uptex:SetPoint("CENTER")
 	uptex:SetVertexColor(1, 1, 1)
 
 	local downtex = down:CreateTexture(nil, "ARTWORK")
-	downtex:SetTexture("Interface\\AddOns\\s_Core\\Media\\arrow-down-active")
+	downtex:SetTexture("Interface\\AddOns\\!SunUI\\Media\\arrow-down-active")
 	downtex:Size(8, 8)
 	downtex:SetPoint("CENTER")
 	downtex:SetVertexColor(1, 1, 1)
@@ -278,6 +281,7 @@ function S.MakeButton(Parent)
 end
 function S.SetBD(f, x, y, x2, y2)
 	if not f then return end
+	if f. ssb then return end
 	local bg = CreateFrame("Frame", nil, f)
 	if not x then
 		bg:SetPoint("TOPLEFT")
@@ -289,6 +293,7 @@ function S.SetBD(f, x, y, x2, y2)
 	bg:SetFrameLevel(0)
 	CreateBD(bg)
 	CreateSD(bg, 6, 0, 0, 0, 1, 0)
+	f.ssb = bg
 end
 S.ReskinClose = function(f, a1, p, a2, x, y)
 	f:SetSize(17, 17)
@@ -639,6 +644,7 @@ addapi(object)
 addapi(object:CreateTexture())
 addapi(object:CreateFontString())
 object = EnumerateFrames()
+
 while object do
 	if not handled[object:GetObjectType()] then
 		addapi(object)

@@ -1,6 +1,7 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Settings")
-
+function Module:OnInitialize()
+	C = MiniDB
 ---------------- > Some slash commands
 SlashCmdList['RELOADUI'] = function() ReloadUI() end
 SLASH_RELOADUI1 = '/rl'
@@ -203,8 +204,7 @@ hooksecurefunc("MerchantItemButton_OnModifiedClick", function(self, button)
         end
     end
 end)
-function Module:OnInitialize()
-	C = MiniDB
+
 ---------------- > automatic UI Scale 
 if C["UIscale"] then
 	if C["LockUIscale"] then
@@ -262,7 +262,7 @@ if C["HideRaidWarn"] then
 	RaidWarningFrame.Show = function() end
 	RaidWarningFrame.SetPoint = function() end
 end
-end
+
 
 
 
@@ -374,3 +374,4 @@ cloakcb:RegisterEvent("UNIT_MODEL_CHANGED")
 
 helmcb:SetChecked(ShowingHelm())
 cloakcb:SetChecked(ShowingCloak())
+end

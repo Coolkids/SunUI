@@ -66,7 +66,7 @@ end
 
 function ProfessionTabs:CreateTab(Table, Parent)
 	local Tab = CreateFrame("CheckButton", nil, Parent, "SpellBookSkillLineTabTemplate SecureActionButtonTemplate")
-	Tab:SetPoint("TOPLEFT", Parent, "TOPRIGHT", (Parent == ATSWFrame or Parent == TradeFrame) and -32 or 8, (Parent == TradeFrame and -32 or -24) + -44 * #Table)
+	Tab:SetPoint("TOPLEFT", Parent, "TOPRIGHT", (Parent == ATSWFrame or Parent == TradeFrame) and -32 or 13, (Parent == TradeFrame and -32 or -24) + -44 * #Table)
 	Tab:SetScript("OnEnter", Tab_OnEnter)
 	Tab:SetScript("OnLeave", Tab_OnLeave)
 	Tab:CreateShadow("Background")

@@ -1,9 +1,7 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Combatpoint")
-if DB.combatpointOpen ~= true then return end
 if (DB.MyClass ~= "ROGUE" and DB.MyClass ~= "DRUID") then return end
 function Module:OnInitialize()
-local anchorPoint = {"BOTTOM", "Combatpoint", "BOTTOM", 0, 0}
 local origPawWidth, origPawHeight = 512, 137
 local pawWidth = 170
 local comboBar = {
@@ -27,8 +25,8 @@ local texScale = pawWidth / origPawWidth
 
 combo = CreateFrame("Frame", nil, UIParent)
 combo:SetFrameLevel(12)
-combo:Point(unpack(anchorPoint))
 combo:Size(origPawWidth * texScale, origPawHeight * texScale)
+MoveHandle.Combatpoint = S.MakeMoveHandle(combo, L["连击点"], "Combatpoint")
 combo:SetAlpha(0.5)
 local t = combo:CreateTexture(nil, "ARTWORK", self, -5)
 t:SetTexture([[Interface\AddOns\!SunUI\Media\pawsCombo]])
@@ -36,8 +34,6 @@ t:SetTexCoord(0, 1.0, 0, 0.268)
 t:SetAllPoints()
 
 combo.glow = CreateFrame("Frame", nil, UIParent)
-combo:Point(unpack(anchorPoint))
-combo:Size(origPawWidth * texScale, origPawHeight * texScale)
 combo.glow:SetAlpha(0)
 local t2 = combo.glow:CreateTexture(nil, "ARTWORK", self, -1)
 t2:SetTexture([[Interface\AddOns\!SunUI\Media\pawsCombo]])

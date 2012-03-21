@@ -343,8 +343,8 @@ C = UnitFrameDB
     h2:SetPoint("BOTTOMRIGHT",i,"BOTTOMRIGHT",5,-5)
     
     if f.mystyle == "focus" and not C["focusCBuserplaced"] then
-      s:SetPoint("BOTTOM", "Castbarfouce", "BOTTOM", 0, 0)
       s:Size(C["FocusCastBarWidth"],C["FocusCastBarHeight"])
+	  MoveHandle.Castbarfouce = S.MakeMoveHandle(s, L["焦点施法条"], "FocusCastbar")
       i:SetPoint("RIGHT", s, "LEFT", 0, 0)
       sp:SetHeight(s:GetHeight()*2.5)
     elseif f.mystyle == "pet" then
@@ -362,7 +362,7 @@ C = UnitFrameDB
     elseif f.mystyle == "player" then
 	  if not C["playerCBuserplaced"] then
 		s:Size(C["PlayerCastBarWidth"],C["PlayerCastBarHeight"])
-		s:SetPoint("BOTTOM", "Castbarplay", "BOTTOM", 0, 0)
+		MoveHandle.Castbarplay = S.MakeMoveHandle(s, L["玩家施法条"], "PlayerCastbar")
 		i:Size((s:GetHeight()+2)*2,(s:GetHeight()+2)*2)
 		sp:SetHeight(s:GetHeight()*2.5)
 	  else
@@ -387,7 +387,7 @@ C = UnitFrameDB
       f:RegisterEvent("UNIT_SPELLCAST_SENT", cast.OnCastSent)
 	elseif f.mystyle == "target" and not C["targetCBuserplaced"] then
 	  s:Size(C["TargetCastBarWidth"],C["TargetCastBarHeight"])
-	  s:SetPoint("BOTTOM", "Castbartarget", "BOTTOM", 0, 0)
+	  MoveHandle.Castbartarget = S.MakeMoveHandle(s, L["目标施法条"], "TargetCastbar")
 	  i:Size(s:GetHeight()*2,s:GetHeight()*2)
       sp:SetHeight(s:GetHeight()*2.5)
 	else

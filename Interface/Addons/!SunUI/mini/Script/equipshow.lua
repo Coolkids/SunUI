@@ -1,4 +1,8 @@
-﻿local function ChatFrame_OnHyperlinkEnter(self, linkData, link)
+﻿local S, C, L, DB = unpack(select(2, ...))
+local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("equipshow", "AceEvent-3.0")
+function Module:OnInitialize()
+
+local function ChatFrame_OnHyperlinkEnter(self, linkData, link)
    GameTooltip:SetOwner(self,"ANCHOR_TOPRIGHT");
    if strfind(linkData,"^item") or strfind(linkData,"^enchant") then
       GameTooltip:SetHyperlink(linkData);
@@ -29,3 +33,4 @@ do
    end
 
 end      
+end

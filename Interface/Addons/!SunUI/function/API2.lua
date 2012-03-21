@@ -26,7 +26,7 @@ S.ReskinDropDown = function(f)
 	dis:SetAllPoints()
 
 	local downtex = down:CreateTexture(nil, "ARTWORK")
-	downtex:SetTexture("Interface\\AddOns\\Aurora\\arrow-down-active")
+	downtex:SetTexture("Interface\\AddOns\\!SunUI\\Media\\arrow-down-active")
 	downtex:SetSize(8, 8)
 	downtex:SetPoint("CENTER")
 	downtex:SetVertexColor(1, 1, 1)
@@ -85,7 +85,7 @@ S.ReskinInput = function(f, height, width)
 end
 
 function CreateShadow(p, f, t) 
-if f.shadow then return end
+if f.sw then return end
 	
 	local borderr, borderg, borderb, bordera = 0, 0, 0, 1
 	local backdropr, backdropg, backdropb, backdropa =  .05, .05, .05, .9
@@ -119,5 +119,5 @@ if f.shadow then return end
 	})
 	shadow:SetBackdropColor( backdropr, backdropg, backdropb, backdropa )
 	shadow:SetBackdropBorderColor( borderr, borderg, borderb, bordera )
-	f.shadow = shadow
+	f.sw = shadow
 end

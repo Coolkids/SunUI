@@ -1,7 +1,9 @@
 local _, _, _, DB = unpack(select(2, ...))
 if DB.Nuke == true then return end
+local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Cooldown", "AceEvent-3.0")
 -- want hex color instead of RGB?
-RGBToHex = function(r, g, b)
+function Module:OnInitialize()
+local function RGBToHex(r, g, b)
 	r = r <= 1 and r >= 0 and r or 0
 	g = g <= 1 and g >= 0 and g or 0
 	b = b <= 1 and b >= 0 and b or 0
@@ -217,3 +219,4 @@ if _G["ActionBarButtonEventsFrame"].frames then
 end
 
 hooksecurefunc("ActionBarButtonEventsFrame_RegisterFrame", actionButton_Register)
+end
