@@ -63,49 +63,71 @@ function Module.BuildGUI()
 							name = L["bar1布局"], desc = L["请选择主动作条布局"],
 							values = {[1] = L["12x1布局"], [2] =L["6x2布局"]},
 							get = function() return ActionBarDB.Bar1Layout end,
-							set = function(_, value) ActionBarDB.Bar1Layout = value end,
+							set = function(_, value) 
+								ActionBarDB.Bar1Layout = value
+								Core:GetModule("ActionBar"):UpdateBar1()					
+							end,
 						},
 						Bar2Layout = {
 							type = "select", order = 2,
 							name = L["bar2布局"], desc = L["请选择主动作条布局"],
 							values = {[1] = L["12x1布局"], [2] =L["6x2布局"]},
 							get = function() return ActionBarDB.Bar2Layout end,
-							set = function(_, value) ActionBarDB.Bar2Layout = value end,
+							set = function(_, value)
+								ActionBarDB.Bar2Layout = value
+								Core:GetModule("ActionBar"):BuildActionBar()
+							end,
 						},
 						Bar3Layout = {
 							type = "select", order = 3,
 							name = L["bar3布局"], desc = L["请选择主动作条布局"],
 							values = {[1] = L["12x1布局"], [2] =L["6x2布局"]},
 							get = function() return ActionBarDB.Bar3Layout end,
-							set = function(_, value) ActionBarDB.Bar3Layout = value end,
+							set = function(_, value) 
+								ActionBarDB.Bar3Layout = value 
+								Core:GetModule("ActionBar"):BuildActionBar()
+							end,
 						},	
 						Bar4Layout = {
 							type = "select", order = 4,
 							name = L["bar4布局"], desc = L["请选择主动作条布局"],
 							values = {[1] = L["12x1布局"], [2] =L["6x2布局"]},
 							get = function() return ActionBarDB.Bar4Layout end,
-							set = function(_, value) ActionBarDB.Bar4Layout = value end,
+							set = function(_, value) 
+								ActionBarDB.Bar4Layout = value
+								Core:GetModule("ActionBar"):BuildActionBar()
+								
+							end,
 						},	
 						Bar5Layout = {
 							type = "select", order = 5,
 							name = L["bar5布局"], desc = L["请选择主动作条布局"],disabled = (ActionBarDB.Big4Layout == 1),
 							values = {[1] = "12x1布局", [2] = "6x2布局"},
 							get = function() return ActionBarDB.Bar5Layout end,
-							set = function(_, value) ActionBarDB.Bar5Layout = value end,
+							set = function(_, value) 
+								ActionBarDB.Bar5Layout = value
+								Core:GetModule("ActionBar"):BuildActionBar()
+							end,
 						},	
 						Big4Layout = {
 							type = "select", order = 6,
 							name = L["4方块布局"], desc = L["请选择主动作条布局"],
 							values = {[1] = L["4方块布局"],  [2] = L["不要4方块布局"] },
 							get = function() return ActionBarDB.Big4Layout end,
-							set = function(_, value) ActionBarDB.Big4Layout = value end,
+							set = function(_, value) 
+								ActionBarDB.Big4Layout = value
+								Core:GetModule("ActionBar"):BuildActionBar()
+							end,
 						},
 						Style = {
 							type = "select", order = 7,
 							name = L["动作条皮肤风格"], desc = L["请选择动作条皮肤风格"],
 							values = {[1] = L["阴影风格"], [2] = L["框框风格"]},
 							get = function() return ActionBarDB.Style end,
-							set = function(_, value) ActionBarDB.Style = value end,
+							set = function(_, value) 
+								ActionBarDB.Style = value 
+								Core:GetModule("ActionStyle"):UpdateActionStyle()
+							end,
 						},
 					}
 				},
@@ -117,25 +139,45 @@ function Module.BuildGUI()
 							type = "toggle", order = 1,
 							name = L["隐藏快捷键显示"],			
 							get = function() return ActionBarDB.HideHotKey end,
-							set = function(_, value) ActionBarDB.HideHotKey = value end,
+							set = function(_, value) 
+								ActionBarDB.HideHotKey = value 
+								Core:GetModule("ActionStyle"):UpdateActionStyle()
+							end,
 						},
 						HideMacroName = {
 							type = "toggle", order = 2,
 							name = L["隐藏宏名称显示"],		
 							get = function() return ActionBarDB.HideMacroName end,
-							set = function(_, value) ActionBarDB.HideMacroName = value end,
+							set = function(_, value) 
+								ActionBarDB.HideMacroName = value 
+								Core:GetModule("ActionStyle"):UpdateActionStyle()
+							end,
 						},
 						CooldownFlash = {
 							type = "toggle", order = 3,
 							name = L["冷却闪光"],		
 							get = function() return ActionBarDB.CooldownFlash end,
-							set = function(_, value) ActionBarDB.CooldownFlash = value end,
+							set = function(_, value) 
+								ActionBarDB.CooldownFlash = value 
+								Core:GetModule("ActionStyle"):UpdateActionStyle()
+							end,
 						},
 						EnableBarFader = {
 							type = "toggle", order = 4,
 							name = L["动作条渐隐"],		
 							get = function() return ActionBarDB.EnableBarFader end,
-							set = function(_, value) ActionBarDB.EnableBarFader = value end,
+							set = function(_, value) 
+								ActionBarDB.EnableBarFader = value 
+								Core:GetModule("ActionStyle"):UpdateActionStyle()
+							end,
+						},
+						UnLock = {
+							type = "execute",
+							name = "按鍵綁定",
+							order = 5,
+							func = function()
+								SlashCmdList.MOUSEOVERBIND()
+							end,
 						},
 					}
 				},
@@ -148,63 +190,90 @@ function Module.BuildGUI()
 							name = L["动作条按钮大小"], desc = L["动作条按钮大小"],
 							min = 16, max = 64, step = 1,
 							get = function() return ActionBarDB.ButtonSize end,
-							set = function(_, value) ActionBarDB.ButtonSize = value end,
+							set = function(_, value) 
+								ActionBarDB.ButtonSize = value 
+								Core:GetModule("ActionBar"):BuildActionBar()
+							end,
 						},
 						ButtonSpacing = {
 							type = "range", order = 2,
 							name = L["动作条间距大小"], desc = L["动作条间距大小"],
 							min = 0, max = 6, step = 1,
 							get = function() return ActionBarDB.ButtonSpacing end,
-							set = function(_, value) ActionBarDB.ButtonSpacing = value end,
+							set = function(_, value) 
+								ActionBarDB.ButtonSpacing = value 
+								Core:GetModule("ActionBar"):BuildActionBar()
+							end,
 						},
 						FontSize = {
 							type = "range", order = 3,
 							name = L["动作条字体大小"], desc = L["动作条字体大小"],
 							min = 1, max = 36, step = 1,
 							get = function() return ActionBarDB.FontSize end,
-							set = function(_, value) ActionBarDB.FontSize = value end,
+							set = function(_, value) 
+								ActionBarDB.FontSize = value 
+								Core:GetModule("ActionStyle"):UpdateActionStyle()
+							end,
 						},
 						MFontSize = {
 							type = "range", order = 4,
 							name = L["宏名字字体大小"], desc = L["宏名字字体大小"],
 							min = 1, max = 36, step = 1,
 							get = function() return ActionBarDB.MFontSize end,
-							set = function(_, value) ActionBarDB.MFontSize = value end,
+							set = function(_, value) 
+								ActionBarDB.MFontSize = value 
+								Core:GetModule("ActionStyle"):UpdateActionStyle()
+							end,
 						},
 						MainBarSacle = {
 							type = "range", order = 5,
 							name = L["主动作条缩放大小"], desc = L["主动作条缩放大小"],
 							min = 0, max = 3, step = 0.1,
 							get = function() return ActionBarDB.MainBarSacle end,
-							set = function(_, value) ActionBarDB.MainBarSacle = value end,
+							set = function(_, value) 
+								ActionBarDB.MainBarSacle = value 
+								Core:GetModule("ActionBar"):BuildActionBar()
+							end,
 						},
 						ExtraBarSacle = {
 							type = "range", order = 6,
 							name = L["特殊按钮缩放大小"], desc = L["特殊按钮缩放大小"],
 							min = 0, max = 3, step = 0.1,
 							get = function() return ActionBarDB.ExtraBarSacle end,
-							set = function(_, value) ActionBarDB.ExtraBarSacle = value end,
+							set = function(_, value) 
+								ActionBarDB.ExtraBarSacle = value 
+								Core:GetModule("ActionBar"):BuildActionBar()
+							end,
 						},
 						PetBarSacle = {
 							type = "range", order = 7,
 							name = L["宠物条缩放大小"], desc = L["宠物条缩放大小"],
 							min = 0, max = 3, step = 0.1,
 							get = function() return ActionBarDB.PetBarSacle end,
-							set = function(_, value) ActionBarDB.PetBarSacle = value end,
+							set = function(_, value) 
+								ActionBarDB.PetBarSacle = value 
+								Core:GetModule("ActionBar"):BuildActionBar()
+							end,
 						},
 						StanceBarSacle = {
 							type = "range", order = 8,
 							name = L["姿态栏缩放大小"], desc = L["姿态栏缩放大小"],
 							min = 0, max = 3, step = 0.1,
 							get = function() return ActionBarDB.StanceBarSacle end,
-							set = function(_, value) ActionBarDB.StanceBarSacle = value end,
+							set = function(_, value) 
+								ActionBarDB.StanceBarSacle = value 
+								Core:GetModule("ActionBar"):BuildActionBar()
+							end,
 						},
 						TotemBarSacle = {
 							type = "range", order = 9,
 							name = L["图腾栏缩放大小"], desc = L["图腾栏缩放大小"],
 							min = 0, max = 3, step = 0.1,
 							get = function() return ActionBarDB.TotemBarSacle end,
-							set = function(_, value) ActionBarDB.TotemBarSacle = value end,
+							set = function(_, value) 
+								ActionBarDB.TotemBarSacle = value
+								Core:GetModule("ActionBar"):BuildActionBar()
+							end,
 						},
 					}
 				},
@@ -218,7 +287,10 @@ function Module.BuildGUI()
 							desc = L["冷却闪光图标大小"],
 							order = 1,
 							get = function() return tostring(ActionBarDB.CooldownFlashSize) end,
-							set = function(_, value) ActionBarDB.CooldownFlashSize = tonumber(value) end,
+							set = function(_, value) 
+								ActionBarDB.CooldownFlashSize = tonumber(value) 
+								Core:GetModule("ActionStyle"):UpdateActionStyle()
+							end,
 						},
 					}
 				},
@@ -231,28 +303,40 @@ function Module.BuildGUI()
 							name = "Big1大小", desc = L["动作条按钮大小"],
 							min = 6, max = 80, step = 1,
 							get = function() return ActionBarDB.BigSize1 end,
-							set = function(_, value) ActionBarDB.BigSize1 = value end,
+							set = function(_, value) 
+								ActionBarDB.BigSize1 = value 
+								Core:GetModule("ActionBar"):BuildActionBar()
+							end,
 						},
 						BigSize2 = {
 							type = "range", order = 2,
 							name = "Big2大小", desc = L["动作条按钮大小"],
 							min = 6, max = 80, step = 1,
 							get = function() return ActionBarDB.BigSize2 end,
-							set = function(_, value) ActionBarDB.BigSize2 = value end,
+							set = function(_, value) 
+								ActionBarDB.BigSize2 = value 
+								Core:GetModule("ActionBar"):BuildActionBar()
+							end,
 						},
 						BigSize3 = {
 							type = "range", order = 3,
 							name = "Big3大小", desc = L["动作条按钮大小"],
 							min = 6, max = 80, step = 1,
 							get = function() return ActionBarDB.BigSize3 end,
-							set = function(_, value) ActionBarDB.BigSize3 = value end,
+							set = function(_, value) 
+								ActionBarDB.BigSize3 = value 
+								Core:GetModule("ActionBar"):BuildActionBar()
+							end,
 						},
 						BigSize4 = {
 							type = "range", order = 4,
 							name = "Big4大小", desc = L["动作条按钮大小"],
 							min = 6, max = 80, step = 1,
 							get = function() return ActionBarDB.BigSize4 end,
-							set = function(_, value) ActionBarDB.BigSize4 = value end,
+							set = function(_, value) 
+								ActionBarDB.BigSize4 = value 
+								Core:GetModule("ActionBar"):BuildActionBar()
+							end,
 						},
 					}
 				},

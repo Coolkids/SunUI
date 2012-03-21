@@ -1,8 +1,29 @@
 local S, C, L, DB = unpack(SunUI)
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("NamePlates")
 if DB.Nuke == true then return end
-
+local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("NamePlates")
 function Module:OnInitialize()
+local colors = {
+	power = {
+		["MANA"] = {0.31, 0.45, 0.63},
+	},
+	reaction = {
+		[1] = { .7, .2, .1 }, -- Hated
+		[4] = { 1, .8, 0 }, -- Neutral
+		[5] = { .2, .6, .1 }, -- Friendly
+	},
+	class = {
+		["DEATHKNIGHT"] = { 196/255,  30/255,  60/255 },
+		["DRUID"]       = { 255/255, 125/255,  10/255 },
+		["HUNTER"]      = { 171/255, 214/255, 116/255 },
+		["MAGE"]        = { 104/255, 205/255, 255/255 },
+		["PALADIN"]     = { 245/255, 140/255, 186/255 },
+		["PRIEST"]      = { 212/255, 212/255, 212/255 },
+		["ROGUE"]       = { 255/255, 243/255,  82/255 },
+		["SHAMAN"]      = {  41/255,  79/255, 155/255 },
+		["WARLOCK"]     = { 148/255, 130/255, 201/255 },
+		["WARRIOR"]     = { 199/255, 156/255, 110/255 },
+	},
+}
 C = NameplateDB
 if C["enable"] ~= true then return end
 local FONTSIZE = C["Fontsize"]*S.Scale(1)
@@ -118,7 +139,7 @@ local PlateBlacklist = {
 	["Lava Parasite"] = true,
 	["熔岩蟲"] = true,
 	["熔岩寄生虫"] = true,
-	["腐化之血"] = true,
+	--["腐化之血"] = true,
 }
 
 local NamePlates = CreateFrame("Frame")
@@ -406,22 +427,22 @@ local function Colorize(frame)
 		if RAID_CLASS_COLORS[class].r == r and RAID_CLASS_COLORS[class].g == g and RAID_CLASS_COLORS[class].b == b then
 			frame.hasClass = true
 			frame.isFriendly = false
-			frame.hp:SetStatusBarColor(unpack(DB.colors.class[class]))
+			frame.hp:SetStatusBarColor(unpack(colors.class[class]))
 			return
 		end
 	end
 	
 	if g+b == 0 then -- hostile
-		r,g,b = unpack(DB.colors.reaction[1])
+		r,g,b = unpack(colors.reaction[1])
 		frame.isFriendly = false
 	elseif r+b == 0 then -- friendly npc
-		r,g,b = unpack(DB.colors.reaction[5])
+		r,g,b = unpack(colors.reaction[5])
 		frame.isFriendly = true
 	elseif r+g > 1.95 then -- neutral
-		r,g,b = unpack(DB.colors.reaction[4])
+		r,g,b = unpack(colors.reaction[4])
 		frame.isFriendly = false
 	elseif r+g == 0 then -- friendly player
-		r,g,b = unpack(DB.colors.power["MANA"])
+		r,g,b = unpack(colors.power["MANA"])
 		frame.isFriendly = true
 	else -- enemy player
 		frame.isFriendly = false

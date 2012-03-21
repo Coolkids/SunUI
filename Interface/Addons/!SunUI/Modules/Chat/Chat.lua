@@ -2,6 +2,18 @@
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Chat", "AceEvent-3.0")
 if DB.Nuke == true then return end
 function Module:OnInitialize()
+
+-- 聊天设置
+local AutoApply = false									--聊天设置锁定		
+local def_position = {"BOTTOMLEFT",UIParent,"BOTTOMLEFT",20,30} -- Chat Frame position
+local chat_height = 230
+local chat_width = 440
+local fontsize = 10                          --other variables
+local eb_point = {"BOTTOM", -200, 180}		-- Editbox position
+local eb_width = 400						-- Editbox width
+local tscol = "64C2F5"						-- Timestamp coloring
+local TimeStampsCopy = true					-- 时间戳
+
 	CHAT_FONT_HEIGHTS = {5, 6, 7, 8, 9,10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28}
 	local LinkHover = {}; LinkHover.show = {	-- enable (true) or disable (false) LinkHover functionality for different things in chat
 		["achievement"] = true,
@@ -48,12 +60,12 @@ function Module:OnInitialize()
 	do
 		ChatFrame2ButtonFrameBottomButton:RegisterEvent("PLAYER_LOGIN")
 		ChatFrame2ButtonFrameBottomButton:SetScript("OnEvent", function(f)
-			TIMESTAMP_FORMAT_HHMM = "|cff"..DB.tscol.."[%I:%M]|r "
-			TIMESTAMP_FORMAT_HHMMSS = "|cff"..DB.tscol.."[%I:%M:%S]|r "
-			TIMESTAMP_FORMAT_HHMMSS_24HR = "|cff"..DB.tscol.."[%H:%M:%S]|r "
-			TIMESTAMP_FORMAT_HHMMSS_AMPM = "|cff"..DB.tscol.."[%I:%M:%S %p]|r "
-			TIMESTAMP_FORMAT_HHMM_24HR = "|cff"..DB.tscol.."[%H:%M]|r "
-			TIMESTAMP_FORMAT_HHMM_AMPM = "|cff"..DB.tscol.."[%I:%M %p]|r "
+			TIMESTAMP_FORMAT_HHMM = "|cff"..tscol.."[%I:%M]|r "
+			TIMESTAMP_FORMAT_HHMMSS = "|cff"..tscol.."[%I:%M:%S]|r "
+			TIMESTAMP_FORMAT_HHMMSS_24HR = "|cff"..tscol.."[%H:%M:%S]|r "
+			TIMESTAMP_FORMAT_HHMMSS_AMPM = "|cff"..tscol.."[%I:%M:%S %p]|r "
+			TIMESTAMP_FORMAT_HHMM_24HR = "|cff"..tscol.."[%H:%M]|r "
+			TIMESTAMP_FORMAT_HHMM_AMPM = "|cff"..tscol.."[%I:%M %p]|r "
 			f:UnregisterEvent("PLAYER_LOGIN")
 			f:SetScript("OnEvent", nil)
 		end)
@@ -66,11 +78,11 @@ function Module:OnInitialize()
 	---------------- > Function to move and scale chatframes 
 	SetChat = function()
 		FCF_SetLocked(ChatFrame1, nil)
-		FCF_SetChatWindowFontSize(self, ChatFrame1, DB.fontsize*S.Scale(1)) 
+		FCF_SetChatWindowFontSize(self, ChatFrame1, fontsize*S.Scale(1)) 
 		ChatFrame1:ClearAllPoints()
-		ChatFrame1:SetPoint(unpack(DB.def_position))
-		ChatFrame1:SetWidth(DB.chat_width)
-		ChatFrame1:SetHeight(DB.chat_height)
+		ChatFrame1:SetPoint(unpack(def_position))
+		ChatFrame1:SetWidth(chat_width)
+		ChatFrame1:SetHeight(chat_height)
 		ChatFrame1:SetFrameLevel(8)
 		ChatFrame1:SetUserPlaced(true)
 		for i=1,10 do 
@@ -83,7 +95,7 @@ function Module:OnInitialize()
 	end
 	SlashCmdList["SETCHAT"] = SetChat
 	SLASH_SETCHAT1 = "/setchat"
-	if DB.AutoApply then
+	if AutoApply then
 		local f = CreateFrame"Frame"
 		f:RegisterEvent("PLAYER_ENTERING_WORLD")
 		f:SetScript("OnEvent", function() SetChat() end)
@@ -103,7 +115,7 @@ function Module:OnInitialize()
 			local tab = _G["ChatFrame"..i.."Tab"]
 			tab:SetAlpha(0)
 			tab.noMouseAlpha = 0
-			cf:SetFading(false)
+			cf:SetFading(true)
 		
 		-- Hide chat textures
 			for j = 1, #CHAT_FRAME_TEXTURES do
@@ -114,7 +126,7 @@ function Module:OnInitialize()
 			cf:SetMaxResize(0,0)
 		
 		--Allow the chat frame to move to the end of the screen
-			cf:SetClampedToScreen(false)
+			cf:SetClampedToScreen(true)
 			cf:SetClampRectInsets(0,0,0,0)
 		
 		--EditBox Module
@@ -147,7 +159,7 @@ function Module:OnInitialize()
 			--eb:SetPoint("BOTTOMRIGHT", UIParent, eb_point[1], eb_point[2]+eb_width, eb_point[3])
 			eb:SetHeight(18)
 			eb:CreateShadow("Background")
-			eb:EnableMouse(false)
+			eb:EnableMouse(true)
 			eb:SetFont(DB.Font, 14*MiniDB["FontScale"]*S.Scale(1), "OUTLINE")
 
 		--Remove scroll buttons
@@ -325,13 +337,12 @@ function Module:OnInitialize()
 	do
 		--Create Frames/Objects
 		local frame = CreateFrame("Frame", "BCMCopyFrame", UIParent)
-		frame:CreateShadow("Background")
 		frame:SetWidth(600)
 		frame:SetHeight(500)
 		frame:SetPoint("CENTER", UIParent, "CENTER")
 		frame:Hide()
 		frame:SetFrameStrata("DIALOG")
-		
+		S.SetBD(frame)
 		local scrollArea = CreateFrame("ScrollFrame", "BCMCopyScroll", frame, "UIPanelScrollFrameTemplate")
 		scrollArea:SetPoint("TOPLEFT", frame, "TOPLEFT", 8, -30)
 		scrollArea:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -30, 8)
@@ -346,10 +357,14 @@ function Module:OnInitialize()
 		editBox:SetHeight(270)
 		editBox:SetScript("OnEscapePressed", function(f) f:GetParent():GetParent():Hide() f:SetText("") end)
 		scrollArea:SetScrollChild(editBox)
-		editBox:CreateShadow("Background")
+		
 		
 		local close = CreateFrame("Button", "BCMCloseButton", frame, "UIPanelCloseButton")
-		close:SetPoint("TOPRIGHT", frame, "TOPRIGHT")
+		close:SetSize(20, 20)
+		close:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -5, -5)
+		close.text = S.MakeFontString(close, 10)
+		close.text:SetAllPoints(close)
+		close.text:SetText("X")
 		S.Reskin(close)
 		local copyFunc = function(frame, btn)
 			local cf = _G[format("%s%d", "ChatFrame", frame:GetID())]
@@ -377,7 +392,7 @@ function Module:OnInitialize()
 				GameTooltip:AddLine(CHAT_OPTIONS_LABEL, 1, 1, 1)
 				GameTooltip:AddLine(NEWBIE_TOOLTIP_CHATOPTIONS, nil, nil, nil, 1)
 			end
-			GameTooltip:AddLine((SHOW_NEWBIE_TIPS == "1" and "\n" or "").."|TInterface\\Buttons\\UI-GuildButton-OfficerNote-Disabled:27|tDouble-click to copy chat.", 1, 0, 0)
+			GameTooltip:AddLine((SHOW_NEWBIE_TIPS == "1" and "\n" or "").."|TInterface\\Buttons\\UI-GuildButton-OfficerNote-Disabled:27|t雙擊標籤複製.", 1, 1, 1)
 			GameTooltip:Show()
 		end
 		for i = 1, 10 do
@@ -389,11 +404,11 @@ function Module:OnInitialize()
 
 
 	---------------- > Per-line chat copy via time stamps
-	if DB.TimeStampsCopy then
+	if TimeStampsCopy then
 		local AddMsg = {}
 		local AddMessage = function(frame, text, ...)
 			text = string.gsub(text, "%[(%d+)%. .-%]", "[%1]")
-			text = ('|cffffffff|Hm_Chat|h|r%s|h %s'):format('|cff'..DB.tscol..''..date('%H:%M')..'|r', text)
+			text = ('|cffffffff|Hm_Chat|h|r%s|h %s'):format('|cff'..tscol..''..date('%H:%M')..'|r', text)
 			return AddMsg[frame:GetName()](frame, text, ...)
 		end
 		for i = 1, 10 do

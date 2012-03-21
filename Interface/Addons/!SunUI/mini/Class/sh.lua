@@ -1,4 +1,7 @@
 local S, _, _, DB = unpack(select(2, ...))
+
+local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("SH")
+function Module:OnInitialize()
 local class = select(2, UnitClass("player"))
 local Frame = CreateFrame("Frame")
 	  Frame:Width(48)
@@ -83,4 +86,5 @@ if class=="PRIEST" then
 	sp:RegisterEvent("PLAYER_ENTERING_WORLD")	
 	sp:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
 	sp:RegisterEvent("UPDATE_SHAPESHIFT_FORMS")
+end
 end

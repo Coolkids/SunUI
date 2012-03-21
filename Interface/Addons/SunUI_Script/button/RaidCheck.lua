@@ -1,6 +1,7 @@
 local S, C, L, DB = unpack(SunUI) --Engine
 local RC = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule('RaidCheck');
 
+function RC:OnInitialize()
 
 
 local join = string.join
@@ -360,3 +361,4 @@ end
 			RC:CheckRaidFlask()
 		end
 	end)	
+end

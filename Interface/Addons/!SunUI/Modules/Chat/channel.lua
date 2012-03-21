@@ -1,6 +1,8 @@
 ﻿local S, _, L, DB = unpack(select(2, ...))
 if DB.Nuke == true then return end
 if DB.zone ~= "zhTW" and DB.zone ~= "zhCN" then return end
+local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("bigfootchannel", "AceTimer-3.0")
+function Module:OnInitialize()
 local button = CreateFrame("Button", "ButtonP", ColectorButton)
 		button:Point("TOP", ButtonE, "BOTTOM", 0, -5)
 		button:Size(20)
@@ -47,3 +49,4 @@ local button = CreateFrame("Button", "ButtonP", ColectorButton)
 		button:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 		S.MakeBG(button, 0)
 		S.Reskin(button)
+end

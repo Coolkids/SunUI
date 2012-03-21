@@ -212,8 +212,9 @@ AceGUI.RegisterAsContainer = function(self, widget)
 					S.StripTextures(child)
 				end
 			end
-			frame:CreateSD()
-			frame:CreateBD()
+			--frame:CreateSD()
+			--frame:CreateBD()
+			S.SetBD(frame)
 		end		
 		
 		if widget.treeframe then

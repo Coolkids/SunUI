@@ -1,4 +1,7 @@
 ﻿local S, C, L, DB = unpack(SunUI)
+local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("iRoster")
+function Module:OnInitialize()
+
 for i = 1, 4 do
 	_G["WorldMapParty"..i]:SetWidth(32)
 	_G["WorldMapParty"..i]:SetHeight(32)
@@ -148,3 +151,4 @@ hooksecurefunc("BattlefieldMinimap_LoadUI", function()
 		end
 	end
 end)
+end

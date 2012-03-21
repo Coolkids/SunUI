@@ -5,11 +5,12 @@ local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Threat")
 local ThreatList, ThreatFlag = {}, {}
 local MainFrame = CreateFrame("Frame", nil, UIParent)
 local Tank = CreateFrame("StatusBar", nil, MainFrame)
-if DB.OpenThreat ~= true then return end
 -- Init
 function Module:OnInitialize()
 C=ThreatDB
 L=MoveHandleDB
+local ArrowT = "Interface\\Addons\\!SunUI\\media\\ArrowT"
+local Arrow = "Interface\\Addons\\!SunUI\\media\\Arrow"
 local function Init()
 	MainFrame:Size(C["ThreatBarWidth"], 6)
 	MainFrame:SetBackdrop({bgFile = "Interface\\Addons\\!SunUI\\Media\\statusbar6"})
@@ -27,7 +28,7 @@ local function Init()
 	Tank.Flag:Point("LEFT", Tank:GetStatusBarTexture(), "RIGHT", 0, 0)
 	Tank.Arrow = Tank:CreateTexture(nil, "OVERLAY")
 	Tank.Arrow:Size(24, 24)
-	Tank.Arrow:SetTexture(DB.ArrowT)
+	Tank.Arrow:SetTexture(ArrowT)
 	Tank.Arrow:Point("BOTTOM", Tank.Flag, "TOP", 0, 0)
 	Tank.Name = S.MakeFontString(Tank, 10)
 	Tank.Name:Point("BOTTOM", Tank.Arrow, "TOP", 0, -8)
@@ -45,7 +46,7 @@ local function Init()
 		StatusBar.Arrow = StatusBar:CreateTexture(nil, "OVERLAY")
 		StatusBar.Arrow:Height(16)
 		StatusBar.Arrow:Width(16)
-		StatusBar.Arrow:SetTexture(DB.Arrow)
+		StatusBar.Arrow:SetTexture(Arrow)
 		StatusBar.Arrow:Point("TOP", StatusBar.Flag, "BOTTOM", 0, -1)
 		StatusBar.Name = S.MakeFontString(StatusBar, 10)
 		StatusBar.Name:Point("TOP", StatusBar.Arrow, "BOTTOM", 1, 3)

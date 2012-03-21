@@ -1,4 +1,6 @@
 local S, _, L, DB = unpack(SunUI)
+local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("calculator")
+function Module:OnInitialize()
 function calc(arg1)
 	if arg1=="" then 
 		Calc_OpenFrame()
@@ -341,3 +343,4 @@ end
 SlashCmdList["CALCULATOR"] = calc
 SLASH_CALCULATOR1 = "/calc"
 SLASH_CALCULATOR2 = "/jsq"
+end

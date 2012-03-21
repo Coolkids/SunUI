@@ -1,6 +1,8 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
 if DB.Nuke == true then return end
-
+local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("loot", "AceTimer-3.0")
+function Module:OnInitialize()
+local  iconsize = 28
 local L = {
 	fish = "Fishy loot",
 	empty = "Empty slot",
@@ -126,7 +128,7 @@ local createSlot = function(id)
 	local frame = CreateFrame("Button", 'm_LootSlot'..id, addon)
 	frame:Point("LEFT", 8, 0)
 	frame:Point("RIGHT", -8, 0)
-	frame:Height(DB.iconsize-2)
+	frame:Height(iconsize-2)
 	frame:SetID(id)
 	
 	frame:SetScript("OnEnter", OnEnter)
@@ -135,8 +137,8 @@ local createSlot = function(id)
 	frame:SetScript("OnUpdate", OnUpdate)
 
 	local iconFrame = CreateFrame("Frame", nil, frame)
-	iconFrame:Height(DB.iconsize+2)
-	iconFrame:Width(DB.iconsize+2)
+	iconFrame:Height(iconsize+2)
+	iconFrame:Width(iconsize+2)
 	iconFrame:ClearAllPoints()
 	iconFrame:Point("LEFT", frame, 3,0)
 	
@@ -184,7 +186,7 @@ local createSlot = function(id)
 	--drop:SetAllPoints(frame)
 	drop:SetAlpha(.5)
 	frame.drop = drop
-	frame:Point("TOP", addon, 8, (-5+DB.iconsize)-(id*(DB.iconsize+10))-10)
+	frame:Point("TOP", addon, 8, (-5+iconsize)-(id*(iconsize+10))-10)
 	frame:SetBackdrop{
 	edgeFile = DB.edgetex, edgeSize = 10,
 	--insets = {left = 0, right = 0, top = 0, bottom = 0},
@@ -324,7 +326,7 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 
 	local color = ITEM_QUALITY_COLORS[m]
 	self:SetBackdropBorderColor(color.r, color.g, color.b, .8)
-	self:Height(math.max((items*(DB.iconsize+10))+27), 20)
+	self:Height(math.max((items*(iconsize+10))+27), 20)
 	self:Width(250)
 	title:Width(220)
 	title:Height(16)
@@ -546,3 +548,4 @@ local function init()
 end
 
 UIDropDownMenu_Initialize(GroupLootDropDown, init, "MENU")
+end

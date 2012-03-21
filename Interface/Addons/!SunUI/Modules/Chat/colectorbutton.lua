@@ -1,5 +1,6 @@
 ﻿local S, _, _, DB = unpack(select(2, ...))
-
+local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Cbutton", "AceTimer-3.0")
+function Module:OnInitialize()
 local colectorbutton = CreateFrame("Button", nil, UIParent)
 colectorbutton:Size(20)
 colectorbutton:Point("TOPLEFT", ChatFrame1, "TOPRIGHT", 5, 0)
@@ -32,3 +33,4 @@ end)
 colectorbutton:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 S.MakeBG(colectorbutton, 0)
 S.Reskin(colectorbutton)
+end

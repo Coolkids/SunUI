@@ -1,5 +1,7 @@
 local S, C, L, DB = unpack(select(2, ...))
 if DB.Nuke == true then return end
+local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("roll", "AceTimer-3.0")
+function Module:OnInitialize()
 local pos = "TOP"
 local backdrop = {
 	bgFile = DB.Solid, tile = true, tileSize = 0,
@@ -387,3 +389,4 @@ SlashCmdList["LFrames"] = function(msg)
 	f:Show()
 end
 SLASH_LFrames1 = "/lframes"
+end

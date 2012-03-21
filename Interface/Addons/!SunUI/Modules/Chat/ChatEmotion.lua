@@ -3,6 +3,8 @@
 local S, _, _, DB = unpack(select(2, ...))
 if DB.Nuke == true then return end
 if DB.zone ~= "zhTW" and DB.zone ~= "zhCN" then return end
+local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("chatemotion", "AceTimer-3.0")
+function Module:OnInitialize()
 local IconSize = S.Scale(23)					 -- 表情IconSize
 local fdir = "Interface\\Addons\\!SunUI\\Modules\\Chat\\Icon\\"			 -- 表情材质路径
 ----------------------------------------------------------------------------------------
@@ -256,3 +258,4 @@ local button = CreateFrame("Button", "ButtonE", ColectorButton)
 		button:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 		S.MakeBG(button, 0)
 		S.Reskin(button)
+end

@@ -1,30 +1,7 @@
 ﻿local S, C, L, DB = unpack(SunUI) --Engine
 if DB.Nuke == true then return end
---[[ local MBB = MBB_MinimapButtonFrame
-S.StripTextures(MBB, Kill)
-local MBB = CreateFrame("Button", "ButtonM", ChatFrame1)
-MBB:Size(20)
-MBB:Point("BOTTOMLEFT", ChatFrame1, "BOTTOMRIGHT", 5, 75)
-MBB.text = S.MakeFontString(MBB, 10)
-MBB.text:SetPoint("CENTER", MBB, "CENTER", 2, 0)
-MBB.text:SetText("M")
-MBB.text:SetTextColor(23/255, 132/255, 209/255)
-MBB:SetScript("OnMouseUp", function(self, button) 
-		MBB_OnLoad() MBB_OnEvent() 
-		MBB_SecureOnClick(self, button) MBB_OnClick(button) 
-		MBB_SetPositions() MBB_UpdateAltRadioButtons()
-end)
-MBB:SetScript("OnEnter", function(self, button) 
-	GameTooltip:SetOwner(self, 'ANCHOR_TOP', 0, 6)
-	GameTooltip:AddLine("点击显示小地图按钮")
-	GameTooltip:AddLine("按钮显示在小地图")
-	GameTooltip:Show() 
-end)
-MBB:SetScript("OnLeave", function(self)
-	GameTooltip:Hide()
-end)
-S.MakeBG(MBB, 0)
-S.Reskin(MBB) ]]
+local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("MBB", "AceTimer-3.0")
+function Module:OnInitialize()
 
 local BlackList = { 
 	["MiniMapTracking"] = true,
@@ -126,3 +103,4 @@ hooksecurefunc(Minimap, "SetPoint", function()
 			MBCF:ClearAllPoints()
 			PositionAndStyle()
 end)
+end

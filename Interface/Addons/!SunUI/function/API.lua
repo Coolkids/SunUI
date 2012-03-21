@@ -113,7 +113,7 @@ local function CreateBD(f, a)
 		edgeFile = "Interface\\ChatFrame\\ChatFrameBackground", 
 		edgeSize = S.mult, 
 	})
-	f:SetBackdropColor(0, 0, 0, a or 0.6)
+	f:SetBackdropColor(0, 0, 0, a or 0.5)
 	f:SetBackdropBorderColor(0, 0, 0)
 end
 S.CreateBD = CreateBD
@@ -148,7 +148,7 @@ local function CreateSD(parent, size, r, g, b, alpha, offset)
 	sd:CreateShadow()
 	sd.shadow:SetBackdropBorderColor(r or 0, g or 0, b or 0)
 	sd.border:SetBackdropBorderColor(r or 0, g or 0, b or 0)
-	sd:SetAlpha(0.7 or 1)
+	sd:SetAlpha(alpha or 1)
 end
 S.CreateSD = CreateSD
 local function StartGlow(f)
@@ -288,7 +288,7 @@ function S.SetBD(f, x, y, x2, y2)
 	end
 	bg:SetFrameLevel(0)
 	CreateBD(bg)
-	CreateSD(bg)
+	CreateSD(bg, 6, 0, 0, 0, 1, 0)
 end
 S.ReskinClose = function(f, a1, p, a2, x, y)
 	f:SetSize(17, 17)

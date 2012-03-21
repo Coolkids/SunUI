@@ -35,14 +35,15 @@ C = UnitFrameDB
 		if C["ClassColor"] then 
 			self.colors.smooth = {DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b}
 		else
-			self.colors.smooth = {1,0,0,0.77,0.12,0.23, 0.05,0.05,0.05} 
+			self.colors.smooth = {1,0,0,199/255,97/255,20/255, 199/255,97/255,20/255} 
 		end
 	else 
 		if C["ClassColor"] then 
 			self.colors.smooth = {DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b}
 		else
 			--self.colors.smooth = {1,0,0, .7,.41,.44, .3,.3,.3}
-			self.colors.smooth = {1,0,0,1,0,0,1,0,0}
+			
+			self.colors.smooth = {199/255,97/255,20/255,199/255,97/255,20/255,199/255,97/255,20/255}
 		end
 	end
     self.Health.colorSmooth = true

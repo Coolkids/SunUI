@@ -345,8 +345,8 @@ function stAddonManager:LoadWindow()
 	
 	window:SetSize(400,600)
 	header:SetSize(window:GetWidth(),20)
-	
-	SkinFrame(window, true)
+	S.SetBD(window)
+	--SkinFrame(window, true)
 	--SkinFrame(header)
 	
 	header:EnableMouse(true)

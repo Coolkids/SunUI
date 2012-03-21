@@ -5,6 +5,9 @@
 --Open directly to the Guild Roster tab 
 local S, C, L, DB = unpack(SunUI)
 --when switching to the guild frame
+
+local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("socialtabs")
+function Module:OnInitialize()
 local roster = true
 
 -- Always show looking for guild tab
@@ -284,3 +287,4 @@ if (not IsTrialAccount()) then
 	f:RegisterEvent("PLAYER_GUILD_UPDATE");
 end
 f:RegisterEvent("PLAYER_LEVEL_UP");
+end

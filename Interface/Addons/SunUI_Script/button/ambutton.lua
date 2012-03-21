@@ -1,5 +1,7 @@
 ﻿local S, _, L, DB = unpack(SunUI)
 if DB.Nuke == true then return end
+local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ambutton", "AceTimer-3.0")
+function Module:OnInitialize()
 local button = CreateFrame("Button", "ButtonA",  ColectorButton)
 		button:Point("BOTTOMRIGHT", ColectorButton, "BOTTOMRIGHT", -5, 5)
 		button:Size(20)
@@ -26,3 +28,4 @@ local button = CreateFrame("Button", "ButtonA",  ColectorButton)
 		button:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 		S.MakeBG(button, 0)
 		S.Reskin(button)
+end

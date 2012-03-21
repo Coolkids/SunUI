@@ -2,7 +2,8 @@ local S, C, L, DB = unpack(select(2, ...))
 if DB.Nuke == true then return end
 local lib = LibStub("LibCooldown")
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("CooldownFlash")
-function Module:OnInitialize()
+
+function Module:UpdateCooldownFlash()
 	C = ActionBarDB
 	if C["CooldownFlash"] ~= true then return end
 
@@ -45,4 +46,8 @@ function Module:OnInitialize()
 			flash.e = 0
 			flash:Show()
 		end)
+end
+
+function Module:OnInitialize()
+	Module:UpdateCooldownFlash()
 end

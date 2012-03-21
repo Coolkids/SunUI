@@ -1,4 +1,4 @@
-local addon, ns = ...
+﻿local addon, ns = ...
 local oUF = ns.oUF or oUF 
 local cast = ns.cast
 local S, C, L, DB = unpack(select(2, ...))
@@ -8,6 +8,8 @@ local lib = CreateFrame("Frame")
 if DB.Nuke == true then return end
 local PlayerTimersOnly = false 
 function Module:OnInitialize()
+local playerauras = "DEBUFFS"  		
+local EnableCombatFeedback = false
 C = UnitFrameDB
   -----------------------------
   -- local variables
@@ -563,7 +565,7 @@ C = UnitFrameDB
       a:SetWidth((a.size+a.spacing)*8)
       a.numBuffs = 8 
       a.numDebuffs = 8
-	elseif f.mystyle=="player" and DB.playerauras=="AURAS" then
+	elseif f.mystyle=="player" and playerauras=="AURAS" then
 	  a.gap = false
       a['growth-x'] = 'LEFT'
       a['growth-y'] = 'DOWN' 
@@ -615,7 +617,7 @@ C = UnitFrameDB
       b:SetPoint("TOPLEFT", f.Power, "BOTTOMLEFT", 0, -b.spacing)
 	  b.size = 19
       b.num = 8
-	elseif f.mystyle=="player" and DB.playerauras=="BUFFS" then
+	elseif f.mystyle=="player" and playerauras=="BUFFS" then
 	  b['growth-x'] = 'LEFT'
       b['growth-y'] = 'DOWN' 
       b.initialAnchor = 'TOPRIGHT'
@@ -668,7 +670,7 @@ C = UnitFrameDB
 	  d.size = 18
       d["growth-x"] = "LEFT"
       d:SetWidth((d.size+d.spacing)*4)
-	elseif f.mystyle=="player" and DB.playerauras=="DEBUFFS" then
+	elseif f.mystyle=="player" and playerauras=="DEBUFFS" then
 	  d['growth-x'] = 'RIGHT'
       d['growth-y'] = 'UP' 
       d.initialAnchor = 'BOTTOMLEFT'
@@ -1020,7 +1022,7 @@ C = UnitFrameDB
   end
   -- oUF_CombatFeedback
   lib.gen_combat_feedback = function(f)
-	if DB.EnableCombatFeedback then
+	if EnableCombatFeedback then
 		local h = CreateFrame("Frame", nil, f.Health)
 		h:SetAllPoints(f.Health)
 		h:SetFrameLevel(30)

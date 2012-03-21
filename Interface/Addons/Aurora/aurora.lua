@@ -1,3 +1,6 @@
+
+
+
 local alpha = .5 -- controls the backdrop opacity (0 = invisible, 1 = solid)
 
 -- [[ Core ]]
@@ -348,8 +351,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		local FrameBDs = {"StaticPopup1", "StaticPopup2", "GameMenuFrame", "InterfaceOptionsFrame", "VideoOptionsFrame", "AudioOptionsFrame", "LFGDungeonReadyStatus", "ChatConfigFrame", "StackSplitFrame", "AddFriendFrame", "FriendsFriendsFrame", "ColorPickerFrame", "ReadyCheckFrame", "LFDRoleCheckPopup", "LFGDungeonReadyDialog", "RolePollPopup", "GuildInviteFrame", "ChannelFrameDaughterFrame", "LFGInvitePopup"}
 		for i = 1, #FrameBDs do
 			FrameBD = _G[FrameBDs[i]]
-			S.CreateBD(FrameBD)
-			S.CreateSD(FrameBD)
+			--S.CreateBD(FrameBD)
+			--S.CreateSD(FrameBD)
+			S.StripTextures(FrameBD)
+			S.SetBD(FrameBD)
 		end
 
 		NPCBD = CreateFrame("Frame", nil, QuestNPCModel)

@@ -1,6 +1,5 @@
 local _, _, _, DB = unpack(select(2, ...))
 local _, RT = ...
-if DB.Ratings ~= true then return end
 local string_find = string.find
 local string_match = string.match
 local string_len = string.len

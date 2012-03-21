@@ -1,7 +1,7 @@
 local S, C, L, DB = unpack(SunUI)
 if DB.MyClass ~= "PRIEST" then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("BallBar")
-function Module:BuildBar()
+function Module:OnInitialize()
 	-- 設置
 	local barsize = {UnitFrameDB["Width"],6}											-- 大小					
 	local autofade = true												-- 是否开启脱战渐隐
@@ -148,10 +148,3 @@ function Module:BuildBar()
 		end
 	end)
 end
-
-local Launch = CreateFrame("Frame")
-Launch:RegisterEvent("PLAYER_ENTERING_WORLD")
-Launch:SetScript("OnEvent", function(self)
-	Launch:UnregisterEvent("PLAYER_ENTERING_WORLD")
-	Module:BuildBar()
-end)

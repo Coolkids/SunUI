@@ -1,8 +1,6 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
 
-if DB.ShadowPetOpen ~= true then return end
 if DB.MyClass ~= "PRIEST" then return end
-
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ShadowPet")
 function Module:OnInitialize()
 	local petbar = CreateFrame("Frame", nil, UIParent)
