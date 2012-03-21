@@ -171,8 +171,8 @@ local bars = {}
 local ClassCDAnchor = CreateFrame("Frame", "ClassCDAnchor", UIParent)
 
 ClassCDAnchor:Size(C["ClassCDWidth"], C["ClassCDHeight"])
+MoveHandle.ClassCD = S.MakeMoveHandle(ClassCDAnchor, L["内置CD监视"], "ClassCD")
 
-ClassCDAnchor:Point("BOTTOMLEFT","ClassCD","BOTTOMLEFT", 0, 0)
 
 local FormatTime = function(time)
 	if time >= 60 then
@@ -192,7 +192,7 @@ local UpdatePositions = function()
 	for i = 1, #bars do
 		bars[i]:ClearAllPoints()
 		if i == 1 then
-			bars[i]:Point("TOPLEFT", ClassCDAnchor, "TOPLEFT", 26, 0)
+			bars[i]:Point("TOPLEFT", ClassCDAnchor, "TOPLEFT", 0, 0)
 		else
 			if C["ClassCDDirection"] == "1" then
 				bars[i]:Point("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, C["ClassCDHeight"]*2+5)
