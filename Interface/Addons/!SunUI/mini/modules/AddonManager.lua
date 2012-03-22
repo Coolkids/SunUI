@@ -343,7 +343,7 @@ function stAddonManager:LoadWindow()
 	
 	tinsert(UISpecialFrames,window:GetName());
 	
-	window:SetSize(400,600)
+	window:SetSize(300,500)
 	header:SetSize(window:GetWidth(),20)
 	S.SetBD(window)
 	--SkinFrame(window, true)

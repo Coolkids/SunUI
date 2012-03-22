@@ -3,7 +3,7 @@ if DB.Nuke == true then return end
 local lib = LibStub("LibCooldown")
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("CooldownFlash")
 
-function Module:UpdateCooldownFlash()
+function Module:OnInitialize()
 	C = ActionBarDB
 	if C["CooldownFlash"] ~= true then return end
 
@@ -17,10 +17,10 @@ function Module:UpdateCooldownFlash()
 		}
 
 		local flash = CreateFrame("Frame", nil, UIParent)
+		flash:SetSize(C["CooldownFlashSize"],C["CooldownFlashSize"])
+		MoveHandle.CooldownFlash = S.MakeMoveHandle(flash, L["¿‰»¥…¡π‚"], "CooldownFlash")
 		flash.icon = flash:CreateTexture(nil, "OVERLAY")
 		flash:SetScript("OnEvent", function()
-		MoveHandle.CooldownFlash = S.MakeMoveHandle(flash, L["¿‰»¥…¡π‚"], "CooldownFlash")
-		flash:SetSize(C["CooldownFlashSize"],C["CooldownFlashSize"])
 			flash.icon:SetAllPoints(flash)
 			flash.icon:SetTexCoord(.08, .92, .08, .92)
 			flash:CreateShadow()
@@ -46,8 +46,4 @@ function Module:UpdateCooldownFlash()
 			flash.e = 0
 			flash:Show()
 		end)
-end
-
-function Module:OnInitialize()
-	Module:UpdateCooldownFlash()
 end

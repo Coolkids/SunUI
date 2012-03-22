@@ -5,7 +5,7 @@ local binding_modifiers = { "Click", "shift-", "ctrl-", "alt-", "ctrl-shift-", "
 ns.mediapath = "Interface\\AddOns\\oUF_Freebgrid\\media\\"
 
 ns.defaults = {
-    scale = 1.0,
+    scale = 0.8,
     width = 65,
     height = 40,
     texture = "gradient",

@@ -3,24 +3,24 @@ local n = select(2, ...)
 n.windowsettings = {
 	-- pos = { "TOPLEFT", 4, -4 },
 	pos = { "BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -5, 0 },
-	width = 290,
-	maxlines = 8,
+	width = 200,
+	maxlines = 9,
 	backgroundalpha = 0,
 	scrollbar = true,
 
-	titleheight = 15,
+	titleheight = 11,
 	titlealpha = 0,
 	titlefont = ChatFrame1:GetFont(),
-	titlefontsize = 16,
+	titlefontsize = 14,
 	titlefontcolor = {1, .82, 0},
 	buttonhighlightcolor = {1, 1, 1},
 
-	lineheight = 15,
+	lineheight = 11,
 	linegap = 1,
 	linealpha = 1,
 	linetexture = "Interface\\Addons\\!SunUI\\media\\statusbar7",
 	linefont = ChatFrame1:GetFont(),
-	linefontsize = 16,
+	linefontsize = 14,
 	linefontcolor = {1, 1, 1},
 }
 

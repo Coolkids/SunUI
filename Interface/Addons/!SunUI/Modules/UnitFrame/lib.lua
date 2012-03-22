@@ -464,7 +464,7 @@ C = UnitFrameDB
           self.timeLeft = self.timeLeft - GetTime()
           self.first = false
         end
-        if self.timeLeft > 0 and w > 19 then
+        if self.timeLeft > 0 and w > 10 then
           local time = lib.FormatTime(self.timeLeft)
           self.remaining:SetText(time)
           if self.timeLeft < 5 then
@@ -552,13 +552,13 @@ C = UnitFrameDB
   --auras for certain frames
   lib.createAuras = function(f)
     a = CreateFrame('Frame', nil, f)
-    a:SetPoint('TOPLEFT', f, 'TOPRIGHT', 7, 0)
+    a:SetPoint('TOPLEFT', f, 'TOPRIGHT', 3, 0)
     a['growth-x'] = 'RIGHT'
     a['growth-y'] = 'DOWN' 
     a.initialAnchor = 'TOPLEFT'
     a.gap = true
-    a.spacing = 6
-    a.size = 23
+    a.spacing = 3
+    a.size = 14
     a.showDebuffType = true
     if f.mystyle=="target" then
       a:SetHeight((a.size+a.spacing)*2)
@@ -591,8 +591,8 @@ C = UnitFrameDB
     b.initialAnchor = "TOPLEFT"
     b["growth-y"] = "DOWN"
     b.num = 8
-    b.size = 19
-    b.spacing = 6
+    b.size = 14
+    b.spacing = 3
     b:SetHeight((b.size+b.spacing)*2)
     b:SetWidth((b.size+b.spacing)*12)
     if f.mystyle=="tot" then
@@ -604,25 +604,25 @@ C = UnitFrameDB
     elseif f.mystyle=="arena" then
       b.showBuffType = true
       b:SetPoint("TOPLEFT", f, "TOPRIGHT", b.spacing, -2)
-	  b.size = 18
+	  b.size = 14
       b.num = 5
       b:SetWidth((b.size+b.spacing)*4)
 	elseif f.mystyle=="boss" then
       b.showBuffType = true
       b:SetPoint("TOPLEFT", f, "TOPRIGHT", b.spacing, -2)
-	  b.size = 18
+	  b.size = 14
       b.num = 4
       b:SetWidth((b.size+b.spacing)*4)
     elseif f.mystyle=='party' then
       b:SetPoint("TOPLEFT", f.Power, "BOTTOMLEFT", 0, -b.spacing)
-	  b.size = 19
+	  b.size = 14
       b.num = 8
 	elseif f.mystyle=="player" and playerauras=="BUFFS" then
 	  b['growth-x'] = 'LEFT'
       b['growth-y'] = 'DOWN' 
       b.initialAnchor = 'TOPRIGHT'
 	  b.num = 8
-	  b.size = 23
+	  b.size = 14
       b:SetHeight((b.size+b.spacing)*2)
       b:SetWidth((b.size+b.spacing)*8)
 	  b:SetPoint("TOPRIGHT", f, "TOPLEFT", -5, -1)
@@ -639,8 +639,8 @@ C = UnitFrameDB
 	d['growth-x'] = 'RIGHT'
     d["growth-y"] = "DOWN"
     d.num = 16
-    d.size = 19
-    d.spacing = 5
+    d.size = 14
+    d.spacing = 3
     d:SetHeight((d.size+d.spacing)*2)
     d:SetWidth((d.size+d.spacing)*5)
     d.showDebuffType = true
@@ -654,7 +654,7 @@ C = UnitFrameDB
       d.showDebuffType = false
       d.initialAnchor = "TOPLEFT"
       d.num = 4
-	  d.size = 18
+	  d.size = 14
 	  d:SetPoint('TOPLEFT', f, 'TOPRIGHT', 2, 0)
       d:SetWidth((d.size+d.spacing)*4)
 --[[     elseif f.mystyle=="boss" then
@@ -667,7 +667,7 @@ C = UnitFrameDB
     elseif f.mystyle=='party' then
       d:SetPoint("TOPRIGHT", f, "TOPLEFT", -d.spacing, -2)
 	  d.num = 8
-	  d.size = 18
+	  d.size = 14
       d["growth-x"] = "LEFT"
       d:SetWidth((d.size+d.spacing)*4)
 	elseif f.mystyle=="player" and playerauras=="DEBUFFS" then
@@ -675,7 +675,7 @@ C = UnitFrameDB
       d['growth-y'] = 'UP' 
       d.initialAnchor = 'BOTTOMLEFT'
 	  d.num = 8
-	  d.size = 23
+	  d.size = 14
       d:SetHeight((d.size+d.spacing)*2)
       d:SetWidth((d.size+d.spacing)*8)
 	  d:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 15)
@@ -691,7 +691,7 @@ C = UnitFrameDB
       d['growth-y'] = 'UP' 
       d.initialAnchor = 'BOTTOMLEFT'
 	  d.num = 8
-	  d.size = 23
+	  d.size = 14
       d:SetHeight((d.size+d.spacing)*2)
       d:SetWidth((d.size+d.spacing)*8)
 	  d:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 15)

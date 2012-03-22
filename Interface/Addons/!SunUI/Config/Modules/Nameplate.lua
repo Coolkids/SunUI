@@ -9,15 +9,15 @@ local Module = DB["Modules"]["Nameplate"]
 -- LoadSettings
 function Module.LoadSettings()
 	local Default = {
-		["enable"] = true,
-		["Fontsize"] = 10,						-- 姓名板字体大小
-		["HPHeight"] = 10,						-- 姓名板血条高度
-		["HPWidth"] = 130,						-- 姓名板血条宽度
-		["CastBarIconSize"] = 23,				-- 姓名板施法条图标大小
-		["CastBarHeight"] = 8,					-- 姓名板施法条高度
-		["CastBarWidth"] = 130,					-- 姓名板施法条宽度
-		["Combat"] = true,   --战斗自动显示
-		["Showdebuff"] = true,   --debuff显示
+	["CastBarHeight"] = 4,
+	["HPWidth"] = 110,
+	["enable"] = true,
+	["HPHeight"] = 6,
+	["CastBarIconSize"] = 15,
+	["Fontsize"] = 12,
+	["Combat"] = true,
+	["Showdebuff"] = true,
+	["CastBarWidth"] = 110,
 	}
 	if not NameplateDB then NameplateDB = {} end
 	for key, value in pairs(Default) do

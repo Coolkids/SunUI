@@ -9,9 +9,9 @@ local Module = DB["Modules"]["Threat"]
 -- LoadSettings
 function Module.LoadSettings()
 	local Default = {
-		["ThreatBarWidth"] = 240,	-- 仇恨条宽度
-		["NameTextL"] = 3,			-- 姓名长度(单位:字)
-		["ThreatLimited"] = 3,		-- 显示仇恨人数(不包括Tank)
+	["ThreatBarWidth"] = 180,
+	["NameTextL"] = 3,
+	["ThreatLimited"] = 3,
 	}
 	if not ThreatDB then ThreatDB = {} end
 	for key, value in pairs(Default) do

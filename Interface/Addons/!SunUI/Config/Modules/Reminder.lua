@@ -9,14 +9,14 @@ local Module = DB["Modules"]["Reminder"]
 -- LoadSettings
 function Module.LoadSettings()
 	local Default = {
-		["ShowRaidBuff"] = true,
-		["ShowOnlyInParty"] = true,
-		["RaidBuffSize"] = 18,
-		["RaidBuffDirection"] = 1,
-		["ShowClassBuff"] = true,
-		["ClassBuffSize"] = 32,
-		["ClassBuffSpace"] = 64,
-		["ClassBuffSound"] = false,
+	["ShowClassBuff"] = true,
+	["ClassBuffSound"] = false,
+	["ClassBuffSpace"] = 32,
+	["ShowOnlyInParty"] = false,
+	["ShowRaidBuff"] = true,
+	["RaidBuffSize"] = 15,
+	["ClassBuffSize"] = 32,
+	["RaidBuffDirection"] = 1,
 	}
 	if not ReminderDB then ReminderDB = {} end
 	for key, value in pairs(Default) do

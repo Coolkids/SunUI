@@ -84,7 +84,7 @@ DB["Config"] = {
 }
 
 function Module:ShowConfig()
-	LibStub("AceConfigDialog-3.0"):SetDefaultSize("SunUI Config", 850, 600)
+	LibStub("AceConfigDialog-3.0"):SetDefaultSize("SunUI Config", 650, 500)
 	LibStub("AceConfigDialog-3.0"):Open("SunUI Config")
 end
 
@@ -124,7 +124,7 @@ function Module:OnEnable()
 			OnAccept = function()
 				Module:SetDefault()
 				SetCVar("useUiScale", 1)
-				SetCVar("uiScale", 0.7)
+				SetCVar("uiScale", 1)
 				SetCVar("cameraDistanceMax", 50)
 				SetCVar("cameraDistanceMaxFactor", 3.4)
 				ReloadUI()

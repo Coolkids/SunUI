@@ -18,8 +18,8 @@ local HALFDAYISH, HALFHOURISH, HALFMINUTEISH = DAY/2 + 0.5, HOUR/2 + 0.5, MINUTE
 
 --configuration settings
 local FONT_FACE = ChatFrame1:GetFont() --what font to use
-local FONT_SIZE = 24 --the base font size to use at a scale of 1
-local MIN_SCALE = 0.5 --the minimum scale we want to show cooldown counts at, anything below this will be hidden
+local FONT_SIZE = 23 --the base font size to use at a scale of 1
+local MIN_SCALE = 0.1 --the minimum scale we want to show cooldown counts at, anything below this will be hidden
 local MIN_DURATION = 1.8 --the minimum duration to show cooldown text for
 local EXPIRING_DURATION = 5 --the minimum number of seconds a cooldown must be to use to display in the expiring format
 

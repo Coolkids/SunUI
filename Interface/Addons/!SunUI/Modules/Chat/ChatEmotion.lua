@@ -242,7 +242,7 @@ end
 
 local button = CreateFrame("Button", "ButtonE", ColectorButton)
 		button:Point("TOPLEFT", ColectorButton, "TOPLEFT", 5, -5)
-		button:Size(20)
+		button:Size(15)
 		button.text = button:CreateFontString(nil, 'OVERLAY')
 		button.text:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")
 		button.text:SetText("E")

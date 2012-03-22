@@ -1,6 +1,6 @@
 local S, _, _, DB = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("SunUI BaseData")
-DB.scale = 0.7
+DB.scale = 1
 
 function Module:OnInitialize()
   DB.scale = MiniDB["uiScale"]

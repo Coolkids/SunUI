@@ -383,7 +383,7 @@ end
 
 if GetLocale() ~= 'zhCN' or GetLocale() ~= 'zhTW' then
 			local statreport = CreateFrame("Button", "ButtonST", ColectorButton)
-			statreport:Size(20)
+			statreport:Size(15)
 			statreport:Point("TOP", ButtonP, "BOTTOM", 0, -5)
 			statreport.text = statreport:CreateFontString(nil, 'OVERLAY')
 			statreport.text:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")

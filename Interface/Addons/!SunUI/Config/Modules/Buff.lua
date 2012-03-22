@@ -9,10 +9,10 @@ local Module = DB["Modules"]["Buff"]
 -- LoadSettings
 function Module.LoadSettings()
 	local Default = {
-		["IconSize"] = 36,
-		["BuffDirection"] = 1,
-		["DebuffDirection"] = 1,
-		["IconPerRow"] = 16,
+	["BuffDirection"] = 1,
+	["DebuffDirection"] = 1,
+	["IconSize"] = 24,
+	["IconPerRow"] = 16,
 	}
 	if not BuffDB then BuffDB = {} end
 	for key, value in pairs(Default) do

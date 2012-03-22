@@ -44,15 +44,12 @@ wf:SetMovable(true);
 wf:SetClampedToScreen(false); 
 wf:ClearAllPoints()
 wf:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -35, -200)
-wf:SetWidth(250)
-wf:SetHeight(500)
-
 wf:SetUserPlaced(true)
 wf.SetPoint = function() end
 wfg = CreateFrame("Frame")
 wfg:SetPoint("TOPLEFT", wf, "TOPLEFT")
 wfg:SetPoint("BOTTOMRIGHT", wf, "BOTTOMRIGHT")
-wfg.text = S.MakeFontString(wfg, 10)
+wfg.text = S.MakeFontString(wfg, 14)
 wfg.text:SetText("点我拖动")
 wfg.text:SetPoint("TOP", wfg, "TOP")
 wfg:CreateShadow("Background")
@@ -73,10 +70,8 @@ local function WATCHFRAMELOCK()
 		print("|cffFFD700任务追踪框|r |cffFF0000锁定|r")
 	end
 end
-
 SLASH_WATCHFRAMELOCK1 = "/wf"
 SlashCmdList["WATCHFRAMELOCK"] = WATCHFRAMELOCK
-
 -- VS移动(by Tukz)
 local vs = VehicleSeatIndicator
 local vsmove = false 
@@ -92,7 +87,7 @@ vs.SetPoint = function() end
 vsg = CreateFrame("Frame")
 vsg:SetPoint("TOPLEFT", vs, "TOPLEFT")
 vsg:SetPoint("BOTTOMRIGHT", vs, "BOTTOMRIGHT")
-vsg.text = S.MakeFontString(vsg, 10)
+vsg.text = S.MakeFontString(vsg, 14)
 vsg.text:SetText("点我拖动")
 vsg.text:SetPoint("TOP", vsg, "TOP")
 vsg:CreateShadow("Background")

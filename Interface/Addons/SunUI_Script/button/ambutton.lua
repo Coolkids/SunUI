@@ -4,7 +4,7 @@ local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ambutton", "A
 function Module:OnInitialize()
 local button = CreateFrame("Button", "ButtonA",  ColectorButton)
 		button:Point("BOTTOMRIGHT", ColectorButton, "BOTTOMRIGHT", -5, 5)
-		button:Size(20)
+		button:Size(15)
 		button.text = button:CreateFontString(nil, 'OVERLAY')
 		button.text:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")
 		button.text:SetText("A")

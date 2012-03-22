@@ -9,11 +9,11 @@ local Module = DB["Modules"]["InfoPanel"]
 -- LoadSettings
 function Module.LoadSettings()
 	local Default = {
-		["OpenTop"] = true,
-		["MemNum"] = 5,
-		["OpenBottom"] = true,
-		["BottomWidth"] = 440,
-		["BottomHeight"] = 13,
+	["BottomHeight"] = 10,
+	["OpenTop"] = true,
+	["OpenBottom"] = true,
+	["BottomWidth"] = 323,
+	["MemNum"] = 5,
 	}
 	if not InfoPanelDB then InfoPanelDB = {} end
 	for key, value in pairs(Default) do

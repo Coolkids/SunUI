@@ -9,16 +9,16 @@ local Module = DB["Modules"]["UnitFrame"]
 -- LoadSettings
 function Module.LoadSettings()
 	local Default = {
-		["FontSize"] = 10,
+		["FontSize"] = 11,
 --size		
-		["Width"] = 240,
-		["Height"] = 25,
+		["Width"] = 180,
+		["Height"] = 20,
 		["Scale"] = 1,
-		["PetWidth"] = 123,
-		["PetHeight"] = 15,
+		["PetWidth"] = 100,
+		["PetHeight"] = 10,
 		["PetScale"] = 0.9,
-		["BossWidth"] = 196,
-		["BossHeight"] = 22,	
+		["BossWidth"] = 140,
+		["BossHeight"] = 15,	
 		["BossScale"] = 1,		
 		["Alpha3D"] = 0,
 -- true or false		
@@ -35,14 +35,14 @@ function Module.LoadSettings()
 		["TargetAura"] = 1,
 --castbar
 		["playerCBuserplaced"] = false,	-- false to lock player cast bar to the player frame
-		["PlayerCastBarHeight"] = 20,
-		["PlayerCastBarWidth"] = 460,
+		["PlayerCastBarHeight"] = 6,
+		["PlayerCastBarWidth"] = 300,
 		["targetCBuserplaced"] = false,	-- false to lock target cast bar to the target frame
-		["TargetCastBarHeight"] = 20,
-		["TargetCastBarWidth"] = 240,
+		["TargetCastBarHeight"] = 6,
+		["TargetCastBarWidth"] = 180,
 		["focusCBuserplaced"] = true,		-- false to lock focus cast bar to the focus frame
-		["FocusCastBarHeight"] = 20,
-		["FocusCastBarWidth"] = 200,
+		["FocusCastBarHeight"] = 6,
+		["FocusCastBarWidth"] = 100,
 	}
 	if not UnitFrameDB then UnitFrameDB = {} end
 	for key, value in pairs(Default) do

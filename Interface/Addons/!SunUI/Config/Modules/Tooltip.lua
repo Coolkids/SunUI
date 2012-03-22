@@ -9,10 +9,10 @@ local Module = DB["Modules"]["Tooltip"]
 -- LoadSettings
 function Module.LoadSettings()
 	local Default = {
-		["Cursor"] = true,
-		["HideInCombat"] = false,
-		["FontSize"] = 10,
-		["HideTitles"] = true,
+	["HideInCombat"] = false,
+	["FontSize"] = 11,
+	["Cursor"] = true,
+	["HideTitles"] = true,
 	}
 	if not TooltipDB then TooltipDB = {} end
 	for key, value in pairs(Default) do

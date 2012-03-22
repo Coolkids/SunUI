@@ -5,7 +5,7 @@ local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):GetModule("Config", "Ace
 local AceConfigDialog = LibStub and LibStub("AceConfigDialog-3.0", true)
 local button = CreateFrame("Button", "ButtonS", ColectorButton)
 		button:Point("BOTTOMLEFT", ColectorButton, "BOTTOMLEFT", 5, 5)
-		button:Size(20)
+		button:Size(15)
 		button.text = button:CreateFontString(nil, 'OVERLAY')
 		button.text:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")
 		button.text:SetText("S")

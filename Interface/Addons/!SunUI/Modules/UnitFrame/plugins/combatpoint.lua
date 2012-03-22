@@ -3,7 +3,7 @@ local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Combatpoint")
 if (DB.MyClass ~= "ROGUE" and DB.MyClass ~= "DRUID") then return end
 function Module:OnInitialize()
 local origPawWidth, origPawHeight = 512, 137
-local pawWidth = 170
+local pawWidth = 100
 local comboBar = {
 			[1]	= {r = 0.05, g = 0.43, b = 0.72},
 			[2]	= {r = 0.71, g = 0.21, b = 0.82},
