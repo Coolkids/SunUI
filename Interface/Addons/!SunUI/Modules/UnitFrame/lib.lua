@@ -451,7 +451,7 @@ C = UnitFrameDB
     elseif s >= minute then
       return format("%dm", floor(s/minute + 0.5)), s % minute
     end
-    return format("%.1f", s), (s * 100 - floor(s * 100))/100
+    return format("%d", s)
   end
   lib.CreateAuraTimer = function(self,elapsed)
     if self.timeLeft then

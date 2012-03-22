@@ -14,5 +14,4 @@
 	<Script file = "GemCounter.lua"/>
 	<Script file = "Link.lua"/>
 	<Script file = "showme.lua"/>
-	<Script file = "spball.lua"/>
 </Ui>

@@ -1,3 +1,4 @@
+local S, C, L, DB = unpack(SunUI)
 local addonName, BTSUi = ...
 local Launch = CreateFrame("Frame")
 Launch:RegisterEvent("ADDON_LOADED")
@@ -19,7 +20,12 @@ end
 -- Resize the main window
 TradeSkillFrame:SetWidth(570)
 TradeSkillFrame:SetHeight(525)
-
+S.StripTextures(TradeSkillFrame)
+local tmp = CreateFrame("Frame", nil, TradeSkillFrame)
+tmp:SetPoint("TOPLEFT", 2, -2)
+tmp:SetPoint("BOTTOMRIGHT", -2, 2)
+tmp:SetFrameLevel(0)
+S.CreateBD(tmp)
 -- Hide Horizontal bar in the default UI
 TradeSkillHorizontalBarLeft:Hide()
 
