@@ -127,8 +127,7 @@ ChatBar_StoredStickies = { };
 ChatBar_HiddenButtons = { };
 ChatBar_AltArtDirs = { "SkinSolid", "SkinGlass", "SkinSquares" };
 ChatBar_ChannelBindings = {};
-ChatBar_ButtonScale = 1.1;
-
+ChatBar_ButtonScale = 0.7;
 --------------------------------------------------
 -- Button Functions
 --------------------------------------------------

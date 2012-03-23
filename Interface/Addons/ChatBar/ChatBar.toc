@@ -7,7 +7,7 @@
 ## Notes-esES: Barra de botones para abrir los mensajes de chat de cada tipo.
 ## OptionalDeps: Chronos
 ## RequiredDeps:
-## SavedVariablesPerCharacter: ChatBar_VerticalDisplay, ChatBar_AlternateOrientation, ChatBar_HideSpecialChannels, ChatBar_TextOnButtonDisplay, ChatBar_ButtonFlashing, ChatBar_BarBorder, ChatBar_ButtonText, ChatBar_StoredStickies, ChatBar_HiddenButtons, ChatBar_TextChannelNumbers, ChatBar_HideAllButtons, ChatBar_AltArt, ChatBar_ChannelBindings, ChatBar_ButtonScale
+## SavedVariables: ChatBar_VerticalDisplay, ChatBar_AlternateOrientation, ChatBar_HideSpecialChannels, ChatBar_TextOnButtonDisplay, ChatBar_ButtonFlashing, ChatBar_BarBorder, ChatBar_ButtonText, ChatBar_StoredStickies, ChatBar_HiddenButtons, ChatBar_TextChannelNumbers, ChatBar_HideAllButtons, ChatBar_AltArt, ChatBar_ChannelBindings, ChatBar_ButtonScale
 ## Author: AnduinLothar
 ## Version: 3.4
 ## X-Date: $Date$

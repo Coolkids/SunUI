@@ -45,6 +45,7 @@ wf:SetClampedToScreen(false);
 wf:ClearAllPoints()
 wf:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -35, -200)
 wf:SetUserPlaced(true)
+wf:SetSize(180, 500)
 wf.SetPoint = function() end
 wfg = CreateFrame("Frame")
 wfg:SetPoint("TOPLEFT", wf, "TOPLEFT")
