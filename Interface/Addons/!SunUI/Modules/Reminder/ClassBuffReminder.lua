@@ -344,7 +344,7 @@ local function OnEvent_ACTIVE_TALENT_GROUP_CHANGED(event, ...)
 		Button.Icon = Button:CreateTexture(nil, "ARTWORK")
 		Button.Icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 		Button.Icon:SetAllPoints()
-		Button.Text = S.MakeFontString(Button, 10*S.Scale(1))
+		Button.Text = S.MakeFontString(Button, 11*S.Scale(1))
 		Button.Text:Point("TOP", Button, "BOTTOM", 0, -10)
 		if key == 1 then
 			MoveHandle.Class = S.MakeMoveHandle(Button, L["缺少药剂buff提示"], "Class")

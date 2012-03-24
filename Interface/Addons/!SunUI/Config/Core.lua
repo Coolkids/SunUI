@@ -84,7 +84,7 @@ DB["Config"] = {
 }
 
 function Module:ShowConfig()
-	LibStub("AceConfigDialog-3.0"):SetDefaultSize("SunUI Config", 650, 500)
+	LibStub("AceConfigDialog-3.0"):SetDefaultSize("SunUI Config", 780, 500)
 	LibStub("AceConfigDialog-3.0"):Open("SunUI Config")
 end
 

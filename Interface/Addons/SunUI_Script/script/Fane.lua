@@ -1,4 +1,4 @@
-local Fane = CreateFrame'Frame'
+--[[ local Fane = CreateFrame'Frame'
 local inherit = GameFontNormalSmall
 
 local updateFS = function(self, inc, flags, ...)
@@ -123,3 +123,4 @@ Fane:RegisterEvent'ADDON_LOADED'
 Fane:SetScript('OnEvent', function(self, event, ...)
 	return self[event](self, event, ...)
 end)
+ ]]

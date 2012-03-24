@@ -21,14 +21,14 @@ function Module:OnInitialize()
 						local timer = _G[frame:GetName().."BarTimer"]
 						if icon1 then
 							icon1:ClearAllPoints()
-							icon1:SetSize(24, 24)
+							icon1:SetSize(20, 20)
 							icon1:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 							icon1:SetPoint("BOTTOMRIGHT", frame, "BOTTOMLEFT", -5, 0)
 						end
 
 						if icon2 then
 							icon2:ClearAllPoints()
-							icon2:SetSize(24, 24)
+							icon2:SetSize(20, 20)
 							icon2:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 							icon2:SetPoint("BOTTOMLEFT", frame, "BOTTOMRIGHT", 5, 0)
 						end
@@ -59,7 +59,7 @@ function Module:OnInitialize()
 						if not name.styled then
 							name:ClearAllPoints()
 							name:SetPoint("LEFT", frame, 5, icon1:GetHeight()/2)
-							name:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
+							name:SetFont(DB.Font, 12*S.Scale(1), "THINOUTLINE")
 							name:SetShadowOffset(0, 0)
 							name.SetFont = function() end
 							name.styled = true
@@ -68,7 +68,7 @@ function Module:OnInitialize()
 						if not timer.styled then
 							timer:ClearAllPoints()
 							timer:SetPoint("RIGHT", frame, -5, icon1:GetHeight()/2)					
-							timer:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
+							timer:SetFont(DB.Font, 12*S.Scale(1), "THINOUTLINE")
 							timer:SetShadowOffset(0,0)
 							timer.SetFont = function() end
 							timer.styled = true
@@ -140,7 +140,7 @@ function Module:OnInitialize()
 					if not name.styled then
 						name:ClearAllPoints()
 						name:SetPoint("LEFT", bar, "LEFT", 4, 2)
-						name:SetFont(DB.Font,  12*S.Scale(1), "THINOUTLINE")
+						name:SetFont(DB.Font,  13*S.Scale(1), "THINOUTLINE")
 						name:SetJustifyH("LEFT")
 						name:SetShadowColor(0, 0, 0, 0)
 						name.styled=true
@@ -149,7 +149,7 @@ function Module:OnInitialize()
 					if not timer.styled then
 						timer:ClearAllPoints()
 						timer:SetPoint("RIGHT", bar, "RIGHT", -4, 2)
-						timer:SetFont(DB.Font, 12*S.Scale(1), "THINOUTLINE")
+						timer:SetFont(DB.Font, 13*S.Scale(1), "THINOUTLINE")
 						timer:SetJustifyH("RIGHT")
 						timer:SetShadowColor(0, 0, 0, 0)
 						timer.styled=true
@@ -182,23 +182,12 @@ function Module:OnInitialize()
 			end)
 
 			DBMRangeCheckRadar:HookScript("OnShow",function(self)
-				self:SetBackdrop({
-					edgeFile = "Interface\\Buttons\\WHITE8x8", 
-					edgeSize = 1, 
-				})
+				self:SetSize(100, 100)
 				self:SetBackdropBorderColor(65/255, 74/255, 79/255)
-				self.shadow = CreateFrame("Frame", nil, self)
-				self.shadow:SetFrameLevel(1)
-				self.shadow:SetFrameStrata(self:GetFrameStrata())
-				self.shadow:SetPoint("TOPLEFT", -5, 5)
-				self.shadow:SetPoint("BOTTOMRIGHT", 5, -5)
-				self.shadow:SetBackdrop({
-					edgeFile = DB.GlowTex, 
-					edgeSize = 5,
-					insets = { left = 4, right = 4, top = 4, bottom = 4 }
-				})
-				self.shadow:SetBackdropBorderColor(0,0,0)
-				self.text:SetFont(DB.Font, 14*S.Scale(1), "THINOUTLINE")
+				--self.shadow:SetFrameStrata(self:GetFrameStrata())
+				--self:CreateShadow("Background")
+				S.SetBD(self)
+				self.text:SetFont(DB.Font, 13*S.Scale(1), "THINOUTLINE")
 			end)
 
 

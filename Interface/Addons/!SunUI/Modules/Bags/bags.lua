@@ -59,22 +59,21 @@ MyButton:Scaffold("Default")
 
 function MyButton:OnCreate()
 	self:SetNormalTexture(nil)
-	self:Size(32, 32)
+	self:SetSize(28, 28)
 	
 	self.Icon:SetAllPoints()
 	self.Icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 
 	self.Count:SetPoint("BOTTOMRIGHT", 3, 1)
-	self.Count:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")
+	self.Count:SetFont(DB.Font, 12*S.Scale(1), "THINOUTLINE")
 	
 	self.Border = CreateFrame("Frame", nil, self)
 	--self.Border:SetAllPoints(self.Icon)
 	--self.Border:SetPoint("CENTER", point or self.Icon)
-	self.Border:Point("TOPLEFT", point or self.Icon, 0, 0)
-	self.Border:Point("BOTTOMRIGHT", point or self.Icon, 0, 0)
-	self.Border:SetBackdrop({edgeFile = DB.Solid, edgeSize = S.mult+0.12})
+	self.Border:SetPoint("TOPLEFT", point or self.Icon, 0, 0)
+	self.Border:SetPoint("BOTTOMRIGHT", point or self.Icon, 0, 0)
+	self.Border:SetBackdrop({edgeFile = DB.Solid, edgeSize = S.mult+0.2})
 	self.Border:SetBackdropBorderColor(0, 0, 0, 0)
-
 	self.BG = CreateFrame("Frame", nil, self)
 	self.BG:Point("TOPLEFT", self.Icon, 0, 0)
 	self.BG:Point("BOTTOMRIGHT", self.Icon, 0, 0)
@@ -105,7 +104,7 @@ end
 
 -- 更新背包栏
 local UpdateDimensions = function(self)
-	local width, height = self:LayoutButtons("grid", self.Settings.Columns, 4, 10, -10)
+	local width, height = self:LayoutButtons("grid", self.Settings.Columns, 3, 10, -10)
 	local margin = 40
 	if self.BagBar and self.BagBar:IsShown() then
 		margin = margin + 45
@@ -116,7 +115,7 @@ end
 local MyContainer = Bags:GetContainerClass()
 function MyContainer:OnContentsChanged()
 	self:SortButtons("bagSlot")
-	local width, height = self:LayoutButtons("grid", self.Settings.Columns, 4, 10, -10)
+	local width, height = self:LayoutButtons("grid", self.Settings.Columns, 3, 10, -10)
 	self:SetSize(width + 20, height + 10)
 	if self.UpdateDimensions then
 		self:UpdateDimensions()
@@ -155,19 +154,19 @@ function MyContainer:OnCreate(name, settings)
 	
 	-- 信息条
 	local infoFrame = CreateFrame("Button", nil, self)
-	infoFrame:SetPoint("BOTTOM", -20, 0)
-	infoFrame:SetWidth(220)
-	infoFrame:SetHeight(32)
+	infoFrame:SetPoint("BOTTOM", -23, 0)
+	infoFrame:SetWidth(170)
+	infoFrame:SetHeight(36)
 	
 	-- 信息条插件:金币
 	local tagDisplay = self:SpawnPlugin("TagDisplay", "[money]", infoFrame)
 	tagDisplay:SetFontObject("NumberFontNormal")
-	tagDisplay:SetFont(DB.Font, 11*S.Scale(1))
+	tagDisplay:SetFont(DB.Font, 12*S.Scale(1))
 	tagDisplay:SetPoint("RIGHT", infoFrame, "RIGHT", 0, 0)	
 	-- 信息条插件:搜索栏
 	local searchText = infoFrame:CreateFontString(nil, "OVERLAY")
 	searchText:SetPoint("LEFT", infoFrame, "LEFT", 0, 1)
-	searchText:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
+	searchText:SetFont(DB.Font, 12*S.Scale(1), "THINOUTLINE")
 	searchText:SetText(L["搜索"])	
 	local search = self:SpawnPlugin("SearchBar", infoFrame)
 	search.highlightFunction = highlightFunction
@@ -199,7 +198,7 @@ function MyContainer:OnCreate(name, settings)
 	end)
 	BagToggle.Text = BagToggle:CreateFontString(nil, "OVERLAY")
 	BagToggle.Text:SetPoint("CENTER")
-	BagToggle.Text:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
+	BagToggle.Text:SetFont(DB.Font, 12*S.Scale(1), "THINOUTLINE")
 	BagToggle.Text:SetText(L["背包"])
 	
 	-- 背包整理按钮
@@ -209,7 +208,7 @@ function MyContainer:OnCreate(name, settings)
 	SortButton:SetScript("OnClick", function() JPack:Pack() end)
 	SortButton.Text = SortButton:CreateFontString(nil, "OVERLAY")
 	SortButton.Text:SetPoint("CENTER")
-	SortButton.Text:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
+	SortButton.Text:SetFont(DB.Font, 12*S.Scale(1), "THINOUTLINE")
 	SortButton.Text:SetText(L["整理背包"])
 
 	-- 关闭按钮
@@ -220,7 +219,7 @@ function MyContainer:OnCreate(name, settings)
 	CloseButton:SetPoint("BOTTOMRIGHT", -7, 7)
 	CloseButton.Texture = CloseButton:CreateFontString(nil, "OVERLAY")
 	CloseButton.Texture:SetPoint("CENTER", 1, 1)
-	CloseButton.Texture:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
+	CloseButton.Texture:SetFont(DB.Font, 12*S.Scale(1), "THINOUTLINE")
 	CloseButton.Texture:SetText("x")
 end
 

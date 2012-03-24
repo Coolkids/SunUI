@@ -153,6 +153,7 @@ C = UnitFrameDB
     b:SetTexture(nil)
 	b:SetAlpha(0)
     b:SetAllPoints(s)
+	--CreateShadow(s, b, "UnitFrame")
 	-- threat border
 	if f.mystyle == "party" then
 		bg.t = CreateFrame("Frame", nil,bg)
@@ -231,19 +232,18 @@ C = UnitFrameDB
     --helper
     local h = CreateFrame("Frame", nil, s)
     h:SetFrameLevel(0)
-    h:SetPoint("TOPLEFT",-2,0)
-    h:SetPoint("BOTTOMRIGHT",0,2)
-    --lib.gen_backdrop(h)
+    h:SetPoint("TOPLEFT",0,0)
+    h:SetPoint("BOTTOMRIGHT",0,0)
+    h:CreateShadow("UnitFrame")
     --bg
     local b = s:CreateTexture(nil, "BACKGROUND")
-    b:SetTexture(DB.Statusbar)
+    b:SetTexture(nil)
 	b:SetAlpha(.0)
     b:SetAllPoints(s)
     if f.mystyle=="tot" or f.mystyle=="pet" then
       s:SetHeight(f.height/3)
     end
-	--h:CreateShadow("UnitFrame")
-	CreateShadow(s, b, "Background")
+	
     f.Power = s
     f.Power.bg = b
   end
@@ -527,7 +527,7 @@ C = UnitFrameDB
     local h2 = CreateFrame("Frame", nil, button)
     h2:SetAllPoints(button)
     h2:SetFrameLevel(10)
-    button.remaining = lib.gen_fontstring(h2, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
+    button.remaining = lib.gen_fontstring(h2, DB.Font, (C["FontSize"]-3)*S.Scale(1), "THINOUTLINE")
 	--button.remaining:SetShadowColor(0, 0, 0)--button.remaining:SetShadowOffset(2, -1)
     button.remaining:SetPoint("TOPLEFT", 0, -0.5)
     --overlay texture for debuff types display

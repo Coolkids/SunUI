@@ -25,7 +25,7 @@ local Slots = {
 local function BuildClock()
 	local Clock = CreateFrame("Frame", nil, UIParent)
 	Clock.Text = S.MakeFontString(Clock, 14)
-	Clock.Text:Point("RIGHT", MoveHandle.InfoPanel, "RIGHT")
+	Clock.Text:SetPoint("RIGHT", MoveHandle.InfoPanel, "RIGHT")
 	Clock:SetAllPoints(Clock.Text)
 	Clock:SetScript("OnEnter", function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
@@ -116,10 +116,10 @@ local function BuildMemory(Anchor)
 	StatusBar:SetStatusBarTexture(DB.Statusbar)
 	StatusBar:SetMinMaxValues(0, 30000)
 	StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
-	StatusBar:Point("RIGHT", Anchor, "LEFT", -20, 0)
+	StatusBar:SetPoint("RIGHT", Anchor, "LEFT", -20, 0)
 	StatusBar:CreateShadow("Background")
 	StatusBar.Text = S.MakeFontString(StatusBar, 10)
-	StatusBar.Text:Point("CENTER", 0, -5)
+	StatusBar.Text:SetPoint("CENTER", 0, -5)
 	StatusBar:SetScript("OnMouseDown", function(self, button)
 		if button == "LeftButton" then 
 			UpdateAddOnMemoryUsage()
@@ -199,10 +199,10 @@ local function BuildPing(Anchor)
 	StatusBar:SetStatusBarTexture(DB.Statusbar)
 	StatusBar:SetMinMaxValues(0, 300)
 	StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
-	StatusBar:Point("RIGHT", Anchor, "LEFT", -20, 0)
+	StatusBar:SetPoint("RIGHT", Anchor, "LEFT", -20, 0)
 	StatusBar:CreateShadow("Background")
 	StatusBar.Text = S.MakeFontString(StatusBar, 10)
-	StatusBar.Text:Point("CENTER", 0, -5)
+	StatusBar.Text:SetPoint("CENTER", 0, -5)
 	StatusBar.Text:SetText("Ping: 0")
 	StatusBar.Timer = 0
 	StatusBar:SetScript("OnUpdate", function(self, elapsed)
@@ -252,10 +252,10 @@ local function BuildDurability(Anchor)
 	StatusBar:SetStatusBarTexture(DB.Statusbar)
 	StatusBar:SetMinMaxValues(0, 100)
 	StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
-	StatusBar:Point("RIGHT", Anchor, "LEFT", -20, 0)
+	StatusBar:SetPoint("RIGHT", Anchor, "LEFT", -20, 0)
 	StatusBar:CreateShadow("Background")
 	StatusBar.Text = S.MakeFontString(StatusBar, 10)
-	StatusBar.Text:Point("CENTER", 0, -5)
+	StatusBar.Text:SetPoint("CENTER", 0, -5)
 	StatusBar:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
 	StatusBar:RegisterEvent("MERCHANT_SHOW")
 	StatusBar:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -316,10 +316,10 @@ local function BuildCurrency(Anchor)
 	StatusBar:SetStatusBarTexture(DB.Statusbar)
 	StatusBar:SetMinMaxValues(0, 99999)
 	StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
-	StatusBar:Point("RIGHT", Anchor, "LEFT", -20, 0)
+	StatusBar:SetPoint("RIGHT", Anchor, "LEFT", -20, 0)
 	StatusBar:CreateShadow("Background")
 	StatusBar.Text = S.MakeFontString(StatusBar, 10)
-	StatusBar.Text:Point("CENTER", 0, -5)
+	StatusBar.Text:SetPoint("CENTER", 0, -5)
 	StatusBar.Timer = 0
 	StatusBar:SetScript("OnUpdate",function(self,elapsed)
 		self.Timer = self.Timer + elapsed
@@ -339,10 +339,10 @@ local StatusBar = CreateFrame("StatusBar", "FPS", UIParent)
 	StatusBar:SetWidth(60)
 	StatusBar:SetStatusBarTexture(DB.Statusbar)
 	StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
-	StatusBar:Point("RIGHT", Anchor, "LEFT", -20, 0)
+	StatusBar:SetPoint("RIGHT", Anchor, "LEFT", -20, 0)
 	StatusBar:CreateShadow("Background")
 	StatusBar.Text = S.MakeFontString(StatusBar, 10)
-	StatusBar.Text:Point("CENTER", 0, -5)
+	StatusBar.Text:SetPoint("CENTER", 0, -5)
 	StatusBar.Text:SetText("FPS: 0")
 	StatusBar.LastUpdate = 1
 	StatusBar:SetScript("OnUpdate", function(self, elapsed)
@@ -382,10 +382,10 @@ function BuildFriend()
 		StatusBar:SetWidth(60)
 		StatusBar:SetStatusBarTexture(DB.Statusbar)
 		StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
-		StatusBar:Point("RIGHT", "FPS", "LEFT", -20, 0)
+		StatusBar:SetPoint("RIGHT", "FPS", "LEFT", -20, 0)
 		StatusBar:CreateShadow("Background")
 		StatusBar.Text = S.MakeFontString(StatusBar, 10)
-		StatusBar.Text:Point("CENTER", 0, -5)
+		StatusBar.Text:SetPoint("CENTER", 0, -5)
 end
 --BuildGuild
 
@@ -395,34 +395,31 @@ local function BuildGuild()
 		StatusBar:SetWidth(60)
 		StatusBar:SetStatusBarTexture(DB.Statusbar)
 		StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
-		StatusBar:Point("RIGHT", "Friend", "LEFT", -20, 0)
+		StatusBar:SetPoint("RIGHT", "Friend", "LEFT", -20, 0)
 		StatusBar:CreateShadow("Background")
 		StatusBar.Text = S.MakeFontString(StatusBar, 10)
-		StatusBar.Text:Point("CENTER", 0, -5)
+		StatusBar.Text:SetPoint("CENTER", 0, -5)
 end
 
 function Module:OnInitialize()
 	C = InfoPanelDB
-end
-
-function Module:OnEnable()
 	local InfoPanelPos = CreateFrame("Frame", nil, UIParent)
 	InfoPanelPos:SetSize(610, 20)
 	InfoPanelPos:Hide()
 	MoveHandle.InfoPanel = S.MakeMoveHandle(InfoPanelPos, L["信息面板"], "InfoPanel")
-	local BottomInfoPanelPos = CreateFrame("Frame", nil, UIParent)
-	BottomInfoPanelPos:Size(C["BottomWidth"], C["BottomHeight"])
-	BottomInfoPanelPos:Hide()
-	MoveHandle.BottomInfoPanelPos = S.MakeMoveHandle(BottomInfoPanelPos, L["信息面板"], "InfoPanel2")
 	
 	if C["OpenBottom"] == true then
 	XP = CreateFrame("Frame", XP, UIParent)
 	XP:SetHeight(C["BottomHeight"])	
 	XP:SetWidth(C["BottomWidth"])
-	XP:Point("BOTTOM", BottomInfoPanelPos, "BOTTOM", 0, 0)
 	XP:SetFrameLevel(10)
+	MoveHandle.BottomInfoPanelPos = S.MakeMoveHandle(XP, L["信息面板"], "InfoPanel2")
+	XP:CreateShadow("Background")
 	end
-	
+
+end
+
+function Module:OnEnable()
 	if C["OpenTop"] == true then
 	local Clock = BuildClock()
 	local Durability = BuildDurability(Clock)
@@ -433,5 +430,7 @@ function Module:OnEnable()
 	local Friend = BuildFriend()
 	local Guild = BuildGuild()
 	end
+	
+
 end
 

@@ -1,4 +1,4 @@
-local S, C, L, DB = unpack(select(2, ...))
+Ôªølocal S, C, L, DB = unpack(select(2, ...))
 if DB.Nuke == true then return end
 local lib = LibStub("LibCooldown")
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("CooldownFlash")
@@ -18,7 +18,7 @@ function Module:OnInitialize()
 
 		local flash = CreateFrame("Frame", nil, UIParent)
 		flash:SetSize(C["CooldownFlashSize"],C["CooldownFlashSize"])
-		MoveHandle.CooldownFlash = S.MakeMoveHandle(flash, L["¿‰»¥…¡π‚"], "CooldownFlash")
+		MoveHandle.CooldownFlash = S.MakeMoveHandle(flash, L["ÂÜ∑Âç¥Èó™ÂÖâ"], "CooldownFlash")
 		flash.icon = flash:CreateTexture(nil, "OVERLAY")
 		flash:SetScript("OnEvent", function()
 			flash.icon:SetAllPoints(flash)

@@ -5,26 +5,23 @@ local InfoBarStatusColor = {{1, 0, 0}, {1, 1, 0}, {0, 0.4, 1}}
 
 function Module:OnEnable()
 	C = InfoPanelDB
-	--[[local bottomleftbarpos = CreateFrame("Frame", nil, UIParent)
-	bottomleftbarpos:Height(C["BottomHeight"])	
-	bottomleftbarpos:Width(C["BottomWidth"])
-	bottomleftbarpos:Point("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 5 , 5)--]]
+
 	local frame = CreateFrame("Frame", "BottomLeftBar", UIParent)
 	
-	frame:Point("TOPLEFT", ChatFrame1, "BOTTOMLEFT", 0 , -5)
+	frame:SetPoint("TOPLEFT", ChatFrame1, "BOTTOMLEFT", 0 , -5)
 	frame:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE")
 	frame:RegisterEvent("UNIT_THREAT_LIST_UPDATE")
 	frame:RegisterEvent("PLAYER_TARGET_CHANGED")
 	frame:RegisterEvent("PARTY_MEMBERS_CHANGED")
 
 	local threatbar = CreateFrame("StatusBar", "ThreatBar", frame)
-	threatbar:Point("TOPLEFT", frame, "TOPLEFT", 0, 0)
-	threatbar:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 0, 0)
+	threatbar:SetPoint("TOPLEFT", frame, "TOPLEFT", 0, 0)
+	threatbar:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 0, 0)
 	threatbar:SetStatusBarTexture(DB.Statusbar)
 	threatbar:CreateShadow("Background")
 	threatbar:SetMinMaxValues(0, 100)
 	threatbar.text = S.MakeFontString(threatbar, 10)
-	threatbar.text:Point("TOPRIGHT", -15, 8)
+	threatbar.text:SetPoint("TOPRIGHT", -15, 8)
 
 	local function GetThreat(unitId, mobId)
 	local _, _, threatpct, _, _ = UnitDetailedThreatSituation(unitId, mobId)
@@ -50,8 +47,8 @@ function Module:OnEnable()
 	end
 
 	local function UpdateDisplay()
-	frame:Height(C["BottomHeight"])	
-	frame:Width(ChatFrame1:GetWidth()) --C["BottomWidth"]
+	frame:SetHeight(C["BottomHeight"])	
+	frame:SetWidth(ChatFrame1:GetWidth()) --C["BottomWidth"]
 	threatbar:SetValue(0)
 	threatbar.text:SetText("")
 	local status = nil

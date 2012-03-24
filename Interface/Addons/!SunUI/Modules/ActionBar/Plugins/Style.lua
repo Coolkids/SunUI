@@ -37,7 +37,7 @@ function Module:UpdateActionStyle()
 			
 			if Name then		
 				Name:ClearAllPoints()
-				Name:SetPoint("BOTTOMLEFT", 0, 2)
+				Name:SetPoint("BOTTOM", 0, 0)
 				Name:SetFont(DB.Font, C["MFontSize"]*S.Scale(1), "THINOUTLINE")
 				
 				if C["HideMacroName"] then

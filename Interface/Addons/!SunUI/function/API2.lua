@@ -100,8 +100,8 @@ if f.sw then return end
 	
 	local border = CreateFrame("Frame", nil, p)
 	border:SetFrameLevel(1)
-	border:Point("TOPLEFT", f, -1, 1)
-	border:Point("BOTTOMRIGHT", f, 1, -1)
+	border:SetPoint("TOPLEFT", f, -S.mult, S.mult)
+	border:SetPoint("BOTTOMRIGHT", f, S.mult, -S.mult)
 	border:CreateBorder()
 	f.border = border
 	

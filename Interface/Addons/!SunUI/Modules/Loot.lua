@@ -2,7 +2,7 @@
 if DB.Nuke == true then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("loot", "AceTimer-3.0")
 function Module:OnInitialize()
-local  iconsize = 28
+local  iconsize = 20
 local L = {
 	fish = "Fishy loot",
 	empty = "Empty slot",
@@ -128,7 +128,7 @@ local createSlot = function(id)
 	local frame = CreateFrame("Button", 'm_LootSlot'..id, addon)
 	frame:Point("LEFT", 8, 0)
 	frame:Point("RIGHT", -8, 0)
-	frame:Height(iconsize-2)
+	frame:Height(iconsize+2)
 	frame:SetID(id)
 	
 	frame:SetScript("OnEnter", OnEnter)
@@ -137,8 +137,8 @@ local createSlot = function(id)
 	frame:SetScript("OnUpdate", OnUpdate)
 
 	local iconFrame = CreateFrame("Frame", nil, frame)
-	iconFrame:Height(iconsize+2)
-	iconFrame:Width(iconsize+2)
+	iconFrame:Height(iconsize)
+	iconFrame:Width(iconsize)
 	iconFrame:ClearAllPoints()
 	iconFrame:Point("LEFT", frame, 3,0)
 	
@@ -150,8 +150,8 @@ local createSlot = function(id)
     
 	local overlay = iconFrame:CreateTexture(nil, "OVERLAY")
     overlay:SetTexture(DB.bordertex)
-	overlay:Point("TOPLEFT",iconFrame,"TOPLEFT",-3,3)
-	overlay:Point("BOTTOMRIGHT",iconFrame,"BOTTOMRIGHT",3,-3)
+	overlay:SetPoint("TOPLEFT",iconFrame,"TOPLEFT", -1, 1)
+	overlay:SetPoint("BOTTOMRIGHT",iconFrame,"BOTTOMRIGHT", 1, -1)
 	overlay:SetVertexColor(0.35, 0.35, 0.35, 1);
 	frame.overlay = overlay
 	
@@ -171,18 +171,17 @@ local createSlot = function(id)
 	name:Point("RIGHT", frame)
 	name:Point("LEFT", icon, "RIGHT",8,0)
 	name:SetNonSpaceWrap(true)
-	name:SetFont(DB.Font, 17, "OUTLINE")
+	name:SetFont(DB.Font, 12, "OUTLINE")
 	--name:SetFontObject(GameFontWhite)GameTooltipHeaderText
 
-	name:Width(120)
+	name:Width(60)
 	frame.name = name
 	
 	local drop = frame:CreateTexture(nil, "ARTWORK")
-	drop:SetTexture(DB.loottex)
-	drop:Point("LEFT", icon, "RIGHT", 0, 0)
-	drop:Point("RIGHT", frame, "RIGHT", -3, 0)
-	drop:Point("TOP", frame,"TOP",0,-3)
-	drop:Point("BOTTOM", frame,"BOTTOM",0,3)
+	drop:SetTexture("Interface\\QuestFrame\\UI-QuestLogTitleHighlight")
+	drop:SetPoint("TOPLEFT", icon, "TOPRIGHT", 0, 0)
+	drop:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 3, 0)
+
 	--drop:SetAllPoints(frame)
 	drop:SetAlpha(.5)
 	frame.drop = drop
@@ -197,7 +196,7 @@ local createSlot = function(id)
 
 end
 
-title:SetFont(DB.Font, 16, "OUTLINE")
+title:SetFont(DB.Font, 11, "OUTLINE")
 title:SetJustifyH"LEFT"
 title:Point("TOPLEFT", addon, "TOPLEFT", 6, -4)
 
@@ -213,10 +212,10 @@ addon:RegisterForClicks"anyup"
 addon:SetParent(UIParent)
 addon:SetUserPlaced(true)
 addon:Point("TOPLEFT", 0, -104)
-addon:Width(256)
+addon:Width(150)  
 addon:Height(64)
-addon:CreateShadow("Background")
-
+--addon:CreateShadow("Background")
+S.SetBD(addon)
 
 
 addon:SetClampedToScreen(true)
@@ -327,9 +326,9 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 	local color = ITEM_QUALITY_COLORS[m]
 	self:SetBackdropBorderColor(color.r, color.g, color.b, .8)
 	self:Height(math.max((items*(iconsize+10))+27), 20)
-	self:Width(250)
-	title:Width(220)
-	title:Height(16)
+	self:Width(150)
+	title:Width(125)
+	title:Height(iconsize+2)
 	
 --[[	local close = CreateFrame("Button", nil, addon, "UIPanelCloseButton" )
 	close:Point("TOPRIGHT", 0, 2)

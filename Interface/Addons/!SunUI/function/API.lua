@@ -4,17 +4,6 @@ if DB.Nuke == true then return end
 
 local r, g, b = DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b
 
-function S.MakeBorder(Parent, Size)
-	local Border = CreateFrame("Frame", nil, Parent)
-	x = S.Scale(Size)
-	Border:SetFrameLevel(0)
-	Border:SetPoint("TOPLEFT", -x, x)
-	Border:SetPoint("BOTTOMRIGHT", x, -x)
-	Border:SetBackdrop({edgeFile = DB.Solid, edgeSize = x})
-	Border:SetBackdropBorderColor(0, 0, 0, 1)
-	return Border
-end
-
 function S.MakeBG(Parent, Size)
 	local BG = CreateFrame("Frame", nil, Parent)
 	x = S.Scale(Size)
@@ -411,7 +400,7 @@ function S.UpdateSize(obj, width, height)
 	if height then obj:SetHeight(height) end
 end
 
-local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/DB.scale
+local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/1
 local function scale(x)
 	return (mult*math.floor(x/mult+.5)) 
 end
@@ -491,24 +480,24 @@ RoleUpdater:RegisterEvent("UPDATE_BONUS_ACTIONBAR")
 RoleUpdater:SetScript("OnEvent", CheckRole)
 CheckRole()
 local function Size(frame, width, height)
-	frame:SetSize(S.Scale(width), S.Scale(height or width))
+	frame:SetSize(scale(width), scale(height or width))
 end
 
 local function Width(frame, width)
-	frame:SetWidth(S.Scale(width))
+	frame:SetWidth(scale(width))
 end
 
 local function Height(frame, height)
-	frame:SetHeight(S.Scale(height))
+	frame:SetHeight(scale(height))
 end
 
 local function Point(obj, arg1, arg2, arg3, arg4, arg5)
 	-- anyone has a more elegant way for this?
-	if type(arg1)=="number" then arg1 = S.Scale(arg1) end
-	if type(arg2)=="number" then arg2 = S.Scale(arg2) end
-	if type(arg3)=="number" then arg3 = S.Scale(arg3) end
-	if type(arg4)=="number" then arg4 = S.Scale(arg4) end
-	if type(arg5)=="number" then arg5 = S.Scale(arg5) end
+	if type(arg1)=="number" then arg1 = scale(arg1) end
+	if type(arg2)=="number" then arg2 = scale(arg2) end
+	if type(arg3)=="number" then arg3 = scale(arg3) end
+	if type(arg4)=="number" then arg4 = scale(arg4) end
+	if type(arg5)=="number" then arg5 = scale(arg5) end
 
 	obj:SetPoint(arg1, arg2, arg3, arg4, arg5)
 end
@@ -553,24 +542,12 @@ local function CreateShadow(f, t, offset, thickness, texture)
 	shadow:SetBackdrop( { 
 		edgeFile = DB.GlowTex,
 		bgFile =DB.Solid,
-		edgeSize = S.Scale(4),
-		insets = {left = S.Scale(4), right = S.Scale(4), top = S.Scale(4), bottom = S.Scale(4)},
+		edgeSize = scale(4),
+		insets = {left = scale(4), right = scale(4), top = scale(4), bottom = scale(4)},
 	})
 	shadow:SetBackdropColor( backdropr, backdropg, backdropb, backdropa )
 	shadow:SetBackdropBorderColor( borderr, borderg, borderb, bordera )
 	f.shadow = shadow
-end
-
-local function SetTemplate(f, t, texture)
-	f:SetBackdrop({
-	  bgFile = DB.Statusbar,
-	})
-	if t == "Transparent" then 
-		f:SetBackdropColor(0.05, 0.05, 0.05, 0.6)
-	else
-		f:SetBackdropColor(0.05, 0.05, 0.05, 0.9)
-	end
-	f:SetBackdropBorderColor(0, 0, 0, 1)
 end
 
 local function StyleButton(button, setallpoints)
