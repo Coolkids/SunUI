@@ -12,7 +12,7 @@ function Module.LoadSettings()
 		["Buff"] = {"TOPRIGHT", "UIParent", "TOPRIGHT", -5, -5},
 		["Debuff"] = {"TOPRIGHT", "UIParent", "TOPRIGHT", -5, -95},
 		["Minimap"] = {"BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -5, 25},
-		["ShadowPet"] = {"LEFT","UIParent","LEFT", 315, -183},
+		["ShadowPet"] = {"LEFT","UIParent","LEFT", 321, -183},
 		["ClassCD"] = {"BOTTOM","UIParent","BOTTOM", 309, 118},
 		["Combatpoint"] = {"CENTER", "UIParent", "CENTER", 133, -139},
 		["Threat"] = {"BOTTOM", "UIParent", "BOTTOM", -175, 262},
@@ -47,7 +47,7 @@ function Module.LoadSettings()
 		["PartyFrame"] = {"BOTTOMLEFT", "UIParent", "BOTTOMLEFT", 120, 362},
 		["ArenaFrame"] = {"RIGHT", "UIParent", "RIGHT", -50, -60},
 		["BossFrame"] = {"RIGHT", "UIParent", "RIGHT", -50, -60},
-		["PlayerCastbar"] = {"BOTTOM","UIParent","BOTTOM",0,115},
+		["PlayerCastbar"] = {"BOTTOM","UIParent","BOTTOM",0,105},
 		["TargetCastbar"] = {"TOP","oUF_SunUITarget","BOTTOM",0,-30},
 		["FocusCastbar"] = {"TOP","oUF_SunUIFocus","BOTTOM",0,-20},
 	}

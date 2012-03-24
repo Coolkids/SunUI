@@ -24,7 +24,7 @@ function Module.LoadSettings()
 	["Autoinvite"] = false,
 	["Interrupt"] = true,
 	["INVITE_WORD"] = "SunUI",
-	["BagScale"] = 0.8,
+	["BagScale"] = 1,
 	["ClassCDOpen"] = true,
 	["ClassFontSize"] = 12,
 	["ClassCDHeight"] = 8,
