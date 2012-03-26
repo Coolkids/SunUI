@@ -1,4 +1,4 @@
-local S, C, L, DB = unpack(select(2, ...))
+锘縧ocal S, C, L, DB = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ShadowPet")
 if DB.MyClass ~= "PRIEST" then return end
 function Module:OnInitialize()
@@ -54,7 +54,6 @@ end
 
 local CreateBar = function()
 	local bar = CreateFrame("Statusbar", nil, UIParent)
-	bar:SetFrameStrata("LOW")
 	bar:SetSize(UnitFrameDB["PetWidth"]*UnitFrameDB["PetScale"], 6)
 	bar:SetStatusBarTexture(DB.Statusbar)
 	bar:SetMinMaxValues(0, 100)
@@ -87,13 +86,13 @@ local StartTimer = function(name, spellId)
 	bar.icon:GetNormalTexture():SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	bar.spell = spell
 	bar:Show()
-	--bar:SetStatusBarColor(192/255, 192/255, 192/255)
-	bar:SetStatusBarColor(FormatTime(15)/15,1, 0, 0, 1, 1, 0, 0.8, 0.87, 0.9)
+	bar:SetStatusBarColor(192/255, 192/255, 192/255)
+	--bar:SetStatusBarColor(FormatTime(15)/15,1, 0, 0, 1, 1, 0, 0.8, 0.87, 0.9)
 	bar:SetScript("OnUpdate", BarUpdate)
 	bar:EnableMouse(true)
 	bar:SetScript("OnMouseDown", OnMouseDown)
 	tinsert(bars, bar)
-	MoveHandle.ShadowPet = S.MakeMoveHandle(bar, L["暗影魔计时条"], "ShadowPet")
+	MoveHandle.ShadowPet = S.MakeMoveHandle(bar, "鏆楀奖榄旇鏃舵潯", "ShadowPet")
 end
 
 local EuiPriestPetOnUpdate = function(self)

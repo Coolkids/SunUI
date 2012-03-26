@@ -5,6 +5,7 @@ local Module = Core:NewModule("Config", "AceConsole-3.0")
 local Version = 20120323
 if DB.Nuke == true then return end
 function Module:SetDefault()
+	SlashCmdList.AutoSet()
 	CoreVersion = Version
 	-- 聊天频道职业染色
 	ToggleChatColorNamesByClassGroup(true, "SAY")

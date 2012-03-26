@@ -48,7 +48,7 @@ function Module:OnEnable()
 
 	local function UpdateDisplay()
 	frame:SetHeight(C["BottomHeight"])	
-	frame:SetWidth(ChatFrame1:GetWidth()) --C["BottomWidth"]
+	frame:SetWidth(ChatFrame1:GetWidth()) 
 	threatbar:SetValue(0)
 	threatbar.text:SetText("")
 	local status = nil

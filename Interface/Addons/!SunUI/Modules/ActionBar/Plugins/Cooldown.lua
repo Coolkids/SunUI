@@ -1,14 +1,8 @@
-local _, _, _, DB = unpack(select(2, ...))
+local S, _, _, DB = unpack(select(2, ...))
 if DB.Nuke == true then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Cooldown", "AceEvent-3.0")
 -- want hex color instead of RGB?
 function Module:OnInitialize()
-local function RGBToHex(r, g, b)
-	r = r <= 1 and r >= 0 and r or 0
-	g = g <= 1 and g >= 0 and g or 0
-	b = b <= 1 and b >= 0 and b or 0
-	return string.format("|cff%02x%02x%02x", r*255, g*255, b*255)
-end
 --constants!
 OmniCC = true --hack to work around detection from other addons for OmniCC
 local ICON_SIZE = 36 --the normal size for an icon (don't change this)
@@ -19,15 +13,15 @@ local HALFDAYISH, HALFHOURISH, HALFMINUTEISH = DAY/2 + 0.5, HOUR/2 + 0.5, MINUTE
 --configuration settings
 local FONT_FACE = ChatFrame1:GetFont() --what font to use
 local FONT_SIZE = 23 --the base font size to use at a scale of 1
-local MIN_SCALE = 0.1 --the minimum scale we want to show cooldown counts at, anything below this will be hidden
+local MIN_SCALE = 0.3 --the minimum scale we want to show cooldown counts at, anything below this will be hidden
 local MIN_DURATION = 1.8 --the minimum duration to show cooldown text for
 local EXPIRING_DURATION = 5 --the minimum number of seconds a cooldown must be to use to display in the expiring format
 
-local EXPIRING_FORMAT = RGBToHex(1, 0, 0)..'%.1f|r' --format for timers that are soon to expire
-local SECONDS_FORMAT = RGBToHex(1, 1, 0)..'%d|r' --format for timers that have seconds remaining
-local MINUTES_FORMAT = RGBToHex(1, 1, 1)..'%dm|r' --format for timers that have minutes remaining
-local HOURS_FORMAT = RGBToHex(0.4, 1, 1)..'%dh|r' --format for timers that have hours remaining
-local DAYS_FORMAT = RGBToHex(0.4, 0.4, 1)..'%dh|r' --format for timers that have days remaining
+local EXPIRING_FORMAT = S.RGBToHex(1, 0, 0)..'%.1f|r' --format for timers that are soon to expire
+local SECONDS_FORMAT = S.RGBToHex(1, 1, 0)..'%d|r' --format for timers that have seconds remaining
+local MINUTES_FORMAT = S.RGBToHex(1, 1, 1)..'%dm|r' --format for timers that have minutes remaining
+local HOURS_FORMAT = S.RGBToHex(0.4, 1, 1)..'%dh|r' --format for timers that have hours remaining
+local DAYS_FORMAT = S.RGBToHex(0.4, 0.4, 1)..'%dh|r' --format for timers that have days remaining
 
 --local bindings!
 local floor = math.floor

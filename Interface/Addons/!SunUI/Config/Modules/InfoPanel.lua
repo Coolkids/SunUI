@@ -12,7 +12,7 @@ function Module.LoadSettings()
 	["BottomHeight"] = 10,
 	["OpenTop"] = true,
 	["OpenBottom"] = true,
-	["BottomWidth"] = 323,
+	["BottomWidth"] = 327,
 	["MemNum"] = 5,
 	}
 	if not InfoPanelDB then InfoPanelDB = {} end

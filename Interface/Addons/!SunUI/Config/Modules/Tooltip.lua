@@ -10,7 +10,7 @@ local Module = DB["Modules"]["Tooltip"]
 function Module.LoadSettings()
 	local Default = {
 	["HideInCombat"] = false,
-	["FontSize"] = 11,
+	["FontSize"] = 12,
 	["Cursor"] = true,
 	["HideTitles"] = true,
 	}

@@ -5,7 +5,6 @@
 
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file = "db.lua"/>
-	<Script file = "uiscale.lua"/>
 	<Script file = "API.lua"/>
 	<Script file = "API2.lua"/>
 </Ui>
