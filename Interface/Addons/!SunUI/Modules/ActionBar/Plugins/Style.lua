@@ -71,6 +71,7 @@ function Style(self, totem, flyout)
 	if self.styled then return end	
 
 	if Btname then
+	Btname:SetFont(DB.Font, S.mult*C["MFontSize"], "OUTLINE")
 		if C["HideMacroName"] then
 			Btname:SetText("")
 			Btname:Hide()

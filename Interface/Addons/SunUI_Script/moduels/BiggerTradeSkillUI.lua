@@ -4,7 +4,6 @@ local Launch = CreateFrame("Frame")
 Launch:RegisterEvent("ADDON_LOADED")
 Launch:SetScript("OnEvent", function(self, event)
  if   IsAddOnLoaded("Blizzard_TradeSkillUI") then
-  if IsAddOnLoaded("Blizzard_AuctionUI") then return end
 TRADE_SKILLS_DISPLAYED = 25
 
 

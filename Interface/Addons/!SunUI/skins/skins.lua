@@ -30,7 +30,7 @@ Delay:SetScript("OnEvent", function()
 	
 	if WorldMapFrame then
 		S.StripTextures(WorldMapFrame, Kill)
-		S.SetBD(WorldMapFrame,-S.mult,S.mult,S.mult,-S.mult)
+		S.CreateSD(WorldMapFrame,6)
 	end
 	
 	if ChatBarFrameBackground then

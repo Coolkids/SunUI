@@ -861,18 +861,15 @@ function NamePlates:COMBAT_LOG_EVENT_UNFILTERED(_, event, ...)
 end
 
 function NamePlates:PLAYER_ENTERING_WORLD()
-	SetCVar("threatWarning", 3)
-	SetCVar("bloatthreat", 0)
-	SetCVar("bloattest", 1)
-	SetCVar("ShowClassColorInNameplate", 1)
-	SetCVar("bloatnameplates", 0)
 	if C["Combat"]	then
 		if InCombatLockdown() then 
 			SetCVar("nameplateShowEnemies", 1) 
 		end
 	end
 end
-
+--[[ function NamePlates:PLAYER_REGEN_ENABLED()
+	SetCVar("nameplateShowEnemies", 0)
+end ]]
 
 function NamePlates:PLAYER_REGEN_DISABLED()
 	SetCVar("nameplateShowEnemies", 1)
@@ -882,6 +879,7 @@ NamePlates:SetScript("OnEvent", function(self, event, ...) self[event](self, ...
 NamePlates:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 NamePlates:RegisterEvent("PLAYER_ENTERING_WORLD")
 if C["Combat"] then
+	--NamePlates:RegisterEvent("PLAYER_REGEN_ENABLED")
 	NamePlates:RegisterEvent("PLAYER_REGEN_DISABLED")
 end
 end

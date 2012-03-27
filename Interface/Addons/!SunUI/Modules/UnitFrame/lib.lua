@@ -702,8 +702,60 @@ C = UnitFrameDB
   end
 
 ------ [Extra functionality]
+   lib.gen_classpower = function(f)  
+	if class ~= "WARLOCK" and class ~= "PALADIN" and class ~= "DEATHKNIGHT" then return end
+     local runeloadcolors = {
+      [1] = {0.59, 0.31, 0.31},
+      [2] = {0.59, 0.31, 0.31},
+      [3] = {0.33, 0.51, 0.33},
+      [4] = {0.33, 0.51, 0.33},
+      [5] = {0.31, 0.45, 0.53},
+      [6] = {0.31, 0.45, 0.53},}
+        -- Runes, Shards, HolyPower
+            local count
+            if class == "DEATHKNIGHT" then 
+                count = 6 
+            else 
+                count = 3 
+            end
+			local bars = CreateFrame("Frame", nil, f)
+			bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+            bars:SetSize((f.width-4)/count, f.height/3)
+            for i = 1, count do
+                bars[i] =CreateFrame("StatusBar", nil, bars)
+				bars[i]:SetStatusBarTexture(DB.Statusbar)
+				bars[i]:GetStatusBarTexture():SetHorizTile(false)
+				bars[i]:SetSize((f.width-4)/count, f.height/3)
+				 if (i == 1) then
+					bars[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+				else
+					bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 2, 0)
+				end
+                if class == "WARLOCK" then
+                    local color = oUF.colors.power["SOUL_SHARDS"]
+                    bars[i]:SetStatusBarColor(color[1], color[2], color[3])
+                elseif class == "PALADIN" then
+                    local color = oUF.colors.power["HOLY_POWER"]
+                    bars[i]:SetStatusBarColor(color[1], color[2], color[3])
+                elseif  class == "DEATHKNIGHT" then
+					bars[i]:SetStatusBarColor(unpack(runeloadcolors[i]))
+				end
+				bars[i].bg = CreateFrame("Frame", nil, bars[i])
+				bars[i].bg:SetAllPoints()
+				bars[i].bg:CreateShadow("Background")
+                i=i-1
+            end
+            if class == "DEATHKNIGHT" then
+                bars[3], bars[4], bars[5], bars[6] = bars[5], bars[6], bars[3], bars[4]
+                f.Runes = bars
+            elseif class == "WARLOCK" then
+                f.SoulShards = bars
+            elseif class == "PALADIN" then
+                f.HolyPower = bars
+            end
+end
   --gen DK runes
-  lib.gen_Runes = function(f)
+--[[   lib.gen_Runes = function(f)
     if class ~= "DEATHKNIGHT" then return
     else
       local runeloadcolors = {
@@ -716,7 +768,7 @@ C = UnitFrameDB
       f.Runes = CreateFrame("Frame", nil, f)
       for i = 1, 6 do
         r = CreateFrame("StatusBar", f:GetName().."_Runes"..i, f)
-        r:Size(f.width/6 - 2, f.height/3)
+        r:SetSize(f.width/6 - 2, f.height/3)
         if (i == 1) then
           r:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
         else
@@ -738,7 +790,7 @@ C = UnitFrameDB
         f.Runes[i] = r
       end
     end
-  end
+  end ]]
   --gen eclipse bar
   lib.gen_EclipseBar = function(f)
 	if class ~= "DRUID" then return end
@@ -846,22 +898,20 @@ C = UnitFrameDB
 			f:Tag(sp, '[mono:wm1][mono:wm2][mono:wm3]')
 		elseif class == "PRIEST" then
 			f:Tag(sp, '[mono:orbs]')
-		elseif class == "PALADIN" or class == "WARLOCK" then
-			f:Tag(sp, '[mono:sp]')
 		elseif class == "SHAMAN" then
 			f:Tag(sp, '[mono:ws][mono:ls]')
 		end
 	end
   end
   --gen combo points
-  lib.gen_cp = function(f)
+--[[   lib.gen_cp = function(f)
     local h = CreateFrame("Frame", nil, f)
     h:SetAllPoints(f.Health)
     h:SetFrameLevel(10)
     local cp = lib.gen_fontstring(h, DB.Font, 20*S.Scale(1), "THINOUTLINE")
     cp:SetPoint("TOPLEFT", f.Power, "BOTTOMLEFT",0,0)
     f:Tag(cp, '[mono:cp]')
-  end
+  end ]]
   --gen LFD role indicator
   lib.gen_LFDindicator = function(f)
     local lfdi = lib.gen_fontstring(f.Power, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
