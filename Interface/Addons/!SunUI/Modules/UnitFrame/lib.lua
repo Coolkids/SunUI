@@ -706,11 +706,7 @@ C = UnitFrameDB
 ------ [Extra functionality]
  lib.gen_sppower = function(f)  
 	if class ~= "PRIEST" then return end
-    local colors = {
-		[1] = {255/255, 97/255, 97/255},
-		[2] = {255/255, 241/255, 48/255},
-		[3] = {138/255, 255/255, 48/255},
-	}
+	local color = oUF.colors.power["SOUL_SHARDS"]
 	local bars = CreateFrame("Frame", nil, f)
 	bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
     bars:SetSize((f.width-4)/3, f.height/3)
@@ -724,7 +720,7 @@ C = UnitFrameDB
 				else
 					bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 2, 0)
 				end
-				bars[i]:SetStatusBarColor(unpack(colors[i]))
+                bars[i]:SetStatusBarColor(color[1], color[2], color[3])
 				bars[i].bg = CreateFrame("Frame", nil, bars[i])
 				bars[i].bg:SetAllPoints()
 				bars[i].bg:CreateShadow("Background")
@@ -743,6 +739,9 @@ C = UnitFrameDB
 		end
 	end
 	bars:RegisterEvent("UNIT_AURA")
+	bars:RegisterEvent("PLAYER_ENTERING_WORLD")
+	bars:RegisterEvent("PLAYER_REGEN_DISABLED")
+	bars:RegisterEvent("PLAYER_REGEN_ENABLED")
 	bars:SetScript("OnEvent", OnEvent)
 end
    lib.gen_classpower = function(f)  

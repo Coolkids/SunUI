@@ -308,7 +308,7 @@ Logon:RegisterEvent("PLAYER_ENTERING_WORLD")
 Logon:SetScript("OnEvent", function(self, event)
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	SetCVar("alwaysShowActionBars", 0)
-	S.Kill(InterfaceOptionsActionBarsPanelAlwaysShowActionBars)
+	--S.Kill(InterfaceOptionsActionBarsPanelAlwaysShowActionBars)
 	--[[ if C["actionbar"].showgrid == true then
 		ActionButton_HideGrid = function() end
 		for i = 1, 12 do
