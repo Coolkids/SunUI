@@ -725,7 +725,7 @@ C = UnitFrameDB
                 bars[i] =CreateFrame("StatusBar", nil, bars)
 				bars[i]:SetStatusBarTexture(DB.Statusbar)
 				bars[i]:GetStatusBarTexture():SetHorizTile(false)
-				bars[i]:SetSize((f.width-4)/count, f.height/3)
+				bars[i]:SetSize((f.width-2*(count-1))/count, f.height/3)
 				 if (i == 1) then
 					bars[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
 				else
