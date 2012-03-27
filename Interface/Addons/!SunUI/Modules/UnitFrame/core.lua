@@ -70,6 +70,7 @@ C = UnitFrameDB
     lib.gen_ppstrings(self)
     --lib.gen_Runes(self)
 	lib.gen_classpower(self)
+	lib.gen_sppower(self)
     lib.gen_TotemBar(self)
     lib.gen_InfoIcons(self)
     lib.gen_specificpower(self)

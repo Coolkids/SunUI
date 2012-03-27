@@ -116,6 +116,7 @@ C = UnitFrameDB
     end
     threat:Show()
   end
+  	
 ------ [Building frames]
   --gen healthbar func
   lib.gen_hpbar = function(f)
@@ -155,6 +156,7 @@ C = UnitFrameDB
     b:SetAllPoints(s)
 	--CreateShadow(s, b, "UnitFrame")
 	-- threat border
+
 	if f.mystyle == "party" then
 		bg.t = CreateFrame("Frame", nil,bg)
 		bg.t:SetPoint("TOPLEFT", bg, "TOPLEFT", -1, 1)
@@ -702,6 +704,47 @@ C = UnitFrameDB
   end
 
 ------ [Extra functionality]
+ lib.gen_sppower = function(f)  
+	if class ~= "PRIEST" then return end
+    local colors = {
+		[1] = {255/255, 97/255, 97/255},
+		[2] = {255/255, 241/255, 48/255},
+		[3] = {138/255, 255/255, 48/255},
+	}
+	local bars = CreateFrame("Frame", nil, f)
+	bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+    bars:SetSize((f.width-4)/3, f.height/3)
+            for i = 1, 3 do
+                bars[i] =CreateFrame("StatusBar", nil, bars)
+				bars[i]:SetStatusBarTexture(DB.Statusbar)
+				bars[i]:GetStatusBarTexture():SetHorizTile(false)
+				bars[i]:SetSize((f.width-4)/3, f.height/3)
+				 if (i == 1) then
+					bars[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+				else
+					bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 2, 0)
+				end
+				bars[i]:SetStatusBarColor(unpack(colors[i]))
+				bars[i].bg = CreateFrame("Frame", nil, bars[i])
+				bars[i].bg:SetAllPoints()
+				bars[i].bg:CreateShadow("Background")
+                i=i-1
+            end
+	local function OnEvent(self,event)
+		rank = select(4,UnitBuff("player", GetSpellInfo(77487)))
+		if rank then
+			for i = 1, rank do
+				bars[i]:SetAlpha(1)
+			end
+		else
+			for i = 1, 3 do
+				bars[i]:SetAlpha(0)
+			end
+		end
+	end
+	bars:RegisterEvent("UNIT_AURA")
+	bars:SetScript("OnEvent", OnEvent)
+end
    lib.gen_classpower = function(f)  
 	if class ~= "WARLOCK" and class ~= "PALADIN" and class ~= "DEATHKNIGHT" then return end
      local runeloadcolors = {
@@ -720,7 +763,7 @@ C = UnitFrameDB
             end
 			local bars = CreateFrame("Frame", nil, f)
 			bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
-            bars:SetSize((f.width-2*(count-1))/count, f.height/3)
+            bars:SetSize((f.width-4)/count, f.height/3)
             for i = 1, count do
                 bars[i] =CreateFrame("StatusBar", nil, bars)
 				bars[i]:SetStatusBarTexture(DB.Statusbar)
@@ -896,8 +939,6 @@ end
 		sp:SetPoint("TOPLEFT", f.Power, "BOTTOMLEFT",0,0)
 		if class == "DRUID" then
 			f:Tag(sp, '[mono:wm1][mono:wm2][mono:wm3]')
-		elseif class == "PRIEST" then
-			f:Tag(sp, '[mono:orbs]')
 		elseif class == "SHAMAN" then
 			f:Tag(sp, '[mono:ws][mono:ls]')
 		end
@@ -944,6 +985,11 @@ end
     ml:Size(12,12)
     ml:SetPoint('LEFT', f.Leader, 'RIGHT')
     f.MasterLooter = ml
+	 --PVP icon
+    local pvp = h:CreateTexture(nil, 'OVERLAY')
+    pvp:Size(25)
+    pvp:SetPoint('RIGHT', f.Leader, 'LEFT')
+    f.PvP = pvp
   end
   --gen raid mark icons
   lib.gen_RaidMark = function(f)
