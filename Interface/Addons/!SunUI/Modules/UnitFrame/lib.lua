@@ -773,9 +773,9 @@ end
                     local color = oUF.colors.power["HOLY_POWER"]
                     bars[i]:SetStatusBarColor(color[1], color[2], color[3])
 				end
-				bars[i].bg = CreateFrame("Frame", nil, bars[i])
-				bars[i].bg:SetAllPoints()
-				bars[i].bg:CreateShadow("Background")
+				bars[i].bd = CreateFrame("Frame", nil, bars[i])
+				bars[i].bd:SetAllPoints()
+				bars[i].bd:CreateShadow("Background")
                 i=i-1
             end
             if class == "DEATHKNIGHT" then
@@ -951,7 +951,7 @@ end
 		elseif class == "DRUID" then
 			local function OnEvent(self,event)
 				for i=1,3 do
-					local dur = select(4,GetTotemInfo(i))d
+					local dur = select(4,GetTotemInfo(i))
 					if dur > 0 then
 						bars[i]:SetAlpha(1)
 					else
