@@ -746,13 +746,6 @@ C = UnitFrameDB
 end
    lib.gen_classpower = function(f)  
 	if class ~= "WARLOCK" and class ~= "PALADIN" and class ~= "DEATHKNIGHT" then return end
-     local runeloadcolors = {
-      [1] = {0.59, 0.31, 0.31},
-      [2] = {0.59, 0.31, 0.31},
-      [3] = {0.33, 0.51, 0.33},
-      [4] = {0.33, 0.51, 0.33},
-      [5] = {0.31, 0.45, 0.53},
-      [6] = {0.31, 0.45, 0.53},}
         -- Runes, Shards, HolyPower
             local count
             if class == "DEATHKNIGHT" then 
@@ -762,7 +755,7 @@ end
             end
 			local bars = CreateFrame("Frame", nil, f)
 			bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
-            bars:SetSize((f.width-4)/count, f.height/3)
+            bars:SetSize((f.width-2*(count-1))/count, f.height/3)
             for i = 1, count do
                 bars[i] =CreateFrame("StatusBar", nil, bars)
 				bars[i]:SetStatusBarTexture(DB.Statusbar)
@@ -779,8 +772,6 @@ end
                 elseif class == "PALADIN" then
                     local color = oUF.colors.power["HOLY_POWER"]
                     bars[i]:SetStatusBarColor(color[1], color[2], color[3])
-                elseif  class == "DEATHKNIGHT" then
-					bars[i]:SetStatusBarColor(unpack(runeloadcolors[i]))
 				end
 				bars[i].bg = CreateFrame("Frame", nil, bars[i])
 				bars[i].bg:SetAllPoints()
@@ -919,39 +910,92 @@ end
   end
   --gen class specific power display
   lib.gen_specificpower = function(f, unit)
-    local h = CreateFrame("Frame", nil, f)
-    h:SetAllPoints(f.Health)
-    h:SetFrameLevel(10)
-	if f.mystyle == "party" then
-		local es = lib.gen_fontstring(h, DB.Font, (C["FontSize"]+2)*S.Scale(1), "THINOUTLINE")
-		es:SetPoint("CENTER", f.Power, "BOTTOMRIGHT",0,0)	
-		if class == "SHAMAN" then
-			f:Tag(es, '[raid:earth]')
+   if class ~= "DRUID" and class ~= "SHAMAN" then return end
+	local bars = CreateFrame("Frame", nil, f)
+	bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+    bars:SetSize((f.width-4)/3, f.height/3)
+    for i = 1, 3 do
+        bars[i] =CreateFrame("StatusBar", nil, bars)
+		bars[i]:SetStatusBarTexture(DB.Statusbar)
+		bars[i]:GetStatusBarTexture():SetHorizTile(false)
+		bars[i]:SetSize((f.width-4)/3, f.height/3)
+		if (i == 1) then
+			bars[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+		else
+			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 2, 0)
+		end
+		bars[i]:SetStatusBarColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
+		bars[i].bg = CreateFrame("Frame", nil, bars[i])
+		bars[i].bg:SetAllPoints()
+		bars[i].bg:CreateShadow("Background")
+        i=i-1
+        end
+		if 	class == "SHAMAN" then
+		local function OnEvent(self,event)
+			rank = select(4,UnitBuff("player", GetSpellInfo(52127)))
+			if rank then
+				for i = 1, rank do
+					bars[i]:SetAlpha(1)
+				end
+			else
+				for i = 1, 3 do
+					bars[i]:SetAlpha(0)
+				end
+			end
+		end
+		bars:RegisterEvent("UNIT_AURA")
+		bars:RegisterEvent("PLAYER_ENTERING_WORLD")
+		bars:RegisterEvent("PLAYER_REGEN_DISABLED")
+		bars:RegisterEvent("PLAYER_REGEN_ENABLED")
+		bars:SetScript("OnEvent", OnEvent)
 		elseif class == "DRUID" then
-			f:Tag(es, '[raid:lb]')
-		elseif class == "PRIEST" then
-			f:Tag(es, '[raid:pom]')
-		end
-	end
-	if f.mystyle == "player" then
-		local sp = lib.gen_fontstring(h, DB.Font, (C["FontSize"]+10)*S.Scale(1), "OUTLINE")
-		sp:SetPoint("TOPLEFT", f.Power, "BOTTOMLEFT",0,0)
-		if class == "DRUID" then
-			f:Tag(sp, '[mono:wm1][mono:wm2][mono:wm3]')
-		elseif class == "SHAMAN" then
-			f:Tag(sp, '[mono:ws][mono:ls]')
-		end
-	end
+			local function OnEvent(self,event)
+				for i=1,3 do
+					local dur = select(4,GetTotemInfo(i))d
+					if dur > 0 then
+						bars[i]:SetAlpha(1)
+					else
+						bars[i]:SetAlpha(0)
+					end
+				end
+			end
+		bars:RegisterEvent("PLAYER_TOTEM_UPDATE")
+		bars:RegisterEvent("PLAYER_ENTERING_WORLD")
+		bars:RegisterEvent("PLAYER_REGEN_DISABLED")
+		bars:RegisterEvent("PLAYER_REGEN_ENABLED")
+		bars:SetScript("OnEvent", OnEvent)
+	  end
   end
   --gen combo points
---[[   lib.gen_cp = function(f)
-    local h = CreateFrame("Frame", nil, f)
-    h:SetAllPoints(f.Health)
-    h:SetFrameLevel(10)
-    local cp = lib.gen_fontstring(h, DB.Font, 20*S.Scale(1), "THINOUTLINE")
-    cp:SetPoint("TOPLEFT", f.Power, "BOTTOMLEFT",0,0)
-    f:Tag(cp, '[mono:cp]')
-  end ]]
+  lib.gen_cp = function(f)
+	if class ~= "ROGUE" and class ~= "DRUID" then return end
+     local colors = {
+			[1]	= {0.05, 0.43, 0.72},
+			[2]	= {0.71, 0.21, 0.82},
+			[3]	= {0.24, 0.67, 0.23},
+			[4]	= {0.95, 0.71, 0.00},
+			[5]	= {0.72, 0.05, 0.05},}
+			local bars = CreateFrame("Frame", nil, f)
+			bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+            bars:SetSize((f.width-8)/5, f.height/4)
+            for i = 1, 5 do
+                bars[i] =CreateFrame("StatusBar", nil, bars)
+				bars[i]:SetStatusBarTexture(DB.Statusbar)
+				bars[i]:GetStatusBarTexture():SetHorizTile(false)
+				bars[i]:SetSize((f.width-12)/5, f.height/4)
+				 if (i == 1) then
+					bars[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+				else
+					bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 3, 0)
+				end
+				bars[i]:SetStatusBarColor(unpack(colors[i]))
+				bars[i].bg = CreateFrame("Frame", nil, bars[i])
+				bars[i].bg:SetAllPoints()
+				bars[i].bg:CreateShadow("Background")
+                i=i-1
+				end
+				f.CPoints = bars
+  end 
   --gen LFD role indicator
   lib.gen_LFDindicator = function(f)
     local lfdi = lib.gen_fontstring(f.Power, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
