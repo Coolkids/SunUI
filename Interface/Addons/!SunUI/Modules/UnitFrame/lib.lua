@@ -515,6 +515,10 @@ C = UnitFrameDB
     button.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
     button.icon:SetDrawLayer("BACKGROUND")
     --count
+	local h3 = CreateFrame("Frame", nil, button)
+    h3:SetAllPoints(button)
+    h3:SetFrameLevel(10)
+	button.count = lib.gen_fontstring(h3, DB.Font, (C["FontSize"]-1)*S.Scale(1), "THINOUTLINE")
     button.count:ClearAllPoints()
     button.count:SetJustifyH("RIGHT")
     button.count:SetPoint("BOTTOMRIGHT", 2, -2)
@@ -529,9 +533,9 @@ C = UnitFrameDB
     local h2 = CreateFrame("Frame", nil, button)
     h2:SetAllPoints(button)
     h2:SetFrameLevel(10)
-    button.remaining = lib.gen_fontstring(h2, DB.Font, (C["FontSize"]-3)*S.Scale(1), "THINOUTLINE")
+    button.remaining = lib.gen_fontstring(h2, DB.Font, (C["FontSize"]-1)*S.Scale(1), "THINOUTLINE")
 	--button.remaining:SetShadowColor(0, 0, 0)--button.remaining:SetShadowOffset(2, -1)
-    button.remaining:SetPoint("TOPLEFT", 0, -0.5)
+    button.remaining:SetPoint("TOPLEFT", -2, 4)
     --overlay texture for debuff types display
 	
     button.overlay:SetTexture(DB.bordertex)
@@ -560,7 +564,7 @@ C = UnitFrameDB
     a.initialAnchor = 'TOPLEFT'
     a.gap = true
     a.spacing = 3
-    a.size = 14
+    a.size = 16
     a.showDebuffType = true
     if f.mystyle=="target" then
       a:SetHeight((a.size+a.spacing)*2)
@@ -574,8 +578,8 @@ C = UnitFrameDB
       a.initialAnchor = 'TOPLEFT'
       a:SetHeight((a.size+a.spacing)*2)
       a:SetWidth((a.size+a.spacing)*8)
-      a.numBuffs = 15 
-      a.numDebuffs = 15
+      a.numBuffs = 8 
+      a.numDebuffs = 8
 	  a:SetPoint('TOPLEFT', f, 'TOPLEFT', -a.size-5, -1)
     elseif f.mystyle=="focus" then
       a:SetHeight((a.size+a.spacing)*2)
@@ -593,7 +597,7 @@ C = UnitFrameDB
     b.initialAnchor = "TOPLEFT"
     b["growth-y"] = "DOWN"
     b.num = 8
-    b.size = 14
+    b.size = 16
     b.spacing = 3
     b:SetHeight((b.size+b.spacing)*2)
     b:SetWidth((b.size+b.spacing)*12)
@@ -606,25 +610,25 @@ C = UnitFrameDB
     elseif f.mystyle=="arena" then
       b.showBuffType = true
       b:SetPoint("TOPLEFT", f, "TOPRIGHT", b.spacing, -2)
-	  b.size = 14
+	  b.size = 16
       b.num = 5
       b:SetWidth((b.size+b.spacing)*4)
 	elseif f.mystyle=="boss" then
       b.showBuffType = true
       b:SetPoint("TOPLEFT", f, "TOPRIGHT", b.spacing, -2)
-	  b.size = 14
+	  b.size = 16
       b.num = 4
       b:SetWidth((b.size+b.spacing)*4)
     elseif f.mystyle=='party' then
       b:SetPoint("TOPLEFT", f.Power, "BOTTOMLEFT", 0, -b.spacing)
-	  b.size = 14
+	  b.size = 16
       b.num = 8
 	elseif f.mystyle=="player" and playerauras=="BUFFS" then
 	  b['growth-x'] = 'LEFT'
       b['growth-y'] = 'DOWN' 
       b.initialAnchor = 'TOPRIGHT'
 	  b.num = 8
-	  b.size = 14
+	  b.size = 16
       b:SetHeight((b.size+b.spacing)*2)
       b:SetWidth((b.size+b.spacing)*8)
 	  b:SetPoint("TOPRIGHT", f, "TOPLEFT", -5, -1)
@@ -641,7 +645,7 @@ C = UnitFrameDB
 	d['growth-x'] = 'RIGHT'
     d["growth-y"] = "DOWN"
     d.num = 16
-    d.size = 14
+    d.size = 16
     d.spacing = 3
     d:SetHeight((d.size+d.spacing)*2)
     d:SetWidth((d.size+d.spacing)*5)
@@ -656,7 +660,7 @@ C = UnitFrameDB
       d.showDebuffType = false
       d.initialAnchor = "TOPLEFT"
       d.num = 4
-	  d.size = 14
+	  d.size = 16
 	  d:SetPoint('TOPLEFT', f, 'TOPRIGHT', 2, 0)
       d:SetWidth((d.size+d.spacing)*4)
 --[[     elseif f.mystyle=="boss" then
@@ -669,7 +673,7 @@ C = UnitFrameDB
     elseif f.mystyle=='party' then
       d:SetPoint("TOPRIGHT", f, "TOPLEFT", -d.spacing, -2)
 	  d.num = 8
-	  d.size = 14
+	  d.size = 16
       d["growth-x"] = "LEFT"
       d:SetWidth((d.size+d.spacing)*4)
 	elseif f.mystyle=="player" and playerauras=="DEBUFFS" then
@@ -677,7 +681,7 @@ C = UnitFrameDB
       d['growth-y'] = 'UP' 
       d.initialAnchor = 'BOTTOMLEFT'
 	  d.num = 8
-	  d.size = 14
+	  d.size = 16
       d:SetHeight((d.size+d.spacing)*2)
       d:SetWidth((d.size+d.spacing)*8)
 	  d:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 15)
@@ -693,7 +697,7 @@ C = UnitFrameDB
       d['growth-y'] = 'UP' 
       d.initialAnchor = 'BOTTOMLEFT'
 	  d.num = 8
-	  d.size = 14
+	  d.size = 16
       d:SetHeight((d.size+d.spacing)*2)
       d:SetWidth((d.size+d.spacing)*8)
 	  d:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 15)

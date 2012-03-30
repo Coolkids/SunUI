@@ -98,12 +98,17 @@ function S.FormatMemory(Memory)
 end
 
 local function CreateBD(f, a)
+	
 	f:SetBackdrop({
 		bgFile = "Interface\\ChatFrame\\ChatFrameBackground", 
 		edgeFile = "Interface\\ChatFrame\\ChatFrameBackground", 
 		edgeSize = S.mult, 
 	})
-	f:SetBackdropColor(0, 0, 0, a or 0.5)
+	if a then
+		f:SetBackdropColor(0, 0, 0, a)
+	else
+		f:SetBackdropColor(0, 0, 0, 0.6)
+	end
 	f:SetBackdropBorderColor(0, 0, 0)
 end
 S.CreateBD = CreateBD

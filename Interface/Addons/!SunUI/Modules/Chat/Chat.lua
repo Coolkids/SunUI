@@ -2,12 +2,32 @@
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Chat", "AceEvent-3.0")
 if DB.Nuke == true then return end
 function Module:OnInitialize()
-
+	ToggleChatColorNamesByClassGroup(true, "SAY")
+	ToggleChatColorNamesByClassGroup(true, "EMOTE")
+	ToggleChatColorNamesByClassGroup(true, "YELL")
+	ToggleChatColorNamesByClassGroup(true, "GUILD")
+	ToggleChatColorNamesByClassGroup(true, "GUILD_OFFICER")
+	ToggleChatColorNamesByClassGroup(true, "OFFICER")
+	ToggleChatColorNamesByClassGroup(true, "GUILD_ACHIEVEMENT")
+	ToggleChatColorNamesByClassGroup(true, "ACHIEVEMENT")
+	ToggleChatColorNamesByClassGroup(true, "WHISPER")
+	ToggleChatColorNamesByClassGroup(true, "PARTY")
+	ToggleChatColorNamesByClassGroup(true, "PARTY_LEADER")
+	ToggleChatColorNamesByClassGroup(true, "RAID")
+	ToggleChatColorNamesByClassGroup(true, "RAID_LEADER")
+	ToggleChatColorNamesByClassGroup(true, "RAID_WARNING")
+	ToggleChatColorNamesByClassGroup(true, "BATTLEGROUND")
+	ToggleChatColorNamesByClassGroup(true, "BATTLEGROUND_LEADER")   
+	ToggleChatColorNamesByClassGroup(true, "CHANNEL1")
+	ToggleChatColorNamesByClassGroup(true, "CHANNEL2")
+	ToggleChatColorNamesByClassGroup(true, "CHANNEL3")
+	ToggleChatColorNamesByClassGroup(true, "CHANNEL4")
+	ToggleChatColorNamesByClassGroup(true, "CHANNEL5")
 -- 聊天设置
 local AutoApply = false									--聊天设置锁定		
-local def_position = {"BOTTOMLEFT",UIParent,"BOTTOMLEFT",20,30} -- Chat Frame position
-local chat_height = 230
-local chat_width = 440
+local def_position = {"BOTTOMLEFT", 5, 25} -- Chat Frame position
+local chat_height = 122
+local chat_width = 327
 local fontsize = 10                          --other variables
 local eb_point = {"BOTTOM", -200, 180}		-- Editbox position
 local eb_width = 400						-- Editbox width
@@ -38,7 +58,7 @@ local TimeStampsCopy = true					-- 时间戳
 	  if tab then
 		tab:GetFontString():SetFont(NAMEPLATE_FONT, 11*S.Scale(1), "OUTLINE")
 		--fix for color and alpha of undocked frames
-		tab:GetFontString():SetTextColor(1,0.7,0)
+		tab:GetFontString():SetTextColor(0,0.3,1)
 		tab:SetAlpha(1)
 	  end
 	end

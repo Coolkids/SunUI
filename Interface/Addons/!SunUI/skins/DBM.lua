@@ -1,4 +1,4 @@
--- Engines
+﻿-- Engines
 local S, C, L, DB = unpack(select(2, ...))
 if DB.Nuke == true then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("SkinDBM", "AceEvent-3.0")
@@ -21,28 +21,30 @@ function Module:OnInitialize()
 						local timer = _G[frame:GetName().."BarTimer"]
 						if icon1 then
 							icon1:ClearAllPoints()
-							icon1:SetSize(20, 20)
+							icon1:SetSize(16, 16)
 							icon1:SetTexCoord(0.08, 0.92, 0.08, 0.92)
-							icon1:SetPoint("BOTTOMRIGHT", frame, "BOTTOMLEFT", -5, 0)
+							icon1:SetPoint("RIGHT", frame, "LEFT", -5, 0)
 						end
 
 						if icon2 then
 							icon2:ClearAllPoints()
-							icon2:SetSize(20, 20)
+							icon2:SetSize(16, 16)
 							icon2:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 							icon2:SetPoint("BOTTOMLEFT", frame, "BOTTOMRIGHT", 5, 0)
 						end
 
 						if not frame.styled then
 							frame:SetScale(1)
-							frame:SetHeight(icon1:GetHeight()/3)
-							frame:CreateShadow("Background")
+							frame:SetHeight(icon1:GetHeight()-2)
+							--frame:CreateShadow("Background")
 							frame.styled = true
 						end
 
 						if not tbar.styled then
-							tbar:SetAllPoints(frame)
-							frame.styled = true
+							tbar:SetPoint("TOPLEFT", frame, "TOPLEFT", -1, 1)
+							tbar:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 1, -1)
+							tbar:CreateShadow()--("UnitFrame")
+							tbar.styled = true
 						end
 						
 						if not spark.killed then
@@ -58,8 +60,8 @@ function Module:OnInitialize()
 
 						if not name.styled then
 							name:ClearAllPoints()
-							name:SetPoint("LEFT", frame, 5, icon1:GetHeight()/2)
-							name:SetFont(DB.Font, 12*S.Scale(1), "THINOUTLINE")
+							name:SetPoint("LEFT", frame, 5, 0)
+							name:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
 							name:SetShadowOffset(0, 0)
 							name.SetFont = function() end
 							name.styled = true
@@ -67,13 +69,13 @@ function Module:OnInitialize()
 
 						if not timer.styled then
 							timer:ClearAllPoints()
-							timer:SetPoint("RIGHT", frame, -5, icon1:GetHeight()/2)					
-							timer:SetFont(DB.Font, 12*S.Scale(1), "THINOUTLINE")
+							timer:SetPoint("RIGHT", frame, -5, 0)					
+							timer:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
 							timer:SetShadowOffset(0,0)
 							timer.SetFont = function() end
 							timer.styled = true
+							--timer:SetTextColor(1,0,0,1)
 						end
-
 						frame:Show()
 						bar:Update(0)
 						bar.injected = true
@@ -198,17 +200,51 @@ function Module:OnInitialize()
 				end
 				return RaidNotice_AddMessage_(noticeFrame, textString, colorInfo)
 			end
-
+		end
+	end)
+	
+		local UploadDBM = function()
 			DBM_SavedOptions.Enabled = true
 			DBT_SavedOptions["DBM"].Scale = 1
 			DBT_SavedOptions["DBM"].HugeScale = 1
 			DBT_SavedOptions["DBM"].Texture = DB.Statusbar
 			DBT_SavedOptions["DBM"].ExpandUpwards = false
 			DBT_SavedOptions["DBM"].BarXOffset = 0
-			DBT_SavedOptions["DBM"].BarYOffset = 20
+			DBT_SavedOptions["DBM"].BarYOffset = 6
 			DBT_SavedOptions["DBM"].IconLeft = true
 			DBT_SavedOptions["DBM"].Texture = "Interface\\Buttons\\WHITE8x8"
-			DBT_SavedOptions["DBM"].IconRight = false
-		end
-	end)
+			DBT_SavedOptions["DBM"].IconRight = false	
+			DBT_SavedOptions["DBM"].HugeBarsEnabled = true
+			local players = {
+			["Coolkid"] = true,
+			["Coolkids"] = true,
+			["Kenans"] = true,
+			["月殤軒"] = true,
+			["月殤玄"] = true,
+			["月殤妶"] = true,
+			["月殤玹"] = true,
+			["月殤璇"] = true,
+			}
+				if players[DB.PlayerName] == true then
+					DBT_SavedOptions["DBM"].TimerX = 348
+					DBT_SavedOptions["DBM"].TimerY = -29
+					DBT_SavedOptions["DBM"].TimerPoint = "TOPLEFT"
+					DBT_SavedOptions["DBM"].StartColorR = 1
+					DBT_SavedOptions["DBM"].StartColorG = 1
+					DBT_SavedOptions["DBM"].StartColorB = 0
+					DBT_SavedOptions["DBM"].EndColorR = 1
+					DBT_SavedOptions["DBM"].EndColorG = 0
+					DBT_SavedOptions["DBM"].EndColorB = 0
+					DBT_SavedOptions["DBM"].Width = 130
+					DBT_SavedOptions["DBM"].HugeWidth = 155
+					DBT_SavedOptions["DBM"].HugeTimerPoint = "TOP"
+					DBT_SavedOptions["DBM"].HugeTimerX = -150
+					DBT_SavedOptions["DBM"].HugeTimerY = -207
+				end
+			end
+		local frame = CreateFrame("Frame")
+		frame:RegisterEvent('PLAYER_LOGIN')
+		frame:SetScript('OnEvent', function(self, event)
+			UploadDBM()
+		end)
 end

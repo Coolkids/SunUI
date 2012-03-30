@@ -12,7 +12,7 @@ function Module.LoadSettings()
 	["ShowClassBuff"] = true,
 	["ClassBuffSound"] = false,
 	["ClassBuffSpace"] = 32,
-	["ShowOnlyInParty"] = false,
+	["ShowOnlyInParty"] = true,
 	["ShowRaidBuff"] = true,
 	["RaidBuffSize"] = 15,
 	["ClassBuffSize"] = 32,

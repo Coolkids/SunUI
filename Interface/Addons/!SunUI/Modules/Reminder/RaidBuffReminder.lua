@@ -217,11 +217,11 @@ end
 local function BuildBuffFrame()
 	for i = 1, 6 do
 		local Temp = CreateFrame("Frame", nil, UIParent)
-		Temp:Size(ReminderDB.RaidBuffSize, ReminderDB.RaidBuffSize)
+		Temp:SetSize(ReminderDB.RaidBuffSize, ReminderDB.RaidBuffSize)
 		Temp:SetFrameStrata("LOW")
 		Temp.Shadow = CreateFrame("Frame", nil, Temp)
-		Temp.Shadow:Point("TOPLEFT", Temp, "TOPLEFT", -2, 2)
-		Temp.Shadow:Point("BOTTOMRIGHT", Temp, "BOTTOMRIGHT", 2, -2)
+		Temp.Shadow:SetPoint("TOPLEFT", Temp, "TOPLEFT", -2, 2)
+		Temp.Shadow:SetPoint("BOTTOMRIGHT", Temp, "BOTTOMRIGHT", 2, -2)
 		Temp.Shadow:SetBackdrop({edgeFile = DB.GlowTex, edgeSize = 2})
 		Temp.Shadow:SetBackdropBorderColor(0, 0, 0, 1)
 		Temp.Shadow:SetFrameLevel(0)
@@ -234,13 +234,13 @@ local function BuildBuffFrame()
 			if i == 1 then
 				MoveHandle.Reminder = S.MakeMoveHandle(Temp, L["药水"], "Reminder")
 			else
-				Temp:Point("LEFT", BuffFrame[i-1], "RIGHT", 4, 0)
+				Temp:SetPoint("LEFT", BuffFrame[i-1], "RIGHT", 4, 0)
 			end
 		elseif ReminderDB.RaidBuffDirection == 2 then
 			if i == 1 then
 				MoveHandle.Reminder = S.MakeMoveHandle(Temp, L["药水"], "Reminder")
 			else
-				Temp:Point("TOP", BuffFrame[i-1], "BOTTOM", 0, -4)
+				Temp:SetPoint("TOP", BuffFrame[i-1], "BOTTOM", 0, -4)
 			end
 		end
 		
@@ -250,18 +250,18 @@ local function BuildBuffFrame()
 		
 		Temp.Flag = Temp:CreateTexture(nil, "OVERLAY")
 		if ReminderDB.RaidBuffDirection == 1 then
-			Temp.Flag:Height(2)
-			Temp.Flag:Point("TOPLEFT", Temp, "BOTTOMLEFT", 0, -4)
-			Temp.Flag:Point("TOPRIGHT", Temp, "BOTTOMRIGHT", 0, -4)
+			Temp.Flag:SetHeight(2)
+			Temp.Flag:SetPoint("TOPLEFT", Temp, "BOTTOMLEFT", 0, -4)
+			Temp.Flag:SetPoint("TOPRIGHT", Temp, "BOTTOMRIGHT", 0, -4)
 		elseif ReminderDB.RaidBuffDirection == 2 then
-			Temp.Flag:Width(2)
-			Temp.Flag:Point("TOPRIGHT", Temp, "TOPLEFT", -4, 0)
-			Temp.Flag:Point("BOTTOMRIGHT", Temp, "BOTTOMLEFT", -4, 0)	
+			Temp.Flag:SetWidth(2)
+			Temp.Flag:SetPoint("TOPRIGHT", Temp, "TOPLEFT", -4, 0)
+			Temp.Flag:SetPoint("BOTTOMRIGHT", Temp, "BOTTOMLEFT", -4, 0)	
 		end
 		Temp.Flag:SetTexture(0.1, 1, 0.1, 0.8)
 		Temp.Flag.Border = CreateFrame("Frame", nil, Temp)
-		Temp.Flag.Border:Point("TOPLEFT", Temp.Flag, "TOPLEFT", -1, 1)
-		Temp.Flag.Border:Point("BOTTOMRIGHT", Temp.Flag, "BOTTOMRIGHT", 1, -1)
+		Temp.Flag.Border:SetPoint("TOPLEFT", Temp.Flag, "TOPLEFT", -1, 1)
+		Temp.Flag.Border:SetPoint("BOTTOMRIGHT", Temp.Flag, "BOTTOMRIGHT", 1, -1)
 		Temp.Flag.Border:SetBackdrop({edgeFile = DB.Solid, edgeSize = S.mult})
 		Temp.Flag.Border:SetBackdropBorderColor(0, 0, 0, 1)
 

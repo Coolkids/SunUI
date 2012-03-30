@@ -132,7 +132,7 @@ SetCVar("ShowClassColorInNameplate", 1)
 SetCVar("bloattest", 0)
 SetCVar("bloatthreat",0)
 SetCVar("bloatnameplates", 0.0) ]]
-SetCVar("screenshotQuality", 10)
+SetCVar("screenshotQuality", 7)
 
 
 ---------------- > ALT+RightClick to buy a stack
