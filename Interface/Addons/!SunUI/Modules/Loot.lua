@@ -2,7 +2,7 @@
 if DB.Nuke == true then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("loot", "AceTimer-3.0")
 function Module:OnInitialize()
-local  iconsize = 20
+local  iconsize = 22
 local L = {
 	fish = "Fishy loot",
 	empty = "Empty slot",
@@ -171,7 +171,7 @@ local createSlot = function(id)
 	name:Point("RIGHT", frame)
 	name:Point("LEFT", icon, "RIGHT",8,0)
 	name:SetNonSpaceWrap(true)
-	name:SetFont(DB.Font, 12, "OUTLINE")
+	name:SetFont(DB.Font, 13*S.Scale(1), "OUTLINE")
 	--name:SetFontObject(GameFontWhite)GameTooltipHeaderText
 
 	name:Width(60)
@@ -196,7 +196,7 @@ local createSlot = function(id)
 
 end
 
-title:SetFont(DB.Font, 11, "OUTLINE")
+title:SetFont(DB.Font, 13*S.Scale(1), "OUTLINE")
 title:SetJustifyH"LEFT"
 title:Point("TOPLEFT", addon, "TOPLEFT", 6, -4)
 
@@ -212,8 +212,8 @@ addon:RegisterForClicks"anyup"
 addon:SetParent(UIParent)
 addon:SetUserPlaced(true)
 addon:Point("TOPLEFT", 0, -104)
-addon:Width(150)  
-addon:Height(64)
+addon:Width(175)  
+addon:Height(80)
 --addon:CreateShadow("Background")
 S.SetBD(addon)
 
