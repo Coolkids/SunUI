@@ -1,8 +1,0 @@
-<Bindings>
-	<Binding name="TRADITIONALIZE_SHOW" header="TRADITIONALIZE">
-		Traditionalize_Command("show");
-	</Binding>
-	<Binding name="TRADITIONALIZE_TOGGLE" header="TRADITIONALIZE">
-		Traditionalize_Command();
-	</Binding>
-</Bindings>
