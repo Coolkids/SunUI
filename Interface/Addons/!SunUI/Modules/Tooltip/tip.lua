@@ -241,6 +241,15 @@ hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
     tooltip.default = 1
 end)
 
+GameTooltip:HookScript("OnUpdate", function(self, ...)
+   if self:GetAnchorType() == "ANCHOR_CURSOR" then
+	  local x, y = GetCursorPosition()
+	  local effScale = self:GetEffectiveScale()
+	  local width = self:GetWidth() or 0
+	  self:ClearAllPoints()
+	  self:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", x / effScale +5, y / effScale + 20)
+   end
+end)
 
 local function style(frame)
     if not frame.shadow then

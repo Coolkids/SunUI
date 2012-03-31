@@ -735,6 +735,6 @@ function  Module:BuildActionBar()
 	Module:UpdateVehicleExit()
 end
 
- function Module:OnInitialize()
+function Module:OnInitialize()
 	Module:BuildActionBar()
- end
+end

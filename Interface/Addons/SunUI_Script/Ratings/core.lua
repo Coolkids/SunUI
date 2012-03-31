@@ -1,4 +1,3 @@
-local _, _, _, DB = unpack(select(2, ...))
 local _, RT = ...
 local string_find = string.find
 local string_match = string.match
