@@ -49,7 +49,7 @@ local function tagger(tag, ...) return object.tags[tag] and object.tags[tag](obj
 local function updater(self, event)
 	object = self
 	self:SetText(self.tagString:gsub("%[([^%]:]+):?(.-)%]", tagger))
-
+	
 	if(self.OnTagUpdate) then self:OnTagUpdate(event) end
 end
 
@@ -74,6 +74,7 @@ cargBags:RegisterPlugin("TagDisplay", function(self, tagString, parent)
 	plugin.tags = tagPool
 	plugin.tagEvents = tagEvents
 	plugin.iconValues = "16:16:0:0"
+	plugin.forceEvent = function(event) updater(plugin, event) end
 
 	setTagString(plugin, tagString)
 
@@ -112,27 +113,9 @@ tagPool["item"] = function(self, item)
 		return bags .. (bank and " ("..bank..")") .. createIcon(GetItemIcon(item), self.iconValues)
 	end
 end
-tagPool["shards"] = function(self) return self.tags["item"](self, 6265) end
-
-tagPool["ammo"] = function(self)
-	local slot = GetInventorySlotInfo("AmmoSlot")
-	local count = GetInventoryItemCount("player", slot)
-	local icon = GetInventoryItemTexture("player", slot)
-
-	if(icon and count > 0) then
-		return count .. createIcon(icon, self.iconValues)
-	end
-end
-tagEvents["ammo"] = { "UNIT_INVENTORY_CHANGED" }
 
 tagPool["currency"] = function(self, id)
-	local name, count, type, icon = GetBackpackCurrencyInfo(id)
-
-	if(type == 1) then
-		icon = "Interface\\PVPFrame\\PVP-ArenaPoints-Icon"
-	elseif(type == 2) then
-		icon = "Interface\\PVPFrame\\PVP-Currency-"..UnitFactionGroup("player")
-	end
+	local name, count, icon, itemid = GetBackpackCurrencyInfo(id)
 
 	if(count) then
 		return count .. createIcon(icon, self.iconValues)

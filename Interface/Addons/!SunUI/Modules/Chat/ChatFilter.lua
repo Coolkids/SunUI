@@ -358,6 +358,7 @@ function Module:OnInitialize()
 			if (not Config.ScanTeam and (UnitInRaid(player) or UnitInParty(player))) then return end
 			if (not Config.ScanGuild and UnitIsInMyGuild(player)) then return end
 			if (event ~= "CHAT_MSG_CHANNEL") then
+				if (flag == "GM") then return end
 				if (tonumber(guid:sub(-12, -9), 16) >0) then return end
 			end
 			if (event == "CHAT_MSG_WHISPER") then

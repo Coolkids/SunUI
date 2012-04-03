@@ -2,4 +2,5 @@
 
 	<Script file ="InspectFix.lua"/>
 	<Script file ="GuildRosterSelectedFix.lua"/>
+	<Script file ="BlizzBugsSuck.lua"/>
 </Ui>

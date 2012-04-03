@@ -249,6 +249,7 @@ C = UnitFrameDB
     self.Power.colorPower = true
     self.Power.bg.multiplier = 0.3
 	lib.createBuffs(self)
+	lib.createDebuffs(self)
     lib.gen_castbar(self)
 	lib.gen_alt_powerbar(self)
 	self:Size(self.width,self.height)
@@ -338,7 +339,7 @@ oUF:Factory(function(self)
     oUF:DisableBlizzard'party'
   end
   
-  local gap = 56
+  local gap = 66
   if C["showarena"] and not IsAddOnLoaded('Gladius') then
     SetCVar("showArenaEnemyFrames", false)
     self:SetActiveStyle("SunUIArena")

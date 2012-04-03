@@ -1,4 +1,22 @@
 subversion:
+	- Omega via svn r7471: make it so a single script can disable it permanently (ie it has an option variable now) while at it, so next year people can QQ less about whatever humor is used there, if another joke is used.
+	- Omega via svn r7470: make the random april fools scheduler also do a delay on player entering world too, so it doesn't just fire sounds every time you hit a loading screen, especially if they are back to back.
+	- arta via svn r7469: Forgot about multiple floors, but they seem to be rounded.
+	- nbluewiz via svn r7468: # Fix bad toc.
+	- nbluewiz via svn r7467: # koKR update
+	- nbluewiz via svn r7466: # Blackhorn : fix 3rd elites related warning and timer error.
+	- arta via svn r7465: Datamined mapsizes (only these 2 currently in DBC files it seems)
+	- arta via svn r7464: Some more datamined model IDs (needs ingame confirmation)
+	- arta via svn r7463: Datamined model IDs  (need confirmation tho ;) )
+	- ultrashining via svn r7462: zhTW update (MoP)
+	- Omega via svn r7461: Populate some dummy mods in based on very incomplete EJ stuff, at least one mob isn't even named yet (ResinharvesterPH) and one entire instance is not filled out at all yet, while another one has one boss listed in it but improperly links to a raid boss when you click info so i left that zone out for now. Will wait for a cleaner MoP patch to sort those iffy zones out.
+	- Omega via svn r7460: houndmaster mod done, i'll do the other scarlet instance later after my raids. then probably scholomance tomororw.
+	- Omega via svn r7459: Our first MoP party mod, yay, will have a few more by end of night. Just wanted to commit current work so far.
+	- ebmor via svn r7458: deDE update (MoP)
+	- Snamor via svn r7457: esES update
+	- nbluewiz via svn r7456: # some comment, tap cleanup. # koKR update (MoP)
+	- Omega via svn r7455: Fix some bad spelling in last commit
+	- Omega via svn r7454: Some MoP prepping.
 	- Omega via svn r7453: Remove BossN therat check from shannox, when his unit IDs do work, he isn't always boss1, i've seen him be 2 and even 3. So checking threat on boss1 is completely invalid, especially if it ends up being rageface (who wildly switches threat) Improve trash mods with some anti spam for multiple mobs targeting same target
 	- Omega via svn r7452: Make unstable corruption cast countdown off by default. 2 countdowns on same fight are confusing. Someone might mistake it for a bolt about to hit (since bolts have no mob where you can watch a cast bar, most depend solely on the countdown for it). Parasites are usually stupid obvious since most are on it and can flat out see cast bar so it was logical choice for the "off by default". If someone blows a CD on a parasite cast instead of a bolt, a wipe is very likely.
 	- nbluewiz via svn r7451: # Madness of Deathwing : heroic Madness update.

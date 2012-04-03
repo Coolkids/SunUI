@@ -3,26 +3,33 @@ local Core = LibStub("AceAddon-3.0"):GetAddon("Core")
 local Module = Core:NewModule("bottomleftbar")
 local InfoBarStatusColor = {{1, 0, 0}, {1, 1, 0}, {0, 0.4, 1}}
 
-function Module:OnEnable()
-	C = InfoPanelDB
 
-	local frame = CreateFrame("Frame", "BottomLeftBar", UIParent)
+local frame = CreateFrame("Frame", "BottomLeftBar", UIParent)
 	
-	frame:SetPoint("TOPLEFT", ChatFrame1, "BOTTOMLEFT", 0 , -5)
-	frame:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE")
-	frame:RegisterEvent("UNIT_THREAT_LIST_UPDATE")
-	frame:RegisterEvent("PLAYER_TARGET_CHANGED")
-	frame:RegisterEvent("PARTY_MEMBERS_CHANGED")
+frame:SetPoint("TOPLEFT", ChatFrame1, "BOTTOMLEFT", 0 , -5)
 
-	local threatbar = CreateFrame("StatusBar", "ThreatBar", frame)
-	threatbar:SetPoint("TOPLEFT", frame, "TOPLEFT", 0, 0)
-	threatbar:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 0, 0)
-	threatbar:SetStatusBarTexture(DB.Statusbar)
-	threatbar:CreateShadow("Background")
-	threatbar:SetMinMaxValues(0, 100)
-	threatbar.text = S.MakeFontString(threatbar, 10)
-	threatbar.text:SetPoint("TOPRIGHT", -15, 8)
+frame:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE")
+frame:RegisterEvent("UNIT_THREAT_LIST_UPDATE")
+frame:RegisterEvent("PLAYER_TARGET_CHANGED")
+frame:RegisterEvent("PARTY_MEMBERS_CHANGED")
 
+
+local threatbar = CreateFrame("StatusBar", "ThreatBar", frame)
+threatbar:SetPoint("TOPLEFT", frame, "TOPLEFT", 0, 0)
+threatbar:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 0, 0)
+threatbar:SetStatusBarTexture(DB.Statusbar)
+threatbar:CreateShadow("Background")
+threatbar:SetMinMaxValues(0, 100)
+threatbar.text = S.MakeFontString(threatbar, 10)
+threatbar.text:SetPoint("TOPRIGHT", -15, 8)
+
+
+function Module:UpdateSize()
+frame:SetHeight(InfoPanelDB["BottomHeight"])	
+frame:SetWidth(ChatFrame1:GetWidth()) 
+end
+	
+local function BuildThreat()
 	local function GetThreat(unitId, mobId)
 	local _, _, threatpct, _, _ = UnitDetailedThreatSituation(unitId, mobId)
 	if not threatpct then threatpct = 0 end
@@ -47,7 +54,7 @@ function Module:OnEnable()
 	end
 
 	local function UpdateDisplay()
-	frame:SetHeight(C["BottomHeight"])	
+	frame:SetHeight(InfoPanelDB["BottomHeight"])	
 	frame:SetWidth(ChatFrame1:GetWidth()) 
 	threatbar:SetValue(0)
 	threatbar.text:SetText("")
@@ -325,6 +332,24 @@ function Module:OnEnable()
 		end
 	end
 end
-	
-frame:SetScript("OnEvent", function() UpdateDisplay() end)
+frame:SetScript("OnEvent", function() Module:UpdateSize() UpdateDisplay() end)		
 end
+
+function Module:OnEnable()
+	Module:UpdateSize()
+	BuildThreat()
+end
+tmp = CreateFrame("Frame")
+function tmp:UPDATE_FLOATING_CHAT_WINDOWS()
+	Module:UpdateSize()
+end
+function tmp:PLAYER_ENTERING_WORLD()
+	Module:UpdateSize()
+end
+function tmp:PLAYER_REGEN_DISABLED()
+	Module:UpdateSize()
+end
+tmp:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
+tmp:RegisterEvent("UPDATE_FLOATING_CHAT_WINDOWS")
+tmp:RegisterEvent("PLAYER_ENTERING_WORLD")
+tmp:RegisterEvent("PLAYER_REGEN_DISABLED")

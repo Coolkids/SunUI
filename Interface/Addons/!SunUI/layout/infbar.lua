@@ -404,7 +404,7 @@ end
 function Module:OnInitialize()
 	C = InfoPanelDB
 	local InfoPanelPos = CreateFrame("Frame", nil, UIParent)
-	InfoPanelPos:SetSize(610, 20)
+	InfoPanelPos:SetSize(630, 20)
 	InfoPanelPos:Hide()
 	MoveHandle.InfoPanel = S.MakeMoveHandle(InfoPanelPos, L["信息面板"], "InfoPanel")
 	
@@ -412,7 +412,7 @@ function Module:OnInitialize()
 	XP = CreateFrame("Frame", XP, UIParent)
 	XP:SetHeight(C["BottomHeight"])	
 	XP:SetWidth(C["BottomWidth"])
-	XP:SetFrameLevel(10)
+	XP:SetFrameLevel(2)
 	MoveHandle.BottomInfoPanelPos = S.MakeMoveHandle(XP, L["信息面板"], "InfoPanel2")
 	XP:CreateShadow("Background")
 	end

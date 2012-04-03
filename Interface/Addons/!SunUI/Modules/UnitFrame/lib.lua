@@ -538,7 +538,7 @@ C = UnitFrameDB
     button.remaining:SetPoint("TOPLEFT", -2, 4)
     --overlay texture for debuff types display
 	
-    button.overlay:SetTexture(DB.bordertex)
+    button.overlay:SetTexture("Interface\\Addons\\!SunUI\\media\\icon_clean")
     button.overlay:SetPoint("TOPLEFT", button, "TOPLEFT", -1, 1)
     button.overlay:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 1, -1)
     button.overlay:SetTexCoord(0.04, 0.96, 0.04, 0.96)
@@ -614,8 +614,9 @@ C = UnitFrameDB
       b.num = 5
       b:SetWidth((b.size+b.spacing)*4)
 	elseif f.mystyle=="boss" then
+	  b.initialAnchor = "RIGHT"
       b.showBuffType = true
-      b:SetPoint("TOPLEFT", f, "TOPRIGHT", b.spacing, -2)
+      b:SetPoint("RIGHT", f, "LEFT", -2, 0)
 	  b.size = 16
       b.num = 4
       b:SetWidth((b.size+b.spacing)*4)
@@ -701,6 +702,15 @@ C = UnitFrameDB
       d:SetHeight((d.size+d.spacing)*2)
       d:SetWidth((d.size+d.spacing)*8)
 	  d:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 15)
+	   elseif f.mystyle=="boss" then
+	  d['growth-x'] = 'RIGHT'
+      d['growth-y'] = 'UP' 
+      d.initialAnchor = 'BOTTOMLEFT'
+	  d.num = 5
+	  d.size = 16
+      d:SetHeight((d.size+d.spacing)*2)
+      d:SetWidth((d.size+d.spacing)*8)
+	  d:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
     end
     d.PostCreateIcon = lib.PostCreateIcon
     d.PostUpdateIcon = lib.PostUpdateIcon

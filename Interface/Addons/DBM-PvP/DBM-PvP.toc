@@ -37,7 +37,7 @@
 ## X-DBM-Mod-Name-ptBR: JxJ
 ## X-DBM-Mod-Sort: 175
 ## X-DBM-Mod-LoadZoneID: 461,443,401,540,482
-## X-Curse-Packaged-Version: 4.10.10-128-g419b1e1
+## X-Curse-Packaged-Version: 4.10.10-146-g9fa7964
 ## X-Curse-Project-Name: Deadly Boss Mods
 ## X-Curse-Project-ID: deadly-boss-mods
 ## X-Curse-Repository-ID: wow/deadly-boss-mods/mainline

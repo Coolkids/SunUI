@@ -2,7 +2,7 @@
 if DB.Nuke == true then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("loot", "AceTimer-3.0")
 function Module:OnInitialize()
-local  iconsize = 22
+local  iconsize = 24
 local L = {
 	fish = "Fishy loot",
 	empty = "Empty slot",
@@ -21,8 +21,8 @@ local OnEnter = function(self)
 		CursorUpdate(self)
 	end
 
-	self.drop:Show()
-	self.drop:SetVertexColor(1, 1, 0)
+	--self.drop:Show()
+	--self.drop:SetVertexColor(1, 1, 0)
 end
 
 
@@ -39,9 +39,9 @@ function Announce(chn)
     local nums = GetNumLootItems()
     if(nums == 0) then return end
     if UnitIsPlayer("target") or not UnitExists("target") then -- Chests are hard to identify!
-		SendChatMessage("*** Loot from chest ***", chn)
+		SendChatMessage("*** SunUI Loot from chest ***", chn)
 	else
-		SendChatMessage("*** Loot from "..UnitName("target").." ***", chn)
+		SendChatMessage("*** SunUI Loot from "..UnitName("target").." ***", chn)
 	end
     for i = 1, GetNumLootItems() do
         if(LootSlotIsItem(i)) then
@@ -95,7 +95,7 @@ end
 local OnLeave = function(self)
 	--if(self.quality > 1) then
 		local color = ITEM_QUALITY_COLORS[self.quality]
-		self.drop:SetVertexColor(color.r, color.g, color.b)
+		--self.drop:SetVertexColor(color.r, color.g, color.b)
 	--else
 	--	self.drop:Hide()
 	--end
@@ -126,9 +126,9 @@ end
 
 local createSlot = function(id)
 	local frame = CreateFrame("Button", 'm_LootSlot'..id, addon)
-	frame:Point("LEFT", 8, 0)
-	frame:Point("RIGHT", -8, 0)
-	frame:Height(iconsize+2)
+	frame:SetPoint("LEFT", 5, 0)
+	frame:SetPoint("RIGHT", -5, 0)
+	frame:SetHeight(iconsize+2)
 	frame:SetID(id)
 	
 	frame:SetScript("OnEnter", OnEnter)
@@ -137,10 +137,10 @@ local createSlot = function(id)
 	frame:SetScript("OnUpdate", OnUpdate)
 
 	local iconFrame = CreateFrame("Frame", nil, frame)
-	iconFrame:Height(iconsize)
-	iconFrame:Width(iconsize)
+	iconFrame:SetHeight(iconsize)
+	iconFrame:SetWidth(iconsize)
 	iconFrame:ClearAllPoints()
-	iconFrame:Point("LEFT", frame, 3,0)
+	iconFrame:SetPoint("LEFT", frame, 3,-4)
 	
 	local icon = iconFrame:CreateTexture(nil, "BACKGROUND")
 	icon:SetAlpha(.8)
@@ -148,17 +148,19 @@ local createSlot = function(id)
 	icon:SetAllPoints(iconFrame)
 	frame.icon = icon
     
-	local overlay = iconFrame:CreateTexture(nil, "OVERLAY")
-    overlay:SetTexture(DB.bordertex)
+	local overlay = CreateFrame("Frame", nil, iconFrame)
+	overlay:SetBackdrop({
+			edgeFile = "Interface\\ChatFrame\\ChatFrameBackground",   --, 
+			edgeSize = S.mult+0.2, 
+		})
 	overlay:SetPoint("TOPLEFT",iconFrame,"TOPLEFT", -1, 1)
 	overlay:SetPoint("BOTTOMRIGHT",iconFrame,"BOTTOMRIGHT", 1, -1)
-	overlay:SetVertexColor(0.35, 0.35, 0.35, 1);
 	frame.overlay = overlay
 	
 	local count = iconFrame:CreateFontString(nil, "OVERLAY")
 	count:ClearAllPoints()
 	count:SetJustifyH"RIGHT"
-	count:Point("BOTTOMRIGHT", iconFrame, 2, 2)
+	count:SetPoint("BOTTOMRIGHT", iconFrame, 2, 2)
 	count:SetFontObject(NumberFontNormal)
 	count:SetShadowOffset(.8, -.8)
 	count:SetShadowColor(0, 0, 0, 1)
@@ -168,37 +170,28 @@ local createSlot = function(id)
 	local name = frame:CreateFontString(nil, "OVERLAY")
 	name:SetJustifyH"LEFT"
 	name:ClearAllPoints()
-	name:Point("RIGHT", frame)
-	name:Point("LEFT", icon, "RIGHT",8,0)
+	name:SetPoint("RIGHT", frame)
+	name:SetPoint("LEFT", icon, "RIGHT",8,0)
 	name:SetNonSpaceWrap(true)
-	name:SetFont(DB.Font, 13*S.Scale(1), "OUTLINE")
+	name:SetFont(DB.Font, 12*S.Scale(1), "OUTLINE")
 	--name:SetFontObject(GameFontWhite)GameTooltipHeaderText
 
-	name:Width(60)
+	name:SetWidth(70)
 	frame.name = name
-	
-	local drop = frame:CreateTexture(nil, "ARTWORK")
-	drop:SetTexture("Interface\\QuestFrame\\UI-QuestLogTitleHighlight")
-	drop:SetPoint("TOPLEFT", icon, "TOPRIGHT", 0, 0)
-	drop:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 3, 0)
-
-	--drop:SetAllPoints(frame)
-	drop:SetAlpha(.5)
-	frame.drop = drop
-	frame:Point("TOP", addon, 8, (-5+iconsize)-(id*(iconsize+10))-10)
-	frame:SetBackdrop{
-	edgeFile = DB.edgetex, edgeSize = 10,
+	frame:SetPoint("TOP", addon, 8, (-5+iconsize)-(id*(iconsize+5))-10)
+	--frame:SetBackdrop{
+	--edgeFile = DB.edgetex, edgeSize = 10,
 	--insets = {left = 0, right = 0, top = 0, bottom = 0},
-	}
+	--}
 	addon.slots[id] = frame
 	
 	return frame
 
 end
 
-title:SetFont(DB.Font, 13*S.Scale(1), "OUTLINE")
+title:SetFont(DB.Font, 14*S.Scale(1), "OUTLINE")
 title:SetJustifyH"LEFT"
-title:Point("TOPLEFT", addon, "TOPLEFT", 6, -4)
+title:SetPoint("TOPLEFT", addon, "TOPLEFT", 4, 2)
 
 addon:SetScript("OnMouseDown", function(self) if(IsAltKeyDown()) then self:StartMoving() end end)
 addon:SetScript("OnMouseUp", function(self) self:StopMovingOrSizing() end)
@@ -211,9 +204,9 @@ addon:RegisterForClicks"anyup"
 
 addon:SetParent(UIParent)
 addon:SetUserPlaced(true)
-addon:Point("TOPLEFT", 0, -104)
-addon:Width(175)  
-addon:Height(80)
+addon:SetPoint("TOPLEFT", 0, -104)
+addon:SetWidth(160)  
+addon:SetHeight(74)
 --addon:CreateShadow("Background")
 S.SetBD(addon)
 
@@ -225,10 +218,10 @@ addon:SetFrameStrata"HIGH"
 addon:SetToplevel(true)
 
 lb:ClearAllPoints()
-lb:Width(20)
-lb:Height(14)
+lb:SetWidth(20)
+lb:SetHeight(14)
 lb:SetScale(0.85)
-lb:Point("TOPRIGHT", addon, "TOPRIGHT", -35, -9)
+lb:SetPoint("TOPRIGHT", addon, "TOPRIGHT", -35, -9)
 lb:SetFrameStrata("TOOLTIP")
 lb:RegisterForClicks("RightButtonUp", "LeftButtonUp")
 lb:SetScript("OnClick", OnLinkClick)
@@ -269,18 +262,21 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 		y = y / self:GetEffectiveScale()
 
 		self:ClearAllPoints()
-		self:Point("TOPLEFT", nil, "BOTTOMLEFT", x-40, y+20)
+		self:SetPoint("TOPLEFT", nil, "BOTTOMLEFT", x-40, y+20)
 		self:GetCenter()
 		self:Raise()
 	end
 
 	local m = 0
 	if(items > 0) then
+		if item == 0 then return end
 		for i=1, items do
 			local slot = addon.slots[i] or createSlot(i)
 			local texture, item, quantity, quality, locked = GetLootSlotInfo(i)
 			local color = ITEM_QUALITY_COLORS[quality]
-
+			if color.r == nil then return end
+			local q = {}
+			if quality < 2 then q.r, q.g, q.b = 0, 0, 0 else q.r, q.g, q.b = color.r, color.g, color.b end
 			if(LootSlotIsCoin(i)) then
 				item = item:gsub("\n", ", ")
 			end
@@ -292,10 +288,10 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 				slot.count:Hide()
 			end
 
-			slot.overlay:SetVertexColor(color.r, color.g, color.b)
+			slot.overlay:SetBackdropBorderColor(q.r, q.g, q.b)
 			slot:SetBackdropBorderColor(color.r, color.g, color.b)
-			slot.drop:SetVertexColor(color.r, color.g, color.b)
-			slot.drop:Show()
+			--slot.drop:SetVertexColor(color.r, color.g, color.b)
+			--slot.drop:Show()
 
 			slot.quality = quality
 			slot.name:SetText(item)
@@ -318,40 +314,23 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 		items = 1
 
 		slot.count:Hide()
-		slot.drop:Hide()
+		--slot.drop:Hide()
 		slot:Disable()
 		slot:Show()
 	end
 
 	local color = ITEM_QUALITY_COLORS[m]
 	self:SetBackdropBorderColor(color.r, color.g, color.b, .8)
-	self:Height(math.max((items*(iconsize+10))+27), 20)
-	self:Width(150)
-	title:Width(125)
-	title:Height(iconsize+2)
+	self:SetHeight(math.max((items*(iconsize+10))+27), 20)
+	self:SetWidth(150)
+	title:SetWidth(125)
+	title:SetHeight(iconsize+2)
 	
---[[	local close = CreateFrame("Button", nil, addon, "UIPanelCloseButton" )
-	close:Point("TOPRIGHT", 0, 2)
+	local close = CreateFrame("Button", nil, addon, "UIPanelCloseButton" )
+	close:SetPoint("TOPRIGHT", 0, 2)
 	close:SetScale(0.87)
-	close:SetScript("OnClick", function(self) self:GetParent():Hide() end)]]
-
-	local close = self:CreateTexture(nil, "ARTWORK")
-	close:SetTexture(DB.closebtex)
-	close:SetTexCoord(0, .7, 0, 1)
-	close:Width(20)
-	close:Height(14)
-	close:SetVertexColor(0.5, 0.5, 0.4)
-	close:Point("TOPRIGHT", self, "TOPRIGHT", -6, -7)
-	
-	local closebutton = CreateFrame("Button", nil)
-	closebutton:SetParent( self )
-	closebutton:Width(20)
-	closebutton:Height(14)
-	closebutton:SetScale(0.9)
-	closebutton:Point("CENTER", close, "CENTER")
-	closebutton:SetScript("OnClick", function(self) self:GetParent():Hide() end)
-	closebutton:SetScript( "OnLeave", function() close:SetVertexColor(0.5, 0.5, 0.4) end )
-	closebutton:SetScript( "OnEnter", function() close:SetVertexColor(0.7, 0.2, 0.2) end )
+	--close:SetScript("OnClick", function(self) self:GetParent():Hide() end)
+	S.ReskinClose(close)
 
 end
 

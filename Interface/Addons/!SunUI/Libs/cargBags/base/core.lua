@@ -72,8 +72,8 @@ end
 
 local function toggleBag(forceopen)	cargBags.blizzard:Toggle(forceopen)	end
 local function toggleNoForce()		cargBags.blizzard:Toggle()			end
-local function openBag()			cargBags.blizzard:Show()			end
-local function closeBag()			cargBags.blizzard:Hide()			end
+local function openBag()				cargBags.blizzard:Show()			end
+local function closeBag()				cargBags.blizzard:Hide()			end
 
 --- Overwrites Blizzards Bag-Toggle-Functions with the implementation's ones
 --  @param name <string> The name of the implementation [optional]
@@ -82,18 +82,25 @@ function cargBags:ReplaceBlizzard(name)
 	self.blizzard = impl
 
 	-- Can we maybe live without hooking ToggleBag(id)?
-	--OpenAllBags = ToggleBackpack
-	--CloseAllBags = CloseBackpack
-	
-	ToggleAllBags = toggleNoForce
+
+	--ToggleAllBags = toggleNoForce
 	ToggleBag = toggleNoForce
-	ToggleBackpack = toggleNoForce
+	--ToggleBackpack = toggleNoForce
+	--OpenBag = toggleBag -- in 4.1 we need to grab this too
 	OpenAllBags = toggleBag	-- Name is misleading, Blizz-function actually toggles bags
 	OpenBackpack = toggleBag -- Blizz does not provide toggling here
 	CloseAllBags = closeBag
 	CloseBackpack = closeBag
 
 	BankFrame:UnregisterAllEvents()
+
+	-- hiding the Blizzard bags completely, just in case - Lars Norberg
+	for i = 1, 5 do
+		local bag = _G["ContainerFrame" .. i]
+		bag:Hide()
+		bag.Show = bag.Hide
+	end
+
 end
 
 --- Flags the implementation to handle Blizzards Bag-Toggle-Functions

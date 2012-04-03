@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(332, "DBM-DragonSoul", nil, 187)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7445 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7466 $"):sub(12, -3))
 mod:SetCreatureID(56598)--56427 is Boss, but engage trigger needs the ship which is 56598
 mod:SetMainBossID(56427)
 mod:SetModelID(39399)
@@ -108,17 +108,17 @@ function mod:ShockwaveTarget()
 	end
 end
 
-function mod:AddsRepeat() -- it seems to be adds summon only 3 times. needs more review
-	if addsCount < 2 then -- fix logical error
+function mod:AddsRepeat()
+	if addsCount < 2 then
 		addsCount = addsCount + 1
-		specWarnElites:Show()
 		timerAdd:Start()
 		self:ScheduleMethod(61, "AddsRepeat")
-		if addsCount == 1 then
-			timerHarpoonCD:Start(18)--20 seconds after first elites (Confirmed). If harpoon bug not happening, it comes 18 sec after first elites.
-		else--6-7 seconds after sets 2 and 3.
-			timerHarpoonCD:Start()--6-7 second variation.
-		end
+	end
+	specWarnElites:Show()
+	if addsCount == 1 then
+		timerHarpoonCD:Start(18)--20 seconds after first elites (Confirmed). If harpoon bug not happening, it comes 18 sec after first elites.
+	else--6-7 seconds after sets 2 and 3.
+		timerHarpoonCD:Start()--6-7 second variation.
 	end
 end
 

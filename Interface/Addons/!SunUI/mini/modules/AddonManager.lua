@@ -360,7 +360,7 @@ function stAddonManager:LoadWindow()
 	hTitle:SetText(L["SunUI插件管理"])
 	header.title = hTitle 
 
-	local close = CreateMenuButton(header, 20, 20, "x", "RIGHT", header, "RIGHT", 0, 0)
+	local close = CreateMenuButton(header, 15, 15, "x", "RIGHT", header, "RIGHT", -5, -2)
 	close:SetBackdrop(nil)
 	close:HookScript("OnEnter", function(self) self:SetBackdrop(nil) end)
 	close:HookScript("OnLeave", function(self) self:SetBackdrop(nil) end)

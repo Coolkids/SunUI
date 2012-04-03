@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(325, "DBM-DragonSoul", nil, 187)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7442 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7456 $"):sub(12, -3))
 mod:SetCreatureID(55312)
 mod:SetModelID(39101)
 mod:SetModelSound("sound\\CREATURE\\Yorsahj\\VO_DS_YORSAHJ_INTRO_01.OGG", "sound\\CREATURE\\Yorsahj\\VO_DS_YORSAHJ_SPELL_02.OGG")
@@ -220,13 +220,14 @@ end
 RegisterAddonMessagePrefix("DBM-YORSAHJARROW")
 --mod:RegisterEvents("CHAT_MSG_ADDON") -- for debugging
 local oozePos = {
-  ["BLUE"] = 	{ 71, 34 },
-  ["PURPLE"] = 	{ 57, 13 },
-  ["RED"] = 	{ 37, 12 },
-  ["GREEN"] = 	{ 22, 34 },
-  ["YELLOW"] = 	{ 37, 85 },
-  ["BLACK"] = 	{ 71, 65 },
+	["BLUE"] = 	{ 71, 34 },
+	["PURPLE"] = 	{ 57, 13 },
+	["RED"] = 	{ 37, 12 },
+	["GREEN"] = 	{ 22, 34 },
+	["YELLOW"] = 	{ 37, 85 },
+	["BLACK"] = 	{ 71, 65 },
 }
+
 function mod:CHAT_MSG_ADDON(prefix, message, channel, sender)
 	if prefix ~= "DBM-YORSAHJARROW" then return end
 	local cmd = message or ""
