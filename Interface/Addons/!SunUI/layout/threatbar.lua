@@ -332,7 +332,7 @@ local function BuildThreat()
 		end
 	end
 end
-frame:SetScript("OnEvent", function() Module:UpdateSize() UpdateDisplay() end)		
+frame:SetScript("OnEvent", function() UpdateDisplay() end)		
 end
 
 function Module:OnEnable()
