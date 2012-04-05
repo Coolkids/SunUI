@@ -703,14 +703,14 @@ C = UnitFrameDB
       d:SetWidth((d.size+d.spacing)*8)
 	  d:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 15)
 	   elseif f.mystyle=="boss" then
-	  d['growth-x'] = 'RIGHT'
-      d['growth-y'] = 'UP' 
-      d.initialAnchor = 'BOTTOMLEFT'
+	  d['growth-x'] = 'LEFT'
+      d['growth-y'] = 'DOWN' 
+      d.initialAnchor = 'BOTTOMRIGHT'
 	  d.num = 5
 	  d.size = 16
       d:SetHeight((d.size+d.spacing)*2)
       d:SetWidth((d.size+d.spacing)*8)
-	  d:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+	  d:SetPoint("BOTTOMRIGHT", f, "TOPLEFT", 0, 3)
     end
     d.PostCreateIcon = lib.PostCreateIcon
     d.PostUpdateIcon = lib.PostUpdateIcon

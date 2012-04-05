@@ -60,7 +60,8 @@ function Style(self, totem, flyout)
 
 	if Count then
 		Count:ClearAllPoints()
-		Count:SetPoint("BOTTOMRIGHT", 0, S.Scale(2))
+		Count:SetJustifyH("RIGHT")
+		Count:SetPoint("BOTTOMRIGHT", 3, 0)
 		Count:SetFont(DB.Font, S.mult*C["FontSize"], "OUTLINE")
 	end
 
@@ -71,7 +72,11 @@ function Style(self, totem, flyout)
 	if self.styled then return end	
 
 	if Btname then
-	Btname:SetFont(DB.Font, S.mult*C["MFontSize"], "OUTLINE")
+	Btname:SetJustifyH("CENTER")
+	Btname:SetJustifyV("BOTTOM")
+	Btname:SetPoint("BOTTOMLEFT")
+	Btname:SetPoint("BOTTOMRIGHT")
+	Btname:SetFont(DB.Font, S.mult*C["MFontSize"], "THINOUTLINE")
 		if C["HideMacroName"] then
 			Btname:SetText("")
 			Btname:Hide()
@@ -97,7 +102,8 @@ function Style(self, totem, flyout)
 
 	if HotKey then
 		HotKey:ClearAllPoints()
-		HotKey:SetPoint("TOPRIGHT", 0, 0)
+		HotKey:SetJustifyH("RIGHT")
+		HotKey:SetPoint("TOPRIGHT", 3, 0)
 		HotKey:SetFont(DB.Font, S.mult*C["FontSize"], "OUTLINE")
 		HotKey:SetShadowColor(0, 0, 0, 0.3)
 		HotKey.ClearAllPoints = function() end

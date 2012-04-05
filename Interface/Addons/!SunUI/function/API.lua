@@ -153,12 +153,14 @@ local function StartGlow(f)
 	f:SetBackdropBorderColor(r, g, b)
 	CreatePulse(f.glow)
 end
+S.StartGlow = StartGlow
 local function StopGlow(f)
 	f:SetBackdropColor(0, 0, 0, 0)
 	f:SetBackdropBorderColor(0, 0, 0)
 	f.glow:SetScript("OnUpdate", nil)
 	f.glow:SetAlpha(0)
 end
+S.StopGlow = StopGlow
 function S.Reskin(f)
 	f:SetNormalTexture("")
 	f:SetHighlightTexture("")

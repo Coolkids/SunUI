@@ -20,7 +20,7 @@ local OnEnter = function(self)
 		GameTooltip:SetLootItem(slot)
 		CursorUpdate(self)
 	end
-
+	S.StartGlow(self)
 	--self.drop:Show()
 	--self.drop:SetVertexColor(1, 1, 0)
 end
@@ -93,13 +93,7 @@ local function LDD_Initialize()
 end
 
 local OnLeave = function(self)
-	--if(self.quality > 1) then
-		local color = ITEM_QUALITY_COLORS[self.quality]
-		--self.drop:SetVertexColor(color.r, color.g, color.b)
-	--else
-	--	self.drop:Hide()
-	--end
-
+	S.StopGlow(self)
 	GameTooltip:Hide()
 	ResetCursor()
 end
@@ -126,8 +120,8 @@ end
 
 local createSlot = function(id)
 	local frame = CreateFrame("Button", 'm_LootSlot'..id, addon)
-	frame:SetPoint("LEFT", 5, 0)
-	frame:SetPoint("RIGHT", -5, 0)
+	frame:SetPoint("LEFT", 6, 0)
+	frame:SetPoint("RIGHT", -6, 0)
 	frame:SetHeight(iconsize+2)
 	frame:SetID(id)
 	
@@ -135,12 +129,22 @@ local createSlot = function(id)
 	frame:SetScript("OnLeave", OnLeave)
 	frame:SetScript("OnClick", OnClick)
 	frame:SetScript("OnUpdate", OnUpdate)
-
+	
+	frame.glow = CreateFrame("Frame", nil, frame)
+	frame.glow:SetBackdrop({
+		edgeFile = DB.GlowTex,
+		edgeSize = S.Scale(5),
+	})
+	frame.glow:SetPoint("TOPLEFT", -6, 6)
+	frame.glow:SetPoint("BOTTOMRIGHT", 6, -6)
+	frame.glow:SetBackdropBorderColor(r, g, b)
+	frame.glow:SetAlpha(0)
+	
 	local iconFrame = CreateFrame("Frame", nil, frame)
 	iconFrame:SetHeight(iconsize)
 	iconFrame:SetWidth(iconsize)
 	iconFrame:ClearAllPoints()
-	iconFrame:SetPoint("LEFT", frame, 3,-4)
+	iconFrame:SetPoint("LEFT", frame, 2,0)
 	
 	local icon = iconFrame:CreateTexture(nil, "BACKGROUND")
 	icon:SetAlpha(.8)
@@ -191,7 +195,7 @@ end
 
 title:SetFont(DB.Font, 14*S.Scale(1), "OUTLINE")
 title:SetJustifyH"LEFT"
-title:SetPoint("TOPLEFT", addon, "TOPLEFT", 4, 2)
+title:SetPoint("TOPLEFT", addon, "TOPLEFT", 4, 6)
 
 addon:SetScript("OnMouseDown", function(self) if(IsAltKeyDown()) then self:StartMoving() end end)
 addon:SetScript("OnMouseUp", function(self) self:StopMovingOrSizing() end)
@@ -206,7 +210,7 @@ addon:SetParent(UIParent)
 addon:SetUserPlaced(true)
 addon:SetPoint("TOPLEFT", 0, -104)
 addon:SetWidth(160)  
-addon:SetHeight(74)
+addon:SetHeight(84)
 --addon:CreateShadow("Background")
 S.SetBD(addon)
 
@@ -221,7 +225,7 @@ lb:ClearAllPoints()
 lb:SetWidth(20)
 lb:SetHeight(14)
 lb:SetScale(0.85)
-lb:SetPoint("TOPRIGHT", addon, "TOPRIGHT", -35, -9)
+lb:SetPoint("TOPRIGHT", addon, "TOPRIGHT", -35, -5)
 lb:SetFrameStrata("TOOLTIP")
 lb:RegisterForClicks("RightButtonUp", "LeftButtonUp")
 lb:SetScript("OnClick", OnLinkClick)
@@ -327,8 +331,8 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 	title:SetHeight(iconsize+2)
 	
 	local close = CreateFrame("Button", nil, addon, "UIPanelCloseButton" )
-	close:SetPoint("TOPRIGHT", 0, 2)
-	close:SetScale(0.87)
+	close:SetPoint("TOPRIGHT", 0, 8)
+	close:SetScale(0.7)
 	--close:SetScript("OnClick", function(self) self:GetParent():Hide() end)
 	S.ReskinClose(close)
 
