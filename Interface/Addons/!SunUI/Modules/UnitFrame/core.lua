@@ -157,6 +157,10 @@ C = UnitFrameDB
     self.height = C["PetHeight"]
     self.mystyle = "focus"
     genStyle(self)
+	if C["ClassColor"] then
+	self.Health.colorClass = true
+	self.Health.colorReaction = true
+	end
     self.Power.frequentUpdates = true
     self.Power.colorPower = true
     self.Power.bg.multiplier = 0.3
