@@ -6,12 +6,13 @@ local Core = LibStub("AceAddon-3.0"):GetAddon("Core")
 DB["Modules"]["Mini"] = {}
 local Module = DB["Modules"]["Mini"]
 
+local uis = SetUIScale()
 -- LoadSettings
 function Module.LoadSettings()
 	local Default = {
 	["ClassCDWidth"] = 80,
 	["AutoSell"] = true,
-	["uiScale"] = 1,
+	["uiScale"] = uis,
 	["AutoRepair"] = false,
 	["Icicle"] = false,
 	["MiniMapPanels"] = true,
@@ -165,11 +166,10 @@ function Module.BuildGUI()
 			name = L["UI缩放"],
 			args = {
 				uiScale = {
-					type = "range", order = 1,
+					type = "input", order = 1,
 					name = L["UI缩放大小"], desc = L["UI缩放大小"],
-					min = 0.40, max = 1.20, step = 0.01,
-					get = function() return MiniDB.uiScale end,
-					set = function(_, value) MiniDB.uiScale = value end,
+					get = function() return tostring(GetCVar("uiScale")) end,
+					set = function(_, value) MiniDB.uiScale = tostring(value) end,
 				},
 				accept = {
 					type = "execute", order = 2,

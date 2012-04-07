@@ -556,7 +556,22 @@ local function CreateShadow(f, t, offset, thickness, texture)
 	shadow:SetBackdropBorderColor( borderr, borderg, borderb, bordera )
 	f.shadow = shadow
 end
+function S.ReskinFrame(f)
+	if f.reskin == true then return end
+	f.glow = CreateFrame("Frame", nil, f)
+	f.glow:SetBackdrop({
+		edgeFile = DB.GlowTex,
+		edgeSize = S.Scale(5),
+	})
+	f.glow:Point("TOPLEFT", -6, 6)
+	f.glow:Point("BOTTOMRIGHT", 6, -6)
+	f.glow:SetBackdropBorderColor(r, g, b)
+	f.glow:SetAlpha(0)
 
+	f:HookScript("OnEnter", StartGlow)
+ 	f:HookScript("OnLeave", StopGlow)
+	f.reskin = true
+end
 local function StyleButton(button, setallpoints)
 	if button.SetHighlightTexture and not button.hover then
 		local hover = button:CreateTexture(nil, "OVERLAY")

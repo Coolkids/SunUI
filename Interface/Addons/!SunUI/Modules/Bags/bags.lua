@@ -59,7 +59,7 @@ MyButton:Scaffold("Default")
 
 function MyButton:OnCreate()
 	self:SetNormalTexture(nil)
-	self:SetSize(28, 28)
+	self:SetSize(27, 27)
 	
 	self.Icon:SetAllPoints()
 	self.Icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
@@ -68,10 +68,9 @@ function MyButton:OnCreate()
 	self.Count:SetFont(DB.Font, 12*S.Scale(1), "THINOUTLINE")
 	
 	self.Border = CreateFrame("Frame", nil, self)
-	self.Border:SetAllPoints(self.Icon)
-	--self.Border:SetPoint("CENTER", point or self.Icon)
-	--self.Border:SetPoint("TOPLEFT", point or self.Icon, 0, 0)
-	--self.Border:SetPoint("BOTTOMRIGHT", point or self.Icon, 0, 0)
+	--self.Border:SetAllPoints(self.Icon)
+	self.Border:SetPoint("TOPLEFT", self.Icon, -1, 1)
+	self.Border:SetPoint("BOTTOMRIGHT", self.Icon, 1, -1)
 	self.Border:SetBackdrop({edgeFile = DB.Solid, edgeSize = S.mult+0.2})
 	self.Border:SetBackdropBorderColor(0, 0, 0, 0)
 	self.BG = CreateFrame("Frame", nil, self)
@@ -104,7 +103,7 @@ end
 
 -- 更新背包栏
 local UpdateDimensions = function(self)
-	local width, height = self:LayoutButtons("grid", self.Settings.Columns, 3, 10, -10)
+	local width, height = self:LayoutButtons("grid", self.Settings.Columns, 4, 10, -10)
 	local margin = 40
 	if self.BagBar and self.BagBar:IsShown() then
 		margin = margin + 45
@@ -115,7 +114,7 @@ end
 local MyContainer = Bags:GetContainerClass()
 function MyContainer:OnContentsChanged()
 	self:SortButtons("bagSlot")
-	local width, height = self:LayoutButtons("grid", self.Settings.Columns, 3, 10, -10)
+	local width, height = self:LayoutButtons("grid", self.Settings.Columns, 4, 10, -10)
 	self:SetSize(width + 20, height + 10)
 	if self.UpdateDimensions then
 		self:UpdateDimensions()

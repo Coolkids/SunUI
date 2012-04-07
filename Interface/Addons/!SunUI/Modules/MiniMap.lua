@@ -41,52 +41,52 @@ MinimapCluster:EnableMouse(false)
 MiniMapTrackingBackground:SetAlpha(0)
 MiniMapTrackingButton:SetAlpha(0)
 MiniMapTracking:ClearAllPoints()
-MiniMapTracking:Point("BOTTOMLEFT", Minimap, -5, -5)
+MiniMapTracking:SetPoint("BOTTOMLEFT", Minimap, -5, -5)
 MiniMapTracking:SetScale(1)
 
 -- BG icon
 MiniMapBattlefieldFrame:ClearAllPoints()
-MiniMapBattlefieldFrame:Point("TOP", Minimap, "TOP", 2, 8)
+MiniMapBattlefieldFrame:SetPoint("TOP", Minimap, "TOP", 2, 8)
 
 -- Random Group icon
 MiniMapLFGFrame:ClearAllPoints()
 MiniMapLFGFrameBorder:SetAlpha(0)
-MiniMapLFGFrame:Point("TOP", Minimap, "TOP", 1, 8)
+MiniMapLFGFrame:SetPoint("TOP", Minimap, "TOP", 1, 8)
 MiniMapLFGFrame:SetFrameStrata("MEDIUM")
 
 -- Instance Difficulty flag
 MiniMapInstanceDifficulty:ClearAllPoints()
-MiniMapInstanceDifficulty:Point("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2)
+MiniMapInstanceDifficulty:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2)
 MiniMapInstanceDifficulty:SetScale(0.1)
 MiniMapInstanceDifficulty:SetAlpha(0)
 MiniMapInstanceDifficulty:SetFrameStrata("LOW")
 
 -- Guild Instance Difficulty flag
 GuildInstanceDifficulty:ClearAllPoints()
-GuildInstanceDifficulty:Point("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2)
+GuildInstanceDifficulty:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2)
 GuildInstanceDifficulty:SetScale(0.1)
 GuildInstanceDifficulty:SetAlpha(0)
 GuildInstanceDifficulty:SetFrameStrata("LOW")
 
 -- Mail icon
 MiniMapMailFrame:ClearAllPoints()
-MiniMapMailFrame:Point("BOTTOMRIGHT", Minimap, "BOTTOMRIGHT", 2, -6)
+MiniMapMailFrame:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMRIGHT", 2, -6)
 MiniMapMailIcon:SetTexture("Interface\\AddOns\\!SunUI\\media\\mail")
 
 -- Invites Icon
 GameTimeCalendarInvitesTexture:ClearAllPoints()
 GameTimeCalendarInvitesTexture:SetParent("Minimap")
-GameTimeCalendarInvitesTexture:Point("TOPRIGHT")
+GameTimeCalendarInvitesTexture:SetPoint("TOPRIGHT")
 
 if FeedbackUIButton then
 FeedbackUIButton:ClearAllPoints()
-FeedbackUIButton:Point("TOPLEFT", Minimap, "TOPLEFT", 6, -6)
+FeedbackUIButton:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 6, -6)
 FeedbackUIButton:SetScale(0.8)
 end
 
 if StreamingIcon then
 StreamingIcon:ClearAllPoints()
-StreamingIcon:Point("TOPRIGHT", Minimap, "TOPRIGHT", 8, 8)
+StreamingIcon:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 8, 8)
 StreamingIcon:SetScale(0.8)
 end
 

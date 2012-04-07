@@ -24,10 +24,8 @@ threatbar.text = S.MakeFontString(threatbar, 10)
 threatbar.text:SetPoint("TOPRIGHT", -15, 8)
 
 
-function Module:UpdateSize()
-frame:SetHeight(InfoPanelDB["BottomHeight"])	
-frame:SetWidth(ChatFrame1:GetWidth()) 
-end
+
+
 	
 local function BuildThreat()
 	local function GetThreat(unitId, mobId)
@@ -336,20 +334,15 @@ frame:SetScript("OnEvent", function() UpdateDisplay() end)
 end
 
 function Module:OnEnable()
-	Module:UpdateSize()
+	frame:SetHeight(InfoPanelDB["BottomHeight"])	
+	frame:SetWidth(ChatFrame1:GetWidth()) 
 	BuildThreat()
 end
 tmp = CreateFrame("Frame")
 function tmp:UPDATE_FLOATING_CHAT_WINDOWS()
-	Module:UpdateSize()
-end
-function tmp:PLAYER_ENTERING_WORLD()
-	Module:UpdateSize()
-end
-function tmp:PLAYER_REGEN_DISABLED()
-	Module:UpdateSize()
+	frame:SetWidth(ChatFrame1:GetWidth()) 
 end
 tmp:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
 tmp:RegisterEvent("UPDATE_FLOATING_CHAT_WINDOWS")
-tmp:RegisterEvent("PLAYER_ENTERING_WORLD")
-tmp:RegisterEvent("PLAYER_REGEN_DISABLED")
+
+

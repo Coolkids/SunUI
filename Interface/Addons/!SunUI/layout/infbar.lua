@@ -222,12 +222,8 @@ local function BuildPing(Anchor)
 	StatusBar:SetScript("OnEnter", function(self)
 		local _, _, latencyHome, latencyWorld = GetNetStats()
 		local bandwidth = GetAvailableBandwidth()
-		local r1, g1, b1 = S.ColorGradient((300-latencyHome)/300, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
-																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
-																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
-		local r2, g2, b2 = S.ColorGradient((300-latencyWorld)/300, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
-																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
-																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
+		local r1, g1, b1 = S.ColorGradient(latencyHome/900, 0, 1, 0, 1, 1, 0, 1, 0, 0)
+		local r2, g2, b2 = S.ColorGradient(latencyWorld/900, 0, 1, 0, 1, 1, 0, 1, 0, 0)
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 		GameTooltip:ClearLines()
 			GameTooltip:AddLine(L["延迟"], 0.4, 0.78, 1)
@@ -362,7 +358,7 @@ local StatusBar = CreateFrame("StatusBar", "FPS", UIParent)
 	end)
 	StatusBar:SetScript("OnEnter", function(self)
 		local value = floor(GetFramerate())
-		local r, g, b = S.ColorGradient(value/100, 1, 0, 0, 0, 1, 0, 0, 0.4, 1)
+		local r, g, b = S.ColorGradient(value/100, 1, 0, 0, 1, 1, 0, 0, 1, 0)
 		if not InCombatLockdown() then
 			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT", 0, 0)
 			GameTooltip:ClearLines()

@@ -106,27 +106,53 @@ idtext:SetTextColor(1, 0, 0)
 idtext:SetFont("Fonts\\ARIALN.ttf", 18, "THINOUTLINE")
 
 local function diff()
+
+	if event == "GUILD_PARTY_STATE_UPDATED" then inGroup = true else inGroup = false end
 	local inInstance, instanceType = IsInInstance()
 	local _, _, difficultyIndex, _, _, dynamicDifficulty, isDynamic = GetInstanceInfo()
 
 	if inInstance and instanceType == "raid" then
-		if (isDynamic and difficultyIndex == 1 and dynamicDifficulty == 0) or (not isDynamic and difficultyIndex == 1) then
-			idtext:SetText("10")
-		elseif (isDynamic and (difficultyIndex == 3 and dynamicDifficulty == 0) or (difficultyIndex == 1 and dynamicDifficulty == 1)) or (not isDynamic and difficultyIndex == 3) then
-			idtext:SetText("10H")
-		elseif (isDynamic and difficultyIndex == 2 and dynamicDifficulty == 0) or (not isDynamic and difficultyIndex == 2) then
-			idtext:SetText("25")
-		elseif (isDynamic and (difficultyIndex == 2 and dynamicDifficulty == 1) or (difficultyIndex == 4)) or (not isDynamic and difficultyIndex == 4) then
-			idtext:SetText("25H")
+		if inGroup then 
+			if (isDynamic and difficultyIndex == 1 and dynamicDifficulty == 0) or (not isDynamic and difficultyIndex == 1) then
+				idtext:SetText("10G")
+			elseif (isDynamic and (difficultyIndex == 3 and dynamicDifficulty == 0) or (difficultyIndex == 1 and dynamicDifficulty == 1)) or (not isDynamic and difficultyIndex == 3) then
+				idtext:SetText("10HG")
+			elseif (isDynamic and difficultyIndex == 2 and dynamicDifficulty == 0) or (not isDynamic and difficultyIndex == 2) then
+				idtext:SetText("25G")
+			elseif (isDynamic and (difficultyIndex == 2 and dynamicDifficulty == 1) or (difficultyIndex == 4)) or (not isDynamic and difficultyIndex == 4) then
+				idtext:SetText("25HG")
+			end
+		else
+			if (isDynamic and difficultyIndex == 1 and dynamicDifficulty == 0) or (not isDynamic and difficultyIndex == 1) then
+				idtext:SetText("10")
+			elseif (isDynamic and (difficultyIndex == 3 and dynamicDifficulty == 0) or (difficultyIndex == 1 and dynamicDifficulty == 1)) or (not isDynamic and difficultyIndex == 3) then
+				idtext:SetText("10H")
+			elseif (isDynamic and difficultyIndex == 2 and dynamicDifficulty == 0) or (not isDynamic and difficultyIndex == 2) then
+				idtext:SetText("25")
+			elseif (isDynamic and (difficultyIndex == 2 and dynamicDifficulty == 1) or (difficultyIndex == 4)) or (not isDynamic and difficultyIndex == 4) then
+				idtext:SetText("25H")
+			end
 		end
-	elseif inInstance and instanceType == "party" then
-		if difficultyIndex == 1 then
-			idtext:SetText("5")
-		elseif difficultyIndex == 2 then
-			idtext:SetText("5H")
+	else 
+		if inGroup then
+			if inInstance and instanceType == "party" then
+				if difficultyIndex == 1 then
+					idtext:SetText("5G")
+				elseif difficultyIndex == 2 then
+					idtext:SetText("5HG")
+				end
+			end
+		else
+			if inInstance and instanceType == "party" then
+				if difficultyIndex == 1 then
+					idtext:SetText("5")
+				elseif difficultyIndex == 2 then
+					idtext:SetText("5H")
+				end
+			else
+				idtext:SetText("")
+			end
 		end
-	else
-		idtext:SetText("")
 	end
 end
 id:SetScript("OnEvent", diff)

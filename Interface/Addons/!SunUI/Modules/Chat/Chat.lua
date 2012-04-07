@@ -29,7 +29,6 @@ local def_position = {"BOTTOMLEFT", 5, 25} -- Chat Frame position
 local chat_height = 122
 local chat_width = 327
 local fontsize = 10                          --other variables
-local eb_point = {"BOTTOM", -200, 180}		-- Editbox position
 local eb_width = 400						-- Editbox width
 local tscol = "64C2F5"						-- Timestamp coloring
 local TimeStampsCopy = true					-- 时间戳
@@ -166,20 +165,15 @@ local TimeStampsCopy = true					-- 时间戳
 					_G[chat.."EditBoxLanguage"]:SetPoint("LEFT", _G[chat.."EditBox"], "RIGHT", S.Scale(5), 0)
 					_G[chat.."EditBoxLanguage"]:SetSize(_G[chat.."EditBox"]:GetHeight(),_G[chat.."EditBox"]:GetHeight()+1)
 					S.StripTextures(_G[chat.."EditBoxLanguage"])
-					--_G[chat.."EditBoxLanguage"]:SetTemplate("Default", true)
-					--S.MakeShadow(_G[chat.."EditBoxLanguage"], 2)
-					--S.MakeBG(_G[chat.."EditBoxLanguage"], 0)
 					_G[chat.."EditBoxLanguage"]:CreateShadow("Background")
 				end
 			eb:SetAltArrowKeyMode(false)
 			eb:ClearAllPoints()
 			eb:SetPoint("BOTTOMLEFT", cf, "TOPLEFT",  0, 3)
-			--eb:SetPoint("BOTTOMLEFT", UIParent, eb_point[1], eb_point[2], eb_point[3])
 			eb:SetPoint("BOTTOMRIGHT", cf, "TOPRIGHT", 0, 3)
-			--eb:SetPoint("BOTTOMRIGHT", UIParent, eb_point[1], eb_point[2]+eb_width, eb_point[3])
 			eb:SetHeight(18)
 			eb:CreateShadow("Background")
-			eb:EnableMouse(true)
+			--eb:EnableMouse(true)
 			eb:SetFont(DB.Font, 14*MiniDB["FontScale"]*S.Scale(1), "OUTLINE")
 
 		--Remove scroll buttons

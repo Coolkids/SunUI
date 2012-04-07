@@ -1,6 +1,6 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ShadowPet")
 if DB.MyClass ~= "PRIEST" then return end
+local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ShadowPet")
 function Module:OnInitialize()
 local spellname = GetSpellInfo(34433)
 

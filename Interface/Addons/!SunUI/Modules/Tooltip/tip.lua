@@ -184,11 +184,12 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 
     if GameTooltipStatusBar:IsShown() then
         GameTooltipStatusBar:ClearAllPoints()
-		GameTooltipStatusBar:Height(8)
-		GameTooltipStatusBar:Point("BOTTOMLEFT", GameTooltipStatusBar:GetParent(), "TOPLEFT", 0, 5)
-		GameTooltipStatusBar:Point("BOTTOMRIGHT", GameTooltipStatusBar:GetParent(), "TOPRIGHT", 0, 5)
-		if not GameTooltipStatusBar.Shadow then
+		GameTooltipStatusBar:SetHeight(6)
+		GameTooltipStatusBar:SetPoint("BOTTOMLEFT", GameTooltipStatusBar:GetParent(), "TOPLEFT", 0, 5)
+		GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", GameTooltipStatusBar:GetParent(), "TOPRIGHT", 0, 5)
+		if GameTooltipStatusBar.shadow ~= true then 
 			GameTooltipStatusBar:CreateShadow("Background")
+			GameTooltipStatusBar.shadow = true
 		end
     end
 end)

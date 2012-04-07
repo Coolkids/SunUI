@@ -105,6 +105,7 @@ local function CreateTabs(fr, frtype)
 	frametabs['social'].ToggleFrameType = 'social'
 	frametabs['social']:SetScript("OnClick", Tab_OnClick)
 	frametabs['social']:CreateShadow("Background")
+	--S.ReskinFrame(frametabs['social'])
 	-- Guild tab
 	frametabs['guild'] = CreateFrame("CheckButton", nil, fr, "SpellBookSkillLineTabTemplate")
 	frametabs['guild']:Show()
@@ -112,6 +113,7 @@ local function CreateTabs(fr, frtype)
 	frametabs['guild']:SetFrameStrata("LOW")
 	frametabs['guild'].tooltip = GUILD
 	frametabs['guild']:CreateShadow("Background")
+	--S.ReskinFrame(frametabs['guild'])
 	if GetGuildTabardFileNames() then
 		frametabs['guild']:SetNormalTexture("Interface\\SpellBook\\GuildSpellbooktabBG")
 		frametabs['guild'].TabardEmblem:Show()
@@ -148,6 +150,7 @@ local function CreateTabs(fr, frtype)
 		frametabs['lfd']:Disable()
 	end
 	frametabs['lfd']:CreateShadow("Background")
+	--S.ReskinFrame(frametabs['lfd'])
 	-- LFR tab
 	frametabs['lfr'] = CreateFrame("CheckButton", nil, fr, "SpellBookSkillLineTabTemplate")
 	frametabs['lfr']:Show()
@@ -159,6 +162,7 @@ local function CreateTabs(fr, frtype)
 	frametabs['lfr'].ToggleFrameType = 'lfr'
 	frametabs['lfr']:SetScript("OnClick", Tab_OnClick)
 	frametabs['lfr']:CreateShadow("Background")
+	--S.ReskinFrame(frametabs['lfr'])
 	-- PVP tab
 	frametabs['pvp'] = CreateFrame("CheckButton", nil, fr, "SpellBookSkillLineTabTemplate")
 	frametabs['pvp']:Show()
@@ -175,6 +179,7 @@ local function CreateTabs(fr, frtype)
 		frametabs['pvp']:Disable()
 	end
 	frametabs['pvp']:CreateShadow("Background")
+	--S.ReskinFrame(frametabs['pvp'])
 	-- LFG tab
 	frametabs['lfg'] = CreateFrame("CheckButton", nil, fr, "SpellBookSkillLineTabTemplate")
 	frametabs['lfg']:Show()
@@ -186,6 +191,7 @@ local function CreateTabs(fr, frtype)
 	frametabs['lfg'].ToggleFrameType = 'lfg'
 	frametabs['lfg']:SetScript("OnClick", Tab_OnClick)
 	frametabs['lfg']:CreateShadow("Background")
+	--S.ReskinFrame(frametabs['lfg'])
 	-- restricted to trial accounts
 	if (IsTrialAccount()) then
 		frametabs['lfg']:SetAlpha(0.5)

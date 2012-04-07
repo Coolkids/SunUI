@@ -1,4 +1,4 @@
-﻿
+﻿local S, _, _, DB = unpack(select(2, ...))
 local addonName, ns = ...
 local button = CreateFrame('Button', addonName, UIParent, 'SecureActionButtonTemplate, AutoCastShineTemplate')
 button:SetScript('OnEvent', function(self, event, ...) self[event](self, ...) end)
@@ -42,7 +42,8 @@ function button:PLAYER_LOGIN()
 				button:SetAttribute('macrotext', string.format('/cast %s\n/use %s %s', spell, bag:GetID(), slot:GetID()))
 				button:SetAllPoints(slot)
 				button:Show()
-				AutoCastShine_AutoCastStart(button, r, g, b)
+				S.ReskinFrame(button)
+				--AutoCastShine_AutoCastStart(button, r, g, b)
 			end
 		end
 	end)
@@ -54,10 +55,10 @@ function button:PLAYER_LOGIN()
 	self:RegisterEvent('MODIFIER_STATE_CHANGED')
 	self:Hide()
 
-	for _, sparks in pairs(self.sparkles) do
-		sparks:SetHeight(sparks:GetHeight() * 3)
-		sparks:SetWidth(sparks:GetWidth() * 3)
-	end
+	--for _, sparks in pairs(self.sparkles) do
+		--sparks:SetHeight(sparks:GetHeight() * 3)
+		--sparks:SetWidth(sparks:GetWidth() * 3)
+	--end
 end
 
 function button:MODIFIER_STATE_CHANGED(key)
@@ -70,7 +71,7 @@ function button:MODIFIER_STATE_CHANGED(key)
 		self:ClearAllPoints()
 		self:SetAlpha(1)
 		self:Hide()
-		AutoCastShine_AutoCastStop(self)
+		--AutoCastShine_AutoCastStop(self)
 	end
 end
 

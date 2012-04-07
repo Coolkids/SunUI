@@ -137,7 +137,7 @@ local createSlot = function(id)
 	})
 	frame.glow:SetPoint("TOPLEFT", -6, 6)
 	frame.glow:SetPoint("BOTTOMRIGHT", 6, -6)
-	frame.glow:SetBackdropBorderColor(r, g, b)
+	frame.glow:SetBackdropBorderColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
 	frame.glow:SetAlpha(0)
 	
 	local iconFrame = CreateFrame("Frame", nil, frame)

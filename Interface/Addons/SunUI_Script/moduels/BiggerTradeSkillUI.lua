@@ -139,28 +139,28 @@ BTSUiVerticalBarBottom:SetHeight(128)
 -- Detail frame with the ingredients
 TradeSkillDetailScrollFrame:ClearAllPoints()
 TradeSkillDetailScrollFrame:SetPoint("RIGHT", TradeSkillFrame, "RIGHT", -31, 0)
-TradeSkillDetailScrollFrame:SetPoint("LEFT", TradeSkillFrame, "RIGHT", -218, 0)
+TradeSkillDetailScrollFrame:SetPoint("LEFT", TradeSkillFrame, "RIGHT", -260, 0)
 TradeSkillDetailScrollFrame:SetPoint("TOP", TradeSkillFrame, "TOP", 0, -86)
 TradeSkillDetailScrollFrame:SetPoint("BOTTOM", TradeSkillFrame, "BOTTOM", 0, 30)
 
 -- Re-anchor icons, text and stuff
 TradeSkillDetailHeaderLeft:SetPoint("TOPLEFT", TradeSkillDetailScrollChildFrame, "TOPLEFT", 3, -5)
 TradeSkillDetailHeaderLeft:SetWidth(140)
-TradeSkillDetailHeaderLeft:SetTexCoord(0, 0.56, 0, 1)
-TradeSkillDetailHeaderLeft:Show()
+TradeSkillDetailHeaderLeft:Hide()
 
 TradeSkillSkillIcon:SetPoint("TOPLEFT", TradeSkillDetailHeaderLeft, "TOPLEFT", 8, -6)
+
 
 TradeSkillSkillName:SetPoint("TOPLEFT", TradeSkillDetailHeaderLeft, "TOPLEFT", 50, -4)
 TradeSkillSkillName:SetPoint("RIGHT", TradeSkillDetailScrollFrame, "RIGHT", -5, 0)
 TradeSkillSkillName:SetHeight(40)
-
+TradeSkillSkillName:SetWidth(200)
 -- Description and requirements swapped places cause it looks better.
 -- Note that the anchors get reset when the recipe detail display is updated
 -- So need to reapply this when that happens (hook TradeSkillFrame_SetSelection)
 -- The values in the hook function are leading when they are different from here
 TradeSkillDescription:SetPoint("TOPLEFT", TradeSkillDetailHeaderLeft, "BOTTOMLEFT", 5, 5)
-TradeSkillDescription:SetWidth(180)  -- Set a width that matches the real width for the autosizing 
+TradeSkillDescription:SetWidth(220)  -- Set a width that matches the real width for the autosizing 
                                      -- to work. Smaller widths seem to add height, bigger widths 
                                      -- will cut off the text instead of expanding the textheight
 
@@ -169,16 +169,16 @@ TradeSkillRequirementLabel:SetTextColor(TradeSkillReagentLabel:GetTextColor())
 TradeSkillRequirementLabel:SetShadowColor(TradeSkillReagentLabel:GetShadowColor())
 TradeSkillRequirementLabel:SetPoint("TOPLEFT", TradeSkillDescription, "BOTTOMLEFT", 0, -15)
 TradeSkillRequirementText:SetPoint("TOPLEFT", TradeSkillRequirementLabel, "BOTTOMLEFT", 0, 0)
-
+TradeSkillRequirementText:SetText(nil)
 TradeSkillReagentLabel:SetPoint("TOPLEFT", TradeSkillRequirementText, "BOTTOMLEFT", 0, -15)
-
+_G["TradeSkillReagent1"]:SetWidth(180)
 -- Reposition reagent buttons
 for i=2, MAX_TRADE_SKILL_REAGENTS do
    local reagentButton = _G["TradeSkillReagent"..i]
-   
+   reagentButton:SetWidth(180)
    reagentButton:ClearAllPoints()
    reagentButton:SetPoint("TOPLEFT", _G["TradeSkillReagent"..(i-1)], "BOTTOMLEFT", 0, -3)
-   reagentButton:SetPoint("RIGHT", TradeSkillDetailScrollFrame, "RIGHT")
+   --reagentButton:SetPoint("RIGHT", TradeSkillDetailScrollFrame, "RIGHT")
 end
 
 -- Background for reagents/detailarea
@@ -194,8 +194,8 @@ detailBackground:SetTexture(nil)
 
 -- Scrollbar of the recipe list
 TradeSkillListScrollFrame:ClearAllPoints()
-TradeSkillListScrollFrame:SetPoint("TOPRIGHT", TradeSkillDetailScrollFrame, "TOPLEFT", -28, 0)
-TradeSkillListScrollFrame:SetPoint("BOTTOMRIGHT", TradeSkillDetailScrollFrame, "BOTTOMLEFT", -28, 0)
+TradeSkillListScrollFrame:SetPoint("TOPRIGHT", TradeSkillDetailScrollFrame, "TOPLEFT", -15, 0)
+TradeSkillListScrollFrame:SetPoint("BOTTOMRIGHT", TradeSkillDetailScrollFrame, "BOTTOMLEFT", -15, 0)
 
 if (not BTSUiTradeSkillListScrollBarMiddle) then
    -- Use horrible random name for texture. When using a proper name like BTSUiTradeSkillListScrollBarMiddle

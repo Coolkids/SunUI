@@ -614,6 +614,8 @@ C = UnitFrameDB
       b.num = 5
       b:SetWidth((b.size+b.spacing)*4)
 	elseif f.mystyle=="boss" then
+	  b["growth-x"] = "LEFT"
+	  d['growth-y'] = 'DOWN'
 	  b.initialAnchor = "RIGHT"
       b.showBuffType = true
       b:SetPoint("RIGHT", f, "LEFT", -2, 0)
@@ -703,14 +705,14 @@ C = UnitFrameDB
       d:SetWidth((d.size+d.spacing)*8)
 	  d:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 15)
 	   elseif f.mystyle=="boss" then
-	  d['growth-x'] = 'LEFT'
-      d['growth-y'] = 'DOWN' 
-      d.initialAnchor = 'BOTTOMRIGHT'
+	  d['growth-x'] = 'RIGHT'
+      d['growth-y'] = 'UP' 
+      d.initialAnchor = 'BOTTOMLEFT'
 	  d.num = 5
 	  d.size = 16
       d:SetHeight((d.size+d.spacing)*2)
       d:SetWidth((d.size+d.spacing)*8)
-	  d:SetPoint("BOTTOMRIGHT", f, "TOPLEFT", 0, 3)
+	  d:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
     end
     d.PostCreateIcon = lib.PostCreateIcon
     d.PostUpdateIcon = lib.PostUpdateIcon
