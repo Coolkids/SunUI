@@ -47,7 +47,10 @@ Delay:SetScript("OnEvent", function()
 		S.StripTextures(ItemRefShoppingTooltip2)
 		ItemRefShoppingTooltip2:CreateShadow("Background")
 	end
-
+	
+	if UnitPopupMenus then
+		UnitPopupMenus["PLAYER"] = { "SET_FOCUS", "WHISPER", "INSPECT", "ACHIEVEMENTS", "INVITE", "TRADE", "FOLLOW", "DUEL", "RAID_TARGET_ICON", "RAF_SUMMON", "RAF_GRANT_LEVEL", "MOVE_PLAYER_FRAME", "MOVE_TARGET_FRAME", "CANCEL" };
+	end
 	
 	if DB.Nuke == true then
 		for i = 1,20 do

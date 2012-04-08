@@ -216,6 +216,10 @@ C = UnitFrameDB
     self.mystyle = "arena"
     genStyle(self)
     self.Health.Smooth = true
+	if C["ClassColor"] then
+	self.Health.colorClass = true
+	self.Health.colorReaction = true
+	end
     self.Power.frequentUpdates = true
     self.Power.colorPower = true
     self.Power.bg.multiplier = 0.3

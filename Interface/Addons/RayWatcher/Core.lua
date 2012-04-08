@@ -1,5 +1,5 @@
 local RayUIWatcher = LibStub("AceAddon-3.0"):NewAddon("RayWatcher", "AceEvent-3.0")
-
+local S, _, _, DB = unpack(select(2, ...))
 local _, ns = ...
 local _, myclass = UnitClass("player")
 local colors = RAID_CLASS_COLORS
@@ -14,52 +14,6 @@ local CooldownFrame_SetTimer = CooldownFrame_SetTimer
 
 local normal = "Interface\\Addons\\RayWatcher\\media\\statusbar"
 local glow = "Interface\\Addons\\RayWatcher\\media\\glowtex"
-
-local function sc(x)
-	local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/GetCVar("UIScale")
-	--print (mult)
-	return mult*math.floor(x/mult+0.5)
-end
-
-local function CreateSh(f, t, offset, thickness, texture)
-	if f.shadow then return end	
-	local borderr, borderg, borderb, bordera =  0,0,0,1
-	local backdropr, backdropg, backdropb, backdropa = .05,.05,.05, .9
-	
-	if t == "Background" then
-		backdropa = 0.8
-	else
-		backdropa = 0
-	end
-	
-	local shadow = CreateFrame("Frame", nil, f)
-	if f:GetFrameLevel() - 1 >= 0 then
-		shadow:SetFrameLevel(f:GetFrameLevel() - 1)
-	else
-		shadow:SetFrameLevel(0)
-	end
-	if offset and type(offset) == "number" then
-		offset = sc(offset)
-		shadow:SetPoint("TOPLEFT", -sc(1 + offset), sc(1 + offset))
-		shadow:SetPoint("BOTTOMRIGHT", sc(1 + offset), -sc(1 + offset))
-	else
-		shadow:SetPoint("TOPLEFT", -sc(3), sc(3))
-		shadow:SetPoint("BOTTOMRIGHT", sc(3), -sc(3))
-	end
-	local thick = 4
-	if type(thickness) == "number" then
-		thick = thickness
-	end
-	shadow:SetBackdrop({
-	bgFile = normal,
-	edgeFile = glow, 
-	edgeSize = sc(4),
-	insets = { left = sc(thick), right = sc(thick), top = sc(thick), bottom = sc(thick) }
-	})
-	shadow:SetBackdropColor( backdropr, backdropg, backdropb, backdropa )
-	shadow:SetBackdropBorderColor( borderr, borderg, borderb, bordera )
-	f.shadow = shadow
-end
 
 function watcherPrototype:OnEnable()
 		if self.parent then
@@ -77,12 +31,11 @@ end
 
 function watcherPrototype:CreateButton(mode)
 	local button=CreateFrame("Frame", nil, self.parent)
-	CreateSh(button,"Background")
+	button:CreateShadow("Background")
 	button:SetSize(self.size, self.size)
 	self.parent:SetSize(self.size, self.size)
 	button.icon = button:CreateTexture(nil, "ARTWORK")
-	button.icon:SetPoint("TOPLEFT", button , 2, -2)
-	button.icon:SetPoint("BOTTOMRIGHT", button , -2, 2)
+	button.icon:SetAllPoints()
 	button.count = button:CreateFontString(nil, "OVERLAY")
 	button.count:SetFont(ns.font, ns.fontsize + 0, ns.fontflag)
 	button.count:SetPoint("BOTTOMRIGHT", button , "BOTTOMRIGHT", 4, -2)
@@ -106,9 +59,8 @@ function watcherPrototype:CreateButton(mode)
 		button.statusbar = CreateFrame("StatusBar", nil, button)
 		button.statusbar:SetFrameStrata("BACKGROUND")
 		local shadow = CreateFrame("Frame", nil, button.statusbar)
-		shadow:SetPoint("TOPLEFT", -2, 2)
-		shadow:SetPoint("BOTTOMRIGHT", 2, -2)
-		CreateSh(shadow,"Background")
+		shadow:SetAllPoints()
+		shadow:CreateShadow("Background")
 		button.statusbar:SetWidth(self.barwidth - 6)
 		button.statusbar:SetHeight(5)
 		button.statusbar:SetStatusBarTexture([[Interface\AddOns\RayWatcher\media\statusbar.tga]])
@@ -350,7 +302,7 @@ function watcherPrototype:ApplyStyle()
 				local shadow = CreateFrame("Frame", nil, button.statusbar)
 				shadow:SetPoint("TOPLEFT", -2, 2)
 				shadow:SetPoint("BOTTOMRIGHT", 2, -2)
-				CreateSh(shadow,"Background",3)
+				shadow:CreateShadow("Background")
 				button.statusbar:SetWidth(self.barwidth - 6)
 				button.statusbar:SetHeight(5)
 				button.statusbar:SetStatusBarTexture([[Interface\AddOns\RayWatcher\media\statusbar.tga]])
