@@ -2,10 +2,20 @@ local parent, ns = ...
 local oUF = ns.oUF
 
 local Update = function(self, event)
-	if(UnitAffectingCombat"player") then
-		self.Combat:Show()
+	local combat = self.Combat
+	if(combat.PreUpdate) then
+		combat:PreUpdate()
+	end
+
+	local inCombat = UnitAffectingCombat('player')
+	if(inCombat) then
+		combat:Show()
 	else
-		self.Combat:Hide()
+		combat:Hide()
+	end
+
+	if(combat.PostUpdate) then
+		return combat:PostUpdate(inCombat)
 	end
 end
 
@@ -23,8 +33,8 @@ local Enable = function(self, unit)
 		combat.__owner = self
 		combat.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent("PLAYER_REGEN_DISABLED", Path)
-		self:RegisterEvent("PLAYER_REGEN_ENABLED", Path)
+		self:RegisterEvent("PLAYER_REGEN_DISABLED", Path, true)
+		self:RegisterEvent("PLAYER_REGEN_ENABLED", Path, true)
 
 		if(combat:IsObjectType"Texture" and not combat:GetTexture()) then
 			combat:SetTexture[[Interface\CharacterFrame\UI-StateIcon]]

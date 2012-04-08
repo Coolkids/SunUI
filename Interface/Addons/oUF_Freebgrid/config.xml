@@ -5,4 +5,5 @@
     <Include file="libs\LibAboutPanel\lib.xml" />
 
     <Script file="config.lua" />
+	<Script file="clickset\config.lua" />
 </Ui>

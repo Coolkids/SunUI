@@ -2,11 +2,11 @@ local _, ns = ...
 local oUF =  ns.oUF or oUF
 assert(oUF, "oUF_Freebgrid was unable to locate oUF install.")
 
-local _, class = UnitClass("player")
-local indicator = ns.mediapath.."squares.ttf"
-local symbols = ns.mediapath.."PIZZADUDEBULLETS.ttf"
+local class = select(2, UnitClass("player"))
+local indicator = ns.media.indicator
+local symbols = ns.media.symbols
 
-local update = .25
+local update = .2
 
 local Enable = function(self)
     if(self.freebIndicators) then

@@ -3,7 +3,7 @@ local oUF = ns.oUF
 
 oUF.colors.health = {49/255, 207/255, 37/255}
 
-local Update = function(self, event, unit, powerType)
+local Update = function(self, event, unit)
 	if(self.unit ~= unit) then return end
 	local health = self.Health
 
@@ -11,8 +11,12 @@ local Update = function(self, event, unit, powerType)
 
 	local min, max = UnitHealth(unit), UnitHealthMax(unit)
 	local disconnected = not UnitIsConnected(unit)
+	if max == 0 then
+		max = 1
+	end
+	
 	health:SetMinMaxValues(0, max)
-
+	
 	if(disconnected) then
 		health:SetValue(max)
 	else
@@ -34,14 +38,7 @@ local Update = function(self, event, unit, powerType)
 	elseif(health.colorReaction and UnitReaction(unit, 'player')) then
 		t = self.colors.reaction[UnitReaction(unit, "player")]
 	elseif(health.colorSmooth) then
-		local perc
-		if(max == 0) then
-			perc = 0
-		else
-			perc = min / max
-		end
-
-		r, g, b = self.ColorGradient(perc, unpack(health.smoothGradient or self.colors.smooth))
+		r, g, b = self.ColorGradient(min, max, unpack(health.smoothGradient or self.colors.smooth))
 	elseif(health.colorHealth) then
 		t = self.colors.health
 	end

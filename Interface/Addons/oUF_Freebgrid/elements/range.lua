@@ -112,35 +112,35 @@ local OnRangeUpdate = function(self, elapsed)
             if(object:IsShown()) then
 		
                 local range = object.freebRange
-		if(UnitIsConnected(object.unit) and not UnitInRange(object.unit)) then
-                    if(object:GetAlpha() == range.insideAlpha) then
-                        object:SetAlpha(ns.db.outsideRange)
-                    end
+				if(UnitIsConnected(object.unit) and not UnitInRange(object.unit)) then
+					if(object:GetAlpha() == range.insideAlpha) then
+						object:SetAlpha(ns.db.outsideRange)
+					end
 
-                    object.OoR = true
-                    if ns.db.arrow and not ns.db.arrowmouseover then
+					object.OoR = true
+					if ns.db.arrow and not ns.db.arrowmouseover then
 			
-                        local bearing = GetBearing(object.unit)
-                        if bearing then
-			    object.freebarrow:SetScale(ns.db.arrowscale)	--动态更新箭头图标大小
-                            RotateTexture(object.freebarrow, bearing)
-                        elseif object.freebarrow:IsShown() then
-                            object.freebarrow:Hide()
-                        end
-                    end
-		elseif(not UnitIsConnected(object.unit) and ns.db.rangeIsNotConnected) then
-                    object:SetAlpha(ns.db.outsideRange)
-                    if object.freebarrow:IsShown() then
-                        object.freebarrow:Hide()
-                    end
-                elseif(object:GetAlpha() ~= range.insideAlpha) then
-                    object:SetAlpha(range.insideAlpha)
-                    if object.freebarrow:IsShown() then
-                        object.freebarrow:Hide()
-                    end
-                else
-                    object.OoR = false
-                end
+						local bearing = GetBearing(object.unit)
+						if bearing then
+							object.freebarrow:SetScale(ns.db.arrowscale)	--动态更新箭头图标大小
+							RotateTexture(object.freebarrow, bearing)
+						elseif object.freebarrow:IsShown() then
+							object.freebarrow:Hide()
+						end
+					end
+				elseif(not UnitIsConnected(object.unit) and ns.db.rangeIsNotConnected) then
+					object:SetAlpha(ns.db.outsideRange)
+					if object.freebarrow:IsShown() then
+						object.freebarrow:Hide()
+					end
+				elseif(object:GetAlpha() ~= range.insideAlpha) then
+					object:SetAlpha(range.insideAlpha)
+					if object.freebarrow:IsShown() then
+						object.freebarrow:Hide()
+					end
+				else
+					object.OoR = false
+				end
             else
                 if object.freebarrow:IsShown() then
                     object.freebarrow:Hide()

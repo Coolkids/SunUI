@@ -2,79 +2,67 @@ local _, ns = ...
 local oUF = ns.oUF or oUF
 assert(oUF, "oUF_Freebgrid was unable to locate oUF install.")
 
-local ResurrectionSpells = {
-	7328,			-- Paladin
-	2008,			-- Shaman
-	50769,			-- Druid 起死回生
-	--20484,			-- Druid 复生
-	2006,			-- Priest
-}
-
-local BOOKTYPE_SPELL = BOOKTYPE_SPELL
-local spellname = nil
-
-local Init = function()
-	local FindInSpellbook = function(spell)
-		for tab = 1, 4 do
-			local _, _, offset, numSpells = GetSpellTabInfo(tab)
-			for i = (1+offset), (offset + numSpells) do
-				local bspell = GetSpellInfo(i, BOOKTYPE_SPELL)
-				if (bspell == spell) then
-					return i   
-				end
-			end
-		end
-		return nil
-	end
-
-	for _, lspell in pairs(ResurrectionSpells) do
-		local na = GetSpellInfo (lspell)
-		local x = FindInSpellbook(na)
-		if x ~= nil then
-			spellname = na
-			break
-		end
-	end
-	return spellname
+local spellcache = setmetatable({}, {__index=function(t,v) local a = {GetSpellInfo(v)} if GetSpellInfo(v) then t[v] = a end return a end})
+local function GetSpellInfo(a)
+    return unpack(spellcache[a])
 end
 
-local Resurrection = function(_,_,cast,name,_,unit)
-	if(InCombatLockdown()) then return end
---[[	local unitname = nil
-	if unit =="未知目标" and MouseoverUnit then
-		unitname =  UnitName( MouseoverUnit)
-	else
-		unitname = unit
-	end
---]]
-	if cast == "player" and name == spellname and unit ~="未知目标" then 
-		local Text = "正在复活<< "..unit.." >>...."
-		if (GetNumRaidMembers() > 0) then
-			SendChatMessage(Text, "RAID", nil, nil);
-		elseif (GetNumPartyMembers() > 0) then
-			SendChatMessage(Text, "PARTY", nil, nil);
+local ResurrectionSpells = {
+	[GetSpellInfo(7328)] = true, 	--救赎
+	[GetSpellInfo(2008)] = true, 	--先祖之魂
+	[GetSpellInfo(50769)] = true, 	--起死回生
+	[GetSpellInfo(20484)] = true, 	--复生
+	[GetSpellInfo(2006)] = true, 	--复活术
+	[GetSpellInfo(61999)] = true, 	--复活盟友
+	[GetSpellInfo(20707)] = true, 	--灵魂石复活
+	[GetSpellInfo(331)] = true, 	--灵魂石复活
+}
+
+
+local Resurrection = function(self, event,...)
+	if not ns.db.Resurrection then return end
+	if event == "UNIT_SPELLCAST_SENT" then
+		local cast, spellname, rank, unit = ...
+		
+		if cast ~= "player" then return end
+
+		--local inInstance, instanceType = IsInInstance() 
+		--if not (inInstance and (instanceType == "raid" or instanceType == "party")) then return end
+		local instanceType
+		if GetNumRaidMembers() > 0 then
+			instanceType = "raid"
+		elseif GetNumPartyMembers() > 0 then
+			instanceType = "party"
 		else
-			SendChatMessage(Text, "WHISPER", nil, unit);
-		end		
-	end	
+			return
+		end
+		
+		if spellname == GetSpellInfo(83968) then	--群体复活
+			SendChatMessage("正在释放群体复活...", instanceType, nil, nil)
+			return
+		end
+
+		if ResurrectionSpells[spellname] and unit ~="unknown" and UnitIsDeadOrGhost(unit) then 
+			local Text = "正在复活  "..unit.." ...."
+			SendChatMessage(Text, instanceType, nil, nil);	
+		end	
+    end
 end
 
 
 local Enable = function(self)	
-	if not ns.db.Resurrection or (spellname == nil and Init() == nil) then  return end 
-		if(not OnResFrame) then
-            OnResFrame = CreateFrame"Frame"
-			OnResFrame:RegisterEvent('UNIT_SPELLCAST_SENT')
-			OnResFrame:SetScript('OnEvent', Resurrection)
-		end
+	if(not OnResFrame) then
+		OnResFrame = CreateFrame"Frame"
+		OnResFrame:RegisterEvent('UNIT_SPELLCAST_SENT')
+		OnResFrame:SetScript('OnEvent', Resurrection)
+	end	
 end
-
 
 local Disable = function(self)
 	if OnResFrame then
 		OnResFrame:UnregisterEvent('UNIT_SPELLCAST_SENT')
 	end
 end
-oUF:AddElement('Resurrection', Update, Enable, Disable)
+oUF:AddElement('Resurrection', nil, Enable, Disable)
 
 

@@ -5,14 +5,21 @@ local GetRaidTargetIndex = GetRaidTargetIndex
 local SetRaidTargetIconTexture = SetRaidTargetIconTexture
 
 local Update = function(self, event)
-	local index = GetRaidTargetIndex(self.unit)
 	local icon = self.RaidIcon
+	if(icon.PreUpdate) then
+		icon:PreUpdate()
+	end
 
+	local index = GetRaidTargetIndex(self.unit)
 	if(index) then
 		SetRaidTargetIconTexture(icon, index)
 		icon:Show()
 	else
 		icon:Hide()
+	end
+
+	if(icon.PostUpdate) then
+		return icon:PostUpdate(index)
 	end
 end
 
@@ -31,7 +38,7 @@ local Enable = function(self)
 		ricon.__owner = self
 		ricon.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent("RAID_TARGET_UPDATE", Path)
+		self:RegisterEvent("RAID_TARGET_UPDATE", Path, true)
 
 		if(ricon:IsObjectType"Texture" and not ricon:GetTexture()) then
 			ricon:SetTexture[[Interface\TargetingFrame\UI-RaidTargetingIcons]]

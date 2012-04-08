@@ -1,13 +1,25 @@
 local ADDON_NAME, ns = ...
+
 local oUF = ns.oUF or oUF
 assert(oUF, "oUF_Freebgrid was unable to locate oUF install.")
+
+local L = ns.Locale
 
 ns._Objects = {}
 ns._Headers = {}
 
 ns.nameCache = {}
 ns.colorCache = {}
-ns.debuffColor = {} -- hex debuff colors for tags
+ns.debuffColor = {} 
+ns.instDebuffs = {}
+
+local media = LibStub("LibSharedMedia-3.0", true)
+if media then
+	media:Register("font", "Accidental Presidency",		[[Interface\Addons\oUF_Freebgrid\media\Accidental Presidency.ttf]])
+	media:Register("font", "Expressway",				[[Interface\Addons\oUF_Freebgrid\media\expressway.ttf]])
+	media:Register("statusbar", "gradient",				[[Interface\Addons\oUF_Freebgrid\media\gradient]])
+	media:Register("statusbar", "Cabaret",				[[Interface\Addons\oUF_Freebgrid\media\Cabaret]])
+end
 
 local backdrop = {
     bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
@@ -30,17 +42,123 @@ local glowBorder = {
     insets = {left = 3, right = 3, top = 3, bottom = 3}
 }
 
+local glowBorder2 = {
+    bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
+    edgeFile = [=[Interface\AddOns\oUF_Freebgrid\media\glowTex.tga]=], edgeSize = 3,
+    insets = {left = 1, right = 1, top = 1, bottom = 1}
+}
+
 local colors = setmetatable({
     power = setmetatable({
         ['MANA'] = {.31,.45,.63},
     }, {__index = oUF.colors.power}),
 }, {__index = oUF.colors})
 
+function ns:multicheck(check, ...)
+    for i=1, select('#', ...) do
+        if check == select(i, ...) then return true end
+    end
+    return false
+end
+
 function ns:hex(r, g, b)
     if(type(r) == 'table') then
         if(r.r) then r, g, b = r.r, r.g, r.b else r, g, b = unpack(r) end
     end
     return ('|cff%02x%02x%02x'):format(r * 255, g * 255, b * 255)
+end
+
+function ns:Getdifficulty()
+	local _, instanceType, difficulty, _, maxPlayers, playerDifficulty, isDynamicInstance = GetInstanceInfo()
+	if IsPartyLFG() and IsInLFGDungeon() and difficulty == 2 and instanceType == "raid" and maxPlayers == 25 then
+		return "lfr25"
+	elseif difficulty == 1 then
+		return instanceType == "raid" and "normal10" or "normal5"
+	elseif difficulty == 2 then
+		return instanceType == "raid" and "normal25" or "heroic5"
+	elseif difficulty == 3 then
+		return "heroic10"
+	elseif difficulty == 4 then
+		return "heroic25"
+	else
+		return "unknown"
+	end
+end
+
+function ns:GetTalentSpec()
+	local spec = GetPrimaryTalentTree() or 0
+	local name,group = "NONE",0
+	
+	if spec > 0 then
+		group = GetActiveTalentGroup()
+		name = select(2, GetTalentTabInfo(spec))
+	end
+	
+	return spec, group, name
+end
+
+function ns:IsHealer()
+	local _, class = UnitClass("player")
+	local spec = ns:GetTalentSpec()
+
+	if ((class == "SHAMAN" or class == "DRUID") and spec == 3) 
+	or (class == "PALADIN" and spec == 1) or (class == "PRIEST" and (spec == 1 or spec == 2)) then
+		return true
+	end
+	return false
+end
+
+function ns:GetMapID()
+	SetMapToCurrentZone()
+    local zone = GetCurrentMapAreaID()
+	return zone
+end
+
+function ns:GetDispelClass()
+	local _, class = UnitClass("player")
+	local dispelClass = {				
+		["PRIEST"] 	= { Disease = true, Magic = true},
+		["SHAMAN"] 	= { Curse = true},
+		["PALADIN"] = { Poison = true, Disease = true},
+		["MAGE"] 	= { Curse = true},
+		["DRUID"] 	= { Curse = true, Poison = true},
+	}
+	if class == "SHAMAN" and select(5, GetTalentInfo(3, 12)) == 1 then
+		dispelClass[class].Magic = true	
+	elseif class == "PALADIN" and select(5, GetTalentInfo(1, 14)) == 1 then
+		dispelClass[class].Magic = true
+		
+	elseif class == "DRUID" and select(5, GetTalentInfo(3, 17)) == 1 then
+		dispelClass[class].Magic = true			
+	end
+	return dispelClass[class] or {}
+end
+
+function ns:UpdateBlizzardRaidFrame()
+	if InCombatLockdown() then return end
+	CompactRaidFrameManager:UnregisterAllEvents()
+	CompactRaidFrameContainer:UnregisterAllEvents() 
+	if ns.db.hideblzraid then
+		CompactRaidFrameManager_SetSetting("IsShown", "0")
+		CompactRaidFrameManager:Hide()
+	else
+		CompactRaidFrameManager:RegisterEvent("DISPLAY_SIZE_CHANGED")
+		CompactRaidFrameManager:RegisterEvent("UI_SCALE_CHANGED")
+		CompactRaidFrameManager:RegisterEvent("RAID_ROSTER_UPDATE")
+		CompactRaidFrameManager:RegisterEvent("UNIT_FLAGS")
+		CompactRaidFrameManager:RegisterEvent("PLAYER_FLAGS_CHANGED")
+		CompactRaidFrameManager:RegisterEvent("PLAYER_ENTERING_WORLD")
+		CompactRaidFrameManager:RegisterEvent("PARTY_LEADER_CHANGED")
+		CompactRaidFrameManager:RegisterEvent("RAID_TARGET_UPDATE")
+		CompactRaidFrameManager:RegisterEvent("PLAYER_TARGET_CHANGED")
+		CompactRaidFrameManager:RegisterEvent("PARTY_MEMBERS_CHANGED")
+				
+		CompactRaidFrameContainer:RegisterEvent("RAID_ROSTER_UPDATE")
+		CompactRaidFrameContainer:RegisterEvent("PARTY_MEMBERS_CHANGED")
+		CompactRaidFrameContainer:RegisterEvent("UNIT_PET")
+		CompactRaidFrameManager_SetSetting("IsShown", true)
+		CompactRaidFrameManager:Show()
+	end
 end
 
 -- 单位菜单
@@ -102,22 +220,22 @@ local FocusTarget = function(self)
     end
 	self.FocusHighlight:Hide()
 end
---可驱散边框显示
-local updateDispel = function(self)
-	if ns.db.dispel ~= "BORDER" then return end
-	local dispellist = ns.dispellist or {}
-    local index = 1
 
+--可驱散边框显示
+local updateDispel = function(self, event, unit)
+	if ns.db.dispel ~= "BORDER" or self.unit ~= unit then return end
+
+    local index = 1
     while true do
-        local name,_,_,_, dtype = UnitAura(self.unit, index, 'HARMFUL')
+        local name,_,_,_, dtype = UnitAura(unit, index, 'HARMFUL')
         if not name then break end
-		if dispellist[dtype] then
+		if ns.general.dispellist[dtype] then
 			local color = DebuffTypeColor[dtype] or DebuffTypeColor.none
-			self.DispelBorder:SetBackdropColor(color.r, color.g, color.b)
+			self.DispelBorder:SetBackdropBorderColor(color.r, color.g, color.b, 1)
 			self.DispelBorder:Show()
 			return 
 		end
-        index = index+1
+        index = index + 1
     end
 	self.DispelBorder:Hide()
 end
@@ -139,7 +257,7 @@ local updateThreat = function(self, event, unit)
     self.Threat:Show()
 end
 
-local function utf8sub(str, start, numChars) 
+local utf8sub = function(str, start, numChars) 
     local currentIndex = start 
     while numChars > 0 and currentIndex <= #str do 
         local char = string.byte(str, currentIndex) 
@@ -162,12 +280,15 @@ function ns:UpdateName(name, unit)
     if(unit) then
         local _NAME = UnitName(unit)      
         if not _NAME then return end
-
+		
         local substring
         for length=#_NAME, 1, -1 do
             substring = utf8sub(_NAME, 1, length)
             name:SetText(substring)
-            if name:GetStringWidth() <= ns.db.width - 8 then name:SetText(nil); break end
+            if name:GetStringWidth() <= ns.db.width - 8 then 
+				name:SetText(nil)
+				break 
+			end
         end
 
 		local _, class = UnitClass(unit)
@@ -180,9 +301,9 @@ function ns:UpdateName(name, unit)
     end
 end
 
-local  function UpdateHealth(self, event, unit)
-	
+local updateHealth = function(self, event, unit)
 	if(self.unit ~= unit) then return end
+	
 	local hp = self.Health
 	local min, max = UnitHealth(unit), UnitHealthMax(unit)
 	local disconnected = not UnitIsConnected(unit)
@@ -212,9 +333,6 @@ local  function UpdateHealth(self, event, unit)
 			return
 		end
 
-		--local suffix = self:GetAttribute'unitsuffix'
-		--local ispet = string.match(unit,"pet")
-		--if suffix == 'pet' or unit == 'vehicle' or ispet then
 		if  UnitPlayerControlled(unit) and not UnitIsPlayer(unit) then
 			hp:SetStatusBarColor(V.r, V.g, V.b)
 			hp.bg:SetVertexColor(V.r*.2, V.g*.2, V.b*.2)
@@ -224,20 +342,8 @@ local  function UpdateHealth(self, event, unit)
 				hp.bg:SetVertexColor(r, g, b)
 			else
 				hp.bg:SetVertexColor(Hbg.r, Hbg.g, Hbg.b)
-			end
-			
-			if not hp.colorSmooth then
-				hp:SetStatusBarColor(H.r, H.g, H.b)
-			else
-				local perc
-				if(max == 0) then
-					perc = 0
-				else
-					perc = min / max
-				end
-				r, g, b = self.ColorGradient(perc, unpack(hp.smoothGradient or colors.smooth))
-				hp:SetStatusBarColor(r, g, b)
-			end
+			end			
+			hp:SetStatusBarColor(H.r, H.g, H.b)
 			return 
 		elseif ns.db.reversecolors  then
 			hp.bg:SetVertexColor(r*.2, g*.2, b*.2)
@@ -256,13 +362,9 @@ function ns:UpdateHealth(hp)
     hp:SetStatusBarTexture(ns.db.texturePath)
     hp:SetOrientation(ns.db.orientation)
     hp.bg:SetTexture(ns.db.texturePath)
-    hp.freebSmooth = ns.db.smooth
 
-    hp.colorSmooth = ns.db.colorSmooth
-    hp.smoothGradient = { 
-        ns.db.gradient.r, ns.db.gradient.g, ns.db.gradient.b,
-        ns.db.hpcolor.r, ns.db.hpcolor.g, ns.db.hpcolor.b,
-    }
+	hp.freebSmooth = ns.db.smooth
+
     if not ns.db.powerbar then		
         hp:SetHeight(ns.db.height)
         hp:SetWidth(ns.db.width)
@@ -282,7 +384,7 @@ function ns:UpdateHealth(hp)
     end
 end
 
-local function PostPower(power, unit)
+local PostPower = function(power, unit)
     local self = power.__owner
     local _, ptype = UnitPowerType(unit)
     local _, class = UnitClass(unit)
@@ -305,7 +407,7 @@ local function PostPower(power, unit)
 		end
     end    
 
-    local perc = oUF.Tags['perpp'](unit)
+    local perc = oUF.Tags.Methods['perpp'](unit)
     -- This kinda conflicts with the threat module, but I don't really care
     if (ns.db.lowmana and perc < ns.db.manapercent and UnitIsConnected(unit) and ptype == 'MANA' and not UnitIsDeadOrGhost(unit)) then
         self.Threat:SetBackdropBorderColor(0, 0, 1, 1)			--蓝低于10%,边框高亮显示
@@ -377,17 +479,19 @@ function ns:UpdatePower(power)
 end
 
 local RoleIconUpdate = function(self, event)
+	if not ns.db.roleicon then return end
 	local lfdrole = self.LFDRole
 	local role = UnitGroupRolesAssigned(self.unit)
 
-	if(role == 'TANK' or role == 'HEALER' or role == 'DAMAGER') and UnitIsConnected(self.unit) and ns.db.roleicon then
-		if role == 'TANK' then
-			lfdrole:SetTexture([[Interface\AddOns\oUF_Freebgrid\media\tank.tga]])
-		elseif role == 'HEALER' then
-			lfdrole:SetTexture([[Interface\AddOns\oUF_Freebgrid\media\healer.tga]])
-		elseif role == 'DAMAGER' then
-			lfdrole:SetTexture([[Interface\AddOns\oUF_Freebgrid\media\dps.tga]])
-		end
+	if role == 'TANK' then
+		lfdrole:SetTexture([[Interface\AddOns\oUF_Freebgrid\media\tank.tga]])
+	elseif role == 'HEALER' then
+		lfdrole:SetTexture([[Interface\AddOns\oUF_Freebgrid\media\healer.tga]])
+	elseif role == 'DAMAGER' then
+		lfdrole:SetTexture([[Interface\AddOns\oUF_Freebgrid\media\dps.tga]])
+	end
+
+	if role ~= 'NONE' then		
 		lfdrole:Show()
 	else
 		lfdrole:Hide()
@@ -397,7 +501,7 @@ end
 local ResurrectIconUpdate = function(self, event)
 	local incomingResurrect = UnitHasIncomingResurrection(self.unit)
 	local resurrect = self.ResurrectIcon
-	if UnitIsDeadOrGhost (self.unit) and incomingResurrect  then
+	if UnitIsDeadOrGhost(self.unit) and incomingResurrect then
 		resurrect:Show()
 	else
 		resurrect:Hide()
@@ -407,7 +511,7 @@ end
 -- 鼠标滑过高亮
 local OnEnter = function(self)
 	ns.MouseoverUnit = self.unit
-    if ns.db.tooltip and  InCombatLockdown() then	
+    if ns.db.tooltip and InCombatLockdown() then	
 		GameTooltip:Hide()       
     else
         UnitFrame_OnEnter(self)
@@ -433,52 +537,199 @@ local OnLeave = function(self)
     end
 end
 
-   --设置鼠标点击
-function  ns:RegisterClicks (self)
-    if not ns.db.ClickCastenable then return end
-	local action,macrotext,key_tmp
-	local C = ns.db.ClickCastset
-	for id, _ in pairs(C) do
-		for	key, _ in pairs(C[id]) do
-			key_tmp = string.gsub(key,"Click","")
-			action =  C[id][key]["action"]
-			macrotext = C[id][key]["macrotext"]
-			if action == "macro"  and type(macrotext) == "string" then
-				self:SetAttribute(key_tmp.."type"..id, "macro")
-				self:SetAttribute(key_tmp.."macrotext"..id, macrotext)
-			elseif action == "follow" then
-				self:SetAttribute(key_tmp.."type"..id, "macro")
-				self:SetAttribute(key_tmp.."macrotext"..id, "/follow mouseover")
-			elseif	action == "menu" then		
-				self:SetAttribute(key_tmp.."type"..id, "menu")
-			elseif	action == "target" then		
-				self:SetAttribute(key_tmp.."type"..id, "target")
-			else				
-				self:SetAttribute(key_tmp.."type"..id, 'spell')
-				self:SetAttribute(key_tmp.."spell"..id, action)
-			end				
+function ns:Colors()
+    for class, color in next, colors.class do
+        if ns.db.reversecolors then
+            ns.colorCache[class] = "|cffFFFFFF"
+        else
+            ns.colorCache[class] = ns:hex(color)
+        end
+    end
+
+    for dtype, color in next, DebuffTypeColor do
+        ns.debuffColor[dtype] = ns:hex(color)
+    end
+end
+
+local round = function(n)
+    return math.floor(n * 1e5 + .5) / 1e5
+end
+
+local getPoint = function(obj)
+    local UIx, UIy = UIParent:GetCenter()
+    local Ox, Oy = obj:GetCenter()
+	
+    if(not Ox) then return end
+
+    local UIS = UIParent:GetEffectiveScale()
+    local OS = obj:GetEffectiveScale()
+
+    local UIWidth, UIHeight = UIParent:GetRight(), UIParent:GetTop()
+
+    local LEFT = UIWidth / 3
+    local RIGHT = UIWidth * 2 / 3
+
+    local point, x, y
+    if(Ox >= RIGHT) then
+        point = 'RIGHT'
+        x = obj:GetRight() - UIWidth
+    elseif(Ox <= LEFT) then
+        point = 'LEFT'
+        x = obj:GetLeft()
+    else
+        x = Ox - UIx
+    end
+
+    local BOTTOM = UIHeight / 3
+    local TOP = UIHeight * 2 / 3
+
+    if(Oy >= TOP) then
+        point = 'TOP' .. (point or '')
+        y = obj:GetTop() - UIHeight
+    elseif(Oy <= BOTTOM) then
+        point = 'BOTTOM' .. (point or '')
+        y = obj:GetBottom()
+    else
+        if(not point) then point = 'CENTER' end
+        y = Oy - UIy
+    end
+
+    return string.format(
+    '%s\031%s\031%d\031%d',
+    point, 'UIParent', round(x * UIS / OS),  round(y * UIS / OS)
+    )
+end
+
+local savePosition = function(anchor)
+	local _DB = ns.db.Freebgridomf2Char or {}
+
+    local style, identifier  = "Freebgrid", anchor:GetName()
+    if(not _DB[style]) then _DB[style] = {} end
+
+    _DB[style][identifier] = getPoint(anchor)
+	ns.db.Freebgridomf2Char = _DB
+end
+
+local anchorpool = {}
+
+function ns:RestoreDefaultPosition()
+	if not ns.db then return end
+	local _DB = ns.db.Freebgridomf2Char or {}
+	
+    for _, anchor in next, anchorpool do
+		local style, identifier = "Defaults", anchor:GetName()
+
+		if(_DB[style] and _DB[style][identifier]) then 
+			local scale = anchor:GetScale()
+			local point, parentName, x, y = string.split('\031', _DB[style][identifier])
+			anchor:ClearAllPoints();
+			anchor:SetPoint(point, parentName, point, x / scale, y / scale)
 		end
 	end
 end
-local raid_visible
-local function kill_raid()
-	if InCombatLockdown() then return end
 
-	CompactRaidFrameManager:UnregisterAllEvents()
-	CompactRaidFrameManager:Hide()
-	raid_visible = CompactRaidFrameManager_GetSetting("IsShown")
-
-	if raid_visible and raid_visible ~= "0" then 
-	  CompactRaidFrameManager_SetSetting("IsShown", "0")
-	end
+function ns:RestorePosition()
+	local _DB = ns.db.Freebgridomf2Char or {}
+	for _, anchor in next, anchorpool do
+        local style, identifier = "Freebgrid", anchor:GetName()
+		if(_DB[style] and _DB[style][identifier]) then 
+			local scale = anchor:GetScale()
+			local point, parentName, x, y = string.split('\031', _DB[style][identifier])
+			anchor:ClearAllPoints();
+			anchor:SetPoint(point, parentName, point, x / scale, y / scale)
+		end
+    end
 end
 
+local OnDragStart = function(self)
+	self:StartMoving()
+	self:ClearAllPoints()
+end
 
+local OnDragStop = function(self)
+	self:StopMovingOrSizing()
+	savePosition(self)
+end
+
+local setframe = function(frame)
+	frame:SetHeight(ns.db.height)
+	frame:SetWidth(ns.db.width)
+	frame:SetFrameStrata"TOOLTIP"
+	frame:SetBackdrop({bgFile = "Interface\\Tooltips\\UI-Tooltip-Background";})
+	frame:EnableMouse(true)
+	frame:SetMovable(true)
+	frame:SetClampedToScreen(true)
+	frame:RegisterForDrag"LeftButton"
+	frame:SetBackdropBorderColor(0, .9, 0)
+	frame:SetBackdropColor(0, .9, 0)
+	frame:Hide()
+
+	frame:SetScript("OnDragStart", OnDragStart)
+	frame:SetScript("OnDragStop", OnDragStop)
+
+	frame.name = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+	frame.name:SetPoint"CENTER"
+	frame.name:SetJustifyH"CENTER"
+	frame.name:SetFont(GameFontNormal:GetFont(), 12)
+	frame.name:SetTextColor(1, 1, 1)
+
+	return frame
+end
+
+local Anchors = function()
+
+	local raidframe = CreateFrame("Frame", "oUF_FreebgridRaidFrame", UIParent)
+	setframe(raidframe)
+	raidframe.ident = "Raid"
+	raidframe.name:SetText("Raid")
+	raidframe:SetPoint("LEFT", UIParent, "LEFT", 8, 0)
+	anchorpool["oUF_FreebgridRaidFrame"] = raidframe
+
+	local petframe = CreateFrame("Frame", "oUF_FreebgridPetFrame", UIParent)
+	setframe(petframe)
+	petframe.ident = "Pet"
+	petframe.name:SetText("Pet")
+	petframe:SetPoint("LEFT", UIParent, "LEFT", 250, 0)
+	anchorpool["oUF_FreebgridPetFrame"] = petframe
+
+	local mtframe = CreateFrame("Frame", "oUF_FreebgridMTFrame", UIParent)
+	setframe(mtframe)
+	mtframe.ident = "MT"
+	mtframe.name:SetText("MT")
+	mtframe:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 8, -60)
+	anchorpool["oUF_FreebgridMTFrame"] = mtframe
+
+	ns:RestorePosition()
+end
+
+local _LOCK
+function ns:Movable()
+
+    if(not _LOCK) then
+        for k, frame in next, anchorpool do
+            frame:Show()
+        end
+        _LOCK = true
+    else
+        for k, frame in next, anchorpool do
+            frame:Hide()
+        end
+        _LOCK = nil
+    end
+end
 --设置样式
 local style = function(self)
     self.menu = menu
 
-    -- 创建背景边框
+	-- 鼠标事件
+    self:SetScript("OnEnter", OnEnter)
+    self:SetScript("OnLeave", OnLeave)
+    self:RegisterForClicks"AnyDown"
+	
+	if type(ns.db.ClickCast) == "table" and type(ns.RegisterClicks) == "function" then
+		ns:RegisterClicks(self)
+	end
+    -- 背景边框
     self.BG = CreateFrame("Frame", nil, self)
     self.BG:SetPoint("TOPLEFT", self, "TOPLEFT")
     self.BG:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT")
@@ -493,20 +744,13 @@ local style = function(self)
     self.border:SetBackdrop(border2)
     self.border:SetBackdropColor(0, 0, 0)
 
-    -- 注册鼠标事件,鼠标按下施法注册'AnyDown',否则'AnyUp'
-    self:SetScript("OnEnter", OnEnter)
-    self:SetScript("OnLeave", OnLeave)
-    self:RegisterForClicks"AnyDown"
-
-	ns:RegisterClicks(self)
-
-    -- 创建生命条
+    -- 生命条
     local Health = CreateFrame"StatusBar"
     Health:SetParent(self)
     Health.frequentUpdates = true
     Health.bg = Health:CreateTexture(nil, "BORDER")
     Health.bg:SetAllPoints(Health)
-    Health.Override = UpdateHealth
+    Health.Override = updateHealth
 	self.Health = Health
     ns:UpdateHealth(self.Health)
 	
@@ -520,7 +764,7 @@ local style = function(self)
     self:Tag(afktext, "[freebgrid:afk]")
 	self.AFKtext = afktext
 
-	 -- 创建能力条
+	 -- 能力条
     local Power = CreateFrame"StatusBar"
     Power:SetParent(self)
     Power.bg = Power:CreateTexture(nil, "BORDER")
@@ -528,7 +772,7 @@ local style = function(self)
 	self.Power = Power
     ns:UpdatePower(self.Power)
 	
-    -- 创建仇恨边框
+    -- 仇恨边框
     local threat = CreateFrame("Frame", nil, self)
     threat:SetPoint("TOPLEFT", self, "TOPLEFT", -5, 5)
     threat:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", 5, -5)
@@ -544,13 +788,13 @@ local style = function(self)
     name:SetPoint("CENTER")
     name:SetJustifyH("CENTER")
     name:SetFont(ns.db.fontPath, ns.db.fontsize, ns.db.outline)
-    name:SetShadowOffset(1.25, -1.25)
+    name:SetShadowOffset(1, -1)
     name:SetWidth(ns.db.width)
     name.overrideUnit = true
     self.Name = name
     self:Tag(self.Name, '[freebgrid:name]')
 
-    -- 创建高亮材质
+    -- 高亮材质
     local hl = self.Health:CreateTexture(nil, "OVERLAY")
     hl:SetAllPoints(self)
     hl:SetTexture([=[Interface\AddOns\oUF_Freebgrid\media\white.tga]=])
@@ -559,7 +803,7 @@ local style = function(self)
     hl:Hide()
     self.Highlight = hl
 	
-    -- 鼠标悬停高亮边框
+    -- 悬停高亮边框
     local hlBorder = CreateFrame("Frame", nil, self)
     hlBorder:SetPoint("TOPLEFT", self, "TOPLEFT")
     hlBorder:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT")
@@ -569,7 +813,7 @@ local style = function(self)
     hlBorder:Hide()
     self.HighlightBorder = hlBorder
 
-	-- 创建GCD条
+	-- GCD条
     local GCD = CreateFrame("StatusBar", nil, self)
     GCD:SetAllPoints(self)
     GCD:SetStatusBarTexture([=[Interface\AddOns\oUF_Freebgrid\media\white.tga]=])
@@ -580,7 +824,7 @@ local style = function(self)
     GCD:Hide()
     self.GCD = GCD	
 
-    -- 创建焦点目标高亮边框
+    -- 焦点目标高亮边框
     local fBorder = CreateFrame("Frame", nil, self)
     fBorder:SetPoint("TOPLEFT", self, "TOPLEFT")
     fBorder:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT")
@@ -590,41 +834,42 @@ local style = function(self)
     fBorder:Hide()
     self.FocusHighlight = fBorder
 	
-	-- 创建可驱散debuff显示边框
+	-- 可驱散debuff显示边框
     local dispelBorder = CreateFrame("Frame", nil, self)
-    dispelBorder:SetPoint("TOPLEFT", self, "TOPLEFT")
+    dispelBorder:SetPoint("TOPLEFT", self, "TOPLEFT" )
     dispelBorder:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT")
-    dispelBorder:SetBackdrop(border)
+    dispelBorder:SetBackdrop(glowBorder2)
     dispelBorder:SetBackdropColor(0, 0, 0, 0)
-    dispelBorder:SetFrameLevel(3)
+	dispelBorder:SetBackdropBorderColor(0, 0, 0, 0)
+    dispelBorder:SetFrameLevel(5)
     dispelBorder:Hide()
     self.DispelBorder = dispelBorder
 
-    -- 设置团队图标
+    -- 团队图标
     local ricon = self.Health:CreateTexture(nil, 'OVERLAY')
     ricon:SetPoint("TOP", self, -15, 6)
     ricon:SetSize(ns.db.leadersize+2, ns.db.leadersize+2)
     self.RaidIcon = ricon
 
-    -- 设置队长图标
+    -- 队长图标
     local Leader = self.Health:CreateTexture(nil, "OVERLAY")
     Leader:SetPoint("TOPLEFT", self, 0, 8)
     Leader:SetSize(ns.db.leadersize, ns.db.leadersize )
 	self.Leader = Leader
 
-    -- 设置助手等图标
+    -- 助手等图标
     local Assistant = self.Health:CreateTexture(nil, "OVERLAY")
     Assistant:SetPoint("TOPLEFT", self, 0, 8)
     Assistant:SetSize(ns.db.leadersize, ns.db.leadersize)
 	self.Assistant = Assistant
 
-	--设置拾取权限图标
+	--拾取权限图标
     local masterlooter = self.Health:CreateTexture(nil, 'OVERLAY')
     masterlooter:SetSize(ns.db.leadersize, ns.db.leadersize)
     masterlooter:SetPoint('LEFT', self.Leader, 'RIGHT')
     self.MasterLooter = masterlooter
 
-    -- 设置职业图标
+    -- 职业图标
 	local LFDRole = self.Health:CreateTexture(nil, 'OVERLAY')
 	LFDRole:SetSize(ns.db.leadersize + 4, ns.db.leadersize + 4)
 	LFDRole:SetPoint('RIGHT', self, 'LEFT', ns.db.leadersize, 0)
@@ -632,7 +877,7 @@ local style = function(self)
 	self:RegisterEvent("UNIT_CONNECTION", RoleIconUpdate)
 	self.LFDRole = LFDRole
 
-	--设置复活提示图标
+	--复活提示图标
 	local ResurrectIcon = self.Health:CreateTexture(nil, 'OVERLAY')
     ResurrectIcon:SetPoint("TOP", self, 0, -2)
     ResurrectIcon:SetSize(16, 16)
@@ -650,18 +895,24 @@ local style = function(self)
     self.freebRange = ns.db.arrow and range
     self.Range = ns.db.arrow == false and range
 
-    --设置准备确认图标
+    --准备确认图标
     local ReadyCheck = self.Health:CreateTexture(nil, "OVERLAY")
     ReadyCheck:SetPoint("TOP", self)
     ReadyCheck:SetSize(ns.db.leadersize, ns.db.leadersize)
 	self.ReadyCheck = ReadyCheck
 
-    -- 设置光环图标
+    -- 光环图标
     local auras = CreateFrame("Frame", nil, self)
     auras:SetSize(ns.db.aurasize, ns.db.aurasize)
     auras:SetPoint("CENTER", self.Health)
     auras.size = ns.db.aurasize
     self.freebAuras = auras
+	
+	local secauras = CreateFrame("Frame", nil, self)
+    secauras:SetSize(ns.db.secaurasize, ns.db.secaurasize)
+    secauras:SetPoint("LEFT", self.Health)
+    secauras.size = ns.db.secaurasize
+    self.freebSecAuras = secauras
 
     self:RegisterEvent('PLAYER_FOCUS_CHANGED', FocusTarget)
     self:RegisterEvent('RAID_ROSTER_UPDATE', FocusTarget)
@@ -676,191 +927,249 @@ end
 
 oUF:RegisterStyle("Freebgrid", style)
 
-function ns:Colors()
-    for class, color in next, colors.class do
-        if ns.db.reversecolors then
-            ns.colorCache[class] = "|cffFFFFFF"
-        else
-            ns.colorCache[class] = ns:hex(color)
-        end
-    end
-
-    for dtype, color in next, DebuffTypeColor do
-        ns.debuffColor[dtype] = ns:hex(color)
-    end
-end
-
-local pos, posRel, colX, colY
-local function freebHeader(name, group, temp, pet, MT)
-    local horiz, grow = ns.db.horizontal, ns.db.growth
-    local numUnits = ns.db.multi and 5 or ns.db.numUnits
-    local initconfig = [[
-    self:SetWidth(%d)
-    self:SetHeight(%d)
-    ]]
-
-    if pet then
-        horiz, grow = ns.db.pethorizontal, ns.db.petgrowth
-        numUnits = ns.db.petUnits
-        initconfig = [[ 
+local buildPosition = function(name)
+	local horiz, grow, spacing = ns.db.horizontal, ns.db.growth, ns.db.spacing 
+	local initconfig = [[
+		self:SetWidth(%d)
+		self:SetHeight(%d)
+		]]
+	if name == "pet" then
+		horiz, grow = ns.db.pethorizontal, ns.db.petgrowth
+		initconfig = [[ 
         self:SetWidth(%d)        
         self:SetHeight(%d)           
         self:SetAttribute('unitsuffix', 'pet')
         ]]
-    elseif MT then
-        horiz, grow = ns.db.MThorizontal, ns.db.MTgrowth
-        numUnits = ns.db.MTUnits
-    end
+	elseif name == "mt" then
+		horiz, grow = ns.db.MThorizontal, ns.db.MTgrowth		
+	end
 
-    local point, growth, xoff, yoff
-    if horiz then
+    if horiz then	
         point = "LEFT"
-        xoff = ns.db.spacing
+        xoff = spacing
         yoff = 0
         if grow == "UP" then
             growth = "BOTTOM"
             pos = "BOTTOMLEFT"
             posRel = "TOPLEFT"
-            colY = ns.db.spacing
+            colY = spacing
+			colX = 0
         else
             growth = "TOP"
             pos = "TOPLEFT"
             posRel = "BOTTOMLEFT"
-            colY = -ns.db.spacing
+            colY = -spacing
+			colX = 0
         end
     else
         point = "TOP"
         xoff = 0
-        yoff = -ns.db.spacing
+        yoff = -spacing
         if grow == "RIGHT" then
-            growth = "LEFT"
+            growth = "BOTTOM"
             pos = "TOPLEFT"
             posRel = "TOPRIGHT"
-            colX = ns.db.spacing
+            colX = spacing
+			colY = 0
         else
             growth = "RIGHT"
             pos = "TOPRIGHT"
             posRel = "TOPLEFT"
-            colX = -ns.db.spacing
+            colX = -spacing
+			colY = 0
         end
     end
+	return pos, posRel, colX, colY, point, growth, xoff, yoff, initconfig
+end
 
-    local groupBy, groupOrder = "GROUP", "1,2,3,4,5,6,7,8"
-    if not pet and not MT then
-        if ns.db.sortClass then
-            groupBy = "CLASS"
-            groupOrder = ns.db.classOrder
-            group = ns.db.classOrder
-        end
-    end
-
+local function freebHeader(name, group, temp, htype)
+	local _, _, colX, colY, point, growth, xoff, yoff, initconfig = buildPosition(htype)
+	
     local template = temp or nil
     local header = oUF:SpawnHeader(name, template, 'raid,party,solo',
     'oUF-initialConfigFunction', (initconfig):format(ns.db.width, ns.db.height),
-	'initial-width', ns.db.width, 
-    'initial-height',ns.db.height,
     'showPlayer', ns.db.player,
     'showSolo', ns.db.solo,
     'showParty', ns.db.party,
     'showRaid', true,
-    'xOffset', xoff,
+    'xOffset',	xoff,
     'yOffset', yoff,
     'point', point,
- --   'sortMethod', sort,
     'groupFilter', group,
-    'groupingOrder', groupOrder,
-    'groupBy', groupBy,
-    'maxColumns', ns.db.numCol,
-    'unitsPerColumn', numUnits,
+    'groupingOrder', "1,2,3,4,5,6,7,8",
+    'groupBy', "GROUP",
+    'maxColumns', 8,
+    'unitsPerColumn', 5,
     'columnSpacing', ns.db.spacing,
     'columnAnchorPoint', growth)
-
     return header
 end
 
 oUF:Factory(function(self)
-	ns.InitDB()
-    ns:Anchors()
+	ns:InitDB()
     ns:Colors()
+	Anchors()
 	
-	if ns.db.hideblzraid then
-		hooksecurefunc("CompactRaidFrameManager_UpdateShown",function() kill_raid() end)
-		CompactRaidFrameManager:HookScript('OnShow', kill_raid)
-		CompactRaidFrameManager:SetScale(0.000001)
-	end
-	
+	hooksecurefunc("CompactRaidFrameManager_UpdateShown", ns.UpdateBlizzardRaidFrame)
+
     self:SetActiveStyle"Freebgrid"
-    if ns.db.multi then
-        local raid = {}
-        for i=1, 8 do
-            local group = freebHeader("Raid_Freebgrid"..i, i)
-            if i == 1 then
-                group:SetPoint(pos, "oUF_FreebgridRaidFrame", pos)
-            else
-                group:SetPoint(pos, raid[i-1], posRel, colX or 0, colY or 0)
-            end
-			if i > ns.db.numCol then
-				group:SetAttribute("groupFilter", "")
-			end
-            raid[i] = group
-            ns._Headers[group:GetName()] = group
-        end
-    else
-       local raid = freebHeader("Raid_Freebgrid")
-        raid:SetPoint(pos, "oUF_FreebgridRaidFrame", pos)
-        ns._Headers[raid:GetName()] = raid
-    end
+	
+	for i = 1, 8 do
+		local group = freebHeader("Raid_Freebgrid"..i, i)
+		ns._Headers[group:GetName()] = group
+	end
 
-    if ns.db.pets then
-        local pet = freebHeader("Pet_Freebgrid", nil, 'SecureGroupPetHeaderTemplate', true)
-        pet:SetPoint(pos, "oUF_FreebgridPetFrame", pos)
-        pet:SetAttribute('useOwnerUnit', true)
-        ns._Headers[pet:GetName()] = pet
-    end
+	local tank = freebHeader("MT_Freebgrid", nil, nil, "mt")
+	tank:SetAttribute('groupFilter', 'MAINTANK')
+	ns._Headers[tank:GetName()] = tank
+	
+	local pet = freebHeader("Pet_Freebgrid", nil, 'SecureGroupPetHeaderTemplate', "pet")
+	pet:SetAttribute('useOwnerUnit', true)
+	ns._Headers[pet:GetName()] = pet
 
-    if ns.db.MT then
-        local tank = freebHeader("MT_Freebgrid", nil, nil, nil, true)
-        tank:SetPoint(pos, "oUF_FreebgridMTFrame", pos)
-        ns._Headers[tank:GetName()] = tank
-
-        if oRA3 then
-            tank:SetAttribute("initial-unitWatch", true)
-            tank:SetAttribute("nameList", table.concat(oRA3:GetSortedTanks(), ","))
-
-            local tankhandler = {}
-            function tankhandler:OnTanksUpdated(event, tanks) 
-                tank:SetAttribute("nameList", table.concat(tanks, ","))
-            end
-            oRA3.RegisterCallback(tankhandler, "OnTanksUpdated")
-        else
-            tank:SetAttribute('groupFilter', 'MAINTANK')
-        end
-    end
+	ns:UpdateAttribute()
 end)
 
-ns.textures = {
-    ["gradient"] = ns.mediapath.."gradient",
-    ["Cabaret"] = ns.mediapath.."Cabaret",
-}
+function ns:UpdateAttribute()
+	if ns:CheckCombat(ns.UpdateAttribute) then return end
+	
+	local pos, posRel, colX, colY, point, growth, xoff, yoff, initconfig = buildPosition()
 
-ns.fonts = {
-    ["Accidental Presidency"] = ns.mediapath.."Accidental Presidency.ttf",
-    ["Expressway"] = ns.mediapath.."expressway.ttf",
-}
+	local lastgroup, group
+	
+	for i = 1, 8 do
+		group = ns._Headers["Raid_Freebgrid"..i]
 
-local SM = LibStub("LibSharedMedia-3.0", true)
-if SM then
-    for font, path in pairs(ns.fonts) do
-        SM:Register("font", font, path)
+		group :SetAttribute( 'oUF-initialConfigFunction', (initconfig):format(ns.db.width, ns.db.height))
+		group :SetAttribute( 'groupBy', "GROUP")
+		group :SetAttribute( 'showParty', ns.db.party)
+		group :SetAttribute( 'showRaid', true)
+		group :SetAttribute( 'showSolo', ns.db.solo)
+		group :SetAttribute( 'showPlayer', ns.db.player)
+		group :SetAttribute( 'point', point)		
+		group :SetAttribute( 'groupingOrder', "1,2,3,4,5,6,7,8")		
+		group :SetAttribute( 'maxColumns', 8)
+		group :SetAttribute( 'unitsPerColumn', 5)
+		group :SetAttribute( 'columnSpacing', ns.db.spacing)
+		group :SetAttribute( 'xOffset', xoff)
+		group :SetAttribute( 'yOffset', yoff)
+		--group :SetAttribute( 'columnAnchorPoint', growth)
+		group :SetAttribute( 'groupFilter', i <= ns.db.numCol and i or 0)
+	
+		group:ClearAllPoints()
+		if i == 1 then
+			group:SetPoint(pos, "oUF_FreebgridRaidFrame", pos)
+		else
+			group:SetPoint(pos, lastgroup, posRel, colX , colY )
+		end
+		lastgroup = group
+	end
+	--MT和宠物这块没完成.
+	local pet = ns._Headers["Pet_Freebgrid"]
+	if ns.db.pets then
+		pet:SetAttribute('useOwnerUnit', true)
+
+		pet:ClearAllPoints()
+		pet:SetPoint(pos, "oUF_FreebgridPetFrame", pos)
+	else
+		pet:SetAttribute('useOwnerUnit', false)
+	end
+	
+	local mt = ns._Headers["MT_Freebgrid"]
+	if ns.db.MT then
+		mt:SetAttribute('groupFilter', 'MAINTANK')
+		mt:ClearAllPoints()
+		mt:SetPoint(pos, "oUF_FreebgridMTFrame", pos)
+	else
+		mt:SetAttribute('groupFilter', '')
+	end
+	local i = 0 
+	for _, object in next, ns._Objects do
+		object:ClearAllPoints()
+	end
+	collectgarbage("collect")
+end
+
+local lockprint
+local updatelist = {}
+function ns:CheckCombat(func)
+	if(InCombatLockdown()) then
+		ns:RegisterEvent("PLAYER_REGEN_ENABLED")
+		if not updatelist.func then
+			table.insert(updatelist, func)
+		end
+		if not lockprint then
+			lockprint = true
+			print(ADDON_NAME..": "..L.incombatlock)
+		end
+		return true
+	end
+	return false
+end
+
+function ns:PLAYER_REGEN_ENABLED()
+	print(ADDON_NAME..": "..L.outcombatlock)
+
+    lockprint = nil
+	for _, v in pairs (updatelist) do
+		if type(v) == "function" then v() end
+	end	
+    ns:UnregisterEvent("PLAYER_REGEN_ENABLED")
+end
+
+local getZone = function(self, elapsed)
+	self.elapsed = (self.elapsed or 0) + elapsed
+    if self.elapsed < 5 then return end	
+
+	local mapid = ns:GetMapID()
+    if IsInInstance() then       		 
+		ns.difficulty = ns:Getdifficulty()
+		
+		local tbl = ns.auras or {}	
+		tbl.first = tbl.first or {}
+		tbl.second = tbl.second or {}
+		
+		if type(tbl.first.instances) == "table" or type(tbl.second.instances) == "table" then	
+			local mapname = GetMapNameByID(mapid)		
+			ns.instDebuffs.first = tbl.first.instances[mapid] or tbl.first.instances[mapname] or {}	
+			ns.instDebuffs.second = tbl.second.instances[mapid] or tbl.second.instances[mapname] or {}
+		end
     end
+	ns.general.MapID = mapid
+    self:SetScript("OnUpdate", nil)
+    self.elapsed = 0
+end
 
-    for tex, path in pairs(ns.textures) do
-        SM:Register("statusbar", tex, path)
-    end
+local updateData = function(self, event, ...)
+	if event == "ACTIVE_TALENT_GROUP_CHANGED" then	
+		ns:LoadPlayerData()
+
+		if ns.general.TalentGroup > 0 and not _G[ADDON_NAME.."DB"].profileKeys[ns.general.playerDBKey].dualspec then
+			if not IsAddOnLoaded('oUF_Freebgrid_Config') then
+				LoadAddOn('oUF_Freebgrid_Config')
+			end
+			ns:FlushDB()
+			ns.general.Profilename = _G[ADDON_NAME.."DB"].profileKeys[ns.general.playerDBKey].profile[tostring(ns.general.TalentGroup)]
+
+			ns.db = _G[ADDON_NAME.."DB"].profiles[ns.general.Profilename]
+			ns:CopyDefaults(ns.db, ns.defaults)
+			
+			ns:UpdateAttribute()
+			ns:updateObjects()
+			ns:RestorePosition()
+		end
+		
+	elseif event == "CHARACTER_POINTS_CHANGED" then
+		ns:LoadPlayerData()
+	elseif event == "PLAYER_ENTERING_WORLD" or event == "ZONE_CHANGED_NEW_AREA" then
+		if event == "PLAYER_ENTERING_WORLD" then	
+			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+		end 
+		self:SetScript("OnUpdate", getZone)
+	end		
 end
 
 ns:RegisterEvent("ADDON_LOADED")
-
 function ns:ADDON_LOADED(event, addon)
     if addon ~= ADDON_NAME then return end
 	if event == "ADDON_LOADED" then
@@ -872,31 +1181,44 @@ function ns:ADDON_LOADED(event, addon)
 end
 
 function ns:PLAYER_LOGIN()
-    self:RegisterEvent("PLAYER_LOGOUT")
-	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 
-    local frame = CreateFrame('Frame', nil, InterfaceOptionsFrame)
-    frame:SetScript('OnShow', function(self)
+    self:RegisterEvent("PLAYER_LOGOUT")
+	
+	local f = CreateFrame('Frame', nil, InterfaceOptionsFrame)
+    f:SetScript('OnShow', function(self)
         self:SetScript('OnShow', nil)
         if not IsAddOnLoaded('oUF_Freebgrid_Config') then
             LoadAddOn('oUF_Freebgrid_Config')
         end
     end)
-		
-    self:UnregisterEvent("PLAYER_LOGIN")
+	
+	local frame = CreateFrame('Frame')
+	frame:RegisterEvent("PLAYER_ENTERING_WORLD")
+	frame:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+	frame:RegisterEvent("CHARACTER_POINTS_CHANGED")
+	frame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+	frame:SetScript("OnEvent", updateData)
+	
+	local eventcount = 0
+	--local initmem = collectgarbage("count")
+	local a = CreateFrame("Frame")
+	a:RegisterAllEvents()
+	a:SetScript("OnEvent", function(self, event)
+	   eventcount = eventcount + 1
+	   --local nowmem = collectgarbage("count")
+	   if InCombatLockdown() then return end
+	   if eventcount > 6000 or event == "PLAYER_ENTERING_WORLD" then
+		  collectgarbage("collect")
+		  eventcount = 0
+	   end
+	end)
+	
+	self:UnregisterEvent("PLAYER_LOGIN")
     self.PLAYER_LOGIN = nil
 end
 
 function ns:PLAYER_LOGOUT()
     self:FlushDB()
-end
-
-function ns:ACTIVE_TALENT_GROUP_CHANGED()
-	ns.TalentChanged = true
-	if not IsAddOnLoaded('oUF_Freebgrid_Config') then
-            LoadAddOn('oUF_Freebgrid_Config')
-    end
-	self:InitDB()
 end
 
 function ns:Slash(inp)
@@ -906,7 +1228,7 @@ function ns:Slash(inp)
         end
         InterfaceOptionsFrame_OpenToCategory(ADDON_NAME)
     else
-        ns.Movable()
+        ns:Movable()
     end
 end
 
@@ -914,3 +1236,5 @@ _G["SLASH_".. ADDON_NAME:upper().."1"] = GetAddOnMetadata(ADDON_NAME, "X-LoadOn-
 SlashCmdList[ADDON_NAME:upper()] = function(inp)
     ns:Slash(inp)
 end
+
+Freebgrid_NS = ns

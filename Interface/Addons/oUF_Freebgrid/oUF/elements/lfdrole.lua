@@ -3,14 +3,20 @@ local oUF = ns.oUF
 
 local Update = function(self, event)
 	local lfdrole = self.LFDRole
+	if(lfdrole.PreUpdate) then
+		lfdrole:PreUpdate()
+	end
 
 	local role = UnitGroupRolesAssigned(self.unit)
-
 	if(role == 'TANK' or role == 'HEALER' or role == 'DAMAGER') then
 		lfdrole:SetTexCoord(GetTexCoordsForRoleSmallCircle(role))
 		lfdrole:Show()
 	else
 		lfdrole:Hide()
+	end
+
+	if(lfdrole.PostUpdate) then
+		return lfdrole:PostUpdate(role)
 	end
 end
 
@@ -29,9 +35,9 @@ local Enable = function(self)
 		lfdrole.ForceUpdate = ForceUpdate
 
 		if(self.unit == "player") then
-			self:RegisterEvent("PLAYER_ROLES_ASSIGNED", Path)
+			self:RegisterEvent("PLAYER_ROLES_ASSIGNED", Path, true)
 		else
-			self:RegisterEvent("PARTY_MEMBERS_CHANGED", Path)
+			self:RegisterEvent("PARTY_MEMBERS_CHANGED", Path, true)
 		end
 
 		if(lfdrole:IsObjectType"Texture" and not lfdrole:GetTexture()) then

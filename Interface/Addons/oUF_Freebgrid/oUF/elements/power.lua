@@ -26,6 +26,9 @@ local Update = function(self, event, unit)
 	local displayType = GetDisplayPower(power, unit)
 	local min, max = UnitPower(unit, displayType), UnitPowerMax(unit, displayType)
 	local disconnected = not UnitIsConnected(unit)
+	if max == 0 then
+		max = 1
+	end
 	power:SetMinMaxValues(0, max)
 
 	if(disconnected) then
@@ -56,14 +59,7 @@ local Update = function(self, event, unit)
 	elseif(power.colorReaction and UnitReaction(unit, 'player')) then
 		t = self.colors.reaction[UnitReaction(unit, "player")]
 	elseif(power.colorSmooth) then
-		local perc
-		if(max == 0) then
-			perc = 0
-		else
-			perc = min / max
-		end
-
-		r, g, b = self.ColorGradient(perc, unpack(power.smoothGradient or self.colors.smooth))
+		r, g, b = self.ColorGradient(min, max, unpack(power.smoothGradient or self.colors.smooth))
 	end
 
 	if(t) then
@@ -93,22 +89,6 @@ local ForceUpdate = function(element)
 	return Path(element.__owner, 'ForceUpdate', element.__owner.unit)
 end
 
-local OnPowerUpdate
-do
-	local UnitPower = UnitPower
-	OnPowerUpdate = function(self)
-		if(self.disconnected) then return end
-		local unit = self.__owner.unit
-		local power = UnitPower(unit, GetDisplayPower(self, unit))
-
-		if(power ~= self.min) then
-			self.min = power
-
-			return Path(self.__owner, 'OnPowerUpdate', unit)
-		end
-	end
-end
-
 local Enable = function(self, unit)
 	local power = self.Power
 	if(power) then
@@ -116,7 +96,7 @@ local Enable = function(self, unit)
 		power.ForceUpdate = ForceUpdate
 
 		if(power.frequentUpdates and (unit == 'player' or unit == 'pet')) then
-			power:SetScript("OnUpdate", OnPowerUpdate)
+			self:RegisterEvent('UNIT_POWER_FREQUENT', Path)
 		else
 			self:RegisterEvent('UNIT_POWER', Path)
 		end
@@ -141,12 +121,8 @@ end
 local Disable = function(self)
 	local power = self.Power
 	if(power) then
-		if(power:GetScript'OnUpdate') then
-			power:SetScript("OnUpdate", nil)
-		else
-			self:UnregisterEvent('UNIT_POWER', Path)
-		end
-
+		self:UnregisterEvent('UNIT_POWER_FREQUENT', Path)
+		self:UnregisterEvent('UNIT_POWER', Path)
 		self:UnregisterEvent('UNIT_POWER_BAR_SHOW', Path)
 		self:UnregisterEvent('UNIT_POWER_BAR_HIDE', Path)
 		self:UnregisterEvent('UNIT_DISPLAYPOWER', Path)

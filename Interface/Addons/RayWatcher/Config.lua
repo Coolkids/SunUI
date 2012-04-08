@@ -24,7 +24,7 @@ ns.watchers ={
 			name = "玩家buff",
 			direction = "RIGHT",
 			setpoint =  {"CENTER", UIParent, "CENTER", -75, -175},
-			size = 16,
+			size = 20,
 				-- 节能施法
 				{ spellID = 16870, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 自然之赐
@@ -82,7 +82,7 @@ ns.watchers ={
 			name = "玩家技能CD",
 			direction = "RIGHT",
 			setpoint = {"CENTER", UIParent, "CENTER", -45, -250},
-			size = 16,
+			size = 20,
 				-- 狂暴恢复
 				{ spellID = 22842, filter = "CD" },
 				-- 求生本能
@@ -121,7 +121,7 @@ ns.watchers ={
 			name = "目標的目标框上方",
 			direction = "RIGHT",
 			setpoint = {"CENTER", UIParent, "CENTER", -75, -175},
-			size = 16,
+			size = 20,
 				-- 急速射击
 				{ spellID =  3045, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 治疗宠物
@@ -159,7 +159,7 @@ ns.watchers ={
 			name = "玩家技能CD",
 			direction = "RIGHT",
 			setpoint = {"CENTER", UIParent, "CENTER", -45, -250},
-			size = 16,
+			size = 20,
 				-- 奇美拉射击
 				{ spellID = 53209, filter = "CD" },
 				-- 急速射击
@@ -245,7 +245,7 @@ ns.watchers ={
 			name = "玩家技能CD",
 			direction = "RIGHT",
 			setpoint = {"CENTER", UIParent, "CENTER", -45, -250},
-			size = 16,
+			size = 20,
 				-- 唤醒
 				{ spellID = 12051, filter = "CD" },
 				-- 秘法强化
@@ -259,7 +259,7 @@ ns.watchers ={
 			name = "玩家Buff",
 			direction = "RIGHT",
 			setpoint = {"CENTER", UIParent, "CENTER", -75, -175},
-			size = 16,
+			size = 20,
 				-- 盾墙(防御姿态)
 				{ spellID =   871, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 怒火中烧
@@ -355,7 +355,7 @@ ns.watchers ={
 			name = "玩家buff",
 			direction = "RIGHT",
 			setpoint =  {"CENTER", UIParent, "CENTER", -75, -175},
-			size = 16,
+			size = 20,
 				-- 嗜血
 				{ spellID =  2825, unitId = "player", caster = "all", filter = "BUFF" },
 				-- 闪电之盾
@@ -397,7 +397,7 @@ ns.watchers ={
 			name = "玩家buff",
 			direction = "RIGHT",
 			setpoint =  {"CENTER", UIParent, "CENTER", -75, -175},
-			size = 16,
+			size = 20,
 				-- 圣佑术
 				{ spellID =   498, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 圣盾术
@@ -465,7 +465,7 @@ ns.watchers ={
 			name = "玩家buff",
 			direction = "RIGHT",
 			setpoint =  {"CENTER", UIParent, "CENTER", -75, -175},
-			size = 16,
+			size = 20,
 				-- 心靈熔蝕
 				{ spellID = 87160, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 黑暗佈道
@@ -557,7 +557,7 @@ ns.watchers ={
 			name = "玩家技能CD",
 			direction = "RIGHT",
 			setpoint = {"CENTER", UIParent, "CENTER", -45, -250},
-			size = 16,
+			size = 20,
 				-- 心靈震爆
 				{ spellID = 8092, filter = "CD" },
 				-- 暗影魔
@@ -572,7 +572,7 @@ ns.watchers ={
 			direction = "RIGHT",
 			setpoint = {"CENTER", UIParent, "CENTER", -75, -175},
 			mode = "ICON",
-			size = 16,
+			size = 20,
 				-- 嗜血
 				{ spellID =  2825, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 暗影冥思
@@ -635,7 +635,7 @@ ns.watchers ={
 			name = "目標的目標上方",
 			direction = "RIGHT",
 			setpoint = {"CENTER", UIParent, "CENTER", -75, -175},
-			size = 16,
+			size = 20,
 				-- 冷血
 				{ spellID = 14177, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 嫁祸诀窍
@@ -688,7 +688,7 @@ ns.watchers ={
 			name = "玩家技能CD",
 			direction = "RIGHT",
 			setpoint = {"CENTER", UIParent, "CENTER", -45, -250},
-			size = 16,
+			size = 20,
 				-- 殺戮盛筵
 				{ spellID = 51690, filter = "CD" },
 				-- 冲动
@@ -700,7 +700,7 @@ ns.watchers ={
 			name = "玩家Buff",
 			direction = "RIGHT",
 			setpoint = {"CENTER", UIParent, "CENTER", -75, -175},
-			size = 16,
+			size = 20,
 				-- 反魔法护罩
 				{ spellID = 48707, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 冰封之韧
@@ -746,7 +746,7 @@ ns.watchers ={
 			name = "玩家Debuff",
 			direction = "RIGHT",
 			setpoint = {"CENTER", UIParent, "CENTER", 160, 300},
-			size = 40,
+			size = 46,
 				-- 震懾波
 				{ spellID = 46968, unitId = "player", caster = "all", filter = "DEBUFF" },
 				-- 变羊
@@ -847,6 +847,8 @@ ns.watchers ={
 				{ spellID = 106444, unitId = "player", caster = "all", filter = "DEBUFF" },  -- Impale(刺穿)
 				--凋零之光
 				{ spellID = 110079, unitId = "player", caster = "all", filter = "DEBUFF" },
+				{ spellID = 110080, unitId = "player", caster = "all", filter = "DEBUFF" },
+				{ spellID = 105925, unitId = "player", caster = "all", filter = "DEBUFF" },
 		},
 		{
 			name = "玩家PVPDebuff",
@@ -1101,6 +1103,8 @@ ns.watchers ={
 				{ spellID = 47788, unitId = "player", caster = "all", filter = "BUFF" },
 				--战士4T13防御
 				{ spellID = 105914, unitId = "player", caster = "all", filter = "BUFF" },
+				--群体恢复
+				{ spellID = 105739, unitId = "player", caster = "all", filter = "BUFF" },
 
 		},
 		{
@@ -1167,7 +1171,7 @@ ns.watchers ={
 			name = "玩家饰品附魔触发buff",
 			direction = "RIGHT",
 			setpoint = {"CENTER", UIParent, "CENTER", -75, -140},
-			size = 16,
+			size = 20,
 				--电容器
 				{ spellID = 96890, unitId = "player", caster = "player", filter = "BUFF" }, 
 				--死灵法师极核

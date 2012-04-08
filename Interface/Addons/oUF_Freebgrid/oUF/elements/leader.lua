@@ -2,11 +2,21 @@ local parent, ns = ...
 local oUF = ns.oUF
 
 local Update = function(self, event)
+	local leader = self.Leader
+	if(leader.PreUpdate) then
+		leader:PreUpdate()
+	end
+
 	local unit = self.unit
-	if((UnitInParty(unit) or UnitInRaid(unit)) and UnitIsPartyLeader(unit)) then
-		self.Leader:Show()
+	local isLeader = (UnitInParty(unit) or UnitInRaid(unit)) and UnitIsPartyLeader(unit)
+	if(isLeader) then
+		leader:Show()
 	else
-		self.Leader:Hide()
+		leader:Hide()
+	end
+
+	if(leader.PostUpdate) then
+		return leader:PostUpdate(isLeader)
 	end
 end
 
@@ -24,8 +34,8 @@ local Enable = function(self)
 		leader.__owner = self
 		leader.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent("PARTY_LEADER_CHANGED", Path)
-		self:RegisterEvent("PARTY_MEMBERS_CHANGED", Path)
+		self:RegisterEvent("PARTY_LEADER_CHANGED", Path, true)
+		self:RegisterEvent("PARTY_MEMBERS_CHANGED", Path, true)
 
 		if(leader:IsObjectType"Texture" and not leader:GetTexture()) then
 			leader:SetTexture[[Interface\GroupFrame\UI-Group-LeaderIcon]]

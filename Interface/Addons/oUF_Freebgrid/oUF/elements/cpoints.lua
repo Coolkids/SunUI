@@ -7,6 +7,11 @@ local MAX_COMBO_POINTS = MAX_COMBO_POINTS
 local Update = function(self, event, unit)
 	if(unit == 'pet') then return end
 
+	local cpoints = self.CPoints
+	if(cpoints.PreUpdate) then
+		cpoints:PreUpdate()
+	end
+
 	local cp
 	if(UnitHasVehicleUI'player') then
 		cp = GetComboPoints('vehicle', 'target')
@@ -14,13 +19,16 @@ local Update = function(self, event, unit)
 		cp = GetComboPoints('player', 'target')
 	end
 
-	local cpoints = self.CPoints
 	for i=1, MAX_COMBO_POINTS do
 		if(i <= cp) then
 			cpoints[i]:Show()
 		else
 			cpoints[i]:Hide()
 		end
+	end
+
+	if(cpoints.PostUpdate) then
+		return cpoints:PostUpdate(cp)
 	end
 end
 
@@ -38,8 +46,8 @@ local Enable = function(self)
 		cpoints.__owner = self
 		cpoints.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent('UNIT_COMBO_POINTS', Path)
-		self:RegisterEvent('PLAYER_TARGET_CHANGED', Path)
+		self:RegisterEvent('UNIT_COMBO_POINTS', Path, true)
+		self:RegisterEvent('PLAYER_TARGET_CHANGED', Path, true)
 
 		for index = 1, MAX_COMBO_POINTS do
 			local cpoint = cpoints[index]

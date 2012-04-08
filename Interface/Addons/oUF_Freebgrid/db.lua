@@ -1,43 +1,52 @@
 local ADDON_NAME, ns = ...
 
-local binding_modifiers = { "Click", "shift-", "ctrl-", "alt-", "ctrl-shift-", "alt-shift-", "alt-ctrl-"}
+local L = ns.Locale
 
-ns.mediapath = "Interface\\AddOns\\oUF_Freebgrid\\media\\"
+local mediapath = "Interface\\AddOns\\oUF_Freebgrid\\media\\"
+ns.media = {
+	indicator = mediapath.."squares.ttf",
+	symbols = mediapath.."PIZZADUDEBULLETS.ttf",
+}
+
+ns.db = {}
+ns.general = {}
+
+if GetLocale() == "zhCN" then
+	STANDARD_TEXT_FONT = [[Fonts\ZYKai_T.ttf]]
+elseif GetLocale() == "zhTW" then
+	STANDARD_TEXT_FONT = [[Fonts\bLEI00D.ttf]]
+end
 
 ns.defaults = {
-    scale = 1,
-    width = 70,
-    height = 32,
+    scale = 1.0,
+    width = 78,
+    height = 42,
     texture = "gradient",
-    texturePath = ns.mediapath.."gradient",   
+    texturePath = mediapath.."gradient",   
     fontPath = STANDARD_TEXT_FONT,
-    font = "默认",
-    fontsize = 13,
+    font = L.defaultfont,
+    fontsize = 12,
     fontsizeEdge = 11,
     outline = "OUTLINE",
     solo = true,
     player = true,
     party = true,
     numCol = 8,
-    numUnits = 10,
-    petUnits = 5,
-    MTUnits = 5,
-    spacing = 3,
+    spacing = 4,
     orientation = "HORIZONTAL",
     porientation = "HORIZONTAL",
-    horizontal = false,
+    horizontal = true,
     pethorizontal = true,
     MThorizontal = true,
-    growth = "RIGHT",
+    growth = "DOWN",
     petgrowth = "DOWN",
     MTgrowth = "DOWN",
 	GCD = true,
-	GCDChange = true,
     reversecolors = true,
     definecolors = false,
     powerbar = true,
     onlymana = true,
-    powerbarsize = .1,
+    powerbarsize = .08,
     outsideRange = .40,
     arrow = true,
     arrowscale = 1.0,
@@ -45,7 +54,7 @@ ns.defaults = {
     rangeIsNotConnected = true,
     healtext = false,
     healbar = true,
-    healoverflow = true,
+    healoverflow = false,
     healothersonly = false,
     healalpha = .40,
     hppercent = 90,
@@ -54,15 +63,14 @@ ns.defaults = {
     manapercent = 10,
     pets = false,
     MT = false,
-	tankaura = true,
     indicatorsize = 8,
-    symbolsize = 16,
-    leadersize = 10,
-    aurasize = 16,
-    multi = false,
+    symbolsize = 18,
+    leadersize = 12,
+    aurasize = 18,
+	secaurasize = 12,
 	hptext = "DEFICIT",
 	vehiclecolor = {r = 0.2, g = 0.9, b = 0.1, a = 1},	--载具颜色
-	enemycolor = {r = 0.03, g = 0.03, b = 0.23, a = 1},	--敌对颜色
+	enemycolor = {r = 0.25, g = 0.05, b = 0.27, a = 1},	--敌对颜色
 	deadcolor = {r = 0.3, g = 0.3, b = 0.3, a = 1},		--死亡颜色
     myhealcolor = { r = 0.0, g = 1.0, b = 0.5, a = 0.4 },
     otherhealcolor = { r = 0.0, g = 1.0, b = 0.0, a = 0.4 },
@@ -72,24 +80,19 @@ ns.defaults = {
     powerbgcolor = { r = 0.33, g = 0.33, b = 0.33, a = 1 },
     powerdefinecolors = true,
 	classbgcolor = true,
-    colorSmooth = false,
-    gradient = { r = 1, g = 0, b = 0, a = 1 },
-    dispel = "BORDER",	--可驱散debuff显示方式,"NONE" = 不显示,"ICON" = "只显示图标","BORDER"= "图标+边框显示","INDICATOR"= "图标+右侧指示器显示",
+    dispel = "BORDER",	--可驱散debuff显示方式,"ICON" = "只显示图标","BORDER"= "图标+边框显示"
     fborder = false,
     afk = false,
     highlight = true,
     powerclass = false,
-    tooltip = false,
+    tooltip = true,
     smooth = true,
-    altpower = false,
-    sortClass = false,
-    classOrder = "DEATHKNIGHT,DRUID,HUNTER,MAGE,PALADIN,PRIEST,ROGUE,SHAMAN,WARLOCK,WARRIOR",
-    hidemenu = false,
+    altpower = true,
+
+    hidemenu = true,
 	Resurrection = true,
 	hideblzraid = true,
-	ClickCastenable = true,
-	ClickCastsetchange = false,
-    ClickCastset = {},
+
 	Freebgridomf2Char = {
 		["Defaults"] ={
 			["oUF_FreebgridPetFrame"] = "LEFTUIParent2500",
@@ -99,419 +102,122 @@ ns.defaults = {
 	},
 }
 
-local ClassClickSets = {
-	PRIEST = { 
-		["1"] = {
-			["Click"]		= {
-				["action"]	= "target",
-							},
-			["shift-"]		= {
-				["action"]	= 139,--"恢復",
-							},
-			["ctrl-"]		= {
-				["action"]	= 527,--"驅散魔法",
-							},
-			["alt-"]		= {
-				["action"]	= 2061,--"快速治療",
-							},
-			["alt-ctrl-"]	= {
-				["action"]	= 2006,--"復活術",
-							},
-		},
-		["2"] = {
-			["Click"]			= {
-				["action"]		= 17,--"真言術:盾",
-							},
-			["shift-"]		= {
-				["action"]	= 33076,--"癒合禱言",
-							},
-			["ctrl-"]		= {
-				["action"]	= 528,--"驅除疾病", 
-							},
-			["alt-"]		= {
-				["action"]	= 2060,--"強效治療術",
-							},
-			["alt-ctrl-"]	= {
-				["action"]	= 32546,--"束縛治療",
-							},
-		},
-		["3"] = {
-			["Click"]			= {
-				["action"]	= 34861,--"治療之環",
-							},
-			["shift-"]		= {
-				["action"]	= 2050, --治疗术
-							},
-			["alt-"]		= {
-				["action"]	= 1706, --漂浮术
-							},
-			["ctrl-"]		= {
-				["action"]	= 21562,--耐
-							},
-		},
-		["4"] = {
-			["Click"]		= {
-				["action"]		= 596, --治疗祷言
-							},
-			["shift-"]		= {
-				["action"]	= 47758, -- 苦修
-							},
-			["ctrl-"]		= {
-				["action"]	= 73325, -- 信仰飞跃
-							},
-		},
-		["5"] = {
-			["Click"]			= {
-				["action"]	= 48153, -- 守护之魂
-							},
-			["shift-"]		= {
-				["action"]	= 88625, -- 圣言术
-							},
-			["ctrl-"]		= {
-				["action"]	= 33206,--痛苦压制
-							},
-		},
-	},
-	
-	DRUID = { 
-		["1"] = {
-			["Click"]		= {
-				["action"]	= "target",
-							},
-			["shift-"]		= {
-				["action"]	= 774,--"回春術",
-							},
-			["ctrl-"]		= {
-				["action"]	= 2782,--"净化腐蚀",
-							},
-			["alt-"]		= {
-				["action"]	= 8936,--"癒合",
-							},
-			["alt-ctrl-"]	= {
-				["action"]	= 50769,--"復活",
-							},
-		},
-		["2"] = {
-			["Click"]			= {
-				["action"]	= 48438,--"野性成长",
-							},
-			["shift-"]		= {
-				["action"]	= 18562,--"迅捷治愈",
-							},
-			["ctrl-"]		= {
-				["action"]	= 88423, -- 自然治愈
-							},
-			["alt-"]		= {
-				["action"]	= 50464,--"滋補術",
-							},
-			["alt-ctrl-"]	= {
-				["action"]	= 1126, -- 野性印记
-							},
-		},
-		["3"] = {
-			["Click"]			= {
-				["action"]	= 33763,--"生命之花",
-							},
-			["shift-"]		= {
-				["action"]	= 5185,--治疗之触
-							},
-			["ctrl-"]		= {
-				["action"]	= 20484,--复生,
-							},
-		},
-		["4"] = {
-			["Click"]			= {
-				["action"]	= 29166,----激活
-							},
-			["alt-"]		= {
-				["action"]		= 33763,----生命之花
-							},
-		},
-	},
-	SHAMAN = { 
-		["1"] = {
-			["Click"]		= {
-				["action"]	= "target",
-							},
-			["ctrl-shift-"]	= {
-				["action"]	= 974,		--"大地之盾",
-				},
-			["ctrl-"]		= {
-				["action"]	= 2008,		--"先祖之魂",
-							},
-			["alt-"]		= {
-				["action"]	= 8004,		--"治疗之涌",
-							},
-			["shift-"]		= {
-				["action"]	= 1064,		--"治疗链",
-							},
-			["alt-ctrl-"]	= {
-				["action"]	= 331,		--"治疗波",
-							},
-		},
-		["2"] = {
-			["Click"]			= {
-				["action"]	= 51886,	--"净化灵魂",
-							},
-			["ctrl-"]		= {
-				["action"]	= 546,		--水上行走
-							},
-			["alt-"]		= {
-				["action"]	= 131,		--水下呼吸
-							},
-		},
-		["3"] = {
-			["Click"]			= {
-				["action"]	= 61295,	--"激流",
-							},
-			["alt-ctrl-"]	= {
-				["action"]	= 77472,	--"强效治疗波",	
-							},
-		},
-		["4"] = {
-			["Click"]			= {
-				["action"]	= 73680,	--"元素释放",
-							},
-		},
-		["5"] = {
-
-		},
-	},
-
-	PALADIN = { 
-		["1"] = {
-			["Click"]		= {
-				["action"]	= "target",
-							},
-			["shift-"]		= {
-				["action"]	= 635,--"聖光術",
-							},
-			["alt-"]		= {
-				["action"]	= 19750,--"聖光閃現",
-							},
-			["ctrl-"]		= {
-				["action"]	= 53563,--"圣光信标",
-							},
-			["alt-ctrl-"]	= {
-				["action"]	= 7328,--"救贖",
-							},
-		},
-		["2"] = {
-		    ["Click"]			= {
-				["action"]	= 20473,--"神聖震擊",
-							},
-			["shift-"]		= {
-				["action"]	= 82326,--"神圣之光",
-							},
-			["ctrl-"]		= {
-				["action"]	= 4987,--"淨化術",
-							},
-			["alt-"]		= {
-				["action"]	= 85673,--"荣耀圣令",
-							},
-			["alt-ctrl-"]	= {
-				["action"]	= 633,--"聖療術",
-							},
-		},
-		["3"] = {
-		    ["Click"]			= {
-				["action"]	= 31789,--正義防護
-							},
-			["alt-"]		= {
-				["action"]	= 1044,--自由之手
-							},
-			["ctrl-"]	= {
-				["action"]	= 31789, -- 正义防御
-							},
-		},
-		["4"] = {
-			["Click"]			= {
-				["action"]	= 1022,	--"保护之手",
-							},
-			["alt-"]		= {
-				["action"]	= 6940,  --牺牲之手
-							},
-		},
-		["5"] = {
-			["Click"]			= {
-				["action"]	= 1038,	--"拯救之手",
-							},
-		},
-	},
-
-	WARRIOR = { 
-		["1"] = {
-			["Click"]			= {
-				["action"]	= "target",
-							},
-			["ctrl-"]		= {
-				["action"]	= 50720,--"戒備守護",
-							},
-		},
-		["2"] = {
-			["Click"]			= {
-				["action"]	= 3411,--"阻擾",
-							},
-		},
-	},
-
-	MAGE = { 
-		["1"] = {
-			["Click"]			= {
-				["action"]	= "target",
-							},
-			["alt-"]		= {
-				["action"]	= 1459,--"秘法智力",
-							},
-			["ctrl-"]		= {
-				["action"]	= 54646,--"专注",
-							},
-		},
-		["2"] = {
-			["Click"]			= {
-				["action"]	= 475,--"解除詛咒",
-							},
-			["shift-"]		= {
-				["action"]	= 130,--"缓落",
-							},
-		},
-	},
-
-	WARLOCK = { 
-		["1"] = {
-			["Click"]			= {
-				["action"]	= "target",
-							},
-			["alt-"]		= {
-				["action"]	= 80398,--"黑暗意图",
-							},
-		},
-		["2"] = {
-			["Click"]			= {
-				["action"]	= 5697,--"魔息",
-							},
-		},
-	},
-
-	HUNTER = { 
-		["1"] = {
-			["Click"]			= {
-				["action"]	= "target",
-							},
-		},
-		["2"] = {
-			["Click"]			= {
-				["action"]	= 34477,--"誤導",
-							},
-			["shift-"]		= {
-				["action"]	= 136, --治疗宠物
-							},
-		},
-	},
-	
-	ROGUE = { 
-		["1"] = {
-			["Click"]			= {
-				["action"]	= "target",
-							},
-		},
-		["2"] = {
-			["Click"]			= {
-				["action"]	= 57933,--"偷天換日",
-							},
-		},
-	},
-	
-	DEATHKNIGHT = {
-		["1"] = {
-			["Click"]			= {
-				["action"]	= "target",
-							},
-			["shift-"]		= {
-				["action"]	= 61999, --复活盟友
-							},
-		},
-		["2"] = {
-			["Click"]			= {
-				["action"]	= 47541, --死缠
-							},
-			["alt-"]		= {
-				["action"]	= 49016, -- 邪恶狂乱（邪恶天赋)
-							},
-		},
-	},
-}
-
-local function GetTalentSpec()
-	local spec = GetPrimaryTalentTree() or 0
-	return spec
-end
-
-function ns.ClickSetDefault ()
-	local db = {}
-	local i
-	for i=1, 5  do
-		db[tostring(i )] = {}
-		local modifier
-		for _, modifier in ipairs(binding_modifiers) do
-			db[tostring(i )][modifier] = {}
-			db[tostring(i )][modifier]["action"] = "NONE"
+local function copyTable(src, dest) --只拷贝dest表内值为nil的数据,非覆盖拷贝.
+	if type(dest) ~= "table" then dest = {} end
+	if type(src) == "table" then
+		for k,v in pairs(src) do
+			
+			if type(v) == "table" then
+				v = copyTable(v, dest[k])
+			end
+			if type(dest[k]) == 'nil' then 
+				dest[k] = v
+			end
 		end
 	end
-
-	local class = select(2, UnitClass("player"))
-		for k, _ in pairs(ClassClickSets[class]) do
-				for j, _ in pairs(ClassClickSets[class][k]) do
-					local var = ClassClickSets[class][k][j]["action"]
-					local spellname = GetSpellInfo(var)
-					if (var == "target" or var == "menu" or var == "follow") then
-						db[k][j]["action"] = var
-					elseif spellname then						
-						db[k][j]["action"] = spellname
-					end
-				end
-		end
-	ns.db.ClickCastset = db
+	return dest
 end
 
-function ns.InitDB()
-	_G[ADDON_NAME.."DB"]  = _G[ADDON_NAME.."DB"] or {}	
-	for n, _ in pairs(_G[ADDON_NAME.."DB"]) do		--删除旧版的配置文件
-		if not string.match(n,"Talent") then
-			_G[ADDON_NAME.."DB"] [n] = nil
+function ns:CopyDefaults(dest, src)
+	for k, v in pairs(src) do
+		if type(v) == "table" then
+			if not rawget(dest, k) then rawset(dest, k, {}) end
+			if type(dest[k]) == "table" then
+				self:CopyDefaults(dest[k], v)
+			end
+		else
+			if rawget(dest, k) == nil then
+				rawset(dest, k, v)
+			end
 		end
 	end
-	
-	ns.TalentTree = "Talent"..GetTalentSpec()
-	local tree = ns.TalentTree
+end
 
-	if type(_G[ADDON_NAME.."DB"][tree]) ~= "table" then
-		_G[ADDON_NAME.."DB"][tree] = {}
+local function removeDefaults(src, dest)
+	if type(dest) ~= "table" then return end
+	for k, v in pairs(src) do 
+		if type(v) == "table" and type(dest[k]) == "table" then
+			removeDefaults(v, dest[k])
+			if next(dest[k]) == nil then
+				dest[k] = nil
+			end
+		else
+			if dest[k] == src[k] then
+				dest[k] = nil
+			end
+		end
 	end	
-	
-	for k, v in pairs(ns.defaults) do
-        if(type(_G[ADDON_NAME.."DB"][tree][k]) == 'nil') then
-            _G[ADDON_NAME.."DB"][tree][k] = v
-        end
-    end
-	
-	ns.db = _G[ADDON_NAME.."DB"][tree]
-
-	if not ns.db.ClickCastsetchange then
-		ns.ClickSetDefault () 
-		ns.db.ClickCastsetchange = true	
-	end
-	
-	if ns.TalentChanged then
-		ns.restorePosition()
-		ns.updateFrameSetting()
-		ns.ApplyClickSetting()
-		ns.TalentChanged = nil
-	end
 end
 
-function ns.FlushDB()			
-	for i,v in pairs(ns.defaults) do if type(ns.db[i]) ~= "table" and ns.db[i] == v then ns.db[i] = nil end end
+function ns:LoadPlayerData()		
+	ns.general.class = select(2, UnitClass("player"))
+	ns.general.playername = UnitName("player")
+	ns.general.isHealer = self:IsHealer()
+	ns.general.realmname = GetRealmName()
+	ns.general.playerDBKey = ns.general.playername.." - "..ns.general.realmname
+	ns.general.MapID = self:GetMapID()
+	ns.general.dispellist = self:GetDispelClass()
+	ns.general.TalentSpec, ns.general.TalentGroup, ns.general.TalentGroupName = self:GetTalentSpec()
+end	
+	
+function ns:InitDB()
+	_G[ADDON_NAME.."DB"] = _G[ADDON_NAME.."DB"] or {}	
+	
+	ns:LoadPlayerData()
+
+	local G = ns.general
+	local DB = _G[ADDON_NAME.."DB"] 
+
+	for n, _ in pairs(DB) do		--删除旧版的配置文件
+		if not string.match(n,"profile") then
+			DB[n] = nil
+		end
+	end
+	
+	if type(DB.profiles) ~= "table" then
+		DB.profiles = {}
+	end
+	if type(DB.profiles[G.playerDBKey]) ~= "table" then
+		DB.profiles[G.playerDBKey] = {}
+	end
+	
+	if type(DB.profileKeys) ~= "table" then
+		DB.profileKeys = {}
+	end
+	if type(DB.profileKeys[G.playerDBKey]) ~= "table" then
+		DB.profileKeys[G.playerDBKey] = {}
+	end
+	if type(DB.profileKeys[G.playerDBKey].profile) ~= "table" then
+		DB.profileKeys[G.playerDBKey].profile = {}
+	end
+	
+	if ns.general.TalentSpec == 0 or DB.profileKeys[G.playerDBKey].dualspec then
+		if not DB.profileKeys[G.playerDBKey].profile.dual or type(DB.profiles[DB.profileKeys[G.playerDBKey].profile.dual]) ~= "table" then
+			DB.profileKeys[G.playerDBKey].profile.dual = G.playerDBKey
+		end
+	else
+		if not DB.profileKeys[G.playerDBKey].profile["1"] then
+			DB.profileKeys[G.playerDBKey].profile["1"] = G.playerDBKey
+		end
+		if not DB.profileKeys[G.playerDBKey].profile["2"] then
+			DB.profileKeys[G.playerDBKey].profile["2"] = G.playerDBKey
+		end
+	end
+	
+	if ns.general.TalentSpec == 0 or DB.profileKeys[G.playerDBKey].dualspec then
+		ns.general.Profilename = DB.profileKeys[G.playerDBKey].profile.dual
+	else
+		ns.general.Profilename = DB.profileKeys[G.playerDBKey].profile[tostring(ns.general.TalentGroup)]
+	end
+
+	ns.db = _G[ADDON_NAME.."DB"].profiles[ns.general.Profilename]
+	ns:CopyDefaults(ns.db, ns.defaults)
+end
+
+function ns:FlushDB(key)
+	local name = key or ns.general.Profilename
+	
+	removeDefaults(ns.defaults, _G[ADDON_NAME.."DB"].profiles[name])
 end
 
 

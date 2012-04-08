@@ -5,11 +5,20 @@ local Update = function(self, event)
 	local raidID = UnitInRaid(self.unit)
 	if(not raidID) then return end
 
+	local maintank = self.MainTank
+	if(maintank.PreUpdate) then
+		maintank:PreUpdate()
+	end
+
 	local _, _, _, _, _, _, _, _, _, rinfo = GetRaidRosterInfo(raidID)
 	if(rinfo == 'MAINTANK' and not UnitHasVehicleUI(self.unit)) then
 		self.MainTank:Show()
 	else
 		self.MainTank:Hide()
+	end
+
+	if(maintank.PostUpdate) then
+		return maintank:PostUpdate(rinfo)
 	end
 end
 
@@ -28,8 +37,8 @@ local Enable = function(self)
 		mt.__owner = self
 		mt.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent('PARTY_MEMBERS_CHANGED', Path)
-		self:RegisterEvent('RAID_ROSTER_UPDATE', Path)
+		self:RegisterEvent('PARTY_MEMBERS_CHANGED', Path, true)
+		self:RegisterEvent('RAID_ROSTER_UPDATE', Path, true)
 
 		if(mt:IsObjectType'Texture' and not mt:GetTexture()) then
 			mt:SetTexture[[Interface\GROUPFRAME\UI-GROUP-MAINTANKICON]]

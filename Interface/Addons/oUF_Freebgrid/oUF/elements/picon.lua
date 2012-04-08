@@ -2,13 +2,20 @@ local parent, ns = ...
 local oUF = ns.oUF
 
 local Update = function(self, event)
-	local inPhase = UnitInPhase(self.unit)
 	local picon = self.PhaseIcon
+	if(picon.PreUpdate) then
+		picon:PreUpdate()
+	end
 
+	local inPhase = UnitInPhase(self.unit)
 	if(inPhase) then
 		picon:Hide()
 	else
 		picon:Show()
+	end
+
+	if(picon.PostUpdate) then
+		return picon:PostUpdate(inPhase)
 	end
 end
 
@@ -26,7 +33,7 @@ local Enable = function(self)
 		picon.__owner = self
 		picon.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent('UNIT_PHASE', Path)
+		self:RegisterEvent('UNIT_PHASE', Path, true)
 
 		if(picon:IsObjectType'Texture' and not picon:GetTexture()) then
 			picon:SetTexture[[Interface\TargetingFrame\UI-PhasingIcon]]

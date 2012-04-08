@@ -5,7 +5,7 @@
 ## Notes-zhTW: Raid Frames using the oUF framework.
 ## Author: Freebaser
 ## Version: 6.7
-## SavedVariablesPerCharacter: oUF_FreebgridDB
+## SavedVariables: oUF_FreebgridDB
 ## OptionalDeps: !ClassColors, Ace3, Clique, oRA3, SharedMedia
 ## X-oUF: Freebgrid
 ## X-LoadOn-Slash: /freeb

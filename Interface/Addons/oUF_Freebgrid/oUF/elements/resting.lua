@@ -2,10 +2,20 @@ local parent, ns = ...
 local oUF = ns.oUF
 
 local Update = function(self, event)
-	if(IsResting()) then
-		self.Resting:Show()
+	local resting = self.Resting
+	if(resting.PreUpdate) then
+		resting:PreUpdate()
+	end
+
+	local isResting = IsResting()
+	if(isResting) then
+		resting:Show()
 	else
-		self.Resting:Hide()
+		resting:Hide()
+	end
+
+	if(resting.PostUpdate) then
+		return resting:PostUpdate(isResting)
 	end
 end
 
@@ -23,7 +33,7 @@ local Enable = function(self, unit)
 		resting.__owner = self
 		resting.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent("PLAYER_UPDATE_RESTING", Path)
+		self:RegisterEvent("PLAYER_UPDATE_RESTING", Path, true)
 
 		if(resting:IsObjectType"Texture" and not resting:GetTexture()) then
 			resting:SetTexture[[Interface\CharacterFrame\UI-StateIcon]]
