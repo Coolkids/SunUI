@@ -13,7 +13,7 @@ local FactionInfo = {
 	[8] = {{ 155/255,  255/255, 155/255 }, L["³ç°Ý"],"FF9bff9b"},
 }
 function Module:BuildExpBar()
-	ExpBar = CreateFrame("StatusBar", nil, XP)
+	ExpBar = CreateFrame("StatusBar", nil, BottomRightBar)
 	--ExpBar:CreateShadow("Background")
 	ExpBar:SetStatusBarTexture(DB.Statusbar)
 	ExpBar:SetPoint("TOPLEFT", 0, 0)

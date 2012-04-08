@@ -405,12 +405,12 @@ function Module:OnInitialize()
 	MoveHandle.InfoPanel = S.MakeMoveHandle(InfoPanelPos, L["信息面板"], "InfoPanel")
 	
 	if C["OpenBottom"] == true then
-	XP = CreateFrame("Frame", XP, UIParent)
-	XP:SetHeight(C["BottomHeight"])	
-	XP:SetWidth(C["BottomWidth"])
-	XP:SetFrameLevel(2)
-	MoveHandle.BottomInfoPanelPos = S.MakeMoveHandle(XP, L["信息面板"], "InfoPanel2")
-	XP:CreateShadow("Background")
+	BottomRightBar = CreateFrame("Frame", BottomRightBar, UIParent)
+	BottomRightBar:SetHeight(C["BottomHeight"])	
+	BottomRightBar:SetWidth(C["BottomWidth"])
+	BottomRightBar:SetFrameLevel(2)
+	MoveHandle.BottomInfoPanelPos = S.MakeMoveHandle(BottomRightBar, L["信息面板"], "InfoPanel2")
+	BottomRightBar:CreateShadow("Background")
 	end
 
 end
