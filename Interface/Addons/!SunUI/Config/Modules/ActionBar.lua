@@ -65,7 +65,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.Bar1Layout end,
 							set = function(_, value) 
 								ActionBarDB.Bar1Layout = value
-								Core:GetModule("ActionBar"):UpdateBar1()					
+								Core:GetModule("ActionBar"):BuildActionBar()					
 							end,
 						},
 						Bar2Layout = {

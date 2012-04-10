@@ -297,11 +297,7 @@ function Module:UpdateBar5()
 			bar:SetWidth(C["ButtonSize"])
 			bar:SetHeight(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
 		end
-		if C["Bar5Layout"] == 2 then
-			MoveHandle.SunUIActionBar5 = S.MakeMove(bar, "SunUIActionBar5", "bar5", C["MainBarSacle"])
-		else 
-			MoveHandle.SunUIActionBar5 = S.MakeMove(bar, "SunUIActionBar5", "bar5", C["MainBarSacle"])
-		end
+		MoveHandle.SunUIActionBar5 = S.MakeMove(bar, "SunUIActionBar5", "bar5", C["MainBarSacle"])
 		bar:SetHitRectInsets(-10, -10, -10, -10)
   
 		bar:SetScale(C["MainBarSacle"])
@@ -359,6 +355,7 @@ function Module:UpdateExtraBar()
   --the button
 	local b = ExtraActionButton1
 	b:SetSize(C["ButtonSize"],C["ButtonSize"])
+	b:SetScale(C["ExtraBarSacle"])   --新?
 	bar.button = b
 
   --style texture

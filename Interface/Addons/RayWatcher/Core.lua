@@ -30,8 +30,10 @@ function watcherPrototype:OnDisable()
 end
 
 function watcherPrototype:CreateButton(mode)
-	local button=CreateFrame("Frame", nil, self.parent)
+	local button=CreateFrame("Button", nil, self.parent)
 	button:CreateShadow("Background")
+	button:StyleButton(true)
+	button:SetPushedTexture(nil)
 	button:SetSize(self.size, self.size)
 	self.parent:SetSize(self.size, self.size)
 	button.icon = button:CreateTexture(nil, "ARTWORK")
