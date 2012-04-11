@@ -928,19 +928,38 @@ end
   lib.gen_specificpower = function(f, unit)
    if class ~= "DRUID" and class ~= "SHAMAN" then return end
 	local bars = CreateFrame("Frame", nil, f)
-	bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
-    bars:SetSize((f.width-4)/3, f.height/3)
+	bars:SetFrameLevel(f:GetFrameLevel()+1)
+	if class == "DRUID" then 
+		bars:SetSize((f.width-10)/3, f.height/3/2)
+		bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, -3)
+	else
+		bars:SetSize((f.width-4)/3, f.height/3)
+		bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+	end
     for i = 1, 3 do
         bars[i] =CreateFrame("StatusBar", nil, bars)
 		bars[i]:SetStatusBarTexture(DB.Statusbar)
 		bars[i]:GetStatusBarTexture():SetHorizTile(false)
-		bars[i]:SetSize((f.width-4)/3, f.height/3)
+		if class == "DRUID" then 
+			bars[i]:SetSize((f.width-4)/3, f.height/3/2)
+		else
+			bars[i]:SetSize((f.width-4)/3, f.height/3)
+		end
 		if (i == 1) then
-			bars[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+			if class ~= "DRUID" then
+				bars[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+			else
+				bars[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, -1.5)
+			end
 		else
 			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 2, 0)
 		end
-		bars[i]:SetStatusBarColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
+		if class == "DRUID" then 
+			local color = oUF.colors.power["SOUL_SHARDS"]
+            bars[i]:SetStatusBarColor(color[1], color[2], color[3])
+		else
+			bars[i]:SetStatusBarColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
+		end
 		bars[i].bg = CreateFrame("Frame", nil, bars[i])
 		bars[i].bg:SetAllPoints()
 		bars[i].bg:CreateShadow("Background")
