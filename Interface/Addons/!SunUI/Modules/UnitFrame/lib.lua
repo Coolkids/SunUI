@@ -1019,6 +1019,7 @@ end
 	local function OnEvent(self,event)
 		rank = select(4,UnitBuff("target", GetSpellInfo(33763)))
 		caster = select(8,UnitBuff("target", GetSpellInfo(33763)))
+		print(caster)
 		if rank and caster == "player" then
 			for i = 1, rank do
 				bars[i]:SetAlpha(1)
@@ -1030,6 +1031,7 @@ end
 		end
 	end
 	bars:RegisterEvent("UNIT_AURA")
+	bars:RegisterEvent("PLAYER_TARGET_CHANGED")
 	bars:RegisterEvent("PLAYER_ENTERING_WORLD")
 	bars:RegisterEvent("PLAYER_REGEN_DISABLED")
 	bars:RegisterEvent("PLAYER_REGEN_ENABLED")
