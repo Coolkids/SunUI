@@ -803,43 +803,7 @@ end
                 f.HolyPower = bars
             end
 end
-  --gen DK runes
---[[   lib.gen_Runes = function(f)
-    if class ~= "DEATHKNIGHT" then return
-    else
-      local runeloadcolors = {
-      [1] = {0.59, 0.31, 0.31},
-      [2] = {0.59, 0.31, 0.31},
-      [3] = {0.33, 0.51, 0.33},
-      [4] = {0.33, 0.51, 0.33},
-      [5] = {0.31, 0.45, 0.53},
-      [6] = {0.31, 0.45, 0.53},}
-      f.Runes = CreateFrame("Frame", nil, f)
-      for i = 1, 6 do
-        r = CreateFrame("StatusBar", f:GetName().."_Runes"..i, f)
-        r:SetSize(f.width/6 - 2, f.height/3)
-        if (i == 1) then
-          r:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
-        else
-          r:SetPoint("TOPLEFT", f.Runes[i-1], "TOPRIGHT", 2, 0)
-        end
-        r:SetStatusBarTexture(DB.Statusbar)
-        r:GetStatusBarTexture():SetHorizTile(false)
-        r:SetStatusBarColor(unpack(runeloadcolors[i]))
-        r.bd = r:CreateTexture(nil, "BORDER")
-        r.bd:SetAllPoints()
-        r.bd:SetTexture(DB.Statusbar)
-        r.bd:SetVertexColor(0.15, 0.15, 0.15)
-        f.b = CreateFrame("Frame", nil, r)
-        f.b:SetPoint("TOPLEFT", r, "TOPLEFT", -4, 4)
-        f.b:SetPoint("BOTTOMRIGHT", r, "BOTTOMRIGHT", 4, -5)
-        f.b:SetBackdrop(backdrop_tab)
-        f.b:SetBackdropColor(0, 0, 0, 0)
-        f.b:SetBackdropBorderColor(0,0,0,1)
-        f.Runes[i] = r
-      end
-    end
-  end ]]
+
   --gen eclipse bar
   lib.gen_EclipseBar = function(f)
 	if class ~= "DRUID" then return end
@@ -1031,6 +995,46 @@ end
 				end
 				f.CPoints = bars
   end 
+  lib.gen_lifebloom = function(f)  
+	if class ~= "DRUID" then return end
+	local bars = CreateFrame("Frame", nil, f)
+	bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+    bars:SetSize((f.width-4)/3, f.height/3)
+            for i = 1, 3 do
+                bars[i] =CreateFrame("StatusBar", nil, bars)
+				bars[i]:SetStatusBarTexture(DB.Statusbar)
+				bars[i]:GetStatusBarTexture():SetHorizTile(false)
+				bars[i]:SetSize((f.width-4)/3, f.height/3)
+				 if (i == 1) then
+					bars[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+				else
+					bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 2, 0)
+				end
+                bars[i]:SetStatusBarColor(0.2, 0.8, 0.2)
+				bars[i].bg = CreateFrame("Frame", nil, bars[i])
+				bars[i].bg:SetAllPoints()
+				bars[i].bg:CreateShadow("Background")
+                i=i-1
+            end
+	local function OnEvent(self,event)
+		rank = select(4,UnitBuff("target", GetSpellInfo(33763)))
+		caster = select(8,UnitBuff("target", GetSpellInfo(33763)))
+		if rank and caster == "player" then
+			for i = 1, rank do
+				bars[i]:SetAlpha(1)
+			end
+		else
+			for i = 1, 3 do
+				bars[i]:SetAlpha(0)
+			end
+		end
+	end
+	bars:RegisterEvent("UNIT_AURA")
+	bars:RegisterEvent("PLAYER_ENTERING_WORLD")
+	bars:RegisterEvent("PLAYER_REGEN_DISABLED")
+	bars:RegisterEvent("PLAYER_REGEN_ENABLED")
+	bars:SetScript("OnEvent", OnEvent)
+end
   --gen LFD role indicator
   lib.gen_LFDindicator = function(f)
     local lfdi = lib.gen_fontstring(f.Power, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
