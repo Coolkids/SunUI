@@ -149,15 +149,20 @@ local function BuildMemory(Anchor)
 	StatusBar:SetScript("OnEnter", function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 		GameTooltip:ClearLines()
+		local TotalMemory, num = UpdateMemory()
 		local maxadd = 0
 		maxadd = #MemoryTable
 		if IsAltKeyDown() then
 				maxAddOns = #MemoryTable
 				
 			else
-				maxAddOns = InfoPanelDB["MemNum"]
+				if InfoPanelDB["MemNum"] <= num  then
+					maxAddOns = InfoPanelDB["MemNum"]
+				else
+					maxAddOns = num
+				end
 		end
-		local TotalMemory, num = UpdateMemory()
+		
 		GameTooltip:AddDoubleLine(L["总共内存使用"], S.FormatMemory(TotalMemory), 0.4, 0.78, 1, 0.84, 0.75, 0.65)
 		GameTooltip:AddLine(" ")
 		local more = 0
@@ -400,7 +405,7 @@ end
 function Module:OnInitialize()
 	C = InfoPanelDB
 	local InfoPanelPos = CreateFrame("Frame", nil, UIParent)
-	InfoPanelPos:SetSize(630, 20)
+	InfoPanelPos:SetSize(610, 20)
 	InfoPanelPos:Hide()
 	MoveHandle.InfoPanel = S.MakeMoveHandle(InfoPanelPos, L["信息面板"], "InfoPanel")
 	

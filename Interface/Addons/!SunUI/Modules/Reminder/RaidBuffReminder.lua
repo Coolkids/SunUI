@@ -227,7 +227,7 @@ local function BuildBuffFrame()
 		Temp.Shadow:SetFrameLevel(0)
 		
 		Temp.Icon = Temp:CreateTexture(nil, "ARTWORK")
-		Temp.Icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+		Temp.Icon:SetTexCoord(.1, .9, .1, .9)
 		Temp.Icon:SetAllPoints()
 		
 		if ReminderDB.RaidBuffDirection == 1 then

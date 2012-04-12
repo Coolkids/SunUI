@@ -48,6 +48,11 @@ end
 Stat:SetScript("OnEnter", function() ShowTooltip(Stat) end)
 Stat:SetScript("OnLeave", function() GameTooltip:Hide() end)
 Stat:SetScript("OnUpdate", Update)
+Stat:SetScript("OnEvent", Update)
 Update(Stat)
 
+Stat:RegisterEvent("MAIL_CLOSED")
+Stat:RegisterEvent("MAIL_INBOX_UPDATE")
+Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
+Stat:RegisterEvent("MAIL_SHOW")
 end

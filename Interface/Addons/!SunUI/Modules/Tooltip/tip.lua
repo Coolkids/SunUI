@@ -70,7 +70,11 @@ end
 
 function GameTooltip_UnitColor(unit)
     local color = unitColor(unit)
-    return color.r, color.g, color.b
+	if color == nil then 
+		return
+	else
+		return color.r, color.g, color.b
+	end
 end
 
 local function getTarget(unit)

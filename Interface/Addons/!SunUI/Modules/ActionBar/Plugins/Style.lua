@@ -72,10 +72,10 @@ function Style(self, totem, flyout)
 	if self.styled then return end	
 
 	if Btname then
-	Btname:SetJustifyH("CENTER")
+	Btname:SetJustifyH("LEFT")
 	Btname:SetJustifyV("BOTTOM")
 	Btname:SetPoint("BOTTOMLEFT")
-	Btname:SetPoint("BOTTOMRIGHT")
+	--Btname:SetPoint("BOTTOMRIGHT")
 	Btname:SetFont(DB.Font, S.mult*C["MFontSize"], "THINOUTLINE")
 		if C["HideMacroName"] then
 			Btname:SetText("")

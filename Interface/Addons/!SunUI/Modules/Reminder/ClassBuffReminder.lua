@@ -329,7 +329,7 @@ local function OnEvent_PLAYER_ENTERING_WORLD(event, ...)
 			local Name, _, Icon = select(1, GetSpellInfo(value[1]))
 			i = i + 1
 			BuffFrame[i].Icon:SetTexture(Icon)
-			BuffFrame[i].Icon:SetTexCoord(0.05, 0.95, 0.05, 0.95)
+			BuffFrame[i].Icon:SetTexCoord(.1, .9, .1, .9)
 			BuffFrame[i].Text:SetText(format(Name))
 			BuffFrame[i]:SetAlpha(1)
 		end
@@ -370,7 +370,7 @@ local function OnEvent_PLAYER_REGEN_DISABLED(event, ...)
 			local Name, _, Icon = select(1, GetSpellInfo(value[1]))
 			i = i + 1
 			BuffFrame[i].Icon:SetTexture(Icon)
-			BuffFrame[i].Icon:SetTexCoord(0.05, 0.95, 0.05, 0.95)
+			BuffFrame[i].Icon:SetTexCoord(.1, .9, .1, .9)
 			BuffFrame[i].Text:SetText(format(Name))
 			BuffFrame[i]:SetAlpha(1)
 		end
@@ -391,7 +391,7 @@ local function OnEvent_UNIT_AURA(event, unit, ...)
 			local Name, _, Icon = select(1, GetSpellInfo(value[1]))
 			i = i + 1
 			BuffFrame[i].Icon:SetTexture(Icon)
-			BuffFrame[i].Icon:SetTexCoord(0.05, 0.95, 0.05, 0.95)
+			BuffFrame[i].Icon:SetTexCoord(.1, .9, .1, .9)
 			BuffFrame[i].Text:SetText(format(Name))
 			BuffFrame[i]:SetAlpha(1)
 		end

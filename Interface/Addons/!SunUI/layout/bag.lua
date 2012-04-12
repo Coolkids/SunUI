@@ -51,5 +51,6 @@ Stat:SetScript("OnEnter", function() ShowTooltip(Stat) end)
 Stat:SetScript("OnLeave", function() GameTooltip:Hide() end)
 Stat:SetScript("OnMouseDown", function() OpenAllBags() end)
 Stat:SetScript("OnUpdate", Update)
+Stat:SetScript("OnEvent", Update)
 Update(Stat)	
 end

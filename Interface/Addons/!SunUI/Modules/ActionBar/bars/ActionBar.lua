@@ -354,10 +354,11 @@ function Module:UpdateExtraBar()
 
   --the button
 	local b = ExtraActionButton1
-	b:SetSize(C["ButtonSize"],C["ButtonSize"])
-	b:SetScale(C["ExtraBarSacle"])   --新?
+	--b:SetSize(C["ButtonSize"],C["ButtonSize"])
+	--b:SetScale(C["ExtraBarSacle"])   --新?
 	bar.button = b
-
+	ExtraActionButton1Cooldown:SetPoint("TOPLEFT")
+	ExtraActionButton1Cooldown:SetPoint("BOTTOMRIGHT")
   --style texture
 	local s = b.style
 	s:SetTexture(nil)

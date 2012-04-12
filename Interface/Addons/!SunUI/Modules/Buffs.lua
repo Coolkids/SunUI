@@ -7,7 +7,7 @@ local BuffPos, DebuffPos = nil, nil
 local tinsert, _G, tsort = tinsert, _G, table.sort
 local BuffTable = {["Time"] = {}, ["None"] = {}}
 
-function Module:Style(buttonName, i)
+function Module:Style(buttonName, i, debuff)
 	if not _G[buttonName..i] then return end
 	
 	local Button	= _G[buttonName..i]
@@ -16,9 +16,9 @@ function Module:Style(buttonName, i)
 	local Count 	= _G[buttonName..i.."Count"]
 	local Border = _G[buttonName..i.."Border"]
 
-	Button:Size(C["IconSize"], C["IconSize"])
+	Button:SetSize(C["IconSize"], C["IconSize"])
 	
-	Icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+	Icon:SetTexCoord(.1, .9, .1, .9)
 	
 	Duration:ClearAllPoints()
 	Duration:SetParent(Button)
@@ -34,10 +34,20 @@ function Module:Style(buttonName, i)
 		Border:Hide()
 	end
 	
-	if not Button.shadow then
-		Button:CreateShadow()
-		Button:StyleButton(true)
-	end	
+
+	Button:CreateShadow()
+	Button:StyleButton(true)
+	
+	if debuff then
+		local dtype = select(5, UnitDebuff("player",i))
+			if (dtype ~= nil) then
+				color = DebuffTypeColor[dtype]
+			else
+				color = DebuffTypeColor["none"]
+			end
+		Button.shadow:SetBackdropColor(0, 0, 0)
+		Button.border:SetBackdropBorderColor(color.r, color.g, color.b, 1)
+	end
 end
 
 function Module:OnInitialize()
@@ -71,7 +81,7 @@ function Module:GetWeaponEnchantNum()
 	if hasOffHandEnchant then Num = Num + 1 end
 	if hasThrownEnchant then Num = Num + 1 end
 	for i = 1, Num do
-		Module:Style("TempEnchant", i)
+		Module:Style("TempEnchant", i, false)
 		tinsert(BuffTable["None"], _G["TempEnchant"..i])
 	end
 end
@@ -109,7 +119,7 @@ hooksecurefunc("BuffFrame_UpdateAllBuffAnchors", function()
 	Module:GetWeaponEnchantNum()
 	
 	for i = 1, BUFF_ACTUAL_DISPLAY do
-		Module:Style("BuffButton", i)
+		Module:Style("BuffButton", i, false)
 		if select(6, UnitBuff("player", i)) == 0 then
 			tinsert(BuffTable["None"], _G["BuffButton"..i])
 		else
@@ -135,7 +145,7 @@ hooksecurefunc("AuraButton_UpdateDuration", function(auraButton, timeLeft)
 end) 
 
 hooksecurefunc("DebuffButton_UpdateAnchors", function(buttonName, i)
-	Module:Style(buttonName, i)
+	Module:Style(buttonName, i, true)
 	local Aura = _G[buttonName..i]
 	local Pre = _G[buttonName..(i-1)]
 	local PreRow = _G[buttonName..(i-C["IconPerRow"])]
