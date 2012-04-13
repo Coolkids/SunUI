@@ -6,7 +6,22 @@ local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Buff")
 local BuffPos, DebuffPos = nil, nil
 local tinsert, _G, tsort = tinsert, _G, table.sort
 local BuffTable = {["Time"] = {}, ["None"] = {}}
-
+local slotDB = {
+	[3] = "MainHandSlot",
+	[2]= "SecondaryHandSlot",
+	[1]= "RangedSlot"
+	}
+local function fetchQuality(slotName)
+	local slotId, texture, checkRelic = GetInventorySlotInfo(slotName)
+	local itemId = GetInventoryItemID("player", slotId)
+	if itemId then
+		local name, link, quality, iLevel, reqLevel, class, subclass, maxStack, equipSlot, texture, vendorPrice =GetItemInfo(itemId)
+		if quality then
+			local r, g, b, hex = GetItemQualityColor(quality)
+			return r, g, b
+		end
+	end
+end
 function Module:Style(buttonName, i, f)
 	if not _G[buttonName..i] then return end
 	
@@ -22,7 +37,7 @@ function Module:Style(buttonName, i, f)
 	
 	Duration:ClearAllPoints()
 	Duration:SetParent(Button)
-	Duration:Point("TOP", Button, "BOTTOM", 2, 5)
+	Duration:Point("TOP", Button, "BOTTOM", 2, -3)
 	Duration:SetFont(DB.bfont, 12*S.Scale(1)*MiniDB["FontScale"], "THINOUTLINE")
 	
 	Count:ClearAllPoints()
@@ -50,21 +65,9 @@ function Module:Style(buttonName, i, f)
 	end
 	
 	if f == w then
-		local slotDB = {"MainHandSlot",
-		"SecondaryHandSlot",
-		"RangedSlot"}
-		local function fetchQuality(slotName)
-			local slotId, texture, checkRelic = GetInventorySlotInfo(slotName)
-			local itemId = GetInventoryItemID("player", slotId)
-			if itemId then
-				local name, link, quality, iLevel, reqLevel, class, subclass, maxStack, equipSlot, texture, vendorPrice = GetItemInfo(itemId)
-				local r, g, b, hex = GetItemQualityColor(quality)
-				return r, g, b
-			end
-		end
 		local r, g, b = {}, {}, {}
-		for k ,v in pairs(slotDB) do
-			r[k], g[k], b[k] = fetchQuality(v)
+		for k = 1,3 do
+			r[k], g[k], b[k] = fetchQuality(slotDB[k])
 		end
 		Button.shadow:SetBackdropColor(0, 0, 0)
 		Button.border:SetBackdropBorderColor(r[i], g[i], b[i], 1)
@@ -116,7 +119,7 @@ function Module:UpdateBuffPos()
 			if key == 1 then
 				value:Point("CENTER", BuffPos)
 			elseif key%C["IconPerRow"] == 1 then
-				value:Point("TOP", PreRow, "BOTTOM", 0, -15)
+				value:Point("TOP", PreRow, "BOTTOM", 0, -20)
 			else
 				value:Point("RIGHT", Pre, "LEFT", -8, 0)
 			end
@@ -125,7 +128,7 @@ function Module:UpdateBuffPos()
 			if key == 1 then
 				value:Point("CENTER", BuffPos)
 			elseif key%C["IconPerRow"] == 1 then
-				value:Point("TOP", PreRow, "BOTTOM", 0, -15)
+				value:Point("TOP", PreRow, "BOTTOM", 0, -20)
 			else
 				value:Point("LEFT", Pre, "RIGHT", 8, 0)
 			end
@@ -175,7 +178,7 @@ hooksecurefunc("DebuffButton_UpdateAnchors", function(buttonName, i)
 		if i == 1 then
 			Aura:Point("CENTER", DebuffPos)
 		elseif i%C["IconPerRow"] == 1 then
-			Aura:Point("TOP", PreRow, "BOTTOM", 0, -15)
+			Aura:Point("TOP", PreRow, "BOTTOM", 0, -20)
 		else
 			Aura:Point("RIGHT", Pre, "LEFT", -8, 0)
 		end
@@ -184,7 +187,7 @@ hooksecurefunc("DebuffButton_UpdateAnchors", function(buttonName, i)
 		if i == 1 then
 			Aura:Point("CENTER", DebuffPos)
 		elseif i%C["IconPerRow"] == 1 then
-			Aura:Point("TOP", PreRow, "BOTTOM", 0, -15)
+			Aura:Point("TOP", PreRow, "BOTTOM", 0, -20)
 		else
 			Aura:Point("LEFT", Pre, "RIGHT", 8, 0)
 		end
