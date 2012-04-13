@@ -848,7 +848,7 @@ end
 		local width = (f.width + 4) / 4 - 4
 		local height = f.height/3
 		local TotemBar = CreateFrame("Frame", nil, f)
-		TotemBar:Size(width,height)
+		TotemBar:SetSize(width,height)
 		TotemBar:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 1, 3)
 		TotemBar.Destroy = true
 		TotemBar.UpdateColors = true
@@ -859,6 +859,7 @@ end
 			t:SetWidth(width)
 			t:SetHeight(height)
 			local bar = CreateFrame("StatusBar", nil, t)
+			bar:SetStatusBarTexture(DB.Statusbar)
 			bar:SetWidth(width)
 			bar:SetPoint"BOTTOM"
 			bar:SetHeight(8)
@@ -873,7 +874,8 @@ end
 			text:Hide()---SetPoint("BOTTOMLEFT", t, "TOPLEFT", 0, -1)
 			--text:SetFontObject"GameFontNormal"
 			t.Text = text
-	        t.bg = CreateFrame("Frame", nil, t)
+			bar:CreateShadow("Background")
+--[[ 	        t.bg = CreateFrame("Frame", nil, t)
 			t.bg:SetPoint("TOPLEFT", t, "TOPLEFT", -4, 5)
 			t.bg:SetPoint("BOTTOMRIGHT", t, "BOTTOMRIGHT", 4, -5)
 			t.bg:SetBackdrop(backdrop_tab)
@@ -882,7 +884,7 @@ end
 			t.bg = t:CreateTexture(nil, "BACKGROUND")
 			t.bg:SetAllPoints()
 			t.bg:SetTexture(1, 1, 1)
-			t.bg.multiplier = 0.2
+			t.bg.multiplier = 0.2 ]]
 			TotemBar[i] = t
 		end
 		f.TotemBar = TotemBar
