@@ -1,4 +1,4 @@
-local S, C, L, DB = unpack(select(2, ...))
+ï»¿local S, C, L, DB = unpack(select(2, ...))
 if DB.Nuke == true then return end
 local Delay = CreateFrame("Frame")
 Delay:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -72,8 +72,9 @@ Delay:SetScript("OnEvent", function()
 	
 	if DB.Nuke == true then
 		for i = 1,20 do
-			print("|cffFFD700SunUIÌáÊ¾Äú: Õì²âµ½ÄúÕıÔÚÊ¹ÓÃ|r|cff308014´ó½Å|r|cffFFD700»òÕß|r|cff308014Ä§ºĞ|r,|cffFFD700´¥·¢|r|cffFF0000Nuke²ÎÊı|r,|cffFFD700ÎªÁËÈÃÄúÓÃµÄÊæÊÊËùÒÔ²å¼ş|r|cffFF0000×ÔÎÒ¹Ø±Õ|r.|cffFFD700ÈçÏëÊ¹ÓÃ±¾²å¼şÇë|r|cffFF0000ÍêÈ«É¾³ı|r|cff308014´ó½Å|r|cffFFD700»òÕß|r|cff308014Ä§ºĞ|r")
+			print("|cffFFD700SunUIæç¤ºæ‚¨: ä¾¦æµ‹åˆ°æ‚¨æ­£åœ¨ä½¿ç”¨|r|cff308014å¤§è„š|r|cffFFD700æˆ–è€…|r|cff308014é­”ç›’|r,|cffFFD700è§¦å‘|r|cffFF0000Nukeå‚æ•°|r,|cffFFD700ä¸ºäº†è®©æ‚¨ç”¨çš„èˆ’é€‚æ‰€ä»¥æ’ä»¶|r|cffFF0000è‡ªæˆ‘å…³é—­|r.|cffFFD700å¦‚æƒ³ä½¿ç”¨æœ¬æ’ä»¶è¯·|r|cffFF0000å®Œå…¨åˆ é™¤|r|cff308014å¤§è„š|r|cffFFD700æˆ–è€…|r|cff308014é­”ç›’|r")
 		end
 	end
+	DEFAULT_CHAT_FRAME:AddMessage("|cffDDA0DDSun|r|cff44CCFFUI|rå·²åŠ è½½ï¼Œå‘å¸ƒç½‘å€:\124cff7f7fffhttp://bbs.ngacn.cc/read.php?tid=4743077&_fp=1&_ff=200\124r")
 	MiniDB["uiScale"] = GetCVar("uiScale")
 end)

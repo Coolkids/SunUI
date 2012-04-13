@@ -7,7 +7,7 @@ local BuffPos, DebuffPos = nil, nil
 local tinsert, _G, tsort = tinsert, _G, table.sort
 local BuffTable = {["Time"] = {}, ["None"] = {}}
 
-function Module:Style(buttonName, i, debuff)
+function Module:Style(buttonName, i, f)
 	if not _G[buttonName..i] then return end
 	
 	local Button	= _G[buttonName..i]
@@ -38,7 +38,7 @@ function Module:Style(buttonName, i, debuff)
 	Button:CreateShadow()
 	Button:StyleButton(true)
 	
-	if debuff then
+	if f == d then
 		local dtype = select(5, UnitDebuff("player",i))
 			if (dtype ~= nil) then
 				color = DebuffTypeColor[dtype]
@@ -47,6 +47,27 @@ function Module:Style(buttonName, i, debuff)
 			end
 		Button.shadow:SetBackdropColor(0, 0, 0)
 		Button.border:SetBackdropBorderColor(color.r, color.g, color.b, 1)
+	end
+	
+	if f == w then
+		local slotDB = {"MainHandSlot",
+		"SecondaryHandSlot",
+		"RangedSlot"}
+		local function fetchQuality(slotName)
+			local slotId, texture, checkRelic = GetInventorySlotInfo(slotName)
+			local itemId = GetInventoryItemID("player", slotId)
+			if itemId then
+				local name, link, quality, iLevel, reqLevel, class, subclass, maxStack, equipSlot, texture, vendorPrice = GetItemInfo(itemId)
+				local r, g, b, hex = GetItemQualityColor(quality)
+				return r, g, b
+			end
+		end
+		local r, g, b = {}, {}, {}
+		for k ,v in pairs(slotDB) do
+			r[k], g[k], b[k] = fetchQuality(v)
+		end
+		Button.shadow:SetBackdropColor(0, 0, 0)
+		Button.border:SetBackdropBorderColor(r[i], g[i], b[i], 1)
 	end
 end
 
@@ -81,7 +102,7 @@ function Module:GetWeaponEnchantNum()
 	if hasOffHandEnchant then Num = Num + 1 end
 	if hasThrownEnchant then Num = Num + 1 end
 	for i = 1, Num do
-		Module:Style("TempEnchant", i, false)
+		Module:Style("TempEnchant", i, w)
 		tinsert(BuffTable["None"], _G["TempEnchant"..i])
 	end
 end
@@ -119,7 +140,7 @@ hooksecurefunc("BuffFrame_UpdateAllBuffAnchors", function()
 	Module:GetWeaponEnchantNum()
 	
 	for i = 1, BUFF_ACTUAL_DISPLAY do
-		Module:Style("BuffButton", i, false)
+		Module:Style("BuffButton", i, b)
 		if select(6, UnitBuff("player", i)) == 0 then
 			tinsert(BuffTable["None"], _G["BuffButton"..i])
 		else
@@ -145,7 +166,7 @@ hooksecurefunc("AuraButton_UpdateDuration", function(auraButton, timeLeft)
 end) 
 
 hooksecurefunc("DebuffButton_UpdateAnchors", function(buttonName, i)
-	Module:Style(buttonName, i, true)
+	Module:Style(buttonName, i, d)
 	local Aura = _G[buttonName..i]
 	local Pre = _G[buttonName..(i-1)]
 	local PreRow = _G[buttonName..(i-C["IconPerRow"])]
