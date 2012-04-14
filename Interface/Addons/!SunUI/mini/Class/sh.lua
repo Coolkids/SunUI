@@ -36,7 +36,7 @@ function Module:OnInitialize()
 
 	Frame:SetScript("OnEvent", function(self, event)
 		if DB.MyClass == "PRIEST" and UnitLevel("player") == 85 then 
-			if ( UnitCanAttack("player", "target") and not UnitIsDead("target") and ( UnitHealth("target")/UnitHealthMax("target") < 1.25 ) and not UnitIsDead("player") ) then		
+			if ( UnitCanAttack("player", "target") and not UnitIsDead("target") and ( UnitHealth("target")/UnitHealthMax("target") < 0.25 ) and not UnitIsDead("player") ) then		
 				self:Show()
 				UpdateFrame()
 				if event == "SPELL_UPDATE_COOLDOWN" then
