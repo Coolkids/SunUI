@@ -613,7 +613,7 @@ end
 			icon:Point("BOTTOMRIGHT", -2, 2)
 			if not InCombatLockdown() then
 				button:ClearAllPoints()
-				button:Point("BOTTOM",last,"TOP",0,4)
+				button:Point("BOTTOM",last,"TOP",0,2)
 			end
 			if button:IsVisible() then last = button end
 			button:CreateBorder(flyout.parent:GetBackdropBorderColor())
@@ -730,7 +730,6 @@ end
 	--shift 右键取消图腾
 	local destroyers = { }
     local totemSlot  = { 2, 1, 3, 4 }
-    local backdrop   = { bgFile = "Interface\\BUTTONS\\WHITE8X8", tile = false }
 
     local function Button_OnClick(self, button)
 		DestroyTotem(self.slot)
