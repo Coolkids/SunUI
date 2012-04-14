@@ -224,7 +224,7 @@ function Module:OnInitialize()
 			["月殤妶"] = true,
 			["月殤玹"] = true,
 			["月殤璇"] = true,
-			["月殤璇"] = true,
+			["月殤旋"] = true,
 			}
 				if players[DB.PlayerName] == true then
 					DBT_SavedOptions["DBM"].TimerX = 348

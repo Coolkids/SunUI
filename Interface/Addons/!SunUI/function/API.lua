@@ -652,3 +652,4 @@ while object do
 
 	object = EnumerateFrames(object)
 end
+

@@ -119,7 +119,7 @@ function Module:UpdateBuffPos()
 			if key == 1 then
 				value:Point("CENTER", BuffPos)
 			elseif key%C["IconPerRow"] == 1 then
-				value:Point("TOP", PreRow, "BOTTOM", 0, -20)
+				value:Point("TOP", PreRow, "BOTTOM", 0, -23)
 			else
 				value:Point("RIGHT", Pre, "LEFT", -8, 0)
 			end
@@ -128,7 +128,7 @@ function Module:UpdateBuffPos()
 			if key == 1 then
 				value:Point("CENTER", BuffPos)
 			elseif key%C["IconPerRow"] == 1 then
-				value:Point("TOP", PreRow, "BOTTOM", 0, -20)
+				value:Point("TOP", PreRow, "BOTTOM", 0, -23)
 			else
 				value:Point("LEFT", Pre, "RIGHT", 8, 0)
 			end
@@ -178,7 +178,7 @@ hooksecurefunc("DebuffButton_UpdateAnchors", function(buttonName, i)
 		if i == 1 then
 			Aura:Point("CENTER", DebuffPos)
 		elseif i%C["IconPerRow"] == 1 then
-			Aura:Point("TOP", PreRow, "BOTTOM", 0, -20)
+			Aura:Point("TOP", PreRow, "BOTTOM", 0, -23)
 		else
 			Aura:Point("RIGHT", Pre, "LEFT", -8, 0)
 		end
@@ -187,7 +187,7 @@ hooksecurefunc("DebuffButton_UpdateAnchors", function(buttonName, i)
 		if i == 1 then
 			Aura:Point("CENTER", DebuffPos)
 		elseif i%C["IconPerRow"] == 1 then
-			Aura:Point("TOP", PreRow, "BOTTOM", 0, -20)
+			Aura:Point("TOP", PreRow, "BOTTOM", 0, -23)
 		else
 			Aura:Point("LEFT", Pre, "RIGHT", 8, 0)
 		end

@@ -895,28 +895,15 @@ end
    if class ~= "DRUID" and class ~= "SHAMAN" then return end
 	local bars = CreateFrame("Frame", nil, f)
 	bars:SetFrameLevel(f:GetFrameLevel()+1)
-	if class == "DRUID" then 
-		bars:SetSize((f.width-10)/3, f.height/3/2)
-		bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, -3)
-	else
-		bars:SetSize((f.width-4)/3, f.height/3)
-		bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
-	end
+	bars:SetSize((f.width-10)/3, f.height/3/2)
+	bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, -3)
     for i = 1, 3 do
         bars[i] =CreateFrame("StatusBar", nil, bars)
 		bars[i]:SetStatusBarTexture(DB.Statusbar)
 		bars[i]:GetStatusBarTexture():SetHorizTile(false)
-		if class == "DRUID" then 
-			bars[i]:SetSize((f.width-4)/3, f.height/3/2)
-		else
-			bars[i]:SetSize((f.width-4)/3, f.height/3)
-		end
+		bars[i]:SetSize((f.width-4)/3, f.height/3/2)
 		if (i == 1) then
-			if class ~= "DRUID" then
-				bars[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
-			else
-				bars[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, -1.5)
-			end
+			bars[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, -1.5)
 		else
 			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 2, 0)
 		end
