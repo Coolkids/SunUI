@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("EchoTyrande", "DBM-Party-Cataclysm", 12)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 6810 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7473 $"):sub(12, -3))
 mod:SetCreatureID(54544)
 mod:SetModelID(39617)
 mod:SetZone()
@@ -14,12 +14,12 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_START"
 )
 
-local warnGuidance	= mod:NewSpellAnnounce(102472, 3)
+local warnGuidance		= mod:NewSpellAnnounce(102472, 3)
 local warnGuidanceStack	= mod:NewCountAnnounce(102472, 2, nil, false)
-local warnStardust	= mod:NewSpellAnnounce(102173 ,3)
+local warnStardust		= mod:NewSpellAnnounce(102173 ,3)
 local specwarnStardust	= mod:NewSpecialWarningInterrupt(102173)
 
-local timerGuidance	= mod:NewNextTimer(20, 102472)
+local timerGuidance		= mod:NewNextTimer(20, 102472)
 
 function mod:OnCombatStart(delay)
 end
@@ -37,6 +37,6 @@ function mod:SPELL_CAST_START(args)
 		timerGuidance:Start()
 	elseif args:IsSpellID(102173) then
 		warnStardust:Show()
-		specwarnStardust:Show()
+		specwarnStardust:Show(args.sourceName)
 	end
 end

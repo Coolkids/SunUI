@@ -2,7 +2,7 @@
 local mod	= DBM:NewMod("Nefarian", "DBM-BlackwingDescent")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7444 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7473 $"):sub(12, -3))
 mod:SetCreatureID(41376, 41270)
 mod:SetModelID(32716)
 mod:SetZone()
@@ -192,7 +192,7 @@ function mod:SPELL_CAST_START(args)
 		end
 		if args.sourceGUID == UnitGUID("target") then--Only show warning/timer for your own target.
 			warnBlastNova:Show()
-			specWarnBlastsNova:Show()
+			specWarnBlastsNova:Show(args.sourceName)
 			if self:IsDifficulty("heroic10", "heroic25") then
 				timerBlastNova:Start()
 			else

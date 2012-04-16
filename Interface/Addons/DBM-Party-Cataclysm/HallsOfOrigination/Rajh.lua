@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Rajh", "DBM-Party-Cataclysm", 4)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7444 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7473 $"):sub(12, -3))
 mod:SetCreatureID(39378)
 mod:SetModelID(33177)
 mod:SetZone()
@@ -44,7 +44,7 @@ end
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(80352) then
 		warnSunOrb:Show()
-		specWarnSunOrb:Show()
+		specWarnSunOrb:Show(args.sourceName)
 	elseif args:IsSpellID(73872, 89887) then
 		warnSunStrike:Show()
 		timerSunStrike:Start()

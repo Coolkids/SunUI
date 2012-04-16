@@ -2,7 +2,7 @@
 local mod	= DBM:NewMod("Chogall", "DBM-BastionTwilight")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7448 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7473 $"):sub(12, -3))
 mod:SetCreatureID(43324)
 mod:SetModelID(34576)
 mod:SetZone()
@@ -217,7 +217,7 @@ function mod:SPELL_CAST_START(args)
 			DBM.BossHealth:AddBoss(args.sourceGUID, args.sourceName)--And add if not.
 		end
 		if args.sourceGUID == UnitGUID("target") then--Only show warning for your own target.
-			specWarnDepravity:Show()
+			specWarnDepravity:Show(args.sourceName)
 			if self:IsDifficulty("normal10", "heroic10") then
 				timerDepravityCD:Start()--every 12 seconds on 10 man from their 1 adherent, can be solo interrupted.
 			else

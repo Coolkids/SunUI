@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Malacrass5", "DBM-Party-Cataclysm", 10)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7444 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7473 $"):sub(12, -3))
 mod:SetCreatureID(24239)
 mod:SetModelID(22332)
 mod:SetZone()
@@ -70,13 +70,13 @@ end
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(43451) then					--Paladin Heal (Holy Light)
 		warnHolyLight:Show()
-		specWarnHolyLight:Show()
+		specWarnHolyLight:Show(args.sourceName)
 	elseif args:IsSpellID(43431) then				--Priest Heal (Flash Heal)
 		warnFlashHeal:Show()
-		specWarnFlashHeal:Show()
+		specWarnFlashHeal:Show(args.sourceName)
 	elseif args:IsSpellID(43548) then				--Shaman Heal (Healing Wave)
 		warnHealingWave:Show()
-		specWarnHealingWave:Show()
+		specWarnHealingWave:Show(args.sourceName)
 	end
 end
 

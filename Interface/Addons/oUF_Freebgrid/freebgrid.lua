@@ -1,5 +1,5 @@
 local ADDON_NAME, ns = ...
-
+local S,_,_,_ = unpack(SunUI)
 local oUF = ns.oUF or oUF
 assert(oUF, "oUF_Freebgrid was unable to locate oUF install.")
 
@@ -19,33 +19,35 @@ if media then
 	media:Register("font", "Expressway",				[[Interface\Addons\oUF_Freebgrid\media\expressway.ttf]])
 	media:Register("statusbar", "gradient",				[[Interface\Addons\oUF_Freebgrid\media\gradient]])
 	media:Register("statusbar", "Cabaret",				[[Interface\Addons\oUF_Freebgrid\media\Cabaret]])
+	media:Register("statusbar", "statusbar7",				[[Interface\Addons\oUF_Freebgrid\media\statusbar7]])
+	media:Register("statusbar", "statusbar",				[[Interface\Addons\oUF_Freebgrid\media\statusbar]])
 end
 
 local backdrop = {
     bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
-    insets = {top = 2, left = 2, bottom = 2, right = 2},
+    insets = {top = S.Scale(2), left = S.Scale(2), bottom = S.Scale(2), right = S.Scale(2)},
 }
 
 local border = {
     bgFile = [=[Interface\AddOns\oUF_Freebgrid\media\white.tga]=],
-    insets = {top = -2, left = -2, bottom = -2, right = -2},
+    insets = {top = -S.Scale(2), left = -S.Scale(2), bottom = -S.Scale(2), right = -S.Scale(2)},
 }
 
 local border2 = {
     bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
-    insets = {top = -1, left = -1, bottom = -1, right = -1},
+    insets = {top = -S.Scale(1), left = -S.Scale(1), bottom = -S.Scale(1), right = -S.Scale(1)},
 }
 
 local glowBorder = {
     bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
-    edgeFile = [=[Interface\AddOns\oUF_Freebgrid\media\glowTex.tga]=], edgeSize = 5,
-    insets = {left = 3, right = 3, top = 3, bottom = 3}
+    edgeFile = [=[Interface\AddOns\oUF_Freebgrid\media\glowTex.tga]=], edgeSize = S.Scale(5),
+    insets = {left = S.Scale(3), right = S.Scale(3), top = S.Scale(3), bottom = S.Scale(3)}
 }
 
 local glowBorder2 = {
     bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
-    edgeFile = [=[Interface\AddOns\oUF_Freebgrid\media\glowTex.tga]=], edgeSize = 3,
-    insets = {left = 1, right = 1, top = 1, bottom = 1}
+    edgeFile = [=[Interface\AddOns\oUF_Freebgrid\media\glowTex.tga]=], edgeSize = S.Scale(3),
+    insets = {left = S.Scale(1), right = S.Scale(1), top = S.Scale(1), bottom = S.Scale(1)}
 }
 
 local colors = setmetatable({
@@ -334,7 +336,7 @@ local updateHealth = function(self, event, unit)
 		end
 
 		if  UnitPlayerControlled(unit) and not UnitIsPlayer(unit) then
-			hp:SetStatusBarColor(V.r, V.g, V.b)
+			hp:SetStatusBarColor(V.r, V.g, V.b, 0.9)
 			hp.bg:SetVertexColor(V.r*.2, V.g*.2, V.b*.2)
 			return
 		elseif ns.db.definecolors then
@@ -343,17 +345,17 @@ local updateHealth = function(self, event, unit)
 			else
 				hp.bg:SetVertexColor(Hbg.r, Hbg.g, Hbg.b)
 			end			
-			hp:SetStatusBarColor(H.r, H.g, H.b)
+			hp:SetStatusBarColor(H.r, H.g, H.b, 0.9)
 			return 
 		elseif ns.db.reversecolors  then
 			hp.bg:SetVertexColor(r*.2, g*.2, b*.2)
-			hp:SetStatusBarColor(r, g, b)
+			hp:SetStatusBarColor(r, g, b, 0.9)
 		else
 			hp.bg:SetVertexColor(r, g, b)
-			hp:SetStatusBarColor(0, 0, 0, .8)
+			hp:SetStatusBarColor(0, 0, 0, .9)
 		end		
 	else
-		hp:SetStatusBarColor(E.r, E.g, E.b)
+		hp:SetStatusBarColor(E.r, E.g, E.b, 0.9)
 		hp.bg:SetVertexColor(E.r*.2, E.g*.2, E.b*.2)
 	end
 end
@@ -741,7 +743,7 @@ local style = function(self)
     self.border:SetPoint("TOPLEFT", self, "TOPLEFT")
     self.border:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT")
     self.border:SetFrameLevel(self:GetFrameLevel())
-    self.border:SetBackdrop(border2)
+	self.border:SetBackdrop(border2)
     self.border:SetBackdropColor(0, 0, 0)
 
     -- ÉúÃüÌõ
@@ -1199,19 +1201,6 @@ function ns:PLAYER_LOGIN()
 	frame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	frame:SetScript("OnEvent", updateData)
 	
-	local eventcount = 0
-	--local initmem = collectgarbage("count")
-	local a = CreateFrame("Frame")
-	a:RegisterAllEvents()
-	a:SetScript("OnEvent", function(self, event)
-	   eventcount = eventcount + 1
-	   --local nowmem = collectgarbage("count")
-	   if InCombatLockdown() then return end
-	   if eventcount > 6000 or event == "PLAYER_ENTERING_WORLD" then
-		  collectgarbage("collect")
-		  eventcount = 0
-	   end
-	end)
 	
 	self:UnregisterEvent("PLAYER_LOGIN")
     self.PLAYER_LOGIN = nil

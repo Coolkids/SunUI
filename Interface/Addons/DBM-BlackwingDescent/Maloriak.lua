@@ -2,7 +2,7 @@
 local mod	= DBM:NewMod("Maloriak", "DBM-BlackwingDescent")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7448 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7473 $"):sub(12, -3))
 mod:SetCreatureID(41378)
 mod:SetModelID(33186)
 mod:SetZone()
@@ -216,7 +216,7 @@ function mod:SPELL_CAST_START(args)
 	elseif args:IsSpellID(77896) then
 		warnArcaneStorm:Show()
 		timerArcaneStormCD:Start()
-		specWarnArcaneStorm:Show()
+		specWarnArcaneStorm:Show(args.sourceName)
 	elseif args:IsSpellID(78194) then
 		warnMagmaJets:Show()
 		if self:IsDifficulty("heroic10", "heroic25") then

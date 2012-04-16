@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Kilnara", "DBM-Party-Cataclysm", 11)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 6499 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7473 $"):sub(12, -3))
 mod:SetCreatureID(52059)
 mod:SetModelID(37805)
 mod:SetZone()
@@ -37,7 +37,7 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(96435) then	-- Tears of Blood, CD 27-37 secs
 		warnTears:Show()
-		specWarnTears:Show()
+		specWarnTears:Show(args.sourceName)
 		timerTears:Start()
 	elseif args:IsSpellID(96958) then
 		warnLash:Show(args.destName)

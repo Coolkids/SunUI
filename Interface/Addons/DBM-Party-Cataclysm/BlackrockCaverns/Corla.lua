@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Corla", "DBM-Party-Cataclysm", 1)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7445 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7473 $"):sub(12, -3))
 mod:SetCreatureID(39679)
 mod:SetModelID(31546)
 mod:SetZone()
@@ -58,12 +58,12 @@ end
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(75823, 93462) then
 		warnDarkCommandCast:Show()
-		specWarnDarkCommand:Show()
+		specWarnDarkCommand:Show(args.sourceName)
 		timerDarkCommandCast:Start()
 		timerDarkCommandCD:Start()
 	elseif args:IsSpellID(82362, 87374) then
 		warnShadowStrike:Show()
-		specWarnShadowStrike:Show()
+		specWarnShadowStrike:Show(args.sourceName)
 		if mod:IsDifficulty("heroic5") then
 			timerShadowStrike:Start()
 		else

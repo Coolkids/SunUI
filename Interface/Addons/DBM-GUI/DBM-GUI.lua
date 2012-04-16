@@ -38,7 +38,7 @@
 --
 --
 
-local revision =("$Revision: 7454 $"):sub(12, -3) 
+local revision =("$Revision: 7486 $"):sub(12, -3) 
 local FrameTitle = "DBM_GUI_Option_"	-- all GUI frames get automatically a name FrameTitle..ID
 
 local PanelPrototype = {}
@@ -1248,14 +1248,12 @@ local function CreateOptionsMenu()
 		----------------------------------------------
 		--             General Options              --
 		----------------------------------------------
-		local generaloptions = DBM_GUI_Frame:CreateArea(L.General, nil, 270, true)
+		local generaloptions = DBM_GUI_Frame:CreateArea(L.General, nil, 230, true)
 	
 		local enabledbm = generaloptions:CreateCheckButton(L.EnableDBM, true)
 		enabledbm:SetScript("OnShow",  function() enabledbm:SetChecked(DBM:IsEnabled()) end)
 		enabledbm:SetScript("OnClick", function() if DBM:IsEnabled() then DBM:Disable() else DBM:Enable() end end)
-	
-		local StatusEnabled				= generaloptions:CreateCheckButton(L.EnableStatus, true, nil, "StatusEnabled")
-		local AutoRespond				= generaloptions:CreateCheckButton(L.AutoRespond, true, nil, "AutoRespond")
+
 		local MiniMapIcon				= generaloptions:CreateCheckButton(L.EnableMiniMapIcon, true)
 		MiniMapIcon:SetScript("OnClick", function(self)
 			DBM:ToggleMinimapButton()
@@ -1371,6 +1369,31 @@ local function CreateOptionsMenu()
 		--
 		DBM_GUI_Frame:SetMyOwnHeight()
 	end
+
+	do
+		-------------------------------------------
+		--            General Warnings           --
+		-------------------------------------------
+		local generalWarningPanel = DBM_GUI_Frame:CreateNewPanel(L.Tab_GeneralMessages, "option")
+		local generalCoreArea = generalWarningPanel:CreateArea(L.CoreMessages, nil, 120, true)
+--		generalCoreArea:CreateCheckButton(L.ShowLoadMessage, true, nil, "ShowLoadMessage")--Only here as a note, this is commented out so inexperienced users don't disable this, but an option for advanced users who want to manually change the value from true to false
+		generalCoreArea:CreateCheckButton(L.ShowPizzaMessage, true, nil, "ShowPizzaMessage")
+
+		local generalMessagesArea = generalWarningPanel:CreateArea(L.CombatMessages, nil, 135, true)
+		generalMessagesArea:CreateCheckButton(L.ShowEngageMessage, true, nil, "ShowEngageMessage")
+		generalMessagesArea:CreateCheckButton(L.ShowKillMessage, true, nil, "ShowKillMessage")
+		generalMessagesArea:CreateCheckButton(L.ShowWipeMessage, true, nil, "ShowWipeMessage")
+		generalMessagesArea:CreateCheckButton(L.ShowRecoveryMessage, true, nil, "ShowRecoveryMessage")
+		local generalWhispersArea = generalWarningPanel:CreateArea(L.WhisperMessages, nil, 135, true)
+		generalWhispersArea:CreateCheckButton(L.AutoRespond, true, nil, "AutoRespond")
+		generalWhispersArea:CreateCheckButton(L.EnableStatus, true, nil, "StatusEnabled")
+		generalWhispersArea:CreateCheckButton(L.WhisperStats, true, nil, "WhisperStats")
+		generalCoreArea:AutoSetDimension()
+		generalMessagesArea:AutoSetDimension()
+		generalWhispersArea:AutoSetDimension()
+		generalWarningPanel:SetMyOwnHeight()
+	end	
+
 	do
 		-----------------------------------------------
 		--            Raid Warning Colors            --
@@ -1532,6 +1555,9 @@ local function CreateOptionsMenu()
 	end
 
 	do
+		--------------------------------------
+		--            Bar Options           --
+		--------------------------------------
 		local BarSetupPanel = DBM_GUI_Frame:CreateNewPanel(L.BarSetup, "option")
 		
 		local BarSetup = BarSetupPanel:CreateArea(L.AreaTitle_BarSetup, nil, 240, true)

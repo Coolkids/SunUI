@@ -2,7 +2,7 @@
 local mod	= DBM:NewMod("HalfusWyrmbreaker", "DBM-BastionTwilight")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7445 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7473 $"):sub(12, -3))
 mod:SetCreatureID(44600)
 mod:SetModelID(34816)
 mod:SetZone()
@@ -87,7 +87,7 @@ function mod:SPELL_CAST_START(args)
 		timerBreathCD:Start()
 	elseif args:IsSpellID(83703, 86166, 86167, 86168) then
 		warnShadowNova:Show()
-		specWarnShadowNova:Show()
+		specWarnShadowNova:Show(args.sourceName)
 		timerNovaCD:Start()
 	end
 end

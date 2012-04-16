@@ -23,7 +23,7 @@
 ## DefaultState: enabled
 ## Author: Nitram and Tandanu
 ## URL: http://www.deadlybossmods.com
-## X-Curse-Packaged-Version: 4.10.10-146-g9fa7964
+## X-Curse-Packaged-Version: 4.10.10-180-gf7e00b3
 ## X-Curse-Project-Name: Deadly Boss Mods
 ## X-Curse-Project-ID: deadly-boss-mods
 ## X-Curse-Repository-ID: wow/deadly-boss-mods/mainline
@@ -35,7 +35,7 @@ localization.fr.lua
 localization.tw.lua
 localization.kr.lua
 localization.es.lua
-localization.pt.lua
+localization.br.lua
 DBM-GUI_DropDown.xml
 DBM-GUI_Templates.xml
 DBM-GUI.lua

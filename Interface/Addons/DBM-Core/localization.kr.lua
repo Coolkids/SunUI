@@ -12,7 +12,7 @@ DBM_CORE_BOSS_DOWN					= "%s 전투에서 승리하였습니다! (전투 시간:
 DBM_CORE_BOSS_DOWN_L				= "%s 전투에서 승리하였습니다! (전투 시간: %s, 최종 전투 기록: %s, 가장 빨랐던 기록: %s, 처치: %d회)"
 DBM_CORE_BOSS_DOWN_NR				= "%s 전투에서 승리하였습니다! (전투 시간: %s) 이 기록은 새로운 기록이군요! (과거 기록: %s, 처치: %d회)"
 DBM_CORE_COMBAT_ENDED_AT			= "%s 전투가 종료되었습니다. (전투 종료시 보스 체력: %s, 전투 시간: %s)"
-DBM_CORE_COMBAT_ENDED_AT_LONG		= "%s 전투가 종료되었습니다. (전투 종료시 보스 체력: %s, 전투 시간: %s, 총 전투: %d회)"
+DBM_CORE_COMBAT_ENDED_AT_LONG		= "%s 전투가 종료되었습니다. (전투 종료시 보스 체력: %s, 전투 시간: %s, 전멸: %d회)"
 DBM_CORE_COMBAT_STATE_RECOVERED		= "%s 전투가 %s 전에 시작되었습니다. 바를 복구 중입니다..."
 
 DBM_CORE_TIMER_FORMAT_SECS			= "%d|4초:초;"
@@ -35,11 +35,13 @@ DBM_CORE_OPTION_CATEGORY_TIMERS		= "바"
 DBM_CORE_OPTION_CATEGORY_WARNINGS	= "알림"
 DBM_CORE_OPTION_CATEGORY_MISC		= "기타 추가 기능"
 
-DBM_CORE_AUTO_RESPONDED				= "전투중 받은 귓속말에 대해 자동 응답합니다."
-DBM_CORE_STATUS_WHISPER				= "%s: %s, %d/%d 명이 생존해 있습니다."
-DBM_CORE_AUTO_RESPOND_WHISPER		= "%s 님은 현재 바쁩니다. %s 전투가 진행중입니다. (%s, %d/%d 명 생존중) 전투 종료후 다시 알림 메세지가 표시됩니다."
-DBM_CORE_WHISPER_COMBAT_END_KILL	= "%s 님의 %s 전투가 끝났습니다!"
-DBM_CORE_WHISPER_COMBAT_END_WIPE_AT	= "%s 님이 %s 전투에서 전멸하였습니다. 전투 종료시 보스의 체력은 %s 입니다."
+DBM_CORE_AUTO_RESPONDED						= "전투중 받은 귓속말에 대해 자동 응답합니다."
+DBM_CORE_STATUS_WHISPER						= "%s: %s, %d/%d 명이 생존해 있습니다."
+DBM_CORE_AUTO_RESPOND_WHISPER				= "%s 님은 현재 바쁩니다. %s 전투가 진행중입니다. (%s, %d/%d 명 생존중) 전투 종료후 다시 알림 메세지가 표시됩니다."
+DBM_CORE_WHISPER_COMBAT_END_KILL			= "%s 님의 %s 전투가 끝났습니다!"
+DBM_CORE_WHISPER_COMBAT_END_KILL_STATS		= "%s 님의 %s 전투가 끝났습니다! (처치: %d회)"
+DBM_CORE_WHISPER_COMBAT_END_WIPE_AT			= "%s 님이 %s 전투에서 전멸하였습니다. 전투 종료시 보스의 체력은 %s 입니다."
+DBM_CORE_WHISPER_COMBAT_END_WIPE_STATS_AT	= "%s 님이 %s 전투에서 전멸하였습니다. 전투 종료시 보스의 체력은 %s 입니다. (현재 난이도에서 전멸: %d회)"
 
 DBM_CORE_VERSIONCHECK_HEADER		= "죽이는 보스 모드 - 버전"
 DBM_CORE_VERSIONCHECK_ENTRY			= "%s: %s (r%d)"
@@ -196,7 +198,7 @@ DBM_CORE_AUTO_SPEC_WARN_OPTIONS = {
 DBM_CORE_AUTO_SPEC_WARN_TEXTS = {
 	spell 		= "%s!",
 	dispel 		= "%s : %%s - 해제!",
-	interrupt 	= "%s - 차단!",	
+	interrupt 	= "%s : %%s - 차단!",	
 	you 		= "당신에게 %s",
 	target 		= "%s : %%s",
 	close 		= "당신 근처에 %s (%%s)!",

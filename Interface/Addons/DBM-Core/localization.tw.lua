@@ -12,7 +12,7 @@ DBM_CORE_BOSS_DOWN					= "擊敗%s，經過%s!"
 DBM_CORE_BOSS_DOWN_L				= "擊敗%s!本次經過%s，上次經過%s，最快紀錄為%s。你總共擊殺了%d次。"
 DBM_CORE_BOSS_DOWN_NR				= "擊敗%s!經過%s! 這是一個新記錄! (舊紀錄為%s) 你總共擊殺了%d次。"
 DBM_CORE_COMBAT_ENDED_AT			= "%s(%s)的戰鬥經過%s結束。"
-DBM_CORE_COMBAT_ENDED_AT_LONG		= "%s(%s)的戰鬥經過%s結束。你總共嘗試了%d次。"
+DBM_CORE_COMBAT_ENDED_AT_LONG		= "%s(%s)的戰鬥經過%s結束。你在這個難度總共滅團了%d次。"
 DBM_CORE_COMBAT_STATE_RECOVERED		= "%s的戰鬥在%s前開始，恢復計時器中..."
 
 DBM_CORE_TIMER_FORMAT_SECS			= "%d秒"
@@ -35,11 +35,13 @@ DBM_CORE_OPTION_CATEGORY_TIMERS			= "計時器"
 DBM_CORE_OPTION_CATEGORY_WARNINGS		= "提示"
 DBM_CORE_OPTION_CATEGORY_MISC			= "其它"
 
-DBM_CORE_AUTO_RESPONDED					= "已自動回覆密語。"
-DBM_CORE_STATUS_WHISPER					= "%s：%s，%d/%d存活。"
-DBM_CORE_AUTO_RESPOND_WHISPER			= "%s正在與%s交戰（當前%s，%d/%d存活）"
-DBM_CORE_WHISPER_COMBAT_END_KILL		= "%s已經擊敗%s!"
-DBM_CORE_WHISPER_COMBAT_END_WIPE_AT		= "%s在%s還有%s時滅團了。"
+DBM_CORE_AUTO_RESPONDED						= "已自動回覆密語。"
+DBM_CORE_STATUS_WHISPER						= "%s：%s，%d/%d存活。"
+DBM_CORE_AUTO_RESPOND_WHISPER				= "%s正在與%s交戰（當前%s，%d/%d存活）"
+DBM_CORE_WHISPER_COMBAT_END_KILL			= "%s已經擊敗%s!"
+DBM_CORE_WHISPER_COMBAT_END_KILL_STATS		= "%s已經擊敗%s! 他們總共已擊殺了%d次"
+DBM_CORE_WHISPER_COMBAT_END_WIPE_AT			= "%s在%s還有%s時滅團了。"
+DBM_CORE_WHISPER_COMBAT_END_WIPE_STATS_AT	= "%s在%s還有%s時滅團了。他們在這個難度總共滅團了%d次。"
 
 DBM_CORE_VERSIONCHECK_HEADER			= "Deadly Boss Mods - 版本檢測"
 DBM_CORE_VERSIONCHECK_ENTRY				= "%s：%s(r%d)"
@@ -197,7 +199,7 @@ DBM_CORE_AUTO_SPEC_WARN_OPTIONS = {
 DBM_CORE_AUTO_SPEC_WARN_TEXTS = {
 	spell					= "%s!",
 	dispel					= "%%s中了%s - 現在驅散",
-	interrupt				= "%s - 現在斷法",
+	interrupt				= "%s - 快中斷%%s !",
 	you						= "你中了%s",
 	target					= "%%s中了%s",
 	close					= "你附近的%%s中了%s",
