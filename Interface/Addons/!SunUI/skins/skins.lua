@@ -14,7 +14,6 @@ Delay:SetScript("OnEvent", function()
 		S.StripTextures(BaudErrorFrame)
 		S.Reskin(BaudErrorFrameCloseButton)
 		S.Reskin(BaudErrorFrameClearButton)
-		--BaudErrorFrame:CreateShadow("Background") 
 		S.SetBD(BaudErrorFrame)
 	end
 	
@@ -25,36 +24,11 @@ Delay:SetScript("OnEvent", function()
 		S.Reskin(BuyEmAllOkayButton)
 		S.Reskin(BuyEmAllCancelButton)
 		S.SetBD(BuyEmAllFrame)
-		--BuyEmAllFrame:CreateShadow("Background") 
 	end
 	
 	if WorldMapFrame then
 		S.StripTextures(WorldMapFrame, Kill)
 		S.CreateSD(WorldMapFrame,6)
-	end
-	
-	if ChatBarFrameBackground then
-		S.StripTextures(ChatBarFrame, Kill)
-		S.StripTextures(ChatBarFrameBackground, Kill)
-		ChatBarFrameBackground:CreateShadow("Background")
-		Button = CreateFrame("Button", nil, ChatBarFrameBackground, "SecureActionButtonTemplate")
-		Button:SetAttribute("*type*", "macro")
-		Button:SetAttribute("macrotext", "/roll")
-		Button:SetSize(ChatBarFrameButton1:GetWidth()*0.4, ChatBarFrameButton1:GetHeight()*0.4)
-		Button:SetBackdrop({ 
-			bgFile = DB.Statusbar
-		})
-		Button:CreateShadow("Background")
-		Button:SetBackdropColor(1, 1, 0)
-		Button:SetPoint("RIGHT", ChatBarFrameBackground, "RIGHT", -5, 0)
-		Button.Text = S.MakeFontString(Button, 7)
-		Button.Text:SetText("R")
-		Button.Text:SetTextColor(1, 215/255, 0)
-		Button.Text:SetPoint("BOTTOM", Button, "TOP", 2, 2)
-		local hover = Button:CreateTexture(nil, "OVERLAY")
-		hover:SetTexture(1, 1, 1, 0.3)
-		hover:SetAllPoints()
-		Button:SetHighlightTexture(hover)
 	end
 	
 	if ItemRefShoppingTooltip1 then 
@@ -71,9 +45,7 @@ Delay:SetScript("OnEvent", function()
 	end
 	
 	if DB.Nuke == true then
-		for i = 1,20 do
-			print("|cffFFD700SunUI提示您: 侦测到您正在使用|r|cff308014大脚|r|cffFFD700或者|r|cff308014魔盒|r,|cffFFD700触发|r|cffFF0000Nuke参数|r,|cffFFD700为了让您用的舒适所以插件|r|cffFF0000自我关闭|r.|cffFFD700如想使用本插件请|r|cffFF0000完全删除|r|cff308014大脚|r|cffFFD700或者|r|cff308014魔盒|r")
-		end
+		print("|cffFFD700SunUI提示您: 侦测到您正在使用|r|cff308014大脚|r|cffFFD700或者|r|cff308014魔盒|r,|cffFFD700触发|r|cffFF0000Nuke参数|r,|cffFFD700为了让您用的舒适所以插件|r|cffFF0000自我关闭|r.|cffFFD700如想使用本插件请|r|cffFF0000完全删除|r|cff308014大脚|r|cffFFD700或者|r|cff308014魔盒|r")
 	end
 	DEFAULT_CHAT_FRAME:AddMessage("|cffDDA0DDSun|r|cff44CCFFUI|r已加载，发布网址:\124cff7f7fffhttp://bbs.ngacn.cc/read.php?tid=4743077&_fp=1&_ff=200\124r")
 	MiniDB["uiScale"] = GetCVar("uiScale")
