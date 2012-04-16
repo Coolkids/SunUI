@@ -56,7 +56,12 @@ function Style(self, totem, flyout)
 	if Flash then Flash:SetTexture(nil) end
 	if normal then normal:SetTexture(nil) end
 	if normal2 then normal2:SetTexture(nil) end
-	if Border then S.Kill(Border) end
+	--if Border then S.Kill(Border) end
+	if Border then
+		Border:ClearAllPoints()
+		Border:SetPoint("TOPLEFT", -12, 12)
+		Border:SetPoint("BOTTOMRIGHT", 12, -12)
+	end
 
 	if Count then
 		Count:ClearAllPoints()
