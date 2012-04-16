@@ -386,20 +386,3 @@ oUF:Factory(function(self)
   end
 end)  
 end
---[[ 
-SlashCmdList["SHOW_ARENA"] = function()
-    oUF_Arena1:Show(); oUF_Arena1.Hide = function() end oUF_Arena1.unit = "player"
-    oUF_Arena2:Show(); oUF_Arena2.Hide = function() end oUF_Arena2.unit = "player"
-    oUF_Arena3:Show(); oUF_Arena3.Hide = function() end oUF_Arena3.unit = "player"
-    oUF_Arena4:Show(); oUF_Arena4.Hide = function() end oUF_Arena4.unit = "player"
-    oUF_Arena5:Show(); oUF_Arena5.Hide = function() end oUF_Arena5.unit = "player"
-end
-SLASH_SHOW_ARENA1 = "/tarena"
-SlashCmdList["SHOW_BOSS"] = function()
-    oUF_Boss1:Show(); oUF_Boss1.Hide = function() end oUF_Boss1.unit = "player"
-    oUF_Boss2:Show(); oUF_Boss2.Hide = function() end oUF_Boss2.unit = "player"
-    oUF_Boss3:Show(); oUF_Boss3.Hide = function() end oUF_Boss3.unit = "player"
-    oUF_Boss4:Show(); oUF_Boss4.Hide = function() end oUF_Boss4.unit = "player"
-end
-SLASH_SHOW_BOSS1 = "/tboss" 
- ]]

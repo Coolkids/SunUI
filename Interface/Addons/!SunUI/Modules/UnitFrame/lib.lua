@@ -742,22 +742,22 @@ C = UnitFrameDB
 				bars[i].bg:CreateShadow("Background")
                 i=i-1
             end
-	local function OnEvent(self,event)
-		rank = select(4,UnitBuff("player", GetSpellInfo(77487)))
-		if rank then
-			for i = 1, rank do
-				bars[i]:SetAlpha(1)
-			end
-		else
-			for i = 1, 3 do
-				bars[i]:SetAlpha(0)
+	local function OnEvent(self,event,unit)
+		if ( event == "UNIT_AURA" and unit == "player" ) then
+			local rank = select(4,UnitBuff("player", GetSpellInfo(77487)))
+			if rank then
+				for i = 1, rank do
+					bars[i]:SetAlpha(1)
+				end
+			else
+				for i = 1, 3 do
+					bars[i]:SetAlpha(0)
+				end
 			end
 		end
 	end
 	bars:RegisterEvent("UNIT_AURA")
 	bars:RegisterEvent("PLAYER_ENTERING_WORLD")
-	bars:RegisterEvent("PLAYER_REGEN_DISABLED")
-	bars:RegisterEvent("PLAYER_REGEN_ENABLED")
 	bars:SetScript("OnEvent", OnEvent)
 end
    lib.gen_classpower = function(f)  
@@ -919,22 +919,22 @@ end
         i=i-1
         end
 		if 	class == "SHAMAN" then
-		local function OnEvent(self,event)
-			rank = select(4,UnitBuff("player", GetSpellInfo(52127)))
-			if rank then
-				for i = 1, rank do
-					bars[i]:SetAlpha(1)
-				end
-			else
-				for i = 1, 3 do
-					bars[i]:SetAlpha(0)
+		local function OnEvent(self,event,unit)
+			if ( event == "UNIT_AURA" and unit == "player" ) then
+				local rank = select(4,UnitBuff("player", GetSpellInfo(52127)))
+				if rank then
+					for i = 1, rank do
+						bars[i]:SetAlpha(1)
+					end
+				else
+					for i = 1, 3 do
+						bars[i]:SetAlpha(0)
+					end
 				end
 			end
 		end
 		bars:RegisterEvent("UNIT_AURA")
 		bars:RegisterEvent("PLAYER_ENTERING_WORLD")
-		bars:RegisterEvent("PLAYER_REGEN_DISABLED")
-		bars:RegisterEvent("PLAYER_REGEN_ENABLED")
 		bars:SetScript("OnEvent", OnEvent)
 		elseif class == "DRUID" then
 			local function OnEvent(self,event)
@@ -949,8 +949,6 @@ end
 			end
 		bars:RegisterEvent("PLAYER_TOTEM_UPDATE")
 		bars:RegisterEvent("PLAYER_ENTERING_WORLD")
-		bars:RegisterEvent("PLAYER_REGEN_DISABLED")
-		bars:RegisterEvent("PLAYER_REGEN_ENABLED")
 		bars:SetScript("OnEvent", OnEvent)
 	  end
   end
@@ -1006,23 +1004,23 @@ end
                 i=i-1
             end
 	local function OnEvent(self,event)
-		rank = select(4,UnitBuff("target", GetSpellInfo(33763)))
-		caster = select(8,UnitBuff("target", GetSpellInfo(33763)))
-		if rank and caster == "player" then
-			for i = 1, rank do
-				bars[i]:SetAlpha(1)
-			end
-		else
-			for i = 1, 3 do
-				bars[i]:SetAlpha(0)
+		if ( event == "UNIT_AURA" and unit == "target" ) then
+			local rank = select(4,UnitBuff("target", GetSpellInfo(33763)))
+			local caster = select(8,UnitBuff("target", GetSpellInfo(33763)))
+			if rank and caster == "player" then
+				for i = 1, rank do
+					bars[i]:SetAlpha(1)
+				end
+			else
+				for i = 1, 3 do
+					bars[i]:SetAlpha(0)
+				end
 			end
 		end
 	end
 	bars:RegisterEvent("UNIT_AURA")
 	bars:RegisterEvent("PLAYER_TARGET_CHANGED")
 	bars:RegisterEvent("PLAYER_ENTERING_WORLD")
-	bars:RegisterEvent("PLAYER_REGEN_DISABLED")
-	bars:RegisterEvent("PLAYER_REGEN_ENABLED")
 	bars:SetScript("OnEvent", OnEvent)
 end
   --gen LFD role indicator

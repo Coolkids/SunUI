@@ -18,7 +18,7 @@ function Module.LoadSettings()
 		["Threat"] = {"BOTTOM", "UIParent", "BOTTOM", -175, 262},
 		["Reminder"] = {"BOTTOMLEFT","Minimap","TOPLEFT", 0, 30},
 		["Class"] = {"CENTER", "UIParent", "CENTER", -150, 150},
-		["Combatpoint"] = {"CENTER", "UIParent", "CENTER", 133, -178},
+		--["Combatpoint"] = {"CENTER", "UIParent", "CENTER", 133, -178},
 		["CooldownFlash"] = {"CENTER", "UIParent", "CENTER", 0, -130},
 		["InfoPanel"] = {"TOPLEFT", "UIParent", "TOPLEFT", 5, -5},
 		["InfoPanel2"] = {"TOPRIGHT", "Minimap", "BOTTOMRIGHT", 0, -5},
