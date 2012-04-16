@@ -743,7 +743,7 @@ C = UnitFrameDB
                 i=i-1
             end
 	local function OnEvent(self,event,unit)
-		if ( event == "UNIT_AURA" and unit == "player" ) then
+		if ( event == "UNIT_AURA" and unit == "player" ) or event == "PLAYER_ENTERING_WORLD" then
 			local rank = select(4,UnitBuff("player", GetSpellInfo(77487)))
 			if rank then
 				for i = 1, rank do
@@ -920,7 +920,7 @@ end
         end
 		if 	class == "SHAMAN" then
 		local function OnEvent(self,event,unit)
-			if ( event == "UNIT_AURA" and unit == "player" ) then
+			if ( event == "UNIT_AURA" and unit == "player" ) or event == "PLAYER_ENTERING_WORLD" then
 				local rank = select(4,UnitBuff("player", GetSpellInfo(52127)))
 				if rank then
 					for i = 1, rank do
