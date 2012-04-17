@@ -82,7 +82,7 @@ function AB:OnInitialize()
 
 		if Btname then	
 			Btname:SetJustifyH("CENTER")
-			Btname:SetPoint("BOTTOMLEFT", -5, 0)
+			Btname:SetPoint("BOTTOMLEFT", -5, 1)
 			Btname:SetFont(Font, FontSize, "OUTLINE")
 			if HideMacroName then
 				Btname:SetText("")
@@ -110,7 +110,7 @@ function AB:OnInitialize()
 		if HotKey then
 			HotKey:ClearAllPoints()
 			HotKey:SetJustifyH("RIGHT")
-			HotKey:SetPoint("TOPRIGHT", 4, 0)
+			HotKey:SetPoint("TOPRIGHT", 4, 1)
 			HotKey:SetFont(Font, FontSize, "OUTLINE")
 			HotKey:SetShadowColor(0, 0, 0, 0.3)
 			HotKey.ClearAllPoints = function() end
