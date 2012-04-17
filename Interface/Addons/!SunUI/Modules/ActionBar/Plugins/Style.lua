@@ -67,7 +67,8 @@ function AB:OnInitialize()
 
 		if Count then
 			Count:ClearAllPoints()
-			Count:SetPoint("BOTTOMRIGHT", 0, S.Scale(2))
+			Count:SetJustifyH("RIGHT")
+			Count:SetPoint("BOTTOMRIGHT", 3, 0)
 			Count:SetFont(Font, FontSize, "OUTLINE")
 		end
 
@@ -77,7 +78,10 @@ function AB:OnInitialize()
 
 		if button.styled then return end
 
-		if Btname then
+		if Btname then	
+			Btname:SetJustifyH("CENTER")
+			Btname:SetPoint("BOTTOMLEFT", -5, 0)
+			Btname:SetFont(Font, FontSize, "OUTLINE")
 			if HideMacroName then
 				Btname:SetText("")
 				Btname:Hide()
@@ -103,7 +107,8 @@ function AB:OnInitialize()
 
 		if HotKey then
 			HotKey:ClearAllPoints()
-			HotKey:SetPoint("TOPRIGHT", 0, 0)
+			HotKey:SetJustifyH("RIGHT")
+			HotKey:SetPoint("TOPRIGHT", 4, 0)
 			HotKey:SetFont(Font, FontSize, "OUTLINE")
 			HotKey:SetShadowColor(0, 0, 0, 0.3)
 			HotKey.ClearAllPoints = function() end
