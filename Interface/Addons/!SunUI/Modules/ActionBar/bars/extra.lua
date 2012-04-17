@@ -8,12 +8,40 @@ function Module:OnInitialize()
 	bar:SetScale(C["ExtraBarSacle"])
  
 	MoveHandle.SunUIExtraActionBar = S.MakeMove(bar, "SunUI特殊按钮", "extrabar", C["ExtraBarSacle"])
-	ExtraActionBarFrame:SetPoint('CENTER', bar, 'CENTER')
-	ExtraActionBarFrame:SetSize(C["ButtonSize"],C["ButtonSize"])
-	ExtraActionBarFrame:SetScale(C["ExtraBarSacle"])
+
+	local f = ExtraActionBarFrame
+	f:SetParent(bar)
+	f:ClearAllPoints()
+	f:SetPoint("CENTER", 0, 0)
+	f.ignoreFramePositionManager = true
+
+  --the button
+	local b = ExtraActionButton1
+	b:SetSize(C["ButtonSize"],C["ButtonSize"])
+	b:SetScale(C["ExtraBarSacle"])
+	bar.button = b
 	ExtraActionButton1Cooldown:SetPoint("TOPLEFT")
 	ExtraActionButton1Cooldown:SetPoint("BOTTOMRIGHT")
-	UIPARENT_MANAGED_FRAME_POSITIONS.ExtraActionBarFrame = nil
-	UIPARENT_MANAGED_FRAME_POSITIONS.PlayerPowerBarAlt.extraActionBarFrame = nil
-	UIPARENT_MANAGED_FRAME_POSITIONS.CastingBarFrame.extraActionBarFrame = nil
+  --style texture
+	local s = b.style
+	s:SetTexture(nil)
+	local disableTexture = function(style, texture)
+    if not texture then return end
+    if string.sub(texture,1,9) == "Interface" then
+		style:SetTexture(nil) --bzzzzzzzz
+    end
+	end
+	hooksecurefunc(s, "SetTexture", disableTexture)
+
+  --register the event, make sure the damn button shows up
+	bar:RegisterEvent("UPDATE_EXTRA_ACTIONBAR")
+	bar:RegisterEvent("PLAYER_REGEN_ENABLED")
+	bar:SetScript("OnEvent", function(self, event, ...)
+		if (HasExtraActionBar()) then
+			self:Show()
+			self.button:Show()
+		else
+			self:Hide()
+		end
+	end)
 end
