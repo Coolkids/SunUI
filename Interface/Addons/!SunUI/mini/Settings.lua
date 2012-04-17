@@ -133,7 +133,7 @@ SetCVar("bloattest", 0)
 SetCVar("bloatthreat",0)
 SetCVar("bloatnameplates", 0.0) ]]
 SetCVar("screenshotQuality", 7)
-
+SetCVar("scriptProfile", 1)
 
 ---------------- > ALT+RightClick to buy a stack
 hooksecurefunc("MerchantItemButton_OnModifiedClick", function(self, button)
