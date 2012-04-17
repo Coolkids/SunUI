@@ -28,6 +28,7 @@ local function BuildClock()
 	Clock.Text:SetPoint("RIGHT", MoveHandle.InfoPanel, "RIGHT")
 	Clock:SetAllPoints(Clock.Text)
 	Clock:SetScript("OnEnter", function(self)
+		if  InCombatLockdown() then return end
 		GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(date"%A, %B %d", 0.40, 0.78, 1)
@@ -147,6 +148,7 @@ local function BuildMemory(Anchor)
 		end
 	end)
 	StatusBar:SetScript("OnEnter", function(self)
+		if  InCombatLockdown() then return end
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 		GameTooltip:ClearLines()
 		local TotalMemory, num = UpdateMemory()
@@ -155,15 +157,12 @@ local function BuildMemory(Anchor)
 		if IsAltKeyDown() then
 				maxAddOns = #MemoryTable
 			else
-				if InfoPanelDB["MemNum"] <= num  then
-					maxAddOns = InfoPanelDB["MemNum"]
-				else
-					maxAddOns = num
-				end
+				maxAddOns = math.min(InfoPanelDB["MemNum"], #MemoryTable)
 		end
 		
 		GameTooltip:AddDoubleLine(L["总共内存使用"], S.FormatMemory(TotalMemory), 0.4, 0.78, 1, 0.84, 0.75, 0.65)
 		GameTooltip:AddLine(" ")
+		GameTooltip:AddDoubleLine("Name","Use")
 		local more = 0
 		for i = 1, maxAddOns do
 			if MemoryTable[i][4] then
@@ -224,6 +223,7 @@ local function BuildPing(Anchor)
 		end
 	end)
 	StatusBar:SetScript("OnEnter", function(self)
+		if  InCombatLockdown() then return end
 		local _, _, latencyHome, latencyWorld = GetNetStats()
 		local bandwidth = GetAvailableBandwidth()
 		local r1, g1, b1 = S.ColorGradient(latencyHome/900, 0, 1, 0, 1, 1, 0, 1, 0, 0)
@@ -232,8 +232,8 @@ local function BuildPing(Anchor)
 		GameTooltip:ClearLines()
 			GameTooltip:AddLine(L["延迟"], 0.4, 0.78, 1)
 			GameTooltip:AddLine(" ")
-		GameTooltip:AddDoubleLine(L["本地延迟"], latencyHome, 0.75, 0.9, 1, r1, g1, b1)
-		GameTooltip:AddDoubleLine(L["世界延迟"], latencyWorld, 0.75, 0.9, 1, r2, g2, b2)
+		GameTooltip:AddDoubleLine(L["本地延迟"], latencyHome.."ms", 0.75, 0.9, 1, r1, g1, b1)
+		GameTooltip:AddDoubleLine(L["世界延迟"], latencyWorld.."ms", 0.75, 0.9, 1, r2, g2, b2)
 		if bandwidth ~= 0 then
 		GameTooltip:AddDoubleLine(L["带宽"]..": " , string.format(bandwidthString, bandwidth),0.69, 0.31, 0.31,0.84, 0.75, 0.65)
 		GameTooltip:AddDoubleLine(L["下载"]..": " , string.format(percentageString, GetDownloadedPercentage() *100),0.69, 0.31, 0.31, 0.84, 0.75, 0.65)
@@ -285,13 +285,6 @@ local function BuildDurability(Anchor)
 			GameTooltip:ClearLines()
 			GameTooltip:AddLine(L["耐久度"], 0.4, 0.78, 1)
 			GameTooltip:AddLine(" ")
-			--[[for i = 1, 11 do
-				if Slots[i][3] ~= 1000 then
-					green = Slots[i][3]*2
-					red = 1-green
-					GameTooltip:AddDoubleLine(Slots[i][2], format("%d %%", floor(Slots[i][3]*100)), 1 , 1 , 1, red + 1, green, 0)
-				end
-			end--]]
 			for i = 1, 11 do
 				if Slots[i][3] ~= 1000 then
 					green = Slots[i][3]/1
@@ -333,6 +326,22 @@ local function BuildCurrency(Anchor)
 end
 
 --BuildFPS
+local Total, Cpuu, Cput
+local function RefreshCput(self)
+	Cput = {}
+	UpdateAddOnCPUUsage()
+	Total = 0
+	for i = 1, GetNumAddOns() do
+		Cpuu = GetAddOnCPUUsage(i)
+		Cput[i] = { select(2, GetAddOnInfo(i)), Cpuu, IsAddOnLoaded(i) }
+		Total = Total + Cpuu
+	end
+	table.sort(Cput, function(a, b)
+		if a and b then
+			return a[2] > b[2]
+		end
+	end)
+end
 local function BuildFPS(Anchor)
 local StatusBar = CreateFrame("StatusBar", "FPS", UIParent)
 	StatusBar:SetHeight(6)	
@@ -361,14 +370,44 @@ local StatusBar = CreateFrame("StatusBar", "FPS", UIParent)
 		end
 	end)
 	StatusBar:SetScript("OnEnter", function(self)
+		if  InCombatLockdown() then return end
 		local value = floor(GetFramerate())
 		local r, g, b = S.ColorGradient(value/100, 1, 0, 0, 1, 1, 0, 0, 1, 0)
 		if not InCombatLockdown() then
 			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT", 0, 0)
 			GameTooltip:ClearLines()
-			GameTooltip:AddLine("FPS", 0.4, 0.78, 1)
+			GameTooltip:AddLine("System", 0.4, 0.78, 1)
 			GameTooltip:AddLine(" ")
 			GameTooltip:AddDoubleLine("FPS",value, 0.4, 0.78, 1, r, g, b)
+			GameTooltip:AddLine(" ")
+			RefreshCput(self)
+			if IsAltKeyDown() then
+				maxAddOns = #Cput
+			else
+				maxAddOns = math.min(InfoPanelDB["MemNum"], #Cput)
+			end
+			GameTooltip:AddLine("CPU Use")
+		for i = 1, maxAddOns do
+			if Cput[i][3] then
+				local color = Cput[i][2]/Total*100 <= 1 and {0,1} -- 0 - 1
+				or Cput[i][2]/Total*100 <= 5 and {0.75,1} -- 1 - 5
+				or Cput[i][2]/Total*100 <= 10 and {1,1} -- 5 - 10
+				or Cput[i][2]/Total*100 <= 25 and {1,0.75} -- 10 - 25
+				or Cput[i][2]/Total*100 <= 50 and {1,0.5} -- 25 - 50
+				or {1,0.1} -- 50 +
+				GameTooltip:AddDoubleLine(Cput[i][1], format("%.2f%s", Cput[i][2]/Total*100," %"), 1, 1, 1, color[1], color[2], 0)						
+			end
+		end
+		local more, moreCpuu = 0, 0
+		if not IsAltKeyDown() then
+			for i = (InfoPanelDB["MemNum"] + 1), #Cput do
+				if Cput[i][3] then
+					more = more + 1
+					moreCpuu = moreCpuu + Cput[i][2]
+				end
+			end
+			GameTooltip:AddDoubleLine(format("%d %s (%s)",more,L["Hidden"],L["Alt"]),format("%.2f%s",moreCpuu/Total*100," %"),.6,.8,1,.6,.8,1)
+		end
 			GameTooltip:Show()
 		end
 	end)

@@ -69,6 +69,7 @@ function Module:OnEnable()
 		MiniDB.gold[myPlayerRealm][myPlayerName] = GetMoney();
 		
 		self:SetScript("OnEnter", function()
+			if  InCombatLockdown() then return end
 				GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 				self.hovered = true 
 				GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 6);
