@@ -5,6 +5,14 @@
 
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="hideblizz.lua"/>
-	<Script file="ActionBar.lua"/>
-	<Script file="otherBar.lua"/>
+	<Script file="bar1.lua"/>
+	<Script file="bar2.lua"/>
+	<Script file="bar3.lua"/>
+	<Script file="bar4.lua"/>
+	<Script file="bar5.lua"/>
+	<Script file="extra.lua"/>
+	<Script file="petbar.lua"/>
+	<Script file="stancebar.lua"/>
+	<Script file="totembar.lua"/>
+	<Script file="vehicleexit.lua"/>
 </Ui>

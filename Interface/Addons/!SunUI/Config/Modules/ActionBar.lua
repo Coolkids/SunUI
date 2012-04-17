@@ -65,7 +65,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.Bar1Layout end,
 							set = function(_, value) 
 								ActionBarDB.Bar1Layout = value
-								Core:GetModule("ActionBar"):BuildActionBar()					
+								 					
 							end,
 						},
 						Bar2Layout = {
@@ -75,7 +75,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.Bar2Layout end,
 							set = function(_, value)
 								ActionBarDB.Bar2Layout = value
-								Core:GetModule("ActionBar"):BuildActionBar()
+								 
 							end,
 						},
 						Bar3Layout = {
@@ -85,7 +85,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.Bar3Layout end,
 							set = function(_, value) 
 								ActionBarDB.Bar3Layout = value 
-								Core:GetModule("ActionBar"):BuildActionBar()
+								 
 							end,
 						},	
 						Bar4Layout = {
@@ -95,7 +95,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.Bar4Layout end,
 							set = function(_, value) 
 								ActionBarDB.Bar4Layout = value
-								Core:GetModule("ActionBar"):BuildActionBar()
+								 
 								
 							end,
 						},	
@@ -106,7 +106,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.Bar5Layout end,
 							set = function(_, value) 
 								ActionBarDB.Bar5Layout = value
-								Core:GetModule("ActionBar"):BuildActionBar()
+								 
 							end,
 						},	
 						Big4Layout = {
@@ -116,7 +116,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.Big4Layout end,
 							set = function(_, value) 
 								ActionBarDB.Big4Layout = value
-								Core:GetModule("ActionBar"):BuildActionBar()
+								 
 							end,
 						},
 						Style = {
@@ -126,7 +126,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.Style end,
 							set = function(_, value) 
 								ActionBarDB.Style = value 
-								Core:GetModule("ActionStyle"):UpdateActionStyle()
+	
 							end,
 						},
 					}
@@ -141,7 +141,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.HideHotKey end,
 							set = function(_, value) 
 								ActionBarDB.HideHotKey = value 
-								Core:GetModule("ActionStyle"):UpdateActionStyle()
+								 
 							end,
 						},
 						HideMacroName = {
@@ -150,7 +150,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.HideMacroName end,
 							set = function(_, value) 
 								ActionBarDB.HideMacroName = value 
-								Core:GetModule("ActionStyle"):UpdateActionStyle()
+								 
 							end,
 						},
 						CooldownFlash = {
@@ -159,7 +159,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.CooldownFlash end,
 							set = function(_, value) 
 								ActionBarDB.CooldownFlash = value 
-								Core:GetModule("ActionStyle"):UpdateActionStyle()
+								 
 							end,
 						},
 						EnableBarFader = {
@@ -168,7 +168,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.EnableBarFader end,
 							set = function(_, value) 
 								ActionBarDB.EnableBarFader = value 
-								Core:GetModule("ActionStyle"):UpdateActionStyle()
+								 
 							end,
 						},
 						UnLock = {
@@ -192,7 +192,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.ButtonSize end,
 							set = function(_, value) 
 								ActionBarDB.ButtonSize = value 
-								Core:GetModule("ActionBar"):BuildActionBar()
+								 
 							end,
 						},
 						ButtonSpacing = {
@@ -202,7 +202,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.ButtonSpacing end,
 							set = function(_, value) 
 								ActionBarDB.ButtonSpacing = value 
-								Core:GetModule("ActionBar"):BuildActionBar()
+								 
 							end,
 						},
 						FontSize = {
@@ -212,7 +212,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.FontSize end,
 							set = function(_, value) 
 								ActionBarDB.FontSize = value 
-								Core:GetModule("ActionStyle"):UpdateActionStyle()
+								 
 							end,
 						},
 						MFontSize = {
@@ -222,7 +222,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.MFontSize end,
 							set = function(_, value) 
 								ActionBarDB.MFontSize = value 
-								Core:GetModule("ActionStyle"):UpdateActionStyle()
+								 
 							end,
 						},
 						MainBarSacle = {
@@ -232,7 +232,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.MainBarSacle end,
 							set = function(_, value) 
 								ActionBarDB.MainBarSacle = value 
-								Core:GetModule("ActionBar"):BuildActionBar()
+								 
 							end,
 						},
 						ExtraBarSacle = {
@@ -242,7 +242,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.ExtraBarSacle end,
 							set = function(_, value) 
 								ActionBarDB.ExtraBarSacle = value 
-								Core:GetModule("ActionBar"):BuildActionBar()
+								 
 							end,
 						},
 						PetBarSacle = {
@@ -252,7 +252,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.PetBarSacle end,
 							set = function(_, value) 
 								ActionBarDB.PetBarSacle = value 
-								Core:GetModule("ActionBar"):BuildActionBar()
+								 
 							end,
 						},
 						StanceBarSacle = {
@@ -262,7 +262,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.StanceBarSacle end,
 							set = function(_, value) 
 								ActionBarDB.StanceBarSacle = value 
-								Core:GetModule("ActionBar"):BuildActionBar()
+								 
 							end,
 						},
 						TotemBarSacle = {
@@ -272,7 +272,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.TotemBarSacle end,
 							set = function(_, value) 
 								ActionBarDB.TotemBarSacle = value
-								Core:GetModule("ActionBar"):BuildActionBar()
+								 
 							end,
 						},
 					}
@@ -289,7 +289,7 @@ function Module.BuildGUI()
 							get = function() return tostring(ActionBarDB.CooldownFlashSize) end,
 							set = function(_, value) 
 								ActionBarDB.CooldownFlashSize = tonumber(value) 
-								Core:GetModule("ActionStyle"):UpdateActionStyle()
+								 
 							end,
 						},
 					}
@@ -305,7 +305,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.BigSize1 end,
 							set = function(_, value) 
 								ActionBarDB.BigSize1 = value 
-								Core:GetModule("ActionBar"):BuildActionBar()
+								 
 							end,
 						},
 						BigSize2 = {
@@ -315,7 +315,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.BigSize2 end,
 							set = function(_, value) 
 								ActionBarDB.BigSize2 = value 
-								Core:GetModule("ActionBar"):BuildActionBar()
+								 
 							end,
 						},
 						BigSize3 = {
@@ -325,7 +325,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.BigSize3 end,
 							set = function(_, value) 
 								ActionBarDB.BigSize3 = value 
-								Core:GetModule("ActionBar"):BuildActionBar()
+								 
 							end,
 						},
 						BigSize4 = {
@@ -335,7 +335,7 @@ function Module.BuildGUI()
 							get = function() return ActionBarDB.BigSize4 end,
 							set = function(_, value) 
 								ActionBarDB.BigSize4 = value 
-								Core:GetModule("ActionBar"):BuildActionBar()
+								 
 							end,
 						},
 					}

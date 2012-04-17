@@ -85,9 +85,9 @@ local function RebuildAddonList(self)
 	local addOnCount = GetNumAddOns()
 	if addOnCount == #MemoryTable then return end
 	MemoryTable = {}
-	local a = 0
-	for i = 1, addOnCount do MemoryTable[i] = {i, select(2, GetAddOnInfo(i)), 0, IsAddOnLoaded(i)} end
-	
+	for i = 1, addOnCount do 
+		MemoryTable[i] = {i, select(2, GetAddOnInfo(i)), 0, IsAddOnLoaded(i)} 
+	end
 end
 local function UpdateMemory()
 	UpdateAddOnMemoryUsage()
@@ -154,7 +154,6 @@ local function BuildMemory(Anchor)
 		maxadd = #MemoryTable
 		if IsAltKeyDown() then
 				maxAddOns = #MemoryTable
-				
 			else
 				if InfoPanelDB["MemNum"] <= num  then
 					maxAddOns = InfoPanelDB["MemNum"]

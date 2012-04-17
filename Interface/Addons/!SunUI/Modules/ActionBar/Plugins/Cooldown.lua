@@ -1,4 +1,4 @@
-local S, _, _, DB = unpack(select(2, ...))
+local S, C, L, DB = unpack(select(2, ...))
 if DB.Nuke == true then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Cooldown", "AceEvent-3.0")
 -- want hex color instead of RGB?
