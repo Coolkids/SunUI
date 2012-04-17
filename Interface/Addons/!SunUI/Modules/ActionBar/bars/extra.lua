@@ -17,8 +17,6 @@ function Module:OnInitialize()
 
   --the button
 	local b = ExtraActionButton1
-	b:SetSize(C["ButtonSize"],C["ButtonSize"])
-	b:SetScale(C["ExtraBarSacle"])
 	bar.button = b
 	ExtraActionButton1Cooldown:SetPoint("TOPLEFT")
 	ExtraActionButton1Cooldown:SetPoint("BOTTOMRIGHT")

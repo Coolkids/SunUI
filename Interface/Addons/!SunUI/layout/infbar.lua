@@ -28,7 +28,7 @@ local function BuildClock()
 	Clock.Text:SetPoint("RIGHT", MoveHandle.InfoPanel, "RIGHT")
 	Clock:SetAllPoints(Clock.Text)
 	Clock:SetScript("OnEnter", function(self)
-		if  InCombatLockdown() then return end
+		 
 		GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(date"%A, %B %d", 0.40, 0.78, 1)
@@ -148,7 +148,7 @@ local function BuildMemory(Anchor)
 		end
 	end)
 	StatusBar:SetScript("OnEnter", function(self)
-		if  InCombatLockdown() then return end
+		 
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 		GameTooltip:ClearLines()
 		local TotalMemory, num = UpdateMemory()
@@ -223,7 +223,7 @@ local function BuildPing(Anchor)
 		end
 	end)
 	StatusBar:SetScript("OnEnter", function(self)
-		if  InCombatLockdown() then return end
+		 
 		local _, _, latencyHome, latencyWorld = GetNetStats()
 		local bandwidth = GetAvailableBandwidth()
 		local r1, g1, b1 = S.ColorGradient(latencyHome/900, 0, 1, 0, 1, 1, 0, 1, 0, 0)
@@ -370,7 +370,7 @@ local StatusBar = CreateFrame("StatusBar", "FPS", UIParent)
 		end
 	end)
 	StatusBar:SetScript("OnEnter", function(self)
-		if  InCombatLockdown() then return end
+		 
 		local value = floor(GetFramerate())
 		local r, g, b = S.ColorGradient(value/100, 1, 0, 0, 1, 1, 0, 0, 1, 0)
 		if not InCombatLockdown() then
@@ -455,21 +455,18 @@ function Module:OnInitialize()
 	MoveHandle.BottomInfoPanelPos = S.MakeMoveHandle(BottomRightBar, L["信息面板"], "InfoPanel2")
 	BottomRightBar:CreateShadow("Background")
 	end
-
 end
 
 function Module:OnEnable()
 	if C["OpenTop"] == true then
-	local Clock = BuildClock()
-	local Durability = BuildDurability(Clock)
-	local Currency = BuildCurrency(Durability)
-	local Ping = BuildPing(Currency)
-	local Memory = BuildMemory(Ping)
-	local FPS = BuildFPS(Memory)
-	local Friend = BuildFriend()
-	local Guild = BuildGuild()
+		local Clock = BuildClock()
+		local Durability = BuildDurability(Clock)
+		local Currency = BuildCurrency(Durability)
+		local Ping = BuildPing(Currency)
+		local Memory = BuildMemory(Ping)
+		local FPS = BuildFPS(Memory)
+		local Friend = BuildFriend()
+		local Guild = BuildGuild()
 	end
-	
-
 end
 

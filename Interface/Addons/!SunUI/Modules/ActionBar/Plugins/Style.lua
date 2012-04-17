@@ -8,6 +8,7 @@ function AB:OnInitialize()
 	
 	
 	local function UpdateHotkey(button, actionButtonType)
+		if button.t == true then return end
 		local hotkey = _G[button:GetName() .. 'HotKey']
 		local text = hotkey:GetText()
 		text = string.gsub(text, '(s%-)', 'S')
@@ -32,6 +33,7 @@ function AB:OnInitialize()
 		else
 		hotkey:SetText(text)
 		end
+		button.t = true 
 	end
 
 	local function Style(button, totem, flyout)
