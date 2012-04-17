@@ -57,7 +57,13 @@ if CUSTOM_CLASS_COLORS then
 else
 	r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
 end
-
+F.CreateGradient = function(f)
+	local tex = f:CreateTexture(nil, "BACKGROUND")
+	tex:SetPoint("TOPLEFT")
+	tex:SetPoint("BOTTOMRIGHT")
+	tex:SetTexture(C.media.backdrop)
+	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+end
 F.CreateTab = function(f)
 	f:DisableDrawLayer("BACKGROUND")
 
@@ -225,7 +231,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- [[ Simple backdrops ]]
 
-		local bds = {"AutoCompleteBox", "BNToastFrame", "LFGSearchStatus", "TicketStatusFrameButton", "GearManagerDialogPopup", "TokenFramePopup", "ReputationDetailFrame", "RaidInfoFrame", "MissingLootFrame"}
+		local bds = {"AutoCompleteBox", "BNToastFrame", "LFGSearchStatus", "TicketStatusFrameButton", "GearManagerDialogPopup", "TokenFramePopup", "ReputationDetailFrame", "RaidInfoFrame", "MissingLootFrame", "ScrollOfResurrectionSelectionFrame", "ScrollOfResurrectionFrame", "VoiceChatTalkers"}
 
 		for i = 1, #bds do
 			S.CreateBD(_G[bds[i]])
@@ -1446,7 +1452,51 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		hooksecurefunc("UIParent_ManageFramePositions", CaptureBar)
+		-- Achievement popup
 
+		hooksecurefunc("AchievementAlertFrame_FixAnchors", function()
+			for i = 1, MAX_ACHIEVEMENT_ALERTS do
+				local frame = _G["AchievementAlertFrame"..i]
+
+				if frame then			
+					frame:SetAlpha(1)
+					frame.SetAlpha = F.dummy
+
+					if not frame.bg then
+						frame.bg = CreateFrame("Frame", nil, frame)
+						frame.bg:SetPoint("TOPLEFT", _G[frame:GetName().."Background"], "TOPLEFT", -2, -6)
+						frame.bg:SetPoint("BOTTOMRIGHT", _G[frame:GetName().."Background"], "BOTTOMRIGHT", -2, 8)
+						frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+						S.CreateBD(frame.bg)
+						
+						frame:HookScript("OnEnter", function()
+							S.CreateBD(frame.bg)
+						end)
+						frame:HookScript("OnShow", function()
+							S.CreateBD(frame.bg)
+						end)
+					end
+
+					_G["AchievementAlertFrame"..i.."Glow"]:Hide()
+					_G["AchievementAlertFrame"..i.."Shine"]:Hide()
+					_G["AchievementAlertFrame"..i.."Glow"].Show = F.dummy
+					_G["AchievementAlertFrame"..i.."Shine"].Show = F.dummy
+
+					_G["AchievementAlertFrame"..i.."Background"]:SetTexture(nil)
+
+					_G["AchievementAlertFrame"..i.."Unlocked"]:SetTextColor(1, 1, 1)
+					_G["AchievementAlertFrame"..i.."Unlocked"]:SetShadowOffset(1, -1)
+
+					_G["AchievementAlertFrame"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
+					_G["AchievementAlertFrame"..i.."IconOverlay"]:Hide()	
+
+					if not frame.iconreskinned then
+						F.CreateBG(_G["AchievementAlertFrame"..i.."IconTexture"])
+						frame.iconreskinned = true
+					end
+				end
+			end
+		end)
 		-- Guild challenges
 
 		local challenge = CreateFrame("Frame", nil, GuildChallengeAlertFrame)
@@ -2157,7 +2207,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		if IsAddOnLoaded("ACP") then S.Reskin(GameMenuButtonAddOns) end
 
-		local closebuttons = {"LFDParentFrameCloseButton", "CharacterFrameCloseButton", "PVPFrameCloseButton", "SpellBookFrameCloseButton", "HelpFrameCloseButton", "PVPBannerFrameCloseButton", "RaidInfoCloseButton", "RolePollPopupCloseButton", "ItemRefCloseButton", "TokenFramePopupCloseButton", "ReputationDetailCloseButton", "ChannelFrameDaughterFrameDetailCloseButton", "WorldStateScoreFrameCloseButton", "LFGDungeonReadyStatusCloseButton", "RaidParentFrameCloseButton", "SideDressUpModelCloseButton", "FriendsFrameCloseButton", "MissingLootFramePassButton"}
+		local closebuttons = {"LFDParentFrameCloseButton", "CharacterFrameCloseButton", "PVPFrameCloseButton", "SpellBookFrameCloseButton", "HelpFrameCloseButton", "PVPBannerFrameCloseButton", "RaidInfoCloseButton", "RolePollPopupCloseButton", "ItemRefCloseButton", "TokenFramePopupCloseButton", "ReputationDetailCloseButton", "ChannelFrameDaughterFrameDetailCloseButton", "WorldStateScoreFrameCloseButton", "LFGDungeonReadyStatusCloseButton", "RaidParentFrameCloseButton", "SideDressUpModelCloseButton", "FriendsFrameCloseButton", "MissingLootFramePassButton", "LFGDungeonReadyDialogCloseButton", "StaticPopup1CloseButton"}
 		for i = 1, #closebuttons do
 			local closebutton = _G[closebuttons[i]]
 			S.ReskinClose(closebutton)
@@ -2740,9 +2790,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinCheck(KeyBindingFrameCharacterButton)
 	elseif addon == "Blizzard_Calendar" then
 		CalendarFrame:DisableDrawLayer("BORDER")
-		for i = 1, 15 do
-			if i ~= 10 and i ~= 11 and i ~= 12 and i ~= 13 and i ~= 14 then select(i, CalendarViewEventFrame:GetRegions()):Hide() end
+		for i = 1, 9 do
+			select(i, CalendarViewEventFrame:GetRegions()):Hide()
 		end
+		select(15, CalendarViewEventFrame:GetRegions()):Hide()
+		
 		for i = 1, 9 do
 			select(i, CalendarViewHolidayFrame:GetRegions()):Hide()
 			select(i, CalendarViewRaidFrame:GetRegions()):Hide()
@@ -2754,8 +2806,15 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			select(i, CalendarViewRaidTitleFrame:GetRegions()):Hide()
 		end
 		for i = 1, 42 do
-			_G["CalendarDayButton"..i]:DisableDrawLayer("BACKGROUND")
 			_G["CalendarDayButton"..i.."DarkFrame"]:SetAlpha(.5)
+			local bu = _G["CalendarDayButton"..i]
+			bu:DisableDrawLayer("BACKGROUND")
+			bu:SetHighlightTexture(C.media.backdrop)
+			local hl = bu:GetHighlightTexture()
+			hl:SetVertexColor(r, g, b, .2)
+			hl.SetAlpha = F.dummy
+			hl:SetPoint("TOPLEFT", -1, 1)
+			hl:SetPoint("BOTTOMRIGHT")
 		end
 		for i = 1, 7 do
 			_G["CalendarWeekday"..i.."Background"]:SetAlpha(0)
@@ -2807,6 +2866,22 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.CreateBD(CalendarCreateEventInviteList, .25)
 		S.CreateBD(CalendarCreateEventDescriptionContainer, .25)
 		S.CreateBD(CalendarEventPickerFrame, .25)
+		
+		CalendarWeekdaySelectedTexture:SetVertexColor(r, g, b)
+		
+		hooksecurefunc("CalendarFrame_SetToday", function()
+			CalendarTodayFrame:SetAllPoints()
+		end)
+		
+		CalendarTodayFrame:SetScript("OnUpdate", nil)
+		CalendarTodayTextureGlow:Hide()
+		CalendarTodayTexture:Hide()
+		
+		CalendarTodayFrame:SetBackdrop({
+			edgeFile = C.media.backdrop,
+			edgeSize = S.mult,
+		})
+		CalendarTodayFrame:SetBackdropBorderColor(r, g, b)
 
 		for i, class in ipairs(CLASS_SORT_ORDER) do
 			local bu = _G["CalendarClassButton"..i]
@@ -2850,13 +2925,20 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			hline:SetPoint("LEFT", _G["CalendarDayButton"..i], "TOPLEFT")
 			S.CreateBD(hline)
 		end
+		
+		if not(IsAddOnLoaded("CowTip") or IsAddOnLoaded("TipTac") or IsAddOnLoaded("FreebTip") or IsAddOnLoaded("lolTip") or IsAddOnLoaded("StarTip") or IsAddOnLoaded("TipTop")) then
+			local tooltips = {CalendarContextMenu, CalendarInviteStatusContextMenu}
 
-		CalendarContextMenu:SetBackdrop(nil)
-		local bg = CreateFrame("Frame", nil, CalendarContextMenu)
-		bg:SetPoint("TOPLEFT")
-		bg:SetPoint("BOTTOMRIGHT")
-		bg:SetFrameLevel(CalendarContextMenu:GetFrameLevel()-1)
-		S.CreateBD(bg)
+			for _, tooltip in pairs(tooltips) do
+				tooltip:SetBackdrop(nil)
+				local bg = CreateFrame("Frame", nil, tooltip)
+				bg:SetPoint("TOPLEFT", 2, -2)
+				bg:SetPoint("BOTTOMRIGHT", -1, 2)
+				bg:SetFrameLevel(tooltip:GetFrameLevel()-1)
+				S.CreateBD(bg)
+			end
+		end
+
 
 		CalendarViewEventFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
 		CalendarViewHolidayFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
@@ -4400,7 +4482,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ClassTrainerFrameTopRightCorner:Hide()
 		ClassTrainerFrameBottomInsetBg:Hide()
 		ClassTrainerTrainButton_LeftSeparator:Hide()
-
+		ClassTrainerFrameMoneyBg:SetAlpha(0)
+		
 		ClassTrainerStatusBarSkillRank:ClearAllPoints()
 		ClassTrainerStatusBarSkillRank:SetPoint("CENTER", ClassTrainerStatusBar, "CENTER", 0, 0)
 
@@ -4436,11 +4519,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			bg:SetFrameLevel(bu:GetFrameLevel()-1)
 			S.CreateBD(bg, .25)
 
-			_G["ClassTrainerScrollFrameButton"..i.."Name"]:SetParent(bg)
-			_G["ClassTrainerScrollFrameButton"..i.."SubText"]:SetParent(bg)
-			_G["ClassTrainerScrollFrameButton"..i.."MoneyFrame"]:SetParent(bg)
+			bu.name:SetParent(bg)
+			bu.name:SetPoint("TOPLEFT", ic, "TOPRIGHT", 6, -2)
+			bu.subText:SetParent(bg)
+			bu.money:SetParent(bg)
+			bu.money:SetPoint("TOPRIGHT", bu, "TOPRIGHT", 5, -8)
 			bu:SetHighlightTexture(nil)
-			select(4, bu:GetRegions()):SetAlpha(0)
+			bu.disabledBG:Hide()
+			bu.disabledBG.Show = F.dummy
 			select(5, bu:GetRegions()):SetAlpha(0)
 
 			local check = select(2, bu:GetRegions())
@@ -4467,7 +4553,13 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		bd:SetPoint("BOTTOMRIGHT", 1, -1)
 		bd:SetFrameLevel(ClassTrainerStatusBar:GetFrameLevel()-1)
 		S.CreateBD(bd, .25)
-
+		
+		local moneyBg = CreateFrame("Frame", nil, ClassTrainerFrame)
+		moneyBg:SetPoint("TOPLEFT", ClassTrainerFrameMoneyBg)
+		moneyBg:SetPoint("BOTTOMRIGHT", ClassTrainerFrameMoneyBg, 0, 12)
+		moneyBg:SetFrameLevel(ClassTrainerFrame:GetFrameLevel()-1)
+		S.CreateBD(moneyBg, .25)
+		
 		S.Reskin(ClassTrainerTrainButton)
 
 		S.ReskinClose(ClassTrainerFrameCloseButton)
@@ -4832,7 +4924,7 @@ Delay:SetScript("OnEvent", function()
 			local bu = _G["LootButton"..i]
 			local ic = _G["LootButton"..i.."IconTexture"]
 			_G["LootButton"..i.."IconQuestTexture"]:SetAlpha(0)
-			local _, _, _, _, _, _, _, bg = bu:GetRegions()
+			_G["LootButton"..i.."NameFrame"]:Hide()
 
 			bu:SetNormalTexture("")
 			bu:SetPushedTexture("")
@@ -4846,7 +4938,7 @@ Delay:SetScript("OnEvent", function()
 			ic:SetTexCoord(.08, .92, .08, .92)
 			ic.bg = F.CreateBG(ic)
 
-			bg:Hide()
+
 		end
 
 		hooksecurefunc("LootFrame_UpdateButton", function(index)
