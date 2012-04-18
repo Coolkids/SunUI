@@ -16,9 +16,9 @@ function Module:OnInitialize()
 	["noaltArrowkey"] = true, --Disable the AltArrowKeyMode. // 取消按住ALT才能移动光标
 	["nojoinleaveChannel"] = true, --Disable the alert joinleaveChannel. // 关闭进出频道提示
 	
-	["BlockCombat"] = true, --Block the Channels in Combat. // 战斗中屏蔽世界频道信息
-	["BlockInstance"] = true, --Block the Channels in Instance. // 副本中屏蔽世界频道信息
-	["BlockBossCombat"] = true, --Block the Channels in Boss Combat. // 首领战中屏蔽世界频道信息
+	["BlockCombat"] = false, --Block the Channels in Combat. // 战斗中屏蔽世界频道信息
+	["BlockInstance"] = false, --Block the Channels in Instance. // 副本中屏蔽世界频道信息
+	["BlockBossCombat"] = false, --Block the Channels in Boss Combat. // 首领战中屏蔽世界频道信息
 	
 	["MergeTalentSpec"] = true, --Merge the messages:"You have learned/unlearned..." // 当切换天赋后合并显示“你学会了/忘却了法术…”
 	["FilterPetTalentSpec"] = true, --Filter the messages:"Your pet has learned/unlearned..." // 不显示“你的宠物学会了/忘却了…”
