@@ -4,6 +4,7 @@
 
 
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="ChatFilter.lua"/>
 	<Script file = "NamePlates.lua"/>
 	<Script file = "BiggerTradeSkillUI.lua"/>
 	<Script file = "calculator.lua"/>
