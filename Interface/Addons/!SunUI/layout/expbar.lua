@@ -12,6 +12,15 @@ local FactionInfo = {
 	[7] = {{ 75/255,  175/255, 75/255 }, L["³ç¾´"], "FF4baf4b"},
 	[8] = {{ 155/255,  255/255, 155/255 }, L["³ç°Ý"],"FF9bff9b"},
 }
+local function SVal(Val)
+    if Val >= 1e6 then
+        return ("%.1fm"):format(Val/1e6):gsub("%.?0+([km])$", "%1")
+    elseif Val >= 1e4 then
+        return ("%.1fk"):format(Val/1e3):gsub("%.?0+([km])$", "%1")
+    else
+        return Val
+    end
+end
 function Module:BuildExpBar()
 	ExpBar = CreateFrame("StatusBar", nil, BottomRightBar)
 	--ExpBar:CreateShadow("Background")
@@ -74,7 +83,7 @@ function Module:OnEvent()
 		ExpBar:SetMinMaxValues(0, playerMaxXP)
 		ExpBar.Rest:SetMinMaxValues(0, playerMaxXP)
 		if exhaustionXP then
-			ExpBar.Text:SetText(S.SVal(currXP).." / "..S.SVal(playerMaxXP).."    "..floor((currXP/playerMaxXP)*1000)/10 .."%" .. " (+"..S.SVal(exhaustionXP )..")")
+			ExpBar.Text:SetText(SVal(currXP).." / "..SVal(playerMaxXP).."    "..floor((currXP/playerMaxXP)*1000)/10 .."%" .. " (+"..SVal(exhaustionXP )..")")
 			if exhaustionXP+currXP >= playerMaxXP then
 				ExpBar:SetValue(currXP)
 				ExpBar.Rest:SetValue(playerMaxXP)
@@ -85,7 +94,7 @@ function Module:OnEvent()
 		else
 			ExpBar:SetValue(currXP)
 			ExpBar.Rest:SetValue(0)
-			ExpBar.Text:SetText(S.SVal(currXP).." / "..S.SVal(playerMaxXP).."    "..floor((currXP/playerMaxXP)*1000)/10 .."%")
+			ExpBar.Text:SetText(SVal(currXP).." / "..SVal(playerMaxXP).."    "..floor((currXP/playerMaxXP)*1000)/10 .."%")
 		end
 	end
 end

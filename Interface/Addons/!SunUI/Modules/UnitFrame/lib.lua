@@ -348,7 +348,7 @@ C = UnitFrameDB
       s:Size(C["FocusCastBarWidth"],C["FocusCastBarHeight"])
 	  MoveHandle.Castbarfouce = S.MakeMoveHandle(s, L["焦点施法条"], "FocusCastbar")
       i:SetPoint("RIGHT", s, "LEFT", 0, 0)
-      sp:SetHeight(s:GetHeight()*2.5)
+      --sp:SetHeight(s:GetHeight()*2.5)
     elseif f.mystyle == "pet" then
       s:SetPoint("BOTTOMRIGHT",f.Power,"BOTTOMRIGHT",0,0)
       s:SetScale(f:GetScale())
