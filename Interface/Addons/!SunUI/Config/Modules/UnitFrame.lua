@@ -217,7 +217,7 @@ function Module.BuildGUI()
 						TargetAura = {
 							type = "select", order = 11,
 							name = L["目标增减益"],
-							values = {[1] = L["显示"], [2] =L["不显示"]},
+							values = {[1] = L["显示"], [2] =L["不显示"], [3] = "Only Player"},
 							get = function() return UnitFrameDB.TargetAura end,
 							set = function(_, value) UnitFrameDB.TargetAura = value end,
 						},

@@ -102,7 +102,7 @@ C = UnitFrameDB
 	self.Health.colorTapping = true
     lib.gen_castbar(self)
     lib.gen_portrait(self)
-	if C["TargetAura"] == 1 then
+	if C["TargetAura"] ~= 2 then
     lib.createAuras(self)
 	end
     lib.gen_ppstrings(self)
@@ -112,7 +112,7 @@ C = UnitFrameDB
 	lib.gen_combat_feedback(self)
     if showfaketarget then lib.gen_faketarget(self) end
 	self:Size(self.width,self.height)
-	--self.Auras.onlyShowPlayer = true
+	if C["TargetAura"] == 3 then self.Auras.onlyShowPlayer = true print("1") end
   end  
   
   --the tot style
@@ -167,6 +167,7 @@ C = UnitFrameDB
     self.Power.bg.multiplier = 0.3
     lib.gen_castbar(self)
 	lib.createDebuffs(self)
+	self.Debuffs.onlyShowPlayer = true
 	self:Size(self.width,self.height)
   end
   
@@ -259,6 +260,7 @@ C = UnitFrameDB
     self.Power.bg.multiplier = 0.3
 	lib.createBuffs(self)
 	lib.createDebuffs(self)
+	self.Debuffs.onlyShowPlayer = true
     lib.gen_castbar(self)
 	lib.gen_alt_powerbar(self)
 	self:Size(self.width,self.height)
