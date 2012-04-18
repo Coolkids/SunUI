@@ -2,7 +2,7 @@
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ChatFilter")
 if DB.Nuke == true then return end
 function Module:OnInitialize()
-	if C["ChatFilter"] ~= true then return end
+	if MiniDB["ChatFilter"] ~= true then return end
 	local Config = {
 		["Enabled"] = true, --Enable the ChatFilter. // 是否开启本插件
 		["ScanOurself"] = nil, --Scan ourself. // 是否扫描自己的聊天信息
