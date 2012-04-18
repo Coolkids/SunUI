@@ -326,22 +326,6 @@ local function BuildCurrency(Anchor)
 end
 
 --BuildFPS
-local Total, Cpuu, Cput
-local function RefreshCput(self)
-	Cput = {}
-	UpdateAddOnCPUUsage()
-	Total = 0
-	for i = 1, GetNumAddOns() do
-		Cpuu = GetAddOnCPUUsage(i)
-		Cput[i] = { select(2, GetAddOnInfo(i)), Cpuu, IsAddOnLoaded(i) }
-		Total = Total + Cpuu
-	end
-	table.sort(Cput, function(a, b)
-		if a and b then
-			return a[2] > b[2]
-		end
-	end)
-end
 local function BuildFPS(Anchor)
 local StatusBar = CreateFrame("StatusBar", "FPS", UIParent)
 	StatusBar:SetHeight(6)	
@@ -379,35 +363,6 @@ local StatusBar = CreateFrame("StatusBar", "FPS", UIParent)
 			GameTooltip:AddLine("System", 0.4, 0.78, 1)
 			GameTooltip:AddLine(" ")
 			GameTooltip:AddDoubleLine("FPS",value, 0.4, 0.78, 1, r, g, b)
-			GameTooltip:AddLine(" ")
-			RefreshCput(self)
-			if IsAltKeyDown() then
-				maxAddOns = #Cput
-			else
-				maxAddOns = math.min(InfoPanelDB["MemNum"], #Cput)
-			end
-			GameTooltip:AddLine("CPU Use")
-		for i = 1, maxAddOns do
-			if Cput[i][3] then
-				local color = Cput[i][2]/Total*100 <= 1 and {0,1} -- 0 - 1
-				or Cput[i][2]/Total*100 <= 5 and {0.75,1} -- 1 - 5
-				or Cput[i][2]/Total*100 <= 10 and {1,1} -- 5 - 10
-				or Cput[i][2]/Total*100 <= 25 and {1,0.75} -- 10 - 25
-				or Cput[i][2]/Total*100 <= 50 and {1,0.5} -- 25 - 50
-				or {1,0.1} -- 50 +
-				GameTooltip:AddDoubleLine(Cput[i][1], format("%.2f%s", Cput[i][2]/Total*100," %"), 1, 1, 1, color[1], color[2], 0)						
-			end
-		end
-		local more, moreCpuu = 0, 0
-		if not IsAltKeyDown() then
-			for i = (InfoPanelDB["MemNum"] + 1), #Cput do
-				if Cput[i][3] then
-					more = more + 1
-					moreCpuu = moreCpuu + Cput[i][2]
-				end
-			end
-			GameTooltip:AddDoubleLine(format("%d %s (%s)",more,L["Hidden"],L["Alt"]),format("%.2f%s",moreCpuu/Total*100," %"),.6,.8,1,.6,.8,1)
-		end
 			GameTooltip:Show()
 		end
 	end)
