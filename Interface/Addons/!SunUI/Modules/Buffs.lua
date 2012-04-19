@@ -15,19 +15,19 @@ function Module:Style(buttonName, i, f)
 	local Duration	= _G[buttonName..i.."Duration"]
 	local Count 	= _G[buttonName..i.."Count"]
 	local Border = _G[buttonName..i.."Border"]
-
+	
 	Button:SetSize(C["IconSize"], C["IconSize"])
 	
 	Icon:SetTexCoord(.1, .9, .1, .9)
 	
 	Duration:ClearAllPoints()
 	Duration:SetParent(Button)
-	Duration:Point("TOP", Button, "BOTTOM", 2, -3)
+	Duration:SetPoint("TOP", Button, "BOTTOM", 2, -3)
 	Duration:SetFont(DB.bfont, 12*S.Scale(1)*MiniDB["FontScale"], "THINOUTLINE")
 	
 	Count:ClearAllPoints()
 	Count:SetParent(Button)
-	Count:Point("TOPRIGHT", Button, 3, -1)
+	Count:SetPoint("TOPRIGHT", Button, 3, -1)
 	Count:SetFont(DB.bfont, 12*S.Scale(1)*MiniDB["FontScale"], "THINOUTLINE")
 	
 	if Border then
@@ -72,10 +72,10 @@ end
 
 function Module:OnEnable()
 	BuffPos = CreateFrame("Frame", nil, UIParent)
-	BuffPos:Size(C["IconSize"], C["IconSize"])
+	BuffPos:SetSize(C["IconSize"], C["IconSize"])
 	MoveHandle.Buff = S.MakeMoveHandle(BuffPos, "Buff", "Buff")
 	DebuffPos = CreateFrame("Frame", nil, UIParent)
-	DebuffPos:Size(C["IconSize"], C["IconSize"])
+	DebuffPos:SetSize(C["IconSize"], C["IconSize"])
 	MoveHandle.Debuff = S.MakeMoveHandle(DebuffPos, "Debuff", "Debuff")
 end
 
@@ -107,20 +107,20 @@ function Module:UpdateBuffPos()
 		value:ClearAllPoints()
 		if C["BuffDirection"] == 1 then
 			if key == 1 then
-				value:Point("CENTER", BuffPos)
+				value:SetPoint("CENTER", BuffPos)
 			elseif key%C["IconPerRow"] == 1 then
-				value:Point("TOP", PreRow, "BOTTOM", 0, -23)
+				value:SetPoint("TOP", PreRow, "BOTTOM", 0, -23)
 			else
-				value:Point("RIGHT", Pre, "LEFT", -8, 0)
+				value:SetPoint("RIGHT", Pre, "LEFT", -8, 0)
 			end
 		end
 		if C["BuffDirection"] == 2 then
 			if key == 1 then
-				value:Point("CENTER", BuffPos)
+				value:SetPoint("CENTER", BuffPos)
 			elseif key%C["IconPerRow"] == 1 then
-				value:Point("TOP", PreRow, "BOTTOM", 0, -23)
+				value:SetPoint("TOP", PreRow, "BOTTOM", 0, -23)
 			else
-				value:Point("LEFT", Pre, "RIGHT", 8, 0)
+				value:SetPoint("LEFT", Pre, "RIGHT", 8, 0)
 			end
 		end
 	end
@@ -153,10 +153,10 @@ hooksecurefunc("AuraButton_OnUpdate", function(self, elapsed)
 	end
 end)
 
-hooksecurefunc("AuraButton_UpdateDuration", function(auraButton, timeLeft)
+--[[ hooksecurefunc("AuraButton_UpdateDuration", function(auraButton, timeLeft)
 	local Duration = auraButton.duration
 		Duration:SetText(S.FormatTime(timeLeft, true))
-end) 
+end)  ]]
 
 hooksecurefunc("DebuffButton_UpdateAnchors", function(buttonName, i)
 	Module:Style(buttonName, i, d)
@@ -166,20 +166,24 @@ hooksecurefunc("DebuffButton_UpdateAnchors", function(buttonName, i)
 	Aura:ClearAllPoints()
 	if C["DebuffDirection"] == 1 then
 		if i == 1 then
-			Aura:Point("CENTER", DebuffPos)
+			Aura:SetPoint("CENTER", DebuffPos)
 		elseif i%C["IconPerRow"] == 1 then
-			Aura:Point("TOP", PreRow, "BOTTOM", 0, -23)
+			Aura:SetPoint("TOP", PreRow, "BOTTOM", 0, -23)
 		else
-			Aura:Point("RIGHT", Pre, "LEFT", -8, 0)
+			Aura:SetPoint("RIGHT", Pre, "LEFT", -8, 0)
 		end
 	end
 	if C["DebuffDirection"] == 2 then
 		if i == 1 then
-			Aura:Point("CENTER", DebuffPos)
+			Aura:SetPoint("CENTER", DebuffPos)
 		elseif i%C["IconPerRow"] == 1 then
-			Aura:Point("TOP", PreRow, "BOTTOM", 0, -23)
+			Aura:SetPoint("TOP", PreRow, "BOTTOM", 0, -23)
 		else
-			Aura:Point("LEFT", Pre, "RIGHT", 8, 0)
+			Aura:SetPoint("LEFT", Pre, "RIGHT", 8, 0)
 		end
 	end
 end)
+ HOUR_ONELETTER_ABBR = "%dh";
+ DAY_ONELETTER_ABBR = "%dd";
+ MINUTE_ONELETTER_ABBR = "%dm";
+ SECOND_ONELETTER_ABBR = "%ds";

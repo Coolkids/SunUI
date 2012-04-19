@@ -10,7 +10,7 @@ function Module:OnInitialize()
 		Frame.Cooldown:SetAllPoints()
 		Frame.Cooldown:SetReverse(true)
 		  
-		Frame:CreateShadow("Background")
+		Frame:CreateShadow()
 		Frame:Hide()
 	local start, duration
 	local spellIDs = {

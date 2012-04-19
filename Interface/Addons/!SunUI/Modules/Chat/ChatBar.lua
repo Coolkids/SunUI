@@ -37,9 +37,11 @@ function Module:BuildChatbar()
 		})
 		Button:SetBackdropColor(unpack(Color[i]))
 		Button:SetScript("OnEnter", function(self)
+			if InCombatLockdown() then return end
 			UIFrameFadeIn(Parent, 2, Parent:GetAlpha(), 1)
 		end)
 		Button:SetScript("OnLeave", function(self)
+			if InCombatLockdown() then return end
 			UIFrameFadeOut(Parent, 2, self:GetAlpha(), 0)
 		end)
 		if i == 1 then

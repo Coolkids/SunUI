@@ -12,7 +12,7 @@ function Module:OnInitialize()
 	local f = ExtraActionBarFrame
 	f:SetParent(bar)
 	f:ClearAllPoints()
-	f:SetPoint("CENTER", 0, 0)
+	f:SetAllPoints(bar)
 	f.ignoreFramePositionManager = true
 
   --the button

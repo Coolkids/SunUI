@@ -795,7 +795,6 @@ end
                 i=i-1
             end
             if class == "DEATHKNIGHT" then
-                bars[3], bars[4], bars[5], bars[6] = bars[5], bars[6], bars[3], bars[4]
                 f.Runes = bars
             elseif class == "WARLOCK" then
                 f.SoulShards = bars
