@@ -16,6 +16,28 @@ local function SetChatFrame()
 	for i = 1,10 do FCF_SetWindowAlpha(_G["ChatFrame"..i], 0) end
 	FCF_SavePositionAndDimensions(ChatFrame1)
 	FCF_SetLocked(ChatFrame1, 1)
+	-- 聊天频道职业染色
+	ToggleChatColorNamesByClassGroup(true, "SAY")
+	ToggleChatColorNamesByClassGroup(true, "EMOTE")
+	ToggleChatColorNamesByClassGroup(true, "YELL")
+	ToggleChatColorNamesByClassGroup(true, "GUILD")
+	ToggleChatColorNamesByClassGroup(true, "GUILD_OFFICER")
+	ToggleChatColorNamesByClassGroup(true, "OFFICER")
+	ToggleChatColorNamesByClassGroup(true, "GUILD_ACHIEVEMENT")
+	ToggleChatColorNamesByClassGroup(true, "ACHIEVEMENT")
+	ToggleChatColorNamesByClassGroup(true, "WHISPER")
+	ToggleChatColorNamesByClassGroup(true, "PARTY")
+	ToggleChatColorNamesByClassGroup(true, "PARTY_LEADER")
+	ToggleChatColorNamesByClassGroup(true, "RAID")
+	ToggleChatColorNamesByClassGroup(true, "RAID_LEADER")
+	ToggleChatColorNamesByClassGroup(true, "RAID_WARNING")
+	ToggleChatColorNamesByClassGroup(true, "BATTLEGROUND")
+	ToggleChatColorNamesByClassGroup(true, "BATTLEGROUND_LEADER")   
+	ToggleChatColorNamesByClassGroup(true, "CHANNEL1")
+	ToggleChatColorNamesByClassGroup(true, "CHANNEL2")
+	ToggleChatColorNamesByClassGroup(true, "CHANNEL3")
+	ToggleChatColorNamesByClassGroup(true, "CHANNEL4")
+	ToggleChatColorNamesByClassGroup(true, "CHANNEL5")
 end
 function SetUIScale()
 	local resolution = GetCVar('gxResolution')
@@ -66,9 +88,10 @@ SlashCmdList["AutoSet"] = function()
 	if not UnitAffectingCombat("player") then
 		SetChatFrame()
 		local ResScale = SetUIScale()
-	end
 	SetCVar("useUiScale", 1)
 	SetCVar("uiScale", ResScale)
+	ReloadUI()
+	end
 end
 SLASH_AutoSet1 = "/AutoSet"
 

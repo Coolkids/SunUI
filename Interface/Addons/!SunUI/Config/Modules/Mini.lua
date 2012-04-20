@@ -5,14 +5,13 @@ local Core = LibStub("AceAddon-3.0"):GetAddon("Core")
 -- Init
 DB["Modules"]["Mini"] = {}
 local Module = DB["Modules"]["Mini"]
-
-local uis = SetUIScale()
+local ui = SetUIScale()
 -- LoadSettings
 function Module.LoadSettings()
 	local Default = {
 	["ClassCDWidth"] = 80,
 	["AutoSell"] = true,
-	["uiScale"] = uis,
+	["uiScale"] = ui,
 	["AutoRepair"] = false,
 	["Icicle"] = false,
 	["MiniMapPanels"] = true,
@@ -34,7 +33,7 @@ function Module.LoadSettings()
 	["ClassCDDirection"] = 1,
 	["HideRaid"] = true,
 	["HideRaidWarn"] = true,
-		
+	["Disenchat"] = true,
 	}
 	if not MiniDB then MiniDB = {} end
 	for key, value in pairs(Default) do
@@ -151,10 +150,17 @@ function Module.BuildGUI()
 					get = function() return MiniDB.HideRaidWarn end,
 					set = function(_, value) MiniDB.HideRaidWarn = value end,
 				},
+				Disenchat = {
+					type = "toggle",
+					name = "Quick Disenchat",
+					order = 14,
+					get = function() return MiniDB.Disenchat end,
+					set = function(_, value) MiniDB.Disenchat = value end,
+				},
 				BagScale = {
 					type = "range",
 					name = "背包缩放大小",
-					order = 14,
+					order = 15,
 					min = 0.2, max = 2, step = 0.1,
 					get = function() return MiniDB.BagScale end,
 					set = function(_, value) MiniDB.BagScale = value end,
@@ -180,29 +186,6 @@ function Module.BuildGUI()
 					type = "description", order = 3,
 					name = "\n",					
 				},
-				UIscale = {
-					type = "toggle",
-					name = L["启用插件UI缩放设定"],
-					order = 4,
-					get = function() return MiniDB.UIscale end,
-					set = function(_, value) MiniDB.UIscale = value end,
-				},
-				AutoUIscale = {
-					type = "toggle",
-					name = L["自动设定UI缩放"], desc = L["需要开启插件UI缩放设定"],
-					order = 5,
-					disabled = not MiniDB.UIscale,
-					get = function() return MiniDB.AutoUIscale end,
-					set = function(_, value) MiniDB.AutoUIscale = value end,
-				},
-				LockUIscale = {
-					type = "toggle",
-					name = L["锁定UI缩放"], desc = L["需要开启插件UI缩放设定"],
-					order = 6,
-					disabled = not MiniDB.UIscale,
-					get = function() return MiniDB.LockUIscale end,
-					set = function(_, value) MiniDB.LockUIscale = value end,
-				},	
 				NewLine = {
 					type = "description", order = 7,
 					name = "\n",					

@@ -277,9 +277,10 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 		for i=1, items do
 			local slot = addon.slots[i] or createSlot(i)
 			local texture, item, quantity, quality, locked = GetLootSlotInfo(i)
-			local color = ITEM_QUALITY_COLORS[quality]
-			if color.r == nil then return end
-			local q = {}
+			local color
+			if quality then
+				local color = ITEM_QUALITY_COLORS[quality]
+			end
 			if quality < 2 then q.r, q.g, q.b = 0, 0, 0 else q.r, q.g, q.b = color.r, color.g, color.b end
 			if(LootSlotIsCoin(i)) then
 				item = item:gsub("\n", ", ")

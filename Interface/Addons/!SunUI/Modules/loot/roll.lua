@@ -149,6 +149,7 @@ local function CreateRollFrame()
 	
 
 	frame.buttonborder = buttonborder
+	frame.buttonborder2 = buttonborder2
 
 	local tfade = frame:CreateTexture(nil, "BORDER")
 	tfade:SetPoint("TOPLEFT", frame, "TOPLEFT", 4, 0)
@@ -281,7 +282,7 @@ local function START_LOOT_ROLL(rollid, time)
 	f.fsloot:SetText(name)
 
 	f:SetBackdropBorderColor(color.r, color.g, color.b, 1)
-	f.buttonborder:SetBackdropBorderColor(color.r, color.g, color.b, 1)
+	f.buttonborder2.border:SetBackdropBorderColor(color.r, color.g, color.b, 1)
 	f.status:SetStatusBarColor(color.r, color.g, color.b, .7)
 
 	f.status:SetMinMaxValues(0, time)

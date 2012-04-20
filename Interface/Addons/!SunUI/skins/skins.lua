@@ -47,6 +47,6 @@ Delay:SetScript("OnEvent", function()
 	if DB.Nuke == true then
 		print("|cffFFD700SunUI提示您: 侦测到您正在使用|r|cff308014大脚|r|cffFFD700或者|r|cff308014魔盒|r,|cffFFD700触发|r|cffFF0000Nuke参数|r,|cffFFD700为了让您用的舒适所以插件|r|cffFF0000自我关闭|r.|cffFFD700如想使用本插件请|r|cffFF0000完全删除|r|cff308014大脚|r|cffFFD700或者|r|cff308014魔盒|r")
 	end
-	DEFAULT_CHAT_FRAME:AddMessage("|cffDDA0DDSun|r|cff44CCFFUI|r已加载，发布网址:\124cff7f7fffhttp://bbs.ngacn.cc/read.php?tid=4743077&_fp=1&_ff=200\124r")
+	DEFAULT_CHAT_FRAME:AddMessage("|cffDDA0DDSun|r|cff44CCFFUI|r已加载，详细设置请输入/sunui ,发布网址:\124cff7f7fffhttp://bbs.ngacn.cc/read.php?tid=4743077&_fp=1&_ff=200\124r")
 	MiniDB["uiScale"] = GetCVar("uiScale")
 end)

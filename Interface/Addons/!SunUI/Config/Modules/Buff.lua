@@ -11,7 +11,7 @@ function Module.LoadSettings()
 	local Default = {
 	["BuffDirection"] = 1,
 	["DebuffDirection"] = 1,
-	["IconSize"] = 24,
+	["IconSize"] = 28,
 	["IconPerRow"] = 16,
 	}
 	if not BuffDB then BuffDB = {} end

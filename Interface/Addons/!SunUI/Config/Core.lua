@@ -7,28 +7,7 @@ if DB.Nuke == true then return end
 function Module:SetDefault()
 	SlashCmdList.AutoSet()
 	CoreVersion = Version
-	-- 聊天频道职业染色
-	ToggleChatColorNamesByClassGroup(true, "SAY")
-	ToggleChatColorNamesByClassGroup(true, "EMOTE")
-	ToggleChatColorNamesByClassGroup(true, "YELL")
-	ToggleChatColorNamesByClassGroup(true, "GUILD")
-	ToggleChatColorNamesByClassGroup(true, "GUILD_OFFICER")
-	ToggleChatColorNamesByClassGroup(true, "OFFICER")
-	ToggleChatColorNamesByClassGroup(true, "GUILD_ACHIEVEMENT")
-	ToggleChatColorNamesByClassGroup(true, "ACHIEVEMENT")
-	ToggleChatColorNamesByClassGroup(true, "WHISPER")
-	ToggleChatColorNamesByClassGroup(true, "PARTY")
-	ToggleChatColorNamesByClassGroup(true, "PARTY_LEADER")
-	ToggleChatColorNamesByClassGroup(true, "RAID")
-	ToggleChatColorNamesByClassGroup(true, "RAID_LEADER")
-	ToggleChatColorNamesByClassGroup(true, "RAID_WARNING")
-	ToggleChatColorNamesByClassGroup(true, "BATTLEGROUND")
-	ToggleChatColorNamesByClassGroup(true, "BATTLEGROUND_LEADER")   
-	ToggleChatColorNamesByClassGroup(true, "CHANNEL1")
-	ToggleChatColorNamesByClassGroup(true, "CHANNEL2")
-	ToggleChatColorNamesByClassGroup(true, "CHANNEL3")
-	ToggleChatColorNamesByClassGroup(true, "CHANNEL4")
-	ToggleChatColorNamesByClassGroup(true, "CHANNEL5")
+	WelcomeDB = 1
 end
 
 MoveHandle = {}
@@ -123,12 +102,7 @@ function Module:OnEnable()
 			text = L["欢迎标语"],
 			button1 = OKAY,
 			OnAccept = function()
-				Module:SetDefault()
-				SetCVar("useUiScale", 1)
-				SetCVar("uiScale", 1)
-				SetCVar("cameraDistanceMax", 50)
-				SetCVar("cameraDistanceMaxFactor", 3.4)
-				ReloadUI()
+				Module:SetDefault()	
 			end,
 			timeout = 0,
 			whileDead = 1,

@@ -10,7 +10,7 @@ local Module = DB["Modules"]["MoveHandle"]
 function Module.LoadSettings()
 	local Default = {
 		["Buff"] = {"TOPRIGHT", "UIParent", "TOPRIGHT", -5, -5},
-		["Debuff"] = {"TOPRIGHT", "UIParent", "TOPRIGHT", -5, -95},
+		["Debuff"] = {"TOPRIGHT", "UIParent", "TOPRIGHT", -5, -110},
 		["Minimap"] = {"BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -5, 25},
 		["ShadowPet"] = {"BOTTOM","UIParent","BOTTOM", -316, 201},
 		["ClassCD"] = {"BOTTOMRIGHT","UIParent","BOTTOMRIGHT", -336, 130},

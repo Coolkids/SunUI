@@ -1,0 +1,9 @@
+﻿<!-- -->
+
+
+
+
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file = "Loot.lua"/>
+	<Script file = "roll.lua"/>
+</Ui>

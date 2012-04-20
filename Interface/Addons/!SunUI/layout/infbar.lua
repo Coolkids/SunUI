@@ -20,7 +20,11 @@ local Slots = {
 	[10] = {17, L["副手"], 1000}, 
 	[11] = {18, L["远程"], 1000}
 }
-
+local function AltUpdate(self)
+	if not self.hovered then return end
+	if IsAltKeyDown() and not self.altdown then self.altdown = true self:GetScript("OnEnter")(self)
+	elseif not IsAltKeyDown() and self.altdown then self.altdown = false self:GetScript("OnEnter")(self) end
+end
 -- BuildClock
 local function BuildClock()
 	local Clock = CreateFrame("Frame", nil, UIParent)
@@ -146,52 +150,54 @@ local function BuildMemory(Anchor)
 			self:SetStatusBarColor(r, g, b)
 			self.Timer = 0
 		end
+		AltUpdate(self)
 	end)
 	StatusBar:SetScript("OnEnter", function(self)
-		 
-		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
-		GameTooltip:ClearLines()
-		local TotalMemory, num = UpdateMemory()
-		local maxadd = 0
-		maxadd = #MemoryTable
-		if IsAltKeyDown() then
-				maxAddOns = #MemoryTable
-			else
-				maxAddOns = math.min(InfoPanelDB["MemNum"], #MemoryTable)
-		end
-		
-		GameTooltip:AddDoubleLine(L["总共内存使用"], S.FormatMemory(TotalMemory), 0.4, 0.78, 1, 0.84, 0.75, 0.65)
-		GameTooltip:AddLine(" ")
-		GameTooltip:AddDoubleLine("Name","Use")
-		local more = 0
-		for i = 1, maxAddOns do
-			if MemoryTable[i][4] then
-			if  MemoryTable[i][3] <= 102.4 then r, g, b = 0, 1, 0 -- 0 - 100
-				elseif  MemoryTable[i][3] <= 512 then r, g, b = 0.75, 1, 0 -- 100 - 512
-				elseif  MemoryTable[i][3] <= 1024 then r, g, b = 1, 1, 0 -- 512 - 1mb
-				elseif  MemoryTable[i][3] <= 2560 then r, g, b = 1, 0.75, 0 -- 1mb - 2.5mb
-				elseif  MemoryTable[i][3] <= 5120 then r, g, b = 1, 0.5, 0 -- 2.5mb - 5mb
+			self.hovered = true
+			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
+			GameTooltip:ClearLines()
+			local TotalMemory, num = UpdateMemory()
+			local maxadd = 0
+			local maxAddOns
+			maxadd = #MemoryTable
+			if IsAltKeyDown() then
+					maxAddOns = #MemoryTable
+				else
+					maxAddOns = math.min(InfoPanelDB["MemNum"], #MemoryTable)
 			end
-				GameTooltip:AddDoubleLine(MemoryTable[i][2], S.FormatMemory(MemoryTable[i][3]), 1, 1, 1, r, g, b)
-			end						
-		end
-		local moreMem = 0
-			if not IsAltKeyDown() then
-				for i = 1, GetNumAddOns() do
-					if  MemoryTable[i][3] then
-						moreMem = moreMem +  MemoryTable[i][3]
-					end
-				end
-				local mor = 0
-				mor = num - maxAddOns
-				GameTooltip:AddDoubleLine(format("%d %s (%s)",mor,L["Hidden"],L["Alt"]),S.FormatMemory(moreMem),.6,.8,1,.6,.8,1)
-			end
+			
+			GameTooltip:AddDoubleLine(L["总共内存使用"], S.FormatMemory(TotalMemory), 0.4, 0.78, 1, 0.84, 0.75, 0.65)
 			GameTooltip:AddLine(" ")
-			GameTooltip:AddDoubleLine(L["Default UI Memory Usage:"],S.FormatMemory(gcinfo() - TotalMemory),.6,.8,1,1,1,1)
-			GameTooltip:AddDoubleLine(L["Total Memory Usage:"],S.FormatMemory(collectgarbage'count'),.6,.8,1,1,1,1)
-		GameTooltip:Show()
+			GameTooltip:AddDoubleLine("Name","Use")
+			local more = 0
+			for i = 1, maxAddOns do
+				if MemoryTable[i][4] then
+				if  MemoryTable[i][3] <= 102.4 then r, g, b = 0, 1, 0 -- 0 - 100
+					elseif  MemoryTable[i][3] <= 512 then r, g, b = 0.75, 1, 0 -- 100 - 512
+					elseif  MemoryTable[i][3] <= 1024 then r, g, b = 1, 1, 0 -- 512 - 1mb
+					elseif  MemoryTable[i][3] <= 2560 then r, g, b = 1, 0.75, 0 -- 1mb - 2.5mb
+					elseif  MemoryTable[i][3] <= 5120 then r, g, b = 1, 0.5, 0 -- 2.5mb - 5mb
+				end
+					GameTooltip:AddDoubleLine(MemoryTable[i][2], S.FormatMemory(MemoryTable[i][3]), 1, 1, 1, r, g, b)
+				end						
+			end
+			local moreMem = 0
+				if not IsAltKeyDown() then
+					for i = 1, GetNumAddOns() do
+						if  MemoryTable[i][3] then
+							moreMem = moreMem +  MemoryTable[i][3]
+						end
+					end
+					local mor = 0
+					mor = num - maxAddOns
+					GameTooltip:AddDoubleLine(format("%d %s (%s)",mor,L["Hidden"],L["Alt"]),S.FormatMemory(moreMem),.6,.8,1,.6,.8,1)
+				end
+				GameTooltip:AddLine(" ")
+				GameTooltip:AddDoubleLine(L["Default UI Memory Usage:"],S.FormatMemory(gcinfo() - TotalMemory),.6,.8,1,1,1,1)
+				GameTooltip:AddDoubleLine(L["Total Memory Usage:"],S.FormatMemory(collectgarbage'count'),.6,.8,1,1,1,1)
+				GameTooltip:Show()
 	end)
-	StatusBar:SetScript("OnLeave", function() GameTooltip:Hide() end)
+	StatusBar:SetScript("OnLeave", function(self) GameTooltip:Hide() self.hovered = false  end)
 	return StatusBar
 end
 -- BuildPing

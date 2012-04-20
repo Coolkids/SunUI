@@ -116,8 +116,22 @@ SlashCmdList["VehicleSeatIndicatorLOCK"] = VSLOCK
 --隐藏团队报警
 --RaidBossEmoteFrame:UnregisterEvent("RAID_BOSS_EMOTE")  --Disable Boss Emote Frame
 --RaidBossEmoteFrame:UnregisterEvent("RAID_BOSS_WHISPER") --Disable Boss Whisper Frame
+--分解不必再点确定
 
-
+if C["Disenchat"] then
+	local aotuClick = CreateFrame("Frame")
+	aotuClick:RegisterEvent("CONFIRM_DISENCHANT_ROLL")
+	aotuClick:RegisterEvent("CONFIRM_LOOT_ROLL")
+	aotuClick:RegisterEvent("LOOT_BIND_CONFIRM")      
+	aotuClick:SetScript("OnEvent", function(self, event, ...)
+	   for i = 1, STATICPOPUP_NUMDIALOGS do
+		  local frame = _G["StaticPopup"..i]
+		  if (frame.which == "CONFIRM_LOOT_ROLL" or frame.which == "LOOT_BIND" or frame.which == "LOOT_BIND_CONFIRM") and frame:IsVisible() then 
+		  StaticPopup_OnClick(frame, 1) 
+		  end
+	   end
+	end)
+end
 
 
 ---------------- > SetupUI
@@ -168,26 +182,6 @@ hooksecurefunc("MerchantItemButton_OnModifiedClick", function(self, button)
     end
 end)
 
----------------- > automatic UI Scale 
-if C["UIscale"] then
-	if C["LockUIscale"] then
-		local scalefix = CreateFrame("Frame")
-		scalefix:RegisterEvent("PLAYER_LOGIN")
-		scalefix:SetScript("OnEvent", function()
-			SetCVar("useUiScale", 1)
-			SetCVar("uiScale", C["uiScale"])
-		end)
-	end
-	else
-	if C["AutoUIscale"] then
-		local scalefix = CreateFrame("Frame")
-		scalefix:RegisterEvent("PLAYER_LOGIN")
-		scalefix:SetScript("OnEvent", function()
-			SetCVar("useUiScale", 1)
-			SetCVar("uiScale", 768/string.match(({GetScreenResolutions()})[GetCurrentResolution()], "%d+x(%d+)"))
-			end)
-	end
-end
 --隐藏团队
 if C["HideRaid"] then
 CompactRaidFrameManager:UnregisterAllEvents()

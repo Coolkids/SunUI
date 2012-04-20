@@ -183,6 +183,7 @@ hooksecurefunc("DebuffButton_UpdateAnchors", function(buttonName, i)
 		end
 	end
 end)
+--时间格式修改
  HOUR_ONELETTER_ABBR = "%dh";
  DAY_ONELETTER_ABBR = "%dd";
  MINUTE_ONELETTER_ABBR = "%dm";

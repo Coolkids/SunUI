@@ -15,11 +15,15 @@ text:SetShadowOffset(1.25, -1.25)
 text:SetShadowColor(0, 0, 0, 0.4)
 text:Point("BOTTOMLEFT", BottomLeftBar, "BOTTOMLEFT", 15, -8)
 Stat:SetParent(BottomLeftBar)
-
-local function Update(self)	
-	local mail = HasNewMail()
-	if mail == 1 then text:SetText(L["新邮件"]) else text:SetText(L["无邮件"]) end
-	self:SetAllPoints(text)
+local int = 5
+local function Update(self, t)
+	int = int - t
+	if int < 0 then
+		local mail = HasNewMail()
+		if mail == 1 then text:SetText(L["新邮件"]) else text:SetText(L["无邮件"]) end
+		self:SetAllPoints(text)
+		int = 5
+	end
 end
 
 local function ShowTooltip(self)
@@ -48,11 +52,6 @@ end
 Stat:SetScript("OnEnter", function() ShowTooltip(Stat) end)
 Stat:SetScript("OnLeave", function() GameTooltip:Hide() end)
 Stat:SetScript("OnUpdate", Update)
-Stat:SetScript("OnEvent", Update)
-Update(Stat)
 
-Stat:RegisterEvent("MAIL_CLOSED")
-Stat:RegisterEvent("MAIL_INBOX_UPDATE")
-Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
-Stat:RegisterEvent("MAIL_SHOW")
+Update(Stat, 20)
 end
