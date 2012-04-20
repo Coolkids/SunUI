@@ -3,7 +3,7 @@ if DB.Nuke == true then return end
 local AB = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ActionStyle", "AceEvent-3.0")
 function AB:OnInitialize()
 	if ActionBarDB.Style == 2 then return end
-	local Font, FontSize, ButtonSize, PetBarSacle = DB.Font, ActionBarDB["FontSize"], ActionBarDB["ButtonSize"], ActionBarDB["PetBarSacle"]
+	local Font, FontSize, MFontSize, ButtonSize, PetBarSacle = DB.Font, ActionBarDB["FontSize"], ActionBarDB["MFontSize"], ActionBarDB["ButtonSize"], ActionBarDB["PetBarSacle"]
 	local HideHotKey, HideMacroName = ActionBarDB["HideHotKey"], ActionBarDB["HideMacroName"]
 	
 	
@@ -68,7 +68,7 @@ function AB:OnInitialize()
 			Count:ClearAllPoints()
 			Count:SetJustifyH("RIGHT")
 			Count:SetPoint("BOTTOMRIGHT", 3, 0)
-			Count:SetFont(Font, FontSize, "OUTLINE")
+			Count:SetFont(Font, MFontSize, "OUTLINE")
 		end
 
 		if _G[name..'FloatingBG'] then
@@ -80,7 +80,7 @@ function AB:OnInitialize()
 		if Btname then	
 			Btname:SetJustifyH("CENTER")
 			Btname:SetPoint("BOTTOMLEFT", -3, 1)
-			Btname:SetFont(Font, FontSize, "OUTLINE")
+			Btname:SetFont(Font, MFontSize, "OUTLINE")
 			if HideMacroName then
 				Btname:SetText("")
 				Btname:Hide()
