@@ -2,7 +2,9 @@
 local S, C, L, DB = unpack(select(2, ...))
 if DB.Nuke == true then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Welcome", "AceEvent-3.0")
-
+function Module.ResetToDefault()
+	wipe(WelcomeDB)
+end
 local function OnEvent_PLAYER_ENTERING_WORLD()
 	if WelcomeDB ~= 1 and CoreVersion ~= nil then
 		StaticPopupDialogs["SetuiScale"] = {
