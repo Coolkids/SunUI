@@ -413,7 +413,7 @@ function stAddonManager:LoadWindow()
 		end
 		
 		if i == 1 then
-			button:SetPoint("TOPLEFT", scrollFrame.Anchor, "TOPLEFT", 5, -5)
+			button:Point("TOPLEFT", scrollFrame.Anchor, "TOPLEFT", 7, -5)
 		else
 			button:SetPoint("TOP", stAddonManager.Buttons[i-1], "BOTTOM", 0, -3)
 		end

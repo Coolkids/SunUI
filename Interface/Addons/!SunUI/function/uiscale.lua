@@ -7,7 +7,7 @@ local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("SunUI BaseDat
 --  自动设置聊天框体和UI缩放
 local function SetChatFrame()
 	FCF_SetLocked(ChatFrame1, nil)
-	FCF_SetChatWindowFontSize(self, ChatFrame1, 14) 
+	FCF_SetChatWindowFontSize(self, ChatFrame1, 15) 
 	ChatFrame1:ClearAllPoints()
 	ChatFrame1:SetPoint("BOTTOMLEFT", 5, 25)
 	ChatFrame1:SetWidth(327)

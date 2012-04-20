@@ -79,7 +79,7 @@ function AB:OnInitialize()
 
 		if Btname then	
 			Btname:SetJustifyH("CENTER")
-			Btname:SetPoint("BOTTOMLEFT", -5, 1)
+			Btname:SetPoint("BOTTOMLEFT", -3, 1)
 			Btname:SetFont(Font, FontSize, "OUTLINE")
 			if HideMacroName then
 				Btname:SetText("")

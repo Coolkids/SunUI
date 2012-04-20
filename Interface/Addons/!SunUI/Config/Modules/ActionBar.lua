@@ -9,8 +9,8 @@ local Module = DB["Modules"]["ActionBar"]
 -- LoadSettings
 function Module.LoadSettings()
 	local Default = {
-	["FontSize"] = 11,
-	["MFontSize"] = 10,
+	["FontSize"] = 14,
+	["MFontSize"] = 12,
 	["PetBarSacle"] = 1,
 	["ButtonSpacing"] = 4,
 	["CooldownFlashSize"] = 48,
