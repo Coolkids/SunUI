@@ -277,7 +277,6 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 		for i=1, items do
 			local slot = addon.slots[i] or createSlot(i)
 			local texture, item, quantity, quality, locked = GetLootSlotInfo(i)
-			local color
 			if quality then
 				local color = ITEM_QUALITY_COLORS[quality]
 			end
