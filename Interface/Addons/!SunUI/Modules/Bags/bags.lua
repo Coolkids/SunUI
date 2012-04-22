@@ -4,7 +4,26 @@ local config = {
 	spacing = 2,
 	bpr = 10
 }
-
+--[[ ContainerFrame1:Hide()
+ContainerFrame1:UnregisterAllEvents()
+ContainerFrame1.Show = function() end
+ContainerFrame2:Hide()
+ContainerFrame2:UnregisterAllEvents()
+ContainerFrame2.Show = function() end
+ContainerFrame3:Hide()
+ContainerFrame3:UnregisterAllEvents()
+ContainerFrame3.Show = function() end
+ContainerFrame4:Hide()
+ContainerFrame4:UnregisterAllEvents()
+ContainerFrame4.Show = function() end
+ContainerFrame5:Hide()
+ContainerFrame5:UnregisterAllEvents()
+ContainerFrame5.Show = function() end ]]
+ContainerFrame1:SetSize(0,0)
+ContainerFrame2:SetSize(0,0)
+ContainerFrame3:SetSize(0,0)
+ContainerFrame4:SetSize(0,0)
+ContainerFrame5:SetSize(0,0)
 local toggle
 local togglebag
 
