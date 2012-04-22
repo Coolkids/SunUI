@@ -724,15 +724,16 @@ C = UnitFrameDB
 	if class ~= "PRIEST" then return end
 	local color = oUF.colors.power["SOUL_SHARDS"]
 	local bars = CreateFrame("Frame", nil, f)
-	bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
-    bars:SetSize((f.width-4)/3, f.height/3)
+	bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, -1.5)
+	bars:SetFrameLevel(16)
+    bars:SetSize((f.width-4)/3, f.height/3/2)
             for i = 1, 3 do
                 bars[i] =CreateFrame("StatusBar", nil, bars)
 				bars[i]:SetStatusBarTexture(DB.Statusbar)
 				bars[i]:GetStatusBarTexture():SetHorizTile(false)
-				bars[i]:SetSize((f.width-4)/3, f.height/3)
+				bars[i]:SetSize((f.width-4)/3, f.height/3/2)
 				 if (i == 1) then
-					bars[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+					bars[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, -1.5)
 				else
 					bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 2, 0)
 				end
@@ -893,9 +894,9 @@ end
   lib.gen_specificpower = function(f, unit)
    if class ~= "DRUID" and class ~= "SHAMAN" then return end
 	local bars = CreateFrame("Frame", nil, f)
-	bars:SetFrameLevel(f:GetFrameLevel()+1)
 	bars:SetSize((f.width-10)/3, f.height/3/2)
-	bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, -3)
+	bars:SetFrameLevel(16)
+	bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, -1.5)
     for i = 1, 3 do
         bars[i] =CreateFrame("StatusBar", nil, bars)
 		bars[i]:SetStatusBarTexture(DB.Statusbar)
@@ -985,14 +986,15 @@ end
 	if class ~= "DRUID" then return end
 	local bars = CreateFrame("Frame", nil, f)
 	bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
-    bars:SetSize((f.width-4)/3, f.height/3)
+	bars:SetFrameLevel(16)
+    bars:SetSize((f.width-4)/3, f.height/3/2)
             for i = 1, 3 do
                 bars[i] =CreateFrame("StatusBar", nil, bars)
 				bars[i]:SetStatusBarTexture(DB.Statusbar)
 				bars[i]:GetStatusBarTexture():SetHorizTile(false)
-				bars[i]:SetSize((f.width-4)/3, f.height/3)
+				bars[i]:SetSize((f.width-4)/3, f.height/3/2)
 				 if (i == 1) then
-					bars[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+					bars[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, -1.5)
 				else
 					bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 2, 0)
 				end

@@ -238,11 +238,7 @@ function SkinEditBox(frame)
 	frame:SetFrameStrata("HIGH")
 	frame:SetFrameLevel(2)
 	frame:SetWidth(200)
-	
-	
-	local framebg = CreateFrame('frame', frame, frame)
-	framebg:SetPoint("TOPLEFT", frame, "TOPLEFT", -4, 0)
-	framebg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 0, 0)
+
 end
 
 SkinEditBox(BagItemSearchBox)

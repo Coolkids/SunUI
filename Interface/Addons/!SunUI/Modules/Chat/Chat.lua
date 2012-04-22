@@ -26,7 +26,7 @@ local TimeStampsCopy = true					-- 时间戳
 	  local cf = _G['ChatFrame'..i]
 	  cf:SetFading(true)  --渐隐
 	  if cf then 
-		cf:SetFont(NAMEPLATE_FONT, 10*S.Scale(1), "OUTLINE") 
+		cf:SetFont(NAMEPLATE_FONT, 10*S.Scale(1), "THINOUTLINE") 
 		cf:SetFrameStrata("LOW")
 		cf:SetFrameLevel(2)
 		cf:CreateShadow("Background")
@@ -35,7 +35,7 @@ local TimeStampsCopy = true					-- 时间戳
 	  if tab then
 		tab:GetFontString():SetFont(NAMEPLATE_FONT, 11*S.Scale(1), "OUTLINE")
 		--fix for color and alpha of undocked frames
-		tab:GetFontString():SetTextColor(0,0.3,1)
+		tab:GetFontString():SetTextColor(0,0,1)
 		tab:SetAlpha(1)
 	  end
 	end
