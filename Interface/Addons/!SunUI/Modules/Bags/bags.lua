@@ -1,30 +1,16 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
+ 
 local config = {
+	enable = 1,
+	spacing = 4,
+	bpr = 10,
 	size = 30,
-	spacing = 2,
-	bpr = 10
+	scale = 1,
 }
---[[ ContainerFrame1:Hide()
-ContainerFrame1:UnregisterAllEvents()
-ContainerFrame1.Show = function() end
-ContainerFrame2:Hide()
-ContainerFrame2:UnregisterAllEvents()
-ContainerFrame2.Show = function() end
-ContainerFrame3:Hide()
-ContainerFrame3:UnregisterAllEvents()
-ContainerFrame3.Show = function() end
-ContainerFrame4:Hide()
-ContainerFrame4:UnregisterAllEvents()
-ContainerFrame4.Show = function() end
-ContainerFrame5:Hide()
-ContainerFrame5:UnregisterAllEvents()
-ContainerFrame5.Show = function() end ]]
-ContainerFrame1:SetSize(0,0)
-ContainerFrame2:SetSize(0,0)
-ContainerFrame3:SetSize(0,0)
-ContainerFrame4:SetSize(0,0)
-ContainerFrame5:SetSize(0,0)
-local toggle
+
+if (config.enable ~= 1) then return end
+
+local togglemain, togglebank = 0,0
 local togglebag
 
 local bags = {
@@ -47,6 +33,7 @@ local bags = {
 
 function SetUp(framen, ...)
 	local frame = CreateFrame("Frame", "bBag_"..framen, UIParent)
+	frame:SetScale(config.scale)
 	frame:SetWidth(((config.size+config.spacing)*config.bpr)+20-config.spacing)
 	frame:SetPoint(...)
 	frame:SetFrameStrata("HIGH")
@@ -55,8 +42,7 @@ function SetUp(framen, ...)
 	frame:SetScript("OnDragStart", function(self) self:StartMoving() end)
 	frame:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
 	frame:Hide()
-	--frame:CreateBD()
-	 S.SetBD(frame)
+	S.SetBD(frame)
 	frame:SetClampedToScreen(true)
     frame:SetMovable(true)
     frame:SetUserPlaced(true)
@@ -128,6 +114,7 @@ function SetUp(framen, ...)
 	closet:SetTextColor(.4,.4,.4)
 	close:SetScript('OnMouseUp', function()
 		CloseAllBags()
+		CloseBankBagFrames() 
 	end)
 	
 	if (framen == "bag") then
@@ -145,12 +132,10 @@ function SetUp(framen, ...)
 			end
 			count.Show = function() end
 			count:Hide()
-
 			icon:SetTexCoord(.1, .9, .1, .9)
 			f:SetNormalTexture("")
 			f:SetPushedTexture("")
 			f:SetCheckedTexture("")
-			--f:CreateBorder()
 			lastbuttonbag = f
 			_G["bBag_"..framen.."_bags"]:SetWidth((24+config.spacing)*(getn(bags.bag))+14)
 			_G["bBag_"..framen.."_bags"]:SetHeight(40)
@@ -170,12 +155,10 @@ function SetUp(framen, ...)
 			end
 			count.Show = function() end
 			count:Hide()
-
 			icon:SetTexCoord(.06, .94, .06, .94)
 			f:SetNormalTexture("")
 			f:SetPushedTexture("")
 			f:SetHighlightTexture("")
-			--f:CreateBorder()
 			lastbuttonbank = f
 			_G["bBag_"..framen.."_bags"]:SetWidth((24+config.spacing)*(getn(bags.bank))+14)
 			_G["bBag_"..framen.."_bags"]:SetHeight(40)
@@ -184,7 +167,7 @@ function SetUp(framen, ...)
 end
 
 local function skin(index, frame)
-    for i = 1, index do
+      for i = 1, index do
         local bag = _G[frame..i]
 		local f = _G[bag:GetName().."IconTexture"]
         bag:SetNormalTexture("")
@@ -193,44 +176,41 @@ local function skin(index, frame)
         f:Point("TOPLEFT", bag, 1.5, -1.5)
 		f:Point("BOTTOMRIGHT", bag, -1.5, 1.5)
         f:SetTexCoord(.1, .9, .1, .9)
+		bag.border = bag
     end
 end
-
-ContainerFrame1Item1:SetScript("OnShow", function() 
-    toggle = 1
-end)
-ContainerFrame1Item1:SetScript("OnHide", function() 
-    toggle = 0
-end)
 
 for i = 1, 12 do
 	_G["ContainerFrame"..i..'CloseButton']:Hide()
 	_G["ContainerFrame"..i..'PortraitButton']:Hide()
 	_G["ContainerFrame"..i]:EnableMouse(false)
-	_G["ContainerFrame"..i]:HookScript("OnHide", function(self) if toggle == 1 then self:Show() else self:Hide() end end)
 	skin(36, "ContainerFrame"..i.."Item")
 	for p = 1, 7 do
 		select(p, _G["ContainerFrame"..i]:GetRegions()):SetAlpha(0)
     end
 end
 
-ContainerFrame1Item1:SetScript("OnHide", function() _G["bBag_bag"]:Hide()end)
-ContainerFrame1Item1:SetScript("OnShow", function() _G["bBag_bag"]:Show()end)
+ContainerFrame1Item1:SetScript("OnHide", function() 
+	_G["bBag_bag"]:Hide() 
+	togglemain = 0 
+end)
 BankFrameItem1:SetScript("OnHide", function() 
-	for i = 5, 12 do
-		ToggleBag(i) 
-	end
 	_G["bBag_bank"]:Hide()
+	togglebank = 0
 end)
 BankFrameItem1:SetScript("OnShow", function() 
-	for i = 5, 12 do
-		ToggleBag(i) 
-	end
 	_G["bBag_bank"]:Show()
 end)
+BankPortraitTexture:Hide()
+for a = 1, 5 do
+	select(a, BankFrame:GetRegions()):Hide()
+end
+BankFrame:EnableMouse(0)
+BankCloseButton:Hide()
+BankFrame:SetSize(0,0)
 
 SetUp("bag", "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -10, 10)
-SetUp("bank", "TOPLEFT", UIParent, "TOPLEFT", 20, -20)
+SetUp("bank", "TOPLEFT", UIParent, "TOPLEFT", 10, -134)
 skin(28, "BankFrameItem")
 skin(7, "BankFrameBag")
 
@@ -238,6 +218,11 @@ BagItemSearchBox:SetScript("OnUpdate", function()
 	BagItemSearchBox:ClearAllPoints()
 	BagItemSearchBox:SetSize(4.5*(config.spacing+config.size),20)
 	BagItemSearchBox:SetPoint("LEFT", ContainerFrame1MoneyFrame, "RIGHT", 2, 0)
+end)
+BankItemSearchBox:SetScript("OnUpdate", function()
+	BankItemSearchBox:ClearAllPoints()
+	BagItemSearchBox:SetSize(4.5*(config.spacing+config.size),20)
+	BankItemSearchBox:SetPoint("LEFT", ContainerFrame2MoneyFrame, "RIGHT", 2, 0)
 end)
 
 function SkinEditBox(frame)
@@ -248,11 +233,18 @@ function SkinEditBox(frame)
 	
 	frame:SetFrameStrata("HIGH")
 	frame:SetFrameLevel(2)
-	frame:SetWidth(200) 
+	frame:SetWidth(200)
+	
+	
+	local framebg = CreateFrame('frame', frame, frame)
+	framebg:SetPoint("TOPLEFT", frame, "TOPLEFT", -4, 0)
+	framebg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 0, 0)
 end
 
 SkinEditBox(BagItemSearchBox)
+SkinEditBox(BankItemSearchBox)
 
+-- Centralize and rewrite bag rendering function
 function ContainerFrame_GenerateFrame(frame, size, id)
 	frame.size = size;
 	for i=1, size, 1 do
@@ -262,7 +254,7 @@ function ContainerFrame_GenerateFrame(frame, size, id)
 		itemButton:Show();
 	end
 	frame:SetID(id);
-	frame:Show();
+	frame:Show()
 	updateContainerFrameAnchors();
 	
 	if ( id < 5 ) then
@@ -271,6 +263,8 @@ function ContainerFrame_GenerateFrame(frame, size, id)
 			local slots = GetContainerNumSlots(bag-1)
 			for item = slots, 1, -1 do
 				local itemframes = _G["ContainerFrame"..bag.."Item"..item]
+				local questTexture = _G["ContainerFrame"..bag.."Item"..item.."IconQuestTexture"]
+				S.Kill(questTexture)
 				itemframes:ClearAllPoints()
 				itemframes:SetWidth(config.size)
 				itemframes:SetHeight(config.size)
@@ -304,6 +298,8 @@ function ContainerFrame_GenerateFrame(frame, size, id)
 		local numrows, lastrowbutton, numbuttons, lastbutton = 0, ContainerFrame1Item1, 1, ContainerFrame1Item1
 		for bank = 1, 28 do
 			local bankitems = _G["BankFrameItem"..bank]
+			local questTexture = _G["BankFrameItem"..bank.."IconQuestTexture"]
+			S.Kill(questTexture)
 			bankitems:ClearAllPoints()
 			bankitems:SetWidth(config.size)
 			bankitems:SetHeight(config.size)
@@ -314,6 +310,7 @@ function ContainerFrame_GenerateFrame(frame, size, id)
 			ContainerFrame2MoneyFrame:SetPoint("TOPLEFT", _G["bBag_bank"], "TOPLEFT", 6, -10)
 			ContainerFrame2MoneyFrame:SetFrameStrata("HIGH")
 			ContainerFrame2MoneyFrame:SetFrameLevel(2)
+			ContainerFrame2MoneyFrame:SetParent(_G["bBag_bank"])
 			BankFrameMoneyFrame:Hide()
 			if bank==1 then
 				bankitems:SetPoint("TOPLEFT", _G["bBag_bank"], "TOPLEFT", 10, -30)
@@ -356,5 +353,42 @@ function ContainerFrame_GenerateFrame(frame, size, id)
 			end
 		end
 		_G["bBag_bank"]:SetHeight(((config.size+config.spacing)*(numrows+1)+40)-config.spacing)
+	end
+end
+function updateContainerFrameAnchors() end
+
+-- Centralize and rewrite bag opening functions
+function OpenAllBags(frame) ToggleAllBags() end
+function ToggleAllBags()
+	if (togglemain == 1) then
+		if(not BankFrame:IsShown()) then 
+			togglemain = 0
+			CloseBackpack()
+			_G["bBag_bag"]:Hide()
+			for i=1, NUM_BAG_FRAMES, 1 do CloseBag(i) end
+		end
+	else
+		togglemain = 1
+		OpenBackpack()
+		_G["bBag_bag"]:Show()
+		for i=1, NUM_BAG_FRAMES, 1 do OpenBag(i) end
+	end
+
+	if( BankFrame:IsShown() ) then
+		if (togglebank == 1) then
+			togglebank = 0
+			_G["bBag_bank"]:Hide()
+			BankFrame:Hide()
+			for i=NUM_BAG_FRAMES+1, NUM_CONTAINER_FRAMES, 1 do
+				if ( IsBagOpen(i) ) then CloseBag(i) end
+			end
+		else
+			togglebank = 1
+			_G["bBag_bank"]:Show()
+			BankFrame:Show()
+			for i=1, NUM_CONTAINER_FRAMES, 1 do
+				if (not IsBagOpen(i)) then OpenBag(i) end
+			end
+		end
 	end
 end
