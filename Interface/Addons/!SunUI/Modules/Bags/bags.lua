@@ -4,6 +4,7 @@ local config = {
 	enable = 1,
 	spacing = 4,
 	bpr = 10,
+	bapr = 15,
 	size = 30,
 	scale = 1,
 }
@@ -34,7 +35,11 @@ local bags = {
 function SetUp(framen, ...)
 	local frame = CreateFrame("Frame", "bBag_"..framen, UIParent)
 	frame:SetScale(config.scale)
-	frame:SetWidth(((config.size+config.spacing)*config.bpr)+20-config.spacing)
+	if framen == "bag" then 
+		frame:SetWidth(((config.size+config.spacing)*config.bpr)+20-config.spacing)
+	else
+		frame:SetWidth(((config.size+config.spacing)*config.bapr)+20-config.spacing)
+	end
 	frame:SetPoint(...)
 	frame:SetFrameStrata("HIGH")
 	frame:SetFrameLevel(1)
@@ -297,8 +302,6 @@ function ContainerFrame_GenerateFrame(frame, size, id)
 		local numrows, lastrowbutton, numbuttons, lastbutton = 0, ContainerFrame1Item1, 1, ContainerFrame1Item1
 		for bank = 1, 28 do
 			local bankitems = _G["BankFrameItem"..bank]
-			--local questTexture = _G["BankFrameItem"..bank.."IconQuestTexture"]
-			--S.Kill(questTexture)	
 			bankitems:ClearAllPoints()
 			bankitems:SetWidth(config.size)
 			bankitems:SetHeight(config.size)
@@ -315,7 +318,7 @@ function ContainerFrame_GenerateFrame(frame, size, id)
 				bankitems:SetPoint("TOPLEFT", _G["bBag_bank"], "TOPLEFT", 10, -30)
 				lastrowbutton = bankitems
 				lastbutton = bankitems
-			elseif numbuttons==config.bpr then
+			elseif numbuttons==config.bapr then
 				bankitems:SetPoint("TOPRIGHT", lastrowbutton, "TOPRIGHT", 0, -(config.spacing+config.size))
 				bankitems:SetPoint("BOTTOMLEFT", lastrowbutton, "BOTTOMLEFT", 0, -(config.spacing+config.size))
 				lastrowbutton = bankitems
@@ -332,14 +335,12 @@ function ContainerFrame_GenerateFrame(frame, size, id)
 			local slots = GetContainerNumSlots(bag-1)
 			for item = slots, 1, -1 do
 				local itemframes = _G["ContainerFrame"..bag.."Item"..item]
-				--local questTexture = _G["ContainerFrame"..bag.."Item"..item.."IconQuestTexture"]
-				--S.Kill(questTexture)	
 				itemframes:ClearAllPoints()
 				itemframes:SetWidth(config.size)
 				itemframes:SetHeight(config.size)
 				itemframes:SetFrameStrata("HIGH")
 				itemframes:SetFrameLevel(2)
-				if numbuttons==config.bpr then
+				if numbuttons==config.bapr then
 					itemframes:SetPoint("TOPRIGHT", lastrowbutton, "TOPRIGHT", 0, -(config.spacing+config.size))
 					itemframes:SetPoint("BOTTOMLEFT", lastrowbutton, "BOTTOMLEFT", 0, -(config.spacing+config.size))
 					lastrowbutton = itemframes
