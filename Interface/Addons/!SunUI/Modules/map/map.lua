@@ -136,6 +136,7 @@ w:RegisterEvent("PLAYER_REGEN_ENABLED")
 -- for the love of GOD do not change values in this function
 local function m_MapShrink()
 	if not w.bg then w.bg = CreateFrame("Frame", nil, WorldMapButton) end
+	if w.bg then w.bg:Show() end
 	w.bg:SetParent("WorldMapDetailFrame")
 	w.bg:SetFrameStrata("MEDIUM")
 	w.bg:SetFrameLevel(50)
@@ -217,6 +218,14 @@ local function m_MapEnlarge()
 	WorldMapShowDropDown:ClearAllPoints()
 	WorldMapShowDropDown:SetPoint("LEFT", WorldMapShowDigSites, "RIGHT",115,0)
 	UIPanelWindows["WorldMapFrame"].area = "center"
+	WorldMapFrameMiniBorderLeft:SetAlpha(0)
+	WorldMapFrameMiniBorderRight:SetAlpha(0)
+	WorldMapFrameCloseButton:ClearAllPoints()
+	WorldMapFrameCloseButton:SetPoint("TOPRIGHT", WorldMapButton, "TOPRIGHT", 3, 3)
+	WorldMapFrameCloseButton:SetFrameStrata("HIGH")
+	WorldMapFrameSizeDownButton:ClearAllPoints()
+	WorldMapFrameSizeDownButton:SetPoint("TOPRIGHT", WorldMapButton, "TOPRIGHT", 3, -18)
+	WorldMapFrameSizeDownButton:SetFrameStrata("HIGH")
 	WorldMapFrame:SetAttribute("UIPanelLayout-defined", nil)
 	WorldMapFrameTitle:ClearAllPoints()
 	WorldMapFrameTitle:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, 9, 5)
