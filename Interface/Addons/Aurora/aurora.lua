@@ -4193,7 +4193,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			num:ClearAllPoints()
 			num:SetPoint("RIGHT", _G["PlayerTalentFramePanel"..i.."HeaderBackground"], "RIGHT", -40, 0)
-			num:SetFont("FONTS\\FRIZQT__.TTF", 12)
+			num:SetFont(DB.Font, 12)
 			num:SetJustifyH("RIGHT")
 
 			panel.bg = CreateFrame("Frame", nil, panel)
@@ -4751,7 +4751,7 @@ Delay:SetScript("OnEvent", function()
 
 		S.CreateBD(FriendsTooltip)
 	end
-	if not(IsAddOnLoaded("MetaMap") or IsAddOnLoaded("m_Map") or IsAddOnLoaded("Mapster")) then
+	if not(IsAddOnLoaded("MetaMap") or IsAddOnLoaded("m_Map") or IsAddOnLoaded("Mapster") or IsAddOnLoaded("!SunUI")) then
 		WorldMapFrameMiniBorderLeft:SetAlpha(0)
 		WorldMapFrameMiniBorderRight:SetAlpha(0)
 
@@ -4780,7 +4780,7 @@ Delay:SetScript("OnEvent", function()
 			WorldMapFrameTitle:ClearAllPoints()
 			WorldMapFrameTitle:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, 9, 5)
 			WorldMapFrameTitle:SetParent(frame)
-			WorldMapFrameTitle:SetFont("fonts\\FRIZQT__.TTF", 18, "OUTLINE")
+			WorldMapFrameTitle:SetFont(DB.Font, 18, "OUTLINE")
 			WorldMapFrameTitle:SetShadowOffset(0, 0)
 			WorldMapFrameTitle:SetTextColor(1, 1, 1)
 			WorldMapQuestShowObjectives:SetParent(frame)
@@ -4788,19 +4788,19 @@ Delay:SetScript("OnEvent", function()
 			WorldMapQuestShowObjectives:SetPoint("BOTTOMRIGHT", WorldMapButton, "BOTTOMRIGHT")
 			WorldMapQuestShowObjectivesText:ClearAllPoints()
 			WorldMapQuestShowObjectivesText:SetPoint("RIGHT", WorldMapQuestShowObjectives, "LEFT", -4, 1)
-			WorldMapQuestShowObjectivesText:SetFont("fonts\\FRIZQT__.TTF", 18, "OUTLINE")
+			WorldMapQuestShowObjectivesText:SetFont(DB.Font, 18, "OUTLINE")
 			WorldMapQuestShowObjectivesText:SetShadowOffset(0, 0)
 			WorldMapQuestShowObjectivesText:SetTextColor(1, 1, 1)
 			WorldMapTrackQuest:SetParent(frame)
 			WorldMapTrackQuest:ClearAllPoints()
 			WorldMapTrackQuest:SetPoint("TOPLEFT", WorldMapDetailFrame, 9, -5)
-			WorldMapTrackQuestText:SetFont("fonts\\FRIZQT__.TTF", 18, "OUTLINE")
+			WorldMapTrackQuestText:SetFont(DB.Font, 18, "OUTLINE")
 			WorldMapTrackQuestText:SetShadowOffset(0, 0)
 			WorldMapTrackQuestText:SetTextColor(1, 1, 1)
 			WorldMapShowDigSites:SetParent(frame)
 			WorldMapShowDigSites:ClearAllPoints()
 			WorldMapShowDigSites:SetPoint("BOTTOMRIGHT", WorldMapButton, "BOTTOMRIGHT", 0, 19)
-			WorldMapShowDigSitesText:SetFont("fonts\\FRIZQT__.TTF", 18, "OUTLINE")
+			WorldMapShowDigSitesText:SetFont(DB.Font, 18, "OUTLINE")
 			WorldMapShowDigSitesText:SetShadowOffset(0, 0)
 			WorldMapShowDigSitesText:ClearAllPoints()
 			WorldMapShowDigSitesText:SetPoint("RIGHT",WorldMapShowDigSites,"LEFT",-4,1)
@@ -4816,7 +4816,7 @@ Delay:SetScript("OnEvent", function()
 		F.ReskinCheck(WorldMapTrackQuest)
 	end
 
-	if not(IsAddOnLoaded("Baggins") or IsAddOnLoaded("Stuffing") or IsAddOnLoaded("Combuctor") or IsAddOnLoaded("cargBags") or IsAddOnLoaded("famBags") or IsAddOnLoaded("ArkInventory") or IsAddOnLoaded("Bagnon")) then
+	if not(IsAddOnLoaded("Baggins") or IsAddOnLoaded("Stuffing") or IsAddOnLoaded("Combuctor") or IsAddOnLoaded("cargBags") or IsAddOnLoaded("famBags") or IsAddOnLoaded("ArkInventory") or IsAddOnLoaded("Bagnon") or IsAddOnLoaded("!SunUI")) then
 		for i = 1, 12 do
 			local con = _G["ContainerFrame"..i]
 
