@@ -279,6 +279,9 @@ function S.SetBD(f, x, y, x2, y2)
 	bg:SetFrameLevel(0)
 	CreateBD(bg)
 	CreateSD(bg, 6, 0, 0, 0, 1, 0)
+	f:HookScript("OnShow", function()
+		bg:SetFrameLevel(0)
+	end)
 	f.ssb = bg
 end
 S.ReskinClose = function(f, a1, p, a2, x, y)
@@ -512,7 +515,7 @@ local function CreateShadow(f, t, offset, thickness, texture)
 	
 	local borderr, borderg, borderb, bordera = 0, 0, 0, 1
 	local backdropr, backdropg, backdropb, backdropa =  .05, .05, .05, .9
-	
+	local frameLevel = f:GetFrameLevel() > 1 and f:GetFrameLevel() or 1
 	if t == "Background" then
 		backdropa = 0.6
 	elseif t == "UnitFrame" then 
@@ -522,7 +525,7 @@ local function CreateShadow(f, t, offset, thickness, texture)
 	end
 	
 	local border = CreateFrame("Frame", nil, f)
-	border:SetFrameLevel(1)
+	border:SetFrameLevel(frameLevel)
 	border:Point("TOPLEFT", -1, 1)
 	border:Point("TOPRIGHT", 1, 1)
 	border:Point("BOTTOMRIGHT", 1, -1)
@@ -531,7 +534,7 @@ local function CreateShadow(f, t, offset, thickness, texture)
 	f.border = border
 	
 	local shadow = CreateFrame("Frame", nil, border)
-	shadow:SetFrameLevel(0)
+	shadow:SetFrameLevel(frameLevel - 1)
 	shadow:Point("TOPLEFT", -3, 3)
 	shadow:Point("TOPRIGHT", 3, 3)
 	shadow:Point("BOTTOMRIGHT", 3, -3)

@@ -24,7 +24,6 @@ function Module.LoadSettings()
 	["Autoinvite"] = false,
 	["Interrupt"] = true,
 	["INVITE_WORD"] = "SunUI",
-	["BagScale"] = 1,
 	["ClassCDOpen"] = true,
 	["ClassFontSize"] = 12,
 	["ClassCDHeight"] = 8,
@@ -156,14 +155,6 @@ function Module.BuildGUI()
 					order = 14,
 					get = function() return MiniDB.Disenchat end,
 					set = function(_, value) MiniDB.Disenchat = value end,
-				},
-				BagScale = {
-					type = "range",
-					name = "背包缩放大小",
-					order = 15,
-					min = 0.2, max = 2, step = 0.1,
-					get = function() return MiniDB.BagScale end,
-					set = function(_, value) MiniDB.BagScale = value end,
 				},
 			}
 		}

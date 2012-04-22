@@ -5,4 +5,5 @@
 
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file = "Minimap.lua"/>
+	<Script file = "map.lua"/>
 </Ui>

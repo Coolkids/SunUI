@@ -10,7 +10,7 @@
 	<Include file="Libs\load.xml"/>
 	<Script file = "function\Init.lua"/>
 	<Script file = "function\uiscale.lua"/>
-	<Include file="local\load.xml"/>
+	<Include file="locale\load.xml"/>
 	<Include file="config\Load_Config.xml"/>
 	<Include file="function\load.xml"/>
 	<Include file="Modules\Load.xml"/>

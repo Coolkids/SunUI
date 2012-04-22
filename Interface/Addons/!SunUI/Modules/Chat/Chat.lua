@@ -8,7 +8,6 @@ local def_position = {"BOTTOMLEFT", 5, 25} -- Chat Frame position
 local chat_height = 122
 local chat_width = 327
 local fontsize = 10                          --other variables
-local eb_width = 400						-- Editbox width
 local tscol = "64C2F5"						-- Timestamp coloring
 local TimeStampsCopy = true					-- 时间戳
 

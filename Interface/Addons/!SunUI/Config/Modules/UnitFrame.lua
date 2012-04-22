@@ -307,11 +307,11 @@ function Module.BuildGUI()
 		}
 		DB["Config"]["Raid"] =  {
 			type = "group", order = 10,
-			name = "团队框架",
+			name = L["团队框架"],
 			args = {
 					UnlockRiad = {
 					type = "execute",
-					name = "团队设置",
+					name = L["团队框架"],
 					order = 1,
 					func = function()
 						if not UnitAffectingCombat("player") then

@@ -26,10 +26,10 @@ Delay:SetScript("OnEvent", function()
 		S.SetBD(BuyEmAllFrame)
 	end
 	
-	if WorldMapFrame then
-		S.StripTextures(WorldMapFrame, Kill)
-		S.CreateSD(WorldMapFrame,6)
-	end
+	-- if WorldMapFrame then
+		-- S.StripTextures(WorldMapFrame, Kill)
+		-- S.CreateSD(WorldMapFrame,6)
+	-- end
 	
 	if ItemRefShoppingTooltip1 then 
 		S.StripTextures(ItemRefShoppingTooltip1)
