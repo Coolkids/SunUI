@@ -269,6 +269,7 @@ function S.SetBD(f, x, y, x2, y2)
 	if not f then return end
 	if f. ssb then return end
 	local bg = CreateFrame("Frame", nil, f)
+	local frameLevel = f:GetFrameLevel() > 1 and f:GetFrameLevel() or 1
 	if not x then
 		bg:SetPoint("TOPLEFT")
 		bg:SetPoint("BOTTOMRIGHT")
@@ -276,12 +277,12 @@ function S.SetBD(f, x, y, x2, y2)
 		bg:Point("TOPLEFT", x, y)
 		bg:Point("BOTTOMRIGHT", x2, y2)
 	end
-	bg:SetFrameLevel(0)
+	bg:SetFrameLevel(frameLevel)
 	CreateBD(bg)
 	CreateSD(bg, 6, 0, 0, 0, 1, 0)
-	f:HookScript("OnShow", function()
+	--[[ f:HookScript("OnShow", function()
 		bg:SetFrameLevel(0)
-	end)
+	end) ]]
 	f.ssb = bg
 end
 S.ReskinClose = function(f, a1, p, a2, x, y)
