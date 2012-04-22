@@ -1,8 +1,9 @@
 local n = select(2, ...)
+local S, _, L, DB = unpack(SunUI)
 -- window settings
 n.windowsettings = {
 	-- pos = { "TOPLEFT", 4, -4 },
-	pos = { "BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -5, 0 },
+	pos = { "BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -7, 0 },
 	width = 200,
 	maxlines = 9,
 	backgroundalpha = 0,
@@ -11,7 +12,7 @@ n.windowsettings = {
 	titleheight = 11,
 	titlealpha = 0,
 	titlefont = ChatFrame1:GetFont(),
-	titlefontsize = 14,
+	titlefontsize = 12,
 	titlefontcolor = {1, .82, 0},
 	buttonhighlightcolor = {1, 1, 1},
 
@@ -20,7 +21,7 @@ n.windowsettings = {
 	linealpha = 1,
 	linetexture = "Interface\\Addons\\!SunUI\\media\\statusbar7",
 	linefont = ChatFrame1:GetFont(),
-	linefontsize = 14,
+	linefontsize = 12,
 	linefontcolor = {1, 1, 1},
 }
 
@@ -35,37 +36,37 @@ n.coresettings = {
 -- available types and their order
 n.types = {
 	{
-		name = "伤害",
+		name = L["伤害"],
 		id = "dd",
 		c = {.25, .66, .35},
 	},
 	{
-		name = "伤害目标",
+		name = L["伤害目标"],
 		id = "dd",
 		view = "Targets",
 		onlyfights = true,
 		c = {.25, .66, .35},
 	},
 	{
-		name = "伤害承受: 目标",
+		name = L["伤害承受: 目标"],
 		id = "dt",
 		view = "Targets",
 		onlyfights = true,
 		c = {.66, .25, .25},
 	},
 	{
-		name = "伤害承受: 技能",
+		name = L["伤害承受: 技能"],
 		id = "dt",
 		view = "Spells",
 		c = {.66, .25, .25},
 	},
 	{
-		name = "队友误伤",
+		name = L["队友误伤"],
 		id = "ff",
 		c = {.63, .58, .24},
 	},
 	{
-		name = "治疗及吸收",
+		name = L["治疗及吸收"],
 		id = "hd",
 		id2 = "ga",
 		c = {.25, .5, .85},
@@ -87,27 +88,27 @@ n.types = {
 --		c = {.25, .5, .85},
 --	},
 	{
-		name = "过量治疗",
+		name = L["过量治疗"],
 		id = "oh",
 		c = {.25, .5, .85},
 	},
 	{
-		name = "驱散",
+		name = L["驱散"],
 		id = "dp",
 		c = {.58, .24, .63},
 	},
 	{
-		name = "打断",
+		name = L["打断"],
 		id = "ir",
 		c = {.09, .61, .55},
 	},
 	{
-		name = "法力获取",
+		name = L["法力获取"],
 		id = "pg",
 		c = {48/255, 113/255, 191/255},
 	},
 	{
-		name = "死亡记录",
+		name = L["死亡记录"],
 		id = "deathlog",
 		view = "Deathlog",
 		onlyfights = true,

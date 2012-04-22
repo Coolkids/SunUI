@@ -1,8 +1,14 @@
 local S, _, L, DB = unpack(SunUI)
 local addon = select(2, ...)
-
 local window = CreateFrame("Frame", "NumerationFrame", UIParent)
-window:CreateShadow("Background")
+
+--[[ window:SetBackdrop({
+		edgeFile = DB.Solid, 
+		edgeSize = S.mult,
+		insets = { left = -S.mult, right = -S.mult, top = -S.mult, bottom = -S.mult }
+	})
+window:SetBackdropBorderColor(0, 0, 0, 0.6) ]]
+--S.CreateSD(window)
 addon.window = window
 
 local lines = {}
@@ -37,9 +43,9 @@ local dropdown = CreateFrame("Frame", "NumerationMenuFrame", nil, "UIDropDownMen
 dropdown:CreateShadow("Background")
 local menuTable = {
 	{ text = "Numeration", isTitle = true, notCheckable = true, notClickable = true },
-	{ text = "报告", notCheckable = true, hasArrow = true,
+	{ text = L["报告"], notCheckable = true, hasArrow = true,
 		menuList = {
-			{ text = "报告", isTitle = true, notCheckable = true, notClickable = true },
+			{ text = L["报告"], isTitle = true, notCheckable = true, notClickable = true },
 			{ text = SAY, arg1 = "SAY", func = reportFunction, notCheckable = 1 },
 			{ text = RAID, arg1 = "RAID", func = reportFunction, notCheckable = 1 },
 			{ text = PARTY, arg1 = "PARTY", func = reportFunction, notCheckable = 1 },
@@ -49,17 +55,17 @@ local menuTable = {
 			{ text = CHANNEL, notCheckable = 1, keepShownOnClick = true, hasArrow = true, menuList = {} }
 		},
 	},
-	{ text = "选项", notCheckable = true, hasArrow = true,
+	{ text = L["选项"], notCheckable = true, hasArrow = true,
 		menuList = {
-			{ text = "合并宠物伤害", arg1 = "petsmerged", func = optionFunction, checked = function() return addon:GetOption("petsmerged") end, keepShownOnClick = true },
-			{ text = "仅保留BOSS数据", arg1 = "keeponlybosses", func = optionFunction, checked = function() return addon:GetOption("keeponlybosses") end, keepShownOnClick = true },
-			{ text = "仅在副本中统计", arg1 = "onlyinstance", func = optionFunction, checked = function() return addon:GetOption("onlyinstance") end, keepShownOnClick = true },
-			{ text = "显示小地图图标", func = function(f, a1, a2, checked) addon:MinimapIconShow(checked) end, checked = function() return not NumerationCharOptions.minimap.hide end, keepShownOnClick = true },
-			{ text = "Solo时隐藏", arg1 = "hideonsolo", func = optionFunction, checked = function() return addon:GetOption("hideonsolo") end, keepShownOnClick = true },
+			{ text = L["合并宠物伤害"], arg1 = "petsmerged", func = optionFunction, checked = function() return addon:GetOption("petsmerged") end, keepShownOnClick = true },
+			{ text = L["仅保留BOSS数据"], arg1 = "keeponlybosses", func = optionFunction, checked = function() return addon:GetOption("keeponlybosses") end, keepShownOnClick = true },
+			{ text = L["仅在副本中统计"], arg1 = "onlyinstance", func = optionFunction, checked = function() return addon:GetOption("onlyinstance") end, keepShownOnClick = true },
+			{ text = L["显示小地图图标"], func = function(f, a1, a2, checked) addon:MinimapIconShow(checked) end, checked = function() return not NumerationCharOptions.minimap.hide end, keepShownOnClick = true },
+			{ text = L["Solo时隐藏"], arg1 = "hideonsolo", func = optionFunction, checked = function() return addon:GetOption("hideonsolo") end, keepShownOnClick = true },
 		},
 	},
 	{ text = "", notClickable = true },
-	{ text = "重置", func = function() window:ShowResetWindow() end, notCheckable = true },
+	{ text = L["重置"], func = function() window:ShowResetWindow() end, notCheckable = true },
 }
 
 local updateReportChannels = function()
@@ -84,8 +90,8 @@ function window:OnInitialize()
 	s = addon.windowsettings
 	self.maxlines = s.maxlines
 	self:SetWidth(s.width)
-	self:SetHeight(3+s.titleheight+s.maxlines*(s.lineheight+s.linegap) - s.linegap)
-
+	self:SetHeight(2+s.titleheight+s.maxlines*(s.lineheight+s.linegap) - s.linegap)
+	self:CreateShadow("Background")
 	self:SetClampedToScreen(true)
 	self:EnableMouse(true)
 	self:EnableMouseWheel(true)
@@ -106,8 +112,8 @@ function window:OnInitialize()
 		addon:SetOption("y", yOfs/uis)
 	end)
 
-	self:SetBackdrop(backdrop)
-	self:SetBackdropColor(0, 0, 0, s.backgroundalpha)
+	--self:SetBackdrop(backdrop)
+	--self:SetBackdropColor(0, 0, 0, s.backgroundalpha)
 	
 	local x, y = addon:GetOption("x"), addon:GetOption("y")
 	if not x or not y then
@@ -164,7 +170,7 @@ function window:OnInitialize()
 			GameTooltip:SetOwner(segment, "ANCHOR_BOTTOMRIGHT")
 			local name = ""
 			if addon.nav.set == "current" then
-				name = "当前战斗"
+				name = L["当前战斗"]
 			else
 				local set = addon:GetSet(addon.nav.set)
 				if set then
@@ -350,12 +356,12 @@ function window:ShowResetWindow()
 		reset.titletext = reset:CreateFontString(nil, "ARTWORK")
 		reset.titletext:SetFont(s.titlefont, s.titlefontsize, "OUTLINE")
 		reset.titletext:SetTextColor(s.titlefontcolor[1], s.titlefontcolor[2], s.titlefontcolor[3], 1)
-		reset.titletext:SetText("Numeration: 重置数据 ?")
+		reset.titletext:SetText("Numeration:".. L["重置数据"].."?")
 		reset.titletext:SetPoint("TOP", 0, -2)
 		
 		reset.yes = CreateFrame("Button", nil, reset)
 		reset.yes:SetNormalFontObject(ChatFontSmall)
-		reset.yes:SetText("是")
+		reset.yes:SetText(L["是"])
 		reset.yes:SetWidth(80)
 		reset.yes:SetHeight(18)
 		reset.yes:SetPoint("BOTTOMLEFT", 10, 5)
@@ -374,7 +380,7 @@ function window:ShowResetWindow()
 		
 		reset.no = CreateFrame("Button", nil, reset)
 		reset.no:SetNormalFontObject(ChatFontSmall)
-		reset.no:SetText("否")
+		reset.no:SetText(L["否"])
 		reset.no:SetWidth(80)
 		reset.no:SetHeight(18)
 		reset.no:SetPoint("BOTTOMRIGHT", -10, 5)
@@ -409,7 +415,7 @@ function window:ShowWhisperWindow()
 		whisper.titletext = whisper:CreateFontString(nil, "ARTWORK")
 		whisper.titletext:SetFont(s.titlefont, s.titlefontsize, "OUTLINE")
 		whisper.titletext:SetTextColor(s.titlefontcolor[1], s.titlefontcolor[2], s.titlefontcolor[3], 1)
-		whisper.titletext:SetText("Numeration: 密语目标")
+		whisper.titletext:SetText("Numeration:"..L["密语目标"])
 		whisper.titletext:SetPoint("TOP", 0, -2)
 
 		whisper.target = CreateFrame("EditBox", "NumerationWhisperEditBox", whisper)

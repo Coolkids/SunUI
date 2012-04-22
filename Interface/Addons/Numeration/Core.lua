@@ -1,4 +1,5 @@
 local addonname, addon = ...
+local S, _, L, DB = unpack(SunUI)
 Numeration = addon
 addon.events = CreateFrame("Frame")
 addon.events:SetScript("OnEvent", function(self, event, ...)
@@ -262,9 +263,9 @@ end
 
 function ldb:OnTooltipShow()
     GameTooltip:AddLine("Numeration", 1, .8, 0)
-    GameTooltip:AddLine("左键点击隐藏/显示窗口.")
-    GameTooltip:AddLine("SHIFT左键点击重置数据.")
-    GameTooltip:AddLine("ALT左键切换solo隐藏/显示.")
+    GameTooltip:AddLine(L["左键点击隐藏/显示窗口"])
+    GameTooltip:AddLine(L["SHIFT左键点击重置数据"])
+    GameTooltip:AddLine(L["ALT左键切换solo隐藏/显示"])
 end
 
 function ldb:OnClick(button)
@@ -318,7 +319,7 @@ function addon:Reset()
 		[0] = newSet(),
 		zone = lastZone,
 	}
-	NumerationCharDB[0].name = "所有数据"
+	NumerationCharDB[0].name = L["所有数据"]
 	current = newSet()
 	if self.nav.set and self.nav.set ~= "total" and self.nav.set ~= "current" then
 		self.nav.set = "current"
