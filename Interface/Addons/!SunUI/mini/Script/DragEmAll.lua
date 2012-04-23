@@ -56,6 +56,7 @@ local frames = {
   ["BankFrame"] = false,
   ["WorldMapTitleButton"] = true,
   ["WorldMapPositioningGuide"] = true,
+  [" WorldMapDetailFrame"] = true,
   --["TicketStatusFrame"] = false,
   ["StaticPopup1"] = false,
   --["GhostFrame"] = false,

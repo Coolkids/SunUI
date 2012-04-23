@@ -1,6 +1,5 @@
 local S, _, _, DB = unpack(select(2, ...))
 
-local mpos = {"CENTER",UIParent,"CENTER",0,0}		-- set position for locked map
 local map_scale = 0.9								-- Mini World Map scale
 local isize = 20									-- group icons size
 
@@ -144,8 +143,8 @@ local function m_MapShrink()
 	w.bg:SetPoint("TOPLEFT", WorldMapButton, -8, 25)
 	S.CreateBD(w.bg)
 	S.CreateSD(w.bg, 6, 0, 0, 0, 1, 0)
-	
-	--WorldMapDetailFrame:SetPoint(unpack(mpos))
+	WorldMapDetailFrame:ClearAllPoints()
+	WorldMapDetailFrame:SetPoint("CENTER")
 	WorldMapFrame.scale = map_scale
 	WorldMapDetailFrame:SetScale(map_scale)
 	WorldMapButton:SetScale(map_scale)
