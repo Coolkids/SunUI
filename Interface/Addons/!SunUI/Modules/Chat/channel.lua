@@ -47,6 +47,6 @@ local button = CreateFrame("Button", "ButtonP", ColectorButton)
 		GameTooltip:AddLine(L["您现在大脚世界频道处于"]..inchannel..L["状态"])
 		GameTooltip:Show()  end)
 		button:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
-		S.MakeBG(button, 0)
+		S.CreateBG(button, 0)
 		S.Reskin(button)
 end

@@ -145,7 +145,7 @@ local function m_MapShrink()
 	S.CreateBD(w.bg)
 	S.CreateSD(w.bg, 6, 0, 0, 0, 1, 0)
 	
-	WorldMapDetailFrame:SetPoint(unpack(mpos))
+	--WorldMapDetailFrame:SetPoint(unpack(mpos))
 	WorldMapFrame.scale = map_scale
 	WorldMapDetailFrame:SetScale(map_scale)
 	WorldMapButton:SetScale(map_scale)

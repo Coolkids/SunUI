@@ -47,6 +47,6 @@ colectorbutton:SetScript("OnEnter",  function(self)
 		GameTooltip:Show()  
 end)
 colectorbutton:SetScript("OnLeave", function(self) UIFrameFadeOut(self, 2, self:GetAlpha(), 0) GameTooltip:Hide() end)
-S.MakeBG(colectorbutton, 0)
+S.CreateBG(colectorbutton, 0)
 S.Reskin(colectorbutton)
 end

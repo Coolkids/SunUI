@@ -256,6 +256,6 @@ local button = CreateFrame("Button", "ButtonE", ColectorButton)
 		GameTooltip:AddLine("表情")
 		GameTooltip:Show()  end)
 		button:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
-		S.MakeBG(button, 0)
+		S.CreateBG(button, 0)
 		S.Reskin(button)
 end

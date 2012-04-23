@@ -4,19 +4,17 @@ if DB.Nuke == true then return end
 
 local r, g, b = DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b
 
-function S.MakeBG(Parent, Size)
-	local BG = CreateFrame("Frame", nil, Parent)
-	x = S.Scale(Size)
-	BG:SetFrameLevel(0)
-	BG:SetPoint("TOPLEFT", -x, x)
-	BG:SetPoint("BOTTOMRIGHT", x, -x)
-	BG:SetBackdrop({
-		bgFile = DB.bgFile, insets = {left = x, right = x, top = x, bottom = x},
-		edgeFile = DB.GlowTex, edgeSize = S.Scale(Size-1),
-	})
-	BG:SetBackdropColor(0, 0, 0, 0.6)
-	BG:SetBackdropBorderColor(0, 0, 0, 1)
-	return BG
+function S.CreateBG(f)
+	local f = frame
+	if frame:GetObjectType() == "Texture" then f = frame:GetParent() end
+
+	local bg = f:CreateTexture(nil, "BACKGROUND")
+	bg:Point("TOPLEFT", frame, -1, 1)
+	bg:Point("BOTTOMRIGHT", frame, 1, -1)
+	bg:SetTexture("Interface\\ChatFrame\\ChatFrameBackground")
+	bg:SetVertexColor(0, 0, 0)
+
+	return bg
 end
 
 function S.MakeFontString(Parent, FontSize)
