@@ -315,10 +315,10 @@ function Module.BuildGUI()
 					order = 1,
 					func = function()
 						if not UnitAffectingCombat("player") then
-							if IsAddOnLoaded("oUF_Freebgrid") then 
-								LoadAddOn('oUF_Freebgrid_Config')
+							if IsAddOnLoaded("Freebgrid") then 
+								LoadAddOn('Freebgrid_Config')
 								local RF = LibStub and LibStub("AceConfigDialog-3.0", true)
-										RF:Open("oUF_Freebgrid")
+										RF:Open("Freebgrid")
 										RF:Close("SunUI Config")
 							end
 						end

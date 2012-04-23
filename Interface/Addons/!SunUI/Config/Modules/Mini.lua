@@ -137,7 +137,7 @@ function Module.BuildGUI()
 				},
 				HideRaid = {
 					type = "toggle",
-					name = "隐藏Blz团队框架",
+					name = "Hide Blz RAID Frame",
 					order = 12,
 					get = function() return MiniDB.HideRaid end,
 					set = function(_, value) MiniDB.HideRaid = value end,
@@ -165,8 +165,8 @@ function Module.BuildGUI()
 				uiScale = {
 					type = "input", order = 1,
 					name = L["UI缩放大小"], desc = L["UI缩放大小"],
-					get = function() return tostring(GetCVar("uiScale")) end,
-					set = function(_, value) MiniDB.uiScale = tostring(value) end,
+					get = function() return tostring(MiniDB.uiScale) end,
+					set = function(_, value) MiniDB.uiScale = tonumber(value) end,
 				},
 				accept = {
 					type = "execute", order = 2,

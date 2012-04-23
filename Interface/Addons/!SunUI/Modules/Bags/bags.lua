@@ -117,7 +117,7 @@ function SetUp(framen, ...)
 	closet:SetFont(DB.Font, 12, "OUTLINE")
 	closet:SetText("X")
 	closet:SetTextColor(.4,.4,.4)
-	close:SetScript('OnMouseUp', function()
+	close:SetScript('OnMouseUp', function(self)
 		CloseAllBags()
 	end)
 	
