@@ -402,6 +402,6 @@ if GetLocale() ~= 'zhCN' or GetLocale() ~= 'zhTW' then
 				GameTooltip:Hide()
 			end)
 			
-			S.MakeBG(statreport, 0)
+			S.CreateBG(statreport, 0)
 			S.Reskin(statreport)
 end

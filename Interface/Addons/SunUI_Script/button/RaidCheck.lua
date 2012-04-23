@@ -331,7 +331,7 @@ end
 
 	EuiSetTooltip(RaidCheckFrameLeft, L.BottomPanelRaidCheck, L.MouseLeftButton, RaidUtilityPanel and L.RAIDCHECK_RAIDTOOL or L.RaidCheckTipLeftButtonOnLeftInfo, L.MouseRightButton, L.RaidCheckTipRightButtonOnLeftInfo)
 	S.Reskin(RaidCheckFrameLeft)
-	S.MakeBG(RaidCheckFrameLeft, 0)
+	S.CreateBG(RaidCheckFrameLeft, 0)
 	RaidCheckFrameLeft:SetScript("OnMouseDown", function(self, btn)
 		if InCombatLockdown() then return end
 		if btn == "LeftButton" then
@@ -352,7 +352,7 @@ end
 	RaidCheckFrameRight.text:SetTextColor(23/255, 132/255, 209/255)
 	EuiSetTooltip(RaidCheckFrameRight, L.BottomPanelRaidCheck, L.MouseLeftButton, L.RaidCheckTipLeftButtonOnRightInfo, L.MouseRightButton, L.RaidCheckTipRightButtonOnRightInfo)
 	S.Reskin(RaidCheckFrameRight)
-	S.MakeBG(RaidCheckFrameRight, 0)
+	S.CreateBG(RaidCheckFrameRight, 0)
 	RaidCheckFrameRight:SetScript("OnMouseDown", function(self, btn)
 		if InCombatLockdown() then return end
 		if btn == "LeftButton" then

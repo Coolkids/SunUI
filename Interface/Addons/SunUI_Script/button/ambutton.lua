@@ -26,6 +26,6 @@ local button = CreateFrame("Button", "ButtonA",  ColectorButton)
 		GameTooltip:AddLine("|cffDDA0DDSun|r|cff44CCFFUI|r"..""..L["插件管理"], 0.75, 0.9, 1)
 		GameTooltip:Show()  end)
 		button:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
-		S.MakeBG(button, 0)
+		S.CreateBG(button, 0)
 		S.Reskin(button)
 end

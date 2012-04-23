@@ -28,6 +28,6 @@ local button = CreateFrame("Button", "ButtonS", ColectorButton)
 		GameTooltip:AddLine("点击显示控制台")
 		GameTooltip:Show()  end)
 		button:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
-		S.MakeBG(button, 0)
+		S.CreateBG(button, 0)
 		S.Reskin(button)
 end
