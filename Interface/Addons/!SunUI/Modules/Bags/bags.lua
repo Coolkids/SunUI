@@ -144,6 +144,7 @@ function SetUp(framen, ...)
 			f:SetNormalTexture("")
 			f:SetPushedTexture("")
 			f:SetCheckedTexture("")
+			f:CreateBorder()
 			lastbuttonbag = f
 			_G["bBag_"..framen.."_bags"]:SetWidth((24+config.spacing)*(getn(bags.bag))+14)
 			_G["bBag_"..framen.."_bags"]:SetHeight(40)
@@ -167,6 +168,7 @@ function SetUp(framen, ...)
 			f:SetNormalTexture("")
 			f:SetPushedTexture("")
 			f:SetHighlightTexture("")
+			f:CreateBorder()
 			lastbuttonbank = f
 			_G["bBag_"..framen.."_bags"]:SetWidth((24+config.spacing)*(getn(bags.bank))+14)
 			_G["bBag_"..framen.."_bags"]:SetHeight(40)
@@ -298,7 +300,7 @@ function ContainerFrame_GenerateFrame(frame, size, id)
 			end
 		end
 		_G["bBag_bag"]:SetHeight(((config.size+config.spacing)*(numrows+1)+40)-config.spacing)
-	else
+	end
 		local numrows, lastrowbutton, numbuttons, lastbutton = 0, ContainerFrame1Item1, 1, ContainerFrame1Item1
 		for bank = 1, 28 do
 			local bankitems = _G["BankFrameItem"..bank]
@@ -355,7 +357,6 @@ function ContainerFrame_GenerateFrame(frame, size, id)
 			end
 		end
 		_G["bBag_bank"]:SetHeight(((config.size+config.spacing)*(numrows+1)+40)-config.spacing)
-	end
 end
 function updateContainerFrameAnchors() end
 
@@ -424,3 +425,32 @@ hooksecurefunc("BankFrameItemButton_Update", function(button)
 			button.border:SetBackdropBorderColor(0, 0, 0, 1)
 		end
 end)
+
+local numSlots,full = GetNumBankSlots();
+local button;
+	for i=1, NUM_BANKBAGSLOTS, 1 do
+		button = _G["BankFrameBag"..i];
+		if ( button ) then
+			if ( i > numSlots ) then
+				button:HookScript("OnMouseUp", function()
+					StaticPopup_Show("BUY_BANK_SLOT")
+				end)
+			end
+		end
+	end
+
+StaticPopupDialogs["BUY_BANK_SLOT"] = {
+	text = CONFIRM_BUY_BANK_SLOT,
+	button1 = YES,
+	button2 = NO,
+	OnAccept = function(self)
+		PurchaseSlot()
+	end,
+	OnShow = function(self)
+		MoneyFrame_Update(self.moneyFrame, GetBankSlotCost())
+	end,
+	hasMoneyFrame = 1,
+	timeout = 0,
+	hideOnEscape = 1,
+	preferredIndex = 3
+}

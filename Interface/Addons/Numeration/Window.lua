@@ -130,8 +130,8 @@ function window:OnInitialize()
 		scroll:SetTexture([[Interface\Buttons\WHITE8X8]])
 		scroll:SetTexCoord(.8, 1, .8, 1)
 		scroll:SetVertexColor(0, 0, 0, .8)
-		scroll:SetWidth(4)
-		scroll:SetHeight(4)
+		scroll:SetWidth(2)
+		scroll:SetHeight(2)
 		scroll:Hide()
 	
 	local reset = CreateFrame("Button", nil, self)
@@ -241,7 +241,7 @@ function window:SetScrollPosition(curPos, maxPos)
 	if maxPos <= s.maxlines then return end
 	local total = s.maxlines*(s.lineheight+s.linegap)
 	self.scroll:SetHeight(s.maxlines/maxPos*total)
-	self.scroll:SetPoint("TOPLEFT", self.reset, "BOTTOMRIGHT", 2, -1-(curPos-1)/maxPos*total)
+	self.scroll:SetPoint("TOPLEFT", self.reset, "BOTTOMRIGHT", -2, -1-(curPos-1)/maxPos*total)
 	self.scroll:Show()
 end
 

@@ -412,9 +412,12 @@ function Module:OnInitialize()
 	BottomRightBar = CreateFrame("Frame", BottomRightBar, UIParent)
 	BottomRightBar:SetHeight(C["BottomHeight"])	
 	BottomRightBar:SetWidth(C["BottomWidth"])
-	BottomRightBar:SetFrameLevel(2)
+	BottomRightBar:SetFrameLevel(3)
 	MoveHandle.BottomInfoPanelPos = S.MakeMoveHandle(BottomRightBar, L["信息面板"], "InfoPanel2")
-	BottomRightBar:CreateShadow("Background")
+	local tmp = CreateFrame("Frame", nil, BottomRightBar)
+	tmp:SetAllPoints()
+	tmp:SetFrameLevel(1)
+	tmp:CreateShadow("Background")
 	end
 end
 

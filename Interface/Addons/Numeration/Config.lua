@@ -11,7 +11,7 @@ n.windowsettings = {
 
 	titleheight = 11,
 	titlealpha = 0,
-	titlefont = ChatFrame1:GetFont(),
+	titlefont = DB.Font,
 	titlefontsize = 12,
 	titlefontcolor = {1, .82, 0},
 	buttonhighlightcolor = {1, 1, 1},
@@ -20,7 +20,7 @@ n.windowsettings = {
 	linegap = 1,
 	linealpha = 1,
 	linetexture = "Interface\\Addons\\!SunUI\\media\\statusbar7",
-	linefont = ChatFrame1:GetFont(),
+	linefont = DB.Font,
 	linefontsize = 12,
 	linefontcolor = {1, 1, 1},
 }

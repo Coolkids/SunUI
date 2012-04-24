@@ -370,17 +370,17 @@ local Indicators_class_default = {
         ["Cen"] = {},
     }
 }
-local standard_text_font
-if GetLocale() == "zhCN" then
-	standard_text_font = [[Fonts\ZYKai_T.ttf]]
-elseif GetLocale() == "zhTW" then
-	standard_text_font = [[Fonts\bLEI00D.ttf]]
-elseif GetLocale() == "enUS" then
-	standard_text_font = [[Fonts\ARIALN.ttf]]
-end
+--local version, internalVersion, date, uiVersion = GetBuildInfo()
+--local standard_text_font
+--if GetLocale() == "zhCN" then
+--	standard_text_font = [[Fonts\ARKai_T.ttf]]
+--elseif GetLocale() == "zhTW" then
+--	standard_text_font = [[Fonts\bLEI00D.ttf]]
+--elseif GetLocale() == "enUS" then
+--end
 
 ns.defaults = {
-   scale = 1.0,
+    scale = 1.0,
     width = 75,
     height = 25,
     texture = "gradient",

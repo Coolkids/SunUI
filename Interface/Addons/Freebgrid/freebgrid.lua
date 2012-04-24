@@ -1906,31 +1906,31 @@ function ns:CreateIndicators(self)
 	
 	local TL = self.HealthBar:CreateFontString(nil, "OVERLAY")
 	TL:SetPoint("TOPLEFT", self.HealthBar,"TOPLEFT", 0, -1)
-	TL:SetFont(indicator, ns.db.indicatorsize, "THINOUTLINE")
+	TL:SetFont(indicator, ns.db.indicatorsize, "OUTLINE")
 	TL:Hide()
 	self.Indicators.TL = TL
 
 	local TR = self.HealthBar:CreateFontString(nil, "OVERLAY")
 	TR:SetPoint("TOPRIGHT", self.HealthBar, 2, -1)
-	TR:SetFont(indicator, ns.db.indicatorsize, "THINOUTLINE")
+	TR:SetFont(indicator, ns.db.indicatorsize, "OUTLINE")
 	TR:Hide()
 	self.Indicators.TR = TR
 
 	local BL = self.HealthBar:CreateFontString(nil, "OVERLAY")
 	BL:SetPoint("BOTTOMLEFT", self.HealthBar, 0, 0)
-	BL:SetFont(indicator, ns.db.indicatorsize, "THINOUTLINE")
+	BL:SetFont(indicator, ns.db.indicatorsize, "OUTLINE")
 	BL:Hide()
 	self.Indicators.BL = BL
 
 	local RC = self.HealthBar:CreateFontString(nil, "OVERLAY")
 	RC:SetPoint("RIGHT", self.HealthBar, 2, -1)
-	RC:SetFont(indicator, ns.db.indicatorsize, "THINOUTLINE")
+	RC:SetFont(indicator, ns.db.indicatorsize, "OUTLINE")
 	RC:Hide()
 	self.Indicators.RC = RC
 
 	local BR = self.HealthBar:CreateFontString(nil, "OVERLAY")
 	BR:SetPoint("BOTTOMRIGHT", self.HealthBar, 6, -2)
-	BR:SetFont(symbols, ns.db.symbolsize, "THINOUTLINE")
+	BR:SetFont(symbols, ns.db.symbolsize, "OUTLINE")
 	BR:Hide()
 	self.Indicators.BR = BR
 
@@ -1938,7 +1938,7 @@ function ns:CreateIndicators(self)
 	Cen:SetPoint("TOP", 0, -2)
 	Cen:SetJustifyH("CENTER")
 	Cen:SetShadowOffset(1.25, -1.25)
-	Cen:SetFont(symbols, ns.db.fontsizeEdge, ns.db.outline)
+	Cen:SetFont(symbols, ns.db.fontsizeEdge, "OUTLINE")
 	Cen:SetWidth(ns.db.width)
 	Cen:Hide()
 	self.Indicators.Cen = Cen
@@ -1960,7 +1960,7 @@ function ns:CreateAuraIcon(auras)
 
     local font, fontsize = GameFontNormalSmall:GetFont()
     local count = button:CreateFontString(nil, "OVERLAY")
-    count:SetFont(font, fontsize + 2, "THINOUTLINE")
+    count:SetFont(font, fontsize + 2, "OUTLINE")
     count:SetPoint("LEFT", button, "BOTTOM", 3, 2)
 
     local border = CreateFrame("Frame", nil, button)
@@ -1973,7 +1973,7 @@ function ns:CreateAuraIcon(auras)
     
     local remaining = button:CreateFontString(nil, "OVERLAY")
     remaining:SetPoint("CENTER") 
-    remaining:SetFont(font, fontsize, "THINOUTLINE")
+    remaining:SetFont(font, fontsize, "OUTLINE")
     remaining:SetTextColor(1, 1, 0)
 	
 	button.border = border
