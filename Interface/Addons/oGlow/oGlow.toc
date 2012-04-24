@@ -6,6 +6,8 @@
 ## SavedVariables: oGlowDB
 ## X-eMail: troeks@gmail.com
 ## Notes: Make your shiny items... glow in the dark!
+## X-WoWBox-Ver: 1
+## X-WoWBox-ID: 3341
 
 init.lua
 event.lua

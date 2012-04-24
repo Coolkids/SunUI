@@ -15,7 +15,7 @@
 local _, ns = ...
 local S, C, L, DB = unpack(SunUI)
 ns.font = DB.Font
-ns.fontsize = 12
+ns.fontsize = 14
 ns.fontflag = "OUTLINE"
 
 ns.watchers ={
@@ -23,7 +23,7 @@ ns.watchers ={
 		{
 			name = "玩家buff",
 			direction = "RIGHT",
-			setpoint =  {"CENTER", UIParent, "CENTER", -75, -175},
+			setpoint =  {"BOTTOM", UIParent, "BOTTOM",-68, 188},
 			size = 20,
 				-- 节能施法
 				{ spellID = 16870, unitId = "player", caster = "player", filter = "BUFF" },
@@ -51,7 +51,7 @@ ns.watchers ={
 		{
 			name = "目标debuff",
 			direction = "RIGHT",
-			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 102, 282},
+			setpoint = {"BOTTOM", UIParent, "BOTTOM", 101, 205},
 			size = 28,
 				-- 挫志咆哮(熊)
 				{ spellID =    99, unitId = "target", caster = "player", filter = "DEBUFF" },
@@ -81,7 +81,7 @@ ns.watchers ={
 		{
 			name = "玩家技能CD",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", -45, -250},
+			setpoint = {"BOTTOM", UIParent, "BOTTOM", -38, 135},
 			size = 20,
 				-- 狂暴恢复
 				{ spellID = 22842, filter = "CD" },
@@ -97,7 +97,7 @@ ns.watchers ={
 		{
 			name = "目标框上方",
 			direction = "RIGHT",
-			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 102, 282},
+			setpoint = {"BOTTOM", UIParent, "BOTTOM", 101, 205},
 			size = 28,
 				-- 毒蛇钉刺
 				{ spellID =  1978 ,unitId = "target", caster = "player", filter = "DEBUFF" },
@@ -120,7 +120,7 @@ ns.watchers ={
 		{
 			name = "目標的目标框上方",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", -75, -175},
+			setpoint = {"BOTTOM", UIParent, "BOTTOM",-68, 188},
 			size = 20,
 				-- 急速射击
 				{ spellID =  3045, unitId = "player", caster = "player", filter = "BUFF" },
@@ -158,7 +158,7 @@ ns.watchers ={
 		{
 			name = "玩家技能CD",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", -45, -250},
+			setpoint = {"BOTTOM", UIParent, "BOTTOM", -38, 135},
 			size = 20,
 				-- 奇美拉射击
 				{ spellID = 53209, filter = "CD" },
@@ -176,7 +176,7 @@ ns.watchers ={
 		{
 			name = "目标框上方",
 			direction = "RIGHT",
-			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 102, 282},
+			setpoint = {"BOTTOM", UIParent, "BOTTOM", 101, 205},
 			size = 28,
 			
 				-- 点燃
@@ -244,7 +244,7 @@ ns.watchers ={
 		{
 			name = "玩家技能CD",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", -45, -250},
+			setpoint = {"BOTTOM", UIParent, "BOTTOM", -38, 135},
 			size = 20,
 				-- 唤醒
 				{ spellID = 12051, filter = "CD" },
@@ -258,7 +258,7 @@ ns.watchers ={
 		{
 			name = "玩家Buff",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", -75, -175},
+			setpoint = {"BOTTOM", UIParent, "BOTTOM",-68, 188},
 			size = 20,
 				-- 盾墙(防御姿态)
 				{ spellID =   871, unitId = "player", caster = "player", filter = "BUFF" },
@@ -320,7 +320,7 @@ ns.watchers ={
 		{
 			name = "目标Debuff",
 			direction = "RIGHT",
-			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 102, 282},
+			setpoint = {"BOTTOM", UIParent, "BOTTOM", 101, 205},
 			size = 28,
 			
 			-- Charge Stun / Sturmangriffsbetäubung
@@ -354,7 +354,7 @@ ns.watchers ={
 		{
 			name = "玩家buff",
 			direction = "RIGHT",
-			setpoint =  {"CENTER", UIParent, "CENTER", -75, -175},
+			setpoint =  {"BOTTOM", UIParent, "BOTTOM",-68, 188},
 			size = 20,
 				-- 嗜血
 				{ spellID =  2825, unitId = "player", caster = "all", filter = "BUFF" },
@@ -378,7 +378,7 @@ ns.watchers ={
 		{
 			name = "目标debuff",
 			direction = "RIGHT",
-			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 102, 282},
+			setpoint = {"BOTTOM", UIParent, "BOTTOM", 101, 205},
 			size = 28,
 				-- 大地震击
 				{ spellID =  8042, unitId = "target", caster = "player", filter = "DEBUFF" },
@@ -390,13 +390,15 @@ ns.watchers ={
 				{ spellID = 17364, unitId = "target", caster = "player", filter = "DEBUFF" },
 				-- 灼热烈焰
 				{ spellID = 77661, unitId = "target", caster = "player", filter = "DEBUFF" },
+				--漩涡武器
+				{ spellID = 53817, unitId = "player", caster = "player", filter = "BUFF" }, 
 		},
 	},
 	["PALADIN"] = {
 		{
 			name = "玩家buff",
 			direction = "RIGHT",
-			setpoint =  {"CENTER", UIParent, "CENTER", -75, -175},
+			setpoint =  {"BOTTOM", UIParent, "BOTTOM",-68, 188},
 			size = 20,
 				-- 圣佑术
 				{ spellID =   498, unitId = "player", caster = "player", filter = "BUFF" },
@@ -464,7 +466,7 @@ ns.watchers ={
 		{
 			name = "玩家buff",
 			direction = "RIGHT",
-			setpoint =  {"CENTER", UIParent, "CENTER", -75, -175},
+			setpoint =  {"BOTTOM", UIParent, "BOTTOM",-68, 188},
 			size = 20,
 				-- 心靈熔蝕
 				{ spellID = 87160, unitId = "player", caster = "player", filter = "BUFF" },
@@ -512,7 +514,7 @@ ns.watchers ={
 		{
 			name = "目标框體上方",
 			direction = "RIGHT",
-			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 102, 282},
+			setpoint = {"BOTTOM", UIParent, "BOTTOM", 101, 205},
 			size = 28,
 				--心灵尖刺
 				{ spellID = 87178, unitId = "target", caster = "player", filter = "DEBUFF" },
@@ -556,7 +558,7 @@ ns.watchers ={
 		{
 			name = "玩家技能CD",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", -45, -250},
+			setpoint = {"BOTTOM", UIParent, "BOTTOM", -38, 135},
 			size = 20,
 				-- 心靈震爆
 				{ spellID = 8092, filter = "CD" },
@@ -570,7 +572,7 @@ ns.watchers ={
 		{
 			name = "玩家Buff",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", -75, -175},
+			setpoint = {"BOTTOM", UIParent, "BOTTOM",-68, 188},
 			mode = "ICON",
 			size = 20,
 				-- 嗜血
@@ -598,7 +600,7 @@ ns.watchers ={
 		},
 		{
 			name = "目标debuff",
-			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 102, 282},
+			setpoint = {"BOTTOM", UIParent, "BOTTOM", 101, 205},
 			direction = "RIGHT",
 			mode = "ICON",
 			size = 28,
@@ -634,7 +636,7 @@ ns.watchers ={
 		{
 			name = "目標的目標上方",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", -75, -175},
+			setpoint = {"BOTTOM", UIParent, "BOTTOM",-68, 188},
 			size = 20,
 				-- 冷血
 				{ spellID = 14177, unitId = "player", caster = "player", filter = "BUFF" },
@@ -687,7 +689,7 @@ ns.watchers ={
 		{
 			name = "玩家技能CD",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", -45, -250},
+			setpoint = {"BOTTOM", UIParent, "BOTTOM", -38, 135},
 			size = 20,
 				-- 殺戮盛筵
 				{ spellID = 51690, filter = "CD" },
@@ -699,7 +701,7 @@ ns.watchers ={
 		{
 			name = "玩家Buff",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", -75, -175},
+			setpoint = {"BOTTOM", UIParent, "BOTTOM",-68, 188},
 			size = 20,
 				-- 反魔法护罩
 				{ spellID = 48707, unitId = "player", caster = "player", filter = "BUFF" },
@@ -731,7 +733,7 @@ ns.watchers ={
 		{
 			name = "目标debuff",
 			direction = "RIGHT",
-			setpoint = {"BOTTOMLEFT", UIParent, "BOTTOM", 102, 282},
+			setpoint = {"BOTTOM", UIParent, "BOTTOM", 101, 205},
 			size = 28,
 				-- 血之疫病
 				{ spellID = 55078, unitId = "target", caster = "player", filter = "DEBUFF" },
@@ -745,7 +747,7 @@ ns.watchers ={
 		{
 			name = "玩家Debuff",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", 160, 300},
+			setpoint = {"TOP", UIParent, "TOP", 160, -157},
 			size = 46,
 				-- 震懾波
 				{ spellID = 46968, unitId = "player", caster = "all", filter = "DEBUFF" },
@@ -849,11 +851,13 @@ ns.watchers ={
 				{ spellID = 110079, unitId = "player", caster = "all", filter = "DEBUFF" },
 				{ spellID = 110080, unitId = "player", caster = "all", filter = "DEBUFF" },
 				{ spellID = 105925, unitId = "player", caster = "all", filter = "DEBUFF" },
+				{ spellID = 109075, unitId = "player", caster = "all", filter = "DEBUFF" },
+				{ spellID = 110069, unitId = "player", caster = "all", filter = "DEBUFF" },
 		},
 		{
 			name = "玩家PVPDebuff",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", 160, 375},
+			setpoint = {"TOP", UIParent, "TOP", 160, -111},
 			size = 40,
 				--啃食
 		        { spellID = 47481, unitId = "player", caster = "all", filter = "DEBUFF" },
@@ -1057,7 +1061,7 @@ ns.watchers ={
 		{
 			name = "药水减伤等Buff",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", -340, 65},
+			setpoint = {"CENTER", UIParent, "CENTER", -320, 36},
 			size = 24,
 				-- 火山药水
 				{ spellID = 79476, unitId = "player", caster = "player", filter = "BUFF" },  
@@ -1110,7 +1114,7 @@ ns.watchers ={
 		{
 			name = "玩家重要Buff",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", -345, -5},
+			setpoint = {"CENTER", UIParent, "CENTER", -319, 8},
 			size = 24,
 				-- 急速射击
 				{ spellID =  3045, unitId = "player", caster = "player", filter = "BUFF" }, 
@@ -1170,7 +1174,7 @@ ns.watchers ={
 				{
 			name = "玩家饰品附魔触发buff",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", -75, -140},
+			setpoint = {"CENTER", UIParent, "CENTER", -68, -204},
 			size = 20,
 				--电容器
 				{ spellID = 96890, unitId = "player", caster = "player", filter = "BUFF" }, 

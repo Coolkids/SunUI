@@ -7,6 +7,8 @@
 ## OptionalDeps: LibDBIcon-1.0, !ClassColors
 ## SavedVariablesPerCharacter: NumerationCharDB, NumerationCharOptions
 ## RequiredDeps: !SunUI
+## X-WoWBox-Ver: 1
+## X-WoWBox-ID: 3341
 
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml

@@ -2,6 +2,8 @@
 ## Title: Aurora
 ## Notes: Minimalistic window themes.
 ## Author: Haleth/Freethinker
-## Version: 3.5.7
+## Version: 3.6
+## X-WoWBox-Ver: 1
+## X-WoWBox-ID: 3341
 
 aurora.lua

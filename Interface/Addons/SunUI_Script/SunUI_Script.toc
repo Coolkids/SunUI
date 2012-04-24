@@ -3,6 +3,8 @@
 ## Notes: 孫小貓超級整合插件
 ## Author:All Thanks, Coolkid
 ## RequiredDeps: !SunUI
+## X-WoWBox-Ver: 1
+## X-WoWBox-ID: 3341
 
 load.xml
 

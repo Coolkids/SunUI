@@ -13,7 +13,11 @@ local UnitDebuff = UnitDebuff
 local CooldownFrame_SetTimer = CooldownFrame_SetTimer
 
 local normal = "Interface\\Addons\\RayWatcher\\media\\statusbar"
-local glow = "Interface\\Addons\\RayWatcher\\media\\glowtex"
+
+local function Round(v, decimals)
+	if not decimals then decimals = 0 end
+    return (("%%.%df"):format(decimals)):format(v)
+end
 
 function watcherPrototype:OnEnable()
 		if self.parent then
@@ -39,7 +43,7 @@ function watcherPrototype:CreateButton(mode)
 	button.icon = button:CreateTexture(nil, "ARTWORK")
 	button.icon:SetAllPoints()
 	button.count = button:CreateFontString(nil, "OVERLAY")
-	button.count:SetFont(ns.font, ns.fontsize + 0, ns.fontflag)
+	button.count:SetFont(ns.font, ns.fontsize * (Round(self.size) / 30), ns.fontflag)
 	button.count:SetPoint("BOTTOMRIGHT", button , "BOTTOMRIGHT", 4, -2)
 	button:SetScript("OnEnter", function(self)
 			GameTooltip:SetOwner(self, "ANCHOR_TOP")

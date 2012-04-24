@@ -371,13 +371,12 @@ local Indicators_class_default = {
     }
 }
 --local version, internalVersion, date, uiVersion = GetBuildInfo()
---local standard_text_font
---if GetLocale() == "zhCN" then
---	standard_text_font = [[Fonts\ARKai_T.ttf]]
---elseif GetLocale() == "zhTW" then
---	standard_text_font = [[Fonts\bLEI00D.ttf]]
---elseif GetLocale() == "enUS" then
---end
+local standard_text_font
+if GetLocale() == "zhCN" then
+	standard_text_font = [[Fonts\ARKai_T.ttf]]
+elseif GetLocale() == "zhTW" then
+	standard_text_font = [[Fonts\bLEI00D.ttf]]
+end
 
 ns.defaults = {
     scale = 1.0,
