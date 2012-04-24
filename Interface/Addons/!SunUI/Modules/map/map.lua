@@ -227,6 +227,7 @@ local function m_MapEnlarge()
 
 	WorldMapFrame:SetParent(UIParent)
 	WorldMapDetailFrame:SetFrameLevel(50)
+	WorldMapButton:SetFrameLevel(55)
 	WorldMapFrame:EnableMouse(false)
 	WorldMapFrame:EnableKeyboard(false)
 	SetUIPanelAttribute(WorldMapFrame, "area", "center");
@@ -280,6 +281,43 @@ local function m_MapEnlarge()
 	WorldMapShowDigSitesText:SetTextColor(1, 1, 1)
 end
 hooksecurefunc("WorldMap_ToggleSizeUp", m_MapEnlarge)
+function QuestSkin()
+	if not InCombatLockdown() then
+		WorldMapFrame:SetParent(UIParent)
+		WorldMapFrame:EnableMouse(false)
+		WorldMapFrame:EnableKeyboard(false)
+		SetUIPanelAttribute(WorldMapFrame, "area", "center");
+		SetUIPanelAttribute(WorldMapFrame, "allowOtherPanels", true)
+	end
+
+	WorldMapFrame.backdrop:ClearAllPoints()
+	WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -25, 70)
+	WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 325, -235)  
+	if not WorldMapQuestDetailScrollFrame.backdrop then
+		WorldMapQuestDetailScrollFrame.backdrop = CreateFrame("Frame", nil, WorldMapQuestDetailScrollFrame)
+		S.CreateBD(WorldMapQuestDetailScrollFrame.backdrop)
+		WorldMapQuestDetailScrollFrame.backdrop:SetFrameLevel(0)
+		WorldMapQuestDetailScrollFrame.backdrop:Point("TOPLEFT", -22, 2)
+		WorldMapQuestDetailScrollFrame.backdrop:Point("BOTTOMRIGHT", 23, -4)
+	end
+	
+	if not WorldMapQuestRewardScrollFrame.backdrop then
+		WorldMapQuestRewardScrollFrame.backdrop = CreateFrame("Frame", nil, WorldMapQuestRewardScrollFrame)
+		S.CreateBD(WorldMapQuestRewardScrollFrame.backdrop)
+		WorldMapQuestRewardScrollFrame.backdrop:SetFrameLevel(0)
+		WorldMapQuestRewardScrollFrame.backdrop:Point("TOPLEFT", -2, 2)
+		WorldMapQuestRewardScrollFrame.backdrop:Point("BOTTOMRIGHT", 22, -4)				
+	end
+	
+	if not WorldMapQuestScrollFrame.backdrop then
+		WorldMapQuestScrollFrame.backdrop = CreateFrame("Frame", nil, WorldMapQuestScrollFrame)
+		S.CreateBD(WorldMapQuestScrollFrame.backdrop)
+		WorldMapQuestScrollFrame.backdrop:SetFrameLevel(0)
+		WorldMapQuestScrollFrame.backdrop:Point("TOPLEFT", 0, 2)
+		WorldMapQuestScrollFrame.backdrop:Point("BOTTOMRIGHT", 24, -3)				
+	end
+end
+hooksecurefunc("WorldMapFrame_SetQuestMapView", QuestSkin)
 S.ReskinDropDown(WorldMapZoneMinimapDropDown)
 S.ReskinDropDown(WorldMapContinentDropDown)
 S.ReskinDropDown(WorldMapZoneDropDown)
