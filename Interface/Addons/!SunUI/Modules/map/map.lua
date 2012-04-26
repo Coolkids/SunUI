@@ -153,7 +153,7 @@ WorldMapDetailFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, -2, 2)
 WorldMapDetailFrame.backdrop:Point("BOTTOMRIGHT", WorldMapDetailFrame, 2, -2)
 WorldMapDetailFrame.backdrop:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel() - 2)
 S.StripTextures(WorldMapFrame)
-
+WorldMapFrame:DisableDrawLayer("BORDER")
 ---------------- > Styling mini World Map
 -- for the love of GOD do not change values in this function
 local function m_MapShrink()

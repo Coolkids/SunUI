@@ -13,7 +13,7 @@ local function WorldStateAlwaysUpFrame_Update()
    _G["WorldStateAlwaysUpFrame"].SetPoint = dummy
    local alwaysUpShown = 1   
    for i = alwaysUpShown, NUM_ALWAYS_UP_UI_FRAMES do   
-      _G["AlwaysUpFrame"..i.."Text"]:SetFont(DB.Font, fsize)
+      _G["AlwaysUpFrame"..i.."Text"]:SetFont(DB.Font, fsize, "THINOUTLINE")
    end
 end
 hooksecurefunc("WorldStateAlwaysUpFrame_Update", WorldStateAlwaysUpFrame_Update)

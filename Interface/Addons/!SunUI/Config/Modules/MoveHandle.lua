@@ -44,7 +44,7 @@ function Module.LoadSettings()
 		["FocusFrame"] = {"RIGHT", "UIParent", "RIGHT", -57, -138},
 		["FocusTFrame"] = {"TOP", "oUF_SunUIFocus", "BOTTOM", 0, -30},
 		["PetFrame"] = {"TOPRIGHT", "oUF_SunUIPlayer", "TOPLEFT", -5, 0},
-		["PartyFrame"] = {"BOTTOMLEFT", "UIParent", "BOTTOMLEFT", 120, 362},
+		["PartyFrame"] = {"LEFT", "UIParent", "LEFT", 10, 0},
 		["ArenaFrame"] = {"RIGHT", "UIParent", "RIGHT", -50, -60},
 		["BossFrame"] = {"RIGHT", "UIParent", "RIGHT", -50, -60},
 		["PlayerCastbar"] = {"BOTTOM","UIParent","BOTTOM",0,105},

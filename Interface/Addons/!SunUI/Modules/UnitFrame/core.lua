@@ -346,7 +346,7 @@ oUF:Factory(function(self)
 	'yOffset', -40)
 	party:SetScale(C["BossScale"])
     MoveHandle.SunUIPartyFrame = S.MakeMove(party, "SunUI_PartyFrame", "PartyFrame", C["BossScale"])
-  else
+  --else
     oUF:DisableBlizzard'party'
   end
   

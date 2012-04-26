@@ -84,7 +84,13 @@ function S.FormatMemory(Memory)
 		return "N/A"
 	end	
 end
-
+S.CreateGradient = function(f)
+	local tex = f:CreateTexture(nil, "BACKGROUND")
+	tex:SetPoint("TOPLEFT")
+	tex:SetPoint("BOTTOMRIGHT")
+	tex:SetTexture("Interface\\ChatFrame\\ChatFrameBackground")
+	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+end
 local function CreateBD(f, a)
 	
 	f:SetBackdrop({
@@ -127,8 +133,8 @@ local function CreateSD(parent, size, r, g, b, alpha, offset)
 	sd.size = size or 5
 	sd.size = sd.size - 5
 	sd.offset = offset or 0
-	sd:SetPoint("TOPLEFT", parent, -sd.size - 1 - sd.offset, sd.size + 1 + sd.offset)
-	sd:SetPoint("BOTTOMRIGHT", parent, sd.size + 1 + sd.offset, -sd.size - 1 - sd.offset)
+	sd:Point("TOPLEFT", parent, -sd.size - 1 - sd.offset, sd.size + 1 + sd.offset)
+	sd:Point("BOTTOMRIGHT", parent, sd.size + 1 + sd.offset, -sd.size - 1 - sd.offset)
 	sd:CreateShadow()
 	sd.shadow:SetBackdropBorderColor(r or 0, g or 0, b or 0)
 	sd.border:SetBackdropBorderColor(r or 0, g or 0, b or 0)
@@ -277,7 +283,7 @@ function S.SetBD(f, x, y, x2, y2)
 	end
 	bg:SetFrameLevel(frameLevel)
 	CreateBD(bg)
-	CreateSD(bg, 6, 0, 0, 0, 1, 0)
+	CreateSD(bg, 5.8, 0, 0, 0, 1, 0)
 	--[[ f:HookScript("OnShow", function()
 		bg:SetFrameLevel(0)
 	end) ]]
