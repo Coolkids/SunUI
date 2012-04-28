@@ -3,6 +3,13 @@ local S, _, _, DB = unpack(select(2, ...))
 if DB.Nuke == true then return end
 
 local r, g, b = DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b
+local uiscale = SetUIScale()
+local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/uiscale
+local function scale(x)
+	return (mult*math.floor(x/mult+.5)) 
+end
+S.mult = mult
+S.Scale = scale
 
 function S.CreateBG(f)
 	local f = frame
@@ -283,7 +290,7 @@ function S.SetBD(f, x, y, x2, y2)
 	end
 	bg:SetFrameLevel(frameLevel)
 	CreateBD(bg)
-	CreateSD(bg, 5.8, 0, 0, 0, 1, 0)
+	CreateSD(bg, 4+mult, 0, 0, 0, 1, 0)
 	--[[ f:HookScript("OnShow", function()
 		bg:SetFrameLevel(0)
 	end) ]]
@@ -404,13 +411,6 @@ function S.UpdateSize(obj, width, height)
 	if width then obj:SetWidth(width) end
 	if height then obj:SetHeight(height) end
 end
-local uiscale = SetUIScale()
-local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/uiscale
-local function scale(x)
-	return (mult*math.floor(x/mult+.5)) 
-end
-S.mult = mult
-S.Scale = scale
 
 function S.ColorGradient(perc, ...)
 	if perc >= 1 then

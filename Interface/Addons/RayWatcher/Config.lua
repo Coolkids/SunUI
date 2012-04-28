@@ -1061,8 +1061,8 @@ ns.watchers ={
 		{
 			name = "药水减伤等Buff",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", -320, 36},
-			size = 24,
+			setpoint = {"CENTER", UIParent, "CENTER", -319, 68},
+			size = 50,
 				-- 火山药水
 				{ spellID = 79476, unitId = "player", caster = "player", filter = "BUFF" },  
 				-- 英勇
@@ -1109,13 +1109,15 @@ ns.watchers ={
 				{ spellID = 105914, unitId = "player", caster = "all", filter = "BUFF" },
 				--群体恢复
 				{ spellID = 105739, unitId = "player", caster = "all", filter = "BUFF" },
+				-- 佯攻
+				{ spellID =  1966, unitId = "player", caster = "player", filter = "BUFF" }, 
 
 		},
 		{
 			name = "玩家重要Buff",
 			direction = "RIGHT",
 			setpoint = {"CENTER", UIParent, "CENTER", -319, 8},
-			size = 24,
+			size = 50,
 				-- 急速射击
 				{ spellID =  3045, unitId = "player", caster = "player", filter = "BUFF" }, 
 				-- 4T12特效
@@ -1132,8 +1134,6 @@ ns.watchers ={
 				{ spellID = 13877, unitId = "player", caster = "player", filter = "BUFF" }, 
 				-- 能量刺激
 				{ spellID = 13750, unitId = "player", caster = "player", filter = "BUFF" }, 
-				-- 佯攻
-				{ spellID =  1966, unitId = "player", caster = "player", filter = "BUFF" }, 
 				-- 荷枪实弹
 				{ spellID = 56453, unitId = "player", caster = "player", filter = "BUFF" }, 
 				-- 开火!
@@ -1170,11 +1170,13 @@ ns.watchers ={
 				{ spellID = 50334, unitId = "player", caster = "player", filter = "BUFF" }, 
 				--树皮术
 				{ spellID = 22812, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--橙色匕首特效
+				{ spellID = 109949, unitId = "player", caster = "player", filter = "BUFF" },
 		},
 				{
 			name = "玩家饰品附魔触发buff",
 			direction = "RIGHT",
-			setpoint ={"BOTTOM", UIParent, "BOTTOM",-68, 222},
+			setpoint ={"BOTTOM", UIParent, "BOTTOM",-68, 230},
 			size = 20,
 				--电容器
 				{ spellID = 96890, unitId = "player", caster = "player", filter = "BUFF" }, 
@@ -1300,6 +1302,8 @@ ns.watchers ={
 				{ spellID = 89182, unitId = "player", caster = "player", filter = "BUFF" },
 				--偷取时间
 				{ spellID = 105785, unitId = "player", caster = "player", filter = "BUFF" },
+				--橙色匕首
+				{ spellID = 109941, unitId = "player", caster = "player", filter = "BUFF" },
 		},
 	},
 }

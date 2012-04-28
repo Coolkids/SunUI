@@ -76,7 +76,7 @@ function Module:OnInitialize()
 	Frame:RegisterEvent("UNIT_POWER")
 	Frame:RegisterEvent("SPELL_UPDATE_COOLDOWN")
 
-	if select(2, UnitClass("player"))=="PRIEST" then
+	if DB.PlayerName == "Coolkid" then
 		local sp=CreateFrame("Frame")
 		sp:SetScript("OnEvent",function(self)
 			if GetShapeshiftForm() == 1 then

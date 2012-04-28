@@ -63,11 +63,11 @@ ns.defaults = {
     manapercent = 10,
     pets = false,
     MT = false,
-    indicatorsize = 8,
-    symbolsize = 18,
+    indicatorsize = 12,
+    symbolsize = 8,
     leadersize = 12,
-    aurasize = 18,
-	secaurasize = 12,
+    aurasize = 12,
+	secaurasize = 10,
 	hptext = "DEFICIT",
 	vehiclecolor = {r = 0.2, g = 0.9, b = 0.1, a = 1},	--载具颜色
 	enemycolor = {r = 0.25, g = 0.05, b = 0.27, a = 1},	--敌对颜色
@@ -87,7 +87,7 @@ ns.defaults = {
     powerclass = false,
     tooltip = false,
     smooth = true,
-    altpower = true,
+    altpower = false,
 
     hidemenu = false,
 	Resurrection = false,
