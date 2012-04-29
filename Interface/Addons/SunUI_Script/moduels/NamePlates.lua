@@ -104,11 +104,17 @@ local DebuffWhiteList = {
 		[GetSpellInfo(20549)] = true, --War Stomp
 	--PVE
 }
-local role = {
-	["Melee"] = true,
-	["Caster"] = true,
-	["Tank"] = false,
-}
+local players = {
+			["Coolkid"] = true,
+			["Coolkids"] = true,
+			["Kenans"] = true,
+			["月殤軒"] = true,
+			["月殤玄"] = true,
+			["月殤妶"] = true,
+			["月殤玹"] = false,
+			["月殤璇"] = true,
+			["月殤旋"] = true,
+			}
 local PlateBlacklist = {
 	--圖騰
 	[GetSpellInfo(2062)] = true,  --土元素圖騰
@@ -144,7 +150,7 @@ local PlateBlacklist = {
 	["熔岩蟲"] = true,
 	["熔岩寄生虫"] = true,
 	--DS
-	["腐化之血"] = role[DB.Role],
+	["腐化之血"] = players[DB.PlayerName],
 }
 
 local NamePlates = CreateFrame("Frame")
