@@ -94,6 +94,7 @@ function Module:OnInitialize()
 			"[萬万].?g",
 			"[萬万w].?金",
 			"tao.?bao",
+			"專業代打",
 		},
 		["WhiteList"] = {
 		},

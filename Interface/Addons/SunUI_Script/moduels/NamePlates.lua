@@ -104,7 +104,11 @@ local DebuffWhiteList = {
 		[GetSpellInfo(20549)] = true, --War Stomp
 	--PVE
 }
-
+local role = {
+	["Melee"] = true,
+	["Caster"] = true,
+	["Tank"] = false,
+}
 local PlateBlacklist = {
 	--圖騰
 	[GetSpellInfo(2062)] = true,  --土元素圖騰
@@ -139,7 +143,8 @@ local PlateBlacklist = {
 	["Lava Parasite"] = true,
 	["熔岩蟲"] = true,
 	["熔岩寄生虫"] = true,
-	--["腐化之血"] = true,
+	--DS
+	["腐化之血"] = role[DB.Role],
 }
 
 local NamePlates = CreateFrame("Frame")

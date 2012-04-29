@@ -4,4 +4,5 @@
 	<Script file='ace3.lua' />
 	<Script file='BlzTime.lua' />
 	<Script file='BlzTimeTracker.lua' />
+	<Script file='BubbleBobble.lua' />
 </Ui>

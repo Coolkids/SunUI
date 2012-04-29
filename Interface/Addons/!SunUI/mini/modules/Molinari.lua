@@ -27,7 +27,12 @@ function button:PLAYER_LOGIN()
 	if(IsSpellKnown(13262)) then
 		disenchanter = true
 	end
-
+	
+	if(IsSpellKnown(1804)) then
+		-- Commence localization hack
+		rogue = ITEM_MIN_SKILL:gsub('%%s', (GetSpellInfo(1810))):gsub('%%d', '%(.*%)')
+	end
+	
 	GameTooltip:HookScript('OnTooltipSetItem', function(self)
 		local item, link = self:GetItem()
 		if(item and not InCombatLockdown() and IsAltKeyDown()) then
@@ -35,6 +40,12 @@ function button:PLAYER_LOGIN()
 
 			if(not spell and disenchanter and ns.Disenchantable(link)) then
 				spell, r, g, b = GetSpellInfo(13262), 1/2, 1/2, 1
+			elseif(not spell and rogue) then
+				for index = 1, self:NumLines() do
+					if(string.match(_G['GameTooltipTextLeft' .. index]:GetText() or '', rogue)) then
+						spell, r, g, b = GetSpellInfo(1804), 0, 1, 1
+					end
+				end
 			end
 
 			local bag, slot = GetMouseFocus():GetParent(), GetMouseFocus()
