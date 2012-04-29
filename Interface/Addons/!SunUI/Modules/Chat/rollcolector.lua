@@ -8,7 +8,7 @@ local function RGBToHex(r, g, b)
    return string.format("|cff%02x%02x%02x", r*255, g*255, b*255)
 end
 
-local L = setmetatable(GetLocale() == "zhCN" and {
+local A = setmetatable(GetLocale() == "zhCN" and {
    ["(.*) won: (.+)"]                               = "(.*)赢得了：(.+)",
    ["%s|HLootCollector:%d|h[%s roll]|h|r %s won %s "] = "%s|HLootCollector:%d|h[%s]|h|r %s 赢得了 %s ",
    ["(.*) has?v?e? selected (.+) for: (.+)"]        = "(.+)选择了(.+)取向：(.+)",
@@ -70,9 +70,9 @@ f:SetScript("OnEvent", function(self, event, addon)
    f:RegisterEvent("CHAT_MSG_LOOT")
    f:SetScript("OnEvent", function(self, event, msg)
       FindFrame()
-      local rolltype, rollval, link, player = msg:match(L["(.+) Roll - (%d+) for (.+) by (.+) + Role Bonus"])
+      local rolltype, rollval, link, player = msg:match(A["(.+) Roll - (%d+) for (.+) by (.+) + Role Bonus"])
       if not player then
-         rolltype, rollval, link, player = msg:match(L["(.+) Roll . (%d+) for (.+) by (.+)"])
+         rolltype, rollval, link, player = msg:match(A["(.+) Roll . (%d+) for (.+) by (.+)"])
          if iszhTW then link, player, rollval = rollval, link, player end
       end
 
@@ -81,14 +81,14 @@ f:SetScript("OnEvent", function(self, event, addon)
          roll[player] = {rolltype, rollcolors[rolltype]..rollval, select(2, UnitClass(player))}
          return
       end
-      local player, selection, link = msg:match(L["(.*) has?v?e? selected (.+) for: (.+)"])
+      local player, selection, link = msg:match(A["(.*) has?v?e? selected (.+) for: (.+)"])
       if player and player ~= "" then
          player = player == YOU and UnitName("player") or player
          FindRoll(link, player)[player] = {selection, nil}
          return
       end
 
-      local player, link = msg:match(L["(.*) won: (.+)"])
+      local player, link = msg:match(A["(.*) won: (.+)"])
       if player then
          player = player == YOU and UnitName("player") or player
          for i, roll in ipairs(rolls) do
@@ -104,7 +104,7 @@ f:SetScript("OnEvent", function(self, event, addon)
                if (server and server ~= "") then
                   name = name.."-"..server
                end
-               local msg = string.format(L["%s|HLootCollector:%d|h[%s roll]|h|r %s won %s "], rollcolors[rolltype], i, rolltype, "|Hplayer:"..(name or player).."|h["..RGBToHex(r, g, b)..player.."|r]|h", link)
+               local msg = string.format(A["%s|HLootCollector:%d|h[%s roll]|h|r %s won %s "], rollcolors[rolltype], i, rolltype, "|Hplayer:"..(name or player).."|h["..RGBToHex(r, g, b)..player.."|r]|h", link)
                   for cf in pairs(frames) do
                      _G[cf]:AddMessage(msg)
                   end
@@ -118,8 +118,8 @@ end)
 
 
 ChatFrame_AddMessageEventFilter("CHAT_MSG_LOOT", function(self, event, msg)
-   if msg:match(L["(.*) won: (.+)"]) or msg:match(L["(.*) has?v?e? selected (.+) for: (.+)"]) or msg:match(L["(.+) Roll . (%d+) for (.+) by (.+)"]) or msg:match(L["(.+) Roll - (%d+) for (.+) by (.+) + Role Bonus"])
-      or msg:match(L["You passed on: "]) or msg:match(L[" automatically passed on: "]) or (msg:match(L[" passed on: "]) and not msg:match(L["Everyone passed on: "])) then
+   if msg:match(A["(.*) won: (.+)"]) or msg:match(A["(.*) has?v?e? selected (.+) for: (.+)"]) or msg:match(A["(.+) Roll . (%d+) for (.+) by (.+)"]) or msg:match(A["(.+) Roll - (%d+) for (.+) by (.+) + Role Bonus"])
+      or msg:match(A["You passed on: "]) or msg:match(A[" automatically passed on: "]) or (msg:match(A[" passed on: "]) and not msg:match(A["Everyone passed on: "])) then
       return true
    end
 end)
@@ -140,7 +140,7 @@ function SetItemRef(link, text, button)
       if roll[roll._winner][3] then
          r, g, b = RAID_CLASS_COLORS[roll[roll._winner][3]].r, RAID_CLASS_COLORS[roll[roll._winner][3]].g, RAID_CLASS_COLORS[roll[roll._winner][3]].b
       end
-      ItemRefTooltip:AddDoubleLine(L["Winner"]..": ", RGBToHex(r, g, b)..roll._winner.."|r")
+      ItemRefTooltip:AddDoubleLine(A["Winner"]..": ", RGBToHex(r, g, b)..roll._winner.."|r")
       for i,v in pairs(roll) do
          if string.sub(i, 1, 1) ~= "_" then
             local r, g, b = 1, 1, 1
@@ -150,7 +150,7 @@ function SetItemRef(link, text, button)
             if i == UnitName("player") then
                ItemRefTooltip:AddDoubleLine(RGBToHex(r, g, b)..i.."|r (|cffff0000"..YOU.."|r)", v[2])
             elseif i == roll._winner then
-               ItemRefTooltip:AddDoubleLine(RGBToHex(r, g, b)..i.."|r (|cffff0000"..L["Winner"].."|r)", v[2])
+               ItemRefTooltip:AddDoubleLine(RGBToHex(r, g, b)..i.."|r (|cffff0000"..A["Winner"].."|r)", v[2])
             else
                ItemRefTooltip:AddDoubleLine(RGBToHex(r, g, b)..i.."|r", v[2])
             end

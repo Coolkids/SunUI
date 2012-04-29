@@ -14,7 +14,7 @@ function Module:OnInitialize()
 				local c = cost%100
 				local s = math.floor((cost%10000)/100)
 				local g = math.floor(cost/10000)
-				if IsInGuild() then
+				--[[ if IsInGuild() then
 					local guildMoney = GetGuildBankWithdrawMoney()
 					if guildMoney > GetGuildBankMoney() then
 						guildMoney = GetGuildBankMoney()
@@ -23,21 +23,20 @@ function Module:OnInitialize()
 						RepairAllItems(1)	DEFAULT_CHAT_FRAME:AddMessage("|cffffff00您修理装备花费了公会：|r"..format(GOLD_AMOUNT_TEXTURE, g, 0, 0).." "..format(SILVER_AMOUNT_TEXTURE, s, 0, 0).." "..format(COPPER_AMOUNT_TEXTURE, c, 0, 0),255,255,255)
 						return
 					end
-				end
+				end ]]
 				if possible then
-					StaticPopup_Show("replay")
+					StaticPopup_Show("REPAIR")
 				else
 					DEFAULT_CHAT_FRAME:AddMessage("您没有足够的金币以完成修理！",255,0,0)
 				end
 			end
 		end
-		StaticPopupDialogs["replay"] = {
+		StaticPopupDialogs["REPAIR"] = {
 			text = "自动修理确定",
 			button1 = YES,
 			button2 = NO,
 			OnAccept = function(self)
 				RepairAllItems()
-				DEFAULT_CHAT_FRAME:AddMessage("|cffffff00您修理装备花费了：|r"..format(GOLD_AMOUNT_TEXTURE, g, 0, 0).." "..format(SILVER_AMOUNT_TEXTURE, s, 0, 0).." "..format(COPPER_AMOUNT_TEXTURE, c, 0, 0),255,255,255)
 			end,
 			OnShow = function(self)
 				MoneyFrame_Update(self.moneyFrame, GetRepairAllCost())
