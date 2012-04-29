@@ -16,35 +16,25 @@ function Module:OnInitialize()
 				local g = math.floor(cost/10000)
 				if IsInGuild() then
 					local guildMoney = GetGuildBankWithdrawMoney()
-					if guildMoney > GetGuildBankMoney() then
-						guildMoney = GetGuildBankMoney()
+					if GetGuildBankMoney() ~= 0 then
+						if guildMoney > GetGuildBankMoney() then
+							guildMoney = GetGuildBankMoney()
+						end
 					end
 					if guildMoney > cost and CanGuildBankRepair() then
-						RepairAllItems(1)	DEFAULT_CHAT_FRAME:AddMessage("|cffffff00您修理装备花费了公会：|r"..format(GOLD_AMOUNT_TEXTURE, g, 0, 0).." "..format(SILVER_AMOUNT_TEXTURE, s, 0, 0).." "..format(COPPER_AMOUNT_TEXTURE, c, 0, 0),255,255,255)
+						RepairAllItems(1)
+						print(cost)
+						DEFAULT_CHAT_FRAME:AddMessage("|cffffff00您修理装备花费了公会：|r"..format(GOLD_AMOUNT_TEXTURE, g, 0, 0).." "..format(SILVER_AMOUNT_TEXTURE, s, 0, 0).." "..format(COPPER_AMOUNT_TEXTURE, c, 0, 0),255,255,255)
 						return
 					end
 				end
-				if possible then
-					StaticPopup_Show("REPAIR")
+				if possible and not CanGuildBankRepair() then
+					RepairAllItems()
+					DEFAULT_CHAT_FRAME:AddMessage("|cffffff00您修理装备花费了：|r"..format(GOLD_AMOUNT_TEXTURE, g, 0, 0).." "..format(SILVER_AMOUNT_TEXTURE, s, 0, 0).." "..format(COPPER_AMOUNT_TEXTURE, c, 0, 0),255,255,255)
 				else
 					DEFAULT_CHAT_FRAME:AddMessage("您没有足够的金币以完成修理！",255,0,0)
 				end
 			end
 		end
-		StaticPopupDialogs["REPAIR"] = {
-			text = "自动修理确定",
-			button1 = YES,
-			button2 = NO,
-			OnAccept = function(self)
-				RepairAllItems()
-			end,
-			OnShow = function(self)
-				MoneyFrame_Update(self.moneyFrame, GetRepairAllCost())
-			end,
-			hasMoneyFrame = 1,
-			timeout = 0,
-			hideOnEscape = 1,
-			preferredIndex = 3
-		}
 	end)
 end
