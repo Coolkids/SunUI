@@ -23,7 +23,7 @@ local A = setmetatable(GetLocale() == "zhCN" and {
    ["(.*) won: (.+)"]                               = "(.*)贏得了:(.+)",
    ["%s|HLootCollector:%d|h[%s roll]|h|r %s won %s "] = "%s|HLootCollector:%d|h[%s]|h|r %s 贏得了 %s ",
    ["(.*) has?v?e? selected (.+) for: (.+)"]        = "(.+)選擇\228?\186?\134?(.+):(.+)",
-   ["(.+) Roll . (%d+) for (.+) by (.+)"]           = "(.+) %- (.+)由(.+)擲出(%d+)",
+   ["(.+) Roll . (%d+) for (.+) by (.+)"]           = "([^-]+) %- (.+)由(.+)擲出(%d+)",
    ["(.+) Roll - (%d+) for (.+) by (.+) + Role Bonus"]    = "%((.+)%+角色加成%)(%d+)點:(.+)%((.+)%)",
    [" passed on: "]                                 = "放棄了:",
    [" automatically passed on: "]                   = "自動放棄:",
