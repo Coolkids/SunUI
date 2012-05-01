@@ -150,6 +150,7 @@ local function CreateSD(parent, size, r, g, b, alpha, offset)
 end
 S.CreateSD = CreateSD
 local function StartGlow(f)
+	if not f:IsEnabled() then return end
 	f:SetBackdropColor(r, g, b, .1)
 	f:SetBackdropBorderColor(r, g, b)
 	CreatePulse(f.glow)
@@ -199,7 +200,7 @@ function S.Reskin(f)
 	f:HookScript("OnEnter", StartGlow)
  	f:HookScript("OnLeave", StopGlow)
 end
-function S.ReskinInput(f, height, width)
+function S.ReskinInput(f, height, width, leftOff, rightOff)
 	local frame = f:GetName()
 	_G[frame.."Left"]:Hide()
 	if _G[frame.."Middle"] then _G[frame.."Middle"]:Hide() end
@@ -207,12 +208,14 @@ function S.ReskinInput(f, height, width)
 	_G[frame.."Right"]:Hide()
 	CreateBD(f, 0)
 
-	local tex = f:CreateTexture(nil, "BACKGROUND")
-	tex:SetPoint("TOPLEFT")
-	tex:SetPoint("BOTTOMRIGHT")
-	tex:SetTexture(DB.aurobackdrop)
-	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
-
+	local bd = CreateFrame("Frame", nil, f)
+	bd:SetPoint("TOPLEFT", leftOff or -2, 0)
+	bd:SetPoint("BOTTOMRIGHT", rightOff or 0, 0)
+	bd:SetFrameLevel(f:GetFrameLevel()-1)
+	CreateBD(bd, 0)
+	
+	S.CreateGradient(bd)
+	
 	if height then f:SetHeight(height) end
 	if width then f:SetWidth(width) end
 end
@@ -237,7 +240,7 @@ end
 	local tex = f:CreateTexture(nil, "BACKGROUND")
 	tex:Point("TOPLEFT", bu.bg)
 	tex:Point("BOTTOMRIGHT", bu.bg)
-	tex:SetTexture(DB.aurobackdrop)
+	tex:SetTexture("Interface\\ChatFrame\\ChatFrameBackground")
 	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
 	local up = _G[frame.."ScrollUpButton"]
@@ -249,12 +252,12 @@ end
 	S.Reskin(up)
 	S.Reskin(down)
 	
-	up:SetDisabledTexture(DB.aurobackdrop)
+	up:SetDisabledTexture("Interface\\ChatFrame\\ChatFrameBackground")
 	local dis1 = up:GetDisabledTexture()
 	dis1:SetVertexColor(0, 0, 0, .4)
 	dis1:SetDrawLayer("OVERLAY")
 	
-	down:SetDisabledTexture(DB.aurobackdrop)
+	down:SetDisabledTexture("Interface\\ChatFrame\\ChatFrameBackground")
 	local dis2 = down:GetDisabledTexture()
 	dis2:SetVertexColor(0, 0, 0, .4)
 	dis2:SetDrawLayer("OVERLAY")

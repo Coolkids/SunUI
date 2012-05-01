@@ -202,7 +202,7 @@ ns.watchers ={
 			name = "目标的目标上方",
 			direction = "RIGHT",
 			setpoint = {"BOTTOM", UIParent, "BOTTOM",-68, 203},
-			size = 28,
+			size = 20,
 			  -- 奥术强化
 				{ spellID = 12042, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 唤醒

@@ -290,7 +290,7 @@ oUF.TagEvents['mono:altpower'] = 'UNIT_POWER'
 
 -------------[[ class specific tags ]]-------------
 -- special powers
-oUF.Tags['mono:sp'] = function(u)
+--[[ oUF.Tags['mono:sp'] = function(u)
 	local _, class = UnitClass(u)
 	local SP, spcol = 0,{}
 	if class == "PALADIN" then
@@ -415,4 +415,4 @@ if select(2, UnitClass("player")) == "DRUID" then
 		oUF.TagEvents['mono:wm'..i] = 'PLAYER_TOTEM_UPDATE'
 		oUF.UnitlessTagEvents.PLAYER_TOTEM_UPDATE = true
 	end
-end
+end ]]

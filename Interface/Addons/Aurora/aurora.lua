@@ -44,13 +44,7 @@ if CUSTOM_CLASS_COLORS then
 else
 	r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
 end
-F.CreateGradient = function(f)
-	local tex = f:CreateTexture(nil, "BACKGROUND")
-	tex:SetPoint("TOPLEFT")
-	tex:SetPoint("BOTTOMRIGHT")
-	tex:SetTexture(C.media.backdrop)
-	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
-end
+
 F.CreateTab = function(f)
 	f:DisableDrawLayer("BACKGROUND")
 
@@ -105,11 +99,7 @@ F.ReskinDropDown = function(f)
 	bg:SetFrameLevel(f:GetFrameLevel()-1)
 	S.CreateBD(bg, 0)
 
-	local tex = bg:CreateTexture(nil, "BACKGROUND")
-	tex:SetPoint("TOPLEFT")
-	tex:SetPoint("BOTTOMRIGHT")
-	tex:SetTexture(C.media.backdrop)
-	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+	S.CreateGradient(bg)
 end
 
 F.ReskinArrow = function(f, direction)
@@ -167,11 +157,7 @@ F.ReskinSlider = function(f)
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	S.CreateBD(bd, 0)
 
-	local tex = bd:CreateTexture(nil, "BACKGROUND")
-	tex:SetPoint("TOPLEFT")
-	tex:SetPoint("BOTTOMRIGHT")
-	tex:SetTexture(C.media.backdrop)
-	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+	S.CreateGradient(bd)
 
 	local slider = select(4, f:GetRegions())
 	slider:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
@@ -230,7 +216,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		
 		-- [[ Headers ]]
 
-		local header = {"GameMenuFrame", "InterfaceOptionsFrame", "AudioOptionsFrame", "VideoOptionsFrame", "ChatConfigFrame"}
+		local header = {"GameMenuFrame", "InterfaceOptionsFrame", "AudioOptionsFrame", "VideoOptionsFrame", "ChatConfigFrame", "ColorPickerFrame"}
 		for i = 1, #header do
 		local title = _G[header[i].."Header"]
 			if title then
@@ -253,7 +239,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			if bd then
 				S.CreateBD(bd)
 			else
-				print(bds[i].." was not found.")
+				print("Aurora: "..bds[i].." was not found.")
 			end
 		end
 
@@ -263,7 +249,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			if bd then
 				S.CreateBD(bd, .25)
 			else
-				print(lightbds[i].." was not found.")
+				print("Aurora: "..lightbds[i].." was not found.")
 			end
 		end
 
@@ -287,7 +273,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			if dropdown then
 				F.ReskinDropDown(dropdown)
 			else
-				print(dropdowns[i].." was not found.")
+				print("Aurora: "..dropdowns[i].." was not found.")
 			end
 		end
 
@@ -299,10 +285,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			if input then
 				S.ReskinInput(input)
 			else
-				print(inputs[i].." was not found.")
+				print("Aurora: "..inputs[i].." was not found.")
 			end
 		end
-
+		
+		S.ReskinInput(FriendsFrameBroadcastInput, nil, nil, 0)
 		S.ReskinInput(StaticPopup1EditBox, 20)
 		S.ReskinInput(StaticPopup2EditBox, 20)
 		S.ReskinInput(PVPBannerFrameEditBox, 20)
@@ -347,7 +334,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			if checkbox then
 				F.ReskinCheck(checkbox)
 			else
-				print(checkboxes[i].." was not found.")
+				print("Aurora: "..checkboxes[i].." was not found.")
 			end
 		end
 
@@ -377,7 +364,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			if radiobutton then
 				F.ReskinRadio(radiobutton)
 			else
-				print(radiobuttons[i].." was not found.")
+				print("Aurora: "..radiobuttons[i].." was not found.")
 			end
 		end
 		
@@ -408,13 +395,13 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.SetBD(WorldStateScoreFrame)
 		S.SetBD(RaidParentFrame)
 
-		local FrameBDs = {"StaticPopup1", "StaticPopup2", "GameMenuFrame", "InterfaceOptionsFrame", "VideoOptionsFrame", "AudioOptionsFrame", "LFGDungeonReadyStatus", "ChatConfigFrame", "StackSplitFrame", "AddFriendFrame", "FriendsFriendsFrame", "ReadyCheckFrame", "LFDRoleCheckPopup", "LFGDungeonReadyDialog", "RolePollPopup", "GuildInviteFrame", "ChannelFrameDaughterFrame", "LFGInvitePopup"}
+		local FrameBDs = {"StaticPopup1", "StaticPopup2", "GameMenuFrame", "InterfaceOptionsFrame", "VideoOptionsFrame", "AudioOptionsFrame", "LFGDungeonReadyStatus", "ChatConfigFrame", "StackSplitFrame", "AddFriendFrame", "FriendsFriendsFrame", "ColorPickerFrame", "ReadyCheckFrame", "LFDRoleCheckPopup", "LFGDungeonReadyDialog", "RolePollPopup", "GuildInviteFrame", "ChannelFrameDaughterFrame", "LFGInvitePopup"}
 		for i = 1, #FrameBDs do
 			FrameBD = _G[FrameBDs[i]]
-			--S.CreateBD(FrameBD)
-			--S.CreateSD(FrameBD)
-			S.StripTextures(FrameBD)
-			S.SetBD(FrameBD)
+			S.CreateBD(FrameBD)
+			S.CreateSD(FrameBD)
+			--S.StripTextures(FrameBD)
+			--S.SetBD(FrameBD)
 		end
 
 		NPCBD = CreateFrame("Frame", nil, QuestNPCModel)
@@ -1603,11 +1590,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			bu:DisableDrawLayer("ARTWORK")
 			S.CreateBD(bu, 0)
 
-			local tex = bu:CreateTexture(nil, "BACKGROUND")
-			tex:SetPoint("TOPLEFT")
-			tex:SetPoint("BOTTOMRIGHT")
-			tex:SetTexture(C.media.backdrop)
-			tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+			S.CreateGradient(bu)
 		end
 
 		HelpFrameCharacterStuckHearthstone:SetSize(56, 56)
@@ -1639,11 +1622,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			AudioOptionsVoicePanelTalkingTitle:SetPoint("BOTTOMLEFT", AudioOptionsVoicePanelTalking, "TOPLEFT", 5, 2)
 			AudioOptionsVoicePanelListeningTitle:SetPoint("BOTTOMLEFT", AudioOptionsVoicePanelListening, "TOPLEFT", 5, 2)
 
-			local dropdowns = {"Graphics_DisplayModeDropDown", "Graphics_ResolutionDropDown", "Graphics_RefreshDropDown", "Graphics_PrimaryMonitorDropDown", "Graphics_MultiSampleDropDown", "Graphics_VerticalSyncDropDown", "Graphics_TextureResolutionDropDown", "Graphics_FilteringDropDown", "Graphics_ProjectedTexturesDropDown", "Graphics_ShadowsDropDown", "Graphics_LiquidDetailDropDown", "Graphics_SunshaftsDropDown", "Graphics_ParticleDensityDropDown", "Graphics_ViewDistanceDropDown", "Graphics_EnvironmentalDetailDropDown", "Graphics_GroundClutterDropDown", "Advanced_BufferingDropDown", "Advanced_LagDropDown", "Advanced_HardwareCursorDropDown", "AudioOptionsSoundPanelHardwareDropDown", "AudioOptionsSoundPanelSoundChannelsDropDown", "AudioOptionsVoicePanelInputDeviceDropDown", "AudioOptionsVoicePanelChatModeDropDown", "AudioOptionsVoicePanelOutputDeviceDropDown"}
+			local dropdowns = {"Graphics_DisplayModeDropDown", "Graphics_ResolutionDropDown", "Graphics_RefreshDropDown", "Graphics_PrimaryMonitorDropDown", "Graphics_MultiSampleDropDown", "Graphics_VerticalSyncDropDown", "Graphics_TextureResolutionDropDown", "Graphics_FilteringDropDown", "Graphics_ProjectedTexturesDropDown", "Graphics_ShadowsDropDown", "Graphics_LiquidDetailDropDown", "Graphics_SunshaftsDropDown", "Graphics_ParticleDensityDropDown", "Graphics_ViewDistanceDropDown", "Graphics_EnvironmentalDetailDropDown", "Graphics_GroundClutterDropDown", "Advanced_BufferingDropDown", "Advanced_LagDropDown", "Advanced_HardwareCursorDropDown", "InterfaceOptionsLanguagesPanelLocaleDropDown", "AudioOptionsSoundPanelHardwareDropDown", "AudioOptionsSoundPanelSoundChannelsDropDown", "AudioOptionsVoicePanelInputDeviceDropDown", "AudioOptionsVoicePanelChatModeDropDown", "AudioOptionsVoicePanelOutputDeviceDropDown"}
+ 
 			for i = 1, #dropdowns do
 				F.ReskinDropDown(_G[dropdowns[i]])
 			end
-
+			S.StripTextures(Graphics_MultiSampleDropDown)
 			Graphics_RightQuality:GetRegions():Hide()
 			Graphics_RightQuality:DisableDrawLayer("BORDER")
 
@@ -2260,7 +2244,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			if reskinbutton then
 				S.Reskin(reskinbutton)
 			else
-				print(buttons[i].." was not found.")
+				print("Aurora: "..buttons[i].." was not found.")
 			end
 		end
 
@@ -2591,11 +2575,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		bg:SetFrameLevel(BrowseDropDown:GetFrameLevel(-1))
 		S.CreateBD(bg, 0)
 
-		local tex = bg:CreateTexture(nil, "BACKGROUND")
-		tex:SetPoint("TOPLEFT")
-		tex:SetPoint("BOTTOMRIGHT")
-		tex:SetTexture(C.media.backdrop)
-		tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+		S.CreateGradient(bg)
 
 		local inputs = {"BrowseMinLevel", "BrowseMaxLevel", "BrowseBidPriceGold", "BrowseBidPriceSilver", "BrowseBidPriceCopper", "BidBidPriceGold", "BidBidPriceSilver", "BidBidPriceCopper", "StartPriceGold", "StartPriceSilver", "StartPriceCopper", "BuyoutPriceGold", "BuyoutPriceSilver", "BuyoutPriceCopper", "AuctionsStackSizeEntry", "AuctionsNumStacksEntry"}
 		for i = 1, #inputs do
@@ -2953,6 +2933,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			select(i, CalendarViewEventTitleFrame:GetRegions()):Hide()
 			select(i, CalendarViewHolidayTitleFrame:GetRegions()):Hide()
 			select(i, CalendarViewRaidTitleFrame:GetRegions()):Hide()
+			select(i, CalendarMassInviteTitleFrame:GetRegions()):Hide()
 		end
 		for i = 1, 42 do
 			_G["CalendarDayButton"..i.."DarkFrame"]:SetAlpha(.5)
@@ -3002,6 +2983,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		CalendarFilterFrameLeft:Hide()
 		CalendarFilterFrameMiddle:Hide()
 		CalendarFilterFrameRight:Hide()
+		CalendarMassInviteFrameDivider:Hide()
 
 		S.SetBD(CalendarFrame, 12, 0, -9, 4)
 		S.CreateBD(CalendarViewEventFrame)
@@ -3015,6 +2997,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.CreateBD(CalendarCreateEventInviteList, .25)
 		S.CreateBD(CalendarCreateEventDescriptionContainer, .25)
 		S.CreateBD(CalendarEventPickerFrame, .25)
+		S.CreateBD(CalendarMassInviteFrame)
 		
 		CalendarWeekdaySelectedTexture:SetVertexColor(r, g, b)
 		
@@ -3047,13 +3030,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		bd:SetPoint("BOTTOMRIGHT", -19, 0)
 		bd:SetFrameLevel(CalendarFilterFrame:GetFrameLevel()-1)
 		S.CreateBD(bd, 0)
-
-		local tex = bd:CreateTexture(nil, "BACKGROUND")
-		tex:SetPoint("TOPLEFT")
-		tex:SetPoint("BOTTOMRIGHT")
-		tex:SetTexture(C.media.backdrop)
-		tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
-
+		S.CreateGradient(bd)
+		
 		local downtex = CalendarFilterButton:CreateTexture(nil, "ARTWORK")
 		downtex:SetTexture("Interface\\AddOns\\Aurora\\arrow-down-active")
 		downtex:SetSize(8, 8)
@@ -3081,24 +3059,35 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			for _, tooltip in pairs(tooltips) do
 				tooltip:SetBackdrop(nil)
 				local bg = CreateFrame("Frame", nil, tooltip)
-				bg:SetPoint("TOPLEFT", 2, -2)
-				bg:SetPoint("BOTTOMRIGHT", -1, 2)
+				bg:Point("TOPLEFT", 2, -2)
+				bg:Point("BOTTOMRIGHT", -1, 2)
 				bg:SetFrameLevel(tooltip:GetFrameLevel()-1)
 				S.CreateBD(bg)
 			end
 		end
 
-
 		CalendarViewEventFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
 		CalendarViewHolidayFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
 		CalendarViewRaidFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
 		CalendarCreateEventFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
-		CalendarCreateEventInviteButton:SetPoint("TOPLEFT", CalendarCreateEventInviteEdit, "TOPRIGHT", 1, 1)
+		CalendarCreateEventInviteButton:Point("TOPLEFT", CalendarCreateEventInviteEdit, "TOPRIGHT", 1, 1)
 		CalendarClassButton1:SetPoint("TOPLEFT", CalendarClassButtonContainer, "TOPLEFT", 5, 0)
 
 		CalendarCreateEventHourDropDown:SetWidth(80)
 		CalendarCreateEventMinuteDropDown:SetWidth(80)
 		CalendarCreateEventAMPMDropDown:SetWidth(90)
+		
+		local line = CalendarMassInviteFrame:CreateTexture(nil, "BACKGROUND")
+		line:Size(240, 1)
+		line:SetPoint("TOP", CalendarMassInviteFrame, "TOP", 0, -150)
+		line:SetTexture(C.media.backdrop)
+		line:SetVertexColor(0, 0, 0)
+		
+		CalendarMassInviteFrame:ClearAllPoints()
+		CalendarMassInviteFrame:SetPoint("BOTTOMLEFT", CalendarCreateEventCreateButton, "TOPRIGHT", 10, 0)
+		
+		CalendarTexturePickerFrame:ClearAllPoints()
+		CalendarTexturePickerFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", 311, -24)
 
 		local cbuttons = {"CalendarViewEventAcceptButton", "CalendarViewEventTentativeButton", "CalendarViewEventDeclineButton", "CalendarViewEventRemoveButton", "CalendarCreateEventMassInviteButton", "CalendarCreateEventCreateButton", "CalendarCreateEventInviteButton", "CalendarEventPickerCloseButton", "CalendarCreateEventRaidInviteButton", "CalendarTexturePickerAcceptButton", "CalendarTexturePickerCancelButton", "CalendarFilterButton"}
 		for i = 1, #cbuttons do
@@ -3111,6 +3100,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.ReskinClose(CalendarViewEventCloseButton)
 		S.ReskinClose(CalendarViewHolidayCloseButton)
 		S.ReskinClose(CalendarViewRaidCloseButton)
+		S.ReskinClose(CalendarMassInviteCloseButton)
 		S.ReskinScroll(CalendarTexturePickerScrollBar)
 		S.ReskinScroll(CalendarViewEventInviteListScrollFrameScrollBar)
 		S.ReskinScroll(CalendarViewEventDescriptionScrollFrameScrollBar)
@@ -3119,8 +3109,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinDropDown(CalendarCreateEventHourDropDown)
 		F.ReskinDropDown(CalendarCreateEventMinuteDropDown)
 		F.ReskinDropDown(CalendarCreateEventAMPMDropDown)
+		F.ReskinDropDown(CalendarMassInviteGuildRankMenu)
 		S.ReskinInput(CalendarCreateEventTitleEdit)
 		S.ReskinInput(CalendarCreateEventInviteEdit)
+		S.ReskinInput(CalendarMassInviteGuildMinLevelEdit)
+		S.ReskinInput(CalendarMassInviteGuildMaxLevelEdit)
 		F.ReskinArrow(CalendarPrevMonthButton, 1)
 		F.ReskinArrow(CalendarNextMonthButton, 2)
 		CalendarPrevMonthButton:SetSize(19, 19)
@@ -3389,8 +3382,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		GlyphFrameBackground:Hide()
 		GlyphFrameSideInset:DisableDrawLayer("BACKGROUND")
 		GlyphFrameSideInset:DisableDrawLayer("BORDER")
-		GlyphFrameClearInfoFrameIcon:SetPoint("TOPLEFT", 1, -1)
-		GlyphFrameClearInfoFrameIcon:SetPoint("BOTTOMRIGHT", -1, 1)
+		GlyphFrameClearInfoFrameIcon:Point("TOPLEFT", 1, -1)
+		GlyphFrameClearInfoFrameIcon:Point("BOTTOMRIGHT", -1, 1)
 		S.CreateBD(GlyphFrameClearInfoFrame)
 		GlyphFrameClearInfoFrameIcon:SetTexCoord(.08, .92, .08, .92)
 
@@ -3500,7 +3493,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		GuildBankFrameWithdrawButton:ClearAllPoints()
-		GuildBankFrameWithdrawButton:SetPoint("RIGHT", GuildBankFrameDepositButton, "LEFT", -1, 0)
+		GuildBankFrameWithdrawButton:Point("RIGHT", GuildBankFrameDepositButton, "LEFT", -1, 0)
 
 		for i = 1, NUM_GUILDBANK_COLUMNS do
 			_G["GuildBankColumn"..i]:GetRegions():Hide()
@@ -3665,7 +3658,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		GuildRecruitmentRolesFrameBg:Hide()
 		GuildRecruitmentLevelFrameBg:Hide()
 		GuildRecruitmentCommentFrameBg:Hide()
-
+		GuildRecruitmentDeclineButton_LeftSeparator:Hide()
+		GuildRecruitmentInviteButton_RightSeparator:Hide()
+		
 		GuildFrame:DisableDrawLayer("BACKGROUND")
 		GuildFrame:DisableDrawLayer("BORDER")
 		GuildFrameInset:DisableDrawLayer("BACKGROUND")
@@ -4613,7 +4608,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.ReskinClose(TradeSkillGuildFrameCloseButton)
 		S.ReskinScroll(TradeSkillDetailScrollFrameScrollBar)
 		S.ReskinScroll(TradeSkillListScrollFrameScrollBar)
-		S.ReskinScroll(TradeSkillGuildCraftersFrameScrollBar)
+		S.ReskinInput(TradeSkillInputBox, nil, nil, -2, 2)
 		S.ReskinInput(TradeSkillInputBox)
 		S.ReskinInput(TradeSkillFrameSearchBox)
 		F.ReskinArrow(TradeSkillDecrementButton, 1)
