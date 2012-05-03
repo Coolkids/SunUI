@@ -160,9 +160,9 @@ function Module:OnInitialize()
 		bar:SetMinMaxValues(0, 100)
 
 		bar.left = CreateFS(bar)
-		bar.left:Point("LEFT", 2, MiniDB.RaidCDHeight)
+		bar.left:SetPoint("LEFT", 2, MiniDB.RaidCDHeight)
 		bar.left:SetJustifyH("LEFT")
-		bar.left:Size(MiniDB.RaidCDHeight, MiniDB.RaidCDHeight)
+		bar.left:Size(MiniDB.RaidCDWidth*2/3, MiniDB.RaidCDHeight)
 
 		bar.right = CreateFS(bar)
 		bar.right:Point("RIGHT", 1, MiniDB.RaidCDHeight)
