@@ -33,6 +33,22 @@ function Module.LoadSettings()
 	["HideRaid"] = true,
 	["HideRaidWarn"] = true,
 	["Disenchat"] = true,
+	["AutoBotton"] = true,
+	["BloodShield"] = false,
+	["RaidCD"] = false,
+	["RaidCDWidth"] = 100,
+	["RaidCDHeight"] = 8,
+	["RaidCDDirection"] = 1,
+	["RaidCDFontSize"] = 12,
+	["AutoBuy"] = true,
+	["mageone"] = 20,
+	["magetwo"] = 20,
+	["magethree"] = 100,
+	["rogueone"] = 20,
+	["roguetwo"] = 20,
+	["roguethree"] = 20,
+	["roguefour"] = 20,
+	["roguefive"] = 20,
 	}
 	if not MiniDB then MiniDB = {} end
 	for key, value in pairs(Default) do
@@ -158,7 +174,7 @@ function Module.BuildGUI()
 				},
 			}
 		}
-			DB["Config"]["UI"] =  {
+		DB["Config"]["UI"] =  {
 			type = "group", order = 12,
 			name = L["UI缩放"],
 			args = {
@@ -262,6 +278,148 @@ function Module.BuildGUI()
 					order = 1,
 					get = function() return MiniDB.Flump end,
 					set = function(_, value) MiniDB.Flump = value end,
+				},
+				AutoBotton = {
+					type = "toggle",
+					name = L["打开任务物品按钮"],
+					order = 2,
+					get = function() return MiniDB.AutoBotton end,
+					set = function(_, value) MiniDB.AutoBotton = value end,
+				},
+				BloodShield = {
+					type = "toggle",
+					name = L["打开坦克护盾监视"],
+					order = 3,
+					get = function() return MiniDB.BloodShield end,
+					set = function(_, value) MiniDB.BloodShield = value end,
+				},
+			}
+		}
+		DB["Config"]["RaidCD"] =  {
+			type = "group", order = 17,
+			name = "RaidCD",
+			args = {
+				RaidCD = {
+					type = "toggle",
+					name = L["打开团队技能CD监视"],
+					order = 1,
+					get = function() return MiniDB.RaidCD end,
+					set = function(_, value) MiniDB.RaidCD = value end,
+				},
+				group = {
+					type = "group", order = 2,
+					name = " ",guiInline = true,
+					disabled = not MiniDB.RaidCD,
+					args = {
+						RaidCDFontSize = {
+							type = "range", order = 1,
+							name = L["字体大小"], desc = L["字体大小"],
+							min = 4, max = 28, step = 1,
+							get = function() return MiniDB.RaidCDFontSize end,
+							set = function(_, value) MiniDB.RaidCDFontSize = value end,
+						},
+						RaidCDWidth = {
+							type = "input",
+							name = L["框体宽度"],
+							desc = L["框体宽度"],
+							order = 2,
+							get = function() return tostring(MiniDB.RaidCDWidth) end,
+							set = function(_, value) MiniDB.RaidCDWidth = tonumber(value) end,
+						},
+						RaidCDHeight = {
+							type = "input",
+							name = L["框体高度"],
+							desc = L["框体高度"],
+							order = 3,
+							get = function() return tostring(MiniDB.RaidCDHeight) end,
+							set = function(_, value) MiniDB.RaidCDHeight = tonumber(value) end,
+						},
+						RaidCDDirection = {
+							type = "select",
+							name = L["计时条增长方向"],
+							desc = L["计时条增长方向"],
+							order = 4,
+							values = {[1] = L["向下"], [2] = L["向上"]},
+							get = function() return MiniDB.RaidCDDirection end,
+							set = function(_, value) MiniDB.RaidCDDirection = value end,
+						},
+					}		
+				},
+			}
+		}
+		DB["Config"]["AutoBuy"] =  {
+			type = "group", order = 18,
+			name = "AutoBuy",
+			args = {
+				AutoBuy = {
+					type = "toggle",
+					name = L["打开自动补购"],
+					order = 1,
+					get = function() return MiniDB.AutoBuy end,
+					set = function(_, value) MiniDB.AutoBuy = value end,
+				},
+				group = {
+					type = "group", order = 2,
+					name = " ",guiInline = true,
+					disabled = not MiniDB.AutoBuy,
+					args = {
+						mageone = {
+							type = "range", order = 1,
+							name = GetItemInfo(17031), desc = GetItemInfo(17031),
+							min = 0, max = 200, step = 1,
+							get = function() return MiniDB.mageone end,
+							set = function(_, value) MiniDB.mageone = value end,
+						},
+						magetwo = {
+							type = "range", order = 2,
+							name = GetItemInfo(17032), desc = GetItemInfo(17032),
+							min = 0, max = 200, step = 1,
+							get = function() return MiniDB.magetwo end,
+							set = function(_, value) MiniDB.magetwo = value end,
+						},
+						magethree = {
+							type = "range", order = 3,
+							name = GetItemInfo(17020), desc = GetItemInfo(17020),
+							min = 0, max = 1000, step = 1,
+							get = function() return MiniDB.magethree end,
+							set = function(_, value) MiniDB.magethree = value end,
+						},
+						rogueone = {
+							type = "range", order = 4,
+							name = GetItemInfo(6947), desc = GetItemInfo(6947),
+							min = 0, max = 200, step = 1,
+							get = function() return MiniDB.rogueone end,
+							set = function(_, value) MiniDB.rogueone = value end,
+						},
+						roguetwo = {
+							type = "range", order = 5,
+							name = GetItemInfo(2892), desc = GetItemInfo(2892),
+							min = 0, max = 200, step = 1,
+							get = function() return MiniDB.roguetwo end,
+							set = function(_, value) MiniDB.roguetwo = value end,
+						},
+						roguethree = {
+							type = "range", order = 6,
+							name = GetItemInfo(3775), desc = GetItemInfo(3775),
+							min = 0, max = 200, step = 1,
+							get = function() return MiniDB.roguethree end,
+							set = function(_, value) MiniDB.roguethree = value end,
+						},
+						roguefour= {
+							type = "range", order = 7,
+							name = GetItemInfo(5237), desc = GetItemInfo(5237),
+							min = 0, max = 200, step = 1,
+							get = function() return MiniDB.roguefour end,
+							set = function(_, value) MiniDB.roguefour = value end,
+						},
+						roguefive= {
+							type = "range", order = 8,
+							name = GetItemInfo(10918), desc = GetItemInfo(10918),
+							min = 0, max = 200, step = 1,
+							get = function() return MiniDB.roguefive end,
+							set = function(_, value) MiniDB.roguefive = value end,
+						},
+					}		
 				},
 			}
 		}

@@ -1,147 +1,71 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
-CreateFrame('Frame', 'Needy', UIParent)
+----------------------------------------------------------------------------------------
+--	Average item level(AiL by havoc74)
+----------------------------------------------------------------------------------------
+local MINCOLOR, COLORINC, INCMOD, MinIL, MaxIL = 0.5, 0.2, 0.5, 288, 416
 
-Needy:SetScript('OnEvent', function(self, event, ...) self[event](self, ...) end)
-Needy:RegisterEvent('MODIFIER_STATE_CHANGED')
+local slotName = {
+	"HeadSlot", "NeckSlot", "ShoulderSlot", "BackSlot", "ChestSlot", "WristSlot",
+	"HandsSlot", "WaistSlot", "LegsSlot", "FeetSlot", "Finger0Slot", "Finger1Slot",
+	"Trinket0Slot", "Trinket1Slot", "MainHandSlot", "SecondaryHandSlot", "RangedSlot", "AmmoSlot"
+}
 
-if TinyTip then
-    TinyTip.HookOnTooltipSetUnit(GameTooltip, Needy.UPDATE_MOUSEOVER_UNIT)
-else
-    Needy:RegisterEvent('UPDATE_MOUSEOVER_UNIT')
+local function GetAiL(unit)
+	local i, total, slot, itn, level = 0, 0, nil, 0
+
+	for i in pairs(slotName) do
+		slot = GetInventoryItemLink(unit, GetInventorySlotInfo(slotName[i]))
+		if slot ~= nil then
+			itn = itn + 1
+			level = select(4, GetItemInfo(slot))
+			total = total + level
+		end
+	end
+
+	if total < 1 or itn < 1 then return 0 end
+
+	return floor(total / itn)
 end
 
-function Needy:INSPECT_ACHIEVEMENT_READY()
-    self:UnregisterEvent('INSPECT_ACHIEVEMENT_READY')
-    self.line:SetText()
+local function GetAiLColor(ail)
+	local r, gb
 
-    if GameTooltip:GetUnit() == self.unit then
-        local stats, text = {}, ''
+	if ail < MinIL then
+		r = (ail / MinIL)
+		gb = r
+	else
+		r = MINCOLOR + ((ail / MaxIL) * INCMOD)
+		gb = 1 - ((ail / MaxIL) * INCMOD)
+	end
 
-        stats.TotalAchievemen = tonumber(GetComparisonAchievementPoints()) or 0
-            text = text .. L["成就点数"]  .. stats.TotalAchievemen
+	if r < MINCOLOR then
+		r = MINCOLOR
+		gb = r
+	end
 
-        if text ~= '' then
-            self.line:SetText(text)
-        end
-    end
-
-    GameTooltip:Show()
-
-    if not UnitName('mouseover') then
-        GameTooltip:FadeOut()
-    end
-
-    ClearAchievementComparisonUnit()
-
-    if _G.GearScore then
-        _G.GearScore:RegisterEvent('INSPECT_ACHIEVEMENT_READY')
-    end
-
-    if Elite then
-        Elite:RegisterEvent('INSPECT_ACHIEVEMENT_READY')
-    end
-
-    if AchievementFrameComparison then
-        AchievementFrameComparison:RegisterEvent('INSPECT_ACHIEVEMENT_READY')
-    end
-
-    self:RegisterEvent('UPDATE_MOUSEOVER_UNIT')
+	return r, gb
 end
 
-function Needy:MODIFIER_STATE_CHANGED()
-    if arg1 == 'LCTRL' or arg1 == 'RCTRL' then
-        if self.line and UnitName('mouseover') == self.unit then
-            self:UPDATE_MOUSEOVER_UNIT(true)
-        end
-    end
+local function Setup()
+	GameTooltip:HookScript("OnTooltipSetUnit", function(self, ...)
+		local ail, r, gb, d
+		local _, unit = GameTooltip:GetUnit()
+		if unit and CanInspect(unit) then
+			local isInspectOpen = (InspectFrame and InspectFrame:IsShown()) or (Examiner and Examiner:IsShown())
+			if unit and CanInspect(unit) and not isInspectOpen then
+				NotifyInspect(unit)
+				ail = GetAiL(unit)
+				d = GetAiL(unit) - GetAiL("player")
+				r, gb = GetAiLColor(ail)
+				ClearInspectPlayer(unit)
+				if unit == "player" then
+					GameTooltip:AddLine(format("|cfffed100".."iLv"..":|r "..ail), r, gb, gb)
+				else
+					GameTooltip:AddLine(format("|cfffed100".."iLv"..":|r "..ail).." ("..((d > 0) and "|cff00ff00+" or "|cffff0000")..d.."|r)", r, gb, gb)
+				end
+				GameTooltip:Show()
+			end
+		end
+	end)
 end
-
-function Needy:UPDATE_MOUSEOVER_UNIT(refresh)
-    if not refresh then
-        self.unit, self.line = nil, nil
-    end
-
-    if (UnitAffectingCombat('player')) or UnitIsDead('player') or not UnitExists('mouseover')
-    or not UnitIsPlayer('mouseover') or not UnitIsConnected('mouseover') or UnitIsDead('mouseover') then
-        return
-    end
-
-    self.unit = UnitName('mouseover')
-
-    local text = L["正在查询成就"]
-
-    if refresh then
-        self.line:SetText(text)
-    else
-        GameTooltip:AddLine(text)
-        self.line = _G['GameTooltipTextLeft' .. GameTooltip:NumLines()]
-    end
-
-    GameTooltip:Show()
-
-    if _G.GearScore then
-        _G.GearScore:UnregisterEvent('INSPECT_ACHIEVEMENT_READY')
-    end
-
-    if Elite then
-        Elite:UnregisterEvent('INSPECT_ACHIEVEMENT_READY')
-    end
-
-    if AchievementFrameComparison then
-        AchievementFrameComparison:UnregisterEvent('INSPECT_ACHIEVEMENT_READY')
-    end
-
-    self:UnregisterEvent('UPDATE_MOUSEOVER_UNIT')
-    self:RegisterEvent('INSPECT_ACHIEVEMENT_READY')
-
-    SetAchievementComparisonUnit('mouseover')
-end
-
-
-function GetItemScore(iLink) 
-   local _, _, itemRarity, itemLevel, _, _, _, _, itemEquip = GetItemInfo(iLink);
-   if (IsEquippableItem(iLink)) then 
-      if not   (itemLevel > 1) and (itemRarity > 1) then 
-      return 0;
-      end
-   end
-   return itemLevel;
-end
-
-
-function GetPlayerScore(unit) 
-   local ilvl, ilvlAdd, equipped = 0, 0, 0;
-   if (UnitIsPlayer(unit)) then
-      local _, targetClass = UnitClass(unit);
-      for i = 1, 18 do 
-         if (i ~= 4) then
-            local iLink = GetInventoryItemLink(unit, i);
-            if (iLink) then
-               ilvlAdd = GetItemScore(iLink);
-               ilvl = ilvl + ilvlAdd;
-               equipped = equipped + 1;
-            end
-         end
-      end
-   end
-   ClearInspectPlayer(); 
-   return floor(ilvl / equipped);
-end
-
-
-function SetUnit() 
-   local _, unit = GameTooltip:GetUnit();
-   local unitilvl = 0;
-   if not (unit) or not (UnitIsPlayer(unit)) or not (CanInspect(unit)) then
-      return;
-   elseif (UnitIsUnit(unit,"player")) then 
-      unitilvl = GetPlayerScore("player");
-   elseif not (InspectFrame and InspectFrame:IsShown()) then 
-NotifyInspect(unit); unitilvl = GetPlayerScore(unit);
-   end
-
-	GameTooltip:AddLine("ilevel: "..unitilvl)
-
-end
-
-GameTooltip:HookScript("OnTooltipSetUnit",SetUnit)
+Setup()

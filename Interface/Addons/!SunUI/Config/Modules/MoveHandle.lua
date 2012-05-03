@@ -50,6 +50,9 @@ function Module.LoadSettings()
 		["PlayerCastbar"] = {"BOTTOM","UIParent","BOTTOM",0,105},
 		["TargetCastbar"] = {"TOP","oUF_SunUITarget","BOTTOM",0,-30},
 		["FocusCastbar"] = {"TOP","oUF_SunUIFocus","BOTTOM",0,-20},
+		["AutoButton"] = {"RIGHT","UIParent","RIGHT",-270,188},
+		["RaidCD"] = {"RIGHT","UIParent","RIGHT",-249,-179},
+		["BloodShield"] = {"BOTTOM", "UIParent", "BOTTOM", -285, 172}
 	}
 	if not MoveHandleDB then MoveHandleDB = {} end
 	for key, value in pairs(Default) do

@@ -4,12 +4,16 @@
 
 
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file="ChatFilter.lua"/>
-	<Script file = "NamePlates.lua"/>
+	<Script file="AutoButton.lua"/>
+	<Script file="AutoBuy.lua"/>
 	<Script file = "BiggerTradeSkillUI.lua"/>
-	<Script file = "calculator.lua"/>
+	<Script file = "BloodShield.lua"/>
+	<Script file="ChatFilter.lua"/>
 	<Script file = "classCD.lua"/>
 	<Script file = "CombatNotification.lua"/>
 	<Script file = "Flump.lua"/>
 	<Script file = "GemCounter.lua"/>
+	<Script file = "MozzFullWorldMap.lua"/>
+	<Script file = "NamePlates.lua"/>
+	<Script file = "RaidCD.lua"/>
 </Ui>
