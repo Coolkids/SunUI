@@ -13,7 +13,6 @@
 	<Script file = "CombatNotification.lua"/>
 	<Script file = "Flump.lua"/>
 	<Script file = "GemCounter.lua"/>
-	<Script file = "MozzFullWorldMap.lua"/>
 	<Script file = "NamePlates.lua"/>
 	<Script file = "RaidCD.lua"/>
 </Ui>
