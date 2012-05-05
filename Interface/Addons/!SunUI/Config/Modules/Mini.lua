@@ -1,6 +1,34 @@
 ﻿-- Engines
 local S, C, L, DB = unpack(select(2, ...))
 local Core = LibStub("AceAddon-3.0"):GetAddon("Core")
+local mage, rogue= {}, {}
+if DB.zone == "zhCN" then 
+		mage = {
+			[1] = "传送符文",
+			[2] = "传送门符文",
+			[3] = "魔粉", 
+		}
+		rogue = {
+			[1] = "速效药膏",
+			[2] = "致命药膏",
+			[3] = "减速药膏",
+			[4] = "麻痹药膏",
+			[5] = "致伤药膏",
+		}
+	else
+		mage = {
+			[1] = "傳送符文",
+			[2] = "傳送門符文",
+			[3] = "魔粉", 
+		}
+		rogue = {
+			[1] = "速效毒藥",
+			[2] = "致命毒藥",
+			[3] = "致殘毒藥",
+			[4] = "麻痺毒藥",
+			[5] = "致傷毒藥",
+		}
+end
 
 -- Init
 DB["Modules"]["Mini"] = {}
@@ -365,56 +393,56 @@ function Module.BuildGUI()
 					args = {
 						mageone = {
 							type = "range", order = 1,
-							name = GetItemInfo(17031), desc = GetItemInfo(17031),
+							name = mage[1], desc = mage[1],
 							min = 0, max = 200, step = 1,
 							get = function() return MiniDB.mageone end,
 							set = function(_, value) MiniDB.mageone = value end,
 						},
 						magetwo = {
 							type = "range", order = 2,
-							name = GetItemInfo(17032), desc = GetItemInfo(17032),
+							name = mage[2], desc = mage[2],
 							min = 0, max = 200, step = 1,
 							get = function() return MiniDB.magetwo end,
 							set = function(_, value) MiniDB.magetwo = value end,
 						},
 						magethree = {
 							type = "range", order = 3,
-							name = GetItemInfo(17020), desc = GetItemInfo(17020),
+							name = mage[3], desc = mage[3],
 							min = 0, max = 1000, step = 1,
 							get = function() return MiniDB.magethree end,
 							set = function(_, value) MiniDB.magethree = value end,
 						},
 						rogueone = {
 							type = "range", order = 4,
-							name = GetItemInfo(6947), desc = GetItemInfo(6947),
+							name = rogue[1], desc = rogue[1],
 							min = 0, max = 200, step = 1,
 							get = function() return MiniDB.rogueone end,
 							set = function(_, value) MiniDB.rogueone = value end,
 						},
 						roguetwo = {
 							type = "range", order = 5,
-							name = GetItemInfo(2892), desc = GetItemInfo(2892),
+							name = rogue[2], desc = rogue[2],
 							min = 0, max = 200, step = 1,
 							get = function() return MiniDB.roguetwo end,
 							set = function(_, value) MiniDB.roguetwo = value end,
 						},
 						roguethree = {
 							type = "range", order = 6,
-							name = GetItemInfo(3775), desc = GetItemInfo(3775),
+							name = rogue[3], desc = rogue[3],
 							min = 0, max = 200, step = 1,
 							get = function() return MiniDB.roguethree end,
 							set = function(_, value) MiniDB.roguethree = value end,
 						},
 						roguefour= {
 							type = "range", order = 7,
-							name = GetItemInfo(5237), desc = GetItemInfo(5237),
+							name = rogue[4], desc = rogue[4],
 							min = 0, max = 200, step = 1,
 							get = function() return MiniDB.roguefour end,
 							set = function(_, value) MiniDB.roguefour = value end,
 						},
 						roguefive= {
 							type = "range", order = 8,
-							name = GetItemInfo(10918), desc = GetItemInfo(10918),
+							name = rogue[5], desc = rogue[5],
 							min = 0, max = 200, step = 1,
 							get = function() return MiniDB.roguefive end,
 							set = function(_, value) MiniDB.roguefive = value end,
