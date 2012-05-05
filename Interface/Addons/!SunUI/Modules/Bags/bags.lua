@@ -2,7 +2,6 @@
 local _, ns = ...
 local cargBags = ns.cargBags
 local S, C, L, DB = unpack(select(2, ...))
-if DB.Nuke == true then return end
 ----------------
 --  主程序  --
 ----------------

@@ -1,5 +1,5 @@
-﻿local S, _, L, DB = unpack(SunUI)
-if DB.Nuke == true then return end
+﻿local S, C, L, DB = unpack(SunUI)
+ 
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ambutton", "AceTimer-3.0")
 function Module:OnInitialize()
 local button = CreateFrame("Button", "ButtonA",  ColectorButton)

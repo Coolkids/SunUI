@@ -1,7 +1,5 @@
 ﻿-- Engines
 local S, _, _, DB = unpack(select(2, ...))
-if DB.Nuke == true then return end
-
 local r, g, b = DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b
 local uiscale = SetUIScale()
 local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/uiscale

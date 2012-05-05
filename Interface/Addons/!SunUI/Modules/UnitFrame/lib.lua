@@ -5,7 +5,7 @@ local S, C, L, DB = unpack(select(2, ...))
 local Core = LibStub("AceAddon-3.0"):GetAddon("Core")
 local Module = Core:NewModule("UnitFrameLib")
 local lib = CreateFrame("Frame")  
-if DB.Nuke == true then return end
+ 
 local PlayerTimersOnly = false 
 function Module:OnInitialize()
 local playerauras = "DEBUFFS"  		

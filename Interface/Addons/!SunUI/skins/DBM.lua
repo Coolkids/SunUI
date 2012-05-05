@@ -1,6 +1,6 @@
 ﻿-- Engines
 local S, C, L, DB = unpack(select(2, ...))
-if DB.Nuke == true then return end
+ 
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("SkinDBM", "AceEvent-3.0")
 function Module:OnInitialize()
 	local Event = CreateFrame("Frame")

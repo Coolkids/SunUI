@@ -1,7 +1,7 @@
 ﻿-- Engines
 local S, C, L, DB = unpack(select(2, ...))
 
-if DB.Nuke == true then return end
+ 
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("MiniMap", "AceTimer-3.0")
 function Module:OnInitialize()
 Minimap:SetMaskTexture("Interface\\ChatFrame\\ChatFrameBackground")

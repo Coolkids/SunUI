@@ -4,7 +4,7 @@ local lib = ns.lib
 local S, C, L, DB = unpack(select(2, ...))
 local Core = LibStub("AceAddon-3.0"):GetAddon("Core")
 local Module = Core:NewModule("UnitFrame")
-if DB.Nuke == true then return end
+ 
 local showfaketarget = false -- fake target bars that spawn if you don't have anything targeted
 function Module:OnInitialize()
 C = UnitFrameDB

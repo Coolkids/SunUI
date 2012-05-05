@@ -1,0 +1,12 @@
+﻿<!-- -->
+
+
+
+
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="tullaRange.lua"/>
+	<Script file="HoverBind.lua"/>
+	<Script file="Cooldown.lua"/>
+	<Script file="CooldownFlash.lua"/>
+	<Script file="BarFacer.lua"/>
+</Ui>

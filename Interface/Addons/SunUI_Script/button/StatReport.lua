@@ -1,5 +1,5 @@
-﻿local S, C, L, DB = unpack(SunUI) --Engine
-if DB.Nuke == true then return end
+﻿local S, C, _, DB = unpack(SunUI) --Engine
+ 
 local CH = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("StatReport")
 
 -- Author: YYSS
@@ -382,9 +382,10 @@ end
 
 
 if GetLocale() ~= 'zhCN' or GetLocale() ~= 'zhTW' then
+	function CH:OnInitialize()
 			local statreport = CreateFrame("Button", "ButtonST", ColectorButton)
 			statreport:Size(15)
-			statreport:Point("TOP", ButtonP, "BOTTOM", 0, -5)
+			statreport:Point("TOPLEFT", ColectorButton, "TOPLEFT", 5, -45)
 			statreport.text = statreport:CreateFontString(nil, 'OVERLAY')
 			statreport.text:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")
 			statreport.text:Point("CENTER", statreport, "CENTER", 2, 0)
@@ -404,4 +405,5 @@ if GetLocale() ~= 'zhCN' or GetLocale() ~= 'zhTW' then
 			
 			S.CreateBG(statreport, 0)
 			S.Reskin(statreport)
+	end
 end

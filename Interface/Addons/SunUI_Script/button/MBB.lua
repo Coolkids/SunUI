@@ -1,5 +1,5 @@
 ﻿local S, C, L, DB = unpack(SunUI) --Engine
-if DB.Nuke == true then return end
+ 
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("MBB", "AceTimer-3.0")
 function Module:OnInitialize()
 

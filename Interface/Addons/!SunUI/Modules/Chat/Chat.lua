@@ -1,6 +1,6 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Chat", "AceEvent-3.0")
-if DB.Nuke == true then return end
+ 
 function Module:OnInitialize()
 -- 聊天设置
 local AutoApply = false									--聊天设置锁定		

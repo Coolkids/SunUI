@@ -6,13 +6,17 @@
 
 
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Include file="actionbar\load.xml"/>
 	<Include file="button\load.xml"/>
+	<Include file="chat\load.xml"/>
 	<Include file="moduels\load.xml"/>
 	<Include file="script\load.xml"/>
 	<Include file ="Icicle\load.xml"/>
 	<Include file ="FriendsMenuXP\load.xml"/>
 	<Include file ="TheBurningTrade\load.xml"/>
 	<Include file ="Ratings\load.xml"/>
+	<Include file ="mini\load.xml"/>
+	<Include file ="layout\load.xml"/>
 </Ui>
 
 <!--	<Script file="Load.lua"/>  -->

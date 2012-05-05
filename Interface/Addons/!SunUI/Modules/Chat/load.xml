@@ -1,11 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="chat.lua"/>
 	<Script file="chatbar.lua"/>
-	<Script file="colectorbutton.lua"/>
-	<Script file="damagemeters.lua"/>
-	<Script file="rollcollector.lua"/>
-	<Script file="ChatEmotion.lua"/>
 	<Script file="TabChannel.lua"/>
-	<Script file="channel.lua"/>
-	<Script file="hide.lua"/>
 </Ui>

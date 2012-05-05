@@ -1,9 +1,6 @@
 local S, _, _, DB = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("SunUI BaseData")
 
-
-
-
 --  自动设置聊天框体和UI缩放
 local function SetChatFrame()
 	FCF_SetLocked(ChatFrame1, nil)

@@ -1,5 +1,5 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
-if DB.Nuke == true then return end
+ 
 local AB = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ActionStyle", "AceEvent-3.0")
 function AB:OnInitialize()
 	if ActionBarDB.Style == 2 then return end
