@@ -32,7 +32,6 @@ local function BuildClock()
 	Clock.Text:SetPoint("RIGHT", MoveHandle.InfoPanel, "RIGHT")
 	Clock:SetAllPoints(Clock.Text)
 	Clock:SetScript("OnEnter", function(self)
-		 
 		GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(date"%A, %B %d", 0.40, 0.78, 1)
@@ -59,6 +58,15 @@ local function BuildClock()
 					GameTooltip:AddDoubleLine(format("%s |cffaaaaaa(%s%s)", name, maxPlayers, diff), S.FormatTime(reset), 1, 1, 1, tr, tg, tb)
 				end
 			end	
+		GameTooltip:AddLine("  ")
+		GameTooltip:AddLine("所有ID")	
+		local thisRealmList = MiniDB.raid[GetCVar("realmName")]
+		for k,v in pairs(thisRealmList) do
+			GameTooltip:AddLine(k,0.40, 0.78, 1)
+			for a,b in pairs(v) do
+				GameTooltip:AddDoubleLine(a, S.FormatTime(b), 1, 1, 1, 0, 1, 0)
+			end
+		end
 		GameTooltip:Show()
 	end)
 	Clock:SetScript("OnLeave", function(self) GameTooltip:Hide() end)

@@ -165,8 +165,8 @@ local TimeStampsCopy = true					-- 时间戳
 			end
 			local bb = _G["ChatFrame"..i.."ButtonFrameBottomButton"]
 			bb:SetParent(_G["ChatFrame"..i])
-			bb:SetHeight(24)
-			bb:SetWidth(24)
+			--bb:SetHeight(20)
+			--bb:SetWidth(20)
 			bb:ClearAllPoints()
 			bb:SetPoint("TOPRIGHT", cf, "TOPRIGHT", 0, -6)
 			bb:SetAlpha(1)

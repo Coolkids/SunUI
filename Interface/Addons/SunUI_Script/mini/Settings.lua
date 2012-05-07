@@ -135,17 +135,6 @@ end
 
 
 ---------------- > SetupUI
---[[ SetCVar("scriptErrors", 1)
-SetCVar("buffDurations", 1)
-SetCVar("consolidateBuffs",0)
-SetCVar("autoLootDefault", 1)
-SetCVar("lootUnderMouse", 1)
-SetCVar("autoSelfCast", 1)
-SetCVar("nameplateShowEnemies", 1)
-SetCVar("ShowClassColorInNameplate", 1)
-SetCVar("bloattest", 0)
-SetCVar("bloatthreat",0)
-SetCVar("bloatnameplates", 0.0) ]]
 SetCVar("screenshotQuality", 7)
 if GetCVar("scriptProfile") == "1" then SetCVar("scriptProfile", 0) end
 

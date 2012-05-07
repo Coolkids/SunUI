@@ -23,19 +23,19 @@ function Module:OnInitialize()
 							icon1:ClearAllPoints()
 							icon1:SetSize(16, 16)
 							icon1:SetTexCoord(0.08, 0.92, 0.08, 0.92)
-							icon1:SetPoint("RIGHT", frame, "LEFT", -5, 0)
+							icon1:Point("BOTTOMRIGHT", frame, "BOTTOMLEFT", -8, -1)
 						end
 
 						if icon2 then
 							icon2:ClearAllPoints()
 							icon2:SetSize(16, 16)
 							icon2:SetTexCoord(0.08, 0.92, 0.08, 0.92)
-							icon2:SetPoint("BOTTOMLEFT", frame, "BOTTOMRIGHT", 5, 0)
+							icon2:Point("BOTTOMLEFT", frame, "BOTTOMRIGHT", 8, -1)
 						end
 
 						if not frame.styled then
 							frame:SetScale(1)
-							frame:SetHeight(icon1:GetHeight()-2)
+							frame:SetHeight(icon1:GetHeight()/2)
 							--frame:CreateShadow("Background")
 							frame.styled = true
 						end
@@ -60,18 +60,20 @@ function Module:OnInitialize()
 
 						if not name.styled then
 							name:ClearAllPoints()
-							name:SetPoint("LEFT", frame, 5, 0)
+							name:SetPoint("LEFT", frame, 5, icon1:GetHeight()/2)
 							name:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
 							name:SetShadowOffset(0, 0)
+							name:SetJustifyH("LEFT")
 							name.SetFont = function() end
 							name.styled = true
 						end
 
 						if not timer.styled then
 							timer:ClearAllPoints()
-							timer:SetPoint("RIGHT", frame, -5, 0)					
+							timer:SetPoint("RIGHT", frame, -5, icon1:GetHeight()/2)					
 							timer:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
 							timer:SetShadowOffset(0,0)
+							timer:SetJustifyH("RIGHT")
 							timer.SetFont = function() end
 							timer.styled = true
 							--timer:SetTextColor(1,0,0,1)
@@ -110,24 +112,28 @@ function Module:OnInitialize()
 						local	_, anch, _ ,_, _ = bar:GetPoint()
 						bar:ClearAllPoints()
 						if DBM_SavedOptions.HealthFrameGrowUp then
-							bar:SetPoint("BOTTOM", anch, "TOP" , 0 , 12)
+							bar:Point("BOTTOM", anch, "TOP" , 0 , 15)
 						else
-							bar:SetPoint("TOP", anch, "BOTTOM" , 0, -10)
+							bar:Point("TOP", anch, "BOTTOM" , 0, -15)
 						end
 					else
 						bar:ClearAllPoints()
 						if DBM_SavedOptions.HealthFrameGrowUp then
-							bar:SetPoint("TOPLEFT", prev, "TOPLEFT", 0, 10+8)
+							bar:Point("TOPLEFT", prev, "TOPLEFT", 0, 10+10)
 						else
-							bar:SetPoint("TOPLEFT", prev, "TOPLEFT", 0, -(10+8))
+							bar:Point("TOPLEFT", prev, "TOPLEFT", 0, -(10+10))
 						end
 					end
 
 			if not bar.styled then
 				bar:SetHeight(10)
-				S.Kill(background)
-				--S.MakeTexShadow(bar, background, 3)
-				background:SetNormalTexture(nil)
+				S.StripTextures(background)
+				S.StripTextures(progress)
+				--background:SetNormalTexture(nil)
+				local h = CreateFrame("Frame", nil, bar)
+				h:Point("TOPLEFT", bar, "TOPLEFT", 1, -1)
+				h:Point("BOTTOMRIGHT", bar, "BOTTOMRIGHT", -1, 1)
+				h:CreateShadow()
 				bar.styled=true
 			end	
 			
@@ -136,13 +142,14 @@ function Module:OnInitialize()
 						progress.styled=true
 					end				
 					progress:ClearAllPoints()
-					progress:SetPoint("TOPLEFT", bar, "TOPLEFT", 2, -2)
-					progress:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", -2, 2)
+					progress:Point("TOPLEFT", bar, "TOPLEFT", 1, -1)
+					progress:Point("BOTTOMRIGHT", bar, "BOTTOMRIGHT", -1, 1)
+					
 		
 					if not name.styled then
 						name:ClearAllPoints()
-						name:SetPoint("LEFT", bar, "LEFT", 4, 2)
-						name:SetFont(DB.Font,  13*S.Scale(1), "THINOUTLINE")
+						name:SetPoint("LEFT", bar, "LEFT", 4, 6)
+						name:SetFont(DB.Font,  12*S.Scale(1), "THINOUTLINE")
 						name:SetJustifyH("LEFT")
 						name:SetShadowColor(0, 0, 0, 0)
 						name.styled=true
@@ -150,8 +157,8 @@ function Module:OnInitialize()
 			
 					if not timer.styled then
 						timer:ClearAllPoints()
-						timer:SetPoint("RIGHT", bar, "RIGHT", -4, 2)
-						timer:SetFont(DB.Font, 13*S.Scale(1), "THINOUTLINE")
+						timer:SetPoint("RIGHT", bar, "RIGHT", -4, 6)
+						timer:SetFont(DB.Font, 12*S.Scale(1), "THINOUTLINE")
 						timer:SetJustifyH("RIGHT")
 						timer:SetShadowColor(0, 0, 0, 0)
 						timer.styled=true
@@ -165,31 +172,32 @@ function Module:OnInitialize()
 			DBM.RangeCheck:Show()
 			DBM.RangeCheck:Hide()
 			DBMRangeCheck:HookScript("OnShow",function(self)
-				self:SetBackdrop({
-					edgeFile = "Interface\\Buttons\\WHITE8x8", 
-					edgeSize = 1, 
-				})
-				self:SetBackdropBorderColor(65/255, 74/255, 79/255)
+				--self:SetBackdrop({
+					--edgeFile = "Interface\\Buttons\\WHITE8x8", 
+					--edgeSize = 1, 
+				--})
+				--self:SetBackdropBorderColor(65/255, 74/255, 79/255)
 				self.shadow = CreateFrame("Frame", nil, self)
 				self.shadow:SetFrameLevel(1)
 				self.shadow:SetFrameStrata(self:GetFrameStrata())
 				self.shadow:SetPoint("TOPLEFT", -5, 5)
 				self.shadow:SetPoint("BOTTOMRIGHT", 5, -5)
-				self.shadow:SetBackdrop({
-					edgeFile = DB.GlowTex, 
-					edgeSize = 5,
-					insets = { left = 4, right = 4, top = 4, bottom = 4 }
-				})
-				self.shadow:SetBackdropBorderColor(0,0,0)
+				--self.shadow:SetBackdrop({
+					--edgeFile = DB.GlowTex, 
+					--edgeSize = 5,
+					--insets = { left = 4, right = 4, top = 4, bottom = 4 }
+				--})
+				--self.shadow:SetBackdropBorderColor(0,0,0)
 			end)
 
 			DBMRangeCheckRadar:HookScript("OnShow",function(self)
-				self:SetSize(100, 100)
+				self:SetSize(110, 110)
 				self:SetBackdropBorderColor(65/255, 74/255, 79/255)
 				--self.shadow:SetFrameStrata(self:GetFrameStrata())
 				--self:CreateShadow("Background")
 				S.SetBD(self)
 				self.text:SetFont(DB.Font, 13*S.Scale(1), "THINOUTLINE")
+				self.text:Point("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
 			end)
 
 
@@ -210,7 +218,7 @@ function Module:OnInitialize()
 			DBT_SavedOptions["DBM"].Texture = DB.Statusbar
 			DBT_SavedOptions["DBM"].ExpandUpwards = false
 			DBT_SavedOptions["DBM"].BarXOffset = 0
-			DBT_SavedOptions["DBM"].BarYOffset = 6
+			DBT_SavedOptions["DBM"].BarYOffset = 12
 			DBT_SavedOptions["DBM"].IconLeft = true
 			DBT_SavedOptions["DBM"].Texture = "Interface\\Buttons\\WHITE8x8"
 			DBT_SavedOptions["DBM"].IconRight = false	

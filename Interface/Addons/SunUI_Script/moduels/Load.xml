@@ -8,7 +8,6 @@
 	<Script file="AutoBuy.lua"/>
 	<Script file = "BiggerTradeSkillUI.lua"/>
 	<Script file = "BloodShield.lua"/>
-	<Script file="ChatFilter.lua"/>
 	<Script file = "classCD.lua"/>
 	<Script file = "CombatNotification.lua"/>
 	<Script file = "Flump.lua"/>

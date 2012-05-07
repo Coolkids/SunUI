@@ -27,55 +27,6 @@ ItemRefTooltip:SetScript("OnDragStop", function(self)
 	GameTooltip_ShowCompareItem(self, 1)
 end)
 
---语言过滤
---[[ local SetCVar, BNGetMatureLanguageFilter, BNSetMatureLanguageFilter = 
-	  SetCVar, BNGetMatureLanguageFilter, BNSetMatureLanguageFilter
-local eventFr=CreateFrame("Frame")
-local function set() SetCVar("profanityFilter","0") if BNGetMatureLanguageFilter() then BNSetMatureLanguageFilter(false) end end
-eventFr:SetScript("OnEvent",set)
-eventFr:RegisterEvent("CVAR_UPDATE")
-eventFr:RegisterEvent("VARIABLES_LOADED")
-eventFr:RegisterEvent("BN_MATURE_LANGUAGE_FILTER")
-set() ]]
----------------- > SetupUI
-
---[[ SetCVar("profanityFilter", 0)
-SetCVar("scriptErrors", 1)
-SetCVar("buffDurations", 1)
-SetCVar("consolidateBuffs",0)
-SetCVar("autoLootDefault", 1)
-SetCVar("lootUnderMouse", 1)
-SetCVar("autoSelfCast", 1)
-SetCVar("ShowClassColorInNameplate", 1)
-SetCVar("cameraDistanceMax", 50)
-SetCVar("cameraDistanceMaxFactor", 3.4)
-SetCVar("screenshotQuality", 10)
-SetCVar("cameraSmoothStyle", 0)
-SetCVar("chatStyle", "classic")
-
-SetCVar("deselectOnClick", 1)
-SetCVar("interactOnLeftClick", 0)
-SetCVar("showTargetOfTarget", 1)
-SetCVar("spamFilter", 0)
-SetCVar("UnitNameNPC", 1)
-SetCVar("UnitNameEnemyGuardianName", 1)
-SetCVar("UnitNameEnemyTotemName", 1)
-SetCVar("UnitNameFriendlyGuardianName", 1)
-SetCVar("UnitNameFriendlyTotemName", 1)
-SetCVar("UnitNameNonCombatCreatureName", 1)
-SetCVar("UnitNameFriendlySpecialNPCName", 0)
-SetCVar("fctDodgeParryMiss", 1)
-SetCVar("fctDamageReduction", 1)
-SetCVar("fctRepChanges", 1)
-SetCVar("fctFriendlyHealers", 1)
-SetCVar("fctEnergyGains", 1)
-SetCVar("fctPeriodicEnergyGains", 1)
-SetCVar("fctHonorGains", 1)
-SetCVar("fctAuras", 1)
-SetCVar("showNewbieTips", 0)
-SetCVar("threatShowNumeric", 1)
-SetCVar("showTutorials", 0) ]]
-
 ---Hide Instance Difficulty flag 隐藏难度标志
 MiniMapInstanceDifficulty:ClearAllPoints()
 MiniMapInstanceDifficulty:Hide()

@@ -23,7 +23,7 @@ local c = 0
 	end
 	if c>0 then
 		local g, s, c = math.floor(c/10000) or 0, math.floor((c%10000)/100) or 0, c%100
-		DEFAULT_CHAT_FRAME:AddMessage("共售出：".." |cffffffff"..g.."|cffffc125 G|r".." |cffffffff"..s.."|cffc7c7cf S|r".." |cffffffff"..c.."|cffeda55f C|r"..".",255,255,255)
+		DEFAULT_CHAT_FRAME:AddMessage("共售出："..format(GOLD_AMOUNT_TEXTURE, g, 0, 0).." "..format(SILVER_AMOUNT_TEXTURE, s, 0, 0).." "..format(COPPER_AMOUNT_TEXTURE, c, 0, 0),255,255,255)
 	end
 end)
 end

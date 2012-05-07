@@ -2,4 +2,5 @@
 	<Script file="damagemeters.lua"/>
 	<Script file="rollcollector.lua"/>
 	<Script file="ChatEmotion.lua"/>
+	<Script file="ChatFilter.lua"/>
 </Ui>
