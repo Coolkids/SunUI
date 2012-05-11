@@ -34,20 +34,6 @@ C = UnitFrameDB
     return fs
   end  
 
-  --backdrop table
-  local backdrop_tab = { 
-    bgFile = DB.Solid, 
-    edgeFile = DB.GlowTex,
-    tile = false, tileSize = 0, edgeSize = 5, 
-    insets = {left = 5, right = 5, top = 5, bottom = 5,},}
-  
-  --backdrop func
-  lib.gen_backdrop = function(f)
-    f:SetBackdrop(backdrop_tab);
-    f:SetBackdropColor(0,0,0,0)
-    f:SetBackdropBorderColor(0,0,0,1)
-  end
-  
   --status bar filling fix
   local fixStatusbar = function(b)
     b:GetStatusBarTexture():SetHorizTile(false)
@@ -275,7 +261,7 @@ C = UnitFrameDB
 		ri:SetText("|cff8AFF30Zzz|r")
 		f.Resting = ri
 	end
-	pp.frequentUpdates = 0.2 -- test it!!1
+	pp.frequentUpdates = 0.3 -- test it!!1
     if class == "DRUID" then
       f:Tag(pp, '[mono:druidpower] [mono:pp]')
     else
@@ -355,7 +341,7 @@ C = UnitFrameDB
       s:Size(f.width-f.height/2,f.height/2.5)
       i:SetPoint("RIGHT", s, "LEFT", -2, 0)
       h2:SetFrameLevel(9)
-      b:Hide() txt:Hide() t:Hide() h:Hide()
+      txt:Hide() t:Hide() h:Hide()
     elseif f.mystyle == "arena" then
       s:Size(f.width-(f.height/1.4+4),f.height/1.4)
       s:SetPoint("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
@@ -809,8 +795,8 @@ end
 	if class ~= "DRUID" then return end
 	local eb = CreateFrame('Frame', nil, f)
 	eb:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', -3, -1)
-	eb:Size(f.width+7, 20)
-	lib.gen_backdrop(eb)
+	eb:Size(f.width+7, 10)
+	eb:CreateShadow("Background")
 	local lb = CreateFrame('StatusBar', nil, eb)
 	lb:SetPoint('LEFT', eb, 'LEFT', 4, 0)
 	lb:Size(f.width-2, 10)
@@ -1215,7 +1201,6 @@ end
 		sw.bd:SetFrameLevel(1)
 		sw.bd:SetPoint("TOPLEFT", -4, 4)
 		sw.bd:SetPoint("BOTTOMRIGHT", 4, -4)
-		lib.gen_backdrop(sw.bd)
 		sw.Text = lib.gen_fontstring(sw, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
 		sw.Text:SetPoint("CENTER", 0, 0)
 		sw.Text:SetTextColor(1, 1, 1)
@@ -1231,6 +1216,7 @@ end
 	apb:GetStatusBarTexture():SetHorizTile(false)
 	apb:SetStatusBarColor(1, 0, 0)
 	apb:SetPoint("BOTTOM", f, "TOP", 0, -f.height/6)
+	apb:CreateShadow()
 
 	apb.bg = apb:CreateTexture(nil, "BORDER")
 	apb.bg:SetAllPoints(apb)
@@ -1242,9 +1228,6 @@ end
 	apb.b:SetFrameLevel(f.Health:GetFrameLevel() + 1)
 	apb.b:SetPoint("TOPLEFT", apb, "TOPLEFT", -4, 4)
 	apb.b:SetPoint("BOTTOMRIGHT", apb, "BOTTOMRIGHT", 4, -5)
-	apb.b:SetBackdrop(backdrop_tab)
-	apb.b:SetBackdropColor(0, 0, 0, 0)
-	apb.b:SetBackdropBorderColor(0,0,0,1)
 	
 	apb.v = lib.gen_fontstring(apb, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
 	apb.v:SetPoint("CENTER", apb, "CENTER", 0, 0)

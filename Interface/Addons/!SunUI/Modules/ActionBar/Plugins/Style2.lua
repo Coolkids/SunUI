@@ -3,7 +3,7 @@
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ActionStyle2", "AceEvent-3.0")
 local function Stlye2()
 	C = ActionBarDB
-	local ActionBarMedia = "Interface\\Addons\\!SunUI\\Modules\\ActionBar\\Plugins\\Media\\"
+	local ActionBarMedia = "Interface\\Addons\\SunUI_Modules\\Modules\\ActionBar\\Plugins\\Media\\"
 	local textures = {
     normal            = ActionBarMedia.."gloss",
     flash             = ActionBarMedia.."flash",

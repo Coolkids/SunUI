@@ -132,7 +132,24 @@ if C["Disenchat"] then
 	   end
 	end)
 end
-
+if C["Resurrect"] then
+	local function ResurrectEvent()
+			if not (UnitAffectingCombat('player') or UnitAffectingCombat(name)) then
+				local delay = GetCorpseRecoveryDelay()
+				if delay == 0 then
+					AcceptResurrect()
+					DoEmote('thank', name)
+				else
+					local b = CreateFrame("Button")
+					local formattedText = b:GetText(b:SetFormattedText("%d |4second:seconds", delay))
+					SendChatMessage("感谢复活我！我复活CD了,还有"..formattedText.."才能起来。", 'WHISPER', nil, name)
+				end
+			end
+		end
+	local Resurrect = CreateFrame("Frame")
+	Resurrect:RegisterEvent("RESURRECT_REQUEST")
+	Resurrect:SetScript("OnEvent", ResurrectEvent)
+end
 
 ---------------- > SetupUI
 SetCVar("screenshotQuality", 7)

@@ -143,10 +143,10 @@ oUF.Tags['mono:hp']  = function(u) -- THIS IS FUCKING MADNESS!!!
           if UnitIsEnemy("player","target") then
             return per.." - "..min
           else
-            if def then return "|cffe15f8b"..per.."|r - "..SVal(min) end
+            if def then return per.." - "..SVal(min) end
           end
         else
-          return  "|cffe15f8b"..per.."|r - "..SVal(min)
+          return  per.." - "..SVal(min)
         end
       else
         return  per.." - "..SVal(min)
@@ -156,12 +156,12 @@ oUF.Tags['mono:hp']  = function(u) -- THIS IS FUCKING MADNESS!!!
     else
       if UnitIsPlayer(u) and not UnitIsEnemy("player",u) then
         if min~=max then 
-          return SVal(min).. "|cffe15f8b"..per.."|r - "
+          return SVal(min)..per
         else
           return SVal(min).." - ".. per
         end
       else    
-        return SVal(min).." - ".."|cffe15f8b"..per.."|r - "
+        return SVal(min).." - ".."|cffe15f8b"..per.."|r"
       end
     end
   end

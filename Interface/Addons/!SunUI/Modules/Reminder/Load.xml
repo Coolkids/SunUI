@@ -1,8 +1,4 @@
-﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
-	
-	<Script file = "RaidBuffList.lua"/>
-	<Script file = "ClassBuffList.lua"/>
-	<Script file = "ClassBuffReminder.lua"/>
-	<Script file = "RaidBuffReminder.lua"/>
-
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">	
+	<Script file = "Reminder.lua"/>
+	<Script file = "Raidbuffreminder.lua"/>
 </Ui>

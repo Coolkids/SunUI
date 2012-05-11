@@ -11,6 +11,7 @@
 	<Include file = "loot\load.xml"/>
 	<Include file = "map\load.xml"/>
 	<Include file = "reminder\Load.xml"/>
+	<Include file = "skins\Load.xml"/>
 	<Include file = "threat\Load.xml"/>
 	<Include file ="tooltip\Load.xml"/>
 	<Include file = "unitframe\load.xml"/>

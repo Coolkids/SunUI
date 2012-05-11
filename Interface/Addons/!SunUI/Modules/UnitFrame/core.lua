@@ -66,19 +66,17 @@ C = UnitFrameDB
     self.Power.bg.multiplier = 0.3
     lib.gen_castbar(self)
     lib.gen_portrait(self)
-    --lib.gen_mirrorcb(self)
     lib.gen_ppstrings(self)
-    --lib.gen_Runes(self)
 	lib.gen_classpower(self)
-	lib.gen_sppower(self)
+	--lib.gen_sppower(self)
     lib.gen_TotemBar(self)
     lib.gen_InfoIcons(self)
-    lib.gen_specificpower(self)
-    lib.gen_combat_feedback(self)
-	lib.gen_EclipseBar(self)
+    --lib.gen_specificpower(self)
+    --lib.gen_combat_feedback(self)
+	--lib.gen_EclipseBar(self)
 	lib.gen_alt_powerbar(self)
-    lib.createAuras(self)
-	lib.createBuffs(self)
+    --lib.createAuras(self)
+	--lib.createBuffs(self)
     lib.createDebuffs(self)
 	lib.gen_swing_timer(self)
     self:Size(self.width,self.height)
@@ -103,14 +101,14 @@ C = UnitFrameDB
     lib.gen_castbar(self)
     lib.gen_portrait(self)
 	if C["TargetAura"] ~= 2 then
-    lib.createAuras(self)
+		lib.createAuras(self)
 	end
     lib.gen_ppstrings(self)
 	lib.gen_alt_powerbar(self)
     lib.gen_cp(self)
-	lib.gen_lifebloom(self)
-	lib.gen_combat_feedback(self)
-    if showfaketarget then lib.gen_faketarget(self) end
+	--lib.gen_lifebloom(self)
+	--lib.gen_combat_feedback(self)
+    --if showfaketarget then lib.gen_faketarget(self) end
 	self:Size(self.width,self.height)
 	if C["TargetAura"] == 3 then self.Auras.onlyShowPlayer = true print("1") end
   end  
@@ -126,12 +124,7 @@ C = UnitFrameDB
 	self.Health.colorReaction = true
 	end
     self.Power.colorPower = true
-    self.Power.bg.multiplier = 0.3
-    if unit == "targettarget" then 
-		--lib.createBuffs(self)
-		--lib.createDebuffs(self) 
-	end
-	
+    self.Power.bg.multiplier = 0.3	
 	self:Size(self.width,self.height)
   end 
   
@@ -147,7 +140,6 @@ C = UnitFrameDB
     self.Power.colorPower = true
     self.Power.bg.multiplier = 0.3
     lib.gen_castbar(self)
-    --lib.createBuffs(self)
     lib.createDebuffs(self)
 	self:Size(self.width,self.height)
   end  

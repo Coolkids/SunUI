@@ -77,6 +77,7 @@ function Module.LoadSettings()
 	["roguethree"] = 20,
 	["roguefour"] = 20,
 	["roguefive"] = 20,
+	["Resurrect"] = true,
 	}
 	if not MiniDB then MiniDB = {} end
 	for key, value in pairs(Default) do
@@ -199,6 +200,13 @@ function Module.BuildGUI()
 					order = 14,
 					get = function() return MiniDB.Disenchat end,
 					set = function(_, value) MiniDB.Disenchat = value end,
+				},
+				Resurrect = {
+					type = "toggle",
+					name = "Auto AcceptResurrect",
+					order = 15,
+					get = function() return MiniDB.Resurrect end,
+					set = function(_, value) MiniDB.Resurrect = value end,
 				},
 			}
 		}

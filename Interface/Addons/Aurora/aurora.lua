@@ -3053,7 +3053,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			S.CreateBD(hline)
 		end
 		
-		if not(IsAddOnLoaded("CowTip") or IsAddOnLoaded("TipTac") or IsAddOnLoaded("FreebTip") or IsAddOnLoaded("lolTip") or IsAddOnLoaded("StarTip") or IsAddOnLoaded("TipTop")) then
+		if not(IsAddOnLoaded("CowTip") or IsAddOnLoaded("TipTac") or IsAddOnLoaded("FreebTip") or IsAddOnLoaded("lolTip") or IsAddOnLoaded("StarTip") or IsAddOnLoaded("TipTop") or IsAddOnLoaded("SunUI_Tooltips")) then
 			local tooltips = {CalendarContextMenu, CalendarInviteStatusContextMenu}
 
 			for _, tooltip in pairs(tooltips) do

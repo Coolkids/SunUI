@@ -168,7 +168,7 @@ local TimeStampsCopy = true					-- 时间戳
 			--bb:SetHeight(20)
 			--bb:SetWidth(20)
 			bb:ClearAllPoints()
-			bb:SetPoint("TOPRIGHT", cf, "TOPRIGHT", 0, -6)
+			bb:SetPoint("TOPRIGHT", cf, "TOPRIGHT", 0, -5)
 			bb:SetAlpha(1)
 			bb.SetPoint = function() end
 			bb:SetScript("OnClick", BottomButtonClick)

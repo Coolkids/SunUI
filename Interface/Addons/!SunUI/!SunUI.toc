@@ -1,5 +1,5 @@
 ## Interface: 40300
-## Title: |cffDDA0DDSun|r|cff44CCFFUI|r
+## Title: |cff00d2ffSun|r|cffffffffUI|r
 ## Notes: 整合插件
 ## Author:Neavo, dtzy, Ray, 楼上的你妈妈叫你吃饭, other Authors, Coolkid
 ## SavedVariables: MiniDB, stAddonProfiles, stLockedAddons, ActionBarDB, BuffDB, NameplateDB, ReminderDB, ThreatDB, TooltipDB, UnitFrameDB, MoveHandleDB, SkinDB, CoreVersion, InfoPanelDB

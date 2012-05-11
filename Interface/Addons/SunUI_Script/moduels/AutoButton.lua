@@ -86,7 +86,7 @@ function Module:OnInitialize()
 			AutoButton:Size(40)
 			AutoButton:Point("CENTER", AutoButtonAnchor, "CENTER", 0, 0)
 			AutoButton:CreateShadow()
-			AutoButton:StyleButton()
+			AutoButton:StyleButton(true)
 			AutoButton:SetAttribute("type", "item")
 			AutoButtonHide()
 
