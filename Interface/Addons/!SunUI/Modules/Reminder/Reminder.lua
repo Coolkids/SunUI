@@ -292,7 +292,7 @@ function Module:OnInitialize()
 		local pvp = group.pvp	
 		local reversecheck = group.reversecheck
 		local negate_reversecheck = group.negate_reversecheck
-		--local ReminderDB.ClassBuffSound = true
+		local sound = false
 		local rolepass = false
 		local treepass = false
 		local combatpass = false
@@ -354,7 +354,7 @@ function Module:OnInitialize()
 		if reversecheck ~= nil and (role == nil and tree == nil) then reversecheck = nil end
 		
 		--Only time we allow it to play a sound
-		if (event == "ZONE_CHANGED_NEW_AREA" or event == "PLAYER_REGEN_DISABLED") then ReminderDB.ClassBuffSound = true end
+		if (event == "ZONE_CHANGED_NEW_AREA" or event == "PLAYER_REGEN_DISABLED") then sound = true end
 		
 		if not group.weapon then
 			if (not combat and not instance and not pvp) or ((combat and UnitAffectingCombat("player")) or (instance and (instanceType == "party" or instanceType == "raid")) or (pvp and (instanceType == "arena" or instanceType == "pvp"))) and 
@@ -378,7 +378,7 @@ function Module:OnInitialize()
 					end
 				end
 				self:Show()
-				if ReminderDB.ClassBuffSound == true then PlaySoundFile(DB.Warning) end		
+				if sound == true then PlaySoundFile(DB.Warning) end		
 			elseif ((combat and UnitAffectingCombat("player")) or (instance and (instanceType == "party" or instanceType == "raid"))) and 
 			reversecheck == true and not (UnitInVehicle("player") and self.icon:GetTexture()) then
 				if negate_reversecheck and negate_reversecheck == GetPrimaryTalentTree() then self:Hide() return end
@@ -388,7 +388,7 @@ function Module:OnInitialize()
 						local _, _, icon, _, _, _, _, unitCaster, _, _, _ = UnitBuff("player", name)
 						if (name and icon and unitCaster == "player") then
 							self:Show()
-							if ReminderDB.ClassBuffSound == true then PlaySoundFile(DB.Warning) end
+							if sound == true then PlaySoundFile(DB.Warning) end
 							return
 						end	
 					end
@@ -403,7 +403,7 @@ function Module:OnInitialize()
 					if hasMainHandEnchant == nil then
 						self:Show()
 						self.icon:SetTexture(GetInventoryItemTexture("player", 16))
-						if ReminderDB.ClassBuffSound == true then PlaySoundFile(DB.Warning) end		
+						if sound == true then PlaySoundFile(DB.Warning) end		
 						return
 					end
 				else			
@@ -414,7 +414,7 @@ function Module:OnInitialize()
 						else
 							self.icon:SetTexture(GetInventoryItemTexture("player", 17))
 						end
-						if ReminderDB.ClassBuffSound == true then PlaySoundFile(DB.Warning) end
+						if sound == true then PlaySoundFile(DB.Warning) end
 						
 						return
 					end

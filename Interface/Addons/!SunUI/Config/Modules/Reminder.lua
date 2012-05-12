@@ -10,7 +10,7 @@ local Module = DB["Modules"]["Reminder"]
 function Module.LoadSettings()
 	local Default = {
 	["ShowClassBuff"] = true,
-	["ClassBuffSound"] = false,
+	--["ClassBuffSound"] = false,
 	["ShowRaidBuff"] = true,
 	["RaidBuffSize"] = 15,
 	["ClassBuffSize"] = 32,
@@ -77,12 +77,12 @@ function Module.BuildGUI()
 					type = "group", order = 4,
 					name = " ", guiInline = true, disabled = not ReminderDB.ShowClassBuff,
 					args = {
-						ClassBuffSound = {
+--[[ 						ClassBuffSound = {
 							type = "toggle", order = 1,
 							name = L["开启声音警报"],
 							get = function() return ReminderDB.ClassBuffSound end,
 							set = function(_, value) ReminderDB.ClassBuffSound = value end,
-						},
+						}, ]]
 						ClassBuffSize = {
 							type = "input", order = 2,
 							name = L["职业增益图标大小"], desc = L["职业增益图标大小"],
