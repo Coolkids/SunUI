@@ -209,10 +209,8 @@ function Module:OnInitialize()
 				return RaidNotice_AddMessage_(noticeFrame, textString, colorInfo)
 			end
 			
-		end
-	end)
-	
-		local UploadDBM = function()
+			--自己用
+			local UploadDBM = function()
 			DBM_SavedOptions.Enabled = true
 			DBT_SavedOptions["DBM"].Scale = 1
 			DBT_SavedOptions["DBM"].HugeScale = 1
@@ -253,9 +251,7 @@ function Module:OnInitialize()
 					DBT_SavedOptions["DBM"].HugeTimerY = -207
 				end
 			end
-		local frame = CreateFrame("Frame")
-		frame:RegisterEvent('PLAYER_LOGIN')
-		frame:SetScript('OnEvent', function(self, event)
 			UploadDBM()
-		end)
+		end
+	end)
 end

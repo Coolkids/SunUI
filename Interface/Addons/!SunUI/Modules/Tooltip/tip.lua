@@ -32,15 +32,17 @@ function Module:OnInitialize()
 		types = {
 		rare = " |cffFF44FF稀有|r ",
 		elite = " |cffFFFF00+|r ",
-		worldboss = " |cffFF1919首领|r ",
+		worldboss = " |cffFF1919世界首领|r ",
 		rareelite = " |cff9933FA稀有|r |cffFFFF00+|r ",
+		boss = "|cffFF1919首领|r",
 		}
 	else
 		types = {
 		rare = " |cffFF44FF稀有|r ",
 		elite = " |cffFFFF00+|r ",
-		worldboss = " |cffFF1919首領|r ",
+		worldboss = " |cffFF1919世界首領|r ",
 		rareelite = " |cff9933FA稀有|r |cffFFFF00+|r ",
+		boss = "|cffFF1919首領|r",
 		}
 	end
 
@@ -137,7 +139,7 @@ function Module:OnInitialize()
 			local unitName = UnitName(unit)
 			local unitLevel = UnitLevel(unit)
 			local diffColor = unitLevel > 0 and GetQuestDifficultyColor(UnitLevel(unit)) or QuestDifficultyColors["impossible"]
-			if unitLevel < 0 then unitLevel = '??' end
+			if unitLevel < 0 then unitLevel = types.boss end
 			if UnitIsPlayer(unit) then
 				local unitRace = UnitRace(unit)
 				local unitClass = UnitClass(unit)
@@ -185,8 +187,8 @@ function Module:OnInitialize()
 			end
 		end
 		 if C["HideTitles"] then
-				local name = self:GetUnit()
-                local title = UnitPVPName(unit)
+				local name, uni = self:GetUnit()
+                local title = UnitPVPName(uni)
                 if title then
                     local text = GameTooltipTextLeft1:GetText()
                     title = title:gsub(name, "")
