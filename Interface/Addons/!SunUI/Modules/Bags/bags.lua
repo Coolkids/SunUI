@@ -64,7 +64,7 @@ function MyButton:OnCreate()
 	self.Icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 
 	self.Count:SetPoint("BOTTOMRIGHT", 3, 1)
-	self.Count:SetFont(DB.Font, 12*S.Scale(1), "THINOUTLINE")
+	self.Count:SetFont(DB.PFont, 12*S.Scale(1), "OUTLINEMONOCHROME")
 	
 	self.Border = CreateFrame("Frame", nil, self)
 	--self.Border:SetAllPoints(self.Icon)
@@ -152,14 +152,14 @@ function MyContainer:OnCreate(name, settings)
 	
 	-- 信息条
 	local infoFrame = CreateFrame("Button", nil, self)
-	infoFrame:SetPoint("BOTTOM", -23, 0)
-	infoFrame:SetWidth(170)
+	infoFrame:SetPoint("BOTTOM", -28, 0)
+	infoFrame:SetWidth(165)
 	infoFrame:SetHeight(36)
 	
 	-- 信息条插件:金币
 	local tagDisplay = self:SpawnPlugin("TagDisplay", "[money]", infoFrame)
 	tagDisplay:SetFontObject("NumberFontNormal")
-	tagDisplay:SetFont(DB.Font, 12*S.Scale(1))
+	tagDisplay:SetFont(DB.PFont, 10.5*S.Scale(1), "OUTLINEMONOCHROME")
 	tagDisplay:SetPoint("RIGHT", infoFrame, "RIGHT", 0, 0)	
 	-- 信息条插件:搜索栏
 	local searchText = infoFrame:CreateFontString(nil, "OVERLAY")

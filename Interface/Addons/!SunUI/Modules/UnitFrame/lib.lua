@@ -179,7 +179,7 @@ C = UnitFrameDB
     local valsize
     if f.mystyle == "arenatarget" or f.mystyle == "partypet" then valsize = 11 else valsize = 13 end 
     local name = lib.gen_fontstring(h, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
-    local hpval = lib.gen_fontstring(h, DB.Font,C["FontSize"]*S.Scale(1), "THINOUTLINE")
+    local hpval = lib.gen_fontstring(h, DB.PFont,C["FontSize"]*S.Scale(1), "OUTLINEMONOCHROME")
     if f.mystyle == "target" or f.mystyle == "tot" then
       name:SetPoint("RIGHT", f.Health, "RIGHT",-3,0)
       hpval:SetPoint("LEFT", f.Health, "LEFT",3,0)
@@ -243,20 +243,21 @@ C = UnitFrameDB
     h:SetFrameLevel(10)
     local fh
     if f.mystyle == "arena" then fh = 9 else fh = 11 end
-    local pp = lib.gen_fontstring(h, DB.Font, (C["FontSize"]-1)*S.Scale(1), "THINOUTLINE")
-    local info = lib.gen_fontstring(h, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
+    local pp = lib.gen_fontstring(h, DB.PFont, (C["FontSize"])*S.Scale(1), "OUTLINEMONOCHROME")
+    --local info = lib.gen_fontstring(h, DB.PFont, C["FontSize"]*S.Scale(1), "OUTLINEMONOCHROME")
+	local info = lib.gen_fontstring(h, DB.Font, C["FontSize"]*S.Scale(1), "OUTLINE")
     if f.mystyle == "target" or f.mystyle == "tot" then
         info:SetPoint("RIGHT", f.Power, "RIGHT",-3,0)
         pp:SetPoint("LEFT", f.Power, "LEFT",3,0)
         info:SetJustifyH("RIGHT")
     else
-        info:SetPoint("LEFT", f.Power, "LEFT",3,3)
-        pp:SetPoint("RIGHT", f.Power, "RIGHT",-5,4)
+        info:SetPoint("LEFT", f.Power, "LEFT",3,0)
+        pp:SetPoint("RIGHT", f.Power, "RIGHT",-3,0)
         info:SetJustifyH("LEFT")
     end
 	--resting indicator for player frame
 	if f.mystyle == "player" then
-		local ri = lib.gen_fontstring(f.Power, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
+		local ri = lib.gen_fontstring(f.Power, DB.PFont, C["FontSize"]*S.Scale(1), "OUTLINEMONOCHROME")
 		ri:SetPoint("LEFT", info, "RIGHT",2,0)
 		ri:SetText("|cff8AFF30Zzz|r")
 		f.Resting = ri
@@ -314,7 +315,7 @@ C = UnitFrameDB
     txt:SetPoint("LEFT", 2, s:GetHeight()/2)
     txt:SetJustifyH("LEFT")
     --time
-    local t = lib.gen_fontstring(s, DB.Font, (C["FontSize"]+1)*S.Scale(1), "THINOUTLINE")
+    local t = lib.gen_fontstring(s, DB.PFont, (C["FontSize"]+1)*S.Scale(1), "OUTLINEMONOCHROME")
     t:SetPoint("RIGHT", -2, s:GetHeight()/2)
     txt:SetPoint("RIGHT", t, "LEFT", -5, 0)
     --icon
@@ -367,7 +368,7 @@ C = UnitFrameDB
 	  --if UnitInVehicle("player") then z:Hide() end
       s.SafeZone = z
       --custom latency display
-      local l = lib.gen_fontstring(s, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
+      local l = lib.gen_fontstring(s, DB.PFont, C["FontSize"]*S.Scale(1), "OUTLINEMONOCHROME")
       l:SetPoint("RIGHT", 0, -s:GetHeight())
       l:SetJustifyH("RIGHT")
 	  l:SetTextColor(.8,.31,.45)
@@ -504,7 +505,7 @@ C = UnitFrameDB
 	local h3 = CreateFrame("Frame", nil, button)
     h3:SetAllPoints(button)
     h3:SetFrameLevel(10)
-	button.count = lib.gen_fontstring(h3, DB.Font, (C["FontSize"]-1)*S.Scale(1), "THINOUTLINE")
+	button.count = lib.gen_fontstring(h3, DB.PFont, (C["FontSize"])*S.Scale(1), "OUTLINEMONOCHROME")
     button.count:ClearAllPoints()
     button.count:SetJustifyH("RIGHT")
     button.count:SetPoint("BOTTOMRIGHT", 2, -2)
@@ -519,7 +520,7 @@ C = UnitFrameDB
     local h2 = CreateFrame("Frame", nil, button)
     h2:SetAllPoints(button)
     h2:SetFrameLevel(10)
-    button.remaining = lib.gen_fontstring(h2, DB.Font, (C["FontSize"]-1)*S.Scale(1), "THINOUTLINE")
+    button.remaining = lib.gen_fontstring(h2, DB.PFont, (C["FontSize"]-1)*S.Scale(1), "OUTLINEMONOCHROME")
 	--button.remaining:SetShadowColor(0, 0, 0)--button.remaining:SetShadowOffset(2, -1)
     button.remaining:SetPoint("TOPLEFT", -2, 4)
     --overlay texture for debuff types display

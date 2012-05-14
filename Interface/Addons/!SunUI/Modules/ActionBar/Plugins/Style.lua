@@ -68,7 +68,7 @@ function AB:OnInitialize()
 			Count:ClearAllPoints()
 			Count:SetJustifyH("RIGHT")
 			Count:SetPoint("BOTTOMRIGHT", 3, 0)
-			Count:SetFont(Font, MFontSize, "OUTLINE")
+			Count:SetFont(DB.PFont, MFontSize, 'OUTLINEMONOCHROME')
 		end
 
 		if _G[name..'FloatingBG'] then
@@ -108,8 +108,7 @@ function AB:OnInitialize()
 			HotKey:ClearAllPoints()
 			HotKey:SetJustifyH("RIGHT")
 			HotKey:SetPoint("TOPRIGHT", 4, 1)
-			HotKey:SetFont(Font, FontSize, "OUTLINE")
-			HotKey:SetShadowColor(0, 0, 0, 0.3)
+			HotKey:SetFont(DB.PFont, FontSize, "OUTLINEMONOCHROME")
 			HotKey.ClearAllPoints = function() end
 			HotKey.SetPoint = function() end
 			if HideHotKey then

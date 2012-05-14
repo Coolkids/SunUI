@@ -100,8 +100,8 @@ function Module:OnInitialize()
 			AutoButton.c = AutoButton:CreateFontString(nil, "OVERLAY", f)
 			AutoButton.c:SetFont(DB.Font, ActionBarDB["FontSize"], "OUTLINE")
 			AutoButton.c:SetTextColor(1, 1, 1, 1)
-			AutoButton.c:Point("BOTTOMRIGHT", AutoButton, "BOTTOMRIGHT", 0.5, 0)
-			AutoButton.c:SetJustifyH("CENTER")	
+			AutoButton.c:Point("BOTTOMRIGHT", AutoButton, "BOTTOMRIGHT", -2, 0)
+			AutoButton.c:SetJustifyH("RIGHT")	
 
 			-- Cooldown
 			AutoButton.Cooldown = CreateFrame("Cooldown", nil, AutoButton)

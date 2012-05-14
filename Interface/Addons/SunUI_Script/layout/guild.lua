@@ -16,7 +16,7 @@ local ceil			= math.ceil
 
 local tthead, ttsubh, ttoff = {r=0.4, g=0.78, b=1}, {r=0.75, g=0.9, b=1}, {r=.3,g=1,b=.3}
 local activezone, inactivezone = {r=0.3, g=1.0, b=0.3}, {r=0.65, g=0.65, b=0.65}
-local displayString = join("", GUILD, ": %d|r")
+local displayString = join("", "|cff66c7ff".."Guild".."|r", ": %d|r")
 local noGuildString = join("", "",L["没有工会"])
 local guildInfoString = "%s [%d]"
 local guildInfoString2 = join("", GUILD, ": %d/%d")
@@ -109,10 +109,10 @@ local function Update(self, event, ...)
 		if event ~= "GUILD_ROSTER_UPDATE" and event~="PLAYER_GUILD_UPDATE" then GuildRoster() return end
 
 		local total, online = GetNumGuildMembers()
-		
+		Guild.Text:SetPoint("CENTER", Guild, "CENTER")
 		Guild.Text:SetFormattedText(displayString, online)
-		Guild:SetMinMaxValues(0, total)
-		Guild:SetValue(online)
+		--Guild:SetMinMaxValues(0, total)
+		--Guild:SetValue(online)
 	else
 		Guild.Text:SetText(L["没有工会"])
 	end

@@ -131,10 +131,10 @@ local function Update(self, event, ...)
 
 	-- force update when showing tooltip
 	dataValid = false
-
-	Friend.Text:SetFormattedText(displayString, FRIENDS, onlineFriends + numBNetOnline)
-	Friend:SetMinMaxValues(0, totalFriends + totalBN)
-	Friend:SetValue(onlineFriends + numBNetOnline)
+	Friend.Text:SetPoint("CENTER", Friend, "CENTER")
+	Friend.Text:SetFormattedText(displayString, "|cff66c7ff".."Friend".."|r", onlineFriends + numBNetOnline)
+	--Friend:SetMinMaxValues(0, totalFriends + totalBN)
+	--Friend:SetValue(onlineFriends + numBNetOnline)
 	self:SetAllPoints(Friend)
 end
 

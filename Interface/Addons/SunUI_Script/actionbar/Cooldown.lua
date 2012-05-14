@@ -11,11 +11,11 @@ local DAYISH, HOURISH, MINUTEISH = 3600 * 23.5, 60 * 59.5, 59.5 --used for forma
 local HALFDAYISH, HALFHOURISH, HALFMINUTEISH = DAY/2 + 0.5, HOUR/2 + 0.5, MINUTE/2 + 0.5 --used for calculating next update times
 
 --configuration settings
-local FONT_FACE = ChatFrame1:GetFont() --what font to use
-local FONT_SIZE = 23 --the base font size to use at a scale of 1
+local FONT_FACE = DB.PFont --what font to use
+local FONT_SIZE = 20 --the base font size to use at a scale of 1
 local MIN_SCALE = 0.3 --the minimum scale we want to show cooldown counts at, anything below this will be hidden
 local MIN_DURATION = 1.8 --the minimum duration to show cooldown text for
-local EXPIRING_DURATION = 3 --the minimum number of seconds a cooldown must be to use to display in the expiring format
+local EXPIRING_DURATION = 2 --the minimum number of seconds a cooldown must be to use to display in the expiring format
 
 local EXPIRING_FORMAT = S.RGBToHex(1, 0, 0)..'%.1f|r' --format for timers that are soon to expire
 local SECONDS_FORMAT = S.RGBToHex(1, 1, 0)..'%d|r' --format for timers that have seconds remaining
@@ -82,9 +82,9 @@ local function Timer_OnSizeChanged(self, width, height)
 	if fontScale < MIN_SCALE then
 		self:Hide()
 	else
-		self.text:SetFont(FONT_FACE, fontScale * FONT_SIZE, 'OUTLINE')
+		self.text:SetFont(FONT_FACE, fontScale * FONT_SIZE, 'OUTLINEMONOCHROME')
 		self.text:SetShadowColor(0, 0, 0, 0.5)
-		self.text:SetShadowOffset(2, -2)
+		self.text:SetShadowOffset(S.mult, -S.mult)
 		if self.enabled then
 			Timer_ForceUpdate(self)
 		end

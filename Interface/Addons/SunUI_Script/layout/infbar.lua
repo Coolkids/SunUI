@@ -28,8 +28,11 @@ end
 -- BuildClock
 local function BuildClock()
 	local Clock = CreateFrame("Frame", nil, UIParent)
-	Clock.Text = S.MakeFontString(Clock, 14)
+	Clock.Text = S.MakeFontString(Clock, 14, "O")
+	Clock.Text:SetTextColor(0.40, 0.78, 1)
 	Clock.Text:SetPoint("RIGHT", MoveHandle.InfoPanel, "RIGHT")
+	Clock.Text:SetShadowOffset(S.mult, -S.mult)
+	Clock.Text:SetShadowColor(0, 0, 0, 0.4)
 	Clock:SetAllPoints(Clock.Text)
 	Clock:SetScript("OnEnter", function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
@@ -58,15 +61,6 @@ local function BuildClock()
 					GameTooltip:AddDoubleLine(format("%s |cffaaaaaa(%s%s)", name, maxPlayers, diff), S.FormatTime(reset), 1, 1, 1, tr, tg, tb)
 				end
 			end	
-		GameTooltip:AddLine("  ")
-		GameTooltip:AddLine("所有ID")	
-		local thisRealmList = MiniDB.raid[GetCVar("realmName")]
-		for k,v in pairs(thisRealmList) do
-			GameTooltip:AddLine(k,0.40, 0.78, 1)
-			for a,b in pairs(v) do
-				GameTooltip:AddDoubleLine(a, S.FormatTime(b), 1, 1, 1, 0, 1, 0)
-			end
-		end
 		GameTooltip:Show()
 	end)
 	Clock:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
@@ -125,14 +119,16 @@ end
 local function BuildMemory(Anchor)
 	local StatusBar = CreateFrame("StatusBar", nil, UIParent)
 	StatusBar:SetHeight(6)	
-	StatusBar:SetWidth(60)
-	StatusBar:SetStatusBarTexture(DB.Statusbar)
-	StatusBar:SetMinMaxValues(0, 30000)
-	StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
-	StatusBar:SetPoint("RIGHT", Anchor, "LEFT", -20, 0)
-	StatusBar:CreateShadow("Background")
-	StatusBar.Text = S.MakeFontString(StatusBar, 10)
-	StatusBar.Text:SetPoint("CENTER", 0, -5)
+	StatusBar:SetWidth(50)
+	--StatusBar:SetStatusBarTexture(DB.Statusbar)
+	--StatusBar:SetMinMaxValues(0, 30000)
+	--StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
+	StatusBar:SetPoint("RIGHT", Anchor, "LEFT", -15, 0)
+	--StatusBar:CreateShadow("Background")
+	StatusBar.Text = S.MakeFontString(StatusBar, 11, "O")
+	StatusBar.Text:SetPoint("CENTER")
+	StatusBar.Text:SetShadowOffset(S.mult, -S.mult)
+	StatusBar.Text:SetShadowColor(0, 0, 0, 0.4)
 	StatusBar:SetScript("OnMouseDown", function(self, button)
 		if button == "LeftButton" then 
 			UpdateAddOnMemoryUsage()
@@ -150,12 +146,12 @@ local function BuildMemory(Anchor)
 		if self.Timer > 5 then
 			RebuildAddonList(self)
 			local total = UpdateMemory()
-			self.Text:SetText(S.FormatMemory(total))
-			StatusBar:SetValue(total)
 			local r, g, b = S.ColorGradient((30000-total)/30000, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
 																					InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
 																					InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
-			self:SetStatusBarColor(r, g, b)
+			self.Text:SetText(S.ToHex(r, g, b)..format("%.2f", total/1024).."|r".."|cff66c7ff".." m|r")
+			--StatusBar:SetValue(total)
+			--self:SetStatusBarColor(r, g, b)
 			self.Timer = 0
 		end
 		AltUpdate(self)
@@ -212,27 +208,30 @@ end
 local function BuildPing(Anchor)
 	local StatusBar = CreateFrame("StatusBar", nil, UIParent)
 	StatusBar:SetHeight(6)	
-	StatusBar:SetWidth(60)
-	StatusBar:SetStatusBarTexture(DB.Statusbar)
-	StatusBar:SetMinMaxValues(0, 300)
-	StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
-	StatusBar:SetPoint("RIGHT", Anchor, "LEFT", -20, 0)
-	StatusBar:CreateShadow("Background")
-	StatusBar.Text = S.MakeFontString(StatusBar, 10)
-	StatusBar.Text:SetPoint("CENTER", 0, -5)
+	StatusBar:SetWidth(50)
+	--StatusBar:SetStatusBarTexture(DB.Statusbar)
+	--StatusBar:SetMinMaxValues(0, 300)
+	--StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
+	StatusBar:SetPoint("RIGHT", Anchor, "LEFT", -15, 0)
+	--StatusBar:CreateShadow("Background")
+	StatusBar.Text = S.MakeFontString(StatusBar, 11, "O")
+	StatusBar.Text:SetPoint("CENTER")
+	StatusBar.Text:SetShadowOffset(S.mult, -S.mult)
+	StatusBar.Text:SetShadowColor(0, 0, 0, 0.4)
 	StatusBar.Text:SetText("Ping: 0")
 	StatusBar.Timer = 0
 	StatusBar:SetScript("OnUpdate", function(self, elapsed)
 		self.Timer = self.Timer + elapsed
-		if self.Timer > 1 then
+		if self.Timer > 5 then
 			local _, _, latencyHome, latencyWorld = GetNetStats()
 			local value = (latencyHome > latencyWorld) and latencyHome or latencyWorld	
-			self:SetValue(value)
-			self.Text:SetText("Ping: "..value)			
 			local r, g, b = S.ColorGradient((300-value)/300, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
 																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
 																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
-			self:SetStatusBarColor(r, g, b)
+			--self:SetValue(value)
+			self.Text:SetText("|cff66c7ff".."Ping: ".."|r"..S.ToHex(r, g, b)..value.."|r")			
+			
+			--self:SetStatusBarColor(r, g, b)
 			self.Timer = 0
 		end
 	end)
@@ -262,14 +261,16 @@ end
 local function BuildDurability(Anchor)
 	local StatusBar = CreateFrame("StatusBar", nil, UIParent)
 	StatusBar:SetHeight(6)	
-	StatusBar:SetWidth(60)
-	StatusBar:SetStatusBarTexture(DB.Statusbar)
-	StatusBar:SetMinMaxValues(0, 100)
-	StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
-	StatusBar:SetPoint("RIGHT", Anchor, "LEFT", -20, 0)
-	StatusBar:CreateShadow("Background")
-	StatusBar.Text = S.MakeFontString(StatusBar, 10)
-	StatusBar.Text:SetPoint("CENTER", 0, -5)
+	StatusBar:SetWidth(50)
+	--StatusBar:SetStatusBarTexture(DB.Statusbar)
+	--StatusBar:SetMinMaxValues(0, 100)
+	--StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
+	StatusBar:SetPoint("RIGHT", Anchor, "LEFT", -15, 0)
+	--StatusBar:CreateShadow("Background")
+	StatusBar.Text = S.MakeFontString(StatusBar, 11, "O")
+	StatusBar.Text:SetPoint("CENTER")
+	StatusBar.Text:SetShadowOffset(S.mult, -S.mult)
+	StatusBar.Text:SetShadowColor(0, 0, 0, 0.4)
 	StatusBar:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
 	StatusBar:RegisterEvent("MERCHANT_SHOW")
 	StatusBar:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -286,12 +287,12 @@ local function BuildDurability(Anchor)
 		end
 		table.sort(Slots, function(a, b) return a[3] < b[3] end)
 		local value = floor(Slots[1][3]*100)
-		self:SetValue(100-value)
-		self.Text:SetText("D: "..value.."%")
+		--self:SetValue(100-value)
 		local r, g, b = S.ColorGradient(value/100, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
 																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
 																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
-		self:SetStatusBarColor(r, g, b)
+		self.Text:SetText("|cff66c7ff".."D: ".."|r"..S.ToHex(r, g, b)..value.."|r".." %")
+		--self:SetStatusBarColor(r, g, b)
 	end)
 	StatusBar:SetScript("OnEnter", function(self)
 		if not InCombatLockdown() then
@@ -319,23 +320,16 @@ end
 local function BuildCurrency(Anchor)
 	local StatusBar = CreateFrame("StatusBar", "Currency", UIParent)
 	StatusBar:SetHeight(6)	
-	StatusBar:SetWidth(60)
-	StatusBar:SetStatusBarTexture(DB.Statusbar)
-	StatusBar:SetMinMaxValues(0, 99999)
-	StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
-	StatusBar:SetPoint("RIGHT", Anchor, "LEFT", -20, 0)
-	StatusBar:CreateShadow("Background")
-	StatusBar.Text = S.MakeFontString(StatusBar, 10)
-	StatusBar.Text:SetPoint("CENTER", 0, -5)
-	StatusBar.Timer = 0
-	StatusBar:SetScript("OnUpdate",function(self,elapsed)
-		self.Timer = self.Timer + elapsed
-		if self.Timer > 1 then
-			self.Timer = 0
-			local Gold = GetMoney()	
-			self:SetValue(Gold/100/100)
-		end
-	end)
+	StatusBar:SetWidth(50)
+	--StatusBar:SetStatusBarTexture(DB.Statusbar)
+	--StatusBar:SetMinMaxValues(0, 99999)
+	--StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
+	StatusBar:SetPoint("RIGHT", Anchor, "LEFT", -15, 0)
+	--StatusBar:CreateShadow("Background")
+	StatusBar.Text = S.MakeFontString(StatusBar, 12, "O")
+	StatusBar.Text:SetPoint("CENTER")
+	StatusBar.Text:SetShadowOffset(S.mult, -S.mult)
+	StatusBar.Text:SetShadowColor(0, 0, 0, 0.4)
 	return StatusBar
 end
 
@@ -343,28 +337,30 @@ end
 local function BuildFPS(Anchor)
 local StatusBar = CreateFrame("StatusBar", "FPS", UIParent)
 	StatusBar:SetHeight(6)	
-	StatusBar:SetWidth(60)
-	StatusBar:SetStatusBarTexture(DB.Statusbar)
-	StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
-	StatusBar:SetPoint("RIGHT", Anchor, "LEFT", -20, 0)
-	StatusBar:CreateShadow("Background")
-	StatusBar.Text = S.MakeFontString(StatusBar, 10)
-	StatusBar.Text:SetPoint("CENTER", 0, -5)
+	StatusBar:SetWidth(50)
+	--StatusBar:SetStatusBarTexture(DB.Statusbar)
+	--StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
+	StatusBar:SetPoint("RIGHT", Anchor, "LEFT", -15, 0)
+	--StatusBar:CreateShadow("Background")
+	StatusBar.Text = S.MakeFontString(StatusBar, 11, "O")
+	StatusBar.Text:SetPoint("CENTER")
+	StatusBar.Text:SetShadowOffset(S.mult, -S.mult)
+	StatusBar.Text:SetShadowColor(0, 0, 0, 0.4)
 	StatusBar.Text:SetText("FPS: 0")
-	StatusBar.LastUpdate = 1
+	StatusBar.LastUpdate = 0
 	StatusBar:SetScript("OnUpdate", function(self, elapsed)
-		self.LastUpdate = self.LastUpdate - elapsed
-		if self.LastUpdate < 0 then
-		self:SetMinMaxValues(0, 100)
+		self.LastUpdate = self.LastUpdate + elapsed
+		if self.LastUpdate > 5 then
+		--self:SetMinMaxValues(0, 100)
 		local value = floor(GetFramerate())
 		local max = GetCVar("MaxFPS")
-		self:SetValue(value)
-		self.Text:SetText("FPS: "..value)
+		--self:SetValue(value)
 		local r, g, b = S.ColorGradient(value/100, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
 																		InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
 																		InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
-		self:SetStatusBarColor(r, g, b)
-		self.LastUpdate = 1
+		self.Text:SetText("|cff66c7ff".."FPS: ".."|r"..S.ToHex(r, g, b)..value.."|r")
+		--self:SetStatusBarColor(r, g, b)
+		self.LastUpdate = 0
 		end
 	end)
 	StatusBar:SetScript("OnEnter", function(self)
@@ -381,38 +377,45 @@ local StatusBar = CreateFrame("StatusBar", "FPS", UIParent)
 		end
 	end)
 	StatusBar:SetScript("OnLeave", function() GameTooltip:Hide() end)
+	return StatusBar
 end
 
 --BuildFriend
-function BuildFriend()
+function BuildFriend(Anchor)
 	local StatusBar = CreateFrame("StatusBar", "Friend", UIParent)
 		StatusBar:SetHeight(6)	
-		StatusBar:SetWidth(60)
-		StatusBar:SetStatusBarTexture(DB.Statusbar)
-		StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
-		StatusBar:SetPoint("RIGHT", "FPS", "LEFT", -20, 0)
-		StatusBar:CreateShadow("Background")
-		StatusBar.Text = S.MakeFontString(StatusBar, 10)
-		StatusBar.Text:SetPoint("CENTER", 0, -5)
+		StatusBar:SetWidth(50)
+		--StatusBar:SetStatusBarTexture(DB.Statusbar)
+		--StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
+		StatusBar:SetPoint("RIGHT", Anchor, "LEFT", -25, 0)
+		--StatusBar:CreateShadow("Background")
+		StatusBar.Text = S.MakeFontString(StatusBar, 11, "O")
+		StatusBar.Text:SetPoint("CENTER")
+		StatusBar.Text:SetShadowOffset(S.mult, -S.mult)
+		StatusBar.Text:SetShadowColor(0, 0, 0, 0.4)
+	return StatusBar
 end
 --BuildGuild
 
-local function BuildGuild()
+local function BuildGuild(Anchor)
 	local StatusBar = CreateFrame("StatusBar", "Guild", UIParent)
 		StatusBar:SetHeight(6)	
-		StatusBar:SetWidth(60)
-		StatusBar:SetStatusBarTexture(DB.Statusbar)
-		StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
-		StatusBar:SetPoint("RIGHT", "Friend", "LEFT", -20, 0)
-		StatusBar:CreateShadow("Background")
-		StatusBar.Text = S.MakeFontString(StatusBar, 10)
-		StatusBar.Text:SetPoint("CENTER", 0, -5)
+		StatusBar:SetWidth(50)
+		--StatusBar:SetStatusBarTexture(DB.Statusbar)
+		--StatusBar:SetStatusBarColor(0, 0.4, 1, 0.6)
+		StatusBar:SetPoint("RIGHT", Anchor, "LEFT", -25, 0)
+		--StatusBar:CreateShadow("Background")
+		StatusBar.Text = S.MakeFontString(StatusBar, 11, "O")
+		StatusBar.Text:SetPoint("CENTER")
+		StatusBar.Text:SetShadowOffset(S.mult, -S.mult)
+		StatusBar.Text:SetShadowColor(0, 0, 0, 0.4)
+	return StatusBar
 end
 
 function Module:OnInitialize()
 	C = InfoPanelDB
 	local InfoPanelPos = CreateFrame("Frame", nil, UIParent)
-	InfoPanelPos:SetSize(610, 20)
+	InfoPanelPos:SetSize(540, 20)
 	InfoPanelPos:Hide()
 	MoveHandle.InfoPanel = S.MakeMoveHandle(InfoPanelPos, L["信息面板"], "InfoPanel")
 	
@@ -437,8 +440,8 @@ function Module:OnEnable()
 		local Ping = BuildPing(Currency)
 		local Memory = BuildMemory(Ping)
 		local FPS = BuildFPS(Memory)
-		local Friend = BuildFriend()
-		local Guild = BuildGuild()
+		local Friend = BuildFriend(FPS)
+		local Guild = BuildGuild(Friend)
 	end
 end
 
