@@ -31,6 +31,7 @@ C.media = {
 	["backdrop"] = "Interface\\ChatFrame\\ChatFrameBackground",
 	["checked"] = "Interface\\AddOns\\Aurora\\CheckButtonHilight",
 	["glow"] = "Interface\\AddOns\\Aurora\\glow",
+	["texture"] = DB.Statusbar,
 }
 
 F.dummy = function() end
