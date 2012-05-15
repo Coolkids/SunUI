@@ -414,22 +414,31 @@ end
 
 function Module:OnInitialize()
 	C = InfoPanelDB
+	if C["OpenTop"] == true then
+		local top = CreateFrame("Frame", nil, UIParent)
+		top:SetHeight(20)
+		top:SetFrameStrata("BACKGROUND")
+		top:SetFrameLevel(0)
+		top:CreateShadow("Background")
+		top:SetPoint("TOP", 0, 3)
+		top:SetPoint("LEFT")
+		top:SetPoint("RIGHT")
+	end
 	local InfoPanelPos = CreateFrame("Frame", nil, UIParent)
-	InfoPanelPos:SetSize(540, 20)
+	InfoPanelPos:SetSize(540, 13)
 	InfoPanelPos:Hide()
 	MoveHandle.InfoPanel = S.MakeMoveHandle(InfoPanelPos, L["信息面板"], "InfoPanel")
 	
 	if C["OpenBottom"] == true then
-	BottomRightBar = CreateFrame("Frame", BottomRightBar, UIParent)
-	BottomRightBar:SetHeight(C["BottomHeight"])	
-	BottomRightBar:SetWidth(C["BottomWidth"])
-	BottomRightBar:SetFrameLevel(3)
-	MoveHandle.BottomInfoPanelPos = S.MakeMoveHandle(BottomRightBar, L["信息面板"], "InfoPanel2")
-	local tmp = CreateFrame("Frame", nil, BottomRightBar)
-	tmp:SetAllPoints()
-	tmp:SetFrameLevel(1)
-	tmp:CreateShadow("Background")
+		local bottom = CreateFrame("Frame", "BottomBar", UIParent)
+		bottom:SetHeight(20)
+		bottom:SetFrameLevel(0)
+		bottom:CreateShadow("Background")
+		bottom:SetPoint("BOTTOM", 0, -3)
+		bottom:SetPoint("LEFT")
+		bottom:SetPoint("RIGHT")
 	end
+
 end
 
 function Module:OnEnable()

@@ -6,15 +6,15 @@ local InfoBarStatusColor = {{1, 0, 0}, {1, 1, 0}, {0, 0.4, 1}}
 function Module:OnEnable()	
 local Stat = CreateFrame("Frame")
 Stat:EnableMouse(true)
-Stat:SetFrameStrata("MEDIUM")
-Stat:SetFrameLevel(3)
+--Stat:SetFrameStrata("MEDIUM")
+Stat:SetFrameLevel(1)
 
 local text  = Stat:CreateFontString(nil, "OVERLAY")
 text:SetFont(DB.PFont, 12*S.Scale(1)*MiniDB["FontScale"], "OUTLINEMONOCHROME")
 text:SetShadowOffset(1.25, -1.25)
 text:SetShadowColor(0, 0, 0, 0.4)
-text:Point("BOTTOMRIGHT", BottomLeftBar, "BOTTOMRIGHT",-15, -8)
-Stat:SetParent(BottomLeftBar)
+text:Point("LEFT", BottomBar, "LEFT", 100, 2)
+Stat:SetParent(BottomBar)
 
 local function Update(self)	
 	local free, total = 0, 0

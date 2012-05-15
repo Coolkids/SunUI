@@ -31,7 +31,7 @@ local function PositionAndStyle()
 	MBCF:SetAlpha(0)
 	if select(3, Minimap:GetPoint()):upper():find("TOP") then
 		MBCF:SetSize(150, 15)
-		MBCF:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", -2, -5)
+		MBCF:SetPoint("BOTTOMLEFT", Minimap, "TOPLEFT", 2, 5)
 		--MBCF.bg:SetGradientAlpha("VERTICAL", 0, 0, 0, 0, 0, 0, 0, .6)
 		for i =1, #buttons do
 			buttons[i]:ClearAllPoints()
@@ -42,7 +42,7 @@ local function PositionAndStyle()
 		end
 	else
 		MBCF:SetSize(150, 15)
-		MBCF:SetPoint("BOTTOMLEFT", Minimap, "TOPLEFT", -2, 5)
+		MBCF:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 2, -5)
 		--MBCF.bg:SetGradientAlpha("HORIZONTAL", 0, 0, 0, 0.6, 0, 0, 0, 0)
 		for i =1, #buttons do
 			buttons[i]:ClearAllPoints()

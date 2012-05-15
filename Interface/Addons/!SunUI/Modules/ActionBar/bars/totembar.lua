@@ -238,7 +238,7 @@ end
 		mcab.destroyer = b
     end
 	--图腾时间
-	local totemSlot = { 2, 1, 3, 4 }
+	--[[ local totemSlot = { 2, 1, 3, 4 }
 
     local function OnEvent(self, event, slot)
 		if event == "PLAYER_ENTERING_WORLD" then
@@ -320,5 +320,5 @@ end
 		timerFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 		timerFrame:RegisterEvent("PLAYER_TOTEM_UPDATE")
 		OnEvent(timerFrame, "PLAYER_TOTEM_UPDATE", timerFrame.slot)
-    end
+    end ]]
 end

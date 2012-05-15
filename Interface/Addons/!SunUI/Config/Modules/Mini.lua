@@ -37,7 +37,7 @@ local ui = SetUIScale()
 -- LoadSettings
 function Module.LoadSettings()
 	local Default = {
-	["ClassCDWidth"] = 80,
+	["ClassCDWidth"] = 100,
 	["AutoSell"] = true,
 	["uiScale"] = ui,
 	["AutoRepair"] = false,
@@ -63,7 +63,7 @@ function Module.LoadSettings()
 	["Disenchat"] = true,
 	["AutoBotton"] = true,
 	["BloodShield"] = false,
-	["RaidCD"] = false,
+	["RaidCD"] = true,
 	["RaidCDWidth"] = 100,
 	["RaidCDHeight"] = 8,
 	["RaidCDDirection"] = 1,
@@ -77,7 +77,7 @@ function Module.LoadSettings()
 	["roguethree"] = 20,
 	["roguefour"] = 20,
 	["roguefive"] = 20,
-	["Resurrect"] = true,
+	["Resurrect"] = false,
 	}
 	if not MiniDB then MiniDB = {} end
 	for key, value in pairs(Default) do
