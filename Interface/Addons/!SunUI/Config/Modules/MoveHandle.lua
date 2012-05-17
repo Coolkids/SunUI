@@ -13,7 +13,7 @@ function Module.LoadSettings()
 		["Debuff"] = {"TOPRIGHT", "UIParent", "TOPRIGHT", -5, -110},
 		["Minimap"] = {"TOPLEFT", "UIParent", "TOPLEFT", 5, -5},
 		["ShadowPet"] = {"BOTTOM","UIParent","BOTTOM", -316, 201},
-		["ClassCD"] = {"LEFT","UIParent","LEFT",20,240},
+		["ClassCD"] = {"LEFT","UIParent","LEFT",30,240},
 		["Combatpoint"] = {"CENTER", "UIParent", "CENTER", 133, -139},
 		["Threat"] = {"BOTTOM", "UIParent", "BOTTOM", -175, 262},
 		["Reminder"] = {"TOPLEFT","Minimap","BOTTOMLEFT", 0, -20},
@@ -34,7 +34,7 @@ function Module.LoadSettings()
 		["bar5"] = {"CENTER", "UIParent", "CENTER", 0, 0 }, 
 		["stancebar"] = {"BOTTOMLEFT", "MultiBarBottomRightButton6", "TOPLEFT", 0, 4}, 
 		["petbar"] = {"BOTTOMRIGHT", "MultiBarBottomRightButton12", "TOPRIGHT", 0, 4}, 
-		["extrabar"] = {"BOTTOM", "UIParent", "BOTTOM", -184, 44 },
+		["extrabar"] = {"BOTTOM", "UIParent", "BOTTOM", -194, 54 },
 		["totembar"] = {"BOTTOM", "UIParent", "BOTTOM", -175, 292},
 		["vehicleexit"] = {"BOTTOM", "UIParent", "BOTTOM", 278, 66 }, 
 		["PlayerFrame"] = {"BOTTOM", "UIParent", "BOTTOM", -175, 172},
@@ -50,7 +50,7 @@ function Module.LoadSettings()
 		["TargetCastbar"] = {"TOP","oUF_SunUITarget","BOTTOM",0,-30},
 		["FocusCastbar"] = {"TOP","oUF_SunUIFocus","BOTTOM",0,-20},
 		["AutoButton"] = {"RIGHT","UIParent","RIGHT",-270,188},
-		["RaidCD"] = {"LEFT","UIParent","LEFT",20,0},
+		["RaidCD"] = {"LEFT","UIParent","LEFT",30,0},
 		["BloodShield"] = {"BOTTOM", "UIParent", "BOTTOM", -285, 172}
 	}
 	if not MoveHandleDB then MoveHandleDB = {} end
