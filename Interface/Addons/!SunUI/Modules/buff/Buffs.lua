@@ -21,13 +21,13 @@ function Module:Style(buttonName, i, f)
 	
 	Duration:ClearAllPoints()
 	Duration:SetParent(Button)
-	Duration:SetPoint("TOP", Button, "BOTTOM", 2, -3)
-	Duration:SetFont("Interface\\Addons\\!SunUI\\media\\ROADWAY.ttf", 12*S.Scale(1)*MiniDB["FontScale"], "THINOUTLINE")
+	Duration:SetPoint("TOP", Button, "BOTTOM", 2, 0)
+	Duration:SetFont(DB.Font, 13*S.Scale(1)*MiniDB["FontScale"], "THINOUTLINE")
 	
 	Count:ClearAllPoints()
 	Count:SetParent(Button)
 	Count:SetPoint("TOPRIGHT", Button, 3, -1)
-	Count:SetFont("Interface\\Addons\\!SunUI\\media\\ROADWAY.ttf", 12*S.Scale(1)*MiniDB["FontScale"], "THINOUTLINE")
+	Count:SetFont(DB.Font, 13*S.Scale(1)*MiniDB["FontScale"], "THINOUTLINE")
 	
 	if Border then
 		Border:Hide()
