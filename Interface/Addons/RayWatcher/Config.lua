@@ -14,9 +14,9 @@
 
 local _, ns = ...
 local S, C, L, DB = unpack(SunUI)
-ns.font = DB.PFont
+ns.font = DB.Font
 ns.fontsize = 14
-ns.fontflag = 'OUTLINEMONOCHROME'
+ns.fontflag = 'THINOUTLINE'
 
 ns.watchers ={
 	["DRUID"] = {

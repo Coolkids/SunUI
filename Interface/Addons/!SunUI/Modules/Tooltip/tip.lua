@@ -34,7 +34,6 @@ function Module:OnInitialize()
 		elite = " |cffFFFF00+|r ",
 		worldboss = " |cffFF1919首领|r ",
 		rareelite = " |cff9933FA稀有|r |cffFFFF00+|r ",
-
 		}
 	else
 		types = {
@@ -138,7 +137,7 @@ function Module:OnInitialize()
 			local unitName = UnitName(unit)
 			local unitLevel = UnitLevel(unit)
 			local diffColor = unitLevel > 0 and GetQuestDifficultyColor(UnitLevel(unit)) or QuestDifficultyColors["impossible"]
-			if unitLevel < 0 then unitLevel = "??" end
+			if unitLevel < 0 then unitLevel = '??' end
 			if UnitIsPlayer(unit) then
 				local unitRace = UnitRace(unit)
 				local unitClass = UnitClass(unit)
@@ -252,7 +251,7 @@ function Module:OnInitialize()
 			tooltip:SetOwner(parent, "ANCHOR_CURSOR")
 		else
 			tooltip:SetOwner(parent, "ANCHOR_NONE")
-			tooltip:SetPoint("BOTTOMRIGHT", TooltipMover, "BOTTOMRIGHT", 0, 0)
+			tooltip:SetPoint("BOTTOMRIGHT", tooltipholder, "BOTTOMRIGHT", 0, 0)
 		end	
 		tooltip.default = 1
 	end)

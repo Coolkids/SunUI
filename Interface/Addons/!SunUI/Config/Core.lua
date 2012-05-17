@@ -2,7 +2,7 @@
 local S, C, L, DB = unpack(select(2, ...))
 local Core = LibStub("AceAddon-3.0"):GetAddon("Core")
 local Module = Core:NewModule("Config", "AceConsole-3.0")
-local Version = 20120515
+local Version = 20120323
 function Module:SetDefault()
 	SlashCmdList.AutoSet()
 	CoreVersion = Version

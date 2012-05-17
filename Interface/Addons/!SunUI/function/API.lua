@@ -22,13 +22,9 @@ function S.CreateBG(f)
 	return bg
 end
 
-function S.MakeFontString(Parent, FontSize, t)
+function S.MakeFontString(Parent, FontSize)
 	local Text = Parent:CreateFontString(nil, "OVERLAY")
-	if t == "O" then
-		Text:SetFont(DB.PFont, FontSize*S.Scale(1), "OUTLINEMONOCHROME")
-	else
-		Text:SetFont(DB.Font, FontSize*S.Scale(1), "OUTLINE")
-	end
+	Text:SetFont(DB.Font, FontSize*S.Scale(1), "THINOUTLINE")
 	return Text
 end
 
@@ -86,14 +82,13 @@ function S.FormatMemory(Memory)
 	local M = format("%.2f", Memory/1024)
 	local K = floor(Memory-floor(Memory/1024))
 	if Memory > 1024 then
-		return M.."m"	
+		return M.."m "	
 	elseif Memory > 0 and Memory < 1024 then
 		return K.."k"
 	else
 		return "N/A"
 	end	
 end
-
 S.CreateGradient = function(f)
 	local tex = f:CreateTexture(nil, "BACKGROUND")
 	tex:SetPoint("TOPLEFT")

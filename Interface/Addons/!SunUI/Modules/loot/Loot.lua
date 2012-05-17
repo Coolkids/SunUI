@@ -19,7 +19,7 @@ local OnEnter = function(self)
 		GameTooltip:SetLootItem(slot)
 		CursorUpdate(self)
 	end
-	self.glow:SetAlpha(1)
+	S.StartGlow(self)
 	--self.drop:Show()
 	--self.drop:SetVertexColor(1, 1, 0)
 end
@@ -53,6 +53,7 @@ end
 
 local function LDD_Initialize()  
     local info = {}
+    
     info.text = "Announce to"
     info.notCheckable = true
     info.isTitle = true
@@ -91,9 +92,9 @@ local function LDD_Initialize()
 end
 
 local OnLeave = function(self)
+	S.StopGlow(self)
 	GameTooltip:Hide()
 	ResetCursor()
-	self.glow:SetAlpha(0)
 end
 
 local OnClick = function(self)

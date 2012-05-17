@@ -239,11 +239,11 @@ oUF.TagEvents['mono:gridname'] = 'UNIT_NAME_UPDATE UNIT_CONNECTION'
 -- unit status tag
 oUF.Tags['mono:DDG'] = function(u)
 	if not UnitIsConnected(u) then
-		return "|cffCFCFCF offline|r"
+		return "|cffCFCFCF 离线|r"
 	elseif UnitIsGhost(u) then
-		return "|cffCFCFCF ghost|r"
+		return "|cffCFCFCF 灵魂|r"
 	elseif UnitIsDead(u) then
-		return "|cffCFCFCF dead|r"
+		return "|cffCFCFCF 死亡|r"
 	end
 end
 oUF.TagEvents['mono:DDG'] = 'UNIT_NAME_UPDATE UNIT_HEALTH UNIT_CONNECTION'--'UNIT_MAXHEALTH'

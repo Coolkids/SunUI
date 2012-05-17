@@ -10,7 +10,7 @@ Stat:EnableMouse(true)
 Stat:SetFrameLevel(1)
 
 local text  = Stat:CreateFontString(nil, "OVERLAY")
-text:SetFont(DB.PFont, 12*S.Scale(1)*MiniDB["FontScale"], "OUTLINEMONOCHROME")
+text:SetFont(DB.Font, 12*S.Scale(1)*MiniDB["FontScale"], "THINOUTLINE")
 text:SetShadowOffset(1.25, -1.25)
 text:SetShadowColor(0, 0, 0, 0.4)
 text:Point("LEFT", BottomBar, "LEFT", 100, 2)

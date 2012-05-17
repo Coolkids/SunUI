@@ -1,7 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	
 	<Script file="AuraTracker.lua"/>
-	<Script file="CombatFeedback.lua"/>
 	<Script file="Smooth.lua"/>
 	<Script file="Trinkets.lua"/>
 	<Include file="PartyPets.xml"/>

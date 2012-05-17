@@ -378,7 +378,6 @@ function Module:OnInitialize()
 					end
 				end
 				self:Show()
-				if sound == true then PlaySoundFile(DB.Warning) end		
 			elseif ((combat and UnitAffectingCombat("player")) or (instance and (instanceType == "party" or instanceType == "raid"))) and 
 			reversecheck == true and not (UnitInVehicle("player") and self.icon:GetTexture()) then
 				if negate_reversecheck and negate_reversecheck == GetPrimaryTalentTree() then self:Hide() return end
@@ -388,7 +387,6 @@ function Module:OnInitialize()
 						local _, _, icon, _, _, _, _, unitCaster, _, _, _ = UnitBuff("player", name)
 						if (name and icon and unitCaster == "player") then
 							self:Show()
-							if sound == true then PlaySoundFile(DB.Warning) end
 							return
 						end	
 					end
@@ -403,7 +401,6 @@ function Module:OnInitialize()
 					if hasMainHandEnchant == nil then
 						self:Show()
 						self.icon:SetTexture(GetInventoryItemTexture("player", 16))
-						if sound == true then PlaySoundFile(DB.Warning) end		
 						return
 					end
 				else			
@@ -413,9 +410,7 @@ function Module:OnInitialize()
 							self.icon:SetTexture(GetInventoryItemTexture("player", 16))
 						else
 							self.icon:SetTexture(GetInventoryItemTexture("player", 17))
-						end
-						if sound == true then PlaySoundFile(DB.Warning) end
-						
+						end		
 						return
 					end
 				end

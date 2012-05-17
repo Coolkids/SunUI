@@ -9,7 +9,7 @@ function Module:OnEnable()
 	Stat:SetFrameLevel(3)
 	
 	local Text  = Stat:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(DB.PFont, 11*S.Scale(1)*MiniDB["FontScale"], "OUTLINEMONOCHROME")
+	Text:SetFont(DB.Font, 11*S.Scale(1)*MiniDB["FontScale"], "THINOUTLINE")
 	Text:SetShadowOffset(S.mult, -S.mult)
 	Text:SetShadowColor(0, 0, 0, 0.4)
 	Text:SetPoint("CENTER", Currency, "CENTER")

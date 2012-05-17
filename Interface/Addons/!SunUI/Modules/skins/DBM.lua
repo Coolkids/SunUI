@@ -209,8 +209,10 @@ function Module:OnInitialize()
 				return RaidNotice_AddMessage_(noticeFrame, textString, colorInfo)
 			end
 			
-			--自己用
-			local UploadDBM = function()
+		end
+	end)
+	
+		local UploadDBM = function()
 			DBM_SavedOptions.Enabled = true
 			DBT_SavedOptions["DBM"].Scale = 1
 			DBT_SavedOptions["DBM"].HugeScale = 1
@@ -235,7 +237,7 @@ function Module:OnInitialize()
 			["月殤旋"] = true,
 			}
 				if players[DB.PlayerName] == true then
-					DBT_SavedOptions["DBM"].TimerX = 420
+					DBT_SavedOptions["DBM"].TimerX = 348
 					DBT_SavedOptions["DBM"].TimerY = -29
 					DBT_SavedOptions["DBM"].TimerPoint = "TOPLEFT"
 					DBT_SavedOptions["DBM"].StartColorR = 1
@@ -251,48 +253,9 @@ function Module:OnInitialize()
 					DBT_SavedOptions["DBM"].HugeTimerY = -207
 				end
 			end
+		local frame = CreateFrame("Frame")
+		frame:RegisterEvent('PLAYER_LOGIN')
+		frame:SetScript('OnEvent', function(self, event)
 			UploadDBM()
-			local SetDBM = function()
-				DBM_SavedOptions.Enabled = true
-				DBT_SavedOptions["DBM"].Scale = 1
-				DBT_SavedOptions["DBM"].HugeScale = 1
-				DBT_SavedOptions["DBM"].Texture = DB.Statusbar
-				DBT_SavedOptions["DBM"].ExpandUpwards = false
-				DBT_SavedOptions["DBM"].BarXOffset = 0
-				DBT_SavedOptions["DBM"].BarYOffset = 12
-				DBT_SavedOptions["DBM"].IconLeft = true
-				DBT_SavedOptions["DBM"].Texture = "Interface\\Buttons\\WHITE8x8"
-				DBT_SavedOptions["DBM"].IconRight = false	
-				DBT_SavedOptions["DBM"].Flash = false
-				DBT_SavedOptions["DBM"].FadeIn = true
-				DBT_SavedOptions["DBM"].TimerX = 420
-				DBT_SavedOptions["DBM"].TimerY = -29
-				DBT_SavedOptions["DBM"].TimerPoint = "TOPLEFT"
-				DBT_SavedOptions["DBM"].StartColorR = 1
-				DBT_SavedOptions["DBM"].StartColorG = 1
-				DBT_SavedOptions["DBM"].StartColorB = 0
-				DBT_SavedOptions["DBM"].EndColorR = 1
-				DBT_SavedOptions["DBM"].EndColorG = 0
-				DBT_SavedOptions["DBM"].EndColorB = 0
-				DBT_SavedOptions["DBM"].Width = 130
-				DBT_SavedOptions["DBM"].HugeWidth = 155
-				DBT_SavedOptions["DBM"].HugeTimerPoint = "TOP"
-				DBT_SavedOptions["DBM"].HugeTimerX = -150
-				DBT_SavedOptions["DBM"].HugeTimerY = -207
-			end
-			SLASH_SETDBM1 = "/setdbm"
-			SlashCmdList["SETDBM"] = function(msg)
-			SetDBM()
-			StaticPopup_Show("CFG_RELOAD")
-			end
-			StaticPopupDialogs["CFG_RELOAD"] = {
-				text = "改变DBM设置,需重载应用设置",
-				button1 = ACCEPT,
-				button2 = CANCEL,
-				OnAccept = function() ReloadUI() end,
-				timeout = 0,
-				whileDead = 1,
-			}
-		end
-	end)
+		end)
 end

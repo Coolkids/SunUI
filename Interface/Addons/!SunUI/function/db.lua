@@ -10,7 +10,6 @@ DB.MyClass = select(2, UnitClass("player"))
 DB.PlayerName, _ = UnitName("player")
 DB.MyClassColor = RAID_CLASS_COLORS[DB.MyClass]
 DB.Font = ChatFrame1:GetFont()
-DB.PFont = Media.."pixel.ttf"
 DB.Solid = Media.."solid"
 DB.Button = Media.."Button"
 DB.GlowTex = Media.."glowTex"

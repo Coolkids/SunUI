@@ -73,7 +73,7 @@ C = UnitFrameDB
     lib.gen_InfoIcons(self)
     --lib.gen_specificpower(self)
     --lib.gen_combat_feedback(self)
-	lib.gen_EclipseBar(self)
+	--lib.gen_EclipseBar(self)
 	lib.gen_alt_powerbar(self)
     --lib.createAuras(self)
 	--lib.createBuffs(self)

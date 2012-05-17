@@ -133,7 +133,7 @@ if C["Disenchat"] then
 	end)
 end
 if C["Resurrect"] then
-	local function ResurrectEvent()
+	local function ResurrectEvent(name)
 			if not (UnitAffectingCombat('player') or UnitAffectingCombat(name)) then
 				local delay = GetCorpseRecoveryDelay()
 				if delay == 0 then

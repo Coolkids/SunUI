@@ -13,7 +13,7 @@ function Module.LoadSettings()
 		["Debuff"] = {"TOPRIGHT", "UIParent", "TOPRIGHT", -5, -110},
 		["Minimap"] = {"TOPLEFT", "UIParent", "TOPLEFT", 5, -5},
 		["ShadowPet"] = {"BOTTOM","UIParent","BOTTOM", -316, 201},
-		["ClassCD"] = {"LEFT","UIParent","LEFT",10,240},
+		["ClassCD"] = {"LEFT","UIParent","LEFT",20,240},
 		["Combatpoint"] = {"CENTER", "UIParent", "CENTER", 133, -139},
 		["Threat"] = {"BOTTOM", "UIParent", "BOTTOM", -175, 262},
 		["Reminder"] = {"TOPLEFT","Minimap","BOTTOMLEFT", 0, -20},
@@ -50,7 +50,7 @@ function Module.LoadSettings()
 		["TargetCastbar"] = {"TOP","oUF_SunUITarget","BOTTOM",0,-30},
 		["FocusCastbar"] = {"TOP","oUF_SunUIFocus","BOTTOM",0,-20},
 		["AutoButton"] = {"RIGHT","UIParent","RIGHT",-270,188},
-		["RaidCD"] = {"LEFT","UIParent","LEFT",10,0},
+		["RaidCD"] = {"LEFT","UIParent","LEFT",20,0},
 		["BloodShield"] = {"BOTTOM", "UIParent", "BOTTOM", -285, 172}
 	}
 	if not MoveHandleDB then MoveHandleDB = {} end
