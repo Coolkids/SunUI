@@ -13,6 +13,7 @@
 	<Include file="locale\load.xml"/>
 	<Include file="config\Load_Config.xml"/>
 	<Include file="function\load.xml"/>
+	<Include file="Modules\load.xml"/>
 </Ui>
 
 <!--	<Script file="Load.lua"/>  -->

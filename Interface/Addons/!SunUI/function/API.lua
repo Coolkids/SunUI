@@ -166,7 +166,6 @@ function S.Reskin(f)
 	f:SetHighlightTexture("")
 	f:SetPushedTexture("")
 	f:SetDisabledTexture("")
-
 	if f:GetName() then
 		local left = _G[f:GetName().."Left"]
 		local middle = _G[f:GetName().."Middle"]
