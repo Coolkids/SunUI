@@ -39,6 +39,6 @@ Delay:SetScript("OnEvent", function()
 		UnitPopupMenus["PLAYER"] = { "SET_FOCUS", "WHISPER", "INSPECT", "ACHIEVEMENTS", "INVITE", "TRADE", "FOLLOW", "DUEL", "RAID_TARGET_ICON", "RAF_SUMMON", "RAF_GRANT_LEVEL", "MOVE_PLAYER_FRAME", "MOVE_TARGET_FRAME", "CANCEL" };
 	end
 
-	DEFAULT_CHAT_FRAME:AddMessage("|cffDDA0DDSun|r|cff44CCFFUI|r已加载，详细设置请输入/sunui ,发布网址:\124cff7f7fffhttp://bbs.ngacn.cc/read.php?tid=4743077&_fp=1&_ff=200\124r")
+	DEFAULT_CHAT_FRAME:AddMessage("|cffDDA0DDSun|r|cff44CCFFUI|r已加载，详细设置请输入/sunui")
 	MiniDB["uiScale"] = GetCVar("uiScale")
 end)

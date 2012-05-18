@@ -39,7 +39,7 @@ local Text  = BottomBar:CreateFontString(nil, "BORDER")
 				if int > 0 or not GetPrimaryTalentTree() then return end
 
 				active = GetActiveTalentGroup(false, false)
-				Text:SetFormattedText(talentString, select(2, GetTalentTabInfo(GetPrimaryTalentTree(false, false, active))), talent[active][1], talent[active][2], talent[active][3])
+				Text:SetFormattedText(talentString, S.RGBToHex(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)..select(2, GetTalentTabInfo(GetPrimaryTalentTree(false, false, active))).."|r", talent[active][1], talent[active][2], talent[active][3])
 				int = 1
 
 				-- disable script	

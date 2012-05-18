@@ -87,20 +87,20 @@ SlashCmdList["AutoSet"] = function()
 		local ResScale = SetUIScale()
 	SetCVar("useUiScale", 1)
 	SetCVar("uiScale", ResScale)
-	ReloadUI()
+	--ReloadUI()
 	end
 end
 SLASH_AutoSet1 = "/AutoSet"
 
 
 function Module:OnInitialize()
-  if MiniDB["uiScale"] == nil then 
-	MiniDB["uiScale"] = SetUIScale()
-  end
-  local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/MiniDB["uiScale"]
-  local function scale(x)
-	return (mult*math.floor(x/mult+.5)) 
-  end
-  S.mult = mult
-  S.Scale = scale
+	if MiniDB["uiScale"] then 
+		MiniDB["uiScale"] = SetUIScale()
+	end
+	local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/MiniDB["uiScale"]
+	local function scale(x)
+		return (mult*math.floor(x/mult+.5)) 
+	end
+	S.mult = mult
+	S.Scale = scale
 end

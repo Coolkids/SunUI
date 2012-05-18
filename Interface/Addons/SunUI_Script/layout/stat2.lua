@@ -85,7 +85,7 @@ function Module:OnEnable()
 	local function UpdateTank(self)
 		baseArmor, effectiveArmor, armor, posBuff, negBuff = UnitArmor("player");
 		
-		Text:SetFormattedText(displayNumberString, armorString, effectiveArmor)
+		Text:SetFormattedText(displayNumberString, S.RGBToHex(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)..armorString.."|r", effectiveArmor)
 		--Setup Tooltip
 		self:SetAllPoints(Text)
 	end
@@ -95,9 +95,9 @@ function Module:OnEnable()
 				haste = UnitSpellHaste("player")
 		num = max(spellcrit, haste)
 		if num == spellcrit then
-		Text:SetFormattedText(displayFloatString, SPELL_CRIT_CHANCE..": ", spellcrit)
+		Text:SetFormattedText(displayFloatString, S.RGBToHex(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)..SPELL_CRIT_CHANCE..": ".."|r", spellcrit)
 		else
-		Text:SetFormattedText(displayFloatString, STAT_HASTE..": ", haste)
+		Text:SetFormattedText(displayFloatString, S.RGBToHex(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)..STAT_HASTE..": ".."|r", haste)
 		end
 		--Setup Tooltip
 		self:SetAllPoints(Text)
@@ -114,7 +114,7 @@ function Module:OnEnable()
 			critChance = meleecrit
 		end
 		
-		Text:SetFormattedText(displayFloatString, MELEE_CRIT_CHANCE..": ", critChance)
+		Text:SetFormattedText(displayFloatString, S.RGBToHex(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)..MELEE_CRIT_CHANCE..": ".."|r", critChance)
 		--Setup Tooltip
 		self:SetAllPoints(Text)
 	end

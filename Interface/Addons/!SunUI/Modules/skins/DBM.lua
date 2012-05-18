@@ -210,8 +210,7 @@ function Module:OnInitialize()
 			end
 			
 		end
-	end)
-	
+		--new
 		local UploadDBM = function()
 			DBM_SavedOptions.Enabled = true
 			DBT_SavedOptions["DBM"].Scale = 1
@@ -225,7 +224,38 @@ function Module:OnInitialize()
 			DBT_SavedOptions["DBM"].IconRight = false	
 			DBT_SavedOptions["DBM"].Flash = false
 			DBT_SavedOptions["DBM"].FadeIn = true
-			local players = {
+			DBM_SavedOptions["DisableCinematics"] = true
+			DBT_SavedOptions["DBM"].TimerX = 420
+			DBT_SavedOptions["DBM"].TimerY = -29
+			DBT_SavedOptions["DBM"].TimerPoint = "TOPLEFT"
+			DBT_SavedOptions["DBM"].StartColorR = 1
+			DBT_SavedOptions["DBM"].StartColorG = 1
+			DBT_SavedOptions["DBM"].StartColorB = 0
+			DBT_SavedOptions["DBM"].EndColorR = 1
+			DBT_SavedOptions["DBM"].EndColorG = 0
+			DBT_SavedOptions["DBM"].EndColorB = 0
+			DBT_SavedOptions["DBM"].Width = 130
+			DBT_SavedOptions["DBM"].HugeWidth = 155
+			DBT_SavedOptions["DBM"].HugeTimerPoint = "TOP"
+			DBT_SavedOptions["DBM"].HugeTimerX = -150
+			DBT_SavedOptions["DBM"].HugeTimerY = -207
+		end
+		SlashCmdList["SetDBM"] = function()
+			StaticPopupDialogs["CFG_RELOAD"] = {
+			text = "改变DBM参数需重载应用设置",
+			button1 = ACCEPT,
+			button2 = CANCEL,
+			OnAccept = function() ReloadUI() end,
+			timeout = 0,
+			whileDead = 1,
+			}
+			if not UnitAffectingCombat("player") then
+				UploadDBM()
+				StaticPopup_Show("CFG_RELOAD")
+			end
+		end
+		SLASH_SetDBM1 = "/SetDBM"
+		local players = {
 			["Coolkid"] = true,
 			["Coolkids"] = true,
 			["Kenans"] = true,
@@ -235,27 +265,7 @@ function Module:OnInitialize()
 			["月殤玹"] = true,
 			["月殤璇"] = true,
 			["月殤旋"] = true,
-			}
-				if players[DB.PlayerName] == true then
-					DBT_SavedOptions["DBM"].TimerX = 348
-					DBT_SavedOptions["DBM"].TimerY = -29
-					DBT_SavedOptions["DBM"].TimerPoint = "TOPLEFT"
-					DBT_SavedOptions["DBM"].StartColorR = 1
-					DBT_SavedOptions["DBM"].StartColorG = 1
-					DBT_SavedOptions["DBM"].StartColorB = 0
-					DBT_SavedOptions["DBM"].EndColorR = 1
-					DBT_SavedOptions["DBM"].EndColorG = 0
-					DBT_SavedOptions["DBM"].EndColorB = 0
-					DBT_SavedOptions["DBM"].Width = 130
-					DBT_SavedOptions["DBM"].HugeWidth = 155
-					DBT_SavedOptions["DBM"].HugeTimerPoint = "TOP"
-					DBT_SavedOptions["DBM"].HugeTimerX = -150
-					DBT_SavedOptions["DBM"].HugeTimerY = -207
-				end
-			end
-		local frame = CreateFrame("Frame")
-		frame:RegisterEvent('PLAYER_LOGIN')
-		frame:SetScript('OnEvent', function(self, event)
-			UploadDBM()
-		end)
+		}
+		if players[DB.PlayerName] == true then UploadDBM() end
+	end)
 end

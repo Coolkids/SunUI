@@ -148,7 +148,7 @@ function Module:OnEnable()
 		end
 		avoidance = (dodge+parry+block+basemisschance)
 		
-		Text:SetFormattedText(displayFloatString, L["免伤"]..": ", avoidance)
+		Text:SetFormattedText(displayFloatString, S.RGBToHex(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)..L["免伤"]..": ".."|r", avoidance)
 		--Setup Tooltip
 		self:SetAllPoints(Text)
 	end
@@ -160,7 +160,7 @@ function Module:OnEnable()
 			spellpwr = GetSpellBonusDamage(7)
 		end
 		
-		Text:SetFormattedText(displayNumberString, STAT_SPELLPOWER..": ", spellpwr)
+		Text:SetFormattedText(displayNumberString, S.RGBToHex(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)..STAT_SPELLPOWER..": ".."|r", spellpwr)
 		--Setup Tooltip
 		self:SetAllPoints(Text)
 	end
@@ -177,7 +177,7 @@ function Module:OnEnable()
 			pwr = effective
 		end
 		
-		Text:SetFormattedText(displayNumberString, STAT_ATTACK_POWER..": ", pwr)      
+		Text:SetFormattedText(displayNumberString, S.RGBToHex(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)..STAT_ATTACK_POWER..": ".."|r", pwr)      
 		--Setup Tooltip
 		self:SetAllPoints(Text)
 	end
