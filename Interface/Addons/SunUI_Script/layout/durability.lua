@@ -35,6 +35,8 @@ function Module:OnEnable()
 			local value = floor(Slots[1][3]*100)
 			if value < 40 then
 				self.text:SetText(Slots[1][2].."耐久过低!")
+			else
+				self.text:SetText("")
 			end
 	end)
 end
