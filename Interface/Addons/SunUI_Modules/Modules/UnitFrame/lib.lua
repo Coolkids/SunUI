@@ -9,7 +9,7 @@ local lib = CreateFrame("Frame")
 local PlayerTimersOnly = false 
 function Module:OnInitialize()
 local playerauras = "DEBUFFS"  		
-C = UnitFrameDB
+C = C["UnitFrameDB"]
   -----------------------------
   -- local variables
   -----------------------------

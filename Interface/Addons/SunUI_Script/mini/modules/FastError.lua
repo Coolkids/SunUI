@@ -2,7 +2,7 @@ local S, C, L, DB = unpack(SunUI)
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("FastError")
 
 function Module:OnInitialize()
-	C = MiniDB
+	C = C["MiniDB"]
 	if C["FastError"] ~= true then return end
 
 

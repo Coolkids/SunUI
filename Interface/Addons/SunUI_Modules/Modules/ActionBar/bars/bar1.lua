@@ -1,8 +1,7 @@
 ﻿local S, C, L, DB = unpack(SunUI)
- 
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Bar1", "AceEvent-3.0")
+local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("bar1", "AceEvent-3.0")
 function Module:OnInitialize()
-	C = ActionBarDB
+	C = C["ActionBarDB"]
 	local bar = CreateFrame("Frame","SunUIActionBar1",UIParent, "SecureHandlerStateTemplate")
 	if C["Bar1Layout"] == 2 then
 		bar:SetWidth(C["ButtonSize"]*6+C["ButtonSpacing"]*5)

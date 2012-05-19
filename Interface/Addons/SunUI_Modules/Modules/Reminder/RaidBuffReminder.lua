@@ -96,7 +96,7 @@ local function OnEvent_ACTIVE_TALENT_GROUP_CHANGED(event, ...)
 	end
 end
 local function OnEvent_UNIT_AURA(event, unit, ...)
-	if ReminderDB.ShowOnlyInParty and not IsInParty then 
+	if C["ReminderDB"].ShowOnlyInParty and not IsInParty then 
 		for key, value in pairs(BuffFrame) do value:SetAlpha(0) end
 		return
 	end
@@ -156,7 +156,7 @@ local function OnEvent_UNIT_AURA(event, unit, ...)
 	end
 end
 local function OnEvent_PLAYER_ENTERING_WORLD(event, ...)
-	if ReminderDB.ShowOnlyInParty and not IsInParty then 
+	if C["ReminderDB"].ShowOnlyInParty and not IsInParty then 
 		for key, value in pairs(BuffFrame) do value:SetAlpha(0) end
 		return
 	end
@@ -217,7 +217,7 @@ end
 local function BuildBuffFrame()
 	for i = 1, 6 do
 		local Temp = CreateFrame("Frame", nil, UIParent)
-		Temp:SetSize(ReminderDB.RaidBuffSize, ReminderDB.RaidBuffSize)
+		Temp:SetSize(C["ReminderDB"].RaidBuffSize, C["ReminderDB"].RaidBuffSize)
 		Temp:SetFrameStrata("LOW")
 		Temp.Shadow = CreateFrame("Frame", nil, Temp)
 		Temp.Shadow:SetPoint("TOPLEFT", Temp, "TOPLEFT", -2, 2)
@@ -230,13 +230,13 @@ local function BuildBuffFrame()
 		Temp.Icon:SetTexCoord(.1, .9, .1, .9)
 		Temp.Icon:SetAllPoints()
 		
-		if ReminderDB.RaidBuffDirection == 1 then
+		if C["ReminderDB"].RaidBuffDirection == 1 then
 			if i == 1 then
 				MoveHandle.Reminder = S.MakeMoveHandle(Temp, L["药水"], "Reminder")
 			else
 				Temp:SetPoint("LEFT", BuffFrame[i-1], "RIGHT", 4, 0)
 			end
-		elseif ReminderDB.RaidBuffDirection == 2 then
+		elseif C["ReminderDB"].RaidBuffDirection == 2 then
 			if i == 1 then
 				MoveHandle.Reminder = S.MakeMoveHandle(Temp, L["药水"], "Reminder")
 			else
@@ -249,11 +249,11 @@ local function BuildBuffFrame()
 		Temp.Overlay:SetTexture(0, 0, 0)
 		
 		Temp.Flag = Temp:CreateTexture(nil, "OVERLAY")
-		if ReminderDB.RaidBuffDirection == 1 then
+		if C["ReminderDB"].RaidBuffDirection == 1 then
 			Temp.Flag:SetHeight(2)
 			Temp.Flag:SetPoint("TOPLEFT", Temp, "BOTTOMLEFT", 0, -4)
 			Temp.Flag:SetPoint("TOPRIGHT", Temp, "BOTTOMRIGHT", 0, -4)
-		elseif ReminderDB.RaidBuffDirection == 2 then
+		elseif C["ReminderDB"].RaidBuffDirection == 2 then
 			Temp.Flag:SetWidth(2)
 			Temp.Flag:SetPoint("TOPRIGHT", Temp, "TOPLEFT", -4, 0)
 			Temp.Flag:SetPoint("BOTTOMRIGHT", Temp, "BOTTOMLEFT", -4, 0)	
@@ -271,7 +271,7 @@ local function BuildBuffFrame()
 end
 
 function Module:OnEnable()
-	if not ReminderDB.ShowRaidBuff then return end
+	if not C["ReminderDB"].ShowRaidBuff then return end
 	BuildBuffFrame()
 	Module:RegisterEvent("PLAYER_ENTERING_WORLD", OnEvent_PLAYER_ENTERING_WORLD)
 	Module:RegisterEvent("UNIT_AURA", OnEvent_UNIT_AURA)

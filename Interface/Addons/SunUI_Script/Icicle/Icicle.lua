@@ -2,7 +2,7 @@ local S, C, L, DB = unpack(SunUI)
 local Module = LibStub("AceAddon-3.0"):NewAddon("Icicle")
 
 function Module:OnInitialize()
-C = MiniDB
+C = C["MiniDB"]
 if C["Icicle"] ~= true then return end
 ----Config----
 local iconsize = 22

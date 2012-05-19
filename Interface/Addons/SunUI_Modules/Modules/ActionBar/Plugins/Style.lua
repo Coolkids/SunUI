@@ -2,9 +2,9 @@
  
 local AB = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ActionStyle", "AceEvent-3.0")
 function AB:OnInitialize()
-	if ActionBarDB.Style == 2 then return end
-	local Font, FontSize, MFontSize, ButtonSize, PetBarSacle = DB.Font, ActionBarDB["FontSize"], ActionBarDB["MFontSize"], ActionBarDB["ButtonSize"], ActionBarDB["PetBarSacle"]
-	local HideHotKey, HideMacroName = ActionBarDB["HideHotKey"], ActionBarDB["HideMacroName"]
+	if C["ActionBarDB"].Style == 2 then return end
+	local Font, FontSize, MFontSize, ButtonSize, PetBarSacle = DB.Font, C["ActionBarDB"]["FontSize"], C["ActionBarDB"]["MFontSize"],C["ActionBarDB"]["ButtonSize"], C["ActionBarDB"]["PetBarSacle"]
+	local HideHotKey, HideMacroName = C["ActionBarDB"]["HideHotKey"], C["ActionBarDB"]["HideMacroName"]
 	
 	
 	local function UpdateHotkey(button, actionButtonType)

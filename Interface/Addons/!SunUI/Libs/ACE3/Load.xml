@@ -9,6 +9,8 @@
 	<Include file="AceGUI-3.0\AceGUI-3.0.xml"/>
 	<Include file="AceTimer-3.0\AceTimer-3.0.xml"/>
 	<Include file="AceConfig-3.0\AceConfig-3.0.xml"/>
+	<Include file="AceDB-3.0\AceDB-3.0.xml"/>
+	<Include file="AceDBOptions-3.0\AceDBOptions-3.0.xml"/>
 	<Script file="Ace3.lua"/>
 
 </Ui>

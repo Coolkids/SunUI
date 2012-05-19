@@ -3,8 +3,7 @@ local Core = LibStub("AceAddon-3.0"):GetAddon("Core")
 local Module = Core:NewModule("InfoPanelstat2")
 
 function Module:OnEnable()
-	C = InfoPanelDB
-	if C["OpenBottom"] ~= true then return end
+	if C["InfoPanelDB"]["OpenBottom"] ~= true then return end
 
 	local Stat = CreateFrame("Frame")
 	Stat:EnableMouse(true)
@@ -12,7 +11,7 @@ function Module:OnEnable()
 	Stat:SetFrameLevel(3)
 
 	local Text  = BottomBar:CreateFontString(nil, "BORDER")
-	Text:SetFont(DB.Font, 12*S.Scale(1)*MiniDB["FontScale"], "THINOUTLINE")
+	Text:SetFont(DB.Font, 12*S.Scale(1)*C["MiniDB"]["FontScale"], "THINOUTLINE")
 	Text:SetShadowOffset(1.25, -1.25)
 	Text:SetShadowColor(0, 0, 0, 0.4)
 	Text:Point("RIGHT", BottomBar, "RIGHT", -20, 2)

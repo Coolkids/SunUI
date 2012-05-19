@@ -2,7 +2,7 @@
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("AutoRepair")
 
 function Module:OnInitialize()
-	C = MiniDB
+	C = C["MiniDB"]
 	if C["AutoRepair"] ~= true then return end
 	-- Event
 	local Event = CreateFrame("Frame")

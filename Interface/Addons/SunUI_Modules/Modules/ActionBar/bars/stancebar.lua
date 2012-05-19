@@ -2,7 +2,7 @@
  
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Stancebar", "AceEvent-3.0")
 function Module:OnInitialize()
-	C = ActionBarDB
+	C = C["ActionBarDB"]
     local num = NUM_SHAPESHIFT_SLOTS
     local bar = CreateFrame("Frame","SunUIStanceBar",UIParent, "SecureHandlerStateTemplate")
     bar:SetWidth(C["ButtonSize"]*6+C["ButtonSpacing"]*(6-1))

@@ -2,7 +2,7 @@
  
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Bar3", "AceEvent-3.0")
 function Module:OnInitialize()
-	C = ActionBarDB
+	C = C["ActionBarDB"]
 	local bar = CreateFrame("Frame","SunUIActionBar3",UIParent, "SecureHandlerStateTemplate")
 	local bar2 = CreateFrame("Frame","SunUIActionBar32",UIParent, "SecureHandlerStateTemplate")
 	if C["Bar3Layout"] == 1 then

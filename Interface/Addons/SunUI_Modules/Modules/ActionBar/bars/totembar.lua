@@ -3,7 +3,7 @@
 if DB.MyClass ~= "SHAMAN" then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("TotemBar", "AceEvent-3.0")
 function Module:OnInitialize()
-	C = ActionBarDB
+	C = C["ActionBarDB"]
 	local bar = CreateFrame("Frame","SunUITotemBar",UIParent,"SecureHandlerStateTemplate")
 	bar:SetSize(C["ButtonSize"]*7+5*5,C["ButtonSize"]+3)
 	bar:SetScale(C["TotemBarSacle"])

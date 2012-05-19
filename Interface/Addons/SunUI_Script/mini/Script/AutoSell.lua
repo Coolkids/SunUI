@@ -2,7 +2,7 @@
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("AutoSell")
 
 function Module:OnInitialize()
-	C = MiniDB
+	C = C["MiniDB"]
 	if C["AutoSell"] ~= true then return end
 local Event = CreateFrame("Frame")
 Event:RegisterEvent("MERCHANT_SHOW")

@@ -2,7 +2,7 @@
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("MiniMapPanels")
 
 function Module:OnInitialize()
-	C = MiniDB
+	C = C["MiniDB"]
 	if C["MiniMapPanels"] ~= true then return end
 	local wm = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
 	wm:SetParent("UIParent") 

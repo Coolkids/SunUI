@@ -1,5 +1,6 @@
 ﻿-- Engines
 local S, _, _, DB = unpack(select(2, ...))
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("Core"):GetModule("SunUIConfig")
 local r, g, b = DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b
 local uiscale = SetUIScale()
 local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/uiscale
@@ -336,7 +337,7 @@ function S.MakeMoveHandle(Frame, Text, key)
 	MoveHandle.Text = S.MakeFontString(MoveHandle, 10)
 	MoveHandle.Text:SetPoint("CENTER")
 	MoveHandle.Text:SetText(Text)
-	MoveHandle:SetPoint(unpack(MoveHandleDB[key]))
+	MoveHandle:SetPoint(unpack(SunUIConfig.db.profile.MoveHandleDB[key]))
 	MoveHandle:EnableMouse(true)
 	MoveHandle:SetMovable(true)
 	MoveHandle:RegisterForDrag("LeftButton")
@@ -344,7 +345,7 @@ function S.MakeMoveHandle(Frame, Text, key)
 	MoveHandle:SetScript("OnDragStop", function(self)
 		self:StopMovingOrSizing()
 		local AnchorF, _, AnchorT, X, Y = self:GetPoint()
-		MoveHandleDB[key] = {AnchorF, "UIParent", AnchorT, X, Y}
+		SunUIConfig.db.profile.MoveHandleDB[key] = {AnchorF, "UIParent", AnchorT, X, Y}
 	end)
 	MoveHandle:Hide()
 	Frame:SetPoint("CENTER", MoveHandle)
@@ -368,7 +369,7 @@ function S.MakeMove(Frame, Text, key, a)
 	end
 	MoveHandle.Text:SetPoint("CENTER")
 	MoveHandle.Text:SetText(Text)
-	MoveHandle:SetPoint(unpack(MoveHandleDB[key]))
+	MoveHandle:SetPoint(unpack(SunUIConfig.db.profile.MoveHandleDB[key]))
 	MoveHandle:EnableMouse(true)
 	MoveHandle:SetMovable(true)
 	MoveHandle:RegisterForDrag("LeftButton")
@@ -376,7 +377,7 @@ function S.MakeMove(Frame, Text, key, a)
 	MoveHandle:SetScript("OnDragStop", function(self)
 		self:StopMovingOrSizing()
 		local AnchorF, _, AnchorT, X, Y = self:GetPoint()
-		MoveHandleDB[key] = {AnchorF, "UIParent", AnchorT, X, Y}
+		SunUIConfig.db.profile.MoveHandleDB[key] = {AnchorF, "UIParent", AnchorT, X, Y}
 	end)
 	MoveHandle:Hide()
 	Frame:SetPoint("CENTER", MoveHandle)

@@ -2,7 +2,7 @@
  
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Extra", "AceEvent-3.0")
 function Module:OnInitialize()
-	C = ActionBarDB
+	C = C["ActionBarDB"]
 	local bar = CreateFrame("Frame","SunUIExtraActionBar",UIParent)
 	bar:SetSize(C["ButtonSize"],C["ButtonSize"])
 	bar:SetScale(C["ExtraBarSacle"])

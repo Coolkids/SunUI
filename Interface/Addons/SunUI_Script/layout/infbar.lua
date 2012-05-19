@@ -93,7 +93,7 @@ local function BuildMemory(Anchor)
 			if IsAltKeyDown() then
 					maxAddOns = #MemoryTable
 				else
-					maxAddOns = math.min(InfoPanelDB["MemNum"], #MemoryTable)
+					maxAddOns = math.min(C["MemNum"], #MemoryTable)
 			end
 			
 			GameTooltip:AddDoubleLine(L["总共内存使用"], S.FormatMemory(TotalMemory), 0.4, 0.78, 1, 0.84, 0.75, 0.65)
@@ -339,7 +339,7 @@ end
 end ]]
 
 function Module:OnInitialize()
-	C = InfoPanelDB
+	C = C["InfoPanelDB"]
 	if C["OpenTop"] == true then
 		local top = CreateFrame("Frame", nil, UIParent)
 		top:SetHeight(20)

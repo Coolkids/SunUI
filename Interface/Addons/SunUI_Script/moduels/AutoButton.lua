@@ -4,7 +4,7 @@
 local S, C, L, DB = unpack(SunUI)
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("AutoButton")
 function Module:OnInitialize()
-	if MiniDB["AutoBotton"] ~= true  then return end
+	if C["MiniDB"]["AutoBotton"] ~= true  then return end
 	local Items = {
 		39213,	-- 大型爆盐炸弹 (征服之岛)
 		46847,	-- 爆盐炸弹 (征服之岛)
@@ -98,7 +98,7 @@ function Module:OnInitialize()
 
 			-- Count text for our button
 			AutoButton.c = AutoButton:CreateFontString(nil, "OVERLAY", f)
-			AutoButton.c:SetFont(DB.Font, ActionBarDB["FontSize"], "OUTLINE")
+			AutoButton.c:SetFont(DB.Font, C["ActionBarDB"]["FontSize"], "OUTLINE")
 			AutoButton.c:SetTextColor(1, 1, 1, 1)
 			AutoButton.c:Point("BOTTOMRIGHT", AutoButton, "BOTTOMRIGHT", -2, 0)
 			AutoButton.c:SetJustifyH("RIGHT")	

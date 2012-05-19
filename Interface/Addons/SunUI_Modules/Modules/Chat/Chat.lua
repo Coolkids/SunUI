@@ -152,7 +152,7 @@ local TimeStampsCopy = true					-- 时间戳
 			eb:SetHeight(18)
 			eb:CreateShadow("Background")
 			--eb:EnableMouse(true)
-			eb:SetFont(DB.Font, 14*MiniDB["FontScale"]*S.Scale(1), "OUTLINE")
+			eb:SetFont(DB.Font, 14*C["MiniDB"]["FontScale"]*S.Scale(1), "OUTLINE")
 
 		--Remove scroll buttons
 			local bf = _G['ChatFrame'..i..'ButtonFrame']

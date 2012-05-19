@@ -57,7 +57,7 @@ local CLEAR_FONT_CHAT = CLEAR_FONT_BASE.."ARHei.TTF"
 --  範例：你想把所有字體縮小到80%，那麼可以將"1.0"改成"0.8"
 -- -----------------------------------------------------------------------------
 
-	local CF_SCALE = MiniDB["FontScale"]*S.Scale(1)
+	local CF_SCALE = C["MiniDB"]["FontScale"]*S.Scale(1)
 
 
 -- -----------------------------------------------------------------------------

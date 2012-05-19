@@ -2,7 +2,7 @@
  
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("vehicleexit", "AceEvent-3.0")
 function Module:OnInitialize()
-	C = ActionBarDB
+	C = C["ActionBarDB"]
 	local bar = CreateFrame("Frame","Vehicle",UIParent, "SecureHandlerStateTemplate")
 	bar:SetHeight(C["ButtonSize"])
 	bar:SetWidth(C["ButtonSize"])

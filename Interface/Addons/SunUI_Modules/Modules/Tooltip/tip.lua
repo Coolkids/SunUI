@@ -2,7 +2,7 @@
  
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Tooltips")
 function Module:OnInitialize()
-	C=TooltipDB
+	C=C["TooltipDB"]
 
 	local gcol = {.35, 1, .6}										-- Guild Color
 	local pgcol = {1, .12, .8} 									-- Player's Guild Color
@@ -241,9 +241,9 @@ function Module:OnInitialize()
 
 	if not C["Cursor"] then
 		local tooltipholder = CreateFrame("Frame", nil, UIParent)
-		tooltipholder:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, 160)
 		tooltipholder:SetFrameStrata("TOOLTIP")
 		tooltipholder:SetSize(120, 20)
+		MoveHandle.Tooltip = S.MakeMoveHandle(tooltipholder, L["鼠标提示"], "Tooltip")
 	end
 			
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
@@ -257,12 +257,12 @@ function Module:OnInitialize()
 	end)
 
 	GameTooltip:HookScript("OnUpdate", function(self, ...)
-	   if self:GetAnchorType() == "ANCHOR_CURSOR" then
-		  local x, y = GetCursorPosition()
-		  local effScale = self:GetEffectiveScale()
-		  local width = self:GetWidth() or 0
-		  self:ClearAllPoints()
-		  self:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", x / effScale - width / 2, y / effScale + 15)
-	   end
-	end)
+   if self:GetAnchorType() == "ANCHOR_CURSOR" then
+	  local x, y = GetCursorPosition()
+	  local effScale = self:GetEffectiveScale()
+	  local width = self:GetWidth() or 0
+	  self:ClearAllPoints()
+	  self:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", x / effScale +5, y / effScale + 20)
+   end
+end)
 end

@@ -24,7 +24,7 @@ local colors = {
 		["WARRIOR"]     = { 199/255, 156/255, 110/255 },
 	},
 }
-C = NameplateDB
+C = C["NameplateDB"]
 if C["enable"] ~= true then return end
 local FONTSIZE = C["Fontsize"]*S.Scale(1)
 local hpHeight = C["HPHeight"]

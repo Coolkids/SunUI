@@ -4,19 +4,19 @@
 local S, C, L, DB = unpack(SunUI)
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("AutoBuy")
 function Module:OnInitialize()
-	if MiniDB["AutoBuy"] ~= true or (UnitLevel('player') ~= MAX_PLAYER_LEVEL) then return end
+	if C["MiniDB"]["AutoBuy"] ~= true or (UnitLevel('player') ~= MAX_PLAYER_LEVEL) then return end
 	local reagents = {
 		MAGE = {
-			[17031] = MiniDB.mageone,	-- 传送符文
-			[17032] = MiniDB.magetwo,	-- 传送门符文
-			[17020] = MiniDB.magethree,	-- 魔粉
+			[17031] = C["MiniDB"].mageone,	-- 传送符文
+			[17032] = C["MiniDB"].magetwo,	-- 传送门符文
+			[17020] = C["MiniDB"].magethree,	-- 魔粉
 		},
 		ROGUE = {
-			[6947] = MiniDB.rogueone,	-- 速效药膏
-			[2892] = MiniDB.roguetwo,	-- 致命药膏
-			[3775] = MiniDB.roguethree,	-- 减速药膏
-			[5237] = MiniDB.roguefour,	-- 麻痹药膏
-			[10918] = MiniDB.roguefive,	-- 致伤药膏
+			[6947] = C["MiniDB"].rogueone,	-- 速效药膏
+			[2892] = C["MiniDB"].roguetwo,	-- 致命药膏
+			[3775] = C["MiniDB"].roguethree,	-- 减速药膏
+			[5237] = C["MiniDB"].roguefour,	-- 麻痹药膏
+			[10918] = C["MiniDB"].roguefive,	-- 致伤药膏
 		},
 	}
 

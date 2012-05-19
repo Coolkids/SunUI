@@ -15,5 +15,4 @@
 	<Include file = "threat\Load.xml"/>
 	<Include file ="tooltip\Load.xml"/>
 	<Include file = "unitframe\load.xml"/>
-	<Include file = "welcome\load.xml"/>
 </Ui>

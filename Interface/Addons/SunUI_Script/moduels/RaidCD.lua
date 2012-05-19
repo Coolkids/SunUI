@@ -5,7 +5,7 @@
 local S, C, L, DB = unpack(SunUI)
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("RaidCD")
 function Module:OnInitialize()
-	if MiniDB.RaidCD ~= true then return end
+	if C["MiniDB"].RaidCD ~= true then return end
 	local show = {
 		raid = true,
 		party = true,
@@ -77,7 +77,7 @@ function Module:OnInitialize()
 	local bars = {}
 
 	local RaidCDAnchor = CreateFrame("Frame", "RaidCDAnchor", UIParent)
-	RaidCDAnchor:SetSize(MiniDB.RaidCDWidth, MiniDB.RaidCDHeight)
+	RaidCDAnchor:SetSize(C["MiniDB"].RaidCDWidth, C["MiniDB"].RaidCDHeight)
 	MoveHandle.RaidCD = S.MakeMoveHandle(RaidCDAnchor, "RaidCD", "RaidCD")
 
 	local FormatTime = function(time)
@@ -90,7 +90,7 @@ function Module:OnInitialize()
 
 	local CreateFS = function(frame, fsize, fstyle)
 		local fstring = frame:CreateFontString(nil, "OVERLAY")
-		fstring:SetFont(DB.Font, MiniDB["RaidCDFontSize"], "OUTLINE")
+		fstring:SetFont(DB.Font, C["MiniDB"]["RaidCDFontSize"], "OUTLINE")
 		return fstring
 	end
 
@@ -100,10 +100,10 @@ function Module:OnInitialize()
 			if i == 1 then
 				bars[i]:SetPoint("TOPLEFT", RaidCDAnchor, "TOPLEFT")
 			else
-				if MiniDB.RaidCDDirection == 2 then
-					bars[i]:Point("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, MiniDB.RaidCDHeight*2+5)
+				if C["MiniDB"].RaidCDDirection == 2 then
+					bars[i]:Point("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, C["MiniDB"].RaidCDHeight*2+5)
 				else
-					bars[i]:Point("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -MiniDB.RaidCDHeight*2+5)
+					bars[i]:Point("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -C["MiniDB"].RaidCDHeight*2+5)
 				end
 			end
 			bars[i].id = i
@@ -155,22 +155,22 @@ function Module:OnInitialize()
 	local CreateBar = function()
 		local bar = CreateFrame("Statusbar", nil, UIParent)
 		bar:SetFrameStrata("LOW")
-		bar:Size(MiniDB.RaidCDWidth, MiniDB.RaidCDHeight)
+		bar:Size(C["MiniDB"].RaidCDWidth, C["MiniDB"].RaidCDHeight)
 		bar:SetStatusBarTexture(DB.Statusbar)
 		bar:SetMinMaxValues(0, 100)
 
 		bar.left = CreateFS(bar)
-		bar.left:SetPoint("LEFT", 2, MiniDB.RaidCDHeight)
+		bar.left:SetPoint("LEFT", 2, C["MiniDB"].RaidCDHeight)
 		bar.left:SetJustifyH("LEFT")
-		bar.left:Size(MiniDB.RaidCDWidth*2/3, MiniDB.RaidCDHeight)
+		bar.left:Size(C["MiniDB"].RaidCDWidth*2/3, C["MiniDB"].RaidCDHeight)
 
 		bar.right = CreateFS(bar)
-		bar.right:Point("RIGHT", 1, MiniDB.RaidCDHeight)
+		bar.right:Point("RIGHT", 1, C["MiniDB"].RaidCDHeight)
 		bar.right:SetJustifyH("RIGHT")
 
 		bar.icon = CreateFrame("Button", nil, bar)
-		bar.icon:Width(MiniDB.RaidCDHeight*2)
-		bar.icon:Height(MiniDB.RaidCDHeight*2)
+		bar.icon:Width(C["MiniDB"].RaidCDHeight*2)
+		bar.icon:Height(C["MiniDB"].RaidCDHeight*2)
 		bar.icon:Point("BOTTOMRIGHT", bar, "BOTTOMLEFT", -5, 0)
 		bar.icon:CreateShadow()
 		bar.icon.backdrop = CreateFrame("Frame", nil, bar.icon)

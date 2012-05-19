@@ -1,4 +1,4 @@
-local S, _, _, DB = unpack(select(2, ...))
+local S, C, L, DB = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("SunUI BaseData")
 
 --  自动设置聊天框体和UI缩放
@@ -92,12 +92,11 @@ SlashCmdList["AutoSet"] = function()
 end
 SLASH_AutoSet1 = "/AutoSet"
 
-
 function Module:OnInitialize()
-	if MiniDB["uiScale"] then 
-		MiniDB["uiScale"] = SetUIScale()
+	if C["MiniDB"]["uiScale"] then 
+		C["MiniDB"]["uiScale"] = SetUIScale()
 	end
-	local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/MiniDB["uiScale"]
+	local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/C["MiniDB"]["uiScale"]
 	local function scale(x)
 		return (mult*math.floor(x/mult+.5)) 
 	end

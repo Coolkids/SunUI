@@ -22,12 +22,12 @@ function Module:Style(buttonName, i, f)
 	Duration:ClearAllPoints()
 	Duration:SetParent(Button)
 	Duration:SetPoint("TOP", Button, "BOTTOM", 2, 0)
-	Duration:SetFont(DB.Font, 13*S.Scale(1)*MiniDB["FontScale"], "THINOUTLINE")
+	Duration:SetFont(DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
 	
 	Count:ClearAllPoints()
 	Count:SetParent(Button)
 	Count:SetPoint("TOPRIGHT", Button, 3, -1)
-	Count:SetFont(DB.Font, 13*S.Scale(1)*MiniDB["FontScale"], "THINOUTLINE")
+	Count:SetFont(DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
 	
 	if Border then
 		Border:Hide()
@@ -64,7 +64,7 @@ function Module:Style(buttonName, i, f)
 end
 
 function Module:OnInitialize()
-	C = BuffDB
+	C = C["BuffDB"]
 	SetCVar("consolidateBuffs", 0)
 	SetCVar("buffDurations", 1)
 end

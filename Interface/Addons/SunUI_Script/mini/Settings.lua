@@ -35,7 +35,6 @@ local ShowReadyCheckHook = function(self, initiator, timeLeft)
 end
 hooksecurefunc("ShowReadyCheck", ShowReadyCheckHook)
 function Module:OnInitialize()
-	C = MiniDB
 -- Quest tracker(by Tukz)
 local wf = WatchFrame
 local wfmove = false 
@@ -118,7 +117,7 @@ SlashCmdList["VehicleSeatIndicatorLOCK"] = VSLOCK
 --RaidBossEmoteFrame:UnregisterEvent("RAID_BOSS_WHISPER") --Disable Boss Whisper Frame
 --分解不必再点确定
 
-if C["Disenchat"] then
+if C["MiniDB"]["Disenchat"] then
 	local aotuClick = CreateFrame("Frame")
 	aotuClick:RegisterEvent("CONFIRM_DISENCHANT_ROLL")
 	aotuClick:RegisterEvent("CONFIRM_LOOT_ROLL")
@@ -132,17 +131,17 @@ if C["Disenchat"] then
 	   end
 	end)
 end
-if C["Resurrect"] then
-	local function ResurrectEvent(name)
-			if not (UnitAffectingCombat('player') or UnitAffectingCombat(name)) then
+if C["MiniDB"]["Resurrect"] then
+	local function ResurrectEvent()
+			if not UnitAffectingCombat("player") then
 				local delay = GetCorpseRecoveryDelay()
 				if delay == 0 then
 					AcceptResurrect()
-					DoEmote('thank', name)
+					DoEmote('thanks')
 				else
 					local b = CreateFrame("Button")
 					local formattedText = b:GetText(b:SetFormattedText("%d |4second:seconds", delay))
-					SendChatMessage("感谢复活我！我复活CD了,还有"..formattedText.."才能起来。", 'WHISPER', nil, name)
+					AddMessage("还有"..formattedText.."才能起来。")
 				end
 			end
 		end
@@ -189,7 +188,7 @@ hooksecurefunc("MerchantItemButton_OnModifiedClick", function(self, button)
 end)
 
 --隐藏团队
-if C["HideRaid"] then
+if C["MiniDB"]["HideRaid"] then
 CompactRaidFrameManager:UnregisterAllEvents()
 CompactRaidFrameManager.Show = function() end
 CompactRaidFrameManager:Hide()
@@ -198,7 +197,7 @@ CompactRaidFrameContainer.Show = function() end
 CompactRaidFrameContainer:Hide()	
 end
 -- 隐藏小队框体
-if not UnitFrameDB["showparty"] then
+if not C["UnitFrameDB"]["showparty"] then
 for i = 1, MAX_PARTY_MEMBERS do
 	local PartyMemberFrame = _G["PartyMemberFrame"..i]
 	PartyMemberFrame:UnregisterAllEvents()
@@ -208,17 +207,17 @@ end
 UIParent:UnregisterEvent("RAID_ROSTER_UPDATE")
 end
 ---------------- > Autoinvite by whisper
-if C["Autoinvite"] then
+if C["MiniDB"]["Autoinvite"] then
 local f = CreateFrame("frame")
 f:RegisterEvent("CHAT_MSG_WHISPER")
 f:SetScript("OnEvent", function(self,event,arg1,arg2)
-    if (not UnitExists("party1") or IsPartyLeader("player")) and arg1:lower():match(C["INVITE_WORD"]) then
+    if (not UnitExists("party1") or IsPartyLeader("player")) and arg1:lower():match(C["MiniDB"]["INVITE_WORD"]) then
         InviteUnit(arg2)
     end
 end)
 end
 
-if C["HideRaidWarn"] then
+if C["MiniDB"]["HideRaidWarn"] then
 	RaidWarningFrame:ClearAllPoints()
 	RaidWarningFrame:Hide()
 	RaidWarningFrame:UnregisterAllEvents()

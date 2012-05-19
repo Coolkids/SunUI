@@ -9,7 +9,7 @@ function Module:OnEnable()
 	Stat:SetFrameLevel(3)
 	
 	local Text  = Stat:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(DB.Font, 11*S.Scale(1)*MiniDB["FontScale"], "THINOUTLINE")
+	Text:SetFont(DB.Font, 11*S.Scale(1)*C["MiniDB"]["FontScale"], "THINOUTLINE")
 	Text:SetShadowOffset(S.mult, -S.mult)
 	Text:SetShadowColor(0, 0, 0, 0.4)
 	Text:SetPoint("CENTER", Currency, "CENTER")
@@ -63,11 +63,10 @@ function Module:OnEnable()
 
 		local myPlayerRealm = GetCVar("realmName");
 		local myPlayerName  = UnitName("player");				
-		if (MiniDB == nil) then MiniDB = {}; end
-		if (MiniDB.gold == nil) then MiniDB.gold = {}; end
-		if (MiniDB.gold[myPlayerRealm]==nil) then MiniDB.gold[myPlayerRealm]={}; end
-		MiniDB.gold[myPlayerRealm][myPlayerName] = GetMoney();
-		
+		if (SunUIConfig == nil) then SunUIConfig = {}; end
+		if (SunUIConfig.gold == nil) then SunUIConfig.gold = {}; end
+		if (SunUIConfig.gold[myPlayerRealm]==nil) then SunUIConfig.gold[myPlayerRealm]={}; end
+		SunUIConfig.gold[myPlayerRealm][myPlayerName] = GetMoney();
 		self:SetScript("OnEnter", function()
 			 
 				GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
@@ -90,7 +89,7 @@ function Module:OnEnable()
 			
 				local totalGold = 0				
 				GameTooltip:AddLine("当前ID: ",.6,.8,1)			
-				local thisRealmList = MiniDB.gold[myPlayerRealm];
+				local thisRealmList = SunUIConfig.gold[myPlayerRealm];
 				for k,v in pairs(thisRealmList) do
 					GameTooltip:AddDoubleLine(k, FormatTooltipMoney(v), 1, 1, 1, 1, 1, 1)
 					totalGold=totalGold+v;
@@ -131,4 +130,13 @@ function Module:OnEnable()
 		end
 	end)
 	Stat:SetScript("OnEvent", OnEvent)
+	function cleargold()
+		wipe(SunUIConfig.gold)
+	end
+	SlashCmdList["CLEARGOLD"] = function()
+		if not UnitAffectingCombat("player") then
+			cleargold()
+		end
+	end
+	SLASH_CLEARGOLD1 = "/cleargold"
 end

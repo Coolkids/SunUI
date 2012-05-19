@@ -4,7 +4,7 @@ local lib = LibStub("LibCooldown")
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("CooldownFlash")
 
 function Module:OnInitialize()
-	C = ActionBarDB
+	C = C["ActionBarDB"]
 	if C["CooldownFlash"] ~= true then return end
 
 		local filter = {

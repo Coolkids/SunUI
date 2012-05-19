@@ -62,7 +62,7 @@ local function BuildClock()
 	GameTimeFrame:Hide()
 end
 function Module:OnEnable()
-	if InfoPanelDB["OpenBottom"] == true then
+	if C["InfoPanelDB"]["OpenBottom"] == true then
 		BuildClock()
 	end
 end

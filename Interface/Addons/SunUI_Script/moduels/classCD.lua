@@ -2,7 +2,7 @@
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ClassCD")
 
 function Module:OnInitialize()
-	C = MiniDB
+	C = C["MiniDB"]
 if C["ClassCDOpen"] ~= true then return end
 
 ----------------------------------------------------------------------------------------
@@ -217,7 +217,7 @@ local BarUpdate = function(self, elapsed)
 		StopTimer(self)
 		return
 	end
-	self:SetValue(100 - (curTime - self.startTime) / (self.endTime - self.startTime) * 100)
+	self:SetValue((curTime - self.startTime) / (self.endTime - self.startTime) * 100)
 	self.right:SetText(FormatTime(self.endTime - curTime))
 end
 

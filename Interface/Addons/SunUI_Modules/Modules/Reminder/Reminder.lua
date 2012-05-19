@@ -4,7 +4,7 @@ local S, C, L, DB = unpack(SunUI)
 local Core = LibStub("AceAddon-3.0"):GetAddon("Core")
 local Module = Core:NewModule("ClassReminder", "AceEvent-3.0")
 function Module:OnInitialize()
-	if not ReminderDB.ShowClassBuff then return end
+	if not C["ReminderDB"].ShowClassBuff then return end
 	local ReminderBuffs = {
 		PRIEST = {
 			["Shields"] = { --inner fire/will group
@@ -428,7 +428,7 @@ function Module:OnInitialize()
 		i = i + 1
 		local frame = CreateFrame("Frame", "ReminderFrame"..i, UIParent)
 		--frame:CreatePanel("Default", 40, 40, "CENTER", UIParent, "CENTER", 0, 200)
-		frame:SetSize(ReminderDB.ClassBuffSize,ReminderDB.ClassBuffSize)
+		frame:SetSize(C["ReminderDB"].ClassBuffSize,C["ReminderDB"].ClassBuffSize)
 		MoveHandle.Class = S.MakeMoveHandle(frame, L["缺少药剂buff提示"], "Class")
 		frame:SetFrameLevel(1)
 		frame.id = groupName

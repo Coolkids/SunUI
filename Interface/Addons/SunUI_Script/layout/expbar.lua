@@ -104,7 +104,7 @@ function Module:OnEvent()
 	end
 end
 function Module:OnInitialize()
-	C = InfoPanelDB
+	C = C["InfoPanelDB"]
 end
 function Module:OnEnable()
 	if C["OpenBottom"] ~= true then return end

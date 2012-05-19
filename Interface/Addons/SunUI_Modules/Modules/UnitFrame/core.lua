@@ -7,7 +7,7 @@ local Module = Core:NewModule("UnitFrame")
  
 local showfaketarget = false -- fake target bars that spawn if you don't have anything targeted
 function Module:OnInitialize()
-C = UnitFrameDB
+C = C["UnitFrameDB"]
   -- compatibility with older versions cfg
 --if not FTpos then FTpos = {"TOPLEFT", "oUF_monoTargetFrame", "BOTTOMLEFT", 0, -37} end
   -----------------------------

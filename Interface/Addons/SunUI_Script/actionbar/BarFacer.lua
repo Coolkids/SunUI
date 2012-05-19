@@ -6,17 +6,17 @@ function Module:UpdateAutoHide()
 	local autohide = CreateFrame("Frame")
 	local rabs = {}
 
-	if SunUIStanceBar and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIStanceBar") end
-	if SunUIPetBar and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIPetBar") end
-	if SunUIActionBar1 and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIActionBar1") end
-	if SunUIActionBar2 and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIActionBar2") end
-	if SunUIActionBar3 and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIActionBar3") end
-	if SunUIActionBar4 and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIActionBar4") end
-	if SunUIActionBar5 and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIActionBar5") end
-	if SunUIMultiBarLeft1 and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIMultiBarLeft1") end
-	if SunUIMultiBarLeft2 and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIMultiBarLeft2") end
-	if SunUIMultiBarLeft3 and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIMultiBarLeft3") end
-	if SunUIMultiBarLeft4 and ActionBarDB["EnableBarFader"] then table.insert(rabs, "SunUIMultiBarLeft4") end
+	if SunUIStanceBar and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUIStanceBar") end
+	if SunUIPetBar and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUIPetBar") end
+	if SunUIActionBar1 and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUIActionBar1") end
+	if SunUIActionBar2 and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUIActionBar2") end
+	if SunUIActionBar3 and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUIActionBar3") end
+	if SunUIActionBar4 and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUIActionBar4") end
+	if SunUIActionBar5 and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUIActionBar5") end
+	if SunUIMultiBarLeft1 and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUIMultiBarLeft1") end
+	if SunUIMultiBarLeft2 and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUIMultiBarLeft2") end
+	if SunUIMultiBarLeft3 and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUIMultiBarLeft3") end
+	if SunUIMultiBarLeft4 and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUIMultiBarLeft4") end
 
 	if #rabs == 0 then return end
 

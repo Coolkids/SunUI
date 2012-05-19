@@ -2,7 +2,7 @@
  
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ActionStyle2", "AceEvent-3.0")
 local function Stlye2()
-	C = ActionBarDB
+	C = C["ActionBarDB"]
 	local ActionBarMedia = "Interface\\Addons\\SunUI_Modules\\Modules\\ActionBar\\Plugins\\Media\\"
 	local textures = {
     normal            = ActionBarMedia.."gloss",
@@ -338,6 +338,6 @@ local function Stlye2()
 end
 
 function Module:OnInitialize()
-	if ActionBarDB.Style == 1 then return end
+	if C["ActionBarDB"].Style == 1 then return end
 	Stlye2()
 end
