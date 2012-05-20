@@ -9,7 +9,7 @@ local function SkinIt(bar)
 		if region:GetObjectType() == "Texture" then
 			region:SetTexture(nil)
 		elseif region:GetObjectType() == "FontString" then
-			region:SetFont(DB.Font, 14*MiniDB["FontScale"]*S.Scale(1), "THINOUTLINE")
+			region:SetFont(DB.Font, 14*C["MiniDB"]["FontScale"]*S.Scale(1), "THINOUTLINE")
 			region:SetShadowColor(0,0,0,0)
 		end
 	end

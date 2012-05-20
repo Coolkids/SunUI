@@ -17,8 +17,8 @@ local settings = {
 		bgTexture = "Interface\\AddOns\\!SunUI\\Media\\BubbleBobble\\tailbg",
 		bdTexture = "Interface\\AddOns\\!SunUI	\\Media\\BubbleBobble\\tailbd",
 	},
-	fontText = {DB.Font, 12*S.Scale(1), "THINOUTLINE"},
-	fontSender = {DB.Font, 12*S.Scale(1), "THINOUTLINE"},
+	fontText = {DB.Font, 12*C["MiniDB"]["uiScale"]*S.Scale(1), "THINOUTLINE"},
+	fontSender = {DB.Font, 12*C["MiniDB"]["uiScale"]*S.Scale(1), "THINOUTLINE"},
 	showSender = false,
 }
 

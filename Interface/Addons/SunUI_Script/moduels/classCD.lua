@@ -15,7 +15,6 @@ local show = {
 	arena = true,
 	none = true,
 }
-
 local class_spells = {
 	[47755] = 12, --狂喜
 	[96171] = 45, --大墓地的意志
@@ -169,8 +168,11 @@ local bars = {}
 
 
 local ClassCDAnchor = CreateFrame("Frame", "ClassCDAnchor", UIParent)
-
-ClassCDAnchor:SetSize(C["ClassCDWidth"], C["ClassCDHeight"])
+if not C["ClassCDIcon"] then 
+	ClassCDAnchor:SetSize(C["ClassCDWidth"], C["ClassCDHeight"])
+else
+	ClassCDAnchor:SetSize(C["ClassCDIconSize"], C["ClassCDIconSize"])
+end
 MoveHandle.ClassCD = S.MakeMoveHandle(ClassCDAnchor, L["内置CD监视"], "ClassCD")
 
 
@@ -191,16 +193,28 @@ end
 local UpdatePositions = function()
 	for i = 1, #bars do
 		bars[i]:ClearAllPoints()
-		if i == 1 then
-			bars[i]:Point("TOPLEFT", ClassCDAnchor, "TOPLEFT", 0, 0)
-		else
-			if C["ClassCDDirection"] == 2 then
-				bars[i]:Point("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, C["ClassCDHeight"]*2+5)
+		if not C["ClassCDIcon"] then
+			if i == 1 then
+				bars[i]:Point("TOPLEFT", ClassCDAnchor, "TOPLEFT", 0, 0)
 			else
-				bars[i]:Point("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -C["ClassCDHeight"]*2+5)
+				if C["ClassCDDirection"] == 2 then
+					bars[i]:Point("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, C["ClassCDHeight"]*2+5)
+				else
+					bars[i]:Point("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -C["ClassCDHeight"]*2+5)
+				end
 			end
+		else
+			if i == 1 then
+				bars[i]:Point("LEFT", ClassCDAnchor, "LEFT", 0, 0)
+			else
+				if C["ClassCDIconDirection"] == 1 then
+					bars[i]:Point("LEFT", bars[i-1], "RIGHT", 5, 0)
+				else
+					bars[i]:Point("RIGHT", bars[i-1], "LEFT", -5, 0)
+				end
+			end
+			bars[i].id = i
 		end
-		bars[i].id = i
 	end
 end
 
@@ -217,13 +231,21 @@ local BarUpdate = function(self, elapsed)
 		StopTimer(self)
 		return
 	end
-	self:SetValue((curTime - self.startTime) / (self.endTime - self.startTime) * 100)
-	self.right:SetText(FormatTime(self.endTime - curTime))
+	if not C["ClassCDIcon"] then
+		self:SetValue((curTime - self.startTime) / (self.endTime - self.startTime) * 100)
+		self.right:SetText(FormatTime(self.endTime - curTime))
+		else
+		self.right = FormatTime(self.endTime - curTime)
+	end
 end
 
 local OnEnter = function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-	GameTooltip:AddDoubleLine(self.spell, self.right:GetText())
+	if not C["ClassCDIcon"] then 
+		GameTooltip:AddDoubleLine(self.spell, self.right:GetText())
+	else
+		GameTooltip:SetSpellByID(self.spell)
+	end
 	GameTooltip:SetClampedToScreen(true)
 	GameTooltip:Show()
 end
@@ -233,65 +255,70 @@ local OnLeave = function(self)
 end
 
 local OnMouseDown = function(self, button)
-	if button == "LeftButton" then
-		if GetRealNumRaidMembers() > 0 then
-			SendChatMessage(sformat("冷卻計時".." %s: %s", self.left:GetText(), self.right:GetText()), "RAID")
-		elseif GetRealNumPartyMembers() > 0 and not UnitInRaid("player") then
-			SendChatMessage(sformat("冷卻計時".." %s: %s", self.left:GetText(), self.right:GetText()), "PARTY")
-		else
-			SendChatMessage(sformat("冷卻計時".." %s: %s", self.left:GetText(), self.right:GetText()), "SAY")
+	if not C["ClassCDIcon"] then 
+		if button == "LeftButton" then
+			if GetRealNumRaidMembers() > 0 then
+				SendChatMessage(sformat("冷卻計時".." %s: %s", self.left:GetText(), self.right:GetText()), "RAID")
+			elseif GetRealNumPartyMembers() > 0 and not UnitInRaid("player") then
+				SendChatMessage(sformat("冷卻計時".." %s: %s", self.left:GetText(), self.right:GetText()), "PARTY")
+			else
+				SendChatMessage(sformat("冷卻計時".." %s: %s", self.left:GetText(), self.right:GetText()), "SAY")
+			end
+		elseif button == "RightButton" then
+			StopTimer(self)
 		end
-	elseif button == "RightButton" then
-		StopTimer(self)
+	else
+		if button == "LeftButton" then
+			if GetRealNumRaidMembers() > 0 then
+				SendChatMessage(sformat("SunUI冷卻計時".." %s: %s", GetSpellInfo(self.spell), self.right), "RAID")
+			elseif GetRealNumPartyMembers() > 0 and not UnitInRaid("player") then
+				SendChatMessage(sformat("SunUI冷卻計時".." %s: %s", GetSpellInfo(self.spell), self.right), "PARTY")
+			else
+				SendChatMessage(sformat("冷卻計時".." %s: %s", GetSpellInfo(self.spell), self.right), "SAY")
+			end
+		elseif button == "RightButton" then
+			StopTimer(self)
+		end
 	end
 end
 
 local CreateBar = function()
-	local bar = CreateFrame("Statusbar", nil, UIParent)
-	bar:SetFrameStrata("LOW")
-	bar:Size(C["ClassCDWidth"], C["ClassCDHeight"])
-	bar:SetStatusBarTexture(DB.Statusbar)
-	bar:SetMinMaxValues(0, 100)
+	if not C["ClassCDIcon"] then
+		local bar = CreateFrame("Statusbar", nil, UIParent)
+		bar:SetFrameStrata("LOW")
+		bar:Size(C["ClassCDWidth"], C["ClassCDHeight"])
+		bar:SetStatusBarTexture(DB.Statusbar)
+		bar:SetMinMaxValues(0, 100)
 	
-    spar =  bar:CreateTexture(nil, "OVERLAY")
-	spar:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
-	spar:SetBlendMode("ADD")
-	spar:SetAlpha(.8)
-	spar:SetPoint("TOPLEFT", bar:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
-	spar:SetPoint("BOTTOMRIGHT", bar:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
-	
---[[ 	bar.backdrop = CreateFrame("Frame", nil, bar)
-	bar.backdrop:Point("TOPLEFT", -2, 2)
-	bar.backdrop:Point("BOTTOMRIGHT", 2, -2)
-	bar.backdrop:SetFrameStrata("BACKGROUND")
-	bar.backdrop:SetBackdrop({
-	bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
-	edgeFile = "Interface\\AddOns\\!SunUI\\Media\\glowTex", edgeSize = 3,
-	insets = {top = 3, left = 3, bottom = 3, right = 3},
-    })
-	bar.backdrop:SetBackdropColor(0, 0, 0, 0.2)
-    bar.backdrop:SetBackdropBorderColor(0, 0, 0) ]]
-	
+		spar =  bar:CreateTexture(nil, "OVERLAY")
+		spar:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
+		spar:SetBlendMode("ADD")
+		spar:SetAlpha(.8)
+		spar:SetPoint("TOPLEFT", bar:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
+		spar:SetPoint("BOTTOMRIGHT", bar:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
+		
+		bar.left = CreateFS(bar)
+		bar.left:Point("LEFT", 2, C["ClassCDHeight"])
+		bar.left:SetJustifyH("LEFT")
+		bar.left:Size(C["ClassCDWidth"], C["ClassCDHeight"])
 
-	
-	bar.left = CreateFS(bar)
-	bar.left:Point("LEFT", 2, C["ClassCDHeight"])
-	bar.left:SetJustifyH("LEFT")
-	bar.left:Size(C["ClassCDWidth"], C["ClassCDHeight"])
+		bar.right = CreateFS(bar)
+		bar.right:Point("RIGHT", 1, C["ClassCDHeight"])
+		bar.right:SetJustifyH("RIGHT")
 
-	bar.right = CreateFS(bar)
-	bar.right:Point("RIGHT", 1, C["ClassCDHeight"])
-	bar.right:SetJustifyH("RIGHT")
-
-	bar.icon = CreateFrame("Button", nil, bar)
-	bar.icon:Width(C["ClassCDHeight"]*2)
-	bar.icon:Height(C["ClassCDHeight"]*2)
-	bar.icon:Point("BOTTOMRIGHT", bar, "BOTTOMLEFT", -5, 0)
-	bar.icon:CreateShadow()
-	bar.icon.backdrop = CreateFrame("Frame", nil, bar.icon)
-	bar.icon.backdrop:Point("TOPLEFT", -2, 2)
-	bar.icon.backdrop:Point("BOTTOMRIGHT", 2, -2)
-	bar.icon.backdrop:SetFrameStrata("BACKGROUND")
+		bar.icon = CreateFrame("Button", nil, bar)
+		bar.icon:Width(C["ClassCDHeight"]*2)
+		bar.icon:Height(C["ClassCDHeight"]*2)
+		bar.icon:Point("BOTTOMRIGHT", bar, "BOTTOMLEFT", -5, 0)
+		bar.icon:CreateShadow()
+	else
+		bar = CreateFrame("Button", nil, UIParent)
+		bar:SetFrameStrata("LOW")
+		bar:SetSize(C["ClassCDIconSize"], C["ClassCDIconSize"])
+		bar.cooldown = CreateFrame("Cooldown", nil, bar)
+		bar.cooldown:SetAllPoints()
+		bar.cooldown:SetReverse(true)
+	end
     bar:CreateShadow("Background")
 	return bar
 end
@@ -301,20 +328,30 @@ local StartTimer = function(name, spellId)
 	local spell, rank, icon = GetSpellInfo(spellId)
 	bar.endTime = GetTime() + class_spells[spellId]
 	bar.startTime = GetTime()
-	bar.left:SetText(spell)
-	bar.right:SetText(FormatTime(class_spells[spellId]))
-	bar.icon:SetNormalTexture(icon)
-	bar.icon:GetNormalTexture():SetTexCoord(0.1, 0.9, 0.1, 0.9)
-	bar.spell = spell
-	bar:Show()
-	local color = RAID_CLASS_COLORS[select(2, UnitClass(name))]
-	if color then
-		bar:SetStatusBarColor(color.r, color.g, color.b)
+	if not C["ClassCDIcon"] then
+		bar.spell = spell
+		bar.left:SetText(spell)
+		bar.right:SetText(FormatTime(class_spells[spellId]))
+		bar.icon:SetNormalTexture(icon)
+		bar.icon:GetNormalTexture():SetTexCoord(0.1, 0.9, 0.1, 0.9)
+		bar:Show()
+		local color = RAID_CLASS_COLORS[select(2, UnitClass(name))]
+		if color then
+			bar:SetStatusBarColor(color.r, color.g, color.b)
+		else
+			bar:SetStatusBarColor(0.3, 0.7, 0.3)
+		end
 	else
-		bar:SetStatusBarColor(0.3, 0.7, 0.3)
+		bar.spell = spellId
+		bar.right = FormatTime(class_spells[spellId])
+		bar:SetNormalTexture(icon)
+		bar:GetNormalTexture():SetTexCoord(0.1, 0.9, 0.1, 0.9)
+		bar.cooldown:SetReverse(false)
+		CooldownFrame_SetTimer(bar.cooldown, GetTime(), class_spells[spellId], 1)
 	end
-	bar:SetScript("OnUpdate", BarUpdate)
+	
 	bar:EnableMouse(true)
+	bar:SetScript("OnUpdate", BarUpdate)
 	bar:SetScript("OnEnter", OnEnter)
 	bar:SetScript("OnLeave", OnLeave)
 	bar:SetScript("OnMouseDown", OnMouseDown)
