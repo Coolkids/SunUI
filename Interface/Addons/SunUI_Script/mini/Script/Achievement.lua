@@ -2,6 +2,7 @@
 	AchievementHolder:SetWidth(180)
 	AchievementHolder:SetHeight(20)
 	AchievementHolder:SetPoint("TOP", UIParent, "TOP", 0, -35)
+	AchievementHolder:Hide()
 
 	local function AchievementMove(self, event, ...)
 		local previousFrame

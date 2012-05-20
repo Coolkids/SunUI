@@ -311,6 +311,8 @@ local CreateBar = function()
 		bar.icon:Height(C["ClassCDHeight"]*2)
 		bar.icon:Point("BOTTOMRIGHT", bar, "BOTTOMLEFT", -5, 0)
 		bar.icon:CreateShadow()
+		bar:CreateShadow("Background")
+		return bar
 	else
 		bar = CreateFrame("Button", nil, UIParent)
 		bar:SetFrameStrata("LOW")
@@ -318,9 +320,9 @@ local CreateBar = function()
 		bar.cooldown = CreateFrame("Cooldown", nil, bar)
 		bar.cooldown:SetAllPoints()
 		bar.cooldown:SetReverse(true)
+		bar:CreateShadow("Background")
+		return bar
 	end
-    bar:CreateShadow("Background")
-	return bar
 end
 
 local StartTimer = function(name, spellId)

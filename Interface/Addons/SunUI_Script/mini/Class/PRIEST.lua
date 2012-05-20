@@ -43,10 +43,10 @@ function Module:OnInitialize()
 
 	local BarUpdate = function(self, elapsed)
 		local curTime = GetTime()
-	--	if self.endTime < curTime then
-	--		StopTimer(self)
-	--		return
-	--	end
+		if self.endTime < curTime then
+			StopTimer(self)
+			return
+		end
 		if not oUF_SunUIPet:IsShown() then
 			StopTimer(self)
 			return
@@ -65,7 +65,7 @@ function Module:OnInitialize()
 
 	local CreateBar = function()
 		local bar = CreateFrame("Statusbar", nil, UIParent)
-		bar:SetSize(UnitFrameDB["PetWidth"]*UnitFrameDB["PetScale"], 6)
+		bar:SetSize(C["UnitFrameDB"]["PetWidth"]*C["UnitFrameDB"]["PetScale"], 6)
 		bar:SetStatusBarTexture(DB.Statusbar)
 		bar:SetMinMaxValues(0, 100)
 		bar:CreateShadow("Background")
