@@ -468,8 +468,6 @@ end
 
 function SunUIConfig:OnInitialize()	
 	self:Load()
-	SunUIConfig:RegisterChatCommand("sunui", "ShowConfig")
-	
 	self.OnInitialize = nil
 end
 
@@ -503,7 +501,7 @@ function SunUIConfig:SetupOptions()
 	AC:RegisterOptionsTable("SunUIProfiles", self.profile)
 	self.profile.order = -10
 	
-	--self.SetupOptions = nil
+	self.SetupOptions = nil
 end
 
 function SunUIConfig.GenerateOptions()
@@ -1886,4 +1884,13 @@ function SunUIConfig:OnEnable()
 	if not CoreVersion or (CoreVersion < Version) then 
 			BuildFrame()
 	end	
+	SunUIConfig:RegisterChatCommand("sunui", "ShowConfig")
 end
+
+SlashCmdList["CLEARSUNUI"] = function()
+	if not UnitAffectingCombat("player") then
+		wipe(SunUIConfig)
+		wipe(CoreVersion)
+	end
+end
+SLASH_CLEARSUNUI1 = "/clearset"

@@ -238,19 +238,16 @@ function Module:OnInitialize()
 			end
 		end
 	end)
-
-	if not C["Cursor"] then
-		local tooltipholder = CreateFrame("Frame", nil, UIParent)
-		tooltipholder:SetFrameStrata("TOOLTIP")
-		tooltipholder:SetSize(120, 20)
-		MoveHandle.Tooltip = S.MakeMoveHandle(tooltipholder, L["鼠标提示"], "Tooltip")
-	end
 			
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
 		if C["Cursor"] then
 			tooltip:SetOwner(parent, "ANCHOR_CURSOR")
 		else
 			tooltip:SetOwner(parent, "ANCHOR_NONE")
+			local tooltipholder = CreateFrame("Frame", nil, UIParent)
+			tooltipholder:SetFrameStrata("TOOLTIP")
+			tooltipholder:SetSize(120, 20)
+			MoveHandle.Tooltip = S.MakeMoveHandle(tooltipholder, L["鼠标提示"], "Tooltip")
 			tooltip:SetPoint("BOTTOMRIGHT", tooltipholder, "BOTTOMRIGHT", 0, 0)
 		end	
 		tooltip.default = 1

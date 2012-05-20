@@ -1,7 +1,7 @@
 ﻿local S, C, L, DB = unpack(SunUI)
 local CB = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("CB", "AceTimer-3.0")
 function CB:OnInitialize()
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):GetModule("Config", "AceConsole-3.0")
+local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):GetModule("SunUIConfig", "AceConsole-3.0")
 local AceConfigDialog = LibStub and LibStub("AceConfigDialog-3.0", true)
 local button = CreateFrame("Button", "ButtonS", ColectorButton)
 		button:Point("BOTTOMLEFT", ColectorButton, "BOTTOMLEFT", 5, 5)
