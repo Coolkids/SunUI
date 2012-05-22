@@ -161,6 +161,8 @@ function SunUIConfig:LoadDefaults()
 				["OpenTop"] = true,
 				["OpenBottom"] = true,
 				["MemNum"] = 5,
+				["Friend"] = false,
+				["Guild"] = false,
 			},
 			MoveHandleDB = {
 				["bar3"] = {
@@ -1573,24 +1575,30 @@ function SunUIConfig.GenerateOptionsInternal()
 					type = "toggle",
 					name = L["启用顶部信息条"],
 					order = 1,
-					get = function() return db.InfoPanelDB.OpenTop end,
-					set = function(_, value) db.InfoPanelDB.OpenTop = value end,
+					},
+					OpenBottom = {
+						type = "toggle",
+						name = L["启用底部信息条"],
+						order = 2,
 					},
 					MemNum = {
 						type = "input",
 						name = L["一次显示插件数目"],
 						desc = L["一次显示插件数目"],
 						disabled = not db.InfoPanelDB.OpenTop,
-						order = 4,
+						order = 3,
 						get = function() return tostring(db.InfoPanelDB.MemNum) end,
 						set = function(_, value) db.InfoPanelDB.MemNum = tonumber(value) end,
 					},
-					OpenBottom = {
+					Friend = {
+					type = "toggle",
+					name = FRIENDS,
+					order = 4,
+					},
+					Guild = {
 						type = "toggle",
-						name = L["启用底部信息条"],
-						order = 3,
-						get = function() return db.InfoPanelDB.OpenBottom end,
-						set = function(_, value) db.InfoPanelDB.OpenBottom = value end,
+						name = GUILD,
+						order = 5,
 					},
 				}
 			},	

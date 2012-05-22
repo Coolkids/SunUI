@@ -446,24 +446,37 @@ local function AltzFrame()
 				UIFrameFade(UIParent, fadeInfo1)
 			self:SetScript("OnUpdate", function(self, elapsed) --update渐隐动画
 				t = t + elapsed
-				if t > 0.8 then
+				if t > 0.1 then
 					altztop:Show()
 					altzcenter:Show()
 					altzbottom:Show()
 				end
-				if t > 1.9 then 
-					UIFrameFadeIn(altztop, 5, 0, 1)
-					UIFrameFadeIn(altzcenter, 5, 0, 1)
-					UIFrameFadeIn(altzbottom, 5, 0, 1)
+				if t > 1.7 then 
+					UIFrameFadeIn(altztop, 3, 0, 1)
+					UIFrameFadeIn(altzcenter, 3, 0, 1)
+					UIFrameFadeIn(altzbottom, 3, 0, 1)
 				end
 				if t > 2 then
 					launcher:Hide()		--隐藏并且终止update
 				end
+				--print("显示:"..t) --测试内存泄漏
 			end)
 		else
-			launcher:Hide()		--隐藏并且终止update
-			UIFrameFadeIn(UIParent, 2, UIParent:GetAlpha(), 1)
-			FadeOutFrame()
+			launcher:Show()
+			t = 0
+			self:SetScript("OnUpdate", function(self, elapsed) --update渐隐动画
+				t = t + elapsed
+				if t > 0 then
+					FadeOutFrame()
+				end
+				if t > 1.9 then 
+					UIFrameFadeIn(UIParent, 3, UIParent:GetAlpha(), 1)
+				end
+				if t > 2 then
+					launcher:Hide()		--隐藏并且终止update
+				end
+				--print("隐藏:"..t) --测试内存泄漏
+			end)
 		end
 	end)
 end
@@ -478,11 +491,11 @@ function Module:OnInitialize()
 		top:SetPoint("TOP", 0, 3)
 		top:SetPoint("LEFT")
 		top:SetPoint("RIGHT")
+		local InfoPanelPos = CreateFrame("Frame", nil, UIParent)
+		InfoPanelPos:SetSize(350, 12)
+		InfoPanelPos:Hide()
+		MoveHandle.InfoPanel = S.MakeMoveHandle(InfoPanelPos, L["信息面板"], "InfoPanel")
 	end
-	local InfoPanelPos = CreateFrame("Frame", nil, UIParent)
-	InfoPanelPos:SetSize(350, 12)
-	InfoPanelPos:Hide()
-	MoveHandle.InfoPanel = S.MakeMoveHandle(InfoPanelPos, L["信息面板"], "InfoPanel")
 	
 	if C["OpenBottom"] == true then
 		local bottom = CreateFrame("Frame", "BottomBar", UIParent)

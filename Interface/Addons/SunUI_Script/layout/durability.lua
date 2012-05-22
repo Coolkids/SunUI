@@ -2,6 +2,7 @@
 local Core = LibStub("AceAddon-3.0"):GetAddon("Core")
 local Module = Core:NewModule("durability")
 function Module:OnEnable()
+	if C["InfoPanelDB"]["OpenBottom"] ~= true then return end
 	local Slots = {
 		[1] = {1, L["头部"], 1000},
 		[2] = {3, L["肩部"], 1000},
@@ -22,6 +23,7 @@ function Module:OnEnable()
 	durability:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
 	durability:RegisterEvent("MERCHANT_SHOW")
 	durability:RegisterEvent("PLAYER_ENTERING_WORLD")
+	durability:SetAllPoints(durability.text)
 	durability:SetScript("OnEvent", function(self)
 			for i = 1, 11 do
 				if GetInventoryItemLink("player", Slots[i][1]) ~= nil then
@@ -39,4 +41,23 @@ function Module:OnEnable()
 				self.text:SetText("")
 			end
 	end)
+	durability:SetScript("OnEnter", function(self)
+		if not InCombatLockdown() then
+			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT", 0, 0)
+			GameTooltip:ClearLines()
+			GameTooltip:AddLine(L["耐久度"], 0.4, 0.78, 1)
+			GameTooltip:AddLine(" ")
+			for i = 1, 11 do
+				if Slots[i][3] ~= 1000 then
+					green = Slots[i][3]/1
+					red = 1-green
+					GameTooltip:AddDoubleLine(Slots[i][2], format("%d %%", floor(Slots[i][3]*100)), 1 , 1 , 1, red, green, 0)
+				end
+			end
+			GameTooltip:Show()
+		end
+	end)
+	durability:SetScript("OnLeave", function() GameTooltip:Hide() end)
+	durability:SetScript("OnMouseDown", function(self, button)
+	ToggleCharacter("PaperDollFrame") end)
 end

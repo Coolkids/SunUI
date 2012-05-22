@@ -3,6 +3,7 @@ local Core = LibStub("AceAddon-3.0"):GetAddon("Core")
 local Module = Core:NewModule("InfoPanel-Time")
 -- BuildClock
 local function BuildClock()
+	if C["InfoPanelDB"]["OpenBottom"] ~= true then return end
 	local Clock = CreateFrame("Frame", nil, UIParent)
 	Clock.Text = S.MakeFontString(Clock, 14)
 	Clock.Text:SetTextColor(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)

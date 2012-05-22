@@ -3,6 +3,7 @@ local Core = LibStub("AceAddon-3.0"):GetAddon("Core")
 local Module = Core:NewModule("Gold")
 
 function Module:OnEnable()
+	if C["InfoPanelDB"]["OpenTop"] ~= true then return end
 	local Stat = CreateFrame("Frame")
 	Stat:EnableMouse(true)
 	Stat:SetFrameStrata("BACKGROUND")
