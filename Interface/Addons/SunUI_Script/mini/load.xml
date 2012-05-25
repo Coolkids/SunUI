@@ -1,7 +1,6 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file ="Settings.lua"/>
 	<Include file ="Announce\load.xml"/>
-	<Include file ="blzhook\load.xml"/>
 	<Include file ="Class\load.xml"/>
 	<Include file ="modules\load.xml"/>
 	<Include file ="Quest\load.xml"/>

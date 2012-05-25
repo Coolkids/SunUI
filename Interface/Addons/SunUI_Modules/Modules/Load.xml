@@ -10,6 +10,7 @@
 	<Include file = "chat\load.xml"/>
 	<Include file = "loot\load.xml"/>
 	<Include file = "map\load.xml"/>
+	<Include file = "nameplates\load.xml"/>
 	<Include file = "reminder\Load.xml"/>
 	<Include file = "skins\Load.xml"/>
 	<Include file = "threat\Load.xml"/>

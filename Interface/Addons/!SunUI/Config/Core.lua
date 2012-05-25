@@ -1642,6 +1642,15 @@ function SunUIConfig.GenerateOptionsInternal()
 	}
 	SunUIConfig.Options.args.profiles = SunUIConfig.profile
 end
+-- for group, options in pairs(SunUIConfig.profile) do
+		-- if not C[group] then C[group] = {} end
+		-- if C[group] then
+			-- for option, value in pairs(options) do
+				-- C[group][option] = value
+			-- end
+		-- end
+	-- end
+-- MoveHandle = {}
 local function BuildFrame()
 	local f = CreateFrame("Frame", "SunUI_InstallFrame", UIParent)
 	f:SetSize(400, 400)
@@ -1737,6 +1746,7 @@ local function BuildFrame()
 	end
 	--SetUpDBM
 	local function SetDBM()
+		if not IsAddOnLoaded("DBM-Core") then return end
 		if(DBM_SavedOptions) then table.wipe(DBM_SavedOptions) end
 		DBM_SavedOptions["DisableCinematics"] = true
 		DBM_SavedOptions.Enabled = true

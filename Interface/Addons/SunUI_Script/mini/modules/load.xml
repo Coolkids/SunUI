@@ -2,7 +2,6 @@
 	<Script file ="AddonManager.lua"/>
 	<Script file='AutoLFG.lua'/>
 	<Script file ="CloseUp.lua"/>
-	<Script file ="Disenchanting.lua"/>
 	<Script file ="FastError.lua"/>
 	<Script file ="Glow.lua"/>
 	<Script file='memory.lua'/>
