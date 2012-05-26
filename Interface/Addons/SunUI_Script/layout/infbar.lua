@@ -93,7 +93,7 @@ local function BuildMemory(Anchor)
 			if IsAltKeyDown() then
 					maxAddOns = #MemoryTable
 				else
-					maxAddOns = math.min(C["MemNum"], #MemoryTable)
+					maxAddOns = math.min(C["InfoPanelDB"]["MemNum"], #MemoryTable)
 			end
 			
 			GameTooltip:AddDoubleLine(L["总共内存使用"], S.FormatMemory(TotalMemory), 0.4, 0.78, 1, 0.84, 0.75, 0.65)
@@ -428,10 +428,18 @@ local function AltzFrame()
 				UIFrameFade(altztop, fadeInfo)
 			end 
 	end
-	--滚起来
 	local t = 0
 	local launcher = CreateFrame("Frame")
 	launcher:RegisterEvent("PLAYER_FLAGS_CHANGED")
+	--手动离开
+	local outaltz = CreateFrame("Frame")
+	outaltz:SetAllPoints(altzbottom.text)
+	outaltz:SetParent(altzbottom)
+	outaltz:SetScript("OnMouseDown", function(self)
+		FadeOutFrame()
+		UIFrameFadeIn(UIParent, 3, UIParent:GetAlpha(), 1)
+	end)
+	--滚起来
 	launcher:SetScript("OnEvent", function(self)
 		if UnitAffectingCombat("player") then return end
 		if UnitIsAFK("player") then 
@@ -450,6 +458,7 @@ local function AltzFrame()
 					altztop:Show()
 					altzcenter:Show()
 					altzbottom:Show()
+					outaltz:Show()
 				end
 				if t > 1.7 then 
 					UIFrameFadeIn(altztop, 3, 0, 1)
@@ -481,8 +490,7 @@ local function AltzFrame()
 	end)
 end
 function Module:OnInitialize()
-	C = C["InfoPanelDB"]
-	if C["OpenTop"] == true then
+	if C["InfoPanelDB"]["OpenTop"] == true then
 		local top = CreateFrame("Frame", nil, UIParent)
 		top:SetHeight(20)
 		top:SetFrameStrata("BACKGROUND")
@@ -497,7 +505,7 @@ function Module:OnInitialize()
 		MoveHandle.InfoPanel = S.MakeMoveHandle(InfoPanelPos, L["信息面板"], "InfoPanel")
 	end
 	
-	if C["OpenBottom"] == true then
+	if C["InfoPanelDB"]["OpenBottom"] == true then
 		local bottom = CreateFrame("Frame", "BottomBar", UIParent)
 		bottom:SetHeight(20)
 		bottom:SetFrameLevel(0)
@@ -510,14 +518,15 @@ function Module:OnInitialize()
 end
 
 function Module:OnEnable()
-	if C["OpenTop"] == true then
+	if C["InfoPanelDB"]["OpenTop"] == true then
 		local FPS = BuildFPS(Friend)
 		local Memory = BuildMemory(FPS)
 		local Ping = BuildPing(Memory)
 		local Currency = BuildCurrency(Ping)
 		--local Durability = BuildDurability(Currency)		
 	end
-
-	AltzFrame()
+	if C["MiniDB"]["IPhoneLock"] == true then
+		AltzFrame()
+	end
 end
 

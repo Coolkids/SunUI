@@ -156,6 +156,7 @@ function SunUIConfig:LoadDefaults()
 				["ClassCDIcon"] = false,
 				["ClassCDIconSize"] = 25,
 				["ClassCDIconDirection"] = 1,
+				["IPhoneLock"] = true,
 			},
 			InfoPanelDB = {
 				["OpenTop"] = true,
@@ -1320,6 +1321,11 @@ function SunUIConfig.GenerateOptionsInternal()
 								type = "toggle",
 								name = "Auto AcceptResurrect",
 								order = 15,
+							},
+							IPhoneLock = {
+								type = "toggle",
+								name = "SlideLock",
+								order = 16,
 							},
 						}
 					},

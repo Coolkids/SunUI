@@ -300,7 +300,7 @@ end
     end
 
     for i = 1, #totemSlot do
-		local button = _G["MultiCastActionButton"..i]
+		local button = _G["MultiCastSlotButton"..i]
 		local timerFrame = CreateFrame("Frame", nil, button)
 		button.timerFrame = timerFrame
 		timerFrame:SetAllPoints(button)
