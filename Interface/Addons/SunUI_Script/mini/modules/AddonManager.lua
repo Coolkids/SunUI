@@ -1,10 +1,10 @@
 ﻿local S, C, L, DB = unpack(SunUI)
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("AddonManager")
-function Module.ResetToDefault()
-	wipe(stAddonProfiles)
-	wipe(stLockedAddons)
-end
-function Module:OnInitialize()
+-- local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("AddonManager")
+-- function Module.ResetToDefault()
+	-- wipe(stAddonProfiles)
+	-- wipe(stLockedAddons)
+-- end
+-- function Module:OnInitialize()
 ------------------------------------------------------
 -- MEDIA & CONFIG ------------------------------------
 ------------------------------------------------------
@@ -564,4 +564,4 @@ gmbAddOns:SetScript("OnClick", function()
 end)
 gmbAddOns:RegisterEvent("ADDON_LOADED")
 gmbAddOns:RegisterEvent("PLAYER_ENTERING_WORLD")
-end
+-- end

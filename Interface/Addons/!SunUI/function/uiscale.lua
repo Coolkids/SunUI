@@ -93,7 +93,7 @@ end
 SLASH_AutoSet1 = "/AutoSet"
 
 function Module:OnInitialize()
-	if C["MiniDB"]["uiScale"] then 
+	if C["MiniDB"]["uiScale"] == nil then 
 		C["MiniDB"]["uiScale"] = SetUIScale()
 	end
 	local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/C["MiniDB"]["uiScale"]

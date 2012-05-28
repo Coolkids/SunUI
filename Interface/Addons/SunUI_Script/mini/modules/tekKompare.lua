@@ -42,7 +42,7 @@ local idtext = id:CreateFontString(nil, "OVERLAY")
 idtext:SetPoint("LEFT", id)
 idtext:SetJustifyH('LEFT')
 idtext:SetTextColor(1, 0, 0)
-idtext:SetFont(DB.Font, 18, "THINOUTLINE")
+idtext:SetFont(DB.Font, 16, "THINOUTLINE")
 idtext:SetShadowOffset(S.mult, -S.mult)
 idtext:SetShadowColor(0, 0, 0, 0.4)
 

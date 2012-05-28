@@ -1,8 +1,5 @@
 ﻿local S, C, L, DB = unpack(SunUI)
 
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("CloseUp")
-function Module:OnInitialize()
-
 local _G = getfenv(0)
 local GetCursorPosition = GetCursorPosition
 local function nada() end
@@ -213,4 +210,3 @@ Apply("QuestNPCModel", nil, nil, nil, nil, nil, true)
 Apply("TutorialNPCModel", nil, nil, nil, nil, nil, true)
 PetPaperDollPetInfo:SetFrameStrata("HIGH")
 Apply("CompanionModelFrame")
-end

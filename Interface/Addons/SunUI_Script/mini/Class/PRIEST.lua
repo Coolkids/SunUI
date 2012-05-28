@@ -43,10 +43,10 @@ function Module:OnInitialize()
 
 	local BarUpdate = function(self, elapsed)
 		local curTime = GetTime()
-		if self.endTime < curTime then
-			StopTimer(self)
-			return
-		end
+		-- if self.endTime < curTime then
+			-- StopTimer(self)
+			-- return
+		-- end
 		if not oUF_SunUIPet:IsShown() then
 			StopTimer(self)
 			return

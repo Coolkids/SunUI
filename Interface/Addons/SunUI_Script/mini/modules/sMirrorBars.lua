@@ -1,8 +1,6 @@
-local addon, ns = ...
-local _, settings = ...
 local S, C, L, DB = unpack(SunUI)
 
-local _DEFAULTS = { 
+local settings = { 
    width = 252, 
    height = 18, 
    texture = DB.Statusbar, 
@@ -22,18 +20,6 @@ local _DEFAULTS = {
       FEIGNDEATH = {1, .7, 0}; 
    }; 
 } 
-
-do 
-   settings = setmetatable(settings, {__index = _DEFAULTS}) 
-   for k,v in next, settings do 
-      if(type(v) == 'table') then 
-         settings[k] = setmetatable(settings[k], {__index = _DEFAULTS[k]}) 
-      end 
-   end 
-end 
-
-
-
 
 local function SkinIt(bar)    
    local _, originalPoint, _, _, _ = bar:GetPoint() 

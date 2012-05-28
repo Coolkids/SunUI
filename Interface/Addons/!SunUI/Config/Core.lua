@@ -537,7 +537,7 @@ function SunUIConfig.GenerateOptionsInternal()
 			Header = {
 				order = 1,
 				type = "header",
-				name = "V 0.1",
+				name = "5.29A",
 				width = "full",		
 			},
 			Unlock = {

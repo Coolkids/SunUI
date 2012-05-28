@@ -40,5 +40,4 @@ Delay:SetScript("OnEvent", function()
 	end
 
 	DEFAULT_CHAT_FRAME:AddMessage("|cffDDA0DDSun|r|cff44CCFFUI|r已加载，详细设置请输入/sunui")
-	C["MiniDB"]["uiScale"] = GetCVar("uiScale")
 end)

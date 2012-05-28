@@ -8,7 +8,7 @@ C = C["MiniDB"]
 		zhCN = {
 			ignore = "|cffffff00AutoLFG:自动离开队列(%s:已击杀%d/%d个首领)|r",
 		},
-		zhTW = {},
+		zhTW = {ignore = "|cffffff00AutoLFG:自動離開隊列(%s:已擊殺%d/%d個首領)|r",},
 		enUS = {
 			ignore = "|cffffff00AutoLFG:Auto leave the queue(%s:%d/%d Bosses defeated)|r"
 		},
