@@ -110,6 +110,7 @@ function SunUIConfig:LoadDefaults()
 				["ReverseHPbars"] = false,
 				["showarena"] = true,
 				["Height"] = 20,
+				["BigFocus"] = true,
 			},
 			MiniDB = {
 				["uiScale"] = 0.9,
@@ -1093,6 +1094,10 @@ function SunUIConfig.GenerateOptionsInternal()
 							min = 0, max = 1, step = 0.1,
 							get = function() return db.UnitFrameDB.Alpha3D end,
 							set = function(_, value) db.UnitFrameDB.Alpha3D = value end,
+						},
+						BigFocus = {
+							type = "toggle", order = 12,
+							name = "BigFocus",
 						},
 					}
 					},

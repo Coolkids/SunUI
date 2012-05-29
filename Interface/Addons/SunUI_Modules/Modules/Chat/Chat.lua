@@ -97,10 +97,17 @@ local TimeStampsCopy = true					-- 时间戳
 		f:RegisterEvent("PLAYER_ENTERING_WORLD")
 		f:SetScript("OnEvent", function() SetChat() end)
 	end
-
+	local function kill(f)
+		if f.UnregisterAllEvents then
+			f:UnregisterAllEvents()
+		end
+		--f.Show = function() end
+		f:Hide()
+	end
+	
 	do
 		-- Buttons Hiding/moving 
-		local kill = function(f) f:Hide() end
+		--local kill = function(f) f:Hide() end
 		ChatFrameMenuButton:Hide()
 		ChatFrameMenuButton:SetScript("OnShow", kill)
 		FriendsMicroButton:Hide()
@@ -109,10 +116,41 @@ local TimeStampsCopy = true					-- 时间戳
 		for i=1, 10 do
 			local cf = _G[format("%s%d", "ChatFrame", i)]
 		--fix fading
+			cf:SetFading(false)
+			--cf:SetClampRectInsets(0,0,0,0)
 			local tab = _G["ChatFrame"..i.."Tab"]
-			tab:SetAlpha(0)
-			tab.noMouseAlpha = 0
-			cf:SetFading(true)
+			if style_chat_tabs then
+				tab:SetAlpha(1)
+				--if tab:GetAlpha() ~= 0 then tab.SetAlpha = UIFrameFadeRemoveFrame end
+				_G["ChatFrame"..i.."TabText"]:SetTextColor(.9,.8,.5) -- 1,.7,.2
+				_G["ChatFrame"..i.."TabText"].SetTextColor = function() end
+				_G["ChatFrame"..i.."TabText"]:SetFont(DB.Font,12,"THINOUTLINE")
+				_G["ChatFrame"..i.."TabText"]:SetShadowOffset(1.75, -1.75)
+				
+				kill(_G[format("ChatFrame%sTabLeft", i)])
+				kill(_G[format("ChatFrame%sTabMiddle", i)])
+				kill(_G[format("ChatFrame%sTabRight", i)])
+				kill(_G[format("ChatFrame%sTabSelectedLeft", i)])
+				kill(_G[format("ChatFrame%sTabSelectedMiddle", i)])
+				kill(_G[format("ChatFrame%sTabSelectedRight", i)])
+				kill(_G[format("ChatFrame%sTabHighlightLeft", i)])
+				kill(_G[format("ChatFrame%sTabHighlightMiddle", i)])
+				kill(_G[format("ChatFrame%sTabHighlightRight", i)])
+				kill(_G[format("ChatFrame%sTabSelectedLeft", i)])
+				kill(_G[format("ChatFrame%sTabSelectedMiddle", i)])
+				kill(_G[format("ChatFrame%sTabSelectedRight", i)])
+				kill(_G[format("ChatFrame%sTabGlow", i)])
+				
+				tab.leftSelectedTexture:Hide()
+				tab.middleSelectedTexture:Hide()
+				tab.rightSelectedTexture:Hide()
+				tab.leftSelectedTexture.Show = tab.leftSelectedTexture.Hide
+				tab.middleSelectedTexture.Show = tab.middleSelectedTexture.Hide
+				tab.rightSelectedTexture.Show = tab.rightSelectedTexture.Hide
+			else
+				tab:SetAlpha(0)
+				tab.noMouseAlpha = 0
+			end
 		
 		-- Hide chat textures
 			for j = 1, #CHAT_FRAME_TEXTURES do
@@ -123,13 +161,20 @@ local TimeStampsCopy = true					-- 时间戳
 			cf:SetMaxResize(0,0)
 		
 		--Allow the chat frame to move to the end of the screen
-			cf:SetClampedToScreen(true)
+			cf:SetClampedToScreen(false)
 			cf:SetClampRectInsets(0,0,0,0)
-		
+		for i = 1, NUM_CHAT_WINDOWS do
+					local chat = format("ChatFrame%s",i)
+					_G[chat.."EditBoxLanguage"]:ClearAllPoints()
+					_G[chat.."EditBoxLanguage"]:SetPoint("LEFT", _G[chat.."EditBox"], "RIGHT", S.Scale(5), 0)
+					_G[chat.."EditBoxLanguage"]:SetSize(_G[chat.."EditBox"]:GetHeight(),_G[chat.."EditBox"]:GetHeight()+1)
+					S.StripTextures(_G[chat.."EditBoxLanguage"])
+					_G[chat.."EditBoxLanguage"]:CreateShadow("Background")
+			end
+				
 		--EditBox Module
 			local ebParts = {'Left', 'Mid', 'Right'}
 			local eb = _G['ChatFrame'..i..'EditBox']
-			local cf = _G[format("%s%d", "ChatFrame", i)]
 			for _, ebPart in ipairs(ebParts) do
 				_G['ChatFrame'..i..'EditBox'..ebPart]:SetTexture(nil)
 				local ebed = _G['ChatFrame'..i..'EditBoxFocus'..ebPart]
@@ -137,23 +182,14 @@ local TimeStampsCopy = true					-- 时间戳
 				ebed:SetTexture(nil)
 				ebed:SetHeight(18)
 			end
-			for i = 1, NUM_CHAT_WINDOWS do
-					local chat = format("ChatFrame%s",i)
-					_G[chat.."EditBoxLanguage"]:ClearAllPoints()
-					_G[chat.."EditBoxLanguage"]:SetPoint("LEFT", _G[chat.."EditBox"], "RIGHT", S.Scale(5), 0)
-					_G[chat.."EditBoxLanguage"]:SetSize(_G[chat.."EditBox"]:GetHeight(),_G[chat.."EditBox"]:GetHeight()+1)
-					S.StripTextures(_G[chat.."EditBoxLanguage"])
-					_G[chat.."EditBoxLanguage"]:CreateShadow("Background")
-				end
 			eb:SetAltArrowKeyMode(false)
 			eb:ClearAllPoints()
 			eb:SetPoint("BOTTOMLEFT", cf, "TOPLEFT",  0, 3)
 			eb:SetPoint("BOTTOMRIGHT", cf, "TOPRIGHT", 0, 3)
 			eb:SetHeight(18)
 			eb:CreateShadow("Background")
-			--eb:EnableMouse(true)
-			eb:SetFont(DB.Font, 14*C["MiniDB"]["FontScale"]*S.Scale(1), "OUTLINE")
-
+			eb:EnableMouse(false)
+		
 		--Remove scroll buttons
 			local bf = _G['ChatFrame'..i..'ButtonFrame']
 			bf:Hide()
@@ -165,12 +201,12 @@ local TimeStampsCopy = true					-- 时间戳
 			end
 			local bb = _G["ChatFrame"..i.."ButtonFrameBottomButton"]
 			bb:SetParent(_G["ChatFrame"..i])
-			--bb:SetHeight(20)
-			--bb:SetWidth(20)
+			bb:SetHeight(18)
+			bb:SetWidth(18)
 			bb:ClearAllPoints()
-			bb:SetPoint("TOPRIGHT", cf, "TOPRIGHT", 0, -5)
-			bb:SetAlpha(1)
-			bb.SetPoint = function() end
+			bb:SetPoint("TOPRIGHT", cf, "TOPRIGHT", 0, -6)
+			bb:SetAlpha(0.4)
+			--bb.SetPoint = function() end
 			bb:SetScript("OnClick", BottomButtonClick)
 		end
 	end

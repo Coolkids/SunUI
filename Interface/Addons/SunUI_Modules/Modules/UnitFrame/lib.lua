@@ -632,7 +632,7 @@ C = C["UnitFrameDB"]
     d.initialAnchor = "TOPRIGHT"
 	d['growth-x'] = 'RIGHT'
     d["growth-y"] = "DOWN"
-    d.num = 16
+    d.num = 8
     d.size = 16
     d.spacing = 3
     d:SetHeight((d.size+d.spacing)*2)
@@ -679,7 +679,7 @@ C = C["UnitFrameDB"]
       d["growth-x"] = "LEFT"
 	  d['growth-y'] = 'DOWN' 
 	  d.initialAnchor = 'RIGHT'
-	  d.num = 16
+	  d.num = 5
 	  elseif f.mystyle=="pet" then
 	  d['growth-x'] = 'RIGHT'
       d['growth-y'] = 'UP' 
