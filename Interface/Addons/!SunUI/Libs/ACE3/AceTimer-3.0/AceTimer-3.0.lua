@@ -15,7 +15,7 @@
 -- make into AceTimer.
 -- @class file
 -- @name AceTimer-3.0
--- @release $Id: AceTimer-3.0.lua 1037 2011-09-02 16:24:08Z mikk $
+-- @release $Id: AceTimer-3.0.lua 895 2009-12-06 16:28:55Z nevcairiel $
 
 --[[
 	Basic assumptions:
@@ -36,7 +36,7 @@
 	- ALLOWS unscheduling ANY timer (including the current running one) at any time, including during OnUpdate processing
 ]]
 
-local MAJOR, MINOR = "AceTimer-3.0", 6
+local MAJOR, MINOR = "AceTimer-3.0", 5
 local AceTimer, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not AceTimer then return end -- No upgrade needed
@@ -402,7 +402,7 @@ local function OnEvent(this, event)
 	
 	-- Time to clean it out?
 	local list = selfs[self]
-	if (list.__ops or 0) < 250 then	-- 250 slosh indices = ~10KB wasted (worst case!). For one 'self'.
+	if (list.__ops or 0) < 250 then	-- 250 slosh indices = ~10KB wasted (max!). For one 'self'.
 		return
 	end
 	
@@ -411,9 +411,7 @@ local function OnEvent(this, event)
 	local n=0
 	for k,v in pairs(list) do
 		newlist[k] = v
-		if type(v)=="table" and v.callback then -- if the timer is actually live: count it
-			n=n+1
-		end
+		n=n+1
 	end
 	newlist.__ops = 0	-- Reset operation count
 	
@@ -470,6 +468,6 @@ AceTimer.frame:SetScript("OnUpdate", OnUpdate)
 AceTimer.frame:SetScript("OnEvent", OnEvent)
 AceTimer.frame:RegisterEvent("PLAYER_REGEN_ENABLED")
 
--- In theory, we could hide&show the frame based on there being timers or not.
+-- In theory, we should hide&show the frame based on there being timers or not.
 -- However, this job is fairly expensive, and the chance that there will 
--- actually be zero timers running is diminuitive to say the least.
+-- actually be zero timers running is diminuitive to say the lest.

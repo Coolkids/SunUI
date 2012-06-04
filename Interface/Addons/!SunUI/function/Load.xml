@@ -7,4 +7,5 @@
 	<Script file = "db.lua"/>
 	<Script file = "API.lua"/>
 	<Script file = "API2.lua"/>
+	<Script file = "aurora.lua"/>
 </Ui>

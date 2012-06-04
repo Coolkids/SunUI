@@ -89,6 +89,7 @@ local function CreateRollButton(parent, ntex, ptex, htex, rolltype, tiptext, ...
 	f:SetPoint(...)
 	f:Width(28)
 	f:Height(28)
+	--S.Reskin(f)  --美化
 	f:SetNormalTexture(ntex)
 	if ptex then f:SetPushedTexture(ptex) end
 	f:SetHighlightTexture(htex)
@@ -114,7 +115,7 @@ end
 
 local function CreateRollFrame()
 	local frame = CreateFrame("Frame", nil, UIParent)
-	frame:Width(328)
+	frame:Width(240)
 	frame:Height(22)
 	frame:SetBackdropColor( .05, .05, .05, .9)
 	frame:SetScript("OnEvent", OnEvent)
@@ -142,7 +143,8 @@ local function CreateRollFrame()
 	buttonborder2:Width(22)
 	buttonborder2:Height(22)
 	buttonborder2:SetFrameLevel(buttonborder:GetFrameLevel()+1)
-	buttonborder2:SetPoint("CENTER", button, "CENTER")
+	buttonborder2:Point("TOPLEFT", button, "TOPLEFT", 1, -1)
+	buttonborder2:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", -1, 1)
     buttonborder2:CreateShadow()
 
 	
@@ -158,7 +160,7 @@ local function CreateRollFrame()
 	tfade:SetGradientAlpha("VERTICAL", .1, .1, .1, 0, .1, .1, .1, 0)
 
 	local status = CreateFrame("StatusBar", nil, frame)
-	status:Width(326)
+	status:Width(240)
 	status:Height(5)
 	status:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", 2, 1)
 	status:CreateShadow("Background")
@@ -177,15 +179,16 @@ local function CreateRollFrame()
 	status.spark = spark
 
 	local need, needtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Dice-Up", "Interface\\Buttons\\UI-GroupLoot-Dice-Highlight", "Interface\\Buttons\\UI-GroupLoot-Dice-Down", 1, NEED, "LEFT", frame.button, "RIGHT", S.Scale(5), S.Scale(-1))
-	local greed, greedtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Coin-Up", "Interface\\Buttons\\UI-GroupLoot-Coin-Highlight", "Interface\\Buttons\\UI-GroupLoot-Coin-Down", 2, GREED, "LEFT", need, "RIGHT", 0, S.Scale(-1))
+	local greed, greedtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Coin-Up", "Interface\\Buttons\\UI-GroupLoot-Coin-Highlight", "Interface\\Buttons\\UI-GroupLoot-Coin-Down", 2, GREED, "LEFT", need, "RIGHT", 0, 0)
 	local de, detext
-	de, detext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-DE-Up", "Interface\\Buttons\\UI-GroupLoot-DE-Highlight", "Interface\\Buttons\\UI-GroupLoot-DE-Down", 3, ROLL_DISENCHANT, "LEFT", greed, "RIGHT", 0, S.Scale(-1))
-	local pass, passtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Pass-Up", nil, "Interface\\Buttons\\UI-GroupLoot-Pass-Down", 0, PASS, "LEFT", de or greed, "RIGHT", 0, S.Scale(2.2))
+	de, detext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-DE-Up", "Interface\\Buttons\\UI-GroupLoot-DE-Highlight", "Interface\\Buttons\\UI-GroupLoot-DE-Down", 3, ROLL_DISENCHANT, "LEFT", greed, "RIGHT", 0, 0)
+	--local pass, passtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Pass-Up", nil, "Interface\\Buttons\\UI-GroupLoot-Pass-Down", 0, PASS, "LEFT", de or greed, "RIGHT", 0, S.Scale(2.2))
+	local pass, passtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Pass-Up", nil, "Interface\\Buttons\\UI-GroupLoot-Pass-Down", 0, PASS, "BOTTOMLEFT", frame, "BOTTOMRIGHT", S.Scale(2.2), 0)
 	frame.needbutt, frame.greedbutt, frame.disenchantbutt = need, greed, de
 	frame.need, frame.greed, frame.pass, frame.disenchant = needtext, greedtext, passtext, detext
 
 	local bind = frame:CreateFontString()
-	bind:SetPoint("LEFT", pass, "RIGHT", S.Scale(3), S.Scale(1))
+	bind:SetPoint("LEFT", de or greed, "RIGHT", S.Scale(3), S.Scale(1))
 	bind:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
 	frame.fsbind = bind
 
@@ -205,24 +208,8 @@ end
 
 
 local anchor = CreateFrame("Button", nil, UIParent)
-anchor:Width(300) 
+anchor:Width(240) 
 anchor:Height(22)
-anchor:SetBackdropColor(0.25, 0.25, 0.25, 1)
-local label = anchor:CreateFontString(nil, "ARTWORK")
-label:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
-label:SetAllPoints(anchor)
-label:SetText("teksLoot")
-
-anchor:SetScript("OnClick", anchor.Hide)
-anchor:SetScript("OnDragStart", anchor.StartMoving)
-anchor:SetScript("OnDragStop", function(self)
-	self:StopMovingOrSizing()
-	self.db.x, self.db.y = self:GetCenter()
-end)
-anchor:SetMovable(true)
-anchor:EnableMouse(true)
-anchor:RegisterForDrag("LeftButton")
-anchor:RegisterForClicks("RightButtonUp")
 anchor:Hide()
 
 local frames = {}
@@ -382,5 +369,5 @@ SlashCmdList["LFrames"] = function(msg)
 	f.status:SetStatusBarColor(ITEM_QUALITY_COLORS[5].r, ITEM_QUALITY_COLORS[5].g, ITEM_QUALITY_COLORS[5].b)
 	f:Show()
 end
-SLASH_LFrames1 = "/lframes"
+SLASH_LFrames1 = "/rolltest"
 end

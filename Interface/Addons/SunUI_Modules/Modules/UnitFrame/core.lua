@@ -43,7 +43,7 @@ C = C["UnitFrameDB"]
 		else
 			--self.colors.smooth = {1,0,0, .7,.41,.44, .3,.3,.3}
 			
-			self.colors.smooth = {199/255,97/255,20/255,199/255,97/255,20/255,199/255,97/255,20/255}
+			self.colors.smooth = {1,0,0,1,1,0,0,0.5,0.5}
 		end
 	end
     self.Health.colorSmooth = true
@@ -75,8 +75,8 @@ C = C["UnitFrameDB"]
     --lib.gen_combat_feedback(self)
 	--lib.gen_EclipseBar(self)
 	lib.gen_alt_powerbar(self)
-    --lib.createAuras(self)
-	--lib.createBuffs(self)
+    lib.createAuras(self)
+	lib.createBuffs(self)
     lib.createDebuffs(self)
 	lib.gen_swing_timer(self)
     self:Size(self.width,self.height)

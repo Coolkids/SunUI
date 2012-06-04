@@ -7,8 +7,7 @@ local Module = Core:NewModule("UnitFrameLib")
 local lib = CreateFrame("Frame")  
  
 local PlayerTimersOnly = false 
-function Module:OnInitialize()
-local playerauras = "DEBUFFS"  		
+function Module:OnInitialize()	
 C = C["UnitFrameDB"]
   -----------------------------
   -- local variables
@@ -543,7 +542,11 @@ C = C["UnitFrameDB"]
   --auras for certain frames
   lib.createAuras = function(f)
     a = CreateFrame('Frame', nil, f)
-    a:SetPoint('TOPLEFT', f, 'TOPRIGHT', 3, 0)
+	if f.mystyle~="player" then 
+		a:SetPoint('TOPLEFT', f, 'TOPRIGHT', 3, 0)
+	else
+		a:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 0, 15)
+	end
     a['growth-x'] = 'RIGHT'
     a['growth-y'] = 'DOWN' 
     a.initialAnchor = 'TOPLEFT'
@@ -556,16 +559,16 @@ C = C["UnitFrameDB"]
       a:SetWidth((a.size+a.spacing)*8)
       a.numBuffs = 8 
       a.numDebuffs = 8
-	elseif f.mystyle=="player" and playerauras=="AURAS" then
+	elseif f.mystyle=="player" and C["PlayerBuff"]==3 then
 	  a.gap = false
-      a['growth-x'] = 'LEFT'
-      a['growth-y'] = 'DOWN' 
-      a.initialAnchor = 'TOPLEFT'
-      a:SetHeight((a.size+a.spacing)*2)
+	  a['growth-x'] = 'RIGHT'
+      a['growth-y'] = 'UP' 
+	  a:SetHeight((a.size+a.spacing)*2)
       a:SetWidth((a.size+a.spacing)*8)
-      a.numBuffs = 8 
-      a.numDebuffs = 8
-	  a:SetPoint('TOPLEFT', f, 'TOPLEFT', -a.size-5, -1)
+      a.initialAnchor = 'BOTTOMLEFT'
+      a.numBuffs = 4 
+      a.numDebuffs = 4
+	  a:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 0, 15)
     elseif f.mystyle=="focus" then
       a:SetHeight((a.size+a.spacing)*2)
       a:SetWidth((a.size+a.spacing)*4)
@@ -611,15 +614,15 @@ C = C["UnitFrameDB"]
       b:SetPoint("TOPLEFT", f.Power, "BOTTOMLEFT", 0, -b.spacing)
 	  b.size = 16
       b.num = 8
-	elseif f.mystyle=="player" and playerauras=="BUFFS" then
-	  b['growth-x'] = 'LEFT'
-      b['growth-y'] = 'DOWN' 
-      b.initialAnchor = 'TOPRIGHT'
+	elseif f.mystyle=="player" and C["PlayerBuff"]==2 then
+	  b['growth-x'] = 'RIGHT'
+      b['growth-y'] = 'UP' 
+      b.initialAnchor = 'BOTTOMLEFT'
 	  b.num = 8
 	  b.size = 16
       b:SetHeight((b.size+b.spacing)*2)
       b:SetWidth((b.size+b.spacing)*8)
-	  b:SetPoint("TOPRIGHT", f, "TOPLEFT", -5, -1)
+	  b:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 15)
 	  --b.PreSetPosition = lib.PreSetPosition
     end
     b.PostCreateIcon = lib.PostCreateIcon
@@ -664,7 +667,7 @@ C = C["UnitFrameDB"]
 	  d.size = 16
       d["growth-x"] = "LEFT"
       d:SetWidth((d.size+d.spacing)*4)
-	elseif f.mystyle=="player" and playerauras=="DEBUFFS" then
+	elseif f.mystyle=="player" and C["PlayerBuff"]==1 then
 	  d['growth-x'] = 'RIGHT'
       d['growth-y'] = 'UP' 
       d.initialAnchor = 'BOTTOMLEFT'

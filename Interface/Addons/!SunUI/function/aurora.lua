@@ -5,15 +5,9 @@ local alpha = .5 -- controls the backdrop opacity (0 = invisible, 1 = solid)
 
 -- [[ Core ]]
 
-local addon, core = ...
 
-core[1] = {} -- F, functions
-core[2] = {} -- C, constants/config
-
-Aurora = core
-
-local F, C = unpack(select(2, ...))
-local S, _, _, DB = unpack(SunUI)
+local F, C = {}, {}
+local S, _, _, DB = unpack(select(2, ...))
 C.classcolours = {
 	["HUNTER"] = { r = 0.58, g = 0.86, b = 0.49 },
 	["WARLOCK"] = { r = 0.6, g = 0.47, b = 0.85 },
@@ -29,8 +23,8 @@ C.classcolours = {
 
 C.media = {
 	["backdrop"] = "Interface\\ChatFrame\\ChatFrameBackground",
-	["checked"] = "Interface\\AddOns\\Aurora\\CheckButtonHilight",
-	["glow"] = "Interface\\AddOns\\Aurora\\glow",
+	["checked"] = "Interface\\AddOns\\!Sunui\\Media\\CheckButtonHilight",
+	["glow"] = "Interface\\AddOns\\!Sunui\\Media\\glowTex",
 	["texture"] = DB.Statusbar,
 }
 
@@ -89,7 +83,7 @@ F.ReskinDropDown = function(f)
 	dis:SetAllPoints()
 
 	local downtex = down:CreateTexture(nil, "ARTWORK")
-	downtex:SetTexture("Interface\\AddOns\\Aurora\\arrow-down-active")
+	downtex:SetTexture("Interface\\AddOns\\!SunUI\\Media\\arrow-down-active")
 	downtex:SetSize(8, 8)
 	downtex:SetPoint("CENTER")
 	downtex:SetVertexColor(1, 1, 1)
@@ -117,9 +111,9 @@ F.ReskinArrow = function(f, direction)
 	tex:SetPoint("CENTER")
 	
 	if direction == 1 then
-		tex:SetTexture("Interface\\AddOns\\Aurora\\arrow-left-active")
+		tex:SetTexture("Interface\\AddOns\\!SunUI\\Media\\arrow-left-active")
 	elseif direction == 2 then
-		tex:SetTexture("Interface\\AddOns\\Aurora\\arrow-right-active")
+		tex:SetTexture("Interface\\AddOns\\!SunUI\\Media\\arrow-right-active")
 	end
 end
 
@@ -213,7 +207,7 @@ end
 local Skin = CreateFrame("Frame", nil, UIParent)
 Skin:RegisterEvent("ADDON_LOADED")
 Skin:SetScript("OnEvent", function(self, event, addon)
-	if addon == "Aurora" then
+	if addon == "!SunUI" then
 		
 		-- [[ Headers ]]
 
@@ -320,11 +314,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		hooksecurefunc("CharacterFrame_Expand", function()
-			select(15, CharacterFrameExpandButton:GetRegions()):SetTexture("Interface\\AddOns\\Aurora\\arrow-left-active")
+			select(15, CharacterFrameExpandButton:GetRegions()):SetTexture("Interface\\AddOns\\!SunUI\\Media\\arrow-left-active")
 		end)
 
 		hooksecurefunc("CharacterFrame_Collapse", function()
-			select(15, CharacterFrameExpandButton:GetRegions()):SetTexture("Interface\\AddOns\\Aurora\\arrow-right-active")
+			select(15, CharacterFrameExpandButton:GetRegions()):SetTexture("Interface\\AddOns\\!SunUI\\Media\\arrow-right-active")
 		end)
 
 		-- [[ Check boxes ]]
@@ -3052,7 +3046,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.CreateGradient(bd)
 		
 		local downtex = CalendarFilterButton:CreateTexture(nil, "ARTWORK")
-		downtex:SetTexture("Interface\\AddOns\\Aurora\\arrow-down-active")
+		downtex:SetTexture("Interface\\AddOns\\!SunUI\\Media\\arrow-down-active")
 		downtex:SetSize(8, 8)
 		downtex:SetPoint("CENTER")
 		downtex:SetVertexColor(1, 1, 1)
@@ -3844,12 +3838,15 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end)
 
 		local reskinnedrewards = false
-		GuildFrameTab4:HookScript("OnClick", function()
-			if not reskinnedrewards == true then
+		hooksecurefunc("GuildRewards_Update", function()
+				if reskinnedRewards == true then return end
+				
 				for i = 1, 8 do
 					local button = "GuildRewardsContainerButton"..i
 					local bu = _G[button]
 					local ic = _G[button.."Icon"]
+					local locked = select(6, bu:GetRegions())
+					local bd = select(7, bu:GetRegions())
 
 					local bg = CreateFrame("Frame", nil, bu)
 					bg:SetPoint("TOPLEFT", 0, -1)
@@ -3864,16 +3861,16 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 					ic:SetTexCoord(.08, .92, .08, .92)
 
-					select(6, bu:GetRegions()):SetAlpha(0)
-					select(7, bu:GetRegions()):SetTexture(C.media.backdrop)
-					select(7, bu:GetRegions()):SetVertexColor(0, 0, 0, .25)
-					select(7, bu:GetRegions()):SetPoint("TOPLEFT", 0, -1)
-					select(7, bu:GetRegions()):SetPoint("BOTTOMRIGHT", 0, 1)
+					locked:Hide()
+					locked.Show = F.dummy
+					bd:SetTexture(C.media.backdrop)
+					bd:SetVertexColor(0, 0, 0, .25)
+					bd:Point("TOPLEFT", 0, -1)
+					bd:Point("BOTTOMRIGHT", 0, 1)
 
 					S.CreateBG(ic)
 				end
 				reskinnedrewards = true
-			end
 		end)
 
 		local function createButtonBg(bu)
@@ -5001,7 +4998,7 @@ Delay:SetScript("OnEvent", function()
 				icon:SetPoint("BOTTOMRIGHT", -1, 1)
 				icon:SetTexCoord(.08, .92, .08, .92)
 
-				quest:SetTexture("Interface\\AddOns\\Aurora\\quest")
+				quest:SetTexture("Interface\\AddOns\\!SunUI\\Media\\quest")
 				quest:SetVertexColor(1, 0, 0)
 				quest:SetTexCoord(0.05, .955, 0.05, .965)
 				quest.SetTexture = F.dummy
@@ -5046,7 +5043,7 @@ Delay:SetScript("OnEvent", function()
 			icon:SetPoint("BOTTOMRIGHT", -1, 1)
 			icon:SetTexCoord(.08, .92, .08, .92)
 
-			quest:SetTexture("Interface\\AddOns\\Aurora\\quest")
+			quest:SetTexture("Interface\\AddOns\\!SunUI\\Media\\quest")
 			quest:SetVertexColor(1, 0, 0)
 			quest:SetTexCoord(0.05, .955, 0.05, .965)
 			quest.SetTexture = F.dummy

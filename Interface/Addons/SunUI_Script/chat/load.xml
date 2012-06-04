@@ -3,4 +3,5 @@
 	<Script file="rollcollector.lua"/>
 	<Script file="ChatEmotion.lua"/>
 	<Script file="ChatFilter.lua"/>
+	<Script file="urlcopy.lua"/>
 </Ui>

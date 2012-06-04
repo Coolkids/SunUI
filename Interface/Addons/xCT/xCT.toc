@@ -1,0 +1,9 @@
+## Interface: 40300
+## Title: |cffFF0000x|rCT|cffDDFF55+|r
+## Notes: X Combat Text Plus
+## Author: Dandruff @ US-Whisperwind
+## Version: 2.3.1
+## RequiredDeps: Blizzard_CombatText
+
+config.lua
+xCT.lua

@@ -11,7 +11,9 @@ local fontsize = 10                          --other variables
 local tscol = "64C2F5"						-- Timestamp coloring
 local TimeStampsCopy = true					-- 时间戳
 
-	CHAT_FONT_HEIGHTS = {5, 6, 7, 8, 9,10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28}
+	for i = 1, 25 do
+		CHAT_FONT_HEIGHTS[i] = i+4
+	end
 	local LinkHover = {}; LinkHover.show = {	-- enable (true) or disable (false) LinkHover functionality for different things in chat
 		["achievement"] = true,
 		["enchant"]     = true,
@@ -170,6 +172,14 @@ local TimeStampsCopy = true					-- 时间戳
 					_G[chat.."EditBoxLanguage"]:SetSize(_G[chat.."EditBox"]:GetHeight(),_G[chat.."EditBox"]:GetHeight()+1)
 					S.StripTextures(_G[chat.."EditBoxLanguage"])
 					_G[chat.."EditBoxLanguage"]:CreateShadow("Background")
+					_G['ChatFrame'..i..'EditBox']:HookScript("OnEditFocusGained", function(self) self:Show() end)
+					_G['ChatFrame'..i..'EditBox']:HookScript("OnEditFocusLost", function(self) self:Hide() end)
+					local a = CreateFrame("Frame",nil,WorldFrame)
+					a:RegisterEvent("PLAYER_ENTERING_WORLD") 
+					a:SetScript("OnEvent",function(self,event,...) 
+					if(event == "PLAYER_ENTERING_WORLD") then
+					_G['ChatFrame'..i..'EditBox']:SetAlpha(0) end 
+					end)
 			end
 				
 		--EditBox Module
@@ -187,7 +197,10 @@ local TimeStampsCopy = true					-- 时间戳
 			eb:SetPoint("BOTTOMLEFT", cf, "TOPLEFT",  0, 3)
 			eb:SetPoint("BOTTOMRIGHT", cf, "TOPRIGHT", 0, 3)
 			eb:SetHeight(18)
-			eb:CreateShadow("Background")
+			eb:SetBackdrop({bgFile = "Interface\\Buttons\\WHITE8x8", edgeFile = DB.GlowTex, edgeSize = S.mult, 
+				insets = {top = S.mult, left =S.mult, bottom = S.mult, right = S.mult}})
+			eb:SetBackdropColor(0,0,0,0.3)
+			eb:SetBackdropBorderColor(0,0,0,1)
 			eb:EnableMouse(false)
 		
 		--Remove scroll buttons

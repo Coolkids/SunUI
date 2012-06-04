@@ -111,6 +111,7 @@ function SunUIConfig:LoadDefaults()
 				["showarena"] = true,
 				["Height"] = 20,
 				["BigFocus"] = true,
+				["PlayerBuff"] = 4,
 			},
 			MiniDB = {
 				["uiScale"] = 0.9,
@@ -538,7 +539,7 @@ function SunUIConfig.GenerateOptionsInternal()
 			Header = {
 				order = 1,
 				type = "header",
-				name = "5.29A",
+				name = "6.5A",
 				width = "full",		
 			},
 			Unlock = {
@@ -549,6 +550,7 @@ function SunUIConfig.GenerateOptionsInternal()
 					--ACD["Close"](ACD,"SunUIConfig")
 					if not UnitAffectingCombat("player") then
 						for _, value in pairs(MoveHandle) do value:Show() end
+						SlashCmdList.TOGGLEGRID()
 					end
 					--GameTooltip_Hide()
 				end,
@@ -560,6 +562,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				func = function()
 					if not UnitAffectingCombat("player") then
 						for _, value in pairs(MoveHandle) do value:Hide() end
+						SlashCmdList.TOGGLEGRID()
 					end
 				end,
 			},
@@ -1151,6 +1154,13 @@ function SunUIConfig.GenerateOptionsInternal()
 								type = "select", order = 11,
 								name = L["目标增减益"],
 								values = {[1] = L["显示"], [2] =L["不显示"], [3] = "Only Player"},
+							},
+							PlayerBuff = {
+								type = "select",
+								name = "玩家框体BUFF显示",
+								desc = "玩家框体BUFF显示",
+								order = 12,
+								values = {[1] = "debuff", [2] = "buff", [3] = "debuff+buff", [4] = "none"},
 							},
 						}
 					},
