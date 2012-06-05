@@ -539,7 +539,7 @@ function SunUIConfig.GenerateOptionsInternal()
 			Header = {
 				order = 1,
 				type = "header",
-				name = "6.5A",
+				name = "6.6A",
 				width = "full",		
 			},
 			Unlock = {
@@ -1768,8 +1768,6 @@ local function BuildFrame()
 	--SetUpDBM
 	local function SetDBM()
 		if not IsAddOnLoaded("DBM-Core") then return end
-		if(DBM_SavedOptions) then table.wipe(DBM_SavedOptions) end
-		DBM_SavedOptions["DisableCinematics"] = true
 		DBM_SavedOptions.Enabled = true
 		DBT_SavedOptions["DBM"].Scale = 1
 		DBT_SavedOptions["DBM"].HugeScale = 1
@@ -1782,6 +1780,7 @@ local function BuildFrame()
 		DBT_SavedOptions["DBM"].IconRight = false	
 		DBT_SavedOptions["DBM"].Flash = false
 		DBT_SavedOptions["DBM"].FadeIn = true
+		DBM_SavedOptions["DisableCinematics"] = true
 		DBT_SavedOptions["DBM"].TimerX = 420
 		DBT_SavedOptions["DBM"].TimerY = -29
 		DBT_SavedOptions["DBM"].TimerPoint = "TOPLEFT"
@@ -1796,6 +1795,11 @@ local function BuildFrame()
 		DBT_SavedOptions["DBM"].HugeTimerPoint = "TOP"
 		DBT_SavedOptions["DBM"].HugeTimerX = -150
 		DBT_SavedOptions["DBM"].HugeTimerY = -207
+		DBM_SavedOptions["SpecialWarningFontColor"] = {
+			0.40,
+			0.78,
+			1,
+		}
 	end
 	--按钮
 	local step4 = function()
