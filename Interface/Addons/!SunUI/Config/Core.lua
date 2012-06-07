@@ -112,6 +112,7 @@ function SunUIConfig:LoadDefaults()
 				["Height"] = 20,
 				["BigFocus"] = true,
 				["PlayerBuff"] = 4,
+				["CastBar"] = true,
 			},
 			MiniDB = {
 				["uiScale"] = 0.9,
@@ -1102,6 +1103,10 @@ function SunUIConfig.GenerateOptionsInternal()
 							type = "toggle", order = 12,
 							name = "BigFocus",
 						},
+						CastBar = {
+							type = "toggle", order = 13,
+							name = "施法条开关",
+						},
 					}
 					},
 					group2 = {
@@ -1166,7 +1171,7 @@ function SunUIConfig.GenerateOptionsInternal()
 					},
 					group3 = {
 						type = "group", order = 3,
-						name = " ",guiInline = true,
+						name = " ",guiInline = true,disabled = (db.UnitFrameDB.CastBar == false),
 						args = {
 							playerCBuserplaced = {
 								type = "toggle", order = 1,

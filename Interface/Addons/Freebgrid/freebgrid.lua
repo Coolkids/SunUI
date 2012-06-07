@@ -12,6 +12,7 @@ if media then
 	media:Register("statusbar", "gradient",				[[Interface\Addons\Freebgrid\media\gradient]])
 	media:Register("statusbar", "Cabaret",				[[Interface\Addons\Freebgrid\media\Cabaret]])
 	media:Register("statusbar", "sunui",				[[Interface\Addons\Freebgrid\media\statusbar7]])
+	media:Register("statusbar", "waterline", [[Interface\Addons\Freebgrid\media\waterline]])
 end
 
 local backdrop = {

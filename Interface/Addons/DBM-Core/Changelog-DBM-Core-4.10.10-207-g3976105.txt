@@ -1,0 +1,237 @@
+subversion:
+	- Omega via svn r7531: Raid mods now all have correct zone/encounter IDs
+	- Arta via svn r7530: updated mapSizes (Terrace of Endless Spring not in DBC files yet)
+	- Omega via svn r7529: Start prepping raid mods, since all boss names and zoneids are now known. Tocs have correct loadzone IDs, bosses still need EJ info and none of em have correct creatureids yet until we have logs (ie blizz opens raid testing)
+	- Omega via svn r7528: GuCloudstrike mod done, target scanning commented out until it can be verified.
+	- Omega via svn r7527: Sha of Anger mod, thanks to some exploiters on beta realm killing sha of anger with npcs, all i had to do was stand far enough away and log.
+	- Arta via svn r7526: build 15668 changes
+	- Omega via svn r7525: Merge a minor DS change into this branch
+	- Omega via svn r7524: Small option default tweak
+	- Omega via svn r7523: rest of Mogu Shan Palace complete
+	- Omega via svn r7522: Fix some party mod bugs (forgot to put right creatureIDs, also a nil error in libraryEvent Added Gekkan Mod
+	- Arta via svn r7521: Build 15662 updated some maps and model IDs
+	- Arta via svn r7520: updated mapsizes. Hope I did it correctly this time :P WorldMapArea / DungeonFloor 1 = Scale factor Scale factor * DungeonFloor # = mapSize
+	- Arta via svn r7519: Mogu'shan Vaults initial commit (only 3 are known so far)
+	- Omega via svn r7518: oops, fix some stuff that wasn't supposed to be left in Hoptallus mod
+	- Omega via svn r7517: Brewery done
+	- Omega via svn r7516: Now that MoP has it's own branch, Kill off party mods for MoP in live version, since they'd probably just lua error if someone manually loaded them anyways.
+	- Arta via svn r7515: Added file with currently known changes in MoP
+	- tandanu via svn r7514: add branch for MoP beta
+	- nbluewiz via svn r7513: # Alysrazor: Removed Wings of Flame timer. The timer not refreshing, and mismatch.
+	- arta via svn r7512: beta build 15650 mapSize update
+	- arta via svn r7511: changed party mods to use the journal 'format' so we need less localizations :)  (someone with beta access confirm please) Updated map sizes based on latest beta build (still a lot missing or inaccurate)
+	- arta via svn r7510: beta build 15640 - model IDs
+	- Omega via svn r7509: Some party mod updates based on latest beta patch.
+	- nbluewiz via svn r7508: # Hagara : chat bubble option also disables party chat bubbles.
+	- Omega via svn r7507: forgot model idea, now that mod is correct
+	- Omega via svn r7506: Some mod prep
+	- Omega via svn r7505: Make StaticPopupDialogs use preferredIndex 3 to avoid using 1 and 2 (the ones blizz like to use). This avoids some taints caused by bad blizzard code.
+	- Omega via svn r7504: Update zoneID for Salyis/galleon
+	- thiagovfar via svn r7503: ptBR: Renaming localization files
+	There seems to be a new localization available in MoP -- european
+	portuguese. For which reason, I'm changing the localization files for ptBR
+	from localization.pt.lua to localization.br.lua.
+	- thiagovfar via svn r7502: ptBR update (Core, GUI)
+	- arta via svn r7501: new patch, updated mapSizes as far as they changed/added
+	- Omega via svn r7500: More boss updates based on new EJ info from latest build
+	- Omega via svn r7499: Fear is no longer a world boss, apparently salyis is now, fear is now inside a raid zone called Terrace of Endless Spring
+	- Omega via svn r7498: actually load party mods into TOC file
+	- Omega via svn r7497: Sha Of Doubt and LiuFlameheart done.
+	- ebmor via svn r7496: deDE update (Core, GUI)
+	- Omega via svn r7495: Some small fixes and comment updates to Jade temple. Still need to do rest later.
+	- nbluewiz via svn r7494: # koKR update
+	- ultrashining via svn r7493: zhTW update (Core/GUI)
+	- update pkgmeta to include Party-MoP
+	- Omega via svn r7492: *library event (half done) *Wisemari done *Fixed bugs in LilianVoss
+	- Omega via svn r7491: ThalnosSoulrender done, i thought i had done this already but forgot Added correct CiDs to some of the fights in ToJS, will do the actual encounters soon.
+	- Snamor via svn r7490: esES update
+	- nbluewiz via svn r7489: # koKR update (2 missed)
+	- nbluewiz via svn r7488: # koKR update
+	- Omega via svn r7487: add in auto repair of a logical error i've received reports on. (users saying dbm was saying they wiped to a boss negative times, meaning for whatever reason their total kills was > their total pulls. We will now attempt to correct this mistake when a boss is killed if detected.
+	- Omega via svn r7486: Add new option for including kill/wipe stats in whispers
+	- Omega via svn r7485: even more tweaks, now it looks really nice :)
+	- Omega via svn r7484: More tweaks, move the whisper response into the message handling options to unclutter general options a little, as it seems to fit better in the new home.
+	- Omega via svn r7483: rest implemented
+	- Omega via svn r7482: tweak to last
+	- Omega via svn r7481: Working on additional option config tab, since it's been brought up enough times that chat frame messages need configuration. They fit nice in a new GUI tab dedicated to configuring those options individually, here are the locals to start with, working on implementation now while you guys work on localized versions.
+	- nbluewiz via svn r7480: # koKR update (MoP translation)
+	- Omega via svn r7479: Scholomance mods implimented. They should be mostly functional minus some shortcomings that will need to be fixed with transcriptor events. Also, pretty sure DarkmasterGandling is NYI as he doesn't really do anything right now and EJ for him is not yet completed either.
+	- arta via svn r7478: datamined Scarlet Cathedral & Scholomance mapsizes (main floor size not in DBC files yet)
+	- arta via svn r7477: make use of SWING_DAMAGE as well
+	- nbluewiz via svn r7476: # Core : fixed DBM_CORE_COMBAT_ENDED_AT_LONG to show wipe count. # koKR update
+	- ultrashining via svn r7475: zhTW update
+	- ebmor via svn r7474: deDE update
+	- Omega via svn r7473: Change interrupt special warning to include source name, so the warnings are more useful in fights that have more then one target. Also added another SM mod, still working on rest, time has been limited this week. Hopefully should have the rest of all current MoP 5 man content completed in next 3-4 days though.
+	- Omega via svn r7472: Comment cleanup and small text tweak
+	- Omega via svn r7471: make it so a single script can disable it permanently (ie it has an option variable now) while at it, so next year people can QQ less about whatever humor is used there, if another joke is used.
+	- Omega via svn r7470: make the random april fools scheduler also do a delay on player entering world too, so it doesn't just fire sounds every time you hit a loading screen, especially if they are back to back.
+	- arta via svn r7469: Forgot about multiple floors, but they seem to be rounded.
+	- nbluewiz via svn r7468: # Fix bad toc.
+	- nbluewiz via svn r7467: # koKR update
+	- nbluewiz via svn r7466: # Blackhorn : fix 3rd elites related warning and timer error.
+	- arta via svn r7465: Datamined mapsizes (only these 2 currently in DBC files it seems)
+	- arta via svn r7464: Some more datamined model IDs (needs ingame confirmation)
+	- arta via svn r7463: Datamined model IDs  (need confirmation tho ;) )
+	- ultrashining via svn r7462: zhTW update (MoP)
+	- Omega via svn r7461: Populate some dummy mods in based on very incomplete EJ stuff, at least one mob isn't even named yet (ResinharvesterPH) and one entire instance is not filled out at all yet, while another one has one boss listed in it but improperly links to a raid boss when you click info so i left that zone out for now. Will wait for a cleaner MoP patch to sort those iffy zones out.
+	- Omega via svn r7460: houndmaster mod done, i'll do the other scarlet instance later after my raids. then probably scholomance tomororw.
+	- Omega via svn r7459: Our first MoP party mod, yay, will have a few more by end of night. Just wanted to commit current work so far.
+	- ebmor via svn r7458: deDE update (MoP)
+	- Snamor via svn r7457: esES update
+	- nbluewiz via svn r7456: # some comment, tap cleanup. # koKR update (MoP)
+	- Omega via svn r7455: Fix some bad spelling in last commit
+	- Omega via svn r7454: Some MoP prepping.
+	- Omega via svn r7453: Remove BossN therat check from shannox, when his unit IDs do work, he isn't always boss1, i've seen him be 2 and even 3. So checking threat on boss1 is completely invalid, especially if it ends up being rageface (who wildly switches threat) Improve trash mods with some anti spam for multiple mobs targeting same target
+	- Omega via svn r7452: Make unstable corruption cast countdown off by default. 2 countdowns on same fight are confusing. Someone might mistake it for a bolt about to hit (since bolts have no mob where you can watch a cast bar, most depend solely on the countdown for it). Parasites are usually stupid obvious since most are on it and can flat out see cast bar so it was logical choice for the "off by default". If someone blows a CD on a parasite cast instead of a bolt, a wipe is very likely.
+	- nbluewiz via svn r7451: # Madness of Deathwing : heroic Madness update.
+	- nbluewiz via svn r7450: # Spine of Deathwing : oops, removed by mistaken. fixed residueCount error after 2nd combat.
+	- nbluewiz via svn r7449: # Spine of Deathwing : Improve Residue stuff. Now Residue count more accurate when absorbed blood in Amalgamation 9 > stacks. + clean up comments
+	- Omega via svn r7448: Revert AC, chogal, malorkak and bethtilac changes. Look at code again. option is on by default for tanks AND HEALERS. the trigger checks current target (for the tank) and if your current target = the bosses target for the HEALER. changing that to player broke all those mods for the healers. the boss does not target the healer, they target the tank, we want to know if the bosses target is the same target as the healer. the first check already serves the tanks purpose (the tank on it is targeting the caster, simple enough)
+	- nbluewiz via svn r7447: # Apply to filter "Unknown" unitname in some mods. In koKR client, this bug especially appears in Shannox. (other bosses appears to not have problem.) So for Shannox, I needs more review. (And in koKR client, we did not have uid bugs. Refer to http://pds21.egloos.com/pds/201203/10/23/b0007223_4f5a8b8646cd4.jpg, http://pds23.egloos.com/pds/201203/10/23/b0007223_4f5a8bb19a65b.jpg or http://lastever.egloos.com) # Fix bad boss target check. These spells DO NOT uses on npcs (-. # Clean up core comments.
+	- Omega via svn r7446: Small DMF update
+	- Omega via svn r7445: Should be the rest of the cata mods
+	- Omega via svn r7444: Update Antispam params so time is first and ID is second, time is usually first since it's most common optimal arg, and self:AntiSpam(nil, 3) seems counter intuitive with all the mods that have custom times but only one anti spam events, so time, id is better, so we can use self:AntiSpam(3) instead to supply a custom time when an ID isn't needed. it's far less likely we'll need a custom ID without a custom time :)
+	While at it, here is first batch of mod updates. only about 1/10th done too (when counting classic mods, ugg), about 1/3rd done with cata mods though.
+	- tandanu via svn r7443: update mod:AntiSpam() to allow mods to track more than one event at the same time
+	- Omega via svn r7442: A new DBM core prototype, an anti spam function, that can be used instead of writing anti spam functions in so many mods individually. a LOT of mods can be updated to use this but first i want to make sure it actually works as right now it's just a drycode. Also make sure T12 and 13 mods using UNIT_SPELLCAST_SUCCEEDED all work in the event bossN is missing. This issue is still hit or miss, In test pulling a re-pulling bosses it was hit or miss on whether or not the Boss unit IDs were present. this is a strange and new bug since 4.3.2. But it means we can't rely on those UnitIDs alone for detecting some of the important casts that only work with UNIT_SPELLCAST_SUCCEEDED, so instead we filter no unitIDs at all, and instead use anti spam. it becomes a lot more complicated for bosses that have MANY diff spells, some of which can be cast at SAME TIME like alakir, a global anti spam won't work and each spell would need it's own, But i don't feel like doing that, i'm hoping only T12 and 13 need these work arounds cause i'm hoping this bug is a temporary blizzard bug.
+	- Omega via svn r7441: Fixed bug in getbosstarget, that sanity check you added to filter unknown, is also filtering ALL non player controlled units(ie, pets, mobs, bosses). Find another way to fix that bug. meteors on ragnaros target pets more often then they target players. Other mods depend on getbosstarget to return a non player as well, iron council, conclave, etc.
+	use my updated conclave mod to test. you can facepull anshal while solo and use the print message to see how getbosstarget responds to his soothing breeze cast. Its perfect, will get a couple player scans then a boss scan and print it out for you to diagnose.
+	- Omega via svn r7440: Update staghelm scanner to also use getbosstarget instead of custom boss1 coding, since i now know boss1 is not reliable method thanks to blizz breaking the game.
+	Also of note, this won't actually fix leap targets, or meteor targets or trap targets, cause something still wrong with getboss target, it's actually been broken since 6873, doing more testing i realize now, why i haven't seen a meteor target in weeks even though that never relied on boss1 existing. somehow it was broken and hasn't worked since, i just didn't pay enought attention in firelands to notice it,and nothing important in DS uses getbosstarget. If someone could, find out why this doesn't work. cause i've logged ragnaros, and actually SEEN h im look at meteor target, why isn't getbosstarget returning anything valid? it must be returning unknown/nil every time, all 12 scans. I suspect it has to do with "realm" not being a valid arg when not in LFR?
+	- Omega via svn r7439: It appears using BossN unitID is no longer 100% reliable. i finally figured out why it's been so problematic isnce 4.3.2. API change, if blizzards boss health frame is disabled, so are boss unit IDs, wtf? So if i prefer my own SMALL boss health frame, i get screwed cause i won't use your giant clunky one? thanks :( All mods will now have to use syncing to work around this issue for users who turn off blizzards boss health frame. sigh.
+	- thiagovfar via svn r7438: ptBR update
+	- nbluewiz via svn r7437: # Core : Fix countdown/out sound issue since 4.3.3. (delaying, skipping... )
+	- Omega via svn r7436: remove unneeded stuff, some comment cleanup/updates.
+	- nbluewiz via svn r7435: # Ragnaros, Shannox : Attempt to fix trap bug.
+	- ebmor via svn r7434: deDE update (DragonSoul)
+	- Snamor via svn r7433: esES update
+	- ultrashining via svn r7432: zhTW update
+	- nbluewiz via svn r7431: # Blackhorn : Added optional special warning for Sapper. # koKR update
+	- Omega via svn r7430: That commit actually didn't fix the issues, it just made more. it broke the function completely for normal. HoT warnings are supposed to work on normal even if it's set to reset in 2s.
+	Ultraxion:
+	*Re-did HoT code to cover more users.
+	-If reset is set to always3, spec warns will work on 1 2 or 3.
+	-if normal and dynamic, it will alert for 1 and 2 as intended, if they set it to 3 then oops on them. They should know 3 > 2
+	-iF reset is never, it will alert in 3s, and still fully support special warnings based on that setting inteligently (ie 1= 1 4 7)
+	*Re-did raid CDs to use a popdown menu
+	- nbluewiz via svn r7429: # Ultraxion : improved specWarnHourofTwilightN works on only 3 set.
+	- Omega via svn r7428: Fix a bug where you can get messages from someone else in your part doing DMF dailies near you. Now the mods will ignore non "player" unitid casts.
+	- nbluewiz via svn r7427: # koKR update
+	- nbluewiz via svn r7426: # koKR update
+	- Omega via svn r7425: Model viewer sounds for DS bosses and alizabal
+	- Omega via svn r7424: actually, a simpler way to do same thing.
+	- Omega via svn r7423: Small tweak for the future ;)
+	- DiabloHu via svn r7422: zhCN update
+	- nbluewiz via svn r7421: # Core : Fix ShortTerm events not registering on 2nd pull.
+	- nbluewiz via svn r7420: # Blackhorn, Hagara : Adjusted min cooldown. Try to fix bubble options (why this stuff working randomly?......)
+	- Omega via svn r7419: small tweak and additional commentation
+	- nbluewiz via svn r7418: # Ragnaros : Comment update.
+	- Omega via svn r7417: Try to fix rag and shannox trap scanners, particularly rag one, which hasn't worked AT ALL since i changed it in 7345, even with blu's changes, it fails to announce meteors 100% of the time when they are on a pet, uId just fails for this so lets just return to targetname, heck i don't even thnk i've seen it successfully announce a player for that matter either, so hopefully the revert in isTank fixes that problem as well.
+	- nbluewiz via svn r7416: # koKR update
+	- nbluewiz via svn r7415: # Core : Fix all combat end stuff. Because you can see kill or wipe message not instances. (i.e: Tomb) # Blackhorn : Updated Phase 2 timer canceling. Also cancels reload timer when drake dies.
+	- Omega via svn r7414: naming convention updates. Also added an optional countdown for grip timers (off by default for obvious reasons, users who want it will need to turn it on and probably disable the roll countdown on their own)
+	- Snamor via svn r7413: esES update
+	- tandanu via svn r7412: fix warsong/twin peaks flag carrier coloring and targeting
+	- ebmor via svn r7411: deDE update (Core)
+	- thiagovfar via svn r7410: ptBR update (core)
+	- nbluewiz via svn r7409: # koKR update (re-update)
+	- nbluewiz via svn r7408: # koKR update (core)
+	- ultrashining via svn r7407: zhTW update (Core)
+	- Omega via svn r7406: fix () error in last
+	- Omega via svn r7405: actually i'll just do this, so i can enable the kill stuff too, it won't break error other locals now being enabled already, they just won't be translated until renamed/updated
+	- Omega via svn r7404: kills and wipes will now report totals in local message (note the whispers are NOT changed, this feature in no way impacts your privacy, it's just a nifty local message :) )
+	- DiabloHu via svn r7403: zhCN update
+	- nbluewiz via svn r7402: # Zonozz : Fix first Psychic Drain timer.
+	- nbluewiz via svn r7401: # Blackhorn : Fix for harpoons bug. Change harpoon timer to cd timer. (see comments)
+	- nbluewiz via svn r7400: # Fandral Staghelm : Update ability timer (18 stack at 3.7) # Rhyolith : Fix first Heated Volcano timer (seems to changed in 4.3)
+	- nbluewiz via svn r7399: # Yorsahj : fix error.
+	- Omega via svn r7398: Update yorsahj special warning to warn at 2 stacks not 3. there is no reason for a tank to have more then 2 stacks post nerf (unless you're just solo tanking in which case you probably want to just turn this warning off) Also added a warning for other tank to taunt at 2 stacks also. even if youre debuff isn't clear yet, you taunt when other tank is at 2 stacks, because it WILL be clear before next cast, trust me. 2, 2, 2, 2, 2 is flawless post 12 second debuff duration nerf.
+	- nbluewiz via svn r7397: # Hagara : Fix Shattering CD bar not canceling on special phase. # Yorsahj : Added Mana Void debuff fades bar.
+	- Omega via svn r7396: add unit role filtering so it doesn't actually call out healers or tanks that are doing something else. It will only name damagers or undefined (so if you want it to be more accurate, do a roll check outside LFR for this feature)
+	- Omega via svn r7395: Add info frame that can detect who's not targeting something they should be. Usage:
+	/script DBM.InfoFrame:Show(5, "playertargets", 56188)
+	Show all players not targeting blistering tentacles
+	- Omega via svn r7394: for good measure, lets just say savedDifficulty = "" on load vs making it a nil value to begin with.
+	- Omega via svn r7393: when doing difficulty recovery, lets find out what it actually is. also, shortened and simplified the normal10 difficulty check to figure out player size in a cleaner way.
+	- nbluewiz via svn r7392: # Core : Fix rare nil savedDifficulty error. # Firelands/Baleroc : Fix strike spellName error.
+	- nbluewiz via svn r7391: # koKR update (core)
+	- nbluewiz via svn r7390: # Blackhorn : fix spellId case to match other mods.
+	- Omega via svn r7389: even more tank debuff stuff.
+	- Omega via svn r7388: Add some phase 2 tank debuff tracking
+	- Omega via svn r7387: ah fix more stuff, some of the trash mods weren't limited to their proper zone, this is now fixed too.
+	- Omega via svn r7386: More of the same
+	- Omega via svn r7385: Reduce needless function usage when there is only one spellid for a UNIT event (ie, don't call GetSpellInfo if we don't need to). In events we DO need to GetSpellInfo call it only once. Trivial things, but better code/cpu usage none the less :)
+	Fights in current tier cause extraodordinary hit on even some of the most decent computers with how many mods are overwhelmed by their data. Improving the game one function at a time, one mod at a time ;)
+	- Snamor via svn r7384: esES update
+	- thiagovfar via svn r7383: ptBR update
+	Adding/removing localizations strings that I've missed on r7368.
+	- ebmor via svn r7382: BWD Omnotron Defense System: fix Encasing Shadows yell (seems to be broken since r5518)
+	- ebmor via svn r7381: deDe update
+	- nbluewiz via svn r7380: # Madness of Deathwing : Remove Parasite canceling. I have bad log. sorry. (-
+	- Omega via svn r7379: no reason to check difficulty when canceling timers, that's just extra code. I'm not even sure why you'd need to cancel parasite here to be honest. That timer is canceled when corruption dies, and corruption ALWAYS dies before arm/wing? Unless maybe a bug where the cast can show in combat log after it dies? guess that's probably why.
+	- Omega via svn r7378: *Comment cleanup. *Changed 3 world bosses to only register events in combat, since they have no mobs even remotely near em that could possibly mess up combat regen pull detection. *Event tweaks on al'akir (another particularly brutal fight on combat log/fps on 25 man)
+	- nbluewiz via svn r7377: # Madness of Deathwing : Also cancels Parasite timer on heroic.
+	- nbluewiz via svn r7376: # Madness of Deathwing : Change phase 1 timer canceling. If wing or arm dies same time on Cataclysm casting, Cataclysm timer not cancels. This fix will fix this problem (hopefully).
+	- nbluewiz via svn r7375: # Madness of Deathwing : Change Shrapnel timer to personal timer. Also Shrapnel target warning off by default (too spammy on 25-man). And cancels countdown and timer when Shrapnel fades from player.
+	- Omega via svn r7374: chamge hemorage back to spell warning, you don't actively switch to them on heroic, you keep them up on purpose to gimmick spellweave onto parasites and corruption, then kill them. So for this one, we'll leave the "switch" call to the raid leader.
+	- Omega via svn r7373: oops, only register health update on heroic, since we don't need it on normal. no reason to add heroic check to health event then either since it won't even be activated there ;)
+	- Omega via svn r7372: Add a pre warn for congealingblood. Make sure it's faster by using FREQUENT health method (as a result, using short term events to register it so it's not being used entire fight)
+	- ultrashining via svn r7371: zhTW update (blank clean up, pvp update)
+	- nbluewiz via svn r7370: # Core : RegisterEventsShortTerm -> RegisterShortTermEvents
+	- Omega via svn r7369: Remove un-needed checks from sending sync kill sync, that spell is a unique spellid that's only ever cast at one point in fight, the end. he uses a different spellid at beginning of fight. Instead just make sure we're in combat before trying to end combat (otherwise there is no point)
+	- thiagovfar via svn r7368: ptBR update
+	Wild localization strings appeared (some others got away), while I was
+	away.
+	
+	I'm also cleaning up my locals, as Omega did just now.
+	- nbluewiz via svn r7367: # koKR update (remove blank)
+	- Omega via svn r7366: More trash stuff. Kill off first charge timer on BWD trash, it's an ugly hack/hog with no clean workaround Disable flamestrike when council is pulled and only register it on flamestrike casts for BoT trash
+	- Omega via svn r7365: rename Partly to ShortTerm. "Partly" signifies something that's only partially registered, but that's not true, it's fully registered, just only temporarily. "Short Term" is a more accurate description of the function. Applied short term event registeration usage to firelands trash mods as well. Did some useless locals cleanup to reduce locals size and loading time. No sense in having a ton of empty tables. Removed firelands trash range finder. that's just silly. Like no one uses it, and to even make it work we have to do all kinds of ugly hacking. It's better off gone.
+	- nbluewiz via svn r7364: # koKR update
+	- nbluewiz via svn r7363: # DSTrash : Oops, forgot to remove debug code.
+	- nbluewiz via svn r7362: # Core : Added partly register event support. Refer to DSTrash. # DSTrash : High volume events (SPELL_DAMAGE, SWING_DAMAGE, ...) now using Drake event only. It will resolve performance issue.
+	- DiabloHu via svn r7361: zhCN update
+	- thiagovfar via svn r7360: ptBR update
+	Some triggers for dragon soul, end time and hour of twilight.
+	
+	I'm also updating the "translation by" string, Since I have lost my toon's
+	name on a realm transfer.
+	- nbluewiz via svn r7359: # DSTrash : Performance tweak + Removed sync stuff. (As I watched, UNIT_DIED event not related combat log range. It seems that blizz's bug. And Omega's overkill hack works very good with not syncing.) # Blackhorn, Morchok, Spine of Deathwing : Remove useless variables like SPELL_DAMAGE event. # Occuthar : Changed overkill hack like DSTrash. # Ragnaros, Shannox : Sometimes trap target returns "Unknown" or "none". Filter this. + And GetPartyAssignment function not needs 3rd parameter if 2nd parameter is uId. Remove that.
+	- Omega via svn r7358: Add blood warning for phase 2 madness
+	- Omega via svn r7357: Move the parasite dps warning to the right place, so it actually doesn't fire 3-4 seconds late
+	- Omega via svn r7356: ok this should fix the errors. i guess RANGE_DAMAGE has same args as spell events, not melee events. ok then.
+	- Omega via svn r7355: comment this out for now, will fix after raid when i have more time
+	- Omega via svn r7354: Forgot something, NOW it should be working heh
+	- Omega via svn r7353: Fix a small bug in that though. because SPELL_PERIODIC_DAMAGE does NOT equal SWING_DAMAGE. Oops
+	- Omega via svn r7352: Confirmed overkill method works, add more events for tracking it.
+	- Omega via svn r7351: oops forgot to register swing damage
+	- Omega via svn r7350: *Fix skyrim drakes same way we fix same problem on occuthar. If they fail to fire UNIT_DIED< then we'll just track overkill damage as well *Disabled EoE portal timer. It's only reliable if the FIRST Person up there is running latest alpha, otherwise it utterly fails. The problem is the RP event is indvidualized, it starts when YOU get up there, not when first person gets up there, so it's wrong for 24 out of 25 people or 9 out of 10 people, it's only right for FIRST person up there. We cannot control whether that person is running DBM or not though, if they aren't then it's worthless :(
+	- Omega via svn r7349: Try this trash fix.
+	- nbluewiz via svn r7348: # DSTrash : comment update
+	- nbluewiz via svn r7347: # DSTrash : 1. Adjust portal timer. 2. Fix portal sync problem. 3. Updated drake stuff comment. # Hagara : 1. Added count to Assault warning and timer. 2. Next Ice Lance and Assault timer not shows when these spells not coming. # Spine of Deathwing : Also reduces delay of Absorbed Blood stack warning to 1.25.
+	- Snamor via svn r7346: esES update
+	- Omega via svn r7345: *Remove health check from tank checks, it's not going to scale well with any accuracy, it'll reduce tank detection when people don't set roles but that's on them. *Improvements to trapscanners for rag and shannox, rag mainly to prevent the kind of breaking shannox mod got in case blizzard ever removes boss1 from him too, and shannox just a slight code tweak.
+	- ultrashining via svn r7344: zhTW update
+	- ebmor via svn r7343: deDE update (Core, WorldEvents)
+	- nbluewiz via svn r7342: # koKR update (core)
+	- DiabloHu via svn r7341: zhCN update
+	- Omega via svn r7340: update last to use quest progress if available otherwise post generic message if not
+	- Omega via svn r7339: Start of point tracking for Whack a Gnoll, todo, figure out how to track how many points PLAYER has earned out of that max total. cannot find an event at least tracked by transcriptor. COuld possibly register and watch quest progress update events, BUT what if you aren't on quest, and just want to free for all practice? Gotta be another way to track this besides quests.
+	- tandanu via svn r7338: Add best guess for lowest boss health in the current fight to the combat end message.
+	The following localization variables have been renamed and modified:
+	DBM_CORE_COMBAT_ENDED --> DBM_CORE_COMBAT_ENDED_AT
+	DBM_CORE_WHISPER_COMBAT_END_WIPE --> DBM_CORE_WHISPER_COMBAT_END_WIPE_AT
+	
+	Both have a new parameter %s for the boss status.
+	- nbluewiz via svn r7337: # Morchok : typo
+	- ebmor via svn r7336: fix lua error
+	- Omega via svn r7335: change the vortex to also use anti spam instead of CiD, the rest have to stay the way they are though. because that's how encounter is designed, if you pull twin out of range of morchok, you're just not going to get the 5-6 second mimic timer. But you'll get the cast warnings still so you'll live.
+	- nbluewiz via svn r7334: # DSTrash : oops forgot to remove old one.
+	- nbluewiz via svn r7333: # Morchok : fix lua error.
+	- nbluewiz via svn r7332: # DSTrash : do not not warn when Drakes count below 0.
+	- Omega via svn r7331: Madness updates
+	- Omega via svn r7330: Fix shannox trap scanning hopefully, it seems shannox is no longer boss1 (or any boss, his boss unit id was removed, wtf?)
+	- Snamor via svn r7329: esES update
+	- ebmor via svn r7328: deDE update (DragonSoul)
+	- Omega via svn r7327: The timer should cancel after 15 drakes die, the secondary checks probably won't be needed now that drake count is changed to sync, but leaving em anyways as redundancy doesn't hurt anything.
+	- nbluewiz via svn r7326: # Morchok : prevent double warn on Furious warning.

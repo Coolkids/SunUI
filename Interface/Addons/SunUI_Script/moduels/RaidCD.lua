@@ -12,7 +12,7 @@ function Module:OnInitialize()
 		arena = true,
 	}
 
-	local utf8sub = function(string, i, dots)
+	--[[local utf8sub = function(string, i, dots)
 		if not string then return end
 		local bytes = string:len()
 		if (bytes <= i) then
@@ -40,7 +40,7 @@ function Module:OnInitialize()
 				return string
 			end
 		end
-	end
+	end--]]
 
 	local raid_spells = {
 		[20484] = 600,	-- 复生
@@ -192,7 +192,7 @@ function Module:OnInitialize()
 		local spell, rank, icon = GetSpellInfo(spellId)
 		bar.endTime = GetTime() + raid_spells[spellId]
 		bar.startTime = GetTime()
-		bar.left:SetText(utf8sub(name,6,true).." - "..spell)
+		bar.left:SetText(spell.." - "..name)
 		bar.right:SetText(FormatTime(raid_spells[spellId]))
 		bar.icon:SetNormalTexture(icon)
 		bar.icon:GetNormalTexture():SetTexCoord(0.1, 0.9, 0.1, 0.9)

@@ -6,7 +6,7 @@ function Module:OnInitialize()
 	local Event = CreateFrame("Frame")
 	Event:RegisterEvent("PLAYER_LOGIN")
 	Event:SetScript("OnEvent", function()
-		if IsAddOnLoaded("DBM-Core") then
+		if not IsAddOnLoaded("DBM-Core") then return end
 			if not C["SkinDB"]["EnableDBMSkin"] then return end
 			hooksecurefunc(DBT, "CreateBar", function(self)
 				for bar in self:GetBarIterator() do
@@ -36,14 +36,13 @@ function Module:OnInitialize()
 						if not frame.styled then
 							frame:SetScale(1)
 							frame:SetHeight(icon1:GetHeight()/2)
-							--frame:CreateShadow("Background")
 							frame.styled = true
 						end
 
 						if not tbar.styled then
 							tbar:SetPoint("TOPLEFT", frame, "TOPLEFT", -1, 1)
 							tbar:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 1, -1)
-							tbar:CreateShadow()--("UnitFrame")
+							tbar:CreateShadow("Background")
 							tbar.styled = true
 						end
 						
@@ -76,7 +75,6 @@ function Module:OnInitialize()
 							timer:SetJustifyH("RIGHT")
 							timer.SetFont = function() end
 							timer.styled = true
-							--timer:SetTextColor(1,0,0,1)
 						end
 						frame:Show()
 						bar:Update(0)
@@ -129,7 +127,6 @@ function Module:OnInitialize()
 				bar:SetHeight(10)
 				S.StripTextures(background)
 				S.StripTextures(progress)
-				--background:SetNormalTexture(nil)
 				local h = CreateFrame("Frame", nil, bar)
 				h:Point("TOPLEFT", bar, "TOPLEFT", 1, -1)
 				h:Point("BOTTOMRIGHT", bar, "BOTTOMRIGHT", -1, 1)
@@ -172,29 +169,16 @@ function Module:OnInitialize()
 			DBM.RangeCheck:Show()
 			DBM.RangeCheck:Hide()
 			DBMRangeCheck:HookScript("OnShow",function(self)
-				--self:SetBackdrop({
-					--edgeFile = "Interface\\Buttons\\WHITE8x8", 
-					--edgeSize = 1, 
-				--})
-				--self:SetBackdropBorderColor(65/255, 74/255, 79/255)
 				self.shadow = CreateFrame("Frame", nil, self)
 				self.shadow:SetFrameLevel(1)
 				self.shadow:SetFrameStrata(self:GetFrameStrata())
 				self.shadow:SetPoint("TOPLEFT", -5, 5)
 				self.shadow:SetPoint("BOTTOMRIGHT", 5, -5)
-				--self.shadow:SetBackdrop({
-					--edgeFile = DB.GlowTex, 
-					--edgeSize = 5,
-					--insets = { left = 4, right = 4, top = 4, bottom = 4 }
-				--})
-				--self.shadow:SetBackdropBorderColor(0,0,0)
 			end)
 
 			DBMRangeCheckRadar:HookScript("OnShow",function(self)
 				self:SetSize(110, 110)
 				self:SetBackdropBorderColor(65/255, 74/255, 79/255)
-				--self.shadow:SetFrameStrata(self:GetFrameStrata())
-				--self:CreateShadow("Background")
 				S.SetBD(self)
 				self.text:SetFont(DB.Font, 13*S.Scale(1), "THINOUTLINE")
 				self.text:Point("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
@@ -208,8 +192,6 @@ function Module:OnInitialize()
 				end
 				return RaidNotice_AddMessage_(noticeFrame, textString, colorInfo)
 			end
-			
-		end
 		--new
 		local UploadDBM = function()
 			DBM_SavedOptions.Enabled = true
@@ -239,6 +221,11 @@ function Module:OnInitialize()
 			DBT_SavedOptions["DBM"].HugeTimerPoint = "TOP"
 			DBT_SavedOptions["DBM"].HugeTimerX = -150
 			DBT_SavedOptions["DBM"].HugeTimerY = -207
+			DBM_SavedOptions["SpecialWarningFontColor"] = {
+				0.40,
+				0.78,
+				1,
+			}
 		end
 		SlashCmdList["SetDBM"] = function()
 			StaticPopupDialogs["CFG_RELOAD"] = {

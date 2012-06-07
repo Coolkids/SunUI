@@ -41,13 +41,10 @@ C = C["UnitFrameDB"]
 		if C["ClassColor"] then 
 			self.colors.smooth = {DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b}
 		else
-			--self.colors.smooth = {1,0,0, .7,.41,.44, .3,.3,.3}
-			
-			self.colors.smooth = {1,0,0,1,1,0,0,0.5,0.5}
+			self.colors.smooth = {1,0,0,1,1,0,0,128/255,0}
 		end
 	end
     self.Health.colorSmooth = true
-	--self.Health.colorHealth = true self.colors.health = {.6,.3,.3}
 	self.Health.multiplier = 0.3
 	self.Health.colorDisconnected = true
   end
@@ -64,15 +61,14 @@ C = C["UnitFrameDB"]
     self.Power.Smooth = true
     self.Power.colorPower = true
     self.Power.multiplier = 0.3
-    lib.gen_castbar(self)
+	if C["CastBar"] == true then
+		lib.gen_castbar(self)
+	end
     lib.gen_portrait(self)
     lib.gen_ppstrings(self)
 	lib.gen_classpower(self)
-	--lib.gen_sppower(self)
     lib.gen_TotemBar(self)
     lib.gen_InfoIcons(self)
-    --lib.gen_specificpower(self)
-    --lib.gen_combat_feedback(self)
 	lib.gen_EclipseBar(self)
 	lib.gen_alt_powerbar(self)
     lib.createAuras(self)
@@ -98,7 +94,9 @@ C = C["UnitFrameDB"]
     self.Power.colorPower = true
     self.Power.multiplier = 0.3
 	self.Health.colorTapping = true
-    lib.gen_castbar(self)
+   	if C["CastBar"] == true then
+		lib.gen_castbar(self)
+	end
     lib.gen_portrait(self)
 	if C["TargetAura"] ~= 2 then
 		lib.createAuras(self)
@@ -106,9 +104,6 @@ C = C["UnitFrameDB"]
     lib.gen_ppstrings(self)
 	lib.gen_alt_powerbar(self)
     lib.gen_cp(self)
-	--lib.gen_lifebloom(self)
-	--lib.gen_combat_feedback(self)
-    --if showfaketarget then lib.gen_faketarget(self) end
 	self:Size(self.width,self.height)
 	if C["TargetAura"] == 3 then self.Auras.onlyShowPlayer = true print("1") end
   end  
@@ -139,7 +134,9 @@ C = C["UnitFrameDB"]
 	self.Power.Smooth = true
     self.Power.colorPower = true
     self.Power.multiplier = 0.3
-    lib.gen_castbar(self)
+    if C["CastBar"] == true then
+		lib.gen_castbar(self)
+	end
     lib.createDebuffs(self)
 	self:Size(self.width,self.height)
   end  
@@ -162,7 +159,9 @@ C = C["UnitFrameDB"]
     self.Power.frequentUpdates = true
     self.Power.colorPower = true
     self.Power.multiplier = 0.3
-    lib.gen_castbar(self)
+    if C["CastBar"] == true then
+		lib.gen_castbar(self)
+	end
 	lib.createDebuffs(self)
 	--self.Debuffs.onlyShowPlayer = true
 	self:Size(self.width,self.height)
@@ -226,7 +225,9 @@ C = C["UnitFrameDB"]
     lib.createBuffs(self)
     lib.createDebuffs(self)
     lib.gen_ppstrings(self)
-    lib.gen_castbar(self)
+   	if C["CastBar"] == true then
+		lib.gen_castbar(self)
+	end
     lib.gen_arenatracker(self)
     lib.gen_targeticon(self)
 	self:Size(self.width,self.height)
@@ -258,7 +259,9 @@ C = C["UnitFrameDB"]
 	lib.createBuffs(self)
 	lib.createDebuffs(self)
 	self.Debuffs.onlyShowPlayer = true
-    lib.gen_castbar(self)
+	if C["CastBar"] == true then
+		lib.gen_castbar(self)
+	end
 	lib.gen_alt_powerbar(self)
 	self:Size(self.width,self.height)
   end  
@@ -332,18 +335,15 @@ oUF:Factory(function(self)
     end
   ]]
   local visible = 'custom [group:party,nogroup:raid][@raid6,noexists,group:raid] show;hide'
-  --local visible = 'raid, party'
   if C["showparty"] then
     self:SetActiveStyle("SunUIParty") 
     local party = self:SpawnHeader("SunUIParty",nil,visible,
 	'oUF-initialConfigFunction', init:format(w,h,s,ph,ph),
 	'showParty',true,
 	'template','oUF_SunUIPartyPet',
-	--'useOwnerUnit', true, 
 	'yOffset', -40)
 	party:SetScale(C["BossScale"])
     MoveHandle.SunUIPartyFrame = S.MakeMove(party, "SunUI_PartyFrame", "PartyFrame", C["BossScale"])
-  --else
     oUF:DisableBlizzard'party'
   end
   

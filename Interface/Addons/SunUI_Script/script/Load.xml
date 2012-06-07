@@ -1,11 +1,19 @@
-﻿<!-- -->
-
-
-
-
-<Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file = "OCES.lua"/>
-	<Script file = "SocialTabs.lua"/>
-	<Script file = "smallthings.lua"/>
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file ="Achievement.lua"/>
+	<Script file ="Align.lua"/>
+	<Script file ="AlreadyKnown.lua"/>
+	<Script file ="AutoRepair.lua"/>
+	<Script file ="AutoSell.lua"/>
+	<Script file ="ClearFont_zhCN.lua"/>	
+	<Script file ="ClearFont_zhTW.lua"/>
+	<Script file ="DragEmAll.lua"/>
+	<Script file ="equipshow.lua"/>
+	<Script file ="Focuser.lua"/>
+	<Script file='FriendColor.lua'/>
 	<Script file = "nibWatchFrameAdv.lua"/>
+	<Script file = "OCES.lua"/>
+	<Script file = "smallthings.lua"/>
+	<Script file = "SocialTabs.lua"/>
+	<Script file ="SR.lua"/>
+	<Script file ="yQuestLevel.lua"/>
 </Ui>

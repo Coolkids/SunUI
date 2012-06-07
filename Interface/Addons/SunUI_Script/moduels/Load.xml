@@ -1,15 +1,23 @@
-﻿<!-- -->
-
-
-
-
-<Ui xmlns="http://www.blizzard.com/wow/ui/">
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file ="AddonManager.lua"/>
 	<Script file="AutoButton.lua"/>
 	<Script file="AutoBuy.lua"/>
+	<Script file='AutoLFG.lua'/>
 	<Script file = "BiggerTradeSkillUI.lua"/>
 	<Script file = "BloodShield.lua"/>
 	<Script file = "classCD.lua"/>
+	<Script file ="CloseUp.lua"/>
 	<Script file = "CombatNotification.lua"/>
+	<Script file ="Durability.lua"/>
+	<Script file ="FastError.lua"/>
 	<Script file = "Flump.lua"/>
+	<Script file='memory.lua'/>
+	<Script file ="MiniMapPanels.lua"/>
+	<Script file ="Molinari.lua"/>
+	<Script file ="PVPx_off.lua"/>
+	<Script file ="tekKompare.lua"/>
 	<Script file = "RaidCD.lua"/>
+	<Script file ="sMirrorBars.lua"/>
+	<Script file ="TooltipItemIcon.lua"/>
+	<Script file ="TradeTab.lua"/>
 </Ui>

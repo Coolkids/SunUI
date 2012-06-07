@@ -2577,7 +2577,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.Reskin(BrowseDropDownButton)
 
 		local downtex = BrowseDropDownButton:CreateTexture(nil, "OVERLAY")
-		downtex:SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-down-active")
+		downtex:SetTexture("Interface\\AddOns\\!SunUI\\media\\arrow-down-active")
 		downtex:SetSize(8, 8)
 		downtex:SetPoint("CENTER")
 		downtex:SetVertexColor(1, 1, 1)
