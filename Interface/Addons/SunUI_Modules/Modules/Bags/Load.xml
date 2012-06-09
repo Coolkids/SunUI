@@ -4,6 +4,5 @@
 
 
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Include file="JPack\JPack.xml"/>
 	<Script file="bags.lua"/>
 </Ui>

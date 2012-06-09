@@ -1,6 +1,6 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file = "infbar.lua"/>
-	<Script file = "Gold.lua"/>
+	<Script file = "infbartop.lua"/>
+	<Script file = "infbarbottom.lua"/>
 	<Script file = "specswitch.lua"/>
 	<Script file = "stat1.lua"/>
 	<Script file = "stat2.lua"/>

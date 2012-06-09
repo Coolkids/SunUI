@@ -4,10 +4,17 @@ local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("Core"):GetModule("SunUICon
 local r, g, b = DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b
 local uiscale = SetUIScale()
 local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/uiscale
+local a
+if GetCVar("gxWindow") == "1" then 
+	a = mult + 0.2
+else
+	a = mult
+end
 local function scale(x)
 	return (mult*math.floor(x/mult+.5)) 
 end
-S.mult = mult
+
+S.mult = a
 S.Scale = scale
 
 function S.CreateBG(f)
@@ -509,7 +516,7 @@ local function Point(obj, arg1, arg2, arg3, arg4, arg5)
 end
 
 local function CreateBorder(f, r, g, b, a)
-	f:SetBackdrop({
+ 	f:SetBackdrop({
 		edgeFile = DB.Solid, 
 		edgeSize = S.mult,
 		insets = { left = -S.mult, right = -S.mult, top = -S.mult, bottom = -S.mult }

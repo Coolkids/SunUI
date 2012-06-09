@@ -139,4 +139,41 @@ function Module:OnInitialize()
 			Minimap_OnClick(self)
 		end
 	end)
+	local SubLoc = CreateFrame("Frame", "Sub Location", Minimap)
+	local SubText = SubLoc:CreateFontString(nil)
+	local SubText2 = SubLoc:CreateFontString(nil)
+	SubText:SetFont(DB.Font, 17*S.mult, "OUTLINE")
+	SubText:SetPoint("TOP", Minimap, "BOTTOM", 0, -5)
+	SubLoc:SetAllPoints(SubText)
+	SubText2:SetPoint("TOP", SubLoc, "BOTTOM", 0,-3)
+	SubText2:SetFont(DB.Font, 13*S.mult, "OUTLINE")
+	SubLoc:Hide()
+	SubText2:SetText("")
+	SubText:SetText("")
+	Minimap:SetScript('OnEnter', function() 
+		SubText:Show() 
+		SubText2:Show() 
+		SubText2:SetText(GetZoneText())
+		SubText:SetText(GetSubZoneText()) 
+		UIFrameFadeIn(SubLoc, 1.5, SubLoc:GetAlpha(), 1)
+		local pvp = GetZonePVPInfo()
+		if pvp == "friendly" then r,g,b = 0.1,1,0.1 
+			elseif pvp == "sanctuary" then r,g,b = 0.41,0.8,0.94 
+			elseif pvp =="arena" then r,g,b = 1,0.1,0.1 
+			elseif pvp == "hostile" then r,g,b = 1,0.1,0.1 
+			elseif pvp == "contested" then r,g,b = 1,0.7,0 
+			elseif pvp == "combat" then r,g,b = 1,0.1,0.1 
+			else r,g,b = 1,1,1 
+		end
+		SubText:SetTextColor(r,g,b) 
+	end)
+	Minimap:SetScript('OnLeave', function() 
+		local fadeInfo = {}
+		fadeInfo.mode = "OUT"
+		fadeInfo.timeToFade = 1.5
+		fadeInfo.finishedFunc = function() SubLoc:Hide() end	--隐藏
+		fadeInfo.startAlpha = SubLoc:GetAlpha()
+		fadeInfo.endAlpha = 0
+		UIFrameFade(SubLoc, fadeInfo)
+	end)
 end

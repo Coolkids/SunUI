@@ -197,8 +197,8 @@ local TimeStampsCopy = true					-- 时间戳
 			eb:SetPoint("BOTTOMLEFT", cf, "TOPLEFT",  0, 3)
 			eb:SetPoint("BOTTOMRIGHT", cf, "TOPRIGHT", 0, 3)
 			eb:SetHeight(18)
-			eb:SetBackdrop({bgFile = "Interface\\Buttons\\WHITE8x8", edgeFile = DB.GlowTex, edgeSize = S.mult, 
-				insets = {top = S.mult, left =S.mult, bottom = S.mult, right = S.mult}})
+			eb:SetBackdrop({bgFile = "Interface\\Buttons\\WHITE8x8", edgeFile = DB.GlowTex, edgeSize = S.mult+0.2, 
+				insets = {top = S.mult+0.2, left =S.mult+0.2, bottom = S.mult+0.2, right = S.mult+0.2}})
 			eb:SetBackdropColor(0,0,0,0.3)
 			eb:SetBackdropBorderColor(0,0,0,1)
 			eb:EnableMouse(false)
