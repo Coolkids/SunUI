@@ -4818,6 +4818,23 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 	end
+	--RaidFrame Skin
+	for i = 1, 8 do
+		if _G["RaidGroup"..i] then 
+			S.StripTextures(_G["RaidGroup"..i])
+		end
+		for f = 1, 5 do
+			if _G["RaidGroup"..i.."Slot"..f] then 
+				_G["RaidGroup"..i.."Slot"..f]:Hide()
+			end
+		end
+	end
+	for i = 1, 40 do
+		if _G["RaidGroupButton"..i] then 
+			S.StripTextures(_G["RaidGroupButton"..i])
+			S.Reskin(_G["RaidGroupButton"..i])
+		end
+	end
 end)
 
 -- [[ Mac Options ]]

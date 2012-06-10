@@ -1,12 +1,5 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file = "infbartop.lua"/>
 	<Script file = "infbarbottom.lua"/>
-	<Script file = "specswitch.lua"/>
-	<Script file = "stat1.lua"/>
-	<Script file = "stat2.lua"/>
 	<Script file = "expbar.lua"/>
-	<Script file = "time.lua"/>
-	<Script file = "durability.lua"/>
-	<Script file = "friend.lua"/>
-	<Script file = "guild.lua"/>
 </Ui>

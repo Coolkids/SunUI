@@ -47,7 +47,7 @@ function Module:OnInitialize()
 			-- StopTimer(self)
 			-- return
 		-- end
-		if not oUF_SunUIPet:IsShown() then
+		if not oUF_SunUIPet:IsShown() and not UnitHasVehicleUI("player") then
 			StopTimer(self)
 			return
 		end
@@ -87,6 +87,7 @@ function Module:OnInitialize()
 	end
 
 	local StartTimer = function(name, spellId)
+		if UnitHasVehicleUI("player") then return end
 		local bar = CreateBar()
 		local spell, rank, icon = GetSpellInfo(spellId)
 		bar.endTime = GetTime() + timeing
@@ -108,6 +109,7 @@ function Module:OnInitialize()
 
 	local EuiPriestPetOnUpdate = function(self)
 		if (DB.MyClass ~= "PRIEST" and DB.MyClass ~= "SHAMAN") then return end
+		if UnitHasVehicleUI("player") then return end
 		if oUF_SunUIPet:IsShown() and self.havePet == false then
 			StartTimer(spellname, spellid);
 			self.havePet = true;

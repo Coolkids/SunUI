@@ -8,10 +8,9 @@ local S, C, L, DB = unpack(SunUI)
 
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("socialtabs")
 function Module:OnInitialize()
-local roster = true
 
 -- Always show looking for guild tab
-local lfguild = true
+local lfguild = false
 
 -- Hide raid tab from social window, since it's exact copy from Raid window
 local hideraid = false

@@ -109,7 +109,7 @@ function AB:OnInitialize()
 			HotKey:SetJustifyH("RIGHT")
 			HotKey:SetPoint("TOPRIGHT", 4, 1)
 			HotKey:SetFont(Font, FontSize, "OUTLINE")
-			HotKey:SetShadowColor(0, 0, 0, 0.3)
+			HotKey:SetShadowColor(0, 0, 0, 1)
 			HotKey.ClearAllPoints = function() end
 			HotKey.SetPoint = function() end
 			if HideHotKey then

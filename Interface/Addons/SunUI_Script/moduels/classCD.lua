@@ -232,7 +232,7 @@ local BarUpdate = function(self, elapsed)
 		return
 	end
 	if not C["ClassCDIcon"] then
-		self:SetValue((curTime - self.startTime) / (self.endTime - self.startTime) * 100)
+		self:SetValue(100 - (curTime - self.startTime) / (self.endTime - self.startTime) * 100)
 		self.right:SetText(FormatTime(self.endTime - curTime))
 		else
 		self.right = FormatTime(self.endTime - curTime)
@@ -289,14 +289,7 @@ local CreateBar = function()
 		bar:Size(C["ClassCDWidth"], C["ClassCDHeight"])
 		bar:SetStatusBarTexture(DB.Statusbar)
 		bar:SetMinMaxValues(0, 100)
-	
-		spar =  bar:CreateTexture(nil, "OVERLAY")
-		spar:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
-		spar:SetBlendMode("ADD")
-		spar:SetAlpha(.8)
-		spar:SetPoint("TOPLEFT", bar:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
-		spar:SetPoint("BOTTOMRIGHT", bar:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
-		
+			
 		bar.left = CreateFS(bar)
 		bar.left:Point("LEFT", 2, C["ClassCDHeight"])
 		bar.left:SetJustifyH("LEFT")

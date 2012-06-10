@@ -43,13 +43,6 @@ local function enable(self, unit)
 		self:HookScript("OnEnter", function(self)
 			if not InCombatLockdown() then
 				UIFrameFadeIn(self, 0.8, self:GetAlpha(), self.BarFaderMaxAlpha or 1)
---[[ 				UIFrameFadeIn(rABS_MultiBarBottomLeft, 0.8, rABS_MultiBarBottomLeft:GetAlpha(), self.BarFaderMaxAlpha or 1)
-				
-				UIFrameFadeIn(rABS_MultiBarBottomRight, 0.8, rABS_MultiBarBottomRight:GetAlpha(), self.BarFaderMaxAlpha or 1)
-				UIFrameFadeIn(rABS_MultiBarLeft, 0.8, rABS_MultiBarLeft:GetAlpha(), self.BarFaderMaxAlpha or 1)
-				UIFrameFadeIn(rABS_MultiBarRight, 0.8, rABS_MultiBarRight:GetAlpha(), self.BarFaderMaxAlpha or 1)
-				UIFrameFadeIn(rABS_PetBar, 0.8, rABS_PetBar:GetAlpha(), self.BarFaderMaxAlpha or 1)
-				UIFrameFadeIn(rABS_StanceBar, 0.8, rABS_StanceBar:GetAlpha(), self.BarFaderMaxAlpha or 1) ]]
 			else
 				self:SetAlpha(self.BarFaderMaxAlpha or 1)
 			end
@@ -57,16 +50,6 @@ local function enable(self, unit)
 		self:HookScript("OnLeave", function(self)
 			if(not pending(self, self.unit)) then
 				UIFrameFadeOut(self, 1.5, self:GetAlpha(), self.BarFaderMinAlpha or 0.25)
---[[ 				UIFrameFadeOut(rABS_MultiBarBottomLeft, 1.5, rABS_MultiBarBottomLeft:GetAlpha(), self.BarFaderMinAlpha or 0)
-				
-				UIFrameFadeOut(rABS_MultiBarBottomRight, 1.5, rABS_MultiBarBottomRight:GetAlpha(), self.BarFaderMinAlpha or 0)
-				UIFrameFadeIn(rABS_MultiBarLeft, 1.5, rABS_MultiBarLeft:GetAlpha(), self.BarFaderMaxAlpha or 0)
-				UIFrameFadeIn(rABS_MultiBarRight, 1.5, rABS_MultiBarRight:GetAlpha(), self.BarFaderMaxAlpha or 0)
-				UIFrameFadeOut(rABS_PetBar, 1.5, rABS_PetBar:GetAlpha(), self.BarFaderMinAlpha or 0)
-				UIFrameFadeOut(rABS_StanceBar, 1.5, rABS_StanceBar:GetAlpha(), self.BarFaderMinAlpha or 0)
-				if DB.MyClass == "SHAMAN" then
-				UIFrameFadeOut(rABS_TotemBar, 1.5, rABS_TotemBar:GetAlpha(), self.BarFaderMinAlpha or 0) 
-        end ]]
 			end
 		end)
 
