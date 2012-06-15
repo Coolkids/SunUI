@@ -130,6 +130,8 @@ function Module:OnInitialize()
 		{text = L["帮助"], func = function() ToggleHelpFrame() end},
 		{text = L["行事历"], func = function() if(not CalendarFrame) then LoadAddOn("Blizzard_Calendar") end Calendar_Toggle() end},
 		{text = L["地城手册"],func = function() ToggleEncounterJournal() end},
+		{text = "Bags",func = function() ToggleAllBags() end},
+		{text = "系统菜单",func = function() ToggleFrame(GameMenuFrame) end},
 	}
 
 	Minimap:SetScript("OnMouseUp", function(self, button)

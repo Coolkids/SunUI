@@ -225,8 +225,89 @@ if C["MiniDB"]["HideRaidWarn"] then
 	RaidWarningFrame.SetPoint = function() end
 end
 
+if C["MiniDB"]["AutoQuest"] then
+	local f = CreateFrame("Frame")
+	local function MostValueable()
+		local bestp, besti = 0
+		for i=1,GetNumQuestChoices() do
+			local link, name, _, qty = GetQuestItemLink("choice", i), GetQuestItemInfo("choice", i)
+			local price = link and select(11, GetItemInfo(link))
+			if not price then
+				return
+			elseif (price * (qty or 1)) > bestp then
+				bestp, besti = (price * (qty or 1)), i
+			end
+		end
+		if besti then
+			local btn = _G["QuestInfoItem"..besti]
+			if (btn.type == "choice") then
+				btn:GetScript("OnClick")(btn)
+			end
+		end
+	end
 
+	f:SetScript("OnEvent", function(self, event, ...)
+		if (event == "QUEST_DETAIL") then
+			AcceptQuest()
+			CompleteQuest()
+		elseif (event == "QUEST_COMPLETE") then
+			if (GetNumQuestChoices() and GetNumQuestChoices() < 1) then
+				GetQuestReward()
+			else
+				MostValueable()
+			end
+		elseif (event == "QUEST_ACCEPT_CONFIRM") then
+			ConfirmAcceptQuest()
+		end
+	end)
+	f:RegisterEvent("QUEST_ACCEPT_CONFIRM")    
+	f:RegisterEvent("QUEST_DETAIL")
+	f:RegisterEvent("QUEST_COMPLETE")
 
+	---
+	QuestInfoDescriptionText.SetAlphaGradient=function() 
+	return false end
+end
+if C["MiniDB"]["FatigueWarner"] then
+	local function FatigueWarner_OnUpdate(self) 
+		local timer, value, maxvalue, scale, paused, label = GetMirrorTimerInfo(1) 
+		if timer == "EXHAUSTION" then 
+			PlaySoundFile("Sound\\Creature\\XT002Deconstructor\\UR_XT002_Special01.wav", "Master")
+		end 
+		self:SetScript("OnUpdate", nil) 
+	end 
+	 
+	local function FatigueWarner_OnEvent(self) 
+		self:SetScript("OnUpdate", FatigueWarner_OnUpdate) 
+	end 
+		  
+	-- Sinnlos; strip bringt ja irgendwie nichts fiel mir dann auf :>
+	local function FatigueWarner_Strip()
+		local FatigueWarner_StripTable = {16, 17, 18, 5, 7, 1, 3, 10, 8, 6, 9}
+		local start = 1
+		local finish = table.getn(FatigueWarner_StripTable)
+
+		for bag = 0, 4 do
+			for slot=1, GetContainerNumSlots(bag) do
+				if not GetContainerItemLink(bag, slot) then
+					for i = start, finish do
+						if GetInventoryItemLink("player", FatigueWarner_StripTable[i]) then
+							PickupInventoryItem(FatigueWarner_StripTable[i])
+							PickupContainerItem(bag, slot)
+							start = i + 1
+							break
+						end
+					end
+				end
+			end
+		end
+	end
+
+	local FatigueWarnerFrame = CreateFrame("frame")
+	FatigueWarnerFrame:RegisterEvent("MIRROR_TIMER_START")
+	FatigueWarnerFrame:RegisterEvent("MIRROR_TIMER_STOP")
+	FatigueWarnerFrame:SetScript("OnEvent", FatigueWarner_OnEvent)
+end
 
 -- 实名好友弹窗位置修正
 BNToastFrame:HookScript("OnShow", function(self)
@@ -235,8 +316,11 @@ BNToastFrame:HookScript("OnShow", function(self)
 end)
 --装备红人
 DurabilityFrame = _G["DurabilityFrame"]
-DurabilityFrame:Hide()
-DurabilityFrame:UnregisterAllEvents()
+DurabilityFrame:HookScript("OnShow", function(self)
+	self:Hide()
+	self:UnregisterAllEvents()
+end)
+
 ---------------- > Disband Group
 local GroupDisband = function()
 	local pName = UnitName("player")

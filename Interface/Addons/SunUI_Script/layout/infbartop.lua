@@ -111,7 +111,12 @@ local function BuildMemory()
 																					InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
 			Text:SetText(S.ToHex(r, g, b)..format("%.2f", tTotal/1024).."|r".."m")
 		else
-		stAddonManager:LoadWindow()
+			if stAddonManager:IsShown() then 
+				stAddonManager:Hide()
+				stAddonManager:UnregisterAllEvents()
+			else
+				stAddonManager:LoadWindow()
+			end
 		end
 	end)
 	Stat.Timer = 0
@@ -278,7 +283,7 @@ local function BuildGold()
 	Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
 	Stat:SetScript("OnMouseDown", function(self, button) 
 		if button == "LeftButton" then
-			OpenAllBags()
+			ToggleAllBags()
 		else
 			ToggleCharacter("TokenFrame")
 		end

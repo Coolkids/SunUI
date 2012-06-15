@@ -26,6 +26,7 @@ function AB:OnInitialize()
 		text = string.gsub(text, KEY_DELETE, 'Del')
 		text = string.gsub(text, KEY_MOUSEWHEELUP, 'MwU')
 		text = string.gsub(text, KEY_MOUSEWHEELDOWN, 'MwD')
+		text = string.gsub(text, '(數字鍵盤)', 'N')
 
 		if hotkey:GetText() == _G['RANGE_INDICATOR'] then
 		hotkey:SetText('')

@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("ErunakStonespeaker", "DBM-Party-Cataclysm", 9)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7473 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7532 $"):sub(12, -3))
 mod:SetCreatureID(40825, 40788)		-- 40788 = Mindbender Ghur'sha
 mod:SetModelID(32259)
 mod:SetZone()
@@ -35,7 +35,7 @@ local timerAgony			= mod:NewBuffActiveTimer(10, 76339)
 
 local specWarnLavaBolt		= mod:NewSpecialWarningInterrupt(76171)
 local specWarnAbsorbMagic	= mod:NewSpecialWarningCast(76307, nil, nil, nil, true)
-local specWarnEarthShards	= mod:NewSpecialWarningYou(84931)
+local specWarnEarthShards	= mod:NewSpecialWarningMove(84931)
 
 local magmaTargets = {}
 local magmaCount = 0

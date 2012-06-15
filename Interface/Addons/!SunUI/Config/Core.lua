@@ -7,6 +7,7 @@ local DEFAULT_HEIGHT = 500
 local AC = LibStub("AceConfig-3.0")
 local ACD = LibStub("AceConfigDialog-3.0")
 local Version = 20120323
+local aglin = false
 function SunUIConfig:LoadDefaults()
 	--Defaults
 	defaults = {
@@ -160,6 +161,8 @@ function SunUIConfig:LoadDefaults()
 				["ClassCDIconSize"] = 25,
 				["ClassCDIconDirection"] = 1,
 				["IPhoneLock"] = true,
+				["AutoQuest"] = true,
+				["FatigueWarner"] = true,
 			},
 			InfoPanelDB = {
 				["OpenTop"] = true,
@@ -550,7 +553,7 @@ function SunUIConfig.GenerateOptionsInternal()
 					--ACD["Close"](ACD,"SunUIConfig")
 					if not UnitAffectingCombat("player") then
 						for _, value in pairs(MoveHandle) do value:Show() end
-						SlashCmdList.TOGGLEGRID()
+						if not aglin then SlashCmdList.TOGGLEGRID() aglin = true end
 					end
 					--GameTooltip_Hide()
 				end,
@@ -562,7 +565,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				func = function()
 					if not UnitAffectingCombat("player") then
 						for _, value in pairs(MoveHandle) do value:Hide() end
-						SlashCmdList.TOGGLEGRID()
+						if aglin then SlashCmdList.TOGGLEGRID() aglin = false end
 					end
 				end,
 			},
@@ -1345,6 +1348,16 @@ function SunUIConfig.GenerateOptionsInternal()
 								type = "toggle",
 								name = "SlideLock",
 								order = 16,
+							},
+							["AutoQuest"] = {
+								type = "toggle",
+								name = "AutoQuest",
+								order = 17,
+							},
+							["FatigueWarner"] = {
+								type = "toggle",
+								name = "FatigueWarner",
+								order = 18,
 							},
 						}
 					},

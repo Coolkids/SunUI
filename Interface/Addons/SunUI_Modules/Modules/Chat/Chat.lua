@@ -194,8 +194,8 @@ local TimeStampsCopy = true					-- 时间戳
 			end
 			eb:SetAltArrowKeyMode(false)
 			eb:ClearAllPoints()
-			eb:SetPoint("BOTTOMLEFT", cf, "TOPLEFT",  0, 3)
-			eb:SetPoint("BOTTOMRIGHT", cf, "TOPRIGHT", 0, 3)
+			eb:Point("BOTTOMLEFT", cf, "TOPLEFT",  -1, 3)
+			eb:Point("BOTTOMRIGHT", cf, "TOPRIGHT", 1, 3)
 			eb:SetHeight(18)
 			eb:SetBackdrop({bgFile = "Interface\\Buttons\\WHITE8x8", edgeFile = DB.GlowTex, edgeSize = S.mult+0.2, 
 				insets = {top = S.mult+0.2, left =S.mult+0.2, bottom = S.mult+0.2, right = S.mult+0.2}})

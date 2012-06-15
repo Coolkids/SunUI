@@ -24,7 +24,7 @@ C.classcolours = {
 C.media = {
 	["backdrop"] = "Interface\\ChatFrame\\ChatFrameBackground",
 	["checked"] = "Interface\\AddOns\\!Sunui\\Media\\CheckButtonHilight",
-	["glow"] = "Interface\\AddOns\\!Sunui\\Media\\glowTex",
+	["glow"] = DB.GlowTex,
 	["texture"] = DB.Statusbar,
 }
 
@@ -56,6 +56,16 @@ F.CreateTab = function(f)
 	hl:SetVertexColor(r, g, b, .25)
 end
 
+local function colourArrow(f)
+	if f:IsEnabled() then
+		f.downtex:SetVertexColor(0, .76, 1)
+	end
+end
+
+local function clearArrow(f)
+	f.downtex:SetVertexColor(1, 1, 1)
+end
+
 F.ReskinDropDown = function(f)
 	local frame = f:GetName()
 
@@ -74,7 +84,7 @@ F.ReskinDropDown = function(f)
 	down:Point("BOTTOMRIGHT", -18, 8)
 	down:SetWidth(19)
 
-	S.Reskin(down)
+	S.Reskin(down, true)
 	
 	down:SetDisabledTexture(C.media.backdrop)
 	local dis = down:GetDisabledTexture()
@@ -84,10 +94,14 @@ F.ReskinDropDown = function(f)
 
 	local downtex = down:CreateTexture(nil, "ARTWORK")
 	downtex:SetTexture("Interface\\AddOns\\!SunUI\\Media\\arrow-down-active")
-	downtex:SetSize(8, 8)
+	downtex:Size(8, 8)
 	downtex:SetPoint("CENTER")
 	downtex:SetVertexColor(1, 1, 1)
-
+	down.downtex = downtex
+	
+	down:HookScript("OnEnter", colourArrow)
+	down:HookScript("OnLeave", clearArrow)
+	
 	local bg = CreateFrame("Frame", nil, f)
 	bg:Point("TOPLEFT", 16, -4)
 	bg:Point("BOTTOMRIGHT", -18, 8)
@@ -146,8 +160,8 @@ F.ReskinSlider = function(f)
 	f.SetBackdrop = F.dummy
 
 	local bd = CreateFrame("Frame", nil, f)
-	bd:Point("TOPLEFT", 1, -2)
-	bd:Point("BOTTOMRIGHT", -1, 3)
+	bd:Point("TOPLEFT", 14, -2)
+	bd:Point("BOTTOMRIGHT", -15, 3)
 	bd:SetFrameStrata("BACKGROUND")
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	S.CreateBD(bd, 0)
@@ -164,13 +178,13 @@ F.ReskinExpandOrCollapse = function(f)
 	f.SetNormalTexture = F.dummy
 
 	f.minus = f:CreateTexture(nil, "OVERLAY")
-	f.minus:SetSize(7, 1)
+	f.minus:Size(7, 1)
 	f.minus:SetPoint("CENTER")
 	f.minus:SetTexture(C.media.backdrop)
 	f.minus:SetVertexColor(1, 1, 1)
 
 	f.plus = f:CreateTexture(nil, "OVERLAY")
-	f.plus:SetSize(1, 7)
+	f.plus:Size(1, 7)
 	f.plus:SetPoint("CENTER")
 	f.plus:SetTexture(C.media.backdrop)
 	f.plus:SetVertexColor(1, 1, 1)
@@ -218,7 +232,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				title:SetTexture("")
 				title:ClearAllPoints()
 				if title == _G["GameMenuFrameHeader"] then
-					title:SetPoint("TOP", GameMenuFrame, 0, 7)
+					title:Point("TOP", GameMenuFrame, 0, 7)
 				else
 					title:SetPoint("TOP", header[i], 0, 0)
 				end
@@ -250,7 +264,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- [[ Scroll bars ]]
 
-		local scrollbars = {"FriendsFrameFriendsScrollFrameScrollBar", "QuestLogScrollFrameScrollBar", "QuestLogDetailScrollFrameScrollBar", "CharacterStatsPaneScrollBar", "PVPHonorFrameTypeScrollFrameScrollBar", "PVPHonorFrameInfoScrollFrameScrollBar", "LFDQueueFrameSpecificListScrollFrameScrollBar", "GossipGreetingScrollFrameScrollBar", "HelpFrameKnowledgebaseScrollFrameScrollBar", "HelpFrameReportBugScrollFrameScrollBar", "HelpFrameSubmitSuggestionScrollFrameScrollBar", "HelpFrameTicketScrollFrameScrollBar", "PaperDollTitlesPaneScrollBar", "PaperDollEquipmentManagerPaneScrollBar", "SendMailScrollFrameScrollBar", "OpenMailScrollFrameScrollBar", "RaidInfoScrollFrameScrollBar", "ReputationListScrollFrameScrollBar", "FriendsFriendsScrollFrameScrollBar", "HelpFrameGM_ResponseScrollFrame1ScrollBar", "HelpFrameGM_ResponseScrollFrame2ScrollBar", "HelpFrameKnowledgebaseScrollFrame2ScrollBar", "WhoListScrollFrameScrollBar", "QuestProgressScrollFrameScrollBar", "QuestRewardScrollFrameScrollBar", "QuestDetailScrollFrameScrollBar", "QuestGreetingScrollFrameScrollBar", "QuestNPCModelTextScrollFrameScrollBar", "GearManagerDialogPopupScrollFrameScrollBar", "LFDQueueFrameRandomScrollFrameScrollBar", "WarGamesFrameScrollFrameScrollBar", "WarGamesFrameInfoScrollFrameScrollBar", "WorldStateScoreScrollFrameScrollBar", "ItemTextScrollFrameScrollBar", "ScrollOfResurrectionSelectionFrameListScrollFrameScrollBar"}
+		local scrollbars = {"FriendsFrameFriendsScrollFrameScrollBar", "QuestLogScrollFrameScrollBar", "QuestLogDetailScrollFrameScrollBar", "CharacterStatsPaneScrollBar", "PVPHonorFrameTypeScrollFrameScrollBar", "PVPHonorFrameInfoScrollFrameScrollBar", "LFDQueueFrameSpecificListScrollFrameScrollBar", "GossipGreetingScrollFrameScrollBar", "HelpFrameKnowledgebaseScrollFrameScrollBar", "HelpFrameReportBugScrollFrameScrollBar", "HelpFrameSubmitSuggestionScrollFrameScrollBar", "HelpFrameTicketScrollFrameScrollBar", "PaperDollTitlesPaneScrollBar", "PaperDollEquipmentManagerPaneScrollBar", "SendMailScrollFrameScrollBar", "OpenMailScrollFrameScrollBar", "RaidInfoScrollFrameScrollBar", "ReputationListScrollFrameScrollBar", "FriendsFriendsScrollFrameScrollBar", "HelpFrameGM_ResponseScrollFrame1ScrollBar", "HelpFrameGM_ResponseScrollFrame2ScrollBar", "HelpFrameKnowledgebaseScrollFrame2ScrollBar", "WhoListScrollFrameScrollBar", "QuestProgressScrollFrameScrollBar", "QuestRewardScrollFrameScrollBar", "QuestDetailScrollFrameScrollBar", "QuestGreetingScrollFrameScrollBar", "QuestNPCModelTextScrollFrameScrollBar", "GearManagerDialogPopupScrollFrameScrollBar", "LFDQueueFrameRandomScrollFrameScrollBar", "WarGamesFrameScrollFrameScrollBar", "WarGamesFrameInfoScrollFrameScrollBar", "WorldStateScoreScrollFrameScrollBar", "ItemTextScrollFrameScrollBar", "ScrollOfResurrectionSelectionFrameListScrollFrameScrollBar", "ChannelRosterScrollFrameScrollBar"}
 		for i = 1, #scrollbars do
 			local scrollbar = _G[scrollbars[i]]
 			if scrollbar then
@@ -400,15 +414,15 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		NPCBD = CreateFrame("Frame", nil, QuestNPCModel)
-		NPCBD:SetPoint("TOPLEFT", 0, 1)
-		NPCBD:SetPoint("RIGHT", 1, 0)
+		NPCBD:Point("TOPLEFT", 0, 1)
+		NPCBD:Point("RIGHT", 1, 0)
 		NPCBD:SetPoint("BOTTOM", QuestNPCModelTextScrollFrame)
 		NPCBD:SetFrameLevel(QuestNPCModel:GetFrameLevel()-1)
 		S.CreateBD(NPCBD)
 
 		local line = CreateFrame("Frame", nil, QuestNPCModel)
-		line:SetPoint("BOTTOMLEFT", 0, -1)
-		line:SetPoint("BOTTOMRIGHT", 0, -1)
+		line:Point("BOTTOMLEFT", 0, -1)
+		line:Point("BOTTOMRIGHT", 0, -1)
 		line:SetHeight(1)
 		line:SetFrameLevel(QuestNPCModel:GetFrameLevel()-1)
 		S.CreateBD(line, 0)
@@ -419,7 +433,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- Dropdown lists
 
-		local function SkinDropDownList(level, index)
+		hooksecurefunc("UIDropDownMenu_CreateFrames", function(level, index)
 			for i = 1, UIDROPDOWNMENU_MAXLEVELS do
 				local menu = _G["DropDownList"..i.."MenuBackdrop"]
 				local backdrop = _G["DropDownList"..i.."Backdrop"]
@@ -429,9 +443,32 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					backdrop.reskinned = true
 				end
 			end
-		end
+		end)
 
-		hooksecurefunc("UIDropDownMenu_CreateFrames", SkinDropDownList)
+		hooksecurefunc("ToggleDropDownMenu", function(level, _, dropDownFrame, anchorName)
+			if not level then level = 1 end	
+			
+			local listFrame = _G["DropDownList"..level]
+			
+			if level == 1 then
+				if not anchorName then
+					listFrame:SetPoint("TOPLEFT", dropDownFrame, "BOTTOMLEFT", 16, 9)
+				elseif anchorName ~= "cursor" then
+					-- this part might be a bit unreliable
+					local _, _, relPoint, xOff, yOff = listFrame:GetPoint()
+					if relPoint == "BOTTOMLEFT" and xOff == 0 and yOff == 5 then
+						listFrame:Point("TOPLEFT", anchorName, "BOTTOMLEFT", 16, 9)
+					end
+				end
+			else
+				local point, anchor, relPoint = listFrame:GetPoint()
+				if point:find("RIGHT") then
+					listFrame:Point(point, anchor, relPoint, -14, 0)
+				else
+					listFrame:Point(point, anchor, relPoint, 9, 0)
+				end
+			end
+		end)
 
 		-- Pet stuff
 
@@ -460,8 +497,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				for i = 1, 10 do
 					local bu = _G["PetStableStabledPet"..i]
 					local bd = CreateFrame("Frame", nil, bu)
-					bd:SetPoint("TOPLEFT", -1, 1)
-					bd:SetPoint("BOTTOMRIGHT", 1, -1)
+					bd:Point("TOPLEFT", -1, 1)
+					bd:Point("BOTTOMRIGHT", 1, -1)
 					S.CreateBD(bd, .25)
 					bu:SetNormalTexture("")
 					bu:DisableDrawLayer("BACKGROUND")
@@ -471,9 +508,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			local function FixTab()
 				if CharacterFrameTab2:IsShown() then
-					CharacterFrameTab3:SetPoint("LEFT", CharacterFrameTab2, "RIGHT", -15, 0)
+					CharacterFrameTab3:Point("LEFT", CharacterFrameTab2, "RIGHT", -15, 0)
 				else
-					CharacterFrameTab3:SetPoint("LEFT", CharacterFrameTab1, "RIGHT", -15, 0)
+					CharacterFrameTab3:Point("LEFT", CharacterFrameTab1, "RIGHT", -15, 0)
 				end
 			end
 			CharacterFrame:HookScript("OnEvent", FixTab)
@@ -488,8 +525,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			PetPaperDollFrameExpBar:SetStatusBarTexture(C.media.texture)
 
 			local bbg = CreateFrame("Frame", nil, PetPaperDollFrameExpBar)
-			bbg:SetPoint("TOPLEFT", -1, 1)
-			bbg:SetPoint("BOTTOMRIGHT", 1, -1)
+			bbg:Point("TOPLEFT", -1, 1)
+			bbg:Point("BOTTOMRIGHT", 1, -1)
 			bbg:SetFrameLevel(PetPaperDollFrameExpBar:GetFrameLevel()-1)
 			S.CreateBD(bbg, .25)
 		end
@@ -499,8 +536,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		GhostFrameContentsFrameIcon:SetTexCoord(.08, .92, .08, .92)
 
 		local GhostBD = CreateFrame("Frame", nil, GhostFrameContentsFrame)
-		GhostBD:SetPoint("TOPLEFT", GhostFrameContentsFrameIcon, -1, 1)
-		GhostBD:SetPoint("BOTTOMRIGHT", GhostFrameContentsFrameIcon, 1, -1)
+		GhostBD:Point("TOPLEFT", GhostFrameContentsFrameIcon, -1, 1)
+		GhostBD:Point("BOTTOMRIGHT", GhostFrameContentsFrameIcon, 1, -1)
 		S.CreateBD(GhostBD, 0)
 
 		-- Mail frame
@@ -510,8 +547,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		OpenMailLetterButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
 
 		local bgmail = CreateFrame("Frame", nil, OpenMailLetterButton)
-		bgmail:SetPoint("TOPLEFT", -1, 1)
-		bgmail:SetPoint("BOTTOMRIGHT", 1, -1)
+		bgmail:Point("TOPLEFT", -1, 1)
+		bgmail:Point("BOTTOMRIGHT", 1, -1)
 		bgmail:SetFrameLevel(OpenMailLetterButton:GetFrameLevel()-1)
 		S.CreateBD(bgmail)
 
@@ -520,8 +557,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		OpenMailMoneyButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
 
 		local bgmoney = CreateFrame("Frame", nil, OpenMailMoneyButton)
-		bgmoney:SetPoint("TOPLEFT", -1, 1)
-		bgmoney:SetPoint("BOTTOMRIGHT", 1, -1)
+		bgmoney:Point("TOPLEFT", -1, 1)
+		bgmoney:Point("BOTTOMRIGHT", 1, -1)
 		bgmoney:SetFrameLevel(OpenMailMoneyButton:GetFrameLevel()-1)
 		S.CreateBD(bgmoney)
 
@@ -543,8 +580,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			ic:SetTexCoord(.08, .92, .08, .92)
 
 			local bg = CreateFrame("Frame", nil, bu)
-			bg:SetPoint("TOPLEFT", -1, 1)
-			bg:SetPoint("BOTTOMRIGHT", 1, -1)
+			bg:Point("TOPLEFT", -1, 1)
+			bg:Point("BOTTOMRIGHT", 1, -1)
 			bg:SetFrameLevel(bu:GetFrameLevel()-1)
 			S.CreateBD(bg, 0)
 		end
@@ -554,8 +591,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			button:GetRegions():Hide()
 
 			local bg = CreateFrame("Frame", nil, button)
-			bg:SetPoint("TOPLEFT", -1, 1)
-			bg:SetPoint("BOTTOMRIGHT", 1, -1)
+			bg:Point("TOPLEFT", -1, 1)
+			bg:Point("BOTTOMRIGHT", 1, -1)
 			bg:SetFrameLevel(0)
 			S.CreateBD(bg, .25)
 		end
@@ -569,8 +606,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			ic:SetTexCoord(.08, .92, .08, .92)
 
 			local bg = CreateFrame("Frame", nil, bu)
-			bg:SetPoint("TOPLEFT", -1, 1)
-			bg:SetPoint("BOTTOMRIGHT", 1, -1)
+			bg:Point("TOPLEFT", -1, 1)
+			bg:Point("BOTTOMRIGHT", 1, -1)
 			bg:SetFrameLevel(0)
 			S.CreateBD(bg, .25)
 		end
@@ -591,8 +628,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				local button = _G["TokenFrameContainerButton"..i]
 
 				if button and not button.reskinned then
-					button.highlight:SetPoint("TOPLEFT", 1, 0)
-					button.highlight:SetPoint("BOTTOMRIGHT", -1, 0)
+					button.highlight:Point("TOPLEFT", 1, 0)
+					button.highlight:Point("BOTTOMRIGHT", -1, 0)
 					button.highlight.SetPoint = F.dummy
 					button.highlight:SetTexture(r, g, b, .2)
 					button.highlight.SetTexture = F.dummy
@@ -676,8 +713,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		LFDQueueFrameCapBarBG:SetTexture(nil)
 
 		LFDQueueFrameCapBar.backdrop = CreateFrame("Frame", nil, LFDQueueFrameCapBar)
-		LFDQueueFrameCapBar.backdrop:SetPoint("TOPLEFT", LFDQueueFrameCapBar, "TOPLEFT", -1, -2)
-		LFDQueueFrameCapBar.backdrop:SetPoint("BOTTOMRIGHT", LFDQueueFrameCapBar, "BOTTOMRIGHT", 1, 2)
+		LFDQueueFrameCapBar.backdrop:Point("TOPLEFT", LFDQueueFrameCapBar, "TOPLEFT", -1, -2)
+		LFDQueueFrameCapBar.backdrop:Point("BOTTOMRIGHT", LFDQueueFrameCapBar, "BOTTOMRIGHT", 1, 2)
 		LFDQueueFrameCapBar.backdrop:SetFrameLevel(0)
 		S.CreateBD(LFDQueueFrameCapBar.backdrop)
 
@@ -686,7 +723,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			_G["LFDQueueFrameCapBarCap"..i.."MarkerTexture"]:Hide()
 
 			local cap = bu:CreateTexture(nil, "OVERLAY")
-			cap:SetSize(1, 14)
+			cap:Size(1, 14)
 			cap:SetPoint("CENTER")
 			cap:SetTexture(C.media.backdrop)
 			cap:SetVertexColor(0, 0, 0)
@@ -710,11 +747,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 						icon:SetDrawLayer("OVERLAY")
 						count:SetDrawLayer("OVERLAY")
 						na:SetTexture(0, 0, 0, .25)
-						na:SetSize(118, 39)
+						na:Size(118, 39)
 						cta:SetAlpha(0)
 
 						button.bg2 = CreateFrame("Frame", nil, button)
-						button.bg2:SetPoint("TOPLEFT", na, "TOPLEFT", 10, 0)
+						button.bg2:Point("TOPLEFT", na, "TOPLEFT", 10, 0)
 						button.bg2:SetPoint("BOTTOMRIGHT", na, "BOTTOMRIGHT")
 						S.CreateBD(button.bg2, 0)
 
@@ -789,12 +826,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					icon:SetDrawLayer("OVERLAY")
 					count:SetDrawLayer("OVERLAY")
 					na:SetTexture(0, 0, 0, .25)
-					na:SetSize(118, 39)
+					na:Size(118, 39)
 					cta:SetAlpha(0)
 
 					button.bg2 = CreateFrame("Frame", nil, button)
-					button.bg2:SetPoint("TOPLEFT", na, "TOPLEFT", 10, 0)
-					button.bg2:SetPoint("BOTTOMRIGHT", na, "BOTTOMRIGHT")
+					button.bg2:Point("TOPLEFT", na, "TOPLEFT", 10, 0)
+					button.bg2:Point("BOTTOMRIGHT", na, "BOTTOMRIGHT")
 					S.CreateBD(button.bg2, 0)
 
 					button.reskinned = true
@@ -802,8 +839,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 
-		RaidParentFrameTab2:SetPoint("LEFT", RaidParentFrameTab1, "RIGHT", -15, 0)
-		RaidParentFrameTab3:SetPoint("LEFT", RaidParentFrameTab2, "RIGHT", -15, 0)
+		RaidParentFrameTab2:Point("LEFT", RaidParentFrameTab1, "RIGHT", -15, 0)
+		RaidParentFrameTab3:Point("LEFT", RaidParentFrameTab2, "RIGHT", -15, 0)
 
 		-- Spellbook
 
@@ -876,7 +913,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			bu.statusBar.rankText:SetPoint("CENTER")
 
 			local _, p = bu.statusBar:GetPoint()
-			bu.statusBar:SetPoint("TOPLEFT", p, "BOTTOMLEFT", 1, -3)
+			bu.statusBar:Point("TOPLEFT", p, "BOTTOMLEFT", 1, -3)
 
 			_G[button.."StatusBarLeft"]:Hide()
 			bu.statusBar.capRight:SetAlpha(0)
@@ -885,8 +922,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			_G[button.."StatusBarBGRight"]:Hide()
 
 			local bg = CreateFrame("Frame", nil, bu.statusBar)
-			bg:SetPoint("TOPLEFT", -1, 1)
-			bg:SetPoint("BOTTOMRIGHT", 1, -1)
+			bg:Point("TOPLEFT", -1, 1)
+			bg:Point("BOTTOMRIGHT", 1, -1)
 			bg:SetFrameLevel(bu:GetFrameLevel()-1)
 			S.CreateBD(bg, .25)
 		end
@@ -905,8 +942,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			if icon then
 				icon:SetTexCoord(.08, .92, .08, .92)
 				icon:ClearAllPoints()
-				icon:SetPoint("TOPLEFT", 2, -2)
-				icon:SetPoint("BOTTOMRIGHT", -2, 2)
+				icon:Point("TOPLEFT", 2, -2)
+				icon:Point("BOTTOMRIGHT", -2, 2)
 				S.CreateBG(icon)
 			end					
 		end
@@ -915,7 +952,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local bu = _G["PrimaryProfession"..i]
 			local bg = CreateFrame("Frame", nil, bu)
 			bg:SetPoint("TOPLEFT")
-			bg:SetPoint("BOTTOMRIGHT", 0, -4)
+			bg:Point("BOTTOMRIGHT", 0, -4)
 			bg:SetFrameLevel(0)
 			S.CreateBD(bg, .25)
 		end
@@ -934,8 +971,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				ic:SetTexCoord(.08, .92, .08, .92)
 
 				bu.bd = CreateFrame("Frame", nil, bu)
-				bu.bd:SetPoint("TOPLEFT", ic, -1, 1)
-				bu.bd:SetPoint("BOTTOMRIGHT", ic, 1, -1)
+				bu.bd:Point("TOPLEFT", ic, -1, 1)
+				bu.bd:Point("BOTTOMRIGHT", ic, 1, -1)
 				S.CreateBD(bu.bd, 0)
 
 				bu:SetPushedTexture(nil)
@@ -958,7 +995,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			bu:SetPoint(a1, p, a2, -2, -2)
 			bu:SetNormalTexture("")
 			bu:SetPushedTexture("")
-			bu:SetSize(40, 40)
+			bu:Size(40, 40)
 
 			local a3, p2, a4, x, y = mo:GetPoint()
 			mo:SetPoint(a3, p2, a4, x, y+2)
@@ -966,15 +1003,15 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			S.CreateBD(bu, 0)
 
 			button.bd = CreateFrame("Frame", nil, button)
-			button.bd:SetPoint("TOPLEFT", 39, 0)
+			button.bd:Point("TOPLEFT", 39, 0)
 			button.bd:SetPoint("BOTTOMRIGHT")
 			button.bd:SetFrameLevel(0)
 			S.CreateBD(button.bd, .25)
 
 			ic:SetTexCoord(.08, .92, .08, .92)
 			ic:ClearAllPoints()
-			ic:SetPoint("TOPLEFT", 1, -1)
-			ic:SetPoint("BOTTOMRIGHT", -1, 1)
+			ic:Point("TOPLEFT", 1, -1)
+			ic:Point("BOTTOMRIGHT", -1, 1)
 			
 			for j = 1, 3 do
 				S.CreateBG(_G["MerchantItem"..i.."AltCurrencyFrameItem"..j.."Texture"])
@@ -989,7 +1026,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				if index <= numMerchantItems then
 					local name, texture, price, stackCount, numAvailable, isUsable, extendedCost = GetMerchantItemInfo(index)
 					if extendedCost and (price <= 0) then
-						_G["MerchantItem"..i.."AltCurrencyFrame"]:SetPoint("BOTTOMLEFT", "MerchantItem"..i.."NameFrame", "BOTTOMLEFT", 0, 35)
+						_G["MerchantItem"..i.."AltCurrencyFrame"]:Point("BOTTOMLEFT", "MerchantItem"..i.."NameFrame", "BOTTOMLEFT", 0, 35)
 					end
 				end
 			end					
@@ -1005,8 +1042,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		MerchantBuyBackItemItemButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
 		MerchantBuyBackItemItemButtonIconTexture:ClearAllPoints()
-		MerchantBuyBackItemItemButtonIconTexture:SetPoint("TOPLEFT", 1, -1)
-		MerchantBuyBackItemItemButtonIconTexture:SetPoint("BOTTOMRIGHT", -1, 1)
+		MerchantBuyBackItemItemButtonIconTexture:Point("TOPLEFT", 1, -1)
+		MerchantBuyBackItemItemButtonIconTexture:Point("BOTTOMRIGHT", -1, 1)
 
 		MerchantGuildBankRepairButton:SetPushedTexture("")
 		S.CreateBG(MerchantGuildBankRepairButton)
@@ -1029,8 +1066,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 					ic:SetTexCoord(.08, .92, .08, .92)
 					ic:SetDrawLayer("OVERLAY")
-					ic:SetPoint("LEFT", co, "RIGHT", 2, 0)
-					co:SetPoint("TOPLEFT", bu, "TOPLEFT", -2, 0)
+					ic:Point("LEFT", co, "RIGHT", 2, 0)
+					co:Point("TOPLEFT", bu, "TOPLEFT", -2, 0)
 
 					S.CreateBG(ic)
 					bu.reskinned = true
@@ -1048,11 +1085,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			bu:SetHighlightTexture(C.media.backdrop)
 			bu:GetHighlightTexture():SetVertexColor(.24, .56, 1, .2)
 
-			ic:SetSize(22, 22)
+			ic:Size(22, 22)
 			ic:SetTexCoord(.15, .85, .15, .85)
 
 			ic:ClearAllPoints()
-			ic:SetPoint("RIGHT", bu, "RIGHT", -2, -2)
+			ic:Point("TOPRIGHT", bu, "TOPRIGHT", -2, -2)
 			ic.SetPoint = F.dummy
 
 			inv:SetAlpha(0)
@@ -1082,14 +1119,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		local whobg = CreateFrame("Frame", nil, WhoFrameEditBoxInset)
 		whobg:SetPoint("TOPLEFT")
-		whobg:SetPoint("BOTTOMRIGHT", -1, 1)
+		whobg:Point("BOTTOMRIGHT", -1, 1)
 		whobg:SetFrameLevel(WhoFrameEditBoxInset:GetFrameLevel()-1)
 		S.CreateBD(whobg, .25)
 
 		FriendsTabHeaderSoRButtonIcon:SetTexCoord(.08, .92, .08, .92)
 		local sorbg = CreateFrame("Frame", nil, FriendsTabHeaderSoRButton)
-		sorbg:SetPoint("TOPLEFT", -1, 1)
-		sorbg:SetPoint("BOTTOMRIGHT", 1, -1)
+		sorbg:Point("TOPLEFT", -1, 1)
+		sorbg:Point("BOTTOMRIGHT", 1, -1)
 		S.CreateBD(sorbg, 0)
 
 		-- Nav Bar
@@ -1101,7 +1138,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				if navButton and lastNav then
 					navButton:SetFrameLevel(lastNav:GetFrameLevel() - 2)
 					navButton:ClearAllPoints()
-					navButton:SetPoint("LEFT", lastNav, "RIGHT", 1, 0)
+					navButton:Point("LEFT", lastNav, "RIGHT", 1, 0)
 				end
 			end			
 		end
@@ -1176,28 +1213,28 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 
 			tab.Highlight:SetTexture(r, g, b, .2)
-			tab.Highlight:SetPoint("TOPLEFT", 3, -4)
-			tab.Highlight:SetPoint("BOTTOMRIGHT", -1, 0)
+			tab.Highlight:Point("TOPLEFT", 3, -4)
+			tab.Highlight:Point("BOTTOMRIGHT", -1, 0)
 			tab.Hider:SetTexture(.3, .3, .3, .4)
 			tab.TabBg:SetAlpha(0)
 
 			select(2, tab:GetRegions()):ClearAllPoints()
 			if i == 1 then
-				select(2, tab:GetRegions()):SetPoint("TOPLEFT", 3, -4)
-				select(2, tab:GetRegions()):SetPoint("BOTTOMRIGHT", -1, 0)
+				select(2, tab:GetRegions()):Point("TOPLEFT", 3, -4)
+				select(2, tab:GetRegions()):Point("BOTTOMRIGHT", -1, 0)
 			else
-				select(2, tab:GetRegions()):SetPoint("TOPLEFT", 2, -4)
-				select(2, tab:GetRegions()):SetPoint("BOTTOMRIGHT", -1, -1)
+				select(2, tab:GetRegions()):Point("TOPLEFT", 2, -4)
+				select(2, tab:GetRegions()):Point("BOTTOMRIGHT", -1, -1)
 			end
 
 			tab.bg = CreateFrame("Frame", nil, tab)
-			tab.bg:SetPoint("TOPLEFT", 2, -3)
-			tab.bg:SetPoint("BOTTOMRIGHT", 0, -1)
+			tab.bg:Point("TOPLEFT", 2, -3)
+			tab.bg:Point("BOTTOMRIGHT", 0, -1)
 			tab.bg:SetFrameLevel(0)
 			S.CreateBD(tab.bg)
 
-			tab.Hider:SetPoint("TOPLEFT", tab.bg, 1, -1)
-			tab.Hider:SetPoint("BOTTOMRIGHT", tab.bg, -1, 1)
+			tab.Hider:Point("TOPLEFT", tab.bg, 1, -1)
+			tab.Hider:Point("BOTTOMRIGHT", tab.bg, -1, 1)
 		end
 
 		for i = 1, NUM_GEARSET_ICONS_SHOWN do
@@ -1206,8 +1243,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			bu:SetCheckedTexture(C.media.checked)
 			select(2, bu:GetRegions()):Hide()
-			ic:SetPoint("TOPLEFT", 1, -1)
-			ic:SetPoint("BOTTOMRIGHT", -1, 1)
+			ic:Point("TOPLEFT", 1, -1)
+			ic:Point("BOTTOMRIGHT", -1, 1)
 			ic:SetTexCoord(.08, .92, .08, .92)
 
 			S.CreateBD(bu, .25)
@@ -1252,12 +1289,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- Quest Frame
 
-		QuestInfoSkillPointFrameIconTexture:SetSize(40, 40)
+		QuestInfoSkillPointFrameIconTexture:Size(40, 40)
 		QuestInfoSkillPointFrameIconTexture:SetTexCoord(.08, .92, .08, .92)
 
 		local bg = CreateFrame("Frame", nil, QuestInfoSkillPointFrame)
-		bg:SetPoint("TOPLEFT", -3, 0)
-		bg:SetPoint("BOTTOMRIGHT", -3, 0)
+		bg:Point("TOPLEFT", -3, 0)
+		bg:Point("BOTTOMRIGHT", -3, 0)
 		bg:Lower()
 		S.CreateBD(bg, .25)
 
@@ -1269,8 +1306,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		QuestInfoSkillPointFramePoints:SetParent(bg)
 
 		local line = QuestInfoSkillPointFrame:CreateTexture(nil, "BACKGROUND")
-		line:SetSize(1, 40)
-		line:SetPoint("RIGHT", QuestInfoSkillPointFrameIconTexture, 1, 0)
+		line:Size(1, 40)
+		line:Point("RIGHT", QuestInfoSkillPointFrameIconTexture, 1, 0)
 		line:SetTexture(C.media.backdrop)
 		line:SetVertexColor(0, 0, 0)
 
@@ -1297,7 +1334,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local na = _G["QuestProgressItem"..i.."NameFrame"]
 			local co = _G["QuestProgressItem"..i.."Count"]
 
-			ic:SetSize(40, 40)
+			ic:Size(40, 40)
 			ic:SetTexCoord(.08, .92, .08, .92)
 
 			S.CreateBD(bu, .25)
@@ -1306,8 +1343,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			co:SetDrawLayer("OVERLAY")
 
 			local line = CreateFrame("Frame", nil, bu)
-			line:SetSize(1, 40)
-			line:SetPoint("RIGHT", ic, 1, 0)
+			line:Size(1, 40)
+			line:Point("RIGHT", ic, 1, 0)
 			S.CreateBD(line)
 		end
 
@@ -1317,8 +1354,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local na = _G["QuestInfoItem"..i.."NameFrame"]
 			local co = _G["QuestInfoItem"..i.."Count"]
 
-			ic:SetPoint("TOPLEFT", 1, -1)
-			ic:SetSize(39, 39)
+			ic:Point("TOPLEFT", 1, -1)
+			ic:Size(39, 39)
 			ic:SetTexCoord(.08, .92, .08, .92)
 			ic:SetDrawLayer("OVERLAY")
 
@@ -1328,8 +1365,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			co:SetDrawLayer("OVERLAY")
 
 			local line = CreateFrame("Frame", nil, bu)
-			line:SetSize(1, 40)
-			line:SetPoint("RIGHT", ic, 1, 0)
+			line:Size(1, 40)
+			line:Point("RIGHT", ic, 1, 0)
 			S.CreateBD(line)
 		end
 
@@ -1356,8 +1393,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					questLogTitle.SetHighlightTexture = F.dummy
 
 					questLogTitle.bg = CreateFrame("Frame", nil, questLogTitle)
-					questLogTitle.bg:SetSize(13, 13)
-					questLogTitle.bg:SetPoint("LEFT", 4, 0)
+					questLogTitle.bg:Size(13, 13)
+					questLogTitle.bg:Point("LEFT", 4, 0)
 					questLogTitle.bg:SetFrameLevel(questLogTitle:GetFrameLevel()-1)
 					S.CreateBD(questLogTitle.bg, 0)	
 
@@ -1367,13 +1404,13 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					questLogTitle.tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
 					questLogTitle.minus = questLogTitle:CreateTexture(nil, "OVERLAY")
-					questLogTitle.minus:SetSize(7, 1)
+					questLogTitle.minus:Size(7, 1)
 					questLogTitle.minus:SetPoint("CENTER", questLogTitle.bg)
 					questLogTitle.minus:SetTexture(C.media.backdrop)
 					questLogTitle.minus:SetVertexColor(1, 1, 1)
 
 					questLogTitle.plus = questLogTitle:CreateTexture(nil, "OVERLAY")
-					questLogTitle.plus:SetSize(1, 7)
+					questLogTitle.plus:Size(1, 7)
 					questLogTitle.plus:SetPoint("CENTER", questLogTitle.bg)
 					questLogTitle.plus:SetTexture(C.media.backdrop)
 					questLogTitle.plus:SetVertexColor(1, 1, 1)
@@ -1439,8 +1476,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		PVPFrameConquestBarProgress:SetGradient("VERTICAL", .7, 0, 0, .8, 0, 0)
 
 		local qbg = CreateFrame("Frame", nil, PVPFrameConquestBar)
-		qbg:SetPoint("TOPLEFT", -1, -2)
-		qbg:SetPoint("BOTTOMRIGHT", 1, 2)
+		qbg:Point("TOPLEFT", -1, -2)
+		qbg:Point("BOTTOMRIGHT", 1, 2)
 		qbg:SetFrameLevel(PVPFrameConquestBar:GetFrameLevel()-1)
 		S.CreateBD(qbg, .25)
 
@@ -1465,7 +1502,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 				if bar and bar:IsVisible() then
 					bar:ClearAllPoints()
-					bar:SetPoint("TOP", UIParent, "TOP", 0, -120)
+					bar:Point("TOP", UIParent, "TOP", 0, -120)
 					if not bar.skinned then
 						local left = _G[barname.."LeftBar"]
 						local right = _G[barname.."RightBar"]
@@ -1489,14 +1526,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 						_G[barname.."RightIconHighlight"]:SetAlpha(0)
 
 						bar.bg = bar:CreateTexture(nil, "BACKGROUND")
-						bar.bg:SetPoint("TOPLEFT", left, -1, 1)
-						bar.bg:SetPoint("BOTTOMRIGHT", right, 1, -1)
+						bar.bg:Point("TOPLEFT", left, -1, 1)
+						bar.bg:Point("BOTTOMRIGHT", right, 1, -1)
 						bar.bg:SetTexture(C.media.backdrop)
 						bar.bg:SetVertexColor(0, 0, 0)
 
 						bar.bgmiddle = CreateFrame("Frame", nil, bar)
-						bar.bgmiddle:SetPoint("TOPLEFT", middle, -1, 1)
-						bar.bgmiddle:SetPoint("BOTTOMRIGHT", middle, 1, -1)
+						bar.bgmiddle:Point("TOPLEFT", middle, -1, 1)
+						bar.bgmiddle:Point("BOTTOMRIGHT", middle, 1, -1)
 						S.CreateBD(bar.bgmiddle, 0)
 
 						bar.skinned = true
@@ -1518,8 +1555,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 					if not frame.bg then
 						frame.bg = CreateFrame("Frame", nil, frame)
-						frame.bg:SetPoint("TOPLEFT", _G[frame:GetName().."Background"], "TOPLEFT", -2, -6)
-						frame.bg:SetPoint("BOTTOMRIGHT", _G[frame:GetName().."Background"], "BOTTOMRIGHT", -2, 8)
+						frame.bg:Point("TOPLEFT", _G[frame:GetName().."Background"], "TOPLEFT", -2, -6)
+						frame.bg:Point("BOTTOMRIGHT", _G[frame:GetName().."Background"], "BOTTOMRIGHT", -2, 8)
 						frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 						S.CreateBD(frame.bg)
 						
@@ -1554,8 +1591,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		-- Guild challenges
 
 		local challenge = CreateFrame("Frame", nil, GuildChallengeAlertFrame)
-		challenge:SetPoint("TOPLEFT", 8, -12)
-		challenge:SetPoint("BOTTOMRIGHT", -8, 13)
+		challenge:Point("TOPLEFT", 8, -12)
+		challenge:Point("BOTTOMRIGHT", -8, 13)
 		challenge:SetFrameLevel(GuildChallengeAlertFrame:GetFrameLevel()-1)
 		S.CreateBD(challenge)
 		S.CreateBG(GuildChallengeAlertFrameEmblemBackground)
@@ -1563,8 +1600,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		-- Dungeon completion rewards
 
 		local bg = CreateFrame("Frame", nil, DungeonCompletionAlertFrame1)
-		bg:SetPoint("TOPLEFT", 6, -14)
-		bg:SetPoint("BOTTOMRIGHT", -6, 6)
+		bg:Point("TOPLEFT", 6, -14)
+		bg:Point("BOTTOMRIGHT", -6, 6)
 		bg:SetFrameLevel(DungeonCompletionAlertFrame1:GetFrameLevel()-1)
 		S.CreateBD(bg)
 
@@ -1578,7 +1615,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		DungeonCompletionAlertFrame1.dungeonArt4:SetAlpha(0)
 		DungeonCompletionAlertFrame1.raidArt:SetAlpha(0)
 
-		DungeonCompletionAlertFrame1.dungeonTexture:SetPoint("BOTTOMLEFT", DungeonCompletionAlertFrame1, "BOTTOMLEFT", 13, 13)
+		DungeonCompletionAlertFrame1.dungeonTexture:Point("BOTTOMLEFT", DungeonCompletionAlertFrame1, "BOTTOMLEFT", 13, 13)
 		DungeonCompletionAlertFrame1.dungeonTexture.SetPoint = F.dummy
 
 		hooksecurefunc("DungeonCompletionAlertFrame_ShowAlert", function()
@@ -1606,7 +1643,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			S.CreateGradient(bu)
 		end
 
-		HelpFrameCharacterStuckHearthstone:SetSize(56, 56)
+		HelpFrameCharacterStuckHearthstone:Size(56, 56)
 		S.CreateBG(HelpFrameCharacterStuckHearthstone)
 		HelpFrameCharacterStuckHearthstoneIconTexture:SetTexCoord(.08, .92, .08, .92)
 
@@ -1618,8 +1655,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			options = true
 
 			local line = VideoOptionsFrame:CreateTexture(nil, "ARTWORK")
-			line:SetSize(1, 512)
-			line:SetPoint("LEFT", 205, 30)
+			line:Size(1, 512)
+			line:Point("LEFT", 205, 30)
 			line:SetTexture(1, 1, 1, .2)
 
 			S.CreateBD(AudioOptionsSoundPanelPlayback, .25)
@@ -1629,11 +1666,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			S.CreateBD(AudioOptionsVoicePanelBinding, .25)
 			S.CreateBD(AudioOptionsVoicePanelListening, .25)
 
-			AudioOptionsSoundPanelPlaybackTitle:SetPoint("BOTTOMLEFT", AudioOptionsSoundPanelPlayback, "TOPLEFT", 5, 2)
-			AudioOptionsSoundPanelHardwareTitle:SetPoint("BOTTOMLEFT", AudioOptionsSoundPanelHardware, "TOPLEFT", 5, 2)
-			AudioOptionsSoundPanelVolumeTitle:SetPoint("BOTTOMLEFT", AudioOptionsSoundPanelVolume, "TOPLEFT", 5, 2)
-			AudioOptionsVoicePanelTalkingTitle:SetPoint("BOTTOMLEFT", AudioOptionsVoicePanelTalking, "TOPLEFT", 5, 2)
-			AudioOptionsVoicePanelListeningTitle:SetPoint("BOTTOMLEFT", AudioOptionsVoicePanelListening, "TOPLEFT", 5, 2)
+			AudioOptionsSoundPanelPlaybackTitle:Point("BOTTOMLEFT", AudioOptionsSoundPanelPlayback, "TOPLEFT", 5, 2)
+			AudioOptionsSoundPanelHardwareTitle:Point("BOTTOMLEFT", AudioOptionsSoundPanelHardware, "TOPLEFT", 5, 2)
+			AudioOptionsSoundPanelVolumeTitle:Point("BOTTOMLEFT", AudioOptionsSoundPanelVolume, "TOPLEFT", 5, 2)
+			AudioOptionsVoicePanelTalkingTitle:Point("BOTTOMLEFT", AudioOptionsVoicePanelTalking, "TOPLEFT", 5, 2)
+			AudioOptionsVoicePanelListeningTitle:Point("BOTTOMLEFT", AudioOptionsVoicePanelListening, "TOPLEFT", 5, 2)
 
 			local dropdowns = {"Graphics_DisplayModeDropDown", "Graphics_ResolutionDropDown", "Graphics_RefreshDropDown", "Graphics_PrimaryMonitorDropDown", "Graphics_MultiSampleDropDown", "Graphics_VerticalSyncDropDown", "Graphics_TextureResolutionDropDown", "Graphics_FilteringDropDown", "Graphics_ProjectedTexturesDropDown", "Graphics_ShadowsDropDown", "Graphics_LiquidDetailDropDown", "Graphics_SunshaftsDropDown", "Graphics_ParticleDensityDropDown", "Graphics_ViewDistanceDropDown", "Graphics_EnvironmentalDetailDropDown", "Graphics_GroundClutterDropDown", "Advanced_BufferingDropDown", "Advanced_LagDropDown", "Advanced_HardwareCursorDropDown", "InterfaceOptionsLanguagesPanelLocaleDropDown", "AudioOptionsSoundPanelHardwareDropDown", "AudioOptionsSoundPanelSoundChannelsDropDown", "AudioOptionsVoicePanelInputDeviceDropDown", "AudioOptionsVoicePanelChatModeDropDown", "AudioOptionsVoicePanelOutputDeviceDropDown"}
  
@@ -1667,8 +1704,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			interface = true
 
 			local line = InterfaceOptionsFrame:CreateTexture(nil, "ARTWORK")
-			line:SetSize(1, 536)
-			line:SetPoint("LEFT", 205, 18)
+			line:Size(1, 536)
+			line:Point("LEFT", 205, 18)
 			line:SetTexture(1, 1, 1, .2)
 
 			local checkboxes = {"InterfaceOptionsControlsPanelStickyTargeting", "InterfaceOptionsControlsPanelAutoDismount", "InterfaceOptionsControlsPanelAutoClearAFK", "InterfaceOptionsControlsPanelBlockTrades", "InterfaceOptionsControlsPanelBlockGuildInvites", "InterfaceOptionsControlsPanelLootAtMouse", "InterfaceOptionsControlsPanelAutoLootCorpse", "InterfaceOptionsControlsPanelInteractOnLeftClick", "InterfaceOptionsCombatPanelAttackOnAssist", "InterfaceOptionsCombatPanelStopAutoAttack", "InterfaceOptionsCombatPanelNameplateClassColors", "InterfaceOptionsCombatPanelTargetOfTarget", "InterfaceOptionsCombatPanelShowSpellAlerts", "InterfaceOptionsCombatPanelReducedLagTolerance", "InterfaceOptionsCombatPanelActionButtonUseKeyDown", "InterfaceOptionsCombatPanelEnemyCastBarsOnPortrait", "InterfaceOptionsCombatPanelEnemyCastBarsOnNameplates", "InterfaceOptionsCombatPanelAutoSelfCast", "InterfaceOptionsDisplayPanelShowCloak", "InterfaceOptionsDisplayPanelShowHelm", "InterfaceOptionsDisplayPanelShowAggroPercentage", "InterfaceOptionsDisplayPanelPlayAggroSounds", "InterfaceOptionsDisplayPanelDetailedLootInfo", "InterfaceOptionsDisplayPanelShowSpellPointsAvg", "InterfaceOptionsDisplayPanelemphasizeMySpellEffects", "InterfaceOptionsDisplayPanelShowFreeBagSpace", "InterfaceOptionsDisplayPanelCinematicSubtitles", "InterfaceOptionsDisplayPanelRotateMinimap", "InterfaceOptionsDisplayPanelScreenEdgeFlash", "InterfaceOptionsObjectivesPanelAutoQuestTracking", "InterfaceOptionsObjectivesPanelAutoQuestProgress", "InterfaceOptionsObjectivesPanelMapQuestDifficulty", "InterfaceOptionsObjectivesPanelWatchFrameWidth", "InterfaceOptionsSocialPanelProfanityFilter", "InterfaceOptionsSocialPanelSpamFilter", "InterfaceOptionsSocialPanelChatBubbles", "InterfaceOptionsSocialPanelPartyChat", "InterfaceOptionsSocialPanelChatHoverDelay", "InterfaceOptionsSocialPanelGuildMemberAlert", "InterfaceOptionsSocialPanelChatMouseScroll", "InterfaceOptionsActionBarsPanelBottomLeft", "InterfaceOptionsActionBarsPanelBottomRight", "InterfaceOptionsActionBarsPanelRight", "InterfaceOptionsActionBarsPanelRightTwo", "InterfaceOptionsActionBarsPanelLockActionBars", "InterfaceOptionsActionBarsPanelAlwaysShowActionBars", "InterfaceOptionsActionBarsPanelSecureAbilityToggle", "InterfaceOptionsNamesPanelMyName", "InterfaceOptionsNamesPanelFriendlyPlayerNames", "InterfaceOptionsNamesPanelFriendlyPets", "InterfaceOptionsNamesPanelFriendlyGuardians", "InterfaceOptionsNamesPanelFriendlyTotems", "InterfaceOptionsNamesPanelUnitNameplatesFriends", "InterfaceOptionsNamesPanelUnitNameplatesFriendlyPets", "InterfaceOptionsNamesPanelUnitNameplatesFriendlyGuardians", "InterfaceOptionsNamesPanelUnitNameplatesFriendlyTotems", "InterfaceOptionsNamesPanelGuilds", "InterfaceOptionsNamesPanelGuildTitles", "InterfaceOptionsNamesPanelTitles", "InterfaceOptionsNamesPanelNonCombatCreature", "InterfaceOptionsNamesPanelEnemyPlayerNames", "InterfaceOptionsNamesPanelEnemyPets", "InterfaceOptionsNamesPanelEnemyGuardians", "InterfaceOptionsNamesPanelEnemyTotems", "InterfaceOptionsNamesPanelUnitNameplatesEnemies", "InterfaceOptionsNamesPanelUnitNameplatesEnemyPets", "InterfaceOptionsNamesPanelUnitNameplatesEnemyGuardians", "InterfaceOptionsNamesPanelUnitNameplatesEnemyTotems", "InterfaceOptionsCombatTextPanelTargetDamage", "InterfaceOptionsCombatTextPanelPeriodicDamage", "InterfaceOptionsCombatTextPanelPetDamage", "InterfaceOptionsCombatTextPanelHealing", "InterfaceOptionsCombatTextPanelTargetEffects", "InterfaceOptionsCombatTextPanelOtherTargetEffects", "InterfaceOptionsCombatTextPanelEnableFCT", "InterfaceOptionsCombatTextPanelDodgeParryMiss", "InterfaceOptionsCombatTextPanelDamageReduction", "InterfaceOptionsCombatTextPanelRepChanges", "InterfaceOptionsCombatTextPanelReactiveAbilities", "InterfaceOptionsCombatTextPanelFriendlyHealerNames", "InterfaceOptionsCombatTextPanelCombatState", "InterfaceOptionsCombatTextPanelComboPoints", "InterfaceOptionsCombatTextPanelLowManaHealth", "InterfaceOptionsCombatTextPanelEnergyGains", "InterfaceOptionsCombatTextPanelPeriodicEnergyGains", "InterfaceOptionsCombatTextPanelHonorGains", "InterfaceOptionsCombatTextPanelAuras", "InterfaceOptionsStatusTextPanelPlayer", "InterfaceOptionsStatusTextPanelPet", "InterfaceOptionsStatusTextPanelParty", "InterfaceOptionsStatusTextPanelTarget", "InterfaceOptionsStatusTextPanelAlternateResource", "InterfaceOptionsStatusTextPanelPercentages", "InterfaceOptionsStatusTextPanelXP", "InterfaceOptionsUnitFramePanelPartyBackground", "InterfaceOptionsUnitFramePanelPartyPets", "InterfaceOptionsUnitFramePanelArenaEnemyFrames", "InterfaceOptionsUnitFramePanelArenaEnemyCastBar", "InterfaceOptionsUnitFramePanelArenaEnemyPets", "InterfaceOptionsUnitFramePanelFullSizeFocusFrame", "CompactUnitFrameProfilesRaidStylePartyFrames", "CompactUnitFrameProfilesGeneralOptionsFrameKeepGroupsTogether", "CompactUnitFrameProfilesGeneralOptionsFrameDisplayIncomingHeals", "CompactUnitFrameProfilesGeneralOptionsFrameDisplayPowerBar", "CompactUnitFrameProfilesGeneralOptionsFrameDisplayAggroHighlight", "CompactUnitFrameProfilesGeneralOptionsFrameUseClassColors", "CompactUnitFrameProfilesGeneralOptionsFrameDisplayPets", "CompactUnitFrameProfilesGeneralOptionsFrameDisplayMainTankAndAssist", "CompactUnitFrameProfilesGeneralOptionsFrameDisplayBorder", "CompactUnitFrameProfilesGeneralOptionsFrameShowDebuffs", "CompactUnitFrameProfilesGeneralOptionsFrameDisplayOnlyDispellableDebuffs", "CompactUnitFrameProfilesGeneralOptionsFrameAutoActivate2Players", "CompactUnitFrameProfilesGeneralOptionsFrameAutoActivate3Players", "CompactUnitFrameProfilesGeneralOptionsFrameAutoActivate5Players", "CompactUnitFrameProfilesGeneralOptionsFrameAutoActivate10Players", "CompactUnitFrameProfilesGeneralOptionsFrameAutoActivate15Players", "CompactUnitFrameProfilesGeneralOptionsFrameAutoActivate25Players", "CompactUnitFrameProfilesGeneralOptionsFrameAutoActivate40Players", "CompactUnitFrameProfilesGeneralOptionsFrameAutoActivateSpec1", "CompactUnitFrameProfilesGeneralOptionsFrameAutoActivateSpec2", "CompactUnitFrameProfilesGeneralOptionsFrameAutoActivatePvP", "CompactUnitFrameProfilesGeneralOptionsFrameAutoActivatePvE", "InterfaceOptionsBuffsPanelBuffDurations", "InterfaceOptionsBuffsPanelDispellableDebuffs", "InterfaceOptionsBuffsPanelCastableBuffs", "InterfaceOptionsBuffsPanelConsolidateBuffs", "InterfaceOptionsBuffsPanelShowAllEnemyDebuffs", "InterfaceOptionsBattlenetPanelOnlineFriends", "InterfaceOptionsBattlenetPanelOfflineFriends", "InterfaceOptionsBattlenetPanelBroadcasts", "InterfaceOptionsBattlenetPanelFriendRequests", "InterfaceOptionsBattlenetPanelConversations", "InterfaceOptionsBattlenetPanelShowToastWindow", "InterfaceOptionsCameraPanelFollowTerrain", "InterfaceOptionsCameraPanelHeadBob", "InterfaceOptionsCameraPanelWaterCollision", "InterfaceOptionsCameraPanelSmartPivot", "InterfaceOptionsMousePanelInvertMouse", "InterfaceOptionsMousePanelClickToMove", "InterfaceOptionsMousePanelWoWMouse", "InterfaceOptionsHelpPanelShowTutorials", "InterfaceOptionsHelpPanelLoadingScreenTips", "InterfaceOptionsHelpPanelEnhancedTooltips", "InterfaceOptionsHelpPanelBeginnerTooltips", "InterfaceOptionsHelpPanelShowLuaErrors", "InterfaceOptionsHelpPanelColorblindMode", "InterfaceOptionsHelpPanelMovePad"}
@@ -1698,12 +1735,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		SideDressUpModel:HookScript("OnShow", function(self)
 			self:ClearAllPoints()
-			self:SetPoint("LEFT", self:GetParent():GetParent(), "RIGHT", 1, 0)
+			self:Point("LEFT", self:GetParent():GetParent(), "RIGHT", 1, 0)
 		end)
 
 		SideDressUpModel.bg = CreateFrame("Frame", nil, SideDressUpModel)
-		SideDressUpModel.bg:SetPoint("TOPLEFT", 0, 1)
-		SideDressUpModel.bg:SetPoint("BOTTOMRIGHT", 1, -1)
+		SideDressUpModel.bg:Point("TOPLEFT", 0, 1)
+		SideDressUpModel.bg:Point("BOTTOMRIGHT", 1, -1)
 		SideDressUpModel.bg:SetFrameLevel(SideDressUpModel:GetFrameLevel()-1)
 		S.CreateBD(SideDressUpModel.bg)
 
@@ -1726,14 +1763,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			bu2.icon:SetTexCoord(.08, .92, .08, .92)
 
 			local bg1 = CreateFrame("Frame", nil, bu1)
-			bg1:SetPoint("TOPLEFT", -1, 1)
-			bg1:SetPoint("BOTTOMRIGHT", 1, -1)
+			bg1:Point("TOPLEFT", -1, 1)
+			bg1:Point("BOTTOMRIGHT", 1, -1)
 			bg1:SetFrameLevel(bu1:GetFrameLevel()-1)
 			S.CreateBD(bg1, .25)
 
 			local bg2 = CreateFrame("Frame", nil, bu2)
-			bg2:SetPoint("TOPLEFT", -1, 1)
-			bg2:SetPoint("BOTTOMRIGHT", 1, -1)
+			bg2:Point("TOPLEFT", -1, 1)
+			bg2:Point("BOTTOMRIGHT", 1, -1)
 			bg2:SetFrameLevel(bu2:GetFrameLevel()-1)
 			S.CreateBD(bg2, .25)
 		end
@@ -1741,8 +1778,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		select(4, TradePlayerItem7:GetRegions()):Hide()
 		select(4, TradeRecipientItem7:GetRegions()):Hide()
 
-		TradePlayerInputMoneyFrameSilver:SetPoint("LEFT", TradePlayerInputMoneyFrameGold, "RIGHT", 1, 0)
-		TradePlayerInputMoneyFrameCopper:SetPoint("LEFT", TradePlayerInputMoneyFrameSilver, "RIGHT", 1, 0)
+		TradePlayerInputMoneyFrameSilver:Point("LEFT", TradePlayerInputMoneyFrameGold, "RIGHT", 1, 0)
+		TradePlayerInputMoneyFrameCopper:Point("LEFT", TradePlayerInputMoneyFrameSilver, "RIGHT", 1, 0)
 
 		-- [[ Hide regions ]]
 
@@ -2148,62 +2185,62 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		-- [[ Change positions ]]
 
 		ChatConfigFrameDefaultButton:SetWidth(125)
-		ChatConfigFrameDefaultButton:SetPoint("TOPLEFT", ChatConfigCategoryFrame, "BOTTOMLEFT", 0, -4)
-		ChatConfigFrameOkayButton:SetPoint("TOPRIGHT", ChatConfigBackgroundFrame, "BOTTOMRIGHT", 0, -4)
+		ChatConfigFrameDefaultButton:Point("TOPLEFT", ChatConfigCategoryFrame, "BOTTOMLEFT", 0, -4)
+		ChatConfigFrameOkayButton:Point("TOPRIGHT", ChatConfigBackgroundFrame, "BOTTOMRIGHT", 0, -4)
 		QuestLogFramePushQuestButton:ClearAllPoints()
-		QuestLogFramePushQuestButton:SetPoint("LEFT", QuestLogFrameAbandonButton, "RIGHT", 1, 0)
+		QuestLogFramePushQuestButton:Point("LEFT", QuestLogFrameAbandonButton, "RIGHT", 1, 0)
 		QuestLogFramePushQuestButton:SetWidth(100)
 		QuestLogFrameTrackButton:ClearAllPoints()
-		QuestLogFrameTrackButton:SetPoint("LEFT", QuestLogFramePushQuestButton, "RIGHT", 1, 0)
+		QuestLogFrameTrackButton:Point("LEFT", QuestLogFramePushQuestButton, "RIGHT", 1, 0)
 		FriendsFrameStatusDropDown:ClearAllPoints()
-		FriendsFrameStatusDropDown:SetPoint("TOPLEFT", FriendsFrame, "TOPLEFT", 10, -28)
+		FriendsFrameStatusDropDown:Point("TOPLEFT", FriendsFrame, "TOPLEFT", 10, -28)
 		RaidFrameConvertToRaidButton:ClearAllPoints()
-		RaidFrameConvertToRaidButton:SetPoint("TOPLEFT", RaidFrame, "TOPLEFT", 38, -35)
-		ReputationDetailFrame:SetPoint("TOPLEFT", ReputationFrame, "TOPRIGHT", 1, -28)
+		RaidFrameConvertToRaidButton:Point("TOPLEFT", RaidFrame, "TOPLEFT", 38, -35)
+		ReputationDetailFrame:Point("TOPLEFT", ReputationFrame, "TOPRIGHT", 1, -28)
 		PaperDollEquipmentManagerPaneEquipSet:SetWidth(PaperDollEquipmentManagerPaneEquipSet:GetWidth()-1)
-		PaperDollEquipmentManagerPaneSaveSet:SetPoint("LEFT", PaperDollEquipmentManagerPaneEquipSet, "RIGHT", 1, 0)
-		GearManagerDialogPopup:SetPoint("LEFT", PaperDollFrame, "RIGHT", 1, 0)
-		DressUpFrameResetButton:SetPoint("RIGHT", DressUpFrameCancelButton, "LEFT", -1, 0)
-		SendMailMailButton:SetPoint("RIGHT", SendMailCancelButton, "LEFT", -1, 0)
-		OpenMailDeleteButton:SetPoint("RIGHT", OpenMailCancelButton, "LEFT", -1, 0)
-		OpenMailReplyButton:SetPoint("RIGHT", OpenMailDeleteButton, "LEFT", -1, 0)
-		HelpFrameReportBugScrollFrameScrollBar:SetPoint("TOPLEFT", HelpFrameReportBugScrollFrame, "TOPRIGHT", 1, -16)
-		HelpFrameSubmitSuggestionScrollFrameScrollBar:SetPoint("TOPLEFT", HelpFrameSubmitSuggestionScrollFrame, "TOPRIGHT", 1, -16)
-		HelpFrameTicketScrollFrameScrollBar:SetPoint("TOPLEFT", HelpFrameTicketScrollFrame, "TOPRIGHT", 1, -16)
-		HelpFrameGM_ResponseScrollFrame1ScrollBar:SetPoint("TOPLEFT", HelpFrameGM_ResponseScrollFrame1, "TOPRIGHT", 1, -16)
-		HelpFrameGM_ResponseScrollFrame2ScrollBar:SetPoint("TOPLEFT", HelpFrameGM_ResponseScrollFrame2, "TOPRIGHT", 1, -16)
-		RaidInfoFrame:SetPoint("TOPLEFT", RaidFrame, "TOPRIGHT", 1, -28)
-		TokenFramePopup:SetPoint("TOPLEFT", TokenFrame, "TOPRIGHT", 1, -28)
-		CharacterFrameExpandButton:SetPoint("BOTTOMRIGHT", CharacterFrameInset, "BOTTOMRIGHT", -14, 6)
-		PVPTeamManagementFrameWeeklyDisplay:SetPoint("RIGHT", PVPTeamManagementFrameWeeklyToggleRight, "LEFT", -2, 0)
-		TabardCharacterModelRotateRightButton:SetPoint("TOPLEFT", TabardCharacterModelRotateLeftButton, "TOPRIGHT", 1, 0)
-		LFDQueueFrameSpecificListScrollFrameScrollBarScrollDownButton:SetPoint("TOP", LFDQueueFrameSpecificListScrollFrameScrollBar, "BOTTOM", 0, 2)
-		LFDQueueFrameRandomScrollFrameScrollBarScrollDownButton:SetPoint("TOP", LFDQueueFrameRandomScrollFrameScrollBar, "BOTTOM", 0, 2)
-		MerchantFrameTab2:SetPoint("LEFT", MerchantFrameTab1, "RIGHT", -15, 0)
+		PaperDollEquipmentManagerPaneSaveSet:Point("LEFT", PaperDollEquipmentManagerPaneEquipSet, "RIGHT", 1, 0)
+		GearManagerDialogPopup:Point("LEFT", PaperDollFrame, "RIGHT", 1, 0)
+		DressUpFrameResetButton:Point("RIGHT", DressUpFrameCancelButton, "LEFT", -1, 0)
+		SendMailMailButton:Point("RIGHT", SendMailCancelButton, "LEFT", -1, 0)
+		OpenMailDeleteButton:Point("RIGHT", OpenMailCancelButton, "LEFT", -1, 0)
+		OpenMailReplyButton:Point("RIGHT", OpenMailDeleteButton, "LEFT", -1, 0)
+		HelpFrameReportBugScrollFrameScrollBar:Point("TOPLEFT", HelpFrameReportBugScrollFrame, "TOPRIGHT", 1, -16)
+		HelpFrameSubmitSuggestionScrollFrameScrollBar:Point("TOPLEFT", HelpFrameSubmitSuggestionScrollFrame, "TOPRIGHT", 1, -16)
+		HelpFrameTicketScrollFrameScrollBar:Point("TOPLEFT", HelpFrameTicketScrollFrame, "TOPRIGHT", 1, -16)
+		HelpFrameGM_ResponseScrollFrame1ScrollBar:Point("TOPLEFT", HelpFrameGM_ResponseScrollFrame1, "TOPRIGHT", 1, -16)
+		HelpFrameGM_ResponseScrollFrame2ScrollBar:Point("TOPLEFT", HelpFrameGM_ResponseScrollFrame2, "TOPRIGHT", 1, -16)
+		RaidInfoFrame:Point("TOPLEFT", RaidFrame, "TOPRIGHT", 1, -28)
+		TokenFramePopup:Point("TOPLEFT", TokenFrame, "TOPRIGHT", 1, -28)
+		CharacterFrameExpandButton:Point("BOTTOMRIGHT", CharacterFrameInset, "BOTTOMRIGHT", -14, 6)
+		PVPTeamManagementFrameWeeklyDisplay:Point("RIGHT", PVPTeamManagementFrameWeeklyToggleRight, "LEFT", -2, 0)
+		TabardCharacterModelRotateRightButton:Point("TOPLEFT", TabardCharacterModelRotateLeftButton, "TOPRIGHT", 1, 0)
+		LFDQueueFrameSpecificListScrollFrameScrollBarScrollDownButton:Point("TOP", LFDQueueFrameSpecificListScrollFrameScrollBar, "BOTTOM", 0, 2)
+		LFDQueueFrameRandomScrollFrameScrollBarScrollDownButton:Point("TOP", LFDQueueFrameRandomScrollFrameScrollBar, "BOTTOM", 0, 2)
+		MerchantFrameTab2:Point("LEFT", MerchantFrameTab1, "RIGHT", -15, 0)
 		GuildRegistrarFrameEditBox:SetHeight(20)
-		SendMailMoneySilver:SetPoint("LEFT", SendMailMoneyGold, "RIGHT", 1, 0)
-		SendMailMoneyCopper:SetPoint("LEFT", SendMailMoneySilver, "RIGHT", 1, 0)
-		StaticPopup1MoneyInputFrameSilver:SetPoint("LEFT", StaticPopup1MoneyInputFrameGold, "RIGHT", 1, 0)
-		StaticPopup1MoneyInputFrameCopper:SetPoint("LEFT", StaticPopup1MoneyInputFrameSilver, "RIGHT", 1, 0)
-		StaticPopup2MoneyInputFrameSilver:SetPoint("LEFT", StaticPopup2MoneyInputFrameGold, "RIGHT", 1, 0)
-		StaticPopup2MoneyInputFrameCopper:SetPoint("LEFT", StaticPopup2MoneyInputFrameSilver, "RIGHT", 1, 0)
-		WorldStateScoreFrameTab2:SetPoint("LEFT", WorldStateScoreFrameTab1, "RIGHT", -15, 0)
-		WorldStateScoreFrameTab3:SetPoint("LEFT", WorldStateScoreFrameTab2, "RIGHT", -15, 0)
-		WhoFrameWhoButton:SetPoint("RIGHT", WhoFrameAddFriendButton, "LEFT", -1, 0)
-		WhoFrameAddFriendButton:SetPoint("RIGHT", WhoFrameGroupInviteButton, "LEFT", -1, 0)
+		SendMailMoneySilver:Point("LEFT", SendMailMoneyGold, "RIGHT", 1, 0)
+		SendMailMoneyCopper:Point("LEFT", SendMailMoneySilver, "RIGHT", 1, 0)
+		StaticPopup1MoneyInputFrameSilver:Point("LEFT", StaticPopup1MoneyInputFrameGold, "RIGHT", 1, 0)
+		StaticPopup1MoneyInputFrameCopper:Point("LEFT", StaticPopup1MoneyInputFrameSilver, "RIGHT", 1, 0)
+		StaticPopup2MoneyInputFrameSilver:Point("LEFT", StaticPopup2MoneyInputFrameGold, "RIGHT", 1, 0)
+		StaticPopup2MoneyInputFrameCopper:Point("LEFT", StaticPopup2MoneyInputFrameSilver, "RIGHT", 1, 0)
+		WorldStateScoreFrameTab2:Point("LEFT", WorldStateScoreFrameTab1, "RIGHT", -15, 0)
+		WorldStateScoreFrameTab3:Point("LEFT", WorldStateScoreFrameTab2, "RIGHT", -15, 0)
+		WhoFrameWhoButton:Point("RIGHT", WhoFrameAddFriendButton, "LEFT", -1, 0)
+		WhoFrameAddFriendButton:Point("RIGHT", WhoFrameGroupInviteButton, "LEFT", -1, 0)
 		WarGameStartButton:ClearAllPoints()
-		WarGameStartButton:SetPoint("BOTTOMRIGHT", PVPFrame, "BOTTOMRIGHT", -4, 4)
-		FriendsFrameTitleText:SetPoint("TOP", FriendsFrame, "TOP", 0, -8)
-		VideoOptionsFrameOkay:SetPoint("BOTTOMRIGHT", VideoOptionsFrameCancel, "BOTTOMLEFT", -1, 0)
-		InterfaceOptionsFrameOkay:SetPoint("BOTTOMRIGHT", InterfaceOptionsFrameCancel, "BOTTOMLEFT", -1, 0)
-		RaidFrameRaidInfoButton:SetPoint("LEFT", RaidFrameConvertToRaidButton, "RIGHT", 67, 12)
+		WarGameStartButton:Point("BOTTOMRIGHT", PVPFrame, "BOTTOMRIGHT", -4, 4)
+		FriendsFrameTitleText:Point("TOP", FriendsFrame, "TOP", 0, -8)
+		VideoOptionsFrameOkay:Point("BOTTOMRIGHT", VideoOptionsFrameCancel, "BOTTOMLEFT", -1, 0)
+		InterfaceOptionsFrameOkay:Point("BOTTOMRIGHT", InterfaceOptionsFrameCancel, "BOTTOMLEFT", -1, 0)
+		RaidFrameRaidInfoButton:Point("LEFT", RaidFrameConvertToRaidButton, "RIGHT", 67, 12)
 
 		hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, portrait, text, name, x, y)
 			local parent = parentFrame:GetName()
 			if parent == "QuestLogFrame" or parent == "QuestLogDetailFrame" then
-				QuestNPCModel:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x+4, y)
+				QuestNPCModel:Point("TOPLEFT", parentFrame, "TOPRIGHT", x+4, y)
 			else
-				QuestNPCModel:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x+8, y)
+				QuestNPCModel:Point("TOPLEFT", parentFrame, "TOPRIGHT", x+8, y)
 			end
 		end)
 
@@ -2211,10 +2248,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local parent
 			if QuestLogFrame:IsShown() then
 				parent = QuestLogFrame
-				QuestLogControlPanel:SetPoint("BOTTOMLEFT", parent, "BOTTOMLEFT", 9, 6)
+				QuestLogControlPanel:Point("BOTTOMLEFT", parent, "BOTTOMLEFT", 9, 6)
 			elseif QuestLogDetailFrame:IsShown() then
 				parent = QuestLogDetailFrame
-				QuestLogControlPanel:SetPoint("BOTTOMLEFT", parent, "BOTTOMLEFT", 9, 0)
+				QuestLogControlPanel:Point("BOTTOMLEFT", parent, "BOTTOMLEFT", 9, 0)
 			end
 		end
 		hooksecurefunc("QuestLogControlPanel_UpdatePosition", questlogcontrolpanel)
@@ -2321,17 +2358,17 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			select(4, bu:GetRegions()):SetTextColor(1, 1, 1)
 			select(5, bu:GetRegions()):SetTextColor(1, 1, 1)
 			local bg = CreateFrame("Frame", nil, bu)
-			bg:SetPoint("TOPLEFT", -1, 1)
-			bg:SetPoint("BOTTOMRIGHT", 1, -1)
+			bg:Point("TOPLEFT", -1, 1)
+			bg:Point("BOTTOMRIGHT", 1, -1)
 			bg:SetFrameLevel(bu:GetFrameLevel()-1)
 			S.CreateBD(bg, .25)
 			local vline = CreateFrame("Frame", nil, bu)
-			vline:SetPoint("LEFT", 44, 0)
-			vline:SetSize(1, 44)
+			vline:Point("LEFT", 44, 0)
+			vline:Size(1, 44)
 			S.CreateBD(vline)
 		end
 
-		ArchaeologyFrameInfoButton:SetPoint("TOPLEFT", 3, -3)
+		ArchaeologyFrameInfoButton:Point("TOPLEFT", 3, -3)
 
 		F.ReskinDropDown(ArchaeologyFrameRaceFilter)
 		S.ReskinClose(ArchaeologyFrameCloseButton)
@@ -2354,8 +2391,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		bar:SetGradient("VERTICAL", .65, .25, 0, .75, .35, .1)
 
 		local bg = CreateFrame("Frame", nil, ArchaeologyFrameArtifactPageSolveFrameStatusBar)
-		bg:SetPoint("TOPLEFT", -1, 1)
-		bg:SetPoint("BOTTOMRIGHT", 1, -1)
+		bg:Point("TOPLEFT", -1, 1)
+		bg:Point("BOTTOMRIGHT", 1, -1)
 		bg:SetFrameLevel(0)
 		S.CreateBD(bg, .25)
 
@@ -2367,8 +2404,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		AuctionProgressBar:SetStatusBarTexture(C.media.backdrop)
 		local ABBD = CreateFrame("Frame", nil, AuctionProgressBar)
-		ABBD:SetPoint("TOPLEFT", -1, 1)
-		ABBD:SetPoint("BOTTOMRIGHT", 1, -1)
+		ABBD:Point("TOPLEFT", -1, 1)
+		ABBD:Point("BOTTOMRIGHT", 1, -1)
 		ABBD:SetFrameLevel(AuctionProgressBar:GetFrameLevel()-1)
 		S.CreateBD(ABBD, .25)
 
@@ -2376,10 +2413,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.CreateBG(AuctionProgressBarIcon)
 
 		AuctionProgressBarText:ClearAllPoints()
-		AuctionProgressBarText:SetPoint("CENTER", 0, 1)
+		AuctionProgressBarText:Point("CENTER", 0, 1)
 
 		S.ReskinClose(AuctionProgressFrameCancelButton, "LEFT", AuctionProgressBar, "RIGHT", 4, 0)
-		select(15, AuctionProgressFrameCancelButton:GetRegions()):SetPoint("CENTER", 0, 2)
+		select(15, AuctionProgressFrameCancelButton:GetRegions()):Point("CENTER", 0, 2)
 
 		AuctionFrame:DisableDrawLayer("ARTWORK")
 		AuctionPortraitTexture:Hide()
@@ -2428,28 +2465,28 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		BrowseCloseButton:ClearAllPoints()
-		BrowseCloseButton:SetPoint("BOTTOMRIGHT", AuctionFrameBrowse, "BOTTOMRIGHT", 66, 13)
+		BrowseCloseButton:Point("BOTTOMRIGHT", AuctionFrameBrowse, "BOTTOMRIGHT", 66, 13)
 		BrowseBuyoutButton:ClearAllPoints()
-		BrowseBuyoutButton:SetPoint("RIGHT", BrowseCloseButton, "LEFT", -1, 0)
+		BrowseBuyoutButton:Point("RIGHT", BrowseCloseButton, "LEFT", -1, 0)
 		BrowseBidButton:ClearAllPoints()
-		BrowseBidButton:SetPoint("RIGHT", BrowseBuyoutButton, "LEFT", -1, 0)
+		BrowseBidButton:Point("RIGHT", BrowseBuyoutButton, "LEFT", -1, 0)
 		BidBuyoutButton:ClearAllPoints()
-		BidBuyoutButton:SetPoint("RIGHT", BidCloseButton, "LEFT", -1, 0)
+		BidBuyoutButton:Point("RIGHT", BidCloseButton, "LEFT", -1, 0)
 		BidBidButton:ClearAllPoints()
-		BidBidButton:SetPoint("RIGHT", BidBuyoutButton, "LEFT", -1, 0)
+		BidBidButton:Point("RIGHT", BidBuyoutButton, "LEFT", -1, 0)
 		AuctionsCancelAuctionButton:ClearAllPoints()
-		AuctionsCancelAuctionButton:SetPoint("RIGHT", AuctionsCloseButton, "LEFT", -1, 0)
+		AuctionsCancelAuctionButton:Point("RIGHT", AuctionsCloseButton, "LEFT", -1, 0)
 
 		-- Blizz needs to be more consistent
 
-		BrowseBidPriceSilver:SetPoint("LEFT", BrowseBidPriceGold, "RIGHT", 1, 0)
-		BrowseBidPriceCopper:SetPoint("LEFT", BrowseBidPriceSilver, "RIGHT", 1, 0)
-		BidBidPriceSilver:SetPoint("LEFT", BidBidPriceGold, "RIGHT", 1, 0)
-		BidBidPriceCopper:SetPoint("LEFT", BidBidPriceSilver, "RIGHT", 1, 0)
-		StartPriceSilver:SetPoint("LEFT", StartPriceGold, "RIGHT", 1, 0)
-		StartPriceCopper:SetPoint("LEFT", StartPriceSilver, "RIGHT", 1, 0)
-		BuyoutPriceSilver:SetPoint("LEFT", BuyoutPriceGold, "RIGHT", 1, 0)
-		BuyoutPriceCopper:SetPoint("LEFT", BuyoutPriceSilver, "RIGHT", 1, 0)
+		BrowseBidPriceSilver:Point("LEFT", BrowseBidPriceGold, "RIGHT", 1, 0)
+		BrowseBidPriceCopper:Point("LEFT", BrowseBidPriceSilver, "RIGHT", 1, 0)
+		BidBidPriceSilver:Point("LEFT", BidBidPriceGold, "RIGHT", 1, 0)
+		BidBidPriceCopper:Point("LEFT", BidBidPriceSilver, "RIGHT", 1, 0)
+		StartPriceSilver:Point("LEFT", StartPriceGold, "RIGHT", 1, 0)
+		StartPriceCopper:Point("LEFT", StartPriceSilver, "RIGHT", 1, 0)
+		BuyoutPriceSilver:Point("LEFT", BuyoutPriceGold, "RIGHT", 1, 0)
+		BuyoutPriceCopper:Point("LEFT", BuyoutPriceSilver, "RIGHT", 1, 0)
 
 		for i = 1, NUM_BROWSE_TO_DISPLAY do
 			local bu = _G["BrowseButton"..i]
@@ -2468,7 +2505,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 				local bd = CreateFrame("Frame", nil, bu)
 				bd:SetPoint("TOPLEFT")
-				bd:SetPoint("BOTTOMRIGHT", 0, 5)
+				bd:Point("BOTTOMRIGHT", 0, 5)
 				bd:SetFrameLevel(bu:GetFrameLevel()-1)
 				S.CreateBD(bd, .25)
 
@@ -2476,8 +2513,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				local hl = bu:GetHighlightTexture()
 				hl:SetVertexColor(r, g, b, .2)
 				hl:ClearAllPoints()
-				hl:SetPoint("TOPLEFT", 0, -1)
-				hl:SetPoint("BOTTOMRIGHT", -1, 6)
+				hl:Point("TOPLEFT", 0, -1)
+				hl:Point("BOTTOMRIGHT", -1, 6)
 			end
 		end
 
@@ -2497,7 +2534,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			local bd = CreateFrame("Frame", nil, bu)
 			bd:SetPoint("TOPLEFT")
-			bd:SetPoint("BOTTOMRIGHT", 0, 5)
+			bd:Point("BOTTOMRIGHT", 0, 5)
 			bd:SetFrameLevel(bu:GetFrameLevel()-1)
 			S.CreateBD(bd, .25)
 
@@ -2505,8 +2542,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local hl = bu:GetHighlightTexture()
 			hl:SetVertexColor(r, g, b, .2)
 			hl:ClearAllPoints()
-			hl:SetPoint("TOPLEFT", 0, -1)
-			hl:SetPoint("BOTTOMRIGHT", -1, 6)
+			hl:Point("TOPLEFT", 0, -1)
+			hl:Point("BOTTOMRIGHT", -1, 6)
 		end
 
 		for i = 1, NUM_AUCTIONS_TO_DISPLAY do
@@ -2525,7 +2562,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			local bd = CreateFrame("Frame", nil, bu)
 			bd:SetPoint("TOPLEFT")
-			bd:SetPoint("BOTTOMRIGHT", 0, 5)
+			bd:Point("BOTTOMRIGHT", 0, 5)
 			bd:SetFrameLevel(bu:GetFrameLevel()-1)
 			S.CreateBD(bd, .25)
 
@@ -2533,8 +2570,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local hl = bu:GetHighlightTexture()
 			hl:SetVertexColor(r, g, b, .2)
 			hl:ClearAllPoints()
-			hl:SetPoint("TOPLEFT", 0, -1)
-			hl:SetPoint("BOTTOMRIGHT", -1, 6)
+			hl:Point("TOPLEFT", 0, -1)
+			hl:Point("BOTTOMRIGHT", -1, 6)
 		end
 
 		local auctionhandler = CreateFrame("Frame")
@@ -2543,8 +2580,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local _, _, _, _, _, _, _, _, _, _, _, _, _, AuctionsItemButtonIconTexture = AuctionsItemButton:GetRegions() -- blizzard, please name your textures
 			if AuctionsItemButtonIconTexture then
 				AuctionsItemButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
-				AuctionsItemButtonIconTexture:SetPoint("TOPLEFT", 1, -1)
-				AuctionsItemButtonIconTexture:SetPoint("BOTTOMRIGHT", -1, 1)
+				AuctionsItemButtonIconTexture:Point("TOPLEFT", 1, -1)
+				AuctionsItemButtonIconTexture:Point("BOTTOMRIGHT", -1, 1)
 			end
 		end)
 
@@ -2564,7 +2601,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinCheck(IsUsableCheckButton)
 		F.ReskinCheck(ShowOnPlayerCheckButton)
 		
-		BrowsePrevPageButton:GetRegions():SetPoint("LEFT", BrowsePrevPageButton, "RIGHT", 2, 0)
+		BrowsePrevPageButton:GetRegions():Point("LEFT", BrowsePrevPageButton, "RIGHT", 2, 0)
 
 		-- seriously, consistency
 		BrowseDropDownLeft:SetAlpha(0)
@@ -2573,18 +2610,18 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		local a1, p, a2, x, y = BrowseDropDownButton:GetPoint()
 		BrowseDropDownButton:SetPoint(a1, p, a2, x, y-4)
-		BrowseDropDownButton:SetSize(16, 16)
+		BrowseDropDownButton:Size(16, 16)
 		S.Reskin(BrowseDropDownButton)
 
 		local downtex = BrowseDropDownButton:CreateTexture(nil, "OVERLAY")
 		downtex:SetTexture("Interface\\AddOns\\!SunUI\\media\\arrow-down-active")
-		downtex:SetSize(8, 8)
+		downtex:Size(8, 8)
 		downtex:SetPoint("CENTER")
 		downtex:SetVertexColor(1, 1, 1)
 
 		local bg = CreateFrame("Frame", nil, BrowseDropDown)
-		bg:SetPoint("TOPLEFT", 16, -5)
-		bg:SetPoint("BOTTOMRIGHT", 109, 11)
+		bg:Point("TOPLEFT", 16, -5)
+		bg:Point("BOTTOMRIGHT", 109, 11)
 		bg:SetFrameLevel(BrowseDropDown:GetFrameLevel(-1))
 		S.CreateBD(bg, 0)
 
@@ -2635,10 +2672,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
-		AchievementFrameHeaderPoints:SetPoint("TOP", AchievementFrame, "TOP", 0, -6)
-		AchievementFrameFilterDropDown:SetPoint("TOPRIGHT", AchievementFrame, "TOPRIGHT", -98, 1)
+		AchievementFrameHeaderPoints:Point("TOP", AchievementFrame, "TOP", 0, -6)
+		AchievementFrameFilterDropDown:Point("TOPRIGHT", AchievementFrame, "TOPRIGHT", -98, 1)
 		AchievementFrameFilterDropDownText:ClearAllPoints()
-		AchievementFrameFilterDropDownText:SetPoint("CENTER", -10, 1)
+		AchievementFrameFilterDropDownText:Point("CENTER", -10, 1)
 
 		AchievementFrameSummaryCategoriesStatusBar:SetStatusBarTexture(C.media.backdrop)
 		AchievementFrameSummaryCategoriesStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
@@ -2647,12 +2684,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		AchievementFrameSummaryCategoriesStatusBarRight:Hide()
 		AchievementFrameSummaryCategoriesStatusBarFillBar:Hide()
 		AchievementFrameSummaryCategoriesStatusBarTitle:SetTextColor(1, 1, 1)
-		AchievementFrameSummaryCategoriesStatusBarTitle:SetPoint("LEFT", AchievementFrameSummaryCategoriesStatusBar, "LEFT", 6, 0)
-		AchievementFrameSummaryCategoriesStatusBarText:SetPoint("RIGHT", AchievementFrameSummaryCategoriesStatusBar, "RIGHT", -5, 0)
+		AchievementFrameSummaryCategoriesStatusBarTitle:Point("LEFT", AchievementFrameSummaryCategoriesStatusBar, "LEFT", 6, 0)
+		AchievementFrameSummaryCategoriesStatusBarText:Point("RIGHT", AchievementFrameSummaryCategoriesStatusBar, "RIGHT", -5, 0)
 
 		local bg = CreateFrame("Frame", nil, AchievementFrameSummaryCategoriesStatusBar)
-		bg:SetPoint("TOPLEFT", -1, 1)
-		bg:SetPoint("BOTTOMRIGHT", 1, -1)
+		bg:Point("TOPLEFT", -1, 1)
+		bg:Point("BOTTOMRIGHT", 1, -1)
 		bg:SetFrameLevel(AchievementFrameSummaryCategoriesStatusBar:GetFrameLevel()-1)
 		S.CreateBD(bg, .25)
 		
@@ -2688,8 +2725,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			_G["AchievementFrameAchievementsContainerButton"..i.."GuildCornerR"]:SetAlpha(0)
 
 			local bg = CreateFrame("Frame", nil, bu)
-			bg:SetPoint("TOPLEFT", 2, -2)
-			bg:SetPoint("BOTTOMRIGHT", -2, 2)
+			bg:Point("TOPLEFT", 2, -2)
+			bg:Point("BOTTOMRIGHT", -2, 2)
 			S.CreateBD(bg, 0)
 
 			local ic = _G["AchievementFrameAchievementsContainerButton"..i.."IconTexture"]
@@ -2724,8 +2761,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				_G["AchievementFrameProgressBar"..index.."BorderRight"]:Hide()
 
 				local bg = CreateFrame("Frame", nil, bar)
-				bg:SetPoint("TOPLEFT", -1, 1)
-				bg:SetPoint("BOTTOMRIGHT", 1, -1)
+				bg:Point("TOPLEFT", -1, 1)
+				bg:Point("BOTTOMRIGHT", 1, -1)
 				S.CreateBD(bg, 0)
 
 				bar.reskinned = true
@@ -2755,8 +2792,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					text.SetShadowOffset = F.dummy
 
 					local bg = CreateFrame("Frame", nil, bu)
-					bg:SetPoint("TOPLEFT", 2, -2)
-					bg:SetPoint("BOTTOMRIGHT", -2, 2)
+					bg:Point("TOPLEFT", 2, -2)
+					bg:Point("BOTTOMRIGHT", -2, 2)
 					S.CreateBD(bg, 0)
 
 					local ic = _G["AchievementFrameSummaryAchievement"..i.."IconTexture"]
@@ -2776,11 +2813,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			bu:SetStatusBarTexture(C.media.backdrop)
 			bar:SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
 			label:SetTextColor(1, 1, 1)
-			label:SetPoint("LEFT", bu, "LEFT", 6, 0)
+			label:Point("LEFT", bu, "LEFT", 6, 0)
 
 			local bg = CreateFrame("Frame", nil, bu)
-			bg:SetPoint("TOPLEFT", -1, 1)
-			bg:SetPoint("BOTTOMRIGHT", 1, -1)
+			bg:Point("TOPLEFT", -1, 1)
+			bg:Point("BOTTOMRIGHT", 1, -1)
 			bg:SetFrameLevel(bu:GetFrameLevel()-1)
 			S.CreateBD(bg, .25)
 			
@@ -2789,7 +2826,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			_G["AchievementFrameSummaryCategoriesCategory"..i.."Right"]:Hide()
 			_G["AchievementFrameSummaryCategoriesCategory"..i.."FillBar"]:Hide()
 			_G["AchievementFrameSummaryCategoriesCategory"..i.."ButtonHighlight"]:SetAlpha(0)
-			_G["AchievementFrameSummaryCategoriesCategory"..i.."Text"]:SetPoint("RIGHT", bu, "RIGHT", -5, 0)
+			_G["AchievementFrameSummaryCategoriesCategory"..i.."Text"]:Point("RIGHT", bu, "RIGHT", -5, 0)
 		end
 
 		for i = 1, 20 do
@@ -2800,11 +2837,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			_G["AchievementFrameStatsContainerButton"..i.."HeaderRight"]:SetAlpha(0)
 		end
 		
-		AchievementFrameComparisonHeader:SetPoint("BOTTOMRIGHT", AchievementFrameComparison, "TOPRIGHT", 39, 25)
+		AchievementFrameComparisonHeader:Point("BOTTOMRIGHT", AchievementFrameComparison, "TOPRIGHT", 39, 25)
 		
 		local headerbg = CreateFrame("Frame", nil, AchievementFrameComparisonHeader)
-		headerbg:SetPoint("TOPLEFT", 20, -20)
-		headerbg:SetPoint("BOTTOMRIGHT", -28, -5)
+		headerbg:Point("TOPLEFT", 20, -20)
+		headerbg:Point("BOTTOMRIGHT", -28, -5)
 		headerbg:SetFrameLevel(AchievementFrameComparisonHeader:GetFrameLevel()-1)
 		S.CreateBD(headerbg, .25)
 		
@@ -2813,8 +2850,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		for _, frame in pairs(summaries) do
 			frame:SetBackdrop(nil)
 			local bg = CreateFrame("Frame", nil, frame)
-			bg:SetPoint("TOPLEFT", 2, -2)
-			bg:SetPoint("BOTTOMRIGHT", -2, 0)
+			bg:Point("TOPLEFT", 2, -2)
+			bg:Point("BOTTOMRIGHT", -2, 0)
 			bg:SetFrameLevel(frame:GetFrameLevel()-1)
 			S.CreateBD(bg, .25)
 		end
@@ -2830,12 +2867,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			_G[name.."Right"]:Hide()
 			_G[name.."FillBar"]:Hide()
 			_G[name.."Title"]:SetTextColor(1, 1, 1)
-			_G[name.."Title"]:SetPoint("LEFT", bar, "LEFT", 6, 0)
-			_G[name.."Text"]:SetPoint("RIGHT", bar, "RIGHT", -5, 0)
+			_G[name.."Title"]:Point("LEFT", bar, "LEFT", 6, 0)
+			_G[name.."Text"]:Point("RIGHT", bar, "RIGHT", -5, 0)
 			
 			local bg = CreateFrame("Frame", nil, bar)
-			bg:SetPoint("TOPLEFT", -1, 1)
-			bg:SetPoint("BOTTOMRIGHT", 1, -1)
+			bg:Point("TOPLEFT", -1, 1)
+			bg:Point("BOTTOMRIGHT", 1, -1)
 			bg:SetFrameLevel(bar:GetFrameLevel()-1)
 			S.CreateBD(bg, .25)
 		end
@@ -2846,8 +2883,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			for _, button in pairs(buttons) do
 				button:DisableDrawLayer("BORDER")
 				local bg = CreateFrame("Frame", nil, button)
-				bg:SetPoint("TOPLEFT", 2, -3)
-				bg:SetPoint("BOTTOMRIGHT", -2, 2)
+				bg:Point("TOPLEFT", 2, -3)
+				bg:Point("BOTTOMRIGHT", -2, 2)
 				S.CreateBD(bg, 0)
 			end
 
@@ -2915,15 +2952,15 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.Reskin(KeyBindingFrameOkayButton)
 		S.Reskin(KeyBindingFrameCancelButton)
 		KeyBindingFrameOkayButton:ClearAllPoints()
-		KeyBindingFrameOkayButton:SetPoint("RIGHT", KeyBindingFrameCancelButton, "LEFT", -1, 0)
+		KeyBindingFrameOkayButton:Point("RIGHT", KeyBindingFrameCancelButton, "LEFT", -1, 0)
 		KeyBindingFrameUnbindButton:ClearAllPoints()
-		KeyBindingFrameUnbindButton:SetPoint("RIGHT", KeyBindingFrameOkayButton, "LEFT", -1, 0)
+		KeyBindingFrameUnbindButton:Point("RIGHT", KeyBindingFrameOkayButton, "LEFT", -1, 0)
 
 		for i = 1, KEY_BINDINGS_DISPLAYED do
 			local button1 = _G["KeyBindingFrameBinding"..i.."Key1Button"]
 			local button2 = _G["KeyBindingFrameBinding"..i.."Key2Button"]
 
-			button2:SetPoint("LEFT", button1, "RIGHT", 1, 0)
+			button2:Point("LEFT", button1, "RIGHT", 1, 0)
 			S.Reskin(button1)
 			S.Reskin(button2)
 		end
@@ -2956,7 +2993,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local hl = bu:GetHighlightTexture()
 			hl:SetVertexColor(r, g, b, .2)
 			hl.SetAlpha = F.dummy
-			hl:SetPoint("TOPLEFT", -1, 1)
+			hl:Point("TOPLEFT", -1, 1)
 			hl:SetPoint("BOTTOMRIGHT")
 		end
 		for i = 1, 7 do
@@ -3039,15 +3076,15 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		local bd = CreateFrame("Frame", nil, CalendarFilterFrame)
-		bd:SetPoint("TOPLEFT", 40, 0)
-		bd:SetPoint("BOTTOMRIGHT", -19, 0)
+		bd:Point("TOPLEFT", 40, 0)
+		bd:Point("BOTTOMRIGHT", -19, 0)
 		bd:SetFrameLevel(CalendarFilterFrame:GetFrameLevel()-1)
 		S.CreateBD(bd, 0)
 		S.CreateGradient(bd)
 		
 		local downtex = CalendarFilterButton:CreateTexture(nil, "ARTWORK")
 		downtex:SetTexture("Interface\\AddOns\\!SunUI\\Media\\arrow-down-active")
-		downtex:SetSize(8, 8)
+		downtex:Size(8, 8)
 		downtex:SetPoint("CENTER")
 		downtex:SetVertexColor(1, 1, 1)
 
@@ -3079,12 +3116,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 
-		CalendarViewEventFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
-		CalendarViewHolidayFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
-		CalendarViewRaidFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
-		CalendarCreateEventFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
+		CalendarViewEventFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
+		CalendarViewHolidayFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
+		CalendarViewRaidFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
+		CalendarCreateEventFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
 		CalendarCreateEventInviteButton:Point("TOPLEFT", CalendarCreateEventInviteEdit, "TOPRIGHT", 1, 1)
-		CalendarClassButton1:SetPoint("TOPLEFT", CalendarClassButtonContainer, "TOPLEFT", 5, 0)
+		CalendarClassButton1:Point("TOPLEFT", CalendarClassButtonContainer, "TOPLEFT", 5, 0)
 
 		CalendarCreateEventHourDropDown:SetWidth(80)
 		CalendarCreateEventMinuteDropDown:SetWidth(80)
@@ -3092,15 +3129,15 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		
 		local line = CalendarMassInviteFrame:CreateTexture(nil, "BACKGROUND")
 		line:Size(240, 1)
-		line:SetPoint("TOP", CalendarMassInviteFrame, "TOP", 0, -150)
+		line:Point("TOP", CalendarMassInviteFrame, "TOP", 0, -150)
 		line:SetTexture(C.media.backdrop)
 		line:SetVertexColor(0, 0, 0)
 		
 		CalendarMassInviteFrame:ClearAllPoints()
-		CalendarMassInviteFrame:SetPoint("BOTTOMLEFT", CalendarCreateEventCreateButton, "TOPRIGHT", 10, 0)
+		CalendarMassInviteFrame:Point("BOTTOMLEFT", CalendarCreateEventCreateButton, "TOPRIGHT", 10, 0)
 		
 		CalendarTexturePickerFrame:ClearAllPoints()
-		CalendarTexturePickerFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", 311, -24)
+		CalendarTexturePickerFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", 311, -24)
 
 		local cbuttons = {"CalendarViewEventAcceptButton", "CalendarViewEventTentativeButton", "CalendarViewEventDeclineButton", "CalendarViewEventRemoveButton", "CalendarCreateEventMassInviteButton", "CalendarCreateEventCreateButton", "CalendarCreateEventInviteButton", "CalendarEventPickerCloseButton", "CalendarCreateEventRaidInviteButton", "CalendarTexturePickerAcceptButton", "CalendarTexturePickerCancelButton", "CalendarFilterButton"}
 		for i = 1, #cbuttons do
@@ -3129,12 +3166,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.ReskinInput(CalendarMassInviteGuildMaxLevelEdit)
 		F.ReskinArrow(CalendarPrevMonthButton, 1)
 		F.ReskinArrow(CalendarNextMonthButton, 2)
-		CalendarPrevMonthButton:SetSize(19, 19)
-		CalendarNextMonthButton:SetSize(19, 19)
+		CalendarPrevMonthButton:Size(19, 19)
+		CalendarNextMonthButton:Size(19, 19)
 		F.ReskinCheck(CalendarCreateEventLockEventCheck)
 	elseif addon == "Blizzard_DebugTools" then
 		ScriptErrorsFrame:SetScale(UIParent:GetScale())
-		ScriptErrorsFrame:SetSize(386, 274)
+		ScriptErrorsFrame:Size(386, 274)
 		ScriptErrorsFrame:DisableDrawLayer("OVERLAY")
 		ScriptErrorsFrameTitleBG:Hide()
 		ScriptErrorsFrameDialogBG:Hide()
@@ -3199,9 +3236,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.CreateBD(EncounterJournalSearchResults, .75)
 
 		EncounterJournalEncounterFrameInfoBossTab:ClearAllPoints()
-		EncounterJournalEncounterFrameInfoBossTab:SetPoint("TOPRIGHT", EncounterJournalEncounterFrame, "TOPRIGHT", 75, 20)
+		EncounterJournalEncounterFrameInfoBossTab:Point("TOPRIGHT", EncounterJournalEncounterFrame, "TOPRIGHT", 75, 20)
 		EncounterJournalEncounterFrameInfoLootTab:ClearAllPoints()
-		EncounterJournalEncounterFrameInfoLootTab:SetPoint("TOP", EncounterJournalEncounterFrameInfoBossTab, "BOTTOM", 0, -4)
+		EncounterJournalEncounterFrameInfoLootTab:Point("TOP", EncounterJournalEncounterFrameInfoBossTab, "BOTTOM", 0, -4)
 
 		EncounterJournalEncounterFrameInfoBossTab:SetScale(0.75)
 		EncounterJournalEncounterFrameInfoLootTab:SetScale(0.75)
@@ -3240,15 +3277,15 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				bu:SetHighlightTexture("")
 
 				local bg = CreateFrame("Frame", nil, bu)
-				bg:SetPoint("TOPLEFT", 4, -4)
-				bg:SetPoint("BOTTOMRIGHT", -5, 3)
+				bg:Point("TOPLEFT", 4, -4)
+				bg:Point("BOTTOMRIGHT", -5, 3)
 				S.CreateBD(bg, 0)
 			end
 		end
 
 		local modelbg = CreateFrame("Frame", nil, EncounterJournalEncounterFrameModelFrame)
-		modelbg:SetPoint("TOPLEFT", -1, 1)
-		modelbg:SetPoint("BOTTOMRIGHT", 1, -1)
+		modelbg:Point("TOPLEFT", -1, 1)
+		modelbg:Point("BOTTOMRIGHT", 1, -1)
 		modelbg:SetFrameLevel(EncounterJournalEncounterFrameModelFrame:GetFrameLevel()-1)
 		S.CreateBD(modelbg, .25)
 
@@ -3287,8 +3324,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 					if not header.button.bg then
 						header.button.bg = header.button:CreateTexture(nil, "BACKGROUND")
-						header.button.bg:SetPoint("TOPLEFT", header.button.abilityIcon, -1, 1)
-						header.button.bg:SetPoint("BOTTOMRIGHT", header.button.abilityIcon, 1, -1)
+						header.button.bg:Point("TOPLEFT", header.button.abilityIcon, -1, 1)
+						header.button.bg:Point("BOTTOMRIGHT", header.button.abilityIcon, 1, -1)
 						header.button.bg:SetTexture(C.media.backdrop)
 						header.button.bg:SetVertexColor(0, 0, 0)
 					end
@@ -3350,20 +3387,20 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			item.bossTexture:SetAlpha(0)
 			item.bosslessTexture:SetAlpha(0)
 
-			item.icon:SetPoint("TOPLEFT", 3, -3)
+			item.icon:Point("TOPLEFT", 3, -3)
 			item.icon:SetTexCoord(.08, .92, .08, .92)
 			item.icon:SetDrawLayer("OVERLAY")
 			S.CreateBG(item.icon)
 
 			local bg = CreateFrame("Frame", nil, item)
 			bg:SetPoint("TOPLEFT")
-			bg:SetPoint("BOTTOMRIGHT", 0, 1)
+			bg:Point("BOTTOMRIGHT", 0, 1)
 			bg:SetFrameStrata("BACKGROUND")
 			S.CreateBD(bg, 0)
 
 			local tex = item:CreateTexture(nil, "BACKGROUND")
 			tex:SetPoint("TOPLEFT")
-			tex:SetPoint("BOTTOMRIGHT", -1, 2)
+			tex:Point("BOTTOMRIGHT", -1, 2)
 			tex:SetTexture(C.media.backdrop)
 			tex:SetVertexColor(0, 0, 0, .25)
 		end
@@ -3412,8 +3449,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local ic = _G["GlyphFrameScrollFrameButton"..i.."Icon"]
 
 			local bg = CreateFrame("Frame", nil, bu)
-			bg:SetPoint("TOPLEFT", 38, -2)
-			bg:SetPoint("BOTTOMRIGHT", 0, 2)
+			bg:Point("TOPLEFT", 38, -2)
+			bg:Point("BOTTOMRIGHT", 0, 2)
 			bg:SetFrameLevel(bu:GetFrameLevel()-1)
 			S.CreateBD(bg, .25)
 
@@ -3424,8 +3461,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			select(4, bu:GetRegions()):SetAlpha(0)
 
 			local check = select(2, bu:GetRegions())
-			check:SetPoint("TOPLEFT", 39, -3)
-			check:SetPoint("BOTTOMRIGHT", -1, 3)
+			check:Point("TOPLEFT", 39, -3)
+			check:Point("BOTTOMRIGHT", -1, 3)
 			check:SetTexture(C.media.backdrop)
 			check:SetVertexColor(r, g, b, .2)
 
@@ -3459,17 +3496,17 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.ReskinScroll(GMSurveyScrollFrameScrollBar)
 	elseif addon == "Blizzard_GuildBankUI" then
 		local bg = CreateFrame("Frame", nil, GuildBankFrame)
-		bg:SetPoint("TOPLEFT", 10, -8)
-		bg:SetPoint("BOTTOMRIGHT", 0, 6)
+		bg:Point("TOPLEFT", 10, -8)
+		bg:Point("BOTTOMRIGHT", 0, 6)
 		bg:SetFrameLevel(GuildBankFrame:GetFrameLevel()-1)
 		S.CreateBD(bg)
 		S.CreateSD(bg)
 
-		GuildBankPopupFrame:SetPoint("TOPLEFT", GuildBankFrame, "TOPRIGHT", 2, -30)
+		GuildBankPopupFrame:Point("TOPLEFT", GuildBankFrame, "TOPRIGHT", 2, -30)
 
 		local bd = CreateFrame("Frame", nil, GuildBankPopupFrame)
 		bd:SetPoint("TOPLEFT")
-		bd:SetPoint("BOTTOMRIGHT", -28, 26)
+		bd:Point("BOTTOMRIGHT", -28, 26)
 		bd:SetFrameLevel(GuildBankPopupFrame:GetFrameLevel()-1)
 		S.CreateBD(bd)
 		S.CreateBD(GuildBankPopupEditBox, .25)
@@ -3501,7 +3538,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			F.CreateTab(tab)
 
 			if i ~= 1 then
-				tab:SetPoint("LEFT", _G["GuildBankFrameTab"..i-1], "RIGHT", -15, 0)
+				tab:Point("LEFT", _G["GuildBankFrameTab"..i-1], "RIGHT", -15, 0)
 			end
 		end
 
@@ -3518,8 +3555,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				_G["GuildBankColumn"..i.."Button"..j.."NormalTexture"]:SetAlpha(0)
 
 				local bg = CreateFrame("Frame", nil, bu)
-				bg:SetPoint("TOPLEFT", -1, 1)
-				bg:SetPoint("BOTTOMRIGHT", 1, -1)
+				bg:Point("TOPLEFT", -1, 1)
+				bg:Point("BOTTOMRIGHT", 1, -1)
 				bg:SetFrameLevel(bu:GetFrameLevel()-1)
 				S.CreateBD(bg, 0)
 			end
@@ -3543,6 +3580,16 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			nt:SetAlpha(0)
 		end
 
+		for i = 1, NUM_GUILDBANK_ICONS_PER_ROW * NUM_GUILDBANK_ICON_ROWS do
+			local bu = _G["GuildBankPopupButton"..i]
+			bu:SetCheckedTexture(C.media.checked)
+			select(2, bu:GetRegions()):Hide()
+			
+			_G["GuildBankPopupButton"..i.."Icon"]:SetTexCoord(.08, .92, .08, .92)
+			
+			S.CreateBG(_G["GuildBankPopupButton"..i.."Icon"])
+		end
+		
 		S.Reskin(GuildBankFrameWithdrawButton)
 		S.Reskin(GuildBankFrameDepositButton)
 		S.Reskin(GuildBankFramePurchaseButton)
@@ -3556,8 +3603,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.ReskinScroll(GuildBankPopupScrollFrameScrollBar)
 		S.ReskinInput(GuildItemSearchBox)
 	elseif addon == "Blizzard_GuildControlUI" then
-		S.CreateBD(GuildControlUI)
-		S.CreateSD(GuildControlUI)
+		S.SetBD(GuildControlUI, 0, 0, 0, -28)
 		S.CreateBD(GuildControlUIRankBankFrameInset, .25)
 
 		for i = 1, 9 do
@@ -3578,11 +3624,19 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		GuildControlUIRankBankFrameInsetScrollFrameBottom:SetAlpha(0)
 
 		hooksecurefunc("GuildControlUI_RankOrder_Update", function()
-			if not reskinnedranks then
-				for i = 1, GuildControlGetNumRanks() do
-					S.ReskinInput(_G["GuildControlUIRankOrderFrameRank"..i.."NameEditBox"], 20)
+			for i = 1, GuildControlGetNumRanks() do
+				local name = "GuildControlUIRankOrderFrameRank"..i
+				local rank = _G[name.."NameEditBox"]
+				if not rank.reskinned then
+					S.ReskinInput(rank, 20)
+					F.ReskinArrow(_G[name.."ShiftUpButton"], "up")
+					_G[name.."ShiftUpButtonIcon"]:Hide()
+					F.ReskinArrow(_G[name.."ShiftDownButton"], "down")
+					_G[name.."ShiftDownButtonIcon"]:Hide()
+					S.ReskinClose(_G[name.."DeleteButton"])
+					_G[name.."DeleteButtonIcon"]:Hide()
+					rank.reskinned = true
 				end
-				reskinnedranks = true
 			end
 		end)
 
@@ -3594,6 +3648,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					_G[tab.."Bg"]:Hide()
 					S.CreateBD(bu, .12)
 					S.Reskin(_G[tab.."BuyPurchaseButton"])
+					F.ReskinCheck(_G[tab.."OwnedViewCheck"])
+					F.ReskinCheck(_G[tab.."OwnedDepositCheck"])
+					F.ReskinCheck(_G[tab.."OwnedUpdateInfoCheck"])
 					S.ReskinInput(_G[tab.."OwnedStackBox"])
 
 					bu.reskinned = true
@@ -3601,6 +3658,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
+		for i = 1, 19 do
+			local checkbox = _G["GuildControlUIRankSettingsFrameCheckbox"..i]
+			if checkbox then F.ReskinCheck(checkbox) end
+		end
+		
 		S.Reskin(GuildControlUIRankOrderFrameNewButton)
 
 		S.ReskinClose(GuildControlUICloseButton)
@@ -3618,7 +3680,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.CreateBD(GuildLogContainer, .25)
 		S.CreateBD(GuildNewsFiltersFrame)
 		S.CreateBD(GuildTextEditFrame)
-		S.CreateSD(GuildTextEditFrame)
 		S.CreateBD(GuildTextEditContainer, .25)
 		S.CreateBD(GuildRecruitmentInterestFrame, .25)
 		S.CreateBD(GuildRecruitmentAvailabilityFrame, .25)
@@ -3630,6 +3691,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		GuildFrameTabardBackground:Hide()
 		GuildFrameTabardEmblem:Hide()
 		GuildFrameTabardBorder:Hide()
+		GuildFrameInset:Hide()
 		select(5, GuildInfoFrameInfo:GetRegions()):Hide()
 		select(11, GuildMemberDetailFrame:GetRegions()):Hide()
 		GuildMemberDetailCorner:Hide()
@@ -3651,7 +3713,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		GuildPerksToggleButtonHighlightMiddle:Hide()
 		GuildPerksToggleButtonHighlightRight:Hide()
 		GuildPerksContainerScrollBarTrack:Hide()
-		GuildNewPerksFrameHeader1:Hide()
+		GuildNewPerksFrameHeader1:SetAlpha(0)
 		GuildNewsContainerScrollBarTrack:Hide()
 		GuildInfoDetailsFrameScrollBarTrack:Hide()
 		GuildInfoFrameInfoHeader1:SetAlpha(0)
@@ -3673,6 +3735,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		GuildRecruitmentCommentFrameBg:Hide()
 		GuildRecruitmentDeclineButton_LeftSeparator:Hide()
 		GuildRecruitmentInviteButton_RightSeparator:Hide()
+		GuildRecruitmentListGuildButton_LeftSeparator:Hide()
+		GuildNewsFrameHeader:SetAlpha(0)
 		
 		GuildFrame:DisableDrawLayer("BACKGROUND")
 		GuildFrame:DisableDrawLayer("BORDER")
@@ -3700,14 +3764,27 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		for i = 2, 6 do
 			select(i, GuildNewsBossModelTextFrame:GetRegions()):Hide()
 		end
-
 		GuildMemberRankDropdown:HookScript("OnShow", function()
 			GuildMemberDetailRankText:Hide()
 		end)
 		GuildMemberRankDropdown:HookScript("OnHide", function()
 			GuildMemberDetailRankText:Show()
 		end)
-
+		hooksecurefunc("GuildNews_Update", function()
+			local buttons = GuildNewsContainer.buttons
+			for i = 1, #buttons do
+				buttons[i].header:SetAlpha(0)
+			end
+		end)
+		
+		--GuildNewsFrameHeader:SetTexture(nil)
+		-- for i = 1, 17 do
+			-- S.StripTextures(_G["GuildNewsContainerButton"..i])
+			-- local hover = _G["GuildNewsContainerButton"..i]:CreateTexture(nil, "OVERLAY")
+			-- hover:SetTexture(1, 1, 1, 0.3)
+			-- hover:SetAllPoints()
+			-- _G["GuildNewsContainerButton"..i]:SetHighlightTexture(hover)
+		-- end
 		S.ReskinClose(GuildFrameCloseButton)
 		S.ReskinClose(GuildNewsFiltersFrameCloseButton)
 		S.ReskinClose(GuildLogFrameCloseButton)
@@ -3726,7 +3803,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		GuildRecruitmentCommentInputFrame:SetWidth(312)
 		GuildRecruitmentCommentEditBox:SetWidth(284)
 		GuildRecruitmentCommentFrame:ClearAllPoints()
-		GuildRecruitmentCommentFrame:SetPoint("TOPLEFT", GuildRecruitmentLevelFrame, "BOTTOMLEFT", 0, 1)
+		GuildRecruitmentCommentFrame:Point("TOPLEFT", GuildRecruitmentLevelFrame, "BOTTOMLEFT", 0, 1)
 		F.ReskinCheck(GuildRosterShowOfflineButton)
 		for i = 1, 7 do
 			F.ReskinCheck(_G["GuildNewsFilterButton"..i])
@@ -3737,23 +3814,24 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		GuildNewsBossModel:SetPoint(a1, p, a2, x+5, y)
 
 		local f = CreateFrame("Frame", nil, GuildNewsBossModel)
-		f:SetPoint("TOPLEFT", 0, 1)
-		f:SetPoint("BOTTOMRIGHT", 1, -52)
+		f:Point("TOPLEFT", 0, 1)
+		f:Point("BOTTOMRIGHT", 1, -52)
 		f:SetFrameLevel(GuildNewsBossModel:GetFrameLevel()-1)
 		S.CreateBD(f)
 
 		local line = CreateFrame("Frame", nil, GuildNewsBossModel)
-		line:SetPoint("BOTTOMLEFT", 0, -1)
-		line:SetPoint("BOTTOMRIGHT", 0, -1)
+		line:Point("BOTTOMLEFT", 0, -1)
+		line:Point("BOTTOMRIGHT", 0, -1)
 		line:SetHeight(1)
 		line:SetFrameLevel(GuildNewsBossModel:GetFrameLevel()-1)
 		S.CreateBD(line, 0)
 
 		GuildNewsFiltersFrame:SetWidth(224)
-		GuildNewsFiltersFrame:SetPoint("TOPLEFT", GuildFrame, "TOPRIGHT", 1, -20)
-		GuildMemberDetailFrame:SetPoint("TOPLEFT", GuildFrame, "TOPRIGHT", 1, -28)
-		GuildLogFrame:SetPoint("TOPLEFT", GuildFrame, "TOPRIGHT", 1, 0)
-
+		GuildNewsFiltersFrame:Point("TOPLEFT", GuildFrame, "TOPRIGHT", 1, -20)
+		GuildMemberDetailFrame:Point("TOPLEFT", GuildFrame, "TOPRIGHT", 1, -28)
+		GuildLogFrame:Point("TOPLEFT", GuildFrame, "TOPRIGHT", 1, 0)
+		GuildTextEditFrame:Point("TOPLEFT", GuildFrame, "TOPRIGHT", 1, 0)
+		
 		for i = 1, 5 do
 			local bu = _G["GuildInfoFrameApplicantsContainerButton"..i]
 			S.CreateBD(bu, .25)
@@ -3770,18 +3848,18 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		GuildFactionBarBG:Hide()
 		GuildFactionBarCap:SetAlpha(0)
 		GuildFactionBar.bg = CreateFrame("Frame", nil, GuildFactionFrame)
-		GuildFactionBar.bg:SetPoint("TOPLEFT", GuildFactionFrame, -1, -1)
-		GuildFactionBar.bg:SetPoint("BOTTOMRIGHT", GuildFactionFrame, -3, 0)
+		GuildFactionBar.bg:Point("TOPLEFT", GuildFactionFrame, -1, -1)
+		GuildFactionBar.bg:Point("BOTTOMRIGHT", GuildFactionFrame, -3, 0)
 		GuildFactionBar.bg:SetFrameLevel(0)
 		S.CreateBD(GuildFactionBar.bg, .25)
 
 		GuildXPFrame:ClearAllPoints()
-		GuildXPFrame:SetPoint("TOP", GuildFrame, "TOP", 0, -40)
+		GuildXPFrame:Point("TOP", GuildFrame, "TOP", 0, -40)
 		GuildXPBarProgress:SetTexture(C.media.backdrop)
-		GuildXPBarLeft:Hide()
-		GuildXPBarRight:Hide()
-		GuildXPBarMiddle:Hide()
-		GuildXPBarBG:Hide()
+		GuildXPBarLeft:SetAlpha(0)
+		GuildXPBarRight:SetAlpha(0)
+		GuildXPBarMiddle:SetAlpha(0)
+		GuildXPBarBG:SetAlpha(0)
 		GuildXPBarShadow:SetAlpha(0)
 		GuildXPBarCap:SetAlpha(0)
 		GuildXPBarDivider1:Hide()
@@ -3789,8 +3867,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		GuildXPBarDivider3:Hide()
 		GuildXPBarDivider4:Hide()
 		GuildXPBar.bg = CreateFrame("Frame", nil, GuildXPBar)
-		GuildXPBar.bg:SetPoint("TOPLEFT", GuildXPFrame)
-		GuildXPBar.bg:SetPoint("BOTTOMRIGHT", GuildXPFrame, 0, 4)
+		GuildXPBar.bg:Point("TOPLEFT", GuildXPBar, 0, -3)
+		GuildXPBar.bg:Point("BOTTOMRIGHT", GuildXPBar, 0, 1)
 		GuildXPBar.bg:SetFrameLevel(0)
 		S.CreateBD(GuildXPBar.bg, .25)
 
@@ -3800,14 +3878,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local ic = _G[button.."IconTexture"]
 			local na = _G[button.."NameFrame"]
 
-			na:Hide()
+			na:SetAlpha(0)
 			ic:SetTexCoord(.08, .92, .08, .92)
 			ic:SetDrawLayer("OVERLAY")
 			S.CreateBG(ic)
 
 			bu.bg = CreateFrame("Frame", nil, bu)
-			bu.bg:SetPoint("TOPLEFT", 0, -1)
-			bu.bg:SetPoint("BOTTOMRIGHT", 0, 2)
+			bu.bg:Point("TOPLEFT", 0, -1)
+			bu.bg:Point("BOTTOMRIGHT", 0, 2)
 			bu.bg:SetFrameLevel(0)
 			S.CreateBD(bu.bg, .25)
 		end
@@ -3829,8 +3907,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					ic:SetTexCoord(.08, .92, .08, .92)
 
 					ic.bg = CreateFrame("Frame", nil, bu)
-					ic.bg:SetPoint("TOPLEFT", ic, -1, 1)
-					ic.bg:SetPoint("BOTTOMRIGHT", ic, 1, -1)
+					ic.bg:Point("TOPLEFT", ic, -1, 1)
+					ic.bg:Point("BOTTOMRIGHT", ic, 1, -1)
 					S.CreateBD(ic.bg, 0)
 				end
 				reskinnedperks = true
@@ -3849,14 +3927,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					local bd = select(7, bu:GetRegions())
 
 					local bg = CreateFrame("Frame", nil, bu)
-					bg:SetPoint("TOPLEFT", 0, -1)
+					bg:Point("TOPLEFT", 0, -1)
 					bg:SetPoint("BOTTOMRIGHT")
 					S.CreateBD(bg, 0)
 
 					bu:SetHighlightTexture(C.media.backdrop)
 					local hl = bu:GetHighlightTexture()
 					hl:SetVertexColor(r, g, b, .2)
-					hl:SetPoint("TOPLEFT", 0, -1)
+					hl:Point("TOPLEFT", 0, -1)
 					hl:SetPoint("BOTTOMRIGHT")
 
 					ic:SetTexCoord(.08, .92, .08, .92)
@@ -3926,7 +4004,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		hooksecurefunc("GuildRoster_Update", UpdateIcons)
 		GuildRosterContainer:HookScript("OnMouseWheel", UpdateIcons)
 		GuildRosterContainer:HookScript("OnVerticalScroll", UpdateIcons)
-
+		
 		GuildLevelFrame:SetAlpha(0)
 		local closebutton = select(4, GuildTextEditFrame:GetChildren())
 		S.Reskin(closebutton)
@@ -3934,11 +4012,20 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.Reskin(logbutton)
 		local gbuttons = {"GuildAddMemberButton", "GuildViewLogButton", "GuildControlButton", "GuildTextEditFrameAcceptButton", "GuildMemberGroupInviteButton", "GuildMemberRemoveButton", "GuildRecruitmentInviteButton", "GuildRecruitmentMessageButton", "GuildRecruitmentDeclineButton", "GuildPerksToggleButton", "GuildRecruitmentListGuildButton"}
 		for i = 1, #gbuttons do
-		local gbutton = _G[gbuttons[i]]
-			if gbutton then
-				S.Reskin(gbutton)
-			end
+			S.Reskin(_G[gbuttons[i]])
 		end
+		
+		local checkboxes = {"GuildRecruitmentQuestButton", "GuildRecruitmentDungeonButton", "GuildRecruitmentRaidButton", "GuildRecruitmentPvPButton", "GuildRecruitmentRPButton", "GuildRecruitmentWeekdaysButton", "GuildRecruitmentWeekendsButton"}
+		for i = 1, #checkboxes do
+			F.ReskinCheck(_G[checkboxes[i]])
+		end
+		
+		F.ReskinCheck(GuildRecruitmentTankButton:GetChildren())
+		F.ReskinCheck(GuildRecruitmentHealerButton:GetChildren())
+		F.ReskinCheck(GuildRecruitmentDamagerButton:GetChildren())
+		
+		F.ReskinRadio(GuildRecruitmentLevelAnyButton)
+		F.ReskinRadio(GuildRecruitmentLevelMaxButton)
 
 		for i = 1, 3 do
 			for j = 1, 6 do
@@ -3967,7 +4054,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local tab = _G["InspectFrameTab"..i]
 			F.CreateTab(tab)
 			if i ~= 1 then
-				tab:SetPoint("LEFT", _G["InspectFrameTab"..i-1], "RIGHT", -15, 0)
+				tab:Point("LEFT", _G["InspectFrameTab"..i-1], "RIGHT", -15, 0)
 			end
 		end
 		for i = 1, 3 do
@@ -3997,8 +4084,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			slot:SetNormalTexture("")
 			slot:SetPushedTexture("")
 			slot.bd = CreateFrame("Frame", nil, slot)
-			slot.bd:SetPoint("TOPLEFT", -1, 1)
-			slot.bd:SetPoint("BOTTOMRIGHT", 1, -1)
+			slot.bd:Point("TOPLEFT", -1, 1)
+			slot.bd:Point("BOTTOMRIGHT", 1, -1)
 			slot.bd:SetFrameLevel(0)
 			S.CreateBD(slot.bd, .25)
 			_G["Inspect"..slots[i].."SlotIconTexture"]:SetTexCoord(.08, .92, .08, .92)
@@ -4055,7 +4142,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ItemSocketingSocket3Right:SetAlpha(0)
 		S.Reskin(ItemSocketingSocketButton)
 		ItemSocketingSocketButton:ClearAllPoints()
-		ItemSocketingSocketButton:SetPoint("BOTTOMRIGHT", ItemSocketingFrame, "BOTTOMRIGHT", -10, 28)
+		ItemSocketingSocketButton:Point("BOTTOMRIGHT", ItemSocketingFrame, "BOTTOMRIGHT", -10, 28)
 
 		for i = 1, MAX_NUM_SOCKETS do
 			local bu = _G["ItemSocketingSocket"..i]
@@ -4078,8 +4165,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				edgeFile = C.media.glow,
 				edgeSize = 4,
 			})
-			bu.glow:SetPoint("TOPLEFT", -4, 4)
-			bu.glow:SetPoint("BOTTOMRIGHT", 4, -4)
+			bu.glow:Point("TOPLEFT", -4, 4)
+			bu.glow:Point("BOTTOMRIGHT", 4, -4)
 		end
 		hooksecurefunc("ItemSocketingFrame_Update", function()
 			for i = 1, MAX_NUM_SOCKETS do
@@ -4188,8 +4275,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			bu:SetCheckedTexture(C.media.checked)
 			select(2, bu:GetRegions()):Hide()
 
-			ic:SetPoint("TOPLEFT", 1, -1)
-			ic:SetPoint("BOTTOMRIGHT", -1, 1)
+			ic:Point("TOPLEFT", 1, -1)
+			ic:Point("BOTTOMRIGHT", -1, 1)
 			ic:SetTexCoord(.08, .92, .08, .92)
 
 			S.CreateBD(bu, .25)
@@ -4202,16 +4289,16 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			bu:SetCheckedTexture(C.media.checked)
 			select(2, bu:GetRegions()):Hide()
 
-			ic:SetPoint("TOPLEFT", 1, -1)
-			ic:SetPoint("BOTTOMRIGHT", -1, 1)
+			ic:Point("TOPLEFT", 1, -1)
+			ic:Point("BOTTOMRIGHT", -1, 1)
 			ic:SetTexCoord(.08, .92, .08, .92)
 
 			S.CreateBD(bu, .25)
 		end
 
-		MacroFrameSelectedMacroButton:SetPoint("TOPLEFT", MacroFrameSelectedMacroBackground, "TOPLEFT", 12, -16)
-		MacroFrameSelectedMacroButtonIcon:SetPoint("TOPLEFT", 1, -1)
-		MacroFrameSelectedMacroButtonIcon:SetPoint("BOTTOMRIGHT", -1, 1)
+		MacroFrameSelectedMacroButton:Point("TOPLEFT", MacroFrameSelectedMacroBackground, "TOPLEFT", 12, -16)
+		MacroFrameSelectedMacroButtonIcon:Point("TOPLEFT", 1, -1)
+		MacroFrameSelectedMacroButtonIcon:Point("BOTTOMRIGHT", -1, 1)
 		MacroFrameSelectedMacroButtonIcon:SetTexCoord(.08, .92, .08, .92)
 
 		S.CreateBD(MacroFrameSelectedMacroButton, .25)
@@ -4225,7 +4312,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.Reskin(MacroSaveButton)
 		S.Reskin(MacroCancelButton)
 		MacroPopupFrame:ClearAllPoints()
-		MacroPopupFrame:SetPoint("TOPLEFT", MacroFrame, "TOPRIGHT", -32, -40)
+		MacroPopupFrame:Point("TOPLEFT", MacroFrame, "TOPRIGHT", -32, -40)
 
 		S.ReskinClose(MacroFrameCloseButton, "TOPRIGHT", MacroFrame, "TOPRIGHT", -38, -14)
 		S.ReskinScroll(MacroButtonScrollFrameScrollBar)
@@ -4301,19 +4388,19 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			PlayerTalentFramePetPanelHeaderIconIcon:SetTexCoord(.08, .92, .08, .92)
 			S.CreateBG(PlayerTalentFramePetPanelHeaderIcon)
 
-			PlayerTalentFramePetPanelHeaderIcon:SetPoint("TOPLEFT", PlayerTalentFramePetPanelHeaderBackground, "TOPLEFT", -2, 3)
-			PlayerTalentFramePetPanelName:SetPoint("LEFT", PlayerTalentFramePetPanelHeaderBackground, "LEFT", 62, 8)
+			PlayerTalentFramePetPanelHeaderIcon:Point("TOPLEFT", PlayerTalentFramePetPanelHeaderBackground, "TOPLEFT", -2, 3)
+			PlayerTalentFramePetPanelName:Point("LEFT", PlayerTalentFramePetPanelHeaderBackground, "LEFT", 62, 8)
 
 			local bg = CreateFrame("Frame", nil, PlayerTalentFramePetPanel)
-			bg:SetPoint("TOPLEFT", 4, -6)
-			bg:SetPoint("BOTTOMRIGHT", -4, 4)
+			bg:Point("TOPLEFT", 4, -6)
+			bg:Point("BOTTOMRIGHT", -4, 4)
 			bg:SetFrameLevel(0)
 			S.CreateBD(bg, .25)
 
 			local line = PlayerTalentFramePetPanel:CreateTexture(nil, "BACKGROUND")
 			line:SetHeight(1)
-			line:SetPoint("TOPLEFT", 4, -52)
-			line:SetPoint("TOPRIGHT", -4, -52)
+			line:Point("TOPLEFT", 4, -52)
+			line:Point("TOPRIGHT", -4, -52)
 			line:SetTexture(C.media.backdrop)
 			line:SetVertexColor(0, 0, 0)
 		end
@@ -4345,27 +4432,27 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			_G["PlayerTalentFramePanel"..i.."HeaderIconPointsSpentBgSilver"]:SetAlpha(0)
 
 			icontexture:SetTexCoord(.08, .92, .08, .92)
-			icontexture:SetPoint("TOPLEFT", 1, -1)
-			icontexture:SetPoint("BOTTOMRIGHT", -1, 1)
+			icontexture:Point("TOPLEFT", 1, -1)
+			icontexture:Point("BOTTOMRIGHT", -1, 1)
 
 			S.CreateBD(icon)
 
-			icon:SetPoint("TOPLEFT", panel, "TOPLEFT", 4, -1)
+			icon:Point("TOPLEFT", panel, "TOPLEFT", 4, -1)
 
 			num:ClearAllPoints()
-			num:SetPoint("RIGHT", _G["PlayerTalentFramePanel"..i.."HeaderBackground"], "RIGHT", -40, 0)
+			num:Point("RIGHT", _G["PlayerTalentFramePanel"..i.."HeaderBackground"], "RIGHT", -40, 0)
 			num:SetFont(DB.Font, 12)
 			num:SetJustifyH("RIGHT")
 
 			panel.bg = CreateFrame("Frame", nil, panel)
-			panel.bg:SetPoint("TOPLEFT", 4, -39)
-			panel.bg:SetPoint("BOTTOMRIGHT", -4, 4)
+			panel.bg:Point("TOPLEFT", 4, -39)
+			panel.bg:Point("BOTTOMRIGHT", -4, 4)
 			panel.bg:SetFrameLevel(0)
 			S.CreateBD(panel.bg)
 
 			panel.bg2 = CreateFrame("Frame", nil, panel)
-			panel.bg2:SetSize(200, 36)
-			panel.bg2:SetPoint("TOPLEFT", 4, -1)
+			panel.bg2:Size(200, 36)
+			panel.bg2:Point("TOPLEFT", 4, -1)
 			panel.bg2:SetFrameLevel(0)
 			S.CreateBD(panel.bg2, .25)
 
@@ -4383,8 +4470,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				bu:SetPushedTexture("")
 				bu.SetPushedTexture = F.dummy
 				ic:SetTexCoord(.08, .92, .08, .92)
-				ic:SetPoint("TOPLEFT", 1, -1)
-				ic:SetPoint("BOTTOMRIGHT", -1, 1)
+				ic:Point("TOPLEFT", 1, -1)
+				ic:Point("BOTTOMRIGHT", -1, 1)
 
 				S.CreateBD(bu)
 			end
@@ -4395,8 +4482,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			tab:SetCheckedTexture(C.media.checked)
 			local a1, p, a2, x, y = PlayerSpecTab1:GetPoint()
 			local bg = CreateFrame("Frame", nil, tab)
-			bg:SetPoint("TOPLEFT", -1, 1)
-			bg:SetPoint("BOTTOMRIGHT", 1, -1)
+			bg:Point("TOPLEFT", -1, 1)
+			bg:Point("BOTTOMRIGHT", 1, -1)
 			bg:SetFrameLevel(tab:GetFrameLevel()-1)
 			hooksecurefunc("PlayerTalentFrame_UpdateTabs", function()
 				PlayerSpecTab1:SetPoint(a1, p, a2, x + 11, y + 10)
@@ -4456,7 +4543,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		TradeSkillGuildFrame:ClearAllPoints()
 		TradeSkillGuildFrame:SetPoint(a1, p, a2, x + 16, y)
 
-		TradeSkillLinkButton:SetPoint("LEFT", 0, -1)
+		TradeSkillLinkButton:Point("LEFT", 0, -1)
 
 		S.Reskin(TradeSkillCreateButton)
 		S.Reskin(TradeSkillCreateAllButton)
@@ -4469,8 +4556,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		TradeSkillRankFrame:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
 
 		local bg = CreateFrame("Frame", nil, TradeSkillRankFrame)
-		bg:SetPoint("TOPLEFT", -1, 1)
-		bg:SetPoint("BOTTOMRIGHT", 1, -1)
+		bg:Point("TOPLEFT", -1, 1)
+		bg:Point("BOTTOMRIGHT", 1, -1)
 		bg:SetFrameLevel(TradeSkillRankFrame:GetFrameLevel()-1)
 		S.CreateBD(bg, .25)
 
@@ -4486,8 +4573,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			S.CreateBG(ic)
 
 			local bd = CreateFrame("Frame", nil, bu)
-			bd:SetPoint("TOPLEFT", 39, -1)
-			bd:SetPoint("BOTTOMRIGHT", 0, 1)
+			bd:Point("TOPLEFT", 39, -1)
+			bd:Point("BOTTOMRIGHT", 0, 1)
 			bd:SetFrameLevel(0)
 			S.CreateBD(bd, .25)
 
@@ -4498,8 +4585,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local ic = TradeSkillSkillIcon:GetNormalTexture()
 			if ic then
 				ic:SetTexCoord(.08, .92, .08, .92)
-				ic:SetPoint("TOPLEFT", 1, -1)
-				ic:SetPoint("BOTTOMRIGHT", -1, 1)
+				ic:Point("TOPLEFT", 1, -1)
+				ic:Point("BOTTOMRIGHT", -1, 1)
 				S.CreateBD(TradeSkillSkillIcon)
 			else
 				TradeSkillSkillIcon:SetBackdrop(nil)
@@ -4513,8 +4600,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		all:SetPushedTexture("")
 
 		all.bg = CreateFrame("Frame", nil, all)
-		all.bg:SetSize(13, 13)
-		all.bg:SetPoint("LEFT", 4, 0)
+		all.bg:Size(13, 13)
+		all.bg:Point("LEFT", 4, 0)
 		all.bg:SetFrameLevel(all:GetFrameLevel()-1)
 		S.CreateBD(all.bg, 0)	
 
@@ -4524,13 +4611,13 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		all.tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
 		all.minus = all:CreateTexture(nil, "OVERLAY")
-		all.minus:SetSize(7, 1)
+		all.minus:Size(7, 1)
 		all.minus:SetPoint("CENTER", all.bg)
 		all.minus:SetTexture(C.media.backdrop)
 		all.minus:SetVertexColor(1, 1, 1)
 
 		all.plus = all:CreateTexture(nil, "OVERLAY")
-		all.plus:SetSize(1, 7)
+		all.plus:Size(1, 7)
 		all.plus:SetPoint("CENTER", all.bg)
 		all.plus:SetTexture(C.media.backdrop)
 		all.plus:SetVertexColor(1, 1, 1)
@@ -4569,8 +4656,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					buttonHighlight.SetTexture = F.dummy
 
 					skillButton.bg = CreateFrame("Frame", nil, skillButton)
-					skillButton.bg:SetSize(13, 13)
-					skillButton.bg:SetPoint("LEFT", 4, 0)
+					skillButton.bg:Size(13, 13)
+					skillButton.bg:Point("LEFT", 4, 0)
 					skillButton.bg:SetFrameLevel(skillButton:GetFrameLevel()-1)
 					S.CreateBD(skillButton.bg, 0)	
 
@@ -4580,13 +4667,13 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					skillButton.tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
 					skillButton.minus = skillButton:CreateTexture(nil, "OVERLAY")
-					skillButton.minus:SetSize(7, 1)
+					skillButton.minus:Size(7, 1)
 					skillButton.minus:SetPoint("CENTER", skillButton.bg)
 					skillButton.minus:SetTexture(C.media.backdrop)
 					skillButton.minus:SetVertexColor(1, 1, 1)
 
 					skillButton.plus = skillButton:CreateTexture(nil, "OVERLAY")
-					skillButton.plus:SetSize(1, 7)
+					skillButton.plus:Size(1, 7)
 					skillButton.plus:SetPoint("CENTER", skillButton.bg)
 					skillButton.plus:SetTexture(C.media.backdrop)
 					skillButton.plus:SetVertexColor(1, 1, 1)
@@ -4618,7 +4705,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
-		TradeSkillIncrementButton:SetPoint("RIGHT", TradeSkillCreateButton, "LEFT", -9, 0)
+		TradeSkillIncrementButton:Point("RIGHT", TradeSkillCreateButton, "LEFT", -9, 0)
 
 		S.ReskinClose(TradeSkillFrameCloseButton)
 		S.ReskinClose(TradeSkillGuildFrameCloseButton)
@@ -4649,8 +4736,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ClassTrainerStatusBarSkillRank:SetPoint("CENTER", ClassTrainerStatusBar, "CENTER", 0, 0)
 
 		local bg = CreateFrame("Frame", nil, ClassTrainerFrameSkillStepButton)
-		bg:SetPoint("TOPLEFT", 42, -2)
-		bg:SetPoint("BOTTOMRIGHT", 0, 2)
+		bg:Point("TOPLEFT", 42, -2)
+		bg:Point("BOTTOMRIGHT", 0, 2)
 		bg:SetFrameLevel(ClassTrainerFrameSkillStepButton:GetFrameLevel()-1)
 		S.CreateBD(bg, .25)
 
@@ -4658,14 +4745,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		select(7, ClassTrainerFrameSkillStepButton:GetRegions()):SetAlpha(0)
 
 		local check = select(4, ClassTrainerFrameSkillStepButton:GetRegions())
-		check:SetPoint("TOPLEFT", 43, -3)
-		check:SetPoint("BOTTOMRIGHT", -1, 3)
+		check:Point("TOPLEFT", 43, -3)
+		check:Point("BOTTOMRIGHT", -1, 3)
 		check:SetTexture(C.media.backdrop)
 		check:SetVertexColor(r, g, b, .2)
 
 		local icbg = CreateFrame("Frame", nil, ClassTrainerFrameSkillStepButton)
-		icbg:SetPoint("TOPLEFT", ClassTrainerFrameSkillStepButtonIcon, -1, 1)
-		icbg:SetPoint("BOTTOMRIGHT", ClassTrainerFrameSkillStepButtonIcon, 1, -1)
+		icbg:Point("TOPLEFT", ClassTrainerFrameSkillStepButtonIcon, -1, 1)
+		icbg:Point("BOTTOMRIGHT", ClassTrainerFrameSkillStepButtonIcon, 1, -1)
 		S.CreateBD(icbg, 0)
 
 		ClassTrainerFrameSkillStepButtonIcon:SetTexCoord(.08, .92, .08, .92)
@@ -4675,24 +4762,24 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local ic = _G["ClassTrainerScrollFrameButton"..i.."Icon"]
 
 			local bg = CreateFrame("Frame", nil, bu)
-			bg:SetPoint("TOPLEFT", 42, -6)
-			bg:SetPoint("BOTTOMRIGHT", 0, 6)
+			bg:Point("TOPLEFT", 42, -6)
+			bg:Point("BOTTOMRIGHT", 0, 6)
 			bg:SetFrameLevel(bu:GetFrameLevel()-1)
 			S.CreateBD(bg, .25)
 
 			bu.name:SetParent(bg)
-			bu.name:SetPoint("TOPLEFT", ic, "TOPRIGHT", 6, -2)
+			bu.name:Point("TOPLEFT", ic, "TOPRIGHT", 6, -2)
 			bu.subText:SetParent(bg)
 			bu.money:SetParent(bg)
-			bu.money:SetPoint("TOPRIGHT", bu, "TOPRIGHT", 5, -8)
+			bu.money:Point("TOPRIGHT", bu, "TOPRIGHT", 5, -8)
 			bu:SetHighlightTexture(nil)
 			bu.disabledBG:Hide()
 			bu.disabledBG.Show = F.dummy
 			select(5, bu:GetRegions()):SetAlpha(0)
 
 			local check = select(2, bu:GetRegions())
-			check:SetPoint("TOPLEFT", 43, -6)
-			check:SetPoint("BOTTOMRIGHT", -1, 7)
+			check:Point("TOPLEFT", 43, -6)
+			check:Point("BOTTOMRIGHT", -1, 7)
 			check:SetTexture(C.media.backdrop)
 			check:SetVertexColor(r, g, b, .2)
 
@@ -4704,20 +4791,20 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ClassTrainerStatusBarMiddle:Hide()
 		ClassTrainerStatusBarRight:Hide()
 		ClassTrainerStatusBarBackground:Hide()
-		ClassTrainerStatusBar:SetPoint("TOPLEFT", ClassTrainerFrame, "TOPLEFT", 64, -35)
+		ClassTrainerStatusBar:Point("TOPLEFT", ClassTrainerFrame, "TOPLEFT", 64, -35)
 		ClassTrainerStatusBar:SetStatusBarTexture(C.media.backdrop)
 
 		ClassTrainerStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
 
 		local bd = CreateFrame("Frame", nil, ClassTrainerStatusBar)
-		bd:SetPoint("TOPLEFT", -1, 1)
-		bd:SetPoint("BOTTOMRIGHT", 1, -1)
+		bd:Point("TOPLEFT", -1, 1)
+		bd:Point("BOTTOMRIGHT", 1, -1)
 		bd:SetFrameLevel(ClassTrainerStatusBar:GetFrameLevel()-1)
 		S.CreateBD(bd, .25)
 		
 		local moneyBg = CreateFrame("Frame", nil, ClassTrainerFrame)
 		moneyBg:SetPoint("TOPLEFT", ClassTrainerFrameMoneyBg)
-		moneyBg:SetPoint("BOTTOMRIGHT", ClassTrainerFrameMoneyBg, 0, 12)
+		moneyBg:Point("BOTTOMRIGHT", ClassTrainerFrameMoneyBg, 0, 12)
 		moneyBg:SetFrameLevel(ClassTrainerFrame:GetFrameLevel()-1)
 		S.CreateBD(moneyBg, .25)
 		
@@ -4772,14 +4859,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			_G["VoidStorageWithdrawButton"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
 
 			local bg1 = CreateFrame("Frame", nil, bu1)
-			bg1:SetPoint("TOPLEFT", -1, 1)
-			bg1:SetPoint("BOTTOMRIGHT", 1, -1)
+			bg1:Point("TOPLEFT", -1, 1)
+			bg1:Point("BOTTOMRIGHT", 1, -1)
 			bg1:SetFrameLevel(bu1:GetFrameLevel()-1)
 			S.CreateBD(bg1, .25)
 
 			local bg2 = CreateFrame("Frame", nil, bu2)
-			bg2:SetPoint("TOPLEFT", -1, 1)
-			bg2:SetPoint("BOTTOMRIGHT", 1, -1)
+			bg2:Point("TOPLEFT", -1, 1)
+			bg2:Point("BOTTOMRIGHT", 1, -1)
 			bg2:SetFrameLevel(bu2:GetFrameLevel()-1)
 			S.CreateBD(bg2, .25)
 		end
@@ -4793,8 +4880,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			_G["VoidStorageStorageButton"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
 
 			local bg = CreateFrame("Frame", nil, bu)
-			bg:SetPoint("TOPLEFT", -1, 1)
-			bg:SetPoint("BOTTOMRIGHT", 1, -1)
+			bg:Point("TOPLEFT", -1, 1)
+			bg:Point("BOTTOMRIGHT", 1, -1)
 			bg:SetFrameLevel(bu:GetFrameLevel()-1)
 			S.CreateBD(bg, .25)
 		end
@@ -4869,17 +4956,17 @@ if IsMacClient() then
 	MacOptionsFrameCancel:SetWidth(96)
 	MacOptionsFrameCancel:SetHeight(22)
 	MacOptionsFrameCancel:ClearAllPoints()
-	MacOptionsFrameCancel:SetPoint("LEFT", MacOptionsButtonKeybindings, "RIGHT", 107, 0)
+	MacOptionsFrameCancel:Point("LEFT", MacOptionsButtonKeybindings, "RIGHT", 107, 0)
  
 	MacOptionsFrameOkay:SetWidth(96)
 	MacOptionsFrameOkay:SetHeight(22)
 	MacOptionsFrameOkay:ClearAllPoints()
-	MacOptionsFrameOkay:SetPoint("LEFT", MacOptionsButtonKeybindings, "RIGHT", 5, 0)
+	MacOptionsFrameOkay:Point("LEFT", MacOptionsButtonKeybindings, "RIGHT", 5, 0)
  
 	MacOptionsButtonKeybindings:SetWidth(96)
 	MacOptionsButtonKeybindings:SetHeight(22)
 	MacOptionsButtonKeybindings:ClearAllPoints()
-	MacOptionsButtonKeybindings:SetPoint("LEFT", MacOptionsFrameDefaults, "RIGHT", 5, 0)
+	MacOptionsButtonKeybindings:Point("LEFT", MacOptionsFrameDefaults, "RIGHT", 5, 0)
  
 	MacOptionsFrameDefaults:SetWidth(96)
 	MacOptionsFrameDefaults:SetHeight(22)
@@ -4916,14 +5003,14 @@ Delay:SetScript("OnEvent", function()
 		local sb = _G["GameTooltipStatusBar"]
 		sb:SetHeight(3)
 		sb:ClearAllPoints()
-		sb:SetPoint("BOTTOMLEFT", GameTooltip, "BOTTOMLEFT", 1, 1)
-		sb:SetPoint("BOTTOMRIGHT", GameTooltip, "BOTTOMRIGHT", -1, 1)
+		sb:Point("BOTTOMLEFT", GameTooltip, "BOTTOMLEFT", 1, 1)
+		sb:Point("BOTTOMRIGHT", GameTooltip, "BOTTOMRIGHT", -1, 1)
 		sb:SetStatusBarTexture(C.media.backdrop)
 
 		local sep = GameTooltipStatusBar:CreateTexture(nil, "ARTWORK")
 		sep:SetHeight(1)
-		sep:SetPoint("BOTTOMLEFT", 0, 3)
-		sep:SetPoint("BOTTOMRIGHT", 0, 3)
+		sep:Point("BOTTOMLEFT", 0, 3)
+		sep:Point("BOTTOMRIGHT", 0, 3)
 		sep:SetTexture(C.media.backdrop)
 		sep:SetVertexColor(0, 0, 0)
 
@@ -4950,13 +5037,13 @@ Delay:SetScript("OnEvent", function()
 			WorldMapFrameMiniBorderLeft:SetAlpha(0)
 			WorldMapFrameMiniBorderRight:SetAlpha(0)
 			WorldMapFrameCloseButton:ClearAllPoints()
-			WorldMapFrameCloseButton:SetPoint("TOPRIGHT", WorldMapButton, "TOPRIGHT", 3, 3)
+			WorldMapFrameCloseButton:Point("TOPRIGHT", WorldMapButton, "TOPRIGHT", 3, 3)
 			WorldMapFrameCloseButton:SetFrameStrata("HIGH")
 			WorldMapFrameSizeUpButton:ClearAllPoints()
-			WorldMapFrameSizeUpButton:SetPoint("TOPRIGHT", WorldMapButton, "TOPRIGHT", 3, -18)
+			WorldMapFrameSizeUpButton:Point("TOPRIGHT", WorldMapButton, "TOPRIGHT", 3, -18)
 			WorldMapFrameSizeUpButton:SetFrameStrata("HIGH")
 			WorldMapFrameTitle:ClearAllPoints()
-			WorldMapFrameTitle:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, 9, 5)
+			WorldMapFrameTitle:Point("BOTTOMLEFT", WorldMapDetailFrame, 9, 5)
 			WorldMapFrameTitle:SetParent(frame)
 			WorldMapFrameTitle:SetFont(DB.Font, 18, "OUTLINE")
 			WorldMapFrameTitle:SetShadowOffset(0, 0)
@@ -4965,23 +5052,23 @@ Delay:SetScript("OnEvent", function()
 			WorldMapQuestShowObjectives:ClearAllPoints()
 			WorldMapQuestShowObjectives:SetPoint("BOTTOMRIGHT", WorldMapButton, "BOTTOMRIGHT")
 			WorldMapQuestShowObjectivesText:ClearAllPoints()
-			WorldMapQuestShowObjectivesText:SetPoint("RIGHT", WorldMapQuestShowObjectives, "LEFT", -4, 1)
+			WorldMapQuestShowObjectivesText:Point("RIGHT", WorldMapQuestShowObjectives, "LEFT", -4, 1)
 			WorldMapQuestShowObjectivesText:SetFont(DB.Font, 18, "OUTLINE")
 			WorldMapQuestShowObjectivesText:SetShadowOffset(0, 0)
 			WorldMapQuestShowObjectivesText:SetTextColor(1, 1, 1)
 			WorldMapTrackQuest:SetParent(frame)
 			WorldMapTrackQuest:ClearAllPoints()
-			WorldMapTrackQuest:SetPoint("TOPLEFT", WorldMapDetailFrame, 9, -5)
+			WorldMapTrackQuest:Point("TOPLEFT", WorldMapDetailFrame, 9, -5)
 			WorldMapTrackQuestText:SetFont(DB.Font, 18, "OUTLINE")
 			WorldMapTrackQuestText:SetShadowOffset(0, 0)
 			WorldMapTrackQuestText:SetTextColor(1, 1, 1)
 			WorldMapShowDigSites:SetParent(frame)
 			WorldMapShowDigSites:ClearAllPoints()
-			WorldMapShowDigSites:SetPoint("BOTTOMRIGHT", WorldMapButton, "BOTTOMRIGHT", 0, 19)
+			WorldMapShowDigSites:Point("BOTTOMRIGHT", WorldMapButton, "BOTTOMRIGHT", 0, 19)
 			WorldMapShowDigSitesText:SetFont(DB.Font, 18, "OUTLINE")
 			WorldMapShowDigSitesText:SetShadowOffset(0, 0)
 			WorldMapShowDigSitesText:ClearAllPoints()
-			WorldMapShowDigSitesText:SetPoint("RIGHT",WorldMapShowDigSites,"LEFT",-4,1)
+			WorldMapShowDigSitesText:Point("RIGHT",WorldMapShowDigSites,"LEFT",-4,1)
 			WorldMapShowDigSitesText:SetTextColor(1, 1, 1)
 		end
 
@@ -5011,8 +5098,8 @@ Delay:SetScript("OnEvent", function()
 				button:SetNormalTexture("")
 				button:SetPushedTexture("")
 
-				icon:SetPoint("TOPLEFT", 1, -1)
-				icon:SetPoint("BOTTOMRIGHT", -1, 1)
+				icon:Point("TOPLEFT", 1, -1)
+				icon:Point("BOTTOMRIGHT", -1, 1)
 				icon:SetTexCoord(.08, .92, .08, .92)
 
 				quest:SetTexture("Interface\\AddOns\\!SunUI\\Media\\quest")
@@ -5024,8 +5111,8 @@ Delay:SetScript("OnEvent", function()
 			end
 
 			local f = CreateFrame("Frame", nil, con)
-			f:SetPoint("TOPLEFT", 8, -4)
-			f:SetPoint("BOTTOMRIGHT", -4, 3)
+			f:Point("TOPLEFT", 8, -4)
+			f:Point("BOTTOMRIGHT", -4, 3)
 			f:SetFrameLevel(con:GetFrameLevel()-1)
 			S.CreateBD(f, .6)
 
@@ -5056,8 +5143,8 @@ Delay:SetScript("OnEvent", function()
 			button:SetNormalTexture("")
 			button:SetPushedTexture("")
 
-			icon:SetPoint("TOPLEFT", 1, -1)
-			icon:SetPoint("BOTTOMRIGHT", -1, 1)
+			icon:Point("TOPLEFT", 1, -1)
+			icon:Point("BOTTOMRIGHT", -1, 1)
 			icon:SetTexCoord(.08, .92, .08, .92)
 
 			quest:SetTexture("Interface\\AddOns\\!SunUI\\Media\\quest")
@@ -5076,8 +5163,8 @@ Delay:SetScript("OnEvent", function()
 			bag:SetNormalTexture("")
 			bag:SetPushedTexture("")
 
-			ic:SetPoint("TOPLEFT", 1, -1)
-			ic:SetPoint("BOTTOMRIGHT", -1, 1)
+			ic:Point("TOPLEFT", 1, -1)
+			ic:Point("BOTTOMRIGHT", -1, 1)
 			ic:SetTexCoord(.08, .92, .08, .92)
 
 			S.CreateBD(bag, 0)
@@ -5091,12 +5178,12 @@ Delay:SetScript("OnEvent", function()
 
 		LootFrame.bg = CreateFrame("Frame", nil, LootFrame)
 		LootFrame.bg:SetFrameLevel(LootFrame:GetFrameLevel()-1)
-		LootFrame.bg:SetPoint("TOPLEFT", LootFrame, "TOPLEFT", 20, -12)
-		LootFrame.bg:SetPoint("BOTTOMRIGHT", LootFrame, "BOTTOMRIGHT", -66, 12)
+		LootFrame.bg:Point("TOPLEFT", LootFrame, "TOPLEFT", 20, -12)
+		LootFrame.bg:Point("BOTTOMRIGHT", LootFrame, "BOTTOMRIGHT", -66, 12)
 
 		S.CreateBD(LootFrame.bg)
 
-		select(3, LootFrame:GetRegions()):SetPoint("TOP", LootFrame.bg, "TOP", 0, -8)
+		select(3, LootFrame:GetRegions()):Point("TOP", LootFrame.bg, "TOP", 0, -8)
 
 		for i = 1, LOOTFRAME_NUMBUTTONS do
 			local bu = _G["LootButton"..i]
@@ -5109,7 +5196,7 @@ Delay:SetScript("OnEvent", function()
 
 			local bd = CreateFrame("Frame", nil, bu)
 			bd:SetPoint("TOPLEFT")
-			bd:SetPoint("BOTTOMRIGHT", 126, 0)
+			bd:Point("BOTTOMRIGHT", 126, 0)
 			bd:SetFrameLevel(bu:GetFrameLevel()-1)
 			S.CreateBD(bd, .25)
 

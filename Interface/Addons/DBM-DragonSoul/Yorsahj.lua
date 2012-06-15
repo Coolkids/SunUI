@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(325, "DBM-DragonSoul", nil, 187)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7456 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7532 $"):sub(12, -3))
 mod:SetCreatureID(55312)
 mod:SetModelID(39101)
 mod:SetModelSound("sound\\CREATURE\\Yorsahj\\VO_DS_YORSAHJ_INTRO_01.OGG", "sound\\CREATURE\\Yorsahj\\VO_DS_YORSAHJ_SPELL_02.OGG")
@@ -34,6 +34,7 @@ local specWarnPurple		= mod:NewSpecialWarningSpell(104896, mod:IsTank() or mod:I
 
 local timerOozesCD			= mod:NewNextTimer(90, "ej3978")
 local timerOozesActive		= mod:NewTimer(7, "timerOozesActive", 16372) -- varies (7.0~8.5)
+local timerOozesReach		= mod:NewTimer(34.5, "timerOozesReach", 16372)
 local timerAcidCD			= mod:NewNextTimer(8.3, 108352)--Green ooze aoe
 local timerSearingCD		= mod:NewNextTimer(6, 108358)--Red ooze aoe
 local timerVoidBoltCD		= mod:NewNextTimer(6, 108383, nil, mod:IsTank())
@@ -204,6 +205,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		specWarnOozes:Show()
 		timerVoidBoltCD:Start(42)
 		timerOozesActive:Start()
+		timerOozesReach:Start()
 		if self:IsDifficulty("heroic10", "heroic25") then
 			warnOozes:Show(table.concat(oozeColorsHeroic[spellId], ", "))
 			timerOozesCD:Start(75)

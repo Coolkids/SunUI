@@ -13,6 +13,7 @@
 	<Script file = "function\uiscale.lua"/>
 	<Include file="function\load.xml"/>
 	<Include file ="blzhook\load.xml"/>
+	<Script file = "function\AddonManager.lua"/>
 </Ui>
 
 <!--	<Script file="Load.lua"/>  -->

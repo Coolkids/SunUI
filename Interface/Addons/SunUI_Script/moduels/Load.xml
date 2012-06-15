@@ -1,5 +1,4 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file ="AddonManager.lua"/>
 	<Script file="AutoButton.lua"/>
 	<Script file="AutoBuy.lua"/>
 	<Script file='AutoLFG.lua'/>

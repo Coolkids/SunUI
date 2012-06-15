@@ -169,7 +169,7 @@ local function StopGlow(f)
 	f.glow:SetAlpha(0)
 end
 S.StopGlow = StopGlow
-function S.Reskin(f)
+function S.Reskin(f, noGlow)
 	f:SetNormalTexture("")
 	f:SetHighlightTexture("")
 	f:SetPushedTexture("")
@@ -186,24 +186,22 @@ function S.Reskin(f)
 
 	CreateBD(f, .0)
 
-	local tex = f:CreateTexture(nil, "BACKGROUND")
-	tex:SetPoint("TOPLEFT")
-	tex:SetPoint("BOTTOMRIGHT")
-	tex:SetTexture("Interface\\ChatFrame\\ChatFrameBackground")
-	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+	S.CreateGradient(f)
 
-	f.glow = CreateFrame("Frame", nil, f)
-	f.glow:SetBackdrop({
-		edgeFile = DB.GlowTex,
-		edgeSize = S.Scale(5),
-	})
-	f.glow:Point("TOPLEFT", -6, 6)
-	f.glow:Point("BOTTOMRIGHT", 6, -6)
-	f.glow:SetBackdropBorderColor(r, g, b)
-	f.glow:SetAlpha(0)
+	if not noGlow then
+		f.glow = CreateFrame("Frame", nil, f)
+		f.glow:SetBackdrop({
+			edgeFile = DB.GlowTex,
+			edgeSize = 5,
+		})
+		f.glow:Point("TOPLEFT", -6, 6)
+		f.glow:Point("BOTTOMRIGHT", 6, -6)
+		f.glow:SetBackdropBorderColor(r, g, b)
+		f.glow:SetAlpha(0)
 
-	f:HookScript("OnEnter", StartGlow)
- 	f:HookScript("OnLeave", StopGlow)
+		f:HookScript("OnEnter", StartGlow)
+ 		f:HookScript("OnLeave", StopGlow)
+	end
 end
 function S.ReskinInput(f, height, width, leftOff, rightOff)
 	local frame = f:GetName()
@@ -211,7 +209,6 @@ function S.ReskinInput(f, height, width, leftOff, rightOff)
 	if _G[frame.."Middle"] then _G[frame.."Middle"]:Hide() end
 	if _G[frame.."Mid"] then _G[frame.."Mid"]:Hide() end
 	_G[frame.."Right"]:Hide()
-	CreateBD(f, 0)
 
 	local bd = CreateFrame("Frame", nil, f)
 	bd:SetPoint("TOPLEFT", leftOff or -2, 0)
@@ -304,6 +301,15 @@ function S.SetBD(f, x, y, x2, y2)
 	end) ]]
 	f.ssb = bg
 end
+
+local function colourClose(f)
+	f.text:SetTextColor(1, .1, .1)
+end
+
+local function clearClose(f)
+	f.text:SetTextColor(1, 1, 1)
+end
+
 S.ReskinClose = function(f, a1, p, a2, x, y)
 	f:SetSize(17, 17)
 
@@ -321,19 +327,16 @@ S.ReskinClose = function(f, a1, p, a2, x, y)
 
 	CreateBD(f, 0)
 
-	local tex = f:CreateTexture(nil, "BACKGROUND")
-	tex:SetPoint("TOPLEFT")
-	tex:SetPoint("BOTTOMRIGHT")
-	tex:SetTexture("Interface\\ChatFrame\\ChatFrameBackground")
-	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+	S.CreateGradient(f)
 
 	local text = f:CreateFontString(nil, "OVERLAY")
 	text:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
 	text:SetPoint("CENTER", 1, 1)
 	text:SetText("x")
+	f.text = text
 
-	f:HookScript("OnEnter", function(self) text:SetTextColor(1, .1, .1) end)
- 	f:HookScript("OnLeave", function(self) text:SetTextColor(1, 1, 1) end)
+	f:HookScript("OnEnter", colourClose)
+ 	f:HookScript("OnLeave", clearClose)
 end
 function S.MakeMoveHandle(Frame, Text, key)
 	local MoveHandle = CreateFrame("Frame", nil, UIParent)
