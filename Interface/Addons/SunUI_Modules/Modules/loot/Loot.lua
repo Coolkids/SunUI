@@ -225,7 +225,7 @@ end
 local AnnounceButton = {}
 for i = 1, #chn do
 	AnnounceButton[i] = CreateFrame("Button", "AnnounceButton"..i, Butsu)
-	AnnounceButton[i]:SetSize(22, 14)
+	AnnounceButton[i]:SetSize(22, 10)
 	AnnounceButton[i]:SetPoint(unpack(pos[i]))
 	AnnounceButton[i]:SetScript("OnClick", function() Announce(chn[i]) end)
 	AnnounceButton[i]:CreateShadow("")
@@ -287,7 +287,7 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 				slot.count:Hide()
 			end
 			
-			if(quality > 2) then
+			if(quality > 1) then
 				slot.iconFrame:SetBackdropBorderColor(color.r, color.g, color.b)
 			else
 				slot.iconFrame:SetBackdropBorderColor(0, 0, 0)

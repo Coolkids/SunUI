@@ -676,28 +676,16 @@ function Bag:InitBags()
 	f.sortButton:Point('TOPLEFT', f, 'TOPLEFT', 7, -4)
 	f.sortButton:Size(55, 10)
 	f.sortButton.ttText = "整理背包"
-	f.sortButton.ttText2 = "按住shift:"
-	f.sortButton.ttText2desc = "整理特殊背包"
+	f.sortButton.ttText2 = "整理背包"
+	f.sortButton.ttText2desc = "整理背包"
 	f.sortButton:SetScript("OnEnter", Tooltip_Show)
 	f.sortButton:SetScript("OnLeave", Tooltip_Hide)	
-	f.sortButton:SetScript('OnClick', function() if IsShiftKeyDown() then Bag:Sort(f, 'c/p'); else Bag:Sort(f, 'd'); end end)
+	f.sortButton:SetScript('OnClick', function() JPack:Pack() end)
 	S.Reskin(f.sortButton)
-	
-	--Stack Button
-	f.stackButton = CreateFrame('Button', nil, f)
-	f.stackButton:Point('LEFT', f.sortButton, 'RIGHT', 3, 0)
-	f.stackButton:Size(55, 10)
-	f.stackButton.ttText = "堆叠物品"
-	f.stackButton.ttText2 = "按住shift:"
-	f.stackButton.ttText2desc = "堆叠特殊背包物品"
-	f.stackButton:SetScript("OnEnter", Tooltip_Show)
-	f.stackButton:SetScript("OnLeave", Tooltip_Hide)	
-	f.stackButton:SetScript('OnClick', function() if IsShiftKeyDown() then Bag:SetBagsForSorting("c/p"); Bag:Restack(f); else Bag:SetBagsForSorting("d"); Bag:Restack(f); end end)
-	S.Reskin(f.stackButton)
 	
 	--Bags Button
 	f.bagsButton = CreateFrame('Button', nil, f)
-	f.bagsButton:Point('LEFT', f.stackButton, 'RIGHT', 3, 0)
+	f.bagsButton:Point('LEFT', f.sortButton, 'RIGHT', 3, 0)
 	f.bagsButton:Size(55, 10)
 	f.bagsButton.ttText = "显示背包"
 	f.bagsButton:SetScript("OnEnter", Tooltip_Show)
@@ -1085,150 +1073,7 @@ function Bag:SortOnUpdate(e)
 		Bag.sortList = nil
 	end
 end
-
-function Bag:SortBags(frame)
-	if InCombatLockdown() then return end;
-	local bs = self.sortBags
-	if #bs < 1 then
-		return
-	end
-
-	local st = {}
-	self:OpenBags()
-
-	for i, v in pairs(self.buttons) do
-		if InBags(v.bag) then
-			self:SlotUpdate(v)
-
-			if v.name then
-				local tex, cnt, _, _, _, _, clink = GetContainerItemInfo(v.bag, v.slot)
-				local n, _, q, iL, rL, c1, c2, _, Sl = GetItemInfo(clink)
-				table.insert(st, {
-					srcSlot = v,
-					sslot = v.slot,
-					sbag = v.bag,
-					--sort = q .. iL .. c1 .. c2 .. rL .. Sl .. n .. i,
-					--sort = q .. iL .. c1 .. c2 .. rL .. Sl .. n .. (#self.buttons - i),
-					sort = q .. c1 .. c2 .. rL .. n .. iL .. Sl .. (#self.buttons - i),
-					--sort = q .. (#self.buttons - i) .. n,
-				})
-			end
-		end
-	end
-
-	table.sort (st, function(a, b)
-		return a.sort > b.sort
-	end)
-
-	local st_idx = #bs
-	local dbag = bs[st_idx]
-	local dslot = GetContainerNumSlots(dbag)
- 
-	for i, v in ipairs (st) do
-		v.dbag = dbag
-		v.dslot = dslot
-		v.dstSlot = self:SlotNew(dbag, dslot)
- 
-		dslot = dslot - 1
- 
-		if dslot == 0 then
-			while true do
-				st_idx = st_idx - 1
- 
-				if st_idx < 0 then
-					break
-				end
- 
-				dbag = bs[st_idx]
-				
-				if dbag and (Bag:BagType(dbag) == ST_NORMAL or Bag:BagType(dbag) == ST_SPECIAL or dbag < 1) then
-					break
-				end
-			end
-			
-			if dbag then
-				dslot = GetContainerNumSlots(dbag)
-			else
-				dslot = 8
-			end
-		end
-	end
-
-	local changed = true
-	while changed do
-		changed = false
-		for i, v in ipairs (st) do
-			if (v.sslot == v.dslot) and (v.sbag == v.dbag) then
-				table.remove (st, i)
-				changed = true
-			end
-		end
-	end
-
-	if st == nil or next(st, nil) == nil then
-		frame:SetScript("OnUpdate", nil)
-	else
-		self.sortList = st
-		frame:SetScript("OnUpdate", Bag.SortOnUpdate)
-	end
-end
-
-function Bag:SetBagsForSorting(c, bank)
-	self:OpenBags()
-
-	self.sortBags = {}
-
-	local cmd = ((c == nil or c == "") and {"d"} or {strsplit("/", c)})
-
-	for _, s in ipairs(cmd) do
-		if s == "c" then
-			self.sortBags = {}
-		elseif s == "d" then
-			if not bank then
-				for _, i in ipairs(BAGS_BACKPACK) do
-					if self.bags[i] and self.bags[i].bagType == ST_NORMAL then
-						table.insert(self.sortBags, i)
-					end
-				end
-			else
-				for _, i in ipairs(BAGS_BANK) do
-					if self.bags[i] and self.bags[i].bagType == ST_NORMAL then
-						table.insert(self.sortBags, i)
-					end
-				end
-			end
-		elseif s == "p" then
-			if not bank then
-				for _, i in ipairs(BAGS_BACKPACK) do
-					if self.bags[i] and self.bags[i].bagType == ST_SPECIAL then
-						table.insert(self.sortBags, i)
-					end
-				end
-			else
-				for _, i in ipairs(BAGS_BANK) do
-					if self.bags[i] and self.bags[i].bagType == ST_SPECIAL then
-						table.insert(self.sortBags, i)
-					end
-				end
-			end
-		else
-			table.insert(self.sortBags, tonumber(s))
-		end
-	end
-end
-
-function Bag:Sort(frame, args, bank)
-	if not args then
-		args = ""
-	end
-
-	self.itmax = 0
-	self:SetBagsForSorting(args, bank)
-	self:SortBags(frame)
-end
-
 Bag:InitBags()
-
 --Register Events
 Bag:RegisterEvent("BAG_UPDATE")
 Bag:RegisterEvent("ITEM_LOCK_CHANGED")

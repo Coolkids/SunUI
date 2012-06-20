@@ -2,16 +2,18 @@
 
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("SH")
 function Module:OnInitialize()
-	local Frame = CreateFrame("Frame")
-		Frame:SetWidth(48)
-		Frame:SetHeight(48)  
+	local Frame = CreateFrame("Frame", "SH", UIParent)
+		Frame:SetSize(48, 48)
 		Frame:SetPoint("TOP", UIParent, "TOP", 0, -35)
 		Frame.Cooldown = CreateFrame("Cooldown", nil, Frame)
 		Frame.Cooldown:SetAllPoints()
 		Frame.Cooldown:SetReverse(true)
-		  
+		--AutoCastShine_AutoCastStart(SH) 
+		--ActionButton_ShowOverlayGlow(SH)
 		Frame:CreateShadow()
 		Frame:Hide()
+		
+	--获取技能所在的动作条位置 INLINEAURA
 	local start, duration
 	local spellIDs = {
 		["PRIEST"] = 32379,
@@ -74,5 +76,5 @@ function Module:OnInitialize()
 	Frame:RegisterEvent("UNIT_HEALTH")
 	Frame:RegisterEvent("PLAYER_TARGET_CHANGED")
 	Frame:RegisterEvent("UNIT_POWER")
-	Frame:RegisterEvent("SPELL_UPDATE_COOLDOWN")
+	Frame:RegisterEvent("SPELL_UPDATE_COOLDOWN")	
 end

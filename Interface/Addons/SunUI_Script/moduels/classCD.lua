@@ -198,9 +198,9 @@ local UpdatePositions = function()
 				bars[i]:Point("TOPLEFT", ClassCDAnchor, "TOPLEFT", 0, 0)
 			else
 				if C["ClassCDDirection"] == 2 then
-					bars[i]:Point("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, C["ClassCDHeight"]*2+5)
+					bars[i]:Point("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, C["ClassCDHeight"]*2+6)
 				else
-					bars[i]:Point("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -C["ClassCDHeight"]*2+5)
+					bars[i]:Point("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -C["ClassCDHeight"]*2+6)
 				end
 			end
 		else
@@ -208,13 +208,13 @@ local UpdatePositions = function()
 				bars[i]:Point("LEFT", ClassCDAnchor, "LEFT", 0, 0)
 			else
 				if C["ClassCDIconDirection"] == 1 then
-					bars[i]:Point("LEFT", bars[i-1], "RIGHT", 5, 0)
+					bars[i]:Point("LEFT", bars[i-1], "RIGHT", 6, 0)
 				else
-					bars[i]:Point("RIGHT", bars[i-1], "LEFT", -5, 0)
+					bars[i]:Point("RIGHT", bars[i-1], "LEFT", -6, 0)
 				end
 			end
-			bars[i].id = i
 		end
+		bars[i].id = i
 	end
 end
 

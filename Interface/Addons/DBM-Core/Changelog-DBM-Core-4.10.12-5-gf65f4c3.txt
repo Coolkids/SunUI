@@ -1,4 +1,5 @@
 subversion:
+	- tandanu via svn r7546: merge changes from MoP branch
 	- Omega via svn r7541: Gate of the Setting Sun Instance now implemented
 	- Omega via svn r7540: Darkmaster Gandling Update Rattlegore Update Korlof Update
 	- Omega via svn r7539: 1. Implemented 2 additional bosses in scarlet halls and cathedral 2. Fixed/Updated 4 other mods in same zones.

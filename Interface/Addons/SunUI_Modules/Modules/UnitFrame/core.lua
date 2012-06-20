@@ -101,6 +101,11 @@ C = C["UnitFrameDB"]
 	if C["TargetAura"] ~= 2 then
 		lib.createAuras(self)
 	end
+	if C["TargetRange"] then
+		self.Range = {
+		  insideAlpha = 1,
+		  outsideAlpha = 0.6}
+	end
     lib.gen_ppstrings(self)
 	lib.gen_alt_powerbar(self)
     lib.gen_cp(self)
@@ -120,6 +125,11 @@ C = C["UnitFrameDB"]
 	end
     self.Power.colorPower = true
     self.Power.multiplier = 0.3	
+	if C["TargetRange"] then
+		self.Range = {
+		  insideAlpha = 1,
+		  outsideAlpha = 0.6}
+	end
 	self:Size(self.width,self.height)
   end 
   
@@ -163,7 +173,12 @@ C = C["UnitFrameDB"]
 		lib.gen_castbar(self)
 	end
 	lib.createDebuffs(self)
-	--self.Debuffs.onlyShowPlayer = true
+	if C["TargetRange"] then
+		self.Range = {
+		  insideAlpha = 1,
+		  outsideAlpha = 0.6}
+	end
+	self.Debuffs.onlyShowPlayer = C["FocusDebuff"]
 	self:Size(self.width,self.height)
   end
   
@@ -198,13 +213,14 @@ C = C["UnitFrameDB"]
     self.Range = {
       insideAlpha = 1,
       outsideAlpha = 0.6}
-    --lib.gen_portrait(self)
+	if C["Party3D"] then
+		lib.gen_portrait(self)
+	end
     lib.createBuffs(self)
     lib.createDebuffs(self)
     lib.gen_InfoIcons(self)
     lib.gen_targeticon(self)
 	lib.gen_LFDindicator(self)
-	lib.gen_specificpower(self)
   end  
   
   --arena frames
