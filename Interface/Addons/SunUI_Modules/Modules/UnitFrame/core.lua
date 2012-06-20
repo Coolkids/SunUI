@@ -102,9 +102,9 @@ C = C["UnitFrameDB"]
 		lib.createAuras(self)
 	end
 	if C["TargetRange"] then
-		self.Range = {
-		  insideAlpha = 1,
-		  outsideAlpha = 0.6}
+		self.SpellRange = {
+	       insideAlpha = 1,
+           outsideAlpha = C["RangeAlpha"]}
 	end
     lib.gen_ppstrings(self)
 	lib.gen_alt_powerbar(self)
@@ -126,9 +126,9 @@ C = C["UnitFrameDB"]
     self.Power.colorPower = true
     self.Power.multiplier = 0.3	
 	if C["TargetRange"] then
-		self.Range = {
-		  insideAlpha = 1,
-		  outsideAlpha = 0.6}
+		self.SpellRange = {
+	       insideAlpha = 1,
+           outsideAlpha = C["RangeAlpha"]}
 	end
 	self:Size(self.width,self.height)
   end 
@@ -174,9 +174,9 @@ C = C["UnitFrameDB"]
 	end
 	lib.createDebuffs(self)
 	if C["TargetRange"] then
-		self.Range = {
-		  insideAlpha = 1,
-		  outsideAlpha = 0.6}
+		self.SpellRange = {
+	       insideAlpha = 1,
+           outsideAlpha = C["RangeAlpha"]}
 	end
 	self.Debuffs.onlyShowPlayer = C["FocusDebuff"]
 	self:Size(self.width,self.height)
