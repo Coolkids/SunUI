@@ -56,17 +56,6 @@ function Module:OnInitialize()
 			if self.GetItem then
 				item = select(2, self:GetItem())
 			end
-			if item then
-				local quality = select(3, GetItemInfo(item))
-				if quality and quality > 1 then
-					local r, g, b = GetItemQualityColor(quality)
-					self:SetBackdropBorderColor(r, g, b)
-				else
-					self:SetBackdropBorderColor(0, 0, 0)
-				end
-			else
-				self:SetBackdropBorderColor(0, 0, 0)
-			end
 			if v.NumLines then
 				for index=1, v:NumLines() do
 					_G[v:GetName()..'TextLeft'..index]:SetShadowOffset(S.mult, -S.mult)
@@ -204,11 +193,6 @@ function Module:OnInitialize()
 	GameTooltipStatusBar.bg:SetBackdrop(backdrop)
 	GameTooltipStatusBar.bg:SetBackdropColor(0, 0, 0, 0.5)
 	GameTooltipStatusBar.bg:SetBackdropBorderColor(0, 0, 0, 1)
-	GameTooltipStatusBar:SetHeight(8)
-	GameTooltipStatusBar:SetStatusBarTexture("Interface\\TargetingFrame\\UI-StatusBar")
-	GameTooltipStatusBar:ClearAllPoints()
-	GameTooltipStatusBar:SetPoint("TOPLEFT", GameTooltip, "BOTTOMLEFT", 1, -2)
-	GameTooltipStatusBar:SetPoint("TOPRIGHT", GameTooltip, "BOTTOMRIGHT", -1, -2)
 	GameTooltipStatusBar:HookScript("OnValueChanged", function(self, value)
 		if not value then
 			return
@@ -225,7 +209,7 @@ function Module:OnInitialize()
 			min, max = UnitHealth(unit), UnitHealthMax(unit)
 			if not self.text then
 				self.text = self:CreateFontString(nil, "OVERLAY")
-				self.text:SetPoint("CENTER", GameTooltipStatusBar, 0, -4)
+				self.text:SetPoint("CENTER")
 				self.text:SetFont(DB.Font, 10, "THINOUTLINE")
 				-- self.text:SetShadowOffset(R.mult, -R.mult)
 			end

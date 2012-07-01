@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Corla", "DBM-Party-Cataclysm", 1)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7473 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7548 $"):sub(12, -3))
 mod:SetCreatureID(39679)
 mod:SetModelID(31546)
 mod:SetZone()
@@ -46,7 +46,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	end
 end
-
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
 function mod:SPELL_AURA_REMOVED(args)

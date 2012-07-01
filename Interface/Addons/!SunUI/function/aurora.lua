@@ -6,8 +6,9 @@ local alpha = .5 -- controls the backdrop opacity (0 = invisible, 1 = solid)
 -- [[ Core ]]
 
 
-local F, C = {}, {}
+
 local S, _, _, DB = unpack(select(2, ...))
+F, C = {}, {}
 C.classcolours = {
 	["HUNTER"] = { r = 0.58, g = 0.86, b = 0.49 },
 	["WARLOCK"] = { r = 0.6, g = 0.47, b = 0.85 },
@@ -58,57 +59,12 @@ end
 
 local function colourArrow(f)
 	if f:IsEnabled() then
-		f.downtex:SetVertexColor(0, .76, 1)
+		f.downtex:SetVertexColor(r, g, b)
 	end
 end
 
 local function clearArrow(f)
 	f.downtex:SetVertexColor(1, 1, 1)
-end
-
-F.ReskinDropDown = function(f)
-	local frame = f:GetName()
-
-	local left = _G[frame.."Left"]
-	local middle = _G[frame.."Middle"]
-	local right = _G[frame.."Right"]
-
-	if left then left:SetAlpha(0) end
-	if middle then middle:SetAlpha(0) end
-	if right then right:SetAlpha(0) end
-
-	local down = _G[frame.."Button"]
-
-	down:ClearAllPoints()
-	down:Point("TOPRIGHT", -18, -4)
-	down:Point("BOTTOMRIGHT", -18, 8)
-	down:SetWidth(19)
-
-	S.Reskin(down, true)
-	
-	down:SetDisabledTexture(C.media.backdrop)
-	local dis = down:GetDisabledTexture()
-	dis:SetVertexColor(0, 0, 0, .3)
-	dis:SetDrawLayer("OVERLAY")
-	dis:SetAllPoints()
-
-	local downtex = down:CreateTexture(nil, "ARTWORK")
-	downtex:SetTexture("Interface\\AddOns\\!SunUI\\Media\\arrow-down-active")
-	downtex:Size(8, 8)
-	downtex:SetPoint("CENTER")
-	downtex:SetVertexColor(1, 1, 1)
-	down.downtex = downtex
-	
-	down:HookScript("OnEnter", colourArrow)
-	down:HookScript("OnLeave", clearArrow)
-	
-	local bg = CreateFrame("Frame", nil, f)
-	bg:Point("TOPLEFT", 16, -4)
-	bg:Point("BOTTOMRIGHT", -18, 8)
-	bg:SetFrameLevel(f:GetFrameLevel()-1)
-	S.CreateBD(bg, 0)
-
-	S.CreateGradient(bg)
 end
 
 F.ReskinArrow = function(f, direction)
@@ -152,7 +108,15 @@ F.ReskinCheck = function(f)
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	S.CreateBD(bd, 0)
 
+	local tex = f:CreateTexture(nil, "BACKGROUND")
+	tex:Point("TOPLEFT", 5, -5)
+	tex:Point("BOTTOMRIGHT", -5, 5)
+	tex:SetTexture(C.media.backdrop)
+	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 	
+	local ch = f:GetCheckedTexture()
+	ch:SetDesaturated(true)
+	ch:SetVertexColor(r, g, b)
 end
 
 F.ReskinSlider = function(f)
@@ -198,12 +162,12 @@ F.ReskinRadio = function(f)
 	local hl = f:GetHighlightTexture()
 	hl:Point("TOPLEFT", 5, -5)
 	hl:Point("BOTTOMRIGHT", -5, 5)
-	hl:SetVertexColor(r, g, b, .2)
+	hl:SetVertexColor(r, g, b, .3)
 	
 	local ch = f:GetCheckedTexture()
 	ch:Point("TOPLEFT", 5, -5)
 	ch:Point("BOTTOMRIGHT", -5, 5)
-	ch:SetVertexColor(r, g, b, .5)
+	ch:SetVertexColor(r, g, b, .6)
 
 	local bd = CreateFrame("Frame", nil, f)
 	bd:Point("TOPLEFT", 4, -4)
@@ -280,7 +244,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		for i = 1, #dropdowns do
 			local dropdown = _G[dropdowns[i]]
 			if dropdown then
-				F.ReskinDropDown(dropdown)
+				S.ReskinDropDown(dropdown)
 			else
 				print("Aurora: "..dropdowns[i].." was not found.")
 			end
@@ -298,7 +262,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 		
-		S.ReskinInput(FriendsFrameBroadcastInput, nil, nil, 0)
+		S.ReskinInput(FriendsFrameBroadcastInput)
 		S.ReskinInput(StaticPopup1EditBox, 20)
 		S.ReskinInput(StaticPopup2EditBox, 20)
 		S.ReskinInput(PVPBannerFrameEditBox, 20)
@@ -444,7 +408,57 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				end
 			end
 		end)
+		local createBackdrop = function(parent, texture, offset)
+			local bg = parent:CreateTexture(nil, "BACKGROUND")
+			bg:SetTexture(0, 0, 0, .5)
+			bg:SetPoint("CENTER", texture)
+			bg:SetSize(12, 12)
+			parent.bg = bg
+		
+			local left = parent:CreateTexture(nil, "BACKGROUND")
+			left:Width(1)
+			left:SetTexture(0, 0, 0)
+			left:SetPoint("TOPLEFT", bg)
+			left:SetPoint("BOTTOMLEFT", bg)
+			parent.left = left
+			
+			local right = parent:CreateTexture(nil, "BACKGROUND")
+			right:Width(1)
+			right:SetTexture(0, 0, 0)
+			right:SetPoint("TOPRIGHT", bg)
+			right:SetPoint("BOTTOMRIGHT", bg)
+			parent.right = right
+			
+			local top = parent:CreateTexture(nil, "BACKGROUND")
+			top:Height(1)
+			top:SetTexture(0, 0, 0)
+			top:SetPoint("TOPLEFT", bg)
+			top:SetPoint("TOPRIGHT", bg)
+			parent.top = top
+			
+			local bottom = parent:CreateTexture(nil, "BACKGROUND")
+			bottom:Height(1)
+			bottom:SetTexture(0, 0, 0)
+			bottom:SetPoint("BOTTOMLEFT", bg)
+			bottom:SetPoint("BOTTOMRIGHT", bg)
+			parent.bottom = bottom
+		end
 
+		local toggleBackdrop = function(bu, show)
+			if show then
+				bu.bg:Show()
+				bu.left:Show()
+				bu.right:Show()
+				bu.top:Show()
+				bu.bottom:Show()
+			else
+				bu.bg:Hide()
+				bu.left:Hide()
+				bu.right:Hide()
+				bu.top:Hide()
+				bu.bottom:Hide()
+			end
+		end
 		hooksecurefunc("ToggleDropDownMenu", function(level, _, dropDownFrame, anchorName)
 			if not level then level = 1 end	
 			
@@ -456,7 +470,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				elseif anchorName ~= "cursor" then
 					-- this part might be a bit unreliable
 					local _, _, relPoint, xOff, yOff = listFrame:GetPoint()
-					if relPoint == "BOTTOMLEFT" and xOff == 0 and yOff == 5 then
+					if relPoint == "BOTTOMLEFT" and xOff == 0 and floor(yOff) == 5 then
 						listFrame:Point("TOPLEFT", anchorName, "BOTTOMLEFT", 16, 9)
 					end
 				end
@@ -466,6 +480,46 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					listFrame:Point(point, anchor, relPoint, -14, 0)
 				else
 					listFrame:Point(point, anchor, relPoint, 9, 0)
+				end
+			end
+			for j = 1, UIDROPDOWNMENU_MAXBUTTONS do
+				local bu = _G["DropDownList"..level.."Button"..j]
+				local _, _, _, x = bu:GetPoint()
+				if bu:IsShown() and x then
+					local hl = _G["DropDownList"..level.."Button"..j.."Highlight"]
+					local check = _G["DropDownList"..level.."Button"..j.."Check"]
+					
+					hl:Point("TOPLEFT", -x + 1, 0)
+					hl:Point("BOTTOMRIGHT", listFrame:GetWidth() - bu:GetWidth() - x - 1, 0)
+					
+					if not bu.bg then
+						createBackdrop(bu, check)
+						hl:SetTexture(r, g, b, .2)
+						_G["DropDownList"..level.."Button"..j.."UnCheck"]:SetTexture("")
+					end
+					
+					if not bu.notCheckable then
+						toggleBackdrop(bu, true)
+						
+						-- only reliable way to see if button is radio or or check...
+						local _, co = check:GetTexCoord()
+					
+						if co == 0 then
+							check:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
+							check:SetVertexColor(r, g, b, 1)
+							check:SetSize(20, 20)
+							check:SetDesaturated(true)
+						else
+							check:SetTexture(C.media.backdrop)
+							check:SetVertexColor(r, g, b, .6)
+							check:SetSize(10, 10)
+							check:SetDesaturated(false)
+						end
+						
+						check:SetTexCoord(0, 1, 0, 1)
+					else
+						toggleBackdrop(bu, false)
+					end
 				end
 			end
 		end)
@@ -982,7 +1036,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- Merchant Frame
 
-		for i = 1, MERCHANT_ITEMS_PER_PAGE do
+		for i = 1, BUYBACK_ITEMS_PER_PAGE do
 			local button = _G["MerchantItem"..i]
 			local bu = _G["MerchantItem"..i.."ItemButton"]
 			local ic = _G["MerchantItem"..i.."ItemButtonIconTexture"]
@@ -1675,7 +1729,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local dropdowns = {"Graphics_DisplayModeDropDown", "Graphics_ResolutionDropDown", "Graphics_RefreshDropDown", "Graphics_PrimaryMonitorDropDown", "Graphics_MultiSampleDropDown", "Graphics_VerticalSyncDropDown", "Graphics_TextureResolutionDropDown", "Graphics_FilteringDropDown", "Graphics_ProjectedTexturesDropDown", "Graphics_ShadowsDropDown", "Graphics_LiquidDetailDropDown", "Graphics_SunshaftsDropDown", "Graphics_ParticleDensityDropDown", "Graphics_ViewDistanceDropDown", "Graphics_EnvironmentalDetailDropDown", "Graphics_GroundClutterDropDown", "Advanced_BufferingDropDown", "Advanced_LagDropDown", "Advanced_HardwareCursorDropDown", "InterfaceOptionsLanguagesPanelLocaleDropDown", "AudioOptionsSoundPanelHardwareDropDown", "AudioOptionsSoundPanelSoundChannelsDropDown", "AudioOptionsVoicePanelInputDeviceDropDown", "AudioOptionsVoicePanelChatModeDropDown", "AudioOptionsVoicePanelOutputDeviceDropDown"}
  
 			for i = 1, #dropdowns do
-				F.ReskinDropDown(_G[dropdowns[i]])
+				S.ReskinDropDown(_G[dropdowns[i]])
 			end
 			S.StripTextures(Graphics_MultiSampleDropDown)
 			Graphics_RightQuality:GetRegions():Hide()
@@ -1715,7 +1769,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			local dropdowns = {"InterfaceOptionsControlsPanelAutoLootKeyDropDown", "InterfaceOptionsCombatPanelTOTDropDown", "InterfaceOptionsCombatPanelFocusCastKeyDropDown", "InterfaceOptionsCombatPanelSelfCastKeyDropDown", "InterfaceOptionsDisplayPanelAggroWarningDisplay", "InterfaceOptionsDisplayPanelWorldPVPObjectiveDisplay", "InterfaceOptionsSocialPanelChatStyle", "InterfaceOptionsSocialPanelTimestamps", "InterfaceOptionsSocialPanelWhisperMode", "InterfaceOptionsSocialPanelBnWhisperMode", "InterfaceOptionsSocialPanelConversationMode", "InterfaceOptionsActionBarsPanelPickupActionKeyDropDown", "InterfaceOptionsNamesPanelNPCNamesDropDown", "InterfaceOptionsNamesPanelUnitNameplatesMotionDropDown", "InterfaceOptionsCombatTextPanelFCTDropDown", "CompactUnitFrameProfilesProfileSelector", "CompactUnitFrameProfilesGeneralOptionsFrameSortByDropdown", "CompactUnitFrameProfilesGeneralOptionsFrameHealthTextDropdown", "InterfaceOptionsCameraPanelStyleDropDown", "InterfaceOptionsMousePanelClickMoveStyleDropDown"}
 			for i = 1, #dropdowns do
-				F.ReskinDropDown(_G[dropdowns[i]])
+				S.ReskinDropDown(_G[dropdowns[i]])
 			end
 
 			local sliders = {"InterfaceOptionsCombatPanelSpellAlertOpacitySlider", "InterfaceOptionsCombatPanelMaxSpellStartRecoveryOffset", "CompactUnitFrameProfilesGeneralOptionsFrameHeightSlider", "CompactUnitFrameProfilesGeneralOptionsFrameWidthSlider", "InterfaceOptionsBattlenetPanelToastDurationSlider", "InterfaceOptionsCameraPanelMaxDistanceSlider", "InterfaceOptionsCameraPanelFollowSpeedSlider", "InterfaceOptionsMousePanelMouseSensitivitySlider", "InterfaceOptionsMousePanelMouseLookSpeedSlider"}
@@ -1780,7 +1834,37 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		TradePlayerInputMoneyFrameSilver:Point("LEFT", TradePlayerInputMoneyFrameGold, "RIGHT", 1, 0)
 		TradePlayerInputMoneyFrameCopper:Point("LEFT", TradePlayerInputMoneyFrameSilver, "RIGHT", 1, 0)
-
+		
+		
+		-- Tutorial Frame
+		
+		S.CreateBD(TutorialFrame)
+		S.CreateSD(TutorialFrame)
+		
+		TutorialFrameBackground:Hide()
+		TutorialFrameBackground.Show = function() end
+		TutorialFrame:DisableDrawLayer("BORDER")
+		
+		S.Reskin(TutorialFrameOkayButton, true)
+		S.ReskinClose(TutorialFrameCloseButton)
+		F.ReskinArrow(TutorialFramePrevButton, "left")
+		F.ReskinArrow(TutorialFrameNextButton, "right")
+		
+		TutorialFrameOkayButton:ClearAllPoints()
+		TutorialFrameOkayButton:Point("BOTTOMLEFT", TutorialFrameNextButton, "BOTTOMRIGHT", 10, 0)
+		
+		-- because gradient alpha and OnUpdate doesn't work for some reason...
+		
+		select(15, TutorialFrameOkayButton:GetRegions()):Hide()
+		select(15, TutorialFramePrevButton:GetRegions()):Hide()
+		select(15, TutorialFrameNextButton:GetRegions()):Hide()
+		select(14, TutorialFrameCloseButton:GetRegions()):Hide()
+		TutorialFramePrevButton:SetScript("OnEnter", nil)
+		TutorialFrameNextButton:SetScript("OnEnter", nil)
+		TutorialFrameOkayButton:SetBackdropColor(0, 0, 0, .25)
+		TutorialFramePrevButton:SetBackdropColor(0, 0, 0, .25)
+		TutorialFrameNextButton:SetBackdropColor(0, 0, 0, .25)
+		
 		-- [[ Hide regions ]]
 
 		local bglayers = {"FriendsFrame", "SpellBookFrame", "LFDParentFrame", "LFDParentFrameInset", "WhoFrameColumnHeader1", "WhoFrameColumnHeader2", "WhoFrameColumnHeader3", "WhoFrameColumnHeader4", "RaidInfoInstanceLabel", "RaidInfoIDLabel", "CharacterFrame", "CharacterFrameInset", "CharacterFrameInsetRight", "GossipFrameGreetingPanel", "PVPFrame", "PVPFrameInset", "PVPFrameTopInset", "PVPTeamManagementFrame", "PVPTeamManagementFrameHeader1", "PVPTeamManagementFrameHeader2", "PVPTeamManagementFrameHeader3", "PVPTeamManagementFrameHeader4", "PVPBannerFrame", "PVPBannerFrameInset", "LFRQueueFrame", "LFRBrowseFrame", "HelpFrameMainInset", "CharacterModelFrame", "HelpFrame", "HelpFrameLeftInset", "QuestFrameDetailPanel", "QuestFrameProgressPanel", "QuestFrameRewardPanel", "WorldStateScoreFrame", "WorldStateScoreFrameInset", "QuestFrameGreetingPanel", "EquipmentFlyoutFrameButtons", "EmptyQuestLogFrame", "VideoOptionsFrameCategoryFrame", "InterfaceOptionsFrameCategories", "InterfaceOptionsFrameAddOns", "RaidParentFrame"}
@@ -2370,7 +2454,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		ArchaeologyFrameInfoButton:Point("TOPLEFT", 3, -3)
 
-		F.ReskinDropDown(ArchaeologyFrameRaceFilter)
+		S.ReskinDropDown(ArchaeologyFrameRaceFilter)
 		S.ReskinClose(ArchaeologyFrameCloseButton)
 		S.ReskinScroll(ArchaeologyFrameArtifactPageHistoryScrollScrollBar)
 		F.ReskinArrow(ArchaeologyFrameCompletedPagePrevPageButton, 1)
@@ -2593,8 +2677,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.ReskinScroll(BrowseScrollFrameScrollBar)
 		S.ReskinScroll(AuctionsScrollFrameScrollBar)
 		S.ReskinScroll(BrowseFilterScrollFrameScrollBar)
-		F.ReskinDropDown(PriceDropDown)
-		F.ReskinDropDown(DurationDropDown)
+		S.ReskinDropDown(PriceDropDown)
+		S.ReskinDropDown(DurationDropDown)
 		S.ReskinInput(BrowseName)
 		F.ReskinArrow(BrowsePrevPageButton, 1)
 		F.ReskinArrow(BrowseNextPageButton, 2)
@@ -2611,13 +2695,17 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		local a1, p, a2, x, y = BrowseDropDownButton:GetPoint()
 		BrowseDropDownButton:SetPoint(a1, p, a2, x, y-4)
 		BrowseDropDownButton:Size(16, 16)
-		S.Reskin(BrowseDropDownButton)
+		S.Reskin(BrowseDropDownButton, true)
+		BrowseDropDownButton:HookScript("OnEnter", colourArrow)
+		BrowseDropDownButton:HookScript("OnLeave", clearArrow)	
+		
 
 		local downtex = BrowseDropDownButton:CreateTexture(nil, "OVERLAY")
 		downtex:SetTexture("Interface\\AddOns\\!SunUI\\media\\arrow-down-active")
 		downtex:Size(8, 8)
 		downtex:SetPoint("CENTER")
 		downtex:SetVertexColor(1, 1, 1)
+		BrowseDropDownButton.downtex = downtex
 
 		local bg = CreateFrame("Frame", nil, BrowseDropDown)
 		bg:Point("TOPLEFT", 16, -5)
@@ -2923,7 +3011,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.ReskinScroll(AchievementFrameStatsContainerScrollBar)
 		S.ReskinScroll(AchievementFrameCategoriesContainerScrollBar)
 		S.ReskinScroll(AchievementFrameComparisonContainerScrollBar)
-		F.ReskinDropDown(AchievementFrameFilterDropDown)
+		S.ReskinDropDown(AchievementFrameFilterDropDown)
 	elseif addon == "Blizzard_BarbershopUI" then
 		S.SetBD(BarberShopFrame, 44, -75, -40, 44)
 		BarberShopFrameBackground:Hide()
@@ -3155,11 +3243,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.ReskinScroll(CalendarViewEventInviteListScrollFrameScrollBar)
 		S.ReskinScroll(CalendarViewEventDescriptionScrollFrameScrollBar)
 		S.ReskinScroll(CalendarCreateEventInviteListScrollFrameScrollBar)
-		F.ReskinDropDown(CalendarCreateEventTypeDropDown)
-		F.ReskinDropDown(CalendarCreateEventHourDropDown)
-		F.ReskinDropDown(CalendarCreateEventMinuteDropDown)
-		F.ReskinDropDown(CalendarCreateEventAMPMDropDown)
-		F.ReskinDropDown(CalendarMassInviteGuildRankMenu)
+		S.ReskinScroll(CalendarCreateEventDescriptionScrollFrameScrollBar)
+		S.ReskinDropDown(CalendarCreateEventTypeDropDown)
+		S.ReskinDropDown(CalendarCreateEventHourDropDown)
+		S.ReskinDropDown(CalendarCreateEventMinuteDropDown)
+		S.ReskinDropDown(CalendarCreateEventAMPMDropDown)
+		S.ReskinDropDown(CalendarMassInviteGuildRankMenu)
 		S.ReskinInput(CalendarCreateEventTitleEdit)
 		S.ReskinInput(CalendarCreateEventInviteEdit)
 		S.ReskinInput(CalendarMassInviteGuildMinLevelEdit)
@@ -3473,15 +3562,18 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		S.ReskinInput(GlyphFrameSearchBox)
 		S.ReskinScroll(GlyphFrameScrollFrameScrollBar)
-		F.ReskinDropDown(GlyphFrameFilterDropDown)
+		S.ReskinDropDown(GlyphFrameFilterDropDown)
 	elseif addon == "Blizzard_GMSurveyUI" then
 		S.SetBD(GMSurveyFrame, 0, 0, -32, 4)
 		S.CreateBD(GMSurveyCommentFrame, .25)
 		for i = 1, 11 do
 			S.CreateBD(_G["GMSurveyQuestion"..i], .25)
+			for j = 0, 5 do
+				F.ReskinRadio(_G["GMSurveyQuestion"..i.."RadioButton"..j])
+			end
 		end
 
-		for i = 1, 11 do
+		for i = 1, 12 do
 			select(i, GMSurveyFrame:GetRegions()):Hide()
 		end
 		GMSurveyHeaderLeft:Hide()
@@ -3667,9 +3759,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		S.ReskinClose(GuildControlUICloseButton)
 		S.ReskinScroll(GuildControlUIRankBankFrameInsetScrollFrameScrollBar)
-		F.ReskinDropDown(GuildControlUINavigationDropDown)
-		F.ReskinDropDown(GuildControlUIRankSettingsFrameRankDropDown)
-		F.ReskinDropDown(GuildControlUIRankBankFrameRankDropDown)
+		S.ReskinDropDown(GuildControlUINavigationDropDown)
+		S.ReskinDropDown(GuildControlUIRankSettingsFrameRankDropDown)
+		S.ReskinDropDown(GuildControlUIRankBankFrameRankDropDown)
 		S.ReskinInput(GuildControlUIRankSettingsFrameGoldBox, 20)
 	elseif addon == "Blizzard_GuildUI" then
 		S.SetBD(GuildFrame)
@@ -3797,8 +3889,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.ReskinScroll(GuildInfoDetailsFrameScrollBar)
 		S.ReskinScroll(GuildLogScrollFrameScrollBar)
 		S.ReskinScroll(GuildTextEditScrollFrameScrollBar)
-		F.ReskinDropDown(GuildRosterViewDropdown)
-		F.ReskinDropDown(GuildMemberRankDropdown)
+		S.ReskinDropDown(GuildRosterViewDropdown)
+		S.ReskinDropDown(GuildMemberRankDropdown)
 		S.ReskinInput(GuildRecruitmentCommentInputFrame)
 		GuildRecruitmentCommentInputFrame:SetWidth(312)
 		GuildRecruitmentCommentEditBox:SetWidth(284)
@@ -4511,7 +4603,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		TradeSkillHorizontalBarLeft:Hide()
 		select(22, TradeSkillFrame:GetRegions()):Hide()
 		for i = 1, 3 do
-			select(i, TradeSkillExpandButtonFrame:GetRegions()):Hide()
+			select(i, TradeSkillExpandButtonFrame:GetRegions()):SetAlpha(0)
 			select(i, TradeSkillFilterButton:GetRegions()):Hide()
 		end
 		for i = 1, 9 do
@@ -4704,19 +4796,19 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				end
 			end
 		end)
-
+		TradeSkillCollapseAllButton:SetDisabledTexture("")
 		TradeSkillIncrementButton:Point("RIGHT", TradeSkillCreateButton, "LEFT", -9, 0)
 
 		S.ReskinClose(TradeSkillFrameCloseButton)
 		S.ReskinClose(TradeSkillGuildFrameCloseButton)
 		S.ReskinScroll(TradeSkillDetailScrollFrameScrollBar)
 		S.ReskinScroll(TradeSkillListScrollFrameScrollBar)
-		S.ReskinInput(TradeSkillInputBox, nil, nil, -2, 2)
-		S.ReskinInput(TradeSkillInputBox)
+		S.ReskinScroll(TradeSkillGuildCraftersFrameScrollBar)
+		S.ReskinInput(TradeSkillInputBox, nil, 33)
 		S.ReskinInput(TradeSkillFrameSearchBox)
-		F.ReskinArrow(TradeSkillDecrementButton, 1)
-		F.ReskinArrow(TradeSkillIncrementButton, 2)
-		F.ReskinArrow(TradeSkillLinkButton, 2)
+		F.ReskinArrow(TradeSkillDecrementButton, "left")
+		F.ReskinArrow(TradeSkillIncrementButton, "right")
+		F.ReskinArrow(TradeSkillLinkButton, "right")
 	elseif addon == "Blizzard_TrainerUI" then
 		S.SetBD(ClassTrainerFrame)
 		ClassTrainerFrame:DisableDrawLayer("BACKGROUND")
@@ -4742,6 +4834,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.CreateBD(bg, .25)
 
 		ClassTrainerFrameSkillStepButton:SetHighlightTexture(nil)
+		local dis = select(6, ClassTrainerFrameSkillStepButton:GetRegions())
+		dis:Hide()
+		dis.Show = function() end
 		select(7, ClassTrainerFrameSkillStepButton:GetRegions()):SetAlpha(0)
 
 		local check = select(4, ClassTrainerFrameSkillStepButton:GetRegions())
@@ -4812,7 +4907,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		S.ReskinClose(ClassTrainerFrameCloseButton)
 		S.ReskinScroll(ClassTrainerScrollFrameScrollBar)
-		F.ReskinDropDown(ClassTrainerFrameFilterDropDown)
+		S.ReskinDropDown(ClassTrainerFrameFilterDropDown)
 	elseif addon == "Blizzard_VoidStorageUI" then
 		S.SetBD(VoidStorageFrame, 20, 0, 0, 20)
 		S.CreateBD(VoidStoragePurchaseFrame)
@@ -4942,9 +5037,9 @@ if IsMacClient() then
 	S.Reskin(MacOptionsFrameOkay)
 	S.Reskin(MacOptionsFrameDefaults)
 
-	F.ReskinDropDown(MacOptionsFrameResolutionDropDown)
-	F.ReskinDropDown(MacOptionsFrameFramerateDropDown)
-	F.ReskinDropDown(MacOptionsFrameCodecDropDown)
+	S.ReskinDropDown(MacOptionsFrameResolutionDropDown)
+	S.ReskinDropDown(MacOptionsFrameFramerateDropDown)
+	S.ReskinDropDown(MacOptionsFrameCodecDropDown)
 
 	for i = 1, 10 do
 		F.ReskinCheck(_G["MacOptionsFrameCheckButton"..i])
@@ -4989,7 +5084,25 @@ Delay:SetScript("OnEvent", function()
 			"LanguageMenu",
 			"VoiceMacroMenu",
 		}
+		local backdrop = {
+			bgFile = C.media.backdrop,
+			edgeFile = C.media.backdrop,
+			edgeSize = S.mult,
+		}
 
+		-- so other stuff which tries to look like GameTooltip doesn't mess up
+		local getBackdrop = function()
+			return backdrop
+		end
+
+		local getBackdropColor = function()
+			return 0, 0, 0, .6
+		end
+
+		local getBackdropBorderColor = function()
+			return 0, 0, 0
+		end
+		
 		for i = 1, #tooltips do
 			local t = _G[tooltips[i]]
 			t:SetBackdrop(nil)
@@ -4997,22 +5110,21 @@ Delay:SetScript("OnEvent", function()
 			bg:SetPoint("TOPLEFT")
 			bg:SetPoint("BOTTOMRIGHT")
 			bg:SetFrameLevel(t:GetFrameLevel()-1)
-			S.CreateBD(bg, .6)
+			bg:SetBackdrop(backdrop)
+			bg:SetBackdropColor(0, 0, 0, .6)
+			bg:SetBackdropBorderColor(0, 0, 0)
+			
+			t.GetBackdrop = getBackdrop
+			t.GetBackdropColor = getBackdropColor
+			t.GetBackdropBorderColor = getBackdropBorderColor
 		end
 
 		local sb = _G["GameTooltipStatusBar"]
-		sb:SetHeight(3)
+		sb:Height(7)
 		sb:ClearAllPoints()
-		sb:Point("BOTTOMLEFT", GameTooltip, "BOTTOMLEFT", 1, 1)
-		sb:Point("BOTTOMRIGHT", GameTooltip, "BOTTOMRIGHT", -1, 1)
-		sb:SetStatusBarTexture(C.media.backdrop)
-
-		local sep = GameTooltipStatusBar:CreateTexture(nil, "ARTWORK")
-		sep:SetHeight(1)
-		sep:Point("BOTTOMLEFT", 0, 3)
-		sep:Point("BOTTOMRIGHT", 0, 3)
-		sep:SetTexture(C.media.backdrop)
-		sep:SetVertexColor(0, 0, 0)
+		sb:Point("BOTTOMLEFT", GameTooltip, "TOPLEFT", 1, 3)
+		sb:Point("BOTTOMRIGHT", GameTooltip, "TOPRIGHT", -1, 3)
+		sb:SetStatusBarTexture(DB.Statusbar)
 
 		S.CreateBD(FriendsTooltip)
 	end
@@ -5075,7 +5187,7 @@ Delay:SetScript("OnEvent", function()
 		skinmap()
 		hooksecurefunc("WorldMap_ToggleSizeDown", skinmap)
 
-		F.ReskinDropDown(WorldMapLevelDropDown)
+		S.ReskinDropDown(WorldMapLevelDropDown)
 		F.ReskinCheck(WorldMapShowDigSites)
 		F.ReskinCheck(WorldMapQuestShowObjectives)
 		F.ReskinCheck(WorldMapTrackQuest)

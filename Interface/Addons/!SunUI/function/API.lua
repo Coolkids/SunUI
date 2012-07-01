@@ -169,7 +169,7 @@ local function StopGlow(f)
 	f.glow:SetAlpha(0)
 end
 S.StopGlow = StopGlow
-function S.Reskin(f, noGlow)
+function S.Reskin(f, noGlow, kill)
 	f:SetNormalTexture("")
 	f:SetHighlightTexture("")
 	f:SetPushedTexture("")
@@ -203,7 +203,7 @@ function S.Reskin(f, noGlow)
  		f:HookScript("OnLeave", StopGlow)
 	end
 end
-function S.ReskinInput(f, height, width, leftOff, rightOff)
+function S.ReskinInput(f, height, width)
 	local frame = f:GetName()
 	_G[frame.."Left"]:Hide()
 	if _G[frame.."Middle"] then _G[frame.."Middle"]:Hide() end
@@ -211,8 +211,8 @@ function S.ReskinInput(f, height, width, leftOff, rightOff)
 	_G[frame.."Right"]:Hide()
 
 	local bd = CreateFrame("Frame", nil, f)
-	bd:SetPoint("TOPLEFT", leftOff or -2, 0)
-	bd:SetPoint("BOTTOMRIGHT", rightOff or 0, 0)
+	bd:Point("TOPLEFT", -2, 0)
+	bd:Point("BOTTOMRIGHT")
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	CreateBD(bd, 0)
 	

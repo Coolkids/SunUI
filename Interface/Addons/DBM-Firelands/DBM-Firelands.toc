@@ -26,7 +26,7 @@
 ## X-DBM-Mod-Name-ptBR: Terras do Fogo
 ## X-DBM-Mod-Sort: 101
 ## X-DBM-Mod-LoadZoneID: 800,803
-## X-Curse-Packaged-Version: 4.10.12-5-gf65f4c3
+## X-Curse-Packaged-Version: 4.10.12-12-g341c972
 ## X-Curse-Project-Name: Deadly Boss Mods
 ## X-Curse-Project-ID: deadly-boss-mods
 ## X-Curse-Repository-ID: wow/deadly-boss-mods/mainline

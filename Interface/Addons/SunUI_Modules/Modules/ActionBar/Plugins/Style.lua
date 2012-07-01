@@ -40,6 +40,8 @@ function AB:OnInitialize()
 		if name:match("MultiCast") then return end
 
 		local action = button.action
+		
+		if button.style == true then return end
 		local Icon = _G[name.."Icon"]
 		local Count = _G[name.."Count"]
 		local Flash = _G[name.."Flash"]
@@ -127,7 +129,7 @@ function AB:OnInitialize()
 		end
 
 		button:StyleButton(true)
-
+		button.style = true
 	end
 
 	local function StyleSmallButton(normal, button, icon, name, pet)

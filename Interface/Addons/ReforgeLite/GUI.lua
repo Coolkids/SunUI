@@ -1,6 +1,7 @@
 -- Part of ReforgeLite by d07.RiV (Iroared)
 -- All rights reserved
-
+local S = unpack(SunUI)
+local F = unpack(SunUI)
 local GUI = {}
 
 GUI.widgetCount = 0
@@ -52,6 +53,7 @@ function GUI:CreateEditBox (parent, width, height, default, setter)
       box:SetScript ("OnLeave", nil)
       table.insert (self.editBoxes, box)
     end
+	S.ReskinInput(box)
   end
   if width then
     box:SetWidth (width)
@@ -109,11 +111,11 @@ function GUI:CreateDropdown (parent, values, default, setter, width)
       UIDropDownMenu_SetSelectedValue (self, self.value)
     end)
     UIDropDownMenu_JustifyText (sel, "LEFT")
-    sel:SetHeight (50)
+   --[[  sel:SetHeight (50)
     _G[name .. "Left"]:SetHeight (50)
     _G[name .. "Middle"]:SetHeight (50)
     _G[name .. "Right"]:SetHeight (50)
-    _G[name .. "Text"]:SetPoint ("LEFT", _G[name .. "Left"], "LEFT", 27, 1)
+    _G[name .. "Text"]:SetPoint ("LEFT", _G[name .. "Left"], "LEFT", 27, 0)
     _G[name .. "Button"]:SetWidth (22)
     _G[name .. "Button"]:SetHeight (22)
     _G[name .. "ButtonNormalTexture"]:SetWidth (22)
@@ -124,7 +126,7 @@ function GUI:CreateDropdown (parent, values, default, setter, width)
     _G[name .. "ButtonDisabledTexture"]:SetHeight (22)
     _G[name .. "ButtonHighlightTexture"]:SetWidth (22)
     _G[name .. "ButtonHighlightTexture"]:SetHeight (22)
-    _G[name .. "Button"]:SetPoint ("TOPRIGHT", _G[name .. "Right"], "TOPRIGHT", -16, -13)
+    _G[name .. "Button"]:SetPoint ("TOPRIGHT", _G[name .. "Right"], "TOPRIGHT", -16, 0) ]]
     sel.Recycle = function (sel)
       sel:Hide ()
       sel:SetScript ("OnEnter", nil)
@@ -141,6 +143,7 @@ function GUI:CreateDropdown (parent, values, default, setter, width)
   if width then
     UIDropDownMenu_SetWidth (sel, width)
   end
+  F.ReskinDropDown(sel)
   return sel
 end
 
@@ -169,6 +172,7 @@ function GUI:CreateCheckButton (parent, text, default, setter)
       setter (self:GetChecked ())
     end)
   end
+  F.ReskinCheck(btn)
   return btn
 end
 
@@ -640,7 +644,6 @@ function GUI:CreateTable (rows, cols, firstRow, firstColumn, gridColor, parent)
     self.cells[i][j].offsY = offsY
     self:AlignCell (i, j)
   end
-  
   return t
 end
 

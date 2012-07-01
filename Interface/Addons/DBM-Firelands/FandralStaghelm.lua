@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(197, "DBM-Firelands", nil, 78)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7447 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7548 $"):sub(12, -3))
 mod:SetCreatureID(52571)
 mod:SetModelID(37953)
 mod:SetZone()
@@ -26,9 +26,9 @@ local warnLeapingFlames			= mod:NewTargetAnnounce(100208, 3)
 local warnOrbs					= mod:NewCastAnnounce(98451, 4)
 
 local yellLeapingFlames			= mod:NewYell(100208)
-local specWarnLeapingFlamesCast	= mod:NewSpecialWarningYou(98476)--Cast on you
-local specWarnLeapingFlamesNear	= mod:NewSpecialWarningClose(98476)--Cast on you
-local specWarnLeapingFlames		= mod:NewSpecialWarningMove(100208)--Standing in circle it left behind.
+local specWarnLeapingFlamesCast	= mod:NewSpecialWarningYou(98476)
+local specWarnLeapingFlamesNear	= mod:NewSpecialWarningClose(98476)
+local specWarnLeapingFlames		= mod:NewSpecialWarningMove(100208)
 local specWarnSearingSeed		= mod:NewSpecialWarningMove(98450)
 local specWarnOrb				= mod:NewSpecialWarningStack(100211, true, 4)
 

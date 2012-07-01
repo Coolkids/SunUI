@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(318, "DBM-DragonSoul", nil, 187)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7450 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7563 $"):sub(12, -3))
 mod:SetCreatureID(53879)
 mod:SetModelID(35268)
 mod:SetModelSound("sound\\CREATURE\\Deathwing\\VO_DS_DEATHWING_BACKEVENT_01.OGG", "sound\\CREATURE\\Deathwing\\VO_DS_DEATHWING_BACKSLAY_01.OGG")
@@ -27,7 +27,7 @@ mod:RegisterEventsInCombat(
 )
 
 local warnAbsorbedBlood		= mod:NewStackAnnounce(105248, 2)
-local warnResidue			= mod:NewCountAnnounce("ej4057", 3, nil, false) -- maybe info frame will be better. (temporarly added)
+local warnResidue			= mod:NewCountAnnounce("ej4057", 3, nil, false)
 local warnGrip				= mod:NewTargetAnnounce(109459, 4)
 local warnNuclearBlast		= mod:NewCastAnnounce(105845, 4)
 local warnSealArmor			= mod:NewCastAnnounce(105847, 4)

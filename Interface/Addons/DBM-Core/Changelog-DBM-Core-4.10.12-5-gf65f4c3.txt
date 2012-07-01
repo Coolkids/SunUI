@@ -1,6 +1,0 @@
-subversion:
-	- tandanu via svn r7546: merge changes from MoP branch
-	- Omega via svn r7541: Gate of the Setting Sun Instance now implemented
-	- Omega via svn r7540: Darkmaster Gandling Update Rattlegore Update Korlof Update
-	- Omega via svn r7539: 1. Implemented 2 additional bosses in scarlet halls and cathedral 2. Fixed/Updated 4 other mods in same zones.
-	- Omega via svn r7538: Many more updates to come. But i just wanted to commit these 2 now. 1. Added rest of MoP 5 man load zones, all 9 are coded now. 2. Updated Braun for the curve ball nerf they did to encounters CDs. My fix should account for this and still provide perfect timers.

@@ -2,11 +2,7 @@
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Chat", "AceEvent-3.0")
  
 function Module:OnInitialize()
--- 聊天设置
-local AutoApply = false									--聊天设置锁定		
-local def_position = {"BOTTOMLEFT", 5, 25} -- Chat Frame position
-local chat_height = 122
-local chat_width = 327
+-- 聊天设置	
 local fontsize = 10                          --other variables
 local tscol = "64C2F5"						-- Timestamp coloring
 local TimeStampsCopy = true					-- 时间戳
@@ -23,24 +19,6 @@ local TimeStampsCopy = true					-- 时间戳
 		["spell"]       = true,
 		["talent"]      = true,
 		["unit"]        = true,}
-
-	for i = 1, NUM_CHAT_WINDOWS do
-	  local cf = _G['ChatFrame'..i]
-	  cf:SetFading(true)  --渐隐
-	  if cf then 
-		cf:SetFont(NAMEPLATE_FONT, 10*S.Scale(1), "THINOUTLINE") 
-		cf:SetFrameStrata("LOW")
-		cf:SetFrameLevel(2)
-		cf:CreateShadow("Background")
-	  end
-	  local tab = _G['ChatFrame'..i..'Tab']
-	  if tab then
-		tab:GetFontString():SetFont(NAMEPLATE_FONT, 11*S.Scale(1), "OUTLINE")
-		--fix for color and alpha of undocked frames
-		tab:GetFontString():SetTextColor(0,0,1)
-		tab:SetAlpha(1)
-	  end
-	end
 
 	-- 打开输入框回到上次对话
 	ChatTypeInfo.SAY.sticky = 0
@@ -74,36 +52,10 @@ local TimeStampsCopy = true					-- 时间戳
 	CHAT_FRAME_TAB_NORMAL_NOMOUSE_ALPHA = 0
 	CHAT_FRAME_TAB_SELECTED_NOMOUSE_ALPHA = 0
 
-	---------------- > Function to move and scale chatframes 
-	SetChat = function()
-		FCF_SetLocked(ChatFrame1, nil)
-		FCF_SetChatWindowFontSize(self, ChatFrame1, fontsize*S.Scale(1)) 
-		ChatFrame1:ClearAllPoints()
-		ChatFrame1:SetPoint(unpack(def_position))
-		ChatFrame1:SetWidth(chat_width)
-		ChatFrame1:SetHeight(chat_height)
-		ChatFrame1:SetFrameLevel(8)
-		ChatFrame1:SetUserPlaced(true)
-		for i=1,10 do 
-		local cf = _G["ChatFrame"..i] 
-		cf:CreateShadow("Background")
-		--FCF_SetWindowAlpha(cf, 0.8) 
-		end 
-		FCF_SavePositionAndDimensions(ChatFrame1)
-		FCF_SetLocked(ChatFrame1, 1)
-	end
-	SlashCmdList["SETCHAT"] = SetChat
-	SLASH_SETCHAT1 = "/setchat"
-	if AutoApply then
-		local f = CreateFrame"Frame"
-		f:RegisterEvent("PLAYER_ENTERING_WORLD")
-		f:SetScript("OnEvent", function() SetChat() end)
-	end
 	local function kill(f)
 		if f.UnregisterAllEvents then
 			f:UnregisterAllEvents()
 		end
-		--f.Show = function() end
 		f:Hide()
 	end
 	
@@ -115,16 +67,70 @@ local TimeStampsCopy = true					-- 时间戳
 		FriendsMicroButton:Hide()
 		FriendsMicroButton:SetScript("OnShow", kill)
 
-		for i=1, 10 do
-			local cf = _G[format("%s%d", "ChatFrame", i)]
+		for i = 1, NUM_CHAT_WINDOWS do
+			local cf = _G['ChatFrame'..i]
+			cf:SetFading(true)  --渐隐
+			if cf then 
+				S.CreateBD(cf, .6)
+			end
+			--EditBox Module
+			local ebParts = {'Left', 'Mid', 'Right'}
+			local eb = _G['ChatFrame'..i..'EditBox']
+			for _, ebPart in ipairs(ebParts) do
+				_G['ChatFrame'..i..'EditBox'..ebPart]:SetTexture(nil)
+				local ebed = _G['ChatFrame'..i..'EditBoxFocus'..ebPart]
+				ebed:SetTexture(nil)
+				ebed:SetHeight(18)
+			end
+			eb:SetAltArrowKeyMode(false)
+			eb:ClearAllPoints()
+			eb:Point("BOTTOMLEFT", cf, "TOPLEFT",  0, 3)
+			eb:Point("BOTTOMRIGHT", cf, "TOPRIGHT", 0, 3)
+			eb:SetHeight(18)
+			S.CreateBD(eb, 0.6)
+			
+			local chat = format("ChatFrame%s",i)
+			_G[chat.."EditBoxLanguage"]:ClearAllPoints()
+			_G[chat.."EditBoxLanguage"]:SetPoint("LEFT", _G[chat.."EditBox"], "RIGHT", S.Scale(5), 0)
+			_G[chat.."EditBoxLanguage"]:SetSize(_G[chat.."EditBox"]:GetHeight(),_G[chat.."EditBox"]:GetHeight())
+			S.StripTextures(_G[chat.."EditBoxLanguage"])
+			S.CreateBD(_G[chat.."EditBoxLanguage"], 0.6)
+			_G['ChatFrame'..i..'EditBox']:HookScript("OnEditFocusGained", function(self) self:Show() end)
+			_G['ChatFrame'..i..'EditBox']:HookScript("OnEditFocusLost", function(self) self:Hide() end)
+			local a = CreateFrame("Frame",nil,WorldFrame)
+			a:RegisterEvent("PLAYER_ENTERING_WORLD") 
+			a:SetScript("OnEvent",function(self,event,...) 
+				if(event == "PLAYER_ENTERING_WORLD") then
+					_G['ChatFrame'..i..'EditBox']:SetAlpha(0) 
+				end 
+			end)
+	
+		--Remove scroll buttons
+			local bf = _G['ChatFrame'..i..'ButtonFrame']
+			bf:Hide()
+			bf:SetScript("OnShow",  kill)
+		
+		--Scroll to the bottom button
+			local function BottomButtonClick(self)
+				self:GetParent():ScrollToBottom();
+			end
+			local bb = _G["ChatFrame"..i.."ButtonFrameBottomButton"]
+			bb:SetParent(_G["ChatFrame"..i])
+			bb:SetHeight(18)
+			bb:SetWidth(18)
+			bb:ClearAllPoints()
+			bb:SetPoint("TOPRIGHT", cf, "TOPRIGHT", 0, -6)
+			bb:SetAlpha(0.4)
+			--bb.SetPoint = function() end
+			bb:SetScript("OnClick", BottomButtonClick)
+			
 		--fix fading
 			cf:SetFading(false)
 			--cf:SetClampRectInsets(0,0,0,0)
 			local tab = _G["ChatFrame"..i.."Tab"]
-			if style_chat_tabs then
 				tab:SetAlpha(1)
 				--if tab:GetAlpha() ~= 0 then tab.SetAlpha = UIFrameFadeRemoveFrame end
-				_G["ChatFrame"..i.."TabText"]:SetTextColor(.9,.8,.5) -- 1,.7,.2
+				_G["ChatFrame"..i.."TabText"]:SetTextColor(0.40, 0.78, 1) -- 1,.7,.2
 				_G["ChatFrame"..i.."TabText"].SetTextColor = function() end
 				_G["ChatFrame"..i.."TabText"]:SetFont(DB.Font,12,"THINOUTLINE")
 				_G["ChatFrame"..i.."TabText"]:SetShadowOffset(1.75, -1.75)
@@ -149,11 +155,9 @@ local TimeStampsCopy = true					-- 时间戳
 				tab.leftSelectedTexture.Show = tab.leftSelectedTexture.Hide
 				tab.middleSelectedTexture.Show = tab.middleSelectedTexture.Hide
 				tab.rightSelectedTexture.Show = tab.rightSelectedTexture.Hide
-			else
 				tab:SetAlpha(0)
 				tab.noMouseAlpha = 0
-			end
-		
+				
 		-- Hide chat textures
 			for j = 1, #CHAT_FRAME_TEXTURES do
 				_G["ChatFrame"..i..CHAT_FRAME_TEXTURES[j]]:SetTexture(nil)
@@ -163,64 +167,8 @@ local TimeStampsCopy = true					-- 时间戳
 			cf:SetMaxResize(0,0)
 		
 		--Allow the chat frame to move to the end of the screen
-			cf:SetClampedToScreen(false)
+			cf:SetClampedToScreen(true)
 			cf:SetClampRectInsets(0,0,0,0)
-		for i = 1, NUM_CHAT_WINDOWS do
-					local chat = format("ChatFrame%s",i)
-					_G[chat.."EditBoxLanguage"]:ClearAllPoints()
-					_G[chat.."EditBoxLanguage"]:SetPoint("LEFT", _G[chat.."EditBox"], "RIGHT", S.Scale(5), 0)
-					_G[chat.."EditBoxLanguage"]:SetSize(_G[chat.."EditBox"]:GetHeight(),_G[chat.."EditBox"]:GetHeight()+1)
-					S.StripTextures(_G[chat.."EditBoxLanguage"])
-					_G[chat.."EditBoxLanguage"]:CreateShadow("Background")
-					_G['ChatFrame'..i..'EditBox']:HookScript("OnEditFocusGained", function(self) self:Show() end)
-					_G['ChatFrame'..i..'EditBox']:HookScript("OnEditFocusLost", function(self) self:Hide() end)
-					local a = CreateFrame("Frame",nil,WorldFrame)
-					a:RegisterEvent("PLAYER_ENTERING_WORLD") 
-					a:SetScript("OnEvent",function(self,event,...) 
-					if(event == "PLAYER_ENTERING_WORLD") then
-					_G['ChatFrame'..i..'EditBox']:SetAlpha(0) end 
-					end)
-			end
-				
-		--EditBox Module
-			local ebParts = {'Left', 'Mid', 'Right'}
-			local eb = _G['ChatFrame'..i..'EditBox']
-			for _, ebPart in ipairs(ebParts) do
-				_G['ChatFrame'..i..'EditBox'..ebPart]:SetTexture(nil)
-				local ebed = _G['ChatFrame'..i..'EditBoxFocus'..ebPart]
-				--ebed:SetTexture(0,0,0,0.8)
-				ebed:SetTexture(nil)
-				ebed:SetHeight(18)
-			end
-			eb:SetAltArrowKeyMode(false)
-			eb:ClearAllPoints()
-			eb:Point("BOTTOMLEFT", cf, "TOPLEFT",  -1, 3)
-			eb:Point("BOTTOMRIGHT", cf, "TOPRIGHT", 1, 3)
-			eb:SetHeight(18)
-			eb:SetBackdrop({bgFile = "Interface\\Buttons\\WHITE8x8", edgeFile = DB.GlowTex, edgeSize = S.mult+0.2, 
-				insets = {top = S.mult+0.2, left =S.mult+0.2, bottom = S.mult+0.2, right = S.mult+0.2}})
-			eb:SetBackdropColor(0,0,0,0.3)
-			eb:SetBackdropBorderColor(0,0,0,1)
-			eb:EnableMouse(false)
-		
-		--Remove scroll buttons
-			local bf = _G['ChatFrame'..i..'ButtonFrame']
-			bf:Hide()
-			bf:SetScript("OnShow",  kill)
-		
-		--Scroll to the bottom button
-			local function BottomButtonClick(self)
-				self:GetParent():ScrollToBottom();
-			end
-			local bb = _G["ChatFrame"..i.."ButtonFrameBottomButton"]
-			bb:SetParent(_G["ChatFrame"..i])
-			bb:SetHeight(18)
-			bb:SetWidth(18)
-			bb:ClearAllPoints()
-			bb:SetPoint("TOPRIGHT", cf, "TOPRIGHT", 0, -6)
-			bb:SetAlpha(0.4)
-			--bb.SetPoint = function() end
-			bb:SetScript("OnClick", BottomButtonClick)
 		end
 	end
 
@@ -383,11 +331,14 @@ local TimeStampsCopy = true					-- 时间戳
 		frame:SetPoint("CENTER", UIParent, "CENTER")
 		frame:Hide()
 		frame:SetFrameStrata("DIALOG")
-		S.SetBD(frame)
+		if not frame.style then 
+			S.SetBD(frame)
+			frame.style = true
+		end
 		local scrollArea = CreateFrame("ScrollFrame", "BCMCopyScroll", frame, "UIPanelScrollFrameTemplate")
 		scrollArea:SetPoint("TOPLEFT", frame, "TOPLEFT", 8, -30)
 		scrollArea:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -30, 8)
-
+		
 		local editBox = CreateFrame("EditBox", "BCMCopyBox", frame)
 		editBox:SetMultiLine(true)
 		editBox:SetMaxLetters(99999)
@@ -403,10 +354,7 @@ local TimeStampsCopy = true					-- 时间戳
 		local close = CreateFrame("Button", "BCMCloseButton", frame, "UIPanelCloseButton")
 		close:SetSize(20, 20)
 		close:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -5, -5)
-		close.text = S.MakeFontString(close, 10)
-		close.text:SetAllPoints(close)
-		close.text:SetText("X")
-		S.Reskin(close)
+		S.ReskinClose(close)
 		local copyFunc = function(frame, btn)
 			local cf = _G[format("%s%d", "ChatFrame", frame:GetID())]
 			local _, size = cf:GetFont()
@@ -433,7 +381,7 @@ local TimeStampsCopy = true					-- 时间戳
 				GameTooltip:AddLine(CHAT_OPTIONS_LABEL, 1, 1, 1)
 				GameTooltip:AddLine(NEWBIE_TOOLTIP_CHATOPTIONS, nil, nil, nil, 1)
 			end
-			GameTooltip:AddLine((SHOW_NEWBIE_TIPS == "1" and "\n" or "").."|TInterface\\Buttons\\UI-GuildButton-OfficerNote-Disabled:27|t雙擊標籤複製.", 1, 1, 1)
+			GameTooltip:AddLine((SHOW_NEWBIE_TIPS == "1" and "\n" or "").."雙擊標籤複製", 1, 1, 1)
 			GameTooltip:Show()
 		end
 		for i = 1, 10 do
@@ -441,6 +389,8 @@ local TimeStampsCopy = true					-- 时间戳
 			tab:SetScript("OnDoubleClick", copyFunc)
 			tab:SetScript("OnEnter", hintFunc)
 		end
+		S.StripTextures(BCMCopyScrollScrollBar)
+		S.ReskinScroll(BCMCopyScrollScrollBar)
 	end
 
 
@@ -459,88 +409,4 @@ local TimeStampsCopy = true					-- 时间戳
 			end
 		end
 	end
-
-	--[[---------------- > URL copy Module
-	local tlds = {
-		"[Cc][Oo][Mm]", "[Uu][Kk]", "[Nn][Ee][Tt]", "[Dd][Ee]", "[Ff][Rr]", "[Ee][Ss]",
-		"[Bb][Ee]", "[Cc][Cc]", "[Uu][Ss]", "[Kk][Oo]", "[Cc][Hh]", "[Tt][Ww]",
-		"[Cc][Nn]", "[Rr][Uu]", "[Gg][Rr]", "[Ii][Tt]", "[Ee][Uu]", "[Tt][Vv]",
-		"[Nn][Ll]", "[Hh][Uu]", "[Oo][Rr][Gg]", "[Ss][Ee]", "[Nn][Oo]", "[Ff][Ii]"
-	}
-
-	local uPatterns = {
-		'(http://%S+)',
-		'(www%.%S+)',
-		'(%d+%.%d+%.%d+%.%d+:?%d*)',
-	}
-
-	local cTypes = {
-		"CHAT_MSG_CHANNEL",
-		"CHAT_MSG_YELL",
-		"CHAT_MSG_GUILD",
-		"CHAT_MSG_OFFICER",
-		"CHAT_MSG_PARTY",
-		"CHAT_MSG_PARTY_LEADER",
-		"CHAT_MSG_RAID",
-		"CHAT_MSG_RAID_LEADER",
-		"CHAT_MSG_SAY",
-		"CHAT_MSG_WHISPER",
-		"CHAT_MSG_BN_WHISPER",
-		"CHAT_MSG_BN_CONVERSATION",
-	}
-
-	for _, event in pairs(cTypes) do
-		ChatFrame_AddMessageEventFilter(event, function(self, event, text, ...)
-			for i=1, 24 do
-				local result, matches = string.gsub(text, "(%S-%."..tlds[i].."/?%S*)", "|cff8A9DDE|Hurl:%1|h[%1]|h|r")
-				if matches > 0 then
-					return false, result, ...
-				end
-			end
-			for _, pattern in pairs(uPatterns) do
-				local result, matches = string.gsub(text, pattern, '|cff8A9DDE|Hurl:%1|h[%1]|h|r')
-				if matches > 0 then
-					return false, result, ...
-				end
-			end 
-		end)
-	end
-
-	local GetText = function(...)
-		for l = 1, select("#", ...) do
-			local obj = select(l, ...)
-			if obj:GetObjectType() == "FontString" and obj:IsMouseOver() then
-				return obj:GetText()
-			end
-		end
-	end
-
-	local SetIRef = SetItemRef
-	SetItemRef = function(link, text, ...)
-		local txt, frame
-		if link:sub(1, 6) == 'm_Chat' then
-			frame = GetMouseFocus():GetParent()
-			txt = GetText(frame:GetRegions())
-			txt = txt:gsub("|c%x%x%x%x%x%x%x%x(.-)|r", "%1")
-			txt = txt:gsub("|H.-|h(.-)|h", "%1")
-		elseif link:sub(1, 3) == 'url' then
-			frame = GetMouseFocus():GetParent()
-			txt = link:sub(5)
-		end
-		if txt then
-			local editbox
-			if GetCVar('chatStyle') == 'classic' then
-				editbox = LAST_ACTIVE_CHAT_EDIT_BOX
-			else
-				editbox = _G['ChatFrame'..frame:GetID()..'EditBox']
-			end
-			editbox:Show()
-			editbox:Insert(txt)
-			editbox:HighlightText()
-			editbox:SetFocus()
-			return
-		end
-		return SetIRef(link, text, ...)
-	end
-	--]]
 end

@@ -25,7 +25,7 @@
 ## X-DBM-Mod-Name-ptBR: Guarnição Baradin
 ## X-DBM-Mod-Sort: 102
 ## X-DBM-Mod-LoadZoneID: 752
-## X-Curse-Packaged-Version: 4.10.12-5-gf65f4c3
+## X-Curse-Packaged-Version: 4.10.12-12-g341c972
 ## X-Curse-Project-Name: Deadly Boss Mods
 ## X-Curse-Project-ID: deadly-boss-mods
 ## X-Curse-Repository-ID: wow/deadly-boss-mods/mainline

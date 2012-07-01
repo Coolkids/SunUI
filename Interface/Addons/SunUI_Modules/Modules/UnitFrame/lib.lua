@@ -245,7 +245,7 @@ C = C["UnitFrameDB"]
 ------ [Castbar, +mirror castbar]
   --gen castbar
   lib.gen_castbar = function(f)
-    local s = CreateFrame("StatusBar", "oUF_monoCastbar"..f.mystyle, f)
+    local s = CreateFrame("StatusBar", "oUF_SunUICastbar"..f.mystyle, f)
     s:Size(f.width-(f.height/1.5+4),f.height/1.5)
     s:SetStatusBarTexture(DB.Statusbar)
     s:SetStatusBarColor(.3, .45, .65,1)
@@ -273,11 +273,20 @@ C = C["UnitFrameDB"]
 	sp:SetPoint("BOTTOMRIGHT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
     --spell text
     local txt = lib.gen_fontstring(s, DB.Font, (C["FontSize"]+1)*S.Scale(1), "THINOUTLINE")
-    txt:SetPoint("LEFT", 2, s:GetHeight()/2)
+    if f.mystyle == "player" then
+		txt:SetPoint("LEFT", 2, s:GetHeight()/2)
+		else
+		txt:SetPoint("LEFT", 2, 0)
+	end
     txt:SetJustifyH("LEFT")
+	
     --time
     local t = lib.gen_fontstring(s, DB.Font, (C["FontSize"]+1)*S.Scale(1), "THINOUTLINE")
-    t:SetPoint("RIGHT", -2, s:GetHeight()/2)
+    if f.mystyle == "player" then
+		t:SetPoint("RIGHT", -2, s:GetHeight()/2)
+	else
+		t:SetPoint("RIGHT", -2, 0)
+	end
     txt:SetPoint("RIGHT", t, "LEFT", -5, 0)
     --icon
     local i = s:CreateTexture(nil, "ARTWORK")
@@ -286,11 +295,6 @@ C = C["UnitFrameDB"]
     i:SetPoint("BOTTOMRIGHT", s, "BOTTOMLEFT", -6, 0)
     i:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	CreateShadow(s, i)
-    --helper2 for icon
-    local h2 = CreateFrame("Frame", nil, s)
-    h2:SetFrameLevel(0)
-    h2:SetPoint("TOPLEFT",i,"TOPLEFT",-5,5)
-    h2:SetPoint("BOTTOMRIGHT",i,"BOTTOMRIGHT",5,-5)
     
     if f.mystyle == "focus" and not C["focusCBuserplaced"] then
       s:Size(C["FocusCastBarWidth"],C["FocusCastBarHeight"])
@@ -302,7 +306,6 @@ C = C["UnitFrameDB"]
       s:SetScale(f:GetScale())
       s:Size(f.width-f.height/2,f.height/2.5)
       i:SetPoint("RIGHT", s, "LEFT", -2, 0)
-      h2:SetFrameLevel(9)
       txt:Hide() t:Hide() h:Hide()
     elseif f.mystyle == "arena" then
       s:Size(f.width-(f.height/1.4+4),f.height/1.4)
@@ -338,7 +341,7 @@ C = C["UnitFrameDB"]
 	elseif f.mystyle == "target" and not C["targetCBuserplaced"] then
 	  s:Size(C["TargetCastBarWidth"],C["TargetCastBarHeight"])
 	  MoveHandle.Castbartarget = S.MakeMoveHandle(s, L["目标施法条"], "TargetCastbar")
-	  i:Size(s:GetHeight()*2,s:GetHeight()*2)
+	  i:Size(s:GetHeight(),s:GetHeight())
       sp:SetHeight(s:GetHeight()*2.5)
 	else
       s:SetPoint("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)

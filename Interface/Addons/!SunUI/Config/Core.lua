@@ -2,7 +2,7 @@
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("SunUIConfig", "AceConsole-3.0", "AceEvent-3.0")
 local db = {}
 local defaults
-local DEFAULT_WIDTH = 700
+local DEFAULT_WIDTH = 800
 local DEFAULT_HEIGHT = 500
 local AC = LibStub("AceConfig-3.0")
 local ACD = LibStub("AceConfigDialog-3.0")
@@ -87,7 +87,7 @@ function SunUIConfig:LoadDefaults()
 				["Scale"] = 1,
 				["EnableSwingTimer"] = false,
 				["PetHeight"] = 10,
-				["TargetCastBarHeight"] = 10,
+				["TargetCastBarHeight"] = 20,
 				["EnableBarFader"] = false,
 				["BossWidth"] = 140,
 				["BossScale"] = 1,
@@ -116,7 +116,7 @@ function SunUIConfig:LoadDefaults()
 				["PlayerBuff"] = 4,
 				["CastBar"] = true,
 				["Party3D"] = false,
-				["TargetRange"] = true,
+				["TargetRange"] = false,
 				["RangeAlpha"] = 0.6,
 				["FocusDebuff"] = false,
 			},
@@ -300,7 +300,7 @@ function SunUIConfig:LoadDefaults()
 					"UIParent", -- [2]
 					"CENTER", -- [3]
 					0, -- [4]
-					185, -- [5]
+					95, -- [5]
 				},
 				["Buff"] = {
 					"TOPRIGHT", -- [1]
@@ -477,6 +477,13 @@ function SunUIConfig:LoadDefaults()
 					-50, -- [4]
 					160, -- [5]
 				},
+				["healpriest"] = {
+					"CENTER", -- [1]
+					"UIParent", -- [2]
+					"CENTER", -- [3]
+					0, -- [4]
+					135, -- [5]
+				},
 			},
 		},
 	}
@@ -547,7 +554,7 @@ function SunUIConfig.GenerateOptionsInternal()
 			Header = {
 				order = 1,
 				type = "header",
-				name = "6.21A",
+				name = "7.02A",
 				width = "full",		
 			},
 			Unlock = {

@@ -1,8 +1,15 @@
 local S, C, L, DB = unpack(select(2, ...))
+local function colourArrow(f)
+	if f:IsEnabled() then
+		f.downtex:SetVertexColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
+	end
+end
 
+local function clearArrow(f)
+	f.downtex:SetVertexColor(1, 1, 1)
+end
 S.ReskinDropDown = function(f)
 	local frame = f:GetName()
-
 	local left = _G[frame.."Left"]
 	local middle = _G[frame.."Middle"]
 	local right = _G[frame.."Right"]
@@ -13,13 +20,14 @@ S.ReskinDropDown = function(f)
 
 	local down = _G[frame.."Button"]
 
-	down:SetSize(20, 20)
 	down:ClearAllPoints()
-	down:SetPoint("RIGHT", -18, 2)
+	down:Point("TOPRIGHT", -18, -4)
+	down:Point("BOTTOMRIGHT", -18, 8)
+	down:SetWidth(19)
 
-	S.Reskin(down)
+	S.Reskin(down, true)
 	
-	down:SetDisabledTexture("Interface\\ChatFrame\\ChatFrameBackground")
+	down:SetDisabledTexture(DB.aurobackdrop)
 	local dis = down:GetDisabledTexture()
 	dis:SetVertexColor(0, 0, 0, .3)
 	dis:SetDrawLayer("OVERLAY")
@@ -27,21 +35,21 @@ S.ReskinDropDown = function(f)
 
 	local downtex = down:CreateTexture(nil, "ARTWORK")
 	downtex:SetTexture("Interface\\AddOns\\!SunUI\\Media\\arrow-down-active")
-	downtex:SetSize(8, 8)
+	downtex:Size(8, 8)
 	downtex:SetPoint("CENTER")
 	downtex:SetVertexColor(1, 1, 1)
-
+	down.downtex = downtex
+	
+	down:HookScript("OnEnter", colourArrow)
+	down:HookScript("OnLeave", clearArrow)
+	
 	local bg = CreateFrame("Frame", nil, f)
-	bg:SetPoint("TOPLEFT", 16, -4)
-	bg:SetPoint("BOTTOMRIGHT", -18, 8)
+	bg:Point("TOPLEFT", 16, -4)
+	bg:Point("BOTTOMRIGHT", -18, 8)
 	bg:SetFrameLevel(f:GetFrameLevel()-1)
-	bg:CreateBD(0)
+	S.CreateBD(bg, 0)
 
-	local tex = bg:CreateTexture(nil, "BACKGROUND")
-	tex:SetPoint("TOPLEFT")
-	tex:SetPoint("BOTTOMRIGHT")
-	tex:SetTexture("Interface\\ChatFrame\\ChatFrameBackground")
-	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+	S.CreateGradient(bg)
 end
 
 S.ReskinCheck = function(f)

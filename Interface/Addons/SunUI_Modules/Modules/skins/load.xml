@@ -5,4 +5,5 @@
 	<Script file='BlzTime.lua' />
 	<Script file='BlzTimeTracker.lua' />
 	<Script file='BubbleBobble.lua' />
+	<Script file='Postal.lua' />
 </Ui>

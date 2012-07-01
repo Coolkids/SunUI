@@ -739,27 +739,13 @@ function Bag:InitBank()
 	f.sortButton.ttText2desc = "整理特殊背包"
 	f.sortButton:SetScript("OnEnter", Tooltip_Show)
 	f.sortButton:SetScript("OnLeave", Tooltip_Hide)	
-	f.sortButton:SetScript('OnClick', function() if IsShiftKeyDown() then Bag:Sort(f, 'c/p', true); else Bag:Sort(f, 'd', true); end end)
+	f.sortButton:SetScript('OnClick', function() JPack:Pack() end)
 	S.Reskin(f.sortButton)
-	
-	--Stack Button
-	f.stackButton = CreateFrame('Button', nil, f)
-	f.stackButton:Point('LEFT', f.sortButton, 'RIGHT', 3, 0)
-	f.stackButton:Size(85, 10)
-	--f.stackButton:SetTemplate('Default', true)
-	f.stackButton.ttText = "堆叠物品"
-	f.stackButton.ttText2 = "按住shift:"
-	f.stackButton.ttText2desc = "堆叠特殊背包物品"
-	f.stackButton:SetScript("OnEnter", Tooltip_Show)
-	f.stackButton:SetScript("OnLeave", Tooltip_Hide)	
-	f.stackButton:SetScript('OnClick', function() if IsShiftKeyDown() then Bag:SetBagsForSorting("c/p", true); Bag:Restack(f); else Bag:SetBagsForSorting("d", true); Bag:Restack(f); end end)
-	S.Reskin(f.stackButton)
 	
 	--Bags Button
 	f.bagsButton = CreateFrame('Button', nil, f)
-	f.bagsButton:Point('LEFT', f.stackButton, 'RIGHT', 3, 0)
+	f.bagsButton:Point('LEFT', f.sortButton, 'RIGHT', 3, 0)
 	f.bagsButton:Size(85, 10)
-	--f.bagsButton:SetTemplate('Default', true)
 	f.bagsButton.ttText = "显示背包"
 	f.bagsButton:SetScript("OnEnter", Tooltip_Show)
 	f.bagsButton:SetScript("OnLeave", Tooltip_Hide)	

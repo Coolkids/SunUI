@@ -72,7 +72,7 @@ local function WATCHFRAMELOCK()
 end
 SLASH_WATCHFRAMELOCK1 = "/wf"
 SlashCmdList["WATCHFRAMELOCK"] = WATCHFRAMELOCK
--- VS移动(by Tukz)
+-- VS移动(by Coolkid)
 local vs = VehicleSeatIndicator
 local vsmove = false 
 
