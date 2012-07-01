@@ -34,10 +34,11 @@ local warnArmageddon		= mod:NewSpellAnnounce(92177, 4)
 local warnPhase2Soon		= mod:NewPrePhaseAnnounce(2, 3)--heroic
 local warnPhase2			= mod:NewPhaseAnnounce(2, 4)--heroic
 
-local specWarnPillar		= mod:NewSpecialWarningSpell(78006, mod:IsRanged())
+local specWarnPillar		= mod:NewSpecialWarningSpell(78006)
 local specWarnIgnition		= mod:NewSpecialWarningMove(92198)
 local specWarnInfernoSoon   = mod:NewSpecialWarning("SpecWarnInferno")
-local specWarnArmageddon	= mod:NewSpecialWarningSpell(92177, nil, nil, nil, true)
+local specWarnInfection		= mod:NewSpecialWarningYou(94679)
+local specWarnArmageddon	= mod:NewSpecialWarningSpell(92177, not mod:IsHealer(), nil, nil, true)
 
 local timerLavaSpew			= mod:NewCDTimer(22, 77689, nil, mod:IsHealer())
 local timerPillarFlame		= mod:NewCDTimer(32.5, 78006)--This timer is a CD timer. 30-40 seconds. Use your judgement.
@@ -49,6 +50,8 @@ local timerArmageddon		= mod:NewCastTimer(8, 92177)
 
 local berserkTimer			= mod:NewBerserkTimer(600)
 
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
+
 mod:AddBoolOption("RangeFrame")
 
 local geddonConstruct = 0
@@ -59,10 +62,18 @@ function mod:OnCombatStart(delay)
 	prewarnedPhase2 = false
 	timerPillarFlame:Start(30-delay)
 	timerMangleCD:Start(90-delay)
+	timerLavaSpew:Start(19-delay)
+	if mod:IsHealer() then
+		sndWOP:Schedule(17-delay, "Interface\\AddOns\\DBM-Core\\extrasounds\\aesoon.mp3")	
+	end
 	berserkTimer:Start(-delay)
 	if self:IsDifficulty("heroic10", "heroic25") then
 		timerInferno:Start(30-delay)
 		specWarnInfernoSoon:Schedule(26-delay)
+		sndWOP:Schedule(27-delay, "Interface\\AddOns\\DBM-Core\\extrasounds\\ghostsoon.mp3")
+		sndWOP:Schedule(28-delay, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Schedule(29-delay, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Schedule(30-delay, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	end
 	DBM.BossHealth:Clear()
 	DBM.BossHealth:AddBoss(41570, 42347, L.name)
@@ -78,6 +89,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(78006) then--More than one spellid?
 		warnPillarFlame:Show()
 		specWarnPillar:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\pillar.mp3")
 		timerPillarFlame:Start()
 	elseif args:IsSpellID(78403) then
 		warnMoltenTantrum:Show()
@@ -85,6 +97,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnMangle:Show(args.destName)
 		timerMangle:Start(args.destName)
 		timerMangleCD:Start()
+	elseif args:IsSpellID(94679, 78097, 78941, 91913, 94678) and args:IsPlayer() then
+		specWarnInfection:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runout.mp3")
 	end
 end
 
@@ -95,13 +110,21 @@ function mod:SPELL_AURA_REMOVED(args)
 end
 
 function mod:SPELL_CAST_SUCCESS(args)
-	if args:IsSpellID(77690, 91919, 91931, 91932) and self:AntiSpam(5, 1) then--SpellIds for other modes are guesswork, 77690 10 man confirmed
+	if args:IsSpellID(77690, 91931, 91932, 91919) and self:AntiSpam(10, 1) then--SpellIds for other modes are guesswork, 77690 10 man confirmed
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\aesoon.mp3")
 		warnLavaSpew:Show()
 		timerLavaSpew:Start()
+		if mod:IsHealer() then
+			sndWOP:Schedule(23, "Interface\\AddOns\\DBM-Core\\extrasounds\\aesoon.mp3")
+		end
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\lavaspew.mp3")
 	elseif args:IsSpellID(92177) then
 		warnArmageddon:Show()
 		specWarnArmageddon:Show()
-		timerArmageddon:Start()
+		if not mod:IsHealer() then
+			timerArmageddon:Start()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\killghost.mp3")
+		end
 		geddonConstruct = args.sourceGUID--Cache last mob to cast armageddon
 	end
 end
@@ -110,13 +133,18 @@ function mod:SPELL_SUMMON(args)
 	if args:IsSpellID(92154, 92190, 92191, 92192) then
 		warnInferno:Show()
 		specWarnInfernoSoon:Schedule(31)
+		sndWOP:Schedule(32, "Interface\\AddOns\\DBM-Core\\extrasounds\\ghostsoon.mp3")
+		sndWOP:Schedule(33, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Schedule(34, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Schedule(35, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		timerInferno:Start()
 	end
 end
 
-function mod:SPELL_DAMAGE(sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId)
+function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
 	if (spellId == 92128 or spellId == 92196 or spellId == 92197 or spellId == 92198) and destGUID == UnitGUID("player") and self:AntiSpam(4, 2) then
 		specWarnIgnition:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")
 	end
 end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE
@@ -126,6 +154,10 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 	if msg == L.YellPhase2 or msg:find(L.YellPhase2) then
 		timerInferno:Cancel()
 		specWarnInfernoSoon:Cancel()
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ghostsoon.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		warnPhase2:Show()
 		if self.Options.RangeFrame then
 			DBM.RangeCheck:Show(5)
@@ -135,10 +167,16 @@ end
 
 function mod:RAID_BOSS_EMOTE(msg)
 	if msg == L.Slump or msg:find(L.Slump) then
-		timerPillarFlame:Start(15)--Resets to 15. If you don't get his head down by then he gives you new adds to mess with. (theory, don't have a lot of logs with chain screwups yet)
+--		timerPillarFlame:Start(15)--Resets to 15. If you don't get his head down by then he gives you new adds to mess with. (theory, don't have a lot of logs with chain screwups yet)
+		timerPillarFlame:Cancel()
 	elseif msg == L.HeadExposed or msg:find(L.HeadExposed) then
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\aesoon.mp3")
 		timerExposed:Start()
 		timerPillarFlame:Start(40)
+		timerLavaSpew:Start(35)
+		if mod:IsHealer() then
+			sndWOP:Schedule(32, "Interface\\AddOns\\DBM-Core\\extrasounds\\aesoon.mp3")	
+		end
 	end
 end
 

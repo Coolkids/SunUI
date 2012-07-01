@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Springvale", "DBM-Party-Cataclysm", 6)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7473 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7444 $"):sub(12, -3))
 mod:SetCreatureID(4278)
 mod:SetModelID(37287)
 mod:SetZone()
@@ -43,7 +43,7 @@ end
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(93844) then
 		warnEmpowerment:Show()
-		specWarnEmpowerment:Show(args.sourceName)
+		specWarnEmpowerment:Show()
 	end
 end
 

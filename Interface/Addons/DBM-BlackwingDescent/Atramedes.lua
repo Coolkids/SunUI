@@ -2,7 +2,7 @@
 local mod	= DBM:NewMod("Atramedes", "DBM-BlackwingDescent")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7473 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 6499 $"):sub(12, -3))
 mod:SetCreatureID(41442)
 mod:SetModelID(34547)
 mod:SetZone()
@@ -38,6 +38,7 @@ local specWarnSearingFlame	= mod:NewSpecialWarningSpell(77840, nil, nil, nil, tr
 local specWarnSonarPulse	= mod:NewSpecialWarningSpell(92411, false, nil, nil, true)
 local specWarnTracking		= mod:NewSpecialWarningYou(78092)
 local specWarnPestered		= mod:NewSpecialWarningYou(92685)
+local specWarnObnoxiousFiend		= mod:NewSpecialWarning("SpecWarnFiend")
 local yellPestered			= mod:NewYell(92685, L.YellPestered)
 local specWarnObnoxious		= mod:NewSpecialWarningInterrupt(92702, mod:IsMelee())
 local specWarnAddTargetable	= mod:NewSpecialWarning("specWarnAddTargetable", mod:IsRanged())
@@ -47,10 +48,13 @@ local timerSonicBreath		= mod:NewCDTimer(41, 78075)
 local timerSearingFlame		= mod:NewCDTimer(45, 77840)
 local timerAirphase			= mod:NewTimer(85, "TimerAirphase", "Interface\\AddOns\\DBM-Core\\textures\\CryptFiendUnBurrow.blp")--These both need more work
 local timerGroundphase		= mod:NewTimer(31.5, "TimerGroundphase", "Interface\\AddOns\\DBM-Core\\textures\\CryptFiendBurrow.blp")--I just never remember to log and /yell at right times since they lack most accurate triggers.
+local timerObnoxiousFiend			= mod:NewTimer(16, "TimerFiend")
+local timerModulation		= mod:NewCDTimer(15, 92452)
 
 local berserkTimer			= mod:NewBerserkTimer(600)
 
-local soundTracking			= mod:NewSound(78092)
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
+--local soundTracking			= mod:NewSound(78092)
 
 mod:AddBoolOption("TrackingIcon")
 mod:AddBoolOption("InfoFrame")
@@ -61,16 +65,22 @@ local pesteredWarned = false
 
 local function groundphase()
 	timerAirphase:Start()
+	timerModulation:Start()
 	timerSonicBreath:Start(25)
+	sndWOP:Schedule(22, "Interface\\AddOns\\DBM-Core\\extrasounds\\sonicsoon.mp3")
 	timerSearingFlame:Start()
+	sndWOP:Schedule(42, "Interface\\AddOns\\DBM-Core\\extrasounds\\dangsoon.mp3")
 	warnSearingFlameSoon:Schedule(40)
 end
 
 function mod:OnCombatStart(delay)
 	timerSonarPulseCD:Start(-delay)
 	timerSonicBreath:Start(25-delay)
+	sndWOP:Schedule(21-delay, "Interface\\AddOns\\DBM-Core\\extrasounds\\sonicsoon.mp3")
+	timerModulation:Start(-delay)
 	warnSearingFlameSoon:Schedule(40-delay)
 	timerSearingFlame:Start(-delay)
+	sndWOP:Schedule(42-delay, "Interface\\AddOns\\DBM-Core\\extrasounds\\dangsoon.mp3")
 	timerAirphase:Start(90-delay)
 	shieldsLeft = 10
 	pesteredWarned = false
@@ -94,11 +104,15 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnTracking:Show(args.destName)
 		if args:IsPlayer() then
 			specWarnTracking:Show()
-			soundTracking:Play()
+--			soundTracking:Play()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\justrun.mp3")
 		end
 		if self.Options.TrackingIcon then
 			self:SetIcon(args.destName, 8)
 		end
+	elseif args:IsSpellID(92681) then
+		specWarnObnoxiousFiend:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\fiend.mp3")
 	end
 end
 
@@ -116,7 +130,7 @@ function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(92677, 92702) then
 		warnObnoxious:Show()
 		if self:IsMelee() and (self:GetUnitCreatureId("target") == 49740 or self:GetUnitCreatureId("focus") == 49740) or not self:IsMelee() then
-			specWarnObnoxious:Show(args.sourceName)--Only warn for melee targeting him or exclicidly put him on focus, else warn regardless if he's your target/focus or not if you aren't a melee
+			specWarnObnoxious:Show()--Only warn for melee targeting him or exclicidly put him on focus, else warn regardless if he's your target/focus or not if you aren't a melee
 		end
 	end
 end
@@ -124,7 +138,11 @@ end
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(78075) then
 		timerSonicBreath:Start()
+		sndWOP:Schedule(39, "Interface\\AddOns\\DBM-Core\\extrasounds\\sonicsoon.mp3")
 		warnSonicBreath:Show()
+		if mod:IsDifficulty("heroic10", "heroic25") then
+			timerObnoxiousFiend:Start()
+		end
 	elseif args:IsSpellID(77840) then
 		specWarnSearingFlame:Show()
 	elseif args:IsSpellID(92681) then--Add is phase shifting which means a new one is spawning, or an old one is changing target cause their first target died.
@@ -134,6 +152,8 @@ function mod:SPELL_CAST_SUCCESS(args)
 		warnSonarPulse:Show()
 		specWarnSonarPulse:Show()
 		timerSonarPulseCD:Start()
+	elseif args:IsSpellID(77612, 92451, 92452, 92453) then
+		timerModulation:Start()
 	end
 end
 
@@ -148,6 +168,8 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 	if msg == L.Airphase or msg:find(L.Airphase)  then
 		warnAirphase:Show()
 		timerSonicBreath:Cancel()
+		timerModulation:Cancel()
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\sonicsoon.mp3")
 		timerSonarPulseCD:Cancel()
 		timerGroundphase:Start()
 		self:Schedule(31.5, groundphase)

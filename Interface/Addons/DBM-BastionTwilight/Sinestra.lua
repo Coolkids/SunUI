@@ -23,48 +23,74 @@ mod:RegisterEventsInCombat(
 	"UNIT_DIED"
 )
 
-local warnBreath			= mod:NewSpellAnnounce(92944, 3)
-local warnOrbSoon			= mod:NewAnnounce("WarnOrbSoon", 3, 92954, true, nil, true)--Still on by default but no longer plays it's own sounds
-local warnOrbs				= mod:NewAnnounce("warnAggro", 4, 92954)
-local warnWrack				= mod:NewTargetAnnounce(92955, 4)
-local warnWrackJump			= mod:NewAnnounce("warnWrackJump", 3, 92955, false)--Not spammy at all (unless you're dispellers are retarded and make it spammy). Useful for a raid leader to coordinate quicker, especially on 10 man with low wiggle room.
-local warnDragon			= mod:NewAnnounce("WarnDragon", 3, 69002)
-local warnPhase2			= mod:NewPhaseAnnounce(2)
-local warnExtinction		= mod:NewSpellAnnounce(86227, 4)
-local warnPhase3			= mod:NewPhaseAnnounce(3, 2)
-local warnRedEssence		= mod:NewSpellAnnounce(87946, 3)
+local isPal = select(2, UnitClass("player")) == "PALADIN"
 
-local specWarnOrbs			= mod:NewSpecialWarning("SpecWarnOrbs", nil, nil, nil, true)
-local specWarnOrbOnYou		= mod:NewSpecialWarning("SpecWarnAggroOnYou")
-local specWarnBreath		= mod:NewSpecialWarningSpell(92944, false, nil, nil, true)
-local specWarnEggShield		= mod:NewSpecialWarning("SpecWarnEggShield", mod:IsRanged())
-local specWarnEggWeaken		= mod:NewSpecialWarning("SpecWarnEggWeaken", mod:IsRanged())
+local warnBreath		= mod:NewAnnounce("WarnFlameBreath", 3, 92944)
+local warnOrbSoon		= mod:NewAnnounce("WarnOrbSoon", 3, 92954, true, nil, true)--Still on by default but no longer plays it's own sounds
+local warnOrbs			= mod:NewAnnounce("warnAggro", 4, 92954)
+local warnWrack			= mod:NewTargetAnnounce(92955, 4)
+local warnWrackJump		= mod:NewAnnounce("warnWrackJump", 3, 92955, false)--Not spammy at all (unless you're dispellers are retarded and make it spammy). Useful for a raid leader to coordinate quicker, especially on 10 man with low wiggle room.
+local warnDragon		= mod:NewAnnounce("WarnDragon", 3, 69002)
+local warnPhase2		= mod:NewPhaseAnnounce(2)
+local warnExtinction	= mod:NewSpellAnnounce(86227, 4)
+local warnPhase3		= mod:NewPhaseAnnounce(3, 2)
+local warnRedEssence	= mod:NewSpellAnnounce(87946, 3)
+local warnFieryBarrier	= mod:NewSpellAnnounce(87231, 3)
+
+local specWarnOrbs		= mod:NewSpecialWarning("SpecWarnOrbs", nil, nil, nil, true)
+local specWarnOrbOnYou	= mod:NewSpecialWarning("SpecWarnAggroOnYou")
+local specWarnDispel	= mod:NewSpecialWarning("SpecWarnDispel", mod:IsHealer()) -- this can be personal stuff, but Warck dispel also important In sinestra. adjust appropriately. (Maybe add support for common 10 man variation with if/else rules?)
+local specWarnBreath	= mod:NewSpecialWarningSpell(92944, false, nil, nil, true)
+local specWarnEggShield	= mod:NewSpecialWarning("SpecWarnEggShield", mod:IsRanged())
+local specWarnEggWeaken	= mod:NewSpecialWarning("SpecWarnEggWeaken", mod:IsRanged())
 local specWarnIndomitable	= mod:NewSpecialWarningDispel(92946, mod:CanRemoveEnrage())
+local specWarnSacrifice	= mod:NewSpecialWarningSpell(6940)
+local yellSlicer						= mod:NewYell(92954)
+local specWarnControl	= mod:NewSpecialWarningSpell(31821)
 
-local timerBreathCD			= mod:NewCDTimer(21, 92944)
-local timerOrbs				= mod:NewTimer(28, "TimerOrbs", 92954)
+local timerBreathCD		= mod:NewTimer(21, "TimerFlameBreath", 92944)
+local timerOrbs			= mod:NewTimer(28, "TimerOrbs", 92954)
 local timerWrack			= mod:NewNextTimer(61, 92955)
-local timerExtinction		= mod:NewCastTimer(16, 86227)
-local timerEggWeakening		= mod:NewTimer(4, "TimerEggWeakening", 61357)
-local timerEggWeaken		= mod:NewTimer(30, "TimerEggWeaken", 61357)
-local timerDragon			= mod:NewTimer(50, "TimerDragon", 69002)
-local timerRedEssenceCD		= mod:NewNextTimer(22, 87946)--21-23 seconds after red egg dies
-local timerRedEssence		= mod:NewBuffFadesTimer(180, 87946)
+local timerExtinction	= mod:NewCastTimer(16, 86227)
+local timerFieryBarrier	= mod:NewBuffActiveTimer(17, 87231)
+local timerEggWeakening	= mod:NewTimer(4, "TimerEggWeakening", 61357)
+local timerEggWeaken	= mod:NewTimer(30, "TimerEggWeaken", 61357)
+local timerDragon		= mod:NewTimer(50, "TimerDragon", 69002)
+local timerRedEssenceCD	= mod:NewNextTimer(22, 87946)--21-23 seconds after red egg dies
+local timerRedEssence	= mod:NewBuffFadesTimer(180, 87946)
 
-local countdownOrbs			= mod:NewCountdown(28, 92954, nil, "OrbsCountdown")
+local countdownOrbs		= mod:NewCountdown(28, 92954, false, "OrbsCountdown")
+
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
+local sndDIS	= mod:NewSound(nil, "SoundDIS", mod:IsHealer())
 
 mod:AddBoolOption("HealthFrame", false)
 mod:AddBoolOption("SetIconOnOrbs", true)
+mod:AddBoolOption("SoundPAL1", false)
+mod:AddBoolOption("SoundPAL2", false)
+mod:AddBoolOption("SoundMAura", false)
 mod:AddBoolOption("InfoFrame", false)--Does not filter tanks. not putting ugly hack in info frame, its simpley an aggro tracker
 
 local eggDown = 0
+local lastDispeled = 0
+local newWrackTime = 0
+local oldWrackTime = 0
+local newWrackCount = 0
+local oldWrackCount = 0
+local orbdamageSpam = 0
 local eggRemoved = false
+local wrackWarned2 = false
+local wrackWarned4 = false
+local wrackWarned8 = false
 local calenGUID = 0
 local orbList = {}
 local orbWarned = nil
 local playerWarned = nil
 local wrackName = GetSpellInfo(92955)
 local wrackTargets = {}
+local fieryWarned = false
+local breathcount = 1
+local wrackloop = 0
 
 local function resetPlayerOrbStatus()
 	orbWarned = nil
@@ -99,6 +125,8 @@ local function showOrbWarning(source)
 			if UnitIsUnit(n, "player") and not playerWarned then
 				playerWarned = true
 				specWarnOrbOnYou:Show()
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\orbrun.mp3")
+				yellSlicer:Yell()
 			end
 		end
 	end
@@ -141,6 +169,7 @@ end
 function mod:OrbsRepeat()
 	resetPlayerOrbStatus()
 	timerOrbs:Start()
+	sndWOP:Schedule(27, "Interface\\AddOns\\DBM-Core\\extrasounds\\blackorb.mp3")
 	if self.Options.WarnOrbSoon then
 		warnOrbSoon:Schedule(23, 5)
 		warnOrbSoon:Schedule(24, 4)
@@ -161,17 +190,40 @@ local function showWrackWarning()
 	table.wipe(wrackTargets)
 end
 
+function mod:givesacrifice()
+	specWarnSacrifice:Show()
+	sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\sacrifice.mp3")
+end
+
+function mod:givemasteraura()
+	specWarnControl:Show()
+	sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\masteraura.mp3")
+end
+
 function mod:OnCombatStart(delay)
 	eggDown = 0
+	lastDispeled = 0
+	newWrackTime = 0
+	oldWrackTime = 0
+	newWrackCount = 0
+	orbdamageSpam = 0
+	breathcount = 1
+	wrackWarned2 = false
+	wrackWarned4 = false
+	wrackWarned8 = false
 	eggRemoved = false
 	calenGUID = 0
+	wrackloop = 0
 	timerDragon:Start(16-delay)
-	timerBreathCD:Start(21-delay)
+	timerBreathCD:Start(21-delay, breathcount)
+	sndWOP:Schedule(19-delay, "Interface\\AddOns\\DBM-Core\\extrasounds\\firebreathsoon.mp3")
 	timerOrbs:Start(29-delay)
+	sndWOP:Schedule(27-delay, "Interface\\AddOns\\DBM-Core\\extrasounds\\blackorb.mp3")
 	table.wipe(orbList)
 	orbWarned = nil
 	playerWarned = nil
 	table.wipe(wrackTargets)
+	fieryWarned = false
 	if self.Options.WarnOrbSoon then
 		warnOrbSoon:Schedule(24-delay, 5)
 		warnOrbSoon:Schedule(25-delay, 4)
@@ -195,11 +247,17 @@ end
 
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(90125, 92944) then
-		warnBreath:Show()
+		warnBreath:Show(breathcount)
 		specWarnBreath:Show()
-		timerBreathCD:Start()
-	elseif args:IsSpellID(86227) then
+		breathcount = breathcount + 1
+		timerBreathCD:Start(21, breathcount)
+		if breathcount == 3 and mod.Options.SoundMAura then
+			self:ScheduleMethod(17.5, "givemasteraura")
+		end
+		sndWOP:Schedule(19, "Interface\\AddOns\\DBM-Core\\extrasounds\\firebreathsoon.mp3")
+	elseif args:IsSpellID(86227, 86226) then
 		warnExtinction:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\twkill.mp3")
 		timerExtinction:Start()
 	end
 end
@@ -208,29 +266,147 @@ function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(90045, 92946) then
 		specWarnIndomitable:Show()
 	elseif args:IsSpellID(89421, 92955) then--Cast wracks (10,25)
+		wrackloop = wrackloop + 1
 		warnWrack:Show(args.destName)
 		timerWrack:Start()
-	elseif args:IsSpellID(89435, 92956) then -- jumped wracks (10,25)
+		if oldWrackTime == 0 then
+			oldWrackTime = GetTime()
+		else
+			oldWrackTime = newWrackTime
+		end
+		newWrackTime = GetTime()
+		newWrackCount = 1
+		lastDispeled = 0
+		wrackWarned8 = false
+		wrackWarned4 = false
+		wrackWarned2 = false
+		if mod:IsDifficulty("heroic10") then
+			mod:SetIcon(args.destName, 8)
+			if wrackloop % 2 == 0 then
+				if mod.Options.SoundPAL2 then
+					self:ScheduleMethod(13, "givesacrifice")
+				end
+			else
+				if mod.Options.SoundPAL1 then
+					self:ScheduleMethod(13, "givesacrifice")
+				end				
+			end
+			if args:IsPlayer() then
+				sndWOP:Schedule(12, "Interface\\AddOns\\DBM-Core\\extrasounds\\trinket.mp3")
+			end
+			specWarnDispel:Schedule(20, 20)
+			sndDIS:Schedule(17, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndDIS:Schedule(18, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndDIS:Schedule(19, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			sndDIS:Schedule(20, "Interface\\AddOns\\DBM-Core\\extrasounds\\dispelnow.mp3")
+		else
+			if wrackloop % 2 == 0 then
+				if mod.Options.SoundPAL2 then
+					self:ScheduleMethod(15, "givesacrifice")
+				end
+			else
+				if mod.Options.SoundPAL1 then
+					self:ScheduleMethod(15, "givesacrifice")
+				end				
+			end
+			if args:IsPlayer() then
+				sndWOP:Schedule(14, "Interface\\AddOns\\DBM-Core\\extrasounds\\trinket.mp3")
+			end
+			specWarnDispel:Schedule(22, 22)
+			sndDIS:Schedule(19, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndDIS:Schedule(20, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndDIS:Schedule(21, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			sndDIS:Schedule(22, "Interface\\AddOns\\DBM-Core\\extrasounds\\dispelnow.mp3")			
+		end
+		self:Schedule(60, function()
+			specWarnDispel:Cancel()
+			sndDIS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndDIS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndDIS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			sndDIS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\dispelnow.mp3")
+		end)
+	elseif args:IsSpellID(89435, 92956) and (GetTime() - oldWrackTime < 60 or GetTime() - newWrackTime > 12) then -- jumped wracks (10,25)
+		newWrackCount = newWrackCount + 1
 		wrackTargets[#wrackTargets + 1] = args.destName
 		self:Unschedule(showWrackWarning)
 		self:Schedule(0.3, showWrackWarning)
+		if newWrackCount > 7 and GetTime() - lastDispeled < 5 and GetTime() - newWrackTime < 60 and not wrackWarned8 and mod:IsDifficulty("heroic10") then
+			specWarnDispel:Cancel()
+			sndDIS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndDIS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndDIS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			sndDIS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\dispelnow.mp3")
+			specWarnDispel:Schedule(12, 12)
+			sndDIS:Schedule(9, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndDIS:Schedule(10, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndDIS:Schedule(11, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			sndDIS:Schedule(12, "Interface\\AddOns\\DBM-Core\\extrasounds\\dispelnow.mp3")
+			wrackWarned8 = true
+		elseif newWrackCount > 3 and GetTime() - lastDispeled < 5 and GetTime() - newWrackTime < 60 and not wrackWarned4 then
+			specWarnDispel:Cancel()
+			sndDIS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndDIS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndDIS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			sndDIS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\dispelnow.mp3")
+			if mod:IsDifficulty("heroic10") then
+				specWarnDispel:Schedule(12, 12)
+				sndDIS:Schedule(9, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+				sndDIS:Schedule(10, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+				sndDIS:Schedule(11, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+				sndDIS:Schedule(12, "Interface\\AddOns\\DBM-Core\\extrasounds\\dispelnow.mp3")
+			else
+				specWarnDispel:Schedule(14, 14)
+				sndDIS:Schedule(11, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+				sndDIS:Schedule(12, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+				sndDIS:Schedule(13, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+				sndDIS:Schedule(14, "Interface\\AddOns\\DBM-Core\\extrasounds\\dispelnow.mp3")
+			end				
+			wrackWarned4 = true
+		elseif newWrackCount > 1 and GetTime() - lastDispeled < 5 and GetTime() - newWrackTime < 60 and not wrackWarned2 then
+			specWarnDispel:Cancel()
+			sndDIS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndDIS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndDIS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			sndDIS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\dispelnow.mp3")
+			if mod:IsDifficulty("heroic10") then
+				specWarnDispel:Schedule(12, 12)
+				sndDIS:Schedule(9, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+				sndDIS:Schedule(10, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+				sndDIS:Schedule(11, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+				sndDIS:Schedule(12, "Interface\\AddOns\\DBM-Core\\extrasounds\\dispelnow.mp3")
+			else
+				specWarnDispel:Schedule(18, 18)
+				sndDIS:Schedule(15, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+				sndDIS:Schedule(16, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+				sndDIS:Schedule(17, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+				sndDIS:Schedule(18, "Interface\\AddOns\\DBM-Core\\extrasounds\\dispelnow.mp3")
+			end
+			wrackWarned2 = true
+		end
 	elseif args:IsSpellID(87299) then
 		eggDown = 0
 		warnPhase2:Show()
 		timerBreathCD:Cancel()
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\firebreathsoon.mp3")
 		timerOrbs:Cancel()
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\blackorb.mp3")
 		if self.Options.WarnOrbSoon then
 			warnOrbSoon:Cancel()
 		end
 		countdownOrbs:Cancel()
 		self:UnscheduleMethod("OrbsRepeat")
-		if self.Options.SetIconOnOrbs then
-			self:ClearIcons()
+		if mod.Options.SetIconOnOrbs then
+			mod:ClearIcons()
 		end
 	elseif args:IsSpellID(87231) and not args:IsDestTypePlayer() then
 		if not DBM.BossHealth:HasBoss(args.sourceGUID) then
 			DBM.BossHealth:AddBoss(args.sourceGUID, args.sourceName)
 			calenGUID = args.sourceGUID
+		end
+		if not fieryWarned then
+			warnFieryBarrier:Show()
+			timerFieryBarrier:Start()
+			fieryWarned = true
 		end
 	elseif args:IsSpellID(87654) then
 		if not DBM.BossHealth:HasBoss(args.sourceGUID) then
@@ -250,16 +426,38 @@ end
 
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(87654) and self:AntiSpam(3) then
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\killegg.mp3")
 		timerEggWeaken:Show()
 		specWarnEggWeaken:Show()
 		eggRemoved = true
+	elseif args:IsSpellID(89421, 92955) then
+		mod:SetIcon(args.destName, 0)
+		if GetTime() - oldWrackTime < 60 or GetTime() - newWrackTime > 14 then
+			newWrackCount = newWrackCount - 1
+			if GetTime() - lastDispeled > 5 then
+				lastDispeled = GetTime()
+			end
+		end
+	elseif args:IsSpellID(89435, 92956) then
+		if GetTime() - oldWrackTime < 60 or GetTime() - newWrackTime > 14 then
+			newWrackCount = newWrackCount - 1
+			if GetTime() - lastDispeled > 5 then
+				lastDispeled = GetTime()
+			end
+		end
 	end
 end
 
-function mod:SPELL_DAMAGE(sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId)
-	if (spellId == 92954 or spellId == 92959) and not orbWarned then
-		orbWarned = true
-		showOrbWarning("damage")
+function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
+	if spellId == 92954 or spellId == 92959 then
+		if not orbWarned then
+			orbWarned = true
+			showOrbWarning("damage")
+		end
+		if destGUID == UnitGUID("player") and GetTime() - orbdamageSpam >= 4 then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")
+			orbdamageSpam = GetTime()
+		end
 	end
 end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE
@@ -267,9 +465,13 @@ mod.SPELL_MISSED = mod.SPELL_DAMAGE
 function mod:CHAT_MSG_MONSTER_YELL(msg)
 	if msg == L.YellDragon or msg:find(L.YellDragon) then
 		warnDragon:Show()
+		if mod:IsTank() then
+			sndWOP:Schedule(4, "Interface\\AddOns\\DBM-Core\\extrasounds\\dragonnow.mp3")
+		end
 		timerDragon:Start()
 	elseif msg == L.YellEgg or msg:find(L.YellEgg) then
 		timerEggWeakening:Start()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\eggsoon.mp3")
 	end
 end
 
@@ -282,8 +484,11 @@ function mod:UNIT_DIED(args)
 			DBM.BossHealth:RemoveBoss(calenGUID)
 			timerEggWeaken:Cancel()
 			warnPhase3:Show()
-			timerBreathCD:Start()
+			breathcount = 1
+			timerBreathCD:Start(21, breathcount)
+			sndWOP:Schedule(19, "Interface\\AddOns\\DBM-Core\\extrasounds\\firebreathsoon.mp3")
 			timerOrbs:Start(30)
+			sndWOP:Schedule(28, "Interface\\AddOns\\DBM-Core\\extrasounds\\blackorb.mp3")
 			timerDragon:Start()
 			timerRedEssenceCD:Start()
 			if self.Options.WarnOrbSoon then

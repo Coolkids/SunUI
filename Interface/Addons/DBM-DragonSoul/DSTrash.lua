@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("DSTrash", "DBM-DragonSoul")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7453 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7445 $"):sub(12, -3))
 mod:SetModelID(39378)
 mod:SetZone()
 
@@ -19,7 +19,7 @@ local specWarnBoulderNear	= mod:NewSpecialWarningClose(107597)
 local yellBoulder			= mod:NewYell(107597)
 local specWarnFlames		= mod:NewSpecialWarningMove(105579)
 
-local timerDrakes			= mod:NewTimer(253, "TimerDrakes", 61248)
+local timerDrakes			= mod:NewTimer(163, "TimerDrakes", 61248)
 --Leave this timer for now, I think this is the same.
 --it still seems timed, just ends earlier if you kill 15 drakes.
 --No one knew it ended at 24 drakes before hotfix because timer always expired before any raid hit 24, so we often just saw the hard capped event limit.
@@ -28,6 +28,8 @@ local timerDrakes			= mod:NewTimer(253, "TimerDrakes", 61248)
 mod:RemoveOption("HealthFrame")
 mod:RemoveOption("SpeedKillTimer")
 
+local antiSpam = 0
+--local syncTime = 0
 local drakeRunning = false
 local drakesCount = 15
 local drakeguid = {}
@@ -53,24 +55,23 @@ function mod:BoulderTarget(sGUID)
 			break
 		end
 	end
-	if targetname and self:AntiSpam(2, targetname) then--Anti spam using targetname as an identifier, will prevent same target being announced double/tripple but NOT prevent multiple targets being announced at once :)
-		if realm then targetname = targetname.."-"..realm end
-		warnBoulder:Show(targetname)
-		if targetname == UnitName("player") then
-			specWarnBoulder:Show()
-			yellBoulder:Yell()
-		else
-			local uId = DBM:GetRaidUnitId(targetname)
-			if uId then
-				local x, y = GetPlayerMapPosition(uId)
-				if x == 0 and y == 0 then
-					SetMapToCurrentZone()
-					x, y = GetPlayerMapPosition(uId)
-				end
-				local inRange = DBM.RangeCheck:GetDistance("player", x, y)
-				if inRange and inRange < 6 then--Guessed, unknown, spelltip isn't informative.
-					specWarnBoulderNear:Show(targetname)
-				end
+	if not targetname then return end
+	if realm then targetname = targetname.."-"..realm end
+	warnBoulder:Show(targetname)
+	if targetname == UnitName("player") then
+		specWarnBoulder:Show()
+		yellBoulder:Yell()
+	else
+		local uId = DBM:GetRaidUnitId(targetname)
+		if uId then
+			local x, y = GetPlayerMapPosition(uId)
+			if x == 0 and y == 0 then
+				SetMapToCurrentZone()
+				x, y = GetPlayerMapPosition(uId)
+			end
+			local inRange = DBM.RangeCheck:GetDistance("player", x, y)
+			if inRange and inRange < 6 then--Guessed, unknown, spelltip isn't informative.
+				specWarnBoulderNear:Show(targetname)
 			end
 		end
 	end
@@ -135,7 +136,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		end
 		table.wipe(drakeguid)
 		drakesCount = 15--Reset drakes here still in case no one running current dbm is targeting thrall
-		timerDrakes:Start(253, GetSpellInfo(109904))--^^
+		timerDrakes:Start(163, GetSpellInfo(109904))--^^
 	-- timer still remains even combat starts. so, cancels manually. (Probably for someone who wasn't present for first drake dying.
 	elseif msg == L.UltraxionTrashEnded or msg:find(L.UltraxionTrashEnded) then
 		self:SendSync("SkyrimEnded")
@@ -167,7 +168,7 @@ function mod:OnSync(msg, GUID)
 		end
 		table.wipe(drakeguid)
 		drakesCount = 15--Reset drakes here too soo they stay accurate after wipes.
-		timerDrakes:Start(231, GetSpellInfo(109904))
+		timerDrakes:Start(141, GetSpellInfo(109904))
 	elseif msg == "SkyrimEnded" then
 		drakeRunning = false
 		self:UnregisterShortTermEvents()

@@ -8,10 +8,10 @@ DBM_CORE_LOAD_GUI_ERROR				= "Could not load GUI: %s"
 
 DBM_CORE_COMBAT_STARTED				= "%s engaged. Good luck and have fun! :)"
 DBM_CORE_BOSS_DOWN					= "%s down after %s!"
-DBM_CORE_BOSS_DOWN_L				= "%s down after %s! Your last kill took %s and your fastest kill took %s. You have %d total kills."
-DBM_CORE_BOSS_DOWN_NR				= "%s down after %s! This is a new record! (Old record was %s). You have %d total kills."
+DBM_CORE_BOSS_DOWN_L				= "%s down after %s! Your last kill took %s and your fastest kill took %s. You have %d total kills."--Localize this with new string, won't use it til it has enough language support.
+DBM_CORE_BOSS_DOWN_NR				= "%s down after %s! This is a new record! (Old record was %s). You have %d total kills."--Localize this with new string, won't use it til it has enough language support.
 DBM_CORE_COMBAT_ENDED_AT			= "Combat against %s (%s) ended after %s."
-DBM_CORE_COMBAT_ENDED_AT_LONG		= "Combat against %s (%s) ended after %s. You have %d total wipes on this difficulty."
+DBM_CORE_COMBAT_ENDED_AT_LONG		= "Combat against %s (%s) ended after %s. You have %d total attempts."--This is usuable now since it's a new string and won't break locals missing this.
 DBM_CORE_COMBAT_STATE_RECOVERED		= "%s was engaged %s ago, recovering timers..."
 
 DBM_CORE_TIMER_FORMAT_SECS			= "%d |4second:seconds;"
@@ -34,13 +34,11 @@ DBM_CORE_OPTION_CATEGORY_TIMERS		= "Bars"
 DBM_CORE_OPTION_CATEGORY_WARNINGS	= "Announces"
 DBM_CORE_OPTION_CATEGORY_MISC		= "Miscellaneous"
 
-DBM_CORE_AUTO_RESPONDED						= "Auto-responded."
-DBM_CORE_STATUS_WHISPER						= "%s: %s, %d/%d people alive"
-DBM_CORE_AUTO_RESPOND_WHISPER				= "%s is busy fighting against %s (%s, %d/%d people alive)"
-DBM_CORE_WHISPER_COMBAT_END_KILL			= "%s has defeated %s!"
-DBM_CORE_WHISPER_COMBAT_END_KILL_STATS		= "%s has defeated %s! They have %d total kills."
-DBM_CORE_WHISPER_COMBAT_END_WIPE_AT			= "%s has wiped on %s at %s"
-DBM_CORE_WHISPER_COMBAT_END_WIPE_STATS_AT	= "%s has wiped on %s at %s. They have %d total wipes on this difficulty."
+DBM_CORE_AUTO_RESPONDED				= "Auto-responded."
+DBM_CORE_STATUS_WHISPER				= "%s: %s, %d/%d people alive"
+DBM_CORE_AUTO_RESPOND_WHISPER		= "%s is busy fighting against %s (%s, %d/%d people alive)"
+DBM_CORE_WHISPER_COMBAT_END_KILL	= "%s has defeated %s!"
+DBM_CORE_WHISPER_COMBAT_END_WIPE_AT	= "%s has wiped on %s at %s"
 
 DBM_CORE_VERSIONCHECK_HEADER		= "Deadly Boss Mods - Versions"
 DBM_CORE_VERSIONCHECK_ENTRY			= "%s: %s (r%d)"
@@ -133,10 +131,8 @@ DBM_CORE_AUTO_TIMER_TEXTS = {
 	fades		= "%s fades",--Buff/Debuff on players
 	cd			= "%s CD",
 	cdcount		= "%s CD (%%d)",
-	cdsource	= "%s CD: %%s",
 	next		= "Next %s",
 	nextcount	= "Next %s (%%d)",
-	nextsource	= "Next %s: %%s",
 	achievement	= "%s"
 }
 
@@ -147,10 +143,8 @@ DBM_CORE_AUTO_TIMER_OPTIONS = {
 	fades		= "Show timer for when $spell:%s fades from players",
 	cd			= "Show timer for $spell:%s cooldown",
 	cdcount		= "Show timer for $spell:%s cooldown",
-	cdsource	= "Show timer (with source) for $spell:%s cooldown",--Maybe better wording?
 	next		= "Show timer for next $spell:%s",
 	nextcount	= "Show timer for next $spell:%s",
-	nextsource	= "Show timer (with source) for next $spell:%s",--Maybe better wording?
 	achievement	= "Show timer for %s"
 }
 
@@ -202,7 +196,7 @@ DBM_CORE_AUTO_SPEC_WARN_OPTIONS = {
 DBM_CORE_AUTO_SPEC_WARN_TEXTS = {
 	spell = "%s!",
 	dispel = "%s on %%s - dispel now",
-	interrupt = "%s - interrupt %%s!",
+	interrupt = "%s - interrupt now",
 	you = "%s on you",
 	target = "%s on %%s",
 	close = "%s on %%s near you",

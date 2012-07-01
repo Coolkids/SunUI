@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("HighPriestessAzil", "DBM-Party-Cataclysm", 7)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7473 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 6499 $"):sub(12, -3))
 mod:SetCreatureID(42333)
 mod:SetModelID(26448)
 mod:SetZone()
@@ -46,7 +46,7 @@ function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(82858, 92667) then
 		warnShield:Show()
 	elseif args:IsSpellID(79351) then
-		specWarnGrip:Show(args.sourceName)
+		specWarnGrip:Show()
 	end
 end
 

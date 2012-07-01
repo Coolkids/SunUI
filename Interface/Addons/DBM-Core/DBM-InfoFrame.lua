@@ -60,6 +60,7 @@ local maxlines
 local infoFrameThreshold 
 local pIndex
 local iconModifier
+local texts
 local headerText = "DBM Info Frame"	-- this is only used if DBM.InfoFrame:SetHeader(text) is not called before :Show()
 local currentEvent
 local sortingAsc
@@ -229,6 +230,8 @@ local function updateHealth()
 	updateIcons()
 end
 
+
+
 local function updatePlayerPower()
 	table.wipe(lines)
 	for i = 1, GetNumRaidMembers() do
@@ -362,7 +365,7 @@ local function updatePlayerBuffStacks()
 		elseif UnitBuff("player", GetSpellInfo(pIndex)) then
 			lines[UnitName("player")] = lastStacks[UnitName("player")]
 			if iconModifier then
-				icons[UnitName("player")] = ("|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_%d:0|t"):format(iconModifier)
+				icons[UnitName(uId)] = ("|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_%d:0|t"):format(iconModifier)
 			end
 		end
 	end
@@ -373,6 +376,31 @@ local function updatePlayerBuffStacks()
 	end
 
 	updateLines()
+end
+
+local function updatePlayerDebuffStacks()
+	table.wipe(lines)
+	if GetNumRaidMembers() > 0 then
+		for i = 1, GetNumRaidMembers() do
+			local uId = "raid"..i
+			if UnitDebuff(uId, GetSpellInfo(infoFrameThreshold)) and not UnitIsDeadOrGhost(uId) then
+				lines[UnitName(uId)] = select(4, UnitDebuff(uId, GetSpellInfo(infoFrameThreshold)))
+			end			
+		end
+	elseif GetNumPartyMembers() > 0 then
+		for i = 1, GetNumPartyMembers() do
+			local uId = "party"..i
+			if UnitDebuff(uId, GetSpellInfo(infoFrameThreshold)) and not UnitIsDeadOrGhost(uId) then
+				lines[UnitName(uId)] = select(4, UnitDebuff(uId, GetSpellInfo(infoFrameThreshold)))
+			end
+		end
+		if UnitDebuff("player", GetSpellInfo(infoFrameThreshold)) then
+			lines[UnitName("player")] = select(4, UnitDebuff("player", GetSpellInfo(infoFrameThreshold)))
+		end
+	end
+
+	updateLines()
+	updateIcons()
 end
 
 local function updatePlayerAggro()
@@ -429,6 +457,12 @@ local function updatePlayerTargets()
 	updateIcons()
 end
 
+local function updateTexts()
+	table.wipe(lines)
+	lines[texts] = infoFrameThreshold
+	updateLines()
+end
+
 ----------------
 --  OnUpdate  --
 ----------------
@@ -455,8 +489,12 @@ function onUpdate(self, elapsed)
 		updatePlayerAggro()
 	elseif currentEvent == "playerbuffstacks" then
 		updatePlayerBuffStacks()
+	elseif currentEvent == "playerdebuffstacks" then
+		updatePlayerDebuffStacks()
 	elseif currentEvent == "playertargets" then
 		updatePlayerTargets()
+	elseif currentEvent == "texts" then
+		updateTexts()
 	end
 --	updateIcons()
 	for i = 1, math.min(#sortedLines, maxlines) do
@@ -473,7 +511,7 @@ function onUpdate(self, elapsed)
 			addedSelf = true
 			if currentEvent == "playerbuff" or currentEvent == "playerbaddebuff" or currentEvent == "playergooddebuff" or currentEvent == "health" or currentEvent == "playertargets" or (currentEvent == "playeraggro" and infoFrameThreshold == 3) then--Player name on frame bad a thing make it red.
 				self:AddDoubleLine(name, power, 255, 0, 0, 255, 255, 255)	-- (leftText, rightText, left.R, left.G, left.B, right.R, right.G, right.B)
-			elseif currentEvent == "playerbuffstacks" or (currentEvent == "playeraggro" and infoFrameThreshold == 0) then--Player name on frame is a good thing, make it green
+			elseif currentEvent == "playerbuffstacks" or currentEvent == "playerdebuffstacks" or (currentEvent == "playeraggro" and infoFrameThreshold == 0) then--Player name on frame is a good thing, make it green
 				self:AddDoubleLine(name, power, 0, 255, 0, 255, 255, 255)	-- (leftText, rightText, left.R, left.G, left.B, right.R, right.G, right.B)
 			else--it's not defined a color, so default to white.
 				self:AddDoubleLine(name, power, color.R, color.G, color.B, 255, 255, 255)	-- (leftText, rightText, left.R, left.G, left.B, right.R, right.G, right.B)
@@ -499,6 +537,7 @@ function infoFrame:Show(maxLines, event, threshold, ...)
 	maxlines = maxLines
 	pIndex = select(1, ...)		-- used as 'filter' for player buff stacks
 	iconModifier = select(2, ...)
+	texts = select(3, ...)
 	currentEvent = event
 	frame = frame or createFrame()
 
@@ -519,8 +558,12 @@ function infoFrame:Show(maxLines, event, threshold, ...)
 		updatePlayerAggro()
 	elseif currentEvent == "playerbuffstacks" then
 		updatePlayerBuffStacks()
+	elseif currentEvent == "playerdebuffstacks" then
+		updatePlayerDebuffStacks()
 	elseif currentEvent == "playertargets" then
 		updatePlayerTargets()
+	elseif currentEvent == "texts" then
+		updateTexts()
 	elseif currentEvent == "test" then
 	else		
 		error("DBM-InfoFrame: Unsupported event", 2)
@@ -538,6 +581,7 @@ function infoFrame:Hide()
 	sortingAsc = false
 	infoFrameThreshold = nil
 	pIndex = nil
+	texts = nil
 	currentEvent = nil
 	if frame then 
 		frame:Hide()

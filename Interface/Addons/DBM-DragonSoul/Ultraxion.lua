@@ -14,14 +14,15 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_START",
 	"SPELL_CAST_SUCCESS",
 	"SPELL_AURA_APPLIED",
-	"SPELL_AURA_REMOVED"
+	"SPELL_AURA_REMOVED",
+	"CHAT_MSG_RAID_BOSS_EMOTE"
 )
 
 mod:RegisterEvents(
 	"CHAT_MSG_MONSTER_SAY"
 )
 
-local warnHourofTwilightSoon		= mod:NewPreWarnAnnounce(109416, 15, 4)--Why 15? because this warning signals the best time to pop 1min CDs a second time. (ie lets say you a tank in HoT1 group, you SW, your SW will be usuable one more time before next HoT1, but when do you use it? 15 seconds before the 3rd HoT exactly, then it's stil up for 3rd HoT and still back off cd for HoT1)
+local warnHourofTwilightSoon		= mod:NewPreWarnAnnounce(109416, 15, 4)
 local warnHourofTwilight			= mod:NewCountAnnounce(109416, 4)
 local warnFadingLight				= mod:NewTargetCountAnnounce(110080, 3)
 
@@ -32,8 +33,7 @@ local specWarnFadingLightOther		= mod:NewSpecialWarningTarget(110080, mod:IsTank
 local specWarnTwilightEruption		= mod:NewSpecialWarningSpell(106388, nil, nil, nil, true)
 
 local timerCombatStart				= mod:NewTimer(35, "TimerCombatStart", 2457)
-local timerUnstableMonstrosity		= mod:NewNextTimer(60, 106372, nil, mod:IsHealer())
-local timerHourofTwilight			= mod:NewCastTimer(5, 109416)
+local timerUnstableMonstrosity		= mod:NewNextTimer(60, 106372, nil, false)
 local timerHourofTwilightCD			= mod:NewNextCountTimer(45.5, 109416)
 local timerTwilightEruption			= mod:NewCastTimer(5, 106388)
 local timerFadingLight				= mod:NewBuffFadesTimer(10, 110080)
@@ -41,30 +41,34 @@ local timerFadingLightCD			= mod:NewNextTimer(10, 110080)
 local timerGiftofLight				= mod:NewNextTimer(80, 105896, nil, mod:IsHealer())
 local timerEssenceofDreams			= mod:NewNextTimer(155, 105900, nil, mod:IsHealer())
 local timerSourceofMagic			= mod:NewNextTimer(215, 105903, nil, mod:IsHealer())
-local timerLoomingDarkness			= mod:NewBuffFadesTimer(120, 106498)
-local timerRaidCDs					= mod:NewTimer(60, "timerRaidCDs", 2565, nil, false)
 
 local berserkTimer					= mod:NewBerserkTimer(360)
 
-local countdownFadingLight			= mod:NewCountdown(10, 110080)
-local countdownHourofTwilight		= mod:NewCountdown(45.5, 109416, mod:IsHealer())--can be confusing with Fading Light, only enable for healer. (healers no dot affect by Fading Light)
-
---Raid CDs will have following options: Don't show Raid CDs, Show only My Raid CDs, Show all raid CDs
-mod:AddDropdownOption("dropdownRaidCDs", {"Never", "ShowRaidCDs", "ShowRaidCDsSelf"}, "Never", "timer")
-
-mod:AddDropdownOption("ResetHoTCounter", {"Never", "ResetDynamic", "Reset3Always"}, "Reset3Always", "announce")
---ResetDynamic = 3s on heroic and 2s on normal.
---Reset3Always = 3s on both heroic and normal.
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
+mod:AddBoolOption("holditHoT1", false)
+mod:AddBoolOption("holditHoT2", false)
+mod:AddBoolOption("holditHoT3", false)
+mod:AddBoolOption("holditHoT4", false)
+mod:AddBoolOption("holditHoT5", false)
+mod:AddBoolOption("holditHoT6", false)
+mod:AddBoolOption("holditHoT7", false)
 mod:AddDropdownOption("SpecWarnHoTN", {"Never", "One", "Two", "Three"}, "Never", "announce")
---If ResetDynamic, SpecWarnHoTN will work for 1-2, if set to 3 on normal it'll just be ignored.
---If ResetHoTCounter is Never, SpecWarnHoTN will work in 3 counts still ie 1 4 7, 2 5, 3 6
 
 local hourOfTwilightCount = 0
 local fadingLightCount = 0
 local fadingLightTargets = {}
+local lightme = false
+local redbuff = GetSpellInfo(105896)
+local greenbuff = GetSpellInfo(105900)
+local bluebuff = GetSpellInfo(105903)
 
 local function warnFadingLightTargets()
 	warnFadingLight:Show(fadingLightCount, table.concat(fadingLightTargets, "<, >"))
+	if not lightme then
+		if mod:IsTank() or mod:IsHealer() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\changemt.mp3")
+		end
+	end
 	table.wipe(fadingLightTargets)
 end
 
@@ -73,14 +77,14 @@ function mod:OnCombatStart(delay)
 	hourOfTwilightCount = 0
 	fadingLightCount = 0
 	warnHourofTwilightSoon:Schedule(30.5)
-	if self.Options.SpecWarnHoTN == "One" then--Don't filter here, this is supposed to work for everyone. IF they don't want special warning they set SpecWarnHoTN to Never (it's default)
+	if self.Options.SpecWarnHoTN == "One" then
 		specWarnHourofTwilightN:Schedule(40.5, GetSpellInfo(109416), hourOfTwilightCount+1)
 	end
-	timerHourofTwilightCD:Start(45.5-delay, 1)
-	countdownHourofTwilight:Start(45.5)
+	lightme = false
 	timerGiftofLight:Start(-delay)
 	timerEssenceofDreams:Start(-delay)
 	timerSourceofMagic:Start(-delay)
+	timerHourofTwilightCD:Start(-delay, 1)
 	berserkTimer:Start(-delay)
 end
 
@@ -93,26 +97,40 @@ function mod:SPELL_CAST_START(args)
 		hourOfTwilightCount = hourOfTwilightCount + 1
 		warnHourofTwilight:Show(hourOfTwilightCount)
 		specWarnHourofTwilight:Show()
-		--Reset Mechanic begin
-		if (self.Options.ResetHoTCounter == "ResetDynamic" and self:IsDifficulty("heroic10", "heroic25") or self.Options.ResetHoTCounter == "Reset3Always") and hourOfTwilightCount == 3
-		or self.Options.ResetHoTCounter == "ResetDynamic" and self:IsDifficulty("normal10", "normal25", "lfr25") and hourOfTwilightCount == 2 then
-			hourOfTwilightCount = 0
-		end
-		-- If reset is set to never, then we still schedule special warnings for 4-7 on a 3 set rule
-		if self.Options.SpecWarnHoTN == "One" and (hourOfTwilightCount == 0 or hourOfTwilightCount == 3 or hourOfTwilightCount == 6)--All use this..
-		or self.Options.SpecWarnHoTN == "Two" and (hourOfTwilightCount == 1 or hourOfTwilightCount == 4)--All use this
-		or self.Options.SpecWarnHoTN == "Three" and (hourOfTwilightCount == 2 or hourOfTwilightCount == 5) then--ResetDynamic doesn't use this on normal, however, no reason to filter it here as hourOfTwilightCount was already reset before this ran. Never also uses this safely.
+		if self.Options.SpecWarnHoTN == "One" and hourOfTwilightCount == 0
+		or self.Options.SpecWarnHoTN == "Two" and hourOfTwilightCount == 1
+		or self.Options.SpecWarnHoTN == "Three" and hourOfTwilightCount == 2 then
 			specWarnHourofTwilightN:Schedule(40.5, args.spellName, hourOfTwilightCount+1)
 		end
 		warnHourofTwilightSoon:Schedule(30.5)
+		if hourOfTwilightCount == 1 and self.Options.holditHoT1 then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\holdit.mp3")
+		elseif hourOfTwilightCount == 2 and self.Options.holditHoT2 then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\holdit.mp3")
+		elseif hourOfTwilightCount == 3 and self.Options.holditHoT3 then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\holdit.mp3")
+		elseif hourOfTwilightCount == 4 and self.Options.holditHoT4 then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\holdit.mp3")
+		elseif hourOfTwilightCount == 5 and self.Options.holditHoT5 then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\holdit.mp3")
+		elseif hourOfTwilightCount == 6 and self.Options.holditHoT6 then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\holdit.mp3")
+		elseif hourOfTwilightCount == 7 and self.Options.holditHoT7 then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\holdit.mp3")
+		else		
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\twilighttime.mp3")
+		end
 		timerHourofTwilightCD:Start(45.5, hourOfTwilightCount+1)
-		countdownHourofTwilight:Start(45.5)
 		if self:IsDifficulty("heroic10", "heroic25") then
 			timerFadingLightCD:Start(13)
-			timerHourofTwilight:Start(3)
+			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Schedule(2, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Schedule(3, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		else
 			timerFadingLightCD:Start(20)
-			timerHourofTwilight:Start()
+			sndWOP:Schedule(2.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Schedule(3.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Schedule(4.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		end
 	elseif args:IsSpellID(106388) then
 		specWarnTwilightEruption:Show()
@@ -123,45 +141,11 @@ end
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(106372, 106376, 106377, 106378, 106379) then
 		timerUnstableMonstrosity:Start()
-	elseif args:IsSpellID(97462) and self:IsInCombat() and (self.Options.dropdownRaidCDs == "ShowRaidCDs" or (self.Options.dropdownRaidCDs == "ShowRaidCDsSelf" and UnitName("player") == args.sourceName)) then--Warrior Rallying Cry
-		if UnitDebuff(args.sourceName, GetSpellInfo(106218)) then
-			timerRaidCDs:Start(90, args.spellName, args.sourceName)
-		else
-			timerRaidCDs:Start(180, args.spellName, args.sourceName)
-		end
-	elseif args:IsSpellID(871) and self:IsInCombat() and (self.Options.dropdownRaidCDs == "ShowRaidCDs" or (self.Options.dropdownRaidCDs == "ShowRaidCDsSelf" and UnitName("player") == args.sourceName)) then--Warrior Shield Wall (4pc Assumed)
-		if UnitDebuff(args.sourceName, GetSpellInfo(106218)) then
-			timerRaidCDs:Start(60, args.spellName, args.sourceName)
-		else
-			timerRaidCDs:Start(120, args.spellName, args.sourceName)
-		end
-	elseif args:IsSpellID(62618) and self:IsInCombat() and (self.Options.dropdownRaidCDs == "ShowRaidCDs" or (self.Options.dropdownRaidCDs == "ShowRaidCDsSelf" and UnitName("player") == args.sourceName)) then--Paladin Divine Guardian (4pc assumed)
-		if UnitDebuff(args.sourceName, GetSpellInfo(106218)) then
-			timerRaidCDs:Start(60, args.spellName, args.sourceName)
-		else
-			timerRaidCDs:Start(120, args.spellName, args.sourceName)
-		end
-	elseif args:IsSpellID(55233) and self:IsInCombat() and (self.Options.dropdownRaidCDs == "ShowRaidCDs" or (self.Options.dropdownRaidCDs == "ShowRaidCDsSelf" and UnitName("player") == args.sourceName)) then--DK Vampric Blood (4pc assumed)
-		if UnitDebuff(args.sourceName, GetSpellInfo(106218)) then
-			timerRaidCDs:Start(30, args.spellName, args.sourceName)
-		else
-			timerRaidCDs:Start(60, args.spellName, args.sourceName)
-		end
-	elseif args:IsSpellID(22842) and self:IsInCombat() and (self.Options.dropdownRaidCDs == "ShowRaidCDs" or (self.Options.dropdownRaidCDs == "ShowRaidCDsSelf" and UnitName("player") == args.sourceName)) then--Druid Frenzied Regen (4pc assumed)
-		if UnitDebuff(args.sourceName, GetSpellInfo(106218)) then
-			timerRaidCDs:Start(90, args.spellName, args.sourceName)
-		else
-			timerRaidCDs:Start(180, args.spellName, args.sourceName)
-		end
-	elseif args:IsSpellID(98008) and self:IsInCombat() and (self.Options.dropdownRaidCDs == "ShowRaidCDs" or (self.Options.dropdownRaidCDs == "ShowRaidCDsSelf" and UnitName("player") == args.sourceName)) then--Shaman Spirit Link
-		timerRaidCDs:Start(180, args.spellName, args.sourceName)
-	elseif args:IsSpellID(62618) and self:IsInCombat() and (self.Options.dropdownRaidCDs == "ShowRaidCDs" or (self.Options.dropdownRaidCDs == "ShowRaidCDsSelf" and UnitName("player") == args.sourceName)) then--Priest Power Word: Barrior
-		timerRaidCDs:Start(180, args.spellName, args.sourceName)
 	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(105925, 110068, 110069, 110070) then--Tank Only SpellIDS
+	if args:IsSpellID(105925, 110070, 110069, 110068) then
 		fadingLightCount = fadingLightCount + 1
 		fadingLightTargets[#fadingLightTargets + 1] = args.destName
 		if self:IsDifficulty("heroic10", "heroic25") and fadingLightCount < 3 then
@@ -169,36 +153,54 @@ function mod:SPELL_AURA_APPLIED(args)
 		elseif self:IsDifficulty("normal10", "normal25", "lfr25") and fadingLightCount < 2 then
 			timerFadingLightCD:Start(15)
 		end
-		if (args:IsPlayer() or UnitDebuff("player", GetSpellInfo(105925))) and self:AntiSpam(2) then--Sometimes the combatlog doesn't report all fading lights, so we perform an additional aura check 
-			local _, _, _, _, _, duration, expires = UnitDebuff("player", args.spellName)--Find out what our specific fading light is
+		if (args:IsPlayer() or UnitDebuff("player", GetSpellInfo(105925))) and self:AntiSpam(2) then
+			local _, _, _, _, _, duration, expires, _, _ = UnitDebuff("player", args.spellName)
 			specWarnFadingLight:Show()
-			countdownFadingLight:Start(duration-1)--For some reason need to offset it by 1 second to make it accurate but otherwise it's perfect
-			timerFadingLight:Start(duration-1)
+			sndWOP:Schedule(duration - 5, "Interface\\AddOns\\DBM-Core\\extrasounds\\clickbravo.mp3")
+			sndWOP:Schedule(duration - 3, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Schedule(duration - 2, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Schedule(duration - 1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			timerFadingLight:Start(duration)
+			lightme = true
 		else
-			specWarnFadingLightOther:Show(args.destName)
+			lightme = false
 		end
 		self:Unschedule(warnFadingLightTargets)
 		if self:IsDifficulty("lfr25") or self:IsDifficulty("heroic25") and #fadingLightTargets >= 7 or self:IsDifficulty("normal25") and #fadingLightTargets >= 4 or self:IsDifficulty("heroic10") and #fadingLightTargets >= 3 or self:IsDifficulty("normal10") and #fadingLightTargets >= 2 then
 			warnFadingLightTargets()
 		else
 			self:Schedule(0.5, warnFadingLightTargets)
-		end
-	elseif args:IsSpellID(109075, 110078, 110079, 110080) then--Non Tank IDs
+		end		
+	elseif args:IsSpellID(109075, 110079, 110080, 110078) then
 		fadingLightTargets[#fadingLightTargets + 1] = args.destName
 		if (args:IsPlayer() or UnitDebuff("player", GetSpellInfo(109075))) and self:AntiSpam(2) then
-			local _, _, _, _, _, duration, expires = UnitDebuff("player", args.spellName)
+			local _, _, _, _, _, duration, expires, _, _ = UnitDebuff("player", args.spellName)
 			specWarnFadingLight:Show()
-			countdownFadingLight:Start(duration-1)
-			timerFadingLight:Start(duration-1)
+			sndWOP:Schedule(duration - 5, "Interface\\AddOns\\DBM-Core\\extrasounds\\clickbravo.mp3")
+			sndWOP:Schedule(duration - 3, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Schedule(duration - 2, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Schedule(duration - 1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			timerFadingLight:Start(duration)
+			lightme = true
+		else
+			lightme = false
 		end
 		self:Unschedule(warnFadingLightTargets)
 		if self:IsDifficulty("heroic25") and #fadingLightTargets >= 7 or self:IsDifficulty("normal25") and #fadingLightTargets >= 4 or self:IsDifficulty("heroic10") and #fadingLightTargets >= 3 or self:IsDifficulty("normal10") and #fadingLightTargets >= 2 then
 			warnFadingLightTargets()
 		else
 			self:Schedule(0.5, warnFadingLightTargets)
-		end
-	elseif args:IsSpellID(106498) and args:IsPlayer() then
-		timerLoomingDarkness:Start()
+		end	
+	end
+end
+
+function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg)
+	if msg:find(redbuff) then
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\redessence.mp3")
+	elseif msg:find(greenbuff) then
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\greenessence.mp3")
+	elseif msg:find(bluebuff) then
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\blueessence.mp3")
 	end
 end
 

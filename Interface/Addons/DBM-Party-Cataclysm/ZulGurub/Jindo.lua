@@ -28,8 +28,8 @@ local specWarnBodySlam			= mod:NewSpecialWarningYou(97198)
 local specWarnSunderRift		= mod:NewSpecialWarningMove(97320)
 
 local timerDeadzone				= mod:NewNextTimer(21, 97170)
-local timerShadowsOfHakkar		= mod:NewBuffActiveTimer(10, 97172)
-local timerShadowsOfHakkarNext	= mod:NewNextTimer(21, 97172)
+local timerShadowsOfHakkar		= mod:NewBuffActiveTimer(8, 97172)
+local timerShadowsOfHakkarNext	= mod:NewNextTimer(19.5, 97172)
 
 mod:AddBoolOption("BodySlamIcon")
 

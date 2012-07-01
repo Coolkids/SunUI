@@ -2,7 +2,7 @@
 local mod	= DBM:NewMod("DarkIronGolemCouncil", "DBM-BlackwingDescent")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7473 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7445 $"):sub(12, -3))
 mod:SetCreatureID(42180, 42178, 42179, 42166)
 mod:SetModelID(32688)
 mod:SetZone()
@@ -101,8 +101,9 @@ local timerNefAbilityCD			= mod:NewTimer(30, "timerNefAblity", 92048)--Huge vari
 
 local berserkTimer				= mod:NewBerserkTimer(600)
 
-local soundLightningConductor	= mod:NewSound(79888)
-local soundFixate				= mod:NewSound(80094)
+--local soundLightningConductor	= mod:NewSound(79888)
+--local soundFixate				= mod:NewSound(80094)
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
 mod:AddBoolOption("AcquiringTargetIcon")
 mod:AddBoolOption("ConductorIcon")
@@ -110,7 +111,7 @@ mod:AddBoolOption("ShadowConductorIcon")
 mod:AddBoolOption("SetIconOnActivated", false)
 
 local pulled = false
-local cloudSpam = 0--Uses custom resets, don't use prototype
+local cloudSpam = 0
 local incinerateCast = 0
 local encasing = false
 
@@ -119,29 +120,45 @@ function mod:ChemicalBombTarget()
 	if not targetname then return end
 	warnChemicalBomb:Show(targetname)
 	if targetname == UnitName("player") then
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\poisoncircle.mp3")
 		yellChemicalCloud:Yell()
 	end
 end
 
 local bossActivate = function(boss)
 	if boss == L.Magmatron or boss == 42178 then
+		if not mod:IsHealer() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\attackfire.mp3")
+		end
 		incinerateCast = 0
 		timerAcquiringTarget:Start(20)--These are same on heroic and normal
+		sndWOP:Schedule(17, "Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\targetsoon.mp3")
 		timerIncinerationCD:Start(10)
+		if mod:IsHealer() then
+			sndWOP:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\aesoon.mp3")
+		end
 		if mod:IsDifficulty("heroic10", "heroic25") then
 			warnBarrierSoon:Schedule(34)
 		else
 			warnBarrierSoon:Schedule(40)
 		end
 	elseif boss == L.Electron or boss == 42179 then
+		if not mod:IsHealer() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\attacklightning.mp3")
+		end
 		if mod:IsDifficulty("heroic10", "heroic25") then
 			timerLightningConductorCD:Start(15)--Probably also has a variation if it's like normal. Needs more logs to verify.
+			sndWOP:Schedule(12, "Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\eleaesoon.mp3")
 			warnUnstableShieldSoon:Schedule(30)
 		else
 			timerLightningConductorCD:Start(11)--11-15 variation confirmed for normal, only boss ability with an actual variation on timer. Strange.
+			sndWOP:Schedule(9, "Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\eleaesoon.mp3")
 			warnUnstableShieldSoon:Schedule(40)
 		end
 	elseif boss == L.Toxitron or boss == 42180 then
+		if not mod:IsHealer() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\attackpoison.mp3")
+		end
 		if mod:IsDifficulty("heroic10", "heroic25") then
 			timerChemicalBomb:Start(25)
 			timerPoisonProtocolCD:Start(15)
@@ -152,6 +169,9 @@ local bossActivate = function(boss)
 			warnShellSoon:Schedule(40)
 		end
 	elseif boss == L.Arcanotron or boss == 42166 then
+		if not mod:IsHealer() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\attackarcane.mp3")
+		end
 		timerGeneratorCD:Start(15)--These appear same on heroic and non heroic but will leave like this for now to await 25 man heroic confirmation.
 		if mod:IsDifficulty("heroic10", "heroic25") then
 			warnConversionSoon:Schedule(30)
@@ -164,9 +184,14 @@ end
 local bossInactive = function(boss)
 	if boss == L.Magmatron then
 		timerAcquiringTarget:Cancel()
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\targetsoon.mp3")
 		timerIncinerationCD:Cancel()
+		if mod:IsHealer() then
+			sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\aesoon.mp3")
+		end
 	elseif boss == L.Electron then
 		timerLightningConductorCD:Cancel()
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\eleaesoon.mp3")
 	elseif boss == L.Toxitron then
 		timerChemicalBomb:Cancel()
 		timerPoisonProtocolCD:Cancel()
@@ -228,12 +253,17 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnAcquiringTarget:Show(args.destName)
 		if self:IsDifficulty("heroic10", "heroic25") then
 			timerAcquiringTarget:Start(27)
+			sndWOP:Schedule(24, "Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\targetsoon.mp3")
 		else
 			timerAcquiringTarget:Start()
+			sndWOP:Schedule(37, "Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\targetsoon.mp3")
 		end
 		if args:IsPlayer() then
 			specWarnAcquiringTarget:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\stopmove.mp3")
 			self:ScheduleMethod(1, "CheckEncasing")
+		else
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\avoidtarget.mp3")
 		end
 		if self.Options.AcquiringTargetIcon then
 			self:SetIcon(args.destName, 7, 8)
@@ -242,7 +272,8 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnLightningConductor:Show(args.destName)
 		if args:IsPlayer() then
 			specWarnConductor:Show()
-			soundLightningConductor:Play()
+--			soundLightningConductor:Play()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runout.mp3")
 			yellLightConductor:Yell()
 		end
 		if self.Options.ConductorIcon then
@@ -251,29 +282,41 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self:IsDifficulty("heroic10", "heroic25") then
 			timerLightningConductor:Start(15, args.destName)
 			timerLightningConductorCD:Start(20)
+			sndWOP:Schedule(17, "Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\eleaesoon.mp3")
 		else
 			timerLightningConductor:Start(args.destName)
 			timerLightningConductorCD:Start()
+			sndWOP:Schedule(22, "Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\eleaesoon.mp3")
 		end
 	elseif args:IsSpellID(80094) then
 		warnFixate:Show(args.destName)
 		if args:IsPlayer() then
 			specWarnBombTarget:Show()
-			soundFixate:Play()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\avoidslime.mp3")
+--			soundFixate:Play()
 			yellFixate:Yell()
 		end
 	elseif args:IsSpellID(91472, 91473) and args:IsPlayer() and GetTime() - cloudSpam > 4 then
 		specWarnChemicalCloud:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")
 		cloudSpam = GetTime()
 	elseif args:IsSpellID(79629, 91555, 91556, 91557) and args:IsDestTypeHostile() then--Check if Generator buff is gained by a hostile.
 		local targetCID = self:GetUnitCreatureId("target")--Get CID of current target
 		if args:GetDestCreatureID() == targetCID and args:GetDestCreatureID() ~= 42897 then--If target gaining buff is target then not an ooze (only hostiles left filtering oozes is golems)
 			specWarnGenerator:Show(args.destName)--Show special warning to move him out of it.
+			if mod:IsTank() then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\bossout.mp3")
+			end
 		end
 	elseif args:IsSpellID(92048) then--Shadow Infusion, debuff 5 seconds before shadow conductor.
 		timerNefAbilityCD:Start()
+		sndWOP:Schedule(30, "Interface\\AddOns\\DBM-Core\\extrasounds\\nefsoon.mp3")
 		warnShadowConductorCast:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\shadowae.mp3")
 		timerShadowConductorCast:Start()
+		if args:IsPlayer() then
+			sndWOP:Schedule(3, "Interface\\AddOns\\DBM-Core\\extrasounds\\runin.mp3")
+		end
 	elseif args:IsSpellID(92023) then
 		if args:IsPlayer() then
 			encasing = true
@@ -283,6 +326,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		specWarnEncasingShadows:Show(args.destName)
 		timerNefAbilityCD:Start()
+		sndWOP:Schedule(30, "Interface\\AddOns\\DBM-Core\\extrasounds\\nefsoon.mp3")
 	elseif args:IsSpellID(92053) then
 		specWarnShadowConductor:Show(args.destName)
 		timerShadowConductor:Show(args.destName)
@@ -315,41 +359,61 @@ function mod:SPELL_CAST_START(args)
 		warnIncineration:Show()
 		if incinerateCast == 1 then--Only cast twice on heroic, 3 times on normal.
 			timerIncinerationCD:Start()--second cast is after 27 seconds on heroic and normal.
+			if mod:IsHealer() then
+				sndWOP:Schedule(24, "Interface\\AddOns\\DBM-Core\\extrasounds\\aesoon.mp3")
+			end
 		elseif incinerateCast == 2 and self:IsDifficulty("normal10", "normal25") then
 			timerIncinerationCD:Start(32)--3rd cast on normal is 32 seconds. 10 27 32 series.
+			if mod:IsHealer() then
+				sndWOP:Schedule(29, "Interface\\AddOns\\DBM-Core\\extrasounds\\aesoon.mp3")
+			end
 		end
 	elseif args:IsSpellID(79582, 91516, 91517, 91518) then
 		warnBarrier:Show()
 		timerBarrier:Start()
 		if self:GetUnitCreatureId("target") == 42178 then
 			specWarnBarrier:Show()
+			if not mod:IsHealer() then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\stopatk.mp3")
+			end
 		end
 	elseif args:IsSpellID(79900, 91447, 91448, 91449) then
 		warnUnstableShield:Show()
 		timerUnstableShield:Start()
 		if self:GetUnitCreatureId("target") == 42179 then
 			specWarnUnstableShield:Show()
+			if not mod:IsHealer() then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\stopatk.mp3")
+			end
 		end
 	elseif args:IsSpellID(79835, 91501, 91502, 91503) then
 		warnShell:Show()
 		timerShell:Start()
 		if self:GetUnitCreatureId("target") == 42180 then
 			specWarnShell:Show()
+			if not mod:IsHealer() then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\stopatk.mp3")
+			end
 		end
 	elseif args:IsSpellID(79729, 91543, 91544, 91545) then
 		warnConversion:Show()
 		timerConversion:Start()
 		if self:GetUnitCreatureId("target") == 42166 then
 			specWarnConversion:Show()
+			if not mod:IsHealer() then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\stopatk.mp3")
+			end
 		end
 	elseif args:IsSpellID(91849) then--Grip
 		warnGrip:Show()
 		specWarnGrip:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\gripaway.mp3")
 		timerNefAbilityCD:Start()
+		sndWOP:Schedule(30, "Interface\\AddOns\\DBM-Core\\extrasounds\\nefsoon.mp3")
 		cloudSpam = GetTime()
 	elseif args:IsSpellID(79710, 91540, 91541, 91542) then
 		if self:IsMelee() and (self:GetUnitCreatureId("target") == 42166 or self:GetUnitCreatureId("focus") == 42166) or not self:IsMelee() then
-			specWarnAnnihilator:Show(args.sourceName)--Only warn for melee targeting him or exclicidly put him on focus, else warn regardless if he's your target/focus or not if you aren't a melee
+			specWarnAnnihilator:Show()--Only warn for melee targeting him or exclicidly put him on focus, else warn regardless if he's your target/focus or not if you aren't a melee
 		end
 	end
 end
@@ -360,6 +424,9 @@ function mod:SPELL_CAST_SUCCESS(args)
 		self:ScheduleMethod(0.1, "ChemicalBombTarget")--Since this is an instance cast scanning accurately is very hard.
 	elseif args:IsSpellID(80053, 91513, 91514, 91515) then
 		warnPoisonProtocol:Show()
+		if not mod:IsHealer() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\killslime.mp3")
+		end
 		if self:GetUnitCreatureId("target") ~= 42180 then--You're not targeting toxitron
 			specWarnPoisonProtocol:Show()
 		end
@@ -370,6 +437,9 @@ function mod:SPELL_CAST_SUCCESS(args)
 		end
 	elseif args:IsSpellID(79624) then
 		warnGenerator:Show()
+		if not mod:IsTank() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\bluecircle.mp3")
+		end
 		if self:IsDifficulty("heroic10", "heroic25") then
 			timerGeneratorCD:Start(20)
 		else
@@ -378,8 +448,10 @@ function mod:SPELL_CAST_SUCCESS(args)
 	elseif args:IsSpellID(91857) then
 		warnOverchargedGenerator:Show()
 		specWarnOvercharged:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\bluecircleboom.mp3")
 		timerArcaneBlowback:Start()
 		timerNefAbilityCD:Start()
+		sndWOP:Schedule(30, "Interface\\AddOns\\DBM-Core\\extrasounds\\nefsoon.mp3")
 	end
 end
 
@@ -399,7 +471,7 @@ function mod:SPELL_INTERRUPT(args)
 	end
 end
 
-function mod:SPELL_DAMAGE(sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId)
+function mod:SPELL_DAMAGE(_, _, _, _, _, _, _, _, spellId)
 	if (spellId == 79710 or spellId == 91540 or spellId == 91541 or spellId == 91542) then--An interrupt failed (or wasn't cast)
 		timerArcaneLockout:Cancel()--Cancel bar just in case one was started by a late SPELL_INTERRUPT event that showed in combat log while cast went off anyways.
 	end

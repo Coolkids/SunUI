@@ -17,7 +17,7 @@ mod:RegisterEvents(
 	"RAID_BOSS_EMOTE"
 )
 
-local warnRoots					= mod:NewSpellAnnounce(100146, 2)--This is cast 2 seconds before a big aoe that blows entire raid off platform. These roots are what keep raid from wiping. You dispel them AFTER the aoe to reduce raid damage, not before!
+local warnRoots	= mod:NewAnnounce("warnRootsDispel", 2, 100146)--This is cast 2 seconds before a big aoe that blows entire raid off platform. These roots are what keep raid from wiping. You dispel them AFTER the aoe to reduce raid damage, not before!
 local warnPhase2				= mod:NewPhaseAnnounce(2, 3)
 
 local timerRootsCD				= mod:NewCDTimer(17, 100146)

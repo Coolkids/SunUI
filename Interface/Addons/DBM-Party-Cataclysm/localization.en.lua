@@ -623,9 +623,6 @@ L:SetOptionLocalization{
 	SetIconOnEagle	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(97318)
 }
 
-L:SetMiscLocalization{
-}
-
 --------------
 -- Jan'alai --
 --------------
@@ -784,6 +781,12 @@ L = DBM:GetModLocalization("Kilnara")
 
 L:SetGeneralLocalization{
 	name = "High Priestess Kilnara"
+}
+
+
+
+L:SetMiscLocalization{
+	WaveAgony	= "Share in my pain!"
 }
 
 ----------------------------

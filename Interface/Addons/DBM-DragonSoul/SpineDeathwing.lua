@@ -1,14 +1,14 @@
 local mod	= DBM:NewMod(318, "DBM-DragonSoul", nil, 187)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7563 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7450 $"):sub(12, -3))
 mod:SetCreatureID(53879)
 mod:SetModelID(35268)
 mod:SetModelSound("sound\\CREATURE\\Deathwing\\VO_DS_DEATHWING_BACKEVENT_01.OGG", "sound\\CREATURE\\Deathwing\\VO_DS_DEATHWING_BACKSLAY_01.OGG")
 mod:SetZone()
-mod:SetUsedIcons(6, 5, 4, 3, 2, 1)
+mod:SetUsedIcons(8, 7, 6, 5, 4, 3, 2, 1)
 
-mod:RegisterCombat("yell", L.Pull)--INSTANCE_ENCOUNTER_ENGAGE_UNIT comes 30 seconds after encounter starts, because of this, the mod can miss the first round of ability casts such as first grip targets. have to use yell
+mod:RegisterCombat("yell", L.Pull)
 
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START",
@@ -23,43 +23,46 @@ mod:RegisterEventsInCombat(
 	"SWING_DAMAGE",
 	"SWING_MISSED",
 	"RAID_BOSS_EMOTE",
-	"UNIT_DIED"
+	"UNIT_DIED",
+	"UNIT_HEALTH"
 )
 
 local warnAbsorbedBlood		= mod:NewStackAnnounce(105248, 2)
-local warnResidue			= mod:NewCountAnnounce("ej4057", 3, nil, false)
 local warnGrip				= mod:NewTargetAnnounce(109459, 4)
 local warnNuclearBlast		= mod:NewCastAnnounce(105845, 4)
 local warnSealArmor			= mod:NewCastAnnounce(105847, 4)
 local warnAmalgamation		= mod:NewSpellAnnounce("ej4054", 3, 106005)--Amalgamation spawning, give temp icon.
+local warnCorruptionDeath   = mod:NewTargetAnnounce(106199, 3)
+local warnCorruptionEarth   = mod:NewTargetAnnounce(106200, 3)
 
-local specWarnRoll			= mod:NewSpecialWarningSpell("ej4050", nil, nil, nil, true)--The actual roll
-local specWarnTendril		= mod:NewSpecialWarning("SpecWarnTendril")--A personal warning for you only if you're not gripped 3 seconds after roll started
+local specWarnTendril		= mod:NewSpecialWarning("SpecWarnTendril")
 local specWarnGrip			= mod:NewSpecialWarningSpell(109459, mod:IsDps())
-local specWarnNuclearBlast	= mod:NewSpecialWarningRun(105845, mod:IsMelee())
+local specWarnNuclearBlast	= mod:NewSpecialWarningRun(105845)
 local specWarnSealArmor		= mod:NewSpecialWarningSpell(105847, mod:IsDps())
 local specWarnAmalgamation	= mod:NewSpecialWarningSpell("ej4054", false)
+local specWarnAmalgamationLowHP	= mod:NewSpecialWarning("SpecWarnAmaLowHP")
 
 local timerSealArmor		= mod:NewCastTimer(23, 105847)
-local timerBarrelRoll		= mod:NewCastTimer(5, "ej4050")
+local timerBarrelRoll		= mod:NewCastTimer(6, "ej4050")
 local timerGripCD			= mod:NewNextTimer(32, 109457)
 local timerDeathCD			= mod:NewCDTimer(8.5, 106199)--8.5-10sec variation.
 
-local countdownRoll			= mod:NewCountdown(5, "ej4050")
-local countdownGrip			= mod:NewCountdown(32, 109457, false)--Can get confusing if used with roll countdown. This is off by default but can be turned on by someone willing to sort out the confusion on their own.
-
-local soundNuclearBlast		= mod:NewSound(105845, nil, mod:IsMelee())
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
 mod:RemoveOption("HealthFrame")
 mod:AddBoolOption("InfoFrame", true)
 mod:AddBoolOption("SetIconOnGrip", true)
-mod:AddBoolOption("ShowShieldInfo", false)--on 25 man this is quite frankly a spammy nightmare, especially on heroic. off by default since it's really only sensible in 10 man. Besides I may be adding an alternate frame option for "grip damage needed"
+mod:AddBoolOption("SetIconOnDeath", true)
+mod:AddBoolOption("SetIconOnEarth", true)
+mod:AddBoolOption("ShowShieldInfo", mod:IsHealer())
 
 local gripTargets = {}
 local gripIcon = 6
 local corruptionActive = {}
 local residueCount = 0
 local diedOozeGUIDS = {}
+local warnedAmalgamation = false
+local BloodAbsorbed = 0
 
 local function checkTendrils()
 	if not UnitDebuff("player", GetSpellInfo(109454)) and not UnitIsDeadOrGhost("player") then
@@ -67,21 +70,18 @@ local function checkTendrils()
 	end
 end
 
-local function clearTendrils()
-	if mod.Options.InfoFrame then
-		DBM.InfoFrame:Hide()
-	end
-end
-
 local function showGripWarning()
 	warnGrip:Show(table.concat(gripTargets, "<, >"))
 	specWarnGrip:Show()
+	sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\someonecaught.mp3")
 	table.wipe(gripTargets)
 end
 
 local function warningResidue()
-	warnResidue:Cancel()
-	warnResidue:Schedule(1.25, residueCount)
+	if mod.Options.InfoFrame then
+		DBM.InfoFrame:SetHeader(L.BloodCount)
+		DBM.InfoFrame:Show(1, "texts", residueCount, nil, nil, L.BloodCount)
+	end
 end
 
 local function checkOozeResurrect(GUID)
@@ -97,7 +97,7 @@ local clearPlasmaTarget, setPlasmaTarget, clearPlasmaVariables
 do
 	local plasmaTargets = {}
 	local healed = {}
-	
+
 	function mod:SPELL_HEAL(_, _, _, _, destGUID, _, _, _, _, _, _, _, _, absorbed)
 		if plasmaTargets[destGUID] then
 			healed[destGUID] = healed[destGUID] + (absorbed or 0)
@@ -118,7 +118,7 @@ do
 			DBM.BossHealth:AddBoss(function() return math.max(1, math.floor((healed[i] or 0) / maxAbsorb * 100))	end, L.PlasmaTarget:format(v))
 		end
 	end
-
+	
 	function setPlasmaTarget(guid, name)
 		plasmaTargets[guid] = name
 		healed[guid] = 0
@@ -130,13 +130,15 @@ do
 		healed[guid] = nil
 		updatePlasmaTargets()
 	end
-
+	
 	function clearPlasmaVariables()
 		table.wipe(plasmaTargets)
 		table.wipe(healed)
 		updatePlasmaTargets()
 	end
 end
+
+
 
 function mod:OnCombatStart(delay)
 	if self:IsDifficulty("lfr25") then
@@ -152,6 +154,8 @@ function mod:OnCombatStart(delay)
 	end
 	gripIcon = 6
 	residueCount = 0
+	warnedAmalgamation = false
+	BloodAbsorbed = 0
 end
 
 function mod:OnCombatEnd()
@@ -164,10 +168,12 @@ function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(105845) then
 		warnNuclearBlast:Show()
 		specWarnNuclearBlast:Show()
-		soundNuclearBlast:Play()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\boomrun.mp3")
+		warnedAmalgamation = false
 	elseif args:IsSpellID(105847, 105848) then
 		warnSealArmor:Show()
 		specWarnSealArmor:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\killmuscle.mp3")
 		if self:IsDifficulty("lfr25") then
 			timerSealArmor:Start(34.5)
 		else
@@ -178,28 +184,29 @@ function mod:SPELL_CAST_START(args)
 			corruptionActive[args.sourceGUID] = 0
 			if self:IsDifficulty("normal25", "heroic25") then
 				timerGripCD:Start(16, args.sourceGUID)
-				if #corruptionActive < 2 then--because using countdowns with more then 1 will be noisy not informative.
-					countdownGrip:Start(16, args.sourceGUID)
-				end
 			else
 				timerGripCD:Start(nil, args.sourceGUID)
-				if #corruptionActive < 2 then--because using countdowns with more then 1 will be noisy not informative.
-					countdownGrip:Start(32, args.sourceGUID)
-				end
 			end
 		end
 		corruptionActive[args.sourceGUID] = corruptionActive[args.sourceGUID] + 1
 		if corruptionActive[args.sourceGUID] == 2 and self:IsDifficulty("normal25", "heroic25") then
 			timerGripCD:Update(8, 16, args.sourceGUID)
+			sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\sounds\\Corsica_S\\3.mp3")
+			sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\sounds\\Corsica_S\\2.mp3")
+			sndWOP:Schedule(7, "Interface\\AddOns\\DBM-Core\\sounds\\Corsica_S\\1.mp3")
 		elseif corruptionActive[args.sourceGUID] == 4 and self:IsDifficulty("normal10", "heroic10") then
 			timerGripCD:Update(24, 32, args.sourceGUID)
+			sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\sounds\\Corsica_S\\3.mp3")
+			sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\sounds\\Corsica_S\\2.mp3")
+			sndWOP:Schedule(7, "Interface\\AddOns\\DBM-Core\\sounds\\Corsica_S\\1.mp3")
 		end
 	end
 end
 
--- not needed guid check. This is residue creation step.
 function mod:SPELL_CAST_SUCCESS(args)
-	if args:IsSpellID(105219, 109371, 109372, 109373) then 
+	if args:IsSpellID(106199) and self:IsHealer() then
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\dispelnow.mp3")
+	elseif args:IsSpellID(105209, 109371, 109372, 109373) then
 		diedOozeGUIDS[args.sourceGUID] = GetTime()
 		residueCount = residueCount + 1
 		warningResidue()
@@ -210,9 +217,6 @@ function mod:SPELL_CAST_SUCCESS(args)
 	end
 end
 
---Damage event that indicates an ooze is taking damage
---we check its GUID to see if it's a resurrected ooze and if so remove it from table.
---oozes do not fires SPELL_DAMAGE event from source. so track SPELL_DAMAGE event only from dest.
 function mod:SPELL_DAMAGE(sourceGUID, _, _, _, destGUID)
 	checkOozeResurrect(destGUID)
 end
@@ -228,10 +232,13 @@ function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(105248) then
 		warnAbsorbedBlood:Cancel()--Just a little anti spam
 		warnAbsorbedBlood:Schedule(1.25, args.destName, 1)
+		BloodAbsorbed = 1
 	elseif args:IsSpellID(105490, 109457, 109458, 109459) then
 		gripTargets[#gripTargets + 1] = args.destName
 		timerGripCD:Cancel(args.sourceGUID)
-		countdownGrip:Cancel(args.sourceGUID)
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\sounds\\Corsica_S\\3.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\sounds\\Corsica_S\\2.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\sounds\\Corsica_S\\1.mp3")
 		if corruptionActive[args.sourceGUID] then
 			corruptionActive[args.sourceGUID] = nil
 		end
@@ -248,6 +255,16 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.ShowShieldInfo then
 			setPlasmaTarget(args.destGUID, args.destName)
 		end
+	elseif args:IsSpellID(106199) then
+		warnCorruptionDeath:Show(args.destName)
+		if self.Options.SetIconOnDeath then
+			self:SetIcon(args.destName, 8)
+		end
+	elseif args:IsSpellID(106200) then
+		warnCorruptionEarth:Show(args.destName)
+		if self.Options.SetIconOnEarth then
+			self:SetIcon(args.destName, 7)
+		end
 	end
 end		
 
@@ -255,10 +272,13 @@ function mod:SPELL_AURA_APPLIED_DOSE(args)
 	if args:IsSpellID(105248) then
 		warnAbsorbedBlood:Cancel()--Just a little anti spam
 		if args.amount == 9 then
-			warnAbsorbedBlood:Show(args.destName, 9)
+			warnAbsorbedBlood:Show(args.destName, args.amount)
+			warnedAmalgamation = true
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\killmixone.mp3")
 		else
 			warnAbsorbedBlood:Schedule(1.25, args.destName, args.amount)
 		end
+		BloodAbsorbed = args.amount
 	end
 end
 
@@ -267,33 +287,45 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnGrip then
 			self:SetIcon(args.destName, 0)
 		end
+		if self:IsDps() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\safenow.mp3")
+		end
 	elseif args:IsSpellID(105479, 109362, 109363, 109364) then
 		if self.Options.ShowShieldInfo then
 			clearPlasmaTarget(args.destGUID, args.destName)
+		end
+	elseif args:IsSpellID(106199) then
+		if self.Options.SetIconOnDeath then
+			self:SetIcon(args.destName, 0)
+		end
+	elseif args:IsSpellID(106200) then
+		if self.Options.SetIconOnEarth then
+			self:SetIcon(args.destName, 0)
 		end
 	end
 end	
 
 function mod:RAID_BOSS_EMOTE(msg)
-	if msg == L.DRoll or msg:find(L.DRoll) then
-		self:Unschedule(checkTendrils)--In case you manage to spam spin him, we don't want to get a bunch of extra stuff scheduled.
-		self:Unschedule(clearTendrils)--^
-		countdownRoll:Cancel()--^
-		specWarnRoll:Show()--Warn you right away.
-		self:Schedule(3, checkTendrils)--After 3 seconds of roll starting, check tendrals, you should have leveled him out by now if this wasn't on purpose.
-		self:Schedule(8, clearTendrils)--Clearing 3 seconds after the roll should be sufficent
+	if msg == L.DRoll or msg:find(L.DRoll) or msg == L.DRollR or msg:find(L.DRollR) then
+		self:Unschedule(checkTendrils)
+		checkTendrils()
+		self:Schedule(3, checkTendrils)
 		timerBarrelRoll:Start()
-		countdownRoll:Start(5)
-		if self.Options.InfoFrame and not DBM.InfoFrame:IsShown() then
-			DBM.InfoFrame:SetHeader(L.NoDebuff:format(GetSpellInfo(109454)))
-			DBM.InfoFrame:Show(5, "playergooddebuff", 109454)
+		sndWOP:Schedule(4, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		if msg == L.DRoll or msg:find(L.DRoll) then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\leftside.mp3")
+		elseif msg == L.DRollR or msg:find(L.DRollR) then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\rightside.mp3")
 		end
 	elseif msg == L.DLevels or msg:find(L.DLevels) then
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\balancenow.mp3")
 		self:Unschedule(checkTendrils)
-		self:Unschedule(clearTendrils)
-		clearTendrils()
-		countdownRoll:Cancel()
 		timerBarrelRoll:Cancel()
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	end
 end
 
@@ -301,7 +333,9 @@ function mod:UNIT_DIED(args)
 	local cid = self:GetCIDFromGUID(args.destGUID)
 	if cid == 53891 or cid == 56162 or cid == 56161 then
 		timerGripCD:Cancel(args.sourceGUID)
-		countdownGrip:Cancel(args.sourceGUID)
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\sounds\\Corsica_S\\3.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\sounds\\Corsica_S\\2.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\sounds\\Corsica_S\\1.mp3")
 		warnAmalgamation:Schedule(4.5)--4.5-5 seconds after corruption dies.
 		specWarnAmalgamation:Schedule(4.5)
 		if self:IsDifficulty("heroic10", "heroic25") then
@@ -309,5 +343,19 @@ function mod:UNIT_DIED(args)
 		end
 	elseif cid == 56341 or cid == 56575 then
 		timerSealArmor:Cancel()
+	end
+end
+
+function mod:UNIT_HEALTH(uId)
+	if self:GetUnitCreatureId(uId) == 53890 then
+		local h = UnitHealth(uId) / UnitHealthMax(uId) * 100
+		if h < 15 and not warnedAmalgamation and BloodAbsorbed < 9 then
+			warnedAmalgamation = true
+			local bleft = 9 - BloodAbsorbed
+			specWarnAmalgamationLowHP:Show(bleft)
+			if not self:IsHealer() then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\stopatk.mp3")
+			end
+		end
 	end
 end

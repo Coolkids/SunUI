@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(333, "DBM-DragonSoul", nil, 187)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7548 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7452 $"):sub(12, -3))
 mod:SetCreatureID(56173)
 mod:SetModelID(40087)
 mod:SetModelSound("sound\\CREATURE\\Deathwing\\VO_DS_DEATHWING_MAELSTROMEVENT_01.OGG", "sound\\CREATURE\\Deathwing\\VO_DS_DEATHWING_MAELSTROMSPELL_04.OGG")
@@ -15,82 +15,74 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_START",
 	"SPELL_CAST_SUCCESS",
 	"SPELL_AURA_APPLIED",
-	"SPELL_AURA_APPLIED_DOSE",
 	"SPELL_AURA_REMOVED",
 	"SPELL_SUMMON",
 	"UNIT_DIED",
 	"UNIT_SPELLCAST_SUCCEEDED"
 )
 
-local warnMutated					= mod:NewSpellAnnounce("ej4112", 3, 467)
-local warnImpale					= mod:NewTargetAnnounce(106400, 3, nil, mod:IsTank() or mod:IsHealer())
-local warnElementiumBolt			= mod:NewSpellAnnounce(105651, 4)
-local warnTentacle					= mod:NewSpellAnnounce(105551, 3)
-local warnHemorrhage				= mod:NewSpellAnnounce(105863, 3)
-local warnCataclysm					= mod:NewCastAnnounce(106523, 4)
-local warnPhase2					= mod:NewPhaseAnnounce(2, 3)
-local warnFragments					= mod:NewSpellAnnounce("ej4115", 4, 106708)--This needs a custom spell icon, EJ doesn't have icons for entires that are mobs
-local warnTerror					= mod:NewSpellAnnounce("ej4117", 4, 106765)--This needs a fitting spell icon, trigger spell only has a gear.
-local warnShrapnel					= mod:NewTargetAnnounce(109598, 3, nil, false)
-local warnParasite					= mod:NewTargetAnnounce(108649, 2)
-local warnUnstableCorruption		= mod:NewCastAnnounce(108813, 4, 10)
-local warnTetanus					= mod:NewStackAnnounce(109605, 4, nil, false)
-local warnCongealingBloodSoon		= mod:NewSoonAnnounce("ej4350", 4, 109089)--15%, 10%, 5% on heroic. spellid is 109089.
+local warnMutated				= mod:NewSpellAnnounce("ej4112", 3, 467)
+local warnImpale				= mod:NewTargetAnnounce(106400, 3, nil, mod:IsTank() or mod:IsHealer())
+local warnElementiumBolt		= mod:NewSpellAnnounce(105651, 4)
+local warnTentacle				= mod:NewSpellAnnounce(105551, 3)
+local warnHemorrhage			= mod:NewSpellAnnounce(105863, 3)
+local warnCataclysm				= mod:NewCastAnnounce(106523, 4)
+local warnPhase2				= mod:NewPhaseAnnounce(2, 3)
+local warnFragments				= mod:NewSpellAnnounce("ej4115", 4, 106708)
+local warnTerror				= mod:NewSpellAnnounce("ej4117", 4, 106765)
+local warnShrapnel				= mod:NewTargetAnnounce(109598, 3)
+local warnParasite				= mod:NewTargetAnnounce(108649, 4)
+local warnCongealingBloodSoon	= mod:NewSoonAnnounce("ej4350", 4, 109089)--15%, 10%, 5% on heroic. spellid is 109089.
 
-local specWarnMutated				= mod:NewSpecialWarningSwitch("ej4112", not mod:IsHealer())--Because tanks need to switch to it too.
-local specWarnImpale				= mod:NewSpecialWarningYou(106400)
-local specWarnImpaleOther			= mod:NewSpecialWarningTarget(106400, mod:IsTank() or mod:IsHealer())
-local specWarnElementiumBolt		= mod:NewSpecialWarningSpell(105651, nil, nil, nil, true)--Cast, helps you find the mark on ground and get into positions
-local specWarnElementiumBoltDPS		= mod:NewSpecialWarningSwitch(105651, mod:IsDps())--Warning for when to switch to dps it, because i really felt one warning didn't serve both meanings, one is an aoe/damage warning for cast, other should be specifically yelling at dps to kill it.
-local specWarnTentacle				= mod:NewSpecialWarningSwitch("ej4103", mod:IsDps())--Tanks not included in this one cause they may still have adds.
-local specWarnHemorrhage			= mod:NewSpecialWarningSpell(105863, not mod:IsHealer())--Because tanks need to switch to it too.
-local specWarnFragments				= mod:NewSpecialWarningSpell("ej4115", mod:IsDps())--Not a "switch" warning because on normal a lot of groups choose to ignore these if they can burn boss and just pop dream. Let the raid leader decide strat on this one, not DBM.
-local specWarnTerror				= mod:NewSpecialWarningSpell("ej4117")--Same as fragments.
-local specWarnShrapnel				= mod:NewSpecialWarningYou(109598)
-local specWarnParasite				= mod:NewSpecialWarningYou(108649)
-local specWarnParasiteDPS			= mod:NewSpecialWarningSpell("ej4347", mod:IsDps())--many raid teams using kalecgos buff. they do not target switch to parasite
-local yellParasite					= mod:NewYell(108649)
-local specWarnCongealingBlood		= mod:NewSpecialWarningSwitch("ej4350", mod:IsDps())--15%, 10%, 5% on heroic. spellid is 109089.
-local specWarnTetanus				= mod:NewSpecialWarningStack(109605, mod:IsTank(), 4)
-local specWarnTetanusOther			= mod:NewSpecialWarningTarget(109605, mod:IsTank())
+local specWarnMutated			= mod:NewSpecialWarningSwitch("ej4112", true)
+local specWarnImpale			= mod:NewSpecialWarningYou(106400)
+local specWarnImpaleOther		= mod:NewSpecialWarningTarget(106400, mod:IsTank() or mod:IsHealer())
+local specWarnElementiumBolt	= mod:NewSpecialWarningSpell(105651, nil, nil, nil, true)
+local specWarnTentacle			= mod:NewSpecialWarningSwitch("ej4103", true)
+local specWarnHemorrhage		= mod:NewSpecialWarningSpell(105863, mod:IsDps())
+local specWarnFragments			= mod:NewSpecialWarningSpell("ej4115", true)
+local specWarnTerror			= mod:NewSpecialWarningSpell("ej4117", true)
+local specWarnShrapnel			= mod:NewSpecialWarningYou(109598)
+local yellShrapnel				= mod:NewYell(109598)
+local specWarnParasite			= mod:NewSpecialWarningYou(108649)
+local specWarnUnstableCorruption			= mod:NewSpecialWarningSpell(108813)
+local yellParasite				= mod:NewYell(108649)
+local specWarnCongealingBlood	= mod:NewSpecialWarningSwitch("ej4350", true)
 
-local timerMutated					= mod:NewNextTimer(17, "ej4112", nil, nil, nil, 467)--use druid spell Thorns icon temporarily.
-local timerImpale					= mod:NewTargetTimer(49.5, 106400, nil, mod:IsTank() or mod:IsHealer())--45 plus 4 second cast plus .5 delay between debuff ID swap.
-local timerImpaleCD					= mod:NewCDTimer(35, 106400, nil, mod:IsTank() or mod:IsHealer())
-local timerElementiumCast			= mod:NewCastTimer(7.5, 105651)
-local timerElementiumBlast			= mod:NewCastTimer(8, 109600)--8-10 variation depending on where it's actually going to land. Use the min time.
-local timerElementiumBoltCD			= mod:NewNextTimer(55.5, 105651)
-local timerHemorrhageCD				= mod:NewCDTimer(100.5, 105863)
-local timerCataclysm				= mod:NewCastTimer(60, 106523)
-local timerCataclysmCD				= mod:NewCDTimer(130.5, 106523)--130.5-131.5 variations
-local timerFragmentsCD				= mod:NewNextTimer(90, "ej4115", nil, nil, nil, 106708)--Gear icon for now til i find something more suitable
-local timerTerrorCD					= mod:NewNextTimer(90, "ej4117", nil, nil, nil, 106765)--^
-local timerShrapnel					= mod:NewBuffFadesTimer(6, 109598)
-local timerParasite					= mod:NewTargetTimer(10, 108649)
-local timerParasiteCD				= mod:NewCDTimer(60, 108649)
-local timerUnstableCorruption		= mod:NewCastTimer(10, 108813)
-local timerTetanus					= mod:NewTargetTimer(6, 109605, nil, mod:IsHealer())
-local timerTetanusCD				= mod:NewCDTimer(3.5, 109605, nil, mod:IsTank())
+local timerImpale				= mod:NewTargetTimer(49.5, 106400, nil, false)
+local timerImpaleCD				= mod:NewCDTimer(35, 109633, nil, mod:IsTank() or mod:IsHealer())
+local timerElementiumCast		= mod:NewCastTimer(7.5, 105651)
+local timerElementiumBlast		= mod:NewCastTimer(8, 109600)
+local timerElementiumBoltCD		= mod:NewNextTimer(55.5, 105651)
+local timerHemorrhageCD			= mod:NewCDTimer(100.5, 105863)
+local timerCataclysm			= mod:NewCastTimer(60, 106523)
+local timerCataclysmCD			= mod:NewCDTimer(130.5, 106523)
+local timerFragmentsCD			= mod:NewNextTimer(90, "ej4115", nil, nil, nil, 106708)
+local timerTerrorCD				= mod:NewNextTimer(90, "ej4117", nil, nil, nil, 106765)
+local timerMutantCD		= mod:NewTimer(11, "TimerMutant", 109454)
+local timerShrapnel				= mod:NewBuffFadesTimer(6, 109598)
+local timerCrushCD	 = mod:NewNextTimer(7, 106382)
+local timerParasite				= mod:NewTargetTimer(10, 108649)
+local timerParasiteCD			= mod:NewCDTimer(60, 108649)
+local timerUnstableCorruption	= mod:NewCastTimer(10, 108813)
 
-local berserkTimer					= mod:NewBerserkTimer(900)
+local berserkTimer				= mod:NewBerserkTimer(900)
 
-local countdownBoltBlast			= mod:NewCountdown(8, 109600)
-local countdownUnstableCorruption	= mod:NewCountdown(10, 108813, false)--Even though not at same time as bolt, 2 countdowns in one fight is always confusing. So off by default for this one since it's more obvious then the bolt one where you can not watch a long cast bar.
-local countdownShrapnel				= mod:NewCountdown(6, 109598, not mod:IsTank())
-
-mod:AddBoolOption("RangeFrame", true)--For heroic parasites, with debuff filtering.
+mod:AddBoolOption("RangeFrame", true)
 mod:AddBoolOption("SetIconOnParasite", true)
+
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
 local firstAspect = true
 local engageCount = 0
+--local playerGUID = 0
 local shrapnelTargets = {}
 local warnedCount = 0
 local hemorrhage = GetSpellInfo(105863)
 local fragment = GetSpellInfo(109568)
-local activateTetanusTimers = false
-local parasite = EJ_GetSectionInfo(4347)
-local parasiteScan = 0
-local parasiteCasted = false
+local blisterling  = GetSpellInfo(105551)
+local parasiteinvortex = false
+local parasitecount = 0
 
 local debuffFilter
 do
@@ -102,9 +94,9 @@ end
 function mod:updateRangeFrame()
 	if not self.Options.RangeFrame then return end
 	if UnitDebuff("player", GetSpellInfo(108649)) then
-		DBM.RangeCheck:Show(10, nil)--Show everyone.
+		DBM.RangeCheck:Show(10, nil)
 	else
-		DBM.RangeCheck:Show(10, debuffFilter)--Show only people who have debuff.
+		DBM.RangeCheck:Show(10, debuffFilter)
 	end
 end
 
@@ -113,39 +105,13 @@ local function warnShrapnelTargets()
 	table.wipe(shrapnelTargets)
 end
 
-function mod:ScanParasite()
-	local unitID
-	local founded = false
-	for i = 1, GetNumRaidMembers() do
-		if UnitName("raid"..i.."target") == parasite then
-			unitID = "raid"..i.."target"
-			founded = true
-			break
-		end
-	end
-	if founded then
-		local _, _, _, _, startTime, endTime = UnitCastingInfo(unitID)
-		local castTime = ((endTime or 0) - (startTime or 0)) / 1000
-		timerUnstableCorruption:Update(parasiteScan * 0.1, castTime)
-		countdownUnstableCorruption:Start(castTime - (parasiteScan * 0.1))
-		warnUnstableCorruption = mod:NewCastAnnounce(108813, 4, castTime)
-		warnUnstableCorruption:Show()
-	elseif parasiteScan < 40 then -- failed scan. rescan for 40 times. (40 * 0.1 = 4 sec)
-		parasiteScan = parasiteScan + 1
-		self:ScheduleMethod(0.1, "ScanParasite")
-	else -- if scan failure after 40 loops, use default 10 sec timer.
-		timerUnstableCorruption:Update(parasiteScan * 0.1, 10)
-		countdownUnstableCorruption:Start(10 - (parasiteScan * 0.1))
-		warnUnstableCorruption = mod:NewCastAnnounce(108813, 4, 10)
-		warnUnstableCorruption:Show()		
-	end
-end
-
 function mod:OnCombatStart(delay)
 	firstAspect = true
-	activateTetanusTimers = false
 	engageCount = 0
+--	playerGUID = 0
 	warnedCount = 0
+	parasitecount = 0
+	parasiteinvortex = false
 	table.wipe(shrapnelTargets)
 	berserkTimer:Start(-delay)
 end
@@ -159,25 +125,23 @@ end
 
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(107018) then
-		parasiteCasted = false
-		if firstAspect then--The abilities all come 15seconds earlier for first one only
+		parasitecount = 0
+		if firstAspect then
 			firstAspect = false
-			timerMutated:Start(11)
-			warnMutated:Schedule(11)
-			specWarnMutated:Schedule(11)
 			timerImpaleCD:Start(22)
 			timerElementiumBoltCD:Start(40.5)
 			if self:IsDifficulty("heroic10", "heroic25") then
-				timerHemorrhageCD:Start(55.5)--Appears to be 30 seconds earlier in heroic
+				timerHemorrhageCD:Start(55.5)
 				timerParasiteCD:Start(11)
 			else
 				timerHemorrhageCD:Start(85.5)
 			end
 			timerCataclysmCD:Start(115.5)
+			warnMutated:Schedule(11)
+			specWarnMutated:Schedule(11)
+			timerMutantCD:Start(11)
+			sndWOP:Schedule(11, "Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\mutant.mp3")
 		else
-			timerMutated:Start()
-			warnMutated:Schedule(17)
-			specWarnMutated:Schedule(17)
 			timerImpaleCD:Start(27.5)
 			timerElementiumBoltCD:Start()
 			if self:IsDifficulty("heroic10", "heroic25") then
@@ -187,30 +151,56 @@ function mod:SPELL_CAST_START(args)
 				timerHemorrhageCD:Start()
 			end
 			timerCataclysmCD:Start()
-		end
+			warnMutated:Schedule(17)
+			specWarnMutated:Schedule(17)
+			timerMutantCD:Start(17)
+			sndWOP:Schedule(17, "Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\mutant.mp3")
+		end	
 	elseif args:IsSpellID(106523, 110042, 110043, 110044) then
 		warnCataclysm:Show()
 		timerCataclysm:Start()
 	elseif args:IsSpellID(108813) then
-		parasiteScan = 0
-		self:ScanParasite()
+		if parasiteinvortex then
+			timerUnstableCorruption:Start(15)
+			if UnitBuff("player", GetSpellInfo(109642)) and not UnitIsDeadOrGhost("player") and not self:IsTank() then--Check for Ysera's Presence
+				sndWOP:Schedule(12, "Interface\\AddOns\\DBM-Core\\extrasounds\\clickshield.mp3")
+			end
+			sndWOP:Schedule(13, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Schedule(14, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Schedule(15, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		else
+			timerUnstableCorruption:Start()
+			if UnitBuff("player", GetSpellInfo(109642)) and not UnitIsDeadOrGhost("player") and not self:IsTank() then--Check for Ysera's Presence
+				sndWOP:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\clickshield.mp3")
+			end
+			sndWOP:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Schedule(9, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Schedule(10, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		end
 	end
 end
 
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(105651) then
 		warnElementiumBolt:Show()
-		specWarnElementiumBolt:Show()
 		if not UnitBuff("player", GetSpellInfo(109624)) and not UnitIsDeadOrGhost("player") then--Check for Nozdormu's Presence
+			specWarnElementiumBolt:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\boltappear.mp3")
 			timerElementiumBlast:Start()
-			countdownBoltBlast:Start()
-			specWarnElementiumBoltDPS:Schedule(10)
+			sndWOP:Schedule(4, "Interface\\AddOns\\DBM-Core\\extrasounds\\boomrun.mp3")
+			sndWOP:Schedule(5.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Schedule(6.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Schedule(7.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		else
-			timerElementiumCast:Start()
-			timerElementiumBlast:Start(20)
-			specWarnElementiumBoltDPS:Schedule(7.5)
+			timerElementiumCast:Start()	
+			timerElementiumBlast:Start(18)
+			specWarnElementiumBolt:Schedule(5.5)
+			sndWOP:Schedule(5.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\boltappear.mp3")
+			sndWOP:Schedule(15.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Schedule(16.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Schedule(17.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		end
-	elseif args:IsSpellID(110063) then--Astral Recall. Thrall teleports off back platform back to front on defeat.
+	elseif args:IsSpellID(110063) then
 		self:SendSync("MadnessDown")
 	end
 end
@@ -234,18 +224,33 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnImpale:Show(args.destName)
 		timerImpale:Start(args.destName)
 		timerImpaleCD:Start()
+--		sndWOP:Schedule(29, "Interface\\AddOns\\DBM-Core\\extrasounds\\awaymutant.mp3")
 		if args:IsPlayer() then
 			specWarnImpale:Show()
+			if not UnitBuff("player", GetSpellInfo(109642)) and not UnitIsDeadOrGhost("player") then--Check for Ysera's Presence
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\watchimpale.mp3")
+			else
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\clickshield.mp3")
+			end
 		else
 			specWarnImpaleOther:Show(args.destName)
+			if self:IsTank() then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\changemt.mp3")				
+			else
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\watchimpale.mp3")
+			end
 		end
 	elseif args:IsSpellID(106794, 110139, 110140, 110141) then
 		shrapnelTargets[#shrapnelTargets + 1] = args.destName
 		self:Unschedule(warnShrapnelTargets)
 		if args:IsPlayer() then
 			specWarnShrapnel:Show()
-			timerShrapnel:Start() -- Shrapnel debuff lasts 7 secs. But Shrapnel damages 1 sec early before debuff fades. So 6 sec timer will be more good.
-			countdownShrapnel:Start(6)
+			yellShrapnel:Yell()
+			timerShrapnel:Start()
+			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\clickshield.mp3")
+			sndWOP:Schedule(3, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Schedule(4, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		end
 		if (self:IsDifficulty("normal10", "heroic10") and #shrapnelTargets >= 3) or (self:IsDifficulty("normal25", "heroic25", "lfr25") and #shrapnelTargets >= 8) then
 			warnShrapnelTargets()
@@ -253,51 +258,42 @@ function mod:SPELL_AURA_APPLIED(args)
 			self:Schedule(0.3, warnShrapnelTargets)
 		end
 	elseif args:IsSpellID(108649) then
+		parasitecount = parasitecount + 1
 		warnParasite:Show(args.destName)
 		timerParasite:Start(args.destName)
+		if parasitecount < 2 then
+			timerParasiteCD:Start()
+		end
 		self:updateRangeFrame()
 		if args:IsPlayer() then
 			specWarnParasite:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runout.mp3")
 			yellParasite:Yell()
+		elseif self:IsHealer() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\healparasite.mp3")
 		end
+--		playerGUID = args.destGUID
 		if self.Options.SetIconOnParasite then
 			self:SetIcon(args.destName, 8)
 		end
-		-- parasite comes regardless of Corruption status. only 2 times.
-		if not parasiteCasted then
-			timerParasiteCD:Start()
-			parasiteCasted = true
-		end
-	elseif args:IsSpellID(106730, 109603, 109604, 109605) then -- Debuffs from adds
-		warnTetanus:Show(args.destName, args.amount or 1)
-		timerTetanus:Start(args.destName)
-		if (args.amount or 1) >= 4 then
-			if args:IsPlayer() then
-				specWarnTetanus:Show(args.amount)
-			else
-				if not UnitIsDeadOrGhost("player") and not UnitDebuff("player", GetSpellInfo(109603)) then--You have no debuff and not dead
-					specWarnTetanusOther:Show(args.destName)--So stop being a tool and taunt off other tank who has 4 stacks.
-				end
-			end
-		end
-		if activateTetanusTimers then -- Only track them when there is no Time Zone down (since we have no way to accurate track/detect whether or not they are tanked in it, ie slowed)
-			timerTetanusCD:Start(args.sourceGUID)
-		end
 	end
-end
-mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
-
+end	
 
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(106444, 109631, 109632, 109633) then
 		timerImpale:Cancel(args.destName)
 	elseif args:IsSpellID(106794, 110139, 110140, 110141) and args:IsPlayer() then
 		timerShrapnel:Cancel()
-		countdownShrapnel:Cancel()
 	elseif args:IsSpellID(108649) then
-		specWarnParasiteDPS:Show()
 		if self.Options.SetIconOnParasite then
 			self:SetIcon(args.destName, 0)
+		end
+		specWarnUnstableCorruption:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\killparasite.mp3")
+		if UnitDebuff(args.destName, GetSpellInfo(108646)) then
+			parasiteinvortex = true
+		else
+			parasiteinvortex = false
 		end
 		if self.Options.RangeFrame then
 			DBM.RangeCheck:Hide()
@@ -306,53 +302,60 @@ function mod:SPELL_AURA_REMOVED(args)
 end
 
 function mod:SPELL_SUMMON(args)
-	if args:IsSpellID(109091) and self:AntiSpam(10, 1) then--They spawn over like 8 seconds, not at same time, so we need a large anti spam.
+	if args:IsSpellID(109091) and self:AntiSpam(10) then
 		specWarnCongealingBlood:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\aeblood.mp3")
 	end
 end
 
 function mod:UNIT_DIED(args)
 	local cid = self:GetCIDFromGUID(args.destGUID)
-	if cid == 56471 then--Mutated Corruption
+	if cid == 56471 then
 		timerImpaleCD:Cancel()
-		timerImpale:Cancel()--Cancel impale debuff timers since they don't matter anymore until next platform (well after they cleared)
-	elseif cid == 56311 then --Phase 2 Time Zone bubbles (yes it's an npc heh)
-		activateTetanusTimers = true
-	elseif cid == 56710 then
-		timerTetanusCD:Cancel(args.destGUID)
+--		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\awaymutant.mp3")
+		timerImpale:Cancel()
 	elseif cid == 57479 then
 		timerUnstableCorruption:Cancel()
-		countdownUnstableCorruption:Cancel()
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, spellName, _, _, spellId)
-	if spellId == 110663 and self:AntiSpam(2, 2) then--Elementium Meteor Transform (apparently this doesn't fire UNIT_DIED anymore, need to use this alternate method)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, spellName, _, _, spellID)
+	if spellId == 110663 then--Elementium Meteor Transform (apparently this doesn't fire UNIT_DIED anymore, need to use this alternate method)
 		self:SendSync("BoltDied")--Send sync because Elementium bolts do not have a bossN arg, which means event only fires if it's current target/focus.
 	end
+	if not uId:find("boss") then return end--Anti spam to ignore all other args (like target/focus/mouseover)
 	if spellName == hemorrhage then
 		warnHemorrhage:Show()
 		specWarnHemorrhage:Show()
-	elseif spellId == 105551 and self:AntiSpam(2, 2) then--Spawn Blistering Tentacles
-		if not UnitBuff("player", GetSpellInfo(106028)) then--Check for Alexstrasza's Presence
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\aeblood.mp3")
+	elseif spellName == blisterling then
+		if not UnitBuff("player", GetSpellInfo(109572)) then--Check for Alexstrasza's Presence
 			warnTentacle:Show()
 			specWarnTentacle:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\blisterling.mp3")
 		end
-	elseif spellName == fragment and self:AntiSpam(2, 2) then--Summon Impaling Tentacle (Fragments summon)
+	elseif spellName == fragment then
 		warnFragments:Show()
 		specWarnFragments:Show()
 		timerFragmentsCD:Start()
-	elseif spellId == 106765 and self:AntiSpam(2, 2) then--Summon Elementium Terror (Big angry add)
-		activateTetanusTimers = false
+	elseif spellId == 106765 then
 		warnTerror:Show()
 		specWarnTerror:Show()
 		timerTerrorCD:Start()
+	elseif spellID == 106382 then
+		timerCrushCD:Start()
 	end
 end
 
 function mod:OnSync(msg)
 	if msg == "BoltDied" then
-		timerElementiumBlast:Cancel()--Lot of work just to cancel a timer, why the heck did blizz break this mob firing UNIT_DIED when it dies? Sigh.
+		timerElementiumBlast:Cancel()
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	elseif msg == "MadnessDown" and self:IsInCombat() then
 		DBM:EndCombat(self)
 	end
@@ -361,13 +364,13 @@ end
 function mod:UNIT_HEALTH_FREQUENT(uId)
 	if uId == "boss1" then
 		local hp = UnitHealth(uId) / UnitHealthMax(uId) * 100
-		if hp > 15 and hp < 16.5 and warnedCount == 0 then
+		if hp > 16 and hp < 17.5 and warnedCount == 0 then
 			warnedCount = 1
 			warnCongealingBloodSoon:Show()
-		elseif hp > 10 and hp < 11.5 and warnedCount == 1 then
+		elseif hp > 11 and hp < 12.5 and warnedCount == 1 then
 			warnedCount = 2
 			warnCongealingBloodSoon:Show()
-		elseif hp > 5 and hp < 6.5 and warnedCount == 2 then
+		elseif hp > 6 and hp < 7.5 and warnedCount == 2 then
 			warnedCount = 3
 			warnCongealingBloodSoon:Show()
 			self:UnregisterShortTermEvents()

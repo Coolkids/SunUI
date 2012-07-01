@@ -1,5 +1,8 @@
-﻿-- Simplified Chinese by Diablohu(diablohudream@gmail.com) & yleaf(yaroot@gmail.com)
--- Last update: 12/26/2011
+﻿-- Simplified Chinese by Diablohu
+-- http://wow.gamespot.com.cn
+-- Last Update: 12/13/2008
+
+-- yleaf (yaroot@gmail.com) 9-19-2009
 
 if GetLocale() ~= "zhCN" then return end
 if not DBM_GUI_Translations then DBM_GUI_Translations = {} end
@@ -10,7 +13,7 @@ L.MainFrame = "Deadly Boss Mods"
 
 L.TranslationBy 	= "Diablohu & yleaf"
 
-L.OTabBosses	= "模块"
+L.OTabBosses	= "首领"
 L.OTabOptions	= "选项"
 
 L.TabCategory_Options 	= "综合设置"
@@ -49,8 +52,8 @@ L.Statistic_Kills	= "击杀："
 L.Statistic_Wipes	= "失败："
 L.Statistic_BestKill	= "最好成绩："
 L.Statistic_Heroic	= "英雄模式"
-L.Statistic_10Man			= "10人"
-L.Statistic_25Man			= "25人"
+L.Statistic_10Man			= "10人团队"
+L.Statistic_25Man			= "25人团队"
 
 -- Tab: General Options
 L.General 		= "DBM综合设置"
@@ -58,20 +61,21 @@ L.EnableDBM 		= "启用DBM"
 L.EnableStatus 		= "回复“status”密语"
 L.AutoRespond 		= "开启战斗中自动密语回复"
 L.EnableMiniMapIcon	= "显示小地图图标"
-L.UseMasterVolume			= "使用游戏总声道播放音频"
-L.DisableCinematics			= "关闭所有游戏内过场动画"
-L.SKT_Enabled				= "永远显示击杀速度计时（无论该首领的相关设置如何）"
+L.VictorySound    = "战斗胜利或失败时随机播放特别音效"
+L.UseMasterVolume			= "使用主要声音频道来播放音效文件。"
+L.DisableCinematics			= "禁用游戏中所有的过场电影"
+L.SKT_Enabled				= "永远显示快速击杀计时条(忽略单独首领的设置)"
 L.Latency_Text				= "设定启用同步功能的最高延迟阀值：%d"
 
-L.ModelOptions				= "3D模型选项"
-L.EnableModels				= "在首领选项中启用3D模型"
-L.ModelSoundOptions			= "为模型查看器设置声音选项"
+L.ModelOptions				= "3D 模型查看选项"
+L.EnableModels				= "在首领选项启用3D模型"
+L.ModelSoundOptions			= "为模型查看器设定音效选项"
 L.ModelSoundShort			= "短"
 L.ModelSoundLong			= "长"
 
-L.Button_RangeFrame	= "显示/隐藏距离监视信息框"
-L.Button_RangeRadar	= "显示/隐藏距离监视雷达"
-L.Button_InfoFrame	= "显示/隐藏信息框"
+L.Button_RangeFrame	= "显示/隐藏距离监视器"
+L.Button_RangeRadar			= "显示/隐藏距离雷达"
+L.Button_InfoFrame			= "显示/隐藏信息框"
 L.Button_TestBars	= "测试计时条"
 
 L.PizzaTimer_Headline 	= '创建一个计时条'
@@ -100,9 +104,9 @@ L.WarningIconRight 	= "右侧显示图标"
 L.RaidWarnMessage 	= "感谢您使用Deadly Boss Mods"
 L.BarWhileMove 		= "团队警报可以移动"
 L.RaidWarnSound		= "发出团队警报时播放声音"
-L.CountdownVoice			= "倒数时播放声音"
-L.SpecialWarnSound	= "针对你或你的角色发出特殊警报时播放声音"
-L.SpecialWarnSound2			= "针对所有人发出特殊警报时播放声音"
+L.CountdownVoice			= "设定倒计时音效"
+L.SpecialWarnSound			= "设定只作用于你的特别警告的音效"
+L.SpecialWarnSound2			= "设定作用于全团的特别警告的音效"
 
 -- Tab: Barsetup
 L.BarSetup   = "计时条样式"
@@ -112,10 +116,10 @@ L.BarEndColor = "结束颜色"
 L.ExpandUpwards		= "向上扩展"
 L.Bar_Font					= "计时条字体"
 L.Bar_FontSize				= "字体大小"
-L.Slider_BarOffSetX 	= "X偏移"
-L.Slider_BarOffSetY 	= "Y偏移"
-L.Slider_BarWidth 	= "宽度"
-L.Slider_BarScale 	= "尺寸"
+L.Slider_BarOffSetX 	= "X偏移: %d"
+L.Slider_BarOffSetY 	= "Y偏移: %d"
+L.Slider_BarWidth 	= "宽度: %d"
+L.Slider_BarScale 	= "尺寸: %0.2f"
 L.AreaTitle_BarSetup 	= "计时条综合设置"
 L.AreaTitle_BarSetupSmall = "小型计时条设置"
 L.AreaTitle_BarSetupHuge = "大型计时条设置"
@@ -129,7 +133,7 @@ L.ClickThrough		= "禁用鼠标点击事件 (允许你点击计时条)"
 L.Panel_SpecWarnFrame		= "特殊警报"
 L.Area_SpecWarn				= "特殊警报设置"
 L.SpecWarn_Enabled			= "显示首领技能特殊警报"
-L.SpecWarn_LHFrame			= "特殊警报时屏幕边缘泛光"
+L.SpecWarn_LHFrame			= "为特别警告添加窗口闪烁效果"
 L.SpecWarn_Font				= "特殊警报字体"
 L.SpecWarn_DemoButton		= "测试警报"
 L.SpecWarn_MoveMe			= "设置位置"
@@ -141,7 +145,7 @@ L.SpecWarn_ResetMe			= "重置选项"
 -- Tab: HealthFrame
 L.Panel_HPFrame				= "首领生命值框体"
 L.Area_HPFrame				= "首领生命值框体选项"
-L.HP_Enabled				= "总是显示首领生命值框体 (首领模块中单独的设置将不起作用)"
+L.HP_Enabled				= "总是显示首领生命值框体(忽略单独首领的设置)"
 L.HP_GrowUpwards			= "计量条向上增长"
 L.HP_ShowDemo				= "显示测试框体"
 L.BarWidth					= "计量条宽度: %d"
@@ -161,6 +165,7 @@ L.SpamBlockNoShowAnnounce		= "不显示警报或播放警报音效"
 L.SpamBlockNoSendAnnounce		= "不发送警报到团队频道"
 L.SpamBlockNoSendWhisper		= "不发送悄悄话提示给其他玩家"
 L.SpamBlockNoSetIcon			= "不设定标记在目标上"
+
 
 -- Misc
 L.FontHeight	= 20

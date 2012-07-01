@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(197, "DBM-Firelands", nil, 78)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7548 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7447 $"):sub(12, -3))
 mod:SetCreatureID(52571)
 mod:SetModelID(37953)
 mod:SetZone()
@@ -26,23 +26,25 @@ local warnLeapingFlames			= mod:NewTargetAnnounce(100208, 3)
 local warnOrbs					= mod:NewCastAnnounce(98451, 4)
 
 local yellLeapingFlames			= mod:NewYell(100208)
-local specWarnLeapingFlamesCast	= mod:NewSpecialWarningYou(98476)
-local specWarnLeapingFlamesNear	= mod:NewSpecialWarningClose(98476)
-local specWarnLeapingFlames		= mod:NewSpecialWarningMove(100208)
+local specWarnLeapingFlamesCast	= mod:NewSpecialWarningYou(98476)--Cast on you
+local specWarnLeapingFlamesNear	= mod:NewSpecialWarningClose(98476)--Cast on you
+local specWarnLeapingFlames		= mod:NewSpecialWarningMove(100208)--Standing in circle it left behind.
 local specWarnSearingSeed		= mod:NewSpecialWarningMove(98450)
 local specWarnOrb				= mod:NewSpecialWarningStack(100211, true, 4)
 
-local timerOrbActive			= mod:NewBuffActiveTimer(64, 98451)
-local timerOrb					= mod:NewBuffFadesTimer(6, 100211)
+local timerOrbActive			= mod:NewBuffActiveTimer(64, 98451, nil, false)
+local timerOrb					= mod:NewBuffFadesTimer(6, 100211, nil, false)
 local timerSearingSeed			= mod:NewBuffFadesTimer(60, 98450)
-local timerNextSpecial			= mod:NewTimer(4, "timerNextSpecial", 97238)--This one stays localized because it's 1 timer used for two abilities
+local timerNextSpecial			= mod:NewTimer(3, "timerNextSpecial", 97238)--This one stays localized because it's 1 timer used for two abilities
 
 local berserkTimer				= mod:NewBerserkTimer(600)
 
-local soundSeed					= mod:NewSound(98450)
+--local soundSeed					= mod:NewSound(98450)
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
 mod:AddBoolOption("RangeFrameSeeds", true)
 mod:AddBoolOption("RangeFrameCat", false)--Diff options for each ability cause seeds strat is pretty universal, don't blow up raid, but leaps may or may not use a stack strategy, plus melee will never want it on by default.
+mod:AddBoolOption("InfoFrame")
 mod:AddBoolOption("IconOnLeapingFlames", false)
 mod:AddBoolOption("LeapArrow", true)
 
@@ -50,31 +52,31 @@ local abilityCount = 0
 local recentlyJumped = false
 local kitty = false
 local targetScansDone = 0
+local orbonyou = GetSpellInfo(98584)
 local leap = GetSpellInfo(100208)
 local swipe = GetSpellInfo(98474)
 local seedsDebuff = GetSpellInfo(98450)
 
 local abilityTimers = {
-	[0] = 17.3,--Still The same baseline.
-	[1] = 14.4,--Everything here onward nerfed in 4.3
-	[2] = 12,
-	[3] = 10.9,
-	[4] = 9.6,
-	[5] = 8.4,
-	[6] = 8.4,
+	[0] = 16.6,--Sometimes this is 16.7
+	[1] = 14.5,--Sometimes this is 12.7 sigh. Wonder what causes this variation?
+	[2] = 12,--One of the few you can count on being consistent.
+	[3] = 10.9,--Really it's between 8.5 and 8.6
+	[4] = 9.6,--Sometimes 8 instead of 7.3-7.4
+	[5] = 8.4,--Varies from 7.3 or 7.4 as well
+	[6] = 8.5,--Varies between 6 even and 6.1 even.
 	[7] = 7.2,
-	[8] = 7.2,--Everyting up to here confirmed by MANY logs
-	[9] = 6.0,
-	[10]= 6.0,
-	[11]= 6.0,
-	[12]= 6.0,
+	[8] = 7.2,
+	[9] = 6,
+	[10]= 6,
+	[11]= 6,
+	[12]= 6,
 	[13]= 4.9,
 	[14]= 4.9,
 	[15]= 4.9,
 	[16]= 4.9,
 	[17]= 4.9,
 }
---caps to 3.7 at 18 stacks.
 
 local function clearLeapWarned()
 	recentlyJumped = false
@@ -104,8 +106,9 @@ function mod:LeapingFlamesTarget(targetname)
 	if targetname == UnitName("player") then
 		recentlyJumped = true--Anti Spam
 		specWarnLeapingFlamesCast:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")
 		yellLeapingFlames:Yell()
-		self:Schedule(4, clearLeapWarned)--So you don't get move warning too from debuff.
+		self:Schedule(3, clearLeapWarned)--So you don't get move warning too from debuff.
 	else
 		local uId = DBM:GetRaidUnitId(targetname)
 		if uId then
@@ -118,6 +121,7 @@ function mod:LeapingFlamesTarget(targetname)
 			if inRange and inRange < 13 then
 				recentlyJumped = true--Anti Spam
 				specWarnLeapingFlamesNear:Show(targetname)
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")
 				if self.Options.LeapArrow then
 					DBM.Arrow:ShowRunAway(x, y, 12, 5)
 				end
@@ -156,6 +160,9 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd()
+	if self.Options.InfoFrame then
+		DBM.InfoFrame:Hide()
+	end
 	if self.Options.RangeFrameSeeds or self.Options.RangeFrameCat then
 		DBM.RangeCheck:Hide()
 	end
@@ -167,6 +174,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		abilityCount = 0
 		timerNextSpecial:Cancel()
 		timerNextSpecial:Start(abilityTimers[abilityCount], leap, abilityCount+1)
+		sndWOP:Schedule(abilityTimers[abilityCount] - 3, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Schedule(abilityTimers[abilityCount] - 2, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Schedule(abilityTimers[abilityCount] - 1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		if self.Options.RangeFrameCat then
 			DBM.RangeCheck:Show(10)
 		end
@@ -183,6 +193,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnAdrenaline:Show(args.destName, args.amount or 1)
 		if kitty then
 			timerNextSpecial:Start(abilityTimers[abilityCount] or 3.7, leap, abilityCount+1)
+			sndWOP:Schedule(abilityTimers[abilityCount] - 3, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Schedule(abilityTimers[abilityCount] - 2, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Schedule(abilityTimers[abilityCount] - 1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		else
 			timerNextSpecial:Start(abilityTimers[abilityCount] or 3.7, swipe, abilityCount+1)
 		end
@@ -190,18 +203,27 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnFury:Show(args.destName, args.amount or 1)
 	elseif args:IsSpellID(98535, 100206, 100207, 100208) and args:IsPlayer() and not recentlyJumped then
 		specWarnLeapingFlames:Show()--You stood in the fire!
-	elseif args:IsSpellID(98584, 100209, 100210, 100211) and args:IsPlayer() then
-		if (args.amount or 1) >= 4 then
-			specWarnOrb:Show(args.amount)--You stood in the fire!
-		end
-		timerOrb:Start()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")
 	elseif args:IsSpellID(98450) and args:IsPlayer() then
 		local _, _, _, _, _, duration, expires, _, _ = UnitDebuff("player", args.spellName)--Find out what our specific seed timer is
-		specWarnSearingSeed:Schedule(expires - GetTime() - 5)	-- Show "move away" warning 5secs before explode
-		soundSeed:Schedule(expires - GetTime() - 5)
+		specWarnSearingSeed:Schedule(expires - GetTime() - 3.5)	-- Show "move away" warning 5secs before explode
+--		soundSeed:Schedule(expires - GetTime() - 5)
+		sndWOP:Schedule(expires - GetTime() - 4.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\runout.mp3")
+		sndWOP:Schedule(expires - GetTime() - 3, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndWOP:Schedule(expires - GetTime() - 2, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Schedule(expires - GetTime() - 1, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Schedule(expires - GetTime(), "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		timerSearingSeed:Start(expires-GetTime())
 		if self.Options.RangeFrameSeeds then
 			DBM.RangeCheck:Show(12)
+		end
+	elseif args:IsSpellID(98584, 100209, 100210, 100211) then
+		if args:IsPlayer() then
+			timerOrb:Start()
+			if (args.amount or 1) >= 4 then
+				specWarnOrb:Show(args.amount)
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\awayfireorb.mp3")
+			end
 		end
 	end
 end
@@ -210,7 +232,7 @@ mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(98450) and args:IsPlayer() then
 		specWarnSearingSeed:Cancel()
-		soundSeed:Cancel()
+--		soundSeed:Cancel()
 		timerSearingSeed:Cancel()
 		if self.Options.RangeFrameSeeds then
 			DBM.RangeCheck:Hide()
@@ -222,6 +244,10 @@ function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(98451) then	--98451 confirmed
 		warnOrbs:Show()
 		timerOrbActive:Start()
+		if self.Options.InfoFrame then
+			DBM.InfoFrame:SetHeader(orbonyou)
+			DBM.InfoFrame:Show(5, "playerdebuffstacks", 98584)
+		end
 	end
 end
 

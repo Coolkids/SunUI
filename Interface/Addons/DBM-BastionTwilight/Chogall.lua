@@ -2,7 +2,7 @@
 local mod	= DBM:NewMod("Chogall", "DBM-BastionTwilight")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7473 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7448 $"):sub(12, -3))
 mod:SetCreatureID(43324)
 mod:SetModelID(34576)
 mod:SetZone()
@@ -64,8 +64,11 @@ local timerDepravityCD				= mod:NewCDTimer(12, 93177, nil, mod:IsMelee())
 
 local berserkTimer					= mod:NewBerserkTimer(600)
 
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
+
 mod:AddBoolOption("SetIconOnWorship", true)
 mod:AddBoolOption("SetIconOnCreature", true)
+mod:AddBoolOption("SetIconOnCrash", true)
 mod:AddBoolOption("CorruptingCrashArrow", true)
 mod:AddBoolOption("RangeFrame")
 mod:AddBoolOption("InfoFrame")
@@ -73,7 +76,7 @@ mod:AddBoolOption("InfoFrame")
 local worshipTargets = {}
 local prewarned_Phase2 = false
 local firstFury = false
-local worshipIcon = 8
+local worshipIcon = 7
 local worshipCooldown = 20.5
 local shadowOrdersCD = 15
 local creatureIcons = {}
@@ -84,8 +87,9 @@ local Corruption = GetSpellInfo(82235)
 local function showWorshipWarning()
 	warnWorship:Show(table.concat(worshipTargets, "<, >"))
 	table.wipe(worshipTargets)
-	worshipIcon = 8
+	worshipIcon = 7
 	timerWorshipCD:Start(worshipCooldown)
+	sndWOP:Schedule(worshipCooldown-1, "Interface\\AddOns\\DBM-Core\\extrasounds\\findmc.mp3")
 	specWarnWorship:Show()
 end
 
@@ -104,9 +108,13 @@ function mod:CorruptingCrashTarget(sGUID)
 		end
 	end
 	if not targetname then return end
+	if self.Options.SetIconOnCrash then
+		self:SetIcon(targetname, 8, 5)
+	end
 	warnCorruptingCrash:Show(targetname)
 	if targetname == UnitName("player") then
 		specWarnCorruptingCrash:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")
 		yellCrash:Yell()
 	else
 		local uId = DBM:GetRaidUnitId(targetname)
@@ -119,6 +127,7 @@ function mod:CorruptingCrashTarget(sGUID)
 			end
 			if inRange then
 				specWarnCorruptingCrashNear:Show(targetname)
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")
 				if self.Options.CorruptingCrashArrow then
 					DBM.Arrow:ShowRunAway(x, y, 10, 5)
 				end
@@ -130,11 +139,12 @@ end
 function mod:OnCombatStart(delay)
 	timerFlamesOrders:Start(5-delay)
 	timerWorshipCD:Start(10-delay)
+	sndWOP:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\findmc.mp3")
 	table.wipe(worshipTargets)
 	table.wipe(creatureIcons)
 	prewarned_Phase2 = false
 	firstFury = false
-	worshipIcon = 8
+	worshipIcon = 7
 	worshipCooldown = 20.5
 	shadowOrdersCD = 15
 	creatureIcon = 8
@@ -177,9 +187,10 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif args:IsSpellID(81572, 93218, 93219, 93220) then
 		warnEmpoweredShadows:Show()
 		specWarnEmpoweredShadows:Show()
+		if self:IsDifficulty("heroic10", "heroic25") then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\shadow3ae.mp3")
+		end
 		timerEmpoweredShadows:Start()
-	elseif args:IsSpellID(82518, 93154, 93155, 93156) then
-		specwarnFury:Show(args.destName)
 	end
 end
 
@@ -196,9 +207,16 @@ function mod:SPELL_CAST_START(args)
 		warnAdherent:Show()
 		timerAdherent:Start()
 		timerFesterBlood:Start()
+		if not mod:IsHealer() then
+			sndWOP:Schedule(43, "Interface\\AddOns\\DBM-Core\\extrasounds\\killslime.mp3")
+		end
 	elseif args:IsSpellID(82524) then
 		warnFury:Show()
 		timerFuryCD:Start()
+		if mod:IsTank() or mod:IsHealer() then
+			specwarnFury:Show(args.destName)
+			sndWOP:Schedule(42, "Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\furysoon.mp3")
+		end		
 		if not firstFury then--85% fury of chogal, it resets cd on worship and changes cd to 36
 			firstFury = true
 			worshipCooldown = 36
@@ -217,7 +235,7 @@ function mod:SPELL_CAST_START(args)
 			DBM.BossHealth:AddBoss(args.sourceGUID, args.sourceName)--And add if not.
 		end
 		if args.sourceGUID == UnitGUID("target") then--Only show warning for your own target.
-			specWarnDepravity:Show(args.sourceName)
+			specWarnDepravity:Show()
 			if self:IsDifficulty("normal10", "heroic10") then
 				timerDepravityCD:Start()--every 12 seconds on 10 man from their 1 adherent, can be solo interrupted.
 			else
@@ -254,6 +272,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 		warnPhase2:Show()
 		timerAdherent:Cancel()
 		timerWorshipCD:Cancel()
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\findmc.mp3")
 		timerFesterBlood:Cancel()
 		timerFlamesOrders:Cancel()
 		timerShadowsOrders:Cancel()
@@ -261,6 +280,8 @@ function mod:SPELL_CAST_SUCCESS(args)
 		if self:IsDifficulty("heroic10", "heroic25") then
 			warnShadowOrders:Show()--No reason to do this warning on normal, nothing spawns so nothing you can do about it.
 			timerEmpoweredShadowsCD:Start()--Time til he actually absorbs elemental and gains it's effects
+			sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\killshaele.mp3")
+			sndWOP:Schedule(18, "Interface\\AddOns\\DBM-Core\\extrasounds\\aesoon.mp3")
 			timerFlamesOrders:Start()--always 25 seconds after shadows orders, regardless of phase.
 		else
 			timerEmpoweredShadowsCD:Start(10.8)--Half the time on normal since you don't actually have to kill elementals plus the only thing worth showing on normal.
@@ -269,6 +290,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 		if self:IsDifficulty("heroic10", "heroic25") then
 			warnFlameOrders:Show()--No reason to do this warning on normal, nothing spawns so nothing you can do about it.
 			timerFlamingDestructionCD:Start()--Time til he actually absorbs elemental and gains it's effects
+			sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\killfireele.mp3")
 			timerShadowsOrders:Start(shadowOrdersCD)--15 seconds after a flame order above 85%, 25 seconds after a flame orders below 85%
 		else
 			timerFlamingDestructionCD:Start(10.8)--Half the time on normal since you don't actually have to kill elementals plus the only thing worth showing on normal.
@@ -281,9 +303,10 @@ function mod:SPELL_CAST_SUCCESS(args)
 	end
 end
 
-function mod:SPELL_DAMAGE(sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId)
+function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
 	if (spellId == 81538 or spellId == 93212 or spellId == 93213 or spellId == 93214) and destGUID == UnitGUID("player") and self:AntiSpam(3, 1) then
 		specWarnBlaze:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")
 	end
 end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE
@@ -305,6 +328,7 @@ function mod:UNIT_AURA(uId)
 	if UnitDebuff("player", Corruption) and self:AntiSpam(7, 2) then
 		specWarnSickness:Show()
 		timerSickness:Start()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runout.mp3")
 		if self.Options.RangeFrame and not DBM.RangeCheck:IsShown() then
 			DBM.RangeCheck:Show(5)
 		end

@@ -3,7 +3,6 @@ local L
 --------------------------
 --  Halfus Wyrmbreaker  --
 --------------------------
---L = DBM:GetModLocalization(156)
 L = DBM:GetModLocalization("HalfusWyrmbreaker")
 
 L:SetGeneralLocalization({
@@ -11,13 +10,13 @@ L:SetGeneralLocalization({
 })
 
 L:SetOptionLocalization({
+	SoundWOP = "Play Extra Warning Sound",
 	ShowDrakeHealth		= "Show the health of released drakes\n(Requires Boss Health enabled)"
 })
 
 ---------------------------
 --  Valiona & Theralion  --
 ---------------------------
---L = DBM:GetModLocalization(157)
 L = DBM:GetModLocalization("ValionaTheralion")
 
 L:SetGeneralLocalization({
@@ -25,6 +24,7 @@ L:SetGeneralLocalization({
 })
 
 L:SetOptionLocalization({
+	SoundWOP = "Play Extra Warning Sound",
 	TBwarnWhileBlackout		= "Show $spell:92898 warning when $spell:86788 active",
 	TwilightBlastArrow		= "Show DBM arrow when $spell:92898 is near you",
 	RangeFrame				= "Show range frame (10)",
@@ -41,7 +41,6 @@ L:SetMiscLocalization({
 ----------------------------------
 --  Twilight Ascendant Council  --
 ----------------------------------
---L = DBM:GetModLocalization(158)
 L = DBM:GetModLocalization("AscendantCouncil")
 
 L:SetGeneralLocalization({
@@ -59,6 +58,7 @@ L:SetTimerLocalization({
 })
 
 L:SetOptionLocalization({
+	SoundWOP = "Play Extra Warning Sound",
 	specWarnBossLow			= "Show special warning when Bosses are below 30% HP",
 	SpecWarnGrounded		= "Show special warning when you are missing $spell:83581 debuff\n(~10sec before cast)",
 	SpecWarnSearingWinds	= "Show special warning when you are missing $spell:83500 debuff\n(~10sec before cast)",
@@ -93,7 +93,6 @@ L:SetMiscLocalization({
 ----------------
 --  Cho'gall  --
 ----------------
---L = DBM:GetModLocalization(167)
 L = DBM:GetModLocalization("Chogall")
 
 L:SetGeneralLocalization({
@@ -101,10 +100,12 @@ L:SetGeneralLocalization({
 })
 
 L:SetOptionLocalization({
+	SoundWOP = "Play Extra Warning Sound",
 	CorruptingCrashArrow	= "Show DBM arrow when $spell:93178 is near you",
 	InfoFrame				= "Show info frame for $spell:81701",
 	RangeFrame				= "Show range frame (5) for $spell:82235",
 	SetIconOnWorship		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(91317),
+	SetIconOnCrash		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(93179),
 	SetIconOnCreature		= "Set icons on Darkened Creations"
 })
 
@@ -115,7 +116,6 @@ L:SetMiscLocalization({
 ----------------
 --  Sinestra  --
 ----------------
---L = DBM:GetModLocalization(168)
 L = DBM:GetModLocalization("Sinestra")
 
 L:SetGeneralLocalization({
@@ -123,17 +123,20 @@ L:SetGeneralLocalization({
 })
 
 L:SetWarningLocalization({
+	WarnFlameBreath		= "Flame Breath (%d)",
 	WarnDragon			= "Twilight Whelp Spawned",
 	WarnOrbSoon			= "Orbs in %d sec!",
 	SpecWarnOrbs		= "Orbs coming! Watch Out!",
 	warnWrackJump		= "%s jumped to >%s<",
 	warnAggro			= "Players with Aggro (Orbs candidates): >%s< ",
 	SpecWarnAggroOnYou	= "You have Aggro! Watch Orbs!",
+	SpecWarnDispel		= "%d sec elapsed since last Wrack - Dispel Now!",
 	SpecWarnEggWeaken	= "Twilight Carapace dissipated - Dps EGG Now!",
 	SpecWarnEggShield	= "Twilight Capapace Regenerated!"
 })
 
 L:SetTimerLocalization({
+	TimerFlameBreath			= "Next Flame Breath (%d)",
 	TimerDragon			= "Next Twilight Whelps",
 	TimerEggWeakening	= "Twilight Carapace dissipates",
 	TimerEggWeaken		= "Twilight Capapace Regeneration",
@@ -141,14 +144,22 @@ L:SetTimerLocalization({
 })
 
 L:SetOptionLocalization({
+	SoundWOP = "Play Extra Warning Sound",
+	SoundDIS = "Play Warning Sound to dispel $spell:92955",
+	SoundPAL1 = "Play Warning Sound when the first $spell:92955 player need $spell:6940 during odd turn",
+	SoundPAL2 = "Play Warning Sound when the first $spell:92955 player need $spell:6940 during even turn",
+	SoundMAura = "Play Warning Sound for $spell:31821 when the third $spell:92944 is coming",
+	WarnFlameBreath		= "Show warning for $spell:92944",
 	WarnDragon			= "Show warning when Twilight Whelp Spawns",
 	WarnOrbSoon			= "Show pre-warning for Orbs (Before 5s, Every 1s)\n(Expected warning. may not be accurate. Can be spammy.)",
 	warnWrackJump		= "Announce $spell:92955 jump targets",
 	warnAggro			= "Announce players who have Aggro when Orbs spawn (Can be target of Orbs)",
 	SpecWarnAggroOnYou	= "Show special warning if you have Aggro when Orbs spawn\n(Can be target of Orbs)",
 	SpecWarnOrbs		= "Show special warning when Orbs spawn (Expected warning)",
+	SpecWarnDispel		= "Show special warning to dispel $spell:92955\n(after certain time elapsed from casted/jumped)",
 	SpecWarnEggWeaken	= "Show special warning when $spell:87654 dissipates",
 	SpecWarnEggShield	= "Show special warning when $spell:87654 regenerated",
+	TimerFlameBreath			= "Show timer for $spell:92944",
 	TimerDragon			= "Show timer for new Twilight Whelp",
 	TimerEggWeakening	= "Show timer for when $spell:87654 dissipates",
 	TimerEggWeaken		= "Show timer for $spell:87654 regeneration",
@@ -164,9 +175,9 @@ L:SetMiscLocalization({
 	HasAggro			= "Has Aggro"
 })
 
--------------------------------------
+--------------------------
 --  The Bastion of Twilight Trash  --
--------------------------------------
+--------------------------
 L = DBM:GetModLocalization("BoTrash")
 
 L:SetGeneralLocalization({

@@ -1,7 +1,4 @@
-﻿-- Simplified Chinese by Diablohu(diablohudream@gmail.com)
--- Last update: 2/25/2012
-
-if GetLocale() ~= "zhCN" then return end
+﻿if GetLocale() ~= "zhCN" then return end
 
 local L
 
@@ -12,7 +9,7 @@ local L
 L = DBM:GetModLocalization("Argaloth")
 
 L:SetGeneralLocalization({
-	name = "阿尔加洛斯"
+	name = "深渊领主阿尔加洛斯"
 })
 
 L:SetOptionLocalization({
@@ -30,12 +27,9 @@ L= DBM:GetModLocalization(140)
 L= DBM:GetModLocalization(339)
 
 L:SetTimerLocalization({
-	TimerFirstSpecial		= "第一次特殊技能"
+	TimerFirstSpecial		= "第一次特别技能"
 })
 
 L:SetOptionLocalization({
-	TimerFirstSpecial		= "计时条：$spell:105738后的第一次特殊技能\n（第一次特殊技能是随机的，$spell:105067或$spell:104936）"
-})
-
-L:SetMiscLocalization({
+	TimerFirstSpecial		= "$spell:105738施放后为第一次特别技能显示计时条"
 })

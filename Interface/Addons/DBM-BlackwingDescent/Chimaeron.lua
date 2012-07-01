@@ -42,12 +42,15 @@ local specWarnDoubleAttack	= mod:NewSpecialWarningSpell(88826, mod:IsTank())
 local timerBreak			= mod:NewTargetTimer(60, 82881)
 local timerBreakCD			= mod:NewNextTimer(15, 82881)--Also double attack CD
 local timerMassacre			= mod:NewCastTimer(4, 82848)
+local timerDoubleAttack			= mod:NewCastTimer(4, 88826)
 local timerMassacreNext		= mod:NewNextTimer(30, 82848)
 local timerCausticSlime		= mod:NewNextTimer(19, 88915)--always 19 seconds after massacre.
 local timerFailure			= mod:NewBuffActiveTimer(26, 88853)
 local timerFailureNext		= mod:NewNextTimer(25, 88853)
 
 local berserkTimer			= mod:NewBerserkTimer(450)--Heroic
+
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
 mod:AddBoolOption("RangeFrame")
 mod:AddBoolOption("SetIconOnSlime")
@@ -129,10 +132,15 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif args:IsSpellID(88826) then
 		warnDoubleAttack:Show()
 		specWarnDoubleAttack:Show()
+		if mod:IsTank() or mod:IsHealer() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\doubleat.mp3")
+		end
+		timerDoubleAttack:Start()
 	elseif args:IsSpellID(88853) then
 		botOffline = true
 		massacreCast = 0
 		specWarnFailure:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\selffight.mp3")
 		timerFailure:Start()
 	elseif not botOffline and args:IsSpellID(82935, 88915, 88916, 88917) and args:IsDestTypePlayer() then
 		slimeTargets[#slimeTargets + 1] = args.destName
@@ -169,9 +177,14 @@ function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(82848) then
 		warnMassacre:Show()
 		specWarnMassacre:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\bigkill.mp3")
 		timerMassacre:Start()
 		timerMassacreNext:Start()
 		timerCausticSlime:Start()--Always 19 seconds after massacre.
+		sndWOP:Schedule(15, "Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\causticsoon.mp3")
+		sndWOP:Schedule(16, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Schedule(17, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Schedule(18, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		timerBreakCD:Start(14)--Massacre resets break timer, although  usualy the CDs line up anyways, they won't for 3rd break.
 		massacreCast = massacreCast + 1
 		self:Schedule(5, failureCheck)
@@ -185,6 +198,10 @@ function mod:SPELL_CAST_SUCCESS(args)
 		phase2 = true
 		warnPhase2:Show()
 		timerCausticSlime:Cancel()
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\causticsoon.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		timerMassacreNext:Cancel()
 		timerFailureNext:Cancel()
 	end

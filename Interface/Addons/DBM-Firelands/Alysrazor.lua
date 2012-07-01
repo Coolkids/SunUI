@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(194, "DBM-Firelands", nil, 78)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7513 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7414 $"):sub(12, -3))
 mod:SetCreatureID(52530)
 mod:SetModelID(38446)
 mod:SetZone()
@@ -18,6 +18,8 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_REFRESH",
 	"SPELL_AURA_REMOVED",
 	"SPELL_CAST_SUCCESS",
+	"SPELL_DAMAGE",
+	"SPELL_MISSED",
 	"RAID_BOSS_EMOTE",
 	"CHAT_MSG_MONSTER_YELL"
 )
@@ -32,30 +34,34 @@ local warnFirestorm		= mod:NewSpellAnnounce(100744, 4)
 local warnCataclysm		= mod:NewCastAnnounce(102111, 3)
 local warnPhase			= mod:NewAnnounce("WarnPhase", 3, "Interface\\Icons\\Spell_Nature_WispSplode")
 local warnNewInitiate	= mod:NewAnnounce("WarnNewInitiate", 3, 61131)
+local warnBlazingPower	= mod:NewStackAnnounce(99461, 3)
 
 local specWarnFirestorm			= mod:NewSpecialWarningSpell(100744, nil, nil, nil, true)
 local specWarnFieroblast		= mod:NewSpecialWarningInterrupt(101223)
 local specWarnGushingWoundSelf	= mod:NewSpecialWarningYou(99308, false)
-local specWarnTantrum			= mod:NewSpecialWarningSpell(99362, mod:IsTank())
+local specWarnTantrum			= mod:NewSpecialWarningSpell(99362, mod:IsTank() or mod:IsHealer())
 local specWarnGushingWoundOther	= mod:NewSpecialWarningTarget(99308, false)
 
 local timerCombatStart		= mod:NewTimer(35.5, "TimerCombatStart", 2457)
 local timerFieryVortexCD	= mod:NewNextTimer(179, 99794)
 local timerMoltingCD		= mod:NewNextTimer(60, 99464)
-local timerCataclysm		= mod:NewCastTimer(5, 102111)--Heroic
+local timerCataclysm		= mod:NewCastTimer(5, 102111, nil, false)--Heroic
 local timerCataclysmCD		= mod:NewCDTimer(31, 102111)--Heroic
 local timerFirestormCD		= mod:NewCDTimer(83, 100744)--Heroic
 local timerPhaseChange		= mod:NewTimer(33.5, "TimerPhaseChange", 99816)
 local timerHatchEggs		= mod:NewTimer(50, "TimerHatchEggs", 42471)
 local timerNextInitiate		= mod:NewTimer(32, "timerNextInitiate", 61131)
---local timerWingsofFlame		= mod:NewBuffFadesTimer(30, 98619)
-local timerTantrum			= mod:NewBuffActiveTimer(10, 99362, nil, mod:IsTank())
-local timerSatiated			= mod:NewBuffActiveTimer(15, 100852, nil, mod:IsTank())
+local timerBlazingPower		= mod:NewBuffActiveTimer(40, 99461)
+local timerWingsofFlame		= mod:NewBuffFadesTimer(30, 98619)
+local timerTantrum			= mod:NewBuffActiveTimer(10, 99362, nil, false)
+local timerSatiated			= mod:NewBuffActiveTimer(15, 100852, nil, false)
 local timerBlazingClaw		= mod:NewTargetTimer(15, 101731, nil, false)
 
 local countdownFirestorm	= mod:NewCountdown(83, 100744)
 
 mod:AddBoolOption("InfoFrame", false)--Why is this useful?
+
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
 local initiatesSpawned = 0
 local initiate = EJ_GetSectionInfo(2834)
@@ -79,8 +85,8 @@ function mod:OnCombatStart(delay)
 	if self:IsDifficulty("heroic10", "heroic25") then
 		timerFieryVortexCD:Start(243-delay)--Probably not right.
 		timerCataclysmCD:Start(32-delay)
-		timerHatchEggs:Start(42-delay)
 		timerFirestormCD:Start(94-delay)
+		sndWOP:Schedule(84-delay, "Interface\\AddOns\\DBM-Core\\extrasounds\\firestormsoon.mp3")
 		countdownFirestorm:Start(94-delay)--Perhaps some tuning.
 		warnFirestormSoon:Schedule(84-delay)
 		timerHatchEggs:Start(37-delay)
@@ -108,7 +114,8 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(99362) and ((args.sourceGUID == UnitGUID("target") and self:IsTank()) or not self:IsTank() and (args.sourceGUID == UnitGUID("targettarget") or args.sourceGUID == UnitGUID("focustargettarget"))) then--Only give warning if it's mob you're targeting and you're a tank, or you're targeting the tank it's on and he's targeting the bird.
 		specWarnTantrum:Show()
-		timerTantrum:Show()
+		timerTantrum:Start()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\chickenfrenzy.mp3")
 	elseif args:IsSpellID(99359, 100850, 100851, 100852) and ((args.sourceGUID == UnitGUID("target") and self:IsTank()) or not self:IsTank() and (args.sourceGUID == UnitGUID("targettarget") or args.sourceGUID == UnitGUID("focustargettarget"))) then--^^ Same as above only with diff spell
 		if self:IsDifficulty("heroic10", "heroic25") then
 			timerSatiated:Start(10)
@@ -122,28 +129,26 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif args:IsSpellID(99432) then--Burnout applied (0 energy)
 		warnPhase:Show(3)
---	elseif args:IsSpellID(98619) and args:IsPlayer() then
---		timerWingsofFlame:Start()
+	elseif args:IsSpellID(98619) and args:IsPlayer() then
+		timerWingsofFlame:Start()
+	elseif args:IsSpellID(99461) and args:IsPlayer() then
+		warnBlazingPower:Show(args.destName, args.amount or 1)
+		timerBlazingPower:Start()
 	elseif args:IsSpellID(99844, 101729, 101730, 101731) and args:IsDestTypePlayer() then
 		timerBlazingClaw:Start(args.destName)
 	end
 end
-
-function mod:SPELL_AURA_APPLIED_DOSE(args)
-	if args:IsSpellID(99844, 101729, 101730, 101731) and args:IsDestTypePlayer() then
-		timerBlazingClaw:Start(args.destName)
-	end
-end
+mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
 function mod:SPELL_AURA_REFRESH(args)
-	if args:IsSpellID(99359, 100850, 100851, 100852) and ((args.sourceGUID == UnitGUID("target") and self:IsTank()) or not self:IsTank() and args.sourceGUID == UnitGUID("targettarget")) then--^^ Same as above only with diff spell
+	if args:IsSpellID(98619) and args:IsPlayer() then
+		timerWingsofFlame:Start()
+	elseif args:IsSpellID(99359, 100850, 100851, 100852) and ((args.sourceGUID == UnitGUID("target") and self:IsTank()) or not self:IsTank() and args.sourceGUID == UnitGUID("targettarget")) then--^^ Same as above only with diff spell
 		if self:IsDifficulty("heroic10", "heroic25") then
 			timerSatiated:Start(10)
 		else
 			timerSatiated:Start()
 		end
---	elseif args:IsSpellID(98619) and args:IsPlayer() then
---		timerWingsofFlame:Start()
 	end
 end
 
@@ -169,11 +174,20 @@ end
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(101223, 101294, 101295, 101296) then
 		if args.sourceGUID == UnitGUID("target") then
-			specWarnFieroblast:Show(args.sourceName)
+			specWarnFieroblast:Show()
 		end
 	elseif args:IsSpellID(102111, 100761) then
 		cataCast = cataCast + 1
 		warnCataclysm:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\catalysm.mp3")
+		sndWOP:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Schedule(9, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		if cataCast < 5 then
+			if not self:IsTank() and not self:IsHealer() then			
+				sndWOP:Schedule(10, "Interface\\AddOns\\DBM-Core\\extrasounds\\killmeteor.mp3")
+			end
+		end
 		timerCataclysm:Start()
 		if cataCast == 1 or cataCast == 3 then--Cataclysm is cast 5 times, but there is a firestorm in middle them affecting CD on 2nd and 4th, so you only want to start 30 sec bar after first and third
 			timerCataclysmCD:Start()
@@ -181,9 +195,14 @@ function mod:SPELL_CAST_START(args)
 	elseif args:IsSpellID(100744) then
 		warnFirestorm:Show()
 		specWarnFirestorm:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\firestorm.mp3")
+		sndWOP:Schedule(2, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Schedule(3, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Schedule(4, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		if cataCast < 3 then--Firestorm is only cast 2 times per phase. This essencially makes cd bar only start once.
 			timerFirestormCD:Start()
 			countdownFirestorm:Start(83)--Perhaps some tuning.
+			sndWOP:Schedule(73, "Interface\\AddOns\\DBM-Core\\extrasounds\\firestormsoon.mp3")
 			warnFirestormSoon:Cancel()--Just in case it's wrong. WoL may not be perfect, i'll have full transcriptor logs soon.
 			warnFirestormSoon:Schedule(73)
 		end
@@ -202,10 +221,23 @@ function mod:SPELL_CAST_SUCCESS(args)
 	end
 end
 
+function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
+	if (spellId == 99336 or spellId == 100726) and self:AntiSpam(3) and destGUID == UnitGUID("player") then
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")
+	end
+end
+mod.SPELL_MISSED = mod.SPELL_DAMAGE
+
 function mod:CHAT_MSG_MONSTER_YELL(msg, mob)
 	if not self:IsInCombat() then return end
 	if msg == L.YellPhase2 or msg:find(L.YellPhase2) then--Basically the pre warn to feiry vortex
 		warnPhase:Show(2)
+		sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\ptwo.mp3")
+		sndWOP:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+		sndWOP:Schedule(9, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndWOP:Schedule(10, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Schedule(11, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Schedule(12, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		timerMoltingCD:Cancel()
 		timerPhaseChange:Start(33, 3)
 		initiatesSpawned = 0
@@ -253,9 +285,10 @@ function mod:RAID_BOSS_EMOTE(msg)
 			timerFieryVortexCD:Start(225)--Probably not right.
 			timerHatchEggs:Start(22)
 			timerCataclysmCD:Start(18)
-			timerFirestormCD:Start(70)--Needs verification.
+			timerFirestormCD:Start(70)
 			countdownFirestorm:Start(70)--Perhaps some tuning.
-			warnFirestormSoon:Schedule(60)--Needs verification.
+			sndWOP:Schedule(60, "Interface\\AddOns\\DBM-Core\\extrasounds\\firestormsoon.mp3")
+			warnFirestormSoon:Schedule(60)
 			cataCast = 0
 			clawCast = 0
 		else

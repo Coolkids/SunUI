@@ -2,7 +2,7 @@
 local mod	= DBM:NewMod("HalfusWyrmbreaker", "DBM-BastionTwilight")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7473 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7445 $"):sub(12, -3))
 mod:SetCreatureID(44600)
 mod:SetModelID(34816)
 mod:SetZone()
@@ -24,6 +24,7 @@ local warnBreath			= mod:NewSpellAnnounce(83707, 3)
 local warnFuriousRoar		= mod:NewSpellAnnounce(83710, 3)
 local warnVengeance			= mod:NewSpellAnnounce(87683, 3)
 local warnShadowNova		= mod:NewSpellAnnounce(83703, 4)
+local warnBarrage			= mod:NewSpellAnnounce(83706, 3)
 local warnParalysis			= mod:NewSpellAnnounce(84030, 2)
 local warnMalevolentStrike	= mod:NewStackAnnounce(83908, 2, nil, mod:IsTank() or mod:IsHealer())
 
@@ -31,6 +32,7 @@ local specWarnShadowNova	= mod:NewSpecialWarningInterrupt(83703, false)
 local specWarnMalevolent	= mod:NewSpecialWarningStack(83908, nil, 8)
 
 local timerFuriousRoar		= mod:NewCDTimer(30, 83710)
+local timerBarrageCD		= mod:NewCDTimer(25, 83706)
 local timerBreathCD			= mod:NewCDTimer(20, 83707)--every 20-25 seconds.
 local timerParalysis		= mod:NewBuffActiveTimer(12, 84030)
 local timerParalysisCD		= mod:NewCDTimer(35, 84030)
@@ -38,6 +40,8 @@ local timerNovaCD			= mod:NewCDTimer(7.2, 86168)--7.2 is actually exact next tim
 local timerMalevolentStrike	= mod:NewTargetTimer(30, 83908, nil, mod:IsTank() or mod:IsHealer())
 
 local berserkTimer			= mod:NewBerserkTimer(360)
+
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
 mod:AddBoolOption("ShowDrakeHealth", true)
 
@@ -70,8 +74,11 @@ function mod:SPELL_AURA_APPLIED_DOSE(args)
 		if args.amount % 4 == 0 or args.amount >= 10 then		-- warn every 4th stack and every stack if 10 or more
 			warnMalevolentStrike:Show(args.destName, args.amount)
 		end
-		if args:IsPlayer() and (args.amount or 1) >= 8 then
-			specWarnMalevolent:Show(args.amount)
+		if args.amount % 2 == 0 and (args.amount or 1) >= 8 then
+			if mod:IsTank() or mod:IsHealer() then
+				specWarnMalevolent:Show(args.amount)
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\dshigh.mp3")
+			end
 		end
 	end
 end
@@ -80,14 +87,16 @@ function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(83710, 86169, 86170, 86171) and self:AntiSpam(6) then
 		warnFuriousRoar:Show()
 		timerFuriousRoar:Cancel()--We Cancel any scheduled roar timers before doing anything else.
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\stunsoon.mp3")
 		timerFuriousRoar:Start()--And start a fresh one.
+		sndWOP:Schedule(27, "Interface\\AddOns\\DBM-Core\\extrasounds\\stunsoon.mp3")
 		timerFuriousRoar:Schedule(30)--If it comes off CD while he's stunned by paralysis, he no longer waits to casts it after stun, it now consumes his CD as if it was cast on time. This is why we schedule this timer. So we get a timer for next roar after a stun.
-	elseif args:IsSpellID(83707) then
+	elseif args:IsSpellID(83707, 86163, 86164, 86165) then
 		warnBreath:Show()
 		timerBreathCD:Start()
 	elseif args:IsSpellID(83703, 86166, 86167, 86168) then
 		warnShadowNova:Show()
-		specWarnShadowNova:Show(args.sourceName)
+		specWarnShadowNova:Show()
 		timerNovaCD:Start()
 	end
 end
@@ -95,6 +104,10 @@ end
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(83612) then
 		DBM.BossHealth:AddBoss(self:GetCIDFromGUID(args.sourceGUID), args.sourceName)
+	elseif args:IsSpellID(83706) then
+		warnBarrage:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\firecircle.mp3")
+		timerBarrageCD:Start()
 	end
 end
 

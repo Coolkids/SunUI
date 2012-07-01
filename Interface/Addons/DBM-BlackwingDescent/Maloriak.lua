@@ -2,7 +2,7 @@
 local mod	= DBM:NewMod("Maloriak", "DBM-BlackwingDescent")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7473 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7448 $"):sub(12, -3))
 mod:SetCreatureID(41378)
 mod:SetModelID(33186)
 mod:SetZone()
@@ -41,6 +41,7 @@ local warnMagmaJets				= mod:NewSpellAnnounce(78194, 4, nil, mod:IsTank())--4.0.
 local warnEngulfingDarkness		= mod:NewSpellAnnounce(92754, 4, nil, mod:IsHealer() or mod:IsTank())--Heroic Ability
 local warnPhase2Soon			= mod:NewPrePhaseAnnounce(2, 3)
 local warnPhase2				= mod:NewPhaseAnnounce(2, 4)
+local warnAcidNova				= mod:NewSpellAnnounce(93012, 4, nil, mod:IsHealer())
  
 local timerPhase				= mod:NewTimer(49, "TimerPhase", 89250)--Just some random cauldron icon not actual spellid
 local timerBitingChill			= mod:NewBuffFadesTimer(10, 77760)
@@ -48,26 +49,33 @@ local timerFlashFreeze			= mod:NewCDTimer(14, 77699)--Varies on other abilities 
 local timerAddsCD				= mod:NewCDTimer(15, 77569, nil, not mod:IsHealer())--Varies on other abilities CDs
 local timerArcaneStormCD		= mod:NewCDTimer(14, 77896)--Varies on other abilities CDs
 local timerConsumingFlames		= mod:NewTargetTimer(10, 77786, nil, mod:IsHealer())
-local timerScorchingBlast		= mod:NewCDTimer(10, 77679)--Varies on other abilities CDs
+local timerScorchingBlast		= mod:NewCDTimer(17, 77679)--Varies on other abilities CDs
 local timerDebilitatingSlime	= mod:NewBuffActiveTimer(15, 77615)
 local timerMagmaJetsCD			= mod:NewNextTimer(10, 78194)
-local timerEngulfingDarknessCD	= mod:NewNextTimer(12, 92754, nil, mod:IsHealer() or mod:IsTank())--Heroic Ability
+--local timerEngulfingDarknessCD	= mod:NewNextTimer(12, 92754, nil, mod:IsHealer() or mod:IsTank())--Heroic Ability
+local timerEngulfingDarkness	= mod:NewCastTimer(8, 92754, nil, mod:IsHealer() or mod:IsTank())
+local timerAbsoluteZeroCD	= mod:NewCDTimer(8, 78223)
+local timerAcidNovaCD	= mod:NewCDTimer(30, 93012, nil, mod:IsHealer())
+local timerAcidNova	= mod:NewCastTimer(10, 93012, nil, mod:IsHealer())
 
 local specWarnBitingChill		= mod:NewSpecialWarningYou(77760)
 local specWarnConsumingFlames	= mod:NewSpecialWarningYou(77786)
 local specWarnSludge			= mod:NewSpecialWarningMove(92987)
-local specWarnArcaneStorm		= mod:NewSpecialWarningInterrupt(77896, false)
+local specWarnArcaneStorm		= mod:NewSpecialWarningInterrupt(77896)
 local specWarnMagmaJets			= mod:NewSpecialWarningMove(78194, mod:IsTank())
-local specWarnEngulfingDarkness	= mod:NewSpecialWarningSpell(92754, mod:IsHealer() or mod:IsTank())--Heroic Ability
+--local specWarnEngulfingDarkness	= mod:NewSpecialWarningSpell(92754, mod:IsTank())--Heroic Ability
 local specWarnFlashFreeze		= mod:NewSpecialWarningTarget(77699, mod:IsRanged())--On Heroic it has a lot more health.
 local specWarnRemedy			= mod:NewSpecialWarningDispel(77912, isDispeller)
 local specWarnAdds				= mod:NewSpecialWarningSpell(77569, false)
+local specWarnAbsoluteZero		= mod:NewSpecialWarningSpell(78223)
 
 local berserkTimer				= mod:NewBerserkTimer(420)
 
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
+
 mod:AddBoolOption("FlashFreezeIcon")
-mod:AddBoolOption("BitingChillIcon", false)
-mod:AddBoolOption("ConsumingFlamesIcon", false)
+mod:AddBoolOption("BitingChillIcon")
+mod:AddBoolOption("ConsumingFlamesIcon")
 mod:AddBoolOption("RangeFrame")
 mod:AddBoolOption("SetTextures", true)--Just about ALL friendly spells cover dark sludge and make it very hard to see it.
 
@@ -156,6 +164,9 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif args:IsSpellID(77912, 92965, 92966, 92967) and not args:IsDestTypePlayer() then
 		warnRemedy:Show()
 		specWarnRemedy:Show(args.destName)
+		if isDispeller then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\dispelnow.mp3")
+		end
 	elseif args:IsSpellID(77786, 92971, 92972, 92973) then
 		warnConsumingFlames:Show(args.destName)
 		timerConsumingFlames:Start(args.destName)
@@ -168,8 +179,17 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif args:IsSpellID(77615) and self:AntiSpam(3, 1) then
 		warnDebilitatingSlime:Show()
 		timerDebilitatingSlime:Start()
-	elseif args:IsSpellID(92930, 92986, 92987, 92988) and args:IsPlayer() and self:AntiSpam(3, 2) then
+	elseif args:IsSpellID(92930, 92986, 92987, 92988) and self:AntiSpam(3, 2) and args:IsPlayer() then
 		specWarnSludge:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")
+	elseif args:IsSpellID(92754) then
+		if (mod:IsTank() and self:GetUnitCreatureId("target") == 41378) or mod:IsHealer() then
+			warnEngulfingDarkness:Show()
+			timerEngulfingDarkness:Start()
+			sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		end		
 	end
 end
 
@@ -200,23 +220,21 @@ function mod:SPELL_CAST_START(args)
 	elseif args:IsSpellID(77991) then
 		warnPhase2:Show()
 		timerMagmaJetsCD:Start()
+		timerAcidNovaCD:Start(14)
+		if mod:IsHealer() then
+			sndWOP:Schedule(12, "Interface\\AddOns\\DBM-Core\\extrasounds\\aesoon.mp3")
+		end
 		timerFlashFreeze:Cancel()
 		timerScorchingBlast:Cancel()
 		timerAddsCD:Cancel()
-		timerEngulfingDarknessCD:Cancel()
+--		timerEngulfingDarknessCD:Cancel()
 		if self.Options.SetTextures and not GetCVarBool("projectedTextures") and CVAR then
 			SetCVar("projectedTextures", 1)
-		end
-	elseif args:IsSpellID(92754) then
-		warnEngulfingDarkness:Show()
-		timerEngulfingDarknessCD:Start()
-		if self:GetUnitCreatureId("target") == 41378 or self:GetBossTarget(33186) == UnitName("target") then--First check is for tank (tank is targeting boss), second check is for HEALER< IE, the HEALER is targeting the bosses TARGET
-			specWarnEngulfingDarkness:Show()
 		end
 	elseif args:IsSpellID(77896) then
 		warnArcaneStorm:Show()
 		timerArcaneStormCD:Start()
-		specWarnArcaneStorm:Show(args.sourceName)
+		specWarnArcaneStorm:Show()
 	elseif args:IsSpellID(78194) then
 		warnMagmaJets:Show()
 		if self:IsDifficulty("heroic10", "heroic25") then
@@ -233,7 +251,17 @@ end
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(77679, 92968, 92969, 92970) then
 		warnScorchingBlast:Show()
-		timerScorchingBlast:Start()
+		timerScorchingBlast:Start(10)
+	elseif args:IsSpellID(78223) then
+		specWarnAbsoluteZero:Show()
+		timerAbsoluteZeroCD:Start()
+	elseif args:IsSpellID(78225, 93011, 93012, 93013) then
+		warnAcidNova:Show()
+		timerAcidNova:Start()
+		timerAcidNovaCD:Start()
+		if mod:IsHealer() then
+			sndWOP:Schedule(27, "Interface\\AddOns\\DBM-Core\\extrasounds\\aesoon.mp3")
+		end
 	end
 end
 
@@ -251,7 +279,7 @@ function mod:RAID_BOSS_EMOTE(msg)
 		timerScorchingBlast:Start(22)
 		timerPhase:Start()
 		timerFlashFreeze:Cancel()
-		timerEngulfingDarknessCD:Cancel()
+--		timerEngulfingDarknessCD:Cancel()
 		if self.Options.RangeFrame then
 			DBM.RangeCheck:Hide()
 		end
@@ -265,7 +293,7 @@ function mod:RAID_BOSS_EMOTE(msg)
 		timerArcaneStormCD:Start(19)
 		timerFlashFreeze:Start(22)
 		timerScorchingBlast:Cancel()
-		timerEngulfingDarknessCD:Cancel()
+--		timerEngulfingDarknessCD:Cancel()
 		if self.Options.RangeFrame then
 			DBM.RangeCheck:Show(6)
 		end
@@ -279,13 +307,13 @@ function mod:RAID_BOSS_EMOTE(msg)
 		timerArcaneStormCD:Start(12)--First one is always shorter in green phase then other 2.
 		timerFlashFreeze:Cancel()
 		timerScorchingBlast:Cancel()
-		timerEngulfingDarknessCD:Cancel()
+--		timerEngulfingDarknessCD:Cancel()
 		if self.Options.RangeFrame then
 			DBM.RangeCheck:Hide()
 		end
 	elseif msg == L.YellDark or msg:find(L.YellDark) then
 		warnPhase:Show(L.Dark)
-		timerEngulfingDarknessCD:Start(16.5)
+--		timerEngulfingDarknessCD:Start(16.5)
 		timerPhase:Start(100)
 		timerArcaneStormCD:Cancel()
 		timerAddsCD:Cancel()

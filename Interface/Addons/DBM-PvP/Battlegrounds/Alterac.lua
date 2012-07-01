@@ -132,7 +132,7 @@ do
 		end
 	end
 	
-	local function schedule_check(self)
+	function schedule_check(self)
 		self:Schedule(1, check_for_updates)
 	end
 

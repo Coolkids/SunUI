@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("KarshSteelbender", "DBM-Party-Cataclysm", 1)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7524 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7445 $"):sub(12, -3))
 mod:SetCreatureID(39698)
 mod:SetModelID(31710)
 mod:SetZone()
@@ -37,4 +37,5 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	end
 end
+
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED

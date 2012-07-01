@@ -2,7 +2,7 @@
 local mod	= DBM:NewMod("AscendantCouncil", "DBM-BastionTwilight")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7549 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7448 $"):sub(12, -3))
 mod:SetCreatureID(43686, 43687, 43688, 43689, 43735)
 mod:SetModelID(34822)
 mod:SetZone()
@@ -20,6 +20,8 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_REMOVED",
 	"SPELL_CAST_START",
 	"SPELL_CAST_SUCCESS",
+	"SPELL_DAMAGE",
+	"SPELL_MISSED",
 	"RAID_BOSS_EMOTE",
 	"UNIT_SPELLCAST_SUCCEEDED",
 	"UNIT_HEALTH"
@@ -116,9 +118,10 @@ local timerStaticOverloadCD	= mod:NewNextTimer(20, 92067)--Heroic Phase 1 ablity
 local timerFlameStrikeCD	= mod:NewNextTimer(20, 92212)--Heroic Phase 2 ablity
 local timerFrostBeaconCD	= mod:NewNextTimer(20, 92307)--Heroic Phase 2 ablity
 
-local soundGlaciate			= mod:NewSound(82746, nil, mod:IsTank())
-local soundLightingRod		= mod:NewSound(83099)
-local soundBeacon			= mod:NewSound(92307)
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
+--local soundGlaciate			= mod:NewSound(82746, nil, mod:IsTank())
+--local soundLightingRod		= mod:NewSound(83099)
+--local soundBeacon			= mod:NewSound(92307)
 
 mod:AddBoolOption("HealthFrame", true)
 mod:AddBoolOption("HeartIceIcon")
@@ -168,6 +171,7 @@ end
 local function checkGrounded()
 	if not UnitDebuff("player", groundedName) and not UnitIsDeadOrGhost("player") then
 		specWarnGrounded:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\findwell.mp3")
 	end
 	if mod.Options.InfoFrame and not infoFrameUpdated then
 		infoFrameUpdated = true
@@ -179,6 +183,7 @@ end
 local function checkSearingWinds()
 	if not UnitDebuff("player", searingName) and not UnitIsDeadOrGhost("player") then
 		specWarnSearingWinds:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\findwind.mp3")
 	end
 	if mod.Options.InfoFrame and not infoFrameUpdated then
 		infoFrameUpdated = true
@@ -267,6 +272,7 @@ function mod:OnCombatStart(delay)
 	timerHeartIceCD:Start(18-delay)--could be just as flakey as it is in combat though.
 	timerBurningBloodCD:Start(28-delay)--could be just as flakey as it is in combat though.
 	timerAegisFlame:Start(31-delay)
+	sndWOP:Schedule(25-delay, "Interface\\AddOns\\DBM-Core\\extrasounds\\shieldsoon.mp3")
 	if self:IsDifficulty("heroic10", "heroic25") then
 		timerGravityCoreCD:Start(25-delay)
 		timerStaticOverloadCD:Start(20-delay)
@@ -296,6 +302,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerHeartIce:Start(args.destName)
 		if args:IsPlayer() then
 			specWarnHeartIce:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\heartice.mp3")
 		end
 		if self.Options.HeartIceIcon then
 			self:SetIcon(args.destName, 6)
@@ -314,7 +321,8 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			isRod = true
 			specWarnLightningRod:Show()
-			soundLightingRod:Play()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\shockrun.mp3")
+--			soundLightingRod:Play()
 			if isBeacon then--You have lighting rod and frost beacon at same time.
 				yellScrewed:Yell()
 			else--You only have rod so do normal yell
@@ -342,6 +350,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		local shieldname = GetSpellInfo(82631)
 		warnAegisFlame:Show()
 		specWarnAegisFlame:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\killshield.mp3")
 		showShieldHealthBar(self, args.destGUID, shieldname, shieldValues[args.spellId] or 0)
 		self:Schedule(20, hideShieldHealthBar)
 --[[	elseif args:IsSpellID(83718, 92541, 92542, 92543) then--Harden Skin (doesn't work, dumb thing doesn't use absorb events it tracks as damage done to boss, even though the boss isn't taking damage, shield is.
@@ -350,6 +359,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		self:Schedule(30, hideShieldHealthBar)--]]
 	elseif args:IsSpellID(82762) and args:IsPlayer() then
 		specWarnWaterLogged:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\gofire.mp3")
 	elseif args:IsSpellID(84948, 92486, 92487, 92488) then
 		gravityCrushTargets[#gravityCrushTargets + 1] = args.destName
 		timerGravityCrushCD:Start()
@@ -365,10 +375,17 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif args:IsSpellID(92307) then
 		warnFrostBeacon:Show(args.destName)
+		timerFrostBeaconCD:Start(15)
+		sndWOP:Schedule(15, "Interface\\AddOns\\DBM-Core\\extrasounds\\iceball.mp3")
 		if args:IsPlayer() then
 			isBeacon = true
 			specWarnFrostBeacon:Show()
-			soundBeacon:Play()
+--			soundBeacon:Play()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\justrun.mp3")
+			sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\gofirecircle.mp3")
+			sndWOP:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Schedule(9, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 			if isRod then--You have lighting rod and frost beacon at same time.
 				yellScrewed:Yell()
 			else--You only have beacon so do normal yell
@@ -378,9 +395,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.FrostBeaconIcon then
 			self:SetIcon(args.destName, 3)
 		end
-		if self:AntiSpam(18, 1) then -- sometimes Frost Beacon change targets, show only new Frost orbs.
-			timerFrostBeaconCD:Start()
-		end
 	elseif args:IsSpellID(92067) then--All other spell IDs are jump spellids, do not add them in or we'll have to scan source target and filter them.
 		warnStaticOverload:Show(args.destName)
 		timerStaticOverloadCD:Start()
@@ -389,6 +403,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		if args:IsPlayer() then
 			specWarnStaticOverload:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\staticout.mp3")
 			yellStaticOverload:Yell()
 		end
 	elseif args:IsSpellID(92075) then
@@ -399,6 +414,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		if args:IsPlayer() then
 			specWarnGravityCore:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\coreout.mp3")
 			yellGravityCore:Yell()
 		end
 	end
@@ -415,7 +431,8 @@ function mod:SPELL_AURA_REFRESH(args)--We do not combine refresh with applied ca
 		if args:IsPlayer() then
 			isRod = true
 			specWarnLightningRod:Show()
-			soundLightingRod:Play()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\shockrun.mp3")
+--			soundLightingRod:Play()
 			if isBeacon then--You have lighting rod and frost beacon at same time.
 				yellScrewed:Yell()
 			else--You only have rod so do normal yell
@@ -437,6 +454,7 @@ function mod:SPELL_AURA_REFRESH(args)--We do not combine refresh with applied ca
 		end
 	elseif args:IsSpellID(82762) and args:IsPlayer() then
 		specWarnWaterLogged:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\gofire.mp3")
 	elseif args:IsSpellID(84948, 92486, 92487, 92488) then
 		gravityCrushTargets[#gravityCrushTargets + 1] = args.destName
 		timerGravityCrushCD:Start()
@@ -452,10 +470,17 @@ function mod:SPELL_AURA_REFRESH(args)--We do not combine refresh with applied ca
 		end
 	elseif args:IsSpellID(92307) then
 		warnFrostBeacon:Show(args.destName)
+		timerFrostBeaconCD:Start(15)
+		sndWOP:Schedule(15, "Interface\\AddOns\\DBM-Core\\extrasounds\\iceball.mp3")
 		if args:IsPlayer() then
 			isBeacon = true
 			specWarnFrostBeacon:Show()
-			soundBeacon:Play()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\justrun.mp3")
+			sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\gofirecircle.mp3")
+			sndWOP:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Schedule(9, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+--			soundBeacon:Play()
 			if isRod then--You have lighting rod and frost beacon at same time.
 				yellScrewed:Yell()
 			else--You only have beacon so do normal yell
@@ -473,6 +498,7 @@ function mod:SPELL_AURA_REFRESH(args)--We do not combine refresh with applied ca
 		end
 		if args:IsPlayer() then
 			specWarnStaticOverload:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\staticout.mp3")
 			yellStaticOverload:Yell()
 		end
 	elseif args:IsSpellID(92075) then
@@ -483,6 +509,7 @@ function mod:SPELL_AURA_REFRESH(args)--We do not combine refresh with applied ca
 		end
 		if args:IsPlayer() then
 			specWarnGravityCore:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\coreout.mp3")
 			yellGravityCore:Yell()
 		end
 	end
@@ -536,7 +563,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		self:Unschedule(hideShieldHealthBar)
 		hideShieldHealthBar()
 		if self:IsMelee() and (self:GetUnitCreatureId("target") == 43686 or self:GetUnitCreatureId("focus") == 43686) or not self:IsMelee() then
-			specWarnRisingFlames:Show(args.sourceName)--Only warn for melee targeting him or exclicidly put him on focus, else warn regardless if he's your target/focus or not if you aren't a melee
+			specWarnRisingFlames:Show()--Only warn for melee targeting him or exclicidly put him on focus, else warn regardless if he's your target/focus or not if you aren't a melee
 		end
 --[[	elseif args:IsSpellID(83718, 92541, 92542, 92543) then--Harden Skin Removed
 		self:Unschedule(hideShieldHealthBar)
@@ -550,11 +577,14 @@ function mod:SPELL_CAST_START(args)
 		if self:GetUnitCreatureId("target") == 43687 then--Only warn if targeting/tanking this boss.
 			warnGlaciate:Show()
 			specWarnGlaciate:Show()
-			soundGlaciate:Play()
+			if mod:IsTank() then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\boomrun.mp3")
+			end
+--			soundGlaciate:Play()
 		end
 	elseif args:IsSpellID(82752, 92509, 92510, 92511) then
 		if self:IsMelee() and (self:GetUnitCreatureId("target") == 43687 or self:GetUnitCreatureId("focus") == 43687) or not self:IsMelee() then
-			specWarnHydroLance:Show(args.sourceName)--Only warn for melee targeting him or exclicidly put him on focus, else warn regardless if he's your target/focus or not if you aren't a melee
+			specWarnHydroLance:Show()--Only warn for melee targeting him or exclicidly put him on focus, else warn regardless if he's your target/focus or not if you aren't a melee
 		end
 		timerHydroLanceCD:Show()
 	elseif args:IsSpellID(82699) then
@@ -568,7 +598,10 @@ function mod:SPELL_CAST_START(args)
 		warnHardenSkin:Show()
 		timerHardenSkinCD:Start()
 		if self:IsMelee() and (self:GetUnitCreatureId("target") == 43689 or self:GetUnitCreatureId("focus") == 43689) or not self:IsMelee() then
-			specWarnHardenedSkin:Show(args.sourceName)--Only warn for melee targeting him or exclicidly put him on focus, else warn regardless if he's your target/focus or not if you aren't a melee
+			specWarnHardenedSkin:Show()--Only warn for melee targeting him or exclicidly put him on focus, else warn regardless if he's your target/focus or not if you aren't a melee
+		end
+		if mod:IsTank() then
+			sndWOP:Schedule(38, "Interface\\AddOns\\DBM-Core\\extrasounds\\skinsoon.mp3")
 		end
 	elseif args:IsSpellID(83565, 92544, 92545, 92546) then
 		infoFrameUpdated = false
@@ -576,7 +609,7 @@ function mod:SPELL_CAST_START(args)
 		timerQuakeCD:Cancel()
 		timerQuakeCast:Start()
 		timerThundershockCD:Start()
-		self:Schedule(5, checkGrounded)
+		self:Schedule(8, checkGrounded)
 	elseif args:IsSpellID(83087) then
 		warnDisperse:Show()
 		timerDisperse:Start()
@@ -590,7 +623,7 @@ function mod:SPELL_CAST_START(args)
 		timerThundershockCD:Cancel()
 		timerThundershockCast:Start()
 		timerQuakeCD:Start()
-		self:Schedule(5, checkSearingWinds)
+		self:Schedule(8, checkSearingWinds)
 	elseif args:IsSpellID(84913) then
 		warnLavaSeed:Show()
 		timerLavaSeedCD:Start()
@@ -603,12 +636,22 @@ end
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(82636) then
 		timerAegisFlame:Start()
+		sndWOP:Schedule(54, "Interface\\AddOns\\DBM-Core\\extrasounds\\shieldsoon.mp3")
 	elseif args:IsSpellID(82665) then
 		timerHeartIceCD:Start()
 	elseif args:IsSpellID(82660) then
 		timerBurningBloodCD:Start()
 	end
 end
+
+function mod:SPELL_DAMAGE(_, _, _, _, _, _, _, _, spellId)
+	if spellId == 83282 or spellId == 92448 or spellId == 92449 or spellId == 92450 then
+		if self.Options.LightningRodIcon then
+			self:SetIcon(args.destName, 0)
+		end
+	end
+end
+mod.SPELL_MISSED = mod.SPELL_DAMAGE
 
 --[[
 function mod:CHAT_MSG_MONSTER_YELL(msg)
@@ -617,27 +660,37 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		timerWaterBomb:Cancel()
 		timerGlaciate:Cancel()
 		timerAegisFlame:Cancel()
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\shieldsoon.mp3")
 		timerBurningBloodCD:Cancel()
 		timerHeartIceCD:Cancel()
 		timerGravityCoreCD:Cancel()
 		timerStaticOverloadCD:Cancel()
 		timerHydroLanceCD:Cancel()
 		if self:IsDifficulty("heroic10", "heroic25") then
-			timerFrostBeaconCD:Start(25)
-			timerFlameStrikeCD:Start(28)
+			timerFrostBeaconCD:Start()
+			sndWOP:Schedule(20, "Interface\\AddOns\\DBM-Core\\extrasounds\\iceball.mp3")
+			timerFlameStrikeCD:Start(30)
 		end
 		timerQuakeCD:Start()
-		self:Schedule(3, checkSearingWinds)
+		timerHardenSkinCD:Start(23)
+		if mod:IsTank() then
+			sndWOP:Schedule(19, "Interface\\AddOns\\DBM-Core\\extrasounds\\skinsoon.mp3")
+		end
+		self:Schedule(12, checkSearingWinds)
 	elseif msg == L.Phase3 or msg:find(L.Phase3) then
 		updateBossFrame(3)
 		timerQuakeCD:Cancel()
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\findwind.mp3")
 		timerThundershockCD:Cancel()
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\findwell.mp3")
 		timerHardenSkinCD:Cancel()
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\skinsoon.mp3")
 		timerEruptionCD:Cancel()
 		timerDisperse:Cancel()
 		timerTransition:Start()
 		if self:IsDifficulty("heroic10", "heroic25") then
 			timerFlameStrikeCD:Cancel()
+			sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\iceball.mp3")
 			self:Schedule(14, function() timerFrostBeaconCD:Cancel() end) -- Frost Beacon appears during phase transition, but not works. Anyway, to prevent spam, actually cancel timers when phase 3 starts.
 		end
 		timerLavaSeedCD:Start(30)
@@ -658,34 +711,79 @@ function mod:RAID_BOSS_EMOTE(msg)
 	if (msg == L.Quake or msg:find(L.Quake)) and phase == 2 then
 		timerQuakeCD:Update(23, 33)
 		warnQuakeSoon:Show()
-		checkSearingWinds()
+		sndWOP:Schedule(9, "Interface\\AddOns\\DBM-Core\\extrasounds\\earthquake.mp3")
+		self:Schedule(2, checkSearingWinds)
 		if self:IsDifficulty("heroic10", "heroic25") then
-			self:Schedule(3.3, checkSearingWinds)
+--			self:Schedule(3.3, checkSearingWinds)
 			self:Schedule(6.6, checkSearingWinds)
 		end
 	elseif (msg == L.Thundershock or msg:find(L.Thundershock)) and phase == 2 then
 		timerThundershockCD:Update(23, 33)
 		warnThundershockSoon:Show()
-		checkGrounded()
+		sndWOP:Schedule(9, "Interface\\AddOns\\DBM-Core\\extrasounds\\thundershock.mp3")
+		self:Schedule(2, checkGrounded)
 		if self:IsDifficulty("heroic10", "heroic25") then
-			self:Schedule(3.3, checkGrounded)
+--			self:Schedule(3.3, checkGrounded)
 			self:Schedule(6.6, checkGrounded)
 		end
 	end
 end
 
 function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+	if not (uId == "boss1" or uId == "boss2" or uId == "boss3" or uId == "boss4") then return end--Anti spam to ignore all other args
 --	"<60.5> Feludius:Possible Target<nil>:boss1:Frost Xplosion (DND)::0:94739"
-	if spellId == 94739 and self:AntiSpam(2, 2) then -- Frost Xplosion (Phase 2 starts)
-		self:SendSync("Phase2")
+	if spellId == 94739 then -- Frost Xplosion (Phase 2 starts)
+		updateBossFrame(2)
+		timerWaterBomb:Cancel()
+		timerGlaciate:Cancel()
+		timerAegisFlame:Cancel()
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\shieldsoon.mp3")
+		timerBurningBloodCD:Cancel()
+		timerHeartIceCD:Cancel()
+		timerGravityCoreCD:Cancel()
+		timerStaticOverloadCD:Cancel()
+		timerHydroLanceCD:Cancel()
+		if self:IsDifficulty("heroic10", "heroic25") then
+			timerFrostBeaconCD:Start()--I need to do heroic hopefully next week after heroic rag to get exact times off new event. We did normal mode this week
+			sndWOP:Schedule(20, "Interface\\AddOns\\DBM-Core\\extrasounds\\iceball.mp3")
+			timerFlameStrikeCD:Start(28)
+		end
+		timerQuakeCD:Start()
+		timerHardenSkinCD:Start(23)
+		if mod:IsTank() then
+			sndWOP:Schedule(19, "Interface\\AddOns\\DBM-Core\\extrasounds\\skinsoon.mp3")
+		end
+		self:Schedule(12, checkSearingWinds)
 --	"<105.3> Terrastra:Possible Target<Omegal>:boss3:Elemental Stasis::0:82285"
-	elseif spellId == 82285 and self:AntiSpam(2, 2)  then -- Elemental Stasis (Phase 3 Transition)
-		self:SendSync("PhaseTransition")
+	elseif spellId == 82285 then -- Elemental Stasis (Phase 3 Transition)
+		self:Unschedule(checkSearingWinds)
+		self:Unschedule(checkGrounded)
+		timerQuakeCD:Cancel()
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\findwind.mp3")
+		timerThundershockCD:Cancel()
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\findwell.mp3")
+		timerHardenSkinCD:Cancel()
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\skinsoon.mp3")
+		timerEruptionCD:Cancel()
+		timerDisperse:Cancel()
+		timerFlameStrikeCD:Cancel()
+		timerTransition:Start()
+		if self.Options.InfoFrame then
+			DBM.InfoFrame:Hide()
+		end
 --	"<122.0> Elementium Monstrosity:Possible Target<nil>:boss1:Electric Instability::0:84526"
-	elseif spellId == 84526 and self:AntiSpam(2, 2) then -- Electric Instability (Phase 3 Actually started)
-		self:SendSync("Phase3")
+	elseif spellId == 84526 then -- Electric Instability (Phase 3 Actually started)
+		updateBossFrame(3)
+		timerFrostBeaconCD:Cancel()--Cancel here to avoid probelms with orbs that spawn during the transition.
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\iceball.mp3")
+		timerLavaSeedCD:Start(18)
+		timerGravityCrushCD:Start(28)
+		if self.Options.RangeFrame then
+			DBM.RangeCheck:Show(10)
+		end
 	end
 end
+
 
 function mod:UNIT_HEALTH(uId)
 	if (uId == "boss1" or uId == "boss2" or uId == "boss3" or uId == "boss4") and self:IsInCombat() then
@@ -703,42 +801,8 @@ function mod:OnSync(msg, boss)
 	if msg == "lowhealth" and boss and not warnedLowHP[boss] then
 		warnedLowHP[boss] = true
 		specWarnBossLow:Show(boss)
-	elseif msg == "Phase2" and self:IsInCombat() then
-		updateBossFrame(2)
-		timerWaterBomb:Cancel()
-		timerGlaciate:Cancel()
-		timerAegisFlame:Cancel()
-		timerBurningBloodCD:Cancel()
-		timerHeartIceCD:Cancel()
-		timerGravityCoreCD:Cancel()
-		timerStaticOverloadCD:Cancel()
-		timerHydroLanceCD:Cancel()
-		if self:IsDifficulty("heroic10", "heroic25") then
-			timerFrostBeaconCD:Start(25)
-			timerFlameStrikeCD:Start(28)
-		end
-		timerQuakeCD:Start()
-		self:Schedule(3, checkSearingWinds)
-	elseif msg == "PhaseTransition" and self:IsInCombat() then
-		self:Unschedule(checkSearingWinds)
-		self:Unschedule(checkGrounded)
-		timerQuakeCD:Cancel()
-		timerThundershockCD:Cancel()
-		timerHardenSkinCD:Cancel()
-		timerEruptionCD:Cancel()
-		timerDisperse:Cancel()
-		timerFlameStrikeCD:Cancel()
-		timerTransition:Start()
-		if self.Options.InfoFrame then
-			DBM.InfoFrame:Hide()
-		end
-	elseif msg == "Phase3" and self:IsInCombat() then
-		updateBossFrame(3)
-		timerFrostBeaconCD:Cancel()--Cancel here to avoid problems with orbs that spawn during the transition.
-		timerLavaSeedCD:Start(18)
-		timerGravityCrushCD:Start(28)
-		if self.Options.RangeFrame then
-			DBM.RangeCheck:Show(10)
+		if not mod:IsHealer() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\checkhp.mp3")
 		end
 	end
 end

@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("LadyNazjar", "DBM-Party-Cataclysm", 9)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7473 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 6700 $"):sub(12, -3))
 mod:SetCreatureID(40586)
 mod:SetModelID(34342)
 mod:SetZone()
@@ -74,7 +74,7 @@ function mod:SPELL_CAST_START(args)
 		timerShockBlastCD:Cancel()
 	elseif args:IsSpellID(76008, 91477) then
 		warnShockBlast:Show()
-		specWarnShockBlast:Show(args.sourceName)
+		specWarnShockBlast:Show()
 		timerShockBlastCD:Start()
 		if mod:IsDifficulty("heroic5") then
 			timerShockBlast:Start(2)

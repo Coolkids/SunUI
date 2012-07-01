@@ -45,7 +45,7 @@ local specWarnWindBlast		= mod:NewSpecialWarningSpell(86193, false)
 local timerNurture			= mod:NewNextTimer(35, 85422)--This this is typically 35 seconds after a special has ended.
 local timerWindChill		= mod:NewNextTimer(10.5, 84645, nil, false)
 local timerSlicingGale		= mod:NewBuffFadesTimer(45, 93058, nil, false)
-local timerWindBlast		= mod:NewBuffActiveTimer(11.5, 86193)
+local timerWindBlast		= mod:NewBuffActiveTimer(6, 86193)
 local timerWindBlastCD		= mod:NewCDTimer(60, 86193)-- Cooldown: 1st->2nd = 22sec || 2nd->3rd = 60sec || 3rd->4th = 60sec ?
 local timerStormShieldCD	= mod:NewCDTimer(35, 95865)--Heroic ability, seems to have a 35-40second cd and no longer syncs up to nurture since the windblast change. No longer consistent.
 local timerGatherStrength	= mod:NewTargetTimer(60, 86307)
@@ -57,6 +57,10 @@ local timerSpecial			= mod:NewTimer(95, "timerSpecial", "Interface\\Icons\\INV_E
 local timerSpecialActive	= mod:NewTimer(15, "timerSpecialActive", "Interface\\Icons\\INV_Enchant_EssenceMagicLarge")
 
 local enrageTimer			= mod:NewBerserkTimer(480) -- Both normal and heroic mode
+
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
+local sndWest	= mod:NewSound(nil, "SoundWest", true)
+local sndEast	= mod:NewSound(nil, "SoundEast", true)
 
 mod:AddBoolOption("OnlyWarnforMyTarget", false, "announce")--Default off do to targeting dependance (not great for healers who don't set focus). Has ability to filter all timers/warnings for bosses you are not targeting or focusing.
 mod:AddBoolOption("HealthFrame", false)
@@ -70,11 +74,11 @@ local GatherStrengthwarned = false
 function mod:OnCombatStart(delay)
 	windBlastCounter = 0
 	breezeCounter = 0
-	poisonCounter = 0
 	scansDone = 0
 	GatherStrengthwarned = false
 	warnSpecialSoon:Schedule(80-delay)
 	timerSpecial:Start(90-delay)
+	sndWOP:Schedule(80-delay, "Interface\\AddOns\\DBM-Core\\extrasounds\\specialsoon.mp3")
 	enrageTimer:Start(-delay)
 	if self:GetUnitCreatureId("target") == 45870 or self:GetUnitCreatureId("focus") == 45870 or self:GetUnitCreatureId("target") == 45812 or not self.Options.OnlyWarnforMyTarget then--Anshal and his flowers
 		timerSoothingBreezeCD:Start(16-delay)
@@ -82,14 +86,15 @@ function mod:OnCombatStart(delay)
 	end
 	if self:GetUnitCreatureId("target") == 45872 or self:GetUnitCreatureId("focus") == 45872 or not self.Options.OnlyWarnforMyTarget then--Rohash
 		timerWindBlastCD:Start(30-delay)
+		sndEast:Schedule(26-delay, "Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\windblastsoon.mp3")
 		if self:IsDifficulty("heroic10", "heroic25") then
 			timerStormShieldCD:Start(30-delay)
+			sndEast:Schedule(25-delay, "Interface\\AddOns\\DBM-Core\\extrasounds\\shieldsoon.mp3")
 		end
 	end
 	if self:GetUnitCreatureId("target") == 45871 or self:GetUnitCreatureId("focus") == 45871 or not self.Options.OnlyWarnforMyTarget then--Nezir
 		timerPermaFrostCD:Start(-delay)
 	end
-
 end
 
 function mod:BreezeTarget()
@@ -121,16 +126,19 @@ function mod:SPELL_AURA_APPLIED(args)
 			warnSpecialSoon:Cancel()
 			warnSpecialSoon:Schedule(85)
 			timerSpecial:Start()
+			sndWOP:Schedule(85, "Interface\\AddOns\\DBM-Core\\extrasounds\\specialsoon.mp3")
 			if self:GetUnitCreatureId("target") == 45870 or self:GetUnitCreatureId("focus") == 45870 or self:GetUnitCreatureId("target") == 45812 or not self.Options.OnlyWarnforMyTarget then--Anshal and his flowers
 				timerSoothingBreezeCD:Start(16)
 				timerNurture:Start()
 			end
 			if self:GetUnitCreatureId("target") == 45872 or self:GetUnitCreatureId("focus") == 45872 or not self.Options.OnlyWarnforMyTarget then--Rohash
 				timerStormShieldCD:Start()
+				sndEast:Schedule(30, "Interface\\AddOns\\DBM-Core\\extrasounds\\shieldsoon.mp3")
 			end
 		end
 	end
 end
+
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
 function mod:SPELL_AURA_REMOVED(args)
@@ -138,19 +146,22 @@ function mod:SPELL_AURA_REMOVED(args)
 		warnSpecialSoon:Cancel()
 		warnSpecialSoon:Schedule(85)
 		timerSpecial:Start()
+		sndWOP:Schedule(85, "Interface\\AddOns\\DBM-Core\\extrasounds\\specialsoon.mp3")
 		if self:GetUnitCreatureId("target") == 45870 or self:GetUnitCreatureId("focus") == 45870 or self:GetUnitCreatureId("target") == 45812 or not self.Options.OnlyWarnforMyTarget then--Anshal and his flowers
 			timerSoothingBreezeCD:Start(16)
 			timerNurture:Start()
 		end
 		if self:GetUnitCreatureId("target") == 45872 or self:GetUnitCreatureId("focus") == 45872 or not self.Options.OnlyWarnforMyTarget then--Rohash
 			timerStormShieldCD:Start()
+			sndEast:Schedule(30, "Interface\\AddOns\\DBM-Core\\extrasounds\\shieldsoon.mp3")
 		end
 	end
 end
 
-function mod:SPELL_DAMAGE(sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId)
+function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
 	if (spellId == 86111 or spellId == 93129 or spellId == 93130 or spellId == 93131) and destGUID == UnitGUID("player") and self:AntiSpam(3, 2) then
 		specWarnIcePatch:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")
 	end
 end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE
@@ -179,6 +190,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 			warnNurture:Show()
 			if self:IsDifficulty("heroic10", "heroic25") then
 				timerPoisonToxicCD:Start()
+				sndWest:Schedule(18, "Interface\\AddOns\\DBM-Core\\extrasounds\\aesoon.mp3")
 			end
 		end
 	elseif args:IsSpellID(93233) then
@@ -198,12 +210,15 @@ function mod:SPELL_CAST_SUCCESS(args)
 		if self:GetUnitCreatureId("target") == 45872 or self:GetUnitCreatureId("focus") == 45872 or not self.Options.OnlyWarnforMyTarget then--Rohash
 			warnStormShield:Show()
 			specWarnShield:Show()
+			sndEast:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\killshield.mp3")
 		end
 	elseif args:IsSpellID(86281) and self:AntiSpam(3, 3) then-- Poison Toxic Warning (at Heroic, Poison Toxic damage is too high, so warning needed)
 		if self:GetUnitCreatureId("target") == 45870 or self:GetUnitCreatureId("focus") == 45870 or self:GetUnitCreatureId("target") == 45812 or not self.Options.OnlyWarnforMyTarget then
 			warnPoisonToxic:Show()
 			timerPoisonToxic:Show()
 			timerPoisonToxicCD:Start()
+			sndWest:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\awayflower.mp3")
+			sndWest:Schedule(18, "Interface\\AddOns\\DBM-Core\\extrasounds\\aesoon.mp3")
 		end
 		if poisonCounter < 1 then
 			poisonCounter = 1
@@ -217,11 +232,16 @@ function mod:SPELL_CAST_SUCCESS(args)
 		if self:GetUnitCreatureId("target") == 45872 or self:GetUnitCreatureId("focus") == 45872 or not self.Options.OnlyWarnforMyTarget then--Rohash
 			warnWindBlast:Show()
 			specWarnWindBlast:Show()
-			timerWindBlast:Start()
+			sndEast:Schedule(2, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndEast:Schedule(3, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndEast:Schedule(4, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			timerWindBlast:Schedule(5)
 			if windBlastCounter == 1 then
 				timerWindBlastCD:Start(82)
+				sndEast:Schedule(78, "Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\windblastsoon.mp3")
 			else
 				timerWindBlastCD:Start()
+				sndEast:Schedule(56, "Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\windblastsoon.mp3")
 			end
 		end
 	end
@@ -232,9 +252,11 @@ function mod:UNIT_POWER(uId)
 	if self:GetUnitCreatureId(uId) == 45870 and UnitPower(uId) == 62 and poisonCounter == 0 and self:IsDifficulty("heroic10", "heroic25") then
 		if self:GetUnitCreatureId("target") == 45870 or self:GetUnitCreatureId("focus") == 45870 or self:GetUnitCreatureId("target") == 45812 or not self.Options.OnlyWarnforMyTarget then
 			timerPoisonToxicCD:Start(10)
+			sndWest:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\aesoon.mp3")
 		end
 	elseif self:GetUnitCreatureId(uId) == 45870 and UnitPower(uId) == 79 and self:IsDifficulty("heroic10", "heroic25") then
 		timerPoisonToxicCD:Cancel()
+		sndWest:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\aesoon.mp3")
 	end
 end
 

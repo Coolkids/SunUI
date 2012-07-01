@@ -2,7 +2,7 @@
 local mod	= DBM:NewMod("Nefarian", "DBM-BlackwingDescent")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7473 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7444 $"):sub(12, -3))
 mod:SetCreatureID(41376, 41270)
 mod:SetModelID(32716)
 mod:SetZone()
@@ -45,7 +45,7 @@ local warnDominion				= mod:NewTargetAnnounce(79318, 3)
 local warnShadowBlaze			= mod:NewSpellAnnounce(81031, 4)--May be quirky
 local warnShadowblazeSoon		= mod:NewAnnounce("warnShadowblazeSoon", 2, 81031, mod:IsTank(), nil, true)--Back to on by default for tanks until option isn't tied to sound.
 
-local specWarnElectrocute		= mod:NewSpecialWarningSpell(81198, nil, nil, nil, true)
+local specWarnElectrocute		= mod:NewSpecialWarning("SpecWarnElectrocute")
 local specWarnBlastsNova		= mod:NewSpecialWarningInterrupt(80734)
 local specWarnDominion			= mod:NewSpecialWarningYou(79318)
 local specWarnStolenPower		= mod:NewSpecialWarningStack(80627, nil, 150)
@@ -55,7 +55,8 @@ local yellCinder				= mod:NewYell(79339)
 local specWarnShadowblaze		= mod:NewSpecialWarningMove(94085)
 local specWarnShadowblazeSoon	= mod:NewSpecialWarning("specWarnShadowblazeSoon", mod:IsTank())
 
-local timerBlastNova			= mod:NewCastTimer(1.5, 80734)
+--local timerBlastNova			= mod:NewCastTimer(1.5, 80734)
+local timerBlastNovaCD		= mod:NewCDTimer(12, 80734)
 local timerElectrocute			= mod:NewCastTimer(5, 81198)
 local timerNefLanding			= mod:NewTimer(30, "timerNefLanding", 78620)
 local timerShadowflameBarrage	= mod:NewBuffActiveTimer(150, 78621)
@@ -65,12 +66,14 @@ local timerOnyBreathCD			= mod:NewTimer(12, "OnyBreathTimer", 94124, mod:IsTank(
 local timerNefBreathCD			= mod:NewTimer(12, "NefBreathTimer", 94124, mod:IsTank() or mod:IsHealer())--same as above
 local timerCinder				= mod:NewBuffFadesTimer(8, 79339)--Heroic Ability
 local timerCinderCD				= mod:NewCDTimer(22, 79339)--Heroic Ability (Every 22-25 seconds, 25 being most common but we gotta use 22 for timer cause of that small chance it's that).
-local timerDominionCD			= mod:NewNextTimer(15, 79318, nil, not mod:IsTank())
+--local timerDominionCD			= mod:NewNextTimer(15, 79318, nil, not mod:IsTank())
+local timerDominion			= mod:NewBuffActiveTimer(18, 79318)
 local timerShadowBlazeCD		= mod:NewCDTimer(10, 81031)
 
 local berserkTimer				= mod:NewBerserkTimer(630)
-
-local soundCinder				= mod:NewSound(79339)
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
+local sndHelp	= mod:NewSound(nil, "SoundHelp", true)
+--local soundCinder				= mod:NewSound(79339)
 local countdownShadowblaze		= mod:NewCountdown(30, 94085, mod:IsTank())
 
 mod:AddBoolOption("RangeFrame", true)
@@ -80,6 +83,7 @@ mod:AddBoolOption("InfoFrame", true)
 mod:AddBoolOption("SetWater", true)
 mod:AddBoolOption("TankArrow", false)--May be prone to some issues if you have 2 kiters, or unpicked up adds, but it's off by default so hopefully feature is used by smart people.
 
+local eleaecount = 1
 local shadowblazeTimer = 35
 local cinderIcons = 8
 local playerDebuffed = false
@@ -87,7 +91,7 @@ local playerDebuffs = 0
 local cinderTargets	= {}
 local cinderDebuff = GetSpellInfo(79339)
 local dominionTargets = {}
-local lastBlaze = 0--Do NOT use prototype for this, it's updated in a special way using different triggers then when method is called.
+local lastBlaze = 0
 local CVAR = false
 local shadowBlazeSynced = false
 
@@ -127,7 +131,7 @@ local function warnCinderTargets()
 	end
 	warnCinder:Show(table.concat(cinderTargets, "<, >"))
 	timerCinder:Start()
-	timerCinderCD:Start()
+--	timerCinderCD:Start()
 	table.wipe(cinderTargets)
 	cinderIcons = 8
 	playerDebuffed = false
@@ -135,12 +139,13 @@ end
 
 local function warnDominionTargets()
 	warnDominion:Show(table.concat(dominionTargets, "<, >"))
-	timerDominionCD:Start()
+--	timerDominionCD:Start()
 	table.wipe(dominionTargets)
 end
 
 function mod:OnCombatStart(delay)
 	shadowBlazeSynced = false
+	eleaecount = 1
 	shadowblazeTimer = 35
 	playerDebuffed = false
 	playerDebuffs = 0
@@ -150,7 +155,7 @@ function mod:OnCombatStart(delay)
 	timerNefLanding:Start(-delay)
 	if self:IsDifficulty("heroic10", "heroic25") then
 		berserkTimer:Start(-delay)
-		timerDominionCD:Start(50-delay)
+--		timerDominionCD:Start(50-delay)
 	end
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:SetHeader(L.Charge)
@@ -192,25 +197,39 @@ function mod:SPELL_CAST_START(args)
 		end
 		if args.sourceGUID == UnitGUID("target") then--Only show warning/timer for your own target.
 			warnBlastNova:Show()
-			specWarnBlastsNova:Show(args.sourceName)
-			if self:IsDifficulty("heroic10", "heroic25") then
-				timerBlastNova:Start()
-			else
-				timerBlastNova:Start(4)--4 second hurp cast on normal since 4.2
-			end
+			specWarnBlastsNova:Show()
+--			if self:IsDifficulty("heroic10", "heroic25") then
+--				timerBlastNova:Start()
+--			else
+--				timerBlastNova:Start(4)--4 second hurp cast on normal since 4.2
+--			end
+			timerBlastNovaCD:Start()
 		end
 	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(79339) then
+		if self:AntiSpam(10, 2) then
+			timerCinderCD:Start()
+			sndWOP:Schedule(20, "Interface\\AddOns\\DBM-Core\\extrasounds\\jumpsoon.mp3")
+		end
 		cinderTargets[#cinderTargets + 1] = args.destName
 		playerDebuffs = playerDebuffs + 1
+		if args.destName == UnitName("focus") then
+			sndHelp:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\helpkick.mp3")
+		end
 		if args:IsPlayer() then
 			playerDebuffed = true
 			specWarnCinder:Show()
 			specWarnCinderMove:Schedule(3)
-			soundCinder:Schedule(3)	-- no need to move as soon as the debuff is applied
+--			soundCinder:Schedule(3)	-- no need to move as soon as the debuff is applied
+			sndWOP:Schedule(3, "Interface\\AddOns\\DBM-Core\\extrasounds\\runout.mp3")
+			sndWOP:Schedule(4, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+			sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+			sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 			yellCinder:Yell()
 			if self.Options.RangeFrame then
 				DBM.RangeCheck:Show(10, nil)
@@ -230,6 +249,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		dominionTargets[#dominionTargets + 1] = args.destName
 		if args:IsPlayer() then
 			specWarnDominion:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\findmc.mp3")
 		end
 		self:Unschedule(warnDominionTargets)
 		if (self:IsDifficulty("heroic25") and #dominionTargets >= 5) or (self:IsDifficulty("heroic10") and #dominionTargets >= 2) then
@@ -241,8 +261,9 @@ function mod:SPELL_AURA_APPLIED(args)
 end
 
 function mod:SPELL_AURA_APPLIED_DOSE(args)
-	if args:IsSpellID(80627) and args:IsPlayer() and (args.amount or 1) >= 150 then
+	if args:IsSpellID(80626, 80627) and args:IsPlayer() and (args.amount or 1) >= 150 then
 		specWarnStolenPower:Show(args.amount)
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\enoughstack.mp3")
 	end
 end
 
@@ -258,6 +279,8 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnCinder then
 			self:SetIcon(args.destName, 0)
 		end
+	elseif args:IsSpellID(79318) and args:IsPlayer() then
+		timerDominion:Start()
 	end
 end
 
@@ -274,8 +297,9 @@ function mod:SPELL_CAST_SUCCESS(args)
 end
 
 function mod:SPELL_DAMAGE(sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId)
-	if (spellId == 81007 or spellId == 94085 or spellId == 94086 or spellId == 94087) and destGUID == UnitGUID("player") and self:AntiSpam(4) then
+	if (spellId == 81007 or spellId == 94085 or spellId == 94086 or spellId == 94087) and destGUID == UnitGUID("player") and self:AntiSpam(4, 1) then
 		specWarnShadowblaze:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")
 	elseif spellID ~= 50288 and self:GetCIDFromGUID(destGUID) == 41918 and bit.band(sourceFlags, COMBATLOG_OBJECT_TYPE_PLAYER) ~= 0 and self:IsInCombat() then--Any spell damage except for starfall
 		if sourceGUID ~= UnitGUID("player") then
 			if self.Options.TankArrow then
@@ -307,18 +331,23 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		timerNefSwipeCD:Cancel()
 		timerOnyBreathCD:Cancel()
 		timerNefBreathCD:Cancel()
-		timerDominionCD:Cancel()
+--		timerDominionCD:Cancel()
 		timerShadowflameBarrage:Start()
 		if self:IsDifficulty("heroic10", "heroic25") then
 			timerCinderCD:Start(11.5)--10+ cast, since we track application not cast.
+			sndWOP:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\jumpsoon.mp3")
 		end
 	elseif msg == L.YellPhase3 or msg:find(L.YellPhase3) then
 		lastBlaze = 0
 		warnPhase3:Show()
-		timerCinderCD:Cancel()
+		if self:IsDifficulty("heroic10", "heroic25") then
+			timerCinderCD:Cancel()
+			sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\jumpsoon.mp3")
+		end
 		timerShadowflameBarrage:Cancel()
-		timerShadowBlazeCD:Start(12)--Seems to vary some, 12 should be a happy medium, it can be off 1-2 seconds though.
-		self:ScheduleMethod(12, "ShadowBlazeFunction")
+		timerShadowBlazeCD:Start(10)--Seems to vary some, 12 should be a happy medium, it can be off 1-2 seconds though.
+		countdownShadowblaze:Start(10)
+		self:ScheduleMethod(10, "ShadowBlazeFunction")
 	elseif msg == L.YellShadowBlaze or msg:find(L.YellShadowBlaze) then--He only does this sometimes, it's not a trigger to replace loop, more so to correct it.
 		shadowBlazeSynced = true
 		self:UnscheduleMethod("ShadowBlazeFunction")--Unschedule any running stuff
@@ -341,7 +370,9 @@ end
 
 function mod:RAID_BOSS_EMOTE(msg)
 	if (msg == L.NefAoe or msg:find(L.NefAoe)) and self:IsInCombat() then
-		specWarnElectrocute:Show()
+		specWarnElectrocute:Show(eleaecount)
+		eleaecount = eleaecount + 1
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\"..GetLocale().."\\eleaestart.mp3")
 		timerElectrocute:Start()
 	end
 end

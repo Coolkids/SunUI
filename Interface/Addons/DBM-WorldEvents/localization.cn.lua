@@ -1,7 +1,4 @@
-﻿-- Simplified Chinese by Diablohu(diablohudream@gmail.com) & yleaf(yaroot@gmail.com)
--- Last update: 2/12/2012
-
-if GetLocale() ~= "zhCN" then return end
+﻿if GetLocale() ~= "zhCN" then return end
 
 local L
 
@@ -20,17 +17,17 @@ L:SetGeneralLocalization({
 L = DBM:GetModLocalization("ApothecaryTrio")
 
 L:SetGeneralLocalization({
-	name 			= "皇冠药剂公司"
+	name 			= "药剂师三人组"
 })
 
 L:SetTimerLocalization({
-	HummelActive		= "汉摩尔加入战斗",
-	BaxterActive		= "拜克斯特加入战斗",
-	FryeActive		= "弗莱加入战斗"
+	HummelActive		= "药剂师汉摩尔 开始活动",
+	BaxterActive		= "药剂师拜克斯特 开始活动",
+	FryeActive		= "药剂师弗莱 开始活动"
 })
 
 L:SetOptionLocalization({
-	TrioActiveTimer		= "计时条：药剂师何时加入战斗"
+	TrioActiveTimer		= "为药剂师三人组开始活动显示计时条"
 })
 
 L:SetMiscLocalization({
@@ -68,7 +65,7 @@ L:SetOptionLocalization({
 })
 
 L:SetMiscLocalization({
-	Pull			= "冰石已经溶化了!"
+	Pull			= "寒冰之石融化了！"
 })
 
 ----------------------
@@ -86,9 +83,9 @@ L:SetWarningLocalization({
 })
 
 L:SetOptionLocalization({
-	specWarnBrew		= "为黑铁啤酒女郎的啤酒显示特别警报",
-	specWarnBrewStun	= "为黑铁啤酒女郎昏迷显示特别警报",
-	YellOnBarrel		= "当你中了空桶(晕)时大喊"
+	specWarnBrew		= "为$spell:47376显示特别警报",
+	specWarnBrewStun	= "为$spell:47340显示特别警报",
+	YellOnBarrel		= "当你中了$spell:51413时大喊"
 })
 
 L:SetMiscLocalization({
@@ -105,9 +102,9 @@ L:SetGeneralLocalization({
 })
 
 L:SetWarningLocalization({
-	WarnPhase				= "第%d阶段",
-	warnHorsemanSoldiers	= "跃动的南瓜出现了",
-	warnHorsemanHead		= "无头骑士激活"
+	WarnPhase				= "阶段 %d",
+	warnHorsemanSoldiers	= "跳动的南瓜出现了！",
+	warnHorsemanHead		= "躲避旋风斩 - 快打脑袋!"
 })
 
 L:SetTimerLocalization{
@@ -115,10 +112,10 @@ L:SetTimerLocalization{
 }
 
 L:SetOptionLocalization({
-	WarnPhase				= "警报：阶段转换",
-	TimerCombatStart		= "计时条：战斗开始",
-	warnHorsemanSoldiers	= "警报：跃动的南瓜出现",
-	warnHorsemanHead		= "特殊警报：旋风斩（无头骑士的脑袋出现）"
+	WarnPhase				= "为每次阶段转换显示警报",
+	TimerCombatStart		= "为战斗开始显示计时条",
+	warnHorsemanSoldiers	= "为跳动的南瓜出现显示警报",
+	warnHorsemanHead		= "为骑士脑袋出现显示警报"
 })
 
 L:SetMiscLocalization({
@@ -126,26 +123,13 @@ L:SetMiscLocalization({
 	HorsemanSoldiers	= "士兵们，起来战斗吧！为死去的骑士带来胜利的荣耀！"
 })
 
-
 ------------------------------
 --  The Abominable Greench  --
 ------------------------------
 L = DBM:GetModLocalization("Greench")
 
 L:SetGeneralLocalization({
-	name = "讨厌的格林奇"
-})
-
-L:SetWarningLocalization({
-})
-
-L:SetTimerLocalization{
-}
-
-L:SetOptionLocalization({
-})
-
-L:SetMiscLocalization({
+	name = "格林奇"
 })
 
 --------------------------
@@ -154,7 +138,7 @@ L:SetMiscLocalization({
 L = DBM:GetModLocalization("Cannon")
 
 L:SetGeneralLocalization({
-	name = "炮弹飞人"
+	name = "冲击者5000型超级大炮"
 })
 
 -------------
@@ -169,16 +153,16 @@ L:SetGeneralLocalization({
 L:SetWarningLocalization({
 	warnGameOverQuest	= "得分：%d / %d（可能的最高分数）",
 	warnGameOverNoQuest	= "游戏结束，本次可能的最高分数：%d",
-	warnGnoll			= "豺狼人出现",
-	warnHogger			= "霍格出现",
-	specWarnHogger		= "霍格出现！"
+	warnGnoll		= "豺狼人出现",
+	warnHogger		= "霍格出现",
+	specWarnHogger	= "霍格出现！"
 })
 
 L:SetOptionLocalization({
 	warnGameOver	= "游戏结束时通报本次游戏可能的最高分数",
-	warnGnoll		= "警报：豺狼人出现",
-	warnHogger		= "警报：霍格出现",
-	specWarnHogger	= "特殊警报：霍格出现"
+	warnGnoll		= "当豺狼人出现时显示报警",
+	warnHogger		= "当霍格出现时显示报警",
+	specWarnHogger	= "当霍格出现时显示特别警告"
 })
 
 ------------------------
@@ -191,7 +175,7 @@ L:SetGeneralLocalization({
 })
 
 L:SetOptionLocalization({
-	SetBubbles			= "在$spell:101871期间自动关闭聊天气泡（结束后自动恢复）"
+	SetBubbles			= "为$spell:101871自动禁用对话泡泡"
 })
 
 ----------------------
@@ -200,5 +184,5 @@ L:SetOptionLocalization({
 L = DBM:GetModLocalization("Tonks")
 
 L:SetGeneralLocalization({
-	name = "坦克大战"
+	name = "蒸汽坦克大挑战"
 })

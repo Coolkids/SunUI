@@ -3,7 +3,6 @@ local L
 --------------
 --  Magmaw  --
 --------------
---L = DBM:GetModLocalization(170)
 L = DBM:GetModLocalization("Magmaw")
 
 L:SetGeneralLocalization({
@@ -18,6 +17,7 @@ L:SetTimerLocalization({
 })
 
 L:SetOptionLocalization({
+	SoundWOP = "Play Extra Warning Sound",
 	SpecWarnInferno	= "Show pre-special warning for $spell:92190 (~4s)",
 	RangeFrame		= "Show range frame in Phase 2 (5)"
 })
@@ -31,7 +31,6 @@ L:SetMiscLocalization({
 -------------------------------
 --  Dark Iron Golem Council  --
 -------------------------------
---L = DBM:GetModLocalization(169)
 L = DBM:GetModLocalization("DarkIronGolemCouncil")
 
 L:SetGeneralLocalization({
@@ -51,6 +50,7 @@ L:SetTimerLocalization({
 })
 
 L:SetOptionLocalization({
+	SoundWOP = "Play Extra Warning Sound",
 	timerShadowConductorCast	= "Show timer for $spell:92048 cast",
 	timerArcaneBlowbackCast		= "Show timer for $spell:91879 cast",
 	timerArcaneLockout			= "Show timer for $spell:91542 spell lockout",
@@ -74,7 +74,6 @@ L:SetMiscLocalization({
 ----------------
 --  Maloriak  --
 ----------------
---L = DBM:GetModLocalization(173)
 L = DBM:GetModLocalization("Maloriak")
 
 L:SetGeneralLocalization({
@@ -91,6 +90,7 @@ L:SetTimerLocalization({
 })
 
 L:SetOptionLocalization({
+	SoundWOP = "Play Extra Warning Sound",
 	WarnPhase			= "Show warning which phase is incoming",
 	WarnRemainingAdds	= "Show warning for how many aberrations remain",
 	TimerPhase			= "Show timer for next phase",
@@ -115,7 +115,6 @@ L:SetMiscLocalization({
 -----------------
 --  Chimaeron  --
 -----------------
---L = DBM:GetModLocalization(172)
 L = DBM:GetModLocalization("Chimaeron")
 
 L:SetGeneralLocalization({
@@ -129,6 +128,7 @@ L:SetTimerLocalization({
 })
 
 L:SetOptionLocalization({
+	SoundWOP = "Play Extra Warning Sound",
 	RangeFrame		= "Show range frame (6)",
 	SetIconOnSlime	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(82935),
 	InfoFrame		= "Show info frame for health (<10k hp)"
@@ -141,7 +141,6 @@ L:SetMiscLocalization({
 -----------------
 --  Atramedes  --
 -----------------
---L = DBM:GetModLocalization(171)
 L = DBM:GetModLocalization("Atramedes")
 
 L:SetGeneralLocalization({
@@ -149,6 +148,7 @@ L:SetGeneralLocalization({
 })
 
 L:SetWarningLocalization({
+	SpecWarnFiend		= "Obnoxious Fiend Appear!",
 	WarnAirphase			= "Airphase",
 	WarnGroundphase			= "Groundphase",
 	WarnShieldsLeft			= "Ancient Dwarven Shield used - %d left",
@@ -157,16 +157,20 @@ L:SetWarningLocalization({
 })
 
 L:SetTimerLocalization({
+	TimerFiend		= "Next Fiend",
 	TimerAirphase			= "Next Airphase",
 	TimerGroundphase		= "Next Groundphase"
 })
 
 L:SetOptionLocalization({
+	SoundWOP = "Play Extra Warning Sound",
+	SpecWarnFiend		= "Show special warning when Obnoxious Fiend appears",
 	WarnAirphase			= "Show warning when Atramedes lifts off",
 	WarnGroundphase			= "Show warning when Atramedes lands",
 	WarnShieldsLeft			= "Show warning when a Ancient Dwarven Shield gets used",
 	warnAddSoon				= "Show warning when Nefarian summons adds",
 	specWarnAddTargetable	= "Show special warning when adds are targetable",
+	TimerFiend		= "Show timer for next Obnoxious Fiend",
 	TimerAirphase			= "Show timer for next airphase",
 	TimerGroundphase		= "Show timer for next groundphase",
 	InfoFrame				= "Show info frame for sound levels",
@@ -184,7 +188,6 @@ L:SetMiscLocalization({
 ----------------
 --  Nefarian  --
 ----------------
---L = DBM:GetModLocalization(174)
 L = DBM:GetModLocalization("Nefarian")
 
 L:SetGeneralLocalization({
@@ -194,6 +197,7 @@ L:SetGeneralLocalization({
 L:SetWarningLocalization({
 	OnyTailSwipe			= "Tail Lash (Onyxia)",
 	NefTailSwipe			= "Tail Lash (Nefarian)",
+	SpecWarnElectrocute		= "Electrocute (%d)",
 	OnyBreath				= "Breath (Onyxia)",
 	NefBreath				= "Breath (Nefarian)",
 	specWarnShadowblazeSoon	= "%s",
@@ -209,6 +213,9 @@ L:SetTimerLocalization({
 })
 
 L:SetOptionLocalization({
+	SoundWOP = "Play Extra Warning Sound",
+	SoundHelp = "Play warning sound when your focus target having $spell:79339",
+	SpecWarnElectrocute		= "Show special warning for $spell:81198",
 	OnyTailSwipe			= "Show warning for Onyxia's $spell:77827",
 	NefTailSwipe			= "Show warning for Nefarian's $spell:77827",
 	OnyBreath				= "Show warning for Onyxia's $spell:94124",
@@ -240,9 +247,9 @@ L:SetMiscLocalization({
 	ShadowBlazeEstimate		= "Shadowblaze Spark soon (~5s)"
 })
 
--------------------------------
+--------------
 --  Blackwing Descent Trash  --
--------------------------------
+--------------
 L = DBM:GetModLocalization("BWDTrash")
 
 L:SetGeneralLocalization({

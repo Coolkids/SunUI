@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Corla", "DBM-Party-Cataclysm", 1)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7548 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7445 $"):sub(12, -3))
 mod:SetCreatureID(39679)
 mod:SetModelID(31546)
 mod:SetZone()
@@ -46,6 +46,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	end
 end
+
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
 function mod:SPELL_AURA_REMOVED(args)
@@ -57,12 +58,12 @@ end
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(75823, 93462) then
 		warnDarkCommandCast:Show()
-		specWarnDarkCommand:Show(args.sourceName)
+		specWarnDarkCommand:Show()
 		timerDarkCommandCast:Start()
 		timerDarkCommandCD:Start()
 	elseif args:IsSpellID(82362, 87374) then
 		warnShadowStrike:Show()
-		specWarnShadowStrike:Show(args.sourceName)
+		specWarnShadowStrike:Show()
 		if mod:IsDifficulty("heroic5") then
 			timerShadowStrike:Start()
 		else

@@ -26,7 +26,7 @@ L:SetWarningLocalization({
 })
 
 L:SetOptionLocalization({
-	WarnAdd		= "當一隻小怪的$spell:75608消散時警告"
+	WarnAdd		= "當一隻小怪丟棄$spell:75608增益時警告"
 })
 
 -----------------------
@@ -39,7 +39,7 @@ L:SetGeneralLocalization({
 })
 
 L:SetTimerLocalization({
-	TimerSuperheated 	= "極灸水銀護甲(%d)"
+	TimerSuperheated 	= "極灸水銀護甲 (%d)"	-- should work, no need for translation :)
 })
 
 L:SetOptionLocalization({
@@ -65,7 +65,7 @@ L:SetGeneralLocalization({
 })
 
 L:SetOptionLocalization({
-	SetIconOnBoss	= "首領施放$spell:76200後標記首領"
+	SetIconOnBoss	= "$spell:76200後標記首領"
 })
 
 ---------------------
@@ -170,7 +170,7 @@ L:SetGeneralLocalization({
 })
 
 L:SetMiscLocalization{
-	ValionaYell	= "龍啊，聽我命令! 抓住我!",
+	ValionaYell	= "龍啊，聽我命令! 抓住我!",	-- translate -- Yell when Valiona is incoming
 	Add		= "%s進行",
 	Valiona		= "瓦莉歐娜"
 }
@@ -218,11 +218,11 @@ L:SetGeneralLocalization({
 })
 
 L:SetTimerLocalization({
-	achievementGauntlet	= "成就挑戰"
+	achievementGauntlet	= "限時挑戰"
 })
 
 L:SetMiscLocalization({
-	Brann				= "好了，快走吧!只需要把最後的登錄程序輸入到門的機關中....然後..."
+	Brann				= "好了，快走吧!只需要把最後的登錄程序輸入到門的機關中...然後..."
 })
 
 ------------
@@ -235,7 +235,7 @@ L:SetGeneralLocalization({
 })
 
 L:SetWarningLocalization({
-	WarnSplitSoon	= "即將分裂"
+	WarnSplitSoon	= "分裂 即將到來"
 })
 
 L:SetOptionLocalization({
@@ -312,12 +312,12 @@ L:SetGeneralLocalization({
 })
 
 L:SetOptionLocalization{
-	BossHealthAdds	= "在首領血量框架顯示小怪血量"
+	BossHealthAdds	= "在首領血量框架顯示小怪血量"	-- translate
 }
 
 L:SetMiscLocalization{
-	BlazeHeavens		= "天之燃炎",
-	HarbringerDarkness	= "黑暗先驅者"
+	BlazeHeavens		= "天之燃炎",	-- translate
+	HarbringerDarkness	= "黑暗先驅者"	-- translate
 }
 
 --------------
@@ -330,7 +330,7 @@ L:SetGeneralLocalization({
 })
 
 L:SetOptionLocalization{
-	RangeFrame	= "顯示距離框(5碼)"
+	RangeFrame	= "顯示距離框 (5碼)"		-- translate
 }
 
 ----------
@@ -339,7 +339,7 @@ L:SetOptionLocalization{
 L = DBM:GetModLocalization("Augh")
 
 L:SetGeneralLocalization({
-	name = "奧各"
+	name = "奧各"		-- translate
 })
 
 -----------------------
@@ -393,8 +393,8 @@ L:SetGeneralLocalization({
 })
 
 L:SetWarningLocalization{
-	specWarnCoagulant	= "綠色混合 - 不斷移動!",
-	specWarnRedMix		= "紅色混合 - 不要移動!"
+	specWarnCoagulant	= "綠色混合 - 不斷移動!",	-- Green light
+	specWarnRedMix		= "紅色混合 - 不要移動!"		-- Red light
 }
 
 L:SetOptionLocalization{
@@ -465,15 +465,15 @@ L:SetWarningLocalization({
 })
 
 L:SetTimerLocalization({
-	TimerAirphase			= "下一次空中階段",
-	TimerGroundphase		= "下一次地上階段"
+	TimerAirphase			= "下一次 空中階段",
+	TimerGroundphase		= "下一次 地上階段"
 })
 
 L:SetOptionLocalization({
 	WarnAirphase			= "當岩革升空時顯示警告",
 	WarnGroundphase			= "當岩革降落時顯示警告",
-	TimerAirphase			= "為下一次空中階段顯示計時器",
-	TimerGroundphase		= "為下一次地上階段顯示計時器",
+	TimerAirphase			= "為下一次 空中階段顯示計時器",
+	TimerGroundphase		= "為下一次 地上階段顯示計時器",
 	specWarnCrystalStorm		= "為$spell:92265顯示特別警告"
 })
 
@@ -653,8 +653,8 @@ L:SetGeneralLocalization{
 }
 
 L:SetWarningLocalization{
-	WarnSpirit	= "靈魂階段",
-	WarnNormal	= "普通階段"
+	WarnSpirit	= "靈魂出現了",
+	WarnNormal	= "靈魂消失了"
 }
 
 L:SetOptionLocalization{
@@ -677,7 +677,7 @@ L:SetGeneralLocalization{
 }
 
 L:SetTimerLocalization{
-	TimerSiphon	= "%s:%s"
+	TimerSiphon	= "%s: %s"
 }
 
 L:SetOptionLocalization{
@@ -739,11 +739,11 @@ L:SetGeneralLocalization{
 
 L:SetWarningLocalization{
 	WarnRevive		= "剩餘%d鬼魂",
-	SpecWarnOhgan		= "奧根蘇醒了!攻擊!"
+	SpecWarnOhgan		= "奧根蘇醒了!攻擊!" -- check this, i'm not good at English
 }
 
 L:SetOptionLocalization{
-	WarnRevive		= "提示剩餘多少鬼魂",
+	WarnRevive		= "公布剩餘多少鬼魂",
 	SpecWarnOhgan	= "當奧根蘇醒時顯示警告",
 	SetIconOnOhgan	= "當奧根蘇醒時標記它"
 }
@@ -766,8 +766,8 @@ L:SetWarningLocalization{
 }
 
 L:SetOptionLocalization{
-	SpecWarnToxic	= "為當你沒有$spell:96328顯示特別警告",
-	InfoFrame		= "為沒有$spell:96328的玩家顯示訊息框",
+	SpecWarnToxic	= "顯示特別警告當你沒有$spell:96328",
+	InfoFrame		= "顯示沒有$spell:96328的玩家的訊息框",
 	SetIconOnGaze	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(96342)
 }
 
@@ -782,6 +782,10 @@ L = DBM:GetModLocalization("Kilnara")
 
 L:SetGeneralLocalization{
 	name = "高階祭司基爾娜拉"
+}
+
+L:SetMiscLocalization{
+	WaveAgony	= "感受我的痛苦!"
 }
 
 ----------------------------
@@ -803,7 +807,7 @@ L:SetOptionLocalization{
 }
 
 L:SetMiscLocalization{
-	Kill			= "你跨越了你的分際，金度。你觸碰了遠超越你的力量。你忘了我是誰嗎?你忘了我的能耐了嗎?"
+	Kill			= "你跨越了你的分際，金度。你觸碰了遠超越你的力量。你忘了我是誰嗎?你忘了我的能耐了嗎?" -- temporarily
 }
 
 ----------------------
@@ -992,16 +996,16 @@ L:SetGeneralLocalization{
 }
 
 L:SetWarningLocalization{
-	WarnAdds	= "新的魔導師!"
+	WarnAdds	= "小怪即將激活"
 }
 
 L:SetTimerLocalization{
-	TimerAdds	= "下一次魔導師"
+	TimerAdds	= "下一波小怪"
 }
 
 L:SetOptionLocalization{
-	WarnAdds	= "為下一次魔導師發佈警告",
-	TimerAdds	= "為下一次魔導師顯示計時器"
+	WarnAdds	= "新一波小怪\"激活\"時顯示警告",
+	TimerAdds	= "為下一次小怪\"激活\"顯示計時器"
 }
 
 L:SetMiscLocalization{
@@ -1018,11 +1022,11 @@ L:SetGeneralLocalization{
 }
 
 L:SetTimerLocalization{
-	TimerTyrandeHelp	= "泰蘭妲需要幫助"
+	TimerTyrandeHelp	= "泰蘭德需要幫助"
 }
 
 L:SetOptionLocalization{
-	TimerTyrandeHelp	= "為泰蘭妲需要幫助之前顯示計時器"
+	TimerTyrandeHelp	= "為泰蘭德需要幫助顯示計時器"
 }
 
 L:SetMiscLocalization{

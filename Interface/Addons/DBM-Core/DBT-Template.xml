@@ -46,8 +46,7 @@
 						</FontString>
 						<FontString name="$parentName" inherits="GameFontHighlightSmall" justifyH="LEFT" text="">
 							<Anchors>
-     								<Anchor point="LEFT" relativePoint="LEFT">
-
+     								<Anchor point="LEFT" relativePoint="LEFT">
 									<Offset>
 										<AbsDimension x="7" y="0.5"/>
 									</Offset>
@@ -56,8 +55,7 @@
 									<Offset>
 										<AbsDimension x="-7" y="0"/>
 									</Offset>
-								</Anchor>
-
+								</Anchor>
 							</Anchors>
 						</FontString>
 						<Texture name="$parentIcon1">

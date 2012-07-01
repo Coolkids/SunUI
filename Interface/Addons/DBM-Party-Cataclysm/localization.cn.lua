@@ -1,8 +1,4 @@
-﻿-- Simplified Chinese by Diablohu(diablohudream@gmail.com)
--- Last update: 2/25/2012
-
-if GetLocale() ~= "zhCN" then return end
-
+﻿if GetLocale() ~= "zhCN" then return end
 local L
 
 -------------------------
@@ -13,7 +9,7 @@ local L
 L = DBM:GetModLocalization("Romogg")
 
 L:SetGeneralLocalization({
-	name = "碎骨者罗姆欧格"
+	name = "摧骨者罗姆欧格"
 })
 
 -------------------------------
@@ -26,11 +22,11 @@ L:SetGeneralLocalization({
 })
 
 L:SetWarningLocalization({
-	WarnAdd		= "小怪出现"
+	WarnAdd		= "小怪被释放了"
 })
 
 L:SetOptionLocalization({
-	WarnAdd		= "警报：当某个小怪失去$spell:75608效果"
+	WarnAdd		= "当一只小怪失去$spell:75608时警告"
 })
 
 -----------------------
@@ -43,11 +39,11 @@ L:SetGeneralLocalization({
 })
 
 L:SetTimerLocalization({
-	TimerSuperheated 	= "过热护甲（%d）"
+	TimerSuperheated 	= "过热的水银护甲 (%d)"	-- should work, no need for translation :)
 })
 
 L:SetOptionLocalization({
-	TimerSuperheated	= "计时条：$spell:75846的持续时间"
+	TimerSuperheated	= "为$spell:75846显示持续时间计时条"
 })
 
 ------------
@@ -69,7 +65,7 @@ L:SetGeneralLocalization({
 })
 
 L:SetOptionLocalization({
-	SetIconOnBoss	= "在$spell:76200之后自动为首领添加标记"
+	SetIconOnBoss	= "施放$spell:76200后标记首领本体"
 })
 
 ---------------------
@@ -133,7 +129,7 @@ L:SetGeneralLocalization({
 })
 
 L:SetTimerLocalization({
-	achievementGauntlet	= "限时挑战"
+	achievementGauntlet	= "坚定的范克里夫复仇者"
 })
 
 ------------------
@@ -144,11 +140,11 @@ L:SetTimerLocalization({
 L = DBM:GetModLocalization("GeneralUmbriss")
 
 L:SetGeneralLocalization({
-	name 		= "乌比斯将军"
+	name = "乌比斯将军"
 })
 
 L:SetOptionLocalization{
-	PingBlitz	= "当乌比斯将军准备对你迅猛突袭时自动点击小地图"
+	PingBlitz	= "当乌比斯将军即将迅猛突袭你时点击小地图"
 }
 
 L:SetMiscLocalization{
@@ -161,7 +157,7 @@ L:SetMiscLocalization{
 L = DBM:GetModLocalization("ForgemasterThrongus")
 
 L:SetGeneralLocalization({
-	name = "铸炉之主索乌格斯"
+	name = "铸炉之主索朗格斯"
 })
 
 -------------------------
@@ -174,8 +170,8 @@ L:SetGeneralLocalization({
 })
 
 L:SetMiscLocalization{
-	ValionaYell	= "巨龙，听从我的命令！接住我！",	-- Yell when Valiona is incoming
-	Add			= "%s开始施放",
+	ValionaYell	= "巨龙，听从我的命令！接住我！",	-- translate -- Yell when Valiona is incoming
+	Add		= "%s开始施放",
 	Valiona		= "瓦里昂娜"
 }
 
@@ -222,7 +218,7 @@ L:SetGeneralLocalization({
 })
 
 L:SetTimerLocalization({
-	achievementGauntlet	= "限时挑战"
+	achievementGauntlet	= "超越光速"
 })
 
 L:SetMiscLocalization({
@@ -239,11 +235,11 @@ L:SetGeneralLocalization({
 })
 
 L:SetWarningLocalization({
-	WarnSplitSoon	= "即将分裂"
+	WarnSplitSoon	= "分裂 即将到来"
 })
 
 L:SetOptionLocalization({
-	WarnSplitSoon	= "提前警报：分裂"
+	WarnSplitSoon	= "为分裂显示预先警告"
 })
 
 -------------
@@ -298,12 +294,12 @@ L:SetWarningLocalization{
 }
 
 L:SetTimerLocalization({
-	timerPhase2 		= "第2阶段开始"
+	timerPhase2 	= "第2阶段开始"
 })
 
 L:SetOptionLocalization{
-	specWarnPhase2Soon	= "特殊警报：第2阶段即将开始（约5秒）",
-	timerPhase2 		= "计时条：第2阶段即将开始"
+	specWarnPhase2Soon	= "当第2阶段即将到来(5秒)时显示特别警告",
+	timerPhase2 	= "为第2阶段开始显示计时条"
 }
 
 ------------------------
@@ -316,12 +312,12 @@ L:SetGeneralLocalization({
 })
 
 L:SetOptionLocalization{
-	BossHealthAdds	= "在首领生命框体内显示小怪血量"
+	BossHealthAdds	= "在首领血量框架显示小怪血量"	-- translate
 }
 
 L:SetMiscLocalization{
-	BlazeHeavens		= "天堂炽焰",
-	HarbringerDarkness	= "黑暗先驱"
+	BlazeHeavens		= "天堂炽焰",	-- translate
+	HarbringerDarkness	= "黑暗先驱"	-- translate
 }
 
 --------------
@@ -334,7 +330,7 @@ L:SetGeneralLocalization({
 })
 
 L:SetOptionLocalization{
-	RangeFrame	= "距离监视器（5码）"
+	RangeFrame	= "显示距离框 (5码)"		-- translate
 }
 
 ----------
@@ -343,7 +339,7 @@ L:SetOptionLocalization{
 L = DBM:GetModLocalization("Augh")
 
 L:SetGeneralLocalization({
-	name = "奥弗"		-- he is fightable after Lockmaw :o
+	name = "奥弗"		-- translate
 })
 
 -----------------------
@@ -376,11 +372,11 @@ L:SetGeneralLocalization({
 })
 
 L:SetTimerLocalization({
-	TimerAdds		= "下一次小怪刷新"
+	TimerAdds		= "下批小怪"
 })
 
 L:SetOptionLocalization{
-	TimerAdds		= "计时条：下一次小怪刷新"
+	TimerAdds		= "为下一批小怪显示计时条"
 }
 
 L:SetMiscLocalization{
@@ -393,16 +389,16 @@ L:SetMiscLocalization{
 L = DBM:GetModLocalization("Walden")
 
 L:SetGeneralLocalization({
-	name = "瓦尔登勋爵"
+	name = "沃登勋爵"
 })
 
 L:SetWarningLocalization{
-	specWarnCoagulant	= "绿色混合剂 - 持续移动！",	-- Green light
-	specWarnRedMix		= "红色混合剂 - 不要移动！"		-- Red light
+	specWarnCoagulant	= "绿色混合 - 不断移动!",	-- Green light
+	specWarnRedMix		= "红色混合 - 不要移动!"		-- Red light
 }
 
 L:SetOptionLocalization{
-	RedLightGreenLight	= "特殊警报：红色/绿色混合剂的移动要求"
+	RedLightGreenLight	= "为红/绿色移动方式显示特别警告"
 }
 
 ------------------
@@ -426,22 +422,22 @@ L:SetGeneralLocalization({
 })
 
 L:SetWarningLocalization({
-	WarnEmerge		= "出现",
-	WarnSubmerge	= "钻地"
+	WarnEmerge	= "钻出地面",
+	WarnSubmerge	= "钻进地里"
 })
 
 L:SetTimerLocalization({
-	TimerEmerge		= "下一次出现",
-	TimerSubmerge	= "下一次钻地"
+	TimerEmerge	= "下一次 钻出地面",
+	TimerSubmerge	= "下一次 钻进地里"
 })
 
 L:SetOptionLocalization({
-	WarnEmerge		= "警报：出现",
-	WarnSubmerge	= "警报：钻地",
-	TimerEmerge		= "计时条：下一次出现",
-	TimerSubmerge	= "计时条：下一次钻地",
-	CrystalArrow	= "DBM箭头：当$spell:81634目标距你过近时",
-	RangeFrame		= "距离监视器（5码）"
+	WarnEmerge	= "为钻出地面显示警告",
+	WarnSubmerge	= "为钻进地里显示警告",
+	TimerEmerge	= "为钻出地面显示计时条",
+	TimerSubmerge	= "为钻进地里显示计时条",
+	CrystalArrow	= "当你附近的人中了$spell:81634时显示DBM箭头",
+	RangeFrame	= "显示距离框 (5码)"
 })
 
 -----------
@@ -464,21 +460,21 @@ L:SetGeneralLocalization({
 
 L:SetWarningLocalization({
 	WarnAirphase			= "空中阶段",
-	WarnGroundphase			= "地面阶段",
-	specWarnCrystalStorm	= "水晶风暴 - 寻找掩护"
+	WarnGroundphase			= "地上阶段",
+	specWarnCrystalStorm		= "水晶风暴 - 找掩护"
 })
 
 L:SetTimerLocalization({
-	TimerAirphase			= "下一次空中阶段",
-	TimerGroundphase		= "下一次地面阶段"
+	TimerAirphase			= "下一次 空中阶段",
+	TimerGroundphase		= "下一次 地上阶段"
 })
 
 L:SetOptionLocalization({
-	WarnAirphase			= "警报：岩皮起飞",
-	WarnGroundphase			= "警报：岩皮落地",
-	TimerAirphase			= "计时条：下一次空中阶段",
-	TimerGroundphase		= "计时条：下一次地面阶段",
-	specWarnCrystalStorm	= "特殊警报：$spell:92265"
+	WarnAirphase			= "当岩皮升空时显示警告",
+	WarnGroundphase			= "当岩皮降落时显示警告",
+	TimerAirphase			= "为下一次 空中阶段显示计时条",
+	TimerGroundphase		= "为下一次 地上阶段显示计时条",
+	specWarnCrystalStorm		= "为$spell:92265显示特别警告"
 })
 
 -------------------------
@@ -498,7 +494,7 @@ L:SetGeneralLocalization({
 L = DBM:GetModLocalization("GrandVizierErtan")
 
 L:SetGeneralLocalization({
-	name = "大宰相埃尔坦喊道"
+	name = "大宰相尔埃尔坦"
 })
 
 L:SetMiscLocalization{
@@ -528,11 +524,11 @@ L:SetGeneralLocalization({
 })
 
 L:SetOptionLocalization({
-	SpecWarnStaticCling	= "特殊警报：$spell:87618"
+	SpecWarnStaticCling	= "为$spell:87618显示特别警告"
 })
 
 L:SetWarningLocalization({
-	SpecWarnStaticCling	= "跳！"
+	SpecWarnStaticCling	= "快跳！"
 })
 
 ---------------------------
@@ -561,7 +557,7 @@ L:SetGeneralLocalization({
 L = DBM:GetModLocalization("ErunakStonespeaker")
 
 L:SetGeneralLocalization({
-	name = "石语者埃鲁纳克"
+	name = "蛊心魔古厄夏"
 })
 
 ------------
@@ -575,66 +571,66 @@ L:SetGeneralLocalization({
 
 ----------------
 --  Zul'Aman  --
-----------------
--- Nalorakk --
---------------
+---------------
+--  Nalorakk --
+---------------
 L = DBM:GetModLocalization("Nalorakk5")
 
 L:SetGeneralLocalization{
-	name = "纳洛拉克（野熊）"
+	name = "纳洛拉克(熊)"
 }
 
 L:SetWarningLocalization{
 	WarnBear		= "熊形态",
-	WarnBearSoon	= "5秒后熊形态",
-	WarnNormal		= "人形态",
-	WarnNormalSoon	= "5秒后人形态"
+	WarnBearSoon	= "5秒后 熊形态",
+	WarnNormal		= "普通形态",
+	WarnNormalSoon	= "5秒后 普通形态"
 }
 
 L:SetTimerLocalization{
 	TimerBear		= "熊形态",
-	TimerNormal		= "人形态"
+	TimerNormal		= "普通形态"
 }
 
 L:SetOptionLocalization{
-	WarnBear		= "警报：变为熊形态",
-	WarnBearSoon	= "提前警报：变为熊形态",
-	WarnNormal		= "警报：变为人形态",
-	WarnNormalSoon	= "提前警报：变为人形态",
-	TimerBear		= "计时条：熊形态",
-	TimerNormal		= "计时条：人形态",
-	InfoFrame		= "信息框：拥有$spell:42402效果的团员的列表"
+	WarnBear		= "为熊形态显示警告",--Translate
+	WarnBearSoon	= "为熊形态显示预先警告",--Translate
+	WarnNormal		= "为普通形态显示警告",--Translate
+	WarnNormalSoon	= "为普通形态显示预先警告",--Translate
+	TimerBear		= "为熊形态显示计时条",--Translate
+	TimerNormal		= "为普通形态显示计时条",
+	InfoFrame		= "在信息框显示中了$spell:42402的玩家"
 }
 
 L:SetMiscLocalization{
-	YellBear 		= "你们召唤野兽？你马上就要大大的后悔了！",
-	YellNormal		= "让我带给你们痛苦！",
-	PlayerDebuffs	= "澎湃效果"
+	YellBear 	= "你们召唤野兽？你马上就要大大的后悔了！",
+	YellNormal	= "纳洛拉克，变形，出发！",
+	PlayerDebuffs	= "刚被冲锋过"
 }
 
---------------
--- Akil'zon --
---------------
+---------------
+--  Akil'zon --
+---------------
 L = DBM:GetModLocalization("Akilzon5")
 
 L:SetGeneralLocalization{
-	name = "埃基尔松（雄鹰）"
+	name = "埃基尔松(鹰)"
 }
 
 L:SetOptionLocalization{
 	StormIcon	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(97300),
-	RangeFrame	= "距离监视器（10码）",
-	StormArrow	= "DBM箭头：$spell:97300",
+	RangeFrame	= "显示距离框(10码)",
+	StormArrow	= "为$spell:97300显示DBM箭头",
 	SetIconOnEagle	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(97318)
 }
 
---------------
--- Jan'alai --
---------------
+---------------
+--  Jan'alai --
+---------------
 L = DBM:GetModLocalization("Janalai5")
 
 L:SetGeneralLocalization{
-	name = "加亚莱（龙鹰）"
+	name = "加亚莱(龙鹰)"
 }
 
 L:SetOptionLocalization{
@@ -647,13 +643,13 @@ L:SetMiscLocalization{
 	YellAdds	= "孵化者呢？快去孵蛋！"
 }
 
--------------
--- Halazzi --
--------------
+--------------
+--  Halazzi --
+--------------
 L = DBM:GetModLocalization("Halazzi5")
 
 L:SetGeneralLocalization{
-	name = "哈尔拉兹（山猫）"
+	name = "哈尔拉兹(山猫)"
 }
 
 L:SetWarningLocalization{
@@ -662,8 +658,8 @@ L:SetWarningLocalization{
 }
 
 L:SetOptionLocalization{
-	WarnSpirit	= "警报：灵魂阶段",
-	WarnNormal	= "警报：普通阶段"
+	WarnSpirit	= "为灵魂阶段显示警告",--Translate
+	WarnNormal	= "为普通阶段显示警告"--Translate
 }
 
 L:SetMiscLocalization{
@@ -671,9 +667,9 @@ L:SetMiscLocalization{
 	YellNormal	= "灵魂，到我这里来！"
 }
 
------------------------
--- Hexlord Malacrass --
------------------------
+--------------------------
+--  Hex Lord Malacrass --
+--------------------------
 L = DBM:GetModLocalization("Malacrass5")
 
 L:SetGeneralLocalization{
@@ -681,11 +677,11 @@ L:SetGeneralLocalization{
 }
 
 L:SetTimerLocalization{
-	TimerSiphon	= "%s：%s"
+	TimerSiphon	= "%s: %s"
 }
 
 L:SetOptionLocalization{
-	TimerSiphon	= "计时条：$spell:43501"
+	TimerSiphon	= "为$spell:43501显示计时条"
 }
 
 L:SetMiscLocalization{
@@ -702,18 +698,18 @@ L:SetGeneralLocalization{
 }
 
 L:SetTimerLocalization{
-	timerNextForm	= "下一次变形"
+	timerNextForm	= "下一次转换形态"
 }
 
 L:SetOptionLocalization{
-	timerNextForm	= "计时条：变形",
-	InfoFrame		= "信息框：拥有$spell:42402效果的团员的列表",
+	timerNextForm	= "为转换形态显示计时条",
+	InfoFrame		= "在信息框显示中了$spell:42402的玩家",
 	ThrowIcon		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(97639),
 	ClawRageIcon	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(97672)
 }
 
 L:SetMiscLocalization{
-	PlayerDebuffs	= "澎湃效果"
+	PlayerDebuffs	= "刚被冲锋过"
 }
 
 -----------------
@@ -724,12 +720,12 @@ L:SetMiscLocalization{
 L = DBM:GetModLocalization("Venoxis")
 
 L:SetGeneralLocalization{
-	name = "高阶祭司温诺西斯"
+	name = "高阶祭司温诺希斯"
 }
 
 L:SetOptionLocalization{
 	SetIconOnToxicLink	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(96477),
-	LinkArrow			= "DBM箭头：当你受到$spell:96477影响时"
+	LinkArrow		= "当你中了$spell:96477时显示DBM箭头"
 }
 
 ------------------------
@@ -742,14 +738,14 @@ L:SetGeneralLocalization{
 }
 
 L:SetWarningLocalization{
-	WarnRevive		= "剩余%d个幽灵",
-	SpecWarnOhgan	= "奥根复活了！" -- check this, i'm not good at English
+	WarnRevive		= "还剩余 %d 救赎的灵魂",
+	SpecWarnOhgan	= "奥根复活! 快击杀!" -- check this, i'm not good at English
 }
 
 L:SetOptionLocalization{
-	WarnRevive		= "警报：幽灵剩余数量",
-	SpecWarnOhgan	= "警报：奥根的复活", -- check this, i'm not good at English
-	SetIconOnOhgan	= "当奥根复活时自动为其添加标记" 
+	WarnRevive		= "通告还剩余多少救赎的灵魂",
+	SpecWarnOhgan	= "当奥根复活的时候显示警告", -- check this, i'm not good at English
+	SetIconOnOhgan	= "当奥根复活的时候给他设定标记"
 }
 
 L:SetMiscLocalization{
@@ -766,17 +762,17 @@ L:SetGeneralLocalization{
 }
 
 L:SetWarningLocalization{
-	SpecWarnToxic	= "Get Toxic Torment"
+	SpecWarnToxic	= "去点绿锅"
 }
 
 L:SetOptionLocalization{
-	SpecWarnToxic	= "特殊警报：当你缺少$spell:96328效果时",
-	InfoFrame		= "信息框：没有$spell:96328效果的团员的列表",
+	SpecWarnToxic	= "当你没有$spell:96328时显示特别警告",
+	InfoFrame		= "在信息框显示没有$spell:96328的玩家",
 	SetIconOnGaze	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(96342)
 }
 
 L:SetMiscLocalization{
-	PlayerDebuffs	= "没有剧毒折磨效果"
+	PlayerDebuffs	= "没有点绿锅"
 }
 
 ----------------------------
@@ -786,6 +782,10 @@ L = DBM:GetModLocalization("Kilnara")
 
 L:SetGeneralLocalization{
 	name = "高阶祭司基尔娜拉"
+}
+
+L:SetMiscLocalization{
+	WaveAgony	= "感受我的痛楚！"
 }
 
 ----------------------------
@@ -798,16 +798,16 @@ L:SetGeneralLocalization{
 }
 
 L:SetWarningLocalization{
-	WarnBarrierDown	= "哈卡之链壁垒被摧毁 - %d/3剩余"
+	WarnBarrierDown	= "哈卡之链被破坏 - 剩余 %d/3"
 }
 
 L:SetOptionLocalization{
-	WarnBarrierDown	= "警报：哈卡之链的壁垒被摧毁",
+	WarnBarrierDown	= "当哈卡之链被破坏时显示警告",
 	BodySlamIcon	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(97198)
 }
 
 L:SetMiscLocalization{
-	Kill			= "You overstepped your bounds, Jin'do. You toy with powers that are beyond you. Have you forgotten who I am? Have you forgotten what I can do?!"
+	Kill			= "你太放肆了，金度，你竟敢把远远凌驾于你的力量当作儿戏。难道你忘了我是谁？难道你忘了我能做什么？" -- temporarily
 }
 
 ----------------------
@@ -825,7 +825,7 @@ L:SetGeneralLocalization{
 }
 
 L:SetMiscLocalization({
-	pursuitEmote	= "%s正在"
+	pursuitEmote	= "%s正在追赶"
 })
 
 ---------------
@@ -878,7 +878,7 @@ L:SetGeneralLocalization{
 L = DBM:GetModLocalization("Garr")
 
 L:SetGeneralLocalization{
-	name = "加尔（大地的裂变）"
+	name = "加尔 (Cata)"
 }
 
 ----------------
@@ -890,6 +890,10 @@ L:SetGeneralLocalization{
 	name = "厄运尤拉克"
 }
 
+L:SetOptionLocalization{
+	SetIconOnMC	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(93621)
+}
+
 -----------
 -- Mobus --
 -----------
@@ -899,9 +903,9 @@ L:SetGeneralLocalization{
 	name = "魔布斯"
 }
 
--------------
+-----------
 -- Xariona --
--------------
+-----------
 L = DBM:GetModLocalization("Xariona")
 
 L:SetGeneralLocalization{
@@ -938,11 +942,11 @@ L:SetGeneralLocalization{
 }
 
 L:SetTimerLocalization{
-	TimerFlarecoreDetonate	= "炙焰之核"
+	TimerFlarecoreDetonate	= "炙焰之核爆炸"
 }
 
 L:SetOptionLocalization{
-	TimerFlarecoreDetonate	= "计时条：$spell:101927引爆"
+	TimerFlarecoreDetonate	= "为$spell:101927显示计时条"
 }
 
 ----------------------
@@ -992,7 +996,7 @@ L:SetGeneralLocalization{
 }
 
 L:SetWarningLocalization{
-	WarnAdds	= "新的小怪即将出现"
+	WarnAdds	= "小怪即将激活"
 }
 
 L:SetTimerLocalization{
@@ -1000,8 +1004,8 @@ L:SetTimerLocalization{
 }
 
 L:SetOptionLocalization{
-	WarnAdds	= "警报：新的小怪出现",
-	TimerAdds	= "计时条：下一批小怪"
+	WarnAdds	= "新一批小怪\"激活\"时显示警告",
+	TimerAdds	= "为下一次小怪\"激活\"显示计时条"
 }
 
 L:SetMiscLocalization{
@@ -1014,7 +1018,7 @@ L:SetMiscLocalization{
 L = DBM:GetModLocalization("Mannoroth")
 
 L:SetGeneralLocalization{
-	name = "玛诺洛斯与瓦罗森"
+	name = "玛诺洛斯和禁卫队长瓦罗森"
 }
 
 L:SetTimerLocalization{
@@ -1022,7 +1026,7 @@ L:SetTimerLocalization{
 }
 
 L:SetOptionLocalization{
-	TimerTyrandeHelp	= "计时条：泰兰德需要帮助"
+	TimerTyrandeHelp	= "为泰兰德需要帮助显示计时条"
 }
 
 L:SetMiscLocalization{
@@ -1041,17 +1045,16 @@ L:SetGeneralLocalization{
 }
 
 L:SetTimerLocalization{
-	TimerCombatStart	= "战斗即将开始"
+	TimerCombatStart	= "战斗开始"
 }
 
 L:SetOptionLocalization{
-	TimerCombatStart	= "计时条：战斗即将开始"
+	TimerCombatStart	= "为战斗开始显示计时条"
 }
 
 L:SetMiscLocalization{
 	Event		= "现身吧！",
-	Pull		= "你不过是个凡人。现在，像个凡人那样卑微地死去吧。"
-	--Pull		= "Twilight forces begin to appear around the canyons edges."
+	Pull		= "暮光大军出现在峡谷上方的悬崖边。"
 }
 
 ----------------------
@@ -1064,7 +1067,7 @@ L:SetGeneralLocalization{
 }
 
 L:SetMiscLocalization{
-	Pull		= "该干正事了，对吧？"
+	Pull		= "……解决了那东西，你和这群乌合之众就是我的下一个目标。唔，我还以为你们根本到不了这儿！"
 }
 
 ---------------------------
@@ -1077,13 +1080,13 @@ L:SetGeneralLocalization{
 }
 
 L:SetTimerLocalization{
-	TimerCombatStart	= "战斗即将开始"
+	TimerCombatStart	= "战斗开始"
 }
 
 L:SetOptionLocalization{
-	TimerCombatStart	= "计时条：战斗即将开始"
+	TimerCombatStart	= "为战斗开始显示计时条"
 }
 
 L:SetMiscLocalization{
-	Event		= " 萨满，你会把巨龙之魂交给我。"
+	Event		= "萨满，你会把巨龙之魂交给我。"
 }

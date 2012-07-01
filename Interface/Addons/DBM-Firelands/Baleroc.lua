@@ -14,6 +14,7 @@ mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED",
+	"SPELL_AURA_APPLIED_DOSE",
 	"SPELL_AURA_REFRESH",
 	"SPELL_AURA_REMOVED",
 	"SPELL_DAMAGE",
@@ -22,47 +23,53 @@ mod:RegisterEventsInCombat(
 )
 
 local warnDecimationBlade	= mod:NewSpellAnnounce(99352, 4, nil, mod:IsTank() or mod:IsHealer())
-local warnStrike			= mod:NewAnnounce("warnStrike", 4, 99353, mod:IsTank() or mod:IsHealer())
-local warnInfernoBlade		= mod:NewSpellAnnounce(99350, 3, nil, mod:IsTank())
+local warnStrike			= mod:NewAnnounce("warnStrike", 4, 99353, false)
+local warnInfernoBlade		= mod:NewSpellAnnounce(99350, 3, nil, mod:IsTank() or mod:IsHealer())
 local warnShardsTorment		= mod:NewCountAnnounce(99259, 3)
-local warnTormented			= mod:NewSpellAnnounce(99402, 3)--Self only warning.
+local warnTormented			= mod:NewSpellAnnounce(99402, 3, nil, false)--Self only warning.
 local warnCountdown			= mod:NewTargetAnnounce(99516, 4)
 local yellCountdown			= mod:NewYell(99516)
+--local warnTorment    = mod:NewStackAnnounce(99256, 3)
 
 local specWarnShardsTorment	= mod:NewSpecialWarningSpell(99259, nil, nil, nil, true)
 local specWarnCountdown		= mod:NewSpecialWarningYou(99516)
-local specWarnTormented		= mod:NewSpecialWarningYou(99402, mod:IsHealer())
-local specWarnDecimation	= mod:NewSpecialWarningSpell(99352, mod:IsTank())
+local specWarnTorment	= mod:NewSpecialWarningStack(99256, true, 8)
+local specWarnTormented		= mod:NewSpecialWarningYou(99402, false)
+local specWarnDecimation	= mod:NewSpecialWarningSpell(99352, false)
+local specWarnHealerTouched	= mod:NewSpecialWarning("SpecWarnHealerTouched", mod:IsTank() or mod:IsHealer())
 
-local timerBladeActive		= mod:NewTimer(15, "TimerBladeActive", 99352)
+local timerBladeActive		= mod:NewTimer(16.5, "TimerBladeActive", 99352)
 local timerBladeNext		= mod:NewTimer(30, "TimerBladeNext", 99350, mod:IsTank() or mod:IsHealer())	-- either Decimation Blade or Inferno Blade
 local timerStrikeCD			= mod:NewTimer(5, "timerStrike", 99353, mod:IsTank() or mod:IsHealer())--5 or 2.5 sec. Variations are noted but can be auto corrected after first timer since game follows correction.
 local timerShardsTorment	= mod:NewNextCountTimer(34, 99259)
 local timerCountdown		= mod:NewBuffFadesTimer(8, 99516)
 local timerCountdownCD		= mod:NewNextTimer(45, 99516)
 local timerVitalFlame		= mod:NewBuffFadesTimer(15, 99263)
-local timerTormented		= mod:NewBuffFadesTimer(40, 99402)
+local timerTormented		= mod:NewBuffFadesTimer(40, 99402, nil, false)
 
 local countdownShards		= mod:NewCountdown(34, 99259, false)
 
 local berserkTimer			= mod:NewBerserkTimer(360)
 
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
+
 mod:AddBoolOption("ResetShardsinThrees", true, "announce")
 mod:AddBoolOption("RangeFrame")
-mod:AddBoolOption("InfoFrame", mod:IsHealer())
+mod:AddBoolOption("InfoFrame")
 mod:AddBoolOption("SetIconOnCountdown")
 mod:AddBoolOption("SetIconOnTorment")
 mod:AddBoolOption("ArrowOnCountdown")
 
 local bladesName = nil
-local lastStrike = 0--Custom, no prototype
-local currentStrike = 0--^^
-local lastStrikeDiff = 0--^^
+local lastStrike = 0
+local currentStrike = 0
+local lastStrikeDiff = 0
 local strikeCount = 0
 local shardCount = 0
 local tormentIcon = 8
 local countdownIcon = 2
 local countdownTargets = {}
+local tormented = GetSpellInfo(100231)
 local tormentDebuff = GetSpellInfo(99404)
 
 local function showCountdownWarning()
@@ -95,8 +102,13 @@ function mod:OnCombatStart(delay)
 		end
 	end
 	if self.Options.InfoFrame then
-		DBM.InfoFrame:SetHeader(L.VitalSpark)
-		DBM.InfoFrame:Show(5, "playerbuffstacks", 99262, 99263, 1)
+		if self:IsHealer() then
+			DBM.InfoFrame:SetHeader(L.VitalSpark)
+			DBM.InfoFrame:Show(5, "playerbuffstacks", 99262, 99263, 1)
+		else
+			DBM.InfoFrame:SetHeader(tormented)
+			DBM.InfoFrame:Show(5, "playerdebuffstacks", 100231)		
+		end
 	end
 end
 
@@ -112,7 +124,6 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(99516) then
 		countdownTargets[#countdownTargets + 1] = args.destName
-		timerCountdown:Start()
 		timerCountdownCD:Start()
 		if self.Options.SetIconOnCountdown then
 			self:SetIcon(args.destName, countdownIcon, 8)
@@ -120,6 +131,11 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		if args:IsPlayer() then
 			specWarnCountdown:Show()
+			timerCountdown:Start()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\followline.mp3")
+			sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 			yellCountdown:Yell()
 		end
 		if self.Options.ArrowOnCountdown and #countdownTargets == 2 then
@@ -136,6 +152,9 @@ function mod:SPELL_AURA_APPLIED(args)
 			self:SetIcon(args.destName, tormentIcon)
 			tormentIcon = tormentIcon - 1
 		end
+--		if not self:IsTank() and not self:IsHealer() then
+--			warnTorment:Show(args.destName, args.amount or 1)
+--		end
 	elseif args:IsSpellID(99263) and args:IsPlayer() then
 		timerVitalFlame:Start()
 	elseif args:IsSpellID(99352, 99405) then--Decimation Blades
@@ -146,6 +165,11 @@ function mod:SPELL_AURA_APPLIED(args)
 			timerStrikeCD:Start(3, bladesName)
 		else
 			timerStrikeCD:Start(6, bladesName)--6 seconds on 10 man
+			if self:IsTank() or self:IsHealer() then
+				sndWOP:Schedule(3.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+				sndWOP:Schedule(4.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+				sndWOP:Schedule(5.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			end
 		end
 	elseif args:IsSpellID(99350) then--Inferno Blades
 		bladesName = GetSpellInfo(101002)
@@ -156,6 +180,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			warnTormented:Show()
 			specWarnTormented:Show()
+			if self:IsHealer() then
+				self:SendSync("healertouched", UnitName("player"))
+			end
 			if self:IsDifficulty("normal10") then--The very first timer is subject to inaccuracis do to variation. But they are minor, usually within 0.5sec
 				timerTormented:Start(20)
 			elseif self:IsDifficulty("heroic10") then
@@ -169,6 +196,32 @@ function mod:SPELL_AURA_APPLIED(args)
 				DBM.RangeCheck:Show(5, nil)--Show everyone, cause you're debuff person and need to stay away from people.
 			end
 		end
+	end
+end
+
+
+function mod:SPELL_AURA_APPLIED_DOSE(args)
+	if args:IsSpellID(99256, 100230, 100231, 100232) then--Torment
+--		if not self:IsTank() and not self:IsHealer() then
+--			warnTorment:Show(args.destName, args.amount or 1)
+--		end
+		if args:IsPlayer() then
+			if mod:IsDifficulty("heroic10", "heroic25") then
+				if args.amount == 7 or args.amount == 9 or args.amount == 12 or args.amount == 18 then
+					specWarnTorment:Show(args.amount)
+					if args.amount == 8 then
+						sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\awayshard.mp3")
+					end
+				end
+			else
+				if args.amount == 11 or args.amount == 13 or args.amount == 18 then
+					specWarnTorment:Show(args.amount)
+					if args.amount == 12 then					
+						sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\awayshard.mp3")
+					end
+				end
+			end
+		end		
 	end
 end
 
@@ -192,6 +245,11 @@ function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(99352, 99405) or args:IsSpellID(99350) then--Decimation Blade/Inferno blade
 		timerBladeNext:Start()--30 seconds after last blades FADED
 		timerStrikeCD:Cancel()
+		if self:IsTank() or self:IsHealer() then
+			sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		end
 	elseif args:IsSpellID(99256, 100230, 100231, 100232) then--Torment
 		if self.Options.SetIconOnTorment then
 			self:SetIcon(args.destName, 0)
@@ -203,10 +261,20 @@ function mod:SPELL_AURA_REMOVED(args)
 				DBM.RangeCheck:Show(5, tormentDebuffFilter)--Show only debuffed poeple again.
 			end
 		end
+	elseif args:IsSpellID(99516) then
+		if self.Options.SetIconOnCountdown then
+			self:SetIcon(args.destName, 0)
+		end
+		if args:IsPlayer() then
+			timerCountdown:Cancel()
+			sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		end
 	end
 end
 
-function mod:SPELL_DAMAGE(sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName)
+function mod:SPELL_DAMAGE(_, _, _, _, _, _, _, _, spellId, spellName)
 	if spellId == 99353 then--Decimation Strike
 		strikeCount = strikeCount + 1
 		warnStrike:Show(spellName, strikeCount)
@@ -222,6 +290,11 @@ function mod:SPELL_DAMAGE(sourceGUID, sourceName, sourceFlags, sourceRaidFlags, 
 				timerStrikeCD:Start(3+lastStrikeDiff, spellName)--Next strike is gonna come late since previous one was early.
 			end
 		else--Do same thing as above only with 10 man timing.
+			if self:IsTank() or self:IsHealer() then
+				sndWOP:Schedule(3.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+				sndWOP:Schedule(4.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+				sndWOP:Schedule(5.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			end
 			if lastStrikeDiff > 6 then
 				lastStrikeDiff = lastStrikeDiff - 6
 				timerStrikeCD:Start(6-lastStrikeDiff, spellName)
@@ -249,19 +322,27 @@ function mod:SPELL_DAMAGE(sourceGUID, sourceName, sourceFlags, sourceRaidFlags, 
 end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE--Dodge/parried decimation strikes show as SPELL_MISSED
 
+
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(99352, 99405) then	--99352 confirmed
 		warnDecimationBlade:Show()
 		specWarnDecimation:Show()
+		if self:IsTank() or self:IsHealer() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\deciblade.mp3")
+		end
 		timerBladeActive:Start(args.spellName)
 	elseif args:IsSpellID(99350) then
 		warnInfernoBlade:Show()
+		if self:IsTank() or self:IsHealer() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\inferblade.mp3")
+		end
 		timerBladeActive:Start(args.spellName)
 	elseif args:IsSpellID(99259) then
 		shardCount = shardCount + 1
 		tormentIcon = 8
 		warnShardsTorment:Show(shardCount)
 		specWarnShardsTorment:Schedule(1.5)
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\shard.mp3")
 		countdownShards:Start(34)
 		if self.Options.ResetShardsinThrees and (self:IsDifficulty("normal25", "heroic25") and shardCount == 3 or self:IsDifficulty("normal10", "heroic10") and shardCount == 2) then
 			shardCount = 0
@@ -269,5 +350,11 @@ function mod:SPELL_CAST_START(args)
 		else
 			timerShardsTorment:Start(34, shardCount+1)
 		end
+	end
+end
+
+function mod:OnSync(msg, pname)
+	if msg == "healertouched" and pname then
+		specWarnHealerTouched:Show(pname)
 	end
 end
