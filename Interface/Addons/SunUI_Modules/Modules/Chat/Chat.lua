@@ -5,7 +5,7 @@ function Module:OnInitialize()
 -- 聊天设置	
 local fontsize = 10                          --other variables
 local tscol = "64C2F5"						-- Timestamp coloring
-local TimeStampsCopy = true					-- 时间戳
+local TimeStampsCopy = C["MiniDB"]["TimeStamps"]					-- 时间戳
 
 	for i = 1, 25 do
 		CHAT_FONT_HEIGHTS[i] = i+4
@@ -315,11 +315,13 @@ local TimeStampsCopy = true					-- 时间戳
 	end)
 
 	---------------- > afk/dnd msg filter
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL_JOIN", function(msg) return true end)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL_LEAVE", function(msg) return true end)
-	-- ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL_NOTICE", function(msg) return true end)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_AFK", function(msg) return true end)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_DND", function(msg) return true end)
+	if C["MiniDB"]["DNDFilter"] then  
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL_JOIN", function(msg) return true end)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL_LEAVE", function(msg) return true end)
+		-- ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL_NOTICE", function(msg) return true end)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_AFK", function(msg) return true end)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_DND", function(msg) return true end)
+	end
 
 	---------------- > Batch ChatCopy Module
 	local lines = {}

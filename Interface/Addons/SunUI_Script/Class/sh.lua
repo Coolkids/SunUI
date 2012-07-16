@@ -45,6 +45,11 @@ function Module:OnInitialize()
 					local start, duration = GetSpellCooldown(spellIDs[select(2, UnitClass("player"))])
 					Frame.Cooldown:SetReverse(false)
 					CooldownFrame_SetTimer(Frame.Cooldown, start, duration, 1)
+					if start > 1.5 and duration > 1.5 then
+						ActionButton_HideOverlayGlow(self)
+					else
+						ActionButton_ShowOverlayGlow(self)
+					end
 				end
 			else self:Hide()
 			end
@@ -56,6 +61,11 @@ function Module:OnInitialize()
 					local start, duration = GetSpellCooldown(spellIDs[select(2, UnitClass("player"))])
 					Frame.Cooldown:SetReverse(false)
 					CooldownFrame_SetTimer(Frame.Cooldown, start, duration, 1)
+					if start > 1.5 and duration > 1.5 then
+						ActionButton_HideOverlayGlow(self)
+					else
+						ActionButton_ShowOverlayGlow(self)
+					end
 				end
 			else self:Hide()
 			end
@@ -67,6 +77,11 @@ function Module:OnInitialize()
 					local start, duration = GetSpellCooldown(spellIDs[select(2, UnitClass("player"))])
 					Frame.Cooldown:SetReverse(false)
 					CooldownFrame_SetTimer(Frame.Cooldown, start, duration, 1)
+					if start > 1.5 and duration > 1.5 then
+						ActionButton_HideOverlayGlow(self)
+					else
+						ActionButton_ShowOverlayGlow(self)
+					end
 				end
 			else self:Hide()
 			end

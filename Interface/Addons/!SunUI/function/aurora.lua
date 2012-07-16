@@ -79,7 +79,7 @@ F.ReskinArrow = function(f, direction)
 	local tex = f:CreateTexture(nil, "ARTWORK")
 	tex:Size(8, 8)
 	tex:SetPoint("CENTER")
-	
+
 	if direction == 1 then
 		tex:SetTexture("Interface\\AddOns\\!SunUI\\Media\\arrow-left-active")
 	elseif direction == 2 then
@@ -160,24 +160,24 @@ F.ReskinRadio = function(f)
 	f:SetCheckedTexture(C.media.backdrop)
 	
 	local hl = f:GetHighlightTexture()
-	hl:Point("TOPLEFT", 5, -5)
-	hl:Point("BOTTOMRIGHT", -5, 5)
+	hl:Point("TOPLEFT", 4, -4)
+	hl:Point("BOTTOMRIGHT", -4, 4)
 	hl:SetVertexColor(r, g, b, .3)
 	
 	local ch = f:GetCheckedTexture()
-	ch:Point("TOPLEFT", 5, -5)
-	ch:Point("BOTTOMRIGHT", -5, 5)
+	ch:Point("TOPLEFT", 4, -4)
+	ch:Point("BOTTOMRIGHT", -4, 4)
 	ch:SetVertexColor(r, g, b, .6)
 
 	local bd = CreateFrame("Frame", nil, f)
-	bd:Point("TOPLEFT", 4, -4)
-	bd:Point("BOTTOMRIGHT", -4, 4)
+	bd:Point("TOPLEFT", 3, -3)
+	bd:Point("BOTTOMRIGHT", -3, 3)
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	S.CreateBD(bd, 0)
 
 	local tex = f:CreateTexture(nil, "BACKGROUND")
-	tex:Point("TOPLEFT", 5, -5)
-	tex:Point("BOTTOMRIGHT", -5, 5)
+	tex:Point("TOPLEFT", 4, -4)
+	tex:Point("BOTTOMRIGHT", -4, 4)
 	tex:SetTexture(C.media.backdrop)
 	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 end
@@ -331,7 +331,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		
 		-- [[ Radio buttons ]]
 
-		local radiobuttons = {"ReportPlayerNameDialogPlayerNameCheckButton", "ReportPlayerNameDialogGuildNameCheckButton", "ReportPlayerNameDialogArenaTeamNameCheckButton"}
+		local radiobuttons = {"ReportPlayerNameDialogPlayerNameCheckButton", "ReportPlayerNameDialogGuildNameCheckButton", "ReportPlayerNameDialogArenaTeamNameCheckButton", "SendMailSendMoneyButton", "SendMailCODButton"}
 		for i = 1, #radiobuttons do
 			local radiobutton = _G[radiobuttons[i]]
 			if radiobutton then
@@ -466,7 +466,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			
 			if level == 1 then
 				if not anchorName then
-					listFrame:SetPoint("TOPLEFT", dropDownFrame, "BOTTOMLEFT", 16, 9)
+					local xOffset = dropDownFrame.xOffset and dropDownFrame.xOffset or 16
+					local yOffset = dropDownFrame.yOffset and dropDownFrame.yOffset or 9
+					local point = dropDownFrame.point and dropDownFrame.point or "TOPLEFT"
+					local relativeTo = dropDownFrame.relativeTo and dropDownFrame.relativeTo or dropDownFrame
+					local relativePoint = dropDownFrame.relativePoint and dropDownFrame.relativePoint or "BOTTOMLEFT"
+					listFrame:SetPoint(point, relativeTo, relativePoint, xOffset, yOffset)
 				elseif anchorName ~= "cursor" then
 					-- this part might be a bit unreliable
 					local _, _, relPoint, xOff, yOff = listFrame:GetPoint()
@@ -1101,16 +1106,18 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		MerchantGuildBankRepairButton:SetPushedTexture("")
 		S.CreateBG(MerchantGuildBankRepairButton)
-		MerchantGuildBankRepairButtonIcon:SetTexCoord(0.61, 0.82, 0.1, 0.52)
+		MerchantGuildBankRepairButtonIcon:SetTexCoord(0.595, 0.8075, 0.05, 0.52)
 
 		MerchantRepairAllButton:SetPushedTexture("")
 		S.CreateBG(MerchantRepairAllButton)
-		MerchantRepairAllIcon:SetTexCoord(0.34, 0.1, 0.34, 0.535, 0.535, 0.1, 0.535, 0.535)
+		MerchantRepairAllIcon:SetTexCoord(0.31375, 0.53, 0.06, 0.52)
 
 		MerchantRepairItemButton:SetPushedTexture("")
 		S.CreateBG(MerchantRepairItemButton)
-		local ic = MerchantRepairItemButton:GetRegions():SetTexCoord(0.04, 0.24, 0.06, 0.5)
-
+		local ic = MerchantRepairItemButton:GetRegions()
+		ic:SetTexture("Interface\\Icons\\INV_Hammer_20")
+		ic:SetTexCoord(.08, .92, .08, .92)
+		
 		hooksecurefunc("MerchantFrame_UpdateCurrencies", function()
 			for i = 1, MAX_MERCHANT_CURRENCIES do
 				local bu = _G["MerchantToken"..i]
@@ -1142,10 +1149,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			ic:Size(22, 22)
 			ic:SetTexCoord(.15, .85, .15, .85)
 
-			ic:ClearAllPoints()
-			ic:Point("TOPRIGHT", bu, "TOPRIGHT", -2, -2)
-			ic.SetPoint = F.dummy
-
 			inv:SetAlpha(0)
 			inv:EnableMouse(false)
 		end
@@ -1160,7 +1163,13 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					S.CreateBD(bu.bg, 0)
 				end
 				if bu.gameIcon:IsShown() then
+					if i == 1 then
+						bu.bg:Point("BOTTOMRIGHT", bu.gameIcon, 0, -1)
+					else
+						bu.bg:Point("BOTTOMRIGHT", bu.gameIcon)
+					end
 					bu.bg:Show()
+					bu.gameIcon:Point("TOPRIGHT", bu, "TOPRIGHT", -2, -2)
 				else
 					bu.bg:Hide()
 				end
@@ -1784,7 +1793,28 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			CompactUnitFrameProfilesGeneralOptionsFrameAutoActivateBG:Hide()
 		end)
-
+	
+			hooksecurefunc("InterfaceOptions_AddCategory", function()
+				local num = #INTERFACEOPTIONS_ADDONCATEGORIES
+				for i = 1, num do
+					local bu = _G["InterfaceOptionsFrameAddOnsButton"..i.."Toggle"]
+					if bu and not bu.reskinned then
+						F.ReskinExpandOrCollapse(bu)
+						bu:SetPushedTexture("")
+						bu.SetPushedTexture = F.dummy
+						bu.reskinned = true
+					end
+				end
+			end)
+		
+			hooksecurefunc("OptionsListButtonToggle_OnClick", function(self)
+				if self:GetParent().element.collapsed then
+					self.plus:Show()
+				else
+					self.plus:Hide()
+				end
+			end)
+		
 		-- SideDressUp
 
 		SideDressUpModel:HookScript("OnShow", function(self)
@@ -1847,8 +1877,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		
 		S.Reskin(TutorialFrameOkayButton, true)
 		S.ReskinClose(TutorialFrameCloseButton)
-		F.ReskinArrow(TutorialFramePrevButton, "left")
-		F.ReskinArrow(TutorialFrameNextButton, "right")
+		F.ReskinArrow(TutorialFramePrevButton, 1)
+		F.ReskinArrow(TutorialFrameNextButton, 2)
 		
 		TutorialFrameOkayButton:ClearAllPoints()
 		TutorialFrameOkayButton:Point("BOTTOMLEFT", TutorialFrameNextButton, "BOTTOMRIGHT", 10, 0)
@@ -1864,6 +1894,20 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		TutorialFrameOkayButton:SetBackdropColor(0, 0, 0, .25)
 		TutorialFramePrevButton:SetBackdropColor(0, 0, 0, .25)
 		TutorialFrameNextButton:SetBackdropColor(0, 0, 0, .25)
+		
+		-- BN conversation
+		
+		BNConversationInviteDialogHeader:SetTexture("")
+		
+		S.CreateBD(BNConversationInviteDialog)
+		S.CreateBD(BNConversationInviteDialogList, .25)
+		
+		S.Reskin(BNConversationInviteDialogInviteButton)
+		S.Reskin(BNConversationInviteDialogCancelButton)
+		S.ReskinScroll(BNConversationInviteDialogListScrollFrameScrollBar)
+		for i = 1, BN_CONVERSATION_INVITE_NUM_DISPLAYED do
+			S.ReskinCheck(_G["BNConversationInviteDialogListFriend"..i].checkButton)
+		end
 		
 		-- [[ Hide regions ]]
 
@@ -4806,9 +4850,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.ReskinScroll(TradeSkillGuildCraftersFrameScrollBar)
 		S.ReskinInput(TradeSkillInputBox, nil, 33)
 		S.ReskinInput(TradeSkillFrameSearchBox)
-		F.ReskinArrow(TradeSkillDecrementButton, "left")
-		F.ReskinArrow(TradeSkillIncrementButton, "right")
-		F.ReskinArrow(TradeSkillLinkButton, "right")
+		F.ReskinArrow(TradeSkillDecrementButton, 1)
+		F.ReskinArrow(TradeSkillIncrementButton, 2)
+		F.ReskinArrow(TradeSkillLinkButton, 2)
 	elseif addon == "Blizzard_TrainerUI" then
 		S.SetBD(ClassTrainerFrame)
 		ClassTrainerFrame:DisableDrawLayer("BACKGROUND")

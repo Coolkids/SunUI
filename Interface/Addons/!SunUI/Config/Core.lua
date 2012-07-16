@@ -7,6 +7,7 @@ local DEFAULT_HEIGHT = 500
 local AC = LibStub("AceConfig-3.0")
 local ACD = LibStub("AceConfigDialog-3.0")
 local Version = 20120323
+local beta = "0717A"
 local aglin = false
 function SunUIConfig:LoadDefaults()
 	--Defaults
@@ -168,6 +169,8 @@ function SunUIConfig:LoadDefaults()
 				["IPhoneLock"] = true,
 				["AutoQuest"] = true,
 				["FatigueWarner"] = true,
+				["DNDFilter"] = true,
+				["TimeStamps"] = true,
 			},
 			InfoPanelDB = {
 				["OpenTop"] = true,
@@ -554,7 +557,7 @@ function SunUIConfig.GenerateOptionsInternal()
 			Header = {
 				order = 1,
 				type = "header",
-				name = "7.03A",
+				name = beta,
 				width = "full",		
 			},
 			Unlock = {
@@ -1361,12 +1364,14 @@ function SunUIConfig.GenerateOptionsInternal()
 							},
 							igonoreOld = {
 								type = "toggle",
-								name = L["启用自动离开有进度的随机副本或团队"],
+								name = "副本排队助手",
+								desc = L["启用自动离开有进度的随机副本或团队"],
 								order = 11,
 							},
 							HideRaid = {
 								type = "toggle",
 								name = "Hide Blz RAID Frame",
+								desc = "隐藏暴雪团队框架",
 								order = 12,
 							},
 							HideRaidWarn = {
@@ -1377,27 +1382,44 @@ function SunUIConfig.GenerateOptionsInternal()
 							Disenchat = {
 								type = "toggle",
 								name = "Quick Disenchat",
+								desc = "快速分解",
 								order = 14,
 							},
 							Resurrect = {
 								type = "toggle",
 								name = "Auto AcceptResurrect",
+								desc = "自动接受复活",
 								order = 15,
 							},
 							IPhoneLock = {
 								type = "toggle",
 								name = "SlideLock",
+								desc = "AFK锁屏",
 								order = 16,
 							},
-							["AutoQuest"] = {
+							AutoQuest = {
 								type = "toggle",
 								name = "AutoQuest",
+								desc = "自动交接任务",
 								order = 17,
 							},
-							["FatigueWarner"] = {
+							FatigueWarner = {
 								type = "toggle",
 								name = "FatigueWarner",
+								desc = "疲劳报警",
 								order = 18,
+							},
+							DNDFilter = {
+								type = "toggle",
+								name = "DNDFilter",
+								desc = "过滤DND/AFK自动回复消息",
+								order = 19,
+							},
+							TimeStamps = {
+								type = "toggle",
+								name = "TimeStamps",
+								desc = "聊天时间戳",
+								order = 20,
 							},
 						}
 					},
