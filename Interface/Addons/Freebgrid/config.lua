@@ -352,21 +352,21 @@ ns.options.args.statusbar = {
 				},
 			},
 		},
-		--[[		
-		altpowertext = {
-			name = L.statusbaraltpower,
+				
+		aumode = {
+			name = "透明模式",
 			type = "group",
-			order = 3,
+			order = 4,
 			inline = true,
 			args = {
-				altpower = {
-					name = L.statusbaraltpowertext,
+				mode = {
+					name = "开启透明模式",
 					type = "toggle",
 					order = 1,
-					desc = L.statusbaraltpowerdesc,
+					desc = "开启透明模式",
 				},
 			},
-		},--]]
+		},
     },
 }
 

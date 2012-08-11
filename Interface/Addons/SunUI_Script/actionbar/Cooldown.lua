@@ -125,8 +125,9 @@ local function Timer_Create(self)
 	timer:SetScript('OnUpdate', Timer_OnUpdate)
 
 	local text = timer:CreateFontString(nil, 'OVERLAY')
-	text:SetPoint("CENTER", 2.5, 1)
+	text:SetPoint("CENTER", 2.5, 1)       --ÎÄ×ÖÎ»ÖÃ
 	text:SetJustifyH("CENTER")
+	text:SetJustifyV("CENTER")
 	timer.text = text
 
 	Timer_OnSizeChanged(timer, scaler:GetSize())

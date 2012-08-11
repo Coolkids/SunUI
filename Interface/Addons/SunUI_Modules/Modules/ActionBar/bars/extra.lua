@@ -6,31 +6,30 @@ function Module:OnInitialize()
 	local bar = CreateFrame("Frame","SunUIExtraActionBar",UIParent)
 	bar:SetSize(C["ButtonSize"],C["ButtonSize"])
 	bar:SetScale(C["ExtraBarSacle"])
-	bar:SetHitRectInsets(-10, -10, -10, -10)
+	--bar:SetHitRectInsets(-10, -10, -10, -10)
 	MoveHandle.SunUIExtraActionBar = S.MakeMove(bar, "SunUI特殊按钮", "extrabar", C["ExtraBarSacle"])
 
 	--the frame
 	local f = ExtraActionBarFrame
 	f:SetParent(bar)
 	f:ClearAllPoints()
-	f:SetAllPoints(bar)
+	f:SetPoint("CENTER", bar, "CENTER")
 	f.ignoreFramePositionManager = true
-
-	--the button
+	
 	local b = ExtraActionButton1
-	bar.button = b
-
+	b:SetSize(C["ButtonSize"],C["ButtonSize"])
+	UIPARENT_MANAGED_FRAME_POSITIONS.ExtraActionBarFrame = nil
+	UIPARENT_MANAGED_FRAME_POSITIONS.PlayerPowerBarAlt.extraActionBarFrame = nil
+	UIPARENT_MANAGED_FRAME_POSITIONS.CastingBarFrame.extraActionBarFrame = nil
+  
 	ExtraActionButton1Cooldown:SetPoint("TOPLEFT")
 	ExtraActionButton1Cooldown:SetPoint("BOTTOMRIGHT")
-
+	
 	--style texture
-	local s = b.style
-	s:SetTexture(nil)
-	local disableTexture = function(style, texture)
-    if not texture then return end
-    if string.sub(texture,1,9) == "Interface" then
-		style:SetTexture(nil) --bzzzzzzzz
-    end
+	--local s = b.style
+	--s:SetTexture(nil)
+	local disableTexture = function(self)
+		self.button.style:SetTexture(nil);
 	end
-	hooksecurefunc(s, "SetTexture", disableTexture)
+	hooksecurefunc("ExtraActionBar_OnShow", disableTexture)
 end

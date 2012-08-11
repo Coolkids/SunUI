@@ -16,12 +16,10 @@ colectorbutton.text:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")
 colectorbutton.text:SetText("B")
 colectorbutton.text:SetPoint("CENTER", 3, 0)
 colectorbutton.text:SetTextColor(23/255, 132/255, 209/255)
-local click = 1
 colectorbutton:SetScript("OnMouseUp", function(self)
-	if click == 1 then 
+	if not ColectorButton:IsShown() then 
 		colector:Show()
 		UIFrameFadeIn(colector, 0.5, colector:GetAlpha(), 1)
-		click = 0
 		local Timer = 0
 		self:SetScript("OnUpdate", function(self, elasped)
 			Timer = Timer + elasped
@@ -30,13 +28,10 @@ colectorbutton:SetScript("OnMouseUp", function(self)
 			end
 			if Timer > 8 then
 				colector:Hide()
-				click = 1
-				return click
 			end
 		end)
 	else
 		colector:Hide()
-		click = 1
 	end
 end)
 

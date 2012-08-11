@@ -12,12 +12,10 @@ local button = CreateFrame("Button", "ButtonA",  ColectorButton)
 		button.text:SetTextColor(23/255, 132/255, 209/255)
 		local click = 0 
 		button:SetScript("OnMouseUp", function(self, button)
-			if click == 0 then 
+			if not stAddonManager:IsShown() then 
 				stAddonManager:LoadWindow()
-				click = 1 
 			else
 				stAddonManager:Hide()
-				click = 0
 			end
 		end)
 		button:SetScript("OnEnter",  function(self)

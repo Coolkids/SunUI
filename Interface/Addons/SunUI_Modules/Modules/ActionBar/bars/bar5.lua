@@ -29,33 +29,39 @@ function Module:OnInitialize()
 		MoveHandle.SunUIMultiBarLeft4 = S.MakeMove(bar54, "SunUIBigActionBar4", "bar54", 1)
 
 		MultiBarLeft:SetParent(bar51)
-		for i=1, 2 do
+		for i=1, 4 do
 			local button = _G["MultiBarLeftButton"..i]
 			button:ClearAllPoints()
 			button:SetSize(C["BigSize"..i], C["BigSize"..i])
 			if i == 1 then
 				button:SetAllPoints(bar51)
-			else
+			elseif i == 2 then
 				button:SetAllPoints(bar52)
-			end
-		end
-		  
-		for i=3, 10 do
-			local button = _G["MultiBarLeftButton"..i]
-			button:ClearAllPoints()
-		 end
-		  
-		for i=11, 12 do
-			local button = _G["MultiBarLeftButton"..i]
-			button:ClearAllPoints()
-			local b = 0
-			b = i - 8
-			button:SetSize(C["BigSize"..b], C["BigSize"..b])
-			if i == 11 then
+			elseif i == 3 then
 				button:SetAllPoints(bar53)
 			else
 				button:SetAllPoints(bar54)
 			end
+		end
+		  
+		for i=5, 12 do
+			local button = _G["MultiBarLeftButton"..i]
+			button:ClearAllPoints()
+		end
+		local players = {
+			["Coolkid"] = true,
+			["Coolkids"] = true,
+			["Kenans"] = true,
+			["月殤軒"] = true,
+			["月殤玄"] = true,
+			["月殤妶"] = true,
+			["月殤玹"] = true,
+			["月殤璇"] = true,
+			["月殤旋"] = true,
+		}
+		if players[DB.PlayerName] == true then 
+			_G["MultiBarLeftButton1"]:ClearAllPoints()
+			_G["MultiBarLeftButton2"]:ClearAllPoints()
 		end
 	elseif C["Big4Layout"] == 2 then
 	

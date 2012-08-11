@@ -352,7 +352,7 @@ if C["MiniDB"]["AutoQuest"] then
 	addon:RegisterEvent('QUEST_PROGRESS')
 
 	_G.idQuestAutomation = addon
-
+	QuestInfoDescriptionText.SetAlphaGradient=function() return false end
 end
 if C["MiniDB"]["FatigueWarner"] then
 	local function FatigueWarner_OnUpdate(self) 

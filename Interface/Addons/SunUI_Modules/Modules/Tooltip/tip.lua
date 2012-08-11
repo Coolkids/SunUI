@@ -134,6 +134,7 @@ function Module:OnInitialize()
 				local playerGuild = GetGuildInfo("player")
 				GameTooltipStatusBar:SetStatusBarColor(unpack({GameTooltip_UnitColor(unit)}))
 				if guild then
+					if guild:len()> 30 then guild = guild:sub(1, 30).."..." end
 					GameTooltipTextLeft2:SetFormattedText("<%s>"..hex(1, 1, 1).." %s|r", guild, rank.."  ("..tmp2..")")
 					if IsInGuild() and guild == playerGuild then
 						GameTooltipTextLeft2:SetTextColor(pgcol[1], pgcol[2], pgcol[3])

@@ -449,7 +449,7 @@ ns.defaults = {
     dispel = true,
     fborder = false,
     highlight = true,
-    powerclass = false,
+    powerclass = true,
     tooltip = true,
     smooth = true,
 	Indicatorsenable = true,
@@ -457,7 +457,7 @@ ns.defaults = {
 	Resurrection = false,
 	hideblzraid = true,
 	hideblzparty = true,
-	
+	mode = true,
 	Freebgridomf2Char = {
 		["Defaults"] ={
 			["FreebgridPetFrame"] = "LEFTUIParent2500",

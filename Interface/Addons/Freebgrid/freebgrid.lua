@@ -1,5 +1,5 @@
 local ADDON_NAME, ns = ...
-local S, _, _, _ = unpack(SunUI)
+local S, _, _, DB = unpack(SunUI)
 local L = ns.Locale
 
 ns._Objects = {}
@@ -633,16 +633,27 @@ local function unitFrameStyleSetup(button)
     bg:SetPoint("TOPLEFT", button, "TOPLEFT")
     bg:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT")
     bg:SetFrameLevel(3)
-    bg:SetBackdrop(backdrop)
-    bg:SetBackdropColor(0, 0, 0, .5)
+    if ns.db.mode then 
+		bg:SetBackdrop(nil)
+		local gradient = bg:CreateTexture(nil, "BACKGROUND")
+		gradient:SetPoint("TOPLEFT")
+		gradient:SetPoint("BOTTOMRIGHT")
+		gradient:SetTexture(DB.Statusbar)
+		gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+	else
+		S.CreateBD(bg)
+		--bg:SetBackdrop(backdrop)
+		--bg:SetBackdropColor(0, 0, 0, .5)
+	end
 	button.BG = bg
 
     local Border = CreateFrame("Frame", nil, button)
     Border:SetPoint("TOPLEFT", button, "TOPLEFT")
     Border:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT")
     Border:SetFrameLevel(button.BG:GetFrameLevel() - 1)
-    Border:SetBackdrop(border)
-    Border:SetBackdropColor(0, 0, 0, .5)
+    --Border:SetBackdrop(border)
+   -- Border:SetBackdropColor(0, 0, 0, 1)
+	S.CreateBD(Border)
 	--Border:SetBackdropBorderColor(0, 0, 0, .5)
 	button.Border = Border
 
@@ -687,11 +698,12 @@ local function unitFrameStyleSetup(button)
     threat:SetPoint("TOPLEFT", button, "TOPLEFT", -5, 5)
     threat:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 5, -5)
     threat:SetFrameLevel(0)
+	--threat:CreateShadow()
     threat:SetBackdrop(glowBorder)
     threat:SetBackdropColor(0, 0, 0, 0)
     threat:SetBackdropBorderColor(0, 0, 0, 1)
-    button.ThreatBorder = threat
-	
+    --button.ThreatBorder = threat.shadow
+	button.ThreatBorder = threat
     local hl = button.HealthBar:CreateTexture(nil, "OVERLAY")
     hl:SetAllPoints(button)
     hl:SetTexture([=[Interface\AddOns\Freebgrid\media\white.tga]=])
@@ -712,8 +724,8 @@ local function unitFrameStyleSetup(button)
     button.Gcd = Gcd	
 
     local fBorder = CreateFrame("Frame", nil, button)
-    fBorder:SetPoint("TOPLEFT", button, "TOPLEFT",-1, 1)
-    fBorder:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 1, -1)
+    fBorder:Point("TOPLEFT", button, "TOPLEFT",-1, 1)
+    fBorder:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 1, -1)
     fBorder:SetBackdrop(border)
     fBorder:SetBackdropColor(0, 0, 0, 0)
     fBorder:SetFrameLevel(1)
@@ -1195,19 +1207,19 @@ function ns:UpdateThreatBorder(self)
 	if(status and status > 0) then
         local r, g, b = GetThreatStatusColor(status)
         self.ThreatBorder:SetBackdropBorderColor(r, g, b, 1)
-        self.Border:SetBackdropColor(r, g, b, 1)
+        --self.Border:SetBackdropColor(r, g, b, 1)
     else
 		if (ns.db.lowmana and UnitIsConnected(unit) and not UnitIsDeadOrGhost(unit)) then
 			local _, ptype = UnitPowerType(unit)
 			if ptype == 'MANA' and math.floor(UnitPower(unit)/UnitPowerMax(unit)*100+.5) < ns.db.manapercent then		
 				self.ThreatBorder:SetBackdropBorderColor(0, 0, 1, 1)						
-				self.Border:SetBackdropColor(0, 0, 1, 1)
+				--self.Border:SetBackdropColor(0, 0, 1, 1)
 				return
 			end
 		end
 		
 		self.ThreatBorder:SetBackdropBorderColor(0, 0, 0, .5)
-        self.Border:SetBackdropColor(0, 0, 0, .5)
+       -- self.Border:SetBackdropColor(0, 0, 0, .5)
     end
 end
 
@@ -1294,13 +1306,18 @@ function ns:CheckReadyCheckDecay(self, elapsed)
 	end
 end
 
-function ns:UpdateHealthBarLayout(self)
+function ns:UpdateHealthBarLayout(self)   --ÑשÊ½
 	local healthBar = self.HealthBar
 	local power = self.PowerBar
     healthBar:SetStatusBarTexture(ns.db.texturePath)
     healthBar:SetOrientation(ns.db.orientation)
-    healthBar.bg:SetTexture(ns.db.texturePath)
-
+    
+	if not ns.db.mode then
+		healthBar.bg:SetTexture(ns.db.texturePath)
+	else
+		healthBar:SetReverseFill(true)
+	end	
+	
     if not ns.db.powerbar or not power:IsShown() then		
         healthBar:SetHeight(ns.db.height)
         healthBar:SetWidth(ns.db.width)
@@ -1310,16 +1327,16 @@ function ns:UpdateHealthBarLayout(self)
     end
 
     healthBar:ClearAllPoints()
-    healthBar:SetPoint"TOP"
+	healthBar:Point("TOP", 0, -1)
     if ns.db.orientation == "VERTICAL" and ns.db.porientation == "VERTICAL" then
-        healthBar:SetPoint"LEFT"
-        healthBar:SetPoint"BOTTOM"
+		healthBar:Point("LEFT", 1, 0)
+		healthBar:Point("BOTTOM", 0, 1)
     elseif ns.db.orientation == "HORIZONTAL" and ns.db.porientation == "VERTICAL" then
-        healthBar:SetPoint"RIGHT"
-        healthBar:SetPoint"BOTTOM"
+		healthBar:Point("RIGHT", -1, 0)
+		healthBar:Point("BOTTOM", 0, 1)
     else
-        healthBar:SetPoint"LEFT"
-        healthBar:SetPoint"RIGHT"
+		healthBar:Point("LEFT", 1, 0)
+		healthBar:Point("RIGHT", -1, 0)
     end
 end
 
@@ -1342,36 +1359,64 @@ function ns:UpdateHealthColor(self)
 		if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
 			if ns.db.definecolors then
 				healthBar:SetStatusBarColor(ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b, 1)
-				healthBar.bg:SetVertexColor(ns.db.deadcolor.r*.2, ns.db.deadcolor.g*.2, ns.db.deadcolor.b*.2, 1)
+				if ns.db.mode then 
+					healthBar.bg:SetTexture(nil)
+				else
+					healthBar.bg:SetVertexColor(ns.db.deadcolor.r*.2, ns.db.deadcolor.g*.2, ns.db.deadcolor.b*.2, 1)
+				end
 			else
 				healthBar:SetStatusBarColor(ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b,.6)
-				healthBar.bg:SetVertexColor(ns.db.deadcolor.r*.2, ns.db.deadcolor.g*.2, ns.db.deadcolor.b*.2,.6)
+				if ns.db.mode then 
+					healthBar.bg:SetTexture(nil)
+				else
+					healthBar.bg:SetVertexColor(ns.db.deadcolor.r*.2, ns.db.deadcolor.g*.2, ns.db.deadcolor.b*.2,.6)
+				end
 			end
 			return
 		end
 
 		if  self.inVehicle then
 			healthBar:SetStatusBarColor(ns.db.vehiclecolor.r, ns.db.vehiclecolor.g, ns.db.vehiclecolor.b)
-			healthBar.bg:SetVertexColor(ns.db.vehiclecolor.r*.2, ns.db.vehiclecolor.g*.2, ns.db.vehiclecolor.b*.2)
+			if ns.db.mode then 
+				healthBar.bg:SetTexture(nil)
+			else
+				healthBar.bg:SetVertexColor(ns.db.vehiclecolor.r*.2, ns.db.vehiclecolor.g*.2, ns.db.vehiclecolor.b*.2)
+			end
 			return
 		elseif ns.db.definecolors then
 			if ns.db.classbgcolor then
 				healthBar.bg:SetVertexColor(r, g, b)
 			else
-				healthBar.bg:SetVertexColor(ns.db.hpbgcolor.r, ns.db.hpbgcolor.g, ns.db.hpbgcolor.b)
+				if ns.db.mode then 
+					healthBar.bg:SetTexture(nil)
+				else
+					healthBar.bg:SetVertexColor(ns.db.hpbgcolor.r, ns.db.hpbgcolor.g, ns.db.hpbgcolor.b)
+				end
 			end			
 			healthBar:SetStatusBarColor(ns.db.hpcolor.r, ns.db.hpcolor.g, ns.db.hpcolor.b)
 			return 
 		elseif ns.db.reversecolors  then
-			healthBar.bg:SetVertexColor(r*.2, g*.2, b*.2)
+			if ns.db.mode then 
+				healthBar.bg:SetTexture(nil)
+			else
+				healthBar.bg:SetVertexColor(r*.2, g*.2, b*.2)
+			end
 			healthBar:SetStatusBarColor(r, g, b)
 		else
-			healthBar.bg:SetVertexColor(r, g, b)
+			if ns.db.mode then 
+				healthBar.bg:SetTexture(nil)
+			else
+				healthBar.bg:SetVertexColor(r, g, b)
+			end
 			healthBar:SetStatusBarColor(0, 0, 0, .8)
 		end		
 	else
 		healthBar:SetStatusBarColor(ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
-		healthBar.bg:SetVertexColor(ns.db.enemycolor.r*.2, ns.db.enemycolor.g*.2, ns.db.enemycolor.b*.2)
+		if ns.db.mode then 
+			healthBar.bg:SetTexture(nil)
+		else
+			healthBar.bg:SetVertexColor(ns.db.enemycolor.r*.2, ns.db.enemycolor.g*.2, ns.db.enemycolor.b*.2)
+		end
 	end
 end
 
@@ -1406,9 +1451,17 @@ function ns:UpdateHealth(self)
 	local healthBar = self.HealthBar
 	local unit = self.displayedUnit or self.unit
 	if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
-		self.HealthBar:SetValue(UnitHealthMax(unit))
+		if ns.db.mode then 
+			self.HealthBar:SetValue(0)
+		else
+			self.HealthBar:SetValue(UnitHealthMax(unit))
+		end
 	else
-		self.HealthBar:SetValue(UnitHealth(unit))
+		if ns.db.mode then 
+			self.HealthBar:SetValue(UnitHealthMax(unit) - UnitHealth(unit)) 
+		else
+			self.HealthBar:SetValue(UnitHealth(unit))
+		end
 	end
 end
 
@@ -1512,17 +1565,17 @@ function ns:UpdatePowerBar(self)
 
 		power:ClearAllPoints()
 		if ns.db.orientation == "HORIZONTAL" and ns.db.porientation == "VERTICAL" then
-			power:SetPoint"LEFT"
-			power:SetPoint"TOP"
-			power:SetPoint"BOTTOM"
+			power:Point("LEFT", 1, 0)
+			power:Point("TOP", 0, -1)
+			power:Point("BOTTOM", 0, 1)
 		elseif ns.db.porientation == "VERTICAL" then
-			power:SetPoint"TOP"
-			power:SetPoint"RIGHT"
-			power:SetPoint"BOTTOM"
+			power:Point("TOP", 0, -1)
+			power:Point("RIGHT", -1, 0)
+			power:Point("BOTTOM", 0, 1)
 		else
-			power:SetPoint"LEFT"
-			power:SetPoint"RIGHT"
-			power:SetPoint"BOTTOM"
+			power:Point("LEFT", 1, 0)
+			power:Point("RIGHT", -1, 0)
+			power:Point("BOTTOM", 0, 1)
 		end	
 	else
 		power:Hide()

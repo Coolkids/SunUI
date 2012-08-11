@@ -36,7 +36,7 @@ local upgradeDB = function(db)
 end
 
 local ADDON_LOADED = function(self, event, addon)
-	if(addon == 'oGlow') then
+	if(addon == 'SunUI_Script') then
 		if(not oGlowDB) then
 			oGlowDB = {
 				version = 1,

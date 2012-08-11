@@ -8,8 +8,6 @@ local Module = Core:NewModule("UnitFrame")
 local showfaketarget = false -- fake target bars that spawn if you don't have anything targeted
 function Module:OnInitialize()
 C = C["UnitFrameDB"]
-  -- compatibility with older versions cfg
---if not FTpos then FTpos = {"TOPLEFT", "oUF_monoTargetFrame", "BOTTOMLEFT", 0, -37} end
   -----------------------------
   -- STYLE FUNCTIONS
   -----------------------------
@@ -110,7 +108,7 @@ C = C["UnitFrameDB"]
 	lib.gen_alt_powerbar(self)
     lib.gen_cp(self)
 	self:Size(self.width,self.height)
-	if C["TargetAura"] == 3 then self.Auras.onlyShowPlayer = true print("1") end
+	if C["TargetAura"] == 3 then self.Auras.onlyShowPlayer = true end
   end  
   
   --the tot style

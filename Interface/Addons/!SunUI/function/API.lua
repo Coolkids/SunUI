@@ -4,19 +4,14 @@ local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("Core"):GetModule("SunUICon
 local r, g, b = DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b
 local uiscale = SetUIScale()
 local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/uiscale
-local a
-if GetCVar("gxWindow") == "1" then 
-	a = mult + 0.2
-else
-	a = mult
-end
 local function scale(x)
 	return (mult*math.floor(x/mult+.5)) 
 end
 
-S.mult = a
-S.Scale = scale
-
+S.mult = mult
+function S.Scale(x)
+	return scale(x)
+end
 function S.CreateBG(f)
 	local f = frame
 	if frame:GetObjectType() == "Texture" then f = frame:GetParent() end

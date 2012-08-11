@@ -1188,8 +1188,8 @@ for i = 1, numf do
 		f:SetSize(160, 60)
     elseif framenames[i] == "gen" then
         f:SetJustifyH(ct.justify_3)
-        f:SetSize(110, 55)
-        f:SetPoint("CENTER", 0, -64)
+        f:SetSize(115, 55)
+        f:SetPoint("CENTER", 455, 123)
     elseif framenames[i] == "done" then
         f:SetJustifyH(ct.justify_4)
         f:SetHeight(384)
@@ -1227,8 +1227,8 @@ for i = 1, numf do
         end
     elseif framenames[i] == "pwr" then
         f:SetJustifyH(ct.justify_7)
-        f:SetPoint("CENTER", 114, -64)
-        f:SetSize(100, 55)
+        f:SetPoint("CENTER", 455, 62)
+        f:SetSize(115, 55)
     elseif framenames[i] == "proc" then
         f:SetJustifyH(ct.justify_8)
         f:SetSize(185, 55)
@@ -1237,9 +1237,9 @@ for i = 1, numf do
     elseif framenames[i] == "class" then
         f:SetJustifyH(ct.justify_9)
         f:SetMaxLines(1)
-        f:SetWidth(64)
-        f:SetHeight(64)
-        f:SetPoint("CENTER", 0, 192)
+        f:SetWidth(70)
+        f:SetHeight(70)
+        f:SetPoint("CENTER", 0, 64)
 		    f:SetFont(ct.classcombofont, ct.classcombofontsize, ct.classcombofontstyle)
         f:SetFading(false)
     -- Add a starting location to your frame

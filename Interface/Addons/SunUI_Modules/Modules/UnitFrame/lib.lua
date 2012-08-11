@@ -115,18 +115,18 @@ C = C["UnitFrameDB"]
 		s:SetAlpha(1)
 	end
     s:SetStatusBarTexture(DB.Statusbar)
+	local gradient = s:CreateTexture(nil, "BACKGROUND")
+	gradient:SetPoint("TOPLEFT")
+	gradient:SetPoint("BOTTOMRIGHT")
+	gradient:SetTexture(DB.Statusbar)
+	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
     fixStatusbar(s)
     s:SetHeight(f.height)
     s:SetWidth(f.width)
     s:SetPoint("TOPLEFT",0,0)
     s:SetOrientation("HORIZONTAL") 
 	s:SetFrameLevel(5)
-    --shadow backdrop
-    local h = CreateFrame("Frame", nil, s)
-    h:SetFrameLevel(0)
-    h:SetPoint("TOPLEFT",0,0)
-    h:SetPoint("BOTTOMRIGHT",0,0)
-	h:CreateShadow("UnitFrame")
+	s:CreateShadow()
     f.Health = s
   end
   --3d portrait behind hp bar
@@ -134,9 +134,9 @@ C = C["UnitFrameDB"]
     s = f.Health
 	local p = CreateFrame("PlayerModel", nil, f)
 	p:SetFrameLevel(s:GetFrameLevel()-1)
-    p:SetWidth(f.width-2)
-    p:SetHeight(f.height-2)
-    p:SetPoint("TOP", s, "TOP", 0, -2)
+    p:Width(f.width-2)
+    p:Height(f.height-2)
+    p:Point("TOP", s, "TOP", 0, -2)
 	p:SetAlpha(C["Alpha3D"])
 	p:SetFrameLevel(6)
 	p.PostUpdate = lib.PortraitPostUpdate	
@@ -189,23 +189,12 @@ C = C["UnitFrameDB"]
     if f.mystyle == "partypet" or f.mystyle == "arenatarget" then
       s:Hide()
     end
-    --helper
-    local h = CreateFrame("Frame", nil, s)
-    h:SetFrameLevel(0)
-    h:SetPoint("TOPLEFT",0,0)
-    h:SetPoint("BOTTOMRIGHT",0,0)
-    h:CreateShadow("Background")
-    --bg
-    -- local b = s:CreateTexture(nil, "BACKGROUND")
-    -- b:SetTexture(nil)
-	-- b:SetAlpha(.0)
-    -- b:SetAllPoints(s)
+    s:CreateShadow("Background")
     if f.mystyle=="tot" or f.mystyle=="pet" then
       s:SetHeight(f.height/3)
     end
 	
     f.Power = s
-    -- f.Power.bg = b
   end
   --filling up powerbar with text strings
   lib.gen_ppstrings = function(f, unit)
@@ -218,12 +207,12 @@ C = C["UnitFrameDB"]
     local pp = lib.gen_fontstring(h, DB.Font, (C["FontSize"]-1)*S.Scale(1), "THINOUTLINE")
     local info = lib.gen_fontstring(h, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
     if f.mystyle == "target" or f.mystyle == "tot" then
-        info:SetPoint("RIGHT", f.Power, "RIGHT",-3,0)
-        pp:SetPoint("LEFT", f.Power, "LEFT",3,0)
+        info:Point("RIGHT", f.Power, "RIGHT",-3,0)
+        pp:Point("LEFT", f.Power, "LEFT",3,0)
         info:SetJustifyH("RIGHT")
     else
-        info:SetPoint("LEFT", f.Power, "LEFT",3,0)
-        pp:SetPoint("RIGHT", f.Power, "RIGHT",-3,0)
+        info:Point("LEFT", f.Power, "LEFT",3,0)
+        pp:Point("RIGHT", f.Power, "RIGHT",-3,0)
         info:SetJustifyH("LEFT")
     end
 	--resting indicator for player frame
@@ -258,12 +247,12 @@ C = C["UnitFrameDB"]
     --helper
     local h = CreateFrame("Frame", nil, s)
     h:SetFrameLevel(0)
-    h:SetPoint("TOPLEFT",0,0)
-    h:SetPoint("BOTTOMRIGHT",0,0)
+    h:Point("TOPLEFT",-1,1)
+    h:Point("BOTTOMRIGHT",1,-1)
 
 	--backdrop
-	h:CreateShadow("Background")
-
+	--h:CreateShadow("Background")
+	S.CreateBD(h, .6)
 	--spark
 	local sp =  s:CreateTexture(nil, "OVERLAY")
 	sp:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
@@ -292,7 +281,7 @@ C = C["UnitFrameDB"]
     local i = s:CreateTexture(nil, "ARTWORK")
     --i:Size(s:GetHeight()+4,s:GetHeight()+4)
 	i:Size(s:GetHeight(),s:GetHeight())
-    i:SetPoint("BOTTOMRIGHT", s, "BOTTOMLEFT", -6, 0)
+    i:Point("BOTTOMRIGHT", s, "BOTTOMLEFT", -6, 0)
     i:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	CreateShadow(s, i)
     
@@ -305,12 +294,12 @@ C = C["UnitFrameDB"]
       s:SetPoint("BOTTOMRIGHT",f.Power,"BOTTOMRIGHT",0,0)
       s:SetScale(f:GetScale())
       s:Size(f.width-f.height/2,f.height/2.5)
-      i:SetPoint("RIGHT", s, "LEFT", -2, 0)
+      i:Point("RIGHT", s, "LEFT", -2, 0)
       txt:Hide() t:Hide() h:Hide()
     elseif f.mystyle == "arena" then
       s:Size(f.width-(f.height/1.4+4),f.height/1.4)
-      s:SetPoint("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
-      i:SetPoint("RIGHT", s, "LEFT", -4, 0)
+      s:Point("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
+      i:Point("RIGHT", s, "LEFT", -4, 0)
       i:Size(s:GetHeight(),s:GetHeight())
     elseif f.mystyle == "player" then
 	  if not C["playerCBuserplaced"] then
@@ -319,7 +308,7 @@ C = C["UnitFrameDB"]
 		i:Size((s:GetHeight()+2)*2,(s:GetHeight()+2)*2)
 		sp:SetHeight(s:GetHeight()*2.5)
 	  else
-		s:SetPoint("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
+		s:Point("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
 	  end
       --latency only for player unit
 	  local z = s:CreateTexture(nil, "OVERLAY")
@@ -440,14 +429,8 @@ C = C["UnitFrameDB"]
 	button.count = lib.gen_fontstring(h3, DB.Font, (C["FontSize"]-1)*S.Scale(1), "THINOUTLINE")
     button.count:ClearAllPoints()
     button.count:SetJustifyH("RIGHT")
-    button.count:SetPoint("BOTTOMRIGHT", 2, -2)
+    button.count:Point("BOTTOMRIGHT", 2, -2)
     button.count:SetTextColor(1,1,1)
-    --helper
-    local h = CreateFrame("Frame", nil, button)
-    h:SetFrameLevel(0)
-    h:SetPoint("TOPLEFT",-4,4)
-    h:SetPoint("BOTTOMRIGHT",4,-4)
-    --lib.gen_backdrop(h)
     --another helper frame for our fontstring to overlap the cd frame
     local h2 = CreateFrame("Frame", nil, button)
     h2:SetAllPoints(button)
@@ -458,8 +441,8 @@ C = C["UnitFrameDB"]
     --overlay texture for debuff types display
 	
     button.overlay:SetTexture("Interface\\Addons\\!SunUI\\media\\icon_clean")
-    button.overlay:SetPoint("TOPLEFT", button, "TOPLEFT", -1, 1)
-    button.overlay:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 1, -1)
+    button.overlay:Point("TOPLEFT", button, "TOPLEFT", -1, 1)
+    button.overlay:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 1, -1)
     button.overlay:SetTexCoord(0.04, 0.96, 0.04, 0.96)
     button.overlay.Hide = function(self) self:SetVertexColor(0, 0, 0) end
 	--button.overlay:CreateShadow()
