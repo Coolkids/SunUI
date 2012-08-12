@@ -13,7 +13,7 @@ function Module:OnInitialize()
 	local f = ExtraActionBarFrame
 	f:SetParent(bar)
 	f:ClearAllPoints()
-	f:SetPoint("CENTER", bar, "CENTER")
+	f:SetAllPoints(bar)
 	f.ignoreFramePositionManager = true
 	
 	local b = ExtraActionButton1
@@ -24,12 +24,6 @@ function Module:OnInitialize()
   
 	ExtraActionButton1Cooldown:SetPoint("TOPLEFT")
 	ExtraActionButton1Cooldown:SetPoint("BOTTOMRIGHT")
-	
-	--style texture
-	--local s = b.style
-	--s:SetTexture(nil)
-	local disableTexture = function(self)
-		self.button.style:SetTexture(nil);
-	end
-	hooksecurefunc("ExtraActionBar_OnShow", disableTexture)
+	S.StripTextures(ExtraActionBarFrame, kill)
+	S.StripTextures(ExtraActionButton1, kill)
 end

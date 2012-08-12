@@ -7,7 +7,7 @@ local DEFAULT_HEIGHT = 500
 local AC = LibStub("AceConfig-3.0")
 local ACD = LibStub("AceConfigDialog-3.0")
 local Version = 20120323
-local beta = "0717A"
+local beta = "0812A"
 local aglin = false
 function SunUIConfig:LoadDefaults()
 	--Defaults
@@ -1949,7 +1949,7 @@ local function BuildFrame()
 	local tut4 = function()
 		sb:SetValue(4)
 		header:SetText("4. 您应该知道的东西")
-		body:SetText("SunUI 95%的设置都是可以通过图形界面来完成的, 大多数的设置在/sunui中 少部分的设置在ESC>界面中.")
+		body:SetText("SunUI 95%的设置都是可以通过图形界面来完成的, 大多数的设置在/sunui中 少部分的设置在ESC>界面中.\n经验条在动作条下面..鼠标指向显示")
 		sbt:SetText("4/6")
 		option2:SetScript("OnClick", tut5)
 	end

@@ -405,7 +405,7 @@ end
 		local region = select(i, object:GetRegions())
 		if region:GetObjectType() == "Texture" then
 			if kill then
-				region:Kill()
+				S.Kill(region)
 			else
 				region:SetTexture(nil)
 			end
