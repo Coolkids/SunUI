@@ -262,20 +262,15 @@ C = C["UnitFrameDB"]
 	sp:SetPoint("BOTTOMRIGHT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
     --spell text
     local txt = lib.gen_fontstring(s, DB.Font, (C["FontSize"]+1)*S.Scale(1), "THINOUTLINE")
-    if f.mystyle == "player" then
-		txt:SetPoint("LEFT", 2, s:GetHeight()/2)
-		else
-		txt:SetPoint("LEFT", 2, 0)
-	end
+   
+	txt:SetPoint("LEFT", 2, 0)
+
     txt:SetJustifyH("LEFT")
 	
     --time
     local t = lib.gen_fontstring(s, DB.Font, (C["FontSize"]+1)*S.Scale(1), "THINOUTLINE")
-    if f.mystyle == "player" then
-		t:SetPoint("RIGHT", -2, s:GetHeight()/2)
-	else
-		t:SetPoint("RIGHT", -2, 0)
-	end
+   
+	t:SetPoint("RIGHT", -2, 0)
     txt:SetPoint("RIGHT", t, "LEFT", -5, 0)
     --icon
     local i = s:CreateTexture(nil, "ARTWORK")
@@ -305,7 +300,7 @@ C = C["UnitFrameDB"]
 	  if not C["playerCBuserplaced"] then
 		s:Size(C["PlayerCastBarWidth"],C["PlayerCastBarHeight"])
 		MoveHandle.Castbarplay = S.MakeMoveHandle(s, L["玩家施法条"], "PlayerCastbar")
-		i:Size((s:GetHeight()+2)*2,(s:GetHeight()+2)*2)
+		i:Size(s:GetHeight(),s:GetHeight())
 		sp:SetHeight(s:GetHeight()*2.5)
 	  else
 		s:Point("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
@@ -322,7 +317,7 @@ C = C["UnitFrameDB"]
       s.SafeZone = z
       --custom latency display
       local l = lib.gen_fontstring(s, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
-      l:SetPoint("RIGHT", 0, -s:GetHeight())
+      l:SetPoint("RIGHT", 0, -s:GetHeight()/2-5)
       l:SetJustifyH("RIGHT")
 	  l:SetTextColor(.8,.31,.45)
       s.Lag = l

@@ -100,7 +100,7 @@ function SunUIConfig:LoadDefaults()
 				["showtot"] = true,
 				["PlayerCastBarWidth"] = 300,
 				["showpet"] = true,
-				["PlayerCastBarHeight"] = 6,
+				["PlayerCastBarHeight"] = 20,
 				["playerCBuserplaced"] = false,
 				["FocusCastBarHeight"] = 6,
 				["Alpha3D"] = 0,
@@ -362,11 +362,11 @@ function SunUIConfig:LoadDefaults()
 					0, -- [5]
 				},
 				["PlayerCastbar"] = {
-					"BOTTOM", -- [1]
+					"CENTER", -- [1]
 					"UIParent", -- [2]
-					"BOTTOM", -- [3]
+					"CENTER", -- [3]
 					0, -- [4]
-					105, -- [5]
+					-110, -- [5]
 				},
 				["Threat"] = {
 					"BOTTOM", -- [1]

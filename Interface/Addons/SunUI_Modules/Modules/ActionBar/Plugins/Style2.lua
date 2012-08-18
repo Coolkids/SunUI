@@ -135,22 +135,8 @@ local function Stlye2()
 	  --style extraactionbutton
 	local function styleExtraActionButton(bu)
 		if not bu or (bu and bu.rabs_styled) then return end
-		local name = bu:GetName()
-		local ho = _G[name.."HotKey"]
-		--remove the style background theme
-		bu.style:SetTexture(nil)
-		hooksecurefunc(bu.style, "SetTexture", function(self, texture)
-		  if texture and string.sub(texture,1,9) == "Interface" then
-			self:SetTexture(nil)
-		  end
-		end)
-		--icon
-		bu.icon:SetTexCoord(0.1,0.9,0.1,0.9)
-		bu.icon:SetAllPoints(bu)
 		--cooldown
-		bu.cooldown:SetAllPoints(bu.icon)
-		--hotkey
-		ho:Hide()
+		bu.cooldown:SetAllPoints(bu)
 		--add button normaltexture
 		bu:SetNormalTexture(textures.normal)
 		local nt = bu:GetNormalTexture()

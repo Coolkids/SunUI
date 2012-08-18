@@ -7,7 +7,7 @@ ns._Headers = {}
 
 local media = LibStub("LibSharedMedia-3.0", true)
 if media then
-	media:Register("font", "Accidental Presidency",		[[Interface\Addons\Freebgrid\media\Accidental Presidency.ttf]])
+	media:Register("font", "Accidental Presidency",		[[Interface\Addons\Freebgrid\media\AccidentalPresidency.ttf]])
 	media:Register("font", "Expressway",				[[Interface\Addons\Freebgrid\media\expressway.ttf]])
 	media:Register("statusbar", "gradient",				[[Interface\Addons\Freebgrid\media\gradient]])
 	media:Register("statusbar", "Cabaret",				[[Interface\Addons\Freebgrid\media\Cabaret]])
@@ -1312,10 +1312,12 @@ function ns:UpdateHealthBarLayout(self)   --ÑשÊ½
     healthBar:SetStatusBarTexture(ns.db.texturePath)
     healthBar:SetOrientation(ns.db.orientation)
     
-	if not ns.db.mode then
-		healthBar.bg:SetTexture(ns.db.texturePath)
-	else
+	if ns.db.mode then
 		healthBar:SetReverseFill(true)
+		healthBar.bg:SetTexture(nil)
+	else
+		healthBar:SetReverseFill(false)
+		healthBar.bg:SetTexture(ns.db.texturePath)
 	end	
 	
     if not ns.db.powerbar or not power:IsShown() then		
