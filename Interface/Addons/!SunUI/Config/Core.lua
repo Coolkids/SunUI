@@ -7,7 +7,7 @@ local DEFAULT_HEIGHT = 500
 local AC = LibStub("AceConfig-3.0")
 local ACD = LibStub("AceConfigDialog-3.0")
 local Version = 20120323
-local beta = "0812A"
+local beta = "0819A"
 local aglin = false
 function SunUIConfig:LoadDefaults()
 	--Defaults
