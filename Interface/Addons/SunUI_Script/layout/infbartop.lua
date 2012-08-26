@@ -37,7 +37,6 @@ local Stat = CreateFrame("Frame", "InfoPanel1", UIParent)
 
 		if int < 0 then
 			local _, _, latencyHome, latencyWorld = GetNetStats()
-			lat = math.max(latencyHome, latencyWorld)
 			if floor(GetFramerate()) >= 30 then
 				fpscolor = "|cff0CD809"
 			elseif (floor(GetFramerate()) > 15 and floor(GetFramerate()) < 30) then
@@ -45,7 +44,7 @@ local Stat = CreateFrame("Frame", "InfoPanel1", UIParent)
 			else
 				fpscolor = "|cffD80909"
 			end
-			Text:SetText(fpscolor..floor(GetFramerate()).."|r".."fps "..colorlatency(lat).."|r".."ms")
+			Text:SetText(fpscolor..floor(GetFramerate()).."|r".."fps  "..colorlatency(latencyHome).."|r/"..colorlatency(latencyWorld).."|r".."ms")
 			int = 0.8
 		end
 	end
@@ -106,10 +105,13 @@ local function BuildMemory()
 			UpdateAddOnMemoryUsage()
 			print(format("|cff66C6FF%s:|r %s", L["共释放内存"], S.FormatMemory(Before - gcinfo())))
 			RefreshText()
-			local r, g, b = S.ColorGradient((30000-tTotal)/30000, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
-																					InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
-																					InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
-			Text:SetText(S.ToHex(r, g, b)..format("%.2f", tTotal/1024).."|r".."m")
+			local color = tTotal/1024 <= 102.4 and {0,1} -- 1
+				or tTotal/1024 <= 512 and {0.75,1} -- 5
+				or tTotal/1024 <= 1024 and {1,1} -- 12
+				or tTotal/1024 <= 2560 and {1,0.75} -- 18
+				or tTotal/1024 <= 5120 and {1,0.5} -- 25
+				or {1,0.1}
+			Text:SetText(string.format("|cff%02x%02x%02x", color[1]*255, color[2]*255, 0)..format("%.2f", tTotal/1024).."|rm")
 		else
 			if stAddonManager:IsShown() then 
 				stAddonManager:Hide()
@@ -124,10 +126,13 @@ local function BuildMemory()
 		self.Timer = self.Timer + elapsed
 		if self.Timer > 5 then
 			RefreshText()
-			local r, g, b = S.ColorGradient((30000-tTotal)/30000, InfoBarStatusColor[1][1], InfoBarStatusColor[1][2], InfoBarStatusColor[1][3], 
-																					InfoBarStatusColor[2][1], InfoBarStatusColor[2][2], InfoBarStatusColor[2][3],
-																					InfoBarStatusColor[3][1], InfoBarStatusColor[3][2], InfoBarStatusColor[3][3])
-			Text:SetText(S.ToHex(r, g, b)..format("%.2f", tTotal/1024).."|r".."m")
+			local color = tTotal/1024 <= 1 and {0,1} -- 1
+				or tTotal/1024 <= 5 and {0.75,1} -- 5
+				or tTotal/1024 <= 12 and {1,1} -- 12
+				or tTotal/1024 <= 18 and {1,0.75} -- 18
+				or tTotal/1024 <= 25 and {1,0.5} -- 25
+				or {1,0.1}
+			Text:SetText(string.format("|cff%02x%02x%02x", color[1]*255, color[2]*255, 0)..format("%.2f", tTotal/1024).."|rm")
 			self.Timer = 0
 		end
 	end)

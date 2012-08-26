@@ -4,8 +4,7 @@
 ----------------------------------------------------------------------------------------
 local S, C, L, DB = unpack(SunUI)
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("RaidCD")
-function Module:OnInitialize()
-	if C["MiniDB"].RaidCD ~= true then return end
+
 	local show = {
 		raid = true,
 		party = true,
@@ -128,7 +127,14 @@ function Module:OnInitialize()
 		bar:Size(C["MiniDB"].RaidCDWidth, C["MiniDB"].RaidCDHeight)
 		bar:SetStatusBarTexture(DB.Statusbar)
 		bar:SetMinMaxValues(0, 100)
-
+	
+		bar:SetReverseFill(true)
+		local gradient = bar:CreateTexture(nil, "BACKGROUND")
+		gradient:SetPoint("TOPLEFT")
+		gradient:SetPoint("BOTTOMRIGHT")
+		gradient:SetTexture(DB.Statusbar)
+		gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+		
 		bar.left = CreateFS(bar)
 		bar.left:SetPoint("LEFT", 2, C["MiniDB"].RaidCDHeight)
 		bar.left:SetJustifyH("LEFT")
@@ -147,7 +153,7 @@ function Module:OnInitialize()
 		bar.icon.backdrop:Point("TOPLEFT", -2, 2)
 		bar.icon.backdrop:Point("BOTTOMRIGHT", 2, -2)
 		bar.icon.backdrop:SetFrameStrata("BACKGROUND")
-		bar:CreateShadow("Background")
+		bar:CreateShadow()
 
 		return bar
 	end
@@ -215,7 +221,8 @@ function Module:OnInitialize()
 			end
 		end
 	end
-
+function Module:OnEnable()
+	if C["MiniDB"].RaidCD ~= true then return end
 	local addon = CreateFrame("Frame")
 	addon:SetScript("OnEvent", OnEvent)
 	addon:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")

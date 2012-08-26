@@ -1,7 +1,6 @@
 local ADDON_NAME, ns = ...
 local S, _, _, DB = unpack(SunUI)
 local L = ns.Locale
-
 ns._Objects = {}
 ns._Headers = {}
 
@@ -17,7 +16,7 @@ end
 
 local backdrop = {
     bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
-    insets = {top = S.Scale(2), left = S.Scale(2), bottom = S.Scale(2), right = S.Scale(2)},
+    insets = {top = S.Scale(1), left = S.Scale(1), bottom = S.Scale(1), right = S.Scale(1)},
 }
 
 local border = {
@@ -635,7 +634,7 @@ local function unitFrameStyleSetup(button)
     bg:SetFrameLevel(3)
     if ns.db.mode then 
 		bg:SetBackdrop(nil)
-		local gradient = bg:CreateTexture(nil, "BACKGROUND")
+		local gradient = button:CreateTexture(nil, "BACKGROUND")
 		gradient:SetPoint("TOPLEFT")
 		gradient:SetPoint("BOTTOMRIGHT")
 		gradient:SetTexture(DB.Statusbar)
@@ -653,7 +652,7 @@ local function unitFrameStyleSetup(button)
     Border:SetFrameLevel(button.BG:GetFrameLevel() - 1)
     --Border:SetBackdrop(border)
    -- Border:SetBackdropColor(0, 0, 0, 1)
-	S.CreateBD(Border)
+	S.CreateBD(Border, 0)
 	--Border:SetBackdropBorderColor(0, 0, 0, .5)
 	button.Border = Border
 
@@ -1256,7 +1255,11 @@ function ns:UpdateName(self)
 	if not ns.db.reversecolors and type(ns.RaidClassColors[class]) == "table" then
 		self.Name:SetTextColor(ns.RaidClassColors[class].r, ns.RaidClassColors[class].g, ns.RaidClassColors[class].b)
 	else
-		self.Name:SetTextColor(1, 1, 1)
+		if ns.db.mode and type(RAID_CLASS_COLORS[class]) == "table" then
+			self.Name:SetTextColor(RAID_CLASS_COLORS[class].r, RAID_CLASS_COLORS[class].g , RAID_CLASS_COLORS[class].b)
+		else
+			self.Name:SetTextColor(1, 1, 1)
+		end
 	end
 end
 

@@ -250,18 +250,18 @@ local function BuildBuffFrame()
 		
 		Temp.Flag = Temp:CreateTexture(nil, "OVERLAY")
 		if C["ReminderDB"].RaidBuffDirection == 1 then
-			Temp.Flag:SetHeight(2)
+			Temp.Flag:Height(2)
 			Temp.Flag:SetPoint("TOPLEFT", Temp, "BOTTOMLEFT", 0, -4)
 			Temp.Flag:SetPoint("TOPRIGHT", Temp, "BOTTOMRIGHT", 0, -4)
 		elseif C["ReminderDB"].RaidBuffDirection == 2 then
-			Temp.Flag:SetWidth(2)
+			Temp.Flag:Width(2)
 			Temp.Flag:SetPoint("TOPRIGHT", Temp, "TOPLEFT", -4, 0)
 			Temp.Flag:SetPoint("BOTTOMRIGHT", Temp, "BOTTOMLEFT", -4, 0)	
 		end
-		Temp.Flag:SetTexture(0.1, 1, 0.1, 0.8)
+		Temp.Flag:SetTexture(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b, 0.8)
 		Temp.Flag.Border = CreateFrame("Frame", nil, Temp)
-		Temp.Flag.Border:SetPoint("TOPLEFT", Temp.Flag, "TOPLEFT", -1, 1)
-		Temp.Flag.Border:SetPoint("BOTTOMRIGHT", Temp.Flag, "BOTTOMRIGHT", 1, -1)
+		Temp.Flag.Border:Point("TOPLEFT", Temp.Flag, "TOPLEFT", -1, 1)
+		Temp.Flag.Border:Point("BOTTOMRIGHT", Temp.Flag, "BOTTOMRIGHT", 1, -1)
 		Temp.Flag.Border:SetBackdrop({edgeFile = DB.Solid, edgeSize = S.mult})
 		Temp.Flag.Border:SetBackdropBorderColor(0, 0, 0, 1)
 

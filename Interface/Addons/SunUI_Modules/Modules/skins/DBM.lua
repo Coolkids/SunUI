@@ -19,6 +19,7 @@ function Module:OnInitialize()
 						local icon2 = _G[frame:GetName().."BarIcon2"]
 						local name = _G[frame:GetName().."BarName"]
 						local timer = _G[frame:GetName().."BarTimer"]
+						--frame:SetReverseFill(true)
 						if icon1 then
 							icon1:ClearAllPoints()
 							icon1:SetSize(16, 16)
@@ -40,9 +41,15 @@ function Module:OnInitialize()
 						end
 
 						if not tbar.styled then
-							tbar:SetPoint("TOPLEFT", frame, "TOPLEFT", -1, 1)
-							tbar:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 1, -1)
-							tbar:CreateShadow("Background")
+							tbar:SetReverseFill(true)
+							tbar:Point("TOPLEFT", frame, "TOPLEFT", -1, 1)
+							tbar:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 1, -1)
+							tbar:CreateShadow()
+							local gradient = tbar:CreateTexture(nil, "BACKGROUND")
+							gradient:SetPoint("TOPLEFT")
+							gradient:SetPoint("BOTTOMRIGHT")
+							gradient:SetTexture(DB.Statusbar)
+							gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
 							tbar.styled = true
 						end
 						
@@ -210,12 +217,12 @@ function Module:OnInitialize()
 			DBT_SavedOptions["DBM"].TimerX = 420
 			DBT_SavedOptions["DBM"].TimerY = -29
 			DBT_SavedOptions["DBM"].TimerPoint = "TOPLEFT"
-			DBT_SavedOptions["DBM"].StartColorR = 1
-			DBT_SavedOptions["DBM"].StartColorG = 1
-			DBT_SavedOptions["DBM"].StartColorB = 0
-			DBT_SavedOptions["DBM"].EndColorR = 1
-			DBT_SavedOptions["DBM"].EndColorG = 0
-			DBT_SavedOptions["DBM"].EndColorB = 0
+			DBT_SavedOptions["DBM"].StartColorR = DB.MyClassColor.r
+			DBT_SavedOptions["DBM"].StartColorG = DB.MyClassColor.g
+			DBT_SavedOptions["DBM"].StartColorB = DB.MyClassColor.b
+			DBT_SavedOptions["DBM"].EndColorR = DB.MyClassColor.r
+			DBT_SavedOptions["DBM"].EndColorG = DB.MyClassColor.g
+			DBT_SavedOptions["DBM"].EndColorB = DB.MyClassColor.b
 			DBT_SavedOptions["DBM"].Width = 130
 			DBT_SavedOptions["DBM"].HugeWidth = 155
 			DBT_SavedOptions["DBM"].HugeTimerPoint = "TOP"

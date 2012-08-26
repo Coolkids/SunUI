@@ -1,9 +1,7 @@
 ﻿local S, C, L, DB = unpack(SunUI)
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ClassCD")
 
-function Module:OnInitialize()
-	C = C["MiniDB"]
-if C["ClassCDOpen"] ~= true then return end
+
 
 ----------------------------------------------------------------------------------------
 --	职业被动技能,饰品,附魔内置CD
@@ -166,16 +164,6 @@ local floor = math.floor
 local timer = 0
 local bars = {}
 
-
-local ClassCDAnchor = CreateFrame("Frame", "ClassCDAnchor", UIParent)
-if not C["ClassCDIcon"] then 
-	ClassCDAnchor:SetSize(C["ClassCDWidth"], C["ClassCDHeight"])
-else
-	ClassCDAnchor:SetSize(C["ClassCDIconSize"], C["ClassCDIconSize"])
-end
-MoveHandle.ClassCD = S.MakeMoveHandle(ClassCDAnchor, L["内置CD监视"], "ClassCD")
-
-
 local FormatTime = function(time)
 	if time >= 60 then
 		return sformat("%.2d:%.2d", floor(time / 60), time % 60)
@@ -289,7 +277,15 @@ local CreateBar = function()
 		bar:Size(C["ClassCDWidth"], C["ClassCDHeight"])
 		bar:SetStatusBarTexture(DB.Statusbar)
 		bar:SetMinMaxValues(0, 100)
-			
+		
+		bar:SetReverseFill(true)
+		local gradient = bar:CreateTexture(nil, "BACKGROUND")
+		gradient:SetPoint("TOPLEFT")
+		gradient:SetPoint("BOTTOMRIGHT")
+		gradient:SetTexture(DB.Statusbar)
+		gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+		
+		
 		bar.left = CreateFS(bar)
 		bar.left:Point("LEFT", 2, C["ClassCDHeight"])
 		bar.left:SetJustifyH("LEFT")
@@ -304,7 +300,7 @@ local CreateBar = function()
 		bar.icon:Height(C["ClassCDHeight"]*2)
 		bar.icon:Point("BOTTOMRIGHT", bar, "BOTTOMLEFT", -5, 0)
 		bar.icon:CreateShadow()
-		bar:CreateShadow("Background")
+		bar:CreateShadow()
 		return bar
 	else
 		bar = CreateFrame("Button", nil, UIParent)
@@ -397,14 +393,27 @@ local OnEvent = function(self, event, ...)
 	end
 end
 
-local addon = CreateFrame("Frame")
-addon:SetScript("OnEvent", OnEvent)
-addon:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-addon:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-
-SlashCmdList.ClassCD = function(msg)
-	StartTimer(UnitName("player"), 47755)
-	StartTimer(UnitName("player"), 96171)
+function Module:OnInitialize()
+	C = C["MiniDB"]
+	if C["ClassCDOpen"] ~= true then return end
 end
-SLASH_ClassCD1 = "/classcd"
+function Module:OnEnable()
+	local ClassCDAnchor = CreateFrame("Frame", "ClassCDAnchor", UIParent)
+	if not C["ClassCDIcon"] then 
+		ClassCDAnchor:SetSize(C["ClassCDWidth"], C["ClassCDHeight"])
+	else
+		ClassCDAnchor:SetSize(C["ClassCDIconSize"], C["ClassCDIconSize"])
+	end
+	
+	MoveHandle.ClassCD = S.MakeMoveHandle(ClassCDAnchor, L["内置CD监视"], "ClassCD")
+	local addon = CreateFrame("Frame")
+	addon:SetScript("OnEvent", OnEvent)
+	addon:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	addon:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+
+	SlashCmdList.ClassCD = function(msg)
+		StartTimer(UnitName("player"), 47755)
+		StartTimer(UnitName("player"), 96171)
+	end
+	SLASH_ClassCD1 = "/classcd"
 end

@@ -1,7 +1,7 @@
 ﻿local S, C, L, DB = unpack(SunUI)
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Chat", "AceEvent-3.0")
  
-function Module:OnInitialize()
+function Module:OnEnable()
 -- 聊天设置	
 local fontsize = 10                          --other variables
 local tscol = "64C2F5"						-- Timestamp coloring

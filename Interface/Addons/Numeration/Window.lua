@@ -40,7 +40,6 @@ local reportFunction = function(f, chatType, channel)
 	CloseDropDownMenus()
 end
 local dropdown = CreateFrame("Frame", "NumerationMenuFrame", nil, "UIDropDownMenuTemplate")
-dropdown:CreateShadow("Background")
 local menuTable = {
 	{ text = "Numeration", isTitle = true, notCheckable = true, notClickable = true },
 	{ text = L["报告"], notCheckable = true, hasArrow = true,
@@ -91,7 +90,7 @@ function window:OnInitialize()
 	self.maxlines = s.maxlines
 	self:SetWidth(s.width)
 	self:SetHeight(2+s.titleheight+s.maxlines*(s.lineheight+s.linegap) - s.linegap)
-	self:CreateShadow("Background")
+	S.CreateBD(self)
 	self:SetClampedToScreen(true)
 	self:EnableMouse(true)
 	self:EnableMouseWheel(true)
@@ -190,9 +189,9 @@ function window:OnInitialize()
 		title:SetPoint("TOPLEFT", 1, -1)
 		title:SetPoint("BOTTOMRIGHT", reset, "BOTTOMLEFT", -1, 0)
 	local font = self:CreateFontString(nil, "ARTWORK")
-	self.titletext = font
-		-- font:SetJustifyH("LEFT")
-		font:SetJustifyH("CENTER")
+		self.titletext = font
+		font:SetJustifyH("LEFT")
+		--font:SetJustifyH("CENTER")
 		font:SetFont(s.titlefont, s.titlefontsize, "OUTLINE")
 		font:SetTextColor(s.titlefontcolor[1], s.titlefontcolor[2], s.titlefontcolor[3], 1)
 		font:SetHeight(s.titleheight)

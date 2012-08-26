@@ -9,7 +9,7 @@ local alpha = .5 -- controls the backdrop opacity (0 = invisible, 1 = solid)
 
 local S, _, _, DB = unpack(select(2, ...))
 F, C = {}, {}
-C.classcolours = {
+--[[ C.classcolours = {
 	["HUNTER"] = { r = 0.58, g = 0.86, b = 0.49 },
 	["WARLOCK"] = { r = 0.6, g = 0.47, b = 0.85 },
 	["PALADIN"] = { r = 1, g = 0.22, b = 0.52 },
@@ -20,7 +20,7 @@ C.classcolours = {
 	["SHAMAN"] = { r = 0, g = 0.6, b = 0.6 };
 	["WARRIOR"] = { r = 0.9, g = 0.65, b = 0.45 },
 	["DEATHKNIGHT"] = { r = 0.77, g = 0.12 , b = 0.23 },
-}
+} ]]
 
 C.media = {
 	["backdrop"] = "Interface\\ChatFrame\\ChatFrameBackground",
@@ -38,7 +38,7 @@ local r, g, b
 if CUSTOM_CLASS_COLORS then 
 	r, g, b = CUSTOM_CLASS_COLORS[class].r, CUSTOM_CLASS_COLORS[class].g, CUSTOM_CLASS_COLORS[class].b
 else
-	r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
+	r, g, b = RAID_CLASS_COLORS[class].r, RAID_CLASS_COLORS[class].g, RAID_CLASS_COLORS[class].b
 end
 
 F.CreateTab = function(f)
@@ -2295,7 +2295,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		function PaperDollFrame_SetLevel()
 			local primaryTalentTree = GetPrimaryTalentTree()
 			local classDisplayName, class = UnitClass("player")
-			local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or C.classcolours[class]
+			local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
 			local classColorString = format("ff%.2x%.2x%.2x", classColor.r * 255, classColor.g * 255, classColor.b * 255)
 			local specName
 

@@ -82,95 +82,99 @@ function SunUIConfig:LoadDefaults()
 				["EnableDBMSkin"] = true,
 			},
 			UnitFrameDB = {
+				--大小
 				["FontSize"] = 11,
-				["focusCBuserplaced"] = true,
-				["BossHeight"] = 15,
+				["Height"] = 20,
+				["Width"] = 180,
 				["Scale"] = 1,
-				["EnableSwingTimer"] = false,
 				["PetHeight"] = 10,
-				["TargetCastBarHeight"] = 20,
-				["EnableBarFader"] = false,
+				["PetWidth"] = 100,
+				["PetScale"] = 0.9,
+				["BossHeight"] = 15,
 				["BossWidth"] = 140,
 				["BossScale"] = 1,
-				["TargetCastBarWidth"] = 300,
-				["showparty"] = false,
-				["targetCBuserplaced"] = false,
-				["TargetAura"] = 1,
-				["FocusCastBarWidth"] = 100,
-				["showtot"] = true,
-				["PlayerCastBarWidth"] = 300,
-				["showpet"] = true,
-				["PlayerCastBarHeight"] = 20,
-				["playerCBuserplaced"] = false,
-				["FocusCastBarHeight"] = 6,
 				["Alpha3D"] = 0,
-				["Width"] = 180,
-				["ClassColor"] = false,
-				["PetWidth"] = 100,
-				["showboss"] = true,
-				["PetScale"] = 0.9,
-				["showfocus"] = true,
-				["ReverseHPbars"] = false,
-				["showarena"] = true,
-				["Height"] = 20,
-				["BigFocus"] = true,
-				["PlayerBuff"] = 4,
-				["CastBar"] = true,
-				["Party3D"] = false,
+				["TargetAura"] = 1,
 				["TargetRange"] = false,
 				["RangeAlpha"] = 0.6,
+				["BigFocus"] = true,
 				["FocusDebuff"] = false,
+				["ClassColor"] = false,
+				["ReverseHPbars"] = false,
+				["showarena"] = true,
+				["showboss"] = true,
+				["showfocus"] = true,
+				["showpet"] = true,
+				["showtot"] = true,
+				["showparty"] = false,
+				["EnableSwingTimer"] = false,
+				["EnableBarFader"] = false,
+				["Party3D"] = false,
+				["PlayerBuff"] = 4,
+				["CastBar"] = true,
+				["targetCBuserplaced"] = false,
+				["TargetCastBarHeight"] = 20,
+				["TargetCastBarWidth"] = 300,
+				["focusCBuserplaced"] = true,
+				["FocusCastBarWidth"] = 100,
+				["FocusCastBarHeight"] = 6,	
+				["playerCBuserplaced"] = false,
+				["PlayerCastBarWidth"] = 300,
+				["PlayerCastBarHeight"] = 20,			
 			},
 			MiniDB = {
-				["uiScale"] = 0.9,
+				--小东西设置
 				["AutoRepair"] = false,
-				["roguefive"] = 20,
 				["Icicle"] = false,
-				["roguetwo"] = 20,
-				["RaidCDWidth"] = 100,
-				["rogueone"] = 20,
 				["Autoinvite"] = false,
 				["Disenchat"] = true,
-				["RaidCDHeight"] = 8,
-				["ClassCDHeight"] = 8,
-				["LockUIscale"] = false,
 				["HideRaidWarn"] = true,
-				["ClassCDWidth"] = 100,
-				["RaidCDDirection"] = 1,
 				["Resurrect"] = false,
 				["igonoreOld"] = false,
-				["ClassCDDirection"] = 1,
 				["Interrupt"] = true,
 				["HideRaid"] = true,
-				["AutoBuy"] = true,
-				["roguethree"] = 20,
-				["UIscale"] = true,
-				["FontScale"] = 1,
 				["FastError"] = true,
-				["AutoBotton"] = true,
-				["magetwo"] = 20,
-				["RaidCDFontSize"] = 12,
-				["RaidCD"] = true,
-				["BloodShield"] = false,
-				["AutoSell"] = true,
-				["magethree"] = 100,
-				["ClassCDOpen"] = true,
-				["ClassFontSize"] = 12,
-				["roguefour"] = 20,
-				["AutoUIscale"] = false,
-				["Flump"] = false,
-				["mageone"] = 20,
 				["MiniMapPanels"] = true,
 				["INVITE_WORD"] = "SunUI",
 				["ChatFilter"] = true,
-				["ClassCDIcon"] = false,
-				["ClassCDIconSize"] = 25,
-				["ClassCDIconDirection"] = 1,
 				["IPhoneLock"] = true,
 				["AutoQuest"] = true,
 				["FatigueWarner"] = true,
 				["DNDFilter"] = true,
 				["TimeStamps"] = true,
+				["AutoSell"] = true,
+				--UI缩放
+				["uiScale"] = 0.9,
+				["FontScale"] = 1,
+				--内置CD
+				["ClassCDOpen"] = true,
+				["ClassCDHeight"] = 8,
+				["ClassCDWidth"] = 100,
+				["ClassCDDirection"] = 1,
+				["ClassFontSize"] = 12,
+				["ClassCDIcon"] = false,
+				["ClassCDIconSize"] = 25,
+				["ClassCDIconDirection"] = 1,
+				--SunUI扩展
+				["Flump"] = false,
+				["AutoBotton"] = true,
+				["BloodShield"] = false,
+				--Raid CD
+				["RaidCD"] = true,
+				["RaidCDFontSize"] = 12,
+				["RaidCDWidth"] = 100,
+				["RaidCDHeight"] = 8,
+				["RaidCDDirection"] = 1,
+				--AutoBuy
+				["AutoBuy"] = true,
+				["mageone"] = 20,
+				["magetwo"] = 20,
+				["magethree"] = 100,
+				["rogueone"] = 20,
+				["roguetwo"] = 20,
+				["roguethree"] = 20,
+				["roguefour"] = 20,
+				["roguefive"] = 20,
 			},
 			InfoPanelDB = {
 				["OpenTop"] = true,
@@ -179,314 +183,54 @@ function SunUIConfig:LoadDefaults()
 				["Guild"] = false,
 			},
 			MoveHandleDB = {
-				["bar3"] = {
-					"BOTTOMRIGHT", -- [1]
-					"SunUIActionBar1", -- [2]
-					"BOTTOMLEFT", -- [3]
-					-4, -- [4]
-					0, -- [5]
-				},
-				["ShadowPet"] = {
-					"BOTTOM", -- [1]
-					"UIParent", -- [2]
-					"BOTTOM", -- [3]
-					-316, -- [4]
-					201, -- [5]
-				},
-				["Minimap"] = {
-					"TOPLEFT", -- [1]
-					"UIParent", -- [2]
-					"TOPLEFT", -- [3]
-					5, -- [4]
-					-5, -- [5]
-				},
-				["Debuff"] = {
-					"TOPRIGHT", -- [1]
-					"UIParent", -- [2]
-					"TOPRIGHT", -- [3]
-					-5, -- [4]
-					-110, -- [5]
-				},
-				["bar32"] = {
-					"BOTTOMLEFT", -- [1]
-					"SunUIActionBar1", -- [2]
-					"BOTTOMRIGHT", -- [3]
-					4, -- [4]
-					0, -- [5]
-				},
-				["Combatpoint"] = {
-					"CENTER", -- [1]
-					"UIParent", -- [2]
-					"CENTER", -- [3]
-					133, -- [4]
-					-139, -- [5]
-				},
-				["Reminder"] = {
-					"TOPLEFT", -- [1]
-					"Minimap", -- [2]
-					"BOTTOMLEFT", -- [3]
-					0, -- [4]
-					-20, -- [5]
-				},
-				["FocusCastbar"] = {
-					"TOP", -- [1]
-					"oUF_SunUIFocus", -- [2]
-					"BOTTOM", -- [3]
-					0, -- [4]
-					-20, -- [5]
-				},
-				["PetFrame"] = {
-					"TOPRIGHT", -- [1]
-					"oUF_SunUIPlayer", -- [2]
-					"TOPLEFT", -- [3]
-					-5, -- [4]
-					0, -- [5]
-				},
-				["bar1"] = {
-					"BOTTOM", -- [1]
-					"UIParent", -- [2]
-					"BOTTOM", -- [3]
-					0, -- [4]
-					13, -- [5]
-				},
-				["ClassCD"] = {
-					"LEFT", -- [1]
-					"UIParent", -- [2]
-					"LEFT", -- [3]
-					30, -- [4]
-					240, -- [5]
-				},
-				["PlayerFrame"] = {
-					"BOTTOM", -- [1]
-					"UIParent", -- [2]
-					"BOTTOM", -- [3]
-					-175, -- [4]
-					172, -- [5]
-				},
-				["stancebar"] = {
-					"BOTTOMLEFT", -- [1]
-					"MultiBarBottomRightButton6", -- [2]
-					"TOPLEFT", -- [3]
-					0, -- [4]
-					4, -- [5]
-				},
-				["FocusTFrame"] = {
-					"TOP", -- [1]
-					"oUF_SunUIFocus", -- [2]
-					"BOTTOM", -- [3]
-					0, -- [4]
-					-30, -- [5]
-				},
-				["bar52"] = {
-					"BOTTOM", -- [1]
-					"MultiBarBottomLeftButton5", -- [2]
-					"TOP", -- [3]
-					0, -- [4]
-					4, -- [5]
-				},
-				["BossFrame"] = {
-					"RIGHT", -- [1]
-					"UIParent", -- [2]
-					"RIGHT", -- [3]
-					-50, -- [4]
-					-60, -- [5]
-				},
-				["ToTFrame"] = {
-					"BOTTOM", -- [1]
-					"UIParent", -- [2]
-					"BOTTOM", -- [3]
-					0, -- [4]
-					190, -- [5]
-				},
-				["TargetCastbar"] = {
-					"CENTER", -- [1]
-					"UIParent", -- [2]
-					"CENTER", -- [3]
-					0, -- [4]
-					95, -- [5]
-				},
-				["Buff"] = {
-					"TOPRIGHT", -- [1]
-					"UIParent", -- [2]
-					"TOPRIGHT", -- [3]
-					-5, -- [4]
-					-5, -- [5]
-				},
-				["Class"] = {
-					"CENTER", -- [1]
-					"UIParent", -- [2]
-					"CENTER", -- [3]
-					-150, -- [4]
-					150, -- [5]
-				},
-				["bar51"] = {
-					"BOTTOM", -- [1]
-					"MultiBarBottomLeftButton4", -- [2]
-					"TOP", -- [3]
-					0, -- [4]
-					4, -- [5]
-				},
-				["totembar"] = {
-					"BOTTOM", -- [1]
-					"UIParent", -- [2]
-					"BOTTOM", -- [3]
-					-175, -- [4]
-					292, -- [5]
-				},
-				["CooldownFlash"] = {
-					"CENTER", -- [1]
-					"UIParent", -- [2]
-					"CENTER", -- [3]
-					0, -- [4]
-					-130, -- [5]
-				},
-				["RaidCD"] = {
-					"LEFT", -- [1]
-					"UIParent", -- [2]
-					"LEFT", -- [3]
-					30, -- [4]
-					0, -- [5]
-				},
-				["bar53"] = {
-					"BOTTOMRIGHT", -- [1]
-					"MultiBarBottomRightButton3", -- [2]
-					"BOTTOMLEFT", -- [3]
-					-4, -- [4]
-					0, -- [5]
-				},
-				["bar4"] = {
-					"RIGHT", -- [1]
-					"UIParent", -- [2]
-					"RIGHT", -- [3]
-					-10, -- [4]
-					0, -- [5]
-				},
-				["PlayerCastbar"] = {
-					"CENTER", -- [1]
-					"UIParent", -- [2]
-					"CENTER", -- [3]
-					0, -- [4]
-					-110, -- [5]
-				},
-				["Threat"] = {
-					"BOTTOM", -- [1]
-					"UIParent", -- [2]
-					"BOTTOM", -- [3]
-					-175, -- [4]
-					262, -- [5]
-				},
-				["petbar"] = {
-					"BOTTOMRIGHT", -- [1]
-					"MultiBarBottomRightButton12", -- [2]
-					"TOPRIGHT", -- [3]
-					0, -- [4]
-					4, -- [5]
-				},
-				["bar2"] = {
-					"BOTTOM", -- [1]
-					"SunUIActionBar1", -- [2]
-					"TOP", -- [3]
-					0, -- [4]
-					4, -- [5]
-				},
-				["BloodShield"] = {
-					"BOTTOM", -- [1]
-					"UIParent", -- [2]
-					"BOTTOM", -- [3]
-					-285, -- [4]
-					172, -- [5]
-				},
-				["bar54"] = {
-					"BOTTOMLEFT", -- [1]
-					"MultiBarBottomRightButton9", -- [2]
-					"BOTTOMRIGHT", -- [3]
-					4, -- [4]
-					0, -- [5]
-				},
-				["bar5"] = {
-					"CENTER", -- [1]
-					"UIParent", -- [2]
-					"CENTER", -- [3]
-					0, -- [4]
-					0, -- [5]
-				},
-				["TargetFrame"] = {
-					"BOTTOM", -- [1]
-					"UIParent", -- [2]
-					"BOTTOM", -- [3]
-					175, -- [4]
-					172, -- [5]
-				},
-				["InfoPanel"] = {
-					"TOPLEFT", -- [1]
-					"Minimap", -- [2]
-					"TOPRIGHT", -- [3]
-					5, -- [4]
-					3, -- [5]
-				},
-				["FocusFrame"] = {
-					"RIGHT", -- [1]
-					"UIParent", -- [2]
-					"RIGHT", -- [3]
-					-57, -- [4]
-					-138, -- [5]
-				},
-				["PartyFrame"] = {
-					"LEFT", -- [1]
-					"UIParent", -- [2]
-					"LEFT", -- [3]
-					10, -- [4]
-					0, -- [5]
-				},
-				["vehicleexit"] = {
-					"BOTTOM", -- [1]
-					"UIParent", -- [2]
-					"BOTTOM", -- [3]
-					278, -- [4]
-					66, -- [5]
-				},
-				["extrabar"] = {
-					"BOTTOM", -- [1]
-					"UIParent", -- [2]
-					"BOTTOM", -- [3]
-					-194, -- [4]
-					54, -- [5]
-				},
-				["ArenaFrame"] = {
-					"RIGHT", -- [1]
-					"UIParent", -- [2]
-					"RIGHT", -- [3]
-					-50, -- [4]
-					-60, -- [5]
-				},
-				["AutoButton"] = {
-					"RIGHT", -- [1]
-					"UIParent", -- [2]
-					"RIGHT", -- [3]
-					-270, -- [4]
-					188, -- [5]
-				},
-				["RollFrame"] = {
-					"TOP", -- [1]
-					"UIParent", -- [2]
-					"TOP", -- [3]
-					0, -- [4]
-					-200, -- [5]
-				},
-				["Tooltip"] = {
-					"BOTTOMRIGHT", -- [1]
-					"UIParent", -- [2]
-					"BOTTOMRIGHT", -- [3]
-					-50, -- [4]
-					160, -- [5]
-				},
-				["healpriest"] = {
-					"CENTER", -- [1]
-					"UIParent", -- [2]
-					"CENTER", -- [3]
-					0, -- [4]
-					135, -- [5]
-				},
+				--头像
+				["PlayerFrame"] = {"BOTTOM", "UIParent", "BOTTOM", -175, 172},
+				["TargetFrame"] = {"BOTTOM", "UIParent", "BOTTOM", 175, 172},
+				["ToTFrame"] = {"BOTTOM", "UIParent", "BOTTOM", 0, 190},
+				["PetFrame"] = {"TOPRIGHT", "oUF_SunUIPlayer", "TOPLEFT", -5, 0},
+				["FocusFrame"] = {"RIGHT", "UIParent", "RIGHT", -57, -138},
+				["PartyFrame"] = {"LEFT", "UIParent", "LEFT", 10, 0},
+				["FocusTFrame"] = {"TOP", "oUF_SunUIFocus", "BOTTOM", 0, -30},
+				["BossFrame"] = {"RIGHT", "UIParent", "RIGHT", -50, -60},
+				["ArenaFrame"] = {"RIGHT", "UIParent", "RIGHT", -50, -60},
+				--施法条
+				["PlayerCastbar"] = {"CENTER", "UIParent", "CENTER", 0, -110},
+				["TargetCastbar"] = {"CENTER", "UIParent", "CENTER", 0, 95},
+				["FocusCastbar"] = {"TOP", "oUF_SunUIFocus", "BOTTOM", 0, -20},
+				--动作条
+				["bar1"] = {"BOTTOM", "UIParent", "BOTTOM", 0, 13},
+				["bar2"] = {"BOTTOM", "SunUIActionBar1", "TOP", 0, 4},
+				["bar3"] = {"BOTTOMRIGHT", "SunUIActionBar1", "BOTTOMLEFT", -4, 0},
+				["bar32"] = {"BOTTOMLEFT", "SunUIActionBar1", "BOTTOMRIGHT", 4, 0},	
+				["bar4"] = {"RIGHT", "UIParent", "RIGHT", -10, 0},
+				["bar5"] = {"CENTER", "UIParent", "CENTER", 0, 0},
+				["bar51"] = {"BOTTOM", "MultiBarBottomLeftButton4", "TOP", 0, 4},
+				["bar52"] = {"BOTTOM", "MultiBarBottomLeftButton5", "TOP", 0, 4},
+				["bar53"] = {"BOTTOMRIGHT", "MultiBarBottomRightButton3", "BOTTOMLEFT", -4, 0},
+				["bar54"] = {"BOTTOMLEFT", "MultiBarBottomRightButton9", "BOTTOMRIGHT", 4, 0},
+				["petbar"] = {"BOTTOMRIGHT", "MultiBarBottomRightButton12", "TOPRIGHT", 0, 4},
+				["stancebar"] = {"BOTTOMLEFT", "MultiBarBottomRightButton6", "TOPLEFT", 0, 4},
+				["totembar"] = {"BOTTOM", "UIParent", "BOTTOM", -175, 292},
+				["vehicleexit"] = {"BOTTOM", "UIParent", "BOTTOM", 278, 66},
+				["extrabar"] = {"BOTTOM", "UIParent", "BOTTOM", -194, 54},
+				--Blz界面
+				["Minimap"] = {"TOPLEFT", "UIParent", "TOPLEFT", 5, -5},
+				["Buff"] = {"TOPRIGHT", "UIParent", "TOPRIGHT", -5, -5},
+				["Debuff"] = {"TOPRIGHT", "UIParent", "TOPRIGHT", -5, -160},
+				["RollFrame"] = {"TOP", "UIParent", "TOP", 0, -200},
+				["Tooltip"] = {"BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -50, 160},
+				--插件增强
+				["CooldownFlash"] = {"CENTER", "UIParent", "CENTER", 0, -130},
+				["Class"] = {"CENTER", "UIParent", "CENTER", -150, 150},
+				["Reminder"] = {"TOPLEFT", "Minimap", "BOTTOMLEFT", 0, -20},
+				["ShadowPet"] = {"BOTTOM", "UIParent", "BOTTOM", -316, 201},	
+				["Threat"] = {"BOTTOM", "UIParent", "BOTTOM", -175, 262},
+				["ClassCD"] = {"LEFT", "UIParent", "LEFT", 30, 240},
+				["RaidCD"] = {"LEFT", "UIParent", "LEFT", 30, 0},
+				["AutoButton"] = {"RIGHT", "UIParent", "RIGHT", -270, 188},
+				["BloodShield"] = {"BOTTOM", "UIParent", "BOTTOM", -285, 172},
+				["InfoPanel"] = {"TOPLEFT", "Minimap", "TOPRIGHT", 5, 3},
+				["healpriest"] = {"CENTER", "UIParent", "CENTER", 0, 135},
 			},
 		},
 	}

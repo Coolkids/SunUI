@@ -1,7 +1,7 @@
 ﻿local S, C, L, DB = unpack(SunUI)
 local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("MiniMapPanels")
 
-function Module:OnInitialize()
+function Module:OnEnable()
 	C = C["MiniDB"]
 	if C["MiniMapPanels"] ~= true then return end
 	local wm = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
@@ -10,10 +10,10 @@ function Module:OnInitialize()
 	wm:ClearAllPoints() 
 	wm:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", -3, -3) 
 	wm:SetSize(16, 16)
-	S.Reskin(wm, false)
-	S.CreateBG(wm)
-	wm:SetText("O")
-	wm:Hide()
+	-- S.Reskin(wm, false)
+	-- S.CreateBG(wm)
+	-- wm:SetText("O")
+	-- wm:Hide()
 
 	CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButtonLeft:SetAlpha(0) 
 	CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButtonMiddle:SetAlpha(0) 
