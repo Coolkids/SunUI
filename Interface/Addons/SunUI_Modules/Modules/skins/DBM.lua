@@ -1,7 +1,7 @@
 ﻿-- Engines
 local S, C, L, DB = unpack(SunUI)
  
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("SkinDBM", "AceEvent-3.0")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SkinDBM", "AceEvent-3.0")
 function Module:OnInitialize()
 	local Event = CreateFrame("Frame")
 	Event:RegisterEvent("PLAYER_LOGIN")

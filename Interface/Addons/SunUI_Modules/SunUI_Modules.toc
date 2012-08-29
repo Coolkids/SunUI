@@ -1,4 +1,4 @@
-## Interface: 40300
+## Interface: 50001
 ## Title:|cff00d2ffSun|r|cffffffffUI|r |cffff0000Modules|r
 ## Notes: 孫小貓超級整合插件
 ## Author:All Thanks, Coolkid

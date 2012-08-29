@@ -2,8 +2,8 @@
 local S, C, L, DB = unpack(SunUI)
 
  
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("MiniMap", "AceTimer-3.0")
-function Module:OnInitialize()
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("MiniMap", "AceTimer-3.0")
+function Module:OnEnable()
 	Minimap:SetMaskTexture("Interface\\ChatFrame\\ChatFrameBackground")
 	Minimap:SetFrameStrata("MEDIUM")
 	Minimap:ClearAllPoints()
@@ -27,8 +27,8 @@ function Module:OnInitialize()
 	MoveHandle.Minimap = S.MakeMoveHandle(Minimap, L["小地图"], "Minimap")
 
 
-	LFGSearchStatus:SetClampedToScreen(true)
-	LFGDungeonReadyStatus:SetClampedToScreen(true)
+	--LFGSearchStatus:SetClampedToScreen(true)
+	--LFGDungeonReadyStatus:SetClampedToScreen(true)
 
 	local frames = {
 		"GameTimeFrame",
@@ -41,13 +41,13 @@ function Module:OnInitialize()
 		"MiniMapVoiceChatFrame",
 		"MiniMapWorldMapButton",
 		"MiniMapMailBorder",
-		"MiniMapBattlefieldBorder",
-	--    "FeedbackUIButton",
 	}
 
 	for i in pairs(frames) do
-		_G[frames[i]]:Hide()
-		_G[frames[i]].Show = function() end
+		if _G[frames[i]] then
+			_G[frames[i]]:Hide()
+			_G[frames[i]].Show = function() end
+		end
 	end
 	MinimapCluster:EnableMouse(false)
 
@@ -59,14 +59,14 @@ function Module:OnInitialize()
 	MiniMapTracking:SetScale(1)
 
 	-- BG icon
-	MiniMapBattlefieldFrame:ClearAllPoints()
-	MiniMapBattlefieldFrame:SetPoint("TOP", Minimap, "TOP", 2, 8)
+	--MiniMapBattlefieldFrame:ClearAllPoints()
+	--MiniMapBattlefieldFrame:SetPoint("TOP", Minimap, "TOP", 2, 8)
 
 	-- Random Group icon
-	MiniMapLFGFrame:ClearAllPoints()
-	MiniMapLFGFrameBorder:SetAlpha(0)
-	MiniMapLFGFrame:SetPoint("TOP", Minimap, "TOP", 1, 8)
-	MiniMapLFGFrame:SetFrameStrata("MEDIUM")
+	-- MiniMapLFGFrame:ClearAllPoints()
+	-- MiniMapLFGFrameBorder:SetAlpha(0)
+	-- MiniMapLFGFrame:SetPoint("TOP", Minimap, "TOP", 1, 8)
+	-- MiniMapLFGFrame:SetFrameStrata("MEDIUM")
 
 	-- Instance Difficulty flag
 	MiniMapInstanceDifficulty:ClearAllPoints()
@@ -132,6 +132,7 @@ function Module:OnInitialize()
 		{text = L["地城手册"],func = function() ToggleEncounterJournal() end},
 		{text = "Bags",func = function() ToggleAllBags() end},
 		{text = "系统菜单",func = function() ToggleFrame(GameMenuFrame) end},
+		{text = "坐骑",func = function() TogglePetJournal() end},
 	}
 
 	Minimap:SetScript("OnMouseUp", function(self, button)

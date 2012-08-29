@@ -4,7 +4,6 @@
 
 
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-
-	<Include file="bars\load.xml"/>
-	<Include file="Plugins\load.xml"/>
+	<Script file="actionbar.lua"/>
+	<Script file="Style.lua"/>
 </Ui>

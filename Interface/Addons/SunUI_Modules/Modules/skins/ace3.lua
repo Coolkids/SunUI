@@ -11,14 +11,14 @@ AceGUI.RegisterAsWidget = function(self, widget)
 	local TYPE = widget.type
 	--print(TYPE)
 	if TYPE == "CheckBox" then
-		S.Kill(widget.checkbg)
-		S.Kill(widget.highlight)
+		widget.checkbg:Kill()
+		widget.highlight:Kill()
 
 		if not widget.skinnedCheckBG then
 			widget.skinnedCheckBG = CreateFrame('Frame', nil, widget.frame)
-			widget.skinnedCheckBG:SetPoint('TOPLEFT', widget.checkbg, 'TOPLEFT', 4, -4)
-			widget.skinnedCheckBG:SetPoint('BOTTOMRIGHT', widget.checkbg, 'BOTTOMRIGHT', -4, 4)
-			widget.skinnedCheckBG:CreateBD()
+			widget.skinnedCheckBG:Point('TOPLEFT', widget.checkbg, 'TOPLEFT', 4, -4)
+			widget.skinnedCheckBG:Point('BOTTOMRIGHT', widget.checkbg, 'BOTTOMRIGHT', -4, 4)
+			S.CreateBD(widget.skinnedCheckBG)
 		end
 
 		if widget.skinnedCheckBG.oborder then
@@ -30,12 +30,12 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		local frame = widget.dropdown
 		local button = widget.button
 		local text = widget.text
-		S.StripTextures(frame)
+		frame:StripTextures()
 		local bg = CreateFrame("Frame", nil, frame)
-		bg:SetPoint("TOPLEFT", 16, 0)
-		bg:SetPoint("BOTTOMRIGHT", -20, 0)
+		bg:Point("TOPLEFT", 16, 0)
+		bg:Point("BOTTOMRIGHT", -20, 0)
 		bg:SetFrameLevel(frame:GetFrameLevel()-1)
-		bg:CreateBD(0)
+		S.CreateBD(bg,0)
 
 		local tex = bg:CreateTexture(nil, "BACKGROUND")
 		tex:SetPoint("TOPLEFT")
@@ -52,7 +52,7 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		dis:SetDrawLayer("OVERLAY")
 
 		local downtex = button:CreateTexture(nil, "ARTWORK")
-		downtex:SetTexture("Interface\\AddOns\\s_Core\\media\\arrow-down-active")
+		downtex:SetTexture("Interface\\AddOns\\!SunUI\\media\\arrow-down-active")
 		downtex:SetSize(8, 8)
 		downtex:SetPoint("CENTER")
 		downtex:SetVertexColor(1, 1, 1)
@@ -61,13 +61,13 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		text:SetParent(bg)
 		button:HookScript('OnClick', function(this)
 			local self = this.obj
-			self.pullout.frame:CreateBD()
+			S.CreateBD(self.pullout.frame)
 		end)
 	elseif TYPE == "LSM30_Font" or TYPE == "LSM30_Sound" or TYPE == "LSM30_Border" or TYPE == "LSM30_Background" or TYPE == "LSM30_Statusbar" then
 		local frame = widget.frame
 		local button = frame.dropButton
 		local text = frame.text
-		S.StripTextures(frame)
+		frame:StripTextures()
 
 		button:ClearAllPoints()
 		button:SetPoint("RIGHT", frame, "RIGHT", -20, 0)
@@ -78,7 +78,7 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		dis:SetDrawLayer("OVERLAY")
 
 		local downtex = button:CreateTexture(nil, "ARTWORK")
-		downtex:SetTexture("Interface\\AddOns\\s_Core\\media\\arrow-down-active")
+		downtex:SetTexture("Interface\\AddOns\\!SunUI\\media\\arrow-down-active")
 		downtex:SetSize(8, 8)
 		downtex:SetPoint("CENTER")
 		downtex:SetVertexColor(1, 1, 1)
@@ -97,7 +97,7 @@ AceGUI.RegisterAsWidget = function(self, widget)
 			tex:SetPoint("BOTTOMRIGHT")
 			tex:SetTexture(DB.aurobackdrop)
 			tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
-			frame.backdrop:CreateBD()
+			S.CreateBD(frame.backdrop)
 			if frame:GetFrameLevel() - 1 >= 0 then
 				frame.backdrop:SetFrameLevel(frame:GetFrameLevel() - 1)
 			else
@@ -127,16 +127,16 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		button:HookScript('OnClick', function(this, button)
 			local self = this.obj
 			if self.dropdown then
-				self.dropdown:CreateBD()
+				CreateBD(self.dropdown)
 			end
 		end)		
 	elseif TYPE == "EditBox" then
 		local frame = widget.editbox
 		local button = widget.button
 		-- frame:S.StripTextures()
-		S.Kill(_G[frame:GetName()..'Left'])
-		S.Kill(_G[frame:GetName()..'Middle'])
-		S.Kill(_G[frame:GetName()..'Right'])
+		_G[frame:GetName()..'Left']:Kill()
+		_G[frame:GetName()..'Middle']:Kill()
+		_G[frame:GetName()..'Right']:Kill()
 		S.ReskinInput(frame)
 		button:ClearAllPoints()
 		button:SetPoint("RIGHT", frame, "RIGHT", -7, 0)
@@ -152,8 +152,8 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		local hightext = widget.hightext
 		local HEIGHT = 12
 
-		S.StripTextures(frame)
-		frame:CreateBD(0)
+		frame:StripTextures()
+		S.CreateBD(frame,0)
 		frame:SetHeight(HEIGHT)
 		-- local slider = CreateFrame("Frame", nil, frame)
 		-- slider:SetPoint("TOPLEFT", frame:GetThumbTexture())
@@ -167,7 +167,7 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		-- frame:GetThumbTexture():SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 		-- frame:GetThumbTexture():SetSize(HEIGHT-2,HEIGHT-2)
 
-		editbox:CreateBD(0)
+		S.CreateBD(editbox,0)
 		editbox.SetBackdropColor = dummy
 		editbox.SetBackdropBorderColor = dummy
 		editbox:SetHeight(15)
@@ -197,19 +197,19 @@ AceGUI.RegisterAsContainer = function(self, widget)
 	local TYPE = widget.type
 	if TYPE == "ScrollFrame" then
 		local frame = widget.scrollbar
-		S.StripTextures(frame)
+		frame:StripTextures()
 		S.ReskinScroll(frame)
 	elseif TYPE == "InlineGroup" or TYPE == "TreeGroup" or TYPE == "TabGroup" or TYPE == "SimpleGroup" or TYPE == "Frame" or TYPE == "DropdownGroup" then
 		local frame = widget.content:GetParent()
-		frame:CreateBD(0)
+		S.CreateBD(frame,0)
 		if TYPE == "Frame" then
-			S.StripTextures(frame)
+			frame:StripTextures()
 			for i=1, frame:GetNumChildren() do
 				local child = select(i, frame:GetChildren())
 				if child:GetObjectType() == "Button" and child:GetText() then
 					S.Reskin(child)
 				else
-					S.StripTextures(child)
+					child:StripTextures()
 				end
 			end
 			--frame:CreateSD()
@@ -218,15 +218,15 @@ AceGUI.RegisterAsContainer = function(self, widget)
 		end		
 		
 		if widget.treeframe then
-			widget.treeframe:CreateBD(.0)
-			frame:SetPoint("TOPLEFT", widget.treeframe, "TOPRIGHT", 1, 0)
+			S.CreateBD(widget.treeframe, 0)
+			frame:Point("TOPLEFT", widget.treeframe, "TOPRIGHT", 1, 0)
 		end
 
 		if TYPE == "TabGroup" then
 			local oldCreateTab = widget.CreateTab
 			widget.CreateTab = function(self, id)
 				local tab = oldCreateTab(self, id)
-				S.StripTextures(tab)			
+				tab:StripTextures()
 				return tab
 			end
 		end

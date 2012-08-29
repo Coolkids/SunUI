@@ -1,4 +1,4 @@
-	local AchievementHolder = CreateFrame("Frame", "AchievementHolder", UIParent)
+--[[ 	local AchievementHolder = CreateFrame("Frame", "AchievementHolder", UIParent)
 	AchievementHolder:SetWidth(180)
 	AchievementHolder:SetHeight(20)
 	AchievementHolder:SetPoint("TOP", UIParent, "TOP", 0, -35)
@@ -34,4 +34,4 @@
 			DungeonCompletionAlertFrame1:ClearAllPoints()	
 			DungeonCompletionAlertFrame1:SetPoint("TOP", AchievementHolder, "BOTTOM")
 		end
-	end)
+	end) ]]

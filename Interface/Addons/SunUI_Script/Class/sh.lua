@@ -1,6 +1,6 @@
 ﻿local S, C, L, DB = unpack(SunUI)
 
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("SH")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SH")
 function Module:OnInitialize()
 	local Frame = CreateFrame("Frame", "SH", UIParent)
 		Frame:SetSize(48, 48)

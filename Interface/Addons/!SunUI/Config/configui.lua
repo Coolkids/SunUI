@@ -1,5 +1,5 @@
 local S, C, L, DB = unpack(select(2, ...))
-local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("Core"):GetModule("SunUIConfig")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 function SunUIConfig:OnInitialize()
 	SunUIConfig:Load()
 	for group, options in pairs(SunUIConfig.db.profile) do

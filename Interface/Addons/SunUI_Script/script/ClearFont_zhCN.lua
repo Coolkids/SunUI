@@ -19,7 +19,7 @@ if not (GetLocale() == "zhCN") then return end
 -- =============================================================================
 -- /////////////////////////////////////////////////////////////////////////////
 
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ClearFont_zhCN", "AceEvent-3.0")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ClearFont_zhCN", "AceEvent-3.0")
 function Module:OnInitialize()
 
 

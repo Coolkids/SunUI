@@ -1,6 +1,6 @@
 ﻿-- Engines
 local S, _, _, DB = unpack(SunUI)
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ChatFramePanel", "AceTimer-3.0")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ChatFramePanel", "AceTimer-3.0")
 
 function Module:BuildChatbar()
 	local Channel = {"/s ","/y ","/p ","/g ","/raid ","/1 ","/2 "}

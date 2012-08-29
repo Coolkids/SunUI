@@ -68,7 +68,7 @@ end
 --[[  Assign Class Combo Abilities ]]
 local function AssignTalentTree()
   -- Spec Calculator
-  ct.myspec = GetPrimaryTalentTree(false, false, GetActiveTalentGroup(false, false))
+  ct.myspec = GetSpecialization(false, false, GetActiveSpecGroup(false, false))
 
   if ct.combowindow then
     ct.classcomboUnit = "player" -- most of the time, this is the player
@@ -1189,7 +1189,7 @@ for i = 1, numf do
     elseif framenames[i] == "gen" then
         f:SetJustifyH(ct.justify_3)
         f:SetSize(115, 55)
-        f:SetPoint("CENTER", 455, 123)
+        f:SetPoint("CENTER", 520, 123)
     elseif framenames[i] == "done" then
         f:SetJustifyH(ct.justify_4)
         f:SetHeight(384)
@@ -1227,7 +1227,7 @@ for i = 1, numf do
         end
     elseif framenames[i] == "pwr" then
         f:SetJustifyH(ct.justify_7)
-        f:SetPoint("CENTER", 455, 62)
+        f:SetPoint("CENTER", 520, 62)
         f:SetSize(115, 55)
     elseif framenames[i] == "proc" then
         f:SetJustifyH(ct.justify_8)

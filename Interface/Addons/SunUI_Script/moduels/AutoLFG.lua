@@ -1,6 +1,6 @@
 ﻿--thanks susnow
 local S, C, L, DB = unpack(SunUI)
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("AutoLFG")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("AutoLFG")
 function Module:OnInitialize()
 C = C["MiniDB"]
 

@@ -17,6 +17,5 @@
 	<Script file ="tekKompare.lua"/>
 	<Script file = "RaidCD.lua"/>
 	<Script file ="sMirrorBars.lua"/>
-	<Script file ="TooltipItemIcon.lua"/>
 	<Script file ="TradeTab.lua"/>
 </Ui>

@@ -1,6 +1,6 @@
 ﻿local S, C, L, DB = unpack(SunUI)
  
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("AutoHide", "AceEvent-3.0")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("AutoHide", "AceEvent-3.0")
 
 function Module:UpdateAutoHide()
 	local autohide = CreateFrame("Frame")
@@ -11,12 +11,16 @@ function Module:UpdateAutoHide()
 	if SunUIActionBar1 and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUIActionBar1") end
 	if SunUIActionBar2 and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUIActionBar2") end
 	if SunUIActionBar3 and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUIActionBar3") end
+	if SunUIActionBar3_2 and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUIActionBar3_2") end
 	if SunUIActionBar4 and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUIActionBar4") end
 	if SunUIActionBar5 and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUIActionBar5") end
 	if SunUIMultiBarLeft1 and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUIMultiBarLeft1") end
 	if SunUIMultiBarLeft2 and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUIMultiBarLeft2") end
 	if SunUIMultiBarLeft3 and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUIMultiBarLeft3") end
 	if SunUIMultiBarLeft4 and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUIMultiBarLeft4") end
+	if SunUI_OverrideBar and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUI_OverrideBar") end
+	if SunUIExtraActionBar and C["ActionBarDB"]["EnableBarFader"] then table.insert(rabs, "SunUIExtraActionBar") end
+	
 
 	if #rabs == 0 then return end
 
@@ -133,6 +137,6 @@ function Module:UpdateAutoHide()
 		end
 end)
 end
-function Module:OnInitialize()
+function Module:OnEnable()
 	Module:UpdateAutoHide()
 end 

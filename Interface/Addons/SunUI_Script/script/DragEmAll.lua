@@ -66,6 +66,9 @@ local frames = {
 
   -- AddOns
   ["LudwigFrame"] = false,
+  --5.0fix
+  --["MountJournal"] = false,
+  --["PetJournalParent"] = false,
 }
 
 -- Frames provided by load on demand addons, hooked when the addon is loaded.
@@ -96,6 +99,7 @@ local lodFrames = {
   Blizzard_VoidStorageUI = { ["VoidStorageFrame"] = false, ["VoidStorageBorderFrameMouseBlockFrame"] = "VoidStorageFrame" },
   Blizzard_ItemAlterationUI = { ["TransmogrifyFrame"] = false },
   Blizzard_EncounterJournal = { ["EncounterJournal"] = false }, -- as of 4.3
+  Blizzard_PetJournal = { ["PetJournalParent"] = false }, -- as of 5.0
 }
 
 local parentFrame = {}

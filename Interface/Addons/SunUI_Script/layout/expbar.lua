@@ -1,6 +1,6 @@
 -- Engines
 local S, C, L, DB = unpack(SunUI)
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ExpBar", "AceEvent-3.0")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ExpBar", "AceEvent-3.0")
 local ExpBar = nil
 local FactionInfo = {
 	[1] = {{ 170/255, 70/255,  70/255 }, L["Г№Ко"], "FFaa4646"},

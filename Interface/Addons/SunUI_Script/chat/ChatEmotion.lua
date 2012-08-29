@@ -3,8 +3,8 @@
 local S, _, _, DB = unpack(SunUI)
  
 if DB.zone ~= "zhTW" and DB.zone ~= "zhCN" then return end
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("chatemotion", "AceTimer-3.0")
-function Module:OnInitialize()
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("chatemotion", "AceTimer-3.0")
+
 local IconSize = S.Scale(23)					 -- 表情IconSize
 local fdir = "Interface\\Addons\\SunUI_Script\\chat\\Icon\\"			 -- 表情材质路径
 ----------------------------------------------------------------------------------------
@@ -232,14 +232,14 @@ local function ToggleEmoteTable()
 
 end
 
-function EmoteIconMouseUp(self, button)
+local function EmoteIconMouseUp(self, button)
 	if (button == "LeftButton") then
 		ChatFrameEditBox:Show()
 		ChatFrameEditBox:Insert(text)
 	end
 	--ToggleEmoteTable()
 end
-
+function Module:OnInitialize()
 local button = CreateFrame("Button", "ButtonE", ColectorButton)
 		button:Point("TOPLEFT", ColectorButton, "TOPLEFT", 5, -5)
 		button:Size(15)
@@ -256,6 +256,5 @@ local button = CreateFrame("Button", "ButtonE", ColectorButton)
 		GameTooltip:AddLine("表情")
 		GameTooltip:Show()  end)
 		button:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
-		S.CreateBG(button, 0)
 		S.Reskin(button)
 end

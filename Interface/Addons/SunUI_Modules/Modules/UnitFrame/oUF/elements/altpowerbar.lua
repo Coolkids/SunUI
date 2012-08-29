@@ -1,3 +1,29 @@
+--[[ Element: Alternative Power Bar
+
+ Handles visibility and updating of the alternative power bar.
+
+ This bar is used to display encounter/quest related power information, such as
+ the number of hour glass uses left on the end boss in End Time.
+
+ Widget
+
+ AltPowerBar - A StatusBar to represent alternative power.
+
+ Examples
+
+   -- Position and size
+   local AltPowerBar = CreateFrame('StatusBar', nil, self)
+   AltPowerBar:SetHeight(20)
+   AltPowerBar:SetPoint('BOTTOM')
+   AltPowerBar:SetPoint('LEFT')
+   AltPowerBar:SetPoint('RIGHT')
+   
+   -- Register with oUF
+   self.AltPowerBar = AltPowerBar
+
+ Callbacks
+]]
+
 local parent, ns = ...
 local oUF = ns.oUF
 
@@ -8,6 +34,14 @@ local UpdatePower = function(self, event, unit, powerType)
 
 	local altpowerbar = self.AltPowerBar
 
+	--[[ :PreUpdate()
+
+	 Called before the element has been updated.
+
+	 Arguments
+
+	 self - The AltPowerBar element.
+	 ]]
 	if(altpowerbar.PreUpdate) then
 		altpowerbar:PreUpdate()
 	end
@@ -20,6 +54,17 @@ local UpdatePower = function(self, event, unit, powerType)
 	altpowerbar:SetMinMaxValues(min, max)
 	altpowerbar:SetValue(cur)
 
+	--[[ :PostUpdate(min, cur, max)
+
+	 Called after the element has been updated.
+
+	 Arguments
+
+	 self - The AltPowerBar element.
+	 min  - The minimum possible power value for the active type.
+	 cur  - The current power value.
+	 max  - The maximum possible power value for the active type.
+	]]
 	if(altpowerbar.PostUpdate) then
 		return altpowerbar:PostUpdate(min, cur, max)
 	end
@@ -59,9 +104,11 @@ local Enable = function(self, unit)
 
 		altpowerbar:Hide()
 
-		PlayerPowerBarAlt:UnregisterEvent'UNIT_POWER_BAR_SHOW'
-		PlayerPowerBarAlt:UnregisterEvent'UNIT_POWER_BAR_HIDE'
-		PlayerPowerBarAlt:UnregisterEvent'PLAYER_ENTERING_WORLD'
+		if(unit == 'player') then
+			PlayerPowerBarAlt:UnregisterEvent'UNIT_POWER_BAR_SHOW'
+			PlayerPowerBarAlt:UnregisterEvent'UNIT_POWER_BAR_HIDE'
+			PlayerPowerBarAlt:UnregisterEvent'PLAYER_ENTERING_WORLD'
+		end
 
 		return true
 	end
@@ -73,9 +120,11 @@ local Disable = function(self, unit)
 		self:UnregisterEvent('UNIT_POWER_BAR_SHOW', Toggler)
 		self:UnregisterEvent('UNIT_POWER_BAR_HIDE', Toggler)
 
-		PlayerPowerBarAlt:RegisterEvent'UNIT_POWER_BAR_SHOW'
-		PlayerPowerBarAlt:RegisterEvent'UNIT_POWER_BAR_HIDE'
-		PlayerPowerBarAlt:RegisterEvent'PLAYER_ENTERING_WORLD'
+		if(unit == 'player') then
+			PlayerPowerBarAlt:RegisterEvent'UNIT_POWER_BAR_SHOW'
+			PlayerPowerBarAlt:RegisterEvent'UNIT_POWER_BAR_HIDE'
+			PlayerPowerBarAlt:RegisterEvent'PLAYER_ENTERING_WORLD'
+		end
 	end
 end
 

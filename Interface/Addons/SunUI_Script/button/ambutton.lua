@@ -1,6 +1,6 @@
 ﻿local S, C, L, DB = unpack(SunUI)
  
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ambutton", "AceTimer-3.0")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ambutton", "AceTimer-3.0")
 function Module:OnInitialize()
 local button = CreateFrame("Button", "ButtonA",  ColectorButton)
 		button:Point("BOTTOMRIGHT", ColectorButton, "BOTTOMRIGHT", -5, 5)
@@ -24,6 +24,5 @@ local button = CreateFrame("Button", "ButtonA",  ColectorButton)
 		GameTooltip:AddLine("|cffDDA0DDSun|r|cff44CCFFUI|r"..""..L["插件管理"], 0.75, 0.9, 1)
 		GameTooltip:Show()  end)
 		button:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
-		S.CreateBG(button, 0)
 		S.Reskin(button)
 end

@@ -1,5 +1,5 @@
 ﻿local S, C, L, DB = unpack(SunUI)
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ChatFilter")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ChatFilter")
  
 function Module:OnInitialize()
 	if C["MiniDB"]["ChatFilter"] ~= true then return end

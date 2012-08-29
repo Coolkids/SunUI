@@ -1,6 +1,6 @@
 ﻿local S, C, _, DB = unpack(SunUI) --Engine
  
-local CH = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("StatReport")
+local CH = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("StatReport")
 
 -- Author: YYSS
 -- modify by ljxx.net at 20110729
@@ -403,7 +403,6 @@ if GetLocale() ~= 'zhCN' or GetLocale() ~= 'zhTW' then
 				GameTooltip:Hide()
 			end)
 			
-			S.CreateBG(statreport, 0)
 			S.Reskin(statreport)
 	end
 end

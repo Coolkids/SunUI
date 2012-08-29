@@ -2,7 +2,7 @@
 --	Auto buy reagents by (ShestakUI)
 ----------------------------------------------------------------------------------------
 local S, C, L, DB = unpack(SunUI)
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("AutoBuy")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("AutoBuy")
 function Module:OnInitialize()
 	if C["MiniDB"]["AutoBuy"] ~= true or (UnitLevel('player') ~= MAX_PLAYER_LEVEL) then return end
 	local reagents = {

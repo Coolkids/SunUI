@@ -1,5 +1,5 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
-local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("SunUIConfig", "AceConsole-3.0", "AceEvent-3.0")
+﻿local S, C, L, DB= unpack(select(2, ...))
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SunUIConfig", "AceConsole-3.0", "AceEvent-3.0")
 local db = {}
 local defaults
 local DEFAULT_WIDTH = 800
@@ -10,228 +10,21 @@ local Version = 20120323
 local beta = "0819A"
 local aglin = false
 function SunUIConfig:LoadDefaults()
+	local _, _, _, G = unpack(SunUI)
 	--Defaults
 	defaults = {
 		profile = {
-			ActionBarDB = {
-				["FontSize"] = 14,
-				["MFontSize"] = 12,
-				["PetBarSacle"] = 1,
-				["ButtonSpacing"] = 4,
-				["CooldownFlashSize"] = 48,
-				["CooldownFlash"] = true,
-				["BigSize1"] = 24,
-				["TotemBarSacle"] = 1,
-				["Bar3Layout"] = 2,
-				["Bar5Layout"] = 1,
-				["Bar2Layout"] = 1,
-				["Big4Layout"] = 1,
-				["ButtonSize"] = 24,
-				["HideMacroName"] = false,
-				["StanceBarSacle"] = 1,
-				["Style"] = 1,
-				["BigSize2"] = 24,
-				["Bar4Layout"] = 1,
-				["BigSize3"] = 52,
-				["HideHotKey"] = false,
-				["MainBarSacle"] = 1,
-				["EnableBarFader"] = false,
-				["Bar1Layout"] = 1,
-				["BigSize4"] = 52,
-				["ExtraBarSacle"] = 1.5,
-			},
-			NameplateDB = {
-				["CastBarWidth"] = 110,
-				["HPWidth"] = 110,
-				["enable"] = true,
-				["Showdebuff"] = true,
-				["HPHeight"] = 6,
-				["CastBarIconSize"] = 15,
-				["Fontsize"] = 12,
-				["CastBarHeight"] = 4,
-				["Combat"] = true,
-				["NotCombat"] = false,
-			},
-			TooltipDB = {
-				["FontSize"] = 12,
-				["HideInCombat"] = false,
-				["Cursor"] = true,
-				["HideTitles"] = true,
-			},
-			BuffDB = {
-				["IconSize"] = 28,
-				["BuffDirection"] = 1,
-				["DebuffDirection"] = 1,
-				["IconPerRow"] = 16,
-				["FontSize"] = 13,
-			},
-			ThreatDB = {
-				["ThreatBarWidth"] = 180,
-				["NameTextL"] = 3,
-				["ThreatLimited"] = 3,
-			},
-			ReminderDB = {
-				["ShowRaidBuff"] = true,
-				["ShowOnlyInParty"] = true,
-				["RaidBuffDirection"] = 1,
-				["RaidBuffSize"] = 15,
-				["ClassBuffSize"] = 32,
-				["ShowClassBuff"] = true,
-			},
-			SkinDB = {
-				["EnableDBMSkin"] = true,
-			},
-			UnitFrameDB = {
-				--大小
-				["FontSize"] = 11,
-				["Height"] = 20,
-				["Width"] = 180,
-				["Scale"] = 1,
-				["PetHeight"] = 10,
-				["PetWidth"] = 100,
-				["PetScale"] = 0.9,
-				["BossHeight"] = 15,
-				["BossWidth"] = 140,
-				["BossScale"] = 1,
-				["Alpha3D"] = 0,
-				["TargetAura"] = 1,
-				["TargetRange"] = false,
-				["RangeAlpha"] = 0.6,
-				["BigFocus"] = true,
-				["FocusDebuff"] = false,
-				["ClassColor"] = false,
-				["ReverseHPbars"] = false,
-				["showarena"] = true,
-				["showboss"] = true,
-				["showfocus"] = true,
-				["showpet"] = true,
-				["showtot"] = true,
-				["showparty"] = false,
-				["EnableSwingTimer"] = false,
-				["EnableBarFader"] = false,
-				["Party3D"] = false,
-				["PlayerBuff"] = 4,
-				["CastBar"] = true,
-				["targetCBuserplaced"] = false,
-				["TargetCastBarHeight"] = 20,
-				["TargetCastBarWidth"] = 300,
-				["focusCBuserplaced"] = true,
-				["FocusCastBarWidth"] = 100,
-				["FocusCastBarHeight"] = 6,	
-				["playerCBuserplaced"] = false,
-				["PlayerCastBarWidth"] = 300,
-				["PlayerCastBarHeight"] = 20,			
-			},
-			MiniDB = {
-				--小东西设置
-				["AutoRepair"] = false,
-				["Icicle"] = false,
-				["Autoinvite"] = false,
-				["Disenchat"] = true,
-				["HideRaidWarn"] = true,
-				["Resurrect"] = false,
-				["igonoreOld"] = false,
-				["Interrupt"] = true,
-				["HideRaid"] = true,
-				["FastError"] = true,
-				["MiniMapPanels"] = true,
-				["INVITE_WORD"] = "SunUI",
-				["ChatFilter"] = true,
-				["IPhoneLock"] = true,
-				["AutoQuest"] = true,
-				["FatigueWarner"] = true,
-				["DNDFilter"] = true,
-				["TimeStamps"] = true,
-				["AutoSell"] = true,
-				--UI缩放
-				["uiScale"] = 0.9,
-				["FontScale"] = 1,
-				--内置CD
-				["ClassCDOpen"] = true,
-				["ClassCDHeight"] = 8,
-				["ClassCDWidth"] = 100,
-				["ClassCDDirection"] = 1,
-				["ClassFontSize"] = 12,
-				["ClassCDIcon"] = false,
-				["ClassCDIconSize"] = 25,
-				["ClassCDIconDirection"] = 1,
-				--SunUI扩展
-				["Flump"] = false,
-				["AutoBotton"] = true,
-				["BloodShield"] = false,
-				--Raid CD
-				["RaidCD"] = true,
-				["RaidCDFontSize"] = 12,
-				["RaidCDWidth"] = 100,
-				["RaidCDHeight"] = 8,
-				["RaidCDDirection"] = 1,
-				--AutoBuy
-				["AutoBuy"] = true,
-				["mageone"] = 20,
-				["magetwo"] = 20,
-				["magethree"] = 100,
-				["rogueone"] = 20,
-				["roguetwo"] = 20,
-				["roguethree"] = 20,
-				["roguefour"] = 20,
-				["roguefive"] = 20,
-			},
-			InfoPanelDB = {
-				["OpenTop"] = true,
-				["OpenBottom"] = true,
-				["Friend"] = false,
-				["Guild"] = false,
-			},
-			MoveHandleDB = {
-				--头像
-				["PlayerFrame"] = {"BOTTOM", "UIParent", "BOTTOM", -175, 172},
-				["TargetFrame"] = {"BOTTOM", "UIParent", "BOTTOM", 175, 172},
-				["ToTFrame"] = {"BOTTOM", "UIParent", "BOTTOM", 0, 190},
-				["PetFrame"] = {"TOPRIGHT", "oUF_SunUIPlayer", "TOPLEFT", -5, 0},
-				["FocusFrame"] = {"RIGHT", "UIParent", "RIGHT", -57, -138},
-				["PartyFrame"] = {"LEFT", "UIParent", "LEFT", 10, 0},
-				["FocusTFrame"] = {"TOP", "oUF_SunUIFocus", "BOTTOM", 0, -30},
-				["BossFrame"] = {"RIGHT", "UIParent", "RIGHT", -50, -60},
-				["ArenaFrame"] = {"RIGHT", "UIParent", "RIGHT", -50, -60},
-				--施法条
-				["PlayerCastbar"] = {"CENTER", "UIParent", "CENTER", 0, -110},
-				["TargetCastbar"] = {"CENTER", "UIParent", "CENTER", 0, 95},
-				["FocusCastbar"] = {"TOP", "oUF_SunUIFocus", "BOTTOM", 0, -20},
-				--动作条
-				["bar1"] = {"BOTTOM", "UIParent", "BOTTOM", 0, 13},
-				["bar2"] = {"BOTTOM", "SunUIActionBar1", "TOP", 0, 4},
-				["bar3"] = {"BOTTOMRIGHT", "SunUIActionBar1", "BOTTOMLEFT", -4, 0},
-				["bar32"] = {"BOTTOMLEFT", "SunUIActionBar1", "BOTTOMRIGHT", 4, 0},	
-				["bar4"] = {"RIGHT", "UIParent", "RIGHT", -10, 0},
-				["bar5"] = {"CENTER", "UIParent", "CENTER", 0, 0},
-				["bar51"] = {"BOTTOM", "MultiBarBottomLeftButton4", "TOP", 0, 4},
-				["bar52"] = {"BOTTOM", "MultiBarBottomLeftButton5", "TOP", 0, 4},
-				["bar53"] = {"BOTTOMRIGHT", "MultiBarBottomRightButton3", "BOTTOMLEFT", -4, 0},
-				["bar54"] = {"BOTTOMLEFT", "MultiBarBottomRightButton9", "BOTTOMRIGHT", 4, 0},
-				["petbar"] = {"BOTTOMRIGHT", "MultiBarBottomRightButton12", "TOPRIGHT", 0, 4},
-				["stancebar"] = {"BOTTOMLEFT", "MultiBarBottomRightButton6", "TOPLEFT", 0, 4},
-				["totembar"] = {"BOTTOM", "UIParent", "BOTTOM", -175, 292},
-				["vehicleexit"] = {"BOTTOM", "UIParent", "BOTTOM", 278, 66},
-				["extrabar"] = {"BOTTOM", "UIParent", "BOTTOM", -194, 54},
-				--Blz界面
-				["Minimap"] = {"TOPLEFT", "UIParent", "TOPLEFT", 5, -5},
-				["Buff"] = {"TOPRIGHT", "UIParent", "TOPRIGHT", -5, -5},
-				["Debuff"] = {"TOPRIGHT", "UIParent", "TOPRIGHT", -5, -160},
-				["RollFrame"] = {"TOP", "UIParent", "TOP", 0, -200},
-				["Tooltip"] = {"BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -50, 160},
-				--插件增强
-				["CooldownFlash"] = {"CENTER", "UIParent", "CENTER", 0, -130},
-				["Class"] = {"CENTER", "UIParent", "CENTER", -150, 150},
-				["Reminder"] = {"TOPLEFT", "Minimap", "BOTTOMLEFT", 0, -20},
-				["ShadowPet"] = {"BOTTOM", "UIParent", "BOTTOM", -316, 201},	
-				["Threat"] = {"BOTTOM", "UIParent", "BOTTOM", -175, 262},
-				["ClassCD"] = {"LEFT", "UIParent", "LEFT", 30, 240},
-				["RaidCD"] = {"LEFT", "UIParent", "LEFT", 30, 0},
-				["AutoButton"] = {"RIGHT", "UIParent", "RIGHT", -270, 188},
-				["BloodShield"] = {"BOTTOM", "UIParent", "BOTTOM", -285, 172},
-				["InfoPanel"] = {"TOPLEFT", "Minimap", "TOPRIGHT", 5, 3},
-				["healpriest"] = {"CENTER", "UIParent", "CENTER", 0, 135},
-			},
+			ActionBarDB = G["ActionBarDB"],
+			NameplateDB = G["NameplateDB"],
+			TooltipDB = G["TooltipDB"],
+			BuffDB = G["BuffDB"],
+			ThreatDB = G["ThreatDB"],
+			ReminderDB = G["ReminderDB"],
+			SkinDB = G["SkinDB"],
+			UnitFrameDB = G["UnitFrameDB"],
+			MiniDB = G["MiniDB"],
+			InfoPanelDB = G["InfoPanelDB"],
+			MoveHandleDB = G["MoveHandleDB"],
 		},
 	}
 end	
@@ -378,11 +171,6 @@ function SunUIConfig.GenerateOptionsInternal()
 							type = "select", order = 6,
 							name = L["4方块布局"], desc = L["请选择主动作条布局"],
 							values = {[1] = L["4方块布局"],  [2] = L["不要4方块布局"] },
-						},
-						Style = {
-							type = "select", order = 7,
-							name = L["动作条皮肤风格"], desc = L["请选择动作条皮肤风格"],
-							values = {[1] = L["阴影风格"], [2] = L["框框风格"]},
 						},
 					}
 				},
@@ -1760,11 +1548,3 @@ function SunUIConfig:OnEnable()
 	end	
 	SunUIConfig:RegisterChatCommand("sunui", "ShowConfig")
 end
-
-SlashCmdList["CLEARSUNUI"] = function()
-	if not UnitAffectingCombat("player") then
-		wipe(SunUIConfig)
-		wipe(CoreVersion)
-	end
-end
-SLASH_CLEARSUNUI1 = "/clearset"

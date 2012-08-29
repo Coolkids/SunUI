@@ -1,6 +1,6 @@
 ﻿-- Engines
 local S, C, L, DB = unpack(SunUI)
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Buff")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Buff")
 
 local BuffPos, DebuffPos = nil, nil
 local tinsert, _G, tsort = tinsert, _G, table.sort
@@ -23,7 +23,7 @@ function Module:Style(buttonName, i, f)
 	Duration:SetParent(Button)
 	Duration:SetPoint("TOP", Button, "BOTTOM", 2, 0)
 	Duration:SetFont(DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
-
+	
 	Count:ClearAllPoints()
 	Count:SetParent(Button)
 	Count:SetPoint("TOPRIGHT", Button, 3, -1)
@@ -32,6 +32,7 @@ function Module:Style(buttonName, i, f)
 	if Border then
 		Border:Hide()
 	end
+	
 
 	Button:CreateShadow()
 	Button:StyleButton(true)
@@ -151,23 +152,10 @@ hooksecurefunc("AuraButton_OnUpdate", function(self, elapsed)
 	end
 end)
 
-hooksecurefunc("AuraButton_UpdateDuration", function(auraButton, timeLeft)
+--[[ hooksecurefunc("AuraButton_UpdateDuration", function(auraButton, timeLeft)
 	local Duration = auraButton.duration
-	if timeLeft then
 		Duration:SetText(S.FormatTime(timeLeft, true))
-		if timeLeft >= 86400 then
-			Duration:SetVertexColor(0.4, 0.4, 1)
-		elseif (timeLeft < 86400 and timeLeft >= 3600) then
-			Duration:SetVertexColor(0.4, 1, 1)
-		elseif (timeLeft < 3600 and timeLeft >= 60) then
-			Duration:SetVertexColor(1, 1, 1)
-		elseif (timeLeft < 60 and timeLeft >= 15) then
-			Duration:SetVertexColor(1, 1, 0)
-		elseif timeLeft < 15 then
-			Duration:SetVertexColor(1, 0, 0)
-		end
-	end
-end)
+end)  ]]
 
 hooksecurefunc("DebuffButton_UpdateAnchors", function(buttonName, i)
 	Module:Style(buttonName, i, d)

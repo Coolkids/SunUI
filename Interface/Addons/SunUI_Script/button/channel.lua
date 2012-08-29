@@ -1,6 +1,6 @@
 ﻿local S, _, L, DB = unpack(SunUI)
 if DB.zone ~= "zhTW" and DB.zone ~= "zhCN" then return end
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("bigfootchannel", "AceTimer-3.0")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("bigfootchannel", "AceTimer-3.0")
 function Module:OnInitialize()
 local button = CreateFrame("Button", "ButtonP", ColectorButton)
 		button:Point("TOPLEFT", ColectorButton, "TOPLEFT", 5, -25)
@@ -46,6 +46,5 @@ local button = CreateFrame("Button", "ButtonP", ColectorButton)
 		GameTooltip:AddLine(L["您现在大脚世界频道处于"]..inchannel..L["状态"])
 		GameTooltip:Show()  end)
 		button:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
-		S.CreateBG(button, 0)
 		S.Reskin(button)
 end

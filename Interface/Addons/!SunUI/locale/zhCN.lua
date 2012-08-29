@@ -331,3 +331,56 @@ L["致命药膏"] = "致命药膏"
 L["减速药膏"] = "减速药膏"
 L["麻痹药膏"] = "麻痹药膏"
 L["致伤药膏"]= "致伤药膏"
+
+--new
+-- Talent spec
+L_PLANNER_DEATHKNIGHT_1 = "鲜血"
+L_PLANNER_DEATHKNIGHT_2 = "冰霜"
+L_PLANNER_DEATHKNIGHT_3 = "邪恶"
+L_PLANNER_DRUID_1 = "平衡"
+L_PLANNER_DRUID_2 = "野性战斗"
+L_PLANNER_DRUID_3 = "Guardian" -- need review
+L_PLANNER_DRUID_4 = "恢复"
+L_PLANNER_HUNTER_1 = "野兽掌握"
+L_PLANNER_HUNTER_2 = "射击"
+L_PLANNER_HUNTER_3 = "生存"
+L_PLANNER_MAGE_1 = "奥术"
+L_PLANNER_MAGE_2 = "火焰"
+L_PLANNER_MAGE_3 = "冰霜"
+L_PLANNER_MONK_1 = "酒仙" -- need review
+L_PLANNER_MONK_2 = "织物" -- need review
+L_PLANNER_MONK_3 = "踏风" -- need review
+L_PLANNER_PALADIN_1 = "神圣"
+L_PLANNER_PALADIN_2 = "防护"
+L_PLANNER_PALADIN_3 = "惩戒"
+L_PLANNER_PRIEST_1 = "戒律"
+L_PLANNER_PRIEST_2 = "神圣"
+L_PLANNER_PRIEST_3 = "暗影"
+L_PLANNER_ROGUE_1 = "刺杀"
+L_PLANNER_ROGUE_2 = "战斗"
+L_PLANNER_ROGUE_3 = "敏锐"
+L_PLANNER_SHAMAN_1 = "元素战斗"
+L_PLANNER_SHAMAN_2 = "增强"
+L_PLANNER_SHAMAN_3 = "恢复"
+L_PLANNER_WARLOCK_1 = "痛苦"
+L_PLANNER_WARLOCK_2 = "恶魔学识"
+L_PLANNER_WARLOCK_3 = "毁灭"
+L_PLANNER_WARRIOR_1 = "武器"
+L_PLANNER_WARRIOR_2 = "狂怒"
+L_PLANNER_WARRIOR_3 = "防护"
+
+L_PANELS_AFK = "你处于暂离状态!"
+L_PANELS_AFK_RCLICK = "右键点击隐藏."
+L_PANELS_AFK_LCLICK = "左键点击返回."
+
+-- Tooltip
+L_TOOLTIP_NO_TALENT = "没有天赋"
+L_TOOLTIP_LOADING = "读取中..."
+L_TOOLTIP_ACH_STATUS = "你的状态:"
+L_TOOLTIP_ACH_COMPLETE = "你的状态: 完成 "
+L_TOOLTIP_ACH_INCOMPLETE = "你的状态: 未完成"
+L_TOOLTIP_SPELL_ID = "法术ID:"
+L_TOOLTIP_ITEM_ID = "物品ID:"
+L_TOOLTIP_WHO_TARGET = "以其为目标的"
+L_TOOLTIP_ITEM_COUNT = "物品数量: "
+L_TOOLTIP_INSPECT_OPEN = "Inspect Frame is open" -- Needs review

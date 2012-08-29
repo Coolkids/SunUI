@@ -6,7 +6,7 @@
 local S, C, L, DB = unpack(SunUI)
 --when switching to the guild frame
 
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("socialtabs")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("socialtabs")
 function Module:OnInitialize()
 
 -- Always show looking for guild tab

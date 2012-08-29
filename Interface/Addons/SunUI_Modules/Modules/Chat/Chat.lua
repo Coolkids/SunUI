@@ -1,5 +1,5 @@
 ﻿local S, C, L, DB = unpack(SunUI)
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Chat", "AceEvent-3.0")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Chat", "AceEvent-3.0")
  
 function Module:OnEnable()
 -- 聊天设置	
@@ -93,7 +93,7 @@ local TimeStampsCopy = C["MiniDB"]["TimeStamps"]					-- 时间戳
 			_G[chat.."EditBoxLanguage"]:ClearAllPoints()
 			_G[chat.."EditBoxLanguage"]:SetPoint("LEFT", _G[chat.."EditBox"], "RIGHT", S.Scale(5), 0)
 			_G[chat.."EditBoxLanguage"]:SetSize(_G[chat.."EditBox"]:GetHeight(),_G[chat.."EditBox"]:GetHeight())
-			S.StripTextures(_G[chat.."EditBoxLanguage"])
+			_G[chat.."EditBoxLanguage"]:StripTextures()
 			S.CreateBD(_G[chat.."EditBoxLanguage"], 0.6)
 			_G['ChatFrame'..i..'EditBox']:HookScript("OnEditFocusGained", function(self) self:Show() end)
 			_G['ChatFrame'..i..'EditBox']:HookScript("OnEditFocusLost", function(self) self:Hide() end)
@@ -391,7 +391,7 @@ local TimeStampsCopy = C["MiniDB"]["TimeStamps"]					-- 时间戳
 			tab:SetScript("OnDoubleClick", copyFunc)
 			tab:SetScript("OnEnter", hintFunc)
 		end
-		S.StripTextures(BCMCopyScrollScrollBar)
+		BCMCopyScrollScrollBar:StripTextures()
 		S.ReskinScroll(BCMCopyScrollScrollBar)
 	end
 

@@ -7,13 +7,14 @@
 
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Include file="Libs\load.xml"/>
-	<Script file = "function\Init.lua"/>
+	<Script file = "core\Init.lua"/>
 	<Include file="locale\load.xml"/>
 	<Include file="config\Load_Config.xml"/>
-	<Script file = "function\uiscale.lua"/>
-	<Include file="function\load.xml"/>
+	<Script file = "core\uiscale.lua"/>
+	<Include file="core\load.xml"/>
+	<Include file="developer\load.xml"/>
 	<Include file ="blzhook\load.xml"/>
-	<Script file = "function\AddonManager.lua"/>
+	<Script file = "core\AddonManager.lua"/>
 </Ui>
 
 <!--	<Script file="Load.lua"/>  -->

@@ -18,7 +18,7 @@ if not (GetLocale() == "zhTW") then return end
 -- =============================================================================
 -- /////////////////////////////////////////////////////////////////////////////
 
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ClearFont_zhTW", "AceEvent-3.0")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ClearFont_zhTW", "AceEvent-3.0")
 function Module:OnInitialize()
 
 -- =============================================================================

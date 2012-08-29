@@ -1,6 +1,6 @@
 ﻿local S, C, L, DB = unpack(SunUI)
 if (DB.MyClass ~= "PRIEST" and DB.MyClass ~= "SHAMAN") then return end
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ShadowPet")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ShadowPet")
 function Module:OnInitialize()
 	local spellname, timeing, spellid
 		if DB.MyClass == "PRIEST" then 

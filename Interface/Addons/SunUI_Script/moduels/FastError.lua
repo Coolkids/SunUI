@@ -1,5 +1,5 @@
 local S, C, L, DB = unpack(SunUI)
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("FastError")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("FastError")
 
 function Module:OnInitialize()
 	C = C["MiniDB"]

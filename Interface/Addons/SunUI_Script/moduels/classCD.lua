@@ -1,5 +1,5 @@
 ﻿local S, C, L, DB = unpack(SunUI)
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("ClassCD")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ClassCD")
 
 
 

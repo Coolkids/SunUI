@@ -518,12 +518,6 @@ ns.watchers ={
 			size = 28,
 				--心灵尖刺
 				{ spellID = 87178, unitId = "target", caster = "player", filter = "DEBUFF" },
-				-- 吸血鬼之触
-				{ spellID = 34914, unitId = "target", caster = "player", filter = "DEBUFF" },
-				-- 暗言术:痛
-				{ spellID =   589, unitId = "target", caster = "player", filter = "DEBUFF" },
-				-- 噬灵疫病
-				{ spellID =  2944, unitId = "target", caster = "player", filter = "DEBUFF" },
 				-- 虚弱灵魂
 				{ spellID =  6788, unitId = "target", caster = "player", filter = "DEBUFF" },
 				-- T12 4件特效
@@ -542,26 +536,52 @@ ns.watchers ={
 				{ spellID = 88684, unitId = "target", caster = "player", filter = "BUFF" },
 				-- 聖言術:譴
 				{ spellID = 88625, unitId = "tatget", caster = "player", filter = "DEBUFF"},
+				--暗影宝珠
+				--{ spellID = 77487, unitId = "player", caster = "player", filter = "BUFF" },
+				--强效暗影
+				--{ spellID = 95799, unitId = "player", caster = "player", filter = "BUFF" },	
 		},
 		{
-			name = "玩家框體下方",
+			name = "玩家右邊1",
 			direction = "RIGHT",
-			setpoint = {"BOTTOM", UIParent, "BOTTOM", -123, 133},
-			--setpoint = {"CENTER", UIParent, "CENTER", -185, -265},
+			setpoint = {"CENTER", UIParent, "CENTER", 90, 30},
 			mode = "ICON",
-			size = 22,
-				-- 暗影宝珠
+			size = 26,
+				-- 吸血鬼之触
+				{ spellID = 34914, unitId = "target", caster = "player", filter = "DEBUFF" },
+				-- 暗言术:痛
+				{ spellID =   589, unitId = "target", caster = "player", filter = "DEBUFF" },
+				-- 噬灵疫病
+				{ spellID =  2944, unitId = "target", caster = "player", filter = "DEBUFF" },
+				--CD
+				--愈合祷言
+				{ spellID = 33076, filter = "CD" },
+				-- 治疗之环
+				{ spellID = 34861, filter = "CD" },
+		},
+		{
+			name = "玩家右邊2",
+			direction = "LEFT",
+			setpoint = {"CENTER",UIParent, "CENTER", -90, 30},
+			mode = "ICON",
+			size = 26,
+				--暗影宝珠
 				{ spellID = 77487, unitId = "player", caster = "player", filter = "BUFF" },
-			  -- 强效暗影
+				--强效暗影
 				{ spellID = 95799, unitId = "player", caster = "player", filter = "BUFF" },	
+				-- 心靈震爆
+				{ spellID = 8092, filter = "CD" },
+				--CD
+				--庇
+				{ spellID =  88685, filter = "CD" },
+				-- 宁
+				{ spellID = 88684, filter = "CD" },
 		},
 		{
 			name = "玩家技能CD",
 			direction = "RIGHT",
 			setpoint = {"BOTTOM", UIParent, "BOTTOM", -38, 135},
 			size = 20,
-				-- 心靈震爆
-				{ spellID = 8092, filter = "CD" },
 				-- 暗影魔
 				{ spellID =  34433, filter = "CD" },
 				-- 大天使

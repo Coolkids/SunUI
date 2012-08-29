@@ -7,9 +7,7 @@
 	<Script file ="ClearFont_zhCN.lua"/>	
 	<Script file ="ClearFont_zhTW.lua"/>
 	<Script file ="DragEmAll.lua"/>
-	<Script file ="equipshow.lua"/>
 	<Script file ="Focuser.lua"/>
-	<Script file='FriendColor.lua'/>
 	<Script file = "nibWatchFrameAdv.lua"/>
 	<Script file = "OCES.lua"/>
 	<Script file = "smallthings.lua"/>

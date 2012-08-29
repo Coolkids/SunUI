@@ -1,6 +1,6 @@
 local S, C, L, DB = unpack(SunUI)
  
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Flump")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Flump")
 function Module:OnInitialize()
 	C = C["MiniDB"]
 	if C["Flump"] ~= true then return end

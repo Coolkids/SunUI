@@ -1,4 +1,0 @@
-﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">	
-	<Script file = "Reminder.lua"/>
-	<Script file = "Raidbuffreminder.lua"/>
-</Ui>

@@ -7,9 +7,18 @@
 
 	
 
-	<Script file="tip.lua"/>	
-	<Script file="TipTacTalents.lua"/>
-	<Script file="ilevel.lua"/>
+	<Script file="Tooltip.lua"/>
+	<Script file="HyperLink.lua"/>
+	<Script file="Tooltip\Achievement.lua"/>
+	<Script file="Talents.lua"/>
+	<Script file="ItemIcons.lua"/>
+	<Script file="ItemLevel.lua"/>
+	<Script file="PvPRating.lua"/>
 	<Script file="SpellID.lua"/>
-	<Script file="PowerSource.lua"/>
+	<Script file="ItemCount.lua"/>
+	<Script file="UnitRole.lua"/>
+	<Script file="ReforgeInfo.lua"/>
+	<Script file="Symbiosis.lua"/>
+	<Script file="CheckItemTransmogrify.lua"/>
+	<Script file="InstanceLockCompare.lua"/>
 </Ui>

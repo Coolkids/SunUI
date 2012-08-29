@@ -1,6 +1,6 @@
 ﻿local S, C, L, DB = unpack(SunUI) --Engine
  
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("MBB", "AceTimer-3.0")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("MBB", "AceTimer-3.0")
 function Module:OnInitialize()
 
 local BlackList = { 

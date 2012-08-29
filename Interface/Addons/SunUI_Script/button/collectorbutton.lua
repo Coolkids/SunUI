@@ -1,5 +1,5 @@
 ﻿local S, _, _, DB = unpack(SunUI)
-local Module = LibStub("AceAddon-3.0"):GetAddon("Core"):NewModule("Cbutton", "AceTimer-3.0")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Cbutton", "AceTimer-3.0")
 function Module:OnInitialize()
 local colectorbutton = CreateFrame("Button", nil, UIParent)
 colectorbutton:Size(15)
@@ -42,6 +42,5 @@ colectorbutton:SetScript("OnEnter",  function(self)
 		GameTooltip:Show()  
 end)
 colectorbutton:SetScript("OnLeave", function(self) UIFrameFadeOut(self, 2, self:GetAlpha(), 0) GameTooltip:Hide() end)
-S.CreateBG(colectorbutton, 0)
 S.Reskin(colectorbutton)
 end

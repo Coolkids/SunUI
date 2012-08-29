@@ -1,5 +1,5 @@
 ﻿local S, C, L, DB = unpack(SunUI)
-local Core = LibStub("AceAddon-3.0"):GetAddon("Core")
+local Core = LibStub("AceAddon-3.0"):GetAddon("SunUI")
 local Module = Core:NewModule("InfoPanelBottom")
 
 local function BuildClock()
@@ -869,17 +869,17 @@ local function BuildStat1()
 		end
 		
 		local masteryspell
-		if GetCombatRating(CR_MASTERY) ~= 0 and GetPrimaryTalentTree() then
+		if GetCombatRating(CR_MASTERY) ~= 0 and GetSpecialization() then
 			if DB.MyClass == "DRUID" then
 				if DB.Role == "Melee" then
-					masteryspell = select(2, GetTalentTreeMasterySpells(GetPrimaryTalentTree()))
+					masteryspell = select(2, GetTalentTreeMasterySpells(GetSpecialization()))
 				elseif DB.Role == "Tank" then
-					masteryspell = select(1, GetTalentTreeMasterySpells(GetPrimaryTalentTree()))
+					masteryspell = select(1, GetTalentTreeMasterySpells(GetSpecialization()))
 				else
-					masteryspell = GetTalentTreeMasterySpells(GetPrimaryTalentTree())
+					masteryspell = GetTalentTreeMasterySpells(GetSpecialization())
 				end
 			else
-				masteryspell = GetTalentTreeMasterySpells(GetPrimaryTalentTree())
+				masteryspell = GetTalentTreeMasterySpells(GetSpecialization())
 			end
 			
 
@@ -1011,10 +1011,10 @@ local function BuildSpecswitch()
 	local inactiveString = string.join("", "|cffFF0000", FACTION_INACTIVE, "|r")
 
 	local function LoadTalentTrees()
-		for i = 1, GetNumTalentGroups(false, false) do
+		for i = 1, GetNumSpecializations(false, false) do
 				talent[i] = {} -- init talent group table
-					for j = 1, GetNumTalentTabs(false, false) do
-						talent[i][j] = select(5, GetTalentTabInfo(j, false, false, i))
+					for j = 1, GetNumSpecializations(false, false) do
+						talent[i][j] = select(5, GetSpecializationInfo(j, false, false, i))
 					end
 				end
 		end
@@ -1022,10 +1022,10 @@ local function BuildSpecswitch()
 	local int = 1
 	local function Update(self, t)
 		int = int - t
-		if int > 0 or not GetPrimaryTalentTree() then return end
+		if int > 0 or not GetSpecialization() then return end
 
-		active = GetActiveTalentGroup(false, false)
-		Text:SetFormattedText(talentString, S.RGBToHex(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)..select(2, GetTalentTabInfo(GetPrimaryTalentTree(false, false, active))).."|r", talent[active][1], talent[active][2], talent[active][3])
+		active = GetActiveSpecGroup(false, false)
+		Text:SetFormattedText(talentString, S.RGBToHex(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)..select(2, GetSpecializationInfo( GetSpecialization(false, false, active))).."|r", talent[active][1], talent[active][2], talent[active][3])
 		int = 1
 
 		-- disable script	
@@ -1040,8 +1040,8 @@ local function BuildSpecswitch()
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(TALENTS..":")
 		for i = 1, GetNumTalentGroups() do
-			if GetPrimaryTalentTree(false, false, i) then
-				GameTooltip:AddLine(string.join(" ", string.format(talentString, select(2, GetTalentTabInfo(GetPrimaryTalentTree(false, false, i))), talent[i][1], talent[i][2], talent[i][3]), (i == active and activeString or inactiveString)),1,1,1)
+			if GetSpecialization(false, false, i) then
+				GameTooltip:AddLine(string.join(" ", string.format(talentString, select(2, GetTalentTabInfo(GetSpecialization(false, false, i))), talent[i][1], talent[i][2], talent[i][3]), (i == active and activeString or inactiveString)),1,1,1)
 			end
 		end
 		GameTooltip:Show()
@@ -1084,8 +1084,8 @@ function Module:OnEnable()
 		BuildFriend()
 		BuildGuild()
 		BuildDurability()
-		BuildStat2()
-		BuildStat1()
-		BuildSpecswitch()
+		--BuildStat2()
+		--BuildStat1()
+		--BuildSpecswitch()
 	end
 end

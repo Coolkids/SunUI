@@ -1,23 +1,25 @@
-local _, ns = ...
-local oGlow = ns.oGlow
 local S, _, _, _ = unpack(SunUI)
 local argcheck = oGlow.argcheck
-local colorTable = ns.colorTable
+
+local colorTable = setmetatable(
+	{},
+	{__index = function(self, val)
+		argcheck(val, 2, "number")
+		local r, g, b = GetItemQualityColor(val)
+		rawset(self, val, {r, g, b})
+
+		return self[val]
+	end}
+)
 
 local createBorder = function(self, point)
 	local bc = self.oGlowBorder
-	if(not bc) then
+	if not bc then
 		if(not self:IsObjectType'Frame') then
-			--bc = self:GetParent():CreateTexture(nil, 'OVERLAY')
 			bc = CreateFrame("Frame", nil, self:GetParent())
 		else
-			--bc = self:CreateTexture(nil, "OVERLAY")
 			bc = CreateFrame("Frame", nil, self)
 		end
-
-		--bc:SetTexture"Interface\\Buttons\\UI-ActionButton-Border"
-		--bc:SetBlendMode("ADD")
-		--bc:SetAlpha(.9)
 		bc:SetBackdrop({
 			edgeFile = "Interface\\ChatFrame\\ChatFrameBackground",   --, 
 			edgeSize = S.mult+0.2, 
@@ -26,8 +28,6 @@ local createBorder = function(self, point)
 		
 
 		bc:SetAllPoints(self)
-		--bc:Point("TOPLEFT", -1, point or 1)
-		--bc:Point("BOTTOMRIGHT", 1, point or -1)
 		self.oGlowBorder = bc
 	end
 
@@ -51,4 +51,19 @@ local borderDisplay = function(frame, color)
 	end
 end
 
-oGlow:RegisterDisplay('Border', borderDisplay)
+function oGlow:RegisterColor(name, r, g, b)
+	argcheck(name, 2, "string", "number")
+	argcheck(r, 3, "number")
+	argcheck(g, 4, "number")
+	argcheck(b, 5, "number")
+
+	if(rawget(colorTable, name)) then
+		return nil, string.format("Color [%s] is already registered.", name)
+	else
+		rawset(colorTable, name, {r, g, b})
+	end
+
+	return true
+end
+
+oGlow:RegisterDisplay("Border", borderDisplay)

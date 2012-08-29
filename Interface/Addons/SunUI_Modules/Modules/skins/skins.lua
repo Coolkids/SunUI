@@ -6,19 +6,19 @@ Delay:SetScript("OnEvent", function()
 	Delay:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	
 	if FriendsMenuXPSecure then
-		S.StripTextures(FriendsMenuXPSecureMenuBackdrop)
+		FriendsMenuXPSecureMenuBackdrop:StripTextures()
 		FriendsMenuXPSecure:CreateShadow("Background")
 	end
 	
 	if BaudErrorFrame then
-		S.StripTextures(BaudErrorFrame)
+		BaudErrorFrame:StripTextures()
 		S.Reskin(BaudErrorFrameCloseButton)
 		S.Reskin(BaudErrorFrameClearButton)
 		S.SetBD(BaudErrorFrame)
 	end
 	
 	if BuyEmAllFrame then
-		S.StripTextures(BuyEmAllFrame)
+		BuyEmAllFrame:StripTextures()
 		S.Reskin(BuyEmAllStackButton)
 		S.Reskin(BuyEmAllMaxButton)
 		S.Reskin(BuyEmAllOkayButton)
@@ -27,11 +27,11 @@ Delay:SetScript("OnEvent", function()
 	end
 	
 	if ItemRefShoppingTooltip1 then 
-		S.StripTextures(ItemRefShoppingTooltip1)
+		ItemRefShoppingTooltip1:StripTextures()
 		ItemRefShoppingTooltip1:CreateShadow("Background")
 	end
 	if ItemRefShoppingTooltip2 then 
-		S.StripTextures(ItemRefShoppingTooltip2)
+		ItemRefShoppingTooltip2:StripTextures()
 		ItemRefShoppingTooltip2:CreateShadow("Background")
 	end
 	
