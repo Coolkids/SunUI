@@ -47,7 +47,7 @@ local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("RaidCD")
 
 	local RaidCDAnchor = CreateFrame("Frame", "RaidCDAnchor", UIParent)
 	RaidCDAnchor:SetSize(C["MiniDB"].RaidCDWidth, C["MiniDB"].RaidCDHeight)
-	MoveHandle.RaidCD = S.MakeMoveHandle(RaidCDAnchor, "RaidCD", "RaidCD")
+	
 
 	local FormatTime = function(time)
 		if time >= 60 then
@@ -227,7 +227,7 @@ function Module:OnEnable()
 	addon:SetScript("OnEvent", OnEvent)
 	addon:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	addon:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-
+	MoveHandle.RaidCD = S.MakeMoveHandle(RaidCDAnchor, "RaidCD", "RaidCD")
 	SlashCmdList.RaidCD = function(msg)
 		StartTimer(UnitName("player"), 20484)	-- Rebirth
 		StartTimer(UnitName("player"), 20707)	-- Soulstone

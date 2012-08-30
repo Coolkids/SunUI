@@ -891,7 +891,7 @@ function button:PLAYER_LOGIN()
 				button:SetAttribute('macrotext', string.format('/cast %s\n/use %s %s', spell, bag:GetID(), slot:GetID()))
 				button:SetAllPoints(slot)
 				button:Show()
-				S.ReskinFrame(button)
+				ActionButton_HideOverlayGlow(button)
 				--AutoCastShine_AutoCastStart(button, r, g, b)
 			end
 		end
@@ -899,7 +899,7 @@ function button:PLAYER_LOGIN()
 
 	self:SetFrameStrata('TOOLTIP')
 	self:SetAttribute('alt-type1', 'macro')
-	self:SetScript('OnLeave', self.MODIFIER_STATE_CHANGED)
+	self:SetScript('OnLeave', self.MODIFIER_STATE_CHANGED, ActionButton_ShowOverlayGlow(button))
 
 	self:RegisterEvent('MODIFIER_STATE_CHANGED')
 	self:Hide()

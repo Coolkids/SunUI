@@ -75,22 +75,22 @@ elseif GetLocale() == "zhTW" then
 		["(%d+)([^%d%%|]+)"] = false,
 	}
 	STATS = {
-		{"防禦等級", CR_DEFENSE_SKILL},
-		{"閃躲等級", CR_DODGE},
-		{"格擋等級", CR_BLOCK},
-		{"招架等級", CR_PARRY},
-		{"遠程攻擊致命一擊等級", CR_CRIT_RANGED},
-		{"致命一擊等級", CR_CRIT_MELEE},
-		{"遠程命中等級", CR_HIT_RANGED},
-		{"命中等級", CR_HIT_MELEE},
+		{"防禦", CR_DEFENSE_SKILL},
+		{"閃躲", CR_DODGE},
+		{"格擋", CR_BLOCK},
+		{"招架", CR_PARRY},
+		{"遠程攻擊致命一擊", CR_CRIT_RANGED},
+		{"致命一擊", CR_CRIT_MELEE},
+		{"遠程命中", CR_HIT_RANGED},
+		{"命中", CR_HIT_MELEE},
 		{"韌性", COMBAT_RATING_RESILIENCE_CRIT_TAKEN},
-		{"遠程攻擊加速等級", CR_HASTE_RANGED},
-		{"加速等級", CR_HASTE_MELEE},
-		{"技能等級", CR_WEAPON_SKILL},
-		{"熟練等級", CR_EXPERTISE},
-		{"命中迴避概率", CR_HIT_TAKEN_MELEE},
-		{"護甲穿透等級", CR_ARMOR_PENETRATION},
-    {"精通等級", CR_MASTERY},
+		{"遠程攻擊加速", CR_HASTE_RANGED},
+		{"加速", CR_HASTE_MELEE},
+		{"技能", CR_WEAPON_SKILL},
+		{"熟練", CR_EXPERTISE},
+		{"命中迴避", CR_HIT_TAKEN_MELEE},
+		{"護甲穿透", CR_ARMOR_PENETRATION},
+    {"精通", CR_MASTERY},
 	}
 elseif GetLocale() == "zhCN" then
 	SEPARATORS = {
@@ -107,21 +107,21 @@ elseif GetLocale() == "zhCN" then
 		["(%d+)([^%d%%|]+)"] = false,
 	}
 	STATS = {
-		{"防御等级", CR_DEFENSE_SKILL},
-		{"躲闪等级", CR_DODGE},
-		{"格挡等级", CR_BLOCK},
-		{"招架等级", CR_PARRY},
-		{"远程爆击等级", CR_CRIT_RANGED},
-		{"爆击等级", CR_CRIT_MELEE},
-		{"远程命中等级", CR_HIT_RANGED},
-		{"命中等级", CR_HIT_MELEE},
-		{"韧性等级", CR_CRIT_TAKEN_MELEE},
-		{"远程急速等级", CR_HASTE_RANGED},
-		{"急速等级", CR_HASTE_MELEE},
-		{"武器技能等级", CR_WEAPON_SKILL},
-		{"精准等级", CR_EXPERTISE},
-		{"回避等级", CR_HIT_TAKEN_MELEE},
-		{"护甲穿透等级", CR_ARMOR_PENETRATION},
+		{"防御", CR_DEFENSE_SKILL},
+		{"躲闪", CR_DODGE},
+		{"格挡", CR_BLOCK},
+		{"招架", CR_PARRY},
+		{"远程爆击", CR_CRIT_RANGED},
+		{"爆击", CR_CRIT_MELEE},
+		{"远程命中", CR_HIT_RANGED},
+		{"命中", CR_HIT_MELEE},
+		{"韧性", CR_CRIT_TAKEN_MELEE},
+		{"远程急速", CR_HASTE_RANGED},
+		{"急速", CR_HASTE_MELEE},
+		{"武器技能", CR_WEAPON_SKILL},
+		{"精准", CR_EXPERTISE},
+		{"闪避", CR_HIT_TAKEN_MELEE},
+		{"护甲穿透", CR_ARMOR_PENETRATION},
     {"精通等级", CR_MASTERY},
 	}
 else
@@ -235,24 +235,29 @@ end
 do
 	local CombatRatingMap = {
 		[CR_WEAPON_SKILL] = 2.5,
-		[CR_DEFENSE_SKILL] = 1.5,
-		[CR_DODGE] = 13.8,
-		[CR_PARRY] = 13.8,
-		[CR_BLOCK] = 5,
-		[CR_HIT_MELEE] = 10,
-		[CR_CRIT_MELEE] = 14,
-		[CR_HIT_RANGED] = 10,
-		[CR_CRIT_RANGED] = 14,
-		[CR_HASTE_MELEE] = 10,
-		[CR_HASTE_RANGED] = 10,
-		[CR_HIT_SPELL] = 8,
-		[CR_CRIT_SPELL] = 14,
-		[CR_HASTE_SPELL] = 10,
-		[COMBAT_RATING_RESILIENCE_CRIT_TAKEN] = 28.75,
-		[CR_HIT_TAKEN_MELEE] = 10,
-		[CR_EXPERTISE] = 2.5,
-		[CR_ARMOR_PENETRATION] = 4.2682925137607,
-    [CR_MASTERY] = 14,
+		[CR_DEFENSE_SKILL] = 1.5, --{"防御", CR_DEFENSE_SKILL},
+		[CR_DODGE] = 13.8,		--躲闪
+		[CR_PARRY] = 13.8,	--{"招架", CR_PARRY},
+		[CR_BLOCK] = 5,      --{"格挡", CR_BLOCK},
+		[CR_HIT_MELEE] = 10, --{"爆击", CR_CRIT_MELEE},
+		[CR_CRIT_MELEE] = 14,   --{"远程爆击", CR_CRIT_RANGED},
+		[CR_HIT_RANGED] = 10,   --{"远程命中", CR_HIT_RANGED},
+		[CR_CRIT_RANGED] = 14,     --
+		[CR_HASTE_MELEE] = 10,        --{"急速", CR_HASTE_MELEE},
+		[CR_HASTE_RANGED] = 10,         --{"远程急速", CR_HASTE_RANGED},
+		[CR_HIT_SPELL] = 8,       --{"法术命中", CR_HIT_MELEE},
+		[CR_CRIT_SPELL] = 14,      --
+		[CR_HASTE_SPELL] = 10,      --
+		[COMBAT_RATING_RESILIENCE_CRIT_TAKEN] = 28.75,      --
+		[CR_HIT_TAKEN_MELEE] = 10,       --{"闪避", CR_HIT_TAKEN_MELEE},
+		[CR_EXPERTISE] = 2.5,        --{"精准", CR_EXPERTISE},
+		[CR_ARMOR_PENETRATION] = 4.2682925137607,           --{"护甲穿透", CR_ARMOR_PENETRATION},
+    [CR_MASTERY] = 14,          --
+	
+		
+		
+		
+		
 	}
 
 	local lowerlimit34 = {

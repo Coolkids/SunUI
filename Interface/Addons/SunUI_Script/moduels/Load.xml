@@ -1,9 +1,6 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file="AutoButton.lua"/>
-	<Script file="AutoBuy.lua"/>
 	<Script file='AutoLFG.lua'/>
 	<Script file = "BiggerTradeSkillUI.lua"/>
-	<Script file = "BloodShield.lua"/>
 	<Script file = "classCD.lua"/>
 	<Script file ="CloseUp.lua"/>
 	<Script file = "CombatNotification.lua"/>

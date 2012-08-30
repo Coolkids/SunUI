@@ -92,13 +92,14 @@ do
       frame:SetScript("OnUpdate", OnUpdate) 
 
       local r, g, b = unpack(settings.colors[type]) 
-	  frame:CreateShadow("Background")
-     
---[[       local border = CreateFrame("Frame", nil, frame) 
-      border:SetPoint("TOPLEFT", frame, -2, 0) 
-      border:SetPoint("BOTTOMRIGHT", frame, 0, 2) 
+	  frame:CreateShadow("")
+		local gradient = frame:CreateTexture(nil, "BACKGROUND")
+		gradient:SetPoint("TOPLEFT")
+		gradient:SetPoint("BOTTOMRIGHT")
+		gradient:SetTexture(DB.Statusbar)
+		gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+		
 
-      border:SetFrameLevel(0)  ]]
       local text = frame:CreateFontString(nil, 'OVERLAY') 
       text:SetFont(GameFontNormalSmall:GetFont(), 14, "THINOUTLINE") 
       text:SetShadowOffset(1, -1) 

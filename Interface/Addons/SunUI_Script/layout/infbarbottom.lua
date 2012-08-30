@@ -4,7 +4,7 @@ local Module = Core:NewModule("InfoPanelBottom")
 
 local function BuildClock()
 	local Clock = CreateFrame("Frame", "InfoPanelBottom1", UIParent)
-	Clock.Text = S.MakeFontString(Clock, 14)
+	Clock.Text = S.MakeFontString(Clock, 14*S.Scale(1)*C["MiniDB"]["FontScale"])
 	Clock.Text:SetTextColor(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)
 	Clock.Text:SetPoint("LEFT", BottomBar, "LEFT", 10, 2)
 	Clock.Text:SetShadowOffset(S.mult, -S.mult)
@@ -94,6 +94,7 @@ local function BuildFriend()
 
 	local Text  = Stat:CreateFontString(nil, "BORDER")
 	Text:SetFont(DB.Font, 14*S.Scale(1)*C["MiniDB"]["FontScale"], "THINOUTLINE")
+	Text:SetTextColor(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)
 	Text:SetShadowOffset(1.25, -1.25)
 	Text:SetShadowColor(0, 0, 0, 0.4)
 	Text:SetPoint("LEFT", InfoPanelBottom1, "RIGHT", 3, 0)
@@ -371,6 +372,7 @@ local function BuildGuild()
 
 	local Text  = Stat:CreateFontString(nil, "BORDER")
 	Text:SetFont(DB.Font, 14*S.Scale(1)*C["MiniDB"]["FontScale"], "THINOUTLINE")
+	Text:SetTextColor(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)
 	Text:SetShadowOffset(1.25, -1.25)
 	Text:SetShadowColor(0, 0, 0, 0.4)
 	Text:SetPoint("LEFT", InfoPanelBottom2 or InfoPanelBottom1, "RIGHT", 3, 0)
@@ -411,13 +413,13 @@ local function BuildGuild()
 
 
 	local function UpdateGuildXP()
-		local currentXP, remainingXP, dailyXP, maxDailyXP = UnitGetGuildXP("player")
+		local currentXP, remainingXP = UnitGetGuildXP("player")
 		local nextLevelXP = currentXP + remainingXP
 		local percentTotal = ceil((currentXP / nextLevelXP) * 100)
-		local percentDaily = ceil((dailyXP / maxDailyXP) * 100)
+		--local percentDaily = ceil((dailyXP / maxDailyXP) * 100)
 		
 		guildXP[0] = { currentXP, nextLevelXP, percentTotal }
-		guildXP[1] = { dailyXP, maxDailyXP, percentDaily }
+		--guildXP[1] = { dailyXP, maxDailyXP, percentDaily }
 	end
 
 	local function UpdateGuildMessage()
@@ -609,17 +611,16 @@ local function BuildDurability()
 		[8] = {8, L["脚"], 1000},
 		[9] = {16, L["主手"], 1000},
 		[10] = {17, L["副手"], 1000}, 
-		[11] = {18, L["远程"], 1000}
 	}
 	local Stat = CreateFrame("Frame", "InfoPanelBottom4", UIParent)
-	Text = S.MakeFontString(Stat, 14)
+	Text = S.MakeFontString(Stat, 14*S.Scale(1)*C["MiniDB"]["FontScale"])
 	Text:SetPoint("LEFT", InfoPanelBottom3 or InfoPanelBottom2 or InfoPanelBottom1, "RIGHT", 3, 0)
 	Stat:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
 	Stat:RegisterEvent("MERCHANT_SHOW")
 	Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
 	Stat:SetAllPoints(Text)
 	Stat:SetScript("OnEvent", function(self)
-			for i = 1, 11 do
+			for i = 1, 10 do
 				if GetInventoryItemLink("player", Slots[i][1]) ~= nil then
 					local durability, max = GetInventoryItemDurability(Slots[i][1])
 					if durability then 
@@ -641,7 +642,7 @@ local function BuildDurability()
 			GameTooltip:ClearLines()
 			GameTooltip:AddLine(L["耐久度"], 0.4, 0.78, 1)
 			GameTooltip:AddLine(" ")
-			for i = 1, 11 do
+			for i = 1, 10 do
 				if Slots[i][3] ~= 1000 then
 					green = Slots[i][3]/1
 					red = 1-green
@@ -665,6 +666,7 @@ local function BuildStat2()
 
 	local Text  = BottomBar:CreateFontString(nil, "BORDER")
 	Text:SetFont(DB.Font, 12*S.Scale(1)*C["MiniDB"]["FontScale"], "THINOUTLINE")
+	Text:SetTextColor(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)
 	Text:SetShadowOffset(1.25, -1.25)
 	Text:SetShadowColor(0, 0, 0, 0.4)
 	Text:SetPoint("RIGHT", BottomBar, "RIGHT", -10, 2)
@@ -801,6 +803,7 @@ local function BuildStat1()
 
 	local Text  = BottomBar:CreateFontString(nil, "BORDER")
 	Text:SetFont(DB.Font, 12*S.Scale(1)*C["MiniDB"]["FontScale"], "THINOUTLINE")
+	Text:SetTextColor(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)
 	Text:SetShadowOffset(1.25, -1.25)
 	Text:SetShadowColor(0, 0, 0, 0.4)
 	Text:SetPoint("RIGHT", InfoPanelBottom5, "LEFT", -3, 0)
@@ -867,30 +870,6 @@ local function BuildStat1()
 			
 			GameTooltip:AddDoubleLine(STAT_HASTE, format(modifierString, haste, hasteBonus), 1, 1, 1)
 		end
-		
-		local masteryspell
-		if GetCombatRating(CR_MASTERY) ~= 0 and GetSpecialization() then
-			if DB.MyClass == "DRUID" then
-				if DB.Role == "Melee" then
-					masteryspell = select(2, GetTalentTreeMasterySpells(GetSpecialization()))
-				elseif DB.Role == "Tank" then
-					masteryspell = select(1, GetTalentTreeMasterySpells(GetSpecialization()))
-				else
-					masteryspell = GetTalentTreeMasterySpells(GetSpecialization())
-				end
-			else
-				masteryspell = GetTalentTreeMasterySpells(GetSpecialization())
-			end
-			
-
-
-			local masteryName, _, _, _, _, _, _, _, _ = GetSpellInfo(masteryspell)
-			if masteryName then
-				GameTooltip:AddLine' '
-				GameTooltip:AddDoubleLine(masteryName, format(modifierString, GetCombatRating(CR_MASTERY), GetCombatRatingBonus(CR_MASTERY)), 1, 1, 1)
-			end
-		end
-		
 		GameTooltip:Show()
 	end
 
@@ -994,88 +973,101 @@ end
 local function BuildSpecswitch()
 	local Stat = CreateFrame("Frame", "InfoPanelBottom7", UIParent)
 	Stat:EnableMouse(true)
-	Stat:SetFrameStrata("BACKGROUND")
+	Stat:SetFrameStrata("MEDIUM")
 	Stat:SetFrameLevel(3)
 	local Text  = BottomBar:CreateFontString(nil, "BORDER")
 	Text:SetFont(DB.Font, 12*S.Scale(1)*C["MiniDB"]["FontScale"], "THINOUTLINE")
+	Text:SetTextColor(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)
 	Text:SetShadowOffset(1.25, -1.25)
 	Text:SetShadowColor(0, 0, 0, 0.4)
 	Text:SetPoint("RIGHT", InfoPanelBottom6, "LEFT", -3, 0)
 	Text:SetText(NONE..TALENTS)
 	Stat:SetParent(Text:GetParent())
-
-	local talent = {}
-	local active
-	local talentString = string.join("", "|cffFFFFFF%s:|r %d/%d/%d")
-	local activeString = string.join("", "|cff00FF00" , ACTIVE_PETS, "|r")
-	local inactiveString = string.join("", "|cffFF0000", FACTION_INACTIVE, "|r")
-
-	local function LoadTalentTrees()
-		for i = 1, GetNumSpecializations(false, false) do
-				talent[i] = {} -- init talent group table
-					for j = 1, GetNumSpecializations(false, false) do
-						talent[i][j] = select(5, GetSpecializationInfo(j, false, false, i))
-					end
-				end
-		end
-
+	
 	local int = 1
 	local function Update(self, t)
+		if not GetSpecialization() then
+			Text:SetText(NONE..TALENTS) 
+		return end
 		int = int - t
-		if int > 0 or not GetSpecialization() then return end
-
-		active = GetActiveSpecGroup(false, false)
-		Text:SetFormattedText(talentString, S.RGBToHex(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)..select(2, GetSpecializationInfo( GetSpecialization(false, false, active))).."|r", talent[active][1], talent[active][2], talent[active][3])
-		int = 1
-
-		-- disable script	
-		self:SetScript("OnUpdate", nil)
+		if int < 0 then
+			local tree1 = select(5,GetSpecializationInfo(1))
+			local tree2 = select(5,GetSpecializationInfo(2))
+			local tree3 = select(5,GetSpecializationInfo(3))
+			Text:SetText(select(2,GetSpecializationInfo(GetActiveSpecGroup(false,false))))
+		end
 	end
 
-	Stat:SetScript("OnEnter", function(self)
-		if InCombatLockdown() then return end
-
-		GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 0, 0)
-
-		GameTooltip:ClearLines()
-		GameTooltip:AddLine(TALENTS..":")
-		for i = 1, GetNumTalentGroups() do
-			if GetSpecialization(false, false, i) then
-				GameTooltip:AddLine(string.join(" ", string.format(talentString, select(2, GetTalentTabInfo(GetSpecialization(false, false, i))), talent[i][1], talent[i][2], talent[i][3]), (i == active and activeString or inactiveString)),1,1,1)
-			end
-		end
-		GameTooltip:Show()
-	end)
-
-	Stat:SetScript("OnLeave", function() GameTooltip:Hide() end)
+	local function Checktalentgroup(index)
+		return GetSpecialization(false,false,index)
+	end
 
 	local function OnEvent(self, event, ...)
-					if event == "PLAYER_ENTERING_WORLD" then
-						self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-					end
-					
-					-- load talent information
-					LoadTalentTrees()
+		if event == "PLAYER_ENTERING_WORLD" then
+			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+		end
 
-					-- Setup Talents Tooltip
-					self:SetAllPoints(Text)
-					
-					-- update datatext
-					if event ~= "PLAYER_ENTERING_WORLD" then
-						self:SetScript("OnUpdate", Update)
+		-- Setup Talents Tooltip
+		self:SetAllPoints(Text)
+		
+		self:SetScript("OnEnter", function(self)
+				local c = GetActiveSpecGroup(false,false)
+				local majorTree1 = GetSpecialization(false,false,1)
+				local spec1 = { }
+				for i = 1, 18 do 
+					local name, iconTexture, tier, column, selected, available = GetTalentInfo(i,false,1)
+					if selected then
+						table.insert(spec1,name)
 					end
 				end
-
-				Stat:RegisterEvent("PLAYER_ENTERING_WORLD");
-				Stat:RegisterEvent("CHARACTER_POINTS_CHANGED");
-				Stat:RegisterEvent("PLAYER_TALENT_UPDATE");
-				Stat:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-				Stat:SetScript("OnEvent", OnEvent)
-				Stat:SetScript("OnUpdate", Update)
-
-				Stat:SetScript("OnMouseDown", function()
-					SetActiveTalentGroup(active == 1 and 2 or 1)
-				end)
+				local majorTree2 = GetSpecialization(false,false,2)
+				local spec2 = { }
+				for i = 1, 18 do 
+					local name, iconTexture, tier, column, selected, available = GetTalentInfo(i,false,2)
+					if selected then
+						table.insert(spec2,name)
+					end
+				end
+				GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 6)
+				GameTooltip:ClearAllPoints()
+				GameTooltip:SetPoint("BOTTOM", self, "TOP", 0, 1)
+				GameTooltip:ClearLines()
+				GameTooltip:AddLine(TALENTS_BUTTON,0,.6,1)
+				GameTooltip:AddLine(" ")
+				if GetNumSpecGroups() == 1 then
+					GameTooltip:AddLine("|cff00FF00* |r" .. (GetSpecialization() and select(2,GetSpecializationInfo(majorTree1)) or infoL["none"])..": ",1,1,1)
+					for i = 1, #spec1 do
+						GameTooltip:AddDoubleLine(" ", spec1[i],1,1,1,1,1,1)
+					end
+				else
+					GameTooltip:AddLine("|cff00FF00"..(c == 1 and "* " or "   ") .. "|r" .. select(2,GetSpecializationInfo(majorTree1))..": ",1,1,1)
+					for i = 1, #spec1 do
+						GameTooltip:AddDoubleLine(" ", spec1[i],1,1,1,1,1,1)
+					end
+					GameTooltip:AddLine("|cff00FF00"..(c == 2 and "* " or "   ") .. "|r" .. select(2,GetSpecializationInfo(majorTree2))..": ",1,1,1)
+					for i = 1, #spec2 do
+						GameTooltip:AddDoubleLine(" ", spec2[i],1,1,1,1,1,1)
+					end
+				end
+				GameTooltip:Show()
+			end)
+		
+		self:SetScript("OnLeave", function() GameTooltip:Hide() end)
+	end
+	
+	Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
+	Stat:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+	Stat:SetScript("OnEvent", OnEvent)
+	Stat:SetScript("OnUpdate", Update)
+	Stat:SetScript("OnMouseDown", function(_,btn)
+		if btn == "LeftButton" then
+			ToggleTalentFrame()
+		else
+			c = GetActiveSpecGroup(false,false)
+			SetActiveSpecGroup(c == 1 and 2 or 1)
+		end
+	end)
+	
 end
 
 function Module:OnEnable()
@@ -1084,8 +1076,8 @@ function Module:OnEnable()
 		BuildFriend()
 		BuildGuild()
 		BuildDurability()
-		--BuildStat2()
-		--BuildStat1()
-		--BuildSpecswitch()
+		BuildStat2()
+		BuildStat1()
+		BuildSpecswitch()
 	end
 end

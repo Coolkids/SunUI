@@ -321,7 +321,7 @@ end
 function BTSUi.TradeSkillFilterFrame_LoadSubClasses(...)
 	local selectedID = UIDropDownMenu_GetSelectedID(BTSUiSubClassFilterDropDown);
 	local numSubClasses = select("#", ...);
-	local allChecked = GetTradeSkillSubClassFilter(0);
+	local allChecked = GetTradeSkillSubClassFilteredSlots(0);
 
 	-- the first button in the list is going to be an "all subclasses" button
 	local info = UIDropDownMenu_CreateInfo();
@@ -341,7 +341,7 @@ function BTSUi.TradeSkillFilterFrame_LoadSubClasses(...)
 		if ( allChecked ) then
 			checked = nil;
 		else
-			checked = GetTradeSkillSubClassFilter(i);
+			checked = GetTradeSkillSubClassFilteredSlots(i);
 			if ( checked ) then
 				UIDropDownMenu_SetText(BTSUiSubClassFilterDropDown, select(i, ...));
 			end
@@ -356,7 +356,7 @@ end
 
 function BTSUi.TradeSkillSubClassDropDownButton_OnClick(self)
 	UIDropDownMenu_SetSelectedID(BTSUiSubClassFilterDropDown, self:GetID());
-	SetTradeSkillSubClassFilter(self:GetID() - 1, 1, 1);
+	GetTradeSkillSubClassFilteredSlots(self:GetID() - 1, 1, 1);
 
 	if ( self:GetID() ~= 1 ) then
 		if ( BTSUi.TradeSkillFilterFrame_InvSlotName(GetTradeSkillInvSlots()) ~= BTSUiSlotFilterDropDown.selected ) then

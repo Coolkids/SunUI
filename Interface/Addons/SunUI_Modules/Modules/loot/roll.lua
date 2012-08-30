@@ -1,11 +1,12 @@
 ﻿local S, C, L, DB = unpack(SunUI)
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("RollFrame")
 local addon, ns = ...
 local cfg = {
 	bar_width = 250,					-- group roll bar width
 	bar_height = 25,					-- group roll bar height
-	suppress_loot_spam = true,
 }
-
+local RollHolder = CreateFrame("Frame", "RollHolder", UIParent)
+RollHolder:SetSize(250, 25)
 UIParent:UnregisterEvent("START_LOOT_ROLL");
 UIParent:UnregisterEvent("CANCEL_LOOT_ROLL");
 
@@ -173,12 +174,12 @@ function frame:UpdateGroupLoot()
 			bar = CreateFrame("StatusBar", "sGroupLootBar"..index, UIParent);
 			bar:EnableMouse(1);
 			bar:SetWidth(cfg.bar_width);
-			bar:SetHeight(cfg.bar_height);
+			bar:SetHeight(cfg.bar_height/2);
 			bar:SetStatusBarTexture(DB.Statusbar);
 			if ( index == 1 ) then
-				MoveHandle.RollFrame = S.MakeMoveHandle(bar, "Roll", "RollFrame")
+				bar:SetPoint("CENTER", RollHolder,"CENTER")
 			else
-				bar:SetPoint("TOP", grouplootbars[index-1], "BOTTOM", 0, -17);
+				bar:SetPoint("TOP", grouplootbars[index-1], "BOTTOM", 0, -19);
 			end
 			bar:SetScript("OnUpdate", BarOnUpdate);
 			bar:RegisterEvent("CANCEL_LOOT_ROLL");
@@ -261,117 +262,17 @@ function frame:UpdateGroupLoot()
 			bar.needtext:SetPoint("CENTER", 0, 1);
 			
 			bar.text = bar:CreateFontString("$perentText", "ARTWORK", "GameFontHighlightLeft");
-			--bar.text:SetFont(GFHCName, GFHCHeight, "THINOUTLINE");
 			bar.text:SetPoint("LEFT", 5, 0);
 			bar.text:SetPoint("RIGHT", bar.need, "LEFT");
-			
---[[ 			bar.border = {};
-			bar.border.topleft = bar:CreateTexture(nil, "OVERLAY");
-			bar.border.topleft:SetTexture(nil);
-			bar.border.topleft:SetPoint("TOPLEFT", -3, 3);
-			bar.border.topleft:SetWidth(12);
-			bar.border.topleft:SetHeight(12);
-			bar.border.topleft:SetTexCoord(0, 1/3, 0, 1/3);
-			bar.border.bottomleft = bar:CreateTexture(nil, "OVERLAY");
-			bar.border.bottomleft:SetTexture(nil);
-			bar.border.bottomleft:SetPoint("BOTTOMLEFT", -3, -3);
-			bar.border.bottomleft:SetWidth(12);
-			bar.border.bottomleft:SetHeight(12);
-			bar.border.bottomleft:SetTexCoord(0, 1/3, 2/3, 1);
-			bar.border.topright = bar:CreateTexture(nil, "OVERLAY");
-			bar.border.topright:SetTexture(nil);
-			bar.border.topright:SetPoint("TOPRIGHT", 3, 3);
-			bar.border.topright:SetWidth(12);
-			bar.border.topright:SetHeight(12);
-			bar.border.topright:SetTexCoord(2/3, 1, 0, 1/3);
-			bar.border.bottomright = bar:CreateTexture(nil, "OVERLAY");
-			bar.border.bottomright:SetTexture(nil);
-			bar.border.bottomright:SetPoint("BOTTOMRIGHT", 3, -3);
-			bar.border.bottomright:SetWidth(12);
-			bar.border.bottomright:SetHeight(12);
-			bar.border.bottomright:SetTexCoord(2/3, 1, 2/3, 1);
-			bar.border.top = bar:CreateTexture(nil, "OVERLAY");
-			bar.border.top:SetTexture(cnil);
-			bar.border.top:SetPoint("TOPLEFT", bar.border.topleft, "TOPRIGHT");
-			bar.border.top:SetPoint("TOPRIGHT", bar.border.topright, "TOPLEFT");
-			bar.border.top:SetHeight(12);
-			bar.border.top:SetTexCoord(1/3, 2/3, 0, 1/3);
-			bar.border.bottom = bar:CreateTexture(nil, "OVERLAY");
-			bar.border.bottom:SetTexture(nil);
-			bar.border.bottom:SetPoint("BOTTOMLEFT", bar.border.bottomleft, "BOTTOMRIGHT");
-			bar.border.bottom:SetPoint("BOTTOMRIGHT", bar.border.bottomright, "BOTTOMLEFT");
-			bar.border.bottom:SetHeight(12);
-			bar.border.bottom:SetTexCoord(1/3, 2/3, 2/3, 1);
-			bar.border.left = bar:CreateTexture(nil, "OVERLAY");
-			bar.border.left:SetTexture(nil);
-			bar.border.left:SetPoint("TOPLEFT", bar.border.topleft, "BOTTOMLEFT");
-			bar.border.left:SetPoint("BOTTOMLEFT", bar.border.bottomleft, "TOPLEFT");
-			bar.border.left:SetWidth(12);
-			bar.border.left:SetTexCoord(0, 1/3, 1/3, 2/3);
-			bar.border.right = bar:CreateTexture(nil, "OVERLAY");
-			bar.border.right:SetTexture(nil);
-			bar.border.right:SetPoint("TOPRIGHT", bar.border.topright, "BOTTOMRIGHT");
-			bar.border.right:SetPoint("BOTTOMRIGHT", bar.border.bottomright, "TOPRIGHT");
-			bar.border.right:SetWidth(12);
-			bar.border.right:SetTexCoord(2/3, 1, 1/3, 2/3); ]]
-			
+				
 			bar.hasItem = 1;
 			
             bar.icon = bar:CreateTexture(nil, "BACKGROUND")
-            bar.icon:SetSize(33,33)
+            bar.icon:SetSize(28,28)
             bar.icon:ClearAllPoints()
-            bar.icon:SetPoint("RIGHT", bar, "LEFT", -7,0)
+            bar.icon:SetPoint("BOTTOMRIGHT", bar, "BOTTOMLEFT", -7,0)
             bar.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 			S.CreateShadow(bar, bar.icon)
---[[             bar.iborder = {};
-            bar.iborder.topleft = bar:CreateTexture(nil, "OVERLAY");
-            bar.iborder.topleft:SetTexture(nil);
-            bar.iborder.topleft:SetPoint("TOPLEFT", bar.icon, "TOPLEFT", -4, 4);
-            bar.iborder.topleft:SetWidth(12);
-            bar.iborder.topleft:SetHeight(12);
-            bar.iborder.topleft:SetTexCoord(0, 1/3, 0, 1/3);
-            bar.iborder.bottomleft = bar:CreateTexture(nil, "OVERLAY");
-            bar.iborder.bottomleft:SetTexture(nil);
-            bar.iborder.bottomleft:SetPoint("BOTTOMLEFT", bar.icon, "BOTTOMLEFT",-4, -4);
-            bar.iborder.bottomleft:SetWidth(12);
-            bar.iborder.bottomleft:SetHeight(12);
-            bar.iborder.bottomleft:SetTexCoord(0, 1/3, 2/3, 1);
-            bar.iborder.topright = bar:CreateTexture(nil, "OVERLAY");
-            bar.iborder.topright:SetTexture(nil);
-            bar.iborder.topright:SetPoint("TOPRIGHT",bar.icon, "TOPRIGHT", 4, 4);
-            bar.iborder.topright:SetWidth(12);
-            bar.iborder.topright:SetHeight(12);
-            bar.iborder.topright:SetTexCoord(2/3, 1, 0, 1/3);
-            bar.iborder.bottomright = bar:CreateTexture(nil, "OVERLAY");
-            bar.iborder.bottomright:SetTexture(nil);
-            bar.iborder.bottomright:SetPoint("BOTTOMRIGHT", bar.icon, "BOTTOMRIGHT", 4, -4);
-            bar.iborder.bottomright:SetWidth(12);
-            bar.iborder.bottomright:SetHeight(12);
-            bar.iborder.bottomright:SetTexCoord(2/3, 1, 2/3, 1);
-            bar.iborder.top = bar:CreateTexture(nil, "OVERLAY");
-            bar.iborder.top:SetTexture(nil);
-            bar.iborder.top:SetPoint("TOPLEFT", bar.iborder.topleft, "TOPRIGHT");
-            bar.iborder.top:SetPoint("TOPRIGHT", bar.iborder.topright, "TOPLEFT");
-            bar.iborder.top:SetHeight(12);
-            bar.iborder.top:SetTexCoord(1/3, 2/3, 0, 1/3);
-            bar.iborder.bottom = bar:CreateTexture(nil, "OVERLAY");
-            bar.iborder.bottom:SetTexture(nil);
-            bar.iborder.bottom:SetPoint("BOTTOMLEFT", bar.iborder.bottomleft, "BOTTOMRIGHT");
-            bar.iborder.bottom:SetPoint("BOTTOMRIGHT", bar.iborder.bottomright, "BOTTOMLEFT");
-            bar.iborder.bottom:SetHeight(12);
-            bar.iborder.bottom:SetTexCoord(1/3, 2/3, 2/3, 1);
-            bar.iborder.left = bar:CreateTexture(nil, "OVERLAY");
-            bar.iborder.left:SetTexture(nil);
-            bar.iborder.left:SetPoint("TOPLEFT", bar.iborder.topleft, "BOTTOMLEFT");
-            bar.iborder.left:SetPoint("BOTTOMLEFT", bar.iborder.bottomleft, "TOPLEFT");
-            bar.iborder.left:SetWidth(12);
-            bar.iborder.left:SetTexCoord(0, 1/3, 1/3, 2/3);
-            bar.iborder.right = bar:CreateTexture(nil, "OVERLAY");
-            bar.iborder.right:SetTexture(nil);
-            bar.iborder.right:SetPoint("TOPRIGHT", bar.iborder.topright, "BOTTOMRIGHT");
-            bar.iborder.right:SetPoint("BOTTOMRIGHT", bar.iborder.bottomright, "TOPRIGHT");
-            bar.iborder.right:SetWidth(12);
-            bar.iborder.right:SetTexCoord(2/3, 1, 1/3, 2/3);   ]]
 			
 			tinsert(grouplootbars, bar);
 		end
@@ -381,47 +282,9 @@ function frame:UpdateGroupLoot()
 		if Disenchantable then bar.disenchant:Enable() else bar.disenchant:Disable() end
 		if Needable then bar.need:Enable() else bar.need:Disable() end
 		if Greedable then bar.greed:Enable() else bar.greed:Disable() end
-			SetDesaturation(bar.disenchant:GetNormalTexture(), not Disenchantable)
-			SetDesaturation(bar.need:GetNormalTexture(), not Needable)
-			SetDesaturation(bar.greed:GetNormalTexture(), not Greedable)
-
---[[ 		if ( bindOnPickUp ) then
-			bar.border.topleft:SetVertexColor(194/255, 172/255, 114/255, 1);
-			bar.border.bottomleft:SetVertexColor(194/255, 172/255, 114/255, 1);
-			bar.border.topright:SetVertexColor(194/255, 172/255, 114/255, 1);
-			bar.border.bottomright:SetVertexColor(194/255, 172/255, 114/255, 1);
-			bar.border.top:SetVertexColor(194/255, 172/255, 114/255, 1);
-			bar.border.bottom:SetVertexColor(194/255, 172/255, 114/255, 1);
-			bar.border.left:SetVertexColor(194/255, 172/255, 114/255, 1);
-			bar.border.right:SetVertexColor(194/255, 172/255, 114/255, 1);
-			
-            bar.iborder.topleft:SetVertexColor(194/255, 172/255, 114/255, 1);
-            bar.iborder.bottomleft:SetVertexColor(194/255, 172/255, 114/255, 1);
-            bar.iborder.topright:SetVertexColor(194/255, 172/255, 114/255, 1);
-            bar.iborder.bottomright:SetVertexColor(194/255, 172/255, 114/255, 1);
-            bar.iborder.top:SetVertexColor(194/255, 172/255, 114/255, 1);
-            bar.iborder.bottom:SetVertexColor(194/255, 172/255, 114/255, 1);
-            bar.iborder.left:SetVertexColor(194/255, 172/255, 114/255, 1);
-            bar.iborder.right:SetVertexColor(194/255, 172/255, 114/255, 1);
-		else
-			bar.border.topleft:SetVertexColor(0.25, 0.25, 0.25, 1);
-			bar.border.bottomleft:SetVertexColor(0.25, 0.25, 0.25, 1);
-			bar.border.topright:SetVertexColor(0.25, 0.25, 0.25, 1);
-			bar.border.bottomright:SetVertexColor(0.25, 0.25, 0.25, 1);
-			bar.border.top:SetVertexColor(0.25, 0.25, 0.25, 1);
-			bar.border.bottom:SetVertexColor(0.25, 0.25, 0.25, 1);
-			bar.border.left:SetVertexColor(0.25, 0.25, 0.25, 1);
-			bar.border.right:SetVertexColor(0.25, 0.25, 0.25, 1);
-			
-            bar.iborder.topleft:SetVertexColor(0.25, 0.25, 0.25, 1);
-            bar.iborder.bottomleft:SetVertexColor(0.25, 0.25, 0.25, 1);
-            bar.iborder.topright:SetVertexColor(0.25, 0.25, 0.25, 1);
-            bar.iborder.bottomright:SetVertexColor(0.25, 0.25, 0.25, 1);
-            bar.iborder.top:SetVertexColor(0.25, 0.25, 0.25, 1);
-            bar.iborder.bottom:SetVertexColor(0.25, 0.25, 0.25, 1);
-            bar.iborder.left:SetVertexColor(0.25, 0.25, 0.25, 1);
-            bar.iborder.right:SetVertexColor(0.25, 0.25, 0.25, 1);
-		end ]]
+		SetDesaturation(bar.disenchant:GetNormalTexture(), not Disenchantable)
+		SetDesaturation(bar.need:GetNormalTexture(), not Needable)
+		SetDesaturation(bar.greed:GetNormalTexture(), not Greedable)
 			
 		bar:SetStatusBarColor(color.r, color.g, color.b, 1);
 		bar:SetMinMaxValues(0, value.rollTime);
@@ -446,50 +309,7 @@ function frame:UpdateGroupLoot()
 	end
 end
 
-------> Suppressing detailed loot spamm
--- FFFFFFFFFUUUCKK GODDAMN LOCALIZATION CRAP
-if not (GetLocale=="enGB" or GetLocale=="enUS") then
-	LOOT_ROLL_ALL_PASSED = "Everyone passed on: %s";
-	LOOT_ROLL_DISENCHANT = "%s has selected Disenchant for: %s";
-	LOOT_ROLL_DISENCHANT_SELF = "You have selected Disenchant for: %s";
-	LOOT_ROLL_GREED = "%s has selected Greed for: %s";
-	LOOT_ROLL_GREED_SELF = "You have selected Greed for: %s";
-	LOOT_ROLL_NEED = "%s has selected Need for: %s";
-	LOOT_ROLL_NEED_SELF = "You have selected Need for: %s";
-	LOOT_ROLL_PASSED = "%s passed on: %s";
-	LOOT_ROLL_PASSED_AUTO = "%s automatically passed on: %s because he cannot loot that item.";
-	LOOT_ROLL_PASSED_AUTO_FEMALE = "%s automatically passed on: %s because she cannot loot that item.";
-	LOOT_ROLL_PASSED_SELF = "You passed on: %s";
-	LOOT_ROLL_PASSED_SELF_AUTO = "You automatically passed on: %s because you cannot loot that item.";
-	LOOT_ROLL_ROLLED_DE = "Disenchant Roll - %d for %s by %s";
-	LOOT_ROLL_ROLLED_GREED = "Greed Roll - %d for %s by %s";
-	LOOT_ROLL_ROLLED_NEED = "Need Roll - %d for %s by %s";
-end
-if cfg.suppress_loot_spam then
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_LOOT", function(self, event, msg)
-		if msg:match("(.*) has?v?e? selected (.+) for: (.+)") or msg:match("(.+) Roll . (%d+) for (.+) by (.+)")
-			or msg:match("You passed on: ") or msg:match(" automatically passed on: ") or (msg:match(" passed on: ") and not msg:match("Everyone passed on: ")) then
-			return true
---[[ 			
-		elseif msg:match("%s won: %s") then
-			return false, gsub(msg, "%s won: %s", "%1$s won: %3$s |cff818181(Need - %2$d)|r" or "%1$s won: %3$s |cff818181(Greed - %2$d)|r") ]]
-		end
-	end)
-end
 
---[[ 
-LOOT_ROLL_WON 
-"%s won: %s"
-LOOT_ROLL_WON_NO_SPAM_GREED 
-"%1$s won: %3$s |cff818181(Greed - %2$d)|r"
-LOOT_ROLL_WON_NO_SPAM_NEED 
-"%1$s won: %3$s |cff818181(Need - %2$d)|r"
-LOOT_ROLL_YOU_WON 
-"You won: %s"
-LOOT_ROLL_YOU_WON_NO_SPAM_GREED 
-"You won: %2$s |cff818181(Greed - %1$d)|r"
-LOOT_ROLL_YOU_WON_NO_SPAM_NEED 
-"You won: %2$s |cff818181(Need - %1$d)|r" 
-
-%f -> (%d+%.?%d*)
-]]
+function Module:OnEnable()
+	MoveHandle.RollFrame = S.MakeMoveHandle(RollHolder, "Roll", "RollFrame")
+end

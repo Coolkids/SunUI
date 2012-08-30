@@ -1,4 +1,4 @@
-local ADDON_NAME, ns = ...
+Ôªølocal ADDON_NAME, ns = ...
 local addon, ns = ...
 local oUF = ns.oUF or oUF 
 local cast = ns.cast
@@ -243,12 +243,14 @@ lib.gen_castbar = function(f)
     --helper
     local h = CreateFrame("Frame", nil, s)
     h:SetFrameLevel(0)
-    h:Point("TOPLEFT",-1,1)
-    h:Point("BOTTOMRIGHT",1,-1)
-
-	--backdrop
-	--h:CreateShadow("Background")
-	S.CreateBD(h, .6)
+	h:SetAllPoints()
+	h:CreateShadow()
+	local gradient = h:CreateTexture(nil, "BACKGROUND")
+	gradient:SetPoint("TOPLEFT")
+	gradient:SetPoint("BOTTOMRIGHT")
+	gradient:SetTexture(DB.Statusbar)
+	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+	
 	--spark
 	local sp =  s:CreateTexture(nil, "OVERLAY")
 	sp:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
@@ -278,7 +280,7 @@ lib.gen_castbar = function(f)
     
     if f.mystyle == "focus" and not C["focusCBuserplaced"] then
       s:Size(C["FocusCastBarWidth"],C["FocusCastBarHeight"])
-	  MoveHandle.Castbarfouce = S.MakeMoveHandle(s, L["Ωπµ„ ©∑®Ãı"], "FocusCastbar")
+	  MoveHandle.Castbarfouce = S.MakeMoveHandle(s, L["ÁÑ¶ÁÇπÊñΩÊ≥ïÊù°"], "FocusCastbar")
       i:SetPoint("RIGHT", s, "LEFT", 0, 0)
       --sp:SetHeight(s:GetHeight()*2.5)
     elseif f.mystyle == "pet" then
@@ -295,7 +297,7 @@ lib.gen_castbar = function(f)
     elseif f.mystyle == "player" then
 	  if not C["playerCBuserplaced"] then
 		s:Size(C["PlayerCastBarWidth"],C["PlayerCastBarHeight"])
-		MoveHandle.Castbarplay = S.MakeMoveHandle(s, L["ÕÊº“ ©∑®Ãı"], "PlayerCastbar")
+		MoveHandle.Castbarplay = S.MakeMoveHandle(s, L["Áé©ÂÆ∂ÊñΩÊ≥ïÊù°"], "PlayerCastbar")
 		i:Size(s:GetHeight(),s:GetHeight())
 		sp:SetHeight(s:GetHeight()*2.5)
 	  else
@@ -320,7 +322,7 @@ lib.gen_castbar = function(f)
       f:RegisterEvent("UNIT_SPELLCAST_SENT", cast.OnCastSent)
 	elseif f.mystyle == "target" and not C["targetCBuserplaced"] then
 	  s:Size(C["TargetCastBarWidth"],C["TargetCastBarHeight"])
-	  MoveHandle.Castbartarget = S.MakeMoveHandle(s, L["ƒø±Í ©∑®Ãı"], "TargetCastbar")
+	  MoveHandle.Castbartarget = S.MakeMoveHandle(s, L["ÁõÆÊ†áÊñΩÊ≥ïÊù°"], "TargetCastbar")
 	  i:Size(s:GetHeight(),s:GetHeight())
       sp:SetHeight(s:GetHeight()*2.5)
 	else
