@@ -1,8 +1,5 @@
 ﻿local S, C, L, DB = unpack(SunUI) --Engine
  
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("MBB", "AceTimer-3.0")
-function Module:OnInitialize()
-
 local BlackList = { 
 	["MiniMapTracking"] = true,
 	["MiniMapVoiceChatFrame"] = true,
@@ -61,11 +58,6 @@ MinimapButtonCollect:SetScript("OnEvent", function(self)
 		if not BlackList[child:GetName()] then
 			if child:GetObjectType() == 'Button' and child:GetNumRegions() >= 3 then
 				child:SetParent("MinimapButtonCollectFrame")
-				for j = 1, child:GetNumRegions() do
-					if select(j, child:GetRegions()):GetTexture():find("Highlight") then
-						S.Kill(select(j, child:GetRegions()))
-					end
-				end
 				tinsert(buttons, child)
 			end
 		end
@@ -105,4 +97,3 @@ hooksecurefunc(Minimap, "SetPoint", function()
 			MBCF:ClearAllPoints()
 			PositionAndStyle()
 end)
-end

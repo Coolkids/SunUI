@@ -56,6 +56,7 @@ function Module:BuildExpBar()
 end
 
 function Module:Register()
+	Module:RegisterEvent("PLAYER_ENTERING_WORLD", "OnEvent")
 	Module:RegisterEvent("PLAYER_XP_UPDATE", "OnEvent")
 	Module:RegisterEvent("PLAYER_LEVEL_UP", "OnEvent")
 	Module:RegisterEvent("UPDATE_EXHAUSTION", "OnEvent")

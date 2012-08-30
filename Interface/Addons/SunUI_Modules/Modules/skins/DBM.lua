@@ -60,7 +60,7 @@ function Module:OnInitialize()
 						end
 
 						if not icon1.styled then
-							icon1.Shadow = CreateShadow(frame, icon1)
+							icon1.Shadow = S.CreateShadow(frame, icon1)
 							icon1.styled = true
 						end
 
