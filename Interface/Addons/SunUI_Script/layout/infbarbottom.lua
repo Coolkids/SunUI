@@ -671,7 +671,8 @@ local function BuildStat2()
 	Text:SetShadowColor(0, 0, 0, 0.4)
 	Text:SetPoint("RIGHT", BottomBar, "RIGHT", -10, 2)
 	Stat:SetParent(Text:GetParent())
-
+	Stat:SetAllPoints(Text)
+	
 	local _G = getfenv(0)
 	local format = string.format
 	local chanceString = "%.2f%%"
@@ -808,7 +809,8 @@ local function BuildStat1()
 	Text:SetShadowColor(0, 0, 0, 0.4)
 	Text:SetPoint("RIGHT", InfoPanelBottom5, "LEFT", -3, 0)
 	Stat:SetParent(Text:GetParent())
-
+	Stat:SetAllPoints(Text)
+	
 	local format = string.format
 	local targetlv, playerlv
 	local basemisschance, leveldifference, dodge, parry, block
@@ -972,7 +974,6 @@ end
 
 local function BuildSpecswitch()
 	local Stat = CreateFrame("Frame", "InfoPanelBottom7", UIParent)
-	Stat:EnableMouse(true)
 	Stat:SetFrameStrata("MEDIUM")
 	Stat:SetFrameLevel(3)
 	local Text  = BottomBar:CreateFontString(nil, "BORDER")
@@ -982,19 +983,14 @@ local function BuildSpecswitch()
 	Text:SetShadowColor(0, 0, 0, 0.4)
 	Text:SetPoint("RIGHT", InfoPanelBottom6, "LEFT", -3, 0)
 	Text:SetText(NONE..TALENTS)
+	Stat:SetAllPoints(Text)
 	Stat:SetParent(Text:GetParent())
 	
-	local int = 1
-	local function Update(self, t)
+	local function OnEvent(self)
 		if not GetSpecialization() then
 			Text:SetText(NONE..TALENTS) 
-		return end
-		int = int - t
-		if int < 0 then
-			local tree1 = select(5,GetSpecializationInfo(1))
-			local tree2 = select(5,GetSpecializationInfo(2))
-			local tree3 = select(5,GetSpecializationInfo(3))
-			Text:SetText(select(2,GetSpecializationInfo(GetActiveSpecGroup(false,false))))
+		else		
+			Text:SetText(select(2,GetSpecializationInfo(GetSpecialization())))
 		end
 	end
 
@@ -1002,63 +998,50 @@ local function BuildSpecswitch()
 		return GetSpecialization(false,false,index)
 	end
 
-	local function OnEvent(self, event, ...)
-		if event == "PLAYER_ENTERING_WORLD" then
-			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-		end
 
-		-- Setup Talents Tooltip
-		self:SetAllPoints(Text)
-		
-		self:SetScript("OnEnter", function(self)
-				local c = GetActiveSpecGroup(false,false)
-				local majorTree1 = GetSpecialization(false,false,1)
-				local spec1 = { }
-				for i = 1, 18 do 
-					local name, iconTexture, tier, column, selected, available = GetTalentInfo(i,false,1)
-					if selected then
-						table.insert(spec1,name)
-					end
-				end
-				local majorTree2 = GetSpecialization(false,false,2)
-				local spec2 = { }
-				for i = 1, 18 do 
-					local name, iconTexture, tier, column, selected, available = GetTalentInfo(i,false,2)
-					if selected then
-						table.insert(spec2,name)
-					end
-				end
-				GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 6)
-				GameTooltip:ClearAllPoints()
-				GameTooltip:SetPoint("BOTTOM", self, "TOP", 0, 1)
-				GameTooltip:ClearLines()
-				GameTooltip:AddLine(TALENTS_BUTTON,0,.6,1)
-				GameTooltip:AddLine(" ")
-				if GetNumSpecGroups() == 1 then
-					GameTooltip:AddLine("|cff00FF00* |r" .. (GetSpecialization() and select(2,GetSpecializationInfo(majorTree1)) or infoL["none"])..": ",1,1,1)
-					for i = 1, #spec1 do
-						GameTooltip:AddDoubleLine(" ", spec1[i],1,1,1,1,1,1)
-					end
-				else
-					GameTooltip:AddLine("|cff00FF00"..(c == 1 and "* " or "   ") .. "|r" .. select(2,GetSpecializationInfo(majorTree1))..": ",1,1,1)
-					for i = 1, #spec1 do
-						GameTooltip:AddDoubleLine(" ", spec1[i],1,1,1,1,1,1)
-					end
-					GameTooltip:AddLine("|cff00FF00"..(c == 2 and "* " or "   ") .. "|r" .. select(2,GetSpecializationInfo(majorTree2))..": ",1,1,1)
-					for i = 1, #spec2 do
-						GameTooltip:AddDoubleLine(" ", spec2[i],1,1,1,1,1,1)
-					end
-				end
-				GameTooltip:Show()
-			end)
-		
-		self:SetScript("OnLeave", function() GameTooltip:Hide() end)
-	end
-	
 	Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
 	Stat:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 	Stat:SetScript("OnEvent", OnEvent)
-	Stat:SetScript("OnUpdate", Update)
+	Stat:SetScript("OnEnter", function(self)
+		local c = GetActiveSpecGroup(false,false)
+		local majorTree1 = GetSpecialization(false,false,1)
+		local spec1 = { }
+		for i = 1, 18 do 
+			local name, iconTexture, tier, column, selected, available = GetTalentInfo(i,false,1)
+			if selected then
+				table.insert(spec1,name)
+			end
+		end
+		local majorTree2 = GetSpecialization(false,false,2)
+		local spec2 = { }
+		for i = 1, 18 do 
+			local name, iconTexture, tier, column, selected, available = GetTalentInfo(i,false,2)
+			if selected then
+				table.insert(spec2,name)
+			end
+		end
+		GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 6)
+		GameTooltip:ClearLines()
+		GameTooltip:AddLine(TALENTS_BUTTON,0,.6,1)
+		GameTooltip:AddLine(" ")
+		if GetNumSpecGroups() == 1 then
+			GameTooltip:AddLine("|cff00FF00* |r" .. (GetSpecialization() and select(2,GetSpecializationInfo(majorTree1)) or infoL["none"])..": ",1,1,1)
+			for i = 1, #spec1 do
+				GameTooltip:AddDoubleLine(" ", spec1[i],1,1,1,1,1,1)
+			end
+		else
+			GameTooltip:AddLine("|cff00FF00"..(c == 1 and "* " or "   ") .. "|r" .. select(2,GetSpecializationInfo(majorTree1))..": ",1,1,1)
+			for i = 1, #spec1 do
+				GameTooltip:AddDoubleLine(" ", spec1[i],1,1,1,1,1,1)
+			end
+			GameTooltip:AddLine("|cff00FF00"..(c == 2 and "* " or "   ") .. "|r" .. select(2,GetSpecializationInfo(majorTree2))..": ",1,1,1)
+			for i = 1, #spec2 do
+				GameTooltip:AddDoubleLine(" ", spec2[i],1,1,1,1,1,1)
+			end
+		end
+		GameTooltip:Show()
+	end)
+	Stat:SetScript("OnLeave", function() GameTooltip:Hide() end)
 	Stat:SetScript("OnMouseDown", function(_,btn)
 		if btn == "LeftButton" then
 			ToggleTalentFrame()

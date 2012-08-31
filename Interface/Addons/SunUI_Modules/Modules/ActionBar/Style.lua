@@ -7,6 +7,7 @@ local AB = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ActionStyle", "A
 local function UpdateHotkey(button, actionButtonType)
 	local hotkey = _G[button:GetName() .. 'HotKey']
 	local text = hotkey:GetText()
+	if text == nil then return end
 	text = string.gsub(text, '(s%-)', 'S')
 	text = string.gsub(text, '(a%-)', 'A')
 	text = string.gsub(text, '(c%-)', 'C')
@@ -267,6 +268,7 @@ function AB:OnEnable()
 	hooksecurefunc("ActionButton_ShowOverlayGlow", UpdateOverlayGlow)
 
 	hooksecurefunc("ActionButton_Update", Style)
+	hooksecurefunc("ActionButton_Update", UpdateHotkey)
 	hooksecurefunc("ActionButton_UpdateHotkeys", UpdateHotkey)
 	hooksecurefunc("ActionButton_UpdateFlyout", StyleFlyout)
 end

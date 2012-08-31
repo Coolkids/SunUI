@@ -62,11 +62,11 @@ function Module:OnEnable()
 	--MiniMapBattlefieldFrame:ClearAllPoints()
 	--MiniMapBattlefieldFrame:SetPoint("TOP", Minimap, "TOP", 2, 8)
 
-	-- Random Group icon
-	-- MiniMapLFGFrame:ClearAllPoints()
-	-- MiniMapLFGFrameBorder:SetAlpha(0)
-	-- MiniMapLFGFrame:SetPoint("TOP", Minimap, "TOP", 1, 8)
-	-- MiniMapLFGFrame:SetFrameStrata("MEDIUM")
+	--Random Group icon
+	QueueStatusMinimapButton:ClearAllPoints()
+	QueueStatusMinimapButtonBorder:SetAlpha(0)
+	QueueStatusMinimapButton:SetPoint("TOP", Minimap, "TOP", 1, 8)
+	QueueStatusMinimapButton:SetFrameStrata("MEDIUM")
 
 	-- Instance Difficulty flag
 	MiniMapInstanceDifficulty:ClearAllPoints()

@@ -8,7 +8,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="oUF_BarFader.lua"/>
 	<Script file="oUF_Swing.lua"/>
-	<Script file="oUF_boring_totembar.lua"/>
 	<Script file="oUF_SpellRange.lua"/>
 </Ui>
 

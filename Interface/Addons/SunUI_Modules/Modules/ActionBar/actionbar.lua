@@ -530,6 +530,7 @@ function Module:CreateExitVehicle()
 	--frame is visibile when no vehicle ui is visible
 	RegisterStateDriver(bar, "visibility", "[petbattle] hide; [vehicleui] hide; show")
 end
+
 function Module:UpdateSize()
 	for _, v in ipairs(buttonList) do 
 		v:SetSize(C["ButtonSize"], C["ButtonSize"])

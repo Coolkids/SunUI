@@ -468,24 +468,8 @@ ns.watchers ={
 			direction = "RIGHT",
 			setpoint =  {"BOTTOM", UIParent, "BOTTOM",-68, 203},
 			size = 20,
-				-- 心靈熔蝕
-				{ spellID = 87160, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 黑暗佈道
-				{ spellID = 87118, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 大天使
-				{ spellID = 87152, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 黑天使
-				{ spellID = 87153, unitId = "player", caster = "player", filter = "BUFF" },  
 				-- 消散
 				{ spellID = 47585, unitId = "player", caster = "player", filter = "BUFF" },  
-				-- 佈道
-				{ spellID = 81661, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 心靈意志
-				--{ spellID = 73413, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 心靈之火
-				--{ spellID =   588, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 吸血鬼的擁抱
-				--{ spellID = 15286, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 守护圣灵
 				{ spellID = 47788, unitId = "target", caster = "player", filter = "BUFF" },
 				-- 预支时间
@@ -516,8 +500,6 @@ ns.watchers ={
 			direction = "RIGHT",
 			setpoint ={"TOP", UIParent, "BOTTOM", 101, 235},
 			size = 28,
-				--心灵尖刺
-				{ spellID = 87178, unitId = "target", caster = "player", filter = "DEBUFF" },
 				-- 虚弱灵魂
 				{ spellID =  6788, unitId = "target", caster = "player", filter = "DEBUFF" },
 				-- T12 4件特效
@@ -536,10 +518,6 @@ ns.watchers ={
 				{ spellID = 88684, unitId = "target", caster = "player", filter = "BUFF" },
 				-- 聖言術:譴
 				{ spellID = 88625, unitId = "tatget", caster = "player", filter = "DEBUFF"},
-				--暗影宝珠
-				--{ spellID = 77487, unitId = "player", caster = "player", filter = "BUFF" },
-				--强效暗影
-				--{ spellID = 95799, unitId = "player", caster = "player", filter = "BUFF" },	
 		},
 		{
 			name = "玩家右邊1",
@@ -565,10 +543,6 @@ ns.watchers ={
 			setpoint = {"CENTER",UIParent, "CENTER", -90, 30},
 			mode = "ICON",
 			size = 26,
-				--暗影宝珠
-				{ spellID = 77487, unitId = "player", caster = "player", filter = "BUFF" },
-				--强效暗影
-				{ spellID = 95799, unitId = "player", caster = "player", filter = "BUFF" },	
 				-- 心靈震爆
 				{ spellID = 8092, filter = "CD" },
 				--CD
@@ -582,10 +556,6 @@ ns.watchers ={
 			direction = "RIGHT",
 			setpoint = {"BOTTOM", UIParent, "BOTTOM", -38, 135},
 			size = 20,
-				-- 暗影魔
-				{ spellID =  34433, filter = "CD" },
-				-- 大天使
-				{ spellID = 87151, filter = "CD" },
 		},
 	},
 	["WARLOCK"]={
@@ -1192,6 +1162,8 @@ ns.watchers ={
 				{ spellID = 22812, unitId = "player", caster = "player", filter = "BUFF" }, 
 				--橙色匕首特效
 				{ spellID = 109949, unitId = "player", caster = "player", filter = "BUFF" },
+				--5.0免费的心爆
+				{ spellID = 124430, unitId = "player", caster = "player", filter = "BUFF" },
 		},
 				{
 			name = "玩家饰品附魔触发buff",

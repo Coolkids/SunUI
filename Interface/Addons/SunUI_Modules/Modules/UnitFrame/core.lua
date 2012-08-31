@@ -648,15 +648,6 @@ end
 
 lib.addHarmony = function(f)
 	if class ~= "MONK" then return end
-	--chi = SPELL_POWER_LIGHT_FORCE
-	local coloron = {.9, .9, .9, 1}
-	local coloroff = {.2, .2, .2, 1}
-	local colors = {
-			[1]	= {0.05, 0.43, 0.72},
-			[2]	= {0.71, 0.21, 0.82},
-			[3]	= {0.24, 0.67, 0.23},
-			[4]	= {0.95, 0.71, 0.00},
-			[5]	= {0.72, 0.05, 0.05},}
 	local chibar = CreateFrame("Frame",nil,f)
 	chibar:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
 	chibar:SetSize((f.width-8)/5, f.height/4)
@@ -776,38 +767,6 @@ end
 			ebInd:SetText("|cffE5994C<<<|r")
 		end
 	end
-  end
-  --gen TotemBar for shamans
-  lib.gen_TotemBar = function(f)
-    if class ~= "SHAMAN" then return
-    else
-		local width = (f.width + 4) / 4 - 4
-		local height = f.height/3
-		local TotemBar = CreateFrame("Frame", nil, f)
-		TotemBar:SetSize(width,height)
-		TotemBar:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 1, 3)
-		TotemBar.Destroy = true
-		TotemBar.UpdateColors = true
-		TotemBar.AbbreviateNames = true
-		for i = 1, 4 do
-			local t = CreateFrame("Frame", nil, TotemBar)
-			t:SetPoint("LEFT", (i - 1) * (width + 3.5), 0)
-			t:SetWidth(width)
-			t:SetHeight(height)
-			local bar = CreateFrame("StatusBar", nil, t)
-			bar:SetStatusBarTexture(DB.Statusbar)
-			bar:SetWidth(width)
-			bar:SetPoint"BOTTOM"
-			bar:SetHeight(8)
-			t.StatusBar = bar
-			local h = CreateFrame("Frame",nil,t)
-			h:SetFrameLevel(10)
-			t.Text = text
-			bar:CreateShadow("Background")
-			TotemBar[i] = t
-		end
-		f.TotemBar = TotemBar
-    end
   end
   --gen combo points
   lib.gen_cp = function(f)
@@ -1063,7 +1022,6 @@ end
     lib.gen_portrait(self)
     lib.gen_ppstrings(self)
 	lib.gen_classpower(self)
-    lib.gen_TotemBar(self)
     lib.gen_InfoIcons(self)
 	lib.gen_EclipseBar(self)
 	lib.gen_alt_powerbar(self)
