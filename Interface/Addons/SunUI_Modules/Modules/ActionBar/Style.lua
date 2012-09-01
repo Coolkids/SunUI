@@ -258,16 +258,64 @@ local function UpdateOverlayGlow(button)
 		button.overlay.outerGlow:Point("BOTTOMRIGHT", button.shadow, "BOTTOMRIGHT", 2, -2)
 	end
 end
+local function styleExtraActionButton(bu)
+    if not bu or (bu and bu.sun_styled) then return end
+    local name = bu:GetName()
+ 
+	local normal = _G[name.."NormalTexture"]
+
+	if normal then normal:SetTexture(nil) end
+    bu.style:SetTexture(nil)
+    hooksecurefunc(bu.style, "SetTexture", function(self, texture)
+		if texture then
+		self:SetTexture(nil)
+		end
+    end)
+	bu.icon:SetTexCoord(.08, .92, .08, .92)
+	bu.icon:SetAllPoints()
+    bu.cooldown:SetAllPoints(bu)
+ 
+	--[[ if not bu.shadow then
+		local h = CreateFrame("Frame",nil,bu)
+		h:SetAllPoints()
+		h:CreateShadow("Background")
+		bu.shadow = true
+	end ]]
+	bu:StyleButton(true)
+    bu.sun_styled = true
+end
+local function init()
+    --style the actionbar buttons
+    for i = 1, NUM_ACTIONBAR_BUTTONS do
+      Style(_G["ActionButton"..i])
+      Style(_G["MultiBarBottomLeftButton"..i])
+      Style(_G["MultiBarBottomRightButton"..i])
+      Style(_G["MultiBarRightButton"..i])
+      Style(_G["MultiBarLeftButton"..i])
+    end
+    for i = 1, 6 do
+      Style(_G["OverrideActionBarButton"..i])
+    end
+    --petbar buttons
+    for i=1, NUM_PET_ACTION_SLOTS do
+      StylePet(_G["PetActionButton"..i])
+    end
+    --stancebar buttons
+    for i=1, NUM_STANCE_SLOTS do
+      Style(_G["StanceButton"..i])
+    end
+    --possess buttons
+    for i=1, NUM_POSSESS_SLOTS do
+      Style(_G["PossessButton"..i])
+    end
+    --extraactionbutton1
+    styleExtraActionButton(ExtraActionButton1)
+end
 
 	
 function AB:OnEnable()
-	for i=1, 10 do
-		Style(_G["StanceButton"..i])
-		StylePet(_G["PetActionButton"..i])
-	end
+	init()
 	hooksecurefunc("ActionButton_ShowOverlayGlow", UpdateOverlayGlow)
-
-	hooksecurefunc("ActionButton_Update", Style)
 	hooksecurefunc("ActionButton_Update", UpdateHotkey)
 	hooksecurefunc("ActionButton_UpdateHotkeys", UpdateHotkey)
 	hooksecurefunc("ActionButton_UpdateFlyout", StyleFlyout)

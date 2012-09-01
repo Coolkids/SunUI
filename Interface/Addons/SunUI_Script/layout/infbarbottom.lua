@@ -58,8 +58,6 @@ local function BuildClock()
 		end
 	end)
 	RequestRaidInfo()
-	TimeManagerClockButton:Hide()
-	GameTimeFrame:Hide()
 end
 
 local function BuildFriend()
@@ -854,7 +852,7 @@ local function BuildStat1()
 			
 			--Hunters don't use expertise
 			if DB.MyClass ~= "HUNTER" then
-				local expertisePercent, offhandExpertisePercent = GetExpertisePercent()
+				local expertisePercent, offhandExpertisePercent = GetExpertise()
 				expertisePercent = format("%.2f", expertisePercent)
 				offhandExpertisePercent = format("%.2f", offhandExpertisePercent)
 				
@@ -871,6 +869,7 @@ local function BuildStat1()
 			local hasteBonus = DB.MyClass == "HUNTER" and GetCombatRatingBonus(CR_HASTE_RANGED) or GetCombatRatingBonus(CR_HASTE_MELEE)
 			
 			GameTooltip:AddDoubleLine(STAT_HASTE, format(modifierString, haste, hasteBonus), 1, 1, 1)
+			GameTooltip:AddDoubleLine(STAT_MASTERY,  format(modifierString, GetCombatRating(CR_MASTERY), GetCombatRatingBonus(CR_MASTERY)), 1, 1, 1)
 		end
 		GameTooltip:Show()
 	end

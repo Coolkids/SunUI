@@ -157,6 +157,15 @@ function Module:OnEnable()
 					end
 				end
 			end
+			if (not UnitIsPlayer(unit)) then 
+				local reaction = UnitReaction(unit, "player");
+				if ( reaction ) then
+					r = FACTION_BAR_COLORS[reaction].r;
+					g = FACTION_BAR_COLORS[reaction].g;
+					b = FACTION_BAR_COLORS[reaction].b;
+					GameTooltipStatusBar:SetStatusBarColor(r, g, b)
+				end
+			end
 			if UnitIsPVP(unit) then
 				for i = 2, GameTooltip:NumLines() do
 					if _G["GameTooltipTextLeft"..i]:GetText():find(PVP) then

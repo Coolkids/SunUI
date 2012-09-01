@@ -171,3 +171,61 @@ SlashCmdList["CLEARGOLD"] = function()
 	end
 end
 SLASH_CLEARGOLD1 = "/cleargold"
+
+
+---------------- > Disband Group
+local GroupDisband = function()
+	local pName = UnitName("player")
+	if UnitInRaid("player") then
+	SendChatMessage("Disbanding group.", "RAID")
+		for i = 1, GetNumGroupMembers() do
+			local name, _, _, _, _, _, _, online = GetRaidRosterInfo(i)
+			if online and name ~= pName then
+				UninviteUnit(name)
+			end
+		end
+	else
+		SendChatMessage("Disbanding group.", "PARTY")
+		for i = MAX_PARTY_MEMBERS, 1, -1 do
+			if GetPartyMember(i) then
+				UninviteUnit(UnitName("party"..i))
+			end
+		end
+	end
+	LeaveParty()
+end
+StaticPopupDialogs["DISBAND_RAID"] = {
+	text = "Do you really want to disband this group?",
+	button1 = YES,
+	button2 = NO,
+	OnAccept = GroupDisband,
+	timeout = 0,
+	whileDead = 1,}
+SlashCmdList["GROUPDISBAND"] = function()
+	StaticPopup_Show("DISBAND_RAID")
+end
+SLASH_GROUPDISBAND1 = '/rd'
+-- convert group from raid to party
+SlashCmdList["RAIDTOPARTY"] = function()
+	if GetNumGroupMembers()==0 then
+		print("You are not in a raid.")
+	elseif GetNumGroupMembers() <= MEMBERS_PER_RAID_GROUP then
+		ConvertToParty()
+		print("Converting raid into a party complete.")
+	else
+		print("Unable to convert the raid into a party.")
+	end
+end
+SLASH_RAIDTOPARTY1 = '/rtp'
+-- convert group from party to raid
+SlashCmdList["PARTYTORAID"] = function()
+	if GetNumGroupMembers() > 0 then
+		print("You are in a raid.")
+	elseif GetNumSubgroupMembers() > 0 then
+		ConvertToRaid()
+		print("Converting party into a raid complete.")
+	else
+		print("You are not in a party.")
+	end
+end
+SLASH_PARTYTORAID1 = '/ptr'

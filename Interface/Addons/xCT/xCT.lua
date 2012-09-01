@@ -771,7 +771,7 @@ local function ChatMsgMoney_Handler(msg)
     end
 end
 
-local function ChatMsgLoot_Handler(msg)
+--[[ local function ChatMsgLoot_Handler(msg)
     local pM,iQ,iI,iN,iA = select(3, string.find(msg, parseloot))  -- Pre-Message, ItemColor, ItemID, ItemName, ItemAmount
     local qq,_,_,tt,_,_,_,ic = select(3, GetItemInfo(iI))          -- Item Quality, See "GetAuctionItemClasses()", Item Icon Texture Location
 
@@ -814,7 +814,7 @@ local function ChatMsgLoot_Handler(msg)
         -- Add the message
         (xCTloot or xCTgen):AddMessage(s, r, g, b)
     end
-end
+end ]]
 
 -- Partial Resist Styler (Format String)
 local part = "-%s (%s %s)"
@@ -1140,10 +1140,10 @@ local function OnEvent(self, event, subevent, ...)
         AssignTalentTree()
         
     elseif event == "CHAT_MSG_LOOT" then
-        ChatMsgLoot_Handler(subevent)
+        --ChatMsgLoot_Handler(subevent)
         
     elseif event == "CHAT_MSG_MONEY" then
-        ChatMsgMoney_Handler(subevent)
+       --ChatMsgMoney_Handler(subevent)
         
     end
 end

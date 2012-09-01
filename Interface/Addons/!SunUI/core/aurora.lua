@@ -3723,17 +3723,16 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			S.CreateBG(bu.icon.texture)
 
 			-- can't get a backdrop frame to appear behind the checked texture for some reason
-
+			
 			local ch = bu.tracked
-
 			ch:SetNormalTexture("")
 			ch:SetPushedTexture("")
 			ch:SetHighlightTexture(media.texture)
-
-			local hl = ch:GetHighlightTexture()
+				
+			--[[ local hl = ch:GetHighlightTexture()
 			hl:Point("TOPLEFT", 4, -4)
 			hl:Point("BOTTOMRIGHT", -4, 4)
-			hl:SetVertexColor(r, g, b, .2)
+			hl:SetVertexColor(r, g, b, .2)  ]]
 
 			local check = ch:GetCheckedTexture()
 			check:SetDesaturated(true)

@@ -369,25 +369,21 @@ function Module:CreateExtrabarBar()
 	local bar = CreateFrame("Frame","SunUIExtraActionBar",UIParent, "SecureHandlerStateTemplate")
 	bar:SetSize(C["ButtonSize"],C["ButtonSize"])
 	bar:SetScale(C["ExtraBarSacle"])
+	bar:CreateShadow()
+	
 	MoveHandle.SunUIExtraActionBar = S.MakeMove(bar, "SunUI特殊按钮", "extrabar", C["ExtraBarSacle"])
 	
 	ExtraActionBarFrame:SetParent(bar)
 	ExtraActionBarFrame:ClearAllPoints()
 	ExtraActionBarFrame:SetPoint("CENTER", 0, 0)
 	ExtraActionBarFrame.ignoreFramePositionManager = true
-	
+	ExtraActionButton1:SetSize(C["ButtonSize"],C["ButtonSize"])
 	ExtraActionButton1Cooldown:SetPoint("TOPLEFT")
 	ExtraActionButton1Cooldown:SetPoint("BOTTOMRIGHT")
-	
-	local button = ExtraActionButton1
-	local texture = button.style
-	local disableTexture = function(style, texture)
-		if texture and string.sub(texture,1,9) == "Interface" then
-			style:SetTexture("")
-		end
-	end
-	button.style:SetTexture("")
-	hooksecurefunc(texture, "SetTexture", disableTexture)
+	bar.shadow:SetParent(ExtraActionButton1)
+	bar.border:SetParent(ExtraActionButton1)
+	bar.shadow:SetFrameLevel(1)
+	bar.border:SetFrameLevel(1)
 end
 function Module:CreateOverrideBar()
 	local num = NUM_ACTIONBAR_BUTTONS
@@ -430,7 +426,6 @@ function Module:CreatePetBar()
     local bar = CreateFrame("Frame","SunUIPetBar",UIParent, "SecureHandlerStateTemplate")
     bar:SetWidth(C["ButtonSize"]*num+C["ButtonSpacing"]*(num-1))
     bar:SetHeight(C["ButtonSize"])
-    bar:SetHitRectInsets(-10, -10, -10, -10)
     bar:SetScale(C["PetBarSacle"])
   
     MoveHandle.SunUIPetBar = S.MakeMove(bar, "SunUI宠物条", "petbar", C["PetBarSacle"])

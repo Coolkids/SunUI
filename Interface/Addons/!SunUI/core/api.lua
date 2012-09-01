@@ -35,9 +35,6 @@ end
 		end
 	end		
 end
-
-
-
 local function Size(frame, width, height)
 	frame:SetSize(scale(width), scale(height or width))
 end
