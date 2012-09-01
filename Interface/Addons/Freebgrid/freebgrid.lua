@@ -1139,11 +1139,11 @@ function ns:UpdateLeaderAndAssistantIcon(self)
 	if not assistant or not leader then return end
 	local unit = self.displayedUnit or self.unit
 
-	if UnitInRaid(unit) and UnitIsRaidOfficer(unit) and not UnitIsPartyLeader(unit) then
+	if UnitInRaid(unit) and UnitIsGroupAssistant(unit) and not UnitIsGroupLeader(unit) then
 		leader:Hide()
 		assistant:Show()
 		return
-	elseif (UnitInParty(unit) or UnitInRaid(unit)) and UnitIsPartyLeader(unit) then
+	elseif (UnitInParty(unit) or UnitInRaid(unit)) and UnitIsGroupLeader(unit) then
 		assistant:Hide()
 		leader:Show()
 		return

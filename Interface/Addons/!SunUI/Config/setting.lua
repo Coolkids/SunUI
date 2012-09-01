@@ -206,7 +206,7 @@ G["MoveHandleDB"] = {
 	["Reminder"] = {"TOPLEFT", "Minimap", "BOTTOMLEFT", 0, -20},
 	["Class"] = {"CENTER", "UIParent", "CENTER", -150, 150},
 	--施法条
-	["PlayerCastbar"] = {"CENTER", "UIParent", "CENTER",0, -110},
+	["PlayerCastbar"] = {"BOTTOM", "UIParent", "BOTTOM",0, 110},
 	["TargetCastbar"] = {"CENTER", "UIParent", "CENTER",0, 95},
 	["FocusCastbar"] = {"TOP", "oUF_SunUIFocus", "BOTTOM", 0, -20},
 	--内置CD 团队CD
