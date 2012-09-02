@@ -9,6 +9,7 @@ local channelingTicks = {
 	-- druid
 	[GetSpellInfo(44203)] = 4, -- "Tranquility"
 	[GetSpellInfo(16914)] = 10, -- "Hurricane"
+	[GetSpellInfo(106996)] = 10, -- "ÐÇ½ç·ç±©"
 	-- priest
 	[GetSpellInfo(15407)] = 3, -- "Mind Flay"
 	[GetSpellInfo(48045)] = 5, -- "Mind Sear"

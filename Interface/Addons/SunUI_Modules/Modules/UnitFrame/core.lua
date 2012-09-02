@@ -605,15 +605,13 @@ end
 
 ------ [Extra functionality]
 lib.gen_classpower = function(f)  
-	if class ~= "WARLOCK" and class ~= "PALADIN" and class ~= "DEATHKNIGHT" then return end
+	if  class ~= "PALADIN" and class ~= "DEATHKNIGHT" then return end
         -- Runes, Shards, HolyPower
             local count
             if class == "DEATHKNIGHT" then 
                 count = 6
             elseif class == "PALADIN" then
                 count = UnitPowerMax('player', SPELL_POWER_HOLY_POWER)
-			elseif class == "WARLOCK" then 
-				count = UnitPowerMax('player', SPELL_POWER_SOUL_SHARDS)
             end
 			local bars = CreateFrame("Frame", nil, f)
 			bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
@@ -637,15 +635,44 @@ lib.gen_classpower = function(f)
             end
             if class == "DEATHKNIGHT" then
                 f.Runes = bars
-            elseif class == "WARLOCK" then
-                f.SoulShards = bars
             elseif class == "PALADIN" then
                 f.HolyPower = bars
             end
 end
+--术士这该死的职业
+lib.warlockpower = function(f)
+	if class ~= "WARLOCK" then return end
+	local bars = CreateFrame("Frame", nil, f)
+			bars:SetWidth(f.width)
+			bars:SetHeight(f.height/3)
+			bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+			local gradient = bars:CreateTexture(nil, "BACKGROUND")
+			gradient:SetPoint("TOPLEFT")
+			gradient:SetPoint("BOTTOMRIGHT")
+			gradient:SetTexture(DB.Statusbar)
+			gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+			for i = 1, 4 do
+				bars[i] = CreateFrame("StatusBar", nil, f)
+				bars[i]:SetHeight(f.height/3)
+				bars[i]:SetStatusBarTexture(DB.Statusbar)
+				local gradient = bars[i]:CreateTexture(nil, "BACKGROUND")
+				gradient:SetPoint("TOPLEFT")
+				gradient:SetPoint("BOTTOMRIGHT")
+				gradient:SetTexture(DB.Statusbar)
+				gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+				bars[i]:CreateShadow()
+				if i == 1 then
+					bars[i]:SetPoint("LEFT", bars)
+					bars[i]:SetWidth((f.width/4))
+				else
+					bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 2, 0)
+					bars[i]:SetWidth((f.width/4)-2)
+				end
+			end
+			f.WarlockSpecBars = bars
+end
+
 --Monk harmony bar
-
-
 lib.addHarmony = function(f)
 	if class ~= "MONK" then return end
 	local chibar = CreateFrame("Frame",nil,f)
@@ -1030,6 +1057,7 @@ end
     lib.createDebuffs(self)
 	lib.addHarmony(self)
 	lib.genShadowOrbs(self)
+	lib.warlockpower(self)
 	lib.gen_swing_timer(self)
     self:Size(self.width,self.height)
   end  
@@ -1319,7 +1347,6 @@ function Module:OnEnable()
 		'yOffset', -40)
 		party:SetScale(C["BossScale"])
 		MoveHandle.SunUIPartyFrame = S.MakeMove(party, "SunUI_PartyFrame", "PartyFrame", C["BossScale"])
-		oUF:DisableBlizzard'party'
 	  end
 	  
 	  local gap = 66

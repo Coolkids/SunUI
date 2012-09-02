@@ -717,20 +717,20 @@ local function BuildStat2()
 			if lv and lv > 0 and (lv > DB.level + 3 or lv < DB.level) then
 				GameTooltip:AddDoubleLine(lv, format(chanceString, CalculateMitigation(lv, effectiveArmor) * 100),1,1,1)
 			end	
-		elseif DB.Role == "Caster" or DB.Role == "Melee" then
-			AddTooltipHeader(MAGIC_RESISTANCES_COLON)
+		-- elseif DB.Role == "Caster" or DB.Role == "Melee" then
+			-- AddTooltipHeader(MAGIC_RESISTANCES_COLON)
 			
-			local baseResistance, effectiveResistance, posResitance, negResistance
-			for i = 2, 6 do
-				baseResistance, effectiveResistance, posResitance, negResistance = UnitResistance("player", i)
-				GameTooltip:AddDoubleLine(_G["DAMAGE_SCHOOL"..(i+1)], format(chanceString, (effectiveResistance / (effectiveResistance + (500 + DB.level + 2.5))) * 100),1,1,1)
-			end
+			-- local baseResistance, effectiveResistance, posResitance, negResistance
+			-- for i = 2, 6 do
+				-- baseResistance, effectiveResistance, posResitance, negResistance = UnitResistance("player", i)
+				-- GameTooltip:AddDoubleLine(_G["DAMAGE_SCHOOL"..(i+1)], format(chanceString, (effectiveResistance / (effectiveResistance + (500 + DB.level + 2.5))) * 100),1,1,1)
+			-- end
 			
-			local spellpen = GetSpellPenetration()
-			if (DB.MyClass == "SHAMAN" or DB.Role == "Caster") and spellpen > 0 then
-				GameTooltip:AddLine' '
-				GameTooltip:AddDoubleLine(ITEM_MOD_SPELL_PENETRATION_SHORT, spellpen,1,1,1)
-			end
+			-- local spellpen = GetSpellPenetration()
+			-- if (DB.MyClass == "SHAMAN" or DB.Role == "Caster") and spellpen > 0 then
+				-- GameTooltip:AddLine' '
+				-- GameTooltip:AddDoubleLine(ITEM_MOD_SPELL_PENETRATION_SHORT, spellpen,1,1,1)
+			-- end
 		end
 		GameTooltip:Show()
 	end
@@ -838,18 +838,20 @@ local function BuildStat1()
 			GameTooltip:AddDoubleLine(PARRY_CHANCE, format(chanceString, parry),1,1,1)
 			GameTooltip:AddDoubleLine(BLOCK_CHANCE, format(chanceString, block),1,1,1)
 			GameTooltip:AddDoubleLine(MISS_CHANCE, format(chanceString, basemisschance),1,1,1)
+			GameTooltip:AddDoubleLine(STAT_MASTERY,  format(modifierString, GetCombatRating(CR_MASTERY), GetCombatRatingBonus(CR_MASTERY)), 1, 1, 1)
 		elseif DB.Role == "Caster" then
 			GameTooltip:AddDoubleLine(STAT_HIT_CHANCE, format(modifierString, GetCombatRating(CR_HIT_SPELL), GetCombatRatingBonus(CR_HIT_SPELL)), 1, 1, 1)
 			GameTooltip:AddDoubleLine(STAT_HASTE, format(modifierString, GetCombatRating(CR_HASTE_SPELL), GetCombatRatingBonus(CR_HASTE_SPELL)), 1, 1, 1)
 			GameTooltip:AddDoubleLine(SPELL_CRIT_CHANCE, format(modifierString, GetCombatRating(CR_CRIT_SPELL), GetCombatRatingBonus(CR_CRIT_SPELL)), 1, 1, 1)
 			local base, combat = GetManaRegen()
 			GameTooltip:AddDoubleLine(MANA_REGEN, format(manaRegenString, base * 5, combat * 5), 1, 1, 1)
+			GameTooltip:AddDoubleLine(STAT_MASTERY,  format(modifierString, GetCombatRating(CR_MASTERY), GetCombatRatingBonus(CR_MASTERY)), 1, 1, 1)
 		elseif DB.Role == "Melee" then
 			local hit = DB.MyClass == "HUNTER" and GetCombatRating(CR_HIT_RANGED) or GetCombatRating(CR_HIT_MELEE)
 			local hitBonus = DB.MyClass == "HUNTER" and GetCombatRatingBonus(CR_HIT_RANGED) or GetCombatRatingBonus(CR_HIT_MELEE)
 		
 			GameTooltip:AddDoubleLine(STAT_HIT_CHANCE, format(modifierString, hit, hitBonus), 1, 1, 1)
-			
+			GameTooltip:AddDoubleLine(STAT_MASTERY,  format(modifierString, GetCombatRating(CR_MASTERY), GetCombatRatingBonus(CR_MASTERY)), 1, 1, 1)
 			--Hunters don't use expertise
 			if DB.MyClass ~= "HUNTER" then
 				local expertisePercent, offhandExpertisePercent = GetExpertise()
@@ -869,7 +871,6 @@ local function BuildStat1()
 			local hasteBonus = DB.MyClass == "HUNTER" and GetCombatRatingBonus(CR_HASTE_RANGED) or GetCombatRatingBonus(CR_HASTE_MELEE)
 			
 			GameTooltip:AddDoubleLine(STAT_HASTE, format(modifierString, haste, hasteBonus), 1, 1, 1)
-			GameTooltip:AddDoubleLine(STAT_MASTERY,  format(modifierString, GetCombatRating(CR_MASTERY), GetCombatRatingBonus(CR_MASTERY)), 1, 1, 1)
 		end
 		GameTooltip:Show()
 	end

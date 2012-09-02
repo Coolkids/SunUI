@@ -127,7 +127,7 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		button:HookScript('OnClick', function(this, button)
 			local self = this.obj
 			if self.dropdown then
-				CreateBD(self.dropdown)
+				S.CreateBD(self.dropdown)
 			end
 		end)		
 	elseif TYPE == "EditBox" then
