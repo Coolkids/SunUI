@@ -806,6 +806,8 @@ ns.watchers ={
 				--凋零之光
 				{ spellID = 105925, unitId = "player", caster = "all", filter = "DEBUFF" },
 				{ spellID = 109075, unitId = "player", caster = "all", filter = "DEBUFF" },
+				--寄生体
+				{ spellID = 108601, unitId = "player", caster = "all", filter = "DEBUFF" },
 		},
 		{
 			name = "玩家PVPDebuff",

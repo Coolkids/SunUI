@@ -88,22 +88,26 @@ function RayWatcherConfig.GenerateOptionsInternal()
 		wipe(itemcooldowns)
 		for i in pairs(ns.modules[current].BUFF or {}) do
 			if i ~= "unitIDs" and ns.modules[current].BUFF[i] then
-				buffs[i] = GetSpellInfo(i) .. " (" .. i .. ")"
+				if GetSpellInfo(i) == nil then return end
+				buffs[i] = GetSpellInfo(i)
 			end
 		end
 		for i in pairs(ns.modules[current].DEBUFF or {}) do
 			if i ~= "unitIDs" and ns.modules[current].DEBUFF[i] then
-				debuffs[i] = GetSpellInfo(i) .. " (" .. i .. ")"
+				if GetSpellInfo(i) == nil then return end
+				debuffs[i] = GetSpellInfo(i)
 			end
 		end
 		for i in pairs(ns.modules[current].CD or {}) do
 			if ns.modules[current].CD[i] then
-				cooldowns[i] = GetSpellInfo(i) .. " (" .. i .. ")"
+				if GetSpellInfo(i) == nil then return end
+				cooldowns[i] = GetSpellInfo(i)
 			end
 		end
 		for i in pairs(ns.modules[current].itemCD or {}) do
 			if ns.modules[current].itemCD[i] then
-				itemcooldowns[i] = GetItemInfo(i) .. " (" .. i .. ")"
+			if GetItemInfo(i) == nil then return end
+				itemcooldowns[i] = GetItemInfo(i)
 			end
 		end
 		if next(buffs) == nil then
