@@ -9,7 +9,6 @@
 	<Include file ="layout\load.xml"/>
 	<Include file="moduels\load.xml"/>
 	<Include file ="Quest\load.xml"/>
-	<Include file ="Ratings\load.xml"/>
 	<Include file="script\load.xml"/>
 	<Include file ="Icicle\load.xml"/>
 	<Include file ="TheBurningTrade\load.xml"/>

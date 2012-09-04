@@ -178,6 +178,6 @@ f:SetScript("OnEvent", function(self, event, addon)
 		FriendsListColorsDB = FriendsListColorsDB or cfg.defaults
 		db = FriendsListColorsDB
 		hooksecurefunc("FriendsList_Update", updFunc);
-		hooksecurefunc("HybridScrollFrame_Update", updFunc);
+		--hooksecurefunc("HybridScrollFrame_Update", updFunc);
 	end
 end)
