@@ -26,3 +26,4 @@ DB.edgetex = 	"Interface\\Tooltips\\UI-Tooltip-Border"
 DB.aurobackdrop = "Interface\\ChatFrame\\ChatFrameBackground"
 DB.onepx = "Interface\\Buttons\\WHITE8x8"
 DB.Warning = Media.."Warning.mp3"
+DB.MyRealm = GetRealmName()

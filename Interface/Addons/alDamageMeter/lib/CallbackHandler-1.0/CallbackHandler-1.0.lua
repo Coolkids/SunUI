@@ -1,21 +1,20 @@
---[[ $Id: CallbackHandler-1.0.lua 13 2009-12-06 21:56:53Z nevcairiel $ ]]
-local MAJOR, MINOR = "CallbackHandler-1.0", 5
+--[[ $Id: CallbackHandler-1.0.lua 3 2008-09-29 16:54:20Z nevcairiel $ ]]
+local MAJOR, MINOR = "CallbackHandler-1.0", 3
 local CallbackHandler = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not CallbackHandler then return end -- No upgrade needed
 
 local meta = {__index = function(tbl, key) tbl[key] = {} return tbl[key] end}
 
--- Lua APIs
-local tconcat = table.concat
-local assert, error, loadstring = assert, error, loadstring
-local setmetatable, rawset, rawget = setmetatable, rawset, rawget
-local next, select, pairs, type, tostring = next, select, pairs, type, tostring
-
--- Global vars/functions that we don't upvalue since they might get hooked, or upgraded
--- List them here for Mikk's FindGlobals script
--- GLOBALS: geterrorhandler
-
+local type = type
+local pcall = pcall
+local pairs = pairs
+local assert = assert
+local concat = table.concat
+local loadstring = loadstring
+local next = next
+local select = select
+local type = type
 local xpcall = xpcall
 
 local function errorhandler(err)
@@ -47,7 +46,7 @@ local function CreateDispatcher(argCount)
 
 	local ARGS, OLD_ARGS = {}, {}
 	for i = 1, argCount do ARGS[i], OLD_ARGS[i] = "arg"..i, "old_arg"..i end
-	code = code:gsub("OLD_ARGS", tconcat(OLD_ARGS, ", ")):gsub("ARGS", tconcat(ARGS, ", "))
+	code = code:gsub("OLD_ARGS", concat(OLD_ARGS, ", ")):gsub("ARGS", concat(ARGS, ", "))
 	return assert(loadstring(code, "safecall Dispatcher["..argCount.."]"))(next, xpcall, errorhandler)
 end
 

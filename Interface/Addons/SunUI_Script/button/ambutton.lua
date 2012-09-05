@@ -1,7 +1,7 @@
 ﻿local S, C, L, DB = unpack(SunUI)
  
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ambutton", "AceTimer-3.0")
-function Module:OnInitialize()
+function Module:OnEnable()
 local button = CreateFrame("Button", "ButtonA",  ColectorButton)
 		button:Point("BOTTOMRIGHT", ColectorButton, "BOTTOMRIGHT", -5, 5)
 		button:Size(15)

@@ -1,7 +1,7 @@
 local S, C, L, DB = unpack(SunUI) --Engine
 local RC = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule('RaidCheck');
 
-function RC:OnInitialize()
+
 
 
 local join = string.join
@@ -127,8 +127,13 @@ function RC:CheckRaidBuff()
 	local NoQS2BuffName = {}
 	local NoXDBuffName = {}
 	local NoFOODBuffName = {}
+
+	local inInstance, instanceType = IsInInstance()
+	local _, _, _, _, maxPlayers, _, _ = GetInstanceInfo()
+	local raidNum = GetNumGroupMembers()
+	if inInstance and instanceType == "raid" then raidNum = maxPlayers end
 	
-	for i = 1, GetNumRaidMembers() do
+	for i = 1, raidNum do
 		local _, _, _, _, _, class, _, online = GetRaidRosterInfo(i)
 		if online then
 			if class == 'PRIEST' then HasClass.ms = true end
@@ -138,7 +143,7 @@ function RC:CheckRaidBuff()
 		end
 	end
 	
-	for i = 1, GetNumRaidMembers() do
+	for i = 1, raidNum do
 		local name, _, subgroup = GetRaidRosterInfo(i)
 		local HasBuffMS = false
 		local HasBuffFS = false
@@ -147,7 +152,7 @@ function RC:CheckRaidBuff()
 		local HasBuffXD = false
 		local HasBuffFOOD = false
 		
-		if subgroup <= MaxGroup then
+		if subgroup <= math.floor(raidNum / 5) then
 			local unit = "raid"..i
 			local j = 1
 			while UnitBuff(unit, j) do
@@ -205,11 +210,14 @@ function RC:CheckPosition()
 	local DeadPlayerCount = 0
 	local OfflinePlayerCount = 0
 	local msg = "["..L.RaidCheckMsgPosition.."]"
-	local RaidNum = GetNumRaidMembers()
+	local inInstance, instanceType = IsInInstance()
+	local _, _, _, _, maxPlayers, _, _ = GetInstanceInfo()
+	local RaidNum = GetNumGroupMembers()
+	if inInstance and instanceType == "raid" then RaidNum = maxPlayers end
 
 	for i = 1, RaidNum do
 		_, _, subgroup = GetRaidRosterInfo(i)
-		if subgroup <= MaxGroup then
+		if subgroup <= math.floor(RaidNum/5) then
 			local unit = "raid"..i
 			if UnitIsConnected(unit) then
 				if not UnitIsDeadOrGhost(unit) then
@@ -271,10 +279,14 @@ function RC:CheckRaidFlask()
 	local FlaskPlayer, NoFlaskPlayer = "", ""
 	local FlaskPlayerCount, NoFlaskPlayerCount = 0, 0
 	local msg = "["..L.RaidCheckMsgFlask.."]"
-
-	for i = 1,GetNumRaidMembers() do
+	local inInstance, instanceType = IsInInstance()
+	local _, _, _, _, maxPlayers, _, _ = GetInstanceInfo()
+	local raidNum = GetNumGroupMembers()
+	if inInstance and instanceType == "raid" then raidNum = maxPlayers end
+	
+	for i = 1,raidNum do
 		_, _, subgroup = GetRaidRosterInfo(i)
-		if subgroup <= MaxGroup then
+		if subgroup <= math.floor(raidNum/5) then
 			local unit = "raid"..i
 			local j = 1
 			local has = 0
@@ -313,13 +325,14 @@ end
 -------------------------------------------------------------------------------------------------------------------
 function RC:CheckRaidStatus()
 	local inInstance, instanceType = IsInInstance()
-	if ((GetNumPartyMembers() > 0 and not UnitInRaid("player")) or IsRaidLeader() or IsRaidOfficer()) and not (inInstance and (instanceType == "pvp" or instanceType == "arena")) then
+	if ((GetNumGroupMembers(LE_PARTY_CATEGORY_HOME) > 0) and not IsInRaid() or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and not (inInstance and (instanceType == "pvp" or instanceType == "arena")) then
 		return true
 	else
 		return false
 	end
 end
 
+function RC:OnEnable()
 	local RaidCheckFrameLeft = CreateFrame("Button", "RaidCheckFrameLeft",  ColectorButton)
 	RaidCheckFrameLeft:Size(15)
 	RaidCheckFrameLeft:Point("TOPRIGHT",  ColectorButton, "TOPRIGHT", -5, -5)

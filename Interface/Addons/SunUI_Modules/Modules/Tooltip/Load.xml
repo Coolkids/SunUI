@@ -13,7 +13,6 @@
 	<Script file="Talents.lua"/>
 	<Script file="ItemIcons.lua"/>
 	<Script file="ItemLevel.lua"/>
-	<Script file="PvPRating.lua"/>
 	<Script file="SpellID.lua"/>
 	<Script file="ItemCount.lua"/>
 	<Script file="UnitRole.lua"/>

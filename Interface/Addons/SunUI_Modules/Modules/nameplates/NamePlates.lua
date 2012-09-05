@@ -5,7 +5,7 @@ local   cfg={
 	TotemIcon = true, 				-- Toggle totem icons
 	TotemSize = 20,				-- Totem icon size
 }
-
+local noscalemult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")
 local OVERLAY = "Interface\\TargetingFrame\\UI-TargetingFrame-Flash"
 local blankTex = "Interface\\Buttons\\WHITE8x8"	
 
@@ -16,6 +16,8 @@ local backdrop = {
 
 local numChildren = -1
 local frames = {}
+
+local NamePlates = CreateFrame("Frame")
 
 local f = CreateFrame"Frame"
 f:RegisterEvent("PLAYER_LOGIN")
@@ -28,7 +30,30 @@ f:SetScript("OnEvent", function(self, event)
 		SetCVar("ShowClassColorInNameplate",1)
 	end
 end)
+local players = {["Coolkid"] = true,	["Coolkids"] = true,	["Kenans"] = true, ["月殤軒"] = true, ["月殤玄"] = true, ["月殤妶"] = true,["月殤玹"] = false,["月殤璇"] = true,["月殤旋"] = true}
+local PlateBlacklist = {
+	--亡者大軍
+	["亡者军团食尸鬼"] = true,
+	["食屍鬼大軍"] = true,
+	["Army of the Dead Ghoul"] = true,
 
+	--陷阱
+	["Venomous Snake"] = true,
+	["毒蛇"] = true,
+	["剧毒蛇"] = true,
+
+	["Viper"] = true,
+	["響尾蛇"] = true,
+	
+	--Misc
+	["Lava Parasite"] = true,
+	["熔岩蟲"] = true,
+	["熔岩寄生虫"] = true,
+	--DS
+	["腐化之血"] = players[DB.PlayerName],
+}
+local DebuffWhiteList = {
+}
 -- format numbers
 local function round(val, idp)
   if idp and idp > 0 then
@@ -136,6 +161,162 @@ local function UpdateThreat(frame,elapsed)
 			frame.hp.pct:SetTextColor(1,1,1)
 		end	
 end
+local function UpdateAuraAnchors(frame)
+	for i = 1, 5 do
+		if frame.icons and frame.icons[i] and frame.icons[i]:IsShown() then
+			if frame.icons.lastShown then 
+				frame.icons[i]:Point("RIGHT", frame.icons.lastShown, "LEFT", -2, 0)
+			else
+				frame.icons[i]:Point("RIGHT",frame.icons,"RIGHT")
+			end
+			frame.icons.lastShown = frame.icons[i]
+		end
+	end
+	
+	frame.icons.lastShown = nil;
+end
+--Create our Aura Icons
+local function CreateAuraIcon(parent)
+	local button = CreateFrame("Frame",nil,parent)
+	button:SetScript("OnHide", function(self) UpdateAuraAnchors(self:GetParent()) end)
+	button:Width(20)
+	button:Height(20)
+
+	button.shadow = CreateFrame("Frame", nil, button)
+	button.shadow:SetFrameLevel(0)
+	button.shadow:Point("TOPLEFT", -2*noscalemult, 2*noscalemult)
+	button.shadow:Point("BOTTOMRIGHT", 2*noscalemult, -2*noscalemult)
+	button.shadow:SetBackdrop( { 
+		edgeFile = DB.GlowTex,
+		bgFile = DB.Solid,
+		edgeSize = S.Scale(4),
+		insets = {left = S.Scale(4), right = S.Scale(4), top = S.Scale(4), bottom = S.Scale(4)},
+	})
+	button.shadow:SetBackdropColor( 0, 0, 0 )
+	button.shadow:SetBackdropBorderColor( 0, 0, 0 )
+	
+	button.bord = button:CreateTexture(nil, "BORDER")
+	button.bord:SetTexture(0, 0, 0, 1)
+	button.bord:SetPoint("TOPLEFT",button,"TOPLEFT", noscalemult,-noscalemult)
+	button.bord:SetPoint("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult,noscalemult)
+	
+	button.bg2 = button:CreateTexture(nil, "ARTWORK")
+	button.bg2:SetTexture( .05, .05, .05, .9)
+	button.bg2:Point("TOPLEFT",button,"TOPLEFT", noscalemult*2,-noscalemult*2)
+	button.bg2:Point("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult*2,noscalemult*2)	
+	
+	button.icon = button:CreateTexture(nil, "OVERLAY")
+	button.icon:Point("TOPLEFT",button,"TOPLEFT", noscalemult*3,-noscalemult*3)
+	button.icon:Point("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult*3,noscalemult*3)
+	button.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+
+	button.text = button:CreateFontString(nil, 'OVERLAY')
+	button.text:Point("CENTER", 1, 1)
+	button.text:SetJustifyH('CENTER')
+	button.text:SetFont(DB.Font, 10, "OUTLINE")
+	button.text:SetShadowColor(0, 0, 0, 0)
+
+	button.count = button:CreateFontString(nil,"OVERLAY")
+	button.count:SetFont(DB.Font, 9, "OUTLINE")
+	button.count:SetShadowColor(0, 0, 0, 0.4)
+	button.count:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 2, 0)
+	return button
+end
+
+local day, hour, minute, second = 86400, 3600, 60, 1
+local function formatTime(s)
+	if s >= day then
+		return format("%dd", ceil(s / hour))
+	elseif s >= hour then
+		return format("%dh", ceil(s / hour))
+	elseif s >= minute then
+		return format("%dm", ceil(s / minute))
+	elseif s >= minute / 12 then
+		return floor(s)
+	end
+	
+	return format("%.1f", s)
+end
+
+local function UpdateAuraTimer(self, elapsed)
+	if not self.timeLeft then return end
+	self.elapsed = (self.elapsed or 0) + elapsed
+	if self.elapsed >= 0.1 then
+		if not self.firstUpdate then
+			self.timeLeft = self.timeLeft - self.elapsed
+		else
+			self.timeLeft = self.timeLeft - GetTime()
+			self.firstUpdate = false
+		end
+		if self.timeLeft > 0 then
+			local time = formatTime(self.timeLeft)
+			self.text:SetText(time)
+			if self.timeLeft <= 5 then
+				self.text:SetTextColor(1, 0, 0)
+			elseif self.timeLeft <= minute then
+				self.text:SetTextColor(1, 1, 0)
+			else
+				self.text:SetTextColor(1, 1, 1)
+			end
+		else
+			self.text:SetText('')
+			self:SetScript("OnUpdate", nil)
+			self:Hide()
+		end
+		self.elapsed = 0
+	end
+end
+
+--Update an Aura Icon
+local function UpdateAuraIcon(button, unit, index, filter)
+	local name,_,icon,count,debuffType,duration,expirationTime,_,_,_,spellID = UnitAura(unit,index,filter)
+	
+	if debuffType then
+		button.bord:SetTexture(DebuffTypeColor[debuffType].r, DebuffTypeColor[debuffType].g, DebuffTypeColor[debuffType].b)
+	else
+		button.bord:SetTexture(1, 0, 0, 1)
+	end
+
+	button.icon:SetTexture(icon)
+	button.firstUpdate = true
+	button.expirationTime = expirationTime
+	button.duration = duration
+	button.spellID = spellID	
+	button.timeLeft = expirationTime
+	if count > 1 then 
+		button.count:SetText(count)
+	else
+		button.count:SetText("")
+	end
+	if not button:GetScript("OnUpdate") then
+		button:SetScript("OnUpdate", UpdateAuraTimer)
+	end
+	button:Show()
+end
+
+--Filter auras on nameplate, and determine if we need to update them or not.
+local function OnAura(frame, unit)
+	if not frame.icons or not frame.unit or not C["Showdebuff"] then return end  --
+	local i = 1
+	for index = 1,40 do
+		if i > 5 then return end
+		local match
+		local name,_,_,_,_,duration,_,caster,_,_,spellid = UnitAura(frame.unit,index,"HARMFUL")
+		
+		if caster == "player" and duration>0 then match = true end
+		if DebuffWhiteList[name] then match = true end
+		
+		if duration and match == true then
+			if not frame.icons[i] then frame.icons[i] = CreateAuraIcon(frame) end
+			local icon = frame.icons[i]
+			if i == 1 then icon:Point("RIGHT",frame.icons,"RIGHT") end
+			if i ~= 1 and i <= 5 then icon:Point("RIGHT", frame.icons[i-1], "LEFT", -2, 0) end
+			i = i + 1
+			UpdateAuraIcon(icon, frame.unit, index, "HARMFUL")
+		end
+	end
+	for index = i, #frame.icons do frame.icons[index]:Hide() end
+end
 
 local function UpdateObjects(frame)
 	frame = frame:GetParent()
@@ -186,6 +367,16 @@ local function UpdateObjects(frame)
 		frame.level:SetText(level..(elite and "+" or ""))
 		frame.name:SetText(format('|cff%02x%02x%02x', lvlr*255, lvlg*255, lvlb*255)..frame.level:GetText()..'|r '..frame.oldname:GetText())
 	end
+	
+	if frame.icons then return end
+	frame.icons = CreateFrame("Frame",nil,frame)
+	frame.icons:Point("BOTTOMRIGHT",frame.hp,"TOPRIGHT", 0, FONTSIZE)
+	frame.icons:Width(20 + C["HPWidth"])
+	frame.icons:Height(25)
+	frame.icons:SetFrameLevel(frame.hp:GetFrameLevel()+2)
+	frame:RegisterEvent("UNIT_AURA")
+	frame:HookScript("OnEvent", OnAura)
+	
 	HideObjects(frame)
 	
 	if cfg.TotemIcon then 
@@ -357,7 +548,11 @@ local function SkinObjects(frame)
 	frame.level = level
 	level:SetFont(DB.Font, C["Fontsize"]*S.Scale(1), "THINOUTLINE")
 	--level:SetShadowOffset(1.25, -1.25)
-
+	
+	--Highlight
+	overlay:SetTexture(1,1,1,0.15)
+	overlay:SetAllPoints(hp)
+	frame.overlay = overlay
 	-- totem icon
 	local icon = frame:CreateTexture(nil, "BACKGROUND")
 	icon:SetPoint("CENTER", frame, 0, 38)
@@ -394,7 +589,49 @@ local function SkinObjects(frame)
 
 	frames[frame] = true
 end
+local function CheckBlacklist(frame, ...)
+	if PlateBlacklist[frame.oldname:GetText()] then
+		frame:SetScript("OnUpdate", function() end)
+		frame.hp:Hide()
+		frame.cb:Hide()
+		frame.overlay:Hide()
+		frame.hp.oldlevel:Hide()
+	end
+end
+local function CheckUnit_Guid(frame, ...)
+	--local numParty, numRaid = GetNumPartyMembers(), GetNumRaidMembers()
+	if UnitExists("target") and frame:GetAlpha() == 1 and UnitName("target") == frame.oldname:GetText() then
+		frame.guid = UnitGUID("target")
+		frame.unit = "target"
+		OnAura(frame, "target")
+	elseif frame.overlay:IsShown() and UnitExists("mouseover") and UnitName("mouseover") == frame.oldname:GetText() then
+		frame.guid = UnitGUID("mouseover")
+		frame.unit = "mouseover"
+		OnAura(frame, "mouseover")
+	else
+		frame.unit = nil
+	end	
+end
+--Attempt to match a nameplate with a GUID from the combat log
+local function MatchGUID(frame, destGUID, spellID)
+	if not frame.guid then return end
+	if frame.guid == destGUID then
+		for _,icon in ipairs(frame.icons) do 
+			if icon.spellID == spellID then 
+				icon:Hide() 
+			end 
+		end
+	end
+end
 
+--Run a function for all visible nameplates, we use this for the blacklist, to check unitguid, and to hide drunken text
+local function ForEachPlate(functionToRun, ...)
+	for frame in pairs(frames) do
+		if frame:IsShown() then
+			functionToRun(frame, ...)
+		end
+	end
+end
 local select = select
 local function HookFrames(...)
 	for index = 1, select('#', ...) do
@@ -424,24 +661,50 @@ end
 
 function Module:OnInitialize()
 	C = C["NameplateDB"]
-	if C["enable"] ~= true then return end
 end
 function Module:OnEnable()
+	if C["enable"] ~= true then return end
 	CreateFrame('Frame'):SetScript('OnUpdate', function(self, elapsed)
 		if(WorldFrame:GetNumChildren() ~= numChildren) then
 			numChildren = WorldFrame:GetNumChildren()
 			HookFrames(WorldFrame:GetChildren())
 		end
-
 		if(self.elapsed and self.elapsed > 0.1) then
 			for frame in pairs(frames) do
 				UpdateThreat(frame)
 				UpdateTarget(frame)
 			end
-
 			self.elapsed = 0
 		else
 			self.elapsed = (self.elapsed or 0) + elapsed
 		end
+
+		ForEachPlate(CheckBlacklist)
+		ForEachPlate(CheckUnit_Guid)
 	end)
+	function NamePlates:COMBAT_LOG_EVENT_UNFILTERED(_, event, ...)
+		if event == "SPELL_AURA_REMOVED" then
+			local _, sourceGUID, _, _, _, destGUID, _, _, _, spellID = ...
+			
+			if sourceGUID == UnitGUID("player") then
+				ForEachPlate(MatchGUID, destGUID, spellID)
+			end
+		end
+	end
+	function NamePlates:PLAYER_REGEN_ENABLED()
+		SetCVar("nameplateShowEnemies", 0)
+	end
+
+	function NamePlates:PLAYER_REGEN_DISABLED()
+		SetCVar("nameplateShowEnemies", 1)
+	end
+
+	NamePlates:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
+	NamePlates:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	if C["Combat"] then
+		NamePlates:RegisterEvent("PLAYER_REGEN_DISABLED")
+	end
+	if C["NotCombat"] then
+		NamePlates:RegisterEvent("PLAYER_REGEN_ENABLED")
+	end
 end

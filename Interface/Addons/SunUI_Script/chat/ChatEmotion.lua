@@ -239,7 +239,7 @@ local function EmoteIconMouseUp(self, button)
 	end
 	--ToggleEmoteTable()
 end
-function Module:OnInitialize()
+function Module:OnEnable()
 local button = CreateFrame("Button", "ButtonE", ColectorButton)
 		button:Point("TOPLEFT", ColectorButton, "TOPLEFT", 5, -5)
 		button:Size(15)

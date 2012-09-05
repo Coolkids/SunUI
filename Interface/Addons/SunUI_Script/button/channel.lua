@@ -1,7 +1,7 @@
 ﻿local S, _, L, DB = unpack(SunUI)
 if DB.zone ~= "zhTW" and DB.zone ~= "zhCN" then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("bigfootchannel", "AceTimer-3.0")
-function Module:OnInitialize()
+function Module:OnEnable()
 local button = CreateFrame("Button", "ButtonP", ColectorButton)
 		button:Point("TOPLEFT", ColectorButton, "TOPLEFT", 5, -25)
 		button:Size(15)

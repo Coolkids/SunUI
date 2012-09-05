@@ -318,8 +318,12 @@ function ns:UpdateBlizzardRaidFrame()
 	
 	if GetDisplayedAllyFrames() == "raid" then	
 		if ns.db.hideblzraid then
-			CompactRaidFrameContainer:UnregisterAllEvents() 
-			CompactRaidFrameManager_SetSetting("IsShown", "0")
+			CompactRaidFrameManager:UnregisterAllEvents()
+			CompactRaidFrameManager.Show = function() end
+			CompactRaidFrameManager:Hide()
+			CompactRaidFrameContainer:UnregisterAllEvents()
+			CompactRaidFrameContainer.Show = function() end
+			CompactRaidFrameContainer:Hide()	
 		else
 			if not CompactRaidFrameContainer:IsEventRegistered("PARTY_MEMBERS_CHANGED") then		
 				CompactRaidFrameContainer:RegisterEvent("RAID_ROSTER_UPDATE")

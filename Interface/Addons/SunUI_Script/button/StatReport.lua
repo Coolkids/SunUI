@@ -382,7 +382,7 @@ end
 
 
 if GetLocale() ~= 'zhCN' or GetLocale() ~= 'zhTW' then
-	function CH:OnInitialize()
+	function CH:OnEnable()
 			local statreport = CreateFrame("Button", "ButtonST", ColectorButton)
 			statreport:Size(15)
 			statreport:Point("TOPLEFT", ColectorButton, "TOPLEFT", 5, -45)

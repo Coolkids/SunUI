@@ -1,6 +1,6 @@
 ﻿local S, _, _, DB = unpack(SunUI)
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Cbutton", "AceTimer-3.0")
-function Module:OnInitialize()
+function Module:OnEnable()
 local colectorbutton = CreateFrame("Button", nil, UIParent)
 colectorbutton:Size(15)
 colectorbutton:Point("TOPLEFT", ChatFrame1, "TOPRIGHT", 5, 0)

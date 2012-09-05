@@ -725,9 +725,8 @@ lib.genShadowOrbs = function(f)
 	if class ~= "PRIEST" then return end
 	
 	local ShadowOrbs = CreateFrame("Frame", nil, f)
-	ShadowOrbs:SetPoint('CENTER', f, 'TOP', 0, 2)
-	ShadowOrbs:SetHeight(5)
-	ShadowOrbs:SetWidth(f:GetWidth()/2)
+	ShadowOrbs:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+	ShadowOrbs:SetSize((f.width-8)/5, f.height/4)
 
 	local maxShadowOrbs = UnitPowerMax('player', SPELL_POWER_SHADOW_ORBS)
 	
@@ -757,7 +756,44 @@ lib.genShadowOrbs = function(f)
 		end
 	end)
 end
-
+--奥法的6个东西
+lib.genMage = function(f)
+	if class ~= "MAGE" then return end
+	
+	local bars = CreateFrame("Frame", nil, f)
+	bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+	bars:SetSize((f.width-8)/5, f.height/4)
+	
+	for i = 1,6 do
+		bars[i] = CreateFrame("StatusBar", nil, f)
+		bars[i]:SetSize((f.width-2*(6-1))/6, f.height/4)
+		bars[i]:SetStatusBarTexture(DB.Statusbar)
+		bars[i]:SetStatusBarColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
+		bars[i]:CreateShadow()
+		bars[i]:Hide()
+		if (i == 1) then
+			bars[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+		else
+			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 2, 0)
+		end
+	end
+	bars:RegisterEvent("PLAYER_ENTERING_WORLD")
+	bars:RegisterEvent("UNIT_AURA")
+	bars:RegisterEvent("PLAYER_REGEN_DISABLED")
+	bars:RegisterEvent("PLAYER_REGEN_ENABLED")
+	
+	bars:SetScript("OnEvent",function()
+		local num = select(4, UnitDebuff("player", GetSpellInfo(36032)))
+		if num == nil then num = 0 end
+		for i = 1,6 do
+			if i <= num then
+				bars[i]:Show()
+			else
+				bars[i]:Hide()
+			end
+		end
+	end)
+end
   --gen eclipse bar
   lib.gen_EclipseBar = function(f)
 	if class ~= "DRUID" then return end
@@ -1057,6 +1093,7 @@ end
     lib.createDebuffs(self)
 	lib.addHarmony(self)
 	lib.genShadowOrbs(self)
+	lib.genMage(self)
 	lib.warlockpower(self)
 	lib.gen_swing_timer(self)
     self:Size(self.width,self.height)
