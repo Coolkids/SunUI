@@ -384,3 +384,5 @@ L_TOOLTIP_ITEM_ID = "物品ID:"
 L_TOOLTIP_WHO_TARGET = "以其为目标的"
 L_TOOLTIP_ITEM_COUNT = "物品数量: "
 L_TOOLTIP_INSPECT_OPEN = "Inspect Frame is open" -- Needs review
+--Loot
+L_LOOT_CANNOT = "不能拾取"

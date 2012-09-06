@@ -5,7 +5,7 @@ local cast = ns.cast
 local S, C, L, DB = unpack(SunUI)
 local Core = LibStub("AceAddon-3.0"):GetAddon("SunUI")
 local Module = Core:NewModule("UnitFrame")
-
+local _G = _G
  -----------------------------
  -- local variables
  -----------------------------

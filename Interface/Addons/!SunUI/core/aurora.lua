@@ -1,6 +1,6 @@
 local S, L, C, DB = unpack(select(2, ...))
 local alpha = .5
-
+local _G = _G
 --[[ local classcolours = {
 	["HUNTER"] = { r = 0.58, g = 0.86, b = 0.49 },
 	["WARLOCK"] = { r = 0.6, g = 0.47, b = 0.85 },
@@ -504,11 +504,23 @@ function S.ReskinPortraitFrame(f, isButtonFrame)
 end
 
 function S.CreateBDFrame(f, a)
-	local bg = CreateFrame("Frame", nil, f)
-	bg:Point("TOPLEFT", -1, 1)
-	bg:Point("BOTTOMRIGHT", 1, -1)
-	bg:SetFrameLevel(f:GetFrameLevel()-1)
-	S.CreateBD(bg, a or alpha)
+	local frame
+	if f:GetObjectType() == "Texture" then
+		frame = f:GetParent()
+	else
+		frame = f
+	end
+
+	local lvl = frame:GetFrameLevel()
+
+	local bg = CreateFrame("Frame", nil, frame)
+	bg:SetPoint("TOPLEFT", f, -1, 1)
+	bg:SetPoint("BOTTOMRIGHT", f, 1, -1)
+	bg:SetFrameLevel(lvl == 0 and 1 or lvl - 1)
+
+	S.CreateBD(bg, a or .5)
+
+	return bg
 end
 
 local Skin = CreateFrame("Frame", nil, UIParent)
@@ -4890,7 +4902,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local check = select(2, bu:GetRegions())
 			check:Point("TOPLEFT", 39, -3)
 			check:Point("BOTTOMRIGHT", -1, 3)
-			check:SetTexture(C.media.texture)
+			check:SetTexture(media.texture)
 			check:SetVertexColor(r, g, b, .2)
 
 			S.CreateBG(ic)

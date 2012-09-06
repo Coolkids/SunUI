@@ -372,3 +372,5 @@ L_TOOLTIP_ITEM_ID = "Item ID:"
 L_TOOLTIP_WHO_TARGET = "Targeted By"
 L_TOOLTIP_ITEM_COUNT = "Item count:"
 L_TOOLTIP_INSPECT_OPEN = "Inspect Frame is open"
+--loot
+L_LOOT_CANNOT = "Cannot roll"

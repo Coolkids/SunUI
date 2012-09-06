@@ -1,0 +1,9 @@
+## Interface: 40300
+## Title: Bagnon Forever
+## Notes: Allows you to view your characters inventory and bank from anywhere
+## Notes-zhTW: 儲存角色背包和銀行的物品資訊
+## Notes-zhCN: 保存角色背包与银行内物品的信息
+## Author: Tuller & Jaliborc (João Libório)
+## SavedVariables: BagnonForeverDB
+db.lua
+ui.xml

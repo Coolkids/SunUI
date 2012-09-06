@@ -9,13 +9,13 @@ local settings = {
 		tile = false,
 	},
 	bd = {
-		texture = "Interface/Tooltips/UI-Tooltip-Border",
+		texture = "Interface\\Tooltips\\UI-Tooltip-Border",
 		size = 3,
 		color = {0, 0, 0},
 	},
 	tail = {
 		bgTexture = "Interface\\AddOns\\!SunUI\\Media\\BubbleBobble\\tailbg",
-		bdTexture = "Interface\\AddOns\\!SunUI	\\Media\\BubbleBobble\\tailbd",
+		bdTexture = "",
 	},
 	fontText = {DB.Font, 12*C["MiniDB"]["uiScale"]*S.Scale(1), "THINOUTLINE"},
 	fontSender = {DB.Font, 12*C["MiniDB"]["uiScale"]*S.Scale(1), "THINOUTLINE"},
