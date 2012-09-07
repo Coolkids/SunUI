@@ -38,7 +38,7 @@ function BaudErrorFrame_OnEvent(self, event, ...)
 		end
 		QueueError = nil
 	elseif event == "ADDON_ACTION_BLOCKED" then
-		BaudErrorFrameAdd(arg1.." blocked from using "..arg2, 4)
+		--BaudErrorFrameAdd(arg1.." blocked from using "..arg2, 4)
 	elseif event == "MACRO_ACTION_BLOCKED" then
 		BaudErrorFrameAdd("Macro blocked from using "..arg1, 4)
 	elseif event == "ADDON_ACTION_FORBIDDEN" then

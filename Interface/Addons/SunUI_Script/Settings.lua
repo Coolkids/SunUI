@@ -1,6 +1,6 @@
 ﻿local S, C, L, DB = unpack(SunUI)
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Settings")
-
+local _G = _G
 ---------------- > Proper Ready Check sound
 local ShowReadyCheckHook = function(self, initiator, timeLeft)
 	if initiator ~= "player" then PlaySound("ReadyCheck") end

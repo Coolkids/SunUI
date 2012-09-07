@@ -8,6 +8,7 @@
 ------------------------------------------------------
 -- MEDIA & CONFIG ------------------------------------
 ------------------------------------------------------
+local _G =_G
 local font = { DB.Font, 12*S.Scale(1), "THINOUTLINE" }
 local barTex = DB.Statusbar
 local blankTex = DB.Solid

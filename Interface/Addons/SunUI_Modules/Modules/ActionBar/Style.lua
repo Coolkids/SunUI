@@ -3,7 +3,7 @@
 	return 
 end	
 local AB = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ActionStyle", "AceEvent-3.0")
-	
+local _G = _G
 local function UpdateHotkey(button, actionButtonType)
 	local hotkey = _G[button:GetName() .. 'HotKey']
 	local text = hotkey:GetText()

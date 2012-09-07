@@ -1,5 +1,6 @@
 local S, C, L, DB = unpack(SunUI)
 local addon, ns = ...
+local _G = _G
 local cfg = {
 	iconsize = 32, 					-- loot frame icon's size
 }

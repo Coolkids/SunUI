@@ -27,7 +27,7 @@ local _, ns = ...
 local cargBags = ns.cargBags
 local Implementation = cargBags.classes.Implementation
 local Container = cargBags.classes.Container
-
+local _G = _G
 local FilterSet = cargBags:NewClass("FilterSet")
 
 --[[!

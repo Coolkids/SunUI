@@ -28,7 +28,7 @@ DEPENDENCIES
 
 local addon, ns = ...
 local cargBags = ns.cargBags
-
+local _G = _G
 local function apply(self, container, text, mode)
 	if(text == "" or not text) then
 		container:ApplyToButtons(self.highlightFunction, true)

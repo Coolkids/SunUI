@@ -27,7 +27,7 @@ DEPENDENCIES
 
 local addon, ns = ...
 local cargBags = ns.cargBags
-
+local _G = _G
 local function noop() end
 
 local function ItemButton_Scaffold(self)

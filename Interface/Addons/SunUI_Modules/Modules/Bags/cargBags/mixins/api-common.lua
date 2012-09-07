@@ -28,7 +28,7 @@ local cargBags = ns.cargBags
 local Implementation = cargBags.classes.Implementation
 local Container = cargBags.classes.Container
 local ItemButton = cargBags.classes.ItemButton
-
+local _G = _G
 --[[################################
 	Layouts
 		Methods for positioning the buttons in a container

@@ -1,5 +1,5 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
-
+local _G =_G
 local temp = SetUIScale()
 local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/temp
 local function scale(x)

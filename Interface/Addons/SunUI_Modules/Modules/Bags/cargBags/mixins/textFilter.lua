@@ -30,7 +30,7 @@ local addon, ns = ...
 local cargBags = ns.cargBags
 local Container = cargBags.classes.Container
 local Implementation = cargBags.classes.Implementation
-
+local _G = _G
 local defaultFilters = {
 	n = function(i, arg) return i.name and i.name:lower():match(arg) end,
 	t = function(i, arg) return (i.type and i.type:lower():match(arg)) or (i.subType and i.subType:lower():match(arg)) or (i.equipLoc and i.equipLoc:lower():match(arg)) end,

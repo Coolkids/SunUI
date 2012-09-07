@@ -88,24 +88,26 @@ Frame:RegisterEvent("PLAYER_TARGET_CHANGED")
 Frame:RegisterEvent("UNIT_POWER")
 Frame:RegisterEvent("SPELL_UPDATE_COOLDOWN")	
 
-local ShadowOrbs = CreateFrame("Frame", nil, f)
+if DB.PlayerName == "Coolkid" then
+	local ShadowOrbs = CreateFrame("Frame", nil, f)
 
-ShadowOrbs.text = S.MakeFontString(ShadowOrbs, 60*S.Scale(1), "OUTLINEMONOCHROME")
-ShadowOrbs.text:SetPoint("CENTER", UIParent, "CENTER", 0, -55)
-ShadowOrbs.text:SetText("")
-ShadowOrbs.text:SetTextColor(.86,.22,1)
-ShadowOrbs:SetAllPoints(ShadowOrbs.text)
-ShadowOrbs:Hide()
-ShadowOrbs:SetScript("OnEvent",function()
-	local numShadowOrbs = UnitPower('player', SPELL_POWER_SHADOW_ORBS)
-	if numShadowOrbs == 0 then
-		ShadowOrbs:Hide()
-	else
-		ShadowOrbs:Show()
-		ShadowOrbs.text:SetText(numShadowOrbs)
-	end
-end)
+	ShadowOrbs.text = S.MakeFontString(ShadowOrbs, 60*S.Scale(1), "OUTLINEMONOCHROME")
+	ShadowOrbs.text:SetPoint("CENTER", UIParent, "CENTER", 0, -55)
+	ShadowOrbs.text:SetText("")
+	ShadowOrbs.text:SetTextColor(.86,.22,1)
+	ShadowOrbs:SetAllPoints(ShadowOrbs.text)
+	ShadowOrbs:Hide()
+	ShadowOrbs:SetScript("OnEvent",function()
+		local numShadowOrbs = UnitPower('player', SPELL_POWER_SHADOW_ORBS)
+		if numShadowOrbs == 0 then
+			ShadowOrbs:Hide()
+		else
+			ShadowOrbs:Show()
+			ShadowOrbs.text:SetText(numShadowOrbs)
+		end
+	end)
 
-ShadowOrbs:RegisterEvent("PLAYER_ENTERING_WORLD")
-ShadowOrbs:RegisterEvent("UNIT_POWER")
-ShadowOrbs:RegisterEvent("UNIT_DISPLAYPOWER")
+	ShadowOrbs:RegisterEvent("PLAYER_ENTERING_WORLD")
+	ShadowOrbs:RegisterEvent("UNIT_POWER")
+	ShadowOrbs:RegisterEvent("UNIT_DISPLAYPOWER")
+end

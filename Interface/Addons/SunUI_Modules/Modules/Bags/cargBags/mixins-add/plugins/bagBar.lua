@@ -35,7 +35,7 @@ CALLBACKS
 local addon, ns = ...
 local cargBags = ns.cargBags
 local Implementation = cargBags.classes.Implementation
-
+local _G = _G
 function Implementation:GetBagButtonClass()
 	return self:GetClass("BagButton", true, "BagButton")
 end

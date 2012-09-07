@@ -7,7 +7,7 @@ engine[4] = {} -- G, globals (Optionnal)
 SunUI = engine
 local SunUI = LibStub("AceAddon-3.0"):NewAddon("SunUI")
 local S, C, L, DB = unpack(select(2, ...))
-
+local _G =_G
 --全局设置
 local Media = "Interface\\Addons\\!SunUI\\media\\"
 DB.dummy = function() return end
@@ -16,7 +16,7 @@ DB.level = UnitLevel("player")
 DB.MyClass = select(2, UnitClass("player"))
 DB.PlayerName, _ = UnitName("player")
 DB.MyClassColor = RAID_CLASS_COLORS[DB.MyClass]
-DB.Font = ChatFrame1:GetFont()
+DB.Font = _G["ChatFrame1"]:GetFont()
 DB.Solid = Media.."solid"
 DB.Button = Media.."Button"
 DB.GlowTex = Media.."glowTex"

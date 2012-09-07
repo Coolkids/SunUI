@@ -9,7 +9,7 @@ local frames = {}
 local cancelled_rolls = {}
 local LootRollAnchor = CreateFrame("Frame", "LootRollAnchor", UIParent)
 LootRollAnchor:Size(362, 26)
-
+local _G = _G
 local function ClickRoll(frame)
 	RollOnLoot(frame.parent.rollID, frame.rolltype)
 end

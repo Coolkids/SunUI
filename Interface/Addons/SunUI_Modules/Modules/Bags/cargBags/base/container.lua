@@ -19,7 +19,7 @@
 ]]
 local _, ns = ...
 local cargBags = ns.cargBags
-
+local _G = _G
 --[[!
 	@class Container
 		The container class provides the virtual bags for cargBags

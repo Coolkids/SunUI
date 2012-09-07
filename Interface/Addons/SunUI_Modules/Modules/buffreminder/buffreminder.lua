@@ -1,6 +1,7 @@
 ﻿-- Engines
 local S, C, L, DB = unpack(SunUI)
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ClassReminder", "AceEvent-3.0")
+local _G = _G
 function Module:OnInitialize()
 	if not C["ReminderDB"].ShowClassBuff then return end
 	local ReminderBuffs = {
@@ -351,7 +352,8 @@ function Module:OnInitialize()
 				
 				for buff, value in pairs(group.spells) do
 					if value == true then
-						local name = GetSpellInfo(buff)
+						local name
+						if GetSpellInfo(buff) == nil then return else name = GetSpellInfo(buff) end
 						local _, _, icon, _, _, _, _, unitCaster, _, _, _ = UnitBuff("player", name)
 						if personal and personal == true then
 							if (name and icon and unitCaster == "player") then

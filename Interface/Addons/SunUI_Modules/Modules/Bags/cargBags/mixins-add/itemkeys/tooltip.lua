@@ -23,7 +23,7 @@ DESCRIPTION:
 ]]
 local parent, ns = ...
 local cargBags = ns.cargBags
-
+local _G = _G
 local tipName = parent.."Tooltip"
 local tooltip
 

@@ -5,7 +5,7 @@ local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Buff")
 local BuffPos, DebuffPos = nil, nil
 local tinsert, _G, tsort = tinsert, _G, table.sort
 local BuffTable = {["Time"] = {}, ["None"] = {}}
-
+local _G = _G
 function Module:Style(buttonName, i, f)
 	if not _G[buttonName..i] then return end
 	

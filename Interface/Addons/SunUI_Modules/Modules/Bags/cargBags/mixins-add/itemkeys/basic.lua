@@ -24,7 +24,7 @@ DESCRIPTION:
 
 local parent, ns = ...
 local cargBags = ns.cargBags
-
+local _G = _G
 -- Returns the numeric item id (12345)
 cargBags.itemKeys["id"] = function(i)
 	return i.link and tonumber(i.link:match("item:(%d+)"))

@@ -25,7 +25,7 @@ DEPENDENCIES
 ]]
 local addon, ns = ...
 local layouts = ns.cargBags.classes.Container.layouts
-
+local _G = _G
 function layouts.grid(self, columns, spacing, xOffset, yOffset)
 	columns, spacing = columns or 8, spacing or 5
 	xOffset, yOffset = xOffset or 0, yOffset or 0

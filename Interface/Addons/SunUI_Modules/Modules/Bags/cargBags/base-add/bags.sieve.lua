@@ -26,7 +26,7 @@ DEPENDENCIES
 ]]
 local _, ns = ...
 local cargBags = ns.cargBags
-
+local _G = _G
 local Implementation = cargBags.classes.Implementation
 
 --[[!

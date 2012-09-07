@@ -19,7 +19,7 @@
 ]]
 local _, ns = ...
 local cargBags = ns.cargBags
-
+local _G = _G
 --[[!
 	@class Implementation
 		The Implementation-class serves as the basis for your cargBags-instance, handling

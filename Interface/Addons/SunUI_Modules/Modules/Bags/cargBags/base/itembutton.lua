@@ -19,7 +19,7 @@
 ]]
 local addon, ns = ...
 local cargBags = ns.cargBags
-
+local _G = _G
 --[[!
 	@class ItemButton
 		This class serves as the basis for all itemSlots in a container

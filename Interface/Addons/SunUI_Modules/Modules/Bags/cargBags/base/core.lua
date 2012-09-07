@@ -21,7 +21,7 @@
 
 local parent, ns = ...
 local global = GetAddOnMetadata(parent, 'X-cargBags')
-
+local _G = _G
 --- @class table
 --  @name cargBags
 --  This class provides the underlying fundamental functions, such as

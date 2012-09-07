@@ -41,7 +41,7 @@ CALLBACKS
 ]]
 local _, ns = ...
 local cargBags = ns.cargBags
-
+local _G = _G
 local tagPool, tagEvents, object = {}, {}
 local function tagger(tag, ...) return object.tags[tag] and object.tags[tag](object, ...) or "" end
 

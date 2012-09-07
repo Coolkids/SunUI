@@ -3,7 +3,7 @@
 =====================================]]
 JPack = CreateFrame"Frame"
 JPack.DEV_MOD = DEV_MOD
-
+local _G = _G
 JPack.bankOpened = false
 JPack.guildbankOpened = false
 JPack.deposit = false
