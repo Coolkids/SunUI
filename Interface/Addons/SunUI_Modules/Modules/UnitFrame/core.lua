@@ -296,9 +296,9 @@ lib.gen_castbar = function(f)
       i:Size(s:GetHeight(),s:GetHeight())
     elseif f.mystyle == "player" then
 	  if not C["playerCBuserplaced"] then
-		s:Size(C["PlayerCastBarWidth"],C["PlayerCastBarHeight"])
-		MoveHandle.Castbarplay = S.MakeMoveHandle(s, L["玩家施法条"], "PlayerCastbar")
-		i:Size(s:GetHeight(),s:GetHeight())
+		s:SetSize(C["PlayerCastBarWidth"],C["PlayerCastBarHeight"])
+		MoveHandle.Castbarplayer = S.MakeMoveHandle(s, L["玩家施法条"], "PlayerCastbar")
+		i:SetSize(s:GetHeight(),s:GetHeight())
 		sp:SetHeight(s:GetHeight()*2.5)
 	  else
 		s:Point("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)

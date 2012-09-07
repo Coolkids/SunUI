@@ -164,7 +164,7 @@ function SunUIConfig.GenerateOptionsInternal()
 						},	
 						Bar5Layout = {
 							type = "select", order = 5,
-							name = L["bar5布局"], desc = L["请选择主动作条布局"],disabled = (db.ActionBarDB.Big4Layout == 1),
+							name = L["bar5布局"], desc = L["请选择主动作条布局"],disabled = function(info) return (db.ActionBarDB.Big4Layout == 1) end,
 							values = {[1] = "12x1布局", [2] = "6x2布局"},
 						},	
 						Big4Layout = {
@@ -212,6 +212,11 @@ function SunUIConfig.GenerateOptionsInternal()
 								type = "range", order = 1,
 								name = L["动作条按钮大小"], desc = L["动作条按钮大小"],
 								min = 16, max = 64, step = 1,
+								set = function(info, value) 
+									db.ActionBarDB[ info[#info] ] = value
+									local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("actionbar", "AceEvent-3.0")
+									Module:UpdateSize(value)
+								end,
 							},
 							ButtonSpacing = {
 								type = "range", order = 2,
@@ -257,7 +262,7 @@ function SunUIConfig.GenerateOptionsInternal()
 					},
 					group4 = {
 						type = "group", order = 4,
-						name = " ",guiInline = true, disabled = not db.ActionBarDB.CooldownFlash,
+						name = " ",guiInline = true, disabled = function(info) return not db.ActionBarDB.CooldownFlash end,
 						args = {
 							CooldownFlashSize = {
 								type = "input",
@@ -271,7 +276,7 @@ function SunUIConfig.GenerateOptionsInternal()
 					},
 					group5 = {
 						type = "group", order = 5,
-						name = " ",guiInline = true, disabled = (db.ActionBarDB.Big4Layout ~= 1),
+						name = " ",guiInline = true, disabled =function(info) return (db.ActionBarDB.Big4Layout ~= 1) end,
 						args = {
 							BigSize1 = {
 								type = "range", order = 1,
@@ -364,7 +369,7 @@ function SunUIConfig.GenerateOptionsInternal()
 						},
 						group2 = {
 						type = "group", order = 2,
-						name = " ",guiInline = true,disabled = not db.NameplateDB.enable,
+						name = " ",guiInline = true,disabled = function(info) return not db.NameplateDB.enable end,
 							args = {
 								Fontsize = {
 									type = "input",
@@ -508,7 +513,7 @@ function SunUIConfig.GenerateOptionsInternal()
 					},
 					Gruop_1 = {
 						type = "group", order = 2,
-						name = " ", guiInline = true, disabled = not db.ReminderDB.ShowRaidBuff,
+						name = " ", guiInline = true, disabled = function(info) return not db.ReminderDB.ShowRaidBuff end,
 						args = {
 							ShowOnlyInParty = {
 								type = "toggle", order = 1,
@@ -535,7 +540,7 @@ function SunUIConfig.GenerateOptionsInternal()
 					},
 					Gruop_2 = {
 						type = "group", order = 4,
-						name = " ", guiInline = true, disabled = not db.ReminderDB.ShowClassBuff,
+						name = " ", guiInline = true, disabled = function(info) return not db.ReminderDB.ShowClassBuff end,
 						args = {
 							ClassBuffSize = {
 								type = "input", order = 1,
@@ -585,7 +590,23 @@ function SunUIConfig.GenerateOptionsInternal()
 							desc = L["玩家与目标框体宽度"],
 							order = 2,
 							get = function() return tostring(db.UnitFrameDB.Width) end,
-							set = function(_, value) db.UnitFrameDB.Width = tonumber(value) end,
+							set = function(_, value) 
+								db.UnitFrameDB.Width = tonumber(value) 
+								local player = _G["oUF_SunUIPlayer"]
+								local target = _G["oUF_SunUITarget"]
+								if player then
+									player:SetWidth(db.UnitFrameDB.Width)
+									player.Health:SetWidth(db.UnitFrameDB.Width)
+									player.Power:SetWidth(db.UnitFrameDB.Width)
+									target:SetWidth(db.UnitFrameDB.Width)
+									target.Health:SetWidth(db.UnitFrameDB.Width)
+									target.Power:SetWidth(db.UnitFrameDB.Width)
+								end
+								if MoveHandle.SunUIPlayerFrame then
+									MoveHandle.SunUIPlayerFrame:SetWidth(db.UnitFrameDB.Width)
+									MoveHandle.SunUITargetFrame:SetWidth(db.UnitFrameDB.Width)
+								end
+							end,
 						},
 						Height = {
 							type = "input",
@@ -593,7 +614,23 @@ function SunUIConfig.GenerateOptionsInternal()
 							desc = L["玩家与目标框体高度"],
 							order = 3,
 							get = function() return tostring(db.UnitFrameDB.Height) end,
-							set = function(_, value) db.UnitFrameDB.Height = tonumber(value) end,
+							set = function(_, value) 
+								db.UnitFrameDB.Height = tonumber(value) 
+								local player = _G["oUF_SunUIPlayer"]
+								local target = _G["oUF_SunUITarget"]
+								if player then
+									player:SetHeight(db.UnitFrameDB.Width)
+									player.Health:SetHeight(db.UnitFrameDB.Width)
+									player.Power:SetHeight(db.UnitFrameDB.Width)
+									target:SetHeight(db.UnitFrameDB.Width)
+									target.Health:SetHeight(db.UnitFrameDB.Width)
+									target.Power:SetHeight(db.UnitFrameDB.Width)
+								end
+								if MoveHandle.SunUIPlayerFrame then
+									MoveHandle.SunUIPlayerFrame:SetHeight(db.UnitFrameDB.Width)
+									MoveHandle.SunUITargetFrame:SetHeight(db.UnitFrameDB.Width)
+								end
+							end,
 						},
 						Scale = {
 							type = "range", order = 4,
@@ -675,7 +712,7 @@ function SunUIConfig.GenerateOptionsInternal()
 							set = function(_, value) db.UnitFrameDB.RangeAlpha = value end,
 						}, 
 						FocusDebuff = {
-							type = "toggle", order = 16,disabled = not db.UnitFrameDB.showfocus,
+							type = "toggle", order = 16,disabled = function(info) return not db.UnitFrameDB.showfocus end,
 							name = "焦点debuff过滤",
 							desc = "只显示玩家释放的debuff",
 						}, 
@@ -713,7 +750,7 @@ function SunUIConfig.GenerateOptionsInternal()
 								name = L["开启小队框体"],			
 							},
 							Party3D = {
-							type = "toggle", order = 7,disabled = not db.UnitFrameDB.showparty,
+							type = "toggle", order = 7,disabled = function(info) return not db.UnitFrameDB.showparty end,
 							name = "小队头像",
 							},
 							showboss = {
@@ -748,7 +785,7 @@ function SunUIConfig.GenerateOptionsInternal()
 					},
 					group3 = {
 						type = "group", order = 3,
-						name = " ",guiInline = true,disabled = (db.UnitFrameDB.CastBar == false),
+						name = " ",guiInline = true,disabled = function(info) return (db.UnitFrameDB.CastBar == false) end,
 						args = {
 							playerCBuserplaced = {
 								type = "toggle", order = 1,
@@ -760,7 +797,9 @@ function SunUIConfig.GenerateOptionsInternal()
 								desc = L["玩家施法条宽度"],
 								order = 2,
 								get = function() return tostring(db.UnitFrameDB.PlayerCastBarWidth) end,
-								set = function(_, value) db.UnitFrameDB.PlayerCastBarWidth = tonumber(value) end,
+								set = function(_, value) 
+									db.UnitFrameDB.PlayerCastBarWidth = tonumber(value) 
+								end,
 							},
 							PlayerCastBarHeight = {
 								type = "input",
@@ -768,7 +807,9 @@ function SunUIConfig.GenerateOptionsInternal()
 								desc = L["玩家施法条高度"],
 								order = 3,
 								get = function() return tostring(db.UnitFrameDB.PlayerCastBarHeight) end,
-								set = function(_, value) db.UnitFrameDB.PlayerCastBarHeight = tonumber(value) end,
+								set = function(_, value) 
+									db.UnitFrameDB.PlayerCastBarHeight = tonumber(value) 	
+								end,
 							},
 							NewLine = {
 								type = "description", order = 4,
@@ -784,7 +825,9 @@ function SunUIConfig.GenerateOptionsInternal()
 								desc = L["目标施法条宽度"],
 								order = 6,
 								get = function() return tostring(db.UnitFrameDB.TargetCastBarWidth) end,
-								set = function(_, value) db.UnitFrameDB.TargetCastBarWidth = tonumber(value) end,
+								set = function(_, value) 
+									db.UnitFrameDB.TargetCastBarWidth = tonumber(value) 
+								end,
 							},
 							TargetCastBarHeight = {
 								type = "input",
@@ -792,7 +835,9 @@ function SunUIConfig.GenerateOptionsInternal()
 								desc = L["目标施法条高度"],
 								order = 7,
 								get = function() return tostring(db.UnitFrameDB.TargetCastBarHeight) end,
-								set = function(_, value) db.UnitFrameDB.TargetCastBarHeight = tonumber(value) end,
+								set = function(_, value) 
+									db.UnitFrameDB.TargetCastBarHeight = tonumber(value) 
+								end,
 							},
 							NewLine = {
 								type = "description", order = 8,
@@ -889,7 +934,7 @@ function SunUIConfig.GenerateOptionsInternal()
 								type = "input",
 								name = L["自动邀请关键字"],
 								desc = L["自动邀请关键字"],
-								disabled = not db.MiniDB.Autoinvite,
+								disabled = function(info) return not db.MiniDB.Autoinvite end,
 								order = 10,
 								get = function() return tostring(db.MiniDB.INVITE_WORD) end,
 								set = function(_, value) db.MiniDB.INVITE_WORD = tonumber(value) end,
@@ -1005,7 +1050,7 @@ function SunUIConfig.GenerateOptionsInternal()
 							group = {
 								type = "group", order = 2,
 								name = " ",guiInline = true,
-								disabled = not db.MiniDB.ClassCDOpen,
+								disabled = function(info) return not db.MiniDB.ClassCDOpen end,
 								args = {
 									ClassCDIcon = {
 										type = "toggle",
@@ -1015,7 +1060,7 @@ function SunUIConfig.GenerateOptionsInternal()
 									ClassCDIconSize = {
 										type = "input",
 										name = L["图标大小"],
-										desc = L["图标大小"], disabled = not db.MiniDB.ClassCDIcon,
+										desc = L["图标大小"], disabled = function(info) return not db.MiniDB.ClassCDIcon end,
 										order = 2,
 										get = function() return tostring(db.MiniDB.ClassCDIconSize) end,
 										set = function(_, value) db.MiniDB.ClassCDIconSize = tonumber(value) end,
@@ -1024,14 +1069,14 @@ function SunUIConfig.GenerateOptionsInternal()
 										type = "select",
 										name = L["BUFF增长方向"],
 										desc = L["BUFF增长方向"],
-										order = 3, disabled = not db.MiniDB.ClassCDIcon,
+										order = 3, disabled =function(info) return not db.MiniDB.ClassCDIcon end,
 										values = {[1] = L["从左向右"], [2] = L["从右向左"]},
 										get = function() return db.MiniDB.ClassCDIconDirection end,
 										set = function(_, value) db.MiniDB.ClassCDIconDirection = value end,
 									},
 									ClassFontSize = {
 										type = "range", order = 4,
-										name = L["内置CD字体大小"], desc = L["内置CD字体大小"], disabled = db.MiniDB.ClassCDIcon,
+										name = L["内置CD字体大小"], desc = L["内置CD字体大小"], disabled = function(info) return db.MiniDB.ClassCDIcon end,
 										min = 4, max = 28, step = 1,
 										--get = function() return db.MiniDB.ClassFontSize end,
 										--set = function(_, value) db.MiniDB.ClassFontSize = value end,
@@ -1039,7 +1084,7 @@ function SunUIConfig.GenerateOptionsInternal()
 									ClassCDWidth = {
 										type = "input",
 										name = L["框体宽度"],
-										desc = L["框体宽度"], disabled = db.MiniDB.ClassCDIcon,
+										desc = L["框体宽度"], disabled = function(info) return db.MiniDB.ClassCDIcon end,
 										order = 5,
 										get = function() return tostring(db.MiniDB.ClassCDWidth) end,
 										set = function(_, value) db.MiniDB.ClassCDWidth = tonumber(value) end,
@@ -1048,7 +1093,7 @@ function SunUIConfig.GenerateOptionsInternal()
 										type = "input",
 										name = L["框体高度"],
 										desc = L["框体高度"],
-										order = 6, disabled = db.MiniDB.ClassCDIcon,
+										order = 6, disabled =  function(info) return db.MiniDB.ClassCDIcon end,
 										get = function() return tostring(db.MiniDB.ClassCDHeight) end,
 										set = function(_, value) db.MiniDB.ClassCDHeight = tonumber(value) end,
 									},
@@ -1056,7 +1101,7 @@ function SunUIConfig.GenerateOptionsInternal()
 										type = "select",
 										name = L["计时条增长方向"],
 										desc = L["计时条增长方向"],
-										order = 7, disabled = db.MiniDB.ClassCDIcon,
+										order = 7, disabled = function(info) return db.MiniDB.ClassCDIcon end,
 										values = {[1] = L["向下"], [2] = L["向上"]},
 										get = function() return db.MiniDB.ClassCDDirection end,
 										set = function(_, value) db.MiniDB.ClassCDDirection = value end,
@@ -1098,7 +1143,7 @@ function SunUIConfig.GenerateOptionsInternal()
 							group = {
 								type = "group", order = 2,
 								name = " ",guiInline = true,
-								disabled = not db.MiniDB.RaidCD,
+								disabled = function(info) return not db.MiniDB.RaidCD end,
 								args = {
 									RaidCDFontSize = {
 										type = "range", order = 1,
@@ -1136,64 +1181,6 @@ function SunUIConfig.GenerateOptionsInternal()
 							},
 						}
 					},
-					group6 = {
-					type = "group", order = 6,
-					name = "AutoBuy",
-						args = {
-							AutoBuy = {
-								type = "toggle",
-								name = L["打开自动补购"],
-								order = 1,
-							},
-							group = {
-								type = "group", order = 2,
-								name = " ",guiInline = true,
-								disabled = not db.MiniDB.AutoBuy,
-								args = {
-									mageone = {
-										type = "range", order = 1,
-										name = L["传送符文"],
-										min = 0, max = 200, step = 1,
-									},
-									magetwo = {
-										type = "range", order = 2,
-										name = L["传送门符文"],
-										min = 0, max = 200, step = 1,
-									},
-									magethree = {
-										type = "range", order = 3,
-										name = L["魔粉"],
-										min = 0, max = 1000, step = 1,
-									},
-									rogueone = {
-										type = "range", order = 4,
-										name = L["速效药膏"],
-										min = 0, max = 200, step = 1,
-									},
-									roguetwo = {
-										type = "range", order = 5,
-										name = L["致命药膏"],
-										min = 0, max = 200, step = 1,
-									},
-									roguethree = {
-										type = "range", order = 6,
-										name = L["减速药膏"],
-										min = 0, max = 200, step = 1,
-									},
-									roguefour= {
-										type = "range", order = 7,
-										name = L["麻痹药膏"],
-										min = 0, max = 200, step = 1,
-									},
-									roguefive= {
-										type = "range", order = 8,
-										name = L["致伤药膏"],
-										min = 0, max = 200, step = 1,
-									},
-								}		
-							},
-						}
-					}	
 				}
 			},
 			InfoPanelDB = {

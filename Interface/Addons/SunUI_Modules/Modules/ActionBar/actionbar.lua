@@ -330,7 +330,7 @@ function Module:CreateBar5()
 				end
 			end
 		end
-		RegisterStateDriver(bar5, "visibility", "[petbattle][overridebar][vehicleui] hide; show")
+		RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui] hide; show")
 	end
 end
 function Module:CreateExtrabarBar()
@@ -587,15 +587,16 @@ function Module:CreateExitVehicle()
 	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui] hide; show")
 end
 
-function Module:UpdateSize()
+function Module:UpdateSize(val)
 	for _, v in ipairs(buttonList) do 
-		v:SetSize(C["ButtonSize"], C["ButtonSize"])
+		if v then 
+			v:SetSize(val, val)
+		end
 	end
 end
+
 function Module:OnInitialize()
 	C = C["ActionBarDB"]
-end
-function Module:OnEnable()
 	Module:blizzHider()
 	Module:CreateBar1()
 	Module:CreateBar2()

@@ -27,9 +27,9 @@ local Resurrection = function(self, event,...)
 		--local inInstance, instanceType = IsInInstance() 
 		--if not (inInstance and (instanceType == "raid" or instanceType == "party")) then return end
 		local instanceType
-		if GetNumRaidMembers() > 0 then
+		if  GetNumGroupMembers() > 0 then
 			instanceType = "raid"
-		elseif GetNumPartyMembers() > 0 then
+		elseif GetNumSubgroupMembers() > 0 then
 			instanceType = "party"
 		else
 			return
