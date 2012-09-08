@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(SunUI)
+﻿local S, C, L, DB, _ = unpack(SunUI)
 local Launch = CreateFrame("Frame")
 Launch:RegisterEvent("ADDON_LOADED")
 Launch:SetScript("OnEvent", function(self, event)

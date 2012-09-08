@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(SunUI)
+﻿local S, C, L, DB, _ = unpack(SunUI)
 local Core = LibStub("AceAddon-3.0"):GetAddon("SunUI")
 local Module = Core:NewModule("InfoPanelBottom")
 
@@ -292,6 +292,7 @@ local function BuildFriend()
 					GameTooltip:AddLine(BATTLENET_OPTIONS_LABEL)
 					for i = 1, BNtotal do
 						_, presenceName, battleTag, _, toonName, toonID, client, isOnline, _, isAFK, isDND = BNGetFriendInfo(i)
+						if battleTag == nil then battleTag = "" end
 						if not isOnline then break end
 						if isAFK then
 							status = "|cffE7E716"..L_CHAT_AFK.."|r"

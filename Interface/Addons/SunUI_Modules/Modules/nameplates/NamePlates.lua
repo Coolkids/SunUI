@@ -1,4 +1,4 @@
-local S, C, L, DB = unpack(SunUI)
+local S, C, L, DB, _ = unpack(SunUI)
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("NamePlates")
 local   cfg={
 	combat_toggle = false, 			-- If set to true nameplates will be automatically toggled on when you enter the combat
@@ -539,8 +539,8 @@ local function SkinObjects(frame)
 	frame.cb = cb
 
 	local name = hp:CreateFontString(nil, 'OVERLAY')
-	name:SetPoint('BOTTOMLEFT', hp, 'TOPLEFT', -10, 1)
-	name:SetPoint('BOTTOMRIGHT', hp, 'TOPRIGHT', 10, 1)
+	name:SetPoint('BOTTOMLEFT', hp, 'TOPLEFT', -10, 4)
+	name:SetPoint('BOTTOMRIGHT', hp, 'TOPRIGHT', 10, 4)
 	name:SetFont(DB.Font, C["Fontsize"]*S.Scale(1), "THINOUTLINE")
 	frame.oldname = oldname
 	frame.name = name

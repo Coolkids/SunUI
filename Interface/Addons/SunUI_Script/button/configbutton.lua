@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(SunUI)
+﻿local S, C, L, DB, _ = unpack(SunUI)
 local CB = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("CB", "AceTimer-3.0")
 function CB:OnEnable()
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig", "AceConsole-3.0")

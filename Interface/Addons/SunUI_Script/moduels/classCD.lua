@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(SunUI)
+﻿local S, C, L, DB, _ = unpack(SunUI)
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ClassCD")
 
 
@@ -395,9 +395,10 @@ end
 
 function Module:OnInitialize()
 	C = C["MiniDB"]
-	if C["ClassCDOpen"] ~= true then return end
+	
 end
 function Module:OnEnable()
+	if C["ClassCDOpen"] ~= true then return end
 	local ClassCDAnchor = CreateFrame("Frame", "ClassCDAnchor", UIParent)
 	if not C["ClassCDIcon"] then 
 		ClassCDAnchor:SetSize(C["ClassCDWidth"], C["ClassCDHeight"])

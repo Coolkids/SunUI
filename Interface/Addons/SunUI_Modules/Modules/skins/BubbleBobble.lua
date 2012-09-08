@@ -1,7 +1,7 @@
 -- *****************************************************
 -- ** BubbleBobble by hankthetank
 -- *****************************************************
-local S, C, L, DB = unpack(SunUI)
+local S, C, L, DB, _ = unpack(SunUI)
 local settings = {
 	bg = {
 		texture = "Interface\\Buttons\\WHITE8x8",

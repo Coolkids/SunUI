@@ -1,5 +1,5 @@
 ﻿-- Engines
-local S, C, L, DB = unpack(SunUI)
+local S, C, L, DB, _ = unpack(SunUI)
  
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SkinDBM", "AceEvent-3.0")
 function Module:OnInitialize()
@@ -132,8 +132,8 @@ function Module:OnInitialize()
 
 			if not bar.styled then
 				bar:SetHeight(10)
-				S.StripTextures(background)
-				S.StripTextures(progress)
+				background:StripTextures()
+				progress:StripTextures()
 				local h = CreateFrame("Frame", nil, bar)
 				h:Point("TOPLEFT", bar, "TOPLEFT", 1, -1)
 				h:Point("BOTTOMRIGHT", bar, "BOTTOMRIGHT", -1, 1)

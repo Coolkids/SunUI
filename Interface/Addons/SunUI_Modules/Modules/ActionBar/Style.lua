@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(SunUI)
+﻿local S, C, L, DB, _ = unpack(SunUI)
  if (IsAddOnLoaded("Dominos") or IsAddOnLoaded("Bartender4") or IsAddOnLoaded("Macaroon")) then
 	return 
 end	

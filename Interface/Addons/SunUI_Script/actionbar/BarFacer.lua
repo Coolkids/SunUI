@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(SunUI)
+﻿local S, C, L, DB, _ = unpack(SunUI)
  
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("AutoHide", "AceEvent-3.0")
 

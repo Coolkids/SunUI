@@ -2,7 +2,7 @@
 local addon, ns = ...
 local oUF = ns.oUF or oUF 
 local cast = ns.cast
-local S, C, L, DB = unpack(SunUI)
+local S, C, L, DB, _ = unpack(SunUI)
 local Core = LibStub("AceAddon-3.0"):GetAddon("SunUI")
 local Module = Core:NewModule("UnitFrame")
 local _G = _G

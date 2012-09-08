@@ -1,6 +1,6 @@
 ﻿
 -- Engines
-local S, C, L, DB = unpack(SunUI)
+local S, C, L, DB, _ = unpack(SunUI)
 local Core = LibStub("AceAddon-3.0"):GetAddon("SunUI")
 local Module = Core:NewModule("InfoPanelTop")
 local InfoBarStatusColor = {{1, 0, 0}, {1, 1, 0}, {0, 0.4, 1}}

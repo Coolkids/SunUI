@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(SunUI)
+﻿local S, C, L, DB, _ = unpack(SunUI)
 ----------------------------------------------------------------------------------------
 --	Your instance lock status in tooltip(Instance Lock Compare by Driizt)
 ----------------------------------------------------------------------------------------

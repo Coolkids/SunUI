@@ -1,5 +1,5 @@
 ﻿-- Engines
-local S, C, L, DB = unpack(SunUI)
+local S, C, L, DB, _ = unpack(SunUI)
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ClassReminder", "AceEvent-3.0")
 local _G = _G
 function Module:OnInitialize()
@@ -50,18 +50,13 @@ function Module:OnInitialize()
 		},
 		PALADIN = {
 			["Seals"] = { --Seals group
-				["spells"] = {
-					[20154] = true, -- seal of righteousness
-					[20164] = true, -- seal of justice
-					[20165] = true, -- seal of insight
-					[31801] = true, -- seal of truth				
+				["spells"] = {		
 				},
 				["combat"] = true,
 				["instance"] = true,
 			},
 			["Righteous Fury"] = { -- righteous fury group
 				["spells"] = {
-					[25780] = true, 
 				},
 				["role"] = "Tank",
 				["instance"] = true,
@@ -70,10 +65,6 @@ function Module:OnInitialize()
 			},
 			["Auras"] = { -- auras
 				["spells"] = {
-					[465] = true, --devo
-					[7294] = true, --retr
-					[19746] = true, -- conc
-					[19891] = true, -- resist
 				},
 				["instance"] = true,
 				["personal"] = true,

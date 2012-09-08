@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(SunUI)
+﻿local S, C, L, DB, _ = unpack(SunUI)
 ----------------------------------------------------------------------------------------
 --	Displays items can not be transmogrified(Will It Mog by Nathanyel)
 ----------------------------------------------------------------------------------------

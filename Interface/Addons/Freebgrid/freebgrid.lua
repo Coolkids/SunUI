@@ -1,5 +1,6 @@
 local ADDON_NAME, ns = ...
 local S, _, _, DB = unpack(SunUI)
+local _G = _G
 local L = ns.Locale
 ns._Objects = {}
 ns._Headers = {}
@@ -318,17 +319,17 @@ function ns:UpdateBlizzardRaidFrame()
 	
 	if GetDisplayedAllyFrames() == "raid" then	
 		if ns.db.hideblzraid then
-			CompactRaidFrameManager:UnregisterAllEvents()
-			CompactRaidFrameManager.Show = function() end
-			CompactRaidFrameManager:Hide()
-			CompactRaidFrameContainer:UnregisterAllEvents()
-			CompactRaidFrameContainer.Show = function() end
-			CompactRaidFrameContainer:Hide()	
+			_G["CompactRaidFrameManager"]:UnregisterAllEvents()
+			_G["CompactRaidFrameManager"].Show = function() end
+			_G["CompactRaidFrameManager"]:Hide()
+			_G["CompactRaidFrameManager"]:UnregisterAllEvents()
+			_G["CompactRaidFrameManager"].Show = function() end
+			_G["CompactRaidFrameManager"]:Hide()	
 		else
-			if not CompactRaidFrameContainer:IsEventRegistered("PARTY_MEMBERS_CHANGED") then		
-				CompactRaidFrameContainer:RegisterEvent("RAID_ROSTER_UPDATE")
-				CompactRaidFrameContainer:RegisterEvent("PARTY_MEMBERS_CHANGED")
-				CompactRaidFrameContainer:RegisterEvent("UNIT_PET")
+			if not _G["CompactRaidFrameManager"]:IsEventRegistered("PARTY_MEMBERS_CHANGED") then		
+				_G["CompactRaidFrameManager"]:RegisterEvent("RAID_ROSTER_UPDATE")
+				_G["CompactRaidFrameManager"]:RegisterEvent("PARTY_MEMBERS_CHANGED")
+				_G["CompactRaidFrameManager"]:RegisterEvent("UNIT_PET")
 			end
 			CompactRaidFrameManager_SetSetting("IsShown", true)
 		end

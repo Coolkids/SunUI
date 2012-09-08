@@ -1,5 +1,5 @@
 ﻿-- Engines
-local S, C, L, DB = unpack(SunUI)
+local S, C, L, DB, _ = unpack(SunUI)
 
  
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("MiniMap", "AceTimer-3.0")
@@ -178,4 +178,53 @@ function Module:OnEnable()
 		fadeInfo.endAlpha = 0
 		UIFrameFade(SubLoc, fadeInfo)
 	end)
+	
+		---Hide Instance Difficulty flag 隐藏难度标志
+	MiniMapInstanceDifficulty:ClearAllPoints()
+	MiniMapInstanceDifficulty:Hide()
+
+	local rd = CreateFrame("Frame", nil, Minimap)
+	rd:SetSize(24, 8)
+	rd:RegisterEvent("PLAYER_ENTERING_WORLD")
+	rd:RegisterEvent("PLAYER_DIFFICULTY_CHANGED")
+	rd:RegisterEvent("GUILD_PARTY_STATE_UPDATED")
+	rd:SetPoint("TOPLEFT", 3, -3)
+	local rdt = rd:CreateFontString(nil, "OVERLAY")
+	rdt:SetPoint("LEFT", rd)
+	rdt:SetJustifyH('LEFT')
+	rdt:SetTextColor()
+	rdt:SetFont(DB.Font, 16, "THINOUTLINE")
+	rdt:SetShadowOffset(S.mult, -S.mult)
+	rdt:SetShadowColor(0, 0, 0, 0.4)
+
+	local function diff()
+		local difficulty = GetInstanceDifficulty()
+		if difficulty == 1 then
+			rdt:SetText("")
+		elseif difficulty == 2 then
+			rdt:SetText("5")
+		elseif difficulty == 3 then
+			rdt:SetText("5H")
+		elseif difficulty == 4 then
+			rdt:SetText("10")
+		elseif difficulty == 5 then
+			rdt:SetText("25")
+		elseif difficulty == 6 then
+			rdt:SetText("10H")
+		elseif difficulty == 7 then
+			rdt:SetText("25H")
+		elseif difficulty == 8 then
+			rdt:SetText("LFR")
+		--elseif difficulty == 9 then
+		elseif difficulty == 10 then
+			rdt:SetText("40")
+		end
+
+		if GuildInstanceDifficulty:IsShown() then
+			rdt:SetTextColor(0.40, 0.78, 1)
+		else
+			rdt:SetTextColor(1, 1, 1)
+		end
+	end
+	rd:SetScript("OnEvent", diff)
 end

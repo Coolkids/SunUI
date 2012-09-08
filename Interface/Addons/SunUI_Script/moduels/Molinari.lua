@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(SunUI)
+﻿local S, C, L, DB, _ = unpack(SunUI)
 local button = CreateFrame('Button', nil, UIParent, 'SecureActionButtonTemplate')
 button:SetScript('OnEvent', function(self, event, ...) self[event](self, ...) end)
 button:RegisterEvent('PLAYER_LOGIN')

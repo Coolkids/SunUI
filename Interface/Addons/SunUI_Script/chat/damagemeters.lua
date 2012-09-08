@@ -1,4 +1,4 @@
-local S, C, L, DB = unpack(SunUI)
+local S, C, L, DB, _ = unpack(SunUI)
 -------------------------------------------------------------------------------
 -- By Lockslap (US, Bleeding Hollow)
 -- <Borderline Amazing>, http://ba-guild.com

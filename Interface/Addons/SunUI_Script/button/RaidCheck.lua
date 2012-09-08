@@ -1,4 +1,4 @@
-local S, C, L, DB = unpack(SunUI) --Engine
+local S, C, L, DB, _ = unpack(SunUI) --Engine
 local RC = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule('RaidCheck');
 
 

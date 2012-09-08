@@ -3,16 +3,11 @@ local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SunUI fixPX"
 
 --  自动设置聊天框体和UI缩放
 local function SetChatFrame()
-	FCF_SetLocked(ChatFrame1, nil)
-	FCF_SetChatWindowFontSize(self, ChatFrame1, 15) 
 	ChatFrame1:ClearAllPoints()
 	ChatFrame1:SetPoint("BOTTOMLEFT", 5, 28)
 	ChatFrame1:SetWidth(327)
 	ChatFrame1:SetHeight(122)
 	ChatFrame1:SetUserPlaced(true)
-	for i = 1,10 do FCF_SetWindowAlpha(_G["ChatFrame"..i], 0) end
-	FCF_SavePositionAndDimensions(ChatFrame1)
-	FCF_SetLocked(ChatFrame1, 1)
 	-- 聊天频道职业染色
 	ToggleChatColorNamesByClassGroup(true, "SAY")
 	ToggleChatColorNamesByClassGroup(true, "EMOTE")

@@ -1,5 +1,6 @@
-﻿local S, C, L, DB = unpack(SunUI)
+﻿local S, C, L, DB, _ = unpack(SunUI)
 local _G = _G
+local SetDesaturation = SetDesaturation
 if (IsAddOnLoaded("Dominos") or IsAddOnLoaded("Bartender4") or IsAddOnLoaded("Macaroon")) then
 	return 
 end
@@ -390,17 +391,15 @@ function Module:CreateOverrideBar()
 	RegisterStateDriver(OverrideActionBar, "visibility", "[overridebar][vehicleui] show; hide")
 end
 function Module:CreatePetBar()
-   local num = NUM_PET_ACTION_SLOTS
+	local num = NUM_PET_ACTION_SLOTS
     local bar = CreateFrame("Frame","SunUIPetBar",UIParent, "SecureHandlerStateTemplate")
     bar:SetWidth(C["ButtonSize"]*num+C["ButtonSpacing"]*(num-1))
     bar:SetHeight(C["ButtonSize"])
     bar:SetScale(C["PetBarSacle"])
   
     MoveHandle.SunUIPetBar = S.MakeMove(bar, "SunUI宠物条", "petbar", C["PetBarSacle"])
-
-    PetActionBarFrame:SetParent(bar)
-    PetActionBarFrame:EnableMouse(false)
-	PetBarUpdate = function(self, event)
+	
+	local PetBarUpdate = function(self, event)
 		local petActionButton, petActionIcon, petAutoCastableTexture, petAutoCastShine
 		for i=1, NUM_PET_ACTION_SLOTS, 1 do
 			local buttonName = "PetActionButton" .. i
@@ -595,7 +594,7 @@ function Module:UpdateSize(val)
 	end
 end
 
-function Module:OnInitialize()
+function Module:OnEnable()
 	C = C["ActionBarDB"]
 	Module:blizzHider()
 	Module:CreateBar1()

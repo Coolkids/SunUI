@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(SunUI)
+﻿local S, C, L, DB, _ = unpack(SunUI)
  
 local Delay = CreateFrame("Frame")
 Delay:RegisterEvent("PLAYER_ENTERING_WORLD")

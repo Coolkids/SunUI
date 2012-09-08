@@ -3,7 +3,7 @@
 -- Version: 1.2
 local nWFA = CreateFrame("Frame")
 local EventsRegistered
-
+local _G = _G
 local WF;
 local OrigWFSetPoint, OrigWFClearAllPoints;
 local origWFHighlight;

@@ -11,7 +11,7 @@
   *   - .SpellRange.outsideAlpha - Frame alpha for units out of range.         *
   * Note that SpellRange will automatically disable Range elements of frames.  *
   ****************************************************************************]]
-local S, C, L, DB = unpack(SunUI)
+local S, C, L, DB, _ = unpack(SunUI)
 
 local _, ns = ...
 local oUF = ns.oUF or oUF

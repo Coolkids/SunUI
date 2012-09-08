@@ -1,4 +1,4 @@
-local S, C, L, DB = unpack(SunUI)
+local S, C, L, DB, _ = unpack(SunUI)
 
 local settings = { 
    width = 252, 
@@ -37,10 +37,6 @@ local function SkinIt(bar)
          region:SetShadowColor(0,0,0,0) 
       end 
    end 
-   bar:CreateShadow("Background")
-   bar:SetStatusBarTexture(DB.Statusbar) 
-   bar:SetStatusBarColor(170/255, 10/255, 10/255) 
-    
 end 
 
 
@@ -93,6 +89,7 @@ do
 
       local r, g, b = unpack(settings.colors[type]) 
 	  frame:CreateShadow("")
+	  frame:SetReverseFill(true)
 		local gradient = frame:CreateTexture(nil, "BACKGROUND")
 		gradient:SetPoint("TOPLEFT")
 		gradient:SetPoint("BOTTOMRIGHT")

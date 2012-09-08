@@ -2,7 +2,7 @@
 --	Raid cooldowns(alRaidCD by Allez)
 --  Modify by Ljxx.net at 2011.10.7
 ----------------------------------------------------------------------------------------
-local S, C, L, DB = unpack(SunUI)
+local S, C, L, DB, _ = unpack(SunUI)
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("RaidCD")
 
 	local show = {

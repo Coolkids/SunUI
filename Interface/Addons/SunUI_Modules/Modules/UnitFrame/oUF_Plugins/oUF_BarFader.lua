@@ -1,4 +1,4 @@
-local S, C, L, DB = unpack(SunUI)
+local S, C, L, DB, _ = unpack(SunUI)
 
 local _, ns = ...
 local oUF = ns.oUF or oUF

@@ -153,7 +153,7 @@ function Module:OnEnable()
 			PartyMemberFrame:Hide()
 			PartyMemberFrame.Show = function() end
 		end
-		UIParent:UnregisterEvent("RAID_ROSTER_UPDATE")
+		--UIParent:UnregisterEvent("RAID_ROSTER_UPDATE")
 	end
 	---------------- > Autoinvite by whisper
 	if C["MiniDB"]["Autoinvite"] then
@@ -167,11 +167,11 @@ function Module:OnEnable()
 	end
 
 	if C["MiniDB"]["HideRaidWarn"] then
-		RaidWarningFrame:ClearAllPoints()
-		RaidWarningFrame:Hide()
-		RaidWarningFrame:UnregisterAllEvents()
-		RaidWarningFrame.Show = function() end
-		RaidWarningFrame.SetPoint = function() end
+		_G["RaidWarningFrame"]:ClearAllPoints()
+		_G["RaidWarningFrame"]:Hide()
+		_G["RaidWarningFrame"]:UnregisterAllEvents()
+		_G["RaidWarningFrame"].Show = function() end
+		_G["RaidWarningFrame"].SetPoint = function() end
 	end
 
 	if C["MiniDB"]["AutoQuest"] then

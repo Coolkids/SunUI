@@ -1,4 +1,4 @@
-local S, C, L, DB = unpack(SunUI)
+local S, C, L, DB, _ = unpack(SunUI)
 
 local _G = _G
 local format = format
@@ -178,6 +178,6 @@ f:SetScript("OnEvent", function(self, event, addon)
 		FriendsListColorsDB = FriendsListColorsDB or cfg.defaults
 		db = FriendsListColorsDB
 		hooksecurefunc("FriendsList_Update", updFunc);
-		--hooksecurefunc("HybridScrollFrame_Update", updFunc);
+		hooksecurefunc("HybridScrollFrame_Update", updFunc);
 	end
 end)

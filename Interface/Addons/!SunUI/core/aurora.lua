@@ -1373,7 +1373,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 				local a1, p, a2, x, y = tab:GetPoint()
 				tab:ClearAllPoints()
-				tab:SetPoint(a1, p, a2, x+2, y)
+				tab:SetPoint(a1, p, a2, x+8, y)
 
 				S.CreateBG(tab)
 				S.CreateSD(tab, 5, 0, 0, 0, 1, 1)
@@ -3670,7 +3670,22 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				S.Reskin(reskinbutton)
 			end
 		end
-
+		local a,b,c,d,e = BrowseName:GetPoint()  --名称
+		BrowseName:ClearAllPoints()
+		BrowseName:SetPoint(a,b,c,d-30,e)
+		
+		local a,b,c,d,e = BrowseMinLevel:GetPoint() --最小等级
+		BrowseMinLevel:ClearAllPoints()
+		BrowseMinLevel:SetPoint(a,b,c,d-25,e)
+		
+		local a,b,c,d,e = BrowseSearchButton:GetPoint() --搜索
+		BrowseSearchButton:ClearAllPoints()
+		BrowseSearchButton:SetPoint(a,b,c,d-5,e-10)
+		
+		local a,b,c,d,e = BrowsePrevPageButton:GetPoint() --上一页
+		BrowsePrevPageButton:ClearAllPoints()
+		BrowsePrevPageButton:SetPoint(a,b,c,d-10,e)
+		
 		BrowseCloseButton:ClearAllPoints()
 		BrowseCloseButton:Point("BOTTOMRIGHT", AuctionFrameBrowse, "BOTTOMRIGHT", 66, 13)
 		BrowseBuyoutButton:ClearAllPoints()

@@ -1,3 +1,4 @@
+local S, C, L, DB, _ = unpack(SunUI)
 if(Skinner and Skinner.initialized) then Skinner.initialized.TradeFrame = true; end;
 
 TBT_SPELL_TABLE = {
@@ -48,7 +49,7 @@ function TBTFrame_OnLoad(self)
 	button:SetScript("OnClick", function(self) 
 		ChatFrame_SendTell(GetUnitName("NPC", true));
 	end)
-
+	S.Reskin(button)
 	--button for emote1
 	button = CreateFrame("Button", "TradeFrameTargetEmote1Button", TradeFrame, "UIPanelButtonTemplate");
 	button:SetWidth(30);
@@ -56,7 +57,7 @@ function TBTFrame_OnLoad(self)
 	button:SetPoint("LEFT", "TradeFrameTargetWhisperButton", "RIGHT", 5, 0);
 	button:SetText(TBT_RIGHT_BUTTON.ask);
 	button:SetScript("OnClick", function(self) DoEmote("hungry", "NPC") end);
-
+	S.Reskin(button)
 	--button for emote2
 	button = CreateFrame("Button", "TradeFrameTargetEmote2Button", TradeFrame, "UIPanelButtonTemplate");
 	button:SetWidth(30);
@@ -64,7 +65,7 @@ function TBTFrame_OnLoad(self)
 	button:SetPoint("LEFT", "TradeFrameTargetEmote1Button", "RIGHT", 5, 0);
 	button:SetText(TBT_RIGHT_BUTTON.thank);
 	button:SetScript("OnClick", function(self) DoEmote("thank", "NPC") end);
-
+	S.Reskin(button)
 	--button for click-targetting, positioned at portrait.
 	button = CreateFrame("Button", "TradeFrameTargetRecipientButton", TradeFrame, "SecureActionButtonTemplate") 
 	button:SetAttribute("type", "target");
@@ -72,7 +73,6 @@ function TBTFrame_OnLoad(self)
 	button:SetWidth(60)
 	button:SetHeight(70)
 	button:SetPoint("CENTER", "TradeFrame", "TOPLEFT", 210, -35);
-
 	--for alt+leftclick quick trade
 	hooksecurefunc("ContainerFrameItemButton_OnModifiedClick", function(self, button)
 
@@ -180,16 +180,17 @@ local function CreatePlayerSpellButton(id, type)
 	button:SetWidth(45);
 	button:SetHeight(21);
 	button:SetText(TBT_LEFT_BUTTON[type]);
+	--S.Reskin(button)
 	return button
 end
 
 function TBTFrame_CreateLeftButton(class)
 	--everyone can trade others water
 	local button = CreatePlayerSpellButton(1, "water");
-	button:SetPoint("TOPLEFT", "TradeFrame", "TOPLEFT", 72, -50);
+	button:SetPoint("TOPLEFT", "TradeFrame", "TOPLEFT", 72, -30);
 	button:SetScript("PreClick", function(self) TBT_TradeItem(self, "water") end);
 	button:SetScript("PostClick", function(self) TBTFrame_SetButtonSpell(self,"") end);
-
+	S.Reskin(button)
 	local type = class=="WARLOCK" and "stone" or class=="ROGUE" and "unlock" or nil;
 
 	if(type) then

@@ -3,7 +3,7 @@
 -- Inspired by Seerah`s KeepingTabs (http://www.wowinterface.com/downloads/info18120-KeepingTabs.html)
 
 --Open directly to the Guild Roster tab 
-local S, C, L, DB = unpack(SunUI)
+local S, C, L, DB, _ = unpack(SunUI)
 --when switching to the guild frame
 
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("socialtabs")

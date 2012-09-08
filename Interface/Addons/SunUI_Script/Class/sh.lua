@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(SunUI)
+﻿local S, C, L, DB, _ = unpack(SunUI)
 	
 local start, duration
 local spellIDs = {
@@ -89,7 +89,7 @@ Frame:RegisterEvent("UNIT_POWER")
 Frame:RegisterEvent("SPELL_UPDATE_COOLDOWN")	
 
 if DB.PlayerName == "Coolkid" then
-	local ShadowOrbs = CreateFrame("Frame", nil, f)
+	local ShadowOrbs = CreateFrame("Frame", nil, UIParent)
 
 	ShadowOrbs.text = S.MakeFontString(ShadowOrbs, 60*S.Scale(1), "OUTLINEMONOCHROME")
 	ShadowOrbs.text:SetPoint("CENTER", UIParent, "CENTER", 0, -55)
@@ -97,17 +97,26 @@ if DB.PlayerName == "Coolkid" then
 	ShadowOrbs.text:SetTextColor(.86,.22,1)
 	ShadowOrbs:SetAllPoints(ShadowOrbs.text)
 	ShadowOrbs:Hide()
-	ShadowOrbs:SetScript("OnEvent",function()
+	ShadowOrbs:EnableMouse(false)
+	ShadowOrbs:SetScript("OnEvent",function(self, event, ...)
 		local numShadowOrbs = UnitPower('player', SPELL_POWER_SHADOW_ORBS)
 		if numShadowOrbs == 0 then
-			ShadowOrbs:Hide()
+			self:Hide()
 		else
-			ShadowOrbs:Show()
-			ShadowOrbs.text:SetText(numShadowOrbs)
+			self:Show()
+			self.text:SetText(numShadowOrbs)
+		end
+		if event == "PLAYER_REGEN_DISABLED" then
+			UIFrameFadeIn(self, 2, self:GetAlpha(), 1)
+		end
+		if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" then
+			UIFrameFadeOut(self, 2, self:GetAlpha(), 0)
 		end
 	end)
 
 	ShadowOrbs:RegisterEvent("PLAYER_ENTERING_WORLD")
 	ShadowOrbs:RegisterEvent("UNIT_POWER")
 	ShadowOrbs:RegisterEvent("UNIT_DISPLAYPOWER")
+	ShadowOrbs:RegisterEvent("PLAYER_REGEN_ENABLED")
+	ShadowOrbs:RegisterEvent("PLAYER_REGEN_DISABLED")
 end

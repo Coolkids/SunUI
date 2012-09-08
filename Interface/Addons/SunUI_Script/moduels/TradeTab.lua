@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(SunUI)
+﻿local S, C, L, DB, _ = unpack(SunUI)
 local ProfessionTabs = CreateFrame("Frame", "ProfessionTabs")
 ProfessionTabs:SetScript("OnEvent", function(self, Event, ...) self[Event](self, Event, ...) end)
 ProfessionTabs:RegisterEvent("TRADE_SKILL_SHOW")
@@ -66,7 +66,7 @@ end
 
 function ProfessionTabs:CreateTab(Table, Parent)
 	local Tab = CreateFrame("CheckButton", nil, Parent, "SpellBookSkillLineTabTemplate SecureActionButtonTemplate")
-	Tab:SetPoint("TOPLEFT", Parent, "TOPRIGHT", (Parent == ATSWFrame or Parent == TradeFrame) and -32 or 13, (Parent == TradeFrame and -32 or -24) + -44 * #Table)
+	Tab:SetPoint("TOPLEFT", Parent, "TOPRIGHT", (Parent == ATSWFrame or Parent == TradeFrame) and 5 or 13, (Parent == TradeFrame and -32 or -24) + -44 * #Table)
 	Tab:SetScript("OnEnter", Tab_OnEnter)
 	Tab:SetScript("OnLeave", Tab_OnLeave)
 	Tab:CreateShadow("Background")

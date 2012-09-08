@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(SunUI)
+﻿local S, C, L, DB, _ = unpack(SunUI)
 --- 專業技能提升 [你的附魔技能提升到102→附魔 102]
 ERR_SKILL_UP_SI = "%s   |cff1eff00%d|r"
 if GetLocale() == "zhCN" then  

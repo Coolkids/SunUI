@@ -96,7 +96,7 @@ local function Update(object, event, unit)
 	while ( true ) do
 		local name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable = UnitAura(unit, index, "HELPFUL")
 		if ( not name ) then break end
-		
+		if  auraList[name] == nil then return end
 		if ( auraList[name] and auraList[name] >= priority ) then
 			priority = auraList[name]
 			auraName = name
@@ -113,7 +113,7 @@ local function Update(object, event, unit)
 	while ( true ) do
 		local name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable = UnitAura(unit, index, "HARMFUL")
 		if ( not name ) then break end
-		
+		if  auraList[name] == nil then return end
 		if ( auraList[name] and auraList[name] >= priority ) then
 			priority = auraList[name]
 			auraName = name

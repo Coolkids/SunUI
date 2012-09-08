@@ -1,5 +1,5 @@
 local addon, ns = ...
-local S, C, L, DB = unpack(SunUI)
+local S, C, L, DB, _ = unpack(SunUI)
 local cast = CreateFrame("Frame")  
   -- special thanks to Allez for coming up with this solution
 local channelingTicks = {
