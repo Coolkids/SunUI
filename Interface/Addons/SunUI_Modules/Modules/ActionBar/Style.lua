@@ -265,22 +265,9 @@ local function styleExtraActionButton(bu)
 	local normal = _G[name.."NormalTexture"]
 
 	if normal then normal:SetTexture(nil) end
-    bu.style:SetTexture(nil)
-    hooksecurefunc(bu.style, "SetTexture", function(self, texture)
-		if texture then
-		self:SetTexture(nil)
-		end
-    end)
 	bu.icon:SetTexCoord(.08, .92, .08, .92)
 	bu.icon:SetAllPoints()
     bu.cooldown:SetAllPoints(bu)
- 
-	--[[ if not bu.shadow then
-		local h = CreateFrame("Frame",nil,bu)
-		h:SetAllPoints()
-		h:CreateShadow("Background")
-		bu.shadow = true
-	end ]]
 	bu:StyleButton(true)
     bu.sun_styled = true
 end

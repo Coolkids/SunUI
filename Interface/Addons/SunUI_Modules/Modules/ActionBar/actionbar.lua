@@ -353,6 +353,13 @@ function Module:CreateExtrabarBar()
 	bar.border:SetParent(ExtraActionButton1)
 	bar.shadow:SetFrameLevel(1)
 	bar.border:SetFrameLevel(1)
+	
+	ExtraActionButton1.style:SetTexture(nil)
+    hooksecurefunc(ExtraActionButton1.style, "SetTexture", function(self, texture)
+		if texture then
+		self:SetTexture(nil)
+		end
+    end)
 end
 function Module:CreateOverrideBar()
 	local num = NUM_ACTIONBAR_BUTTONS
