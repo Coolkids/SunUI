@@ -59,6 +59,7 @@ G["ThreatDB"] = {
 	["ThreatBarWidth"] = 180,
 	["NameTextL"] = 3,
 	["ThreatLimited"] = 3,
+	["VERTICAL "]=false,
 }
 G["ReminderDB"] = {
 	["ShowRaidBuff"] = true,

@@ -45,14 +45,11 @@ local function GetAuras()
 		[GetSpellInfo(853)]		= 3, 	-- Hammer of Justice
 		[GetSpellInfo(20066)] 	= 3, 	-- Repentance
 		[GetSpellInfo(46968)] 	= 3, 	-- Shockwave
-		[GetSpellInfo(49203)] 	= 3,	-- Hungering Cold
 		[GetSpellInfo(47481)]	= 3,	-- Gnaw (dk pet stun)
 		
 		-- Silences
-		[GetSpellInfo(18469)] 	= 1,	-- Improved Counterspell
 		[GetSpellInfo(15487)] 	= 1, 	-- Silence
 		[GetSpellInfo(34490)] 	= 1, 	-- Silencing Shot	
-		[GetSpellInfo(18425)]	= 1,	-- Improved Kick
 		[GetSpellInfo(47476)]	= 1,	-- Strangulate
 		
 		-- Disarms
@@ -65,7 +62,6 @@ local function GetAuras()
 		[GetSpellInfo(32182)] 	= 1, 	-- Heroism
 		[GetSpellInfo(33206)] 	= 1, 	-- Pain Suppression
 		[GetSpellInfo(29166)] 	= 1,	-- Innervate
-		[GetSpellInfo(18708)]  	= 1,	-- Fel Domination
 		[GetSpellInfo(54428)]	= 1,	-- Divine Plea
 		[GetSpellInfo(31821)]	= 1,	-- Aura mastery
 		
@@ -96,7 +92,6 @@ local function Update(object, event, unit)
 	while ( true ) do
 		local name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable = UnitAura(unit, index, "HELPFUL")
 		if ( not name ) then break end
-		if  auraList[name] == nil then return end
 		if ( auraList[name] and auraList[name] >= priority ) then
 			priority = auraList[name]
 			auraName = name
@@ -113,7 +108,6 @@ local function Update(object, event, unit)
 	while ( true ) do
 		local name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable = UnitAura(unit, index, "HARMFUL")
 		if ( not name ) then break end
-		if  auraList[name] == nil then return end
 		if ( auraList[name] and auraList[name] >= priority ) then
 			priority = auraList[name]
 			auraName = name

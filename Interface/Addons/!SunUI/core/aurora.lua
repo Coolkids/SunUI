@@ -2276,8 +2276,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 						bar.bg:SetVertexColor(0, 0, 0)
 
 						bar.bgmiddle = CreateFrame("Frame", nil, bar)
-						bar.middle:SetPoint("TOPLEFT", middle, -1, 1)
-						bar.middle:SetPoint("BOTTOMRIGHT", middle, 1, -1)
+						bar.bgmiddle:SetPoint("TOPLEFT", middle, -1, 1)
+						bar.bgmiddle:SetPoint("BOTTOMRIGHT", middle, 1, -1)
 						S.CreateBD(bar.bgmiddle, 0)
 
 						bar.skinned = true

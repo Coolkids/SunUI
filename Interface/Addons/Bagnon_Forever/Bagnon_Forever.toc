@@ -1,4 +1,4 @@
-## Interface: 40300
+## Interface: 50001
 ## Title: Bagnon Forever
 ## Notes: Allows you to view your characters inventory and bank from anywhere
 ## Notes-zhTW: 儲存角色背包和銀行的物品資訊

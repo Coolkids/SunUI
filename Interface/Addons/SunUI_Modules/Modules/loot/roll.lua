@@ -62,6 +62,7 @@ local function StatusUpdate(frame)
 	if t > 1000000000 then
 		frame:GetParent():Hide()
 	end
+	frame.spark:SetPoint("CENTER", frame, "LEFT", perc * frame:GetWidth(), 0)
 end
 
 local function CreateRollButton(parent, ntex, ptex, htex, rolltype, tiptext, ...)
@@ -79,21 +80,21 @@ local function CreateRollButton(parent, ntex, ptex, htex, rolltype, tiptext, ...
 	f:SetScript("OnClick", ClickRoll)
 	f:SetMotionScriptsWhileDisabled(true)
 	local txt = f:CreateFontString(nil, nil)
-	txt:SetFont(DB.Font, 14, "OUTLINE")
+	txt:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
+	txt:SetPoint("CENTER", 0, rolltype == 2 and 1 or rolltype == 0 and -1.2 or 0)
 	txt:SetShadowOffset(1,  -1)
-	txt:Point("CENTER", 0, rolltype == 2 and 1 or rolltype == 0 and -1.2 or 0)
 	return f, txt
 end
 
 local function CreateRollFrame()
 	local frame = CreateFrame("Frame", nil, UIParent)
-	frame:Size(328, 22)
+	frame:Size(240, 5)
 	frame:SetScript("OnEvent", OnEvent)
 	frame:RegisterEvent("CANCEL_LOOT_ROLL")
 	frame:Hide()
 
 	local button = CreateFrame("Button", nil, frame)
-	button:Point("LEFT", -29, 0)
+	button:SetPoint("LEFT", -26, 9)
 	button:Size(22)
 	button:CreateShadow()
 	button:SetScript("OnEnter", SetItemTip)
@@ -109,9 +110,8 @@ local function CreateRollFrame()
 	
 	local status = CreateFrame("StatusBar", nil, frame)
 	status:CreateShadow()
-	status:Size(326, 20)
-	status:Point("TOPLEFT", 0, 0)
-	status:Point("BOTTOMRIGHT", 0, 0)
+	status:Size(240, 5)
+	status:Point("BOTTOMLEFT", frame, "BOTTOMLEFT")
 	status:SetScript("OnUpdate", StatusUpdate)
 	status:SetFrameLevel(status:GetFrameLevel() - 1)
 	status:SetStatusBarTexture(DB.Statusbar)
@@ -119,27 +119,39 @@ local function CreateRollFrame()
 	status.parent = frame
 	frame.status = status
 	
+	local spark = frame:CreateTexture(nil, "OVERLAY")
+	spark:Width(14)
+	spark:Height(25)
+	spark:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
+	spark:SetBlendMode("ADD")
+	status.spark = spark
+	
 	local gradient = status:CreateTexture(nil, "BACKGROUND")
 	gradient:SetPoint("TOPLEFT")
 	gradient:SetPoint("BOTTOMRIGHT")
 	gradient:SetTexture(DB.Statusbar)
 	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
 			
-	local need, needtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Dice-Up", "Interface\\Buttons\\UI-GroupLoot-Dice-Highlight", "Interface\\Buttons\\UI-GroupLoot-Dice-Down", 1, NEED, "LEFT", frame.button, "RIGHT", 5, -1)
-	local greed, greedtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Coin-Up", "Interface\\Buttons\\UI-GroupLoot-Coin-Highlight", "Interface\\Buttons\\UI-GroupLoot-Coin-Down", 2, GREED, "LEFT", need, "RIGHT", 0, -1)
-	local de, detext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-DE-Up", "Interface\\Buttons\\UI-GroupLoot-DE-Highlight", "Interface\\Buttons\\UI-GroupLoot-DE-Down", 3, ROLL_DISENCHANT, "LEFT", greed, "RIGHT", 0, -1)
-	local pass, passtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Pass-Up", nil, "Interface\\Buttons\\UI-GroupLoot-Pass-Down", 0, PASS, "LEFT", de or greed, "RIGHT", 0, 2.2)
+	--local need, needtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Dice-Up", "Interface\\Buttons\\UI-GroupLoot-Dice-Highlight", "Interface\\Buttons\\UI-GroupLoot-Dice-Down", 1, NEED, "LEFT", frame.button, "RIGHT", 5, -1)
+	--local greed, greedtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Coin-Up", "Interface\\Buttons\\UI-GroupLoot-Coin-Highlight", "Interface\\Buttons\\UI-GroupLoot-Coin-Down", 2, GREED, "LEFT", need, "RIGHT", 0, -1)
+	--local de, detext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-DE-Up", "Interface\\Buttons\\UI-GroupLoot-DE-Highlight", "Interface\\Buttons\\UI-GroupLoot-DE-Down", 3, ROLL_DISENCHANT, "LEFT", greed, "RIGHT", 0, -1)
+	--local pass, passtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Pass-Up", nil, "Interface\\Buttons\\UI-GroupLoot-Pass-Down", 0, PASS, "LEFT", de or greed, "RIGHT", 0, 2.2)
+	local need, needtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Dice-Up", "Interface\\Buttons\\UI-GroupLoot-Dice-Highlight", "Interface\\Buttons\\UI-GroupLoot-Dice-Down", 1, NEED, "LEFT", frame.button, "RIGHT", S.Scale(5), S.Scale(-1))
+	local greed, greedtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Coin-Up", "Interface\\Buttons\\UI-GroupLoot-Coin-Highlight", "Interface\\Buttons\\UI-GroupLoot-Coin-Down", 2, GREED, "LEFT", need, "RIGHT", 0, 0)
+	local de, detext
+	de, detext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-DE-Up", "Interface\\Buttons\\UI-GroupLoot-DE-Highlight", "Interface\\Buttons\\UI-GroupLoot-DE-Down", 3, ROLL_DISENCHANT, "LEFT", greed, "RIGHT", 0, 0)
+	local pass, passtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Pass-Up", nil, "Interface\\Buttons\\UI-GroupLoot-Pass-Down", 0, PASS, "BOTTOMLEFT", frame, "BOTTOMRIGHT", S.Scale(2.2), 0)
 	frame.needbutt, frame.greedbutt, frame.disenchantbutt = need, greed, de
 	frame.need, frame.greed, frame.pass, frame.disenchant = needtext, greedtext, passtext, detext
 
 	local bind = frame:CreateFontString()
-	bind:Point("LEFT", pass, "RIGHT", 3, 1)
-	bind:SetFont(DB.Font, 14, "OUTLINE")
+	bind:SetPoint("LEFT", de or greed, "RIGHT", S.Scale(3), S.Scale(1))
+	bind:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
 	bind:SetShadowOffset(1,  -1)
 	frame.fsbind = bind
 
 	local loot = frame:CreateFontString(nil, "ARTWORK")
-	loot:SetFont(DB.Font, 14, "OUTLINE")
+	loot:SetFont(DB.Font, 12*S.Scale(1), "OUTLINE")
 	loot:SetShadowOffset(1, -1)
 	loot:Point("LEFT", bind, "RIGHT", 0, 0)
 	loot:Point("RIGHT", frame, "RIGHT", -5, 0)
@@ -159,9 +171,9 @@ local function GetFrame()
 
 	local f = CreateRollFrame()
 	if pos == "TOP" then
-		f:Point("TOPRIGHT", next(frames) and frames[#frames] or LootRollAnchor, "BOTTOMRIGHT", 0, -7)
+		f:Point("TOPLEFT", next(frames) and frames[#frames] or LootRollAnchor, "BOTTOMLEFT", next(frames) and frames[#frames] and 0 or 27, -23)
 	else
-		f:Point("BOTTOMRIGHT", next(frames) and frames[#frames] or LootRollAnchor, "TOPRIGHT", 0, 7)
+		f:Point("BOTTOMLEFT", next(frames) and frames[#frames] or LootRollAnchor, "TOPLEFT", next(frames) and frames[#frames] and 0 or 27, 23)
 	end
 	table.insert(frames, f)
 	return f
@@ -226,7 +238,7 @@ end
 LootRollAnchor:RegisterEvent("ADDON_LOADED")
 LootRollAnchor:SetScript("OnEvent", function(frame, event, addon)
 	if addon ~= "SunUI_Modules" then return end
-
+	LootRollAnchor:Size(240, 20)
 	LootRollAnchor:UnregisterEvent("ADDON_LOADED")
 	LootRollAnchor:RegisterEvent("LOOT_HISTORY_ROLL_CHANGED")
 	LootRollAnchor:RegisterEvent("START_LOOT_ROLL")
@@ -235,4 +247,17 @@ LootRollAnchor:SetScript("OnEvent", function(frame, event, addon)
 
 	LootRollAnchor:SetScript("OnEvent", function(frame, event, ...) if event == "LOOT_HISTORY_ROLL_CHANGED" then return LOOT_HISTORY_ROLL_CHANGED(...) else return START_LOOT_ROLL(...) end end)
 	MoveHandle.RollFrame = S.MakeMoveHandle(LootRollAnchor, "Roll", "RollFrame")
+	SlashCmdList["LFrames"] = function(msg) 
+		local f = GetFrame()
+		local texture = select(10, GetItemInfo(32837))
+		f.button:SetNormalTexture(texture)
+		f.button:GetNormalTexture():SetTexCoord(.1, .9, .1, .9)
+		f.fsloot:SetVertexColor(ITEM_QUALITY_COLORS[5].r, ITEM_QUALITY_COLORS[5].g, ITEM_QUALITY_COLORS[5].b)
+		f.fsloot:SetText(GetItemInfo(32837))
+		f.status:SetMinMaxValues(0, 100)
+		f.status:SetValue(70)
+		f.status:SetStatusBarColor(ITEM_QUALITY_COLORS[5].r, ITEM_QUALITY_COLORS[5].g, ITEM_QUALITY_COLORS[5].b)
+		f:Show()
+	end
+	SLASH_LFrames1 = "/rolltest"
 end)

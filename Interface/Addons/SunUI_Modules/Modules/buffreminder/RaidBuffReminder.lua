@@ -49,7 +49,8 @@ local RaidBuffList = {
 		-- 全属性
 		20217, -- 王者祝福
 		 1126, -- 野性印记
-		90363, -- 页岩蛛之拥	
+		90363, -- 页岩蛛之拥
+		115921,	
 	},
 	[4] = {
 		-- 耐力
@@ -61,25 +62,22 @@ local RaidBuffList = {
 	},
 	[5] = {
 		-- 智力
-		79058, -- 奥术智慧
-		61316, -- 达拉然光辉
 		 1459, -- 奥术光辉
 	},
 	[6] = {
 		-- AP
 		19740, -- 力量祝福
-		30808, -- 怒火释放
+		57330, -- 怒火释放
 		53138, -- 憎恶之力
 		19506, -- 强击光环
 	},
 	[7] = {
 		-- 回蓝
-		 5675, -- 法力之泉图腾
 		19740, -- 力量祝福
 	},	
 }
 
-local function OnEvent_PARTY_MEMBERS_CHANGED(event, ...)
+local function OnEvent_GROUP_ROSTER_UPDATE(event, ...)
 	IsInParty = (GetNumSubgroupMembers() > 0) and true or false
 end
 local function OnEvent_ACTIVE_TALENT_GROUP_CHANGED(event, ...)
@@ -275,5 +273,5 @@ function Module:OnEnable()
 	Module:RegisterEvent("PLAYER_ENTERING_WORLD", OnEvent_PLAYER_ENTERING_WORLD)
 	Module:RegisterEvent("UNIT_AURA", OnEvent_UNIT_AURA)
 	Module:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", OnEvent_ACTIVE_TALENT_GROUP_CHANGED)
-	Module:RegisterEvent("PARTY_MEMBERS_CHANGED", OnEvent_PARTY_MEMBERS_CHANGED)
+	Module:RegisterEvent("GROUP_ROSTER_UPDATE", OnEvent_GROUP_ROSTER_UPDATE)
 end

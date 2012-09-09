@@ -69,8 +69,15 @@ local function OnUpdate(self, event, unit)
 end
 function Module:OnInitialize()
 	C=C["ThreatDB"]
-	ThreatBar:Size(C["ThreatBarWidth"], 12)
+	if C["VERTICAL"] then
+		ThreatBar:Size(12, C["ThreatBarWidth"])
+		ThreatBar:SetOrientation("VERTICAL")
+		ThreatBar.text:Point("TOP", ThreatBar, "BOTTOM", 0, -3)
+	else
+		ThreatBar:Size(C["ThreatBarWidth"], 12)
+	end
 	MoveHandle.Threat = S.MakeMoveHandle(ThreatBar, "Threat", "Threat")
+	
 end
 function Module:OnEnable()
 	ThreatBar:RegisterEvent("PLAYER_ENTERING_WORLD")

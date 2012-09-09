@@ -949,16 +949,11 @@ end
   lib.gen_arenatracker = function(f)
     t = CreateFrame("Frame", nil, f)
     t:Size(21,21)
-    t:SetPoint("CENTER", f.Power, "CENTER", 0, 0)
+	t:SetPoint("BOTTOMRIGHT", f, "TOPRIGHT", 0, 3)
     t:SetFrameLevel(30)
-    t:SetAlpha(0.8)
+    t:SetAlpha(1)
     t.trinketUseAnnounce = true
-    t.bg = CreateFrame("Frame", nil, t)
-    t.bg:SetPoint("TOPLEFT",-4,4)
-    t.bg:SetPoint("BOTTOMRIGHT",4,-4)
-    t.bg:SetBackdrop(backdrop_tab);
-    t.bg:SetBackdropColor(0,0,0,0)
-    t.bg:SetBackdropBorderColor(0,0,0,1)
+	t:CreateShadow()
     f.Trinket = t
 	at = CreateFrame('Frame', nil, f)
 	at:SetAllPoints(f.Trinket)

@@ -7,6 +7,7 @@
 	<Script file="tullaRange.lua"/>
 	<Script file="HoverBind.lua"/>
 	<Script file="Cooldown.lua"/>
+	<Script file="LibCooldown.lua"/>
 	<Script file="CooldownFlash.lua"/>
 	<Script file="BarFacer.lua"/>
 </Ui>

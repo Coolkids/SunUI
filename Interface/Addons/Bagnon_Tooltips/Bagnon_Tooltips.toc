@@ -1,4 +1,4 @@
-## Interface: 40300
+## Interface: 50001
 ## Title: Bagnon Tooltips
 ## Author: Tuller & Jaliborc (João Libório)
 ## Notes: Tooltips for telling who has what

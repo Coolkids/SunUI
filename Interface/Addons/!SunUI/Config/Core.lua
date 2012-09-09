@@ -7,7 +7,7 @@ local DEFAULT_HEIGHT = 500
 local AC = LibStub("AceConfig-3.0")
 local ACD = LibStub("AceConfigDialog-3.0")
 local Version = 20120323
-local beta = "0907"
+local beta = "0910"
 local aglin = false
 function SunUIConfig:LoadDefaults()
 	local _, _, _, G = unpack(SunUI)
@@ -497,6 +497,11 @@ function SunUIConfig.GenerateOptionsInternal()
 						order = 3,
 						get = function() return tostring(db.ThreatDB.ThreatLimited) end,
 						set = function(_, value) db.ThreatDB.ThreatLimited = tonumber(value) end,
+					},
+					VERTICAL = {
+						type = "toggle",
+						name = "垂直",
+						order = 4,
 					},
 				}
 			},

@@ -62,7 +62,7 @@ local Indicators_class_default = {
 		},						
         ["TR"] = {							--色块的位置	
 			["1"] = {						
-				id 		= {79060, 79063, 90363},	--监视的spellid,可以设置多个,buff与debuff不能共存
+				id 		=  {20217, 1126, 90363},	--监视的spellid,可以设置多个,buff与debuff不能共存
 				isbuff	= true,				--是否为buff
 				mine	= true,				--是否为玩家自己释放
 				lack	= true,				--是否在缺少时显示
@@ -94,7 +94,7 @@ local Indicators_class_default = {
 				mine	= true,
 				lack	= false,
 				count	= true,
-				etime	= true,
+				etime	= false,
 			},
 		},
         ["Cen"] = {
@@ -123,19 +123,14 @@ local Indicators_class_default = {
 			},
 		
 		},
-        ["TR"] = {	["1"] = {
-				id 		= {79105, 6307, 469, 90364},
-				isbuff	= true,
-				lack	= true,
-				color   = {r = 1, g = 0.0, b = 0.0},
-			},
-			["2"] = {
-				id 		= {79107},
+        ["TR"] = {	
+			["1"] = {
+				id 		= {21562},
 				isbuff	= true,
 				lack	= true,
 				color   = {r = .8, g = 1, b = 0.0},
 			},
-			["3"] = {
+			["2"] = {
 				id 		= {6346},
 				isbuff	= true,
 				color   = {r = 1, g = 0.5, b = 0.0},
@@ -181,14 +176,14 @@ local Indicators_class_default = {
 		},
         ["TR"] = {
 			["1"] = {
-				id 		= {53138, 79102, 30808, 19506},
+				id 		= {19506,53138,30808,19740},
 				isbuff	= true,
 				mine	= false,
 				lack	= true,
 				color   = {r = 1, g = 0.0, b = 0.0},
 			},
 			["2"] = {
-				id 		= {79060, 79063, 90363},
+				id 		= {20217, 1126, 90363},
 				isbuff	= true,
 				mine	= false,
 				lack	= true,
@@ -227,7 +222,7 @@ local Indicators_class_default = {
         ["TL"] = {},
         ["TR"] = {
 			["1"] = {
-				id 		= {85768},
+				id 		= {109773},
 				isbuff	= true,
 				color   = {r = 1, g = 0.5, b = 0.0},
 			},
@@ -354,16 +349,11 @@ local Indicators_class_default = {
         ["TL"] = {},
         ["TR"] = {
 			["1"] = {
-				id 		= {79058, 79038},
+				id 		= {1459},
 				isbuff	= true,
 				mine	= false,
 				lack	= true,
 				color   = {r = 1, g = 0.0, b = 0.0},
-			},
-			["2"] = {
-				id 		= {54646},
-				isbuff	= true,
-				color   = {r = 1, g = 0.5, b = 0.0},
 			},
 		},
         ["BL"] = {},
