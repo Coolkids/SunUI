@@ -142,36 +142,11 @@ local function StatReport_GetTankText()
 end
 
 local function StatReport_TalentData()
-	local group = GetActiveTalentGroup(isInspect);
-	-- Get points per tree, and set "primaryTree" to the tree with most points
-	local primaryTree = 1;
-	local current = {};
-	for i = 1, 3 do
-		local _, _, _, _, pointsSpent = GetTalentTabInfo(i,isInspect,nil,group);
-		current[i] = pointsSpent;
-		if (current[i] > current[primaryTree]) then
-			primaryTree = i;
-		end
+	if not GetSpecialization() then
+		return (NONE..TALENTS) 
+	else		
+		return (select(2,GetSpecializationInfo(GetSpecialization())))
 	end
-	local _, tabName = GetTalentTabInfo(primaryTree,isInspect,nil,group);
-	current.tree = tabName;
-	-- Az: Clear Inspect, as we are done using it
-	if (isInspect) then
-		ClearInspectPlayer();
-	end
-	-- Customise output. Use TipTac setting if it exists, otherwise just use formatting style one.
-	local talentFormat = (TipTac_Config and TipTac_Config.talentFormat or 1);
-	if (current[primaryTree] == 0) then
-		current.format = "No Talents";
-	elseif (talentFormat == 1) then
-		current.format = " ("..current[1].."/"..current[2].."/"..current[3]..")";
-	elseif (talentFormat == 2) then
-		current.format = current.tree;
-	elseif (talentFormat == 3) then
-		current.format = current[1].."/"..current[2].."/"..current[3];
-	end
-	return current.tree or L.INFO_DURABILITY_NO, current.format
-
 end
 
 local function StatReport_UnitAttackPower()
@@ -208,7 +183,7 @@ end
 local slotName = {
 	"HeadSlot", "NeckSlot", "ShoulderSlot", "BackSlot", "ChestSlot", "WristSlot",
 	"HandsSlot", "WaistSlot", "LegsSlot", "FeetSlot", "Finger0Slot", "Finger1Slot",
-	"Trinket0Slot", "Trinket1Slot", "MainHandSlot", "SecondaryHandSlot", "RangedSlot", "AmmoSlot"
+	"Trinket0Slot", "Trinket1Slot", "MainHandSlot", "SecondaryHandSlot", "AmmoSlot"
 }
 local function GetAiL(unit)
 	local i, total, slot, itn, level = 0, 0, nil, 0
@@ -293,66 +268,66 @@ function CH:SendReport()
 		msg = msg..StatReport_GetRangedText();
 	end
 	if MyData.CLASS_EN == "DRUID" then
-		if MyData.TKEY == select(2,GetTalentTabInfo(1)) then
+		if MyData.TKEY == select(2,GetSpecializationInfo(1)) then
 			msg = msg..StatReport_GetSpellText();
-		elseif MyData.TKEY == select(2,GetTalentTabInfo(2)) then
+		elseif MyData.TKEY == select(2,GetSpecializationInfo(2)) then
 			if MyData.DODGE > 30 then
 				msg = msg..StatReport_GetTankText();
 			else
 				msg = msg..StatReport_GetMeleeText();
 			end
-		elseif MyData.TKEY == select(2,GetTalentTabInfo(3)) then
+		elseif MyData.TKEY == select(2,GetSpecializationInfo(3)) then
 			msg = msg..StatReport_GetHealText();
 		else
 			msg = msg..StatReport_GetMeleeText();
 		end
 	end
 	if MyData.CLASS_EN == "SHAMAN" then
-		if MyData.TKEY == select(2,GetTalentTabInfo(1)) then
+		if MyData.TKEY == select(2,GetSpecializationInfo(1)) then
 			msg = msg..StatReport_GetSpellText();
-		elseif MyData.TKEY == select(2,GetTalentTabInfo(2)) then
+		elseif MyData.TKEY == select(2,GetSpecializationInfo(2)) then
 			msg = msg..StatReport_GetMeleeText();
-		elseif MyData.TKEY == select(2,GetTalentTabInfo(3)) then
+		elseif MyData.TKEY == select(2,GetSpecializationInfo(3)) then
 			msg = msg..StatReport_GetHealText();
 		else
 			msg = msg..StatReport_GetMeleeText();
 		end
 	end
 	if MyData.CLASS_EN == "PALADIN" then
-		if MyData.TKEY == select(2,GetTalentTabInfo(1)) then
+		if MyData.TKEY == select(2,GetSpecializationInfo(1)) then
 			msg = msg..StatReport_GetHealText();
-		elseif MyData.TKEY == select(2,GetTalentTabInfo(2)) then
+		elseif MyData.TKEY == select(2,GetSpecializationInfo(2)) then
 			msg = msg..StatReport_GetTankText();
-		elseif MyData.TKEY == select(2,GetTalentTabInfo(3)) then
+		elseif MyData.TKEY == select(2,GetSpecializationInfo(3)) then
 			msg = msg..StatReport_GetMeleeText();
 		else
 			msg = msg..StatReport_GetMeleeText();
 		end
 	end
 	if MyData.CLASS_EN == "PRIEST" then
-		if MyData.TKEY == select(2,GetTalentTabInfo(1)) then
+		if MyData.TKEY == select(2,GetSpecializationInfo(1)) then
 			msg = msg..StatReport_GetSpellAndHealText();
-		elseif MyData.TKEY == select(2,GetTalentTabInfo(2)) then
+		elseif MyData.TKEY == select(2,GetSpecializationInfo(2)) then
 			msg = msg..StatReport_GetHealText();
-		elseif MyData.TKEY == select(2,GetTalentTabInfo(3)) then
+		elseif MyData.TKEY == select(2,GetSpecializationInfo(3)) then
 			msg = msg..StatReport_GetSpellText();
 		else
 			msg = msg..StatReport_GetSpellText();
 		end
 	end
 	if MyData.CLASS_EN == "WARRIOR" then
-		if MyData.TKEY == select(2,GetTalentTabInfo(1)) then
+		if MyData.TKEY == select(2,GetSpecializationInfo(1)) then
 			msg = msg..StatReport_GetMeleeText();
-		elseif MyData.TKEY == select(2,GetTalentTabInfo(2)) then
+		elseif MyData.TKEY == select(2,GetSpecializationInfo(2)) then
 			msg = msg..StatReport_GetMeleeText();
-		elseif MyData.TKEY == select(2,GetTalentTabInfo(3)) then
+		elseif MyData.TKEY == select(2,GetSpecializationInfo(3)) then
 			msg = msg..StatReport_GetTankText();
 		else
 			msg = msg..StatReport_GetMeleeText();
 		end
 	end
 	if MyData.CLASS_EN == "DEATHKNIGHT" then
-		if MyData.TKEY == select(2,GetTalentTabInfo(1)) then
+		if MyData.TKEY == select(2,GetSpecializationInfo(1)) then
 			msg = msg..StatReport_GetTankText();
 		else
 			msg = msg..StatReport_GetMeleeText();

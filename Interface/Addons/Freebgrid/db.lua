@@ -64,7 +64,7 @@ local Indicators_class_default = {
 			["1"] = {						
 				id 		=  {20217, 1126, 90363},	--监视的spellid,可以设置多个,buff与debuff不能共存
 				isbuff	= true,				--是否为buff
-				mine	= true,				--是否为玩家自己释放
+				mine	= false,				--是否为玩家自己释放
 				lack	= true,				--是否在缺少时显示
 				etime	= false,			--显示为aura剩余时间.
 				count	= false,			--显示为aura堆叠层数. etime和count 只有CEN和BR位置设置有效
@@ -176,14 +176,14 @@ local Indicators_class_default = {
 		},
         ["TR"] = {
 			["1"] = {
-				id 		= {19506,53138,30808,19740},
+				id 		= {93435, 19740},
 				isbuff	= true,
 				mine	= false,
 				lack	= true,
 				color   = {r = 1, g = 0.0, b = 0.0},
 			},
 			["2"] = {
-				id 		= {20217, 1126, 90363},
+				id 		= {20217, 1126, 90363,115921},
 				isbuff	= true,
 				mine	= false,
 				lack	= true,
@@ -249,13 +249,13 @@ local Indicators_class_default = {
 		},
         ["TR"] = {
 			["1"] = {
-				id 		= {6673, 57330, 8076, 93435},
+				id 		= {6673, 57330, 19506},  --AP
 				isbuff	= true,
 				lack	= true,
 				color   = {r = 1, g = 0.0, b = 0.0},
 			},
 			["2"] = {
-				id 		= {79105, 6307, 469, 90364},
+				id 		= {6307, 469, 90364, 21562},  --耐力
 				isbuff	= true,
 				lack	= true,
 				color   = {r = .8, g = 1.0, b = 0.0},
@@ -269,7 +269,7 @@ local Indicators_class_default = {
     ["DEATHKNIGHT"] = {
         ["TL"] = {},
         ["TR"] = {		["1"] = {
-				id 		= {6673, 57330, 8076, 93435},
+				id 		= {6673, 57330, 19506},
 				isbuff	= true,
 				lack	= true,
 				color   = {r = 1, g = 0.0, b = 0.0},

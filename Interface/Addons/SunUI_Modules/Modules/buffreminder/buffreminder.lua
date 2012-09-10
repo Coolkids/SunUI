@@ -20,7 +20,6 @@ function Module:OnInitialize()
 				["spells"] = {
 					[13165] = true, -- hawk
 					[5118] = true, -- cheetah
-					[20043] = true, -- wild
 					[82661] = true, -- fox	
 				},
 				["combat"] = true,
@@ -40,9 +39,7 @@ function Module:OnInitialize()
 		},
 		WARLOCK = {
 			["Armors"] = { --armors group
-				["spells"] = {
-					[28176] = true, -- fel armor
-					[687] = true, -- demon armor			
+				["spells"] = {		
 				},
 				["combat"] = true,
 				["instance"] = true,
@@ -105,9 +102,8 @@ function Module:OnInitialize()
 					[6673] = true, 
 				},
 				["negate_spells"] = {
-					[8076] = true, -- strength of earth
 					[57330] = true, -- horn of Winter
-					[93435] = true, -- roar of courage (hunter pet)						
+					[19506] = true, -- roar of courage (hunter pet)						
 				},
 				["combat"] = true,
 				["role"] = "Melee",
@@ -119,9 +115,8 @@ function Module:OnInitialize()
 					[57330] = true, 
 				},
 				["negate_spells"] = {
-					[8076] = true, -- strength of earth totem
 					[6673] = true, -- battle Shout
-					[93435] = true, -- roar of courage (hunter pet)			
+					[19506] = true, -- roar of courage (hunter pet)			
 				},
 				["combat"] = true,
 			},

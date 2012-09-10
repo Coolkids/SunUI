@@ -1,0 +1,14 @@
+## Interface: 50001
+## Title: eXPeritia
+## Author: Cargor
+## Version: 4.1
+## X-eMail: xconstruct@gmail.com
+## X-Website: http://www.xconstruct.net
+## X-Credits: Tekkub for tekKonfig
+## Notes: Event-driven experience bar.
+## SavedVariablesPerCharacter: eXPeritiaDB
+
+tekKonfig\tekKonfig.xml
+
+core.lua
+config.lua

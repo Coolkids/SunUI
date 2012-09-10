@@ -30,12 +30,12 @@ local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("RaidCD")
 		[70940] = 180,  -- 神圣守卫(FQ)
 		[31821] = 120,  -- 光环掌握(NQ)
 		[64843] = 180,  -- 神圣赞美诗 *
+		[64901] = 180,	-- 希望圣歌
 		[740]   = 180,  -- 宁静(ND) *
 		[87023] = 60,   --FS
 		[16190] = 180,  --SM 潮汐
 		[105763] =180,  --NS 2T13
-		[105914] =180,  --战士 4T13
-		[105739] =180,  --小德 4T13
+		[6940] = 120, --QS 牺牲之手
 	}
 
 	local filter = COMBATLOG_OBJECT_AFFILIATION_RAID + COMBATLOG_OBJECT_AFFILIATION_PARTY + COMBATLOG_OBJECT_AFFILIATION_MINE

@@ -103,8 +103,7 @@ elseif (GetLocale() == "zhTW") then
 end
 
 L.RaidCheckBuffMS = GetSpellInfo(21562)
-L.RaidCheckBuffFS = GetSpellInfo(79058)
-L.RaidCheckBuffFS2 = GetSpellInfo(61316)
+L.RaidCheckBuffFS = GetSpellInfo(1459)
 L.RaidCheckBuffQS1 = GetSpellInfo(20217)
 L.RaidCheckBuffQS2 = GetSpellInfo(19740)
 L.RaidCheckBuffXD = GetSpellInfo(1126)
@@ -158,7 +157,7 @@ function RC:CheckRaidBuff()
 			while UnitBuff(unit, j) do
 				local BuffTEXT = UnitBuff(unit, j)
 				if find(BuffTEXT, L.RaidCheckBuffMS) then HasBuffMS = true end
-				if find(BuffTEXT, L.RaidCheckBuffFS) or find(BuffTEXT, L.RaidCheckBuffFS2) then HasBuffFS = true end
+				if find(BuffTEXT, L.RaidCheckBuffFS) then HasBuffFS = true end
 				if find(BuffTEXT, L.RaidCheckBuffQS1) then HasBuffQS1 = true end --王者
 				if find(BuffTEXT, L.RaidCheckBuffQS2) then HasBuffQS2 = true end --力量
 				if find(BuffTEXT, L.RaidCheckBuffXD) then HasBuffXD = true end
