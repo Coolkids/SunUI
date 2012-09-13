@@ -5,27 +5,36 @@ function Module:OnInitialize()
 	C = C["MiniDB"]
 	if C["MiniMapPanels"] ~= true then return end
 	local wm = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
-	wm:SetParent("UIParent") 
+	wm:SetParent(UIParent) 
 	wm:SetFrameLevel(Minimap:GetFrameLevel()+1)
 	wm:ClearAllPoints() 
-	wm:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", -3, -3) 
-	wm:SetSize(16, 16)
+	wm:SetPoint("TOP", -90, -5)
+	wm:SetSize(50, 8)
 	S.Reskin(wm, false)
-	S.CreateBG(wm)
-	wm:SetText("O")
 	wm:Hide()
-
+	wm:SetAlpha(0)
+	wm:SetScript("OnEnter", function(self)
+		UIFrameFadeIn(self, 2, self:GetAlpha(), 1)
+		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
+		GameTooltip:AddLine("团队工具", .6,.8,1)
+		GameTooltip:Show()
+	end)
+	wm:SetScript("OnLeave", function(self) 
+		UIFrameFadeOut(self, 2, self:GetAlpha(), 0)
+		GameTooltip:Hide()
+	end)
+		
 	CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButtonLeft:SetAlpha(0) 
 	CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButtonMiddle:SetAlpha(0) 
 	CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButtonRight:SetAlpha(0) 
 
-	wm:RegisterEvent("PARTY_MEMBERS_CHANGED") 
+	wm:RegisterEvent("GROUP_ROSTER_UPDATE") 
 	wm:HookScript("OnEvent", function(self) 
-		local raid = GetNumRaidMembers() > 0 
-		if (raid and (IsRaidLeader() or IsRaidOfficer())) or (GetNumPartyMembers() > 0 and not raid) then 
-		self:Show()
+		local raid =  GetNumGroupMembers() > 0 
+		if (raid and (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player"))) or (GetNumSubgroupMembers() > 0 and not raid) then 
+			self:Show()
 		else 
-		self:Hide() 
+			self:Hide() 
 		end 
 	end) 
 

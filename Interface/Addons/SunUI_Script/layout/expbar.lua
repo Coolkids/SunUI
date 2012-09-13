@@ -24,10 +24,13 @@ end
 function Module:BuildExpBar()
 	ExpBar = CreateFrame("StatusBar", nil, BottomBar)
 	ExpBar:SetFrameLevel(2)
-	ExpBar:CreateShadow("Background")
+	ExpBar:CreateShadow()
+	local gradient = ExpBar:CreateTexture(nil, "BACKGROUND")
+	gradient:SetPoint("TOPLEFT")
+	gradient:SetPoint("BOTTOMRIGHT")
+	gradient:SetTexture(DB.Statusbar)
+	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
 	ExpBar:SetStatusBarTexture(DB.Statusbar)
-	ExpBar:SetPoint("BOTTOM", 0, 4)
-	ExpBar:SetSize(500, 8)
 	ExpBar:SetFrameLevel(2)
 	ExpBar.Rest = CreateFrame("StatusBar", nil, ExpBar)
 	ExpBar.Rest:SetAllPoints()
@@ -38,21 +41,32 @@ function Module:BuildExpBar()
 	Text:SetFrameLevel(4)
 	ExpBar.Text = S.MakeFontString(Text, 10)
 	ExpBar.Text:SetPoint("CENTER")
-	--ExpBar.Text:SetFrameLevel(11)
 	ExpBar.Text:SetAlpha(0)
-	ExpBar:SetStatusBarTexture(DB.Statusbar)
-	ExpBar:SetAlpha(0)
+	if C["ActionBarDB"]["ExpbarFadeOut"] then
+		ExpBar:SetAlpha(0)
+	end
 	ExpBar:SetScript("OnEnter",function(self)
 		if InCombatLockdown() then return end
 		self.Text:SetAlpha(1)
-		UIFrameFadeIn(self, 2, self:GetAlpha(), 1)
+		if C["ActionBarDB"]["ExpbarFadeOut"] then
+			UIFrameFadeIn(self, 2, self:GetAlpha(), 1)
+		end
 	end)
 	ExpBar:SetScript("OnLeave",function(self)
 		if InCombatLockdown() then return end
 		self.Text:SetAlpha(0)
-		UIFrameFadeOut(self, 2, self:GetAlpha(), 0)
-		--ExpBar:SetFrameLevel(9)
+		if C["ActionBarDB"]["ExpbarFadeOut"] then
+			UIFrameFadeOut(self, 2, self:GetAlpha(), 0)
+		end
 	end)
+	if not C["ActionBarDB"]["ExpbarUp"] then
+		ExpBar:SetSize(C["ActionBarDB"]["ExpbarWidth"], C["ActionBarDB"]["ExpbarHeight"])
+	else
+		ExpBar:SetSize(C["ActionBarDB"]["ExpbarHeight"], C["ActionBarDB"]["ExpbarWidth"])
+		ExpBar:SetOrientation("VERTICAL")
+		ExpBar.Rest:SetOrientation("VERTICAL")
+	end
+	MoveHandle.ExpBar = S.MakeMoveHandle(ExpBar, "¾­ÑéÌõ", "expbar")
 end
 
 function Module:Register()

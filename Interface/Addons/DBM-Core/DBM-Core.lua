@@ -42,9 +42,9 @@
 --  Globals/Default Options  --
 -------------------------------
 DBM = {
-	Revision = tonumber(("$Revision: 7790 $"):sub(12, -3)),
-	DisplayVersion = "4.11.0", -- the string that is shown as version
-	ReleaseRevision = 7790 -- the revision of the latest stable version that is available
+	Revision = tonumber(("$Revision: 7811 $"):sub(12, -3)),
+	DisplayVersion = "4.11.1", -- the string that is shown as version
+	ReleaseRevision = 7811 -- the revision of the latest stable version that is available
 }
 
 -- Legacy crap; that stupid "Version" field was never a good idea.
@@ -146,6 +146,7 @@ DBM.DefaultOptions = {
 	AprilFools = true,
 	MoviesSeen = {},
 	MovieFilters = {},
+	LastRevision = 0
 }
 
 DBM.Bars = DBT:New()
@@ -368,21 +369,25 @@ do
 		local unitEventFrame1 = CreateFrame("Frame")
 		local unitEventFrame2 = CreateFrame("Frame")
 		local unitEventFrame3 = CreateFrame("Frame")
-		
+		local unitEventFrame4 = CreateFrame("Frame")
+
 		unitEventFrame1:SetScript("OnEvent", handleEvent)
 		unitEventFrame2:SetScript("OnEvent", handleEvent)
 		unitEventFrame3:SetScript("OnEvent", handleEvent)
+		unitEventFrame4:SetScript("OnEvent", handleEvent)
 		
 		function registerUnitEvent(event)
 			unitEventFrame1:RegisterUnitEvent(event, "boss1", "boss2")
 			unitEventFrame2:RegisterUnitEvent(event, "boss3", "boss4")
 			unitEventFrame3:RegisterUnitEvent(event, "target", "focus")
+			unitEventFrame4:RegisterUnitEvent(event, "mouseover")
 		end
 
 		function unregisterUnitEvent(event)
 			unitEventFrame1:UnregisterEvent(event)
 			unitEventFrame2:UnregisterEvent(event)
 			unitEventFrame3:UnregisterEvent(event)
+			unitEventFrame4:UnregisterEvent(event)
 		end
 
 	end
@@ -1337,10 +1342,21 @@ do
 		RaidWarningFrame:SetPoint(DBM.Options.RaidWarningPosition.Point, UIParent, DBM.Options.RaidWarningPosition.Point, DBM.Options.RaidWarningPosition.X, DBM.Options.RaidWarningPosition.Y)
 	end
 	
+	local function migrateSavedOptions()
+		-- reset default special warning font for russian clients due to many reports of problems with cyrillic characters in special warnings
+		if DBM.Options.LastRevision < 7998 then
+			DBM.Options.LastRevision = DBM.Revision
+			if GetLocale() == "ruRU" then
+				DBM.Options.SpecialWarningFont = STANDARD_TEXT_FONT
+			end
+		end
+	end
+
 	function loadOptions()
 		DBM.Options = DBM_SavedOptions
 		addDefaultOptions(DBM.Options, DBM.DefaultOptions)
 		-- load special warning options
+		migrateSavedOptions()
 		DBM:UpdateSpecialWarningOptions()
 		-- set this with a short delay to prevent issues with other addons also trying to do the same thing with another position ;)
 		DBM:Schedule(5, setRaidWarningPositon)

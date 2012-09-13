@@ -208,7 +208,7 @@ local function StatReport_UpdateMyData()
 	MyData.CLASS, MyData.CLASS_EN = UnitClass("player");		--职业
 	MyData.HP = UnitHealthMax("player");						--生命值
 	MyData.MP = UnitManaMax("player");							--法力值
-	MyData.TKEY, MyData.TDATA = StatReport_TalentData();		--天赋
+	MyData.TDATA = StatReport_TalentData();		--天赋
 --	MyData.ILVL = floor(GetAverageItemLevel());						--平均装备等级
 	MyData.ILVL = GetAiL("player");
 	MyData.Mastery = format("%.2f", GetMastery());								--精通点数
@@ -251,7 +251,7 @@ function CH:SendReport()
 	StatReport_UpdateMyData()
 	msg = msg..MyData.CLASS;
 	msg = msg..", ";
-	msg = msg..MyData.TKEY..L.INFO_DURABILITY_TIP4..MyData.TDATA;
+	msg = msg..L.INFO_DURABILITY_TIP4..":"..MyData.TDATA;
 	msg = msg..", ";
 	msg = msg..L.INFO_DURABILITY_TIP5..MyData.ILVL;
 	msg = msg..", ";

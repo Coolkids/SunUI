@@ -190,14 +190,10 @@ function SunUIConfig.GenerateOptionsInternal()
 								type = "toggle", order = 3,
 								name = L["冷却闪光"],		
 							},
-							EnableBarFader = {
-								type = "toggle", order = 4,
-								name = L["动作条渐隐"],		
-							},
 							UnLock = {
 								type = "execute",
 								name = "按鍵綁定",
-								order = 5,
+								order = 4,
 								func = function()
 									SlashCmdList.MOUSEOVERBIND()
 								end,
@@ -262,20 +258,91 @@ function SunUIConfig.GenerateOptionsInternal()
 					},
 					group4 = {
 						type = "group", order = 4,
-						name = " ",guiInline = true, disabled = function(info) return not db.ActionBarDB.CooldownFlash end,
+						name = " ",guiInline = true,
 						args = {
 							CooldownFlashSize = {
 								type = "input",
 								name = L["冷却闪光图标大小"],
 								desc = L["冷却闪光图标大小"],
 								order = 1,
+								disabled = function(info) return not db.ActionBarDB.CooldownFlash end,
 								get = function() return tostring(db.ActionBarDB.CooldownFlashSize) end,
 								set = function(_, value) db.ActionBarDB.CooldownFlashSize = tonumber(value) end,
+							},
+							ExpbarWidth= {
+								type = "input",
+								name = "经验条宽度",
+								desc = "经验条宽度",
+								order = 2,
+								get = function() return tostring(db.ActionBarDB.ExpbarWidth) end,
+								set = function(_, value) db.ActionBarDB.ExpbarWidth = tonumber(value) end,
+							},
+							ExpbarHeight= {
+								type = "input",
+								name = "经验条高度",
+								desc = "经验条高度",
+								order = 3,
+								get = function() return tostring(db.ActionBarDB.ExpbarHeight) end,
+								set = function(_, value) db.ActionBarDB.ExpbarHeight = tonumber(value) end,
+							},
+							ExpbarUp = {
+								type = "toggle", order = 4,
+								name = "经验条垂直模式",		
+							},
+							EnableBarFader = {
+								type = "toggle", order = 5,
+								name = "经验条渐隐",		
 							},
 						}
 					},
 					group5 = {
-						type = "group", order = 5,
+						type = "group", order = 1,
+						name = " ",guiInline = true,
+						args = {		
+							AllFade = {
+								type = "toggle", order = 2,
+								name = "全部动作条渐隐",		
+							},
+							Bar1Fade = {
+								type = "toggle", order = 3,
+								disabled = function(info) return db.ActionBarDB.AllFade end,
+								name = "Bar1渐隐",		
+							},
+							Bar2Fade = {
+								type = "toggle", order = 4,
+								disabled = function(info) return db.ActionBarDB.AllFade end,
+								name = "Bar2渐隐",		
+							},
+							Bar3Fade = {
+								type = "toggle", order = 5,
+								disabled = function(info) return db.ActionBarDB.AllFade end,
+								name = "Bar3渐隐",		
+							},
+							Bar4Fade = {
+								type = "toggle", order = 6,
+								disabled = function(info) return db.ActionBarDB.AllFade end,
+								name = "Bar4渐隐",		
+							},
+							Bar5Fade = {
+								type = "toggle", order = 7,
+								disabled = function(info) return db.ActionBarDB.AllFade end,
+								name = "Bar5渐隐",		
+							},
+							StanceBarFade = {
+								type = "toggle", order = 8,
+								disabled = function(info) return db.ActionBarDB.AllFade end,
+								name = "姿态栏渐隐",		
+							},
+							
+							PetBarFade = {
+								type = "toggle", order = 9,
+								disabled = function(info) return db.ActionBarDB.AllFade end,
+								name = "宠物渐隐",		
+							},
+						}
+					},
+					group6 = {
+						type = "group", order = 6,
 						name = " ",guiInline = true, disabled =function(info) return (db.ActionBarDB.Big4Layout ~= 1) end,
 						args = {
 							BigSize1 = {
@@ -720,6 +787,11 @@ function SunUIConfig.GenerateOptionsInternal()
 							type = "toggle", order = 16,disabled = function(info) return not db.UnitFrameDB.showfocus end,
 							name = "焦点debuff过滤",
 							desc = "只显示玩家释放的debuff",
+						}, 
+						TagFadeIn = {
+							type = "toggle", order = 17,
+							name = "头像文字渐隐",
+							desc = "非战斗非指向时隐藏",
 						}, 
 					}
 					},

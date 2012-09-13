@@ -150,8 +150,7 @@ function RC:CheckRaidBuff()
 		local HasBuffQS2 = false
 		local HasBuffXD = false
 		local HasBuffFOOD = false
-		
-		if subgroup <= math.floor(raidNum / 5) then
+		if subgroup then
 			local unit = "raid"..i
 			local j = 1
 			while UnitBuff(unit, j) do
@@ -183,7 +182,6 @@ function RC:CheckRaidBuff()
 			if HasBuffFOOD == false then table.insert(NoFOODBuffName, name) end
 		end
 	end
-	
 	if next(NoMSBuffName) == nil and next(NoFSBuffName) == nil and next(NoQS1BuffName) == nil and next(NoQS2BuffName) == nil and next(NoXDBuffName) == nil and next(NoFOODBuffName) == nil then
 		SendChatMessage(L.RaidCheckMsgFullBuff, "RAID")
 	else
@@ -216,7 +214,7 @@ function RC:CheckPosition()
 
 	for i = 1, RaidNum do
 		_, _, subgroup = GetRaidRosterInfo(i)
-		if subgroup <= math.floor(RaidNum/5) then
+		if subgroup then
 			local unit = "raid"..i
 			if UnitIsConnected(unit) then
 				if not UnitIsDeadOrGhost(unit) then
@@ -285,7 +283,7 @@ function RC:CheckRaidFlask()
 	
 	for i = 1,raidNum do
 		_, _, subgroup = GetRaidRosterInfo(i)
-		if subgroup <= math.floor(raidNum/5) then
+		if subgroup then
 			local unit = "raid"..i
 			local j = 1
 			local has = 0

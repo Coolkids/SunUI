@@ -38,7 +38,7 @@
 --
 --
 
-local revision =("$Revision: 7788 $"):sub(12, -3) 
+local revision =("$Revision: 7809 $"):sub(12, -3) 
 local FrameTitle = "DBM_GUI_Option_"	-- all GUI frames get automatically a name FrameTitle..ID
 
 local PanelPrototype = {}
@@ -2040,7 +2040,23 @@ do
 				local boss25stat4	= area:CreateText(L.Statistic_Kills, nil, nil, GameFontNormalSmall, "LEFT")
 				local boss25stat5	= area:CreateText(L.Statistic_Wipes, nil, nil, GameFontNormalSmall, "LEFT")
 				local boss25stat6	= area:CreateText(L.Statistic_BestKill, nil, nil, GameFontNormalSmall, "LEFT")
-
+				if not mod.stats then
+					mod.stats = { }
+				end
+				local stats = mod.stats
+				stats.normalKills = stats.normalKills or 0
+				stats.normalPulls = stats.normalPulls or 0
+				stats.heroicKills = stats.heroicKills or 0
+				stats.heroicPulls = stats.heroicPulls or 0
+				stats.challengeKills = stats.challengeKills or 0
+				stats.challengePulls = stats.challengePulls or 0
+				stats.normal25Kills = stats.normal25Kills or 0
+				stats.normal25Kills = stats.normal25Kills or 0
+				stats.normal25Pulls = stats.normal25Pulls or 0
+				stats.heroic25Kills = stats.heroic25Kills or 0
+				stats.heroic25Pulls = stats.heroic25Pulls or 0
+				stats.lfr25Kills = stats.lfr25Kills or 0
+				stats.lfr25Pulls = stats.lfr25Pulls or 0
 				local bossvalue1	= area:CreateText(mod.stats.normalKills, nil, nil, GameFontNormalSmall, "LEFT")
 				local bossvalue2	= area:CreateText((mod.stats.normalPulls-mod.stats.normalKills), nil, nil, GameFontNormalSmall, "LEFT")
 				local bossvalue3	= area:CreateText("0:00:00", nil, nil, GameFontNormalSmall, "LEFT")
@@ -2132,10 +2148,15 @@ do
 		for k,addon in ipairs(DBM.AddOns) do
 			if not Categories[addon.category] then
 				-- Create a Panel for "Wrath of the Lich King" "Burning Crusade" ...
-				if tonumber((select(2, GetBuildInfo()))) >= 16017 then--Choose default expanded catagory based on build number. This is so we show Cata mods until sept 25th patch.
+				local expLevel = GetExpansionLevel()
+				if expLevel == 4 then--Choose default expanded category based on players current expansion is.
 					Categories[addon.category] = DBM_GUI:CreateNewPanel(L["TabCategory_"..addon.category:upper()] or L.TabCategory_Other, nil, (addon.category:upper()=="MOP"))
-				else
+				elseif expLevel == 3 then
 					Categories[addon.category] = DBM_GUI:CreateNewPanel(L["TabCategory_"..addon.category:upper()] or L.TabCategory_Other, nil, (addon.category:upper()=="CATA"))
+				elseif expLevel == 2 then
+					Categories[addon.category] = DBM_GUI:CreateNewPanel(L["TabCategory_"..addon.category:upper()] or L.TabCategory_Other, nil, (addon.category:upper()=="WotLK"))
+				elseif expLevel == 1 then
+					Categories[addon.category] = DBM_GUI:CreateNewPanel(L["TabCategory_"..addon.category:upper()] or L.TabCategory_Other, nil, (addon.category:upper()=="BC"))
 				end
 				if L["TabCategory_"..addon.category:upper()] then
 					local ptext = Categories[addon.category]:CreateText(L["TabCategory_"..addon.category:upper()])

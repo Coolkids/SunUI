@@ -13,7 +13,6 @@
 	<Script file = "core\uiscale.lua"/>
 	<Include file="core\load.xml"/>
 	<Include file="developer\load.xml"/>
-	<Include file ="blzhook\load.xml"/>
 	<Script file = "core\AddonManager.lua"/>
 </Ui>
 

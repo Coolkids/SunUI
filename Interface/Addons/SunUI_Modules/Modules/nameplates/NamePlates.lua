@@ -595,7 +595,6 @@ local function CheckBlacklist(frame, ...)
 		frame.hp:Hide()
 		frame.cb:Hide()
 		frame.overlay:Hide()
-		frame.hp.oldlevel:Hide()
 	end
 end
 local function CheckUnit_Guid(frame, ...)

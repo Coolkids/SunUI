@@ -144,8 +144,6 @@ lib.gen_hpstrings = function(f, unit)
     local h = CreateFrame("Frame", nil, f)
     h:SetAllPoints(f.Health)
     h:SetFrameLevel(15)
-    local valsize
-    if f.mystyle == "arenatarget" or f.mystyle == "partypet" then valsize = 11 else valsize = 13 end 
     local name = lib.gen_fontstring(h, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
     local hpval = lib.gen_fontstring(h, DB.Font,C["FontSize"]*S.Scale(1), "THINOUTLINE")
     if f.mystyle == "target" or f.mystyle == "tot" then
@@ -170,6 +168,37 @@ lib.gen_hpstrings = function(f, unit)
       f:Tag(name, '[mono:color][mono:longname]')
       f:Tag(hpval, '[mono:hp]')
     end
+	if C["TagFadeIn"] then
+		local Event = CreateFrame("Frame")
+		Event:RegisterEvent("PLAYER_REGEN_DISABLED")
+		Event:RegisterEvent("PLAYER_REGEN_ENABLED")
+		Event:RegisterEvent("PLAYER_ENTERING_WORLD")
+		Event:SetScript("OnEvent", function(self, event, ...)
+			if event == "PLAYER_REGEN_DISABLED" then
+				UIFrameFadeIn(name, 0.5, 0, 1)
+				UIFrameFadeIn(hpval, 0.5, 0, 1)
+			elseif event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD"then
+				UIFrameFadeOut(name, 0.5, 1, 0)
+				UIFrameFadeOut(hpval, 0.5, 1, 0)
+			end
+		end)
+		f:HookScript("OnEnter", function()
+			UnitFrame_OnEnter(f)
+			 f.Highlight:Show()
+			if not UnitAffectingCombat("player") then
+				UIFrameFadeIn(name, 0.5, 0, 1)
+				UIFrameFadeIn(hpval, 0.5, 0, 1)
+			end
+		end)
+		f:HookScript("OnLeave", function()
+			UnitFrame_OnLeave(f)
+			f.Highlight:Hide()
+			if not UnitAffectingCombat("player") then
+				UIFrameFadeOut(name, 0.5, 1, 0)
+				UIFrameFadeOut(hpval, 0.5, 1, 0)
+			end
+		end)
+	end
 end
   
 --gen powerbar func
@@ -225,6 +254,34 @@ lib.gen_ppstrings = function(f, unit)
       f:Tag(pp, '[mono:pp]')
     end
     f:Tag(info, '[mono:info]')
+	
+	if C["TagFadeIn"] then
+		local Event = CreateFrame("Frame")
+		Event:RegisterEvent("PLAYER_REGEN_DISABLED")
+		Event:RegisterEvent("PLAYER_REGEN_ENABLED")
+		Event:RegisterEvent("PLAYER_ENTERING_WORLD")
+		Event:SetScript("OnEvent", function(self, event, ...)
+			if event == "PLAYER_REGEN_DISABLED" then
+				UIFrameFadeIn(info, 0.5, 0, 1)
+				UIFrameFadeIn(pp, 0.5, 0, 1)
+			elseif event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD"then
+				UIFrameFadeOut(info, 0.5, 1, 0)
+				UIFrameFadeOut(pp, 0.5, 1, 0)
+			end
+		end)
+		f:HookScript("OnEnter", function()
+			if not UnitAffectingCombat("player") then
+				UIFrameFadeIn(info, 0.5, 0, 1)
+				UIFrameFadeIn(pp, 0.5, 0, 1)
+			end
+		end)
+		f:HookScript("OnLeave", function()
+			if not UnitAffectingCombat("player") then
+				UIFrameFadeOut(info, 0.5, 1, 0)
+				UIFrameFadeOut(pp, 0.5, 1, 0)
+			end
+		end)
+	end
 end
 
 ------ [Castbar, +mirror castbar]
@@ -912,16 +969,6 @@ end
   end
   --gen hilight texture
   lib.gen_highlight = function(f)
-    local OnEnter = function(f)
-      UnitFrame_OnEnter(f)
-      f.Highlight:Show()
-    end
-    local OnLeave = function(f)
-      UnitFrame_OnLeave(f)
-      f.Highlight:Hide()
-    end
-    f:SetScript("OnEnter", OnEnter)
-    f:SetScript("OnLeave", OnLeave)
     local hl = f.Health:CreateTexture(nil, "OVERLAY")
     hl:SetAllPoints(f.Health)
     hl:SetTexture(DB.Solid)
@@ -1037,7 +1084,6 @@ end
     self:SetAttribute("*type2", "menu")
     self:SetScript("OnEnter", UnitFrame_OnEnter)
     self:SetScript("OnLeave", UnitFrame_OnLeave)
-	
     lib.gen_hpbar(self)
     lib.gen_hpstrings(self)
     lib.gen_ppbar(self)

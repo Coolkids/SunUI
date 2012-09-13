@@ -213,7 +213,7 @@ local function OnEvent_PLAYER_ENTERING_WORLD(event, ...)
 end
 local function BuildBuffFrame()
 	for i = 1, 6 do
-		local Temp = CreateFrame("Frame", nil, UIParent)
+		local Temp = CreateFrame("Frame", nil, Minimap)
 		Temp:SetSize(C["ReminderDB"].RaidBuffSize, C["ReminderDB"].RaidBuffSize)
 		Temp:SetFrameStrata("LOW")
 		Temp.Shadow = CreateFrame("Frame", nil, Temp)

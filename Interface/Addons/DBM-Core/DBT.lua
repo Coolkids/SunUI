@@ -109,7 +109,7 @@ options = {
 	},
 	Texture = {
 		type = "string",
-		default = "Interface\\AddOns\\DBM-DefaultSkins\\textures\\default.tga",
+		default = "Interface\\AddOns\\DBM-DefaultSkin\\textures\\default.tga",
 	},
 	StartColorR = {
 		type = "number",
@@ -1042,7 +1042,11 @@ end
 do
 
 	local function onUpdate(self, elapsed)
-		self.obj:Update(elapsed)
+		 -- this check should *never* fail as only dead bars don't have an object and dead bars should always be hidden
+		 -- however, this function is apparently called by :Show() under some circumstances
+		if self.obj then
+			self.obj:Update(elapsed)
+		end
 	end
 
 	local function onMouseDown(self, btn)

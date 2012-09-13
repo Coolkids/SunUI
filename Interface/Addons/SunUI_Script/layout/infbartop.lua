@@ -296,6 +296,29 @@ local function BuildGold()
 	Stat:SetScript("OnEvent", OnEvent)
 end
 
+local function FadeOutFrameMap()  --隐藏
+	if Minimap:GetAlpha()>0 then
+		local fadeInfo = {}
+		fadeInfo.mode = "OUT"
+		fadeInfo.timeToFade = 2
+		fadeInfo.finishedFunc = function() Minimap:Hide() end 
+		fadeInfo.startAlpha = Minimap:GetAlpha()
+		fadeInfo.endAlpha = 0
+		UIFrameFade(Minimap, fadeInfo)
+	end 
+end
+local function FadeOutFrameDamage()  --隐藏
+	if alDamageMeterFrame:GetAlpha()>0 then
+		local fadeInfo = {}
+		fadeInfo.mode = "OUT"
+		fadeInfo.timeToFade = 2
+		fadeInfo.finishedFunc = function() alDamageMeterFrame:Hide() end 
+		fadeInfo.startAlpha = alDamageMeterFrame:GetAlpha()
+		fadeInfo.endAlpha = 0
+		UIFrameFade(alDamageMeterFrame, fadeInfo)
+	end 
+end
+	
 function Module:OnInitialize()
 	if C["InfoPanelDB"]["OpenTop"] == true then
 		local top = CreateFrame("Frame", nil, UIParent)
@@ -310,6 +333,60 @@ function Module:OnInitialize()
 		InfoPanelPos:SetSize(350, 12)
 		InfoPanelPos:Hide()
 		MoveHandle.InfoPanel = S.MakeMoveHandle(InfoPanelPos, L["信息面板"], "InfoPanel")
+		
+		local maphide = CreateFrame("Button", nil, UIParent)
+		maphide:SetHeight(8)
+		maphide:SetWidth(100)
+		maphide:SetFrameStrata("BACKGROUND")
+		maphide:SetFrameLevel(1)
+		maphide:SetPoint("TOP", 0, -5)
+		maphide:SetAlpha(0)
+		maphide:SetScript("OnMouseDown", function(self, button)
+			if Minimap:IsShown() then 
+				FadeOutFrameMap()
+			else
+				Minimap:Show()
+				UIFrameFadeIn(Minimap, 3, 0, 1)
+			end
+		end)
+		maphide:SetScript("OnEnter", function(self)
+			UIFrameFadeIn(self, 2, self:GetAlpha(), 1)
+			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
+			GameTooltip:AddLine("隐藏小地图", .6,.8,1)
+			GameTooltip:Show()
+		end)
+		maphide:SetScript("OnLeave", function(self) 
+			UIFrameFadeOut(self, 2, self:GetAlpha(), 0)
+			GameTooltip:Hide()
+		end)
+		S.Reskin(maphide)
+		
+		local mapdamage = CreateFrame("Button", nil, UIParent)
+		mapdamage:SetHeight(8)
+		mapdamage:SetWidth(50)
+		mapdamage:SetFrameStrata("BACKGROUND")
+		mapdamage:SetFrameLevel(1)
+		mapdamage:SetPoint("TOP", 90, -5)
+		mapdamage:SetAlpha(0)
+		mapdamage:SetScript("OnMouseDown", function(self, button)
+			if alDamageMeterFrame:IsShown() then 
+				FadeOutFrameDamage()
+			else
+				alDamageMeterFrame:Show()
+				UIFrameFadeIn(alDamageMeterFrame, 3, 0, 1)
+			end
+		end)
+		mapdamage:SetScript("OnEnter", function(self)
+			UIFrameFadeIn(self, 2, self:GetAlpha(), 1)
+			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
+			GameTooltip:AddLine("隐藏伤害统计", .6,.8,1)
+			GameTooltip:Show()
+		end)
+		mapdamage:SetScript("OnLeave", function(self) 
+			UIFrameFadeOut(self, 2, self:GetAlpha(), 0)
+			GameTooltip:Hide()
+		end)
+		S.Reskin(mapdamage)
 	end
 	if C["InfoPanelDB"]["OpenBottom"] == true then
 		local bottom = CreateFrame("Frame", "BottomBar", UIParent)

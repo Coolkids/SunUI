@@ -21,6 +21,7 @@ function Module:OnInitialize()
 					[13165] = true, -- hawk
 					[5118] = true, -- cheetah
 					[82661] = true, -- fox	
+					[109260] = true, --铁鹰守护
 				},
 				["combat"] = true,
 				["instance"] = true,

@@ -25,10 +25,21 @@ G["ActionBarDB"] = {
 	["BigSize3"] = 52,
 	["HideHotKey"] = false,
 	["MainBarSacle"] = 1,
-	["EnableBarFader"] = false,
 	["Bar1Layout"] = 1,
 	["BigSize4"] = 52,
 	["ExtraBarSacle"] = 1.5,
+	["ExpbarWidth"] = 500,
+	["ExpbarHeight"] = 8,
+	["ExpbarUp"] = false,
+	["ExpbarFadeOut"] = true,
+	["AllFade"] = false,
+	["Bar1Fade"] = false,
+	["Bar2Fade"] = false,
+	["Bar3Fade"] = false,
+	["Bar4Fade"] = false,
+	["Bar5Fade"] = false,
+	["StanceBarFade"] = false,
+	["PetBarFade"] = false,
 }
 G["NameplateDB"] = {
 	["CastBarWidth"] = 110,
@@ -111,6 +122,7 @@ G["UnitFrameDB"] = {
 	["TargetRange"] = false,
 	["RangeAlpha"] = 0.6,
 	["FocusDebuff"] = false,
+	["TagFadeIn"] = true,
 }
 G["MiniDB"] = {
 	["AutoRepair"] = false,
@@ -226,6 +238,6 @@ G["MoveHandleDB"] = {
 	--Mini
 	["BloodShield"] = {"BOTTOM", "UIParent", "BOTTOM", -285,  172},
 	["AutoButton"] = {"RIGHT", "UIParent", "RIGHT", -270, 188},
-	--other
-	["healpriest"] = {"CENTER", "UIParent", "CENTER", 0, 135},
+	--经验条
+	["expbar"] = {"BOTTOM", "UIParent", "BOTTOM", 0, 4},
 }
