@@ -1,10 +1,11 @@
-﻿if GetLocale() ~= "zhCN" then
-return
+﻿-- Thanks to q09q09 and networm! (From WoWInterface)
+
+if GetLocale() ~= "zhCN" then
+	return
 end
 
 local L = BUYEMALL_LOCALS
 
--- Thanks to q09q09 and networm (From WoWInterface)
 L.MAX		= "最多"
 L.STACK		= "一组"
 L.CONFIRM	= "是否要买\n%2$s × %1$d个？"

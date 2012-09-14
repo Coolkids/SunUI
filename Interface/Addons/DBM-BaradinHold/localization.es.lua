@@ -21,3 +21,12 @@ L= DBM:GetModLocalization(140)
 ----------------------------------
 L= DBM:GetModLocalization(339)
 
+L:SetTimerLocalization({
+	TimerFirstSpecial		= "Primer especial"
+})
+
+L:SetOptionLocalization({
+	TimerFirstSpecial		= "Mostrar tiempo para el primer especial después de $spell:105738\n(El primer especial es aleatorio. Puede ser $spell:105067 o $spell:104936)"
+})
+
+

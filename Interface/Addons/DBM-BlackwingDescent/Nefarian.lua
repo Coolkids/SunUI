@@ -3,7 +3,7 @@ local L		= mod:GetLocalizedStrings()
 local Nefarian	= EJ_GetSectionInfo(3279)
 local Onyxia	= EJ_GetSectionInfo(3283)
 
-mod:SetRevision(("$Revision: 7779 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 21 $"):sub(12, -3))
 mod:SetCreatureID(41376, 41270)
 mod:SetModelID(32716)
 mod:SetZone()

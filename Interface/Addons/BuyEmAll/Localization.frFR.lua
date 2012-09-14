@@ -1,10 +1,11 @@
-﻿if GetLocale() ~= "frFR" then
+﻿-- Thanks to Layrajha
+
+if GetLocale() ~= "frFR" then
 	return
 end
 
 local L = BUYEMALL_LOCALS
 
--- Thanks to Layrajha
 -- L.MAX 			= "Max"
 L.STACK 		= "Pile"
 L.CONFIRM 		= "Voulez-vous vraiment acheter\n %d × %s?"

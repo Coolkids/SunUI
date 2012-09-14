@@ -51,7 +51,6 @@ L:SetMiscLocalization({
 	YellPhase2		= "¡Estos cielos son MÍOS!",
 	FullPower		= "spell:99925",
 	LavaWorms		= "¡Gusanos de lava ígneos surgen del suelo!",
-	PowerLevel		= "Pluma de arrabio",
 	East			= "Este",
 	West			= "Oeste",
 	Both			= "Ambos"
@@ -142,7 +141,7 @@ L:SetOptionLocalization({
 	warnRageRagnarosSoon		= DBM_CORE_AUTO_ANNOUNCE_OPTIONS.prewarn:format(101109, GetSpellInfo(101109)),
 	warnSplittingBlow	= "Mostrar aviso para $spell:98951",
 	warnEngulfingFlame	= "Mostrar aviso para $spell:99171 en normal",
-	WarnEngulfingFlameHeroic	= "Mostrar avisos de localización para $spell:99171 en heroico",
+	warnEngulfingFlameHeroic	= "Mostrar avisos de localización para $spell:99171 en heroico",
 	warnSeedsLand		= "Mostrar aviso/tiempo para el aterrizaje de $spell:98520 en lugar de los casteos.",
 	warnEmpoweredSulf			= DBM_CORE_AUTO_ANNOUNCE_OPTIONS.cast:format(100604, GetSpellInfo(100604)),
 	timerRageRagnaros			= DBM_CORE_AUTO_TIMER_OPTIONS.cast:format(101109, GetSpellInfo(101109)),

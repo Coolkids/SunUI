@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(318, "DBM-DragonSoul", nil, 187)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7668 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 27 $"):sub(12, -3))
 mod:SetCreatureID(53879)
 mod:SetModelID(35268)
 mod:SetModelSound("sound\\CREATURE\\Deathwing\\VO_DS_DEATHWING_BACKEVENT_01.OGG", "sound\\CREATURE\\Deathwing\\VO_DS_DEATHWING_BACKSLAY_01.OGG")
@@ -58,7 +58,8 @@ mod:AddBoolOption("ShowShieldInfo", false)--on 25 man this is quite frankly a sp
 local gripTargets = {}
 local gripIcon = 6
 local corruptionActive = {}
-local residueCount = 0
+local residueNum = 0
+local residueDebug = false
 local diedOozeGUIDS = {}
 
 local function checkTendrils()
@@ -80,16 +81,20 @@ local function showGripWarning()
 end
 
 local function warningResidue()
-	warnResidue:Cancel()
-	warnResidue:Schedule(1.25, residueCount)
+	--http://mysticalos.com/residue_bug.jpeg (screen shot is from using OLD code, it does not work here. I got it up to -10)
+	if residueNum >= 0 then -- (better to warn 0 on heroic)
+		warnResidue:Show(residueNum)
+	end
 end
 
 local function checkOozeResurrect(GUID)
 	-- set min resurrect time to 5 sec. (guessed)
 	if diedOozeGUIDS[GUID] and GetTime() - diedOozeGUIDS[GUID] > 5 then
-		residueCount = residueCount - 1
+		residueNum = residueNum - 1
 		diedOozeGUIDS[GUID] = nil
-		warningResidue()
+		mod:Unschedule(warningResidue)
+		mod:Schedule(1.25, warningResidue)
+		if residueDebug then print("revived", residueNum) end
 	end
 end
 
@@ -152,7 +157,7 @@ function mod:OnCombatStart(delay)
 		clearPlasmaVariables()
 	end
 	gripIcon = 6
-	residueCount = 0
+	residueNum = 0
 end
 
 function mod:OnCombatEnd()
@@ -201,30 +206,31 @@ end
 -- not needed guid check. This is residue creation step.
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(105219) then 
+		residueNum = residueNum + 1
 		diedOozeGUIDS[args.sourceGUID] = GetTime()
-		residueCount = residueCount + 1
-		if residueCount >= 0 then
-			warningResidue()
-		end
-	elseif args:IsSpellID(105248) then
+		self:Unschedule(warningResidue)
+		self:Schedule(1.25, warningResidue)
+		if residueDebug then print("created", residueNum) end
+	elseif args:IsSpellID(105248) and diedOozeGUIDS[args.sourceGUID] then
+		residueNum = residueNum - 1
 		diedOozeGUIDS[args.sourceGUID] = nil
-		residueCount = residueCount - 1
-		if residueCount >= 0 then
-			warningResidue()
-		end
+		self:Unschedule(warningResidue)
+		self:Schedule(1.25, warningResidue)
+		if residueDebug then print("absorbed", residueNum) end
 	end
 end
 
 --Damage event that indicates an ooze is taking damage
 --we check its GUID to see if it's a resurrected ooze and if so remove it from table.
---oozes do not fires SPELL_DAMAGE event from source. so track SPELL_DAMAGE event only from dest.
+--for WoW 5.x priest spell, Shadow Word: Pain (spellid = 124464) fires spell_damage event. (this is damage over time spell, but combat log records this spell as SPELL_DAMAGE event. not SPELL_PERIODIC_DAMAGE)
+--this cause bad revive check, so only source SPELL_DAMAGE (fires when ooze dies again) and SWING_DAMAGE event will resolve this.
+--although this change causes slow revive check, it will be better than shows bad residue count.
 function mod:SPELL_DAMAGE(sourceGUID, _, _, _, destGUID)
-	checkOozeResurrect(destGUID)
+	checkOozeResurrect(sourceGUID)
 end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE
 
 function mod:SWING_DAMAGE(sourceGUID, _, _, _, destGUID)
-	checkOozeResurrect(destGUID)
 	checkOozeResurrect(sourceGUID)
 end
 mod.SWING_MISSED = mod.SWING_DAMAGE

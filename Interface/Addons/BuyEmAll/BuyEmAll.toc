@@ -1,15 +1,16 @@
 ## Author: Shinisuryu
 ## Interface: 50001
 ## Notes: Enhances shift-click interface at vendors.
-## Title: BuyEmAll (3.1.0)
-## Version: 3.1.0
+## Title: BuyEmAll (3.1.1)
+## Version: 3.1.1
 ## SavedVariablesPerCharacter: BEAConfirmToggle
+Localization.deDE.lua
 Localization.enUS.lua
 Localization.esES.lua
-Localization.deDE.lua
 Localization.frFR.lua
+Localization.koKR.lua
+Localization.ptBR.lua
 Localization.zhCN.lua
 Localization.zhTW.lua
-Localization.koKR.lua
 BuyEmAll.lua
 BuyEmAll.xml

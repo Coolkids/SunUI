@@ -1,10 +1,11 @@
-﻿if GetLocale() ~= "koKR" then
+﻿-- Thanks to sayclub
+
+if GetLocale() ~= "koKR" then
 	return
 end
 
 local L = BUYEMALL_LOCALS
 
--- Thanks to sayclub
 L.MAX 			= "최대"
 L.STACK 		= "세트"
 L.CONFIRM 		= "정말로 당신은 다음과 같이 구매를 희망하십니까?\n[%d 개 × %s 아이템]"

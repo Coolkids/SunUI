@@ -1,10 +1,11 @@
-if GetLocale() ~= "esES" then
+-- Thanks to jsr1976!
+
+if GetLocale() ~= "esES" and GetLocale() ~= "esMX" then
 	return
 end
  
 local L = BUYEMALL_LOCALS
 
--- Thanks to jsr1976!
 L.MAX				= "Max"
 L.STACK				= "Montón"
 L.CONFIRM			= "Estas seguro que quieres comprar\n %d × %s?"

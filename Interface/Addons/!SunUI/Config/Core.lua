@@ -7,7 +7,7 @@ local DEFAULT_HEIGHT = 500
 local AC = LibStub("AceConfig-3.0")
 local ACD = LibStub("AceConfigDialog-3.0")
 local Version = 20120323
-local beta = "0911"
+local beta = "0915"
 local aglin = false
 function SunUIConfig:LoadDefaults()
 	local _, _, _, G = unpack(SunUI)
@@ -25,6 +25,7 @@ function SunUIConfig:LoadDefaults()
 			MiniDB = G["MiniDB"],
 			InfoPanelDB = G["InfoPanelDB"],
 			MoveHandleDB = G["MoveHandleDB"],
+			PowerBarDB = G["PowerBarDB"],
 		},
 	}
 end	
@@ -1324,6 +1325,58 @@ function SunUIConfig.GenerateOptionsInternal()
 					end
 					},
 				}
+			},
+			PowerBarDB = {
+				order = 16,
+				type = "group",
+				name = "职业能量条",
+				get = function(info) return db.PowerBarDB[ info[#info] ] end,
+				set = function(info, value) db.PowerBarDB[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+				args = {
+					group1 = {
+						type = "group", order = 1,
+						name = "",guiInline = true,
+						args = {
+							Open = {
+							type = "toggle",
+							name = "启用职业能量条",
+							order = 1,
+							},
+						}
+					},
+					group2 = {
+						type = "group", order = 2, guiInline = true, disabled = function(info) return not db.PowerBarDB.Open end,
+						name = "",
+						args = {
+							Width = {
+								type = "input",
+								name = "框体宽度",
+								desc = "框体宽度",
+								order = 1,
+								get = function() return tostring(db.PowerBarDB.Width) end,
+								set = function(_, value) db.PowerBarDB.Width = tonumber(value) end,
+							},
+							Height = {
+								type = "input",
+								name = "框体高度",
+								desc = "框体高度",
+								order = 1,
+								get = function() return tostring(db.PowerBarDB.Height) end,
+								set = function(_, value) db.PowerBarDB.Height = tonumber(value) end,
+							},
+							Scale = {
+								type = "range", order = 3,disabled =function(info) return true end,
+								name = "框体缩放", desc = "框体缩放",
+								min = 0, max = 1, step = 0.01,
+							},
+							Fade = {
+							type = "toggle",
+							name = "渐隐",
+							order = 4,
+							},
+						}
+					},
+				},
 			},
 		}
 	}

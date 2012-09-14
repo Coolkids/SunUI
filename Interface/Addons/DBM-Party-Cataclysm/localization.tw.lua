@@ -395,6 +395,14 @@ L= DBM:GetModLocalization(103)
 ------------ 
 L= DBM:GetModLocalization(104)
 
+L:SetTimerLocalization{
+	TimerPhase		= "第二階段"
+}
+
+L:SetOptionLocalization{
+	TimerPhase		= "為第二階段顯示計時器"
+}
+
 ----------------
 --  Zul'Aman  --
 ----------------

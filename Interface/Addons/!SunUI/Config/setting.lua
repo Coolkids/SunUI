@@ -240,4 +240,13 @@ G["MoveHandleDB"] = {
 	["AutoButton"] = {"RIGHT", "UIParent", "RIGHT", -270, 188},
 	--经验条
 	["expbar"] = {"BOTTOM", "UIParent", "BOTTOM", 0, 4},
+	--powerbar
+	["PowerBar"] = {"CENTER", "UIParent", "CENTER", 0, -80},
+}
+G["PowerBarDB"] = {
+	["Open"] = true,
+	["Width"] = 200,
+	["Height"] = 5,
+	["Scale"] = 1,
+	["Fade"] = true,
 }

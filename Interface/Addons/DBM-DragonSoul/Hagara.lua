@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(317, "DBM-DragonSoul", nil, 187)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7746 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 20 $"):sub(12, -3))
 mod:SetCreatureID(55689)
 mod:SetModelID(39318)
 mod:SetModelSound("sound\\CREATURE\\HAGARA\\VO_DS_HAGARA_INTRO_01.OGG", "sound\\CREATURE\\HAGARA\\VO_DS_HAGARA_CRYSTALDEAD_05.OGG")
@@ -136,18 +136,16 @@ do
 		return DBM:GetRaidSubgroup(DBM:GetUnitFullName(v1)) < DBM:GetRaidSubgroup(DBM:GetUnitFullName(v2))
 	end
 	function mod:SetTombIcons()
-		if DBM:GetRaidRank() > 0 then
-			table.sort(tombIconTargets, sort_by_group)
-			local tombIcons = 8
-			for i, v in ipairs(tombIconTargets) do
-				if self.Options.AnnounceFrostTombIcons and IsRaidLeader() then
-					SendChatMessage(L.TombIconSet:format(tombIcons, DBM:GetUnitFullName(v)), "RAID")
-				end
-				self:SetIcon(v, tombIcons)
-				tombIcons = tombIcons - 1
+		table.sort(tombIconTargets, sort_by_group)
+		local tombIcons = 8
+		for i, v in ipairs(tombIconTargets) do
+			if self.Options.AnnounceFrostTombIcons and DBM:GetRaidRank() > 0 then
+				SendChatMessage(L.TombIconSet:format(tombIcons, DBM:GetUnitFullName(v)), "RAID")
 			end
-			self:Schedule(8, ClearTombTargets)
+			self:SetIcon(v, tombIcons)
+			tombIcons = tombIcons - 1
 		end
+		self:Schedule(8, ClearTombTargets)
 	end
 end
 

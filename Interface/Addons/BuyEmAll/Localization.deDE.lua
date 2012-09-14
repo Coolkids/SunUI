@@ -1,10 +1,11 @@
-﻿if GetLocale() ~= "deDE" then
+﻿-- Thanks to JokerGermany
+
+if GetLocale() ~= "deDE" then
 	return
 end
 
 local L = BUYEMALL_LOCALS
 
--- Thanks to JokerGermany
 -- L.MAX 		= "Max"
 -- L.STACK 		= "Stack"
 L.CONFIRM = "Bist du sicher das du\n %d × %s kaufen willst?"

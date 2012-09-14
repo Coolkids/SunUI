@@ -183,9 +183,6 @@ function BuyEmAll:MerchantItemButton_OnModifiedClick(frame, button)
 	end
 end
 
-
--- Testing currency changes
-
 function BuyEmAll:AltCurrencyHandling(itemIndex, frame)
 	self.AltCurrencyMode = 1;
 
@@ -212,6 +209,7 @@ function BuyEmAll:AltCurrencyHandling(itemIndex, frame)
 			self.AltCurrency1Tex = select(10, GetItemInfo(self.AltCurrency1));
 			price1 = select(2,GetMerchantItemCostItem(itemIndex, 1));
 			Afford1 = floor(GetItemCount(self.AltCurrency1) / price1) * self.preset;
+			if (self.AltCurrency1 == 79254) then Afford1 = Afford1 + (floor(GetItemCount(61978) / price1) * self.preset) end
 		end
 	end
 	if (NumAltCurrency == 2) or (NumAltCurrency == 3) then
@@ -286,6 +284,10 @@ function BuyEmAll:AltCurrencyTranslating(Texture)
 		return 395;
 	elseif (strmatch(Texture, "-(%a+)$") == "valor") then
 		return 396;
+	elseif (strmatch(Texture, "_(%a+)$") == "sealofkings") then
+		return 614;
+	elseif (strmatch(Texture, "%a+_%a+$") == "primal_shadow") then
+		return 615;
 	end
 end
 

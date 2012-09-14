@@ -396,6 +396,15 @@ L= DBM:GetModLocalization(103)
 ------------ 
 L= DBM:GetModLocalization(104)
 
+L:SetTimerLocalization{
+	TimerPhase		= "Fase 2"
+}
+
+L:SetOptionLocalization{
+	TimerPhase		= "Mostrar tiempo para fase 2"
+}
+
+
 ----------------
 --  Zul'Aman  --
 ----------------
@@ -783,4 +792,13 @@ L = DBM:GetModLocalization("Mobus")
 
 L:SetGeneralLocalization{
 	name = "Mobus"
+}
+
+-----------
+-- Xariona --
+-----------
+L = DBM:GetModLocalization("Xariona")
+
+L:SetGeneralLocalization{
+	name = "Xariona"
 }

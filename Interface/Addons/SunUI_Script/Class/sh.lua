@@ -87,36 +87,3 @@ Frame:RegisterEvent("UNIT_HEALTH")
 Frame:RegisterEvent("PLAYER_TARGET_CHANGED")
 Frame:RegisterEvent("UNIT_POWER")
 Frame:RegisterEvent("SPELL_UPDATE_COOLDOWN")	
-
-if DB.PlayerName == "Coolkid" then
-	local ShadowOrbs = CreateFrame("Frame", nil, UIParent)
-
-	ShadowOrbs.text = S.MakeFontString(ShadowOrbs, 60*S.Scale(1), "OUTLINEMONOCHROME")
-	ShadowOrbs.text:SetPoint("CENTER", UIParent, "CENTER", 0, -55)
-	ShadowOrbs.text:SetText("")
-	ShadowOrbs.text:SetTextColor(.86,.22,1)
-	ShadowOrbs:SetAllPoints(ShadowOrbs.text)
-	ShadowOrbs:Hide()
-	ShadowOrbs:EnableMouse(false)
-	ShadowOrbs:SetScript("OnEvent",function(self, event, ...)
-		local numShadowOrbs = UnitPower('player', SPELL_POWER_SHADOW_ORBS)
-		if numShadowOrbs == 0 then
-			self:Hide()
-		else
-			self:Show()
-			self.text:SetText(numShadowOrbs)
-		end
-		if event == "PLAYER_REGEN_DISABLED" then
-			UIFrameFadeIn(self, 2, self:GetAlpha(), 1)
-		end
-		if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" then
-			UIFrameFadeOut(self, 2, self:GetAlpha(), 0)
-		end
-	end)
-
-	ShadowOrbs:RegisterEvent("PLAYER_ENTERING_WORLD")
-	ShadowOrbs:RegisterEvent("UNIT_POWER")
-	ShadowOrbs:RegisterEvent("UNIT_DISPLAYPOWER")
-	ShadowOrbs:RegisterEvent("PLAYER_REGEN_ENABLED")
-	ShadowOrbs:RegisterEvent("PLAYER_REGEN_DISABLED")
-end

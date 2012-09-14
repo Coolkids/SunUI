@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(172, "DBM-BlackwingDescent", nil, 73)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 7779 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 21 $"):sub(12, -3))
 mod:SetCreatureID(43296)
 mod:SetModelID(33308)
 mod:SetZone()
@@ -80,15 +80,13 @@ do
 		return DBM:GetRaidSubgroup(DBM:GetUnitFullName(v1)) < DBM:GetRaidSubgroup(DBM:GetUnitFullName(v2))
 	end
 	function mod:SetSlimeIcons()
-		if DBM:GetRaidRank() > 0 then
-			table.sort(slimeTargetIcons, sort_by_group)
-			local slimeIcon = 8
-			for i, v in ipairs(slimeTargetIcons) do
-				self:SetIcon(v, slimeIcon, 3)
-				slimeIcon = slimeIcon - 1
-			end
-			self:Schedule(1.5, ClearSlimeTargets)--Table wipe delay so if icons go out too early do to low fps or bad latency, when they get new target on table, resort and reapplying should auto correct teh icon within .2-.4 seconds at most.
+		table.sort(slimeTargetIcons, sort_by_group)
+		local slimeIcon = 8
+		for i, v in ipairs(slimeTargetIcons) do
+			self:SetIcon(v, slimeIcon, 3)
+			slimeIcon = slimeIcon - 1
 		end
+		self:Schedule(1.5, ClearSlimeTargets)--Table wipe delay so if icons go out too early do to low fps or bad latency, when they get new target on table, resort and reapplying should auto correct teh icon within .2-.4 seconds at most.
 	end
 end
 

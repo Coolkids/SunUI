@@ -34,6 +34,7 @@ localization.kr.lua
 localization.cn.lua
 localization.tw.lua
 localization.fr.lua
+localization.it.lua
 localization.br.lua
 MapSizes.lua
 Morchok.lua

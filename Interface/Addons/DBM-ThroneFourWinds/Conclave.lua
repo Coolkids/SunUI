@@ -4,7 +4,7 @@ local Anshal	= EJ_GetSectionInfo(3166)
 local Nezir	= EJ_GetSectionInfo(3178)
 local Rohash	= EJ_GetSectionInfo(3172)
 
-mod:SetRevision(("$Revision: 7759 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 20 $"):sub(12, -3))
 mod:SetCreatureID(45870, 45871, 45872)
 mod:SetModelID(35232)
 mod:SetZone()
