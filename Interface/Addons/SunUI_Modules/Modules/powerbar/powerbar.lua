@@ -164,6 +164,22 @@ local function OnEvent(self, event, unit)
 			UpdateType(self, i, math.floor((runemap[i]+1)/2))
 		end
 	end
+	if C["Fade"] then 
+		if event == "PLAYER_REGEN_DISABLED" then
+			for i = 1,6 do
+				if self[i]:GetAlpha() < 1 then
+					UIFrameFadeIn(self[i], 2, self[i]:GetAlpha(), 1)
+				end
+			end	
+		end
+		if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" then
+			for i = 1,6 do
+				if self[i]:GetAlpha() > 0 then
+					UIFrameFadeOut(self[i], 2, self[i]:GetAlpha(), 0)
+				end
+			end
+		end
+	end
 end
 function Module:CreateQSDKPower()
 	if  DB.MyClass ~= "PALADIN" and DB.MyClass ~= "DEATHKNIGHT" then return end
@@ -203,6 +219,8 @@ function Module:CreateQSDKPower()
 		bars:RegisterEvent("RUNE_POWER_UPDATE")
 		bars:RegisterEvent("RUNE_TYPE_UPDATE")
 		bars:RegisterEvent("PLAYER_ENTERING_WORLD")
+		bars:RegisterEvent("PLAYER_REGEN_ENABLED")
+		bars:RegisterEvent("PLAYER_REGEN_DISABLED")
 		bars:SetScript("OnEvent", OnEvent)
 	elseif DB.MyClass == "PALADIN" then
 		bars:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -311,6 +329,8 @@ function Module:CreateEclipse()
 	eb:RegisterEvent("UNIT_POWER")
 	eb:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
 	eb:RegisterEvent("PLAYER_ENTERING_WORLD")
+	eb:RegisterEvent("PLAYER_REGEN_DISABLED")
+	eb:RegisterEvent("PLAYER_REGEN_ENABLED")
 	eb:SetScript("OnEvent", function(self, event, unit, powerType)
 		if event == "ECLIPSE_DIRECTION_CHANGE" or event == "PLAYER_ENTERING_WORLD" then
 			local dir = GetEclipseDirection()
@@ -368,6 +388,18 @@ function Module:CreateEclipse()
 				self.SolarBar:SetValue(power * -1)
 			end
 		end
+		if C["Fade"] then 
+			if event == "PLAYER_REGEN_DISABLED" then
+				if eb:GetAlpha() < 1 then
+					UIFrameFadeIn(eb, 2, eb:GetAlpha(), 1)
+				end	
+			end
+			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" or event == "PLAYER_TALENT_UPDATE" or event == "UPDATE_SHAPESHIFT_FORM" then
+				if eb:GetAlpha() > 0 then
+					UIFrameFadeOut(eb, 2, eb:GetAlpha(), 0)
+				end
+			end
+		end
 	end)
 end
 function Module:FuckWarlock()
@@ -391,11 +423,6 @@ function Module:FuckWarlock()
 	local bars = CreateFrame('Frame', nil, UIParent)
 	bars:SetSize(C["Width"], C["Height"])
 	MoveHandle.PowerBar = S.MakeMove(bars, "SunUI PowerBar", "PowerBar", C["Scale"])
-	local gradient = bars:CreateTexture(nil, "BACKGROUND")
-	gradient:SetPoint("TOPLEFT")
-	gradient:SetPoint("BOTTOMRIGHT")
-	gradient:SetTexture(DB.Statusbar)
-	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
 	for i = 1, 4 do
 		bars[i] = CreateFrame("StatusBar", nil, bars)
 		bars[i]:SetSize((C["Width"]-2*(4-1))/4, C["Height"])
@@ -412,10 +439,12 @@ function Module:FuckWarlock()
 			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 2, 0)
 		end
 	end
-	bars:RegisterEvent("UNIT_POWER", Path)
-	bars:RegisterEvent("UNIT_DISPLAYPOWER", Path)
-	bars:RegisterEvent("PLAYER_ENTERING_WORLD", Visibility)
-	bars:RegisterEvent("PLAYER_TALENT_UPDATE", Visibility)
+	bars:RegisterEvent("UNIT_POWER")
+	bars:RegisterEvent("UNIT_DISPLAYPOWER")
+	bars:RegisterEvent("PLAYER_ENTERING_WORLD")
+	bars:RegisterEvent("PLAYER_TALENT_UPDATE")
+	bars:RegisterEvent("PLAYER_REGEN_DISABLED")
+	bars:RegisterEvent("PLAYER_REGEN_ENABLED")
 	bars:SetScript("OnEvent", function(self,event,unit, powerType)
 		if event == "PLAYER_ENTERING_WORLD" or event == "PLAYER_TALENT_UPDATE" then
 			local wsb = self
@@ -493,7 +522,7 @@ function Module:FuckWarlock()
 			end
 		end
 		
-		if event == "UNIT_POWER" or event == "UNIT_DISPLAYPOWER" then
+		if (event == "UNIT_POWER" or event == "UNIT_DISPLAYPOWER") and UnitAffectingCombat("player") then
 			if(unit ~= "player" or (powerType ~= "BURNING_EMBERS" and powerType ~= "SOUL_SHARDS" and powerType ~= "DEMONIC_FURY")) then return end
 			local wsb = self
 			local spec = GetSpecialization()
@@ -517,7 +546,7 @@ function Module:FuckWarlock()
 						if i <= numShards then
 							wsb[i]:SetAlpha(1)
 						else
-							wsb[i]:SetAlpha(0.2)
+							wsb[i]:SetAlpha(0)
 						end
 					end
 				elseif spec == SPEC_WARLOCK_DEMONOLOGY then
@@ -526,6 +555,46 @@ function Module:FuckWarlock()
 					wsb[1]:SetAlpha(1)
 					wsb[1]:SetMinMaxValues(0, maxPower)
 					wsb[1]:SetValue(power)
+				end
+			end
+		end
+		if C["Fade"] then 
+			if event == "PLAYER_REGEN_DISABLED" then
+				local spec = GetSpecialization()
+				if (spec == SPEC_WARLOCK_DESTRUCTION) then
+					local maxembers = 3
+					for i = 1, GetNumGlyphSockets() do
+						local glyphID = select(4, GetGlyphSocketInfo(i))
+						if glyphID == SPEC_WARLOCK_DESTRUCTION_GLYPH_EMBERS then maxembers = 4 end
+					end
+					for i = 1,maxembers do
+						if self[i]:GetAlpha() < 1 then
+							UIFrameFadeIn(self[i], 2, self[i]:GetAlpha(), 1)
+						end
+					end	
+				elseif ( spec == SPEC_WARLOCK_AFFLICTION ) then
+					local numShards = UnitPower("player", SPELL_POWER_SOUL_SHARDS)
+					for i = 1,numShards do
+						if self[i]:GetAlpha() < 1 then
+							UIFrameFadeIn(self[i], 2, self[i]:GetAlpha(), 1)
+						end
+					end	
+				elseif (spec == SPEC_WARLOCK_DEMONOLOGY) then
+					UIFrameFadeIn(self[1], 2, self[1]:GetAlpha(), 1)
+				end
+			end
+			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" or event == "PLAYER_TALENT_UPDATE" then
+				local spec = GetSpecialization()
+				if (spec == SPEC_WARLOCK_DESTRUCTION) then
+					for i = 1,4 do
+						UIFrameFadeOut(self[i], 2, self[i]:GetAlpha(), 0)
+					end	
+				elseif ( spec == SPEC_WARLOCK_AFFLICTION ) then
+					for i = 1,4 do
+						UIFrameFadeOut(self[i], 2, self[i]:GetAlpha(), 0)
+					end	
+				elseif (spec == SPEC_WARLOCK_DEMONOLOGY) then
+					UIFrameFadeOut(self[1], 2, self[1]:GetAlpha(), 0)
 				end
 			end
 		end
