@@ -897,6 +897,7 @@ end
 
 -- returns hex color (xxyyzz) using player level and an argument as "target level"
 local getDiff = function(tar)
+  --if type(tar) == "string" then return end
   local diff, col = tar - UnitLevel("player")
   if diff > 4 then
     col = RED_FONT_COLOR_CODE

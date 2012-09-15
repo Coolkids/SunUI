@@ -222,8 +222,10 @@ local Indicators_class_default = {
         ["TL"] = {},
         ["TR"] = {
 			["1"] = {
-				id 		= {109773},
+				id 		= {109773, 1459},
 				isbuff	= true,
+				mine	= false,
+				lack	= true,
 				color   = {r = 1, g = 0.5, b = 0.0},
 			},
 		},

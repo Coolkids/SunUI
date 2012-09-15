@@ -126,8 +126,7 @@ function Module:OnInitialize()
 					[48263] = true, 
 				},
 				["role"] = "Tank",
-				["instance"] = true,	
-				["reversecheck"] = true,
+				["combat"] = true,
 			},
 		},
 		ROGUE = { 

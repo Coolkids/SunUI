@@ -6,6 +6,7 @@ local S, C, L, DB, _ = unpack(SunUI)
 local Core = LibStub("AceAddon-3.0"):GetAddon("SunUI")
 local Module = Core:NewModule("UnitFrame")
 local _G = _G
+local P,U
  -----------------------------
  -- local variables
  -----------------------------
@@ -19,7 +20,7 @@ local lib = {}
 -----------------------------
 -- FUNCTIONS
 -----------------------------
-
+local dropdown = CreateFrame('Frame', 'oUF_SunUIDropDown', UIParent, 'UIDropDownMenuTemplate')
 --fontstring func
 lib.gen_fontstring = function(f, name, size, outline)
 	local fs = f:CreateFontString(nil, "OVERLAY")
@@ -36,16 +37,47 @@ end
   
   --right click menu
 lib.menu = function(self)
-	local unit = self.unit:sub(1, -2)
-    local cunit = self.unit:gsub("(.)", string.upper, 1)
-
-    if(unit == "party" or unit == "partypet") then
-      ToggleDropDownMenu(1, nil, _G["PartyMemberFrame"..self.id.."DropDown"], "cursor", 0, 0)
-    elseif(_G[cunit.."FrameDropDown"]) then
-      ToggleDropDownMenu(1, nil, _G[cunit.."FrameDropDown"], "cursor", 0, 0)
-    end
+	dropdown:SetParent(self)
+	return ToggleDropDownMenu(1, nil, dropdown, 'cursor', 0, 0)
 end
-  
+ local init = function(self)
+	local unit = self:GetParent().unit
+	local menu, name, id
+
+	if(not unit) then
+		return
+	end
+
+	if(UnitIsUnit(unit, "player")) then
+		menu = "SELF"
+	elseif(UnitIsUnit(unit, "vehicle")) then
+		-- NOTE: vehicle check must come before pet check for accuracy's sake because
+		-- a vehicle may also be considered your pet
+		menu = "VEHICLE"
+	elseif(UnitIsUnit(unit, "pet")) then
+		menu = "PET"
+	elseif(UnitIsPlayer(unit)) then
+		id = UnitInRaid(unit)
+		if(id) then
+			menu = "RAID_PLAYER"
+			name = GetRaidRosterInfo(id)
+		elseif(UnitInParty(unit)) then
+			menu = "PARTY"
+		else
+			menu = "PLAYER"
+		end
+	else
+		menu = "TARGET"
+		name = RAID_TARGET_ICON
+	end
+
+	if(menu) then
+		UnitPopup_ShowMenu(self, menu, unit, name, id)
+	end
+end
+
+UIDropDownMenu_Initialize(dropdown, init, 'MENU')
+
 lib.PostUpdateHealth = function(s, u, min, max)
 	if UnitIsDeadOrGhost(u) then s:SetValue(0) end
 end
@@ -102,7 +134,7 @@ end
 lib.gen_hpbar = function(f)
     --statusbar
 	local s
-	if not C["ReverseHPbars"] then 
+	if not U["ReverseHPbars"] then 
 		s = ReverseBar(f) 
 		s.PostUpdate = lib.PostUpdateHealth  
 		s:SetAlpha(1)
@@ -133,7 +165,7 @@ lib.gen_portrait = function(f)
     p:Width(f.width-2)
     p:Height(f.height-2)
     p:Point("TOP", s, "TOP", 0, -2)
-	p:SetAlpha(C["Alpha3D"])
+	p:SetAlpha(U["Alpha3D"])
 	p:SetFrameLevel(6)
 	p.PostUpdate = lib.PortraitPostUpdate	
     f.Portrait = p
@@ -144,8 +176,8 @@ lib.gen_hpstrings = function(f, unit)
     local h = CreateFrame("Frame", nil, f)
     h:SetAllPoints(f.Health)
     h:SetFrameLevel(15)
-    local name = lib.gen_fontstring(h, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
-    local hpval = lib.gen_fontstring(h, DB.Font,C["FontSize"]*S.Scale(1), "THINOUTLINE")
+    local name = lib.gen_fontstring(h, DB.Font, U["FontSize"]*S.Scale(1), "THINOUTLINE")
+    local hpval = lib.gen_fontstring(h, DB.Font,U["FontSize"]*S.Scale(1), "THINOUTLINE")
     if f.mystyle == "target" or f.mystyle == "tot" then
       name:SetPoint("RIGHT", f.Health, "RIGHT",-3,0)
       hpval:SetPoint("LEFT", f.Health, "LEFT",3,0)
@@ -168,7 +200,7 @@ lib.gen_hpstrings = function(f, unit)
       f:Tag(name, '[mono:color][mono:longname]')
       f:Tag(hpval, '[mono:hp]')
     end
-	if C["TagFadeIn"] then
+	if U["TagFadeIn"] then
 		local Event = CreateFrame("Frame")
 		Event:RegisterEvent("PLAYER_REGEN_DISABLED")
 		Event:RegisterEvent("PLAYER_REGEN_ENABLED")
@@ -229,8 +261,8 @@ lib.gen_ppstrings = function(f, unit)
     h:SetFrameLevel(10)
     local fh
     if f.mystyle == "arena" then fh = 9 else fh = 11 end
-    local pp = lib.gen_fontstring(h, DB.Font, (C["FontSize"]-1)*S.Scale(1), "THINOUTLINE")
-    local info = lib.gen_fontstring(h, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
+    local pp = lib.gen_fontstring(h, DB.Font, (U["FontSize"]-1)*S.Scale(1), "THINOUTLINE")
+    local info = lib.gen_fontstring(h, DB.Font, U["FontSize"]*S.Scale(1), "THINOUTLINE")
     if f.mystyle == "target" or f.mystyle == "tot" then
         info:Point("RIGHT", f.Power, "RIGHT",-3,0)
         pp:Point("LEFT", f.Power, "LEFT",3,0)
@@ -242,7 +274,7 @@ lib.gen_ppstrings = function(f, unit)
     end
 	--resting indicator for player frame
 	if f.mystyle == "player" then
-		local ri = lib.gen_fontstring(f.Power, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
+		local ri = lib.gen_fontstring(f.Power, DB.Font, U["FontSize"]*S.Scale(1), "THINOUTLINE")
 		ri:SetPoint("LEFT", info, "RIGHT",2,0)
 		ri:SetText("|cff8AFF30Zzz|r")
 		f.Resting = ri
@@ -255,7 +287,7 @@ lib.gen_ppstrings = function(f, unit)
     end
     f:Tag(info, '[mono:info]')
 	
-	if C["TagFadeIn"] then
+	if U["TagFadeIn"] then
 		local Event = CreateFrame("Frame")
 		Event:RegisterEvent("PLAYER_REGEN_DISABLED")
 		Event:RegisterEvent("PLAYER_REGEN_ENABLED")
@@ -316,14 +348,14 @@ lib.gen_castbar = function(f)
 	sp:SetPoint("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
 	sp:SetPoint("BOTTOMRIGHT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
     --spell text
-    local txt = lib.gen_fontstring(s, DB.Font, (C["FontSize"]+1)*S.Scale(1), "THINOUTLINE")
+    local txt = lib.gen_fontstring(s, DB.Font, (U["FontSize"]+1)*S.Scale(1), "THINOUTLINE")
    
 	txt:SetPoint("LEFT", 2, 0)
 
     txt:SetJustifyH("LEFT")
 	
     --time
-    local t = lib.gen_fontstring(s, DB.Font, (C["FontSize"]+1)*S.Scale(1), "THINOUTLINE")
+    local t = lib.gen_fontstring(s, DB.Font, (U["FontSize"]+1)*S.Scale(1), "THINOUTLINE")
    
 	t:SetPoint("RIGHT", -2, 0)
     txt:SetPoint("RIGHT", t, "LEFT", -5, 0)
@@ -335,8 +367,8 @@ lib.gen_castbar = function(f)
     i:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	S.CreateShadow(s, i)
     
-    if f.mystyle == "focus" and not C["focusCBuserplaced"] then
-      s:Size(C["FocusCastBarWidth"],C["FocusCastBarHeight"])
+    if f.mystyle == "focus" and not U["focusCBuserplaced"] then
+      s:Size(U["FocusCastBarWidth"],U["FocusCastBarHeight"])
 	  MoveHandle.Castbarfouce = S.MakeMoveHandle(s, L["焦点施法条"], "FocusCastbar")
       i:SetPoint("RIGHT", s, "LEFT", 0, 0)
       --sp:SetHeight(s:GetHeight()*2.5)
@@ -352,8 +384,8 @@ lib.gen_castbar = function(f)
       i:Point("RIGHT", s, "LEFT", -4, 0)
       i:Size(s:GetHeight(),s:GetHeight())
     elseif f.mystyle == "player" then
-	  if not C["playerCBuserplaced"] then
-		s:SetSize(C["PlayerCastBarWidth"],C["PlayerCastBarHeight"])
+	  if not U["playerCBuserplaced"] then
+		s:SetSize(U["PlayerCastBarWidth"],U["PlayerCastBarHeight"])
 		MoveHandle.Castbarplayer = S.MakeMoveHandle(s, L["玩家施法条"], "PlayerCastbar")
 		i:SetSize(s:GetHeight(),s:GetHeight())
 		sp:SetHeight(s:GetHeight()*2.5)
@@ -371,14 +403,14 @@ lib.gen_castbar = function(f)
 	  --if UnitInVehicle("player") then z:Hide() end
       s.SafeZone = z
       --custom latency display
-      local l = lib.gen_fontstring(s, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
+      local l = lib.gen_fontstring(s, DB.Font, U["FontSize"]*S.Scale(1), "THINOUTLINE")
       l:SetPoint("RIGHT", 0, -s:GetHeight()/2-5)
       l:SetJustifyH("RIGHT")
 	  l:SetTextColor(.8,.31,.45)
       s.Lag = l
       f:RegisterEvent("UNIT_SPELLCAST_SENT", cast.OnCastSent)
-	elseif f.mystyle == "target" and not C["targetCBuserplaced"] then
-	  s:Size(C["TargetCastBarWidth"],C["TargetCastBarHeight"])
+	elseif f.mystyle == "target" and not U["targetCBuserplaced"] then
+	  s:Size(U["TargetCastBarWidth"],U["TargetCastBarHeight"])
 	  MoveHandle.Castbartarget = S.MakeMoveHandle(s, L["目标施法条"], "TargetCastbar")
 	  i:Size(s:GetHeight(),s:GetHeight())
       sp:SetHeight(s:GetHeight()*2.5)
@@ -472,7 +504,7 @@ lib.PostCreateIcon = function(self, button)
 	local h3 = CreateFrame("Frame", nil, button)
     h3:SetAllPoints(button)
     h3:SetFrameLevel(10)
-	button.count = lib.gen_fontstring(h3, DB.Font, (C["FontSize"]-1)*S.Scale(1), "THINOUTLINE")
+	button.count = lib.gen_fontstring(h3, DB.Font, (U["FontSize"]-1)*S.Scale(1), "THINOUTLINE")
     button.count:ClearAllPoints()
     button.count:SetJustifyH("RIGHT")
     button.count:Point("BOTTOMRIGHT", 2, -2)
@@ -481,7 +513,7 @@ lib.PostCreateIcon = function(self, button)
     local h2 = CreateFrame("Frame", nil, button)
     h2:SetAllPoints(button)
     h2:SetFrameLevel(10)
-    button.remaining = lib.gen_fontstring(h2, DB.Font, (C["FontSize"]-1)*S.Scale(1), "THINOUTLINE")
+    button.remaining = lib.gen_fontstring(h2, DB.Font, (U["FontSize"]-1)*S.Scale(1), "THINOUTLINE")
 	--button.remaining:SetShadowColor(0, 0, 0)--button.remaining:SetShadowOffset(2, -1)
     button.remaining:SetPoint("TOPLEFT", -2, 4)
     --overlay texture for debuff types display
@@ -514,7 +546,7 @@ lib.createAuras = function(f)
       a:SetWidth((a.size+a.spacing)*8)
       a.numBuffs = 8 
       a.numDebuffs = 8
-	elseif f.mystyle=="player" and C["PlayerBuff"]==3 then
+	elseif f.mystyle=="player" and U["PlayerBuff"]==3 then
 	  a.gap = false
 	  a['growth-x'] = 'RIGHT'
       a['growth-y'] = 'UP' 
@@ -569,7 +601,7 @@ lib.createBuffs = function(f)
 		b:SetPoint("TOPLEFT", f.Power, "BOTTOMLEFT", 0, -b.spacing)
 		b.size = 16
 		b.num = 8
-	elseif f.mystyle=="player" and C["PlayerBuff"]==2 then
+	elseif f.mystyle=="player" and U["PlayerBuff"]==2 then
 		b['growth-x'] = 'RIGHT'
 		b['growth-y'] = 'UP' 
 		b.initialAnchor = 'BOTTOMLEFT'
@@ -621,7 +653,7 @@ end
 		d.size = 16
 		d["growth-x"] = "LEFT"
 		d:SetWidth((d.size+d.spacing)*4)
-	elseif f.mystyle=="player" and C["PlayerBuff"]==1 then
+	elseif f.mystyle=="player" and U["PlayerBuff"]==1 then
 		d['growth-x'] = 'RIGHT'
 		d['growth-y'] = 'UP' 
 		d.initialAnchor = 'BOTTOMLEFT'
@@ -672,12 +704,12 @@ lib.gen_classpower = function(f)
             end
 			local bars = CreateFrame("Frame", nil, f)
 			bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
-            bars:SetSize((f.width-2*(count-1))/count, f.height/3)
+            bars:SetSize((f.width-2*(count-1))/count, f.height/5)
             for i = 1, count do
                 bars[i] =CreateFrame("StatusBar", nil, bars)
 				bars[i]:SetStatusBarTexture(DB.Statusbar)
 				bars[i]:GetStatusBarTexture():SetHorizTile(false)
-				bars[i]:SetSize((f.width-2*(count-1))/count, f.height/3)
+				bars[i]:SetSize((f.width-2*(count-1))/count, f.height/5)
 				 if (i == 1) then
 					bars[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
 				else
@@ -877,7 +909,7 @@ end
 	ebText:SetPoint('CENTER', eb, 'CENTER', 0, 0)
 	eb.Text = ebText]]
 	f.EclipseBar = eb
-	local ebInd = lib.gen_fontstring(h, DB.Font, (C["FontSize"]+4)*S.Scale(1), "THINOUTLINE")
+	local ebInd = lib.gen_fontstring(h, DB.Font, (U["FontSize"]+4)*S.Scale(1), "THINOUTLINE")
 	ebInd:SetPoint('CENTER', eb, 'CENTER', 0, 0)
 	f.EclipseBar.PostDirectionChange = function(element, unit)
 		local dir = GetEclipseDirection()
@@ -920,7 +952,7 @@ end
   end 
   --gen LFD role indicator
   lib.gen_LFDindicator = function(f)
-    local lfdi = lib.gen_fontstring(f.Power, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
+    local lfdi = lib.gen_fontstring(f.Power, DB.Font, U["FontSize"]*S.Scale(1), "THINOUTLINE")
     lfdi:SetPoint("LEFT", f.Power, "LEFT",1,0)
     f:Tag(lfdi, '[mono:LFD]')
   end
@@ -1008,7 +1040,7 @@ end
 	at.icon = at:CreateTexture(nil, 'ARTWORK')
 	at.icon:SetAllPoints(at)
 	at.icon:SetTexCoord(0.07,0.93,0.07,0.93)
-	at.text = lib.gen_fontstring(at, DB.Font, (C["FontSize"]-1)*S.Scale(1), "THINOUTLINE")
+	at.text = lib.gen_fontstring(at, DB.Font, (U["FontSize"]-1)*S.Scale(1), "THINOUTLINE")
 	at.text:SetPoint('CENTER', at, 0, 0)
 	at:SetScript('OnUpdate', lib.UpdateAuraTracker)
 	f.AuraTracker = at
@@ -1018,14 +1050,14 @@ end
     local h = CreateFrame("Frame", nil, f)
     h:SetAllPoints(f.Health)
     h:SetFrameLevel(10)
-    local ti = lib.gen_fontstring(h, DB.Font, C["FontSize"], "THINOUTLINE")
+    local ti = lib.gen_fontstring(h, DB.Font, U["FontSize"], "THINOUTLINE")
     ti:SetPoint("LEFT", f.Health, "BOTTOMLEFT",-5,0)
     ti:SetJustifyH("LEFT")
     f:Tag(ti, '[mono:targeticon]')
   end
   -- oUF_Swing
   lib.gen_swing_timer = function(f)
-	if C["EnableSwingTimer"] then
+	if U["EnableSwingTimer"] then
 		sw = CreateFrame("StatusBar", f:GetName().."_Swing", f)
 		sw:SetStatusBarTexture(DB.Statusbar)
 		sw:SetStatusBarColor(.3, .3, .3)
@@ -1040,7 +1072,7 @@ end
 		sw.bd:SetFrameLevel(1)
 		sw.bd:SetPoint("TOPLEFT", -4, 4)
 		sw.bd:SetPoint("BOTTOMRIGHT", 4, -4)
-		sw.Text = lib.gen_fontstring(sw, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
+		sw.Text = lib.gen_fontstring(sw, DB.Font, U["FontSize"]*S.Scale(1), "THINOUTLINE")
 		sw.Text:SetPoint("CENTER", 0, 0)
 		sw.Text:SetTextColor(1, 1, 1)
 		f.Swing = sw
@@ -1068,13 +1100,13 @@ end
 	apb.b:SetPoint("TOPLEFT", apb, "TOPLEFT", -4, 4)
 	apb.b:SetPoint("BOTTOMRIGHT", apb, "BOTTOMRIGHT", 4, -5)
 	
-	apb.v = lib.gen_fontstring(apb, DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
+	apb.v = lib.gen_fontstring(apb, DB.Font, U["FontSize"]*S.Scale(1), "THINOUTLINE")
 	apb.v:SetPoint("CENTER", apb, "CENTER", 0, 0)
 	f:Tag(apb.v, '[mono:altpower]')
   end
 
 	local BarFader = function(self) 
-         self.BarFade = C["EnableBarFader"]
+         self.BarFade = U["EnableBarFader"]
          self.BarFaderMinAlpha = 0
          self.BarFaderMaxAlpha = 1 
 	end
@@ -1090,14 +1122,14 @@ end
     lib.gen_highlight(self)
     lib.gen_RaidMark(self)
 	self.Health.frequentUpdates = true
-	if C["ReverseHPbars"] then 
-		if C["ClassColor"] then 
+	if U["ReverseHPbars"] then 
+		if U["ClassColor"] then 
 			self.colors.smooth = {DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b}
 		else
 			self.colors.smooth = {1,0,0,199/255,97/255,20/255, 0.1,0.1,0.1} 
 		end
 	else 
-		if C["ClassColor"] then 
+		if U["ClassColor"] then 
 			self.colors.smooth = {DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b}
 		else
 			self.colors.smooth = {1,0,0,1,1,0,0,128/255,0}
@@ -1110,8 +1142,8 @@ end
 
   --the player style
   local function CreatePlayerStyle(self, unit)
-    self.width = C["Width"]
-    self.height = C["Height"]
+    self.width = U["Width"]
+    self.height = U["Height"]
     self.mystyle = "player"
     genStyle(self)
 	BarFader(self)
@@ -1120,33 +1152,35 @@ end
     self.Power.Smooth = true
     self.Power.colorPower = true
     self.Power.multiplier = 0.3
-	if C["CastBar"] == true then
+	if U["CastBar"] == true then
 		lib.gen_castbar(self)
 	end
     lib.gen_portrait(self)
     lib.gen_ppstrings(self)
-	lib.gen_classpower(self)
     lib.gen_InfoIcons(self)
-	lib.gen_EclipseBar(self)
 	lib.gen_alt_powerbar(self)
     lib.createAuras(self)
 	lib.createBuffs(self)
     lib.createDebuffs(self)
-	lib.addHarmony(self)
-	lib.genShadowOrbs(self)
-	lib.genMage(self)
-	lib.warlockpower(self)
+	if not P["Open"] then 
+		lib.gen_EclipseBar(self)
+		lib.gen_classpower(self)
+		lib.addHarmony(self)
+		lib.genShadowOrbs(self)
+		lib.genMage(self)
+		lib.warlockpower(self)
+	end
 	lib.gen_swing_timer(self)
     self:Size(self.width,self.height)
   end  
   
   --the target style
   local function CreateTargetStyle(self, unit)
-    self.width = C["Width"]
-    self.height = C["Height"]
+    self.width = U["Width"]
+    self.height = U["Height"]
     self.mystyle = "target"
     genStyle(self)
-	if C["ClassColor"] then
+	if U["ClassColor"] then
 	self.Health.colorClass = true
 	self.Health.colorReaction = true
 	end
@@ -1156,49 +1190,51 @@ end
     self.Power.colorPower = true
     self.Power.multiplier = 0.3
 	self.Health.colorTapping = true
-   	if C["CastBar"] == true then
+   	if U["CastBar"] == true then
 		lib.gen_castbar(self)
 	end
     lib.gen_portrait(self)
-	if C["TargetAura"] ~= 2 then
+	if U["TargetAura"] ~= 2 then
 		lib.createAuras(self)
 	end
-	if C["TargetRange"] then
+	if U["TargetRange"] then
 		self.SpellRange = {
 	       insideAlpha = 1,
-           outsideAlpha = C["RangeAlpha"]}
+           outsideAlpha = U["RangeAlpha"]}
 	end
     lib.gen_ppstrings(self)
 	lib.gen_alt_powerbar(self)
-    lib.gen_cp(self)
+	if not P["Open"] then 
+		lib.gen_cp(self)
+	end
 	self:Size(self.width,self.height)
-	if C["TargetAura"] == 3 then self.Auras.onlyShowPlayer = true end
+	if U["TargetAura"] == 3 then self.Auras.onlyShowPlayer = true end
   end  
   
   --the tot style
   local function CreateToTStyle(self, unit)
-    self.width = C["PetWidth"]
-    self.height = C["PetHeight"]
+    self.width = U["PetWidth"]
+    self.height = U["PetHeight"]
     self.mystyle = "tot"
     genStyle(self)
-    if C["ClassColor"] then
+    if U["ClassColor"] then
 	self.Health.colorClass = true
 	self.Health.colorReaction = true
 	end
     self.Power.colorPower = true
     self.Power.multiplier = 0.3	
-	if C["TargetRange"] then
+	if U["TargetRange"] then
 		self.SpellRange = {
 	       insideAlpha = 1,
-           outsideAlpha = C["RangeAlpha"]}
+           outsideAlpha = U["RangeAlpha"]}
 	end
 	self:Size(self.width,self.height)
   end 
   
   --the pet style
   local function CreatePetStyle(self, unit)
-    self.width = C["PetWidth"]
-    self.height = C["PetHeight"]
+    self.width = U["PetWidth"]
+    self.height = U["PetHeight"]
     self.mystyle = "pet"
     self.disallowVehicleSwap = true
     genStyle(self)
@@ -1206,7 +1242,7 @@ end
 	self.Power.Smooth = true
     self.Power.colorPower = true
     self.Power.multiplier = 0.3
-    if C["CastBar"] == true then
+    if U["CastBar"] == true then
 		lib.gen_castbar(self)
 	end
     lib.createDebuffs(self)
@@ -1215,38 +1251,38 @@ end
 
   --the focus style
   local function CreateFocusStyle(self, unit)
-	if C["BigFocus"] then
-		self.width =C["BossWidth"]
-		self.height = C["BossHeight"]
+	if U["BigFocus"] then
+		self.width =U["BossWidth"]
+		self.height = U["BossHeight"]
 	else
-		self.width = C["PetWidth"]
-		self.height = C["PetHeight"]
+		self.width = U["PetWidth"]
+		self.height = U["PetHeight"]
 	end
     self.mystyle = "focus"
     genStyle(self)
-	if C["ClassColor"] then
+	if U["ClassColor"] then
 	self.Health.colorClass = true
 	self.Health.colorReaction = true
 	end
     self.Power.frequentUpdates = true
     self.Power.colorPower = true
     self.Power.multiplier = 0.3
-    if C["CastBar"] == true then
+    if U["CastBar"] == true then
 		lib.gen_castbar(self)
 	end
 	lib.createDebuffs(self)
-	if C["TargetRange"] then
+	if U["TargetRange"] then
 		self.SpellRange = {
 	       insideAlpha = 1,
-           outsideAlpha = C["RangeAlpha"]}
+           outsideAlpha = U["RangeAlpha"]}
 	end
-	self.Debuffs.onlyShowPlayer = C["FocusDebuff"]
+	self.Debuffs.onlyShowPlayer = U["FocusDebuff"]
 	self:Size(self.width,self.height)
   end
   
   --partypet style
   local function CreatePartyPetStyle(self)
-    self.width = C["BossHeight"]+C["BossHeight"]/3+3
+    self.width = U["BossHeight"]+U["BossHeight"]/3+3
     self.height = self.width
     self.mystyle = "partypet"
     genStyle(self)
@@ -1260,11 +1296,11 @@ end
 	if self:GetAttribute("unitsuffix") == "pet" then
       return CreatePartyPetStyle(self)
     end
-    self.width = C["BossWidth"]
-    self.height = C["BossHeight"]
+    self.width = U["BossWidth"]
+    self.height = U["BossHeight"]
     self.mystyle = "party"
     genStyle(self)
-	if C["ClassColor"] then
+	if U["ClassColor"] then
 	self.Health.colorClass = true
 	self.Health.colorReaction = true
 	end
@@ -1275,7 +1311,7 @@ end
     self.Range = {
       insideAlpha = 1,
       outsideAlpha = 0.6}
-	if C["Party3D"] then
+	if U["Party3D"] then
 		lib.gen_portrait(self)
 	end
     lib.createBuffs(self)
@@ -1287,12 +1323,12 @@ end
   
   --arena frames
   local function CreateArenaStyle(self, unit)
-    self.width =C["BossWidth"]
-    self.height = C["BossHeight"]
+    self.width =U["BossWidth"]
+    self.height = U["BossHeight"]
     self.mystyle = "arena"
     genStyle(self)
     self.Health.Smooth = true
-	if C["ClassColor"] then
+	if U["ClassColor"] then
 	self.Health.colorClass = true
 	self.Health.colorReaction = true
 	end
@@ -1303,7 +1339,7 @@ end
     lib.createBuffs(self)
     lib.createDebuffs(self)
     lib.gen_ppstrings(self)
-   	if C["CastBar"] == true then
+   	if U["CastBar"] == true then
 		lib.gen_castbar(self)
 	end
     lib.gen_arenatracker(self)
@@ -1313,7 +1349,7 @@ end
 
   --mini arena targets
   local function CreateArenaTargetStyle(self, unit)
-    self.width = C["BossHeight"]+C["BossHeight"]/3+3
+    self.width = U["BossHeight"]+U["BossHeight"]/3+3
     self.height = self.width
     self.mystyle = "arenatarget"
     genStyle(self)
@@ -1323,11 +1359,11 @@ end
   
   --boss frames
   local function CreateBossStyle(self, unit)
-    self.width = C["BossWidth"]
-    self.height = C["BossHeight"]
+    self.width = U["BossWidth"]
+    self.height = U["BossHeight"]
     self.mystyle = "boss"
     genStyle(self)
-	if C["ClassColor"] then
+	if U["ClassColor"] then
 	self.Health.colorClass = true
 	self.Health.colorReaction = true
 	end
@@ -1337,14 +1373,15 @@ end
 	lib.createBuffs(self)
 	lib.createDebuffs(self)
 	self.Debuffs.onlyShowPlayer = true
-	if C["CastBar"] == true then
+	if U["CastBar"] == true then
 		lib.gen_castbar(self)
 	end
 	lib.gen_alt_powerbar(self)
 	self:Size(self.width,self.height)
   end  
 function Module:OnInitialize()
-	C = C["UnitFrameDB"]
+	U = C["UnitFrameDB"]
+	P = C["PowerBarDB"]
 end
 function Module:OnEnable()
 	  -----------------------------
@@ -1365,45 +1402,45 @@ function Module:OnEnable()
 	  self:SetActiveStyle("SunUIPlayer")
 	  local player = self:Spawn("player", "oUF_SunUIPlayer")
 	  player:SetPoint("CENTER", "UIParent", "CENTER", -225, -208)
-	  player:SetScale(C["Scale"])
-	  MoveHandle.SunUIPlayerFrame = S.MakeMove(player, "SunUI_PlayerFrame", "PlayerFrame", C["Scale"])
+	  player:SetScale(U["Scale"])
+	  MoveHandle.SunUIPlayerFrame = S.MakeMove(player, "SunUI_PlayerFrame", "PlayerFrame", U["Scale"])
 	  
 	  self:SetActiveStyle("SunUITarget")
 	  local target = self:Spawn("target", "oUF_SunUITarget")
-	  target:SetScale(C["Scale"])
-	  MoveHandle.SunUITargetFrame = S.MakeMove(target, "SunUI_TargetFrame", "TargetFrame", C["Scale"])
+	  target:SetScale(U["Scale"])
+	  MoveHandle.SunUITargetFrame = S.MakeMove(target, "SunUI_TargetFrame", "TargetFrame", U["Scale"])
 	  
-	  if C["showtot"] then
+	  if U["showtot"] then
 		self:SetActiveStyle("SunUIToT")
 		local tot = self:Spawn("targettarget", "oUF_SunUIToT")
-		tot:SetScale(C["PetScale"])
-		MoveHandle.SunUIToTFrame = S.MakeMove(tot, "SunUI_ToTFrame", "ToTFrame", C["PetScale"])
+		tot:SetScale(U["PetScale"])
+		MoveHandle.SunUIToTFrame = S.MakeMove(tot, "SunUI_ToTFrame", "ToTFrame", U["PetScale"])
 	  end
 	  
-	  if C["showfocus"] then
+	  if U["showfocus"] then
 		self:SetActiveStyle("SunUIFocus")
 		local focus = self:Spawn("focus", "oUF_SunUIFocus")
-		focus:SetScale(C["PetScale"])
-		MoveHandle.SunUIFocusFrame = S.MakeMove(focus, "SunUI_FocusFrame", "FocusFrame", C["PetScale"])
+		focus:SetScale(U["PetScale"])
+		MoveHandle.SunUIFocusFrame = S.MakeMove(focus, "SunUI_FocusFrame", "FocusFrame", U["PetScale"])
 		
 		self:SetActiveStyle("SunUIFocusTarget")
 		local focust = self:Spawn("focustarget", "oUF_SunUIFocusTarget")
-		focust:SetScale(C["PetScale"])
-		MoveHandle.SunUIFocusTFrame = S.MakeMove(focust, "SunUI_FocusTargetFrame", "FocusTFrame", C["PetScale"])
+		focust:SetScale(U["PetScale"])
+		MoveHandle.SunUIFocusTFrame = S.MakeMove(focust, "SunUI_FocusTargetFrame", "FocusTFrame", U["PetScale"])
 	  else
 		oUF:DisableBlizzard'focus'
 	  end
 	  
-	  if C["showpet"] then
+	  if U["showpet"] then
 		self:SetActiveStyle("SunUIPet")
 		local pet = self:Spawn("pet", "oUF_SunUIPet")
-		pet:SetScale(C["PetScale"])
-		MoveHandle.SunUIPetFrame = S.MakeMove(pet, "SunUI_PetFrame", "PetFrame", C["PetScale"])
+		pet:SetScale(U["PetScale"])
+		MoveHandle.SunUIPetFrame = S.MakeMove(pet, "SunUI_PetFrame", "PetFrame", U["PetScale"])
 	  end
 	  
-	  local w = C["BossWidth"]
-	  local h = C["BossHeight"]
-	  local s = C["BossScale"]
+	  local w = U["BossWidth"]
+	  local h = U["BossHeight"]
+	  local s = U["BossScale"]
 	  local ph = 1.5*h+3
 
 	  local init = [[
@@ -1416,28 +1453,28 @@ function Module:OnEnable()
 		end
 	  ]]
 	  local visible = 'custom [group:party,nogroup:raid][@raid6,noexists,group:raid] show;hide'
-	  if C["showparty"] then
+	  if U["showparty"] then
 		self:SetActiveStyle("SunUIParty") 
 		local party = self:SpawnHeader("SunUIParty",nil,visible,
 		'oUF-initialConfigFunction', init:format(w,h,s,ph,ph),
 		'showParty',true,
 		'template','oUF_SunUIPartyPet',
 		'yOffset', -40)
-		party:SetScale(C["BossScale"])
-		MoveHandle.SunUIPartyFrame = S.MakeMove(party, "SunUI_PartyFrame", "PartyFrame", C["BossScale"])
+		party:SetScale(U["BossScale"])
+		MoveHandle.SunUIPartyFrame = S.MakeMove(party, "SunUI_PartyFrame", "PartyFrame", U["BossScale"])
 	  end
 	  
 	  local gap = 66
-	  if C["showarena"] and not IsAddOnLoaded('Gladius') then
+	  if U["showarena"] and not IsAddOnLoaded('Gladius') then
 		SetCVar("showArenaEnemyFrames", false)
 		self:SetActiveStyle("SunUIArena")
 		local arena = {}
 		local arenatarget = {}
 		for i = 1, 5 do
 		  arena[i] = self:Spawn("arena"..i, "oUF_SunUIArena"..i)
-		  arena[i]:SetScale(C["BossScale"])
+		  arena[i]:SetScale(U["BossScale"])
 		  if i == 1 then
-			MoveHandle.SunUIArenaFrame = S.MakeMove(arena[i], "SunUIArena"..i, "ArenaFrame", C["BossScale"])
+			MoveHandle.SunUIArenaFrame = S.MakeMove(arena[i], "SunUIArena"..i, "ArenaFrame", U["BossScale"])
 		  else
 			arena[i]:SetPoint("BOTTOMRIGHT", arena[i-1], "BOTTOMRIGHT", 0, gap)
 		  end
@@ -1446,18 +1483,18 @@ function Module:OnEnable()
 		for i = 1, 5 do
 		  arenatarget[i] = self:Spawn("arena"..i.."target", "oUF_Arena"..i.."target")
 		  arenatarget[i]:SetPoint("TOPRIGHT",arena[i], "TOPLEFT", -4, 0)
-		  arenatarget[i]:SetScale(C["BossScale"])
+		  arenatarget[i]:SetScale(U["BossScale"])
 		end
 	  end
 
-	  if C["showboss"] then
+	  if U["showboss"] then
 		self:SetActiveStyle("SunUIBoss")
 		local boss = {}
 		for i = 1, MAX_BOSS_FRAMES do
 		  boss[i] = self:Spawn("boss"..i, "oUF_Boss"..i)
-		  boss[i]:SetScale(C["BossScale"])
+		  boss[i]:SetScale(U["BossScale"])
 		  if i == 1 then
-			MoveHandle.SunUIBossFrame = S.MakeMove(boss[i], "SunUIBoss"..i, "BossFrame", C["BossScale"])
+			MoveHandle.SunUIBossFrame = S.MakeMove(boss[i], "SunUIBoss"..i, "BossFrame", U["BossScale"])
 		  else
 			boss[i]:SetPoint("BOTTOMRIGHT", boss[i-1], "BOTTOMRIGHT", 0, gap)
 		  end

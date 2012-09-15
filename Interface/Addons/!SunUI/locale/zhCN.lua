@@ -489,3 +489,5 @@ L_EXTRA_ZONEACHID = {
 	["安其拉：堕落王国"]					= {X =    0, A =    0, H =    0},
 	["冬拥湖"]							= {X =    0, A =    0, H =    0},
 }
+L_MAP_CURSOR = "指针: "
+L_MAP_BOUNDS = "超出范围!"

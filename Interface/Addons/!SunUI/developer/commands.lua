@@ -1,4 +1,4 @@
-local S, L, C, DB = unpack(select(2, ...))
+锘縧ocal S, L, C, DB = unpack(select(2, ...))
 -- a command to show frame you currently have mouseovered
 SLASH_FRAME1 = "/frame"
 SlashCmdList["FRAME"] = function(arg)
@@ -93,7 +93,7 @@ wfg:SetPoint("TOPLEFT", wf, "TOPLEFT")
 wfg:SetPoint("BOTTOMRIGHT", wf, "BOTTOMRIGHT")
 wfg.text = wfg:CreateFontString(nil, "OVERLAY")
 wfg.text:SetFont(DB.Font, 16, "THINOUTLINE")
-wfg.text:SetText("点我拖动")
+wfg.text:SetText("鐐规垜鎷栧姩")
 wfg.text:SetPoint("TOP", wfg, "TOP")
 wfg:CreateShadow("Background")
 wfg:Hide()
@@ -101,7 +101,7 @@ local function WATCHFRAMELOCK()
 	if wfmove == false then
 		wfmove = true
 		wfg:Show()
-		print("|cffFFD700任务追踪框|r |cff228B22解锁|r")
+		print("|cffFFD700浠诲姟杩借釜妗唡r |cff228B22瑙ｉ攣|r")
 		wf:EnableMouse(true);
 		wf:RegisterForDrag("LeftButton"); 
 		wf:SetScript("OnDragStart", wf.StartMoving); 
@@ -110,12 +110,12 @@ local function WATCHFRAMELOCK()
 		wf:EnableMouse(false);
 		wfmove = false
 		wfg:Hide()
-		print("|cffFFD700任务追踪框|r |cffFF0000锁定|r")
+		print("|cffFFD700浠诲姟杩借釜妗唡r |cffFF0000閿佸畾|r")
 	end
 end
 SLASH_WATCHFRAMELOCK1 = "/wf"
 SlashCmdList["WATCHFRAMELOCK"] = WATCHFRAMELOCK
--- VS移动(by Coolkid)
+-- VS绉诲姩(by Coolkid)
 local vs = VehicleSeatIndicator
 local vsmove = false 
 
@@ -132,7 +132,7 @@ vsg:SetPoint("TOPLEFT", vs, "TOPLEFT")
 vsg:SetPoint("BOTTOMRIGHT", vs, "BOTTOMRIGHT")
 vsg.text = vsg:CreateFontString(nil, "OVERLAY")
 vsg.text:SetFont(DB.Font, 16, "THINOUTLINE")
-vsg.text:SetText("点我拖动")
+vsg.text:SetText("鐐规垜鎷栧姩")
 vsg.text:SetPoint("TOP", vsg, "TOP")
 vsg:CreateShadow("Background")
 vsg:Hide()
@@ -140,7 +140,7 @@ local function VSLOCK()
 	if vsmove == false then
 		vsmove = true
 		vsg:Show()
-		print("|cffFFD700载具框|r |cff228B22解锁|r")
+		print("|cffFFD700杞藉叿妗唡r |cff228B22瑙ｉ攣|r")
 		vs:EnableMouse(true);
 		vs:RegisterForDrag("LeftButton"); 
 		vs:SetScript("OnDragStart", vs.StartMoving); 
@@ -149,7 +149,7 @@ local function VSLOCK()
 		vs:EnableMouse(false);
 		vsmove = false
 		vsg:Hide()
-		print("|cffFFD700载具框|r |cffFF0000锁定|r")
+		print("|cffFFD700杞藉叿妗唡r |cffFF0000閿佸畾|r")
 	end
 end
 

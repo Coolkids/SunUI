@@ -144,9 +144,9 @@ w:RegisterEvent("PLAYER_REGEN_ENABLED")
 WorldMapFrame.backdrop = CreateFrame("Frame", nil, WorldMapFrame)
 WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapFrame, -2, 2)
 WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapFrame, 2, -2)
-S.SetBD(WorldMapFrame.backdrop)
+--S.CreateBD(WorldMapFrame.backdrop)
 WorldMapFrame.backdrop:SetFrameLevel(0)
-
+S.CreateBD(WorldMapDetailFrame, 0)
 WorldMapDetailFrame.backdrop = CreateFrame("Frame", nil, WorldMapFrame)
 S.SetBD(WorldMapDetailFrame.backdrop)
 WorldMapDetailFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, -2, 2)
@@ -224,7 +224,6 @@ end
 hooksecurefunc("WorldMap_ToggleSizeDown", m_MapShrink)
 
 local function m_MapEnlarge()
-
 	WorldMapFrame:SetParent(UIParent)
 	WorldMapDetailFrame:SetFrameLevel(50)
 	WorldMapButton:SetFrameLevel(55)
@@ -233,10 +232,6 @@ local function m_MapEnlarge()
 	SetUIPanelAttribute(WorldMapFrame, "area", "center");
 	SetUIPanelAttribute(WorldMapFrame, "allowOtherPanels", true)
 	WorldMapDetailFrame.backdrop:Hide()
-	WorldMapFrame.backdrop:Show()
-	WorldMapFrame.backdrop:ClearAllPoints()
-	WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -10, 71)
-	WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 12, -31)
 	WorldMapQuestShowObjectives:SetScale(1)
 	WorldMapTrackQuest:SetScale(1)
 	WorldMapFrameCloseButton:SetScale(1)
@@ -279,8 +274,16 @@ local function m_MapEnlarge()
 	WorldMapShowDigSitesText:ClearAllPoints()
 	WorldMapShowDigSitesText:SetPoint("RIGHT",WorldMapShowDigSites,"LEFT",-4,1)
 	WorldMapShowDigSitesText:SetTextColor(1, 1, 1)
+
+	WorldMapFrame.backdrop:Show()
+	WorldMapFrame.backdrop:ClearAllPoints()
+	WorldMapFrame.backdrop:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", 245, -42) --, -10, 69)
+	WorldMapFrame.backdrop:SetPoint("BOTTOMRIGHT", WorldMapFrame, "BOTTOMRIGHT", -245 , 42)--, 321, -239)
+	S.CreateSD(WorldMapFrame.backdrop) 
+	
 end
 hooksecurefunc("WorldMap_ToggleSizeUp", m_MapEnlarge)
+
 function QuestSkin()
 	if not InCombatLockdown() then
 		WorldMapFrame:SetParent(UIParent)

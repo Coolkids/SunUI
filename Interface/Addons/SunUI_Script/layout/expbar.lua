@@ -1,16 +1,16 @@
--- Engines
+ï»¿-- Engines
 local S, C, L, DB, _ = unpack(SunUI)
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ExpBar", "AceEvent-3.0")
 local ExpBar = nil
 local FactionInfo = {
-	[1] = {{ 170/255, 70/255,  70/255 }, L["³ğºŞ"], "FFaa4646"},
-	[2] = {{ 170/255, 70/255,  70/255 }, L["µĞ¶Ô"], "FFaa4646"},
-	[3] = {{ 170/255, 70/255,  70/255 }, L["²»ÓÑºÃ"], "FFaa4646"},
-	[4] = {{ 200/255, 180/255, 100/255 }, L["ÖĞÁ¢"], "FFc8b464"},
-	[5] = {{ 75/255,  175/255, 75/255 }, L["ÓÑºÃ"], "FF4baf4b"},
-	[6] = {{ 75/255,  175/255, 75/255 }, L["×ğ¾´"], "FF4baf4b"},
-	[7] = {{ 75/255,  175/255, 75/255 }, L["³ç¾´"], "FF4baf4b"},
-	[8] = {{ 155/255,  255/255, 155/255 }, L["³ç°İ"],"FF9bff9b"},
+	[1] = {{ 170/255, 70/255,  70/255 }, L["ä»‡æ¨"], "FFaa4646"},
+	[2] = {{ 170/255, 70/255,  70/255 }, L["æ•Œå¯¹"], "FFaa4646"},
+	[3] = {{ 170/255, 70/255,  70/255 }, L["ä¸å‹å¥½"], "FFaa4646"},
+	[4] = {{ 200/255, 180/255, 100/255 }, L["ä¸­ç«‹"], "FFc8b464"},
+	[5] = {{ 75/255,  175/255, 75/255 }, L["å‹å¥½"], "FF4baf4b"},
+	[6] = {{ 75/255,  175/255, 75/255 }, L["å°Šæ•¬"], "FF4baf4b"},
+	[7] = {{ 75/255,  175/255, 75/255 }, L["å´‡æ•¬"], "FF4baf4b"},
+	[8] = {{ 155/255,  255/255, 155/255 }, L["å´‡æ‹œ"],"FF9bff9b"},
 }
 local function SVal(Val)
     if Val >= 1e6 then
@@ -66,7 +66,7 @@ function Module:BuildExpBar()
 		ExpBar:SetOrientation("VERTICAL")
 		ExpBar.Rest:SetOrientation("VERTICAL")
 	end
-	MoveHandle.ExpBar = S.MakeMoveHandle(ExpBar, "¾­ÑéÌõ", "expbar")
+	MoveHandle.ExpBar = S.MakeMoveHandle(ExpBar, "ç»éªŒæ¡", "expbar")
 end
 
 function Module:Register()

@@ -478,3 +478,5 @@ L_EXTRA_ZONEACHID = {
 	["Ahn'Qiraj: The Fallen Kingdom"]	= {X =    0, A =    0, H =    0},
 	["Wintergrasp"]						= {X =    0, A =    0, H =    0},
 }
+L_MAP_CURSOR = "Cursor: "
+L_MAP_BOUNDS = "Out of bounds!"

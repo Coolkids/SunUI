@@ -65,7 +65,8 @@ local function SkinFrame(frame)
 	end
 	
 	-- Chat text
-	frame.text:SetFont(unpack(settings.fontText))
+	frame.text:SetFontObject(GameFontNormal)
+	--frame.text:SetFont(unpack(settings.fontText))
 	frame.text:SetJustifyH("LEFT")
 	
 	-- Sender text
@@ -74,7 +75,8 @@ local function SkinFrame(frame)
 		frame.sender:SetPoint("TOP", 0, -5)
 		frame.sender:SetPoint("LEFT", frame.text)
 		frame.sender:SetPoint("RIGHT", frame.text)
-		frame.sender:SetFont(unpack(settings.fontSender))
+		frame.sender:SetFontObject(GameFontNormal)
+		--frame.sender:SetFont(unpack(settings.fontSender))
 		frame.sender:SetJustifyH("LEFT")
 	end
 	

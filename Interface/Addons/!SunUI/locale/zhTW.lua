@@ -488,3 +488,5 @@ L_EXTRA_ZONEACHID = {
 	["安其拉: 沒落的王朝"]				= {X =    0, A =    0, H =    0},
 	["冬握湖"]							= {X =    0, A =    0, H =    0},
 }
+L_MAP_CURSOR = "鼠標: "
+L_MAP_BOUNDS = "超出範圍!"

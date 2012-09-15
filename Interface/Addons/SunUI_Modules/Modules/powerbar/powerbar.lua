@@ -170,6 +170,8 @@ function Module:CreateQSDKPower()
     local count
 	if DB.MyClass == "DEATHKNIGHT" then 
 		count = 6
+		RuneFrame.Show = RuneFrame.Hide
+		RuneFrame:Hide()
 	elseif DB.MyClass == "PALADIN" then
 		count = UnitPowerMax('player', SPELL_POWER_HOLY_POWER)
 	end
@@ -568,6 +570,7 @@ end
 
 function Module:OnEnable()
 	C = C["PowerBarDB"]
+	if not C["Open"] then return end
 	Module:CreateShadowOrbs()
 	Module:CreateMonkBar()
 	Module:CreateQSDKPower()
