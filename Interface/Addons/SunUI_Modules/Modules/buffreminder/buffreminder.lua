@@ -130,11 +130,14 @@ function Module:OnInitialize()
 			},
 		},
 		ROGUE = { 
-			["Weapon Enchants"] = { --weapons enchant group
-				["weapon"] = true,
+			["Shields"] = { -- auras
+				["spells"] = {
+					[2823] = true,
+					[8679] = true,
+					[3408] = true,
+					[5761] = true,
+				},
 				["combat"] = true,
-				["instance"] = true,
-				["level"] = 10,
 			},
 		},
 	}

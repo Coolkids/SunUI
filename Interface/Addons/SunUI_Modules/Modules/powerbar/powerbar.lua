@@ -284,13 +284,41 @@ function Module:CreateCombatPoint()
 	CombatPointBar:RegisterEvent("PLAYER_ENTERING_WORLD")
 	CombatPointBar:RegisterEvent("UNIT_COMBO_POINTS")
 	CombatPointBar:RegisterEvent("PLAYER_TARGET_CHANGED")
-	CombatPointBar:SetScript("OnEvent", function(self)
-		cp = GetComboPoints('player', 'target')
-		for i=1, MAX_COMBO_POINTS do
-			if(i <= cp) then
-				self[i]:Show()
-			else
-				self[i]:Hide()
+	CombatPointBar:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
+	CombatPointBar:RegisterEvent("PLAYER_TALENT_UPDATE")
+	CombatPointBar:RegisterEvent("PLAYER_REGEN_DISABLED")
+	CombatPointBar:SetScript("OnEvent", function(self, event)
+		if event == "PLAYER_TALENT_UPDATE" or event == "UPDATE_SHAPESHIFT_FORM" or event == "PLAYER_ENTERING_WORLD" or event == "UNIT_COMBO_POINTS" then
+			if DB.MyClass == "DRUID" then 
+				local form = GetShapeshiftFormID()
+				if(not form) then
+					local ptt = GetSpecialization()
+					if(ptt and ptt == 1) then -- player has balance spec
+						cp = GetComboPoints('player', 'target')
+						for i=1, cp do
+							self[i]:Hide()
+						end
+					end
+				elseif(form ~= CAT_FORM) then
+					cp = GetComboPoints('player', 'target')
+						for i=1, cp do
+							if self[i]:IsShown() then
+								self[i]:Hide()
+							else
+								return
+							end
+						end
+				end
+			end
+		end
+		if event == "UNIT_COMBO_POINTS" or event == "PLAYER_TARGET_CHANGED" or event == "PLAYER_ENTERING_WORLD" then
+			cp = GetComboPoints('player', 'target')
+			for i=1, MAX_COMBO_POINTS do
+				if(i <= cp) then
+					self[i]:Show()
+				else
+					self[i]:Hide()
+				end
 			end
 		end
 	end)
@@ -340,8 +368,7 @@ function Module:CreateEclipse()
 				ebInd:SetText("|cffE5994C<<<|r")
 			end
 		end
-		if event == "PLAYER_TALENT_UPDATE" or event == "UPDATE_SHAPESHIFT_FORM" or event == "PLAYER_ENTERING_WORLD" then
-			local showBar
+		if event == "PLAYER_TALENT_UPDATE" or event == "UPDATE_SHAPESHIFT_FORM" or event == "PLAYER_ENTERING_WORLD" or event == "PLAYER_REGEN_DISABLED" then
 			local form = GetShapeshiftFormID()
 			if(not form) then
 				local ptt = GetSpecialization()
@@ -354,13 +381,16 @@ function Module:CreateEclipse()
 
 			if(showBar) then
 				eb:Show()
+				if eb:GetAlpha() < 1 then
+					UIFrameFadeIn(eb, 1, eb:GetAlpha(), 1)
+				end
 			else
 				eb:Hide()
 			end
 		end
 		if event == "UNIT_POWER" then
 			if(unit ~= "player" or (event == 'UNIT_POWER' and powerType ~= 'ECLIPSE')) then return end
-
+	
 			local power = UnitPower('player', SPELL_POWER_ECLIPSE)
 			local maxPower = UnitPowerMax('player', SPELL_POWER_ECLIPSE)
 
@@ -389,11 +419,6 @@ function Module:CreateEclipse()
 			end
 		end
 		if C["Fade"] then 
-			if event == "PLAYER_REGEN_DISABLED" then
-				if eb:GetAlpha() < 1 then
-					UIFrameFadeIn(eb, 2, eb:GetAlpha(), 1)
-				end	
-			end
 			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" or event == "PLAYER_TALENT_UPDATE" or event == "UPDATE_SHAPESHIFT_FORM" then
 				if eb:GetAlpha() > 0 then
 					UIFrameFadeOut(eb, 2, eb:GetAlpha(), 0)
