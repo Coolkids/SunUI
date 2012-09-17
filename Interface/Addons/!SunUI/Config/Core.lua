@@ -7,7 +7,7 @@ local DEFAULT_HEIGHT = 500
 local AC = LibStub("AceConfig-3.0")
 local ACD = LibStub("AceConfigDialog-3.0")
 local Version = 20120323
-local beta = "0917"
+local beta = "0918A"
 local aglin = false
 function SunUIConfig:LoadDefaults()
 	local _, _, _, G = unpack(SunUI)
@@ -1075,6 +1075,18 @@ function SunUIConfig.GenerateOptionsInternal()
 								name = "TimeStamps",
 								desc = "聊天时间戳",
 								order = 20,
+							},
+							ChatBackground = {
+								type = "toggle",
+								name = "聊天框背景",
+								desc = "聊天框背景",
+								order = 21,
+							},
+							ChatBarFade = {
+								type = "toggle",
+								name = "ChatBarFade",
+								desc = "频道渐隐",
+								order = 22,
 							},
 						}
 					},

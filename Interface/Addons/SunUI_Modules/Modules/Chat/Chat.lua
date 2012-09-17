@@ -70,7 +70,7 @@ local TimeStampsCopy = C["MiniDB"]["TimeStamps"]					-- 时间戳
 		for i = 1, NUM_CHAT_WINDOWS do
 			local cf = _G['ChatFrame'..i]
 			cf:SetFading(true)  --渐隐
-			if cf then 
+			if cf and C["MiniDB"]["ChatBackground"] then 
 				S.CreateBD(cf, .6)
 			end
 			--EditBox Module

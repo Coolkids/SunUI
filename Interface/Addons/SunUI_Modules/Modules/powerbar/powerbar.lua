@@ -39,18 +39,10 @@ function Module:CreateShadowOrbs()
 		end
 		if C["Fade"] then 
 			if event == "PLAYER_REGEN_DISABLED" then
-				for i = 1,numShadowOrbs do
-					if ShadowOrbs[i]:GetAlpha() < 1 then
-						UIFrameFadeIn(ShadowOrbs[i], 2, ShadowOrbs[i]:GetAlpha(), 1)
-					end
-				end	
+				UIFrameFadeIn(ShadowOrbs, 2, ShadowOrbs:GetAlpha(), 1)	
 			end
 			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" then
-				for i = 1,numShadowOrbs do
-					if ShadowOrbs[i]:GetAlpha() > 0 then
-						UIFrameFadeOut(ShadowOrbs[i], 2, ShadowOrbs[i]:GetAlpha(), 0)
-					end
-				end
+				UIFrameFadeOut(ShadowOrbs, 2, ShadowOrbs:GetAlpha(), 0)
 			end
 		end
 	end)
@@ -104,14 +96,10 @@ function Module:CreateMonkBar()
 		end
 		if C["Fade"] then 
 			if event == "PLAYER_REGEN_DISABLED" then
-				for i = 1,chimax do
-					UIFrameFadeIn(chibar[i], 2, chibar[i]:GetAlpha(), 1)
-				end	
+				UIFrameFadeIn(chibar, 2, chibar:GetAlpha(), 1)
 			end
 			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" then
-				for i = 1,chimax do
-					UIFrameFadeOut(chibar[i], 2, chibar[i]:GetAlpha(), 0)
-				end
+				UIFrameFadeOut(chibar, 2, chibar:GetAlpha(), 0)
 			end
 		end
 	end)
@@ -166,18 +154,10 @@ local function OnEvent(self, event, unit)
 	end
 	if C["Fade"] then 
 		if event == "PLAYER_REGEN_DISABLED" then
-			for i = 1,6 do
-				if self[i]:GetAlpha() < 1 then
-					UIFrameFadeIn(self[i], 2, self[i]:GetAlpha(), 1)
-				end
-			end	
+			UIFrameFadeIn(self, 2, self:GetAlpha(), 1)
 		end
 		if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" then
-			for i = 1,6 do
-				if self[i]:GetAlpha() > 0 then
-					UIFrameFadeOut(self[i], 2, self[i]:GetAlpha(), 0)
-				end
-			end
+			UIFrameFadeOut(self, 2, self:GetAlpha(), 0)
 		end
 	end
 end
@@ -229,8 +209,8 @@ function Module:CreateQSDKPower()
 		bars:RegisterEvent("PLAYER_REGEN_ENABLED")
 		bars:RegisterEvent("PLAYER_REGEN_DISABLED")
 		bars:SetScript("OnEvent",function(self, event, unit)
-			local num = UnitPower('player', SPELL_POWER_HOLY_POWER)
 			if unit == "player" then
+				local num = UnitPower('player', SPELL_POWER_HOLY_POWER)
 				for i = 1,count do
 					if i <= num then
 						bars[i]:Show()
@@ -241,18 +221,10 @@ function Module:CreateQSDKPower()
 			end
 			if C["Fade"] then 
 				if event == "PLAYER_REGEN_DISABLED" then
-					for i = 1,num do
-						if bars[i]:GetAlpha() < 1 then
-							UIFrameFadeIn(bars[i], 2, bars[i]:GetAlpha(), 1)
-						end
-					end	
+					UIFrameFadeIn(bars, 2, bars:GetAlpha(), 1)
 				end
 				if event == "PLAYER_REGEN_ENABLED" then
-					for i = 1,num do
-						if bars[i]:GetAlpha() > 0 then
-							UIFrameFadeOut(bars[i], 2, bars[i]:GetAlpha(), 0)
-						end
-					end
+					UIFrameFadeOut(bars, 2, bars:GetAlpha(), 0)
 				end
 			end
 		end)
@@ -294,20 +266,12 @@ function Module:CreateCombatPoint()
 				if(not form) then
 					local ptt = GetSpecialization()
 					if(ptt and ptt == 1) then -- player has balance spec
-						cp = GetComboPoints('player', 'target')
-						for i=1, cp do
-							self[i]:Hide()
-						end
+						self:Hide()
 					end
 				elseif(form ~= CAT_FORM) then
-					cp = GetComboPoints('player', 'target')
-						for i=1, cp do
-							if self[i]:IsShown() then
-								self[i]:Hide()
-							else
-								return
-							end
-						end
+					self:Hide()
+				else
+					self:Show()
 				end
 			end
 		end
@@ -368,7 +332,7 @@ function Module:CreateEclipse()
 				ebInd:SetText("|cffE5994C<<<|r")
 			end
 		end
-		if event == "PLAYER_TALENT_UPDATE" or event == "UPDATE_SHAPESHIFT_FORM" or event == "PLAYER_ENTERING_WORLD" or event == "PLAYER_REGEN_DISABLED" then
+		if event == "PLAYER_TALENT_UPDATE" or event == "UPDATE_SHAPESHIFT_FORM" or event == "PLAYER_REGEN_DISABLED" then
 			local form = GetShapeshiftFormID()
 			if(not form) then
 				local ptt = GetSpecialization()
@@ -419,10 +383,8 @@ function Module:CreateEclipse()
 			end
 		end
 		if C["Fade"] then 
-			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" or event == "PLAYER_TALENT_UPDATE" or event == "UPDATE_SHAPESHIFT_FORM" then
-				if eb:GetAlpha() > 0 then
-					UIFrameFadeOut(eb, 2, eb:GetAlpha(), 0)
-				end
+			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" or event == "UPDATE_SHAPESHIFT_FORM" then
+				UIFrameFadeOut(eb, 2, eb:GetAlpha(), 0)
 			end
 		end
 	end)
@@ -585,42 +547,10 @@ function Module:FuckWarlock()
 		end
 		if C["Fade"] then 
 			if event == "PLAYER_REGEN_DISABLED" then
-				local spec = GetSpecialization()
-				if (spec == SPEC_WARLOCK_DESTRUCTION) then
-					local maxembers = 3
-					for i = 1, GetNumGlyphSockets() do
-						local glyphID = select(4, GetGlyphSocketInfo(i))
-						if glyphID == SPEC_WARLOCK_DESTRUCTION_GLYPH_EMBERS then maxembers = 4 end
-					end
-					for i = 1,maxembers do
-						if self[i]:GetAlpha() < 1 then
-							UIFrameFadeIn(self[i], 2, self[i]:GetAlpha(), 1)
-						end
-					end	
-				elseif ( spec == SPEC_WARLOCK_AFFLICTION ) then
-					local numShards = UnitPower("player", SPELL_POWER_SOUL_SHARDS)
-					for i = 1,numShards do
-						if self[i]:GetAlpha() < 1 then
-							UIFrameFadeIn(self[i], 2, self[i]:GetAlpha(), 1)
-						end
-					end	
-				elseif (spec == SPEC_WARLOCK_DEMONOLOGY) then
-					UIFrameFadeIn(self[1], 2, self[1]:GetAlpha(), 1)
-				end
+				UIFrameFadeIn(self, 2, self:GetAlpha(), 1)
 			end
 			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" or event == "PLAYER_TALENT_UPDATE" then
-				local spec = GetSpecialization()
-				if (spec == SPEC_WARLOCK_DESTRUCTION) then
-					for i = 1,4 do
-						UIFrameFadeOut(self[i], 2, self[i]:GetAlpha(), 0)
-					end	
-				elseif ( spec == SPEC_WARLOCK_AFFLICTION ) then
-					for i = 1,4 do
-						UIFrameFadeOut(self[i], 2, self[i]:GetAlpha(), 0)
-					end	
-				elseif (spec == SPEC_WARLOCK_DEMONOLOGY) then
-					UIFrameFadeOut(self[1], 2, self[1]:GetAlpha(), 0)
-				end
+				UIFrameFadeOut(self, 2, self:GetAlpha(), 0)
 			end
 		end
 	end)

@@ -1,5 +1,5 @@
 ﻿-- Engines
-local S, _, _, DB = unpack(SunUI)
+local S, C, L, DB = unpack(SunUI)
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ChatFramePanel", "AceTimer-3.0")
 local _G =_G
 function Module:BuildChatbar()
@@ -37,14 +37,18 @@ function Module:BuildChatbar()
 		})
 		Button:SetBackdropColor(unpack(Color[i]))
 		Button:CreateShadow()
-		Button:SetScript("OnEnter", function(self)
-			if InCombatLockdown() then return end
-			UIFrameFadeIn(Parent, 2, Parent:GetAlpha(), 1)
-		end)
-		Button:SetScript("OnLeave", function(self)
-			if InCombatLockdown() then return end
-			UIFrameFadeOut(Parent, 2, self:GetAlpha(), 0)
-		end)
+		if C["MiniDB"]["ChatBarFade"] then 
+			Button:SetScript("OnEnter", function(self)
+				if InCombatLockdown() then return end
+				UIFrameFadeIn(Parent, 2, Parent:GetAlpha(), 1)
+			end)
+			Button:SetScript("OnLeave", function(self)
+				if InCombatLockdown() then return end
+				UIFrameFadeOut(Parent, 2, self:GetAlpha(), 0)
+			end)
+		else
+			Parent:SetAlpha(1)
+		end
 		if i == 1 then
 			Button:Point("TOPLEFT", ChatFrame1, "BOTTOMLEFT", 0, -2)
 		else
