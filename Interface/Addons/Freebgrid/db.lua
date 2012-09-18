@@ -55,16 +55,16 @@ local Indicators_class_default = {
     ["DRUID"] = {							--职业
         ["TL"] = {
 			["1"] = {
-				id 		= {774},
+				id 	= {774},			--"回春术"
 				isbuff	= true,
 				mine	= true,
 			},		
 		},						
         ["TR"] = {							--色块的位置	
 			["1"] = {						
-				id 		=  {20217, 1126, 90363},	--监视的spellid,可以设置多个,buff与debuff不能共存
+				id 	= {1126, 20217, 90363, 115921},	--监视的spellid,可以设置多个,buff与debuff不能共存	5%属性
 				isbuff	= true,				--是否为buff
-				mine	= false,				--是否为玩家自己释放
+				mine	= true,				--是否为玩家自己释放
 				lack	= true,				--是否在缺少时显示
 				etime	= false,			--显示为aura剩余时间.
 				count	= false,			--显示为aura堆叠层数. etime和count 只有CEN和BR位置设置有效
@@ -73,13 +73,13 @@ local Indicators_class_default = {
 		},
         ["BL"] = {
 			["1"] = {
-				id 		= {8936},
+				id 		= {8936},		--"愈合"
 				isbuff	= true,
 				mine	= false,
 				lack	= false,
 			},
 			["2"] = {
-				id 		= {48438},
+				id 		= {48438},		--"野性成长"
 				isbuff	= true,
 				mine	= false,
 				lack	= false,
@@ -89,17 +89,17 @@ local Indicators_class_default = {
 		["RC"] = {},
         ["BR"] = {
 			["1"] = {
-				id 		= {33763},
+				id 		= {33763},		--"生命绽放"
 				isbuff	= true,
 				mine	= true,
 				lack	= false,
 				count	= true,
-				etime	= false,
+				etime	= true,
 			},
 		},
         ["Cen"] = {
 			["1"] = {
-				id 		= {774},
+				id 		= {774},		--"回春"
 				isbuff	= true,
 				mine	= true,
 				etime	= true,
@@ -109,13 +109,13 @@ local Indicators_class_default = {
     ["PRIEST"] = {
         ["TL"] = {
 			["1"] = {
-				id 		= {17},
+				id 		= {17},			--"真言术:盾"
 				isbuff	= true,
 				mine	= true,
 				lack	= false,
 			},
 			["2"] = {
-				id 		= {6788},
+				id 		= {6788},		--"虚弱灵魂"
 				isbuff	= false,
 				mine	= true,
 				lack	= false,
@@ -123,15 +123,14 @@ local Indicators_class_default = {
 			},
 		
 		},
-        ["TR"] = {	
-			["1"] = {
-				id 		= {21562},
+        ["TR"] = {	["1"] = {
+				id 		= {21562, 6307, 469, 90364},		--10%耐
 				isbuff	= true,
 				lack	= true,
-				color   = {r = .8, g = 1, b = 0.0},
+				color   = {r = 1, g = 0.0, b = 0.0},
 			},
 			["2"] = {
-				id 		= {6346},
+				id 		= {6346},		--"防护恐惧结界"
 				isbuff	= true,
 				color   = {r = 1, g = 0.5, b = 0.0},
 			},
@@ -139,14 +138,14 @@ local Indicators_class_default = {
 		},
         ["BL"] = {	
 			["1"] = {
-				id 		= {81782},
+				id 		= {62618},		--"真言术:障"
 				isbuff	= true,
 			},
 		},
 		["RC"] = {},
         ["BR"] = {
 			["1"] = {
-				id 		= {41635},
+				id 		= {41635},		--"愈合祷言"
 				isbuff	= true,
 				mine	= true,
 				lack	= false,
@@ -156,7 +155,7 @@ local Indicators_class_default = {
 		},
         ["Cen"] = {
 			["1"] = {
-				id 		= {139},
+				id 		= {139},		--"恢复"
 				isbuff	= true,
 				mine	= true,
 				lack	= false,
@@ -167,23 +166,30 @@ local Indicators_class_default = {
     ["PALADIN"] = {
         ["TL"] = {
 			["1"] = {
-				id 		= {25771},
+				id 	= {25771},		--自律
 				isbuff	= false,
 				mine	= true,
 				lack	= false,
 				color   = {r = 1, g = 0.0, b = 0.0},
 			},
+			["2"] = {
+				id	= {114163},		--"永恒之火"
+				isbuff	= true,
+				mine	= true,
+				lack	= false,
+				etime	= true,
+			},
 		},
         ["TR"] = {
 			["1"] = {
-				id 		= {93435, 19740},
+				id 		= {19740, 116956, 93435},		--精通
 				isbuff	= true,
 				mine	= false,
 				lack	= true,
 				color   = {r = 1, g = 0.0, b = 0.0},
 			},
 			["2"] = {
-				id 		= {20217, 1126, 90363,115921},
+				id 		= {1126, 20217, 90363, 115921},	--5%属性
 				isbuff	= true,
 				mine	= false,
 				lack	= true,
@@ -192,7 +198,7 @@ local Indicators_class_default = {
 		},
         ["BL"] = {
 			["1"] = {
-				id 		= {53563},
+				id 		= {53563},		--"圣光道标"
 				isbuff	= true,
 				mine	= false,
 				lack	= false,
@@ -201,7 +207,7 @@ local Indicators_class_default = {
 		["RC"] = {},
         ["BR"] = {
 			["1"] = {
-				id 		= {53563},
+				id 		= {53563},		--"圣光道标"
 				isbuff	= true,
 				mine	= true,
 				lack	= false,
@@ -210,7 +216,7 @@ local Indicators_class_default = {
 		},
         ["Cen"] = {
 			["1"] = {
-				id 		= {1022, 1038, 1044, 6940},
+				id 		= {1022, 1038, 1044, 6940, 114039},	--祝福之手
 				isbuff	= true,
 				mine	= true,
 				lack	= false,
@@ -222,18 +228,17 @@ local Indicators_class_default = {
         ["TL"] = {},
         ["TR"] = {
 			["1"] = {
-				id 		= {109773, 1459},
+				id 		= {109773, 77747, 1459, 79038},		--10%SP
 				isbuff	= true,
-				mine	= false,
 				lack	= true,
-				color   = {r = 1, g = 0.5, b = 0.0},
+				color   = {r = 1, g = 0.0, b = 0.0},
 			},
 		},
         ["BL"] = {},
 		["RC"] = {},
         ["BR"] = {
 			["1"] = {
-				id 		= {20707},
+				id 		= {20707},		--"灵魂石"
 				isbuff	= true,
 				mine	= false,
 				lack	= false,
@@ -245,19 +250,19 @@ local Indicators_class_default = {
     ["WARRIOR"] = {
         ["TL"] = {
 			["1"] = {
-				id 		= {50720},
+				id 		= {114030},		--"警戒"
 				isbuff	= true,
 			},
 		},
         ["TR"] = {
 			["1"] = {
-				id 		= {6673, 57330, 19506},  --AP
+				id 		= {6673, 57330, 30809, 19506},		--10%AP
 				isbuff	= true,
 				lack	= true,
 				color   = {r = 1, g = 0.0, b = 0.0},
 			},
 			["2"] = {
-				id 		= {6307, 469, 90364, 21562},  --耐力
+				id 		= {21562, 6307, 469, 90364},		--10%耐
 				isbuff	= true,
 				lack	= true,
 				color   = {r = .8, g = 1.0, b = 0.0},
@@ -271,7 +276,7 @@ local Indicators_class_default = {
     ["DEATHKNIGHT"] = {
         ["TL"] = {},
         ["TR"] = {		["1"] = {
-				id 		= {6673, 57330, 19506},
+				id 		= {6673, 57330, 30809, 19506},		--10%AP
 				isbuff	= true,
 				lack	= true,
 				color   = {r = 1, g = 0.0, b = 0.0},
@@ -285,7 +290,7 @@ local Indicators_class_default = {
     ["SHAMAN"] = {
         ["TL"] = {
 			["1"] = {
-				id 		= {61295},
+				id 		= {61295},		--"激流"
 				isbuff	= true,
 				mine	= true,
 				lack	= false,
@@ -295,7 +300,7 @@ local Indicators_class_default = {
 		},
         ["TR"] = {
 			["1"] = {
-				id 		= {105284},
+				id 		= {105284},		--"先祖活力"
 				isbuff	= true,
 				mine	= false,
 				lack	= false,
@@ -304,7 +309,7 @@ local Indicators_class_default = {
 		},
         ["BL"] = {
 			["1"] = {
-				id 		= {974},
+				id 		= {974},		--"大地之盾"
 				isbuff	= true,
 				mine	= false,
 				lack	= false,
@@ -313,7 +318,7 @@ local Indicators_class_default = {
 		["RC"] = {},
         ["BR"] = {
 			["1"] = {
-				id 		= {974},
+				id 		= {974},		--"大地之盾"
 				isbuff	= true,
 				mine	= true,
 				lack	= false,
@@ -323,7 +328,7 @@ local Indicators_class_default = {
 		},
         ["Cen"] = {
 			["1"] = {
-				id 		= {61295},
+				id 		= {61295},		--"激流"
 				isbuff	= true,
 				mine	= true,
 				lack	= false,
@@ -347,11 +352,50 @@ local Indicators_class_default = {
         ["BR"] = {},
         ["Cen"] = {},
     },
+    ["MONK"] = {
+        ["TL"] = {
+			["1"] = {
+				id 		= {115151},		--"复苏之雾"
+				isbuff	= true,
+				mine	= true,
+			},
+		},
+        ["TR"] = {	
+			["1"] = {						
+				id 		= {1126, 20217, 90363, 115921},	--5%属性
+				isbuff	= true,				
+				mine	= true,				
+				lack	= true,				
+				etime	= false,			
+				count	= false,			
+				color   = {r = 1, g = 0.0, b = 0.0},
+			},
+			["2"] = {
+				id 		= {11678, 11459, 79038},		--5%暴击
+				isbuff	= true,
+				mine	= false,
+				lack	= true,
+				color   = {r = .8, g = 1, b = 0.0},
+			},
+		},
+        ["BL"] = {},
+		["RC"] = {},
+        ["BR"] = {},
+        ["Cen"] = {
+			["1"] = {
+				id 		= {124081},		--"禅意珠"
+				isbuff	= true,
+				mine	= true,
+				lack	= false,
+				etime	= true,
+			},
+		},
+    },
     ["MAGE"] = {
         ["TL"] = {},
         ["TR"] = {
 			["1"] = {
-				id 		= {1459},
+				id 		= {1459, 79038},		--10%SP5%爆
 				isbuff	= true,
 				mine	= false,
 				lack	= true,

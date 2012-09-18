@@ -1,5 +1,8 @@
 ﻿local addon, ns = ...
 local oUF = ns.oUF or oUF 
+if IsAddOnLoaded("Stuf") or IsAddOnLoaded("PitBull4") or IsAddOnLoaded("ShadowedUnitFrames") then
+	return
+end
 -- shorten value
 local SVal = function(val)
 if val then

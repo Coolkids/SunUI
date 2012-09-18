@@ -1,7 +1,7 @@
 ﻿local S, C, L, DB, _ = unpack(SunUI)
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ClassCD")
 
-
+if IsAddOnLoaded("ExtarCD") then return end
 
 ----------------------------------------------------------------------------------------
 --	职业被动技能,饰品,附魔内置CD

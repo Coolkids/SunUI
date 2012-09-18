@@ -6,11 +6,10 @@ function Module:OnInitialize()
 	if C["MiniMapPanels"] ~= true then return end
 	local wm = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
 	wm:SetParent(UIParent) 
-	wm:SetFrameLevel(Minimap:GetFrameLevel()+1)
+	wm:SetFrameLevel(3)
 	wm:ClearAllPoints() 
 	wm:SetPoint("TOP", -90, -5)
 	wm:SetSize(50, 8)
-	S.Reskin(wm, false)
 	wm:Hide()
 	wm:SetAlpha(0)
 	wm:SetScript("OnEnter", function(self)
@@ -56,4 +55,6 @@ function Module:OnInitialize()
 			EasyMenu(wmmenuList, wmmenuFrame, "cursor", -150, 0, "MENU", 2) 
 		end 
 	end)
+	
+	S.Reskin(wm)
 end 

@@ -1,4 +1,7 @@
 ﻿local S, C, L, DB, _ = unpack(SunUI)
+if IsAddOnLoaded("AdiBags") or IsAddOnLoaded("ArkInventory") or IsAddOnLoaded("cargBags_Nivaya") or IsAddOnLoaded("cargBags") or IsAddOnLoaded("Bagnon") or IsAddOnLoaded("Combuctor") then
+	return
+end
 local _, ns = ...
 local cargBags = ns.cargBags
 

@@ -2,11 +2,11 @@
 local S, C, L, DB, _ = unpack(SunUI)
  
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SkinDBM", "AceEvent-3.0")
+if not IsAddOnLoaded("DBM-Core") then return end
 function Module:OnInitialize()
 	local Event = CreateFrame("Frame")
 	Event:RegisterEvent("PLAYER_LOGIN")
 	Event:SetScript("OnEvent", function()
-		if not IsAddOnLoaded("DBM-Core") then return end
 			if not C["SkinDB"]["EnableDBMSkin"] then return end
 			hooksecurefunc(DBT, "CreateBar", function(self)
 				for bar in self:GetBarIterator() do

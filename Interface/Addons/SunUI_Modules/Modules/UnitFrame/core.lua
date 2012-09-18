@@ -7,6 +7,9 @@ local Core = LibStub("AceAddon-3.0"):GetAddon("SunUI")
 local Module = Core:NewModule("UnitFrame")
 local _G = _G
 local P,U
+if IsAddOnLoaded("Stuf") or IsAddOnLoaded("PitBull4") or IsAddOnLoaded("ShadowedUnitFrames") then
+	return
+end
  -----------------------------
  -- local variables
  -----------------------------

@@ -50,7 +50,7 @@ local RaidBuffList = {
 		20217, -- 王者祝福
 		 1126, -- 野性印记
 		90363, -- 页岩蛛之拥
-		115921,	
+		115921,	--MK
 	},
 	[4] = {
 		-- 耐力
@@ -61,23 +61,44 @@ local RaidBuffList = {
 		72590, -- 坚韧	
 	},
 	[5] = {
-		-- 智力
-		 1459, -- 奥术光辉
+		-- 10%法伤
+		 --[1] = {
+			1459, -- 奥术光辉
+			109773, --意图
+			77747,--萨满
+			--},
+		
+		--[2] = {
+			
+		--},
 	},
 	[6] = {
-		-- AP
-		19740, -- 力量祝福
-		57330, -- 怒火释放
-		19506, -- 强击光环
-	},
+		--法术加速
+		--[1] = {
+			--49868,--暗牧
+			--24907,--鸟德
+			--51470,--萨满
+		--},
+			--物理加速
+		--[2] = {
+			--113742, --DZ
+			--55610,--邪恶光环 DK
+			--30809,--怒火释放 SM
+			-- 10%AP
+			6673, -- 战斗怒吼
+			19506, -- 强击光环
+			57330,--DK
+		},
 	[7] = {
-		-- 回蓝
+		-- 精通
 		19740, -- 力量祝福
+		128997, --灵魂兽
+		116956, --風之優雅
 	},	
 }
 
 local function OnEvent_GROUP_ROSTER_UPDATE(event, ...)
-	IsInParty = (GetNumSubgroupMembers() > 0) and true or false
+	IsInParty = (GetNumSubgroupMembers() > 0 or GetNumGroupMembers() > 0) and true or false
 end
 local function OnEvent_ACTIVE_TALENT_GROUP_CHANGED(event, ...)
 	local Melee = false
@@ -275,6 +296,7 @@ end
 function Module:OnEnable()
 	if not C["ReminderDB"].ShowRaidBuff then return end
 	BuildBuffFrame()
+	OnEvent_GROUP_ROSTER_UPDATE()
 	Module:RegisterEvent("PLAYER_ENTERING_WORLD", OnEvent_PLAYER_ENTERING_WORLD)
 	Module:RegisterEvent("UNIT_AURA", OnEvent_UNIT_AURA)
 	Module:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", OnEvent_ACTIVE_TALENT_GROUP_CHANGED)

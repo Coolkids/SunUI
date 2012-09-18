@@ -1,11 +1,14 @@
 local addon, ns = ...
 local S, C, L, DB, _ = unpack(SunUI)
+if IsAddOnLoaded("Stuf") or IsAddOnLoaded("PitBull4") or IsAddOnLoaded("ShadowedUnitFrames") then
+	return
+end
 local cast = CreateFrame("Frame")  
   -- special thanks to Allez for coming up with this solution
 local channelingTicks = {
 	-- warlock
-	[GetSpellInfo(689)] = 3, -- "Drain Life"
-	[GetSpellInfo(5740)] = 4, -- "Rain of Fire"
+	--[GetSpellInfo(689)] = 3, -- "Drain Life"
+	--[GetSpellInfo(5740)] = 4, -- "Rain of Fire"
 	-- druid
 	[GetSpellInfo(44203)] = 4, -- "Tranquility"
 	[GetSpellInfo(16914)] = 10, -- "Hurricane"

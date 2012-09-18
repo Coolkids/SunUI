@@ -1,41 +1,37 @@
 ﻿local S, C, L, DB, _ = unpack(SunUI)
  
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("AutoHide", "AceEvent-3.0")
-
 function Module:UpdateAutoHide()
-	local autohide = CreateFrame("Frame")
-	local rabs = {}
+	local autohide = CreateFrame("Frame", "BarFade", UIParent)
 	if C["ActionBarDB"]["AllFade"] then 
-		if SunUIStanceBar then table.insert(rabs, "SunUIStanceBar") end
-		if SunUIPetBar then table.insert(rabs, "SunUIPetBar") end
-		if SunUIActionBar1  then table.insert(rabs, "SunUIActionBar1") end
-		if SunUIActionBar2  then table.insert(rabs, "SunUIActionBar2") end
-		if SunUIActionBar3 then table.insert(rabs, "SunUIActionBar3") end
-		if SunUIActionBar3_2 then table.insert(rabs, "SunUIActionBar3_2") end
-		if SunUIActionBar4  then table.insert(rabs, "SunUIActionBar4") end
-		if SunUIActionBar5  then table.insert(rabs, "SunUIActionBar5") end
-		if SunUIMultiBarLeft1 then table.insert(rabs, "SunUIMultiBarLeft1") end
-		if SunUIMultiBarLeft2 then table.insert(rabs, "SunUIMultiBarLeft2") end
-		if SunUIMultiBarLeft3 then table.insert(rabs, "SunUIMultiBarLeft3") end
-		if SunUIMultiBarLeft4 then table.insert(rabs, "SunUIMultiBarLeft4") end
-		if SunUI_OverrideBar then table.insert(rabs, "SunUI_OverrideBar") end
-		if SunUIExtraActionBar then table.insert(rabs, "SunUIExtraActionBar") end
+		if SunUIStanceBar then SunUIStanceBar:SetParent(BarFade) end
+		if SunUIPetBar then SunUIPetBar:SetParent(BarFade) end
+		if SunUIActionBar1  then SunUIActionBar1:SetParent(BarFade) end
+		if SunUIActionBar2  then SunUIActionBar2:SetParent(BarFade) end
+		if SunUIActionBar3 then SunUIActionBar3:SetParent(BarFade) end
+		if SunUIActionBar3_2 then SunUIActionBar3_2:SetParent(BarFade) end
+		if SunUIActionBar4  then SunUIActionBar4:SetParent(BarFade) end
+		if SunUIActionBar5  then SunUIActionBar5:SetParent(BarFade) end
+		if SunUIMultiBarLeft1 then SunUIMultiBarLeft1:SetParent(BarFade) end
+		if SunUIMultiBarLeft2 then SunUIMultiBarLeft2:SetParent(BarFade) end
+		if SunUIMultiBarLeft3 then SunUIMultiBarLeft3:SetParent(BarFade) end
+		if SunUIMultiBarLeft4 then SunUIMultiBarLeft4:SetParent(BarFade) end
+		if SunUI_OverrideBar then SunUI_OverrideBar:SetParent(BarFade) end
+		if SunUIExtraActionBar then SunUIExtraActionBar:SetParent(BarFade) end
 	else
-		if SunUIStanceBar and C["ActionBarDB"]["StanceBarFade"] then table.insert(rabs, "SunUIStanceBar") end
-		if SunUIPetBar and C["ActionBarDB"]["PetBarFade"] then table.insert(rabs, "SunUIPetBar") end
-		if SunUIActionBar1 and C["ActionBarDB"]["Bar1Fade"] then table.insert(rabs, "SunUIActionBar1") end
-		if SunUIActionBar2 and C["ActionBarDB"]["Bar2Fade"] then table.insert(rabs, "SunUIActionBar2") end
-		if SunUIActionBar3 and C["ActionBarDB"]["Bar3Fade"] then table.insert(rabs, "SunUIActionBar3") end
-		if SunUIActionBar3_2 and C["ActionBarDB"]["Bar3Fade"] then table.insert(rabs, "SunUIActionBar3_2") end
-		if SunUIActionBar4 and C["ActionBarDB"]["Bar4Fade"] then table.insert(rabs, "SunUIActionBar4") end
-		if SunUIActionBar5 and C["ActionBarDB"]["Bar5Fade"] then table.insert(rabs, "SunUIActionBar5") end
-		if SunUIMultiBarLeft1 and C["ActionBarDB"]["Bar5Fade"] then table.insert(rabs, "SunUIMultiBarLeft1") end
-		if SunUIMultiBarLeft2 and C["ActionBarDB"]["Bar5Fade"] then table.insert(rabs, "SunUIMultiBarLeft2") end
-		if SunUIMultiBarLeft3 and C["ActionBarDB"]["Bar5Fade"] then table.insert(rabs, "SunUIMultiBarLeft3") end
-		if SunUIMultiBarLeft4 and C["ActionBarDB"]["Bar5Fade"] then table.insert(rabs, "SunUIMultiBarLeft4") end
+		if SunUIStanceBar and C["ActionBarDB"]["StanceBarFade"] then SunUIStanceBar:SetParent(BarFade) end
+		if SunUIPetBar and C["ActionBarDB"]["PetBarFade"] then SunUIPetBar:SetParent(BarFade) end
+		if SunUIActionBar1 and C["ActionBarDB"]["Bar1Fade"] then SunUIActionBar1:SetParent(BarFade) end
+		if SunUIActionBar2 and C["ActionBarDB"]["Bar2Fade"] then SunUIActionBar2:SetParent(BarFade) end
+		if SunUIActionBar3 and C["ActionBarDB"]["Bar3Fade"] then SunUIActionBar3:SetParent(BarFade) end
+		if SunUIActionBar3_2 and C["ActionBarDB"]["Bar3Fade"] then SunUIActionBar3_2:SetParent(BarFade) end
+		if SunUIActionBar4 and C["ActionBarDB"]["Bar4Fade"] then SunUIActionBar4:SetParent(BarFade) end
+		if SunUIActionBar5 and C["ActionBarDB"]["Bar5Fade"] then SunUIActionBar5:SetParent(BarFade) end
+		if SunUIMultiBarLeft1 and C["ActionBarDB"]["Bar5Fade"] then SunUIMultiBarLeft1:SetParent(BarFade) end
+		if SunUIMultiBarLeft2 and C["ActionBarDB"]["Bar5Fade"] then SunUIMultiBarLeft2:SetParent(BarFade) end
+		if SunUIMultiBarLeft3 and C["ActionBarDB"]["Bar5Fade"] then SunUIMultiBarLeft3:SetParent(BarFade) end
+		if SunUIMultiBarLeft4 and C["ActionBarDB"]["Bar5Fade"] then SunUIMultiBarLeft4:SetParent(BarFade) end
 	end
-
-	if #rabs == 0 then return end
 
 	autohide:RegisterEvent("PLAYER_REGEN_ENABLED")
 	autohide:RegisterEvent("PLAYER_REGEN_DISABLED")
@@ -52,27 +48,22 @@ function Module:UpdateAutoHide()
 		if IsAddOnLoaded("Blizzard_MacroUI") and MacroFrame:IsShown() then return true end
 	end
 
-	local function FadeOutActionButton()
-		for _, v in ipairs(rabs) do 
-			if _G[v]:GetAlpha()>0 then
-				local fadeInfo = {};
-				fadeInfo.mode = "OUT";
-				fadeInfo.timeToFade = 0.5;
-				fadeInfo.finishedFunc = function() _G[v]:Hide() _G[v]:EnableMouse(false) end
-				fadeInfo.startAlpha = _G[v]:GetAlpha()
-				fadeInfo.endAlpha = 0
-				UIFrameFade(_G[v], fadeInfo)
-			end 
-		end
+	local function FadeOutActionButton() 
+		if BarFade:GetAlpha()>0 then
+			local fadeInfo = {};
+			fadeInfo.mode = "OUT";
+			fadeInfo.timeToFade = 0.5;
+			fadeInfo.finishedFunc = function()BarFade:Hide()  end
+			fadeInfo.startAlpha = BarFade:GetAlpha()
+			fadeInfo.endAlpha = 0
+			UIFrameFade(BarFade, fadeInfo)
+		end 
 	end
 
 	local function FadeInActionButton()
-		for _, v in ipairs(rabs) do
-			if _G[v]:GetAlpha()<1 then
-				_G[v]:Show()
-				_G[v]:EnableMouse(true)
-				UIFrameFadeIn(_G[v], 0.5, _G[v]:GetAlpha(), 1)
-			end
+		if BarFade:GetAlpha()<1 then
+			BarFade:Show()
+			UIFrameFadeIn(BarFade, 0.5,BarFade:GetAlpha(), 1)
 		end
 	end
 

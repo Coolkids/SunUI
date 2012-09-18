@@ -307,15 +307,15 @@ local function FadeOutFrameMap()  --隐藏
 		UIFrameFade(Minimap, fadeInfo)
 	end 
 end
-local function FadeOutFrameDamage()  --隐藏
-	if alDamageMeterFrame:GetAlpha()>0 then
+local function FadeOutFrameDamage(p)  --隐藏
+	if p:GetAlpha()>0 then
 		local fadeInfo = {}
 		fadeInfo.mode = "OUT"
 		fadeInfo.timeToFade = 2
-		fadeInfo.finishedFunc = function() alDamageMeterFrame:Hide() end 
-		fadeInfo.startAlpha = alDamageMeterFrame:GetAlpha()
+		fadeInfo.finishedFunc = function() p:Hide() end 
+		fadeInfo.startAlpha = p:GetAlpha()
 		fadeInfo.endAlpha = 0
-		UIFrameFade(alDamageMeterFrame, fadeInfo)
+		UIFrameFade(p, fadeInfo)
 	end 
 end
 	
@@ -350,13 +350,13 @@ function Module:OnInitialize()
 			end
 		end)
 		maphide:SetScript("OnEnter", function(self)
-			UIFrameFadeIn(self, 2, self:GetAlpha(), 1)
+			UIFrameFadeIn(self, 0.5, self:GetAlpha(), 1)
 			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 			GameTooltip:AddLine("隐藏小地图", .6,.8,1)
 			GameTooltip:Show()
 		end)
 		maphide:SetScript("OnLeave", function(self) 
-			UIFrameFadeOut(self, 2, self:GetAlpha(), 0)
+			UIFrameFadeOut(self, 1, self:GetAlpha(), 0)
 			GameTooltip:Hide()
 		end)
 		S.Reskin(maphide)
@@ -369,12 +369,24 @@ function Module:OnInitialize()
 		mapdamage:SetPoint("TOP", 90, -5)
 		mapdamage:SetAlpha(0)
 		mapdamage:SetScript("OnMouseDown", function(self, button)
-			if alDamageMeterFrame:IsShown() then 
-				FadeOutFrameDamage()
+			if alDamageMeter then
+				if alDamageMeterFrame:IsShown() then 
+					FadeOutFrameDamage(alDamageMeterFrame)
+				else
+					alDamageMeterFrame:Show()
+					UIFrameFadeIn(alDamageMeterFrame, 3, 0, 1)
+				end
+			elseif SkadaBarWindowSkada then
+				if SkadaBarWindowSkada:IsShown() then 
+					FadeOutFrameDamage(SkadaBarWindowSkada)
+				else
+					SkadaBarWindowSkada:Show()
+					UIFrameFadeIn(SkadaBarWindowSkada, 3, 0, 1)
+				end
 			else
-				alDamageMeterFrame:Show()
-				UIFrameFadeIn(alDamageMeterFrame, 3, 0, 1)
+				DEFAULT_CHAT_FRAME:AddMessage("SunUI:暂时不兼容其他伤害统计.")
 			end
+			
 		end)
 		mapdamage:SetScript("OnEnter", function(self)
 			UIFrameFadeIn(self, 2, self:GetAlpha(), 1)

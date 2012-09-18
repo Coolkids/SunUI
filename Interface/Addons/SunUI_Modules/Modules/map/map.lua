@@ -1,5 +1,7 @@
 local S, _, _, DB = unpack(SunUI)
-
+if IsAddOnLoaded("Mapster") then
+	return
+end
 local map_scale = 0.9								-- Mini World Map scale
 local isize = 20									-- group icons size
 SetCVar("questPOI", 1)

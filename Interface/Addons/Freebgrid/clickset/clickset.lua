@@ -330,6 +330,18 @@ local default_ClassClick = {
 							},
 		},
 	},
+	MONK = { 
+		["1"] = {
+			["Click"]			= {
+				["action"]	= "target",
+							},
+		},
+		["2"] = {
+			["Click"]			= {
+				["action"]	= 116849,--"做茧缚命",
+							},
+		},
+	},
 	
 	DEATHKNIGHT = {
 		["1"] = {

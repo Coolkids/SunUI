@@ -1,4 +1,7 @@
 ﻿local S, C, L, DB, _ = unpack(SunUI)
+if IsAddOnLoaded("Prat-3.0") or IsAddOnLoaded("Chatter") then
+	return
+end
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Chat", "AceEvent-3.0")
  local _G = _G
 function Module:OnEnable()

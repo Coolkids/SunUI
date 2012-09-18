@@ -1,5 +1,4 @@
 local S, C, L, DB, _ = unpack(SunUI)
-local addon, ns = ...
 local _G = _G
 local cfg = {
 	iconsize = 32, 					-- loot frame icon's size
@@ -112,6 +111,12 @@ local OnClick = function(self)
 		ss = self:GetID()
 		sq = self.quality
 		sn = self.name:GetText()
+		
+		LootFrame.selectedLootButton = self
+		--LootFrame.selectedTexture = self.texture
+		LootFrame.selectedSlot = self:GetID()
+		LootFrame.selectedQuality = self.quality
+		LootFrame.selectedItemName = self.name:GetText()
 		LootSlot(ss)
 	end
 end
@@ -296,7 +301,6 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 			slot.name:SetText(item)
 			slot.name:SetTextColor(color.r, color.g, color.b)
 			slot.icon:SetTexture(texture)
-
 			m = math.max(m, quality)
 
 			slot:Enable()
@@ -346,6 +350,7 @@ end
 
 addon.OPEN_MASTER_LOOT_LIST = function(self)
 	ToggleDropDownMenu(1, nil, GroupLootDropDown, addon.slots[ss], 0, 0)
+	--ToggleDropDownMenu(1, nil, GroupLootDropDown, LootFrame.selectedLootButton, 0, 0)
 end
 
 addon.UPDATE_MASTER_LOOT_LIST = function(self)
@@ -366,18 +371,6 @@ addon:Hide()
 -- Fuzz
 LootFrame:UnregisterAllEvents()
 table.insert(UISpecialFrames, "m_Loot")
-
-function _G.GroupLootDropDown_GiveLoot(self)
-	if ( sq >= MASTER_LOOT_THREHOLD ) then
-		local dialog = StaticPopup_Show("CONFIRM_LOOT_DISTRIBUTION", ITEM_QUALITY_COLORS[sq].hex..sn..FONT_COLOR_CODE_CLOSE, self:GetText())
-		if (dialog) then
-			dialog.data = self.value
-		end
-	else
-		GiveMasterLoot(ss, self.value)
-	end
-	CloseDropDownMenus()
-end
 
 StaticPopupDialogs["CONFIRM_LOOT_DISTRIBUTION"].OnAccept = function(self, data)
 	GiveMasterLoot(ss, data)

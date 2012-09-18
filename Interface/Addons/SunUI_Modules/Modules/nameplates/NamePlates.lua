@@ -1,4 +1,7 @@
 local S, C, L, DB, _ = unpack(SunUI)
+if IsAddOnLoaded("TidyPlates") or IsAddOnLoaded("Aloft") or IsAddOnLoaded("dNamePlates") or IsAddOnLoaded("caelNamePlates") then
+	return
+end
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("NamePlates")
 local   cfg={
 	combat_toggle = false, 			-- If set to true nameplates will be automatically toggled on when you enter the combat

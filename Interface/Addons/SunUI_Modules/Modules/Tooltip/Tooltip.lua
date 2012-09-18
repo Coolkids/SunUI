@@ -1,5 +1,7 @@
 ﻿local S, C, L, DB, _ = unpack(SunUI)
- 
+ if IsAddOnLoaded("TipTac") or IsAddOnLoaded("FreebTip") or IsAddOnLoaded("bTooltip") or IsAddOnLoaded("PhoenixTooltip") or IsAddOnLoaded("Icetip") then
+	return
+end
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Tooltips")
 local _G = _G
 function Module:OnInitialize()
