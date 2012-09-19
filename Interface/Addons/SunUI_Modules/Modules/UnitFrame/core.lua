@@ -165,11 +165,8 @@ lib.gen_portrait = function(f)
     s = f.Health
 	local p = CreateFrame("PlayerModel", nil, f)
 	p:SetFrameLevel(s:GetFrameLevel()-1)
-    p:Width(f.width-2)
-    p:Height(f.height-2)
-    p:Point("TOP", s, "TOP", 0, -2)
+    p:SetAllPoints()
 	p:SetAlpha(U["Alpha3D"])
-	p:SetFrameLevel(6)
 	p.PostUpdate = lib.PortraitPostUpdate	
     f.Portrait = p
 end

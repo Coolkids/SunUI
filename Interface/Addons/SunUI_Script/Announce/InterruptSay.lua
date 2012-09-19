@@ -3,9 +3,9 @@ local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Interrupt")
 
 function Module:OnInitialize()
 	C = C["MiniDB"]
-	if C["Interrupt"] ~= true then return end
 end	
 function Module:OnEnable()
+	if C["Interrupt"] ~= true then return end
 	local frame = CreateFrame('Frame')
 	frame:Hide()
 	frame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
@@ -14,7 +14,7 @@ function Module:OnEnable()
 		if arg2 ~= "SPELL_INTERRUPT" or arg5 ~= UnitName("player") then
 			return
 		end
-		local channel = GetNumGroupMembers() > 0 and "RAID" or GetNumSubgroupMembers() > 0 and "PARTY"
+		local channel = IsInRaid() and "RAID" or GetNumSubgroupMembers() > 0 and "PARTY"
 		if channel then
 			SendChatMessage(GetSpellLink(arg12).." 打断了 "..arg9.."的"..GetSpellLink(arg15), channel)
 		end

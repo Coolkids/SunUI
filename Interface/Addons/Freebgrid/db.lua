@@ -36,10 +36,11 @@ ns.RaidClassColors = {
 	["SHAMAN"] = { r = 0.0, g = 0.44, b = 0.87 },
 	["WARRIOR"] = { r = 0.78, g = 0.61, b = 0.43 },
 	["DEATHKNIGHT"] = { r = 0.77, g = 0.12 , b = 0.23 },
+	["MONK"]= { r = 0.0, g = 1.0, b = 0.59 },
 }
 
 local Gcd_class_spells = {
-	["DEATHKNIGHT"]	= 45902,		
+	["DEATHKNIGHT"]		= 45902,		
 	["HUNTER"]		= 1978,			
 	["PRIEST"] 		= 21562,		
 	["PALADIN"]		= 635,			
@@ -48,7 +49,8 @@ local Gcd_class_spells = {
 	["WARRIOR"]		= 7386,			
 	["SHAMAN"] 		= 331,			
 	["ROGUE"]		= 1752,			
-	["DRUID"] 		= 1126,			
+	["DRUID"] 		= 1126,
+	["MONK"]		= 100780,			
 }
 
 local Indicators_class_default = {
@@ -355,7 +357,7 @@ local Indicators_class_default = {
     ["MONK"] = {
         ["TL"] = {
 			["1"] = {
-				id 		= {115151},		--"复苏之雾"
+				id 		= {119611},		--"复苏之雾"
 				isbuff	= true,
 				mine	= true,
 			},
@@ -371,15 +373,22 @@ local Indicators_class_default = {
 				color   = {r = 1, g = 0.0, b = 0.0},
 			},
 			["2"] = {
-				id 		= {11678, 11459, 79038},		--5%暴击
+				id 		= {116781, 11459, 79038},		--5%暴击
 				isbuff	= true,
 				mine	= false,
 				lack	= true,
 				color   = {r = .8, g = 1, b = 0.0},
 			},
 		},
-        ["BL"] = {},
-		["RC"] = {},
+        ["BL"] = {
+			["1"] = {
+				id 		= {132120},		--"氤氲之雾"
+				isbuff	= true,
+				mine	= false,
+				lack	= false,
+			},
+		},
+	["RC"] = {},
         ["BR"] = {},
         ["Cen"] = {
 			["1"] = {

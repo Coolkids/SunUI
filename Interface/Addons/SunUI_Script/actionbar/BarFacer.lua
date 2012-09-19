@@ -2,6 +2,7 @@
  
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("AutoHide", "AceEvent-3.0")
 function Module:UpdateAutoHide()
+	
 	local autohide = CreateFrame("Frame", "BarFade", UIParent)
 	if C["ActionBarDB"]["AllFade"] then 
 		if SunUIStanceBar then SunUIStanceBar:SetParent(BarFade) end
@@ -16,8 +17,6 @@ function Module:UpdateAutoHide()
 		if SunUIMultiBarLeft2 then SunUIMultiBarLeft2:SetParent(BarFade) end
 		if SunUIMultiBarLeft3 then SunUIMultiBarLeft3:SetParent(BarFade) end
 		if SunUIMultiBarLeft4 then SunUIMultiBarLeft4:SetParent(BarFade) end
-		if SunUI_OverrideBar then SunUI_OverrideBar:SetParent(BarFade) end
-		if SunUIExtraActionBar then SunUIExtraActionBar:SetParent(BarFade) end
 	else
 		if SunUIStanceBar and C["ActionBarDB"]["StanceBarFade"] then SunUIStanceBar:SetParent(BarFade) end
 		if SunUIPetBar and C["ActionBarDB"]["PetBarFade"] then SunUIPetBar:SetParent(BarFade) end
@@ -66,44 +65,6 @@ function Module:UpdateAutoHide()
 			UIFrameFadeIn(BarFade, 0.5,BarFade:GetAlpha(), 1)
 		end
 	end
-
-	local buttons = 0
-	local function UpdateButtonNumber()
-		for i=1, GetNumFlyouts() do
-			local x = GetFlyoutID(i)
-			local _, _, numSlots, isKnown = GetFlyoutInfo(x)
-			if isKnown then
-				buttons = numSlots
-				break
-			end
-		end
-	end
-	hooksecurefunc("ActionButton_UpdateFlyout", UpdateButtonNumber)
-	local function SetUpFlyout()
-		for i=1, buttons do
-			local button = _G["SpellFlyoutButton"..i]
-			if button then
-				if button:GetParent():GetParent():GetParent() == MultiBarLeft  then
-					button:SetScript("OnEnter", function(self) UIFrameFadeIn(SunUIActionBar5,0.5,SunUIActionBar5:GetAlpha(),1) end)
-					button:SetScript("OnLeave", function(self) UIFrameFadeOut(SunUIActionBar5,0.5,SunUIActionBar5:GetAlpha(),0) end)
-				end
-				if button:GetParent():GetParent():GetParent() == MultiBarRight then
-					button:SetScript("OnEnter", function(self) UIFrameFadeIn(SunUIActionBar4,0.5,SunUIActionBar4:GetAlpha(),1) end)
-					button:SetScript("OnLeave", function(self) UIFrameFadeOut(SunUIActionBar4,0.5,SunUIActionBar4:GetAlpha(),0) end)
-				end
-				if button:GetParent():GetParent():GetParent() == MultiBarBottomRight then
-					button:SetScript("OnEnter", function(self) UIFrameFadeIn(SunUIActionBar3,0.5,SunUIActionBar3:GetAlpha(),1) end)
-					button:SetScript("OnLeave", function(self) UIFrameFadeOut(SunUIActionBar3,0.5,SunUIActionBar3:GetAlpha(),0) end)
-				end
-				if button:GetParent():GetParent():GetParent() == MultiBarBottomLeft then
-					button:SetScript("OnEnter", function(self) UIFrameFadeIn(SunUIActionBar2,0.5,SunUIActionBar2:GetAlpha(),1) end)
-					button:SetScript("OnLeave", function(self) UIFrameFadeOut(SunUIActionBar2,0.5,SunUIActionBar2:GetAlpha(),0) end)
-				end
-			end
-		end
-	end
-	SpellFlyout:HookScript("OnShow", SetUpFlyout)
-
 
 	autohide:SetScript("OnEvent", function(self, event, arg1, ...)
 		if event == "PLAYER_ENTERING_WORLD" then

@@ -23,15 +23,16 @@ ns.auras_ascending = {
 
 ns.auras_buffs = {
 	first = {
-		--[GetSpellInfo(61295)] = 9, 	--test
+		--[GetSpellInfo(17)] = 9, 	--test
 	},
 	second = {
+		--[GetSpellInfo(61295)] = 9, 	--test
 		--------------------------战士---------------
 		[GetSpellInfo(871)] = 2,	-- 盾墙
 		[GetSpellInfo(12975)] = 2,	--破釜沉舟
 		[GetSpellInfo(97462)] = 2,	--集结呐喊
 		[GetSpellInfo(2565)] = 2,	--盾牌格挡
-		[GetSpellInfo(114030)] = 2,	--警戒
+		--[GetSpellInfo(114030)] = 2,	--警戒
 		[GetSpellInfo(114203)] = 2,	--挫志战旗
 		--------------------------骑士---------------
 		[GetSpellInfo(642)] = 2,	--圣盾术
@@ -47,7 +48,7 @@ ns.auras_buffs = {
 		[GetSpellInfo(48707)] = 2,	--反魔法护罩
 		[GetSpellInfo(50461)] = 2,	--反魔法领域
 		[GetSpellInfo(42650)] = 2,	--亡者大军
-		[GetSpellInfo(49222)] = 2,	--白骨之盾
+		--[GetSpellInfo(49222)] = 2,	--白骨之盾
 		[GetSpellInfo(48792)] = 2,	--冰封之韧
 		[GetSpellInfo(55233)] = 2,	--吸血鬼之血
 		[GetSpellInfo(81256)] = 2,	--符文刃舞
@@ -85,185 +86,6 @@ ns.auras_debuffs = {
 
 ns.auras_instances_debuffs = {
 	first = {
-		[875] = { --Gate of the Setting Sun 残阳关
-			
-			-- Raigonn 莱公
-			[GetSpellInfo(111644)] = 7, -- Screeching Swarm 111640 111643
-		},
-
-		[885] = { --Mogu'shan Palace 魔古山神殿 
-
-			-- Trial of the King 国王的试炼
-			[GetSpellInfo(119946)] = 7, -- Ravage
-         
-			-- Xin the Weaponmaster <King of the Clans> 武器大师席恩
-			[GetSpellInfo(119684)] = 7, --Ground Slam
-		},
-      
-		[871] = { --Scarlet Halls 血色大厅
-
-			-- Houndmaster Braun <PH Dressing>
-			[GetSpellInfo(114056)] = 7, -- Bloody Mess
-        
-			-- Flameweaver Koegler
-			[GetSpellInfo(113653)] = 7, -- Greater Dragon's Breath
-			[GetSpellInfo(11366)] = 6,-- Pyroblast      
-		},
-      
-		[874] = { --Scarlet Monastery 血色修道院 
-
-			-- Thalnos the Soulrender
-			[GetSpellInfo(115144)] = 7, -- Mind Rot
-			[GetSpellInfo(115297)] = 6, -- Evict Soul
-		},
-      
-		[763] = { --Scholomance 通灵学院 
-
-			-- Instructor Chillheart
-			[GetSpellInfo(111631)] = 7, -- Wrack Soul
-			
-			-- Lilian Voss
-			[GetSpellInfo(111585)] = 7, -- Dark Blaze
-			
-			-- Darkmaster Gandling
-			[GetSpellInfo(108686)] = 7, -- Immolate
-		},
-            
-		[877] = { --Shado-Pan Monastery 影踪禅院 
-
-			-- Sha of Violence
-			[GetSpellInfo(106872)] = 7, -- Disorienting Smash
-			
-			-- Taran Zhu <Lord of the Shado-Pan>
-			[GetSpellInfo(112932)] = 7, -- Ring of Malice
-		},
-      
-		[887] = { --Siege of Niuzao Temple 围攻砮皂寺
-
-			-- Wing Leader Ner'onok 
-			[GetSpellInfo(121447)] = 7, -- Quick-Dry Resin
-		},
-      
-		[867] = { --Temple of the Jade Serpent 青龙寺
-
-			-- Wise Mari <Waterspeaker>
-			[GetSpellInfo(106653)] = 7, -- Sha Residue
-         
-			-- Lorewalker Stonestep <The Keeper of Scrolls>
-			[GetSpellInfo(106653)] = 7, -- Agony
-         
-			-- Liu Flameheart <Priestess of the Jade Serpent>
-			[GetSpellInfo(106823)] = 7, -- Serpent Strike
-         
-			-- Sha of Doubt
-			[GetSpellInfo(106113)] = 7, --Touch of Nothingness
-		},
-      
-		[896] = { --Mogu'shan Vaults 魔古山宝库
-         
-			-- The Stone Guard
-			[GetSpellInfo(116281)] = 7, -- Cobalt Mine Blast, Magic root
-
-			--Feng the Accursed
-			[GetSpellInfo(116040)] = 7, -- Epicenter, roomwide aoe.
-			[GetSpellInfo(116784)] = 7, -- Wildfire Spark, Debuff that explodes leaving fire on the ground after 5 sec.
-			[GetSpellInfo(116374)] = 7, -- Lightning Charge, Stun debuff.
-			[GetSpellInfo(116417)] = 7, -- Arcane Resonance, aoe-people-around-you-debuff.
-			[GetSpellInfo(116942)] = 7, -- Flaming Spear, fire damage dot.
-
-			-- Gara'jal the Spiritbinder
-			[GetSpellInfo(122151)] = 7,   -- Voodoo Doll, shared damage with the tank.
-			[GetSpellInfo(116161)] = 7,   -- Crossed Over, people in the spirit world.
-
-			-- The Spirit Kings
-			[GetSpellInfo(117708)] = 7, -- Meddening Shout, The mind control debuff.
-			[GetSpellInfo(118303)] = 7, -- Fixate, the once targeted by the shadows.
-			[GetSpellInfo(118048)] = 7, -- Pillaged, the healing/Armor/damage debuff.
-			[GetSpellInfo(118135)] = 7, -- Pinned Down, Najentus spine 2.0
-
-			--Elegon
-			[GetSpellInfo(117878)] = 7, -- Overcharged, the stacking increased damage taken debuff.   
-			[GetSpellInfo(117870)] = 7, -- Touch of the Titans, the debuff everybody gets increasing damage done and healing taken.
-			[GetSpellInfo(117949)] = 7, -- Closed Circuit, Magic Healing debuff.
-
-			--Will of the Emperor
-			[GetSpellInfo(116969)] = 7, -- Stomp, Stun from the bosses.
-			[GetSpellInfo(116835)] = 7, -- Devestating Arc, Armor debuff from the boss.
-			[GetSpellInfo(116778)] = 7, -- Focused Defense, Fixate from the Emperors Courage.
-			[GetSpellInfo(117485)] = 7, -- Impending Thrust, Stacking slow from the Emperors Courage.
-			[GetSpellInfo(116525)] = 7, -- Focused Assault, Fixate from the Emperors Rage
-			[GetSpellInfo(116550)] = 7, -- Energizing Smash, Knockdown from the Emperors Strength
-		},
-      
-		[897] = { --Heart of Fear 恐惧之心 
-         
-			-- Imperial Vizier Zor'lok
-			[GetSpellInfo(122761)] = 7, -- Exhale, The person targeted for Exhale. 
-			[GetSpellInfo(123812)] = 7, -- Pheromones of Zeal, the gas in the middle of the room.
-			[GetSpellInfo(122706)] = 7, -- Noise Cancelling, The "safe zone" from the roomwide aoe.
-			[GetSpellInfo(122740)] = 7, -- Convert, The mindcontrol Debuff.
-
-			-- Blade Lord Ta'yak
-			[GetSpellInfo(123180)] = 7, -- Wind Step, Bleeding Debuff from stealth.
-			[GetSpellInfo(123474)] = 7, -- Overwhelming Assault, stacking tank swap debuff. 
-
-			-- Garalon
-			[GetSpellInfo(122774)] = 7, -- Crush, stun from the crush ability.
-			[GetSpellInfo(123426)] = 7, -- Weak Points, Increased damage done to one leg.
-			[GetSpellInfo(123428)] = 7, -- Weak Points, Increased damage to another leg.
-			[GetSpellInfo(123423)] = 7, -- Weak Points, Increased damage to another leg.
-			[GetSpellInfo(123235)] = 7, -- Weak Points, Increased damage to another leg.
-			[GetSpellInfo(122835)] = 7, -- Pheromones, The buff indicating who is carrying the pheramone.
-			[GetSpellInfo(123081)] = 7, -- Punchency, The stacking debuff causing the raid damage.
-
-			--Wind Lord Mel'jarak
-			[GetSpellInfo(122055)] = 7, -- Residue, The debuff after breaking a prsion preventing further breaking.
-			[GetSpellInfo(121885)] = 7, -- Amber Prison, The stun that somebody has to click off.
-			[GetSpellInfo(121881)] = 7, -- Amber Prison, not sure what the differance is but both were used.
-			[GetSpellInfo(122125)] = 7, -- Corrosive Resin pool, the **** on the floor your not supposed to stand in.
-			[GetSpellInfo(122064)] = 7, -- Corrosive Resin, the dot you clear by moving/jumping.
-
-			-- Amber-Shaper Un'sok 
-			[GetSpellInfo(122370)] = 7, -- Reshape Life, the transformation ala putricide.
-			[GetSpellInfo(122784)] = 7, -- Reshape Life, Both were used.
-			[GetSpellInfo(124802)] = 7, -- The transformed players increase damage taken cooldown.
-			[GetSpellInfo(122395)] = 7, -- Struggle for Control, the self stun used to interupt the channel.
-			[GetSpellInfo(122457)] = 7, -- Rough Landing, The stun from being tossed and being hit by the toss from the add in Phase 2.
-			[GetSpellInfo(121949)] = 7, -- Parasitic Growth, the dot that scales with healing taken.
-		},
-      
-		[886] = { --Terrace of Endless Spring 永春台
-         
-			--Protectors Of the Endless
-			[GetSpellInfo(117519)] = 7, -- Touch of Sha, Dot that lasts untill Kaolan is defeated.
-			[GetSpellInfo(117235)] = 7, -- Purified, haste buff gained by killing mist and being in range.
-			[GetSpellInfo(117353)] = 7, -- Overwhelming Corruption, stacking raidwide softenrage debuff.
-			[GetSpellInfo(118091)] = 7, -- Defiled Ground, Increased damage taken from Defiled ground debuff.
-			[GetSpellInfo(117436)] = 7, -- Lightning Prison, Magic stun.
-
-			--Tsulong
-			[GetSpellInfo(122768)] = 7, -- Dread Shadows, Stacking raid damage debuff (ragnaros superheated style) 
-			[GetSpellInfo(122789)] = 7, -- Sunbeam, standing in the sunbeam, used to clear dread shadows.
-			[GetSpellInfo(122858)] = 7, -- Bathed in Light, 500% increased healing done debuff.
-			[GetSpellInfo(122752)] = 7, -- Shadow Breath, increased shadow breath damage debuff.
-			[GetSpellInfo(123011)] = 7, -- Terrorize, Magical dot dealing % health.
-			[GetSpellInfo(123036)] = 7, -- Fright, 2 second fear.
-			[GetSpellInfo(122777)] = 7, -- Nightmares, 3 second fear.
-
-			--Lei Shi
-			[GetSpellInfo(123121)] = 7, -- Spray, Stacking frost damage taken debuff.
-
-			--Sha of Fear
-			[GetSpellInfo(129147)] = 7, -- Ominous Cackle, Debuff that sends players to the outer platforms.
-			[GetSpellInfo(119086)] = 7, -- Penetrating Bolt, Increased Shadow damage debuff.
-			[GetSpellInfo(119775)] = 7, -- Reaching Attack, Increased Shadow damage debuff.
-			[GetSpellInfo(119985)] = 7, -- Dread Spray, stacking magic debuff, fears at 2 stacks.
-			[GetSpellInfo(119983)] = 7, -- Dread Spray, is also used.
-			[GetSpellInfo(119414)] = 7, -- Breath of Fear, Fear+Massiv damage.
-		},
-		[529] = {--奥杜亚
-
-		},
 		[781] = {--"祖阿曼(5人)"
 			[GetSpellInfo(43150)] = 8, -- 利爪之怒
 			[GetSpellInfo(43648)] = 8, -- 电能风暴
@@ -279,16 +101,7 @@ ns.auras_instances_debuffs = {
 			[GetSpellInfo(96423)] = 10, -- 痛苦鞭笞
 			[GetSpellInfo(96342)] = 10, -- 扑杀
 		},
-		[769] = {--旋云之巅
-
-		},
-		[747] = {--托维尔失落之城
-
-		},
-		[759] = {--起源大厅
-
-		},
-
+		
 		[756] = {--"死亡矿井"
 			--[GetSpellInfo(91016)] = 7, -- 劈头斧
 			[GetSpellInfo(88352)] = 8, -- 放置炸弹
@@ -393,61 +206,284 @@ ns.auras_instances_debuffs = {
 		-- Dragon Soul
 	   [824] = {
 		  
-		  [GetSpellInfo(103687)] = 11, --Crush Armor
-		  [GetSpellInfo(103821)] = 12, --Earthen Vortex
-		  [GetSpellInfo(103785)] = 13, --Black Blood of the Earth
-		  [GetSpellInfo(103534)] = 14, --Danger (Red)
-		  [GetSpellInfo(103536)] = 15, --Warning (Yellow)
-		  -- Don't need to show Safe people
-		  [GetSpellInfo(103541)] = 16, --Safe (Blue)
+			[GetSpellInfo(103687)] = 11, --Crush Armor
+			[GetSpellInfo(103821)] = 12, --Earthen Vortex
+			[GetSpellInfo(103785)] = 13, --Black Blood of the Earth
+			[GetSpellInfo(103534)] = 14, --Danger (Red)
+			[GetSpellInfo(103536)] = 15, --Warning (Yellow)
+			-- Don't need to show Safe people
+			[GetSpellInfo(103541)] = 16, --Safe (Blue)
 
-		  --督军
-		  [GetSpellInfo(104378)] = 21, --Black Blood of Go'rath
-		  [GetSpellInfo(103434)] = 22, --干扰之影
+			--督军
+			[GetSpellInfo(104378)] = 21, --Black Blood of Go'rath
+			[GetSpellInfo(103434)] = 22, --干扰之影
 
-		  --Yor'sahj the Unsleeping
-		  [GetSpellInfo(104849)] = 31, --虚空箭
-		  [GetSpellInfo(105171)] = 32, --深度腐蚀
+			--Yor'sahj the Unsleeping
+			[GetSpellInfo(104849)] = 31, --虚空箭
+			[GetSpellInfo(105171)] = 32, --深度腐蚀
 
-		  --Hagara the Stormbinder
-		  [GetSpellInfo(105316)] = 41, --Ice Lance
-		  [GetSpellInfo(105465)] = 42, --Lightning Storm
-		  [GetSpellInfo(105369)] = 43, --Lightning Conduit
-		  [GetSpellInfo(105289)] = 44, --Shattered Ice (dispellable)
-		  [GetSpellInfo(105285)] = 45, --Target (next Ice Lance)
-		  [GetSpellInfo(104451)] = 46, --Ice Tomb
-		  [GetSpellInfo(110317)] = 49, --水壕
-		  [GetSpellInfo(109325)] = 48, --霜冻
+			--Hagara the Stormbinder
+			[GetSpellInfo(105316)] = 41, --Ice Lance
+			[GetSpellInfo(105465)] = 42, --Lightning Storm
+			[GetSpellInfo(105369)] = 43, --Lightning Conduit
+			[GetSpellInfo(105289)] = 44, --Shattered Ice (dispellable)
+			[GetSpellInfo(105285)] = 45, --Target (next Ice Lance)
+			[GetSpellInfo(104451)] = 46, --Ice Tomb
+			[GetSpellInfo(110317)] = 49, --水壕
+			[GetSpellInfo(109325)] = 48, --霜冻
 
-		  --Ultraxion
-		  [GetSpellInfo(105925)] = 55, --黯淡之光
-		  [GetSpellInfo(106108)] = 52, --Heroic Will
-		  [GetSpellInfo(105984)] = 53, --Timeloop
-		  [GetSpellInfo(105927)] = 54, --Faded Into Twilight
+			--Ultraxion
+			[GetSpellInfo(105925)] = 55, --黯淡之光
+			[GetSpellInfo(106108)] = 52, --Heroic Will
+			[GetSpellInfo(105984)] = 53, --Timeloop
+			[GetSpellInfo(105927)] = 54, --Faded Into Twilight
 
-		  --Warmaster Blackhorn			  
-		  [GetSpellInfo(107558)] = 62, --溃变 
-		  [GetSpellInfo(108046)] = 63, --震荡波
-		  [GetSpellInfo(110214)] = 64, --吞噬遮幕
-		  [GetSpellInfo(107567)] = 65, --残忍打击
-		  [GetSpellInfo(108043)] = 66, --破甲
+			--Warmaster Blackhorn			  
+			[GetSpellInfo(107558)] = 62, --溃变 
+			[GetSpellInfo(108046)] = 63, --震荡波
+			[GetSpellInfo(110214)] = 64, --吞噬遮幕
+			[GetSpellInfo(107567)] = 65, --残忍打击
+			[GetSpellInfo(108043)] = 66, --破甲
 
-		  --Spine of Deathwing
-		  [GetSpellInfo(105563)] = 71, --Grasping Tendrils
-		  [GetSpellInfo(105479)] = 72, --灼热血浆
-		  [GetSpellInfo(105490)] = 73, --灼热之握
-		  [GetSpellInfo(106200)] = 74, --血之腐蚀:大地
-		  [GetSpellInfo(106199)] = 75, --血之腐蚀:死亡
+			--Spine of Deathwing
+			[GetSpellInfo(105563)] = 71, --Grasping Tendrils
+			[GetSpellInfo(105479)] = 72, --灼热血浆
+			[GetSpellInfo(105490)] = 73, --灼热之握
+			[GetSpellInfo(106200)] = 74, --血之腐蚀:大地
+			[GetSpellInfo(106199)] = 75, --血之腐蚀:死亡
 
-		  --Madness of Deathwing
-		  [GetSpellInfo(105445)] = 81, --炽热
-		  [GetSpellInfo(105841)] = 82, --突变撕咬
-		  [GetSpellInfo(106385)] = 83, --重碾
-		  [GetSpellInfo(106730)] = 84, --破伤风
-		  [GetSpellInfo(106444)] = 85, --刺穿
-		  [GetSpellInfo(106794)] = 86, --碎屑
-		  [GetSpellInfo(108649)] = 87, --腐蚀寄生虫
-	   },	
+			--Madness of Deathwing
+			[GetSpellInfo(105445)] = 81, --炽热
+			[GetSpellInfo(105841)] = 82, --突变撕咬
+			[GetSpellInfo(106385)] = 83, --重碾
+			[GetSpellInfo(106730)] = 84, --破伤风
+			[GetSpellInfo(106444)] = 85, --刺穿
+			[GetSpellInfo(106794)] = 86, --碎屑
+			[GetSpellInfo(108649)] = 87, --腐蚀寄生虫
+		},	
+		
+		[875] = { --Gate of the Setting Sun 残阳关
+			
+			-- Raigonn 莱公
+			[GetSpellInfo(111644)] = 7, -- Screeching Swarm 111640 111643
+		},
+
+		[885] = { --Mogu'shan Palace 魔古山神殿 
+
+			-- Trial of the King 国王的试炼
+			[GetSpellInfo(119946)] = 7, -- Ravage
+         
+			-- Xin the Weaponmaster <King of the Clans> 武器大师席恩
+			[GetSpellInfo(119684)] = 7, --Ground Slam
+		},
+      
+		[871] = { --Scarlet Halls 血色大厅
+
+			-- Houndmaster Braun <PH Dressing>
+			[GetSpellInfo(114056)] = 7, -- Bloody Mess
+        
+			-- Flameweaver Koegler
+			[GetSpellInfo(113653)] = 7, -- Greater Dragon's Breath
+			[GetSpellInfo(11366)] = 6,-- Pyroblast      
+		},
+      
+		[874] = { --Scarlet Monastery 血色修道院 
+
+			-- Thalnos the Soulrender
+			[GetSpellInfo(115144)] = 7, -- Mind Rot
+			[GetSpellInfo(115297)] = 6, -- Evict Soul
+		},
+      
+		[763] = { --Scholomance 通灵学院 
+
+			-- Instructor Chillheart
+			[GetSpellInfo(111631)] = 7, -- Wrack Soul
+			
+			-- Lilian Voss
+			[GetSpellInfo(111585)] = 7, -- Dark Blaze
+			
+			-- Darkmaster Gandling
+			[GetSpellInfo(108686)] = 7, -- Immolate
+		},
+            
+		[877] = { --Shado-Pan Monastery 影踪禅院 
+
+			-- Sha of Violence
+			[GetSpellInfo(106872)] = 7, -- Disorienting Smash
+			
+			-- Taran Zhu <Lord of the Shado-Pan>
+			[GetSpellInfo(112932)] = 7, -- Ring of Malice
+		},
+      
+		[887] = { --Siege of Niuzao Temple 围攻砮皂寺
+
+			-- Wing Leader Ner'onok 
+			[GetSpellInfo(121447)] = 7, -- Quick-Dry Resin
+		},
+      
+		[867] = { --Temple of the Jade Serpent 青龙寺
+
+			-- Wise Mari <Waterspeaker>
+			[GetSpellInfo(106653)] = 7, -- Sha Residue
+         
+			-- Lorewalker Stonestep <The Keeper of Scrolls>
+			[GetSpellInfo(106653)] = 7, -- Agony
+         
+			-- Liu Flameheart <Priestess of the Jade Serpent>
+			[GetSpellInfo(106823)] = 7, -- Serpent Strike
+         
+			-- Sha of Doubt
+			[GetSpellInfo(106113)] = 7, --Touch of Nothingness
+		},
+      
+		[896] = { --Mogu'shan Vaults 魔古山宝库
+         
+			--Trash
+			[GetSpellInfo(118562)] = 9, -- Petrified
+			[GetSpellInfo(116596)] = 10, -- Smoke Bomb
+
+			-- The Stone Guard
+			[GetSpellInfo(130395)] = 11, -- Jasper Chains: Stacks
+			[GetSpellInfo(130404)] = 12, -- Jasper Chains
+			[GetSpellInfo(130774)] = 13, -- Amethyst Pool
+			[GetSpellInfo(116038)] = 14, -- Jasper Petrification: stacks
+			[GetSpellInfo(115861)] = 15, -- Cobalt Petrification: stacks
+			[GetSpellInfo(116060)] = 16, -- Amethyst Petrification: stacks
+			[GetSpellInfo(116281)] = 17, -- Cobalt Mine Blast, Magic root
+			[GetSpellInfo(125206)] = 18, -- Rend Flesh: Tank only
+			[GetSpellInfo(116008)] = 19, -- Jade Petrification: stacks
+
+			--Feng the Accursed
+			[GetSpellInfo(116040)] = 22, -- Epicenter, roomwide aoe.
+			[GetSpellInfo(116784)] = 24, -- Wildfire Spark, Debuff that explodes leaving fire on the ground after 5 sec.
+			[GetSpellInfo(116374)] = 29, -- Lightning Charge, Stun debuff.
+			[GetSpellInfo(116417)] = 27, -- Arcane Resonance, aoe-people-around-you-debuff.
+			[GetSpellInfo(116942)] = 23, -- Flaming Spear, fire damage dot.
+			[GetSpellInfo(131788)] = 21, -- Lightning Lash: Tank Only: Stacks
+			[GetSpellInfo(131790)] = 25, -- Arcane Shock: Stack : Tank Only
+			[GetSpellInfo(102464)] = 26, -- Arcane Shock: AOE
+			[GetSpellInfo(116364)] = 28, -- Arcane Velocity
+			[GetSpellInfo(131792)] = 30, -- Shadowburn: Tank only: Stacks: HEROIC ONLY
+
+			-- Gara'jal the Spiritbinder
+			[GetSpellInfo(122151)] = 41,   -- Voodoo Doll, shared damage with the tank.
+			[GetSpellInfo(117723)] = 42,   -- Frail Soul: HEROIC ONLY
+			[GetSpellInfo(116161)] = 43,   -- Crossed Over, people in the spirit world.
+
+			-- The Spirit Kings
+			[GetSpellInfo(117708)] = 51, -- Meddening Shout, The mind control debuff.
+			[GetSpellInfo(118303)] = 52, -- Fixate, the once targeted by the shadows.
+			[GetSpellInfo(118048)] = 53, -- Pillaged, the healing/Armor/damage debuff.
+			[GetSpellInfo(118135)] = 54, -- Pinned Down, Najentus spine 2.0
+			[GetSpellInfo(118047)] = 55, -- Pillage: Target
+			[GetSpellInfo(118163)] = 56, -- Robbed Blind
+
+			--Elegon
+			[GetSpellInfo(117878)] = 61, -- Overcharged, the stacking increased damage taken debuff.   
+			[GetSpellInfo(117945)] = 63, -- Arcing Energy
+			[GetSpellInfo(117949)] = 62, -- Closed Circuit, Magic Healing debuff.
+
+			--Will of the Emperor
+			[GetSpellInfo(116969)] = 76, -- Stomp, Stun from the bosses.
+			[GetSpellInfo(116835)] = 77, -- Devestating Arc, Armor debuff from the boss.
+			[GetSpellInfo(116969)] = 75, -- Focused Energy.
+			[GetSpellInfo(116778)] = 72, -- Focused Defense, Fixate from the Emperors Courage.
+			[GetSpellInfo(117485)] = 73, -- Impending Thrust, Stacking slow from the Emperors Courage.
+			[GetSpellInfo(116525)] = 71, -- Focused Assault, Fixate from the Emperors Rage
+			[GetSpellInfo(116550)] = 74, -- Energizing Smash, Knockdown from the Emperors Strength
+		},
+      
+		[897] = { --Heart of Fear 恐惧之心 
+         
+			-- Imperial Vizier Zor'lok
+			[GetSpellInfo(122760)] = 11, -- Exhale, The person targeted for Exhale. 
+			[GetSpellInfo(123812)] = 12, -- Pheromones of Zeal, the gas in the middle of the room.
+			[GetSpellInfo(122706)] = 14, -- Noise Cancelling, The "safe zone" from the roomwide aoe.
+			[GetSpellInfo(122740)] = 13, -- Convert, The mindcontrol Debuff.
+
+			-- Blade Lord Ta'yak
+			[GetSpellInfo(123180)] = 21, -- Wind Step, Bleeding Debuff from stealth.
+			[GetSpellInfo(123474)] = 23, -- Overwhelming Assault, stacking tank swap debuff. 
+			[GetSpellInfo(122949)] = 22, -- Unseen Strike
+			[GetSpellInfo(124783)] = 24, -- Storm Unleashed
+			[GetSpellInfo(123600)] = 25, -- Storm Unleashed?
+
+			-- Garalon
+			[GetSpellInfo(122774)] = 31, -- Crush, stun from the crush ability.
+			[GetSpellInfo(123120)] = 34, --- Pheromone Trail
+			[GetSpellInfo(122835)] = 32, -- Pheromones, The buff indicating who is carrying the pheramone.
+			[GetSpellInfo(123081)] = 33, -- Punchency, The stacking debuff causing the raid damage.
+
+			--Wind Lord Mel'jarak
+			[GetSpellInfo(122055)] = 42, -- Residue, The debuff after breaking a prsion preventing further breaking.
+			[GetSpellInfo(121881)] = 41, -- Amber Prison, not sure what the differance is but both were used.
+			[GetSpellInfo(122064)] = 43, -- Corrosive Resin, the dot you clear by moving/jumping.
+
+			-- Amber-Shaper Un'sok 
+			[GetSpellInfo(122064)] = 53, -- Corrosive Resin
+			[GetSpellInfo(122784)] = 52, -- Reshape Life, Both were used.
+			[GetSpellInfo(122504)] = 54, --Burning Amber.
+			[GetSpellInfo(121949)] = 51, -- Parasitic Growth, the dot that scales with healing taken.
+		
+			--Grand Empress Shek'zeer
+			[GetSpellInfo(125390)] = 61, --Fixate.
+			[GetSpellInfo(123707)] = 62, --Eyes of the Empress.
+			[GetSpellInfo(123788)] = 63, --Cry of Terror.
+			[GetSpellInfo(124097)] = 64, --Sticky Resin.
+			[GetSpellInfo(125824)] = 65, --Trapped!.
+			[GetSpellInfo(124777)] = 66, --Poison Bomb.
+			[GetSpellInfo(124821)] = 67, --Poison-Drenched Armor.
+			[GetSpellInfo(124827)] = 68, --Poison Fumes.
+			[GetSpellInfo(124849)] = 69, --Consuming Terror.
+			[GetSpellInfo(124863)] = 70, --Visions of Demise.
+			[GetSpellInfo(124862)] = 71, --Visions of Demise: Target.
+			[GetSpellInfo(123845)] = 72, --Heart of Fear: Chosen.
+			[GetSpellInfo(123846)] = 73, --Heart of Fear: Lure.
+		},
+      
+		[886] = { --Terrace of Endless Spring 永春台
+			
+			--Trash
+			[GetSpellInfo(125760)] = 10,
+
+			--Protectors Of the Endless
+			[GetSpellInfo(117519)] = 11, -- Touch of Sha, Dot that lasts untill Kaolan is defeated.
+			[GetSpellInfo(111850)] = 12, -- Lightning Prison: Targeted
+			[GetSpellInfo(117986)] = 15, -- Defiled Ground: Stacks
+			[GetSpellInfo(118191)] = 14, -- Corrupted Essence
+			[GetSpellInfo(117436)] = 13, -- Lightning Prison, Magic stun.
+
+			--Tsulong
+			[GetSpellInfo(122768)] = 21, -- Dread Shadows, Stacking raid damage debuff (ragnaros superheated style) 
+			[GetSpellInfo(122789)] = 24, -- Sunbeam, standing in the sunbeam, used to clear dread shadows.
+			[GetSpellInfo(122858)] = 28, -- Bathed in Light, 500% increased healing done debuff.
+			[GetSpellInfo(122752)] = 23, -- Shadow Breath, increased shadow breath damage debuff.
+			[GetSpellInfo(123011)] = 26, -- Terrorize: 10%, Magical dot dealing % health.
+			[GetSpellInfo(123036)] = 27, -- Fright, 2 second fear.
+			[GetSpellInfo(122777)] = 22, -- Nightmares, 3 second fear.
+			[GetSpellInfo(123012)] = 25, -- Terrorize: 5% 
+			
+			--Lei Shi
+			[GetSpellInfo(123121)] = 31, -- Spray, Stacking frost damage taken debuff.
+			[GetSpellInfo(123705)] = 32, -- Scary Fog
+			
+			--Sha of Fear
+			[GetSpellInfo(129147)] = 42, -- Ominous Cackle, Debuff that sends players to the outer platforms.
+			[GetSpellInfo(119086)] = 49, -- Penetrating Bolt, Increased Shadow damage debuff.
+			[GetSpellInfo(119775)] = 50, -- Reaching Attack, Increased Shadow damage debuff.
+			[GetSpellInfo(120669)] = 44, -- Naked and Afraid.
+			[GetSpellInfo(119983)] = 43, -- Dread Spray, is also used.
+			[GetSpellInfo(119414)] = 41, -- Breath of Fear, Fear+Massiv damage.
+			[GetSpellInfo(75683)] = 45, -- Waterspout
+			[GetSpellInfo(120629)] = 46, -- Huddle in Terror
+			[GetSpellInfo(120394)] = 47, --Eternal Darkness
+			[GetSpellInfo(129189)] = 48, --Sha Globe
+		},
+			--Sha of Anger
+			[GetSpellInfo(119626)] = 11, --Aggressive Behavior
+			[GetSpellInfo(119488)] = 12, --Unleashed Wrath
+			[GetSpellInfo(119610)] = 13, --Bitter Thoughts
+			[GetSpellInfo(119601)] = 14, --Bitter Thoughts
 	},
 	second = {
 	

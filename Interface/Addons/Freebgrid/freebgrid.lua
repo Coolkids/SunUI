@@ -280,7 +280,7 @@ function ns:IsHealer()
 	local _, class = UnitClass("player")
 	local spec = self:GetTalentSpec()
 
-	if ((class == "SHAMAN" or class == "DRUID") and spec == 3) 
+	if (class == "SHAMAN" and spec == 3) or (class == "DRUID" and spec == 4) or (class == "MONK" and spec == 2)
 	or (class == "PALADIN" and spec == 1) or (class == "PRIEST" and (spec == 1 or spec == 2)) then
 		return true
 	end
@@ -296,19 +296,23 @@ end
 function ns:GetDispelClass()
 	local _, class = UnitClass("player")
 	local dispelClass = {				
-		["PRIEST"] 	= { Disease = true, Magic = true},
+		["PRIEST"] 	= { Magic = true},
 		["SHAMAN"] 	= { Curse = true},
-		["PALADIN"] = { Poison = true, Disease = true},
+		["PALADIN"]	= { Poison = true, Disease = true},
 		["MAGE"] 	= { Curse = true},
 		["DRUID"] 	= { Curse = true, Poison = true},
+		["MONK"]	= { Poison = true, Disease = true},
 	}
-	if class == "SHAMAN" and select(5, GetTalentInfo(3, 12)) == 1 then
+	if class == "SHAMAN" and GetSpecialization() == 3 then
 		dispelClass[class].Magic = true	
-	elseif class == "PALADIN" and select(5, GetTalentInfo(1, 14)) == 1 then
+	elseif class == "PALADIN" and GetSpecialization() == 1 then
 		dispelClass[class].Magic = true
-		
-	elseif class == "DRUID" and select(5, GetTalentInfo(3, 17)) == 1 then
-		dispelClass[class].Magic = true			
+	elseif class == "MONK" and GetSpecialization() == 2 then
+		dispelClass[class].Magic = true	
+	elseif class == "DRUID" and GetSpecialization() == 4 then
+		dispelClass[class].Magic = true	
+	elseif class == "PRIEST" and ((GetSpecialization() == 1) or (GetSpecialization() == 2)) then
+		dispelClass[class].Disease = true 	
 	end
 	return dispelClass[class] or {}
 end
@@ -319,12 +323,11 @@ function ns:UpdateBlizzardRaidFrame()
 	
 	if GetDisplayedAllyFrames() == "raid" then	
 		if ns.db.hideblzraid then
-			_G["CompactRaidFrameManager"]:UnregisterAllEvents()
-			_G["CompactRaidFrameManager"].Show = function() end
-			_G["CompactRaidFrameManager"]:Hide()
-			_G["CompactRaidFrameManager"]:UnregisterAllEvents()
-			_G["CompactRaidFrameManager"].Show = function() end
-			_G["CompactRaidFrameManager"]:Hide()	
+			CompactRaidFrameManager:Kill()
+			CompactRaidFrameContainer:Kill()
+			CompactUnitFrame_UpateVisible = function() end
+			CompactUnitFrame_UpdateAll = function() end
+			CompactUnitFrameProfiles_ApplyProfile = function() end
 		else
 			if not _G["CompactRaidFrameManager"]:IsEventRegistered("PARTY_MEMBERS_CHANGED") then		
 				_G["CompactRaidFrameManager"]:RegisterEvent("RAID_ROSTER_UPDATE")

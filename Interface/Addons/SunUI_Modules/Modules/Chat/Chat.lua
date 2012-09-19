@@ -3,7 +3,9 @@ if IsAddOnLoaded("Prat-3.0") or IsAddOnLoaded("Chatter") then
 	return
 end
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Chat", "AceEvent-3.0")
- local _G = _G
+local _G = _G
+local HiddenFrame = CreateFrame("Frame")
+HiddenFrame:Hide()
 function Module:OnEnable()
 -- 聊天设置	
 local fontsize = 10                          --other variables
@@ -54,9 +56,10 @@ local TimeStampsCopy = C["MiniDB"]["TimeStamps"]					-- 时间戳
 	---------------- > 渐隐透明度
 	CHAT_FRAME_TAB_NORMAL_NOMOUSE_ALPHA = 0
 	CHAT_FRAME_TAB_SELECTED_NOMOUSE_ALPHA = 0
-
+	
 	local function kill(f)
 		if f.UnregisterAllEvents then
+			f:SetParent(HiddenFrame)
 			f:UnregisterAllEvents()
 		end
 		f:Hide()

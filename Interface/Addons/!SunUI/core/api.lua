@@ -10,15 +10,17 @@ S.mult = mult
 function S.Scale(x)
 	return scale(x)
 end
-
+local HiddenFrame = CreateFrame("Frame")
+HiddenFrame:Hide()
 local function Kill(object)
-	if object.IsProtected then 
+	--[[ if object.IsProtected then 
 		if object:IsProtected() then
 			error("Attempted to kill a protected object: <"..object:GetName()..">")
 		end
-	end
+	end ]]
 	if object.UnregisterAllEvents then
 		object:UnregisterAllEvents()
+		object:SetParent(HiddenFrame)
 	end
 	object.Show = function() return end
 	object:Hide()
