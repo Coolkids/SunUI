@@ -96,7 +96,7 @@ local Indicators_class_default = {
 				mine	= true,
 				lack	= false,
 				count	= true,
-				etime	= true,
+				etime	= false,
 			},
 		},
         ["Cen"] = {
@@ -179,7 +179,7 @@ local Indicators_class_default = {
 				isbuff	= true,
 				mine	= true,
 				lack	= false,
-				etime	= true,
+				etime	= false,
 			},
 		},
         ["TR"] = {
@@ -213,7 +213,7 @@ local Indicators_class_default = {
 				isbuff	= true,
 				mine	= true,
 				lack	= false,
-				etime	= true,
+				etime	= false,
 			},
 		},
         ["Cen"] = {
@@ -244,7 +244,7 @@ local Indicators_class_default = {
 				isbuff	= true,
 				mine	= false,
 				lack	= false,
-				etime	= true,
+				etime	= false,
 			},
 		},
         ["Cen"] = {},
@@ -367,15 +367,12 @@ local Indicators_class_default = {
 				id 		= {1126, 20217, 90363, 115921},	--5%属性
 				isbuff	= true,				
 				mine	= true,				
-				lack	= true,				
-				etime	= false,			
-				count	= false,			
+				lack	= true,						
 				color   = {r = 1, g = 0.0, b = 0.0},
 			},
 			["2"] = {
 				id 		= {116781, 11459, 79038},		--5%暴击
 				isbuff	= true,
-				mine	= false,
 				lack	= true,
 				color   = {r = .8, g = 1, b = 0.0},
 			},
@@ -384,8 +381,6 @@ local Indicators_class_default = {
 			["1"] = {
 				id 		= {132120},		--"氤氲之雾"
 				isbuff	= true,
-				mine	= false,
-				lack	= false,
 			},
 		},
 	["RC"] = {},
