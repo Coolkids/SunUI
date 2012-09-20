@@ -7,7 +7,7 @@ local DEFAULT_HEIGHT = 500
 local AC = LibStub("AceConfig-3.0")
 local ACD = LibStub("AceConfigDialog-3.0")
 local Version = 20120323
-local beta = "0920"
+local beta = "0921"
 local aglin = false
 function SunUIConfig:LoadDefaults()
 	local _, _, _, G = unpack(SunUI)
@@ -1087,6 +1087,18 @@ function SunUIConfig.GenerateOptionsInternal()
 								name = "ChatBarFade",
 								desc = "频道渐隐",
 								order = 22,
+							},
+							Combat = {
+								type = "toggle",
+								name = "战斗提醒",
+								desc = "进出战斗提醒",
+								order = 23,
+							},
+							Aurora = {
+								type = "toggle",
+								name = "Aurora主题",
+								desc = "透明模式",
+								order = 24,
 							},
 						}
 					},
