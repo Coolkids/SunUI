@@ -695,7 +695,7 @@ local function unitFrameStyleSetup(button)
 	frame:SetAllPoints(button)
 	frame:SetFrameStrata("HIGH")
 	frame.arrow = frame:CreateTexture(nil, "OVERLAY")
-	frame.arrow:SetTexture([[Interface\Addons\Freebgrid\Media\Arrow]])
+	frame.arrow:SetTexture([[Interface\Addons\SunUI_Freebgrid\Media\Arrow]])
 	frame.arrow:SetPoint("TOPRIGHT", frame, "TOPRIGHT")
 	frame.arrow:SetSize(16, 16)
 	frame:Hide()
@@ -713,7 +713,7 @@ local function unitFrameStyleSetup(button)
 	button.ThreatBorder = threat
     local hl = button.HealthBar:CreateTexture(nil, "OVERLAY")
     hl:SetAllPoints(button)
-    hl:SetTexture([=[Interface\AddOns\Freebgrid\media\white.tga]=])
+    hl:SetTexture([=[Interface\AddOns\SunUI_Freebgrid\media\white.tga]=])
     hl:SetVertexColor(1, 1, 1, .1)
     hl:SetBlendMode("ADD")
     hl:Hide()
@@ -721,7 +721,7 @@ local function unitFrameStyleSetup(button)
 
     local Gcd = CreateFrame("StatusBar", nil, button)
     Gcd:SetAllPoints(button)
-    Gcd:SetStatusBarTexture([=[Interface\AddOns\Freebgrid\media\white.tga]=])
+    Gcd:SetStatusBarTexture([=[Interface\AddOns\SunUI_Freebgrid\media\white.tga]=])
     Gcd:SetStatusBarColor(.4, .5, .4, .6)
 	Gcd:SetMinMaxValues(0, 1)
     Gcd:SetValue(0)
@@ -1113,11 +1113,11 @@ function ns:UpdateRoleIcon(self)
 		local role = UnitGroupRolesAssigned(unit)
 		if role ~= 'NONE' then
 			if role == 'TANK' then
-				self.RoleIcon:SetTexture([[Interface\AddOns\Freebgrid\media\tank.tga]])
+				self.RoleIcon:SetTexture([[Interface\AddOns\SunUI_Freebgrid\media\tank.tga]])
 			elseif role == 'HEALER' then
-				self.RoleIcon:SetTexture([[Interface\AddOns\Freebgrid\media\healer.tga]])
+				self.RoleIcon:SetTexture([[Interface\AddOns\SunUI_Freebgrid\media\healer.tga]])
 			elseif role == 'DAMAGER' then
-				self.RoleIcon:SetTexture([[Interface\AddOns\Freebgrid\media\dps.tga]])
+				self.RoleIcon:SetTexture([[Interface\AddOns\SunUI_Freebgrid\media\dps.tga]])
 			end
 			self.RoleIcon:SetTexCoord(0, 1, 0, 1)
 			self.RoleIcon:Show()
@@ -2329,8 +2329,8 @@ local OnEvent = function(self, event, ...)
 		local f = CreateFrame('Frame', nil, InterfaceOptionsFrame)
 		f:SetScript('OnShow', function(self)
 			self:SetScript('OnShow', nil)
-			if not IsAddOnLoaded('Freebgrid_Config') then
-				LoadAddOn('Freebgrid_Config')
+			if not IsAddOnLoaded('SunUI_Freebgrid_Config') then
+				LoadAddOn('SunUI_Freebgrid_Config')
 			end
 		end)
 		self:UnregisterEvent("PLAYER_LOGIN")

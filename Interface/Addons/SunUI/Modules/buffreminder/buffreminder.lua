@@ -2,6 +2,7 @@
 local S, C, L, DB, _ = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ClassReminder", "AceEvent-3.0")
 local _G = _G
+
 function Module:OnInitialize()
 	if not C["ReminderDB"].ShowClassBuff then return end
 	local ReminderBuffs = {

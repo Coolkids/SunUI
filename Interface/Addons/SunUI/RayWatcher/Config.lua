@@ -1001,6 +1001,8 @@ ns.watchers ={
 				{ spellID = 109949, unitId = "player", caster = "player", filter = "BUFF" },
 				--5.0免费的心爆
 				{ spellID = 124430, unitId = "player", caster = "player", filter = "BUFF" },
+				--熊的手动档
+				{ spellID = 62606, unitId = "player", caster = "player", filter = "BUFF" },
 		},
 				{
 			name = "玩家饰品附魔触发buff",

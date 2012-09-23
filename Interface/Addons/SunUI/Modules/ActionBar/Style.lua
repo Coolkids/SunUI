@@ -32,7 +32,6 @@ local function UpdateHotkey(button, actionButtonType)
 		hotkey:SetText(text)
 	end
 end
-
 local function Style(button, totem, flyout)
 	local name = button:GetName()
 	if name:match("MultiCast") then return end

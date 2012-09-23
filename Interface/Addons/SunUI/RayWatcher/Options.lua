@@ -89,13 +89,13 @@ function RayWatcherConfig.GenerateOptionsInternal()
 		for i in pairs(ns.modules[current].BUFF or {}) do
 			if i ~= "unitIDs" and ns.modules[current].BUFF[i] then
 				if GetSpellInfo(i) == nil then return end
-				buffs[i] = GetSpellInfo(i)
+				buffs[i] = GetSpellInfo(i).."("..i..")"
 			end
 		end
 		for i in pairs(ns.modules[current].DEBUFF or {}) do
 			if i ~= "unitIDs" and ns.modules[current].DEBUFF[i] then
 				if GetSpellInfo(i) == nil then return end
-				debuffs[i] = GetSpellInfo(i)
+				debuffs[i] = GetSpellInfo(i).."("..i..")"
 			end
 		end
 		for i in pairs(ns.modules[current].CD or {}) do
