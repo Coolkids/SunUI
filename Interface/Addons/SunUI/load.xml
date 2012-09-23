@@ -1,0 +1,28 @@
+﻿
+
+
+
+
+
+
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Include file="Libs\load.xml"/>
+	<Script file = "core\Init.lua"/>
+	<Include file="locale\load.xml"/>
+	<Include file="config\Load_Config.xml"/>
+	<Script file = "core\uiscale.lua"/>
+	<Include file="core\load.xml"/>
+	<Include file="developer\load.xml"/>
+	<Script file = "core\AddonManager.lua"/>
+	<!-- module -->
+	<Include file="Modules\load.xml"/>
+	<!-- script -->
+	<Include file="Script\load.xml"/>
+	<!-- raywatch -->
+	<Include file="RayWatcher\load.xml"/>
+	<!-- freebgrid -->
+	<Include file="Freebgrid\load.xml"/>
+	<Include file="Freebgrid\config.xml"/>
+</Ui>
+
+<!--	<Script file="Load.lua"/>  -->
