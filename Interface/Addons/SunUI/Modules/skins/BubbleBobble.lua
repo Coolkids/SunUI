@@ -14,7 +14,7 @@ local settings = {
 		color = {0, 0, 0},
 	},
 	tail = {
-		bgTexture = "Interface\\AddOns\\!SunUI\\Media\\BubbleBobble\\tailbg",
+		bgTexture = "Interface\\AddOns\\SunUI\\Media\\BubbleBobble\\tailbg",
 		bdTexture = "",
 	},
 	showSender = false,
