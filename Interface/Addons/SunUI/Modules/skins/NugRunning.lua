@@ -216,7 +216,7 @@ ConstructTimerBar = function(width, height)
     m:SetAlpha(1)
     
     local texture = m:CreateTexture(nil, "OVERLAY")
-    texture:SetTexture("Interface\\AddOns\\SunUI_Modules\\Modules\\skins\\mark")
+    texture:SetTexture("Interface\\AddOns\\SunUI\\Modules\\skins\\mark")
     texture:SetVertexColor(0,0,0,1)
     texture:SetAllPoints(m)
     m.texture = texture

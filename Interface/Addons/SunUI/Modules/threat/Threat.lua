@@ -1,5 +1,7 @@
 ﻿local S, C, L, DB, _ = unpack(select(2, ...))
- 
+ if IsAddOnLoaded("Omen3") then
+	return
+end
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Threat")
 
 --[[local aggroColors = {

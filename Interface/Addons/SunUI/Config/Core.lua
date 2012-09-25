@@ -7,7 +7,6 @@ local DEFAULT_HEIGHT = 500
 local AC = LibStub("AceConfig-3.0")
 local ACD = LibStub("AceConfigDialog-3.0")
 local Version = 20120323
-local beta = "0924"
 local aglin = false
 function SunUIConfig:LoadDefaults()
 	local _, _, _, G = unpack(SunUI)
@@ -95,7 +94,7 @@ function SunUIConfig.GenerateOptionsInternal()
 			Header = {
 				order = 1,
 				type = "header",
-				name = beta,
+				name = "版本号:"..GetAddOnMetadata("SunUI", "Version"),
 				width = "full",		
 			},
 			Unlock = {
@@ -290,7 +289,7 @@ function SunUIConfig.GenerateOptionsInternal()
 								type = "toggle", order = 4,
 								name = "经验条垂直模式",		
 							},
-							EnableBarFader = {
+							ExpbarFadeOut = {
 								type = "toggle", order = 5,
 								name = "经验条渐隐",		
 							},

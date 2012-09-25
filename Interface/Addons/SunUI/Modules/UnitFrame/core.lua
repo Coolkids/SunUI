@@ -1452,10 +1452,9 @@ function Module:OnEnable()
 			self:SetHeight(%d)
 		end
 	  ]]
-	  local visible = 'custom [group:party,nogroup:raid][@raid6,noexists,group:raid] show;hide'
 	  if U["showparty"] then
 		self:SetActiveStyle("SunUIParty") 
-		local party = self:SpawnHeader("SunUIParty",nil,visible,
+		local party = self:SpawnHeader(nil,nil,"custom [@raid6,noexists,group:raid] hide; show",
 		'oUF-initialConfigFunction', init:format(w,h,s,ph,ph),
 		'showParty',true,
 		'template','oUF_SunUIPartyPet',

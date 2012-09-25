@@ -107,7 +107,7 @@ local OnClick = function(self)
 	if(IsModifiedClick()) then
 		HandleModifiedItemClick(GetLootSlotLink(self:GetID()))
 	else
-		StaticPopup_Hide"CONFIRM_LOOT_DISTRIBUTION"
+		--StaticPopup_Hide"CONFIRM_LOOT_DISTRIBUTION"
 		ss = self:GetID()
 		sq = self.quality
 		sn = self.name:GetText()
@@ -372,6 +372,6 @@ addon:Hide()
 LootFrame:UnregisterAllEvents()
 table.insert(UISpecialFrames, "m_Loot")
 
-StaticPopupDialogs["CONFIRM_LOOT_DISTRIBUTION"].OnAccept = function(self, data)
-	GiveMasterLoot(ss, data)
-end
+--[[ StaticPopupDialogs["CONFIRM_LOOT_DISTRIBUTION"].OnAccept = function(self, data)
+	GiveMasterLoot(self:GetID(), data)
+end ]]
