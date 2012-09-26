@@ -1,7 +1,7 @@
 ## Interface: 50001
 ## Title: |cff00d2ffSun|r|cffffffffUI|r
 ## Notes: 整合插件
-## Version: 2012.9.26
+## Version: 2012.9.27
 ## Author:Neavo, dtzy, Ray, 楼上的你妈妈叫你吃饭, other Authors, Coolkid
 ## SavedVariables: SunUIConfig, RayWatcherDB, FreebgridDB, stAddonProfiles, stLockedAddons
 ## SavedVariablesPerCharacter: CoreVersion

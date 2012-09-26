@@ -1,5 +1,5 @@
 local S, _, _, DB = unpack(select(2, ...))
-if IsAddOnLoaded("Mapster") then
+if IsAddOnLoaded("Mapster") or IsAddOnLoaded("Carbonite") then
 	return
 end
 local map_scale = 0.9								-- Mini World Map scale

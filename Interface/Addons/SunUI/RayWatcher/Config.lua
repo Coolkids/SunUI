@@ -49,7 +49,7 @@ ns.watchers ={
 		{
 			name = "目标debuff",
 			direction = "RIGHT",
-			setpoint ={"TOP", UIParent, "BOTTOM", 101, 235},
+			setpoint ={"TOP", UIParent, "BOTTOM", 101, 275},
 			size = 28,
 				-- 挫志咆哮(熊)
 				{ spellID =    99, unitId = "target", caster = "player", filter = "DEBUFF" },
@@ -95,7 +95,7 @@ ns.watchers ={
 		{
 			name = "目标框上方",
 			direction = "RIGHT",
-			setpoint ={"TOP", UIParent, "BOTTOM", 101, 235},
+			setpoint ={"TOP", UIParent, "BOTTOM", 101, 275},
 			size = 28,
 				-- 毒蛇钉刺
 				{ spellID =  118253 ,unitId = "target", caster = "player", filter = "DEBUFF" },
@@ -167,7 +167,7 @@ ns.watchers ={
 		{
 			name = "目标框上方",
 			direction = "RIGHT",
-			setpoint ={"TOP", UIParent, "BOTTOM", 101, 235},
+			setpoint ={"TOP", UIParent, "BOTTOM", 101, 275},
 			size = 28,
 			
 				-- 点燃
@@ -273,7 +273,7 @@ ns.watchers ={
 		{
 			name = "目标Debuff",
 			direction = "RIGHT",
-			setpoint ={"TOP", UIParent, "BOTTOM", 101, 235},
+			setpoint ={"TOP", UIParent, "BOTTOM", 101, 275},
 			size = 28,
 			
 			-- Charge Stun / Sturmangriffsbetäubung
@@ -326,7 +326,7 @@ ns.watchers ={
 		{
 			name = "目标debuff",
 			direction = "RIGHT",
-			setpoint ={"TOP", UIParent, "BOTTOM", 101, 235},
+			setpoint ={"TOP", UIParent, "BOTTOM", 101, 275},
 			size = 28,
 				-- 大地震击
 				{ spellID =  8042, unitId = "target", caster = "player", filter = "DEBUFF" },
@@ -388,7 +388,7 @@ ns.watchers ={
 		{
 			name = "目标debuff",
 			direction = "RIGHT",
-			setpoint ={"TOP", UIParent, "BOTTOM", 101, 235},
+			setpoint ={"TOP", UIParent, "BOTTOM", 101, 275},
 			size = 28,
 				-- 制裁之锤
 				{ spellID =   853, unitId = "target", caster = "player", filter = "DEBUFF" },
@@ -432,7 +432,7 @@ ns.watchers ={
 		{
 			name = "目标框體上方",
 			direction = "RIGHT",
-			setpoint ={"TOP", UIParent, "BOTTOM", 101, 235},
+			setpoint ={"TOP", UIParent, "BOTTOM", 101, 275},
 			size = 28,
 				-- 虚弱灵魂
 				{ spellID =  6788, unitId = "target", caster = "player", filter = "DEBUFF" },
@@ -504,7 +504,7 @@ ns.watchers ={
 		},
 		{
 			name = "目标debuff",
-			setpoint ={"TOP", UIParent, "BOTTOM", 101, 235},
+			setpoint ={"TOP", UIParent, "BOTTOM", 101, 275},
 			direction = "RIGHT",
 			mode = "ICON",
 			size = 28,
@@ -627,7 +627,7 @@ ns.watchers ={
 		{
 			name = "目标debuff",
 			direction = "RIGHT",
-			setpoint ={"TOP", UIParent, "BOTTOM", 101, 235},
+			setpoint ={"TOP", UIParent, "BOTTOM", 101, 275},
 			size = 28,
 				-- 血之疫病
 				{ spellID = 55078, unitId = "target", caster = "player", filter = "DEBUFF" },

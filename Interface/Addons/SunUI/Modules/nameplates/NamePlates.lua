@@ -4,7 +4,6 @@ if IsAddOnLoaded("TidyPlates") or IsAddOnLoaded("Aloft") or IsAddOnLoaded("dName
 end
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("NamePlates")
 local   cfg={
-	combat_toggle = false, 			-- If set to true nameplates will be automatically toggled on when you enter the combat
 	TotemIcon = true, 				-- Toggle totem icons
 	TotemSize = 20,				-- Totem icon size
 }
@@ -647,20 +646,24 @@ local function HookFrames(...)
 		end
 	end
 end
-
-if cfg.combat_toggle then
-	local h = CreateFrame("Frame", nil, UIParent)
-	h:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
-	h:RegisterEvent("PLAYER_REGEN_ENABLED")
-	function h:PLAYER_REGEN_ENABLED()
-		SetCVar("nameplateShowEnemies", 0)
-	end
-	h:RegisterEvent("PLAYER_REGEN_DISABLED")
-	function h.PLAYER_REGEN_DISABLED()
-		SetCVar("nameplateShowEnemies", 1)
+function NamePlates:COMBAT_LOG_EVENT_UNFILTERED(event, ...)
+	if event == "SPELL_AURA_REMOVED" or event == "UNIT_DIED" then
+		local _, sourceGUID, _, _, _, destGUID, _, _, _, spellID = ...
+		
+		if sourceGUID == UnitGUID("player") then
+			ForEachPlate(MatchGUID, destGUID, spellID)
+		end
 	end
 end
+function NamePlates:PLAYER_REGEN_ENABLED()
+	SetCVar("nameplateShowEnemies", 0)
+end
 
+function NamePlates:PLAYER_REGEN_DISABLED()
+	SetCVar("nameplateShowEnemies", 1)
+end
+NamePlates:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
+NamePlates:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 function Module:OnInitialize()
 	C = C["NameplateDB"]
 end
@@ -684,25 +687,6 @@ function Module:OnEnable()
 		ForEachPlate(CheckBlacklist)
 		ForEachPlate(CheckUnit_Guid)
 	end)
-	function NamePlates:COMBAT_LOG_EVENT_UNFILTERED(_, event, ...)
-		if event == "SPELL_AURA_REMOVED" then
-			local _, sourceGUID, _, _, _, destGUID, _, _, _, spellID = ...
-			
-			if sourceGUID == UnitGUID("player") then
-				ForEachPlate(MatchGUID, destGUID, spellID)
-			end
-		end
-	end
-	function NamePlates:PLAYER_REGEN_ENABLED()
-		SetCVar("nameplateShowEnemies", 0)
-	end
-
-	function NamePlates:PLAYER_REGEN_DISABLED()
-		SetCVar("nameplateShowEnemies", 1)
-	end
-
-	NamePlates:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
-	NamePlates:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	if C["Combat"] then
 		NamePlates:RegisterEvent("PLAYER_REGEN_DISABLED")
 	end

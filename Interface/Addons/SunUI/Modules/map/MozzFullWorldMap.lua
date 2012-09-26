@@ -10,7 +10,7 @@ SEE ReadMe.txt for latest Patch Notes for (Fan's Update) versions
 欢迎转包, 请不要删除此段信息
 --]]--------------------------------------------------------------------------------------------
 local S, _, _, DB = unpack(select(2, ...))
-if IsAddOnLoaded("MozzFullWorldMap") then
+if IsAddOnLoaded("MozzFullWorldMap") or IsAddOnLoaded("Mapster") or IsAddOnLoaded("Carbonite") then
 	return
 end
 local MozzFullWorldMap

@@ -62,25 +62,26 @@ MyButton:Scaffold("Default")
 
 function MyButton:OnCreate()
 	self:SetNormalTexture(nil)
-	self:SetSize(32, 32)
+	self:Size(32, 32)
 	
 	self.Icon:SetAllPoints()
-	self.Icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+	self.Icon:SetTexCoord(0.1, 0.92, 0.1, 0.92)
 	
 	self.Count:SetPoint("BOTTOMRIGHT", -1, 3)
-	self.Count:SetFont(DB.Font, 10, "THINOUTLINE")
+	self.Count:SetFont(DB.Font, 12, "THINOUTLINE")
 	
 	self.Border = CreateFrame("Frame", nil, self)
 	self.Border:SetAllPoints(self.Icon)
-	self.Border:SetBackdrop({edgeFile = DB.Solid, edgeSize = S.mult})
-	self.Border:SetBackdropBorderColor(0, 0, 0, 0)	
+	--self.Border:SetBackdrop({edgeFile = DB.Solid, edgeSize = S.mult+0.2})
+	--self.Border:SetBackdropBorderColor(0, 0, 0, 0)
+	self.Border:CreateBorder()	
 	
-	self.BG = CreateFrame("Frame", nil, self)
-	self.BG:SetPoint("TOPLEFT", self.Icon, 0, 0)
-	self.BG:SetPoint("BOTTOMRIGHT", self.Icon, 0, 0)
-	self.BG:SetBackdrop({bgFile = DB.Solid, insets = { left = S.mult, right = S.mult, top = S.mult, bottom = S.mult }})
-	self.BG:SetBackdropColor(0.2, 0.2, 0.2, 0.5)
-	self.BG:SetFrameLevel(0)
+	-- self.BG = CreateFrame("Frame", nil, self)
+	-- self.BG:SetPoint("TOPLEFT", self.Icon, 0, 0)
+	-- self.BG:SetPoint("BOTTOMRIGHT", self.Icon, 0, 0)
+	-- self.BG:SetBackdrop({bgFile = DB.Solid, insets = { left = S.mult, right = S.mult, top = S.mult, bottom = S.mult }})
+	-- self.BG:SetBackdropColor(0.2, 0.2, 0.2, 0.5)
+	-- self.BG:SetFrameLevel(0)
 
 	_G[self:GetName().."IconQuestTexture"]:SetSize(0.01, 0.01)
 end
@@ -159,12 +160,12 @@ function MyContainer:OnCreate(name, settings)
 	-- 信息条插件:金币
 	local tagDisplay = self:SpawnPlugin("TagDisplay", "[money]", infoFrame)
 	tagDisplay:SetFontObject("NumberFontNormal")
-	tagDisplay:SetFont(DB.Font, 11, "THINOUTLINE")
+	--tagDisplay:SetFont(DB.Font, 11, "THINOUTLINE")
 	tagDisplay:SetPoint("RIGHT", infoFrame, "RIGHT", -10, 0)	
 	-- 信息条插件:搜索栏
 	local searchText = infoFrame:CreateFontString(nil, "OVERLAY")
 	searchText:SetPoint("LEFT", infoFrame, "LEFT", 0, 1)
-	searchText:SetFont(DB.Font, 11, "THINOUTLINE")
+	searchText:SetFontObject(GameFontNormal)
 	searchText:SetText("搜索")	
 	local search = self:SpawnPlugin("SearchBar", infoFrame)
 	search.highlightFunction = highlightFunction
@@ -196,7 +197,7 @@ function MyContainer:OnCreate(name, settings)
 	end)
 	BagToggle.Text = BagToggle:CreateFontString(nil, "OVERLAY")
 	BagToggle.Text:SetPoint("CENTER")
-	BagToggle.Text:SetFont(DB.Font, 11, "THINOUTLINE")
+	BagToggle.Text:SetFontObject(GameFontNormal)
 	BagToggle.Text:SetText("背包")
 	
 	-- 背包整理按钮
@@ -206,7 +207,7 @@ function MyContainer:OnCreate(name, settings)
 	SortButton:SetScript("OnClick", function() JPack:Pack() end)
 	SortButton.Text = SortButton:CreateFontString(nil, "OVERLAY")
 	SortButton.Text:SetPoint("CENTER")
-	SortButton.Text:SetFont(DB.Font, 11, "THINOUTLINE")
+	SortButton.Text:SetFontObject(GameFontNormal)
 	SortButton.Text:SetText("整理背包")
 
 	-- 关闭按钮
@@ -216,6 +217,6 @@ function MyContainer:OnCreate(name, settings)
 	CloseButton:SetPoint("BOTTOMRIGHT", -7, 7)
 	CloseButton.Texture = CloseButton:CreateFontString(nil, "OVERLAY")
 	CloseButton.Texture:SetPoint("CENTER", 1, 1)
-	CloseButton.Texture:SetFont(DB.Font, 14, "THINOUTLINE")
+	CloseButton.Texture:SetFontObject(GameFontNormal)
 	CloseButton.Texture:SetText("x")
 end

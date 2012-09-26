@@ -472,26 +472,31 @@ lib.CreateAuraTimer = function(self,elapsed)
       end
     end
 end
-lib.PostUpdateIcon = function(self, unit, icon, index, offset)
+lib.PostUpdateIcon = function(self, unit, icon, index)
   local _, _, _, _, _, duration, expirationTime, unitCaster, _ = UnitAura(unit, index, icon.filter)
     -- Debuff desaturation
-    if unitCaster ~= 'player' and unitCaster ~= 'vehicle' and not UnitIsFriend('player', unit) and icon.debuff then
-      icon.icon:SetDesaturated(true)
-    else
-      icon.icon:SetDesaturated(false)
-    end
+	if(unit == "target") then	
+		if (unitCaster == "player" or unitCaster == "vehicle") then
+			icon.icon:SetDesaturated(false)                 
+		elseif(not UnitPlayerControlled(unit)) then -- If Unit is Player Controlled don"t desaturate debuffs
+			icon:SetBackdropColor(0, 0, 0)
+			icon.overlay:SetVertexColor(0.3, 0.3, 0.3)      
+			icon.icon:SetDesaturated(true)  
+		end
+	end
     -- Creating aura timers
-    if duration and duration > 0 then
+	if duration and duration > 0 then
 		icon.remaining:Show() 
-    else
+		icon.overlay:Show()		
+		icon.timeLeft = expirationTime	
+		icon:SetScript("OnUpdate", lib.CreateAuraTimer)			
+	else
 		icon.remaining:Hide()
-    end
-    if unit == 'player' or unit == 'target' or (unit:match'(boss)%d?$' == 'boss') or unit == 'focus' or unit == 'focustarget' then
-      icon.duration = duration
-      icon.timeLeft = expirationTime
-      icon.first = true
-      icon:SetScript("OnUpdate", lib.CreateAuraTimer)
-    end
+		icon.overlay:Hide()
+		icon.timeLeft = math.huge
+		icon:SetScript("OnUpdate", nil)
+	end
+	icon.first = true
 end
 -- creating aura icons
 lib.PostCreateIcon = function(self, button)
@@ -530,22 +535,23 @@ end
 lib.createAuras = function(f)
     a = CreateFrame('Frame', nil, f)
 	if f.mystyle~="player" then 
-		a:SetPoint('TOPLEFT', f, 'TOPRIGHT', 3, 0)
+		a:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 0, -18)
 	else
-		a:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 0, 15)
+		a:SetPoint('TOPLEFT', f, 'BOTTOMLEFT', 0, 15)
 	end
     a['growth-x'] = 'RIGHT'
-    a['growth-y'] = 'DOWN' 
+    a['growth-y'] = 'RIGHT' 
     a.initialAnchor = 'TOPLEFT'
-    a.gap = true
+    a.gap = false
     a.spacing = 3
-    a.size = 16
+    a.size = 18
+	a.showStealableBuffs = true
     a.showDebuffType = true
     if f.mystyle=="target" then
       a:SetHeight((a.size+a.spacing)*2)
       a:SetWidth((a.size+a.spacing)*8)
-      a.numBuffs = 8 
-      a.numDebuffs = 8
+      a.numBuffs = 6 
+      a.numDebuffs = 10
 	elseif f.mystyle=="player" and U["PlayerBuff"]==3 then
 	  a.gap = false
 	  a['growth-x'] = 'RIGHT'
@@ -553,14 +559,14 @@ lib.createAuras = function(f)
 	  a:SetHeight((a.size+a.spacing)*2)
       a:SetWidth((a.size+a.spacing)*8)
       a.initialAnchor = 'BOTTOMLEFT'
-      a.numBuffs = 4 
-      a.numDebuffs = 4
+      a.numBuffs = 8 
+      a.numDebuffs = 8
 	  a:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 0, 15)
     elseif f.mystyle=="focus" then
       a:SetHeight((a.size+a.spacing)*2)
       a:SetWidth((a.size+a.spacing)*4)
-      a.numBuffs = 8
-      a.numDebuffs = 8
+      a.numBuffs = 10
+      a.numDebuffs = 16
     end
     a.PostCreateIcon = lib.PostCreateIcon
     a.PostUpdateIcon = lib.PostUpdateIcon
@@ -574,6 +580,7 @@ lib.createBuffs = function(f)
     b.num = 8
     b.size = 16
     b.spacing = 3
+	b.gap = false
     b:SetHeight((b.size+b.spacing)*2)
     b:SetWidth((b.size+b.spacing)*12)
     if f.mystyle=="tot" then
@@ -590,7 +597,7 @@ lib.createBuffs = function(f)
 		b:SetWidth((b.size+b.spacing)*4)
 	elseif f.mystyle=="boss" then
 		b["growth-x"] = "LEFT"
-		d['growth-y'] = 'DOWN'
+		b['growth-y'] = 'DOWN'
 		b.initialAnchor = "RIGHT"
 		b.showBuffType = true
 		b:SetPoint("RIGHT", f, "LEFT", -2, 0)
@@ -624,9 +631,11 @@ end
     d.num = 8
     d.size = 16
     d.spacing = 3
+	d.gap = false
     d:SetHeight((d.size+d.spacing)*2)
     d:SetWidth((d.size+d.spacing)*5)
-    d.showDebuffType = true
+	d.showStealableBuffs = true
+	d.showDebuffType = true
     if f.mystyle=="tot" then
 		d:SetPoint("TOPLEFT", f, "TOPRIGHT", d.spacing, -2)
 		d.initialAnchor = "TOPLEFT"
