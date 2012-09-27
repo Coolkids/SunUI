@@ -39,10 +39,10 @@ function Module:CreateShadowOrbs()
 		end
 		if C["Fade"] then 
 			if event == "PLAYER_REGEN_DISABLED" then
-				UIFrameFadeIn(ShadowOrbs, 2, ShadowOrbs:GetAlpha(), 1)	
+				UIFrameFadeIn(ShadowOrbs, 1, ShadowOrbs:GetAlpha(), 1)	
 			end
 			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" then
-				UIFrameFadeOut(ShadowOrbs, 2, ShadowOrbs:GetAlpha(), 0)
+				UIFrameFadeOut(ShadowOrbs, 1, ShadowOrbs:GetAlpha(), 0)
 			end
 		end
 	end)
@@ -69,6 +69,8 @@ function Module:CreateMonkBar()
 	chibar:RegisterEvent("PLAYER_ENTERING_WORLD")
 	chibar:RegisterEvent("UNIT_POWER")
 	chibar:RegisterEvent("UNIT_DISPLAYPOWER")
+	chibar:RegisterEvent("PLAYER_REGEN_DISABLED")
+	chibar:RegisterEvent("PLAYER_REGEN_ENABLED")
 	chibar:SetScript("OnEvent",function(self, event, unit)
 		local chinum = UnitPower("player",SPELL_POWER_LIGHT_FORCE)
 		local chimax = UnitPowerMax("player",SPELL_POWER_LIGHT_FORCE)
@@ -77,12 +79,12 @@ function Module:CreateMonkBar()
 				if chimax == 4 then
 					chibar[5]:Hide()
 					for i = 1,4 do
-						chibar[i]:SetWidth((f.width-6)/4)
+						chibar[i]:SetWidth((C["Width"]-6)/4)
 					end
 				elseif chimax == 5 then
 					chibar[5]:Show()
 					for i = 1,5 do
-						chibar[i]:SetWidth((f.width-8)/5)
+						chibar[i]:SetWidth((C["Width"]-8)/5)
 					end
 				end
 			end
@@ -96,10 +98,10 @@ function Module:CreateMonkBar()
 		end
 		if C["Fade"] then 
 			if event == "PLAYER_REGEN_DISABLED" then
-				UIFrameFadeIn(chibar, 2, chibar:GetAlpha(), 1)
+				UIFrameFadeIn(chibar, 1, chibar:GetAlpha(), 1)
 			end
 			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" then
-				UIFrameFadeOut(chibar, 2, chibar:GetAlpha(), 0)
+				UIFrameFadeOut(chibar, 1, chibar:GetAlpha(), 0)
 			end
 		end
 	end)
@@ -154,10 +156,10 @@ local function OnEvent(self, event, unit)
 	end
 	if C["Fade"] then 
 		if event == "PLAYER_REGEN_DISABLED" then
-			UIFrameFadeIn(self, 2, self:GetAlpha(), 1)
+			UIFrameFadeIn(self, 1, self:GetAlpha(), 1)
 		end
 		if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" then
-			UIFrameFadeOut(self, 2, self:GetAlpha(), 0)
+			UIFrameFadeOut(self, 1, self:GetAlpha(), 0)
 		end
 	end
 end
@@ -221,10 +223,10 @@ function Module:CreateQSDKPower()
 			end
 			if C["Fade"] then 
 				if event == "PLAYER_REGEN_DISABLED" then
-					UIFrameFadeIn(bars, 2, bars:GetAlpha(), 1)
+					UIFrameFadeIn(bars, 1, bars:GetAlpha(), 1)
 				end
 				if event == "PLAYER_REGEN_ENABLED" then
-					UIFrameFadeOut(bars, 2, bars:GetAlpha(), 0)
+					UIFrameFadeOut(bars, 1, bars:GetAlpha(), 0)
 				end
 			end
 		end)
@@ -547,10 +549,10 @@ function Module:FuckWarlock()
 		end
 		if C["Fade"] then 
 			if event == "PLAYER_REGEN_DISABLED" then
-				UIFrameFadeIn(self, 2, self:GetAlpha(), 1)
+				UIFrameFadeIn(self, 1, self:GetAlpha(), 1)
 			end
 			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" or event == "PLAYER_TALENT_UPDATE" then
-				UIFrameFadeOut(self, 2, self:GetAlpha(), 0)
+				UIFrameFadeOut(self, 1, self:GetAlpha(), 0)
 			end
 		end
 	end)

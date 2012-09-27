@@ -90,6 +90,140 @@ MFWM = {};
 
 local MozzMapOverlayInfo = 
 {
+	["KunLaiSummit"] = {
+		"BinanVillage:240:198:607:470", -- [1]
+		"Mogujia:253:208:462:411", -- [2]
+		"MuskpawRanch:229:262:603:313", -- [3]
+		"MountNeverset:313:208:228:264", -- [4]
+		"ZouchinVillage:298:219:502:64", -- [5]
+		"TempleoftheWhitetiger:250:260:587:170", -- [6]
+		"GateoftheAugust:261:162:449:506", -- [7]
+		"ShadoPanMonastery:385:385:88:92", -- [8]
+		"TheBurlapTrail:310:276:398:310", -- [9]
+		"PeakOfSerenity:287:277:333:63", -- [10]
+		"ValleyOfEmperors:224:241:453:191", -- [11]
+		"Kotapeak:252:257:233:360", -- [12]
+		"Iseoflostsouls:259:233:602:4", -- [13]
+		"FireboughNook:224:172:322:496", -- [14]
+		"TEMPLEOFTHEWHITETIGER:250:260:587:170", -- [15]
+		},
+		["Krasarang"] = {
+		"RedwingRefuge:212:265:317:63", -- [1]
+		"AnglersOutpost:265:194:545:205", -- [2]
+		"TempleOfTheRedCrane:219:259:300:215", -- [3]
+		"DojaniRiver:190:282:513:3", -- [4]
+		"krasarangCove:286:268:701:19", -- [5]
+		"TheDeepwild:188:412:397:59", -- [6]
+		"LostDynasty:217:279:589:27", -- [7]
+		"FallsongRiver:214:393:218:77", -- [8]
+		"TheSouthernIsles:252:313:23:267", -- [9]
+		"ZhusBastion:306:204:612:0", -- [10]
+		"RuinsOfDojan:204:383:444:44", -- [11]
+		"TheForbiddenJungle:257:300:0:79", -- [12]
+		"RuinsOfKorja:211:395:125:88", -- [13]
+		"CradleOfChiJi:272:250:176:376", -- [14]
+		"UngaIngoo:258:170:330:498", -- [15]
+		"NayeliLagoon:246:240:343:373", -- [16]
+		},
+		["ValleyoftheFourWinds"] = {
+		"ThunderfootFields:380:317:622:0", -- [1]
+		"PoolsofPurity:213:246:513:58", -- [2]
+		"RumblingTerrace:277:245:582:301", -- [3]
+		"PaoquanHollow:273:246:12:105", -- [4]
+		"StormsoutBrewery:257:288:227:380", -- [5]
+		"DustbackGorge:209:308:0:343", -- [6]
+		"CliffsofDispair:510:264:215:404", -- [7]
+		"Theheartland:286:392:253:75", -- [8]
+		"SilkenFields:254:259:530:253", -- [9]
+		"HarvestHome:260:251:5:239", -- [10]
+		"GildedFan:208:292:438:41", -- [11]
+		"GrandGranery:314:212:334:325", -- [12]
+		"SingingMarshes:175:291:170:130", -- [13]
+		"ZhusDecent:303:323:699:114", -- [14]
+		"Halfhill:206:245:438:177", -- [15]
+		"NesingwarySafari:249:342:104:326", -- [16]
+		"MudmugsPlace:230:217:561:161", -- [17]
+		"KuzenVillage:199:304:224:74", -- [18]
+		},
+		["TownlongWastes"] = {
+		"NiuzaoTemple:296:359:213:241", -- [1]
+		"ShanzeDao:300:246:125:0", -- [2]
+		"TheSumprushes:271:205:545:369", -- [3]
+		"Sikvess:261:235:306:433", -- [4]
+		"GaoRanBlockade:353:200:546:468", -- [5]
+		"MingChiCrossroads:247:221:417:447", -- [6]
+		"palewindVillage:282:306:692:362", -- [7]
+		"OsulMesa:238:296:560:185", -- [8]
+		"ShadoPanGarrison:213:170:413:385", -- [9]
+		"KriVess:255:269:420:209", -- [10]
+		"SriVess:294:283:92:192", -- [11]
+		},
+		["TheWanderingIsle"] = {
+		"TheDawningValley:677:668:325:0", -- [1]
+		"TempleofFiveDawns:607:461:395:182", -- [2]
+		"MandoriVillage:610:374:392:294", -- [3]
+		"RidgeofLaughingWinds:313:321:183:198", -- [4]
+		"Pei-WuForest:651:262:351:406", -- [5]
+		"PoolofthePaw:220:188:297:324", -- [6]
+		"SkyfireCrash-Site:346:263:124:405", -- [7]
+		"TheRows:385:373:504:295", -- [8]
+		"TheSingingPools:372:475:545:12", -- [9]
+		"MorningBreezeVillage:261:315:203:36", -- [10]
+		"Fe-FangVillage:234:286:134:9", -- [11]
+		"TheWoodofStaves:989:466:13:202", -- [12]
+		},
+		["ValeofEternalBlossoms"] = {
+		"GuoLaiRuins:337:349:87:3", -- [1]
+		"WhiteMoonShrine:298:262:482:10", -- [2]
+		"MistfallVillage:310:305:200:363", -- [3]
+		"SettingSunTraining:350:429:0:234", -- [4]
+		"TuShenBurialGround:267:308:349:316", -- [5]
+		"TheStairsAscent:446:359:556:267", -- [6]
+		"WinterboughGlade:361:333:4:107", -- [7]
+		"TheGoldenStair:242:254:328:16", -- [8]
+		"WhitepetalLake:267:281:278:170", -- [9]
+		"TheTwinMonoliths:272:522:444:97", -- [10]
+		"MoguShanPalace:373:385:629:22", -- [11]
+		},
+		["TheJadeForest"] = {
+		"GlassfinVillage:278:310:525:358", -- [1]
+		"RuinsOfGanShi:196:158:316:0", -- [2]
+		"TheArboretum:242:210:481:215", -- [3]
+		"WindlessIsle:251:348:539:43", -- [4]
+		"DawnsBlossom:234:210:325:178", -- [5]
+		"TempleOfTheJadeSerpent:264:211:468:295", -- [6]
+		"DreamersPavillion:218:148:474:520", -- [7]
+		"NectarbreezeOrchard:219:256:290:330", -- [8]
+		"HellscreamsHope:196:166:181:75", -- [9]
+		"SlingtailPits:179:180:428:416", -- [10]
+		"SerpentsSpine:191:216:388:299", -- [11]
+		"ChunTianMonastery:227:198:300:56", -- [12]
+		"JadeMines:236:142:400:146", -- [13]
+		"EmperorsOmen:202:204:430:21", -- [14]
+		"GrookinMound:253:229:182:214", -- [15]
+		"WreckOfTheSkyShark:210:158:202:0", -- [16]
+		"Waywardlanding:219:186:346:482", -- [17]
+		"NookaNooka:219:205:189:151", -- [18]
+		},
+		["TheHiddenPass"] = {
+		"TheHiddenCliffs:294:220:433:0", -- [1]
+		"TheBlackMarket:479:493:371:175", -- [2]
+		"TheHiddenSteps:290:191:412:477", -- [3]
+		},
+		["DreadWastes"] = {
+		"KLAXXIVESS:236:206:458:110", -- [1]
+		"ZANVESS:290:283:162:385", -- [2]
+		"BREWGARDEN:250:218:351:0", -- [3]
+		"DREADWATERLAKE:322:211:437:313", -- [4]
+		"CLUTCHESOFSHEKZEER:209:318:341:125", -- [5]
+		"HORRIDMARCH:323:194:441:224", -- [6]
+		"BRINYMUCK:325:270:214:311", -- [7]
+		"SOGGYSGAMBLE:268:241:450:406", -- [8]
+		"TERRACEOFGURTHAN:209:234:593:92", -- [9]
+		"RIKKITUNVILLAGE:218:186:236:32", -- [10]
+		"HEARTOFFEAR:262:293:191:122", -- [11]
+		"KYPARIVOR:325:190:485:0", -- [12]
+		},
 	["AhnQirajTheFallenKingdom"] = {"AQKingdom:887:668:115:0",},
 	["Arathi"] = {"BoulderfistHall:252:258:327:367", "Bouldergor:249:278:171:123", "CircleofEastBinding:183:238:506:126", "CircleofInnerBinding:228:227:201:312", "CircleofOuterBinding:215:188:332:273", "CircleofWestBinding:220:287:85:24", "DabyriesFarmstead:210:227:404:144", "FaldirsCove:273:268:77:400", "GalensFall:212:305:0:144", "GoShekFarm:306:248:430:249", "Hammerfall:270:271:581:118", "NorthfoldManor:227:268:132:105", "RefugePoint:196:270:293:145", "StromgardeKeep:284:306:21:269", "ThandolSpan:237:252:261:416", "WitherbarkVillage:260:220:476:359",},
 	["Ashenvale"] = {"Astranaar:251:271:255:164", "BoughShadow:166:211:836:148", "FallenSkyLake:287:276:529:385", "FelfireHill:277:333:714:317", "LakeFalathim:184:232:112:148", "MaelstrasPost:246:361:188:0", "NightRun:221:257:595:253", "OrendilsRetreat:244:251:143:0", "RaynewoodRetreat:231:256:481:221", "Satyrnaar:235:236:696:154", "SilverwindRefuge:347:308:338:335", "TheHowlingVale:325:239:473:97", "TheRuinsofStardust:236:271:210:331", "TheShrineofAssenia:306:283:40:275", "TheZoramStrand:262:390:0:0", "ThistlefurVillage:314:241:255:78", "ThunderPeak:203:310:377:121", "WarsongLumberCamp:231:223:771:265",},
@@ -454,7 +588,7 @@ function Mozz_AnchorMapOptions()
 			MozzWorldMapShowAllCheckButton:SetPoint( "TOPLEFT", Gatherer_WorldMapDisplay, "TOPRIGHT", 5, 3 );
 			MozzWorldMapShowAllCheckButton:SetScale( 0.9 );
 		else
-			MozzWorldMapShowAllCheckButton:SetPoint( "TOPLEFT", WorldMapPositioningGuide, "TOPLEFT", 10, 0 );
+			MozzWorldMapShowAllCheckButton:SetPoint( "TOPLEFT", WorldMapPositioningGuide, "TOPLEFT", 10, -15 );
 			MozzWorldMapShowAllCheckButton:SetScale( 0.9 );
 		end
 	else
@@ -462,7 +596,7 @@ function Mozz_AnchorMapOptions()
 			MozzWorldMapShowAllCheckButton:SetPoint( "TOPLEFT", Gatherer_WorldMapDisplay, "TOPRIGHT", 5, 3 );
 			MozzWorldMapShowAllCheckButton:SetScale( 1 );
 		else
-			MozzWorldMapShowAllCheckButton:SetPoint( "TOPLEFT", WorldMapPositioningGuide, "TOPLEFT", 5, 0 );
+			MozzWorldMapShowAllCheckButton:SetPoint( "TOPLEFT", WorldMapPositioningGuide, "TOPLEFT", 5, -15 );
 			MozzWorldMapShowAllCheckButton:SetScale( 1 );
 		end
 	end

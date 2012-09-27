@@ -62,11 +62,7 @@ local function OnEvent_GROUP_ROSTER_UPDATE(event, ...)
 	IsInParty = (GetNumSubgroupMembers() > 0 or GetNumGroupMembers() > 0) and true or false
 end
 local function OnEvent_ACTIVE_TALENT_GROUP_CHANGED(event, ...)
-	local _, Class = UnitClass("player")
-	local Talent = GetSpecialization()
-	if	(Class == "DRUID" and Talent == 2 or Talent == 3) or Class == "HUNTER" or Class == "ROGUE" or
-		(Class == "SHAMAN" and Talent == 2) or Class == "DEATHKNIGHT" or Class == "WARRIOR" or
-		(Class == "PALADIN" and (Talent == 2 or Talent == 3)) then
+	if	(DB.Role == "Melee") or (DB.Role == "Tank")then
 		Melee = true
 	else
 		Melee = false

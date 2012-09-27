@@ -1689,7 +1689,20 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		select(19, GossipFrame:GetRegions()):Hide()
 
 		GossipGreetingText:SetTextColor(1, 1, 1)
+		
+		NPCFriendshipStatusBar:GetRegions():Hide()
+		NPCFriendshipStatusBarNotch1:SetTexture(0, 0, 0)
+		NPCFriendshipStatusBarNotch1:SetSize(1, 16)
+		NPCFriendshipStatusBarNotch2:SetTexture(0, 0, 0)
+		NPCFriendshipStatusBarNotch2:SetSize(1, 16)
+		NPCFriendshipStatusBarNotch3:SetTexture(0, 0, 0)
+		NPCFriendshipStatusBarNotch3:SetSize(1, 16)
+		NPCFriendshipStatusBarNotch4:SetTexture(0, 0, 0)
+		NPCFriendshipStatusBarNotch4:SetSize(1, 16)
+		select(7, NPCFriendshipStatusBar:GetRegions()):Hide()
 
+		NPCFriendshipStatusBar.icon:SetPoint("TOPLEFT", -30, 7)
+		S.CreateBDFrame(NPCFriendshipStatusBar, .25)
 		S.ReskinPortraitFrame(GossipFrame, true)
 		S.Reskin(GossipFrameGreetingGoodbyeButton)
 		S.ReskinScroll(GossipGreetingScrollFrameScrollBar)
@@ -2002,7 +2015,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			self.bg:SetShown(self:IsShown())
 		end
 		local function onUpdate(self)
-			self:GetParent().bg:SetAlpha(self:GetParent():GetAlpha())
+			self.bg:SetAlpha(self:GetAlpha())
 		end
 		hooksecurefunc("LootWonAlertFrame_ShowAlert", function()
 			for i = 1, #LOOT_WON_ALERT_FRAMES do
@@ -2018,8 +2031,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 					frame:HookScript("OnShow", showHideBg)
 					frame:HookScript("OnHide", showHideBg)
-					frame.animIn:SetScript("OnUpdate", onUpdate)
-					frame.waitAndAnimOut:SetScript("OnUpdate", onUpdate)
+					frame:HookScript("OnUpdate", onUpdate)
 					
 					frame.Background:Hide()
 					frame.IconBorder:Hide()
@@ -2048,8 +2060,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 					frame:HookScript("OnShow", showHideBg)
 					frame:HookScript("OnHide", showHideBg)
-					frame.animIn:SetScript("OnUpdate", onUpdate)
-					frame.waitAndAnimOut:SetScript("OnUpdate", onUpdate)
+					frame:HookScript("OnUpdate", onUpdate)
 
 					frame.Background:Hide()
 					frame.IconBorder:Hide()
@@ -2069,16 +2080,15 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					local icon = _G["CriteriaAlertFrame"..i.."IconTexture"]
 
 					frame.bg = CreateFrame("Frame", nil, UIParent)
-					frame.bg:Point("TOPLEFT", icon, -10, 12)
-					frame.bg:Point("BOTTOMRIGHT", icon, 240, -12)
+					frame.bg:Point("TOPLEFT", icon, -6, 5)
+					frame.bg:Point("BOTTOMRIGHT", icon, 236, -5)
 					frame.bg:SetFrameStrata("DIALOG")
 					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 					S.CreateBD(frame.bg)
 
 					frame:SetScript("OnShow", showHideBg)
 					frame:SetScript("OnHide", showHideBg)
-					frame.animIn:SetScript("OnUpdate", onUpdate)
-					frame.waitAndAnimOut:SetScript("OnUpdate", onUpdate)
+					frame:HookScript("OnUpdate", onUpdate)
 
 					_G["CriteriaAlertFrame"..i.."Background"]:Hide()
 					_G["CriteriaAlertFrame"..i.."IconOverlay"]:Hide()
@@ -3070,7 +3080,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ArchaeologyFrameCompletedPageTitleMid:SetTextColor(1, 1, 1)
 		ArchaeologyFrameCompletedPagePageText:SetTextColor(1, 1, 1)
 
-		for i = 1, 10 do
+		for i = 1, ARCHAEOLOGY_MAX_RACES do
 			_G["ArchaeologyFrameSummaryPageRace"..i]:GetRegions():SetTextColor(1, 1, 1)
 		end
 		for i = 1, ARCHAEOLOGY_MAX_COMPLETED_SHOWN do
@@ -5017,21 +5027,15 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		InspectPVPTeam2:DisableDrawLayer("BACKGROUND")
 		InspectPVPTeam3:DisableDrawLayer("BACKGROUND")
 
+		InspectTalentFrame:GetRegions():Hide()
+		select(2, InspectTalentFrame:GetRegions()):Hide()
 		InspectGuildFrameBG:Hide()
 		for i = 1, 5 do
 			select(i, InspectModelFrame:GetRegions()):Hide()
 		end
 		InspectPVPFrameBG:SetAlpha(0)
 		InspectPVPFrameBottom:SetAlpha(0)
-
-
-		for i = 1, 4 do
-			local tab = _G["InspectFrameTab"..i]
-			S.CreateTab(tab)
-			if i ~= 1 then
-				tab:Point("LEFT", _G["InspectFrameTab"..i-1], "RIGHT", -15, 0)
-			end
-		end
+		select(9, InspectMainHandSlot:GetRegions()):Hide()
 
 		local slots = {
 			"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist",
@@ -5041,52 +5045,94 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		for i = 1, #slots do
 			local slot = _G["Inspect"..slots[i].."Slot"]
-			slot:DisableDrawLayer("BACKGROUND")
+			_G["Inspect"..slots[i].."SlotFrame"]:Hide()
+
 			slot:SetNormalTexture("")
 			slot:SetPushedTexture("")
-			slot.bd = CreateFrame("Frame", nil, slot)
-			slot.bd:Point("TOPLEFT", -1, 1)
-			slot.bd:Point("BOTTOMRIGHT", 1, -1)
-			slot.bd:SetFrameLevel(0)
-			S.CreateBD(slot.bd, .25)
 			_G["Inspect"..slots[i].."SlotIconTexture"]:SetTexCoord(.08, .92, .08, .92)
 		end
 
-		S.ReskinPortraitFrame(InspectFrame, true)
-	elseif addon == "Blizzard_ItemAlterationUI" then
-		S.SetBD(TransmogrifyFrame)
-		TransmogrifyArtFrame:DisableDrawLayer("BACKGROUND")
-		TransmogrifyArtFrame:DisableDrawLayer("BORDER")
-		TransmogrifyArtFramePortraitFrame:Hide()
-		TransmogrifyArtFramePortrait:Hide()
-		TransmogrifyArtFrameTopBorder:Hide()
-		TransmogrifyArtFrameTopRightCorner:Hide()
-		TransmogrifyModelFrameMarbleBg:Hide()
-		select(2, TransmogrifyModelFrame:GetRegions()):Hide()
-		TransmogrifyModelFrameLines:Hide()
-		TransmogrifyFrameButtonFrame:GetRegions():Hide()
-		TransmogrifyFrameButtonFrameButtonBorder:Hide()
-		TransmogrifyFrameButtonFrameButtonBottomBorder:Hide()
-		TransmogrifyFrameButtonFrameMoneyLeft:Hide()
-		TransmogrifyFrameButtonFrameMoneyRight:Hide()
-		TransmogrifyFrameButtonFrameMoneyMiddle:Hide()
+		InspectTalentFrame.InspectSpec.ring:Hide()
 
-		local slots = {"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Back", "MainHand", "SecondaryHand"}
+		for i = 1, 6 do
+			local row = InspectTalentFrame.InspectTalents["tier"..i]
+			for j = 1, 3 do
+				local bu = row["talent"..j]
 
-		for i = 1, #slots do
-			local slot = _G["TransmogrifyFrame"..slots[i].."Slot"]
-			if slot then
-				local ic = _G["TransmogrifyFrame"..slots[i].."SlotIconTexture"]
-				_G["TransmogrifyFrame"..slots[i].."SlotBorder"]:Hide()
-				_G["TransmogrifyFrame"..slots[i].."SlotGrabber"]:Hide()
+				bu.Slot:Hide()
+				bu.border:SetTexture("")
 
-				ic:SetTexCoord(.08, .92, .08, .92)
-				S.CreateBD(slot, 0)
+				bu.icon:SetDrawLayer("ARTWORK")
+				bu.icon:SetTexCoord(.08, .92, .08, .92)
+
+				S.CreateBG(bu.icon)
 			end
 		end
 
-		S.Reskin(TransmogrifyApplyButton)
-		S.ReskinClose(TransmogrifyArtFrameCloseButton)
+		InspectTalentFrame.InspectSpec.specIcon:SetTexCoord(.08, .92, .08, .92)
+		S.CreateBG(InspectTalentFrame.InspectSpec.specIcon)
+
+		local function updateIcon(self)
+			local spec = nil
+			if INSPECTED_UNIT ~= nil then
+				spec = GetInspectSpecialization(INSPECTED_UNIT)
+			end
+			if spec ~= nil and spec > 0 then
+				local role1 = GetSpecializationRoleByID(spec)
+				if role1 ~= nil then
+					local _, _, _, icon = GetSpecializationInfoByID(spec)
+					self.specIcon:SetTexture(icon)
+				end
+			end
+		end
+
+		InspectTalentFrame.InspectSpec:HookScript("OnShow", updateIcon)
+		InspectTalentFrame:HookScript("OnEvent", function(self, event, unit)
+			if not InspectFrame:IsShown() then return end
+			if event == "INSPECT_READY" and InspectFrame.unit and UnitGUID(InspectFrame.unit) == unit then
+				updateIcon(self.InspectSpec)
+			end
+		end)
+
+		local function updateGlyph(self, clear)
+			local id = self:GetID()
+			local talentGroup = PlayerTalentFrame and PlayerTalentFrame.talentGroup
+			local enabled, glyphType, glyphTooltipIndex, glyphSpell, iconFilename = GetGlyphSocketInfo(id, talentGroup, true, INSPECTED_UNIT);
+
+			if not glyphType then return end
+
+			if enabled and glyphSpell and not clear then
+				if iconFilename then
+					self.glyph:SetTexture(iconFilename)
+				else
+					self.glyph:SetTexture("Interface\\Spellbook\\UI-Glyph-Rune1")
+				end
+			end
+		end
+
+		hooksecurefunc("InspectGlyphFrameGlyph_UpdateSlot", updateGlyph)
+
+		for i = 1, 6 do
+			local glyph = InspectTalentFrame.InspectGlyphs["Glyph"..i]
+
+			glyph:HookScript("OnShow", updateGlyph)
+
+			glyph.ring:Hide()
+
+			glyph.glyph:SetDrawLayer("ARTWORK")
+			glyph.glyph:SetTexCoord(.08, .92, .08, .92)
+			S.CreateBDFrame(glyph.glyph)
+		end
+
+		for i = 1, 4 do
+			local tab = _G["InspectFrameTab"..i]
+			S.CreateTab(tab)
+			if i ~= 1 then
+				tab:Point("LEFT", _G["InspectFrameTab"..i-1], "RIGHT", -15, 0)
+			end
+		end
+
+		S.ReskinPortraitFrame(InspectFrame, true)
 	elseif addon == "Blizzard_ItemSocketingUI" then
 		ItemSocketingFrame:DisableDrawLayer("BORDER")
 		ItemSocketingFrame:DisableDrawLayer("ARTWORK")
@@ -5133,11 +5179,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			local num = GetNumSockets()
 			if num == 3 then
-				ItemSocketingSocket1:SetPoint("BOTTOM", ItemSocketingFrame, "BOTTOM", -75, 39)
+				ItemSocketingSocket1:Point("BOTTOM", ItemSocketingFrame, "BOTTOM", -75, 39)
 			elseif num == 2 then
-				ItemSocketingSocket1:SetPoint("BOTTOM", ItemSocketingFrame, "BOTTOM", -35, 39)
+				ItemSocketingSocket1:Point("BOTTOM", ItemSocketingFrame, "BOTTOM", -35, 39)
 			else
-				ItemSocketingSocket1:SetPoint("BOTTOM", ItemSocketingFrame, "BOTTOM", 0, 39)
+				ItemSocketingSocket1:Point("BOTTOM", ItemSocketingFrame, "BOTTOM", 0, 39)
 			end
 		end)
 
@@ -5176,6 +5222,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		S.ReskinPortraitFrame(ItemUpgradeFrame, true)
 		S.Reskin(ItemUpgradeFrameUpgradeButton)
+
 	elseif addon == "Blizzard_LookingForGuildUI" then
 		S.SetBD(LookingForGuildFrame)
 		S.CreateBD(LookingForGuildInterestFrame, .25)
@@ -5997,7 +6044,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					buttonIndex = i
 				end
 
-				skillButton = _G["TradeSkillSkill"..buttonIndex]
+				local skillButton = _G["TradeSkillSkill"..buttonIndex]
 
 				if not skillButton.reskinned then
 					skillButton.reskinned = true
@@ -6005,7 +6052,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					skillButton:SetNormalTexture("")
 					skillButton.SetNormalTexture = DB.dummy
 					skillButton:SetPushedTexture("")
-					buttonHighlight = _G["TradeSkillSkill"..buttonIndex.."Highlight"]
+					local buttonHighlight = _G["TradeSkillSkill"..buttonIndex.."Highlight"]
 					buttonHighlight:SetTexture("")
 					buttonHighlight.SetTexture = DB.dummy
 
@@ -6031,6 +6078,16 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					skillButton.plus:SetPoint("CENTER", skillButton.bg)
 					skillButton.plus:SetTexture(media.backdrop)
 					skillButton.plus:SetVertexColor(1, 1, 1)
+					
+					skillButton.SubSkillRankBar.BorderLeft:Hide()
+					skillButton.SubSkillRankBar.BorderRight:Hide()
+					skillButton.SubSkillRankBar.BorderMid:Hide()
+
+					skillButton.SubSkillRankBar:SetHeight(12)
+					skillButton.SubSkillRankBar:SetStatusBarTexture(C.media.backdrop)
+					skillButton.SubSkillRankBar:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
+					S.CreateBDFrame(skillButton.SubSkillRankBar, .25)
+
 				end
 
 				if skillIndex <= numTradeSkills then
@@ -6341,7 +6398,7 @@ Delay:SetScript("OnEvent", function()
 		S.CreateBD(FriendsTooltip)
 	end
 
-	if not(IsAddOnLoaded("MetaMap") or IsAddOnLoaded("m_Map") or IsAddOnLoaded("Mapster") or IsAddOnLoaded("SunUI_Modules")) then
+	if not(IsAddOnLoaded("MetaMap") or IsAddOnLoaded("m_Map") or IsAddOnLoaded("Mapster") or IsAddOnLoaded("SunUI")) then
 		WorldMapFrameMiniBorderLeft:SetAlpha(0)
 		WorldMapFrameMiniBorderRight:SetAlpha(0)
 

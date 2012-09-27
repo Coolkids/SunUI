@@ -16,7 +16,9 @@ function Module:OnEnable()
 		end
 		local channel = IsInRaid() and "RAID" or GetNumSubgroupMembers() > 0 and "PARTY"
 		if channel then
-			SendChatMessage(GetSpellLink(arg12).." 打断了 "..arg9.."的"..GetSpellLink(arg15), channel)
+			SendChatMessage(GetSpellLink(arg12).." 打断了>>"..arg9.."<<的"..GetSpellLink(arg15), channel)
+		else
+			DEFAULT_CHAT_FRAME:AddMessage(GetSpellLink(arg12).." 打断了>>"..arg9.."<<的"..GetSpellLink(arg15))
 		end
 	end)
 end	

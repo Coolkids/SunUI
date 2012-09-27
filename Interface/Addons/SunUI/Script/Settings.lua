@@ -281,7 +281,7 @@ function Module:OnEnable()
 		function addon:QUEST_COMPLETE (event)
 		  if not self:canAutomate() then return end
 		  if GetNumQuestChoices() <= 1 then
-			GetQuestReward(QuestFrameRewardPanel.itemChoice)
+			GetQuestReward(1)
 		  end
 		end
 

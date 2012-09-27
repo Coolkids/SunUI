@@ -76,7 +76,7 @@ function S.CreateSD(parent, size, r, g, b, alpha, offset)
 end
 
 function  S.CreateGradient(f)
-	local tex = f:CreateTexture(nil, "BACKGROUND")
+	local tex = f:CreateTexture(nil, "BORDER")
 	tex:SetPoint("TOPLEFT")
 	tex:SetPoint("BOTTOMRIGHT")
 	tex:SetTexture(media.backdrop)

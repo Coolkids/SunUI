@@ -31,7 +31,7 @@ G["ActionBarDB"] = {
 	["ExpbarWidth"] = 500,
 	["ExpbarHeight"] = 8,
 	["ExpbarUp"] = false,
-	["ExpbarFadeOut"] = true,
+	["ExpbarFadeOut"] = false,
 	["AllFade"] = false,
 	["Bar1Fade"] = false,
 	["Bar2Fade"] = false,
@@ -230,7 +230,7 @@ G["MoveHandleDB"] = {
 	["ClassCD"] = {"LEFT", "UIParent", "LEFT", 30, 240},
 	["RaidCD"] =  {"LEFT", "UIParent", "LEFT", 30, 0},
 	--冷却图标闪闪的
-	["CooldownFlash"] = {"CENTER", "UIParent", "CENTER", 0, -130},
+	["CooldownFlash"] = {"CENTER", "UIParent", "CENTER", 0, 172},
 	--鼠标提示
 	["Tooltip"] = {"BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -50, 160},
 	--仇恨监视
@@ -243,7 +243,7 @@ G["MoveHandleDB"] = {
 	["BloodShield"] = {"BOTTOM", "UIParent", "BOTTOM", -285,  172},
 	["AutoButton"] = {"RIGHT", "UIParent", "RIGHT", -270, 188},
 	--经验条
-	["expbar"] = {"BOTTOM", "UIParent", "BOTTOM", 0, 4},
+	["expbar"] = {"TOP", "UIParent", "TOP", 0, -24},
 	--powerbar
 	["PowerBar"] = {"CENTER", "UIParent", "CENTER", 0, -80},
 	--成就移动

@@ -300,7 +300,7 @@ local function FadeOutFrameMap()  --隐藏
 	if Minimap:GetAlpha()>0 then
 		local fadeInfo = {}
 		fadeInfo.mode = "OUT"
-		fadeInfo.timeToFade = 2
+		fadeInfo.timeToFade = 1.5
 		fadeInfo.finishedFunc = function() Minimap:Hide() end 
 		fadeInfo.startAlpha = Minimap:GetAlpha()
 		fadeInfo.endAlpha = 0
@@ -311,7 +311,7 @@ local function FadeOutFrameDamage(p)  --隐藏
 	if p:GetAlpha()>0 then
 		local fadeInfo = {}
 		fadeInfo.mode = "OUT"
-		fadeInfo.timeToFade = 2
+		fadeInfo.timeToFade = 1.5
 		fadeInfo.finishedFunc = function() p:Hide() end 
 		fadeInfo.startAlpha = p:GetAlpha()
 		fadeInfo.endAlpha = 0
@@ -369,24 +369,23 @@ function Module:OnInitialize()
 		mapdamage:SetPoint("TOP", 90, -5)
 		mapdamage:SetAlpha(0)
 		mapdamage:SetScript("OnMouseDown", function(self, button)
-			if alDamageMeter then
+			if alDamageMeterFrame then
 				if alDamageMeterFrame:IsShown() then 
 					FadeOutFrameDamage(alDamageMeterFrame)
 				else
 					alDamageMeterFrame:Show()
-					UIFrameFadeIn(alDamageMeterFrame, 3, 0, 1)
+					UIFrameFadeIn(alDamageMeterFrame, 1.5, alDamageMeterFrame:GetAlpha(), 1)
 				end
 			elseif SkadaBarWindowSkada then
 				if SkadaBarWindowSkada:IsShown() then 
 					FadeOutFrameDamage(SkadaBarWindowSkada)
 				else
 					SkadaBarWindowSkada:Show()
-					UIFrameFadeIn(SkadaBarWindowSkada, 3, 0, 1)
+					UIFrameFadeIn(SkadaBarWindowSkada, 1.5, SkadaBarWindowSkada:GetAlpha(), 1)
 				end
 			else
 				DEFAULT_CHAT_FRAME:AddMessage("SunUI:暂时不兼容其他伤害统计.")
 			end
-			
 		end)
 		mapdamage:SetScript("OnEnter", function(self)
 			UIFrameFadeIn(self, 2, self:GetAlpha(), 1)
