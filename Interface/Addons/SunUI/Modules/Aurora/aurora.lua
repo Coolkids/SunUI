@@ -6084,7 +6084,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					skillButton.SubSkillRankBar.BorderMid:Hide()
 
 					skillButton.SubSkillRankBar:SetHeight(12)
-					skillButton.SubSkillRankBar:SetStatusBarTexture(C.media.backdrop)
+					skillButton.SubSkillRankBar:SetStatusBarTexture(media.backdrop)
 					skillButton.SubSkillRankBar:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
 					S.CreateBDFrame(skillButton.SubSkillRankBar, .25)
 

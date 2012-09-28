@@ -617,8 +617,9 @@ local function BuildDurability()
 		[10] = {17, L["副手"], 1000}, 
 	}
 	local Stat = CreateFrame("Frame", "InfoPanelBottom4", UIParent)
-	Text = S.MakeFontString(Stat)
+	local Text = S.MakeFontString(Stat)
 	Text:SetPoint("LEFT", InfoPanelBottom3 or InfoPanelBottom2 or InfoPanelBottom1, "RIGHT", 3, 0)
+	Text:SetPoint("CENTER", UIParent, "CENTER")
 	Stat:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
 	Stat:RegisterEvent("MERCHANT_SHOW")
 	Stat:RegisterEvent("PLAYER_ENTERING_WORLD")

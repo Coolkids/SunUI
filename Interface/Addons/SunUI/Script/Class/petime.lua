@@ -77,7 +77,7 @@ function Module:OnEnable()
 	
 	local h = CreateFrame("Frame", nil, UIParent)
 	h:SetScript("OnUpdate", function()
-		if UnitExists("pet") then
+		if UnitExists("pet") and GetPetTimeRemaining() then
 			bar:Show()
 		else
 			bar:Hide()

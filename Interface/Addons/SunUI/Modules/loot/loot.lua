@@ -175,8 +175,8 @@ local createSlot = function(id)
 	name:SetPoint("RIGHT", frame)
 	name:SetPoint("LEFT", icon, "RIGHT",8,0)
 	name:SetNonSpaceWrap(true)
-	name:SetFont(DB.Font, S.Scale(12), "OUTLINE")
-	--name:SetFontObject(GameFontWhite)GameTooltipHeaderText
+	--name:SetFont(DB.Font, S.Scale(12), "OUTLINE")
+	name:SetFontObject(GameFontWhite)
 
 	name:SetWidth(120)
 	frame.name = name
@@ -191,8 +191,9 @@ local createSlot = function(id)
 	return frame
 
 end
-
-title:SetFont(DB.Font, S.Scale(14), "OUTLINE")
+--title:SetFontObject(GameFontNormalLarge)
+title:SetFont(DB.Font, S.Scale(20), "OUTLINE")
+title:SetTextColor(GameFontNormalLarge:GetTextColor())
 title:SetJustifyH"LEFT"
 title:SetPoint("TOPLEFT", addon, "TOPLEFT", 6, -4)
 

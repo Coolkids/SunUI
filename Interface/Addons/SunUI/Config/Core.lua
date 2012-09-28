@@ -25,6 +25,7 @@ function SunUIConfig:LoadDefaults()
 			InfoPanelDB = G["InfoPanelDB"],
 			MoveHandleDB = G["MoveHandleDB"],
 			PowerBarDB = G["PowerBarDB"],
+			WarnDB = G["WarnDB"],
 		},
 	}
 end	
@@ -1395,6 +1396,58 @@ function SunUIConfig.GenerateOptionsInternal()
 							Fade = {
 							type = "toggle",
 							name = "渐隐",
+							order = 4,
+							},
+						}
+					},
+				},
+			},
+			WarnDB = {
+				order = 17,
+				type = "group",
+				name = "警告提示",
+				get = function(info) return db.WarnDB[ info[#info] ] end,
+				set = function(info, value) db.WarnDB[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+				args = {
+					group1 = {
+						type = "group", order = 1,
+						name = "",guiInline = true,
+						args = {
+							Open = {
+							type = "toggle",
+							name = "启用警告提示",
+							order = 1,
+							},
+						}
+					},
+					group2 = {
+						type = "group", order = 2, guiInline = true, disabled = function(info) return not db.WarnDB.Open end,
+						name = "",
+						args = {
+							Width = {
+								type = "input",
+								name = "框体宽度",
+								desc = "框体宽度",
+								order = 1,
+								get = function() return tostring(db.WarnDB.Width) end,
+								set = function(_, value) db.WarnDB.Width = tonumber(value) end,
+							},
+							Height = {
+								type = "input",
+								name = "框体高度",
+								desc = "框体高度",
+								order = 1,
+								get = function() return tostring(db.WarnDB.Height) end,
+								set = function(_, value) db.WarnDB.Height = tonumber(value) end,
+							},
+							FontSize = {
+								type = "range", order = 3,
+								name = "字体大小", desc = "字体大小",
+								min = 1, max = 28, step = 1,
+							},
+							Health = {
+							type = "toggle",
+							name = "低血量", desc = "开启低血量报警",
 							order = 4,
 							},
 						}

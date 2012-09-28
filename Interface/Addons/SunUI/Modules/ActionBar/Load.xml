@@ -5,5 +5,6 @@
 
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="actionbar.lua"/>
+	<Script file="petbattles.lua"/>
 	<Script file="Style.lua"/>
 </Ui>

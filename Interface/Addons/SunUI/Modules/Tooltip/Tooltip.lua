@@ -7,6 +7,16 @@ local _G = _G
 function Module:OnInitialize()
 	C=C["TooltipDB"]
 end
+local reactionlist  = {
+	[1] = "仇恨",
+	[2] = "敌对",
+	[3] = "冷淡",
+	[4] = "中立",
+	[5] = "友好",
+	[6] = "尊敬",
+	[7] = "崇敬",
+	[8] = "崇拜",
+}
 function Module:OnEnable()
 	local gcol = {.35, 1, .6}										-- Guild Color
 	local pgcol = {1, .12, .8} 									-- Player's Guild Color
@@ -163,9 +173,15 @@ function Module:OnEnable()
 			if (not UnitIsPlayer(unit)) then 
 				local reaction = UnitReaction(unit, "player");
 				if ( reaction ) then
-					r = FACTION_BAR_COLORS[reaction].r;
-					g = FACTION_BAR_COLORS[reaction].g;
-					b = FACTION_BAR_COLORS[reaction].b;
+					r = FACTION_BAR_COLORS[reaction].r
+					g = FACTION_BAR_COLORS[reaction].g
+					b = FACTION_BAR_COLORS[reaction].b
+					for i=2, GameTooltip:NumLines() do
+						if _G["GameTooltipTextLeft" .. i]:GetText():find(LEVEL) or _G["GameTooltipTextLeft" .. i]:GetText():find(creatureType) then
+							_G["GameTooltipTextLeft" .. i]:SetText(string.format(hex(diffColor.r, diffColor.g, diffColor.b).."%s|r", unitLevel) .. unitClassification .. creatureType .. hex(r, g, b) .."  (".. reactionlist[reaction] .. ")|r")
+							break
+						end
+					end
 					GameTooltipStatusBar:SetStatusBarColor(r, g, b)
 				end
 			end
@@ -217,6 +233,15 @@ function Module:OnEnable()
 		end
 		local unit  = select(2, GameTooltip:GetUnit())
 		if unit then
+			if (not UnitIsPlayer(unit)) then 
+				local reaction = UnitReaction(unit, "player");
+				if ( reaction ) then
+					r = FACTION_BAR_COLORS[reaction].r;
+					g = FACTION_BAR_COLORS[reaction].g;
+					b = FACTION_BAR_COLORS[reaction].b;
+					GameTooltipStatusBar:SetStatusBarColor(r, g, b)
+				end
+			end
 			if UnitIsPlayer(unit) then
 				GameTooltipStatusBar:SetStatusBarColor(unpack({GameTooltip_UnitColor(unit)}))
 			end

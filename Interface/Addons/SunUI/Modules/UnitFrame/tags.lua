@@ -5,15 +5,15 @@ if IsAddOnLoaded("Stuf") or IsAddOnLoaded("PitBull4") or IsAddOnLoaded("Shadowed
 end
 -- shorten value
 local SVal = function(val)
-if val then
-	if (val >= 1e6) then
-        return ("%.1fm"):format(val / 1e6)
-	elseif (val >= 1e3) then
-		return ("%.1fk"):format(val / 1e3)
-	else
-		return ("%d"):format(val)
+	if val then
+		if (val >= 1e6) then
+			return ("%.1fm"):format(val / 1e6)
+		elseif (val >= 1e3) then
+			return ("%.1fk"):format(val / 1e3)
+		else
+			return ("%d"):format(val)
+		end
 	end
-end
 end
 -- calculating the ammount of latters
 local function utf8sub(string, i, dots)
@@ -88,16 +88,6 @@ oUF.Tags.Methods['mono:color'] = function(u, r)
 end
 oUF.Tags.Events['mono:color'] = 'UNIT_REACTION UNIT_HEALTH UNIT_POWER'
 
-oUF.Tags.Methods['mono:gridcolor'] = function(u, r)
-	local _, class = UnitClass(u)
-	if (UnitIsPlayer(u)) then
-		return hex(oUF.colors.class[class])
-	else
-		return hex(1, 1, 1)
-	end
-end
-oUF.Tags.Events['mono:gridcolor'] = 'UNIT_HEALTH'
-
 -- type and level information
 oUF.Tags.Methods['mono:info'] = function(u) 
 	local level = UnitLevel(u)
@@ -171,16 +161,6 @@ oUF.Tags.Methods['mono:hp']  = function(u) -- THIS IS FUCKING MADNESS!!!
 end
 oUF.Tags.Events['mono:hp'] = 'UNIT_HEALTH UNIT_CONNECTION'
 
-oUF.Tags.Methods['mono:hpperc']  = function(u) 
-	local per = oUF.Tags.Methods['perhp'](u)
-	if UnitIsDead(u) or UnitIsGhost(u) or not UnitIsConnected(u) then
-		return oUF.Tags.Methods['mono:DDG'](u)
-	elseif min~=max and per < 90 then
-		return per.."%"
-	end
-end
-oUF.Tags.Events['mono:hpperc'] = 'UNIT_HEALTH UNIT_CONNECTION'
-
 oUF.Tags.Methods['mono:hpraid']  = function(u) 
 	local min, max = UnitHealth(u), UnitHealthMax(u)
 	local per = oUF.Tags.Methods['perhp'](u)
@@ -232,13 +212,6 @@ oUF.Tags.Methods['mono:shortname'] = function(u, r)
 end
 oUF.Tags.Events['mono:shortname'] = 'UNIT_NAME_UPDATE UNIT_CONNECTION'
 
-oUF.Tags.Methods['mono:gridname'] = function(u, r)
-	local namelength = 4
-	local name = UnitName(r or u)
-	return utf8sub(name, namelength, false)
-end
-oUF.Tags.Events['mono:gridname'] = 'UNIT_NAME_UPDATE UNIT_CONNECTION'
-
 -- unit status tag
 oUF.Tags.Methods['mono:DDG'] = function(u)
 	if not UnitIsConnected(u) then
@@ -270,23 +243,4 @@ oUF.Tags.Methods['mono:LFD'] = function(u)
 		return "|cffFF6161D|r"
 	end
 end
-oUF.Tags.Events['mono:LFD'] = 'PLAYER_ROLES_ASSIGNED PARTY_MEMBERS_CHANGED'
-
--- heal prediction value tag
-oUF.Tags.Methods['mono:heal'] = function(u)
-    local incheal = UnitGetIncomingHeals(u, 'player') or 0
-    if incheal > 0 then
-        return "|cff8AFF30+"..SVal(incheal).."|r"
-    end
-end
-oUF.Tags.Events['mono:heal'] = 'UNIT_HEAL_PREDICTION'
-
--- AltPower value tag
-oUF.Tags.Methods['mono:altpower'] = function(unit)
-	local cur = UnitPower(unit, ALTERNATE_POWER_INDEX)
-	local max = UnitPowerMax(unit, ALTERNATE_POWER_INDEX)
-	if(max > 0 and not UnitIsDeadOrGhost(unit)) then
-		return ("%s%%"):format(math.floor(cur/max*100+.5))
-	end
-end
-oUF.Tags.Events['mono:altpower'] = 'UNIT_POWER'
+oUF.Tags.Events['mono:LFD'] = 'PLAYER_ROLES_ASSIGNED GROUP_MEMBERS_CHANGED'

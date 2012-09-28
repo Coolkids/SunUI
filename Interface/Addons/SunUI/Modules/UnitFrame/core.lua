@@ -150,7 +150,7 @@ lib.gen_hpbar = function(f)
 	gradient:SetPoint("TOPLEFT")
 	gradient:SetPoint("BOTTOMRIGHT")
 	gradient:SetTexture(DB.Statusbar)
-	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .4, .1, .1, .1, .4)
     fixStatusbar(s)
     s:SetHeight(f.height)
     s:SetWidth(f.width)
@@ -246,10 +246,12 @@ lib.gen_ppbar = function(f)
     if f.mystyle == "partypet" or f.mystyle == "arenatarget" then
       s:Hide()
     end
-    s:CreateShadow("Background")
-    if f.mystyle=="tot" or f.mystyle=="pet" then
-      s:SetHeight(f.height/3)
-    end
+    s:CreateShadow()
+	local gradient = s:CreateTexture(nil, "BACKGROUND")
+	gradient:SetPoint("TOPLEFT")
+	gradient:SetPoint("BOTTOMRIGHT")
+	gradient:SetTexture(DB.Statusbar)
+	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .4, .1, .1, .1, .4)
 	
     f.Power = s
 end
@@ -962,7 +964,7 @@ end
   --gen LFD role indicator
   lib.gen_LFDindicator = function(f)
     local lfdi = lib.gen_fontstring(f.Power, DB.Font, U["FontSize"]*S.Scale(1), "THINOUTLINE")
-    lfdi:SetPoint("LEFT", f.Power, "LEFT",1,0)
+    lfdi:SetPoint("RIGHT", f.Power, "LEFT",1,0)
     f:Tag(lfdi, '[mono:LFD]')
   end
   --gen combat and leader icons
@@ -1055,7 +1057,7 @@ end
 	f.AuraTracker = at
   end
   --gen current target indicator
-  lib.gen_targeticon = function(f)
+lib.gen_targeticon = function(f)
     local h = CreateFrame("Frame", nil, f)
     h:SetAllPoints(f.Health)
     h:SetFrameLevel(10)
@@ -1063,9 +1065,9 @@ end
     ti:SetPoint("LEFT", f.Health, "BOTTOMLEFT",-5,0)
     ti:SetJustifyH("LEFT")
     f:Tag(ti, '[mono:targeticon]')
-  end
+end
   -- oUF_Swing
-  lib.gen_swing_timer = function(f)
+lib.gen_swing_timer = function(f)
 	if U["EnableSwingTimer"] then
 		sw = CreateFrame("StatusBar", f:GetName().."_Swing", f)
 		sw:SetStatusBarTexture(DB.Statusbar)
@@ -1090,30 +1092,59 @@ end
   -- alt power bar
   lib.gen_alt_powerbar = function(f)
 	local apb = CreateFrame("StatusBar", nil, f)
-	apb:SetFrameLevel(f.Health:GetFrameLevel() + 2)
-	apb:Size(f.width/2.2, f.height/3)
+	apb:Size(f.width, f.height/3)
 	apb:SetStatusBarTexture(DB.Statusbar)
 	apb:GetStatusBarTexture():SetHorizTile(false)
 	apb:SetStatusBarColor(1, 0, 0)
-	apb:SetPoint("BOTTOM", f, "TOP", 0, -f.height/6)
+	apb:SetPoint("TOP", f.Power, "BOTTOM", 0, -f.height/6)
 	apb:CreateShadow()
-
-	apb.bg = apb:CreateTexture(nil, "BORDER")
-	apb.bg:SetAllPoints(apb)
-	apb.bg:SetTexture(DB.Statusbar)
-	apb.bg:SetVertexColor(.18, .18, .18, 1)
+	local gradient = apb:CreateTexture(nil, "BACKGROUND")
+	gradient:SetPoint("TOPLEFT")
+	gradient:SetPoint("BOTTOMRIGHT")
+	gradient:SetTexture(DB.Statusbar)
+	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+	
 	f.AltPowerBar = apb
 	
-	apb.b = CreateFrame("Frame", nil, apb)
-	apb.b:SetFrameLevel(f.Health:GetFrameLevel() + 1)
-	apb.b:SetPoint("TOPLEFT", apb, "TOPLEFT", -4, 4)
-	apb.b:SetPoint("BOTTOMRIGHT", apb, "BOTTOMRIGHT", 4, -5)
-	
-	apb.v = lib.gen_fontstring(apb, DB.Font, U["FontSize"]*S.Scale(1), "THINOUTLINE")
-	apb.v:SetPoint("CENTER", apb, "CENTER", 0, 0)
-	f:Tag(apb.v, '[mono:altpower]')
+	local r, g, b
+	local max
+	apb.text = S.MakeFontString(apb, 10)
+	apb.text:SetPoint("CENTER")
+	apb:SetScript("OnValueChanged", function(_, value)
+		_, max = apb:GetMinMaxValues()
+		r, g, b = oUF.ColorGradient(value, max, unpack(oUF.colors.smooth))
+		apb:SetStatusBarColor(r, g, b)
+		apb.text:SetText(value.."/"..max)
+	end)
   end
+   lib.counterbar = function(f)
+	local ctb = CreateFrame("StatusBar", nil, f)
+	ctb:SetFrameLevel(f.Health:GetFrameLevel() + 1)
+	ctb:Size(f.width, f.height/3)
+	ctb:SetStatusBarTexture(DB.Statusbar)
+	ctb:GetStatusBarTexture():SetHorizTile(false)
+	ctb:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, -f.height/6)
+	ctb:CreateShadow()
+	local gradient = ctb:CreateTexture(nil, "BACKGROUND")
+	gradient:SetPoint("TOPLEFT")
+	gradient:SetPoint("BOTTOMRIGHT")
+	gradient:SetTexture(DB.Statusbar)
+	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+	ctb.text = S.MakeFontString(ctb, 8)
+	ctb.text:SetPoint("CENTER")
+	local r, g, b
+	local max
 
+	ctb:SetScript("OnValueChanged", function(_, value)
+		_, max = ctb:GetMinMaxValues()
+		r, g, b = oUF.ColorGradient(value, max, unpack(oUF.colors.smooth))
+		ctb:SetStatusBarColor(r, g, b)
+
+		ctb.text:SetText(floor(value))
+	end)
+
+	f.CounterBar = ctb
+end
 	local BarFader = function(self) 
          self.BarFade = U["EnableBarFader"]
          self.BarFaderMinAlpha = 0
@@ -1168,6 +1199,7 @@ end
     lib.gen_ppstrings(self)
     lib.gen_InfoIcons(self)
 	lib.gen_alt_powerbar(self)
+	lib.counterbar(self)
     lib.createAuras(self)
 	lib.createBuffs(self)
     lib.createDebuffs(self)
@@ -1255,6 +1287,7 @@ end
 		lib.gen_castbar(self)
 	end
     lib.createDebuffs(self)
+	lib.gen_alt_powerbar(self)
 	self:Size(self.width,self.height)
   end  
 

@@ -14,9 +14,6 @@ local frames = {
   ["QuestLogDetailFrame"] = false,
   ["FriendsFrame"] = false,
   ["LFGParentFrame"] = false,
-  ["LFDQueueFrame"] = true,
-  ["LFRQueueFrame"] = true,
-  ["LFRBrowseFrame"] = true,
   ["KnowledgeBaseFrame"] = true,
   ["HelpFrame"] = false,
   ["GossipFrame"] = false,
@@ -58,17 +55,17 @@ local frames = {
  ["WorldMapPositioningGuide"] = true,
  -- [" WorldMapDetailFrame"] = true,
   --["TicketStatusFrame"] = false,
-  ["StaticPopup1"] = false,
+	["StaticPopup1"] = false,
   --["GhostFrame"] = false,
-  ["EncounterJournal"] = false, -- only in 4.2
-  ["RaidParentFrame"] = false,
-  ["TutorialFrame"] = false,
+	["EncounterJournal"] = false, -- only in 4.2
+	["RaidParentFrame"] = false,
+	["TutorialFrame"] = false,
 
   -- AddOns
-  ["LudwigFrame"] = false,
+	["LudwigFrame"] = false,
   --5.0fix
-  --["MountJournal"] = false,
-  --["PetJournalParent"] = false,
+	["PVEFrame"] = false,
+
 }
 
 -- Frames provided by load on demand addons, hooked when the addon is loaded.

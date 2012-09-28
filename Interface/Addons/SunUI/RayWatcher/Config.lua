@@ -23,8 +23,8 @@ ns.watchers ={
 		{
 			name = "玩家buff",
 			direction = "RIGHT",
-			setpoint =  {"BOTTOM", UIParent, "BOTTOM",-254, 203},
-			size = 20,
+			setpoint =  {"BOTTOM", UIParent, "BOTTOM",-252, 205},
+			size = 24,
 				-- 节能施法
 				{ spellID = 16870, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 自然之赐
@@ -80,7 +80,7 @@ ns.watchers ={
 			name = "玩家技能CD",
 			direction = "RIGHT",
 			setpoint = {"BOTTOM", UIParent, "BOTTOM", -38, 135},
-			size = 20,
+			size = 24,
 				-- 狂暴恢复
 				{ spellID = 22842, filter = "CD" },
 				-- 求生本能
@@ -117,8 +117,8 @@ ns.watchers ={
 		{
 			name = "目標的目标框上方",
 			direction = "RIGHT",
-			setpoint = {"BOTTOM", UIParent, "BOTTOM",-254, 203},
-			size = 20,
+			setpoint = {"BOTTOM", UIParent, "BOTTOM",-252, 205},
+			size = 24,
 				-- 急速射击
 				{ spellID =  3045, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 治疗宠物
@@ -150,7 +150,7 @@ ns.watchers ={
 			name = "玩家技能CD",
 			direction = "RIGHT",
 			setpoint = {"BOTTOM", UIParent, "BOTTOM", -38, 135},
-			size = 20,
+			size = 24,
 				-- 奇美拉射击
 				{ spellID = 53209, filter = "CD" },
 				-- 急速射击
@@ -190,8 +190,8 @@ ns.watchers ={
 		{
 			name = "目标的目标上方",
 			direction = "RIGHT",
-			setpoint = {"BOTTOM", UIParent, "BOTTOM",-254, 203},
-			size = 20,
+			setpoint = {"BOTTOM", UIParent, "BOTTOM",-252, 205},
+			size = 24,
 			  -- 奥术强化
 				{ spellID = 12042, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 唤醒
@@ -224,7 +224,7 @@ ns.watchers ={
 			name = "玩家技能CD",
 			direction = "RIGHT",
 			setpoint = {"BOTTOM", UIParent, "BOTTOM", -38, 135},
-			size = 20,
+			size = 24,
 				-- 唤醒
 				{ spellID = 12051, filter = "CD" },
 				-- 秘法强化
@@ -237,8 +237,8 @@ ns.watchers ={
 		{
 			name = "玩家Buff",
 			direction = "RIGHT",
-			setpoint = {"BOTTOM", UIParent, "BOTTOM",-254, 203},
-			size = 20,
+			setpoint = {"BOTTOM", UIParent, "BOTTOM",-252, 205},
+			size = 24,
 				-- 盾墙(防御姿态)
 				{ spellID =   871, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 盾牌格挡(防御姿态)
@@ -302,8 +302,8 @@ ns.watchers ={
 		{
 			name = "玩家buff",
 			direction = "RIGHT",
-			setpoint =  {"BOTTOM", UIParent, "BOTTOM",-254, 203},
-			size = 20,
+			setpoint =  {"BOTTOM", UIParent, "BOTTOM",-252, 205},
+			size = 24,
 				-- 嗜血
 				{ spellID =  2825, unitId = "player", caster = "all", filter = "BUFF" },
 				-- 闪电之盾
@@ -346,8 +346,8 @@ ns.watchers ={
 		{
 			name = "玩家buff",
 			direction = "RIGHT",
-			setpoint =  {"BOTTOM", UIParent, "BOTTOM",-254, 203},
-			size = 20,
+			setpoint =  {"BOTTOM", UIParent, "BOTTOM",-252, 205},
+			size = 24,
 				-- 圣佑术
 				{ spellID =   498, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 圣盾术
@@ -408,8 +408,8 @@ ns.watchers ={
 		{
 			name = "玩家buff",
 			direction = "RIGHT",
-			setpoint =  {"BOTTOM", UIParent, "BOTTOM",-254, 203},
-			size = 20,
+			setpoint =  {"BOTTOM", UIParent, "BOTTOM",-252, 205},
+			size = 24,
 				-- 消散
 				{ spellID = 47585, unitId = "player", caster = "player", filter = "BUFF" },  
 				-- 守护圣灵
@@ -428,6 +428,8 @@ ns.watchers ={
 				{ spellID = 81208, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 神性火焰
 				{ spellID = 99132, unitId = "player", caster = "player", filter = "BUFF" },
+				-- 自己的盾
+				{ spellID = 6788, unitId = "player", caster = "player", filter = "DEBUFF" },
 		},
 		{
 			name = "目标框體上方",
@@ -448,6 +450,8 @@ ns.watchers ={
 				{ spellID = 88684, unitId = "target", caster = "player", filter = "BUFF" },
 				-- 聖言術:譴
 				{ spellID = 88625, unitId = "tatget", caster = "player", filter = "DEBUFF"},
+				-- 心灵鑚刺雕文 
+				{ spellID = 81292, unitId = "player", caster = "player", filter = "BUFF" },
 		},
 		{
 			name = "玩家右邊1",
@@ -485,16 +489,16 @@ ns.watchers ={
 			name = "玩家技能CD",
 			direction = "RIGHT",
 			setpoint = {"BOTTOM", UIParent, "BOTTOM", -38, 135},
-			size = 20,
+			size = 24,
 		},
 	},
 	["WARLOCK"]={
 		{
 			name = "玩家Buff",
 			direction = "RIGHT",
-			setpoint = {"BOTTOM", UIParent, "BOTTOM",-254, 203},
+			setpoint = {"BOTTOM", UIParent, "BOTTOM",-252, 205},
 			mode = "ICON",
-			size = 20,
+			size = 24,
 				-- 暗影冥思
 				{ spellID = 17941, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 时间扭曲
@@ -532,8 +536,8 @@ ns.watchers ={
 		{
 			name = "目標的目標上方",
 			direction = "RIGHT",
-			setpoint = {"BOTTOM", UIParent, "BOTTOM",-254, 203},
-			size = 20,
+			setpoint = {"BOTTOM", UIParent, "BOTTOM",-252, 205},
+			size = 24,
 				-- 嫁祸诀窍
 				{ spellID = 57934, unitId = "player", caster = "player", filter = "BUFF" },			
 				-- 灭绝
@@ -584,7 +588,7 @@ ns.watchers ={
 			name = "玩家技能CD",
 			direction = "RIGHT",
 			setpoint = {"BOTTOM", UIParent, "BOTTOM", -38, 135},
-			size = 20,
+			size = 24,
 				-- 殺戮盛筵
 				{ spellID = 51690, filter = "CD" },
 				-- 冲动
@@ -595,8 +599,8 @@ ns.watchers ={
 		{
 			name = "玩家Buff",
 			direction = "RIGHT",
-			setpoint = {"BOTTOM", UIParent, "BOTTOM",-254, 203},
-			size = 20,
+			setpoint = {"BOTTOM", UIParent, "BOTTOM",-252, 205},
+			size = 24,
 				-- 反魔法护罩
 				{ spellID = 48707, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 冰封之韧
@@ -1003,12 +1007,14 @@ ns.watchers ={
 				{ spellID = 124430, unitId = "player", caster = "player", filter = "BUFF" },
 				--熊的手动档
 				{ spellID = 62606, unitId = "player", caster = "player", filter = "BUFF" },
+				--吸血鬼的拥抱
+				{ spellID = 15286, unitId = "player", caster = "player", filter = "BUFF" },
 		},
 				{
 			name = "玩家饰品附魔触发buff",
 			direction = "RIGHT",
-			setpoint ={"BOTTOM", UIParent, "BOTTOM",-254, 230},
-			size = 20,
+			setpoint ={"BOTTOM", UIParent, "BOTTOM",-252, 234},
+			size = 24,
 				--电容器
 				{ spellID = 96890, unitId = "player", caster = "player", filter = "BUFF" }, 
 				--死灵法师极核

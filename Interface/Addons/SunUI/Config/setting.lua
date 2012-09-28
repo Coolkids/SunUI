@@ -89,7 +89,7 @@ G["UnitFrameDB"] = {
 	["BossHeight"] = 15,
 	["Scale"] = 1,
 	["EnableSwingTimer"] = false,
-	["PetHeight"] = 10,
+	["PetHeight"] = 20,
 	["TargetCastBarHeight"] = 20,
 	["EnableBarFader"] = false,
 	["BossWidth"] = 140,
@@ -110,7 +110,7 @@ G["UnitFrameDB"] = {
 	["ClassColor"] = false,
 	["PetWidth"] = 100,
 	["showboss"] = true,
-	["PetScale"] = 0.9,
+	["PetScale"] = 1,
 	["showfocus"] = true,
 	["ReverseHPbars"] = false,
 	["showarena"] = true,
@@ -206,7 +206,7 @@ G["MoveHandleDB"] = {
 	["PlayerFrame"] = {"BOTTOM", "UIParent", "BOTTOM", -175, 172},
 	["TargetFrame"] = {"BOTTOM", "UIParent", "BOTTOM",  175,  172},
 	["PetFrame"] = {"TOPRIGHT", "oUF_SunUIPlayer", "TOPLEFT", -5, 0},
-	["ToTFrame"] = {"BOTTOM", "UIParent", "BOTTOM", 0, 190},
+	["ToTFrame"] = {"BOTTOM", "UIParent", "BOTTOM", 0, 172},
 	["FocusTFrame"] = {"TOP", "oUF_SunUIFocus", "BOTTOM", 0, -30},
 	["BossFrame"] = {"RIGHT", "UIParent", "RIGHT", -50, -60},
 	["FocusFrame"] = {"RIGHT", "UIParent", "RIGHT", -57, -138},
@@ -248,6 +248,8 @@ G["MoveHandleDB"] = {
 	["PowerBar"] = {"CENTER", "UIParent", "CENTER", 0, -80},
 	--成就移动
 	["AchievementHolder"] = {"CENTER", "UIParent", "CENTER", 0, 130},
+	--警告框体
+	["Warn"] = {"CENTER", "UIParent", "TOP", 140, -240},
 }
 G["PowerBarDB"] = {
 	["Open"] = true,
@@ -255,4 +257,11 @@ G["PowerBarDB"] = {
 	["Height"] = 5,
 	["Scale"] = 1,
 	["Fade"] = true,
+}
+G["WarnDB"] = {
+	["Open"] = true,
+	["Width"] = 128,
+	["Height"] = 64,
+	["FontSize"] = 15,
+	["Health"] = true,
 }

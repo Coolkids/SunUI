@@ -15,4 +15,5 @@
 	<Script file = "RaidCD.lua"/>
 	<Script file ="sMirrorBars.lua"/>
 	<Script file ="TradeTab.lua"/>
+	<Script file ="warn.lua"/>
 </Ui>

@@ -568,7 +568,7 @@ function Module:CreateExitVehicle()
 	local bar = CreateFrame("Frame","ExitVehicle",UIParent, "SecureHandlerStateTemplate")
 	bar:SetHeight(C["ButtonSize"])
 	bar:SetWidth(C["ButtonSize"])
-	bar:SetScale(S.Scale(2))
+	bar:SetScale(S.Scale(1.3))
 	MoveHandle.Vehicle = S.MakeMoveHandle(bar, "SunUI离开载具按钮", "vehicleexit")
 
 	local button = CreateFrame("BUTTON", nil, bar, "SecureHandlerClickTemplate, SecureHandlerStateTemplate");
