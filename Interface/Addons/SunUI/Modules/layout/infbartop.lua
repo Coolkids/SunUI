@@ -6,7 +6,64 @@ local Module = Core:NewModule("InfoPanelTop")
 local InfoBarStatusColor = {{1, 0, 0}, {1, 1, 0}, {0, 0.4, 1}}
 local bandwidthString = "%.2f Mbps"
 local percentageString = "%.2f%%"
+local wm
+--团队工具
+local function RaidTools()
+	if C["MiniDB"]["MiniMapPanels"] ~= true then return end
+	wm = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
+	wm:SetParent(UIParent) 
+	wm:SetFrameLevel(3)
+	wm:ClearAllPoints() 
+	wm:SetPoint("TOP", -90, -5)
+	wm:SetSize(50, 8)
+	wm:Hide()
+	wm:SetAlpha(0)
+	wm:SetScript("OnEnter", function(self)
+		UIFrameFadeIn(self, 0.5, self:GetAlpha(), 1)
+		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
+		GameTooltip:AddLine("团队工具", .6,.8,1)
+		GameTooltip:Show()
+	end)
+	wm:SetScript("OnLeave", function(self) 
+		UIFrameFadeOut(self, 0.5, self:GetAlpha(), 0)
+		GameTooltip:Hide()
+	end)
+		
+	CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButtonLeft:SetAlpha(0) 
+	CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButtonMiddle:SetAlpha(0) 
+	CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButtonRight:SetAlpha(0) 
+	wm:RegisterEvent("PLAYER_ENTERING_WORLD") 
+	wm:RegisterEvent("GROUP_ROSTER_UPDATE") 
+	wm:HookScript("OnEvent", function(self) 
+		local raid =  IsInRaid()
+		if (raid and (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player"))) or (GetNumSubgroupMembers() > 0 and not raid) then 
+			self:Show()
+		else 
+			self:Hide() 
+		end 
+	end) 
 
+	local wmmenuFrame = CreateFrame("Frame", "wmRightClickMenu", UIParent, "UIDropDownMenuTemplate") 
+	local wmmenuList = { 
+	{text = L["就位确认"], 
+	func = function() DoReadyCheck() end}, 
+	{text = L["角色检查"], 
+	func = function() InitiateRolePoll() end}, 
+	{text = L["转化为团队"], 
+	func = function() ConvertToRaid() end}, 
+	{text = L["转化为小队"], 
+	func = function() ConvertToParty() end}, 
+	} 
+
+	wm:SetScript('OnMouseUp', function(self, button) 
+		wm:StopMovingOrSizing() 
+		if (button=="RightButton") then 
+			EasyMenu(wmmenuList, wmmenuFrame, "cursor", -150, 0, "MENU", 2) 
+		end 
+	end)
+	
+	S.Reskin(wm)
+end 
 --BuildSystem
 local function BuildSystem()
 local Stat = CreateFrame("Frame", "InfoPanel1", UIParent)
@@ -295,29 +352,6 @@ local function BuildGold()
 	end)
 	Stat:SetScript("OnEvent", OnEvent)
 end
-
-local function FadeOutFrameMap()  --隐藏
-	if Minimap:GetAlpha()>0 then
-		local fadeInfo = {}
-		fadeInfo.mode = "OUT"
-		fadeInfo.timeToFade = 1.5
-		fadeInfo.finishedFunc = function() Minimap:Hide() end 
-		fadeInfo.startAlpha = Minimap:GetAlpha()
-		fadeInfo.endAlpha = 0
-		UIFrameFade(Minimap, fadeInfo)
-	end 
-end
-local function FadeOutFrameDamage(p)  --隐藏
-	if p:GetAlpha()>0 then
-		local fadeInfo = {}
-		fadeInfo.mode = "OUT"
-		fadeInfo.timeToFade = 1.5
-		fadeInfo.finishedFunc = function() p:Hide() end 
-		fadeInfo.startAlpha = p:GetAlpha()
-		fadeInfo.endAlpha = 0
-		UIFrameFade(p, fadeInfo)
-	end 
-end
 	
 function Module:OnInitialize()
 	if C["InfoPanelDB"]["OpenTop"] == true then
@@ -343,10 +377,10 @@ function Module:OnInitialize()
 		maphide:SetAlpha(0)
 		maphide:SetScript("OnMouseDown", function(self, button)
 			if Minimap:IsShown() then 
-				FadeOutFrameMap()
+				S.FadeOutFrameDamage(Minimap, 1.5)
 			else
 				Minimap:Show()
-				UIFrameFadeIn(Minimap, 3, 0, 1)
+				UIFrameFadeIn(Minimap, 1.5, 0, 1)
 			end
 		end)
 		maphide:SetScript("OnEnter", function(self)
@@ -371,14 +405,14 @@ function Module:OnInitialize()
 		mapdamage:SetScript("OnMouseDown", function(self, button)
 			if alDamageMeterFrame then
 				if alDamageMeterFrame:IsShown() then 
-					FadeOutFrameDamage(alDamageMeterFrame)
+					S.FadeOutFrameDamage(alDamageMeterFrame, 1.5)
 				else
 					alDamageMeterFrame:Show()
 					UIFrameFadeIn(alDamageMeterFrame, 1.5, alDamageMeterFrame:GetAlpha(), 1)
 				end
 			elseif SkadaBarWindowSkada then
 				if SkadaBarWindowSkada:IsShown() then 
-					FadeOutFrameDamage(SkadaBarWindowSkada)
+					S.FadeOutFrameDamage(SkadaBarWindowSkada, 1.5)
 				else
 					SkadaBarWindowSkada:Show()
 					UIFrameFadeIn(SkadaBarWindowSkada, 1.5, SkadaBarWindowSkada:GetAlpha(), 1)
@@ -398,7 +432,23 @@ function Module:OnInitialize()
 			GameTooltip:Hide()
 		end)
 		S.Reskin(mapdamage)
+		
+		top:SetScript("OnEnter", function()
+			UIFrameFadeIn(mapdamage, 0.5, mapdamage:GetAlpha(), 1)
+			UIFrameFadeIn(maphide, 0.5, maphide:GetAlpha(), 1)
+			if wm:IsShown() then
+				UIFrameFadeIn(wm, 0.5, wm:GetAlpha(), 1)
+			end
+		end)
+		top:SetScript("OnLeave", function() 
+			UIFrameFadeOut(mapdamage, 0.5, mapdamage:GetAlpha(), 0)
+			UIFrameFadeOut(maphide, 0.5, maphide:GetAlpha(), 0)
+			if wm:IsShown() then
+				UIFrameFadeOut(wm, 0.5, wm:GetAlpha(), 0)
+			end
+		end)
 	end
+	
 	if C["InfoPanelDB"]["OpenBottom"] == true then
 		local bottom = CreateFrame("Frame", "BottomBar", UIParent)
 		bottom:SetHeight(20)
@@ -410,6 +460,7 @@ function Module:OnInitialize()
 	end
 end
 function Module:OnEnable()
+	RaidTools()
 	if C["InfoPanelDB"]["OpenTop"] == true then
 		BuildSystem()
 		BuildMemory()

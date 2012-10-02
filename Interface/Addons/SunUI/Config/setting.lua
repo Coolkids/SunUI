@@ -236,7 +236,7 @@ G["MoveHandleDB"] = {
 	--仇恨监视
 	["Threat"] = {"BOTTOM", "UIParent", "BOTTOM", -175, 262},
 	--宠物计时
-	["ShadowPet"] = {"BOTTOM", "UIParent", "BOTTOM", -316, 201},
+	["ShadowPet"] = {"BOTTOM", "UIParent", "BOTTOM", -318, 201},
 	--信息条
 	["InfoPanel"] = {"TOPLEFT", "Minimap", "TOPRIGHT", 5,3},
 	--Mini
@@ -246,6 +246,7 @@ G["MoveHandleDB"] = {
 	["expbar"] = {"TOP", "UIParent", "TOP", 0, -24},
 	--powerbar
 	["PowerBar"] = {"CENTER", "UIParent", "CENTER", 0, -80},
+	["HealthBar"] = {"CENTER", "UIParent", "CENTER", 0, -120},
 	--成就移动
 	["AchievementHolder"] = {"CENTER", "UIParent", "CENTER", 0, 130},
 	--警告框体
@@ -257,6 +258,8 @@ G["PowerBarDB"] = {
 	["Height"] = 5,
 	["Scale"] = 1,
 	["Fade"] = true,
+	["HealthPower"] = false,
+	["HealthPowerWidth"] = 200,
 }
 G["WarnDB"] = {
 	["Open"] = true,

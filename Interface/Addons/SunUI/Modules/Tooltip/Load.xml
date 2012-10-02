@@ -4,9 +4,6 @@
 
 
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-
-	
-
 	<Script file="Tooltip.lua"/>
 	<Script file="HyperLink.lua"/>
 	<Script file="Tooltip\Achievement.lua"/>
@@ -20,4 +17,6 @@
 	<Script file="Symbiosis.lua"/>
 	<Script file="CheckItemTransmogrify.lua"/>
 	<Script file="InstanceLockCompare.lua"/>
+	
+	<Include file = "AchieveCompare.xml"/>
 </Ui>

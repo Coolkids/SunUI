@@ -7,7 +7,7 @@ local texture = warn:CreateTexture(nil, "BACKGROUND")
 texture:SetAllPoints()
 texture:SetTexture("Interface\\Addons\\SunUI\\Media\\Warning_hp25")
 warn:Hide()
-
+warn:RegisterEvent("PLAYER_DEAD")
 warn:RegisterEvent("UNIT_HEALTH")
 warn:SetScript("OnEvent", function(self, event, unit)
 	if unit ~= "player" then return end

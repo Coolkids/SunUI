@@ -105,9 +105,9 @@ local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("RaidCD")
 
 	local OnMouseDown = function(self, button)
 		if button == "LeftButton" then
-			if GetRealNumRaidMembers() > 0 then
+			if GetNumGroupMembers() > 0 then
 				SendChatMessage(sformat("SunUI_RaidCD".." %s: %s", self.left:GetText(), self.right:GetText()), "RAID")
-			elseif GetRealNumPartyMembers() > 0 and not UnitInRaid("player") then
+			elseif GetNumSubgroupMembers() > 0 and not UnitInRaid("player") then
 				SendChatMessage(sformat("SunUI_RaidCD".." %s: %s", self.left:GetText(), self.right:GetText()), "PARTY")
 			else
 				SendChatMessage(sformat("SunUI_RaidCD".." %s: %s", self.left:GetText(), self.right:GetText()), "SAY")

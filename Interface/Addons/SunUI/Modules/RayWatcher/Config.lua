@@ -456,9 +456,9 @@ ns.watchers ={
 		{
 			name = "玩家右邊1",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", 90, 30},
+			setpoint = {"CENTER", UIParent, "CENTER", 110, 30},
 			mode = "ICON",
-			size = 26,
+			size = 30,
 				-- 吸血鬼之触
 				{ spellID = 34914, unitId = "target", caster = "player", filter = "DEBUFF" },
 				-- 暗言术:痛
@@ -470,20 +470,25 @@ ns.watchers ={
 				{ spellID = 33076, filter = "CD" },
 				-- 治疗之环
 				{ spellID = 34861, filter = "CD" },
+				
 		},
 		{
 			name = "玩家右邊2",
 			direction = "LEFT",
-			setpoint = {"CENTER",UIParent, "CENTER", -90, 30},
+			setpoint = {"CENTER",UIParent, "CENTER", -110, 30},
 			mode = "ICON",
-			size = 26,
+			size = 30,
 				-- 心靈震爆
 				{ spellID = 8092, filter = "CD" },
+				-- 神圣之箭
+				{ spellID = 121135, filter = "CD" },
 				--CD
 				--庇
 				{ spellID =  88685, filter = "CD" },
 				-- 宁
 				{ spellID = 88684, filter = "CD" },
+				-- 辉环
+				{ spellID = 120517, filter = "CD" },
 		},
 		{
 			name = "玩家技能CD",

@@ -280,7 +280,7 @@ bf.xpBar:HookScript("OnShow", function(self)
 	for i = 7, 12 do
 		select(i, self:GetRegions()):Hide()
 	end
-	self:SetStatusBarTexture(C.media.texture)
+	self:SetStatusBarTexture(media.texture)
 end)
 
 hooksecurefunc("PetBattlePetSelectionFrame_Show", function()

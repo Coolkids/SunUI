@@ -216,3 +216,17 @@ if f.sw then return end
 	shadow:SetBackdropBorderColor( borderr, borderg, borderb, bordera )
 	f.sw = shadow
 end
+
+function S.FadeOutFrameDamage(p, t, show)  --вўВи
+	if p:GetAlpha()>0 then
+		local fadeInfo = {}
+		fadeInfo.mode = "OUT"
+		fadeInfo.timeToFade = t or 1.5
+		if not show then
+			fadeInfo.finishedFunc = function() p:Hide() end 
+		end
+		fadeInfo.startAlpha = p:GetAlpha()
+		fadeInfo.endAlpha = 0
+		UIFrameFade(p, fadeInfo)
+	end 
+end

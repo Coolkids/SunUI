@@ -7,7 +7,7 @@ Delay:SetScript("OnEvent", function()
 	
 	if FriendsMenuXPSecure then
 		FriendsMenuXPSecureMenuBackdrop:StripTextures()
-		FriendsMenuXPSecure:CreateShadow("Background")
+		S.CreateBD(FriendsMenuXPSecure)
 	end
 	
 	if BaudErrorFrame then
@@ -28,11 +28,11 @@ Delay:SetScript("OnEvent", function()
 	
 	if ItemRefShoppingTooltip1 then 
 		ItemRefShoppingTooltip1:StripTextures()
-		ItemRefShoppingTooltip1:CreateShadow("Background")
+		S.CreateBD(ItemRefShoppingTooltip1)
 	end
 	if ItemRefShoppingTooltip2 then 
 		ItemRefShoppingTooltip2:StripTextures()
-		ItemRefShoppingTooltip2:CreateShadow("Background")
+		S.CreateBD(ItemRefShoppingTooltip2)
 	end
 	
 	if UnitPopupMenus then

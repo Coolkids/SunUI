@@ -51,9 +51,10 @@ BNToastFrame:HookScript("OnShow", function(self)
 end)
 --装备红人
 DurabilityFrame = _G["DurabilityFrame"]
+DurabilityFrame:UnregisterAllEvents()
+DurabilityFrame:Kill()
 DurabilityFrame:HookScript("OnShow", function(self)
 	self:Hide()
-	self:UnregisterAllEvents()
 end)
 ----------------- > Cloak / Helm toggle check boxes at PaperDollFrame
 local GameTooltip = GameTooltip

@@ -93,7 +93,7 @@ local TimeStampsCopy = C["MiniDB"]["TimeStamps"]					-- 时间戳
 			eb:Point("BOTTOMLEFT", cf, "TOPLEFT",  0, 3)
 			eb:Point("BOTTOMRIGHT", cf, "TOPRIGHT", 0, 3)
 			eb:SetHeight(18)
-			eb:SetFontObject(GameFontNormal)
+			eb:SetFont(DB.Font, select(2, GameFontNormal:GetFont()),"OUTLINE")
 			S.CreateBD(eb, 0.6)
 			
 			local chat = format("ChatFrame%s",i)

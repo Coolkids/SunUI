@@ -1,6 +1,6 @@
 if not IsAddOnLoaded("NugRunning") then return end
 local S, C, L, DB, _ = unpack(select(2, ...))
-
+--(\d+)(\s*,.+name\s*=\s*)\"[^"]+\"Ìæ»»\1\2GetSpellInfo(\1)
 local bettertime = true
 local color = "|cffff0000"
 local universal_color = {0.45,0.45,0.45}

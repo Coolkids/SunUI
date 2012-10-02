@@ -5,12 +5,14 @@ function Module:CreateShadowOrbs()
 	if DB.MyClass ~= "PRIEST" then return end
 	local ShadowOrbs = CreateFrame("Frame", nil, UIParent)
 	ShadowOrbs:SetSize(C["Width"], C["Height"])
-	MoveHandle.PowerBar = S.MakeMove(ShadowOrbs, "SunUI PowerBar", "PowerBar", C["Scale"])
+	ShadowOrbs:SetScale(C["Scale"])
+	MoveHandle.PowerBar = S.MakeMove(ShadowOrbs, "SunUIPowerBar", "PowerBar", C["Scale"])
 	local maxShadowOrbs = UnitPowerMax('player', SPELL_POWER_SHADOW_ORBS)
 	
 	for i = 1,maxShadowOrbs do
 		ShadowOrbs[i] = CreateFrame("StatusBar", nil, ShadowOrbs)
 		ShadowOrbs[i]:SetSize((C["Width"]-2*(maxShadowOrbs-1))/maxShadowOrbs, C["Height"])
+		ShadowOrbs[i]:SetScale(C["Scale"])
 		ShadowOrbs[i]:SetStatusBarTexture(DB.Statusbar)
 		ShadowOrbs[i]:SetStatusBarColor(.86,.22,1)
 		ShadowOrbs[i]:CreateShadow()
@@ -52,10 +54,12 @@ function Module:CreateMonkBar()
 	if DB.MyClass ~= "MONK" then return end
 	local chibar = CreateFrame("Frame",nil,UIParent)
 	chibar:SetSize(C["Width"], C["Height"])
-	MoveHandle.PowerBar = S.MakeMove(chibar, "SunUI PowerBar", "PowerBar", C["Scale"])
+	chibar:SetScale(C["Scale"])
+	MoveHandle.PowerBar = S.MakeMove(chibar, "SunUIPowerBar", "PowerBar", C["Scale"])
 	for i=1,5 do
 		chibar[i] = CreateFrame("StatusBar",nil,chibar)
 		chibar[i]:SetSize((C["Width"]-8)/5, C["Height"])
+		chibar[i]:SetScale(C["Scale"])
 		chibar[i]:SetStatusBarTexture(DB.Statusbar)
 		chibar[i]:SetStatusBarColor(0.0, 1.00 , 0.59)
 		chibar[i]:CreateShadow()
@@ -175,12 +179,14 @@ function Module:CreateQSDKPower()
 	end
 	local bars = CreateFrame("Frame", nil, UIParent)
 	bars:SetSize(C["Width"], C["Height"])
-	MoveHandle.PowerBar = S.MakeMove(bars, "SunUI PowerBar", "PowerBar", C["Scale"])
+	bars:SetScale(C["Scale"])
+	MoveHandle.PowerBar = S.MakeMove(bars, "SunUIPowerBar", "PowerBar", C["Scale"])
 	for i = 1, count do
 		bars[i] =CreateFrame("StatusBar", nil, bars)
 		bars[i]:SetStatusBarTexture(DB.Statusbar)
 		bars[i]:GetStatusBarTexture():SetHorizTile(false)
 		bars[i]:SetSize((C["Width"]-2*(count-1))/count, C["Height"])
+		bars[i]:SetScale(C["Scale"])
 		if (i == 1) then
 			bars[i]:SetPoint("LEFT", bars, "LEFT")
 		else
@@ -236,12 +242,14 @@ function Module:CreateCombatPoint()
 	if DB.MyClass ~= "ROGUE" and DB.MyClass ~= "DRUID" then return end
 	local CombatPointBar = CreateFrame("Frame", nil, UIParent)
 	CombatPointBar:SetSize(C["Width"], C["Height"])
-	MoveHandle.PowerBar = S.MakeMove(CombatPointBar, "SunUI PowerBar", "PowerBar", C["Scale"])
+	CombatPointBar:SetScale(C["Scale"])
+	MoveHandle.PowerBar = S.MakeMove(CombatPointBar, "SunUIPowerBar", "PowerBar", C["Scale"])
 	for i = 1, 5 do
 		CombatPointBar[i] =CreateFrame("StatusBar", nil, CombatPointBar)
 		CombatPointBar[i]:SetStatusBarTexture(DB.Statusbar)
 		CombatPointBar[i]:GetStatusBarTexture():SetHorizTile(false)
 		CombatPointBar[i]:SetSize((C["Width"]-2*4)/5, C["Height"])
+		CombatPointBar[i]:SetScale(C["Scale"])
 		if (i == 1) then
 			CombatPointBar[i]:SetPoint("LEFT", CombatPointBar, "LEFT")
 		else
@@ -298,7 +306,7 @@ function Module:CreateEclipse()
 	local MOONKIN_FORM = MOONKIN_FORM
 	local eb = CreateFrame('Frame', nil, UIParent)
 	eb:SetSize(C["Width"], C["Height"])
-	MoveHandle.PowerBar = S.MakeMove(eb, "SunUI PowerBar", "PowerBar", C["Scale"])
+	MoveHandle.PowerBar = S.MakeMove(eb, "SunUIPowerBar", "PowerBar", C["Scale"])
 	eb:CreateShadow()
 	local lb = CreateFrame('StatusBar', nil, eb)
 	lb:SetPoint('LEFT', eb, 'LEFT')
@@ -411,7 +419,7 @@ function Module:FuckWarlock()
 	}
 	local bars = CreateFrame('Frame', nil, UIParent)
 	bars:SetSize(C["Width"], C["Height"])
-	MoveHandle.PowerBar = S.MakeMove(bars, "SunUI PowerBar", "PowerBar", C["Scale"])
+	MoveHandle.PowerBar = S.MakeMove(bars, "SunUIPowerBar", "PowerBar", C["Scale"])
 	for i = 1, 4 do
 		bars[i] = CreateFrame("StatusBar", nil, bars)
 		bars[i]:SetSize((C["Width"]-2*(4-1))/4, C["Height"])
@@ -562,7 +570,7 @@ function Module:Mage()
 	
 	local bars = CreateFrame("Frame", nil, UIParent)
 	bars:SetSize(C["Width"], C["Height"])
-	MoveHandle.PowerBar = S.MakeMove(bars, "SunUI PowerBar", "PowerBar", C["Scale"])
+	MoveHandle.PowerBar = S.MakeMove(bars, "SunUIPowerBar", "PowerBar", C["Scale"])
 	
 	for i = 1,6 do
 		bars[i] = CreateFrame("StatusBar", nil, f)
@@ -593,7 +601,108 @@ function Module:Mage()
 		end
 	end)
 end
+local function Smooth(self, value)
+	if value == self:GetValue() then
+        self.smoothing = nil
+    else
+        self.smoothing = value
+    end
+end
+function UpdateHealthSmooth(self)
+	if self.smoothing == nil then return end
+	local val = self.smoothing
+	local limit = 30/GetFramerate()
+    local cur = self:GetValue()
+    local new = cur + min((val-cur)/3, max(val-cur, limit))
 
+    if new ~= new then
+        new = val
+    end
+
+    self:SetValue_(new)
+    if cur == val or abs(new - val) < 2 then
+        self:SetValue_(val)
+        self.smoothing = nil
+    end
+end
+
+function Module:HealthPowerBar()
+	local bars = CreateFrame("Statusbar", nil, UIParent)
+	bars:SetSize(C["Width"], 5)
+	MoveHandle.HealthBar	= S.MakeMove(bars, "SunUIHealthBar", "HealthBar", 1)
+	bars:SetStatusBarTexture(DB.Statusbar)
+	bars:SetMinMaxValues(0, UnitHealthMax("player"))
+	bars:SetValue(UnitHealth("player"))
+	bars:CreateShadow()
+	bars:SetStatusBarColor(0.1, 0.8, 0.1, 0)
+	local gradient = bars:CreateTexture(nil, "BACKGROUND")
+	gradient:SetPoint("TOPLEFT")
+	gradient:SetPoint("BOTTOMRIGHT")
+	gradient:SetTexture(DB.Statusbar)
+	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+	
+	local spar =  bars:CreateTexture(nil, "OVERLAY")
+	spar:SetTexture("Interface\\Addons\\SunUI\\Media\\Arrow")
+	spar:SetBlendMode("ADD")
+	spar:SetVertexColor(1, 0, 0, 1) 
+	spar:SetSize(16, 16)
+	spar:SetAlpha(.8)
+	spar:SetPoint("LEFT", bars:GetStatusBarTexture(), "RIGHT", -8, -14)
+	local healthtext = S.MakeFontString(bars, select(2, GameFontNormalSmall:GetFont()))
+	healthtext:SetPoint("TOP", spar, "BOTTOM", 0, 5)
+	
+	bars.SetValue_ = bars.SetValue
+	bars.SetValue = Smooth
+	
+	local power = CreateFrame("Statusbar", nil, bars)
+	power:SetSize(C["Width"], 5)
+	power:SetStatusBarTexture(DB.Statusbar)
+	power:SetAllPoints(bars)
+	power:SetStatusBarColor(0.1, 0.8, 0.1, 0)
+	power:SetMinMaxValues(0, UnitPowerMax("player"))
+	local powerspar =  power:CreateTexture(nil, "OVERLAY")
+	powerspar:SetTexture("Interface\\Addons\\SunUI\\Media\\ArrowT")
+	powerspar:SetBlendMode("ADD")
+	powerspar:SetVertexColor(.3,.45,.65, 1) 
+	powerspar:SetSize(16, 16)
+	powerspar:SetAlpha(.8)
+	powerspar:SetPoint("LEFT", power:GetStatusBarTexture(), "RIGHT", -8, 14)
+	local powertext = S.MakeFontString(bars, select(2, GameFontNormalSmall:GetFont()))
+	powertext:SetPoint("BOTTOM", powerspar, "TOP", 0, -5)
+	
+	power.SetValue_ = power.SetValue
+	power.SetValue = Smooth
+	
+	bars:SetScript("OnUpdate", function(self, elapsed)
+		self.elapsed = (self.elapsed or 0) + elapsed
+		if self.elapsed < .2 then
+			local healthnum = UnitHealth("player")
+			local powernum = UnitPower("player")
+			self:SetValue(healthnum)
+			power:SetValue(powernum)
+			healthtext:SetText(S.ShortValue(healthnum))
+			powertext:SetText(S.ShortValue(powernum))
+			UpdateHealthSmooth(bars)
+			UpdateHealthSmooth(power)
+		return end
+		self.elapsed = 0
+	end)
+	
+	bars:RegisterEvent("PLAYER_ENTERING_WORLD")
+	bars:RegisterEvent("PLAYER_REGEN_ENABLED")
+	bars:RegisterEvent("PLAYER_REGEN_DISABLED")
+	bars:SetScript("OnEvent", function(self, event)
+		if C["Fade"] then 
+			if event == "PLAYER_REGEN_DISABLED" then
+				self:Show()
+				UIFrameFadeIn(self, 1, self:GetAlpha(), 1)	
+			end
+			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" then
+				S.FadeOutFrameDamage(self, 1)
+			end
+		end
+	end)
+end
 function Module:OnEnable()
 	C = C["PowerBarDB"]
 	if not C["Open"] then return end
@@ -604,4 +713,5 @@ function Module:OnEnable()
 	Module:CreateEclipse()
 	Module:FuckWarlock()
 	Module:Mage()
+	Module:HealthPowerBar()
 end

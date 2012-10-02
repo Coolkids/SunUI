@@ -1,12 +1,10 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file ="Settings.lua"/>
-	<Include file="actionbar\load.xml"/>
 	<Include file ="Announce\load.xml"/>
-	<Include file="button\load.xml"/>
-	<Include file="chat\load.xml"/>
-	<Include file ="Class\load.xml"/>
+	
+	
 	<Include file ="FriendsMenuXP\load.xml"/>
-	<Include file ="layout\load.xml"/>
+	
 	<Include file="moduels\load.xml"/>
 	<Include file ="Quest\load.xml"/>
 	<Include file="script\load.xml"/>

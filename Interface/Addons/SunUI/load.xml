@@ -18,11 +18,6 @@
 	<Include file="Modules\load.xml"/>
 	<!-- script -->
 	<Include file="Script\load.xml"/>
-	<!-- raywatch -->
-	<Include file="RayWatcher\load.xml"/>
-	<!-- freebgrid -->
-	<Include file="Freebgrid\load.xml"/>
-	<Include file="Freebgrid\config.xml"/>
 </Ui>
 
 <!--	<Script file="Load.lua"/>  -->

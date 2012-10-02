@@ -638,7 +638,7 @@ local function BuildDurability()
 			if value < 40 then
 				Text:SetText("|cffff0000".."警告: |r "..Slots[1][2].."耐久过低!")
 			else
-				Text:SetText("")
+				Text:SetText("      ")
 			end
 	end)
 	Stat:SetScript("OnEnter", function(self)

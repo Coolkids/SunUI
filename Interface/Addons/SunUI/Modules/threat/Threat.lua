@@ -23,9 +23,35 @@ gradient:SetPoint("BOTTOMRIGHT")
 gradient:SetTexture(DB.Statusbar)
 gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
 
+ThreatBar.SetValue_ = ThreatBar.SetValue
+ThreatBar.SetValue = Smooth
+
 ThreatBar.text = ThreatBar:CreateFontString(nil, "OVERLAY", "NumberFontNormal")
 ThreatBar.text:Point("CENTER", ThreatBar, "CENTER")
+local function Smooth(self, value)
+	if value == self:GetValue() then
+        self.smoothing = nil
+    else
+        self.smoothing = value
+    end
+end
+local function UpdateHealthSmooth(self)
+	if self.smoothing == nil then return end
+	local val = self.smoothing
+	local limit = 30/GetFramerate()
+    local cur = self:GetValue()
+    local new = cur + min((val-cur)/3, max(val-cur, limit))
 
+    if new ~= new then
+        new = val
+    end
+
+    self:SetValue_(new)
+    if cur == val or abs(new - val) < 2 then
+        self:SetValue_(val)
+        self.smoothing = nil
+    end
+end
 local function OnEvent(self, event, ...)
 	
 	local party = GetNumGroupMembers()
@@ -67,6 +93,7 @@ local function OnUpdate(self, event, unit)
 		else
 			self:SetAlpha(0)
 		end	
+		UpdateHealthSmooth(self)
 	end
 end
 function Module:OnInitialize()

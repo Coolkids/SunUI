@@ -8,7 +8,6 @@
 	<Script file ="FastError.lua"/>
 	<Script file = "Flump.lua"/>
 	<Script file='memory.lua'/>
-	<Script file ="MiniMapPanels.lua"/>
 	<Script file ="Molinari.lua"/>
 	<Script file ="PVPx_off.lua"/>
 	<Script file ="tekKompare.lua"/>
