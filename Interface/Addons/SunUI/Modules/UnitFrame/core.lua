@@ -16,7 +16,7 @@ end
 oUF.colors.power['MANA'] = {.3,.45,.65}
 oUF.colors.power['RAGE'] = {.7,.3,.3}
 oUF.colors.power['FOCUS'] = {.7,.45,.25}
-oUF.colors.power['ENERGY'] = {.65,.65,.35}
+--oUF.colors.power['ENERGY'] = {.65,.65,.35}
 oUF.colors.power['RUNIC_POWER'] = {.45,.45,.75}
 local class = select(2, UnitClass("player"))
 local lib = {}

@@ -163,9 +163,8 @@ function MyContainer:OnCreate(name, settings)
 	--tagDisplay:SetFont(DB.Font, 11, "THINOUTLINE")
 	tagDisplay:SetPoint("RIGHT", infoFrame, "RIGHT", -10, 0)	
 	-- 信息条插件:搜索栏
-	local searchText = infoFrame:CreateFontString(nil, "OVERLAY")
+	local searchText = S.MakeFontString(infoFrame)
 	searchText:SetPoint("LEFT", infoFrame, "LEFT", 0, 1)
-	searchText:SetFontObject(GameFontWhite)
 	searchText:SetText("搜索")	
 	local search = self:SpawnPlugin("SearchBar", infoFrame)
 	search.highlightFunction = highlightFunction
@@ -195,9 +194,8 @@ function MyContainer:OnCreate(name, settings)
 		end
 		self:UpdateDimensions()
 	end)
-	BagToggle.Text = BagToggle:CreateFontString(nil, "OVERLAY")
+	BagToggle.Text = S.MakeFontString(BagToggle)
 	BagToggle.Text:SetPoint("CENTER")
-	BagToggle.Text:SetFontObject(GameFontWhite)
 	BagToggle.Text:SetText("背包")
 	
 	-- 背包整理按钮
@@ -205,9 +203,8 @@ function MyContainer:OnCreate(name, settings)
 	SortButton:SetSize(70, 20)
 	SortButton:SetPoint("BOTTOMRIGHT", -30, 7)
 	SortButton:SetScript("OnClick", function() JPack:Pack() end)
-	SortButton.Text = SortButton:CreateFontString(nil, "OVERLAY")
+	SortButton.Text = S.MakeFontString(SortButton)
 	SortButton.Text:SetPoint("CENTER")
-	SortButton.Text:SetFontObject(GameFontWhite)
 	SortButton.Text:SetText("整理背包")
 
 	-- 关闭按钮
@@ -215,8 +212,7 @@ function MyContainer:OnCreate(name, settings)
 	CloseButton:SetSize(20, 20)
 	CloseButton:SetScript( "OnClick", function(self) CloseAllBags() end)
 	CloseButton:SetPoint("BOTTOMRIGHT", -7, 7)
-	CloseButton.Texture = CloseButton:CreateFontString(nil, "OVERLAY")
+	CloseButton.Texture = S.MakeFontString(CloseButton)
 	CloseButton.Texture:SetPoint("CENTER", 1, 1)
-	CloseButton.Texture:SetFontObject(GameFontWhite)
 	CloseButton.Texture:SetText("x")
 end

@@ -6,6 +6,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Include file = "aurora\Load.xml"/>
 	<Include file = "actionBar\Load.xml"/>
+	<Include file ="Announce\load.xml"/>
 	<Include file = "bags\load.xml"/>
 	<Include file = "buff\load.xml"/>
 	<Include file = "buffreminder\Load.xml"/>

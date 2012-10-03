@@ -35,6 +35,7 @@ local RaidBuffList = {
 		61316,--法师
 		24604, --LR宝宝
 		126309, --疑似鸟德
+		116781, --武僧5%暴击
 	},
 	[5] = {
 		-- 10%法伤
@@ -238,7 +239,7 @@ local function BuildBuffFrame()
 	for i = 1, 6 do
 		local Temp = CreateFrame("Frame", nil, Minimap)
 		--Temp:SetSize(C["ReminderDB"].RaidBuffSize, C["ReminderDB"].RaidBuffSize)
-		Temp:SetSize((Minimap:GetWidth()-(6-1)*2)/6, (Minimap:GetWidth()-(6-1)*2)/6)
+		Temp:SetSize((120-(6-1)*2)/6, (120-(6-1)*2)/6)
 		Temp:SetFrameStrata("LOW")
 		Temp:CreateBorder()
 		Temp.Icon = Temp:CreateTexture(nil, "ARTWORK")

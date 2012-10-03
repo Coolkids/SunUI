@@ -1,6 +1,18 @@
 ﻿local S, C, L, DB= unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SunUIPowerBar", "AceEvent-3.0")
-
+local powercolor = {
+	["FUEL"] = {0, 0.55, 0.5},
+	["SOUL_SHARDS"] = {0.5, 0.32, 0.55},
+	["HOLY_POWER"] = {0.95, 0.9, 0.6},
+	["FOCUS"] =  {.7,.45,.25},
+	["MANA"] = {0, 0.76, 1},
+	["LIGHT_FORCE"] =  {0.71, 1, 0.92},
+	["RUNIC_POWER"] =  {.45,.45,.75},
+	["ENERGY"] =  {1,1,0},
+	["AMMOSLOT"] =  {0.8 ,0.6, 0},
+	["RUNES"] =  {0.5 ,0.5, 0.5},
+	["RAGE"] =  {.7,.3,.3},
+}
 function Module:CreateShadowOrbs()
 	if DB.MyClass ~= "PRIEST" then return end
 	local ShadowOrbs = CreateFrame("Frame", nil, UIParent)
@@ -643,13 +655,13 @@ function Module:HealthPowerBar()
 	
 	local spar =  bars:CreateTexture(nil, "OVERLAY")
 	spar:SetTexture("Interface\\Addons\\SunUI\\Media\\Arrow")
-	spar:SetBlendMode("ADD")
+	--spar:SetBlendMode("ADD")
 	spar:SetVertexColor(1, 0, 0, 1) 
 	spar:SetSize(16, 16)
-	spar:SetAlpha(.8)
-	spar:SetPoint("LEFT", bars:GetStatusBarTexture(), "RIGHT", -8, -14)
+	spar:SetPoint("CENTER", bars:GetStatusBarTexture(), "RIGHT", 0, -14)
 	local healthtext = S.MakeFontString(bars, select(2, GameFontNormalSmall:GetFont()))
 	healthtext:SetPoint("TOP", spar, "BOTTOM", 0, 5)
+	healthtext:SetTextColor(1, 0.22, 0.52)
 	
 	bars.SetValue_ = bars.SetValue
 	bars.SetValue = Smooth
@@ -662,11 +674,10 @@ function Module:HealthPowerBar()
 	power:SetMinMaxValues(0, UnitPowerMax("player"))
 	local powerspar =  power:CreateTexture(nil, "OVERLAY")
 	powerspar:SetTexture("Interface\\Addons\\SunUI\\Media\\ArrowT")
-	powerspar:SetBlendMode("ADD")
+	--powerspar:SetBlendMode("ADD")
 	powerspar:SetVertexColor(.3,.45,.65, 1) 
 	powerspar:SetSize(16, 16)
-	powerspar:SetAlpha(.8)
-	powerspar:SetPoint("LEFT", power:GetStatusBarTexture(), "RIGHT", -8, 14)
+	powerspar:SetPoint("CENTER", power:GetStatusBarTexture(), "RIGHT", 0, 14)
 	local powertext = S.MakeFontString(bars, select(2, GameFontNormalSmall:GetFont()))
 	powertext:SetPoint("BOTTOM", powerspar, "TOP", 0, -5)
 	
@@ -687,7 +698,7 @@ function Module:HealthPowerBar()
 		return end
 		self.elapsed = 0
 	end)
-	
+	bars:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
 	bars:RegisterEvent("PLAYER_ENTERING_WORLD")
 	bars:RegisterEvent("PLAYER_REGEN_ENABLED")
 	bars:RegisterEvent("PLAYER_REGEN_DISABLED")
@@ -698,7 +709,14 @@ function Module:HealthPowerBar()
 				UIFrameFadeIn(self, 1, self:GetAlpha(), 1)	
 			end
 			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" then
+				local _, power = UnitPowerType("player")
+				powertext:SetTextColor(unpack(powercolor[power]))
 				S.FadeOutFrameDamage(self, 1)
+			end
+			if event == "UPDATE_SHAPESHIFT_FORM"then
+				power:SetMinMaxValues(0, UnitPowerMax("player"))
+				local _, powerclass = UnitPowerType("player")
+				powertext:SetTextColor(unpack(powercolor[powerclass]))
 			end
 		end
 	end)

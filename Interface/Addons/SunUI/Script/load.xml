@@ -1,10 +1,6 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file ="Settings.lua"/>
-	<Include file ="Announce\load.xml"/>
-	
-	
 	<Include file ="FriendsMenuXP\load.xml"/>
-	
 	<Include file="moduels\load.xml"/>
 	<Include file ="Quest\load.xml"/>
 	<Include file="script\load.xml"/>

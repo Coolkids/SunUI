@@ -141,7 +141,6 @@ G["MiniDB"] = {
 	["Resurrect"] = false,
 	["igonoreOld"] = false,
 	["HideRaidWarn"] = true,
-	["Interrupt"] = true,
 	["HideRaid"] = true,
 	["AutoSell"] = true,
 	["FastError"] = true,
@@ -236,7 +235,7 @@ G["MoveHandleDB"] = {
 	--仇恨监视
 	["Threat"] = {"BOTTOM", "UIParent", "BOTTOM", -175, 262},
 	--宠物计时
-	["ShadowPet"] = {"BOTTOM", "UIParent", "BOTTOM", -318, 201},
+	["ShadowPet"] = {"BOTTOM", "UIParent", "BOTTOM", -322, 201},
 	--信息条
 	["InfoPanel"] = {"TOPLEFT", "Minimap", "TOPRIGHT", 5,3},
 	--Mini
@@ -267,4 +266,14 @@ G["WarnDB"] = {
 	["Height"] = 64,
 	["FontSize"] = 15,
 	["Health"] = true,
+}
+G["AnnounceDB"] = {
+	["Open"] = true,
+	["Interrupt"] = true,
+	["Channel"] = true,
+	["Mislead"] = true,
+	["BaoM"] = true,
+	["Give"] = true,
+	["Resurrect"] = true,
+	["Heal"] = true,
 }

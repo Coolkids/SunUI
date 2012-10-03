@@ -1,5 +1,5 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
 
-	<Script file = "InterruptSay.lua"/>
+	<Script file = "Announce.lua"/>
 
 </Ui>
