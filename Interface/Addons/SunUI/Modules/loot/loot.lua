@@ -195,12 +195,12 @@ local createSlot = function(id)
 	frame.count = count
 
 	local name = frame:CreateFontString(nil, "OVERLAY")
-	name:SetJustifyH"CENTER"
+	name:SetJustifyH"LEFT"
 	name:ClearAllPoints()
-	name:SetPoint("CENTER", frame)
+	name:SetPoint("LEFT", frame)
 	name:SetNonSpaceWrap(true)
 	name:SetFontObject(GameFontWhite)
-
+	name:SetHeight(cfg.iconsize)
 	name:SetWidth(120)
 	frame.name = name
 	
@@ -249,7 +249,7 @@ XUIDropDownMenu_Initialize(LDD, LDD_Initialize, "MENU")
 addon.slots = {}
 addon.LOOT_CLOSED = function(self)
 	StaticPopup_Hide"LOOT_BIND"
-	S.FadeOutFrameDamage(self, 0.5)
+	S.FadeOutFrameDamage(self, 0.3)
 	for _, v in pairs(self.slots) do
 		v:Hide()
 	end
@@ -257,7 +257,7 @@ addon.LOOT_CLOSED = function(self)
 end
 addon.LOOT_OPENED = function(self, event, autoloot)
 	self:Show()
-	UIFrameFadeIn(self, 0.5, 0, 1)
+	UIFrameFadeIn(self, 0.3, 0, 1)
 	lb:Show()
 	if(not self:IsShown()) then
 		CloseLoot(not autoLoot)
