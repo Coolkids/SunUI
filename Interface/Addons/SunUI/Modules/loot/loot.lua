@@ -1,16 +1,34 @@
-local S, C, L, DB, _ = unpack(select(2, ...))
+ï»¿local S, C, L, DB, _ = unpack(select(2, ...))
 local _G = _G
 local cfg = {
 	iconsize = 32, 					-- loot frame icon's size
 }
-
+local TitleText = "Items"
+if GetLocale() == "zhCN" then
+    TitleText = "æˆ˜åˆ©å“"
+end
+if GetLocale() == "zhTW" then
+    TitleText = "æˆ°åˆ©å“"
+end
 local L = {
-	fish = "µöÓã",
-	empty = "¿Õ",
+	fish = "é’“é±¼",
+	empty = "ç©º",
 }
 local addon = CreateFrame("Button", "SunUI_Loot")
 
-local title = addon:CreateFontString(nil, "OVERLAY")
+local title = CreateFrame("Frame", nil, addon)
+title.text = S.MakeFontString(addon)
+title.text:SetPoint("CENTER", title, "CENTER")
+title:SetHeight(25)
+title:SetPoint("BOTTOMLEFT", addon, "TOPLEFT", 0, 11)
+title:SetPoint("BOTTOMRIGHT", addon, "TOPRIGHT", 0, 11)
+title:CreateShadow("Background")
+LootTargetPortrait=CreateFrame("PlayerModel",nil,addon)
+LootTargetPortrait:SetPoint("TOPRIGHT",title,"TOPLEFT",-11,0)
+LootTargetPortrait:SetHeight(50)
+LootTargetPortrait:SetWidth(50)
+LootTargetPortrait:CreateShadow("Background")
+	
 local lb = CreateFrame("Button", "Loot_D", addon, "UIPanelScrollDownButtonTemplate")		-- Link button
 local LDD = CreateFrame("Frame", "Loot_b", addon, "XUIDropDownMenuTemplate")				-- Link dropdown menu frame
 lb:SetFrameStrata("FULLSCREEN")
@@ -134,7 +152,7 @@ end
 
 local createSlot = function(id)
 	local frame = CreateFrame("Button", 'm_LootSlot'..id, addon)
-	frame:SetPoint("LEFT", 8, 0)
+	frame:SetPoint("LEFT", cfg.iconsize+8, 0)
 	frame:SetPoint("RIGHT", -8, 0)
 	frame:SetHeight(cfg.iconsize)
 	frame:SetID(id)
@@ -143,11 +161,16 @@ local createSlot = function(id)
 	frame:SetScript("OnClick", OnClick)
 	frame:SetScript("OnUpdate", OnUpdate)
 	frame:SetFrameStrata("FULLSCREEN")
+	local gradient = frame:CreateTexture(nil, "BACKGROUND")
+	gradient:SetPoint("TOPLEFT")
+	gradient:SetPoint("BOTTOMRIGHT")
+	gradient:SetTexture(DB.Statusbar)
+	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
 	local iconFrame = CreateFrame("Frame", nil, frame)
 	iconFrame:SetHeight(cfg.iconsize)
 	iconFrame:SetWidth(cfg.iconsize)
 	iconFrame:ClearAllPoints()
-	iconFrame:SetPoint("LEFT", frame, 3,0)
+	iconFrame:SetPoint("RIGHT", frame, "LEFT", -3,0)
 	
 	local icon = iconFrame:CreateTexture(nil, "BACKGROUND")
 	icon:SetAlpha(.8)
@@ -172,32 +195,22 @@ local createSlot = function(id)
 	frame.count = count
 
 	local name = frame:CreateFontString(nil, "OVERLAY")
-	name:SetJustifyH"LEFT"
+	name:SetJustifyH"CENTER"
 	name:ClearAllPoints()
-	name:SetPoint("RIGHT", frame)
-	name:SetPoint("LEFT", icon, "RIGHT",8,0)
+	name:SetPoint("CENTER", frame)
 	name:SetNonSpaceWrap(true)
-	--name:SetFont(DB.Font, S.Scale(12), "OUTLINE")
 	name:SetFontObject(GameFontWhite)
 
 	name:SetWidth(120)
 	frame.name = name
 	
 	frame:SetPoint("TOP", addon, 8, (-5+cfg.iconsize)-(id*(cfg.iconsize+10))-10)
-	frame:SetBackdrop{
-	edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border", edgeSize = 10,
-	--insets = {left = 0, right = 0, top = 0, bottom = 0},
-	}
 	addon.slots[id] = frame
-	
+	frame:CreateBorder()
 	return frame
-
 end
---title:SetFontObject(GameFontNormalLarge)
-title:SetFont(DB.Font, S.Scale(20), "OUTLINE")
-title:SetTextColor(GameFontNormalLarge:GetTextColor())
-title:SetJustifyH"LEFT"
-title:SetPoint("TOPLEFT", addon, "TOPLEFT", 6, -4)
+title.text:SetTextColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
+title.text:SetJustifyH"CENTER"
 addon:SetScript("OnMouseDown", function(self) self:StartMoving() end)
 addon:SetScript("OnMouseUp", function(self) self:StopMovingOrSizing() end)
 addon:SetScript("OnHide", function(self)
@@ -211,7 +224,7 @@ addon:SetParent(UIParent)
 addon:SetUserPlaced(true)
 addon:SetPoint("TOPLEFT", 0, -104)
 addon:CreateShadow("Background")
-addon:SetWidth(256)
+addon:SetWidth(210)
 addon:SetHeight(64)
 addon:SetBackdropColor(0, 0, 0, 1)
 addon:SetFrameStrata("FULLSCREEN")
@@ -236,8 +249,7 @@ XUIDropDownMenu_Initialize(LDD, LDD_Initialize, "MENU")
 addon.slots = {}
 addon.LOOT_CLOSED = function(self)
 	StaticPopup_Hide"LOOT_BIND"
-	self:Hide()
-
+	S.FadeOutFrameDamage(self, 0.5)
 	for _, v in pairs(self.slots) do
 		v:Hide()
 	end
@@ -245,6 +257,7 @@ addon.LOOT_CLOSED = function(self)
 end
 addon.LOOT_OPENED = function(self, event, autoloot)
 	self:Show()
+	UIFrameFadeIn(self, 0.5, 0, 1)
 	lb:Show()
 	if(not self:IsShown()) then
 		CloseLoot(not autoLoot)
@@ -253,13 +266,23 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 	local items = GetNumLootItems()
 
 	if(IsFishingLoot()) then
-		title:SetText(L.fish)
+		title.text:SetText(L.fish)
 	elseif(not UnitIsFriend("player", "target") and UnitIsDead"target") then
-		title:SetText(UnitName"target")
+		title.text:SetText(UnitName("target"))
 	else
-		title:SetText(LOOT)
+		title.text:SetText(LOOT)
 	end
-
+	if(UnitExists("target") and not IsFishingLoot()) then
+		LootTargetPortrait:SetUnit("target")
+		LootTargetPortrait:SetCamera(0)
+	elseif IsFishingLoot() then
+		LootTargetPortrait:ClearModel()
+		LootTargetPortrait:SetModel("PARTICLES\\Lootfx.m2")
+		LootTargetPortrait:SetCamera(0)
+	else
+		LootTargetPortrait:ClearModel()
+		LootTargetPortrait:SetModel("PARTICLES\\Lootfx.m2")
+	end
 	-- Blizzard uses strings here
 	if(GetCVar("lootUnderMouse") == "1") then
 		local x, y = GetCursorPosition()
@@ -274,30 +297,25 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 
 	local m = 0
 	if(items > 0) then
+		title.text:SetText(TitleText.." x "..items)
 		for i=1, items do
 			local slot = addon.slots[i] or createSlot(i)
 			local texture, item, quantity, quality, locked = GetLootSlotInfo(i)
 			local color = ITEM_QUALITY_COLORS[quality]
---[[ 
-			if(LootSlotIsCoin(i)) then
-				item = item:gsub("\n", ", ")
-			end 
-]]
 
 			if(quantity and quantity > 1) then
 				slot.count:SetText(quantity)
 				slot.count:Show()
 			else
 				slot.count:Hide()
-				
 			end
 			if quality <= 1 then 
 				slot.overlay:SetBackdropBorderColor(0, 0, 0)
+				slot:SetBackdropBorderColor(0, 0, 0)
 			else
 				slot.overlay:SetBackdropBorderColor(color.r, color.g, color.b)
+				slot:SetBackdropBorderColor(color.r, color.g, color.b)
 			end
-			slot:SetBackdropBorderColor(color.r, color.g, color.b)
-
 			slot.quality = quality
 			slot.name:SetText(item)
 			slot.name:SetTextColor(color.r, color.g, color.b)
@@ -325,11 +343,8 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 	local color = ITEM_QUALITY_COLORS[m]
 	self:SetBackdropBorderColor(color.r, color.g, color.b, .8)
 	self:SetHeight(math.max((items*(cfg.iconsize+10))+27), 20)
-	self:SetWidth(250)
-	title:SetWidth(220)
-	title:SetHeight(16)
+	self:SetWidth(210)
 	
-
 	local closebutton = CreateFrame("Button", nil)
 	closebutton:SetParent( self )
 	closebutton:SetWidth(20)
@@ -342,9 +357,7 @@ end
 
 addon.LOOT_SLOT_CLEARED = function(self, event, slot)
 	if(not self:IsShown()) then return end
-
 	addon.slots[slot]:Hide()
-	
 end
 
 

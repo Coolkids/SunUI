@@ -1584,30 +1584,7 @@ local function BuildFrame()
 	--S.ReskinClose(close)
 	--SetUpChat
 	local function SetChat()
-		local channels = {
-				"SAY",
-				"EMOTE",
-				"YELL",
-				"GUILD",
-				"OFFICER",
-				"GUILD_ACHIEVEMENT",
-				"ACHIEVEMENT",
-				"WHISPER",
-				"PARTY",
-				"PARTY_LEADER",
-				"RAID",
-				"RAID_LEADER",
-				"RAID_WARNING",
-				"BATTLEGROUND",
-				"BATTLEGROUND_LEADER",
-				"CHANNEL1",
-				"CHANNEL2",
-				"CHANNEL3",
-				"CHANNEL4",
-				"CHANNEL5",
-				"CHANNEL6",
-				"CHANNEL7",
-			}
+		local channels = {"SAY","EMOTE","YELL","GUILD","OFFICER","GUILD_ACHIEVEMENT","ACHIEVEMENT","WHISPER","PARTY","PARTY_LEADER","RAID","RAID_LEADER","RAID_WARNING","BATTLEGROUND","BATTLEGROUND_LEADER","CHANNEL1","CHANNEL2","CHANNEL3","CHANNEL4","CHANNEL5","CHANNEL6","CHANNEL7",}
 			
 		for i, v in ipairs(channels) do
 			ToggleChatColorNamesByClassGroup(true, v)
@@ -1616,13 +1593,15 @@ local function BuildFrame()
 		FCF_SetLocked(ChatFrame1, nil)
 		FCF_SetChatWindowFontSize(self, ChatFrame1, 15) 
 		ChatFrame1:ClearAllPoints()
-		ChatFrame1:SetPoint("BOTTOMLEFT", 5, 28)
+		ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 3, 33)
 		ChatFrame1:SetWidth(327)
 		ChatFrame1:SetHeight(122)
 		ChatFrame1:SetUserPlaced(true)
+		ChatFrame1:SetClampedToScreen(false)
 		for i = 1,10 do FCF_SetWindowAlpha(_G["ChatFrame"..i], 0) end
 		FCF_SavePositionAndDimensions(ChatFrame1)
 		FCF_SetLocked(ChatFrame1, 1)
+		
 	end
 	--SetUpDBM
 	local function SetDBM()
