@@ -1,79 +1,42 @@
-local ADDON_NAME, ns = ...
+----------------------------------------------------------------------------------------
+--	Copy url from chat(module from Gibberish by p3lim)
+----------------------------------------------------------------------------------------
+local patterns = {
+	"(https://%S+)",
+	"(http://%S+)",
+	"(www%.%S+)",
+	"(%d+%.%d+%.%d+%.%d+:?%d*)"
+}
 
-  local color = "0099FF"
-  local foundurl = false
+for _, event in pairs({
+	"CHAT_MSG_GUILD",
+	"CHAT_MSG_PARTY",
+	"CHAT_MSG_PARTY_LEADER",
+	"CHAT_MSG_RAID",
+	"CHAT_MSG_RAID_LEADER",
+	"CHAT_MSG_CHANNEL",
+	"CHAT_MSG_WHISPER",
+	"CHAT_MSG_BN_WHISPER",
+	"CHAT_MSG_SAY",
+	"CHAT_MSG_BATTLEGROUND",
+	"CHAT_MSG_BATTLEGROUND_LEADER"
+}) do
+	ChatFrame_AddMessageEventFilter(event, function(self, event, str, ...)
+		for _, pattern in pairs(patterns) do
+			local result, match = string.gsub(str, pattern, "|cff00FF00|Hurl:%1|h[%1]|h|r")
+			if match > 0 then
+				return false, result, ...
+			end
+		end
+	end)
+end
 
-  function string.color(text, color)
-    return "|cff"..color..text.."|r"
-  end
+local orig = SetItemRef
+function SetItemRef(link, str, ...)
+	if string.sub(link, 1, 3) ~= "url" then return orig(link, str, ...) end
 
-  function string.link(text, type, value, color)
-    return "|H"..type..":"..tostring(value).."|h"..tostring(text):color(color or "ffffff").."|h"
-  end
-
-  local function highlighturl(before,url,after)
-    foundurl = true
-    return " "..string.link("["..url.."]", "url", url, color).." "
-  end
-
-  local function searchforurl(frame, text, ...)
-
-    foundurl = false
-
-    if string.find(text, "%pTInterface%p+") then
-      --disable interface textures (lol)
-      foundurl = true
-    end
-
-    if not foundurl then
-      --192.168.1.1:1234
-      text = string.gsub(text, "(%s?)(%d%d?%d?%.%d%d?%d?%.%d%d?%d?%.%d%d?%d?:%d%d?%d?%d?%d?)(%s?)", highlighturl)
-    end
-    if not foundurl then
-      --192.168.1.1
-      text = string.gsub(text, "(%s?)(%d%d?%d?%.%d%d?%d?%.%d%d?%d?%.%d%d?%d?)(%s?)", highlighturl)
-    end
-    if not foundurl then
-      --www.teamspeak.com:3333
-      text = string.gsub(text, "(%s?)([%w_-]+%.?[%w_-]+%.[%w_-]+:%d%d%d?%d?%d?)(%s?)", highlighturl)
-    end
-    if not foundurl then
-      --http://www.google.com
-      text = string.gsub(text, "(%s?)(%a+://[%w_/%.%?%%=~&-'%-]+)(%s?)", highlighturl)
-    end
-    if not foundurl then
-      --www.google.com
-      text = string.gsub(text, "(%s?)(www%.[%w_/%.%?%%=~&-'%-]+)(%s?)", highlighturl)
-    end
-    if not foundurl then
-      --lol@lol.com
-      text = string.gsub(text, "(%s?)([_%w-%.~-]+@[_%w-]+%.[_%w-%.]+)(%s?)", highlighturl)
-    end
-
-    frame.am(frame,text,...)
-
-  end
-
-  for i = 1, NUM_CHAT_WINDOWS do
-    if ( i ~= 2 ) then
-      local cf = _G["ChatFrame"..i]
-      cf.am = cf.AddMessage
-      cf.AddMessage = searchforurl
-    end
-  end
-
-  local orig = ChatFrame_OnHyperlinkShow
-  function ChatFrame_OnHyperlinkShow(frame, link, text, button)
-    local type, value = link:match("(%a+):(.+)")
-    if ( type == "url" ) then
-      --local eb = _G[frame:GetName()..'EditBox'] --sometimes this is not the active chatbox. thus use the last active one for this
-      local eb = LAST_ACTIVE_CHAT_EDIT_BOX or _G[frame:GetName()..'EditBox']
-      if eb then
-        eb:SetText(value)
-        eb:SetFocus()
-        eb:HighlightText()
-      end
-    else
-      orig(self, link, text, button)
-    end
-  end
+	local editbox = ChatEdit_ChooseBoxForSend()
+	ChatEdit_ActivateChat(editbox)
+	editbox:Insert(string.sub(link, 5))
+	editbox:HighlightText()
+end

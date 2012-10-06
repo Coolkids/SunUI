@@ -1103,7 +1103,7 @@ lib.gen_swing_timer = function(f)
 	gradient:SetPoint("TOPLEFT")
 	gradient:SetPoint("BOTTOMRIGHT")
 	gradient:SetTexture(DB.Statusbar)
-	gradient:SetGradientAlpha("HORIZONTAL", .3, .3, .3, .4, .1, .1, .1, .4)
+	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
 	
 	f.AltPowerBar = apb
 	

@@ -1,4 +1,4 @@
-local S, C, L, DB = unpack(select(2, ...))
+﻿local S, C, L, DB = unpack(select(2, ...))
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local _G =_G
 local filename, fontHeight, _ = GameFontNormal:GetFont()
@@ -217,16 +217,31 @@ if f.sw then return end
 	f.sw = shadow
 end
 
-function S.FadeOutFrameDamage(p, t, show)  --����
-	if p:GetAlpha()>0 then
+function S.FadeOutFrameDamage(p, t, show)  --隐藏
+	if type(p) == "table" then 
+		if p:GetAlpha()>0 then
+			local fadeInfo = {}
+			fadeInfo.mode = "OUT"
+			fadeInfo.timeToFade = t or 1.5
+			if not show then
+				fadeInfo.finishedFunc = function() p:Hide() end 
+			end
+			fadeInfo.startAlpha = p:GetAlpha()
+			fadeInfo.endAlpha = 0
+			UIFrameFade(p, fadeInfo)
+		end 
+		return
+	end
+	if not _G[p] then print("SunUI:没有发现"..p.."这个框体")return end
+	if _G[p]:GetAlpha()>0 then
 		local fadeInfo = {}
 		fadeInfo.mode = "OUT"
 		fadeInfo.timeToFade = t or 1.5
 		if not show then
-			fadeInfo.finishedFunc = function() p:Hide() end 
+			fadeInfo.finishedFunc = function() _G[p]:Hide() end 
 		end
-		fadeInfo.startAlpha = p:GetAlpha()
+		fadeInfo.startAlpha = _G[p]:GetAlpha()
 		fadeInfo.endAlpha = 0
-		UIFrameFade(p, fadeInfo)
+		UIFrameFade(_G[p], fadeInfo)
 	end 
 end

@@ -1,5 +1,5 @@
 local S, C, L, DB = unpack(SunUI)
-
+if IsAddOnLoaded("Skada") or IsAddOnLoaded("Recount") then return end
 -- Config start
 local anchor = "TOPLEFT"
 local x, y = 130, -25
@@ -77,7 +77,7 @@ local AbsorbSpellDuration = {
 }
 local shields = {}
 
-local menuFrame = CreateFrame("Frame", "alDamageMeterMenu", UIParent, "UIDropDownMenuTemplate")
+local menuFrame = CreateFrame("Frame", "alDamageMeterMenu", UIParent, "XUIDropDownMenuTemplate")
 
 local dummy = function() return end
 
@@ -279,7 +279,7 @@ local CreateBar = function()
 	newbar:SetScript("OnLeave", OnBarLeave)
 	newbar:SetScript("OnMouseUp", function(self, button)
 		if button == "RightButton" then
-			ToggleDropDownMenu(1, nil, menuFrame, 'cursor', 0, 0)
+			XToggleDropDownMenu(1, nil, menuFrame, 'cursor', 0, 0)
 		end
 	end)
 	return newbar
@@ -386,30 +386,30 @@ local CreateMenu = function(self, level)
 		info.isTitle = 1
 		info.text = addon_name
 		info.notCheckable = 1
-		UIDropDownMenu_AddButton(info, level)
+		XUIDropDownMenu_AddButton(info, level)
 		wipe(info)
 		info.text = MODE
 		info.hasArrow = 1
 		info.value = "Mode"
 		info.notCheckable = 1
-		UIDropDownMenu_AddButton(info, level)
+		XUIDropDownMenu_AddButton(info, level)
 		wipe(info)
 		info.text = CHAT_ANNOUNCE
 		info.hasArrow = 1
 		info.value = "Report"
 		info.notCheckable = 1
-		UIDropDownMenu_AddButton(info, level)
+		XUIDropDownMenu_AddButton(info, level)
 		wipe(info)
 		info.text = COMBAT
 		info.hasArrow = 1
 		info.value = "Fight"
 		info.notCheckable = 1
-		UIDropDownMenu_AddButton(info, level)
+		XUIDropDownMenu_AddButton(info, level)
 		wipe(info)
 		info.text = RESET
 		info.func = Clean
 		info.notCheckable = 1
-		UIDropDownMenu_AddButton(info, level)
+		XUIDropDownMenu_AddButton(info, level)
 	elseif level == 2 then
 		if UIDROPDOWNMENU_MENU_VALUE == "Mode" then
 			for i, v in pairs(displayMode) do
@@ -417,7 +417,7 @@ local CreateMenu = function(self, level)
 				info.text = v
 				info.func = function() SetMode(v) end
 				info.notCheckable = 1
-				UIDropDownMenu_AddButton(info, level)
+				XUIDropDownMenu_AddButton(info, level)
 			end
 		end
 		if UIDROPDOWNMENU_MENU_VALUE == "Report" then
@@ -426,7 +426,7 @@ local CreateMenu = function(self, level)
 				info.text = v.text
 				info.func = v.func
 				info.notCheckable = 1
-				UIDropDownMenu_AddButton(info, level)
+				XUIDropDownMenu_AddButton(info, level)
 			end
 		end
 		if UIDROPDOWNMENU_MENU_VALUE == "Fight" then
@@ -434,18 +434,18 @@ local CreateMenu = function(self, level)
 			info.text = "Current"
 			info.func = function() ResetDisplay(current) end
 			info.notCheckable = 1
-			UIDropDownMenu_AddButton(info, level)
+			XUIDropDownMenu_AddButton(info, level)
 			wipe(info)
 			info.text = "Total"
 			info.func = function() ResetDisplay(total) end
 			info.notCheckable = 1
-			UIDropDownMenu_AddButton(info, level)
+			XUIDropDownMenu_AddButton(info, level)
 			for i, v in pairs(fights) do
 				wipe(info)
 				info.text = v.name
 				info.func = function() ResetDisplay(v.data) end
 				info.notCheckable = 1
-				UIDropDownMenu_AddButton(info, level)
+				XUIDropDownMenu_AddButton(info, level)
 			end
 		end
 	end
@@ -678,7 +678,7 @@ local OnEvent = function(self, event, ...)
 			end)
 			MainFrame:SetScript("OnMouseUp", function(self, button)
 				if button == "RightButton" then
-					ToggleDropDownMenu(1, nil, menuFrame, 'cursor', 0, 0)
+					XToggleDropDownMenu(1, nil, menuFrame, 'cursor', 0, 0)
 				end
 				if button == "LeftButton" then
 					self:StopMovingOrSizing()

@@ -34,7 +34,7 @@ function Module:OnInitialize()
 		["FilterMultiLine"] = true, --Filter the multiple messages. // 过滤多行信息
 		["AllowLines"] = 3, --How many lines can be allowd. // 允许的最大行数
 		
-		["FilterRepeat"] = true, --Filter the repeat messages. // 过滤重复聊天信息
+		["FilterRepeat"] = false, --Filter the repeat messages. // 过滤重复聊天信息
 		["RepeatAlike"] = 95, --Set the similarity between the messages. // 设定重复信息相似度
 		["RepeatInterval"] = 60, --Set the interval between the messages. // 设定重复信息间隔时间
 		["RepeatMaxCache"] = 200, --Set the max cache from the messages. // 设定最多缓存多少条消息
@@ -52,6 +52,15 @@ function Module:OnInitialize()
 			"dps",
 		},
 		["DangerWords"] = {
+			"**",
+			"→",
+			"←",
+			"進行最後一擊",
+			"进行最后一击",
+			"[仇恨]",
+			"[误导]",
+			"[誤導]",
+			"生命危急",
 			"塞.?纳.*团.?队",
 			"赤.?焰.?星.?魂",
 			"平.?[台臺]",
@@ -101,12 +110,20 @@ function Module:OnInitialize()
 		["WhiteList"] = {
 		},
 		["BlackList"] = {
-		"大脚",
-		"魔盒",
-		"大腳",
-		"FishUI",
-		"準備開火",
-		"代刷",
+			"大脚",
+			"魔盒",
+			"大腳",
+			"FishUI",
+			"準備開火",
+			"代刷",
+			"**?",
+			"?**",
+			"→?",
+			"?←",
+			"進行最後一擊",
+			"进行最后一击",
+			"[仇恨]",
+			"生命危急",
 		},
 	}
 	-----------------------------------------------------------------------
@@ -543,4 +560,15 @@ function Module:OnInitialize()
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", ChatFilter_TalentSpec)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_ACHIEVEMENT", ChatFilter_Achievement)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD_ACHIEVEMENT", ChatFilter_Achievement)
+	
+	local function KillRaidAlerter(self, event, msg)
+		if (strmatch(msg, "^(%*%*).+(%*%*)$")) or (strmatch(msg, "(大腳).+(提示)")) or (strmatch(msg, "(大脚).+(提示)")) or (strmatch(msg, "(魔盒).+(提示)")) then
+			return true
+		end
+	end
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID", KillRaidAlerter)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID_WARNING", KillRaidAlerter)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID_LEADER", KillRaidAlerter)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY", KillRaidAlerter)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_MONSTER_PARTY", KillRaidAlerter)
 end

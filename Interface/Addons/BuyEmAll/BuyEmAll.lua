@@ -288,6 +288,8 @@ function BuyEmAll:AltCurrencyTranslating(Texture)
 		return 614;
 	elseif (strmatch(Texture, "%a+_%a+$") == "primal_shadow") then
 		return 615;
+	elseif (Texture == "Interface\\Icons\\inv_relics_idolofferocity") then
+		return 402;
 	end
 end
 

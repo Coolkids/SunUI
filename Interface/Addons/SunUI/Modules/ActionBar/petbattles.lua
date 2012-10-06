@@ -1,5 +1,5 @@
 local S, C, L, DB, _ = unpack(select(2, ...))
-
+local btnsize = 26*S.Scale(1)
 local testmode = false
 local media = {
 	["backdrop"] = "Interface\\ChatFrame\\ChatFrameBackground", -- default backdrop
@@ -16,7 +16,7 @@ frame.TopArtLeft:Hide()
 frame.TopArtRight:Hide()
 frame.TopVersus:Hide()
 
-local tooltips = {PetBattlePrimaryAbilityTooltip, PetBattlePrimaryUnitTooltip, FloatingBattlePetTooltip}
+local tooltips = {PetBattlePrimaryAbilityTooltip, PetBattlePrimaryUnitTooltip, FloatingBattlePetTooltip, BattlePetTooltip}
 for _, f in pairs(tooltips) do
 	f:DisableDrawLayer("BACKGROUND")
 	local bg = CreateFrame("Frame", nil, f)
@@ -41,7 +41,7 @@ frame.WeatherFrame.Icon:Hide()
 frame.WeatherFrame.Name:Hide()
 frame.WeatherFrame.DurationShadow:Hide()
 frame.WeatherFrame.Label:Hide()
-frame.WeatherFrame.Duration:SetPoint("CENTER", self, 0, 8)
+frame.WeatherFrame.Duration:SetPoint("CENTER", frame.WeatherFrame, 0, 8)
 frame.WeatherFrame:ClearAllPoints()
 frame.WeatherFrame:SetPoint("TOP", UIParent, 0, -15)
 
@@ -50,7 +50,8 @@ local units = {frame.ActiveAlly, frame.ActiveEnemy}
 for index, unit in pairs(units) do
 	unit.healthBarWidth = 300
 
-	unit.Border:Hide()
+	unit.Border:SetDrawLayer("ARTWORK", 0)
+	unit.Border2:SetDrawLayer("ARTWORK", 1)
 	unit.HealthBarBG:Hide()
 	unit.HealthBarFrame:Hide()
 	unit.LevelUnderlay:Hide()
@@ -61,17 +62,19 @@ for index, unit in pairs(units) do
 
 	unit.Border:SetTexture(media.checked)
 	unit.Border:SetTexCoord(0, 1, 0, 1)
-	unit.Border:SetAllPoints(unit.Icon)
+	unit.Border:Point("TOPLEFT", unit.Icon, "TOPLEFT", -1, 1)
+	unit.Border:Point("BOTTOMRIGHT", unit.Icon, "BOTTOMRIGHT", 1, -1)
 	unit.Border2:SetTexture(media.checked)
 	unit.Border2:SetVertexColor(.89, .88, .06)
 	unit.Border2:SetTexCoord(0, 1, 0, 1)
-	unit.Border2:SetAllPoints(unit.Icon)
+	unit.Border2:Point("TOPLEFT", unit.Icon, "TOPLEFT", -1, 1)
+	unit.Border2:Point("BOTTOMRIGHT", unit.Icon, "BOTTOMRIGHT", 1, -1)
 
 	unit.Level:SetFontObject(GameFontWhite)
 	unit.Level:SetTextColor(1, 1, 1)
 
 	local bg = CreateFrame("Frame", nil, unit)
-	bg:SetWidth(unit.healthBarWidth)
+	bg:Width(unit.healthBarWidth+ 2)
 	bg:SetFrameLevel(unit:GetFrameLevel()-1)
 	S.CreateBD(bg)
 
@@ -102,14 +105,14 @@ for index, unit in pairs(units) do
 	else
 		bg:Point("TOPRIGHT", unit.ActualHealthBar, "TOPRIGHT", 1, 1)
 		bg:Point("BOTTOMRIGHT", unit.ActualHealthBar, "BOTTOMRIGHT", 1, -1)
-		--unit.ActualHealthBar:SetGradient("VERTICAL", 1, .12, .24, .5, .06, .12)
 		unit.ActualHealthBar:Point("BOTTOMRIGHT", unit.Icon, "BOTTOMLEFT", -10, 0)
 		unit.ActualHealthBar:SetVertexColor(1, .12, .24)
 		unit.Name:Point("BOTTOMRIGHT", bg, "TOPRIGHT", 0, 4)
 		unit.PetTypeString:Point("BOTTOMLEFT", bg, "TOPLEFT", 0, 4)
 		unit.PetTypeString:SetJustifyH("LEFT")
 	end
-
+	
+	unit.Icon:SetDrawLayer("ARTWORK", 2)
 	S.CreateBG(unit.Icon)
 end
 
@@ -124,7 +127,7 @@ for index, unit in pairs(extraUnits) do
 	if testmode then unit:Show() end
 
 	unit.healthBarWidth = 36
-
+	unit:SetFrameLevel(3)
 	unit:SetSize(36, 36)
 
 	unit.HealthBarBG:SetAlpha(0)
@@ -150,17 +153,20 @@ end
 
 for i = 1, NUM_BATTLE_PETS_IN_BATTLE  do
 	local unit = bf.PetSelectionFrame["Pet"..i]
+	local icon = unit.Icon
 
 	unit.HealthBarBG:Hide()
 	unit.Framing:Hide()
 	unit.HealthDivider:Hide()
 
-	unit.Icon:SetTexCoord(.08, .92, .08, .92)
-	S.CreateBG(unit.Icon)
+	unit.Name:Point("TOPLEFT", icon, "TOPRIGHT", 3, -3)
+	unit.ActualHealthBar:Point("BOTToMLEFT", icon, "BOTTOMRIGHT", 3, 0)
+
+	icon:SetTexCoord(.08, .92, .08, .92)
+	S.CreateBG(icon)
 
 	unit.ActualHealthBar:SetTexture(media.backdrop)
-
-	S.CreateBD(unit)
+	S.CreateBDFrame(unit.ActualHealthBar)
 end
 
 hooksecurefunc("PetBattleUnitFrame_UpdateHealthInstant", function(self)
@@ -232,12 +238,16 @@ end)
 
 -- [[ Action bar ]]
 
-
-local bar = CreateFrame("Frame", "FreeUIPetBattleActionBar", UIParent, "SecureHandlerStateTemplate")
+local frames = {
+	"oUF_SunUIPlayer",
+	"oUF_SunUITarget",
+	"alDamageMeterFrame",
+	"SkadaBarWindowSkada",
+}
+local bar = CreateFrame("Frame", "SunUIUIPetBattleActionBar", UIParent, "SecureHandlerStateTemplate")
 bar:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 50)
-bar:SetSize(6 * 27, 26)
+bar:SetSize(6 * (btnsize+1), btnsize)
 RegisterStateDriver(bar, "visibility", "[petbattle] show; hide")
-
 bf.RightEndCap:Hide()
 bf.LeftEndCap:Hide()
 bf.Background:Hide()
@@ -257,8 +267,8 @@ bf.TurnTimer.SkipButton:SetParent(bar)
 bf.TurnTimer.SkipButton:SetWidth(bar:GetWidth())
 bf.TurnTimer.SkipButton:ClearAllPoints()
 bf.TurnTimer.SkipButton:SetPoint("BOTTOM", bar, "TOP", 0, 2)
-bf.TurnTimer.SkipButton.ClearAllPoints = S.dummy
-bf.TurnTimer.SkipButton.SetPoint = S.dummy
+bf.TurnTimer.SkipButton.ClearAllPoints = function() end
+bf.TurnTimer.SkipButton.SetPoint = function() end
 S.Reskin(bf.TurnTimer.SkipButton)
 
 bf.TurnTimer.Bar:ClearAllPoints()
@@ -276,16 +286,44 @@ bf.xpBar:ClearAllPoints()
 bf.xpBar:SetPoint("BOTTOM", bf.TurnTimer, "TOP", 0, 4)
 S.CreateBDFrame(bf.xpBar)
 
-bf.xpBar:HookScript("OnShow", function(self)
-	for i = 7, 12 do
-		select(i, self:GetRegions()):Hide()
-	end
-	self:SetStatusBarTexture(media.texture)
-end)
+for i = 7, 12 do
+	select(i, bf.xpBar:GetRegions()):Hide()
+end
 
 hooksecurefunc("PetBattlePetSelectionFrame_Show", function()
 	bf.PetSelectionFrame:ClearAllPoints()
-	bf.PetSelectionFrame:SetPoint("BOTTOM", bf.xpBar, "TOP", 0, 8)
+	bf.PetSelectionFrame:Point("BOTTOM", bf.xpBar, "TOP", 0, 8)
+end)
+
+hooksecurefunc("PetBattleFrame_UpdatePassButtonAndTimer", function()
+	local pveBattle = C_PetBattles.IsPlayerNPC(LE_BATTLE_PET_ENEMY)
+	if bf.TurnTimer.bg then
+		bf.TurnTimer.bg:SetShown(not pveBattle)
+	end
+	bf.xpBar:ClearAllPoints()
+
+	if pveBattle then
+		bf.xpBar:Point("BOTTOM", bf.TurnTimer.SkipButton, "TOP", 0, 2)
+	else
+		bf.xpBar:Point("BOTTOM", bf.TurnTimer, "TOP", 0, 4)
+	end
+end)
+
+bar:RegisterEvent("PET_BATTLE_OPENING_START")
+bar:RegisterEvent("PET_BATTLE_CLOSE")
+bar:SetScript("OnEvent", function(self, event)
+	if event == "PET_BATTLE_OPENING_START" then
+		for _, v in pairs(frames) do
+			if not _G[v] then return end
+			S.FadeOutFrameDamage(_G[v], 1, false)
+		end
+	else
+		for _, v in pairs(frames) do
+			if not _G[v] then return end
+			_G[v]:Show()
+			UIFrameFadeIn(_G[v], 1, _G[v]:GetAlpha(), 1)
+		end
+	end
 end)
 
 -- [[ Buttons ]]
@@ -308,6 +346,8 @@ local function stylePetBattleButton(bu)
 	})
 	bu.bg:SetBackdropBorderColor(0, 0, 0)
 
+	
+	bu.Icon:SetDrawLayer("BACKGROUND", 2)
 	bu.Icon:SetTexCoord(.08, .92, .08, .92)
 	bu.Icon:Point("TOPLEFT", bu, 1, -1)
 	bu.Icon:Point("BOTTOMRIGHT", bu, -1, 1)
@@ -315,14 +355,33 @@ local function stylePetBattleButton(bu)
 	bu.CooldownShadow:SetAllPoints()
 	bu.CooldownFlash:SetAllPoints()
 
-	bu.SelectedHighlight:SetTexture(r, g, b, .2)
+	bu.SelectedHighlight:SetTexture(r, g, b)
+	bu.SelectedHighlight:SetDrawLayer("BACKGROUND")
 	bu.SelectedHighlight:SetAllPoints()
 
 	bu.HotKey:SetFont(DB.Font, 8, "OUTLINEMONOCHROME")
+	bu.HotKey:SetJustifyH("CENTER")
+	bu.HotKey:ClearAllPoints()
 	bu.HotKey:SetPoint("TOP", 1, -2)
+
+	bu.Cooldown:SetFont(DB.Font, 8, "OUTLINEMONOCHROME")
+	bu.Cooldown:SetJustifyH("CENTER")
+	bu.Cooldown:SetDrawLayer("OVERLAY", 5)
+	bu.Cooldown:SetTextColor(1, 1, 1)
+	bu.Cooldown:SetShadowOffset(0, 0)
+	bu.Cooldown:ClearAllPoints()
+	bu.Cooldown:SetPoint("BOTTOM", 1, -1)
+
+	bu.BetterIcon:SetSize(24, 24)
+	bu.BetterIcon:ClearAllPoints()
+	bu.BetterIcon:SetPoint("BOTTOM", 6, -9)
 
 	bu.reskinned = true
 end
+
+hooksecurefunc("PetBattleAbilityButton_UpdateHotKey", function(self)
+	self.HotKey:SetShown(self.HotKey:IsShown())
+end)
 
 local first = true
 hooksecurefunc("PetBattleFrame_UpdateActionBarLayout", function(self)
@@ -330,7 +389,7 @@ hooksecurefunc("PetBattleFrame_UpdateActionBarLayout", function(self)
 		local bu = bf.abilityButtons[i]
 		stylePetBattleButton(bu)
 		bu:SetParent(bar)
-		bu:SetSize(26, 26)
+		bu:SetSize(btnsize, btnsize)
 		bu:ClearAllPoints()
 		if i == 1 then
 			bu:SetPoint("BOTTOMLEFT", bar)
@@ -356,16 +415,16 @@ hooksecurefunc("PetBattleFrame_UpdateActionBarLayout", function(self)
 	end
 
 	bf.SwitchPetButton:SetParent(bar)
-	bf.SwitchPetButton:SetSize(26, 26)
+	bf.SwitchPetButton:SetSize(btnsize, btnsize)
 	bf.SwitchPetButton:ClearAllPoints()
 	bf.SwitchPetButton:Point("LEFT", bf.abilityButtons[NUM_BATTLE_PET_ABILITIES], "RIGHT", 1, 0)
 	bf.SwitchPetButton:SetCheckedTexture(media.checked)
 	bf.CatchButton:SetParent(bar)
-	bf.CatchButton:SetSize(26, 26)
+	bf.CatchButton:SetSize(btnsize, btnsize)
 	bf.CatchButton:ClearAllPoints()
 	bf.CatchButton:Point("LEFT", bf.SwitchPetButton, "RIGHT", 1, 0)
 	bf.ForfeitButton:SetParent(bar)
-	bf.ForfeitButton:SetSize(26, 26)
+	bf.ForfeitButton:SetSize(btnsize, btnsize)
 	bf.ForfeitButton:ClearAllPoints()
 	bf.ForfeitButton:Point("LEFT", bf.CatchButton, "RIGHT", 1, 0)
 end)

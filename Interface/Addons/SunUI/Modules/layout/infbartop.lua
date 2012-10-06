@@ -66,7 +66,7 @@ local function RaidTools()
 end 
 --BuildSystem
 local function BuildSystem()
-local Stat = CreateFrame("Frame", "InfoPanel1", UIParent)
+local Stat = CreateFrame("Frame", "InfoPanel1", TopInfoPanel)
 	Stat:SetFrameStrata("BACKGROUND")
 	Stat:SetFrameLevel(3)
 	Stat:EnableMouse(true)
@@ -143,7 +143,7 @@ local function RefreshText()
 	end
 end
 local function BuildMemory()
-	local Stat = CreateFrame("Frame", "InfoPanel2", UIParent)
+	local Stat = CreateFrame("Frame", "InfoPanel2", TopInfoPanel)
 	Stat:SetFrameStrata("BACKGROUND")
 	Stat:SetFrameLevel(3)
 	Stat:EnableMouse(true)
@@ -225,7 +225,7 @@ local function BuildMemory()
 end
 -- BuildGold
 local function BuildGold()
-	local Stat = CreateFrame("Frame", "InfoPanel3", UIParent)
+	local Stat = CreateFrame("Frame", "InfoPanel3", TopInfoPanel)
 	Stat:SetFrameStrata("BACKGROUND")
 	Stat:SetFrameLevel(3)
 	Stat:EnableMouse(true)
@@ -355,7 +355,7 @@ end
 	
 function Module:OnInitialize()
 	if C["InfoPanelDB"]["OpenTop"] == true then
-		local top = CreateFrame("Frame", nil, UIParent)
+		local top = CreateFrame("Frame", "TopInfoPanel", UIParent)
 		top:SetHeight(20)
 		top:SetFrameStrata("BACKGROUND")
 		top:SetFrameLevel(0)
@@ -363,6 +363,17 @@ function Module:OnInitialize()
 		top:SetPoint("TOP", 0, 3)
 		top:SetPoint("LEFT")
 		top:SetPoint("RIGHT")
+		top:RegisterEvent("PET_BATTLE_OPENING_START")
+		top:RegisterEvent("PET_BATTLE_CLOSE")
+		top:SetScript("OnEvent", function(self, event)
+			if event == "PET_BATTLE_OPENING_START" then
+				S.FadeOutFrameDamage(self, 1, false)
+			else
+				self:Show()
+				UIFrameFadeIn(self, 1, self:GetAlpha(), 1)
+			end
+		end)
+		
 		local InfoPanelPos = CreateFrame("Frame", "InfoPanelPos", UIParent)
 		InfoPanelPos:SetSize(350, 12)
 		InfoPanelPos:Hide()
@@ -450,7 +461,7 @@ function Module:OnInitialize()
 	end
 	
 	if C["InfoPanelDB"]["OpenBottom"] == true then
-		local bottom = CreateFrame("Frame", "BottomBar", UIParent)
+		local bottom = CreateFrame("Frame", "BottomInfoPanel", UIParent)
 		bottom:SetHeight(20)
 		bottom:SetFrameLevel(0)
 		bottom:CreateShadow("Background")

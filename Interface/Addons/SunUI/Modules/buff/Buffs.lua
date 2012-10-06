@@ -2,201 +2,185 @@
 local S, C, L, DB, _ = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Buff")
 
-local BuffPos, DebuffPos = nil, nil
-local tinsert, _G, tsort = tinsert, _G, table.sort
-local BuffTable = {["Time"] = {}, ["None"] = {}}
-local _G = _G
-function Module:Style(buttonName, i, f)
-	if not _G[buttonName..i] then return end
-	
-	local Button	= _G[buttonName..i]
-	local Icon		= _G[buttonName..i.."Icon"]
-	local Duration	= _G[buttonName..i.."Duration"]
-	local Count 	= _G[buttonName..i.."Count"]
-	local Border = _G[buttonName..i.."Border"]
-	
-	Button:SetSize(C["IconSize"], C["IconSize"])
-	
-	Icon:SetTexCoord(.1, .9, .1, .9)
-	
-	Duration:ClearAllPoints()
-	Duration:SetParent(Button)
-	Duration:SetPoint("TOP", Button, "BOTTOM", 2, 0)
-	Duration:SetFont(DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
-	
-	Count:ClearAllPoints()
-	Count:SetParent(Button)
-	Count:SetPoint("TOPRIGHT", Button, 3, -1)
-	Count:SetFont(DB.Font, C["FontSize"]*S.Scale(1), "THINOUTLINE")
-	
-	if Border then
-		Border:Hide()
-	end
-	
+-- making frame to hold all buff frame elements
+local PositionTempEnchant = function()
+	TemporaryEnchantFrame:SetParent(BuffFrameHolder)
+	TemporaryEnchantFrame:ClearAllPoints()
+	TemporaryEnchantFrame:SetAllPoints(BuffFrameHolder)
+end
 
-	Button:CreateShadow()
-	Button:StyleButton(true)
-	
-	if f == d then
-		local dtype = select(5, UnitDebuff("player",i))
-			if (dtype ~= nil) then
-				color = DebuffTypeColor[dtype]
-			else
-				color = DebuffTypeColor["none"]
-			end
-		Button.shadow:SetBackdropColor(0, 0, 0)
-		Button.border:SetBackdropBorderColor(color.r, color.g, color.b, 1)
+local function CreateBuffStyle(buff, t)
+	if not buff or (buff and buff.styled) then return end
+	local bn = buff:GetName()
+	local border 	= _G[bn.."Border"]
+    local icon 		= _G[bn.."Icon"]
+	local duration 	= _G[bn.."Duration"]
+	local count 	= _G[bn.."Count"]
+	if icon and not buff.shadow then
+		icon:SetTexCoord(.08, .92, .08, .92)
+		buff:SetSize(C["BuffDB"]["IconSize"],C["BuffDB"]["IconSize"])
+		duration:ClearAllPoints()
+		duration:SetPoint("TOP", buff, "BOTTOM", 2, 0)
+		duration:SetFont(DB.Font, C["BuffDB"]["FontSize"]*S.Scale(1), "THINOUTLINE")
+		count:ClearAllPoints()
+		count:SetPoint("TOPRIGHT", buff, 3, -1)
+		count:SetFont(DB.Font, C["BuffDB"]["FontSize"]*S.Scale(1), "THINOUTLINE")
+		buff:CreateShadow()
+		buff:StyleButton(true)
 	end
-	
-	if f == w then
-		local id = Button:GetID()
-		local itemId
-		if id ~= 0 then itemId = GetInventoryItemID("player", id) end
-			if itemId then
-				local quality = select(3, GetItemInfo(itemId))
-				if quality then
-					local r, g, b = GetItemQualityColor(quality)
-					Button.border:SetBackdropBorderColor(r, g, b, 1)
+	if border then 
+		if t == "enchant" then border:SetAlpha(0) buff.border:SetBackdropBorderColor(0.7,0,1) end
+	end
+	buff.styled = true
+end
+
+local function OverrideBuffAnchors()
+	local buff, previousBuff, aboveBuff;
+	local numBuffs = 0;
+	for i=1, BUFF_ACTUAL_DISPLAY do
+		local buff = _G["BuffButton"..i]
+		if not buff.styled then CreateBuffStyle(buff) end
+		numBuffs = numBuffs + 1
+		index = numBuffs
+		buff:SetParent(BuffFrame)
+		buff.consolidated = nil
+		buff.parent = BuffFrame
+		buff:ClearAllPoints()
+		if ((index > 1) and (mod(index, C["BuffDB"]["IconPerRow"]) == 1)) then
+			buff:SetPoint("TOP", aboveBuff, "BOTTOM", 0, -23)
+			aboveBuff = buff; 
+		elseif ( index == 1 ) then
+			local  mh, _, _, oh = GetWeaponEnchantInfo()
+			if (mh and oh) and not UnitHasVehicleUI("player") then
+				if C["BuffDB"]["BuffDirection"] == 1 then
+					buff:SetPoint("RIGHT", TempEnchant2, "LEFT", -8, 0)
 				end
-			end
-	Button.shadow:SetBackdropColor(0, 0, 0)	
-	end
-end
-
-function Module:OnInitialize()
-	C = C["BuffDB"]
-	SetCVar("consolidateBuffs", 0)
-	SetCVar("buffDurations", 1)
-end
-
-function Module:OnEnable()
-	BuffPos = CreateFrame("Frame", nil, UIParent)
-	BuffPos:SetSize(C["IconSize"], C["IconSize"])
-	MoveHandle.Buff = S.MakeMoveHandle(BuffPos, "Buff", "Buff")
-	DebuffPos = CreateFrame("Frame", nil, UIParent)
-	DebuffPos:SetSize(C["IconSize"], C["IconSize"])
-	MoveHandle.Debuff = S.MakeMoveHandle(DebuffPos, "Debuff", "Debuff")
-end
-
-function Module:SortBuff()
-	--[[tsort(BuffTable["Time"], function(a, b)
-		return a.timeLeft > b.timeLeft
-	end)--]]
-	for key, value in pairs(BuffTable["Time"]) do
-		tinsert(BuffTable["None"], value)
-	end
-end
-
-function Module:GetWeaponEnchantNum()
-	local Num = 0
-	hasMainHandEnchant, _, _, hasOffHandEnchant, _, _, hasThrownEnchant = GetWeaponEnchantInfo()
-	if hasMainHandEnchant then Num = Num + 1 end
-	if hasOffHandEnchant then Num = Num + 1 end
-	if hasThrownEnchant then Num = Num + 1 end
-	for i = 1, Num do
-		Module:Style("TempEnchant", i, w)
-		tinsert(BuffTable["None"], _G["TempEnchant"..i])
-	end
-end
-
-function Module:UpdateBuffPos()
-	for key, value in pairs(BuffTable["None"]) do
-		local Pre = BuffTable["None"][key-1]
-		local PreRow = BuffTable["None"][key-C["IconPerRow"]]
-		value:ClearAllPoints()
-		if C["BuffDirection"] == 1 then
-			if key == 1 then
-				value:SetPoint("CENTER", BuffPos)
-			elseif key%C["IconPerRow"] == 1 then
-				value:SetPoint("TOP", PreRow, "BOTTOM", 0, -23)
+				if C["BuffDB"]["BuffDirection"] == 2 then
+					TempEnchant2:ClearAllPoints()
+					TempEnchant2:SetPoint("LEFT", TempEnchant1, "RIGHT", 8, 0)
+					buff:SetPoint("LEFT", TempEnchant2, "RIGHT", 8, 0)
+				end
+				aboveBuff = TempEnchant2
+			elseif ((mh and not oh) or (oh and not mh)) and not UnitHasVehicleUI("player") then
+				if C["BuffDB"]["BuffDirection"] == 1 then
+					buff:SetPoint("RIGHT", TempEnchant1, "LEFT", -8, 0)
+				end
+				if C["BuffDB"]["BuffDirection"] == 2 then
+					buff:SetPoint("LEFT", TempEnchant1, "RIGHT", 8, 0)
+				end
+				aboveBuff = TempEnchant1
 			else
-				value:SetPoint("RIGHT", Pre, "LEFT", -8, 0)
+				buff:SetPoint("CENTER", BuffFrame, "CENTER", 0, 0)
+				aboveBuff = buff
 			end
-		end
-		if C["BuffDirection"] == 2 then
-			if key == 1 then
-				value:SetPoint("CENTER", BuffPos)
-			elseif key%C["IconPerRow"] == 1 then
-				value:SetPoint("TOP", PreRow, "BOTTOM", 0, -23)
-			else
-				value:SetPoint("LEFT", Pre, "RIGHT", 8, 0)
-			end
-		end
-	end
-end
-
-hooksecurefunc("BuffFrame_UpdateAllBuffAnchors", function()
-	wipe(BuffTable["Time"])
-	wipe(BuffTable["None"])
-	
-	Module:GetWeaponEnchantNum()
-	
-	for i = 1, BUFF_ACTUAL_DISPLAY do
-		Module:Style("BuffButton", i, b)
-		if select(6, UnitBuff("player", i)) == 0 then
-			tinsert(BuffTable["None"], _G["BuffButton"..i])
 		else
-			tinsert(BuffTable["Time"], _G["BuffButton"..i])
+			--buff:SetPoint("RIGHT", previousBuff, "LEFT", -8, 0);
+			if C["BuffDB"]["BuffDirection"] == 1 then
+				buff:SetPoint("RIGHT", previousBuff, "LEFT", -8, 0)
+			end
+			if C["BuffDB"]["BuffDirection"] == 2 then
+				buff:SetPoint("LEFT", previousBuff, "RIGHT", 8, 0)
+			end
 		end
+		previousBuff = buff
 	end
-	
-	Module:SortBuff()
-	Module:UpdateBuffPos()
-end)
+end
 
-hooksecurefunc("AuraButton_OnUpdate", function(self, elapsed)
-	if self.timeLeft < BUFF_DURATION_WARNING_TIME then
-		self:SetAlpha(BuffFrame.BuffAlphaValue)
-	else
-		self:SetAlpha(1)
-	end
-end)
-
-hooksecurefunc("AuraButton_UpdateDuration", function(auraButton, timeLeft)
-	local Duration = auraButton.duration
-	if timeLeft then
-		Duration:SetText(S.FormatTime(timeLeft, true))
-		if timeLeft >= 86400 then
-			Duration:SetVertexColor(0.4, 0.4, 1)
-		elseif (timeLeft < 86400 and timeLeft >= 3600) then
-			Duration:SetVertexColor(0.4, 1, 1)
-		elseif (timeLeft < 3600 and timeLeft >= 60) then
-			Duration:SetVertexColor(1, 1, 1)
-		elseif (timeLeft < 60 and timeLeft >= 15) then
-			Duration:SetVertexColor(1, 1, 0)
-		elseif timeLeft < 15 then
-			Duration:SetVertexColor(1, 0, 0)
-		end
-	end
-end)
-
-hooksecurefunc("DebuffButton_UpdateAnchors", function(buttonName, i)
-	Module:Style(buttonName, i, d)
-	local Aura = _G[buttonName..i]
+local function OverrideDebuffAnchors(buttonName, i)
+	local color
+	local buffName = buttonName..i
+	local dtype = select(5, UnitDebuff("player",i))   
+	local border = _G[buffName.."Border"]
+	local buff = _G[buttonName..i];
 	local Pre = _G[buttonName..(i-1)]
-	local PreRow = _G[buttonName..(i-C["IconPerRow"])]
-	Aura:ClearAllPoints()
-	if C["DebuffDirection"] == 1 then
-		if i == 1 then
-			Aura:SetPoint("CENTER", DebuffPos)
-		elseif i%C["IconPerRow"] == 1 then
-			Aura:SetPoint("TOP", PreRow, "BOTTOM", 0, -23)
-		else
-			Aura:SetPoint("RIGHT", Pre, "LEFT", -8, 0)
+	local PreRow = _G[buttonName..(i-C["BuffDB"]["IconPerRow"])]
+	buff:ClearAllPoints()
+	if not buff.styled then CreateBuffStyle(buff) end
+	
+	if i == 1 then
+		MoveHandle.Debuff = S.MakeMoveHandle(buff, "Debuff", "Debuff")
+	else
+		buff:SetPoint("RIGHT", _G[buttonName..(i-1)], "LEFT", -8, 0)
+		if C["BuffDB"]["DebuffDirection"] == 1 then
+			if i%C["BuffDB"]["IconPerRow"] == 1 then
+				buff:SetPoint("TOP", PreRow, "BOTTOM", 0, -23)
+			else
+				buff:SetPoint("RIGHT", Pre, "LEFT", -8, 0)
+			end
+		end
+		if C["BuffDB"]["DebuffDirection"] == 2 then
+			if i%C["BuffDB"]["IconPerRow"] == 1 then
+				buff:SetPoint("TOP", PreRow, "BOTTOM", 0, -23)
+			else
+				buff:SetPoint("LEFT", Pre, "RIGHT", 8, 0)
+			end
 		end
 	end
-	if C["DebuffDirection"] == 2 then
-		if i == 1 then
-			Aura:SetPoint("CENTER", DebuffPos)
-		elseif i%C["IconPerRow"] == 1 then
-			Aura:SetPoint("TOP", PreRow, "BOTTOM", 0, -23)
-		else
-			Aura:SetPoint("LEFT", Pre, "RIGHT", 8, 0)
+	if (dtype ~= nil) then
+		color = DebuffTypeColor[dtype]
+	else
+		color = DebuffTypeColor["none"]
+	end
+	if border then border:SetAlpha(0) buff.border:SetBackdropBorderColor(color.r, color.g, color.b, 1) end
+end
+
+local function OverrideTempEnchantAnchors()
+	local previousBuff
+	for i=1, NUM_TEMP_ENCHANT_FRAMES do
+		local te = _G["TempEnchant"..i]
+		if te then
+			te:SetSize(C["BuffDB"]["IconSize"],C["BuffDB"]["IconSize"])
+			if (i == 1) then
+				te:SetPoint("CENTER", TemporaryEnchantFrame, "CENTER", 0, 0)
+			else
+				te:SetPoint("RIGHT", previousBuff, "LEFT", -8, 0)
+			end
+			previousBuff = te
 		end
+	end
+end
+	
+local initialize = function()
+	--position buff & temp enchant frames
+	PositionTempEnchant()
+	BuffFrame:SetParent(BuffFrameHolder)
+	BuffFrame:ClearAllPoints()
+	BuffFrame:SetAllPoints(BuffFrameHolder)
+	--stylize temp enchant frames
+	for i=1, NUM_TEMP_ENCHANT_FRAMES do
+		local buff = _G["TempEnchant"..i]
+		if not buff.styled then CreateBuffStyle(buff, "enchant") end
+	end
+	OverrideTempEnchantAnchors()
+	--getting rid of consolidate buff frame
+	if ConsolidatedBuffs then
+		ConsolidatedBuffs:UnregisterAllEvents()
+		ConsolidatedBuffs:HookScript("OnShow", function(s)
+			s:Hide()
+			PositionTempEnchant()
+		end)
+		ConsolidatedBuffs:HookScript("OnHide", function(s)
+			PositionTempEnchant()
+		end)
+		ConsolidatedBuffs:Hide()
+	end
+end
+
+-- hooking our modifications
+hooksecurefunc("BuffFrame_UpdateAllBuffAnchors", OverrideBuffAnchors)
+hooksecurefunc("DebuffButton_UpdateAnchors", OverrideDebuffAnchors)
+local f = CreateFrame"Frame"
+f:RegisterEvent("VARIABLES_LOADED")
+f:RegisterEvent("PLAYER_LOGIN")
+f:SetScript("OnEvent", function(self, event, ...)
+	if event == "VARIABLES_LOADED" then
+		SetCVar("consolidateBuffs",0) -- disabling consolidated buffs
+		--if cfg.disable_timers then cfg.disable_timers = 0 else cfg.disable_timers = 1 end
+		SetCVar("buffDurations", 1) -- enabling buff durations
+	else
+		local holder = CreateFrame("Frame", "BuffFrameHolder", UIParent)
+		holder:SetSize(C["BuffDB"]["IconSize"],C["BuffDB"]["IconSize"])
+		MoveHandle.Buff = S.MakeMoveHandle(holder, "Buff", "Buff")
+		initialize()
 	end
 end)
---时间格式修改
- HOUR_ONELETTER_ABBR = "%dh";
- DAY_ONELETTER_ABBR = "%dd";
- MINUTE_ONELETTER_ABBR = "%dm";
- SECOND_ONELETTER_ABBR = "%ds";

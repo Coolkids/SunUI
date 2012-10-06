@@ -3,12 +3,12 @@ local Core = LibStub("AceAddon-3.0"):GetAddon("SunUI")
 local Module = Core:NewModule("InfoPanelBottom")
 
 local function BuildClock()
-	local Clock = CreateFrame("Frame", "InfoPanelBottom1", UIParent)
+	local Clock = CreateFrame("Frame", "InfoPanelBottom1", BottomInfoPanel)
 	Clock.Text = S.MakeFontString(Clock)
 	Clock.Text:SetTextColor(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)
 	Clock.Text:SetShadowColor(0, 0, 0)
 	Clock.Text:SetShadowOffset(S.mult, -S.mult)
-	Clock.Text:SetPoint("LEFT", BottomBar, "LEFT", 10, 2)
+	Clock.Text:SetPoint("LEFT", BottomInfoPanel, "LEFT", 10, 2)
 	Clock.Text:SetShadowOffset(S.mult, -S.mult)
 	Clock.Text:SetShadowColor(0, 0, 0, 0.4)
 	Clock:SetAllPoints(Clock.Text)
@@ -88,7 +88,7 @@ local function BuildFriend()
 	local format		= string.format
 	local sort			= table.sort
 
-	local Stat = CreateFrame("Frame", "InfoPanelBottom2", UIParent)
+	local Stat = CreateFrame("Frame", "InfoPanelBottom2", BottomInfoPanel)
 	Stat:EnableMouse(true)
 
 	local Text  = S.MakeFontString(Stat)
@@ -372,7 +372,7 @@ local function BuildGuild()
 	local friendOnline, friendOffline = gsub(ERR_FRIEND_ONLINE_SS,"\124Hplayer:%%s\124h%[%%s%]\124h",""), gsub(ERR_FRIEND_OFFLINE_S,"%%s","")
 	local guildTable, guildXP, guildMotD = {}, {}, ""
 
-	local Stat = CreateFrame("Frame", "InfoPanelBottom3", UIParent)
+	local Stat = CreateFrame("Frame", "InfoPanelBottom3", BottomInfoPanel)
 	Stat:EnableMouse(true)
 
 	local Text  = S.MakeFontString(Stat)
@@ -616,10 +616,9 @@ local function BuildDurability()
 		[9] = {16, L["主手"], 1000},
 		[10] = {17, L["副手"], 1000}, 
 	}
-	local Stat = CreateFrame("Frame", "InfoPanelBottom4", UIParent)
+	local Stat = CreateFrame("Frame", "InfoPanelBottom4", BottomInfoPanel)
 	local Text = S.MakeFontString(Stat)
 	Text:SetPoint("LEFT", InfoPanelBottom3 or InfoPanelBottom2 or InfoPanelBottom1, "RIGHT", 3, 0)
-	Text:SetPoint("CENTER", UIParent, "CENTER")
 	Stat:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
 	Stat:RegisterEvent("MERCHANT_SHOW")
 	Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -664,7 +663,7 @@ end
 
 local function BuildStat2()
 
-	local Stat = CreateFrame("Frame", "InfoPanelBottom5", UIParent)
+	local Stat = CreateFrame("Frame", "InfoPanelBottom5", BottomInfoPanel)
 	Stat:EnableMouse(true)
 	Stat:SetFrameStrata("MEDIUM")
 	Stat:SetFrameLevel(3)
@@ -673,7 +672,7 @@ local function BuildStat2()
 	Text:SetTextColor(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)
 	Text:SetShadowOffset(S.mult, -S.mult)
 	Text:SetShadowColor(0, 0, 0, 0.4)
-	Text:SetPoint("RIGHT", BottomBar, "RIGHT", -10, 2)
+	Text:SetPoint("RIGHT", BottomInfoPanel, "RIGHT", -10, 2)
 	Stat:SetAllPoints(Text)
 	
 	local _G = getfenv(0)
@@ -786,7 +785,7 @@ local function BuildStat2()
 end
 
 local function BuildStat1()
-	local Stat = CreateFrame("Frame", "InfoPanelBottom6", UIParent)
+	local Stat = CreateFrame("Frame", "InfoPanelBottom6", BottomInfoPanel)
 	Stat:EnableMouse(true)
 	Stat:SetFrameStrata("MEDIUM")
 	Stat:SetFrameLevel(3)
@@ -962,7 +961,7 @@ local function BuildStat1()
 end
 
 local function BuildSpecswitch()
-	local Stat = CreateFrame("Frame", "InfoPanelBottom7", UIParent)
+	local Stat = CreateFrame("Frame", "InfoPanelBottom7", BottomInfoPanel)
 	Stat:SetFrameStrata("MEDIUM")
 	Stat:SetFrameLevel(3)
 	local Text  = S.MakeFontString(Stat)

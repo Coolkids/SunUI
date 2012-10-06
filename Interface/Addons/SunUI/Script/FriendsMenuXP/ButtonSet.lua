@@ -317,18 +317,21 @@ FriendsMenuXP_Buttons["ARMORY"] = {
 		n = n or name
 		r = r or GetRealmName()
 
-		local host = "http://eu.wowarmory.com/"
 		if GetLocale()=="zhTW" then
-			host = "http://tw.wowarmory.com/"
+			host = "http://tw.battle.net/wow/"
+			link = "zh"
 		elseif GetLocale()=="zhCN" then
-			host = "http://cn.wowarmory.com/"
+			host = "http://www.battlenet.com.cn/wow"
+			link = "zh"
 		elseif GetLocale()=="koKR" then
 			host = "http://kr.wowarmory.com/"
-		elseif GetLocale()=="enUS" then
-			host = "http://www.wowarmory.com/"
+			link = "kr"
+		else
+			host = "http://us.battle.net/wow/"
+			link = "en"
 		end
 
-		local armory = host.."character-sheet.xml?r="..urlencode(r).."&n="..urlencode(n)
+		local armory = host..link.."/character/"..urlencode(r).."/"..urlencode(n).."/advanced"
 
 		ChatEdit_ActivateChat(ChatFrame1EditBox);
 		ChatFrame1EditBox:SetText(armory);

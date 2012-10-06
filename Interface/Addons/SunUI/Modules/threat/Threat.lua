@@ -23,9 +23,6 @@ gradient:SetPoint("BOTTOMRIGHT")
 gradient:SetTexture(DB.Statusbar)
 gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
 
-ThreatBar.SetValue_ = ThreatBar.SetValue
-ThreatBar.SetValue = Smooth
-
 ThreatBar.text = ThreatBar:CreateFontString(nil, "OVERLAY", "NumberFontNormal")
 ThreatBar.text:Point("CENTER", ThreatBar, "CENTER")
 local function Smooth(self, value)
@@ -109,6 +106,8 @@ function Module:OnInitialize()
 	
 end
 function Module:OnEnable()
+	ThreatBar.SetValue_ = ThreatBar.SetValue
+	ThreatBar.SetValue = Smooth
 	ThreatBar:RegisterEvent("PLAYER_ENTERING_WORLD")
 	ThreatBar:RegisterEvent("PLAYER_REGEN_ENABLED")
 	ThreatBar:RegisterEvent("PLAYER_REGEN_DISABLED")

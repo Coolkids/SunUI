@@ -115,7 +115,7 @@ function Module:OnEnable()
 		end
 	end)
 
-	local menuFrame = CreateFrame("Frame", "m_MinimapRightClickMenu", UIParent, "UIDropDownMenuTemplate")
+	local menuFrame = CreateFrame("Frame", "MinimapRightClickMenu", UIParent, "XUIDropDownMenuTemplate")
 	local menuList = {
 		{text = L["角色信息"], func = function() ToggleCharacter("PaperDollFrame") end},
 		{text = L["法术书"], func = function() ToggleSpellBook("spell") end},
@@ -136,7 +136,7 @@ function Module:OnEnable()
 
 	Minimap:SetScript("OnMouseUp", function(self, button)
 		if button == "RightButton" then
-			EasyMenu(menuList, menuFrame, "cursor", 0, 0, "MENU", 2)
+			XEasyMenu(menuList, menuFrame, "cursor", 0, 0, "MENU", 2)
 		else
 			Minimap_OnClick(self)
 		end

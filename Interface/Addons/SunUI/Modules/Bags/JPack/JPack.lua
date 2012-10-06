@@ -1,9 +1,22 @@
-﻿--[[===================================
+local S, C, L, DB = unpack(select(2, ...))
+local DEV_MOD = false
+local debug = function() end
+
+--[===[@debug@
+local debugf = tekDebug and tekDebug:GetFrame("JPack")--tekDebug
+if debugf then
+	debug = function(...) debugf:AddMessage(string.join(", ", tostringall(...))) end
+end
+DEV_MOD = true
+--@end-debug@]===]
+
+local JPackDB = {}
+--[[===================================
 			Local
 =====================================]]
 JPack = CreateFrame"Frame"
 JPack.DEV_MOD = DEV_MOD
-local _G = _G
+
 JPack.bankOpened = false
 JPack.guildbankOpened = false
 JPack.deposit = false
@@ -13,12 +26,65 @@ JPack.bagGroups = {}
 JPack.packingGroupIndex = 1
 JPack.packingBags={}
 JPack.updatePeriod = .1
+JPackDB.asc=false
+local version = GetAddOnMetadata("JPack", "Version") or "alpha-version"
+local RegisterEvent = JPack.RegisterEvent
+local UnregisterEvent = JPack.UnregisterEvent
+local event_table = {}
 
-local version = GetAddOnMetadata("JPack", "Version") or "alpha"
-JPack.version = version
-local L = setmetatable(JPackLocale, {__index=function(t,i) return i end})
+function JPack:RegisterEvent(event, func)
+	if not func then
+		func = self[event]
+	end
+	if type(func) ~= 'function' then return end
 
-JPack:SetScript("OnEvent", function(self, event, ...) self[event](self,event,...) end)
+	local curr = event_table[event]
+	if curr then
+		if type(curr) == 'function' then
+			event_table[event] = {curr, func}
+		else -- table
+			for k, v in pairs(curr) do
+				if v == func then return end
+			end
+			tinsert(curr, func)
+		end
+	else
+		event_table[event] = func
+		RegisterEvent(self,event)
+	end
+end
+
+function JPack:UnregisterEvent(event, func)
+	if not func then
+		func = self[event]
+	end
+	if type(func) ~= 'function' then return end
+	
+	local curr = event_table[event]
+	if type(curr) == 'function' then
+		event_table[event] = nil
+		UnregisterEvent(self, event)
+	else
+		for k,v in pairs(curr) do
+			if v == func then
+				tremove(curr, k)
+				return
+			end
+		end
+	end
+end
+
+JPack:SetScript("OnEvent", function(self, event, ...)
+	debug('OnEvent', event, ...)
+	local handler = event_table[event]
+	if type(handler) == 'function' then
+		handler(self, event, ...)
+	else
+		for k, func in pairs(handler) do
+			func(self, event, ...)
+		end
+	end
+end)
 
 
 local bagSize=0
@@ -48,9 +114,7 @@ local JPACK_STOPPED=0
 =====================================]]
 
 local function print(msg,r,g,b)
-	if (not r) or (not g) or (not b) then r, g, b = .41, .8, .94 end
-	msg = 'JPack: '..msg
-	DEFAULT_CHAT_FRAME:AddMessage(msg, r, g, b)
+	DEFAULT_CHAT_FRAME:AddMessage('SunUI: '..msg, r or .41, g or .8, b or .94)
 end
 
 local function CheckCursor()
@@ -61,7 +125,7 @@ local function CheckCursor()
 end
 
 local function IndexOfTable(t,v)
-	for i=1,#t do
+	for i=1,table.getn(t) do
 		if(v==t[i])then
 			return i
 		end
@@ -125,8 +189,8 @@ end
 
 --是否所有背包准备好了
 local function isAllBagReady()
-	for i=1,#JPack.bagGroups do
-		for j=1,#JPack.bagGroups[i] do
+	for i=1,table.getn(JPack.bagGroups) do
+		for j=1,table.getn(JPack.bagGroups[i]) do
 			if(not isBagReady(JPack.bagGroups[i][j])) then return false end
 		end
 	end
@@ -327,7 +391,7 @@ end
 --移动到特殊背包，如箭袋，灵魂袋，草药袋，矿石袋
 --flag =0 , 背包， flag = 1 bank
 local function moveToSpecialBag(flag)
-	local bagTypes
+	local bagTypes = nil
 	if flag == 0 then
 		--bagSlotTypes[容器]=[0,1,2,4]  ，bagSlotTypes[箭袋]=[3] 
 		bagTypes = JPack.bagSlotTypes
@@ -344,7 +408,7 @@ local function moveToSpecialBag(flag)
 		--针对每种不同的背包,k is type,v is slots
 		if k ~= L.TYPE_BAG then 
 		local toBags = v
-		local frombagIndex,tobagIndex=#fromBags,#toBags
+		local frombagIndex,tobagIndex=table.getn(fromBags),table.getn(toBags)
 		local frombag,tobag = fromBags[frombagIndex],toBags[tobagIndex]
 		local fromslot,toslot=GetContainerNumSlots(frombag),GetContainerNumSlots(tobag)
 		--移动
@@ -352,6 +416,7 @@ local function moveToSpecialBag(flag)
 		while(true) do
 			c = c + 1
 			if(c>300)then 
+				debug("force quit, count to 300")
 				break 
 			end
 			
@@ -367,6 +432,7 @@ local function moveToSpecialBag(flag)
 			end
 			
 			if(frombagIndex<=0 or tobagIndex <=0 or fromslot<=0 or toslot<=0)then 
+				debug("break to move sepical bag")
 				break
 			end
 			if CheckCursor() then
@@ -392,7 +458,7 @@ local function saveToBank()
 	for k,v in pairs(JPack.bankSlotTypes) do
 		--针对每种不同的背包,k is type,v is slots
 		local bkTypes,bagTypes=JPack.bankSlotTypes[k],JPack.bagSlotTypes[k]
-		local bkBag,bag=#bkTypes,#bagTypes
+		local bkBag,bag=table.getn(bkTypes),table.getn(bagTypes)
 		local bkSlot,slot=GetContainerNumSlots(bkTypes[bkBag]),GetContainerNumSlots(bagTypes[bag])
 		--保存
 		while(true) do
@@ -406,6 +472,7 @@ local function saveToBank()
 			end
 			
 			if(bkBag<=0 or bag <=0 or bkSlot<=0 or slot<=0)then 
+				debug("break to save")
 				break
 			end
 			if CheckCursor() then
@@ -428,7 +495,7 @@ local function loadFromBank()
 	for k,v in pairs(JPack.bankSlotTypes) do
 		--针对每种不同的背包,k is type,v is slots
 		local bkTypes,bagTypes=JPack.bankSlotTypes[k],JPack.bagSlotTypes[k]
-		local bkBag,bag=#bkTypes,#bagTypes
+		local bkBag,bag=table.getn(bkTypes),table.getn(bagTypes)
 		local bkSlot,slot=GetContainerNumSlots(bkTypes[bkBag]),GetContainerNumSlots(bagTypes[bag])
 		--保存
 		while(true) do
@@ -465,45 +532,37 @@ packingTypeIndex
 packingBags
 ]]
 local function groupBags()
-	local ignored = JPACK_IGNORE_BAGS or {}
 	local bagTypes={}
 	bagTypes[L.TYPE_BAG]={}
-	if not ignored[0] then
-		bagTypes[L.TYPE_BAG][1]=0
-	end
+	bagTypes[L.TYPE_BAG][1]=0
 	for i=1,4 do
-		if not ignored[i] then
-			local name=GetBagName(i)
-			if(name)then
-				local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, subType, itemStackCount,
-	itemEquipLoc, itemTexture = GetItemInfo(name)
-				if(bagTypes[subType]==nil)then
-					bagTypes[subType]={}
-				end
-				local t = bagTypes[subType]
-				t[#t+1]=i
+		local name=GetBagName(i)
+		if(name)then
+			local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, subType, itemStackCount,
+itemEquipLoc, itemTexture = GetItemInfo(name)
+			debug("Bag[",i,"]Type：",subType)
+			if(bagTypes[subType]==nil)then
+				bagTypes[subType]={}
 			end
+			local t = bagTypes[subType]
+			t[table.getn(t)+1]=i
 		end
 	end
 
 	local bankSlotTypes={}
 	if(JPack.bankOpened)then
 		bankSlotTypes[L.TYPE_BAG]={}
-		if not ignored[-1] then
-			bankSlotTypes[L.TYPE_BAG][1]=-1
-		end
+		bankSlotTypes[L.TYPE_BAG][1]=-1
 		for i=5,11 do
-			if not ignored[i] then
-				local name=GetBagName(i)
-				if(name)then
-					local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, subType, itemStackCount,
-	itemEquipLoc, itemTexture = GetItemInfo(name)
-					if(bankSlotTypes[subType]==nil)then
-						bankSlotTypes[subType]={}
-					end
-					local t = bankSlotTypes[subType]
-					t[#t+1]=i
+			local name=GetBagName(i)
+			if(name)then
+				local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, subType, itemStackCount,
+itemEquipLoc, itemTexture = GetItemInfo(name)
+				if(bankSlotTypes[subType]==nil)then
+					bankSlotTypes[subType]={}
 				end
+				local t = bankSlotTypes[subType]
+				t[table.getn(t)+1]=i
 			end
 		end
 	end
@@ -527,11 +586,21 @@ end
 local function getPackingItems()
 	local c=1
 	local items={}
-	for i=#JPack.packingBags,1,-1 do
-		local num = GetContainerNumSlots(JPack.packingBags[i]) 
-		for j = num,1,-1 do
-			items[c]=getJPackItem(JPack.packingBags[i],j)
-			c = c+1
+	if JPackDB.asc then
+		for i=1,table.getn(JPack.packingBags) do
+			local num = GetContainerNumSlots(JPack.packingBags[i]) 
+			for j = 1,num do
+				items[c]=getJPackItem(JPack.packingBags[i],j)
+				c = c+1
+			end
+		end
+	else
+		for i=table.getn(JPack.packingBags),1,-1 do
+			local num = GetContainerNumSlots(JPack.packingBags[i]) 
+			for j = num,1,-1 do
+				items[c]=getJPackItem(JPack.packingBags[i],j)
+				c = c+1
+			end
 		end
 	end
 	return items,c-1
@@ -544,6 +613,10 @@ local function startPack()
 	local items,count = getPackingItems()
 	bagSize=count
 	local sorted = jsort(items)
+	debug("sorted...")
+	--[[for i=1,table.getn(sorted) do
+		debug(getCompareStr(sorted[i]))
+	end]]
 	sortTo(items,sorted)
 end
 
@@ -552,12 +625,22 @@ end
 ]]
 local function getSlotId(packIndex)
 	local slot=packIndex
-	for i=#JPack.packingBags,1,-1 do
-		local num=GetContainerNumSlots(JPack.packingBags[i]) 
-		if(slot<=num)then
-			return JPack.packingBags[i],1+num-slot
+	if JPackDB.asc then
+		for i=1,table.getn(JPack.packingBags) do
+			local num=GetContainerNumSlots(JPack.packingBags[i]) 
+			if(slot<=num)then
+				return JPack.packingBags[i],slot
+			end
+			slot = slot - num
 		end
-		slot = slot - num
+	else
+		for i=table.getn(JPack.packingBags),1,-1 do
+			local num=GetContainerNumSlots(JPack.packingBags[i]) 
+			if(slot<=num)then
+				return JPack.packingBags[i],1+num-slot
+			end
+			slot = slot - num
+		end
 	end
 	return -1,-1
 end
@@ -629,7 +712,7 @@ local function moveOnce()
 					current[i]=x
 					if(current[slot]==nil)then
 						--锁定空格
-						lockedSlots[#lockedSlots+1]=i
+						lockedSlots[table.getn(lockedSlots)+1]=i
 					end
 				end
 			end
@@ -762,14 +845,15 @@ JPack.OnLoad = {}
 JPack.OnLoad_GB = {}
 
 function JPack:ADDON_LOADED(event, addon)
-	
-	JPack:RegisterEvent"BANKFRAME_OPENED"
-	JPack:RegisterEvent"BANKFRAME_CLOSED"
-	JPack:RegisterEvent"GUILDBANKFRAME_CLOSED"
-	JPack:RegisterEvent"GUILDBANKFRAME_OPENED"
-	
+	if addon == 'JPack' then
+		debug'JPack loaded'
+		JPackDB = JPackDB or {}
+		
+		print(format('%s %s', version, L["HELP"]))
+		self:UnregisterEvent("ADDON_LOADED")
+		self.ADDON_LOADED = nil
+	end
 end
-JPack:RegisterEvent"ADDON_LOADED"
 
 function JPack:BANKFRAME_OPENED()
 	JPack.bankOpened = true
@@ -788,6 +872,13 @@ function JPack:GUILDBANKFRAME_CLOSED()
 	JPack.guildbankOpened = false
 	if JPACK_STEP~=JPACK_STOPPED and JPack.packupguildbank then stopPacking() end
 end
+
+
+JPack:RegisterEvent"ADDON_LOADED"
+JPack:RegisterEvent"BANKFRAME_OPENED"
+JPack:RegisterEvent"BANKFRAME_CLOSED"
+JPack:RegisterEvent"GUILDBANKFRAME_CLOSED"
+JPack:RegisterEvent"GUILDBANKFRAME_OPENED"
 
 --[=[
 	GuildBank packup
@@ -851,16 +942,20 @@ function JPack.OnUpdate(self, el)
 	elapsed = elapsed + el
 	if elapsed < self.updatePeriod then return end
 	elapsed = 0
+	debug("\nOnUpdate!\n")
 	if DEV_MOD and JPACK_STEP==JPACK_STARTED and JPack.guildbankOpened and JPack.packupguildbank then
+		debug"整理开始, 工会银行整理"
 		
 		-- 取得当前打开页
 		currentGBTab = GetCurrentGuildBankTab()
+		debug('currentGBTab: ',currentGBTab)
 		
 		-- 判断玩家是否打开公会银行并有相应权限 *** 需要纠正判断
 		if IsGuildLeader(UnitName("player")) then
 			JPACK_STEP=JPACK_GUILDBANK_STACKING -- 直接进入工会银行堆叠
 		else
 			local name, icon, isViewable, canDeposit, numWithdrawals, remainingWithdrawals = GetGuildBankTabInfo(currentGBTab)
+			debug('isViewable ', isViewable, 'canDeposit ', canDeposit, 'remainingWithdrawals', remainingWithdrawals)
 			if isViewable and canDeposit then -- 拥有移动权限
 				JPACK_STEP=JPACK_GUILDBANK_STACKING -- 进入工会银行堆叠
 			else
@@ -883,35 +978,45 @@ function JPack.OnUpdate(self, el)
 	
 	--公会银行整理结束, 结束整理工作
 	elseif(JPACK_STEP == JPACK_GUILDBANK_COMPLETE) then
+		debug"GUILDBANK PACKUP COMPLETE"
 		print(L["COMPLETE"])
 		JPack:UnregisterEvent("GUILDBANKBAGSLOTS_CHANGED")
 		
 	-- 普通整理
 	elseif JPACK_STEP==JPACK_STARTED then
+		debug"普通整理"
 		if stackOnce() then
 			JPACK_STEP=JPACK_STACK_OVER
 		end
 	elseif(JPACK_STEP==JPACK_STACK_OVER)then
+		debug("JPACK_STEP==JPACK_STACK_OVER, 开始移动到特殊背包")
 		if(isAllBagReady())then
+			debug("堆叠完毕,JPack_STEP=JPACK_STACK_OVER")
 			moveToSpecialBag(1)
 			moveToSpecialBag(0)
 			JPACK_STEP = JPACK_SPEC_BAG_OVER
 		end
 	elseif(JPACK_STEP==JPACK_SPEC_BAG_OVER)then
+		debug("JPACK_STEP==JPACK_SPEC_BAG_OVER, 开始向银行保存")
 		if(isAllBagReady())then
 			if(JPack.deposit)then
+				debug("saveToBank()")
 				saveToBank()
 			end
 			JPACK_STEP=JPACK_DEPOSITING
 		end
 	elseif(JPACK_STEP==JPACK_DEPOSITING)then
+		debug("JPACK_STEP==JPACK_DEPOSITING, 开始从银行提取")
 		if(isAllBagReady())then
+			debug("保存物品完毕,JPack_STEP=JPACK_DEPOSITING")
 			if(JPack.draw)then
+				debug("loadFromBank()")
 				loadFromBank()
 			end
 			JPACK_STEP=JPACK_START_PACK
 		end
 	elseif(JPACK_STEP==JPACK_START_PACK)then
+		debug("开始整理,JPACK_STEP=JPACK_START_PACK")
 		if(isAllBagReady())then
 			JPack.packingGroupIndex=1
 			JPack.packingBags=JPack.bagGroups[1]
@@ -924,8 +1029,16 @@ function JPack.OnUpdate(self, el)
 		--移动物品
 		if not moveOnce() then
 			JPack.packingGroupIndex=JPack.packingGroupIndex + 1
+			debug("index", JPack.packingGroupIndex)
 			JPack.packingBags=JPack.bagGroups[JPack.packingGroupIndex]
+			debug("JPack.bagGroups . size = ",table.getn(JPack.bagGroups))
+			for i=1,table.getn(JPack.bagGroups) do
+				for j=1,table.getn(JPack.bagGroups[i]) do
+					debug("i", i, "j", j..":", JPack.bagGroups[i][j])
+				end
+			end
 			if(JPack.packingBags==nil)then
+				debug"PACKUP COMPLETE"
 				JPACK_STEP=JPACK_STOPPED
 				JPack.bagGroups={}
 				print(L["COMPLETE"])
@@ -933,6 +1046,7 @@ function JPack.OnUpdate(self, el)
 				current=nil
 				to=nil
 			else
+				debug("Packing ", JPack.packingGroupIndex)
 				startPack()
 			end
 		end
@@ -940,6 +1054,7 @@ function JPack.OnUpdate(self, el)
 end
 
 local function pack()
+	debug("\n\n\n\nPACK START")
 	if CheckCursor() then
 		print(L["WARN"],2,0.28,2)
 	else
@@ -1016,6 +1131,12 @@ function JPack:Pack(access, order)
 		JPack.draw = true
 	elseif access == 3 and DEV_MOD then
 		JPack.packupguildbank = true
-	end	
+	end
+	if order == 1 then
+		JPackDB.asc=true
+	elseif order == 2 then
+		JPackDB.asc=false
+	end
+	
 	pack()
 end

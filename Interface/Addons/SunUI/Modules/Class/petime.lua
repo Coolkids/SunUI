@@ -77,7 +77,7 @@ function Module:OnEnable()
 	
 	local h = CreateFrame("Frame", nil, UIParent)
 	h:SetScript("OnUpdate", function()
-		if UnitExists("pet") and GetPetTimeRemaining() then
+		if UnitExists("pet") and GetPetTimeRemaining() and not UnitInVehicle("player") then
 			bar:Show()
 		else
 			bar:Hide()

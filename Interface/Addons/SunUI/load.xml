@@ -14,6 +14,8 @@
 	<Include file="core\load.xml"/>
 	<Include file="developer\load.xml"/>
 	<Script file = "core\AddonManager.lua"/>
+	<!--Fix UIDropdown-->
+	<Include file = "core\!UIDropDownMenuFix\UIDropDownMenu.xml"/>
 	<!-- module -->
 	<Include file="Modules\load.xml"/>
 	<!-- script -->

@@ -1,10 +1,5 @@
-﻿--[=[
-	Language Localization: zhTW
-	Translated by: name <email address>
-]=]
-
+local S, C, L, DB = unpack(select(2, ...))
 if GetLocale() ~= "zhTW" then return end
-local L = JPackLocale
 
 L.TYPE_BAG = "容器"
 L.TYPE_FISHWEAPON = "魚竿"
@@ -14,7 +9,7 @@ JPACK_ORDER = {"爐石","##坐騎","採礦鎬","剝皮小刀","寶石匠的工�
 JPACK_DEPOSIT = {"#商人","#材料","##草藥","##肉類","#珠寶","#容器"}
 JPACK_DRAW = {"#任務"}
 
-L["HELP"] = '輸入"/jpack help"獲取幫助.'
+L["HELP"] = "輸入'/jpack help'獲取幫助."
 L["COMPLETE"] = "整理完畢..."
 L["WARN"] = "請先拿掉你鼠標上的物品. 整理時不要抓起物品、金錢、法術."
 L["Unknown command"] = "未知指令"
@@ -26,19 +21,4 @@ L["Set sequence to ascend"] = "正序整理"
 L["Set sequence to descend"] = "逆序整理"
 L["Save to the bank"] = "保存到銀行"
 L["Load from the bank"] = "從銀行取出"
-L["Packup guildbank"] = "整理公會銀行"
 L["Print help info"] = "顯示幫助"
-
-L["Sequence"] = "整理順序"
-L["asc"] = "正序"
-L["desc"] = "逆序"
-
-L["Click"] = "點擊"
-L["Pack"] = "整理"
-
-L["Alt + Left-Click"] = "Alt + 左鍵"
-L["Shift + Left-Click"] = "Shift + 左鍵"
-L["Ctrl + Left-Click"] = "Ctrl + 左鍵"
-L["Shift + Right-Click"] = "Shift + 右鍵"
-L["Ctrl + Right-Click"] = "Ctrl + 右鍵"
-
