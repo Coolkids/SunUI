@@ -342,7 +342,7 @@ function stAddonManager:LoadProfileWindow()
 end
 
 function stAddonManager:LoadWindow()
-	if stAddonManager.Loaded then stAddonManager:Show(); return  end
+	if stAddonManager.Loaded then stAddonManager:Show() UIFrameFadeIn(stAddonManager, 0.3, 0, 1); return  end
 	local window = stAddonManager
 	local header = window.header
 	
@@ -369,7 +369,7 @@ function stAddonManager:LoadWindow()
 	close:SetBackdrop(nil)
 	close:HookScript("OnEnter", function(self) self:SetBackdrop(nil) end)
 	close:HookScript("OnLeave", function(self) self:SetBackdrop(nil) end)
-	close:SetScript("OnClick", function() window:Hide() end)
+	close:SetScript("OnClick", function() S.FadeOutFrameDamage(window, 0.3) end)
 	header.close = close
 	
 	local addonListBG = CreateFrame("Frame", window:GetName().."_ScrollBackground", window)

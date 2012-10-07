@@ -39,15 +39,16 @@ Delay:SetScript("OnEvent", function()
 		UnitPopupMenus["PLAYER"] = { "SET_FOCUS", "WHISPER", "INSPECT", "ACHIEVEMENTS", "INVITE", "TRADE", "FOLLOW", "DUEL", "RAID_TARGET_ICON", "RAF_SUMMON", "RAF_GRANT_LEVEL", "MOVE_PLAYER_FRAME", "MOVE_TARGET_FRAME", "CANCEL" };
 	end
 	
-	-- if XDropDownList1 then
-		-- XDropDownList1:StripTextures()
-		-- S.CreateBD(XDropDownList1, 0)
-		-- S.CreateGradient(XDropDownList1)
-	-- end
-	
-	-- if XDropDownList2 then
-		-- XDropDownList2:StripTextures()
-	-- end
-	
+	hooksecurefunc("ShowUIPanel", function(frame)
+		if frame then
+			frame:Show()
+			UIFrameFadeIn(frame, 0.3, 0, 1)
+		end
+	end)
+	hooksecurefunc("HideUIPanel", function(frame)
+		if frame then
+			S.FadeOutFrameDamage(frame, 0.3)
+		end
+	end)
 	DEFAULT_CHAT_FRAME:AddMessage("|cffDDA0DDSun|r|cff44CCFFUI|r已加载，详细设置请输入/sunui")
 end)

@@ -1,5 +1,6 @@
-local mod	= DBM:NewMod(690, "DBM-Party-MoP", 5, 321)
+﻿local mod	= DBM:NewMod(690, "DBM-Party-MoP", 5, 321)
 local L		= mod:GetLocalizedStrings()
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
 mod:SetRevision(("$Revision: 7622 $"):sub(12, -3))
 mod:SetCreatureID(61243)--61243 (Gekkan), 61337 (Glintrok Ironhide), 61338 (Glintrok Skulker), 61339 (Glintrok Oracle), 61340 (Glintrok Hexxer)
@@ -47,6 +48,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnHex:Show(args.destName)
 		specWarnHexDispel:Show(args.destName)
 		timerHex:Start(args.destName)
+		if mod:IsHealer() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\dispelnow.mp3")--快驅散
+		end
 	end
 end
 
@@ -72,12 +76,18 @@ function mod:SPELL_CAST_START(args)
 		warnHexCast:Show()
 		specWarnHexInterrupt:Show(args.sourceName)
 		timerHexCD:Start()
+		if args.sourceGUID == UnitGUID("target") then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3")--打斷施法
+		end
 	elseif args:IsSpellID(118963) then
 		warnShank:Show()
 		specWarnShank:Show(args.sourceName)
 	elseif args:IsSpellID(118940) then
 		warnCleansingFlame:Show()
 		specWarnCleansingFlame:Show(args.sourceName)
+		if args.sourceGUID == UnitGUID("target") then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3")--打斷施法
+		end
 	end
 end
 

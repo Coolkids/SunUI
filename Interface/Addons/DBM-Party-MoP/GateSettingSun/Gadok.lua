@@ -1,5 +1,6 @@
-local mod	= DBM:NewMod(675, "DBM-Party-MoP", 4, 303)
+﻿local mod	= DBM:NewMod(675, "DBM-Party-MoP", 4, 303)
 local L		= mod:GetLocalizedStrings()
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
 mod:SetRevision(("$Revision: 7575 $"):sub(12, -3))
 mod:SetCreatureID(56589)
@@ -56,10 +57,12 @@ function mod:SPELL_CAST_SUCCESS(args)
 end
 
 function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
-	if spellId == 115458 and destGUID == UnitGUID("player") and self:AntiSpam() then
+	if spellId == 115458 and destGUID == UnitGUID("player") and self:AntiSpam(3, 1) then
 		specWarnAcidBomb:Show()
-	elseif spellId == 116297 and destGUID == UnitGUID("player") and self:AntiSpam() then
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
+	elseif spellId == 116297 and destGUID == UnitGUID("player") and self:AntiSpam(3, 2) then
 		specWarnStafingRunAoe:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
 	end
 end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE
@@ -70,5 +73,6 @@ function mod:RAID_BOSS_EMOTE(msg)--Needs a better trigger if possible using tran
 		specWarnStafingRun:Show()
 		timerImpalingStrikeCD:Start(29)
 		timerPreyTimeCD:Start(32.5)
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\bombsoon.mp3")--準備炸彈
 	end
 end

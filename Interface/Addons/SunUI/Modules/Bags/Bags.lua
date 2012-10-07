@@ -1,5 +1,5 @@
 local S, C, L, DB = unpack(select(2, ...))
-
+local _
 local Bag = CreateFrame("Frame", nil, UIParent)
 local ST_NORMAL = 1
 local ST_SOULBAG = 2
@@ -35,6 +35,8 @@ elseif DB.MyClass == 'WARLOCK' then
 	Unusable = {{1, 2, 3, 4, 5, 6, 7, 9, 11, 14, 15}, {3, 4, 5, 6, 7}, true}
 elseif DB.MyClass == 'WARRIOR' then
 	Unusable = {{16}, {7}}
+elseif DB.MyClass == 'MONK' then
+	Unusable = {{2, 3, 4, 6, 9, 13, 14, 15, 16}, {4, 5, 6, 7}}
 end
 
 for class = 1, 2 do

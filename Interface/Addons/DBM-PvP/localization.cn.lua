@@ -35,7 +35,7 @@ L:SetMiscLocalization({
 L = DBM:GetModLocalization("Arenas")
 
 L:SetGeneralLocalization({
-	name = "竞技场"
+	name = "竞技场 "
 })
 
 L:SetTimerLocalization({
@@ -205,7 +205,8 @@ L:SetOptionLocalization({
 	TimerPOI			= "显示夺取计时",
 	TimerSiegeEngine		= "为攻城机具的修复显示计时条",
 	WarnSiegeEngine			= "当攻城机具准备好时显示警报",
-	WarnSiegeEngineSoon		= "当攻城机具接近准备好时显示警报"
+	WarnSiegeEngineSoon		= "当攻城机具接近准备好时显示警报",
+	ShowGatesHealth			= "显示受损大门的耐久值(当加入一个正在进行的战场大门耐久值可能会不準确!)"
 })
 
 L:SetMiscLocalization({

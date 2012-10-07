@@ -1,5 +1,7 @@
-local mod	= DBM:NewMod(677, "DBM-MogushanVaults", nil, 317)
+﻿local mod	= DBM:NewMod(677, "DBM-MogushanVaults", nil, 317)
 local L		= mod:GetLocalizedStrings()
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
+local sndADD	= mod:NewSound(nil, "SoundADD", false)
 
 mod:SetRevision(("$Revision: 7764 $"):sub(12, -3))
 mod:SetCreatureID(60399, 60400)--60396 (Rage), 60397 (Strength), 60398 (Courage), 60480 (Titan Spark), 60399 (Qin-xi), 60400 (Jan-xi)
@@ -12,6 +14,7 @@ mod:SetMinCombatTime(25)
 
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED",
+	"SPELL_AURA_REMOVED",
 	"UNIT_SPELLCAST_SUCCEEDED",
 	"CHAT_MSG_MONSTER_YELL",
 	"RAID_BOSS_EMOTE",
@@ -67,17 +70,22 @@ local timerTitanGasCD			= mod:NewNextCountTimer(153, 116779)
 
 mod:AddBoolOption("InfoFrame", false)
 
+mod:AddDropdownOption("optBY", {"tarfoc", "Janxi", "Qinxi", "none"}, "tarfoc", "sound")
+
 local comboWarned = false
 local sparkCount = 0
 local comboCount = 0
 local titanGasCast = 0
 local focusedAssault = GetSpellInfo(116525)
 
+local Isstomp = 0
+
 function mod:OnCombatStart(delay)
 	comboWarned = false
 	sparkCount = 0
 	comboCount = 0
 	titanGasCast = 0
+	Isstomp = 0
 	timerBossesActivates:Start(-delay)--Still start here to give perspective
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:SetHeader(focusedAssault)
@@ -101,6 +109,17 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnFocusedDefense:Show(args.destName)
 		if args:IsPlayer() then
 			specWarnFocusedDefense:Show()
+			if not mod:IsTank() then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\justrun.mp3") --快跑
+			end
+		end
+	end
+end
+
+function mod:SPELL_AURA_REMOVED(args)
+	if args:IsSpellID(116778) then
+		if args:IsPlayer() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\safenow.mp3") --安全
 		end
 	end
 end
@@ -108,6 +127,7 @@ end
 function mod:CHAT_MSG_MONSTER_YELL(msg)
 	if msg == L.Rage or msg:find(L.Rage) then
 		warnRageActivated:Schedule(11)
+		sndADD:Schedule(10, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qjbcx.mp3") --輕甲
 		timerRageActivates:Start()--They actually spawn 11 seconds after yell
 	end
 end
@@ -115,16 +135,21 @@ end
 function mod:RAID_BOSS_EMOTE(msg)
 	if msg == L.Strength or msg:find(L.Strength) then
 		warnStrengthActivated:Schedule(9)
+		sndWOP:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zjbcx.mp3") --重甲
 		specWarnStrengthActivated:Schedule(9)
 		timerStrengthActivates:Start()--They actually spawn 10 seconds after emote
 	elseif msg == L.Courage or msg:find(L.Courage) then
-		warnCourageActivated:Schedule(10)
-		specWarnCourageActivated:Schedule(10)
+		warnCourageActivated:Schedule(9)
+		if mod:IsDps() then
+			sndWOP:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_bjbcx.mp3") --半甲
+		end
+		specWarnCourageActivated:Schedule(9)
 		timerCourageActivates:Start()--They actually spawn 10 seconds after emote
 	elseif msg == L.Boss or msg:find(L.Boss) then
-		warnBossesActivated:Schedule(12)
-		specWarnBossesActivated:Schedule(12)
-		timerBossesActivates:Start(12)
+		warnBossesActivated:Schedule(9)
+		specWarnBossesActivated:Schedule(9)
+		timerBossesActivates:Start(9)
+		sndWOP:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_szcz.mp3") --雙子
 	elseif msg:find("spell:116779") then
 		if self:IsDifficulty("heroic10", "heroic25") then--On heroic the boss activates this perminantly on pull and it's always present
 			--in fact, pretty sure herioc will use THIS as pull trigger
@@ -132,6 +157,7 @@ function mod:RAID_BOSS_EMOTE(msg)
 		else
 			titanGasCast = titanGasCast + 1
 			warnTitanGas:Show(titanGasCast)
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ttqt.mp3") --泰坦氣體
 			if titanGasCast < 5 then -- after Titan Gas casted 5 times, Titan Gas lasts permanently. (soft enrage)
 				timerTitanGas:Start()
 				timerTitanGasCD:Start(titanGasCast+1)
@@ -140,30 +166,63 @@ function mod:RAID_BOSS_EMOTE(msg)
 	end
 end
 
+function chooseboss(BuId)
+	if mod.Options.optBY == "tarfoc" and (BuId ~= "target") and (BuId ~= "focus") then
+		return false
+	elseif mod.Options.optBY == "Janxi" and (UnitName(BuId) ~= UnitName("boss2")) then
+		return false
+	elseif mod.Options.optBY == "Qinxi" and (UnitName(BuId) ~= UnitName("boss1")) then
+		return false
+	elseif mod.Options.optBY == "none" then
+		return false
+	else
+		return true
+	end
+end
+
+function checkisstomp()
+	sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+	sndWOP:Schedule(2, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+	mod:Schedule(2, function() Isstomp = 0 end)
+	mod:Schedule(4, function() 
+		if Isstomp ~= 1 and comboCount ~= 0 then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jt.mp3") --踐踏
+		end
+	end)
+end
+
 function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 	if spellId == 116556 and self:AntiSpam(2, 1) then
 		warnEnergizingSmash:Show()
 --		specWarnEnergizingSmash:Show()
-	elseif spellId == 116968 and self:AntiSpam(2, 2) then--Arc Left
+	elseif spellId == 117746 then--Spark Spawning
+		self:SendSync("SparkSpawned")
+	end
+	if (not chooseboss(uId)) then return end
+	if spellId == 116968 and self:AntiSpam(2, 2) then--Arc Left
+		Isstomp = 1
 		comboCount = comboCount + 1
+		checkisstomp()
 		warnArcLeft:Show(comboCount)
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_left.mp3") --左側
 	elseif spellId == 116971 and self:AntiSpam(2, 3) then--Arc Right
+		Isstomp = 1
 		comboCount = comboCount + 1
+		checkisstomp()
 		warnArcRight:Show(comboCount)
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_right.mp3") --右側
 	elseif spellId == 116972 and self:AntiSpam(2, 4) then--Arc Center
+		Isstomp = 1
 		comboCount = comboCount + 1
+		checkisstomp()
 		warnArcCenter:Show(comboCount)
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_center.mp3") --前方
 --		specWarnArcCenter:Show()
 	elseif spellId == 116969 and self:AntiSpam(2, 5) then--Stomp
 		comboCount = comboCount + 1
 		warnStomp:Show(comboCount)
+--		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jt.mp3") --踐踏
 --		specWarnStomp:Show()
-
-	--Not most accurate way to detect sparks, as both depend on SOMEONE in raid to be targeting the mob creating spark, or the spark that's dying.
-	--However, FAR more cpu efficent then scanning ALL spell/swing damage and miss events entire fight.
-	--Should be accurate enough with syncing, we'll see.
-	elseif spellId == 117746 then--Spark Spawning
-		self:SendSync("SparkSpawned")
 	end
 end
 
@@ -202,9 +261,11 @@ end
 -- also timerComboCD is not be fixed. their mana increases 1 or 2 randomly every boss's melee attacks.
 -- 
 function mod:UNIT_POWER(uId)
+	if (not chooseboss(uId)) then return end
 	if (self:GetUnitCreatureId(uId) == 60399 or self:GetUnitCreatureId(uId) == 60400) and UnitPower(uId) == 18 and not comboWarned then
 		comboWarned = true
 		specWarnCombo:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbbyz.mp3") --準備半月斬
 	elseif (self:GetUnitCreatureId(uId) == 60399 or self:GetUnitCreatureId(uId) == 60400) and UnitPower(uId) == 1 then
 		comboWarned = false
 		comboCount = 0

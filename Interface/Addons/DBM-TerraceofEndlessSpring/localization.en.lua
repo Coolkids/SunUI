@@ -7,7 +7,10 @@ L= DBM:GetModLocalization(683)
 
 L:SetOptionLocalization({
 	RangeFrame			= "Show range frame (8) for $spell:111850\n(Shows everyone if you have debuff, only players with debuff if not)",
-	SetIconOnPrison		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(117436)
+	SetIconOnPrison		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(117436),
+	HudMAP 				= "HudMAP: $spell:111850",
+	SoundDW 			= "voice warning: $spell:117283 disperse",
+	SoundWOP			= "voice warning: important skills"
 })
 
 
@@ -15,6 +18,18 @@ L:SetOptionLocalization({
 -- Tsulong --
 ------------
 L= DBM:GetModLocalization(742)
+
+L:SetOptionLocalization ({
+	SoundWOP 	= "voice warning: important skills",
+	SoundJK 	= "voice warning: $spell:123011 advance warning",
+	HudMAP 		= "HudMAP:$spell:122770 (only 10N/10H Mode) ",
+	optDS 		= "shadow of terror, how many stacks start warning",
+	six 		= "6",
+	nine 		= "9",
+	twelve 		= "12",
+	fifteen 	= "15",
+	none 		= "Don't warning"
+})
 
 L:SetMiscLocalization{
 	Victory	= "I thank you, strangers. I have been freed."
@@ -36,7 +51,8 @@ L:SetTimerLocalization({
 
 L:SetOptionLocalization({
 	warnHideOver			= "Show warning when $spell:123244 has ended",
-	timerSpecialCD			= "Show timer for when next special ability will be cast."
+	timerSpecialCD			= "Show timer for when next special ability will be cast.",
+	SoundWOP 				= "voice warning: important skills"
 })
 
 L:SetMiscLocalization{
@@ -49,3 +65,7 @@ L:SetMiscLocalization{
 ----------------------
 L= DBM:GetModLocalization(709)
 
+L:SetOptionLocalization ({
+	SoundDD = "voice warning: $spell:131996",
+	SoundWOP = "voice warning: important skills"
+})

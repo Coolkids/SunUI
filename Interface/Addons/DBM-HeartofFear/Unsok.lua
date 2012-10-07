@@ -1,5 +1,6 @@
-local mod	= DBM:NewMod(737, "DBM-HeartofFear", nil, 330)
+﻿local mod	= DBM:NewMod(737, "DBM-HeartofFear", nil, 330)
 local L		= mod:GetLocalizedStrings()
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
 mod:SetRevision(("$Revision: 7696 $"):sub(12, -3))
 mod:SetCreatureID(62511)
@@ -48,6 +49,8 @@ local specwarnAmberExplosion	= mod:NewSpecialWarningSpell(122398, nil, nil, nil,
 --local specwarnBossDebuff		= mod:NewSpecialWarning("specwarnBossDebuff")--Some special warning that says "get your ass to boss and refresh debuff NOW" (Debuff stacks up to 255 with 10% damage taken increase every stack, keeping buff up and stacking is paramount to dps check)
 --Living Amber
 local specwarnBurningAmber		= mod:NewSpecialWarningMove(122504)--Standing in a puddle
+local specwarnScalpel			= mod:NewSpecialWarningMove(121995)
+local specwarnScalpelAmber		= mod:NewSpecialWarningMove(122005)
 --Amber Monstrosity
 local specwarnAmberMonstrosity	= mod:NewSpecialWarningSwitch("ej6254", not mod:IsHealer())
 local specwarnMassiveStomp		= mod:NewSpecialWarningSpell(122408, nil, nil, nil, true)
@@ -86,12 +89,16 @@ function mod:SPELL_AURA_APPLIED(args)
 		specwarnParasiticGrowth:Show(args.destName)
 		timerParasiticGrowth:Start(args.destName)
 		timerParasiticGrowthCD:Start()
+		if mod:IsHealer() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jscz.mp3") --寄生成長
+		end
 	elseif args:IsSpellID(122540) then
 		Phase = 2
 		warnAmberCarapace:Show()
 		specwarnAmberMonstrosity:Show()
 		timerMassiveStompCD:Start(20)
 		timerFlingCD:Start(33)
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ptwo.mp3")--P2
 	elseif args:IsSpellID(122395) and Phase < 3 then
 		warnStruggleForControl:Show(args.destName)
 		timerStruggleForControl:Start(args.destName)
@@ -99,6 +106,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnReshapeLife:Show(args.destName)
 		if args:IsPlayer() then
 			specwarnReshape:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_nbzh.mp3") --你被轉化
 		end
 		if Phase < 3 then--More often in phase 3
 			timerReshapeLifeCD:Start()
@@ -112,30 +120,49 @@ mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(122754) then
 		timerDestabalize:Cancel(args.destName)
+		--[[
+		if not mod:IsDps() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\changemt.mp3") --換坦嘲諷
+		end
+		]]
 	elseif args:IsSpellID(121994) then
 		timerAmberScalpelCD:Start()
 	elseif args:IsSpellID(121949) then
 		timerParasiticGrowth:Cancel(args.destName)
 	elseif args:IsSpellID(122540) then--Phase 3
 		Phase = 3
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\pthree.mp3")--p3
 		timerMassiveStompCD:Cancel()
 		timerFlingCD:Cancel()
 	end
 end
 
 function mod:SPELL_CAST_START(args)
-	if args:IsSpellID(122398) then
+	if args:IsSpellID(122398) then --琥珀小怪
 		warnAmberExplosion:Show()
 		if args:GetSrcCreatureID() == 62701 then--Cast by a wild construct not controlled by player
 			specwarnAmberExplosion:Show()
+			if not UnitDebuff("player", GetSpellInfo(122370)) then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_hpbz.mp3") --琥珀爆炸
+			end
 			timerAmberExplosionCD:Start(18, args.sourceName, args.sourceGUID)--Longer CD if it's a non player controlled construct. Everyone needs to see this bar because there is no way to interrupt these.
 		elseif args.sourceGUID == UnitGUID("player") then--Cast by YOU
 			specwarnAmberExplosionYou:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\stopcast.mp3") --停止施法
 			timerAmberExplosionCD:Start(13, args.sourceName)--Only player needs to see this, they are only person who can do anything about it.
+		end
+	elseif args:IsSpellID(122402) then --琥珀巨怪
+		warnAmberExplosion:Show()
+		specwarnAmberExplosion:Show()
+		if UnitDebuff("player", GetSpellInfo(122370)) and (args.sourceGUID == UnitGUID("target")) then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3") --快打斷
+		else
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jgbz.mp3") --巨怪爆炸
 		end
 	elseif args:IsSpellID(122408) then
 		warnMassiveStomp:Show()
 		specwarnMassiveStomp:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\stompsoon.mp3") --準備踐踏
 		timerMassiveStompCD:Start()
 	elseif args:IsSpellID(122413) then
 		warnFling:Show()
@@ -159,8 +186,15 @@ function mod:SPELL_CAST_SUCCESS(args)
 end
 
 function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
-	if spellId == 122504 and destGUID == UnitGUID("player") and self:AntiSpam(3) then
+	if spellId == 122504 and destGUID == UnitGUID("player") and self:AntiSpam(3, 1) then
 		specwarnBurningAmber:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3") --快躲開
+	elseif spellId == 121995 and destGUID == UnitGUID("player") and self:AntiSpam(3, 2) then
+		specwarnScalpel:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")
+	elseif spellId == 122005 and destGUID == UnitGUID("player") and self:AntiSpam(3, 2) then
+		specwarnScalpelAmber:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")
 	end
 end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE

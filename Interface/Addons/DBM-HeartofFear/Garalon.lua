@@ -1,5 +1,6 @@
-local mod	= DBM:NewMod(713, "DBM-HeartofFear", nil, 330)
+﻿local mod	= DBM:NewMod(713, "DBM-HeartofFear", nil, 330)
 local L		= mod:GetLocalizedStrings()
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
 mod:SetRevision(("$Revision: 7750 $"):sub(12, -3))
 mod:SetCreatureID(63191)--Also has CID 62164. He has 2 CIDs for a single target, wtf? It seems 63191 is one players attack though so i'll try just it.
@@ -15,6 +16,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_REMOVED",
 	"SPELL_CAST_START",
 	"SPELL_CAST_SUCCESS",
+	"RAID_BOSS_EMOTE",
 	"SPELL_DAMAGE",
 	"SPELL_MISSED"
 )
@@ -36,6 +38,9 @@ local specwarnCrush				= mod:NewSpecialWarningSpell(122774, true, nil, nil, true
 local specwarnLeg				= mod:NewSpecialWarningSwitch("ej6270")--If no legs are up (ie all dead), when one respawns, this special warning can be used to alert of a respawned leg and to switch back.
 local specwarnPheromoneTrail	= mod:NewSpecialWarningMove(123120)--Because this starts doing damage BEFORE the visual is there.
 
+local specwarnPungency			= mod:NewSpecialWarningStack(123081, mod:IsTank(), 20)
+local specWarnPungencyOther		= mod:NewSpecialWarning("SpecWarnPungencyOther", mod:IsTank() or mod:IsHealer())
+
 local timerFuriousSwipeCD		= mod:NewCDTimer(8, 122735)
 local timerMendLegCD			= mod:NewNextTimer(30, 123495)
 local timerFury					= mod:NewBuffActiveTimer(30, 122754)
@@ -43,16 +48,48 @@ local timerPungency				= mod:NewBuffFadesTimer(120, 123081)
 
 --mod:AddBoolOption("InfoFrame", true)--Not sure how to do yet, i need to see 25 man first to get a real feel for number of people with debuff at once.
 mod:AddBoolOption("PheromonesIcon", true)
+local sndFS		= mod:NewSound(nil, "SoundFS", mod:IsTank())
+mod:AddBoolOption("InfoFrame", not mod:IsDps(), "sound")
 
 local madeUpNumber = 0
 local PeromonesIcon = 1
 local brokenLegs = 0
+local Pn = 20
+
+mod:AddBoolOption("HudMAP", true, "sound")
+local DBMHudMap = DBMHudMap
+local free = DBMHudMap.free
+local function register(e)	
+	DBMHudMap:RegisterEncounterMarker(e)
+	return e
+end
+
+local PheromonesMarkers = {}
+
+mod:AddDropdownOption("optTankMode", {"two", "three"}, "two", "sound")
 
 function mod:OnCombatStart(delay)
 	madeUpNumber = 0
 	PeromonesIcon = 1
 	brokenLegs = 0
 	timerFuriousSwipeCD:Start(-delay)--8-11 sec on pull
+	sndFS:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+	sndFS:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+	sndFS:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+	if mod.Options.InfoFrame then
+		DBM.InfoFrame:SetHeader(GetSpellInfo(123081))
+		DBM.InfoFrame:Show(3, "playerdebuffstacks", 123081)
+	end
+	table.wipe(PheromonesMarkers)
+end
+
+function mod:OnCombatEnd()
+	if self.Options.InfoFrame then
+		DBM.InfoFrame:Hide()
+	end
+	if self.Options.HudMAP then
+		DBMHudMap:FreeEncounterMarkers()
+	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
@@ -69,6 +106,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		specwarnPheromonesTarget:Show(args.destName)
 		if args:IsPlayer() then
 			specwarnPheromonesYou:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\targetyou.mp3") --目標是你
 		else
 			local uId = DBM:GetRaidUnitId(args.destName)
 			if uId then
@@ -82,6 +120,10 @@ function mod:SPELL_AURA_APPLIED(args)
 					specwarnPheromonesNear:Show(args.destName)
 				end
 			end
+			if self.Options.HudMAP then
+				local spelltext = GetSpellInfo(122835)
+				PheromonesMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("targeting", args.destName, 2, nil, 0, 1, 0, 1):SetLabel(spelltext))
+			end
 		end
 		if self.Options.PheromonesIcon then
 			self:SetIcon(args.destName, PeromonesIcon)
@@ -91,8 +133,18 @@ function mod:SPELL_AURA_APPLIED(args)
 				PeromonesIcon = 1
 			end
 		end
-	elseif args:IsSpellID(123081) and args:IsPlayer() then
-		timerPungency:Start()
+	elseif args:IsSpellID(123081) then
+		timerPungency:Start(args.destName)
+		Pn = self.Options.optTankMode == "two" and 30 or self.Options.optTankMode == "three" and 20
+		if args:IsPlayer() then
+			if (args.amount or 1) >= Pn and args.amount % 2 == 0 then
+				specwarnPungency:Show(args.amount)
+			end
+		else
+			if (args.amount or 1) >= Pn and args.amount % 2 == 0 and not UnitDebuff("player", GetSpellInfo(123081)) and not UnitIsDeadOrGhost("player") then
+				specWarnPungencyOther:Show(args.destName, args.amount)
+			end
+		end
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
@@ -105,8 +157,17 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.PheromonesIcon then
 			self:SetIcon(args.destName, 0)
 		end
-	elseif args:IsSpellID(123081) and args:IsPlayer() then
-		timerPungency:Cancel()
+		if args:IsPlayer() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\targetchange.mp3")--目標改變
+		end
+		if PheromonesMarkers[args.destName] then
+			PheromonesMarkers[args.destName] = free(PheromonesMarkers[args.destName])
+		end
+	elseif args:IsSpellID(123081) then
+		timerPungency:Cancel(args.destName)
+		if mod:IsTank() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\changemt.mp3")--換坦嘲諷
+		end
 	end
 end
 mod.SPELL_AURA_REMOVED_DOSE = mod.SPELL_AURA_REMOVED
@@ -114,18 +175,28 @@ mod.SPELL_AURA_REMOVED_DOSE = mod.SPELL_AURA_REMOVED
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(122735) then
 		warnFuriousSwipe:Show()
+		sndFS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndFS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndFS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		sndFS:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_hj.mp3") --揮擊
 		timerFuriousSwipeCD:Start()
+		sndFS:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndFS:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndFS:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	end
 end
 
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(122774) then
 		warnCrush:Show()
-		specwarnCrush:Show()
+--		specwarnCrush:Show()
 	elseif args:IsSpellID(123495) then
 		warnMendLeg:Show()
 		if brokenLegs == 4 then--all his legs were broken when heal was cast, which means dps was on body.
 			specwarnLeg:Show()--Warn to switch to respawned leg.
+			if mod:IsDps() then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kdtb.mp3") --快打腿部
+			end
 		end
 	end
 end
@@ -133,6 +204,14 @@ end
 function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
 	if spellId == 123120 and destGUID == UnitGUID("player") and self:AntiSpam(3) then
 		specwarnPheromoneTrail:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3") --快躲開
 	end
 end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE
+
+function mod:RAID_BOSS_EMOTE(msg)
+	if msg:find("spell:122774") then
+		specwarnCrush:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_nyjd.mp3") --碾壓
+	end
+end

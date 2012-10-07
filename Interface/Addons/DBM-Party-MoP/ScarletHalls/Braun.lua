@@ -1,5 +1,6 @@
-local mod	= DBM:NewMod(660, "DBM-Party-MoP", 8, 311)
+﻿local mod	= DBM:NewMod(660, "DBM-Party-MoP", 8, 311)
 local L		= mod:GetLocalizedStrings()
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
 mod:SetRevision(("$Revision: 7621 $"):sub(12, -3))
 mod:SetCreatureID(59303)
@@ -68,6 +69,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 		warnDeathBlossom:Show()
 --		timerPiercingThrowCD:Start()
 	elseif args:IsSpellID(114259) then--Call Dog
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3")--準備小怪
 		warnCallDog:Show()
 --[[
 		if timerPiercingThrowCD:IsStarted() then--When this is cast, it extend the current CD of throw/blossom from 6 to 12

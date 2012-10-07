@@ -1,4 +1,4 @@
--- *********************************************************
+﻿-- *********************************************************
 -- **               Deadly Boss Mods - GUI                **
 -- **            http://www.deadlybossmods.com            **
 -- *********************************************************
@@ -38,7 +38,9 @@
 --
 --
 
-local revision =("$Revision: 7809 $"):sub(12, -3) 
+
+
+local revision =("$Revision: 7846 $"):sub(12, -3) 
 local FrameTitle = "DBM_GUI_Option_"	-- all GUI frames get automatically a name FrameTitle..ID
 
 local PanelPrototype = {}
@@ -306,6 +308,7 @@ do
 			return DBM:AddMsg("CreateCheckButton: error: expected string, received number. You probably called mod:NewTimer(optionId) with a spell id.")
 		end
 		local button = CreateFrame('CheckButton', FrameTitle..self:GetNewID(), self.frame, 'OptionsCheckButtonTemplate')
+		button_name = button:GetName()
 		button.myheight = 25
 		button.mytype = "checkbutton"
 		-- font strings do not support hyperlinks, so check if we need one...
@@ -319,8 +322,8 @@ do
 			name = name:gsub("%$journal:(%d+)", replaceJournalLinks)
 		end
 		if name and name:find("|H") then -- ...and replace it with a SimpleHTML frame
-			_G[button:GetName().."Text"] = CreateFrame("SimpleHTML", button:GetName().."Text", button)
-			local html = _G[button:GetName().."Text"]
+			_G[button_name.."Text"] = CreateFrame("SimpleHTML", button_name.."Text", button)
+			local html = _G[button_name.."Text"]
 			html:SetHeight(12)
 			html:SetFontObject("GameFontNormal")
 			html:SetPoint("LEFT", button, "RIGHT", 0, 1)
@@ -328,15 +331,15 @@ do
 			html:SetScript("OnHyperlinkEnter", onHyperlinkEnter)
 			html:SetScript("OnHyperlinkLeave", onHyperlinkLeave)
 		end
-		_G[button:GetName() .. 'Text']:SetText(name or DBM_CORE_UNKNOWN)
-		_G[button:GetName() .. 'Text']:SetWidth( self.frame:GetWidth() - 50 )
+		_G[button_name .. 'Text']:SetText(name or DBM_CORE_UNKNOWN)
+		_G[button_name .. 'Text']:SetWidth( self.frame:GetWidth() - 50 )
 
 		if textleft then
-			_G[button:GetName() .. 'Text']:ClearAllPoints()
-			_G[button:GetName() .. 'Text']:SetPoint("RIGHT", button, "LEFT", 0, 0)
-			_G[button:GetName() .. 'Text']:SetJustifyH("RIGHT")
+			_G[button_name .. 'Text']:ClearAllPoints()
+			_G[button_name .. 'Text']:SetPoint("RIGHT", button, "LEFT", 0, 0)
+			_G[button_name .. 'Text']:SetJustifyH("RIGHT")
 		else
-			_G[button:GetName() .. 'Text']:SetJustifyH("LEFT")
+			_G[button_name .. 'Text']:SetJustifyH("LEFT")
 		end
 		
 		if dbmvar and DBM.Options[dbmvar] ~= nil then
@@ -519,6 +522,7 @@ end
 --
 function PanelPrototype:CreateButton(title, width, height, onclick, FontObject)
 	local button = CreateFrame('Button', FrameTitle..self:GetNewID(), self.frame, 'DBM_GUI_OptionsFramePanelButtonTemplate')
+	button_name = button:GetName()
 	button.mytype = "button"
 	button:SetWidth(width or 100)
 	button:SetHeight(height or 20)
@@ -530,8 +534,8 @@ function PanelPrototype:CreateButton(title, width, height, onclick, FontObject)
 		button:SetNormalFontObject(FontObject);
 		button:SetHighlightFontObject(FontObject);		
 	end
-	if _G[button:GetName().."Text"]:GetStringWidth() > button:GetWidth() then
-		button:SetWidth( _G[button:GetName().."Text"]:GetStringWidth() + 25 )
+	if _G[button_name.."Text"]:GetStringWidth() > button:GetWidth() then
+		button:SetWidth( _G[button_name.."Text"]:GetStringWidth() + 25 )
 	end
 
 	self:SetLastObj(button)
@@ -599,6 +603,20 @@ function PanelPrototype:AutoSetDimension()
 	end
 
 	self.frame.myheight = need_height + 25
+	self.frame:SetHeight(need_height)
+end
+
+function PanelPrototype:AutoSetDimensionDD()
+	if not self.frame.mytype == "area" then return end
+	local height = self.frame:GetHeight()
+
+	local need_height = 25
+	
+	local kids = { self.frame:GetChildren() }
+	for _, child in pairs(kids) do
+		need_height = need_height + child:GetHeight() + 10
+	end
+	self.frame.myheight = need_height
 	self.frame:SetHeight(need_height)
 end
 
@@ -739,7 +757,8 @@ end
 local UpdateAnimationFrame
 do
 	local function HideScrollBar(frame)
-		local list = _G[frame:GetName() .. "List"];
+		local frame_name = frame:GetName()
+		local list = _G[frame_name .. "List"];
 		list:Hide();
 		local listWidth = list:GetWidth();
 		for _, button in next, frame.buttons do
@@ -748,7 +767,7 @@ do
 	end
 
 	local function DisplayScrollBar(frame)
-		local list = _G[frame:GetName() .. "List"];
+		local list = _G[frame_name .. "List"];
 		list:Show();
 		local listWidth = list:GetWidth();
 		for _, button in next, frame.buttons do
@@ -763,7 +782,8 @@ do
 	-- This function is for internal use.
 	-- Function to update the left scrollframe buttons with the menu entries
 	function DBM_GUI_OptionsFrame:UpdateMenuFrame(listframe)
-		local offset = _G[listframe:GetName().."List"].offset;
+		local frame_name = listframe:GetName()
+		local offset = _G[frame_name.."List"].offset;
 		local buttons = listframe.buttons;
 		local TABLE 
 
@@ -795,12 +815,12 @@ do
 		end
 	
 		if ( numAddOnCategories > numButtons ) then
-			_G[listframe:GetName().."List"]:Show();
-			_G[listframe:GetName().."ListScrollBar"]:SetMinMaxValues(0, (numAddOnCategories - numButtons) * buttons[1]:GetHeight());
-			_G[listframe:GetName().."ListScrollBar"]:SetValueStep( buttons[1]:GetHeight() )
+			_G[frame_name.."List"]:Show();
+			_G[frame_name.."ListScrollBar"]:SetMinMaxValues(0, (numAddOnCategories - numButtons) * buttons[1]:GetHeight());
+			_G[frame_name.."ListScrollBar"]:SetValueStep( buttons[1]:GetHeight() )
 		else
-			_G[listframe:GetName().."ListScrollBar"]:SetValue(0);
-			_G[listframe:GetName().."List"]:Hide();
+			_G[frame_name.."ListScrollBar"]:SetValue(0);
+			_G[frame_name.."List"]:Hide();
 		end
 
 		local selection = DBM_GUI_OptionsFrameBossMods.selection;
@@ -913,9 +933,10 @@ do
 	function DBM_GUI_OptionsFrame:OnButtonClick(button)
 		local parent = button:GetParent();
 		local buttons = parent.buttons;
+		local button_name = DBM_GUI_OptionsFrame:GetName()
 	
-		self:ClearSelection(_G[self:GetName().."BossMods"],   _G[self:GetName().."BossMods"].buttons);
-		self:ClearSelection(_G[self:GetName().."DBMOptions"], _G[self:GetName().."DBMOptions"].buttons);
+		self:ClearSelection(_G[button_name.."BossMods"],   _G[button_name.."BossMods"].buttons);
+		self:ClearSelection(_G[button_name.."DBMOptions"], _G[button_name.."DBMOptions"].buttons);
 		self:SelectButton(parent, button);
 
 		self:DisplayFrame(button.element);
@@ -951,15 +972,15 @@ do
 		local mymax = (frame.actualHeight or frame:GetHeight()) - container:GetHeight()
 		
 		if mymax <= 0 then mymax = 0 end
-		
+		local frame_name = container:GetName()
 		if mymax > 0 then
-			_G[container:GetName().."FOV"]:Show()
-			_G[container:GetName().."FOV"]:SetScrollChild(frame)
-			_G[container:GetName().."FOVScrollBar"]:SetMinMaxValues(0, mymax)
+			_G[frame_name.."FOV"]:Show()
+			_G[frame_name.."FOV"]:SetScrollChild(frame)
+			_G[frame_name.."FOVScrollBar"]:SetMinMaxValues(0, mymax)
 
 			if frame.isfixed then
 				frame.isfixed = nil
-				local listwidth = _G[container:GetName().."FOVScrollBar"]:GetWidth()
+				local listwidth = _G[frame_name.."FOVScrollBar"]:GetWidth()
 				for i=1, select("#", frame:GetChildren()), 1 do
 					local child = select(i, frame:GetChildren())
 					if child.mytype == "area" then
@@ -968,14 +989,14 @@ do
 				end
 			end
 		else
-			_G[container:GetName().."FOV"]:Hide()
+			_G[frame_name.."FOV"]:Hide()
 			frame:ClearAllPoints()
 			frame:SetPoint("TOPLEFT", container ,"TOPLEFT", 5, 0)
 			frame:SetPoint("BOTTOMRIGHT", container ,"BOTTOMRIGHT", 0, 0)
 
 			if not frame.isfixed then
 				frame.isfixed = true
-				local listwidth = _G[container:GetName().."FOVScrollBar"]:GetWidth()
+				local listwidth = _G[frame_name.."FOVScrollBar"]:GetWidth()
 				for i=1, select("#", frame:GetChildren()), 1 do
 					local child = select(i, frame:GetChildren())
 					if child.mytype == "area" then
@@ -1248,7 +1269,7 @@ local function CreateOptionsMenu()
 		----------------------------------------------
 		--             General Options              --
 		----------------------------------------------
-		local generaloptions = DBM_GUI_Frame:CreateArea(L.General, nil, 230, true)
+		local generaloptions = DBM_GUI_Frame:CreateArea(L.General, nil, 250, true)
 	
 		local enabledbm = generaloptions:CreateCheckButton(L.EnableDBM, true)
 		enabledbm:SetScript("OnShow",  function() enabledbm:SetChecked(DBM:IsEnabled()) end)
@@ -1264,10 +1285,11 @@ local function CreateOptionsMenu()
 		end)
 		local UseMasterVolume			= generaloptions:CreateCheckButton(L.UseMasterVolume, true, nil, "UseMasterVolume")
 		local DisableCinematics			= generaloptions:CreateCheckButton(L.DisableCinematics, true, nil, "DisableCinematics")
+		local DisableCinematicsOutside	= generaloptions:CreateCheckButton(L.DisableCinematicsOutside, true, nil, "DisableCinematicsOutside")
 		generaloptions:CreateCheckButton(L.SKT_Enabled, true, nil, "AlwaysShowSpeedKillTimer")
 
 		local bmrange  = generaloptions:CreateButton(L.Button_RangeFrame)
-		bmrange:SetPoint('TOPLEFT', MiniMapIcon, "BOTTOMLEFT", 0, -70)
+		bmrange:SetPoint('TOPLEFT', MiniMapIcon, "BOTTOMLEFT", 0, -100)
 		bmrange:SetScript("OnClick", function(self) 
 			if DBM.RangeCheck:IsShown() then
 				DBM.RangeCheck:Hide()
@@ -1428,8 +1450,8 @@ local function CreateOptionsMenu()
 		RaidWarnSoundDropDown:SetPoint("TOPLEFT", WarningIconRight, "BOTTOMLEFT", 20, -10)
 
 		local countSounds = {
-			{	text	= "Mosh (Male)",	value 	= "Mosh"},
-			{	text	= "Corsica (Female)",value 	= "Corsica"},
+			{	text	= "中文倒計時",	value 	= "Mosh"},
+			{	text	= "英文倒計時", value 	= "Corsica"},
 		}
 		local CountSoundDropDown = raidwarnoptions:CreateDropdown(L.CountdownVoice, countSounds, 
 		DBM.Options.CountdownVoice, function(value) 
@@ -2260,6 +2282,7 @@ do
 			for _,v in ipairs(category) do
 				if v == DBM_OPTION_SPACER then
 					addSpacer = true
+					catpanel:AutoSetDimension()
 				elseif type(mod.Options[v]) == "boolean" then
 					lastButton = button
 					button = catpanel:CreateCheckButton(mod.localization.options[v], true)
@@ -2274,6 +2297,7 @@ do
 						mod.Options[v] = not mod.Options[v]
 						if mod.optionFuncs and mod.optionFuncs[v] then mod.optionFuncs[v]() end
 					end)
+					catpanel:AutoSetDimension()
 				elseif mod.dropdowns and mod.dropdowns[v] then
 					lastButton = button
 					local dropdownOptions = {}
@@ -2285,8 +2309,9 @@ do
 						button:SetPoint("TOPLEFT", lastButton, "BOTTOMLEFT", 0, -6)
 						addSpacer = false
 					else
-						button:SetPoint("TOPLEFT", lastButton, "BOTTOMLEFT", 0, -10)
+						button:SetPoint("TOPLEFT", lastButton, "BOTTOMLEFT", 0, -20)
 					end
+					catpanel:AutoSetDimensionDD()
 --					button:SetScript("OnShow", function(self)
 --						-- set the correct selected value if the mod is being loaded after the gui is loaded (hack because the dropdown menu lacks a SetSelectedValue method)
 --						_G[button:GetName().."Text"]:SetText(mod.localization.options[v])
@@ -2295,7 +2320,7 @@ do
 --					end)
 				end
 			end
-			catpanel:AutoSetDimension()
+--			catpanel:AutoSetDimension()
 			panel:SetMyOwnHeight()
 		end
 	end

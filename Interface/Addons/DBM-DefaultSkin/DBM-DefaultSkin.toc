@@ -1,17 +1,14 @@
 ﻿## Interface: 50001
 ## X-Min-Interface: 50000
 ## Title:|cffffe00a<|r|cffff7d0aDBM Skin|r|cffffe00a>|r |cff69ccf0Classic Timer Skin|r
-## Title-koKR:|cffffe00a<|r|cffff7d0aDBM 스킨|r|cffffe00a>|r |cff69ccf0기본 바 스킨|r
+## Title-zhTW:|cffffe00a<|r|cffff7d0aDBM 皮膚|r|cffffe00a>|r |cff69ccf0經典計時器皮膚|r
+## Title-zhCN:|cffffe00a<|r|cffff7d0aDBM 皮肤|r|cffffe00a>|r |cff69ccf0经典计时器皮肤|r
 ## LoadOnDemand: 1
 ## RequiredDeps: DBM-Core
 ## X-DBM-Timer-Skin: 1
 ## X-DBM-Timer-Skin-Name: Classic
 ## X-DBM-Timer-Skin-Textures: Interface\AddOns\DBM-DefaultSkin\textures\default.tga
 ## X-DBM-Timer-Skin-Texture-Names: Default
-## X-Curse-Packaged-Version: 4.11.1
-## X-Curse-Project-Name: Deadly Boss Mods
-## X-Curse-Project-ID: deadly-boss-mods
-## X-Curse-Repository-ID: wow/deadly-boss-mods/mainline
 Skin.lua
 TimerSkin.xml
 

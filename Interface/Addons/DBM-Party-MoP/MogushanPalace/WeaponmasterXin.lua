@@ -1,5 +1,6 @@
-local mod	= DBM:NewMod(698, "DBM-Party-MoP", 5, 321)
+﻿local mod	= DBM:NewMod(698, "DBM-Party-MoP", 5, 321)
 local L		= mod:GetLocalizedStrings()
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
 mod:SetRevision(("$Revision: 7622 $"):sub(12, -3))
 mod:SetCreatureID(61398)
@@ -9,6 +10,8 @@ mod:SetZone()
 mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
+	"SPELL_DAMAGE",
+	"SPELL_MISSED",
 	"SPELL_CAST_START",
 	"SPELL_CAST_SUCCESS",
 	"UNIT_SPELLCAST_SUCCEEDED"
@@ -23,6 +26,7 @@ local warnStreamBlades		= mod:NewSpellAnnounce("ej5972", 4)
 local warnCrossbowTrap		= mod:NewSpellAnnounce("ej5974", 4)
 
 local specWarnSmash			= mod:NewSpecialWarningMove(119684, mod:IsTank())
+local specWarnBlades		= mod:NewSpecialWarningMove(119311)
 
 local timerSmashCD			= mod:NewCDTimer(28, 119684)
 local timerStaffCD			= mod:NewCDTimer(23, "ej5973")--23~25 sec.
@@ -40,6 +44,11 @@ function mod:SPELL_CAST_START(args)
 		warnGroundSmash:Show()
 		specWarnSmash:Show()
 		timerSmashCD:Start()
+		if mod:IsTank() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
+		else
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\shockwave.mp3")--震懾波
+		end
 	end
 end
 
@@ -71,3 +80,11 @@ Notes
 5/2 14:32:02.158  Xin the Weaponmaster activates his Whirlwinding Axe trap!
 5/2 14:32:50.293  Xin the Weaponmaster activates his Stream of Blades trap!
 --]]
+
+function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
+	if spellId == 119311 and destGUID == UnitGUID("player") and self:AntiSpam(2, 5) then
+		specWarnBlades:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
+	end
+end
+mod.SPELL_MISSED = mod.SPELL_DAMAGE

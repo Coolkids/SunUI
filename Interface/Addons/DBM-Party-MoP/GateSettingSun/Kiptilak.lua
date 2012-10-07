@@ -1,5 +1,6 @@
-local mod	= DBM:NewMod(655, "DBM-Party-MoP", 4, 303)
+﻿local mod	= DBM:NewMod(655, "DBM-Party-MoP", 4, 303)
 local L		= mod:GetLocalizedStrings()
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
 mod:SetRevision(("$Revision: 7575 $"):sub(12, -3))
 mod:SetCreatureID(56906)
@@ -36,13 +37,19 @@ function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(107268) then
 		warnSabotage:Show(args.destName)
 		timerSabotage:Start(args.destName)
+		sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndWOP:Schedule(2.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Schedule(3.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Schedule(4.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		timerSabotageCD:Start()
 		if self.Options.IconOnSabotage then
 			self:SetIcon(args.destName, 8)
 		end
 		if args:IsPlayer() then
 			specWarnSabotage:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runout.mp3")--跑開人群
 		else
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\bombsoon.mp3")--準備炸彈
 			local uId = DBM:GetRaidUnitId(args.destName)
 			if uId then
 				local x, y = GetPlayerMapPosition(uId)

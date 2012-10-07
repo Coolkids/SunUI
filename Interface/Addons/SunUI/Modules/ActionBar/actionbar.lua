@@ -347,7 +347,7 @@ function Module:CreateExtrabarBar()
 	ExtraActionBarFrame:SetPoint("CENTER", 0, 0)
 	ExtraActionBarFrame.ignoreFramePositionManager = true
 	ExtraActionButton1:SetSize(C["ButtonSize"],C["ButtonSize"])
-	ExtraActionButton1:SetFrameLevel(3)
+	ExtraActionBarFrame:SetFrameLevel(3)
 	ExtraActionButton1Cooldown:SetPoint("TOPLEFT")
 	ExtraActionButton1Cooldown:SetPoint("BOTTOMRIGHT")
 	bar.shadow:SetParent(ExtraActionButton1)

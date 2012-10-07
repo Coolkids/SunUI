@@ -1,7 +1,7 @@
 ﻿if GetLocale() ~= "zhTW" then return end
 
 DBM_CORE_NEED_SUPPORT				= "你是否擁有良好的程式開發或語言能力? 如果是的話, DBM團隊真的需要你的幫助以保持成為WOW裡最佳的首領模組。觀看 www.deadlybossmods.com 或發送郵件到 tandanu@deadlybossmods.com 或 nitram@deadlybossmods.com 來加入團隊。"
-DBM_HOW_TO_USE_MOD					= "歡迎使用DBM。在聊天頻道輸入 /dbm 打開設定開始設定。你可以載入特定區域後為任何首領設定你喜歡的特別設置。DBM會在第一次啟動時嘗試掃描你的職業天賦，但有些選項你可能想打開。"
+DBM_HOW_TO_USE_MOD					= "歡迎使用DBM-語音版。在聊天頻道輸入 /dbm 打開設定開始設定。你可以載入特定區域後為任何首領設定你喜歡的特別設置。DBM會在第一次啟動時嘗試掃描你的職業天賦，但有些選項你可能想打開。"
 
 DBM_CORE_LOAD_MOD_ERROR				= "載入%s模組時發生錯誤：%s"
 DBM_CORE_LOAD_MOD_SUCCESS			= "成功載入%s模組。輸入/dbm或/dbm help有更多選項。"
@@ -28,11 +28,13 @@ DBM_CORE_OK						= "確定"
 
 DBM_CORE_GENERIC_WARNING_BERSERK		= "%s%s後狂暴"
 DBM_CORE_GENERIC_TIMER_BERSERK			= "狂暴"
-DBM_CORE_OPTION_TIMER_BERSERK			= "為$spell:26662顯示計時器"
+DBM_CORE_OPTION_TIMER_BERSERK			= "狂暴倒計時"
 DBM_CORE_OPTION_HEALTH_FRAME			= "顯示首領血量框架"
 
 DBM_CORE_OPTION_CATEGORY_TIMERS			= "計時器"
-DBM_CORE_OPTION_CATEGORY_WARNINGS		= "提示"
+DBM_CORE_OPTION_CATEGORY_WARNINGS		= "警告"
+DBM_CORE_OPTION_CATEGORY_SPECWARNINGS	= "特別警告"
+DBM_CORE_OPTION_CATEGORY_SOUND			= "語音版額外選項"
 DBM_CORE_OPTION_CATEGORY_MISC			= "其它"
 
 DBM_CORE_AUTO_RESPONDED						= "已自動回覆密語。"
@@ -142,84 +144,84 @@ DBM_CORE_AUTO_TIMER_TEXTS = {
 }
 
 DBM_CORE_AUTO_TIMER_OPTIONS = {
-	target					= "為$spell:%s顯示減益計時器",
-	cast					= "為$spell:%s顯示施法計時器",
-	active					= "為$spell:%s顯示持續時間計時器",
-	fades					= "為當$spell:%s將從玩家消散顯示計時器",
-	cd						= "為$spell:%s顯示冷卻計時器",
-	cdcount					= "為$spell:%s顯示冷卻計時器",
-	cdsource				= "為$spell:%s顯示冷卻計時器",
-	next					= "為下一次$spell:%s顯示計時器",
-	nextcount				= "為下一次$spell:%s顯示計時器",
-	nextsource				= "為下一次$spell:%s顯示計時器",
-	achievement				= "為成就:%s顯示計時器"
+	target					= "計時器：$spell:%s減益效果持續時間",
+	cast					= "計時器：$spell:%s施法時間",
+	active					= "計時器：$spell:%s持續時間",
+	fades					= "計時器：$spell:%s何時從玩家身上消失",
+	cd						= "計時器：$spell:%s冷卻時間",
+	cdcount					= "計時器：$spell:%s冷卻時間",
+	cdsource				= "計時器：$spell:%s冷卻時間",
+	next					= "計時器：下一次$spell:%s",
+	nextcount				= "計時器：下一次$spell:%s",
+	nextsource				= "計時器：下一次$spell:%s",
+	achievement				= "計時器：成就%s"
 }
 
 -- Auto-generated Warning Localizations
 DBM_CORE_AUTO_ANNOUNCE_TEXTS = {
-	target					= "%s:>%%s<",
-	targetcount				= "%s (%%d):>%%s<",
+	target					= "%s：>%%s<",
+	targetcount				= "%s (%%d)：>%%s<",
 	spell					= "%s",
-	adds					= "%s還剩餘:%%d",
-	cast					= "施放%s:%.1f秒",
-	soon					= "%s即將到來",
-	prewarn					= "%s在%s",
+	adds					= "%s 剩餘：%%d",
+	cast					= "正在施放 %s: %.1f 秒",
+	soon					= "%s 即將到來",
+	prewarn					= "%2$s後 %1$s",
 	phase					= "第%s階段",
 	prephase				= "第%s階段 即將到來",
 	count					= "%s (%%d)",
-	stack					= "%s在>%%s< (%%d)"
+	stack					= "%s: >%%s< (%%d)",
 }
 
-local prewarnOption			= "為$spell:%s顯示預先警告"
+local prewarnOption				= "預先警告：$spell:%s"
 DBM_CORE_AUTO_ANNOUNCE_OPTIONS = {
-	target					= "提示$spell:%s的目標",
-	targetcount				= "提示$spell:%s的目標",
-	spell					= "為$spell:%s顯示警告",
-	adds					= "提示$spell:%s的剩餘數量",
-	cast					= "當$spell:%s施放時顯示警告",
+	target					= "警告：$spell:%s的目標",
+	targetcount				= "警告：$spell:%s的目標",
+	spell					= "警告：$spell:%s",
+	adds					= "警告：$spell:%s剩餘數量",
+	cast					= "警告：$spell:%s的施放",
 	soon					= prewarnOption,
 	prewarn					= prewarnOption,
-	phase					= "提示第%s階段",
-	prephase				= "為第%s階段顯示預先警告",
-	count					= "為$spell:%s顯示警告",
-	stack					= "提示$spell:%s的堆疊"
+	phase					= "警告：第%s階段",
+	prephase				= "預先警告：第%s階段",
+	count					= "警告：$spell:%s",
+	stack					= "警告：$spell:%s疊加層數",
 }
 
 -- Auto-generated Special Warning Localizations
 DBM_CORE_AUTO_SPEC_WARN_OPTIONS = {
-	spell					= "為$spell:%s顯示特別警告",
-	dispel					= "需對$spell:%s驅散/竊取時顯示特別警告",
-	interrupt				= "需對$spell:%s斷法時顯示特別警告",
-	you						= "當你中了$spell:%s時顯示特別警告",
-	target					= "當有人中了$spell:%s時顯示特別警告",
-	close					= "當你附近有人中了$spell:%s時顯示特別警告",
-	move					= "當你中了$spell:%s時顯示特別警告",
-	run						= "為$spell:%s顯示特別警告",
-	cast					= "為$spell:%s施放時顯示特別警告",
-	stack					= "為>=%d層$spell:%s時顯示特別警告",
-	switch					= "需對$spell:%s更換目標時顯示特別警告"
+	spell					= "特別警告：$spell:%s",
+	dispel					= "特別警告：需要驅散/竊取$spell:%s時",
+	interrupt				= "特別警告：需要打斷$spell:%s時",
+	you						= "特別警告：當你中了$spell:%s時",
+	target					= "特別警告：當有人中了$spell:%s時",
+	close					= "特別警告：當你附近有人中了$spell:%s時",
+	move					= "特別警告：當你受到$spell:%s影響時",
+	run						= "特別警告：$spell:%s",
+	cast					= "特別警告：$spell:%s的施放",
+	stack					= "特別警告：當疊加了至少%d層$spell:%s時",
+	switch 					= "特別警告：針對$spell:%s轉換目標"
 }
 
 DBM_CORE_AUTO_SPEC_WARN_TEXTS = {
 	spell					= "%s!",
-	dispel					= "%%s中了%s - 現在驅散",
-	interrupt				= "%s - 快中斷%%s !",
-	you						= "你中了%s",
+	dispel					= "%%s中了%s - 快驅散",
+	interrupt				= "%s - 快打斷!",
+	you					= "你中了%s",
 	target					= "%%s中了%s",
 	close					= "你附近的%%s中了%s",
 	move					= "%s - 快離開",
 	run						= "%s - 快跑開",
 	cast					= "%s - 停止施法",
 	stack					= "%s(%%d)",
-	switch					= "%s - 快更換目標!"
+	switch					= "%s - 轉換目標"
 }
 
 
-DBM_CORE_AUTO_ICONS_OPTION_TEXT			= "為$spell:%s的目標設置標記"
-DBM_CORE_AUTO_SOUND_OPTION_TEXT			= "當你中了$spell:%s時播放音效"
-DBM_CORE_AUTO_COUNTDOWN_OPTION_TEXT		= "為$spell:%s播放倒數計時音效"
-DBM_CORE_AUTO_COUNTOUT_OPTION_TEXT		= "為$spell:%s的持續時間播放倒數計時音效"
-DBM_CORE_AUTO_YELL_OPTION_TEXT			= "當你中了$spell:%s時大喊"
+DBM_CORE_AUTO_ICONS_OPTION_TEXT			= "為$spell:%s的目標設置團隊標記"
+DBM_CORE_AUTO_SOUND_OPTION_TEXT			= "語音警告：當你中了$spell:%s時"
+DBM_CORE_AUTO_COUNTDOWN_OPTION_TEXT		= "倒計時：$spell:%s的冷卻時間"
+DBM_CORE_AUTO_COUNTOUT_OPTION_TEXT		= "正計時：$spell:%s的持續時間"
+DBM_CORE_AUTO_YELL_OPTION_TEXT			= "自動喊話：當你中了$spell:%s時"
 DBM_CORE_AUTO_YELL_ANNOUNCE_TEXT		= "我中了%s!"
 
 
@@ -231,7 +233,7 @@ DBM_CORE_MOVE_SPECIAL_WARNING_TEXT		= "特別警告"
 DBM_CORE_RANGE_CHECK_ZONE_UNSUPPORTED	= "在此區域中不支援%d碼的距離檢查。\n已支援的距離有10，11，15及28碼。"
 
 DBM_ARROW_MOVABLE					= "可移動箭頭"
-DBM_ARROW_NO_RAIDGROUP				= "此功能僅作用於團隊副本中的團隊小隊。"
+DBM_ARROW_NO_RAIDGROUP				= "DBM箭頭僅可在副本中調試。"
 DBM_ARROW_ERROR_USAGE	= {
 	"DBM-Arrow 用法:",
 	"/dbm arrow <x> <y>  建立一個箭頭在特定的位置(0 < x/y < 100)",
@@ -241,7 +243,7 @@ DBM_ARROW_ERROR_USAGE	= {
 }
 
 DBM_SPEED_KILL_TIMER_TEXT			= "記錄擊殺"
-DBM_SPEED_KILL_TIMER_OPTION			= "顯示一個計時器來打敗你上次的最快擊殺"
+DBM_SPEED_KILL_TIMER_OPTION			= "計時器：上次的最快擊殺"
 
 
 DBM_REQ_INSTANCE_ID_PERMISSION		= "%s想要查看你的副本ID和進度鎖定情況。\n你想發送該訊息給%s嗎? 在你的當前進程（除非你下線）他可以一直查閱該訊息。"
@@ -256,4 +258,4 @@ DBM_INSTANCE_INFO_STATS_DENIED		= "拒絕回傳數據:%s"
 DBM_INSTANCE_INFO_STATS_AWAY		= "離開:%s"
 DBM_INSTANCE_INFO_STATS_NO_RESPONSE	= "沒有安裝最新版本的DBM:%s"
 DBM_INSTANCE_INFO_RESULTS			= "副本ID掃描結果。注意如果團隊中有不同語言版本的魔獸客戶端，那麼同一副本可能會出現不止一次。"
-DBM_INSTANCE_INFO_SHOW_RESULTS		= "仍未回覆的玩家: %s\n|HDBM:showRaidIdResults|h|cff3588ff[查看結果]|r|h"
+DBM_INSTANCE_INFO_SHOW_RESULTS		= "回复請求的玩家: %s\n|HDBM:showRaidIdResults|h|cff3588ff[查看結果]|r|h"

@@ -202,7 +202,7 @@ return 1xxx 非垃圾 ，0xxx for 垃圾，xxx为（999-JPACK_ORDER中所定的�
 ]]
 local function getPerffix(item)
 	if not item then return end
-	
+	if item.subType == nil and item.type == nil then item.subType = "PET" item.type = "PET"end
 	--按名称获取顺序
 	local i=IndexOfTable(JPACK_ORDER,item.name)
 	if(i<=0)then
@@ -293,6 +293,10 @@ local function getCompareStr(item)
 	if(not item)then
 		return nil
 	elseif(not item.compareStr)then
+		if item.texture == nil then return 
+			getPerffix(item).." ".."1"..item.type.." "..item.subType.." ".."pet".." "
+			..string.format("%2d",item.minLevel).." "..string.format("%2d",item.level).." ".."00".."PET" 
+		end
 		local _,_,textureType,textureIndex=string.find(item.texture,"\\.*\\([^_]+_?[^_]*_?[^_]*)_?(%d*)")
 		if(not item.rarity)then item.rarity='1' end
 		item.compareStr= getPerffix(item).." "..item.rarity..item.type.." "..item.subType.." "..textureType.." "
@@ -740,6 +744,7 @@ local function stackOnce()
 			item = getJPackItem(bag,slot)
 			if(item)then
 				if (not locked) then
+					if item.stackCount == nil then item.stackCount = 1 end
 					if (item.stackCount ~= 1) and (itemCount < item.stackCount)then
 						slotInfo = pendingStack[item.itemid]
 						if(slotInfo)then

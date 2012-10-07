@@ -1,4 +1,4 @@
--- ********************************************
+﻿-- ********************************************
 -- **             DBM Info Frame             **
 -- **     http://www.deadlybossmods.com      **
 -- ********************************************
@@ -67,6 +67,7 @@ local lines = {}
 local icons = {}
 local sortedLines = {}
 local lastStacks = {}
+local showtime,infot = 0
 
 ---------------------
 --  Dropdown Menu  --
@@ -182,15 +183,15 @@ end
 local function updateIcons()
 	table.wipe(icons)
 	if IsInRaid() then
-		for i=1, GetNumGroupMembers() do
+		for i = 1, GetNumGroupMembers() do
 			local uId = "raid"..i
 			local icon = GetRaidTargetIndex(uId)
 			if icon then
 				icons[UnitName(uId)] = ("|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_%d:0|t"):format(icon)
 			end
 		end
-	elseif GetNumSubgroupMembers() > 0 then
-		for i=1, GetNumSubgroupMembers() do
+	elseif IsInGroup() then
+		for i = 1, GetNumSubgroupMembers() do
 			local uId = "party"..i
 			local icon = GetRaidTargetIndex(uId)
 			if icon then
@@ -214,7 +215,7 @@ local function updateHealth()
 				lines[UnitName(uId)] = UnitHealth(uId) - infoFrameThreshold
 			end
 		end
-	elseif GetNumSubgroupMembers() > 0 then
+	elseif IsInGroup() then
 		for i = 1, GetNumSubgroupMembers() do
 			local uId = "party"..i
 			if UnitHealth(uId) < infoFrameThreshold and not UnitIsDeadOrGhost(uId) then
@@ -245,9 +246,41 @@ end
 
 local function updateEnemyPower()
 	table.wipe(lines)
-	for i = 1, 4 do
+	for i = 1, 5 do
 		if UnitPower("boss"..i, pIndex)/UnitPowerMax("boss"..i, pIndex)*100 >= infoFrameThreshold then
 			lines[UnitName("boss"..i)] = UnitPower("boss"..i, pIndex)
+		end
+	end
+	updateLines()
+end
+
+local function updateCobalyPower()
+	table.wipe(lines)	
+	for i = 1, 4 do
+		if UnitName("boss"..i) == EJ_GetSectionInfo(5773) then				--Jade
+			if infoFrameThreshold["Gsdnow"] then
+				lines["|cFF088A08"..UnitName("boss"..i).."|r |cFFCDCDC1["..EJ_GetSectionInfo(5785).."]|r"] = UnitPower("boss"..i)
+			else
+				lines["|cFF088A08"..UnitName("boss"..i).."|r"] = UnitPower("boss"..i)
+			end
+		elseif UnitName("boss"..i) == EJ_GetSectionInfo(5774) then			--Jasper
+			if infoFrameThreshold["Rsdnow"] then
+				lines["|cFFFF0404"..UnitName("boss"..i).."|r |cFFCDCDC1["..EJ_GetSectionInfo(5785).."]|r"] = UnitPower("boss"..i)
+			else
+				lines["|cFFFF0404"..UnitName("boss"..i).."|r"] = UnitPower("boss"..i)
+			end
+		elseif UnitName("boss"..i) == EJ_GetSectionInfo(5771) then			--Cobalt
+			if infoFrameThreshold["Bsdnow"] then
+				lines["|cFF0080FF"..UnitName("boss"..i).."|r |cFFCDCDC1["..EJ_GetSectionInfo(5785).."]|r"] = UnitPower("boss"..i)
+			else
+				lines["|cFF0080FF"..UnitName("boss"..i).."|r"] = UnitPower("boss"..i)
+			end
+		elseif UnitName("boss"..i) == EJ_GetSectionInfo(5691) then			--Amethyst
+			if infoFrameThreshold["Psdnow"] then
+				lines["|cFF9932CD"..UnitName("boss"..i).."|r |cFFCDCDC1["..EJ_GetSectionInfo(5785).."]|r"] = UnitPower("boss"..i)
+			else
+				lines["|cFF9932CD"..UnitName("boss"..i).."|r"] = UnitPower("boss"..i)
+			end
 		end
 	end
 	updateLines()
@@ -263,7 +296,7 @@ local function updatePlayerBuffs()
 				lines[UnitName(uId)] = ""
 			end
 		end
-	elseif GetNumSubgroupMembers() > 0 then
+	elseif IsInGroup() then
 		for i = 1, GetNumSubgroupMembers() do
 			local uId = "party"..i
 			if not UnitBuff(uId, GetSpellInfo(infoFrameThreshold)) and not UnitIsDeadOrGhost(uId) then
@@ -288,7 +321,7 @@ local function updateGoodPlayerDebuffs()
 				lines[UnitName(uId)] = ""
 			end
 		end
-	elseif GetNumSubgroupMembers() > 0 then
+	elseif IsInGroup() then
 		for i = 1, GetNumSubgroupMembers() do
 			local uId = "party"..i
 			if not UnitDebuff(uId, GetSpellInfo(infoFrameThreshold)) and not UnitIsDeadOrGhost(uId) then
@@ -311,19 +344,31 @@ local function updateBadPlayerDebuffs()
 		for i = 1, GetNumGroupMembers() do
 			local uId = "raid"..i
 			if UnitDebuff(uId, GetSpellInfo(infoFrameThreshold)) and not UnitIsDeadOrGhost(uId) then
-				lines[UnitName(uId)] = ""
+				if UnitGroupRolesAssigned(uId) == "HEALER" then
+					lines[UnitName(uId)] = _G["HEALER"]
+				else
+					lines[UnitName(uId)] = ""
+				end
 			end
 		end
-	elseif GetNumSubgroupMembers() > 0 then
+	elseif IsInGroup() then
 		for i = 1, GetNumSubgroupMembers() do
 			local uId = "party"..i
 			if  UnitDebuff(uId, GetSpellInfo(infoFrameThreshold)) and not UnitIsDeadOrGhost(uId) then
 				local icon = GetRaidTargetIndex(uId)
-				lines[UnitName(uId)] = ""
+				if UnitGroupRolesAssigned(uId) == "HEALER" then
+					lines[UnitName(uId)] = _G["HEALER"]
+				else
+					lines[UnitName(uId)] = ""
+				end
 			end
 		end
 		if UnitDebuff("player", GetSpellInfo(infoFrameThreshold)) and not UnitIsDeadOrGhost("player") then--"party"..i excludes player so manually add it in.
-			lines[UnitName("player")] = ""
+			if UnitGroupRolesAssigned("player") == "HEALER" then
+				lines[UnitName("player")] = _G["HEALER"]
+			else
+				lines[UnitName("player")] = ""
+			end
 		end
 	end
 	updateLines()
@@ -345,7 +390,7 @@ local function updatePlayerBuffStacks()
 				end
 			end			
 		end
-	elseif GetNumSubgroupMembers() > 0 then
+	elseif IsInGroup() then
 		for i = 1, GetNumSubgroupMembers() do
 			local uId = "party"..i
 			if UnitBuff(uId, GetSpellInfo(infoFrameThreshold)) then
@@ -375,6 +420,78 @@ local function updatePlayerBuffStacks()
 	updateLines()
 end
 
+local function updatePlayerDebuffStacks()
+	table.wipe(lines)
+	local UnitBossTarget
+	local UnitDebuffTime
+	if IsInRaid() then
+		for i = 1, GetNumGroupMembers() do
+			local uId = "raid"..i
+			if UnitDebuff(uId, GetSpellInfo(infoFrameThreshold)) and not UnitIsDeadOrGhost(uId) then
+				if (UnitName(uId) == UnitName("boss1target")) or UnitDebuff(uId, GetSpellInfo(122835)) then
+					UnitBossTarget = UnitName(uId).." |cFFFF0000← boss|r"
+				else
+					UnitBossTarget = UnitName(uId)
+				end
+				if select(7, UnitDebuff(uId, GetSpellInfo(infoFrameThreshold))) > GetTime() then
+					UnitDebuffTime = math.ceil(select(7, UnitDebuff(uId, GetSpellInfo(infoFrameThreshold))) - GetTime()).."s"
+				else
+					UnitDebuffTime = ""
+				end
+				lines[UnitBossTarget] = "["..select(4, UnitDebuff(uId, GetSpellInfo(infoFrameThreshold))).."層]  "..UnitDebuffTime
+			end			
+		end
+	elseif IsInGroup() then
+		for i = 1, GetNumSubgroupMembers() do
+			local uId = "party"..i
+			if UnitDebuff(uId, GetSpellInfo(infoFrameThreshold)) and not UnitIsDeadOrGhost(uId) then
+				if (UnitName(uId) == UnitName("boss1target")) or UnitDebuff(uId, GetSpellInfo(122835)) then
+					UnitBossTarget = UnitName(uId).." |cFFFF0000← boss|r"
+				else
+					UnitBossTarget = UnitName(uId)
+				end
+				if select(7, UnitDebuff(uId, GetSpellInfo(infoFrameThreshold))) > GetTime() then
+					UnitDebuffTime = math.ceil(select(7, UnitDebuff(uId, GetSpellInfo(infoFrameThreshold))) - GetTime()).."s"
+				else
+					UnitDebuffTime = ""
+				end
+				lines[UnitBossTarget] = "["..select(4, UnitDebuff(uId, GetSpellInfo(infoFrameThreshold))).."層]  "..UnitDebuffTime
+			end
+		end
+		if UnitDebuff("player", GetSpellInfo(infoFrameThreshold)) then
+			if (UnitName("player") == UnitName("boss1target")) or UnitDebuff("player", GetSpellInfo(122835)) then
+				UnitBossTarget = UnitName("player").." |cFFFF0000← boss|r"
+			else
+				UnitBossTarget = UnitName("player")
+			end
+			if select(7, UnitDebuff("player", GetSpellInfo(infoFrameThreshold))) > GetTime() then
+				UnitDebuffTime = math.ceil(select(7, UnitDebuff("player", GetSpellInfo(infoFrameThreshold))) - GetTime()).."s"
+			else
+				UnitDebuffTime = ""
+			end
+			lines[UnitBossTarget] = "["..select(4, UnitDebuff("player", GetSpellInfo(infoFrameThreshold))).."層]  "..UnitDebuffTime
+		end
+	end
+
+	updateLines()
+	updateIcons()
+end
+
+local function updateOther()
+	table.wipe(lines)
+	lines[pIndex]= infoFrameThreshold
+	updateLines()
+end
+
+local function updateTime()
+	showtime = showtime + 0.5
+	infot = ("%d:%0.2d"):format(showtime/60, math.fmod(showtime, 60))
+	table.wipe(lines)
+	lines[infot]= infoFrameThreshold
+	updateLines()
+end
+
+
 local function updatePlayerAggro()
 	table.wipe(lines)
 	if IsInRaid() then
@@ -386,7 +503,7 @@ local function updatePlayerAggro()
 		end
 		updateLines()
 		updateIcons()
-	elseif GetNumSubgroupMembers() > 0 then
+	elseif IsInGroup() then
 		for i = 1, GetNumSubgroupMembers() do
 			local uId = "party"..i
 			if UnitThreatSituation(uId) == infoFrameThreshold then
@@ -414,7 +531,7 @@ local function updatePlayerTargets()
 				lines[UnitName(uId)] = ""
 			end
 		end
-	elseif GetNumSubgroupMembers() > 0 then
+	elseif IsInGroup() then
 		for i = 1, GetNumSubgroupMembers() do
 			local uId = "party"..i
 			if getUnitCreatureId("party"..i.."target") ~= infoFrameThreshold and (UnitGroupRolesAssigned("party"..i) == "DAMAGER" or UnitGroupRolesAssigned("party"..i) == "NONE") then
@@ -445,6 +562,8 @@ function onUpdate(self, elapsed)
 		updatePlayerPower()
 	elseif currentEvent == "enemypower" then
 		updateEnemyPower()
+	elseif currentEvent == "cobalypower" then
+		updateCobalyPower()
 	elseif currentEvent == "playerbuff" then
 		updatePlayerBuffs()
 	elseif currentEvent == "playergooddebuff" then
@@ -457,6 +576,12 @@ function onUpdate(self, elapsed)
 		updatePlayerBuffStacks()
 	elseif currentEvent == "playertargets" then
 		updatePlayerTargets()
+	elseif currentEvent == "playerdebuffstacks" then
+		updatePlayerDebuffStacks()
+	elseif currentEvent == "other" then
+		updateOther()
+	elseif currentEvent == "time" then
+		updateTime()
 	end
 --	updateIcons()
 	for i = 1, math.min(#sortedLines, maxlines) do
@@ -473,7 +598,7 @@ function onUpdate(self, elapsed)
 			addedSelf = true
 			if currentEvent == "playerbuff" or currentEvent == "playerbaddebuff" or currentEvent == "playergooddebuff" or currentEvent == "health" or currentEvent == "playertargets" or (currentEvent == "playeraggro" and infoFrameThreshold == 3) then--Player name on frame bad a thing make it red.
 				self:AddDoubleLine(name, power, 255, 0, 0, 255, 255, 255)	-- (leftText, rightText, left.R, left.G, left.B, right.R, right.G, right.B)
-			elseif currentEvent == "playerbuffstacks" or (currentEvent == "playeraggro" and infoFrameThreshold == 0) then--Player name on frame is a good thing, make it green
+			elseif currentEvent == "playerbuffstacks" or currentEvent == "playerdebuffstacks" or (currentEvent == "playeraggro" and infoFrameThreshold == 0) then--Player name on frame is a good thing, make it green
 				self:AddDoubleLine(name, power, 0, 255, 0, 255, 255, 255)	-- (leftText, rightText, left.R, left.G, left.B, right.R, right.G, right.B)
 			else--it's not defined a color, so default to white.
 				self:AddDoubleLine(name, power, color.R, color.G, color.B, 255, 255, 255)	-- (leftText, rightText, left.R, left.G, left.B, right.R, right.G, right.B)
@@ -509,6 +634,8 @@ function infoFrame:Show(maxLines, event, threshold, ...)
 		updatePlayerPower()
 	elseif event == "enemypower" then
 		updateEnemyPower()
+	elseif currentEvent == "cobalypower" then
+		updateCobalyPower()
 	elseif event == "playerbuff" then
 		updatePlayerBuffs()
 	elseif event == "playergooddebuff" then
@@ -521,6 +648,12 @@ function infoFrame:Show(maxLines, event, threshold, ...)
 		updatePlayerBuffStacks()
 	elseif currentEvent == "playertargets" then
 		updatePlayerTargets()
+	elseif currentEvent == "playerdebuffstacks" then
+		updatePlayerDebuffStacks()
+	elseif currentEvent == "other" then
+		updateOther()
+	elseif currentEvent == "time" then
+		updateTime()
 	elseif currentEvent == "test" then
 	else		
 		error("DBM-InfoFrame: Unsupported event", 2)
@@ -538,6 +671,7 @@ function infoFrame:Hide()
 	sortingAsc = false
 	infoFrameThreshold = nil
 	pIndex = nil
+	showtime = 0
 	currentEvent = nil
 	if frame then 
 		frame:Hide()

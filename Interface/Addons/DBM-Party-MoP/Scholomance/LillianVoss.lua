@@ -1,5 +1,6 @@
-local mod	= DBM:NewMod(666, "DBM-Party-MoP", 7, 246)
+﻿local mod	= DBM:NewMod(666, "DBM-Party-MoP", 7, 246)
 local L		= mod:GetLocalizedStrings()
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
 mod:SetRevision(("$Revision: 7617 $"):sub(12, -3))
 mod:SetCreatureID(58722)--58722 is Body, 58791 is soul. Body is engaged first
@@ -11,6 +12,7 @@ mod:RegisterKill("yell", L.Kill)
 
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED",
+	"SPELL_AURA_REMOVED",
 	"SPELL_CAST_START",
 	"SPELL_CAST_SUCCESS",
 	"SPELL_DAMAGE",
@@ -45,8 +47,9 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(111585) and args:IsPlayer() and self:AntiSpam() then
+	if args:IsSpellID(111585) and args:IsPlayer() and self:AntiSpam(3, 1) then
 		specWarnDarkBlaze:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\keepmove.mp3")--保持移動
 	elseif args:IsSpellID(111649) then--Soul released and body becomes inactive, phase 2.
 		timerShadowShivCD:Cancel()
 		timerDeathsGraspCD:Cancel()
@@ -58,7 +61,16 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerFixateAngerCD:Start()
 		if args:IsPlayer() then
 			specWarnFixateAnger:Show()
-			soundFixateAnger:Play()
+--			soundFixateAnger:Play()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\justrun.mp3")--快跑
+		end
+	end
+end
+
+function mod:SPELL_AURA_REMOVED(args)
+	if args:IsSpellID(115350) then
+		if args:IsPlayer() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\targetchange.mp3")--目標改變
 		end
 	end
 end
@@ -87,8 +99,9 @@ end
 
 -- he dies before health 1, so can't use overkill hack.
 function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId, _, _, _, overkill)
-	if (spellId == 111628 or spellId == 115361) and destGUID == UnitGUID("player") and self:AntiSpam(2) then
+	if (spellId == 111628 or spellId == 115361) and destGUID == UnitGUID("player") and self:AntiSpam(3, 2) then
 		specWarnDarkBlaze:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
 	end
 end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE

@@ -1,5 +1,6 @@
-local mod	= DBM:NewMod(659, "DBM-Party-MoP", 7, 246)
+﻿local mod	= DBM:NewMod(659, "DBM-Party-MoP", 7, 246)
 local L		= mod:GetLocalizedStrings()
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
 mod:SetRevision(("$Revision: 7617 $"):sub(12, -3))
 mod:SetCreatureID(58633, 58664)--58633 is boss, 58664 is Phylactery. We register BOTH to avoid pre mature combat ending cause boss dies twice.
@@ -41,6 +42,7 @@ end
 function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)--120037 is a weak version of same spell by exit points, 115219 is the 50k per second icewall that will most definitely wipe your group if it consumes the room cause you're dps sucks.
 	if (spellId == 120037 or spellId == 115219) and destGUID == UnitGUID("player") and self:AntiSpam(3, 1) then
 		specWarnIceWave:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
 	end
 end
 
@@ -50,6 +52,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		timerFrigidGrasp:Start()
 --	"<330.7> Phylactery [[boss2:Summon Books::0:111669]]"
 	elseif spellId == 111669 and self:AntiSpam(2, 3) then
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\phasechange.mp3")--階段轉換
 		warnPhase2:Show()
 		timerFrigidGrasp:Cancel()
 		timerBerserk:Cancel()

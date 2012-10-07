@@ -1,7 +1,8 @@
-local mod	= DBM:NewMod(671, "DBM-Party-MoP", 9, 316)
+﻿local mod	= DBM:NewMod(671, "DBM-Party-MoP", 9, 316)
 local L		= mod:GetLocalizedStrings()
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7617 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7881 $"):sub(12, -3))
 mod:SetCreatureID(59223)
 mod:SetModelID(41154)
 
@@ -9,20 +10,23 @@ mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_SUCCESS",
+	"SPELL_DAMAGE",
+	"SPELL_MISSED",
 	"SPELL_AURA_APPLIED"
 )
 
-local warnFlyingKick		= mod:NewTargetAnnounce(114487, 3)--This is always followed instantly by Firestorm kick, so no reason to warn both.
+local warnFlyingKick		= mod:NewSpellAnnounce(113764, 4)--This is always followed instantly by Firestorm kick, so no reason to warn both.
 local warnBlazingFists		= mod:NewSpellAnnounce(114807, 3)
 --local warnScorchedEarth		= mod:NewCountAnnounce(114460, 3)--only aoe warn will be enough.
 
-local yellFlyingKick		= mod:NewYell(114487)
-local specWarnFlyingKick	= mod:NewSpecialWarningMove(114487)
-local specWarnFlyingKickNear= mod:NewSpecialWarningClose(114487)
+--local yellFlyingKick		= mod:NewYell(114487)
+local specWarnFlyingKick	= mod:NewSpecialWarningSpell(113764, nil, nil, nil, true)
+--local specWarnFlyingKickNear= mod:NewSpecialWarningClose(114487)
 local specWarnScorchedEarth	= mod:NewSpecialWarningMove(114460)
+local specWarnFirestormKick	= mod:NewSpecialWarningMove(113766)  --voice
 local specWarnBlazingFists	= mod:NewSpecialWarningMove(114807, mod:IsTank()) -- Everything is dangerous in challenge mode, entry level heriocs will also be dangerous when they aren't overtuning your gear with an ilvl buff.if its avoidable, you should avoid it, in good practice, to create good habit for challenge modes.
 
-local timerFlyingKickCD		= mod:NewNextTimer(25, 114487)
+local timerFlyingKickCD		= mod:NewNextTimer(25, 113764)
 local timerFirestormKick	= mod:NewBuffActiveTimer(6, 113764)
 local timerBlazingFistsCD	= mod:NewNextTimer(30, 114807)
 
@@ -38,9 +42,10 @@ function mod:OnCombatEnd()
 end
 
 function mod:SPELL_CAST_SUCCESS(args)
-	if args:IsSpellID(114487) then
-		if args:IsPlayer() then
+	if args:IsSpellID(113764) then
+		--[[if args:IsPlayer() then
 			specWarnFlyingKick:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
 			yellFlyingKick:Yell()
 		else
 			local uId = DBM:GetRaidUnitId(args.destName)
@@ -53,18 +58,23 @@ function mod:SPELL_CAST_SUCCESS(args)
 				local inRange = DBM.RangeCheck:GetDistance("player", x, y)
 				if inRange and inRange < 8 then
 					specWarnFlyingKickNear:Show(args.destName)
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
 					if self.Options.KickArrow then
 						DBM.Arrow:ShowRunAway(x, y, 8, 5)
 					end
 				end
 			end
-		end
-		warnFlyingKick:Show(args.destName)
+		end]]
+		warnFlyingKick:Show()
+		specWarnFlyingKick:Show()
 		timerFirestormKick:Start()
 		timerFlyingKickCD:Start()
-	elseif args:IsSpellID(114025) then
+	elseif args:IsSpellID(114807) then
 		warnBlazingFists:Show()
 		specWarnBlazingFists:Show()
+		if mod:IsTank() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
+		end
 		timerBlazingFistsCD:Start()
 	end
 end
@@ -81,6 +91,10 @@ end
 function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId, _, _, _, overkill)
 	if spellId == 114465 and destGUID == UnitGUID("player") and self:AntiSpam(3) then
 		specWarnScorchedEarth:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
+	elseif spellId == 113766 and destGUID == UnitGUID("player") and self:AntiSpam(3, 2) then
+		specWarnFirestormKick:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
 	end
 end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE

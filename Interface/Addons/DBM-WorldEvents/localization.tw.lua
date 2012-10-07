@@ -186,3 +186,40 @@ L = DBM:GetModLocalization("Tonks")
 L:SetGeneralLocalization({
 	name = "坦克大戰"
 })
+
+-----------------------
+--  Darkmoon Rabbit  --
+-----------------------
+L = DBM:GetModLocalization("Rabbit")
+
+L:SetGeneralLocalization({
+	name = "暗月兔"
+})
+
+--------------------------
+--  Plants Vs. Zombies  --
+--------------------------
+L = DBM:GetModLocalization("PlantsVsZombies")
+
+L:SetGeneralLocalization({
+	name = "植物大戰殭屍"
+})
+
+L:SetWarningLocalization({
+	warnTotalAdds	= "新一輪殭屍已出現的波數：%d",
+	specWarnWave	= "一大波殭屍"
+})
+
+L:SetTimerLocalization{
+	timerWave		= "下一大波殭屍"
+}
+
+L:SetOptionLocalization({
+	warnTotalAdds	= "警告：新一輪殭屍已出現的波數",
+	specWarnWave	= "特別警告：一大波殭屍開始",
+	timerWave		= "計時器：下一次大波殭屍"
+})
+
+L:SetMiscLocalization({
+	MassiveWave		= "一大波殭屍正在接近!"
+})

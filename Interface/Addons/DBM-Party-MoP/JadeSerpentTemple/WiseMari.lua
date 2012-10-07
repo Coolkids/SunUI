@@ -1,7 +1,8 @@
-local mod	= DBM:NewMod(672, "DBM-Party-MoP", 1, 313)
+﻿local mod	= DBM:NewMod(672, "DBM-Party-MoP", 1, 313)
 local L		= mod:GetLocalizedStrings()
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7772 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7844 $"):sub(12, -3))
 mod:SetCreatureID(56448)
 mod:SetModelID(41125)
 mod:SetZone()
@@ -14,58 +15,63 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_START",
 	"SPELL_DAMAGE",
 	"SPELL_MISSED",
-	"UNIT_DIED"
+	"UNIT_DIED",
+	"UNIT_TARGET"
 )
 
-
---local warnHydroLance			= mod:NewSpellAnnounce(106055, 2)--not sure if useful?
 local warnBubbleBurst			= mod:NewCastAnnounce(106612, 3, nil)
-local warnAddsLeft				= mod:NewAddsLeftAnnounce("ej5616", 2, 56511)
+local warnAddsLeft				= mod:NewAddsLeftAnnounce("ej5616", 2, 106526)
 
 local specWarnLivingWater		= mod:NewSpecialWarningSwitch("ej5616", not mod:IsHealer())
 local specWarnCorruptingWaters	= mod:NewSpecialWarningMove(115167)
 local specWarnShaResidue		= mod:NewSpecialWarningMove(106653)
 
---local timerHydroLanceCD		= mod:NewCDTimer(6, 106055)
 local timerLivingWater			= mod:NewCastTimer(5.5, 106526)
 local timerLivingWaterCD		= mod:NewCDTimer(13, 106526)
 local timerWashAway				= mod:NewNextTimer(8, 106334)
 
+mod:AddBoolOption("SetIconOnAdds", false)
+
 local addsRemaining = 4--Also 4 on heroic?
+local addsName = EJ_GetSectionInfo(5616)
+
+function mod:UNIT_TARGET()
+	if self.Options.SetIconOnAdds and UnitName("target") == addsName then
+		SetRaidTarget("target", 8)
+	end
+end
 
 function mod:OnCombatStart(delay)
 	addsRemaining = 4
 	timerLivingWaterCD:Start(13-delay)
-	--specWarnLivingWater:Schedule(13)
 end
 
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(106653) and args:IsPlayer() and self:AntiSpam(4, 1) then
 		specWarnShaResidue:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
 	end
 end
-
---[[
-function mod:SPELL_CAST_SUCCESS(args)
-	if args:IsSpellID(106055) then
-		warnHydroLance:Show()
-		timerHydroLanceCD:Start()
-	end
-end--]]
 
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(106526) then--Call Water
 		timerLivingWater:Start()
 		specWarnLivingWater:Schedule(5.5)
+		sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3")--準備小怪
 	elseif args:IsSpellID(106612) then--Bubble Burst (phase 2)
 		warnBubbleBurst:Show()
 		timerWashAway:Start()
+		sndWOP:Schedule(4, "Interface\\AddOns\\DBM-Core\\extrasounds\\ptwo.mp3")--P2
+		sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	end
 end
 
-function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId, spellName)--120037 is a weak version of same spell by exit points, 115219 is the 50k per second icewall that will most definitely wipe your group if it consumes the room cause you're dps sucks.
+function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)--120037 is a weak version of same spell by exit points, 115219 is the 50k per second icewall that will most definitely wipe your group if it consumes the room cause you're dps sucks.
 	if spellId == 115167 and destGUID == UnitGUID("player") and self:AntiSpam(2, 1) then
-		specWarnCorruptingWaters:Show(spellName)
+		specWarnCorruptingWaters:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
 	end
 end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE
@@ -75,5 +81,8 @@ function mod:UNIT_DIED(args)
 	if cid == 56511 then--Corrupt Living Water
 		addsRemaining = addsRemaining - 1
 		warnAddsLeft:Show(addsRemaining)
+		if addsRemaining == 0 then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\phasechange.mp3")--階段轉換
+		end
 	end
 end

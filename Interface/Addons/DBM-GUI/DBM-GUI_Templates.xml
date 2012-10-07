@@ -1,4 +1,4 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
 
 
 	<Button name="DBM_GUI_OptionsFramePanelButtonTemplate" virtual="true">
@@ -398,6 +398,46 @@
 			</Layer>
 		</Layers>
 		<Frames>
+			<Button name="$parentcheck" inherits="UIPanelButtonTemplate" text="檢查進度®">
+				<Size>
+					<AbsDimension x="96" y="22"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="-116" y="-16"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if DBM:GetRaidRank() == 0 then
+							return DBM:AddMsg(DBM_ERROR_NO_PERMISSION)
+						end
+						if GetNumRaidMembers() == 0 then
+							return DBM:AddMsg(DBM_ERROR_NO_RAID)
+						end
+						DBM:RequestInstanceInfo()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentcheck2" inherits="UIPanelButtonTemplate" text="檢查版本">
+				<Size>
+					<AbsDimension x="96" y="22"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="-16" y="-16"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						DBM:ShowVersions(false)
+					</OnClick>
+				</Scripts>
+			</Button>
 			<Button name="$parentOkay" inherits="UIPanelButtonTemplate" text="OKAY">
 				<Size>
 					<AbsDimension x="96" y="22"/>
@@ -648,10 +688,10 @@
 					self:CreateButtons( _G[self:GetName().."DBMOptions"] )
 					self:UpdateMenuFrame( _G[self:GetName().."BossMods"] )
 				end
-				if math.random(1,2) == 1 then	-- who is first? hmm lets do it random :)
+				if math.random(1,2) == 0 then	-- who is first? hmm lets do it random :)
 					_G[self:GetName().."Authors"]:SetText("DBMv4 by Nitram@EU-Azshara and Tandanu@EU-Aegwynn - visit www.deadlybossmods.com")
 				else
-					_G[self:GetName().."Authors"]:SetText("DBMv4 by Tandanu@EU-Aegwynn and Nitram@EU-Azshara - visit www.deadlybossmods.com")
+					_G[self:GetName().."Authors"]:SetText("DBM-MoP語音增強模塊由 紫嬰之心&lt;黑手之鄉&gt;＠眾星之子(TW-Quel'dorei)製作維護")
 				end
 			</OnShow>
 			<OnDragStart>

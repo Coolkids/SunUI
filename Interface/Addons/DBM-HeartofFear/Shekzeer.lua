@@ -1,5 +1,6 @@
-local mod	= DBM:NewMod(743, "DBM-HeartofFear", nil, 330)
+﻿local mod	= DBM:NewMod(743, "DBM-HeartofFear", nil, 330)
 local L		= mod:GetLocalizedStrings()
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
 mod:SetRevision(("$Revision: 7777 $"):sub(12, -3))
 mod:SetCreatureID(62837)--62847 Dissonance Field, 63591 Kor'thik Reaver, 63589 Set'thik Windblade
@@ -36,6 +37,7 @@ local specwarnAmberTrap			= mod:NewSpecialWarningSpell(125826, false)
 local specwarnFixate			= mod:NewSpecialWarningYou(125390, false)--Could be spammy, make optional, will use info frame to display this more constructively
 local specWarnDispatch			= mod:NewSpecialWarningInterrupt(124077, mod:IsMelee())
 local specWarnAdvance			= mod:NewSpecialWarningSpell(125304)
+local specWarnDead				= mod:NewSpecialWarningYou(124862)
 
 local timerScreechCD			= mod:NewNextTimer(7, 123735)
 local timerCryOfTerror			= mod:NewTargetTimer(20, 123788, nil, mod:IsHealer())
@@ -51,12 +53,26 @@ mod:AddBoolOption("RangeFrame", mod:IsRanged())
 local sentLowHP = {}
 local warnedLowHP = {}
 
+local ptwo = false
+local lastplayer = ""
+
+--mod:AddBoolOption("HudMAP", true, "sound")
+local DBMHudMap = DBMHudMap
+local free = DBMHudMap.free
+local function register(e)	
+	DBMHudMap:RegisterEncounterMarker(e)
+	return e
+end
+local DeadMarkers = {}
+
 function mod:OnCombatStart(delay)
 	timerScreechCD:Start(-delay)
 	timerEyesCD:Start(-delay)
 	timerPhase2:Start(-delay)
 	table.wipe(sentLowHP)
 	table.wipe(warnedLowHP)
+	table.wipe(DeadMarkers)
+	ptwo = false
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Show(5)
 	end
@@ -82,9 +98,13 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerEyesCD:Start()
 		if args:IsPlayer() and (args.amount or 1) >= 4 then
 			specWarnEyes:Show(args.amount)
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_csgg.mp3") --層數過高
 		else
 			if (args.amount or 1) >= 3 and not UnitDebuff("player", GetSpellInfo(123735)) and not UnitIsDeadOrGhost("player") then
 				specWarnEyesOther:Show(args.destName)
+				if mod:IsTank() then
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\changemt.mp3") --換坦嘲諷
+				end
 			end
 		end
 	elseif args:IsSpellID(123788) then
@@ -93,6 +113,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerCryOfTerrorCD:Start()
 		if args:IsPlayer() then
 			specwarnCryOfTerror:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kjyy.mp3") --快進音域
 		end
 	elseif args:IsSpellID(125822) then
 		warnTrapped:Show(args.destName)
@@ -100,7 +121,17 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnFixate:Show(args.destName)
 		if args:IsPlayer() then
 			specwarnFixate:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\justrun.mp3") --快跑
 		end
+	--[[
+	elseif args:IsSpellID(124862, 124863, 124868) then   --死亡幻覺
+		if args:IsPlayer() then
+			specWarnDead:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runout.mp3") --離開人群
+		end
+		if self.Options.HudMAP then
+			DeadMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("targeting", args.destName, 9, nil, 0, 1, 0, 1):Appear():RegisterForAlerts())
+		end]]
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
@@ -108,6 +139,21 @@ mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(123788) then
 		timerCryOfTerror:Cancel(args.destName)
+	elseif args:IsSpellID(123707) then
+		if mod:IsTank() and (not ptwo) then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\changemt.mp3") --換坦嘲諷
+		end
+	elseif args:IsSpellID(125390) then
+		if args:IsPlayer() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\safenow.mp3") --安全
+		end
+	elseif args:IsSpellID(124097) then  --樹脂
+		lastplayer = args.destName
+	--[[
+	elseif args:IsSpellID(124862, 124863, 124868) then
+		if DeadMarkers[args.destName] then
+			DeadMarkers[args.destName] = free(DeadMarkers[args.destName])
+		end]]
 	end
 end
 
@@ -118,6 +164,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 	elseif args:IsSpellID(125826) then
 		warnAmberTrap:Show()
 		specwarnAmberTrap:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_xjwc.mp3") --陷阱完成
 	end
 end
 
@@ -125,6 +172,7 @@ function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(124077) then
 		if args.sourceGUID == UnitGUID("target") then--Only show warning for your own target.
 			specWarnDispatch:Show(args.sourceName)
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3")--快打斷
 		end
 	end
 end
@@ -138,6 +186,13 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		warnRetreat:Show()
 		specWarnRetreat:Show()
 		timerPhase1:Start()
+		ptwo = true
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\phasechange.mp3")--階段轉換
+		sndWOP:Schedule(152, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbnw.mp3") --準備女王
+		sndWOP:Schedule(153, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndWOP:Schedule(154, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Schedule(155, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Schedule(156, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		if self.Options.InfoFrame then
 			DBM.InfoFrame:SetHeader(L.PlayerDebuffs)
 			DBM.InfoFrame:Show(10, "playerbaddebuff", 125390)
@@ -147,9 +202,21 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		end
 	elseif spellId == 125304 and self:AntiSpam(2, 1) then
 		timerPhase1:Cancel()--If you kill everything it should end early.
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		warnAdvance:Show()
 		specWarnAdvance:Show()
 		timerPhase2:Start()--Assumed same as pull
+		ptwo = false
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\phasechange.mp3")--階段轉換
+		sndWOP:Schedule(147, "Interface\\AddOns\\DBM-Core\\extrasounds\\ptwo.mp3")--P2
+		sndWOP:Schedule(148, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndWOP:Schedule(149, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Schedule(150, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Schedule(151, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		if self.Options.InfoFrame then--Will do this more accurately when i have an accurate count of mobs for all difficulties and then i can hide it when mobcount reaches 0
 			DBM.InfoFrame:Hide()
 		end
@@ -178,5 +245,6 @@ function mod:OnSync(msg, guid)
 		warnedLowHP[guid] = true
 		warnSonicDischarge:Show()
 		specwarnSonicDischarge:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ybbz.mp3") --音波爆炸準備
 	end
 end

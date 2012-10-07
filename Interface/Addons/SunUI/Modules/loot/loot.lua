@@ -197,7 +197,7 @@ local createSlot = function(id)
 	local name = frame:CreateFontString(nil, "OVERLAY")
 	name:SetJustifyH"LEFT"
 	name:ClearAllPoints()
-	name:SetPoint("LEFT", frame)
+	name:SetPoint("LEFT", frame, 4, 0)
 	name:SetNonSpaceWrap(true)
 	name:SetFontObject(GameFontWhite)
 	name:SetHeight(cfg.iconsize)

@@ -1,12 +1,14 @@
-local mod	= DBM:NewMod(725, "DBM-Pandaria", nil, 322)	-- 322 = Pandaria/Outdoor I assume
+﻿local mod	= DBM:NewMod(725, "DBM-Pandaria", nil, 322)	-- 322 = Pandaria/Outdoor I assume
 local L		= mod:GetLocalizedStrings()
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7762 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7848 $"):sub(12, -3))
 mod:SetCreatureID(62346)--Salyis not dies. Only Galleon attackable and dies.
 mod:SetModelID(42439)	--Galleon=42439, Salyis=42468 / main boss is Galleon
 mod:SetZone(807)--Valley of the Four winds
 
 mod:RegisterCombat("combat")
+mod:SetWipeTime(180)
 
 mod:RegisterEventsInCombat(
 	"RAID_BOSS_EMOTE"
@@ -26,7 +28,11 @@ local timerWarmongerCD			= mod:NewNextTimer(10, "ej6200", nil, nil, nil, 121747)
 
 function mod:OnCombatStart(delay)
 	timerCannonBarrageCD:Start(24-delay)
+	if mod:IsTank() then
+		sndWOP:Schedule(22, "Interface\\AddOns\\DBM-Core\\extrasounds\\bombsoon.mp3") --炸彈
+	end
 	timerStompCD:Start(50-delay)
+	sndWOP:Schedule(48,"Interface\\AddOns\\DBM-Core\\extrasounds\\stompsoon.mp3") --準備踐踏
 end
 
 function mod:RAID_BOSS_EMOTE(msg)
@@ -34,12 +40,17 @@ function mod:RAID_BOSS_EMOTE(msg)
 		warnCannonBarrage:Show()
 		specWarnCannonBarrage:Show()
 		timerCannonBarrageCD:Start()
+		if mod:IsTank() then
+			sndWOP:Schedule(58, "Interface\\AddOns\\DBM-Core\\extrasounds\\bombsoon.mp3")
+		end
 	elseif msg:find("spell:121787") then
 		warnStomp:Show()
 		warnWarmonger:Schedule(10)
 		specWarnWarmonger:Schedule(10)
+		sndWOP:Schedule(10, "Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3") --準備小怪
 		timerStomp:Start()
 		timerWarmongerCD:Start()
 		timerStompCD:Start()
+		sndWOP:Schedule(58,"Interface\\AddOns\\DBM-Core\\extrasounds\\stompsoon.mp3")
 	end
 end

@@ -191,7 +191,7 @@ G["MoveHandleDB"] = {
 	["bar3"] = {"BOTTOMRIGHT", "SunUIActionBar1", "BOTTOMLEFT", -4, 0},
 	["bar32"] = {"BOTTOMLEFT", "SunUIActionBar1", "BOTTOMRIGHT", 4, 0},
 	["bar4"] = {"RIGHT", "UIParent", "RIGHT", -10, 0},
-	["bar5"] = {"CENTER","UIParent", "CENTER", 0, 0},
+	["bar5"] = {"RIGHT","UIParent", "RIGHT", -40, 0},
 	["bar51"] = {"BOTTOM", "MultiBarBottomLeftButton4", "TOP", 0, 4},
 	["bar52"] = {"BOTTOM", "MultiBarBottomLeftButton5", "TOP", 0, 4},
 	["bar53"] = {"BOTTOMRIGHT", "MultiBarBottomRightButton3", "BOTTOMLEFT", -4, 0},
@@ -199,7 +199,7 @@ G["MoveHandleDB"] = {
 	["stancebar"] = {"BOTTOMLEFT", "MultiBarBottomRightButton6", "TOPLEFT", 0, 4},
 	["petbar"] = {"BOTTOMRIGHT", "MultiBarBottomRightButton12", "TOPRIGHT",  0,  4},
 	["vehicleexit"] = {"BOTTOM", "UIParent", "BOTTOM", 278, 66},
-	["extrabar"] = {"BOTTOM", "UIParent", "BOTTOM", -194, 54},
+	["extrabar"] = {"CENTER", "UIParent", "CENTER", 0, -135},
 	["totembar"] = {"BOTTOM", "UIParent", "BOTTOM", -175, 292},
 	--头像
 	["PlayerFrame"] = {"BOTTOM", "UIParent", "BOTTOM", -175, 172},

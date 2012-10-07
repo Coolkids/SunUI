@@ -1,5 +1,5 @@
 ﻿-- Simplified Chinese by Diablohu(diablohudream@gmail.com) & yleaf(yaroot@gmail.com)
--- Last update: 12/26/2011
+-- Last update: 9/27/2012
 
 if GetLocale() ~= "zhCN" then return end
 if not DBM_GUI_Translations then DBM_GUI_Translations = {} end
@@ -13,12 +13,13 @@ L.TranslationBy 	= "Diablohu & yleaf"
 L.OTabBosses	= "模块"
 L.OTabOptions	= "选项"
 
-L.TabCategory_Options 	= "综合设置"
+L.TabCategory_Options 		= "综合设置"
+L.TabCategory_MOP	 		= "熊猫人之谜"
 L.TabCategory_CATA	 		= "大地的裂变"
-L.TabCategory_WOTLK 	= "巫妖王之怒"
-L.TabCategory_BC 	= "燃烧的远征"
-L.TabCategory_CLASSIC 	= "经典旧世"
-L.TabCategory_OTHER     = "其它"
+L.TabCategory_WOTLK 		= "巫妖王之怒"
+L.TabCategory_BC 			= "燃烧的远征"
+L.TabCategory_CLASSIC 		= "经典旧世"
+L.TabCategory_OTHER    		= "其它"
 
 L.BossModLoaded 	= "%s状态"
 L.BossModLoad_now 	= [[该模块尚未启动。
@@ -55,11 +56,10 @@ L.Statistic_25Man			= "25人"
 -- Tab: General Options
 L.General 		= "DBM综合设置"
 L.EnableDBM 		= "启用DBM"
-L.EnableStatus 		= "回复“status”密语"
-L.AutoRespond 		= "开启战斗中自动密语回复"
 L.EnableMiniMapIcon	= "显示小地图图标"
 L.UseMasterVolume			= "使用游戏总声道播放音频"
-L.DisableCinematics			= "关闭所有游戏内过场动画"
+L.DisableCinematics			= "关闭所有副本内的过场动画"
+L.DisableCinematicsOutside	= "关闭所有副本外的过场动画"
 L.SKT_Enabled				= "永远显示击杀速度计时（无论该首领的相关设置如何）"
 L.Latency_Text				= "设定启用同步功能的最高延迟阀值：%d"
 
@@ -103,6 +103,21 @@ L.RaidWarnSound		= "发出团队警报时播放声音"
 L.CountdownVoice			= "倒数时播放声音"
 L.SpecialWarnSound	= "针对你或你的角色发出特殊警报时播放声音"
 L.SpecialWarnSound2			= "针对所有人发出特殊警报时播放声音"
+
+-- Tab: Generalwarnings
+L.Tab_GeneralMessages 		= "一般信息"
+L.CoreMessages				= "核心信息选项"
+L.ShowLoadMessage 			= "在聊天框显示模块加载信息"
+L.ShowPizzaMessage 			= "在聊天框显示广播信息"
+L.CombatMessages			= "战斗信息选项"
+L.ShowEngageMessage 		= "在聊天框显示进入战斗信息"
+L.ShowKillMessage 			= "在聊天框显示击杀次数信息"
+L.ShowWipeMessage 			= "在聊天框显示团灭次数信息"
+L.ShowRecoveryMessage 		= "在聊天框显示恢复计时条信息"
+L.WhisperMessages			= "密语信息选项"
+L.AutoRespond 				= "战斗时自动回复密语"
+L.EnableStatus 				= "回复'status'的密语"
+L.WhisperStats 				= "在回复的密语中包含击杀/灭团信息"
 
 -- Tab: Barsetup
 L.BarSetup   = "计时条样式"

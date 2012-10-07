@@ -37,6 +37,8 @@
 --    * Share Alike. If you alter, transform, or build upon this work, you may distribute the resulting work only under the same or similar license to this one.
 
 
+
+
 ---------------
 --  Globals  --
 ---------------
@@ -373,7 +375,6 @@ do
 		if unusedBars[#unusedBars] then
 			frame = unusedBars[#unusedBars]
 			unusedBars[#unusedBars] = nil
-			frame:Show()
 		else
 			frame = CreateFrame("Frame", "DBT_Bar_"..fCounter, self.mainAnchor, self.options.Template)
 			setupHandlers(frame)
@@ -436,12 +437,12 @@ do
 			else
 				self.smallBars:Append(newBar)
 			end
-			newBar:ApplyStyle()
 			newBar:SetText(id)
 			newBar:SetIcon(icon)
 			newBar:SetPosition()
-			newBar:Update(0)
 			self.bars[newBar] = true
+			newBar:ApplyStyle()
+			newBar:Update(0)
 		end
 		return newBar
 	end
@@ -567,16 +568,18 @@ function barPrototype:SetText(text)
 end
 
 function barPrototype:SetIcon(icon)
-	_G[self.frame:GetName().."BarIcon1"]:SetTexture("")
-	_G[self.frame:GetName().."BarIcon1"]:SetTexture(icon)
-	_G[self.frame:GetName().."BarIcon2"]:SetTexture("")
-	_G[self.frame:GetName().."BarIcon2"]:SetTexture(icon)
+	local frame_name = self.frame:GetName()
+	_G[frame_name.."BarIcon1"]:SetTexture("")
+	_G[frame_name.."BarIcon1"]:SetTexture(icon)
+	_G[frame_name.."BarIcon2"]:SetTexture("")
+	_G[frame_name.."BarIcon2"]:SetTexture(icon)
 end
 
 function barPrototype:SetColor(color)
 	self.color = color
-	_G[self.frame:GetName().."Bar"]:SetStatusBarColor(color.r, color.g, color.b)
-	_G[self.frame:GetName().."BarSpark"]:SetVertexColor(color.r, color.g, color.b)
+	local frame_name = self.frame:GetName()
+	_G[frame_name.."Bar"]:SetStatusBarColor(color.r, color.g, color.b)
+	_G[frame_name.."BarSpark"]:SetVertexColor(color.r, color.g, color.b)
 end
 
 ------------------
@@ -584,10 +587,11 @@ end
 ------------------
 function barPrototype:Update(elapsed)
 	local frame = self.frame
-	local bar = _G[frame:GetName().."Bar"]
-	local texture = _G[frame:GetName().."BarTexture"]
-	local spark = _G[frame:GetName().."BarSpark"]
-	local timer = _G[frame:GetName().."BarTimer"]
+	local frame_name = frame:GetName()
+	local bar = _G[frame_name.."Bar"]
+	local texture = _G[frame_name.."BarTexture"]
+	local spark = _G[frame_name.."BarSpark"]
+	local timer = _G[frame_name.."BarTimer"]
 	local obj = self.owner
 	self.timer = self.timer - elapsed
 	if obj.options.DynamicColor and not self.color then
@@ -763,13 +767,14 @@ end
 
 function barPrototype:ApplyStyle()
 	local frame = self.frame
-	local bar = _G[frame:GetName().."Bar"]
-	local spark = _G[frame:GetName().."BarSpark"]
-	local texture = _G[frame:GetName().."BarTexture"]
-	local icon1 = _G[frame:GetName().."BarIcon1"]
-	local icon2 = _G[frame:GetName().."BarIcon2"]
-	local name = _G[frame:GetName().."BarName"]
-	local timer = _G[frame:GetName().."BarTimer"]
+	local frame_name = frame:GetName()
+	local bar = _G[frame_name.."Bar"]
+	local spark = _G[frame_name.."BarSpark"]
+	local texture = _G[frame_name.."BarTexture"]
+	local icon1 = _G[frame_name.."BarIcon1"]
+	local icon2 = _G[frame_name.."BarIcon2"]
+	local name = _G[frame_name.."BarName"]
+	local timer = _G[frame_name.."BarTimer"]
 	texture:SetTexture(self.owner.options.Texture)
 	if self.color then
 		bar:SetStatusBarColor(self.color.r, self.color.g, self.color.b)
@@ -1042,31 +1047,39 @@ end
 do
 
 	local function onUpdate(self, elapsed)
-		 -- this check should *never* fail as only dead bars don't have an object and dead bars should always be hidden
-		 -- however, this function is apparently called by :Show() under some circumstances
 		if self.obj then
 			self.obj:Update(elapsed)
+		else
+		 	-- This should *never* happen; .obj is only set to nil when calling :Hide() and :Show() is only called in a function that also sets .obj
+			-- However, there have been several reports of this happening since WoW 5.x, wtf?
+			-- Unfortunately, none of the developers was ever able to reproduce this.
+			-- The bug reports show screenshots of expired timers that are still visible (showing 0.00) with all clean-up operations (positioning, list entry) except for the :Hide() call being performed...
+			self:Hide()
 		end
 	end
 
 	local function onMouseDown(self, btn)
-		if self.obj.owner.movable and btn == "LeftButton" then
-			if self.obj.enlarged then
-				self.obj.owner.secAnchor:StartMoving()
-			else
-				self.obj.owner.mainAnchor:StartMoving()
+		if self.obj then
+			if self.obj.owner.movable and btn == "LeftButton" then
+				if self.obj.enlarged then
+					self.obj.owner.secAnchor:StartMoving()
+				else
+					self.obj.owner.mainAnchor:StartMoving()
+				end
 			end
 		end
 	end
 
 	local function onMouseUp(self, btn)
-		self.obj.owner.mainAnchor:StopMovingOrSizing()
-		self.obj.owner.secAnchor:StopMovingOrSizing()
-		self.obj.owner:SavePosition()
-		if btn == "RightButton" then
-			self.obj:Cancel()
-		elseif btn == "LeftButton" and IsShiftKeyDown() then
-			self.obj:Announce()
+		if self.obj then
+			self.obj.owner.mainAnchor:StopMovingOrSizing()
+			self.obj.owner.secAnchor:StopMovingOrSizing()
+			self.obj.owner:SavePosition()
+			if btn == "RightButton" then
+				self.obj:Cancel()
+			elseif btn == "LeftButton" and IsShiftKeyDown() then
+				self.obj:Announce()
+			end
 		end
 	end
 
