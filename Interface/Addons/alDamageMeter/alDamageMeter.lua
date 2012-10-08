@@ -1,26 +1,31 @@
-local S, C, L, DB = unpack(SunUI)
+﻿local S, C, L, DB = unpack(SunUI)
 if IsAddOnLoaded("Skada") or IsAddOnLoaded("Recount") then return end
--- Config start
-local anchor = "TOPLEFT"
-local x, y = 130, -25
-local barheight = 13
-local spacing = 2
-local maxbars = 6
-local width, height = 185, maxbars*(barheight+spacing)-spacing
-local maxfights = 10
-local reportstrings = 25
-local texture = DB.Statusbar
-local backdrop_color = {0, 0, 0, 0}
-local border_color = {0, 0, 0, 0}
-local border_size = 1
+
+local anchor = "BOTTOMRIGHT"
+local x, y = -15, 44.5
 local font = DB.Font
-local font_style = "OUTLINE"
-local font_size = S.Scale(11)
-local classcolorbar = true
-local onlyboss = false
-local classcolorname = false
-local mergeHealAbsorbs = false
--- Config end
+local texture = DB.Statusbar
+
+local defaults = {
+	barheight = 16,
+	spacing = 0,
+	maxbars = 6,
+	width = 180,
+	maxfights = 10,
+	reportstrings = 25,
+	backdrop_color = {0, 0, 0, 0},
+	border_color = {0, 0, 0, 0},
+	border_size = 0,
+	font_style = "THINOUTLINE",
+	font_size = 12,
+	hidetitle = true,
+	barcolor = {0.4, 0.4, 0.4, 1},
+	classcolorbar = true,
+	onlyboss = false,
+	classcolorname = false,
+	mergeHealAbsorbs = true,
+}
+dmconf = defaults
 
 local addon_name, ns = ...
 local boss = LibStub("LibBossIDs-1.0")
@@ -37,7 +42,7 @@ local petFlags = COMBATLOG_OBJECT_TYPE_PET + COMBATLOG_OBJECT_TYPE_GUARDIAN
 local npcFlags = COMBATLOG_OBJECT_TYPE_NPC+COMBATLOG_OBJECT_CONTROL_NPC
 local backdrop = {
 	bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
-	edgeFile = [=[Interface\ChatFrame\ChatFrameBackground]=], edgeSize = border_size,
+	edgeFile = [=[Interface\ChatFrame\ChatFrameBackground]=], edgeSize = dmconf.border_size,
 	insets = {top = 0, left = 0, bottom = 0, right = 0},
 }
 local displayMode = {
@@ -91,6 +96,13 @@ local truncate = function(value)
 	end
 end
 
+local hex = function(r, g, b)
+	if type(r) == 'table' then
+		if r.r then r, g, b = r.r, r.g, r.b else r, g, b = unpack(r) end
+	end
+	return ('|cff%02x%02x%02x'):format(r * 255, g * 255, b * 255)
+end
+
 function dataobj.OnLeave()
 	GameTooltip:SetClampedToScreen(true)
 	GameTooltip:Hide()
@@ -129,8 +141,19 @@ end
 
 local CreateFS = CreateFS or function(frame)
 	local fstring = frame:CreateFontString(nil, 'OVERLAY')
-	fstring:SetFont(font, font_size, font_style)
+	fstring:SetFont(font, dmconf.font_size, dmconf.font_style)
 	return fstring
+end
+
+local CreateBG = CreateBG or function(parent)
+	local bg = CreateFrame("Frame", nil, parent)
+	bg:SetPoint("TOPLEFT", -dmconf.border_size, dmconf.border_size)
+	bg:SetPoint("BOTTOMRIGHT", dmconf.border_size, -dmconf.border_size)
+	bg:SetFrameLevel(parent:GetFrameLevel() - 1)
+	bg:SetBackdrop(backdrop)
+	bg:SetBackdropColor(unpack(dmconf.backdrop_color))
+	bg:SetBackdropBorderColor(unpack(dmconf.border_color))
+	return bg
 end
 
 local tcopy = function(src)
@@ -146,14 +169,14 @@ local perSecond = function(cdata)
 end
 
 local report = function(channel, cn)
-	local message = sMode..":"
+	local message = addon_name.." : "..sMode
 	if channel == "Chat" then
 		DEFAULT_CHAT_FRAME:AddMessage(message)
 	else
 		SendChatMessage(message, channel, nil, cn)
 	end
 	for i, v in pairs(barguids) do
-		if i > reportstrings or display[v][sMode].amount == 0 then return end
+		if i > dmconf.reportstrings or display[v][sMode].amount == 0 then return end
 		if sMode == DAMAGE or sMode == SHOW_COMBAT_HEALING then
 			message = string.format("%2d. %s    %s (%.0f)", i, display[v].name, truncate(display[v][sMode].amount), perSecond(display[v]))
 		else
@@ -263,18 +286,13 @@ local CreateBar = function()
 	newbar:SetStatusBarTexture(texture)
 	newbar:SetMinMaxValues(0, 100)
 	newbar:SetWidth(MainFrame:GetWidth()-2)
-	newbar:SetHeight(barheight)
+	newbar:SetHeight(dmconf.barheight-2)
 	newbar.left = CreateFS(newbar)
-	newbar.left:SetPoint("LEFT", 2, 0)
+	newbar.left:SetPoint("LEFT", newbar, "LEFT", 2, 0)
 	newbar.left:SetJustifyH("LEFT")
 	newbar.right = CreateFS(newbar)
-	newbar.right:SetPoint("RIGHT", -2, 0)
+	newbar.right:SetPoint("RIGHT", newbar, "RIGHT", -2, 0)
 	newbar.right:SetJustifyH("RIGHT")
-	newbar.bg = CreateFrame("Frame", nil, newbar)
-	newbar.bg:SetPoint("TOPLEFT", -1, 1)
-	newbar.bg:SetPoint("BOTTOMRIGHT", 1, -1)
-	newbar.bg:SetFrameLevel(newbar:GetFrameLevel()-1)
-	S.CreateBD(newbar.bg, 0)
 	newbar:SetScript("OnEnter", OnBarEnter)
 	newbar:SetScript("OnLeave", OnBarLeave)
 	newbar:SetScript("OnMouseUp", function(self, button)
@@ -330,24 +348,52 @@ local UpdateBars = function()
 	for i = 1, #barguids do
 		cur = display[barguids[i+offset]]
 		max = display[barguids[1]]
-		if i > maxbars or not cur then break end
+		if i > dmconf.maxbars or not cur then break end
 		if cur[sMode].amount == 0 then break end
 		if not bar[i] then 
 			bar[i] = CreateBar()
-			bar[i]:SetPoint("TOP", 0, -(barheight + spacing) * (i-1))
+			bar[i]:SetPoint("TOP", 0, -(dmconf.barheight + dmconf.spacing) * (i-1)-1)
 		end
 		bar[i].id = i + offset
 		bar[i]:SetValue(100 * cur[sMode].amount / max[sMode].amount)
 		color = RAID_CLASS_COLORS[cur.class]
-		bar[i]:SetStatusBarColor(color.r, color.g, color.b)
+		if dmconf.classcolorbar and color then
+			bar[i]:SetStatusBarColor(color.r, color.g, color.b)
+		else
+			bar[i]:SetStatusBarColor(unpack(dmconf.barcolor))
+		end
 		if sMode == DAMAGE or sMode == SHOW_COMBAT_HEALING then
-			bar[i].right:SetFormattedText("%s (%.0f)", truncate(cur[sMode].amount), perSecond(cur))
+			bar[i].right:SetFormattedText("%s (%s)", truncate(cur[sMode].amount), truncate(perSecond(cur)))
 		else
 			bar[i].right:SetFormattedText("%s", truncate(cur[sMode].amount))
 		end
-		bar[i].left:SetText(cur.name)
+		if dmconf.classcolorname then
+			bar[i].left:SetFormattedText("%s%s|r", hex(color), cur.name)
+			bar[i].right:SetFormattedText("%s%s|r", hex(color), bar[i].right:GetText())
+		else
+			bar[i].left:SetText(cur.name)
+		end
 		bar[i]:Show()
 	end
+end
+
+local UpdateWindow = function()
+	MainFrame:SetSize(dmconf.width, dmconf.maxbars*(dmconf.barheight+dmconf.spacing)-dmconf.spacing)
+	if dmconf.hidetitle then
+		MainFrame.title:Hide()
+	else
+		MainFrame.title:Show()
+	end
+	for i, v in pairs(bar) do
+		v:SetWidth(MainFrame:GetWidth())
+		v:SetHeight(dmconf.barheight)
+		v:SetPoint("TOP", 0, -(dmconf.barheight + dmconf.spacing) * (i-1))
+		if not IsAddOnLoaded("alInterface") then
+			v.left:SetFont(font, dmconf.font_size, dmconf.font_style)
+			v.right:SetFont(font, dmconf.font_size, dmconf.font_style)
+		end
+	end
+	UpdateBars()
 end
 
 local ResetDisplay = function(fight)
@@ -377,6 +423,7 @@ local SetMode = function(mode)
 		v:Hide()
 	end
 	UpdateBars()
+	MainFrame.title:SetText(sMode)
 end
 
 local CreateMenu = function(self, level)
@@ -406,12 +453,25 @@ local CreateMenu = function(self, level)
 		info.notCheckable = 1
 		XUIDropDownMenu_AddButton(info, level)
 		wipe(info)
+		info.text = SETTINGS
+		info.hasArrow = 1
+		info.value = "Options"
+		info.notCheckable = 1
+		XUIDropDownMenu_AddButton(info, level)
+		wipe(info)
 		info.text = RESET
 		info.func = Clean
 		info.notCheckable = 1
 		XUIDropDownMenu_AddButton(info, level)
+		wipe(info)
+		info.text = HIDE
+		info.func = function()
+			MainFrame:Hide()
+		end
+		info.notCheckable = 1
+		XUIDropDownMenu_AddButton(info, level)
 	elseif level == 2 then
-		if UIDROPDOWNMENU_MENU_VALUE == "Mode" then
+		if XUIDROPDOWNMENU_MENU_VALUE == "Mode" then
 			for i, v in pairs(displayMode) do
 				wipe(info)
 				info.text = v
@@ -420,7 +480,7 @@ local CreateMenu = function(self, level)
 				XUIDropDownMenu_AddButton(info, level)
 			end
 		end
-		if UIDROPDOWNMENU_MENU_VALUE == "Report" then
+		if XUIDROPDOWNMENU_MENU_VALUE == "Report" then
 			for i, v in pairs(reportList) do
 				wipe(info)
 				info.text = v.text
@@ -429,14 +489,14 @@ local CreateMenu = function(self, level)
 				XUIDropDownMenu_AddButton(info, level)
 			end
 		end
-		if UIDROPDOWNMENU_MENU_VALUE == "Fight" then
+		if XUIDROPDOWNMENU_MENU_VALUE == "Fight" then
 			wipe(info)
-			info.text = "Current"
+			info.text = "当前"
 			info.func = function() ResetDisplay(current) end
 			info.notCheckable = 1
 			XUIDropDownMenu_AddButton(info, level)
 			wipe(info)
-			info.text = "Total"
+			info.text = "总体"
 			info.func = function() ResetDisplay(total) end
 			info.notCheckable = 1
 			XUIDropDownMenu_AddButton(info, level)
@@ -448,6 +508,181 @@ local CreateMenu = function(self, level)
 				XUIDropDownMenu_AddButton(info, level)
 			end
 		end
+		if XUIDROPDOWNMENU_MENU_VALUE == "Options" then
+			wipe(info)
+			info.text = "每页条数"
+			info.func = function()
+				StaticPopupDialogs[addon_name.."ReportDialog"].OnAccept = function(self)
+					dmconf.maxbars = tonumber(_G[self:GetName().."EditBox"]:GetText())
+					UpdateWindow()
+				end
+				StaticPopupDialogs[addon_name.."ReportDialog"].OnShow = function(self)
+					_G[self:GetName().."EditBox"]:SetText(dmconf.maxbars)
+				end
+				StaticPopup_Show(addon_name.."ReportDialog")
+			end
+			info.notCheckable = 1
+			XUIDropDownMenu_AddButton(info, level)
+			wipe(info)
+			info.text = "宽度"
+			info.func = function()
+				StaticPopupDialogs[addon_name.."ReportDialog"].OnAccept = function(self)
+					dmconf.width = tonumber(_G[self:GetName().."EditBox"]:GetText())
+					UpdateWindow()
+				end
+				StaticPopupDialogs[addon_name.."ReportDialog"].OnShow = function(self)
+					_G[self:GetName().."EditBox"]:SetText(dmconf.width)
+				end
+				StaticPopup_Show(addon_name.."ReportDialog")
+			end
+			info.notCheckable = 1
+			XUIDropDownMenu_AddButton(info, level)
+			wipe(info)
+			info.text = "高度"
+			info.func = function()
+				StaticPopupDialogs[addon_name.."ReportDialog"].OnAccept = function(self)
+					dmconf.barheight = tonumber(_G[self:GetName().."EditBox"]:GetText())
+					UpdateWindow()
+				end
+				StaticPopupDialogs[addon_name.."ReportDialog"].OnShow = function(self)
+					_G[self:GetName().."EditBox"]:SetText(dmconf.barheight)
+				end
+				StaticPopup_Show(addon_name.."ReportDialog")
+			end
+			info.notCheckable = 1
+			XUIDropDownMenu_AddButton(info, level)
+			wipe(info)
+			info.text = "间距"
+			info.func = function()
+				StaticPopupDialogs[addon_name.."ReportDialog"].OnAccept = function(self)
+					dmconf.spacing = tonumber(_G[self:GetName().."EditBox"]:GetText())
+					UpdateWindow()
+				end
+				StaticPopupDialogs[addon_name.."ReportDialog"].OnShow = function(self)
+					_G[self:GetName().."EditBox"]:SetText(dmconf.spacing)
+				end
+				StaticPopup_Show(addon_name.."ReportDialog")
+			end
+			info.notCheckable = 1
+			XUIDropDownMenu_AddButton(info, level)
+			wipe(info)
+			info.text = "字号"
+			info.func = function()
+				StaticPopupDialogs[addon_name.."ReportDialog"].OnAccept = function(self)
+					dmconf.font_size = tonumber(_G[self:GetName().."EditBox"]:GetText())
+					UpdateWindow()
+				end
+				StaticPopupDialogs[addon_name.."ReportDialog"].OnShow = function(self)
+					_G[self:GetName().."EditBox"]:SetText(dmconf.font_size)
+				end
+				StaticPopup_Show(addon_name.."ReportDialog")
+			end
+			info.notCheckable = 1
+			XUIDropDownMenu_AddButton(info, level)
+			wipe(info)
+			info.text = "隐藏标题"
+			info.func = function()
+				dmconf.hidetitle = not dmconf.hidetitle
+				UpdateWindow()
+			end
+			info.checked = dmconf.hidetitle
+			XUIDropDownMenu_AddButton(info, level)
+			wipe(info)
+			info.text = "职业着色统计条"
+			info.func = function()
+				dmconf.classcolorbar = not dmconf.classcolorbar
+				UpdateWindow()
+			end
+			info.checked = dmconf.classcolorbar
+			XUIDropDownMenu_AddButton(info, level)
+			wipe(info)
+			info.text = "职业着色姓名"
+			info.func = function()
+				dmconf.classcolorname = not dmconf.classcolorname
+				UpdateWindow()
+			end
+			info.checked = dmconf.classcolorname
+			XUIDropDownMenu_AddButton(info, level)
+			wipe(info)
+			info.text = "只保存boss战记录"
+			info.func = function()
+				dmconf.onlyboss = not dmconf.onlyboss
+				UpdateWindow()
+			end
+			info.checked = dmconf.onlyboss
+			XUIDropDownMenu_AddButton(info, level)
+			wipe(info)
+			info.text = "合并治疗和吸收"
+			info.func = function()
+				dmconf.mergeHealAbsorbs = not dmconf.mergeHealAbsorbs
+				UpdateWindow()
+			end
+			info.checked = dmconf.mergeHealAbsorbs
+			XUIDropDownMenu_AddButton(info, level)
+			wipe(info)
+			info.text = "统计条颜色"
+			info.hasColorSwatch = 1
+			info.func = XUIDropDownMenuButton_OpenColorPicker
+			info.r = dmconf.barcolor[1]
+			info.g = dmconf.barcolor[2]
+			info.b = dmconf.barcolor[3]
+			info.swatchFunc = function()
+				dmconf.barcolor = {ColorPickerFrame:GetColorRGB()}
+				UpdateBars()
+			end
+			info.cancelFunc = function(restore)
+				local pv = ColorPickerFrame.previousValues
+				dmconf.barcolor = {pv.r, pv.g, pv.b}
+				UpdateBars()
+			end
+			info.notCheckable = 1
+			info.keepShownOnClick = false
+			XUIDropDownMenu_AddButton(info, level)
+			info.text = "背景颜色"
+			info.hasColorSwatch = 1
+			info.hasOpacity = (dmconf.backdrop_color[4] ~= nil)
+			info.func = XUIDropDownMenuButton_OpenColorPicker
+			info.r = dmconf.backdrop_color[1]
+			info.g = dmconf.backdrop_color[2]
+			info.b = dmconf.backdrop_color[3]
+			info.opacity = dmconf.backdrop_color[4]
+			info.swatchFunc, info.opacityFunc, info.cancelFunc = function ()
+				dmconf.backdrop_color = {ColorPickerFrame:GetColorRGB()}
+				dmconf.backdrop_color[4] = OpacitySliderFrame:GetValue()
+				UpdateWindow()
+			end
+			info.opacityFunc = info.swatchFunc
+			info.cancelFunc = function ()
+				local pv = ColorPickerFrame.previousValues
+				dmconf.backdrop_color = {pv.r, pv.g, pv.b, pv.opacity}
+				UpdateWindow()
+			end
+			info.notCheckable = 1
+			info.keepShownOnClick = false
+			XUIDropDownMenu_AddButton(info, level)
+			info.text = "边框颜色"
+			info.hasColorSwatch = 1
+			info.hasOpacity = 1
+			info.func = XUIDropDownMenuButton_OpenColorPicker
+			info.r = dmconf.border_color[1]
+			info.g = dmconf.border_color[2]
+			info.b = dmconf.border_color[3]
+			info.opacity = (dmconf.border_color[4] ~= nil)
+			info.swatchFunc = function()
+				dmconf.border_color = {ColorPickerFrame:GetColorRGB()}
+				dmconf.border_color[4] = OpacitySliderFrame:GetValue()
+				UpdateWindow()
+			end
+			info.opacityFunc = info.swatchFunc
+			info.cancelFunc = function(restore)
+				local pv = ColorPickerFrame.previousValues
+				dmconf.border_color = {pv.r, pv.g, pv.b, pv.opacity}
+				UpdateWindow()
+			end
+			info.notCheckable = 1
+			info.keepShownOnClick = false
+			XUIDropDownMenu_AddButton(info, level)
+		end
 	end
 end
 
@@ -456,7 +691,7 @@ local EndCombat = function()
 	combatstarted = false
 	local fname = bossname or mobname
 	if fname then
-		if #fights >= maxfights then
+		if #fights >= dmconf.maxfights then
 			tremove(fights, 1)
 		end
 		tinsert(fights, {name = fname, data = tcopy(current)})
@@ -484,30 +719,20 @@ end
 
 local CheckRoster = function()
 	wipe(units)
-	local num = GetNumGroupMembers()
-	if num > 5 then
-		for i = 1, num do
-			CheckUnit("raid"..i)
-		end
-	elseif num > 0 then
-		for i = 1, num do
-			CheckUnit("party"..i)
+	if GetNumGroupMembers() > 0 then
+		local unit = IsInRaid() and "raid" or "party"
+		for i = 1, GetNumGroupMembers(), 1 do
+			CheckUnit(unit..i)
 		end
 	end
 	CheckUnit("player")
 end
 
 local IsRaidInCombat = function()
-	local num = GetNumGroupMembers()
-	if num > 5 then
-		for i = 1, num do
-			if UnitExists("raid"..i) and UnitAffectingCombat("raid"..i) then
-				return true
-			end
-		end
-	elseif num > 0 then
-		for i = 1, num do
-			if UnitExists("party"..i) and UnitAffectingCombat("party"..i) then
+	if GetNumGroupMembers() > 0 then
+		local unit = IsInRaid() and "raid" or "party"
+		for i = 1, GetNumGroupMembers(), 1 do
+			if UnitExists(unit..i) and UnitAffectingCombat(unit..i) then
 				return true
 			end
 		end
@@ -551,7 +776,7 @@ local OnMouseWheel = function(self, direction)
 			offset = offset - 1
 		end
 	else
-		if num > maxbars + offset then
+		if num > dmconf.maxbars + offset then
 			offset = offset + 1
 		end
 	end
@@ -601,7 +826,7 @@ local OnEvent = function(self, event, ...)
 					Add(sourceGUID, amount, DAMAGE, spellName, destName)
 					if not bossname and boss.BossIDs[tonumber(destGUID:sub(9, 12), 16)] then
 						bossname = destName
-					elseif not mobname and not onlyboss then
+					elseif not mobname and not dmconf.onlyboss then
 						mobname = destName
 					end
 				end
@@ -641,7 +866,7 @@ local OnEvent = function(self, event, ...)
 					local old = shields[destGUID][spellName][sourceGUID]
 					shields[destGUID][spellName][sourceGUID] = amount
 					if old > amount then
-						Add(sourceGUID, old - amount, mergeHealAbsorbs and SHOW_COMBAT_HEALING or ABSORB, spellName, destName)
+						Add(sourceGUID, old - amount, dmconf.mergeHealAbsorbs and SHOW_COMBAT_HEALING or ABSORB, spellName, destName)
 					end
 				end
 			end
@@ -653,7 +878,7 @@ local OnEvent = function(self, event, ...)
 					local old = shields[destGUID][spellName][sourceGUID]
 					shields[destGUID][spellName][sourceGUID] = nil
 					if old > amount then
-						Add(sourceGUID, old, mergeHealAbsorbs and SHOW_COMBAT_HEALING or ABSORB, spellName, destName)
+						Add(sourceGUID, old, dmconf.mergeHealAbsorbs and SHOW_COMBAT_HEALING or ABSORB, spellName, destName)
 					end
 				end
 			end
@@ -665,14 +890,14 @@ local OnEvent = function(self, event, ...)
 		if name == addon_name then
 			self:UnregisterEvent(event)
 			MainFrame = CreateFrame("Frame", addon_name.."Frame", UIParent)
-			MainFrame:Size(width+4, height+4)
+			MainFrame:SetSize(dmconf.width, dmconf.maxbars*(dmconf.barheight+dmconf.spacing)-dmconf.spacing)
 			MainFrame:SetPoint(anchor, x, y)
-			MainFrame.bg = S.CreateBD(MainFrame)
+			S.CreateBD(MainFrame)
 			MainFrame:SetMovable(true)
 			MainFrame:EnableMouse(true)
 			MainFrame:EnableMouseWheel(true)
 			MainFrame:SetScript("OnMouseDown", function(self, button)
-				if button == "LeftButton" and IsShiftKeyDown() then
+				if button == "LeftButton" and IsModifiedClick("SHIFT") then
 					self:StartMoving()
 				end
 			end)
@@ -686,10 +911,15 @@ local OnEvent = function(self, event, ...)
 			end)
 			MainFrame:SetScript("OnMouseWheel", OnMouseWheel)
 			MainFrame:Show()
-			UIDropDownMenu_Initialize(menuFrame, CreateMenu, "MENU")
+			XUIDropDownMenu_Initialize(menuFrame, CreateMenu, "MENU")
 			CheckRoster()
 		end
-	elseif event == "GROUP_ROSTER_UPDATE" or event == "PARTY_MEMBERS_CHANGED" or event == "PLAYER_ENTERING_WORLD" then
+	elseif event == "VARIABLES_LOADED" then
+		MainFrame.title = CreateFS(MainFrame)
+		MainFrame.title:SetPoint("BOTTOM", MainFrame, "TOP", 0, 1)
+		MainFrame.title:SetText(sMode)
+		UpdateWindow()
+	elseif event == "GROUP_ROSTER_UPDATE" or event == "PLAYER_ENTERING_WORLD" then
 		CheckRoster()
 	elseif event == "PLAYER_REGEN_DISABLED" then
 		if not combatstarted then
@@ -708,18 +938,15 @@ addon:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 addon:RegisterEvent("ADDON_LOADED")
 addon:RegisterEvent("VARIABLES_LOADED")
 addon:RegisterEvent("GROUP_ROSTER_UPDATE")
-addon:RegisterEvent("PARTY_MEMBERS_CHANGED")
 addon:RegisterEvent("PLAYER_ENTERING_WORLD")
 addon:RegisterEvent("PLAYER_REGEN_DISABLED")
 addon:RegisterEvent("UNIT_PET")
 
 SlashCmdList["alDamage"] = function(msg)
-	for i = 1, 20 do
-		units[i] = {name = UnitName("player"), class = select(2, UnitClass("player")), unit = "1"}
-		Add(i, i*10000, DAMAGE)
-		units[i] = nil
+	if MainFrame:IsShown() then
+		MainFrame:Hide()
+	else
+		MainFrame:Show()
 	end
-	display = current
-	UpdateBars()
 end
-SLASH_alDamage1 = "/aldmg"
+SLASH_alDamage1 = "/dmg"
