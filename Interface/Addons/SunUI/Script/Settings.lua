@@ -66,7 +66,7 @@ helmcb:SetPoint("TOPLEFT", CharacterHeadSlot, "BOTTOMRIGHT", 5, 5)
 helmcb:SetScript("OnClick", function() ShowHelm(not ShowingHelm()) end)
 helmcb:SetScript("OnEnter", function(self)
  	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-	GameTooltip:SetText("Toggle helm")
+	GameTooltip:SetText("显示头盔")
 end)
 helmcb:SetScript("OnLeave", function() GameTooltip:Hide() end)
 helmcb:SetScript("OnEvent", function() helmcb:SetChecked(ShowingHelm()) end)
@@ -85,7 +85,7 @@ cloakcb:SetPoint("TOPLEFT", CharacterBackSlot, "BOTTOMRIGHT", 5, 5)
 cloakcb:SetScript("OnClick", function() ShowCloak(not ShowingCloak()) end)
 cloakcb:SetScript("OnEnter", function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-	GameTooltip:SetText("Toggle cloak")
+	GameTooltip:SetText("显示披风")
 end)
 cloakcb:SetScript("OnLeave", function() GameTooltip:Hide() end)
 cloakcb:SetScript("OnEvent", function() cloakcb:SetChecked(ShowingCloak()) end)
@@ -98,7 +98,8 @@ cloakcb:RegisterEvent("UNIT_MODEL_CHANGED")
 
 helmcb:SetChecked(ShowingHelm())
 cloakcb:SetChecked(ShowingCloak())
-
+S.ReskinCheck(helmcb)
+S.ReskinCheck(cloakcb)
 function Module:OnEnable()
 	TimeManagerClockButton:Hide()
 	GameTimeFrame:Hide()
@@ -304,44 +305,22 @@ function Module:OnEnable()
 		_G.idQuestAutomation = addon
 		QuestInfoDescriptionText.SetAlphaGradient=function() return false end
 	end
-	if C["MiniDB"]["FatigueWarner"] then
-		local function FatigueWarner_OnUpdate(self) 
-			local timer, value, maxvalue, scale, paused, label = GetMirrorTimerInfo(1) 
-			if timer == "EXHAUSTION" then 
-				PlaySoundFile("Sound\\Creature\\XT002Deconstructor\\UR_XT002_Special01.wav", "Master")
-			end 
-			self:SetScript("OnUpdate", nil) 
-		end 
+	-- if C["MiniDB"]["FatigueWarner"] then
+		-- local function FatigueWarner_OnUpdate(self) 
+			-- local timer, value, maxvalue, scale, paused, label = GetMirrorTimerInfo(1) 
+			-- print(timer)
+			-- if timer == "EXHAUSTION" then 
+				-- PlaySoundFile("Sound\\Creature\\XT002Deconstructor\\UR_XT002_Special01.wav", "Master")
+			-- end 
+			-- self:SetScript("OnUpdate", nil) 
+		-- end 
 		 
-		local function FatigueWarner_OnEvent(self) 
-			self:SetScript("OnUpdate", FatigueWarner_OnUpdate) 
-		end 
-			  
-		-- Sinnlos; strip bringt ja irgendwie nichts fiel mir dann auf :>
-		local function FatigueWarner_Strip()
-			local FatigueWarner_StripTable = {16, 17, 18, 5, 7, 1, 3, 10, 8, 6, 9}
-			local start = 1
-			local finish = table.getn(FatigueWarner_StripTable)
-
-			for bag = 0, 4 do
-				for slot=1, GetContainerNumSlots(bag) do
-					if not GetContainerItemLink(bag, slot) then
-						for i = start, finish do
-							if GetInventoryItemLink("player", FatigueWarner_StripTable[i]) then
-								PickupInventoryItem(FatigueWarner_StripTable[i])
-								PickupContainerItem(bag, slot)
-								start = i + 1
-								break
-							end
-						end
-					end
-				end
-			end
-		end
-
-		local FatigueWarnerFrame = CreateFrame("frame")
-		FatigueWarnerFrame:RegisterEvent("MIRROR_TIMER_START")
-		FatigueWarnerFrame:RegisterEvent("MIRROR_TIMER_STOP")
-		FatigueWarnerFrame:SetScript("OnEvent", FatigueWarner_OnEvent)
-	end
+		-- local function FatigueWarner_OnEvent(self) 
+			-- self:SetScript("OnUpdate", FatigueWarner_OnUpdate) 
+		-- end 
+		-- local FatigueWarnerFrame = CreateFrame("frame")
+		-- FatigueWarnerFrame:RegisterEvent("MIRROR_TIMER_START")
+		-- FatigueWarnerFrame:RegisterEvent("MIRROR_TIMER_STOP")
+		-- FatigueWarnerFrame:SetScript("OnEvent", FatigueWarner_OnEvent)
+	-- end
 end

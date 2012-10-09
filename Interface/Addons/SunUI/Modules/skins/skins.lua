@@ -39,13 +39,13 @@ Delay:SetScript("OnEvent", function()
 		UnitPopupMenus["PLAYER"] = { "SET_FOCUS", "WHISPER", "INSPECT", "ACHIEVEMENTS", "INVITE", "TRADE", "FOLLOW", "DUEL", "RAID_TARGET_ICON", "RAF_SUMMON", "RAF_GRANT_LEVEL", "MOVE_PLAYER_FRAME", "MOVE_TARGET_FRAME", "CANCEL" };
 	end
 	hooksecurefunc("ShowUIPanel", function(frame)
-		if frame then
+		if frame and frame ~= InspectFrame and frame ~= TaxiFrame and frame ~= FriendsFrame then
 			frame:Show()
 			UIFrameFadeIn(frame, 0.3, 0, 1)
 		end
 	end)
 	hooksecurefunc("HideUIPanel", function(frame)
-		if frame and frame ~= InspectFrame and frame ~= TaxiFrame then
+		if frame and frame ~= InspectFrame and frame ~= TaxiFrame and frame ~= FriendsFrame then
 			S.FadeOutFrameDamage(frame, 0.3)
 		end
 	end)

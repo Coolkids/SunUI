@@ -646,23 +646,15 @@ local function HookFrames(...)
 		end
 	end
 end
-function NamePlates:COMBAT_LOG_EVENT_UNFILTERED(event, ...)
-	if event == "SPELL_AURA_REMOVED" or event == "UNIT_DIED" then
-		local _, sourceGUID, _, _, _, destGUID, _, _, _, spellID = ...
-		
-		if sourceGUID == UnitGUID("player") then
-			ForEachPlate(MatchGUID, destGUID, spellID)
+
+NamePlates:SetScript("OnEvent", function(self ,event, ...)
+	local arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 = ...
+	if arg2 == "SPELL_AURA_REMOVED" then
+		if arg4 == UnitGUID("player") then
+			ForEachPlate(MatchGUID, arg8, arg12)
 		end
 	end
-end
-function NamePlates:PLAYER_REGEN_ENABLED()
-	SetCVar("nameplateShowEnemies", 0)
-end
-
-function NamePlates:PLAYER_REGEN_DISABLED()
-	SetCVar("nameplateShowEnemies", 1)
-end
-NamePlates:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
+end)
 NamePlates:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 function Module:OnInitialize()
 	C = C["NameplateDB"]
@@ -689,8 +681,18 @@ function Module:OnEnable()
 	end)
 	if C["Combat"] then
 		NamePlates:RegisterEvent("PLAYER_REGEN_DISABLED")
+		NamePlates:HookScript("OnEvent", function(self ,event, ...)
+			if event == "PLAYER_REGEN_DISABLED" then
+				SetCVar("nameplateShowEnemies", 1)
+			end
+		end)
 	end
 	if C["NotCombat"] then
 		NamePlates:RegisterEvent("PLAYER_REGEN_ENABLED")
+		NamePlates:HookScript("OnEvent", function(self ,event, ...)
+			if event == "PLAYER_REGEN_ENABLED" then
+				SetCVar("nameplateShowEnemies", 0)
+			end
+		end)
 	end
 end

@@ -35,12 +35,12 @@ if CUSTOM_CLASS_COLORS then
 else
 	r, g, b = RAID_CLASS_COLORS[class].r, RAID_CLASS_COLORS[class].g, RAID_CLASS_COLORS[class].b
 end
-
+local mult = S.mult
 function S.CreateBD(f, a)
 	f:SetBackdrop({
 		bgFile = media.backdrop,
 		edgeFile = media.backdrop,
-		edgeSize = S.mult,
+		edgeSize = mult,
 	})
 	f:SetBackdropColor(0, 0, 0, a or alpha)
 	f:SetBackdropBorderColor(0, 0, 0)
@@ -124,7 +124,7 @@ function S.Reskin(f, noGlow)
 	f:SetHighlightTexture("")
 	f:SetPushedTexture("")
 	f:SetDisabledTexture("")
-
+	
 	if f.Left then f.Left:SetAlpha(0) end
 	if f.Middle then f.Middle:SetAlpha(0) end
 	if f.Right then f.Right:SetAlpha(0) end
@@ -132,8 +132,8 @@ function S.Reskin(f, noGlow)
 	if f.RightSeparator then f.RightSeparator:Hide() end
 
 	S.CreateBD(f, .0)
-
-	S.CreateGradient(f)
+	S.CreateBack(f)
+	--S.CreateGradient(f)
 
 	if not noGlow then
 		f.glow = CreateFrame("Frame", nil, f)
@@ -422,7 +422,7 @@ end
 
 function S.ReskinSlider(f)
 	f:SetBackdrop(nil)
-	f.SetBackdrop = DB.dummy
+	f.SetBackdrop = function() end
 
 	local bd = CreateFrame("Frame", nil, f)
 	bd:Point("TOPLEFT", 14, -2)
@@ -441,7 +441,7 @@ end
 function S.ReskinExpandOrCollapse(f)
 	f:Size(13, 13)
 	S.Reskin(f, true)
-	f.SetNormalTexture = DB.dummy
+	f.SetNormalTexture = function() end
 
 	f.minus = f:CreateTexture(nil, "OVERLAY")
 	f.minus:Size(7, 1)
@@ -469,7 +469,7 @@ function S.SetBD(f, x, y, x2, y2)
 	end
 	bg:SetFrameLevel(frameLevel)
 	S.CreateBD(bg)
-	S.CreateSD(bg, 4+S.mult, 0, 0, 0, 1, 0)
+	S.CreateSD(bg, 4+mult, 0, 0, 0, 1, 0)
 	f.sbd = true
 end
 

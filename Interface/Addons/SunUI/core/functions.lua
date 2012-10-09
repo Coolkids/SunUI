@@ -245,3 +245,11 @@ function S.FadeOutFrameDamage(p, t, show)  --隐藏
 		UIFrameFade(_G[p], fadeInfo)
 	end 
 end
+
+function S.CreateBack(f)
+	local gradient = f:CreateTexture(nil, "BACKGROUND")
+	gradient:SetPoint("TOPLEFT")
+	gradient:SetPoint("BOTTOMRIGHT")
+	gradient:SetTexture(DB.Statusbar)
+	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+end

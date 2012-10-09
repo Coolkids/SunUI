@@ -5,7 +5,6 @@ local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/temp
 local function scale(x)
 	return (mult*math.floor(x/mult+.5)) 
 end
-
 S.mult = mult
 function S.Scale(x)
 	return scale(x)
@@ -13,17 +12,12 @@ end
 local HiddenFrame = CreateFrame("Frame")
 HiddenFrame:Hide()
 local function Kill(object)
-	--[[ if object.IsProtected then 
-		if object:IsProtected() then
-			error("Attempted to kill a protected object: <"..object:GetName()..">")
-		end
-	end ]]
 	if object.UnregisterAllEvents then
 		object:UnregisterAllEvents()
 		object:SetParent(HiddenFrame)
 	end
 	object.Show = function() return end
-	object:Hide()
+	--object:Hide()
 end
  local function StripTextures(object, kill)
 	for i=1, object:GetNumRegions() do
@@ -63,8 +57,8 @@ end
 local function CreateBorder(f, r, g, b, a)
  	f:SetBackdrop({
 		edgeFile = DB.Solid, 
-		edgeSize = S.mult,
-		insets = { left = -S.mult, right = -S.mult, top = -S.mult, bottom = -S.mult }
+		edgeSize = mult,
+		insets = { left = -mult, right = -mult, top = -mult, bottom = -mult }
 	})
 	f:SetBackdropBorderColor(r or 0, g or 0, b or 0, a or 1)
 end
