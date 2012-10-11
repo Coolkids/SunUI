@@ -1,6 +1,7 @@
 local S, C, L, G = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SunUI fixPX")
 --  自动设置聊天框体和UI缩放
+local _
 local function SetChatFrame()
 	ChatFrame1:ClearAllPoints()
 	ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 3, 33)

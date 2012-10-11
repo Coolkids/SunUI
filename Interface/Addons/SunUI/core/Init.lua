@@ -8,6 +8,7 @@ SunUI = engine
 local SunUI = LibStub("AceAddon-3.0"):NewAddon("SunUI")
 local S, C, L, DB = unpack(select(2, ...))
 local _G =_G
+local _
 --全局设置
 local Media = "Interface\\Addons\\SunUI\\media\\"
 DB.dummy = function() return end

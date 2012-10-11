@@ -1,8 +1,6 @@
-local S, C, L, DB, _ = unpack(select(2, ...)) --Engine
+local S, C, L, DB = unpack(select(2, ...))
+local _
 local RC = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule('RaidCheck');
-
-
-
 
 local join = string.join
 local find = string.find

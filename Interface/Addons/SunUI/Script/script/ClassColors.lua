@@ -1,3 +1,5 @@
+local S, C, L, DB = unpack(select(2, ...))
+local _
 if (IsAddOnLoaded("yClassColor")) then return end
 
 ----------------------------------------------------------------------------------------

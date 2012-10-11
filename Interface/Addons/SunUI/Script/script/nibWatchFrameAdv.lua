@@ -1,6 +1,8 @@
 -- Author: Nibelheim
 -- Notes: Adjust Position, Colors and Auto-hide the Quest Watch Frame
 -- Version: 1.2
+local S, C, L, DB = unpack(select(2, ...))
+local _
 local nWFA = CreateFrame("Frame")
 local EventsRegistered
 local _G = _G

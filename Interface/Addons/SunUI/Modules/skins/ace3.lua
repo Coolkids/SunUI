@@ -1,12 +1,9 @@
-﻿local S, C, L, DB, _ = unpack(select(2, ...))
- 
-
+﻿local S, C, L, DB = unpack(select(2, ...))
+local _
 
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI then return end
-
 local oldRegisterAsWidget = AceGUI.RegisterAsWidget
-
 AceGUI.RegisterAsWidget = function(self, widget)
 	local TYPE = widget.type
 	--print(TYPE)

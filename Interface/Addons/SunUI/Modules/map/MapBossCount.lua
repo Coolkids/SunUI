@@ -1,4 +1,5 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
+local _
 local _G = _G
 ----------------------------------------------------------------------------------------
 --	Show boss count in WorldMap(BetterMapPortraits by Magdain)

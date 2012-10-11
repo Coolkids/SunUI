@@ -1,5 +1,5 @@
-﻿local S, C, L, DB, _ = unpack(select(2, ...)) --Engine
- 
+﻿local S, C, L, DB = unpack(select(2, ...))
+local _
 local BlackList = { 
 	["MiniMapTracking"] = true,
 	["MiniMapVoiceChatFrame"] = true,

@@ -1,9 +1,10 @@
-﻿local S, C, L, DB, _ = unpack(select(2, ...))
+﻿local S, C, L, DB = unpack(select(2, ...))
  if (IsAddOnLoaded("Dominos") or IsAddOnLoaded("Bartender4") or IsAddOnLoaded("Macaroon")) then
 	return 
 end	
 local AB = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ActionStyle", "AceEvent-3.0")
 local _G = _G
+local _
 local function UpdateHotkey(button, actionButtonType)
 	local hotkey = _G[button:GetName() .. 'HotKey']
 	local text = hotkey:GetText()

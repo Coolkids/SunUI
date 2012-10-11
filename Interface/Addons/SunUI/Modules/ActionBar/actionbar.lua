@@ -1,5 +1,6 @@
-﻿local S, C, L, DB, _ = unpack(select(2, ...))
+﻿local S, C, L, DB = unpack(select(2, ...))
 local _G = _G
+local _
 local SetDesaturation = SetDesaturation
 if (IsAddOnLoaded("Dominos") or IsAddOnLoaded("Bartender4") or IsAddOnLoaded("Macaroon")) then
 	return 
@@ -339,7 +340,7 @@ function Module:CreateExtrabarBar()
 	bar:SetSize(C["ButtonSize"],C["ButtonSize"])
 	bar:SetScale(C["ExtraBarSacle"])
 	bar:CreateShadow()
-	
+	bar:SetFrameStrata("MEDIUM")
 	MoveHandle.SunUIExtraActionBar = S.MakeMove(bar, "SunUI特殊按钮", "extrabar", C["ExtraBarSacle"])
 	
 	ExtraActionBarFrame:SetParent(bar)

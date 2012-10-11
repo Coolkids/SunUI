@@ -1,9 +1,9 @@
 -- Engines
-local S, _, _, DB = unpack(select(2, ...))
+local S, C, L, DB = unpack(select(2, ...))
+local _
  
 if DB.zone ~= "zhTW" and DB.zone ~= "zhCN" then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("chatemotion", "AceTimer-3.0")
-
 local IconSize = S.Scale(23)					 -- 表情IconSize
 local fdir = "Interface\\Addons\\SunUI\\Modules\\chat\\Icon\\"			 -- 表情材质路径
 ----------------------------------------------------------------------------------------

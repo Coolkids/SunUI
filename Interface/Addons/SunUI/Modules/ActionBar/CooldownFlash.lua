@@ -2,7 +2,7 @@
  
 local lib = LibStub("LibCooldown")
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("CooldownFlash")
-
+local _
 function Module:OnEnable()
 	C = C["ActionBarDB"]
 	if C["CooldownFlash"] ~= true then return end

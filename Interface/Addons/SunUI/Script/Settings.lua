@@ -1,4 +1,5 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
+local _
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Settings")
 local _G = _G
 ---------------- > Proper Ready Check sound

@@ -1,4 +1,5 @@
-local S, C, L, DB, _ = unpack(select(2, ...))
+local S, C, L, DB = unpack(select(2, ...))
+local _
 local orig1 = GameTooltip:GetScript("OnTooltipSetItem")
 GameTooltip:SetScript("OnTooltipSetItem", function(self, ...)
 	if not ShoppingTooltip1:IsVisible() and not self:IsEquippedItem() then GameTooltip_ShowCompareItem(self, 1) end

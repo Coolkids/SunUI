@@ -1,4 +1,5 @@
-﻿local S, C, L, DB, _ = unpack(select(2, ...))
+﻿local S, C, L, DB = unpack(select(2, ...))
+local _
  if IsAddOnLoaded("TipTac") or IsAddOnLoaded("FreebTip") or IsAddOnLoaded("bTooltip") or IsAddOnLoaded("PhoenixTooltip") or IsAddOnLoaded("Icetip") then
 	return
 end

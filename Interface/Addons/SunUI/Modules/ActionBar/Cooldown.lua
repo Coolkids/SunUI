@@ -1,5 +1,5 @@
-local S, C, L, DB, _ = unpack(select(2, ...))
- 
+local S, C, L, DB = unpack(select(2, ...))
+local _
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Cooldown", "AceEvent-3.0")
 -- want hex color instead of RGB?
 function Module:OnInitialize()

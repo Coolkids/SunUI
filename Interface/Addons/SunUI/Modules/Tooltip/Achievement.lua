@@ -1,4 +1,5 @@
-﻿local S, C, L, DB, _ = unpack(select(2, ...))
+﻿local S, C, L, DB = unpack(select(2, ...))
+local _
 ----------------------------------------------------------------------------------------
 --	Your achievement status in tooltip(Enhanced Achievements by Syzgyn)
 ----------------------------------------------------------------------------------------

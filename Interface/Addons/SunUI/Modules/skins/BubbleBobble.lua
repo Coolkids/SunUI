@@ -1,7 +1,8 @@
 -- *****************************************************
 -- ** BubbleBobble by hankthetank
 -- *****************************************************
-local S, C, L, DB, _ = unpack(select(2, ...))
+local S, C, L, DB = unpack(select(2, ...))
+local _
 local settings = {
 	bg = {
 		texture = "Interface\\Buttons\\WHITE8x8",

@@ -1,7 +1,9 @@
 ﻿-- Engines
 local S, C, L, DB = unpack(select(2, ...))
+local _
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ChatFramePanel", "AceTimer-3.0")
 local _G =_G
+
 function Module:BuildChatbar()
 	local Channel = {"/s ","/y ","/p ","/g ","/raid ","/1 ","/2 "}
 	local Color = {

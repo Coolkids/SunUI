@@ -488,5 +488,4 @@ L_EXTRA_ZONEACHID = {
 	["安其拉: 沒落的王朝"]				= {X =    0, A =    0, H =    0},
 	["冬握湖"]							= {X =    0, A =    0, H =    0},
 }
-L_MAP_CURSOR = "鼠標: "
-L_MAP_BOUNDS = "超出範圍!"
+L_MISC_UI_OUTDATED = "SunUI 版本已過期，請至 https://github.com/Coolkids/SunUI 下載最新版"

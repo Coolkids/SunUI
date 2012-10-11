@@ -1,4 +1,5 @@
-﻿local S, C, L, DB, _ = unpack(select(2, ...))
+﻿local S, C, L, DB = unpack(select(2, ...))
+local _
 
 ----------------------------------------------------------------------------------------
 --	Tracking Explorer and Lore Master achievements in World Map(ExpLoreMaster by CrusaderHeimdall)

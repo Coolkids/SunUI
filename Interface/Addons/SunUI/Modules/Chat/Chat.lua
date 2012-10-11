@@ -1,7 +1,8 @@
-﻿local S, C, L, DB, _ = unpack(select(2, ...))
+﻿local S, C, L, DB = unpack(select(2, ...))
 if IsAddOnLoaded("Prat-3.0") or IsAddOnLoaded("Chatter") then
 	return
 end
+local _
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Chat", "AceEvent-3.0")
 local _G = _G
 local fontsize = 10                          --other variables

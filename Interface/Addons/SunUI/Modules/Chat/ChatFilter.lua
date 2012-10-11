@@ -1,6 +1,7 @@
-﻿local S, C, L, DB, _ = unpack(select(2, ...))
+﻿local S, C, L, DB = unpack(select(2, ...))
+local _
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ChatFilter")
- 
+
 function Module:OnInitialize()
 	if C["MiniDB"]["ChatFilter"] ~= true then return end
 	local Config = {

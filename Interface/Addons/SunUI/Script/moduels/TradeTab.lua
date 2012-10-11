@@ -1,4 +1,5 @@
-﻿local S, C, L, DB, _ = unpack(select(2, ...))
+﻿local S, C, L, DB = unpack(select(2, ...))
+local _
 local ProfessionTabs = CreateFrame("Frame", "ProfessionTabs")
 ProfessionTabs:SetScript("OnEvent", function(self, Event, ...) self[Event](self, Event, ...) end)
 ProfessionTabs:RegisterEvent("TRADE_SKILL_SHOW")

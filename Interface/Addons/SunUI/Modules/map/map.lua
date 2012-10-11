@@ -1,4 +1,5 @@
-local S, _, _, DB = unpack(select(2, ...))
+local S, C, L, DB = unpack(select(2, ...))
+local _
 if IsAddOnLoaded("Mapster") or IsAddOnLoaded("Carbonite") then
 	return
 end

@@ -1,7 +1,9 @@
-local S, C, L, DB, _ = unpack(select(2, ...))
+local S, C, L, DB = unpack(select(2, ...))
+local _
 if IsAddOnLoaded("TidyPlates") or IsAddOnLoaded("Aloft") or IsAddOnLoaded("dNamePlates") or IsAddOnLoaded("caelNamePlates") then
 	return
 end
+
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("NamePlates")
 local   cfg={
 	TotemIcon = true, 				-- Toggle totem icons

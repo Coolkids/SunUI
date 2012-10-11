@@ -1,4 +1,5 @@
-local S, C, L, DB, _ = unpack(select(2, ...))
+local S, C, L, DB = unpack(select(2, ...))
+local _
 local btnsize = 26*S.Scale(1)
 local testmode = false
 local media = {

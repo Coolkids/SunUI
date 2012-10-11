@@ -2,7 +2,8 @@
 TODO:
  + Make "Have Materials" and "Has skill up" somehow include banks if checked.
 ]]
-
+local S, C, L, DB = unpack(select(2, ...))
+local _
 local addon = CreateFrame("Frame")
 addon.name = ...
 

@@ -478,5 +478,4 @@ L_EXTRA_ZONEACHID = {
 	["Ahn'Qiraj: The Fallen Kingdom"]	= {X =    0, A =    0, H =    0},
 	["Wintergrasp"]						= {X =    0, A =    0, H =    0},
 }
-L_MAP_CURSOR = "Cursor: "
-L_MAP_BOUNDS = "Out of bounds!"
+L_MISC_UI_OUTDATED = "Your version of SunUI is out of date. You can download the latest version from https://github.com/Coolkids/SunUI"

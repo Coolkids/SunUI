@@ -1,7 +1,7 @@
 ﻿-- Engines
-local S, C, L, DB, _ = unpack(select(2, ...))
+local S, C, L, DB = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Buff")
-
+local _
 -- making frame to hold all buff frame elements
 local PositionTempEnchant = function()
 	TemporaryEnchantFrame:SetParent(BuffFrameHolder)

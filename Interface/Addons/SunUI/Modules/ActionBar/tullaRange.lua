@@ -6,6 +6,7 @@
 
 --locals and speed
 local _G = _G
+local _
 local UPDATE_DELAY = 0.15
 local ATTACK_BUTTON_FLASH_TIME = ATTACK_BUTTON_FLASH_TIME
 local SPELL_POWER_HOLY_POWER = SPELL_POWER_HOLY_POWER

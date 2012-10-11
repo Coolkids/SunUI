@@ -1,4 +1,5 @@
-﻿local S, _, L, DB = unpack(select(2, ...))
+﻿local S, C, L, DB = unpack(select(2, ...))
+local _
 if DB.zone ~= "zhTW" and DB.zone ~= "zhCN" then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("bigfootchannel", "AceTimer-3.0")
 function Module:OnEnable()

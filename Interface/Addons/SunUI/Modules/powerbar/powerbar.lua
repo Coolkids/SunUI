@@ -1,4 +1,5 @@
-﻿local S, C, L, DB= unpack(select(2, ...))
+﻿local S, C, L, DB = unpack(select(2, ...))
+local _
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SunUIPowerBar", "AceEvent-3.0")
 local powercolor = {
 	["FUEL"] = {0, 0.55, 0.5},

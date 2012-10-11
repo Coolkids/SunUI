@@ -1,4 +1,5 @@
-﻿local S, C, L, DB, _ = unpack(select(2, ...))
+﻿local S, C, L, DB = unpack(select(2, ...))
+local _
 if (DB.MyClass ~= "PRIEST" and DB.MyClass ~= "SHAMAN") then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ShadowPet")
 local _G = _G

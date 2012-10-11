@@ -3,7 +3,7 @@ if not lib then return end
 
 lib.startcalls = {}
 lib.stopcalls = {}
-
+local _
 function lib:RegisterCallback(event, func)
 	assert(type(event)=="string" and type(func)=="function", "Usage: lib:RegisterCallback(event{string}, func{function})")
 	if event=="start" then

@@ -269,10 +269,11 @@ ns.auras_instances_debuffs = {
 		},
 
 		[885] = { --Mogu'shan Palace 魔古山神殿 
-
+			
 			-- Trial of the King 国王的试炼
 			[GetSpellInfo(119946)] = 7, -- Ravage
-         
+			[GetSpellInfo(120167)] = 7, --焚烧
+			[GetSpellInfo(120195)] = 7, --陨石术
 			-- Xin the Weaponmaster <King of the Clans> 武器大师席恩
 			[GetSpellInfo(119684)] = 7, --Ground Slam
 		},

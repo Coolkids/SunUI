@@ -1,4 +1,5 @@
 ﻿local S, L, C, DB = unpack(select(2, ...))
+local _
 -- a command to show frame you currently have mouseovered
 SLASH_FRAME1 = "/frame"
 SlashCmdList["FRAME"] = function(arg)

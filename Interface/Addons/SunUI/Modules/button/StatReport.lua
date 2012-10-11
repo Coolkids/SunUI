@@ -1,7 +1,6 @@
-﻿local S, C, _, DB = unpack(select(2, ...)) --Engine
- 
+﻿local S, C, L, DB = unpack(select(2, ...))
+local _
 local CH = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("StatReport")
-
 -- Author: YYSS
 -- modify by ljxx.net at 20110729
 local L = {}

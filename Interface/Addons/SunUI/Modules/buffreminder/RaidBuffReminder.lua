@@ -1,7 +1,8 @@
 ﻿-- Engines
-local S, C, L, DB, _ = unpack(select(2, ...))
+local S, C, L, DB = unpack(select(2, ...))
 local Module =LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("RaidBuffReminder", "AceEvent-3.0")
 local _G = _G
+local _
 local BuffFrame, IsInParty = {}, false
 local Melee = false
 local RaidBuffList = {
