@@ -44,7 +44,7 @@ end
 -- injecting our default settings
 hooksecurefunc(NugRunning, 'PLAYER_LOGIN', function(self,event,arg1)
 	--if(NRunDB_Global) and not NRunDB.set then table.wipe(NRunDB_Global) end
-	if not NRunDB.set then
+	if not NRunDB_Global.set then
 		table.wipe(NRunDB_Global)
 		NRunDB.set = true
 		NRunDB.anchor = NRunDB.anchor or {}
@@ -67,7 +67,7 @@ hooksecurefunc(NugRunning, 'PLAYER_LOGIN', function(self,event,arg1)
 	end
 
     NugRunning.anchor = NugRunning.CreateAnchor()
-    local pos = NRunDB.anchor
+    local pos = NRunDB_Global.anchor
     NugRunning.anchor:SetPoint(pos.point, pos.parent, pos.to, pos.x, pos.y)
 	
 	NugRunning:SetupArrange()

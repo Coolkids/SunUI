@@ -1,0 +1,17 @@
+﻿## Interface: 50001
+## Title: Hshine
+## Notes: Hshine
+## Title:|cFFBF00FF[H]|r Something About Pet Battle
+## Notes:Something About Pet Battle,Type /hpq to config
+## Title-zhCN: |cFFBF00FF[H]|r 一些关于宠物对战的小工具
+## Notes-zhCN: 一些关于宠物对战的小工具,输入/hpq设置
+## Title-zhTW: |cFFBF00FF[H]|r 一些關於寵物對戰的小工具
+## Notes-zhTW: 一些關於寵物對戰的小工具,輸入/hpq設置
+## Author: Qshine
+## Author-zhCN: 上官晓雾
+## Author-zhTW: 上官曉霧
+
+## Version: 0.954
+
+## SavedVariables: HPetSaves
+ShowPetBattleQuality.lua

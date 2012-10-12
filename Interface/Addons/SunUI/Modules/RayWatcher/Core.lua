@@ -67,9 +67,13 @@ function watcherPrototype:CreateButton(mode)
 		local shadow = CreateFrame("Frame", nil, button.statusbar)
 		shadow:SetAllPoints()
 		shadow:CreateShadow("Background")
+		if self.barwidth == nil then 
+			print("SunUI:RayWatch,'Bar'模式计时条宽度未定义,恢复默认宽度155,如果您有设置宽度值请重新登录,如果您依旧看到次消息请向作者反馈")
+			self.barwidth = 155
+		end
 		button.statusbar:SetWidth(self.barwidth - 6)
 		button.statusbar:SetHeight(5)
-		button.statusbar:SetStatusBarTexture([[Interface\AddOns\RayWatcher\media\statusbar.tga]])
+		button.statusbar:SetStatusBarTexture(DB.Statusbar)
 		button.statusbar:SetStatusBarColor(colors[myclass].r, colors[myclass].g, colors[myclass].b, 1)
 		if ( self.iconside == "RIGHT" ) then
 			button.statusbar:SetPoint("BOTTOMRIGHT", button, "BOTTOMLEFT", -5, 2)

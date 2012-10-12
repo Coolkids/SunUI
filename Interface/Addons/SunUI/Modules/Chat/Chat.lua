@@ -80,9 +80,11 @@ FriendsMicroButton:Kill()
 local tabs = {"Left", "Middle", "Right", "SelectedLeft", "SelectedMiddle",
     "SelectedRight", "Glow", "HighlightLeft", "HighlightMiddle", 
     "HighlightRight"}
+local function ApplyChatStyle(self)
+	if self == "PET_BATTLE_COMBAT_LOG" then self = ChatFrame11 end
+	if not self or (self and self.skinApplied) then return end
 
-for i = 1, NUM_CHAT_WINDOWS do
-    local cf = 'ChatFrame'..i
+	local cf = self:GetName()
     local tex = ({_G[cf..'EditBox']:GetRegions()})
     _G[cf]:SetClampedToScreen(false)
     _G[cf..'ButtonFrame'].Show = _G[cf..'ButtonFrame'].Hide 
@@ -101,38 +103,43 @@ for i = 1, NUM_CHAT_WINDOWS do
 	_G[cf.."EditBoxLanguage"]:SetSize(_G[cf.."EditBox"]:GetHeight(),_G[cf.."EditBox"]:GetHeight())
 	_G[cf.."EditBoxLanguage"]:StripTextures()
 	S.CreateBD(_G[cf.."EditBoxLanguage"], 0.6)
-	_G["ChatFrame"..i.."Tab"]:HookScript("OnClick", function() _G["ChatFrame"..i.."EditBox"]:Hide() end)
+	_G[cf.."Tab"]:HookScript("OnClick", function() _G[cf.."EditBox"]:Hide() end)
     tex[6]:SetAlpha(0) tex[7]:SetAlpha(0) tex[8]:SetAlpha(0) tex[9]:SetAlpha(0) tex[10]:SetAlpha(0) tex[11]:SetAlpha(0)
-    local bb = _G["ChatFrame"..i.."ButtonFrameBottomButton"]
-	bb:SetParent(_G["ChatFrame"..i])
+    local bb = _G[cf.."ButtonFrameBottomButton"]
+	bb:SetParent(_G[cf])
 	bb:SetHeight(18)
 	bb:SetWidth(18)
 	bb:ClearAllPoints()
-	bb:SetPoint("TOPRIGHT", cf, "TOPRIGHT", 0, -6)
+	bb:SetPoint("TOPRIGHT", _G[cf], "TOPRIGHT", 0, -6)
 	bb:SetAlpha(0.4)
 	bb:SetScript("OnClick", function(self)
 		self:GetParent():ScrollToBottom()
 	end)
     
     for g = 1, #CHAT_FRAME_TEXTURES do
-        _G["ChatFrame"..i..CHAT_FRAME_TEXTURES[g]]:SetTexture(nil)
+        _G[cf..CHAT_FRAME_TEXTURES[g]]:SetTexture(nil)
     end
     for index, value in pairs(tabs) do
-        local texture = _G['ChatFrame'..i..'Tab'..value]
+        local texture = _G[cf..'Tab'..value]
         texture:SetTexture(nil)
     end
-	_G["ChatFrame"..i.."TabText"]:SetTextColor(0.40, 0.78, 1) -- 1,.7,.2
-	_G["ChatFrame"..i.."TabText"].SetTextColor = function() end
-	_G["ChatFrame"..i.."TabText"]:SetFont(DB.Font,12,"THINOUTLINE")
-	_G["ChatFrame"..i.."TabText"]:SetShadowOffset(1.75, -1.75)
-    if i ~= 2 then
+	_G[cf.."TabText"]:SetTextColor(0.40, 0.78, 1) -- 1,.7,.2
+	_G[cf.."TabText"].SetTextColor = function() end
+	_G[cf.."TabText"]:SetFont(DB.Font,12,"THINOUTLINE")
+	_G[cf.."TabText"]:SetShadowOffset(1.75, -1.75)
+    if cf ~= "ChatFrame2" then
 		local am = _G[cf].AddMessage 
 		_G[cf].AddMessage = function(frame, text, ...) 
 			return am(frame, text:gsub('|h%[(%d+)%. .-%]|h', '|h%[%1%]|h'), ...)
 		end 
 	end
 end
-
+-- calls
+for i = 1, NUM_CHAT_WINDOWS do
+    ApplyChatStyle(_G["ChatFrame"..i])
+end
+-- temporary chats
+hooksecurefunc("FCF_OpenTemporaryWindow", ApplyChatStyle)
 FloatingChatFrame_OnMouseScroll = function(self, dir)
     if(dir > 0) then
         if(IsShiftKeyDown()) then
