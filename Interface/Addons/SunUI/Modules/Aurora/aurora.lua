@@ -5725,7 +5725,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			bu.icon:SetTexCoord(.08, .92, .08, .92)
 			S.CreateBG(bu.icon)
 		end
-		hooksecurefunc("PetJournal_UpdatePetList", function()
+		local function PJColor()
 			local scrollFrame = PetJournal.listScroll;
 			local offset = HybridScrollFrame_GetOffset(scrollFrame);
 			local petButtons = scrollFrame.buttons;
@@ -5743,7 +5743,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					pet.name:SetVertexColor(ITEM_QUALITY_COLORS[rarity-1].r, ITEM_QUALITY_COLORS[rarity-1].g, ITEM_QUALITY_COLORS[rarity-1].b)
 				end
 			end
-		end)
+		end
+		hooksecurefunc("PetJournal_UpdatePetList", PJColor)
+		hooksecurefunc("HybridScrollFrame_Update", PJColor);	
 	elseif addon == "Blizzard_ReforgingUI" then
 		S.CreateBD(ReforgingFrame)
 		S.CreateSD(ReforgingFrame)
