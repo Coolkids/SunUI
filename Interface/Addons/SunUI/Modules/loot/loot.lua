@@ -286,11 +286,14 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 		LootTargetPortrait:SetCamera(0)
 	elseif IsFishingLoot() then
 		LootTargetPortrait:ClearModel()
-		LootTargetPortrait:SetModel("PARTICLES\\Lootfx.m2")
+		LootTargetPortrait:SetUnit("player")
+		--LootTargetPortrait:SetModel("PARTICLES\\Lootfx.m2")
 		LootTargetPortrait:SetCamera(0)
 	else
 		LootTargetPortrait:ClearModel()
-		LootTargetPortrait:SetModel("PARTICLES\\Lootfx.m2")
+		LootTargetPortrait:SetUnit("player")
+		LootTargetPortrait:SetCamera(0)
+		--LootTargetPortrait:SetModel("PARTICLES\\Lootfx.m2")
 	end
 	-- Blizzard uses strings here
 	if(GetCVar("lootUnderMouse") == "1") then

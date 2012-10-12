@@ -5725,6 +5725,25 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			bu.icon:SetTexCoord(.08, .92, .08, .92)
 			S.CreateBG(bu.icon)
 		end
+		hooksecurefunc("PetJournal_UpdatePetList", function()
+			local scrollFrame = PetJournal.listScroll;
+			local offset = HybridScrollFrame_GetOffset(scrollFrame);
+			local petButtons = scrollFrame.buttons;
+			local pet, index;
+			
+			local isWild = PetJournal.isWild;
+			
+			local numPets, numOwned = C_PetJournal.GetNumPets(isWild);
+			for i = 1,#petButtons do
+				pet = petButtons[i];
+				index = offset + i;
+				if index <= numPets then
+					local petID, speciesID, isOwned, customName, level, favorite, isRevoked, name, icon, petType, creatureID, sourceText, description, isWildPet, canBattle = C_PetJournal.GetPetInfoByIndex(index, isWild);
+					local health, maxHealth, attack, speed, rarity = C_PetJournal.GetPetStats(petID);
+					pet.name:SetVertexColor(ITEM_QUALITY_COLORS[rarity-1].r, ITEM_QUALITY_COLORS[rarity-1].g, ITEM_QUALITY_COLORS[rarity-1].b)
+				end
+			end
+		end)
 	elseif addon == "Blizzard_ReforgingUI" then
 		S.CreateBD(ReforgingFrame)
 		S.CreateSD(ReforgingFrame)
