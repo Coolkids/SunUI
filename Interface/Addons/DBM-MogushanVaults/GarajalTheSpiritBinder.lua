@@ -3,7 +3,7 @@ local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndTT		= mod:NewSound(nil, "SoundTT", false)
 
-mod:SetRevision(("$Revision: 7901 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7939 $"):sub(12, -3))
 mod:SetCreatureID(60143)
 mod:SetModelID(41256)
 mod:SetZone()
@@ -29,33 +29,35 @@ mod:RegisterEventsInCombat(
 --Syncing is used for all warnings because the realms don't share combat events. You won't get warnings for other realm any other way.
 --Voodoo dolls do not have a CD, they are linked to banishment (or player deaths), when he banishes current tank, he reapplies voodoo dolls to new tank and new players. If tank dies, he just recasts voodoo on a new current threat target.
 --Latency checks are used for good reason (to prevent lagging users from sending late events and making our warnings go off again incorrectly). if you play with high latency and want to bypass latency check, do so with in game GUI option.
-local warnTotem							= mod:NewSpellAnnounce(116174, 2)
-local warnVoodooDolls					= mod:NewTargetAnnounce(122151, 3)
-local warnSpiritualInnervation			= mod:NewTargetAnnounce(116161, 3)
-local warnBanishment					= mod:NewTargetAnnounce(116272, 3)
-local warnSuicide						= mod:NewPreWarnAnnounce(116325, 5, 4)--Pre warn 5 seconds before you die so you take whatever action you need to, to prevent. (this is effect that happens after 30 seconds of Soul Sever
+local warnTotem						= mod:NewSpellAnnounce(116174, 2)
+local warnVoodooDolls				= mod:NewTargetAnnounce(122151, 3)
+local warnCrossedOver				= mod:NewTargetAnnounce(116161, 3)
+local warnBanishment				= mod:NewTargetAnnounce(116272, 3)
+local warnSuicide					= mod:NewPreWarnAnnounce(116325, 5, 4)--Pre warn 5 seconds before you die so you take whatever action you need to, to prevent. (this is effect that happens after 30 seconds of Soul Sever
 
-local specWarnTotem						= mod:NewSpecialWarningSpell(116174, false)
-local specWarnBanishment				= mod:NewSpecialWarningYou(116272)
-local specWarnBanishmentOther			= mod:NewSpecialWarningTarget(116272, mod:IsTank())
-local specWarnVoodooDolls				= mod:NewSpecialWarningSpell(122151, false)
-local specWarnGD						= mod:NewSpecialWarningYou(122181)
+local specWarnTotem					= mod:NewSpecialWarningSpell(116174, false)
+local specWarnBanishment			= mod:NewSpecialWarningYou(116272)
+local specWarnBanishmentOther		= mod:NewSpecialWarningTarget(116272, mod:IsTank())
+local specWarnVoodooDolls			= mod:NewSpecialWarningSpell(122151, false)
+local specWarnGD					= mod:NewSpecialWarningYou(122181)
 
-local timerTotemCD						= mod:NewNextTimer(36, 116174)
-local timerBanishmentCD					= mod:NewNextTimer(65, 116272)
-local timerSoulSever					= mod:NewBuffFadesTimer(30, 116278)--Tank version of spirit realm
-local timerSpiritualInnervation			= mod:NewBuffFadesTimer(30, 116161)--Dps version of spirit realm
-local timerShadowyAttackCD				= mod:NewCDTimer(8, "ej6698", nil, nil, nil, 117222)
+local timerTotemCD					= mod:NewNextTimer(36, 116174)
+local timerBanishmentCD				= mod:NewNextTimer(65, 116272)
+local timerSoulSever				= mod:NewBuffFadesTimer(30, 116278)--Tank version of spirit realm
+local timerCrossedOver				= mod:NewBuffFadesTimer(30, 116161)--Dps version of spirit realm
+local timerShadowyAttackCD			= mod:NewCDTimer(8, "ej6698", nil, nil, nil, 117222)
 
 local prewarnedPhase2 = false
 local warnPhase2Soon					= mod:NewPrePhaseAnnounce(2, 3)
+local inTotem = false
 
+--local countdownCrossedOver			= mod:NewCountdown(30, 116161)
 local berserkTimer					= mod:NewBerserkTimer(360)
 
-mod:AddBoolOption("SetIconOnVoodoo", false)
+mod:AddBoolOption("SetIconOnVoodoo", true)
 
 local voodooDollTargets = {}
-local spiritualInnervationTargets = {}
+local crossedOverTargets = {}
 local voodooDollTargetIcons = {}
 mod:AddBoolOption("InfoFrame", true, "sound")
 
@@ -74,9 +76,9 @@ local function warnVoodooDollTargets()
 	table.wipe(voodooDollTargets)
 end
 
-local function warnSpiritualInnervationTargets()
-	warnSpiritualInnervation:Show(table.concat(spiritualInnervationTargets, "<, >"))
-	table.wipe(spiritualInnervationTargets)
+local function warnCrossedOverTargets()
+	warnCrossedOver:Show(table.concat(crossedOverTargets, "<, >"))
+	table.wipe(crossedOverTargets)
 end
 
 local function removeIcon(target)
@@ -84,6 +86,7 @@ local function removeIcon(target)
 		if j == target then
 			table.remove(voodooDollTargetIcons, i)
 			mod:SetIcon(target, 0)
+			break
 		end
 	end
 end
@@ -113,14 +116,14 @@ end
 
 function mod:OnCombatStart(delay)
 	buildGuidTable()
-	guidTableBuilt = true
 	table.wipe(voodooDollTargets)
-	table.wipe(spiritualInnervationTargets)
+	table.wipe(crossedOverTargets)
 	table.wipe(voodooDollTargetIcons)
 	timerShadowyAttackCD:Start(7-delay)
 	timerTotemCD:Start(-delay)
 	timerBanishmentCD:Start(-delay)
 	prewarnedPhase2 = false
+	inTotem = false
 	if not self:IsDifficulty("lfr25") then -- lfr seems not berserks.
 		berserkTimer:Start(-delay)
 	end
@@ -142,11 +145,12 @@ function mod:SPELL_AURA_APPLIED(args)--We don't use spell cast success for actua
 		elseif mod:IsHealer() and self:AntiSpam(2, 3) then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wdww.mp3")--巫毒娃娃(外場治療)
 		end
-	elseif args:IsSpellID(116161) then
-		if args:IsPlayer() then--no latency check for personal notice you aren't syncing.
+	elseif args:IsSpellID(116161, 116160) then -- 116161 is normal and heroic, 116160 is lfr.
+		if args:IsPlayer() then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kj.mp3")--跨界
-			timerSpiritualInnervation:Start()
 			warnSuicide:Schedule(25)
+--			countdownCrossedOver:Start(30)
+			timerCrossedOver:Start(30)
 			sndWOP:Schedule(23.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jjsw.mp3")--即將死亡
 			sndWOP:Schedule(25, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
 			sndWOP:Schedule(26, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
@@ -157,11 +161,13 @@ function mod:SPELL_AURA_APPLIED(args)--We don't use spell cast success for actua
 		if mod.Options.InfoFrame then
 			DBM.InfoFrame:SetHeader(GetSpellInfo(116161))
 			DBM.InfoFrame:Show(10, "playerbaddebuff", 116161)
-		end		
-		if self:LatencyCheck() then
-			self:SendSync("SpiritualTargets", args.destGUID)
 		end
-	elseif args:IsSpellID(116278) then
+		if not self:IsDifficulty("lfr25") then -- lfr totems not breakable, instead totems can click. so lfr warns can be spam, not needed to warn. also CLEU fires all players, no need to use sync.
+			crossedOverTargets[#crossedOverTargets + 1] = args.destName
+			self:Unschedule(warnCrossedOverTargets)
+			self:Schedule(0.3, warnCrossedOverTargets)		
+		end
+	elseif args:IsSpellID(116278) then--this is tank spell, no delays?
 		if args:IsPlayer() then--no latency check for personal notice you aren't syncing.
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kj.mp3")
 			timerSoulSever:Start()
@@ -172,11 +178,6 @@ function mod:SPELL_AURA_APPLIED(args)--We don't use spell cast success for actua
 			sndWOP:Schedule(27, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 			sndWOP:Schedule(28, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 			sndWOP:Schedule(29, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-		end
-	elseif args:IsSpellID(122181) then
-		if args:IsPlayer() then
-			specWarnGD:Show()
-			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jrgd.mp3") --進入管道
 		end
 	elseif args:IsSpellID(116260) then
 		if args:IsPlayer() then
@@ -189,12 +190,23 @@ function mod:SPELL_AURA_APPLIED(args)--We don't use spell cast success for actua
 	elseif args:IsSpellID(117752) then
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kl.mp3") --狂亂	
 	end
+	--[[
+	if UnitDebuff("player", GetSpellInfo(122181)) then
+		if not inTotem then
+			specWarnGD:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jrgd.mp3") --進入管道
+		end
+		inTotem = true
+	else
+		inTotem = false
+	end]]
 end
 
 function mod:SPELL_AURA_REMOVED(args)--We don't use spell cast success for actual debuff on >player< warnings since it has a chance to be resisted.
-	if args:IsSpellID(116161) and args:IsPlayer() then
-		timerSpiritualInnervation:Cancel()
+	if args:IsSpellID(116161, 116160) and args:IsPlayer() then
 		warnSuicide:Cancel()
+--		countdownCrossedOver:Cancel()
+		timerCrossedOver:Cancel()	
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kj.mp3")
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jjsw.mp3")
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
@@ -224,7 +236,7 @@ end
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(116174) then
 		if self:LatencyCheck() then
-		self:SendSync("SummonTotem")
+			self:SendSync("SummonTotem")
 		end
 		sndTT:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_lhtt.mp3")--靈魂圖騰(外場)
 	elseif args:IsSpellID(116272) then
@@ -265,11 +277,7 @@ function mod:OnSync(msg, guid)
 			end
 		end
 	elseif msg == "VoodooGoneTargets" and guids[guid] and self.Options.SetIconOnVoodoo then
-		removeIcon(guids[guid])
-	elseif msg == "SpiritualTargets" and guids[guid] then
-		spiritualInnervationTargets[#spiritualInnervationTargets + 1] = guids[guid]
-		self:Unschedule(warnSpiritualInnervationTargets)
-		self:Schedule(0.3, warnSpiritualInnervationTargets)
+		removeIcon(DBM:GetRaidUnitId(guids[guid]))
 	elseif msg == "BanishmentTarget" and guids[guid] then
 		warnBanishment:Show(guids[guid])
 		timerBanishmentCD:Start()

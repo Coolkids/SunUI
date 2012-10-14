@@ -32,8 +32,8 @@ LootTargetPortrait:CreateShadow("Background")
 	
 local lb = CreateFrame("Button", "Loot_D", addon, "UIPanelScrollDownButtonTemplate")		-- Link button
 local LDD = CreateFrame("Frame", "Loot_b", addon, "XUIDropDownMenuTemplate")				-- Link dropdown menu frame
-lb:SetFrameStrata("FULLSCREEN")
-LDD:SetFrameStrata("FULLSCREEN")
+lb:SetFrameStrata("DIALOG")
+LDD:SetFrameStrata("DIALOG")
 local sq, ss, sn
 local OnEnter = function(self)
 	local slot = self:GetID()
@@ -133,12 +133,11 @@ local OnClick = function(self)
 		ss = self:GetID()
 		sq = self.quality
 		sn = self.name:GetText()
-		
 		LootFrame.selectedLootButton = self
-		--LootFrame.selectedTexture = self.texture
-		LootFrame.selectedSlot = self:GetID()
-		LootFrame.selectedQuality = self.quality
-		LootFrame.selectedItemName = self.name:GetText()
+		LootFrame.selectedTexture = self.icon:GetTexture()
+		LootFrame.selectedSlot = ss
+		LootFrame.selectedQuality = sq
+		LootFrame.selectedItemName = sn
 		LootSlot(ss)
 	end
 end
@@ -161,7 +160,7 @@ local createSlot = function(id)
 	frame:SetScript("OnLeave", OnLeave)
 	frame:SetScript("OnClick", OnClick)
 	frame:SetScript("OnUpdate", OnUpdate)
-	frame:SetFrameStrata("FULLSCREEN")
+	frame:SetFrameStrata("DIALOG")
 	local gradient = frame:CreateTexture(nil, "BACKGROUND")
 	gradient:SetPoint("TOPLEFT")
 	gradient:SetPoint("BOTTOMRIGHT")
@@ -236,7 +235,7 @@ addon:CreateShadow("Background")
 addon:SetWidth(210)
 addon:SetHeight(64)
 addon:SetBackdropColor(0, 0, 0, 1)
-addon:SetFrameStrata("FULLSCREEN")
+addon:SetFrameStrata("DIALOG")
 
 
 addon:SetClampedToScreen(true)
@@ -254,6 +253,7 @@ lb:RegisterForClicks("RightButtonUp", "LeftButtonUp")
 lb:SetScript("OnClick", OnLinkClick)
 lb:Hide()
 XUIDropDownMenu_Initialize(LDD, LDD_Initialize, "MENU")
+MasterLooterFrame:SetFrameStrata("FULLSCREEN")
 
 addon.slots = {}
 addon.LOOT_CLOSED = function(self)
@@ -375,12 +375,12 @@ end
 
 
 addon.OPEN_MASTER_LOOT_LIST = function(self)
-	XToggleDropDownMenu(1, nil, GroupLootDropDown, addon.slots[ss], 0, 0)
+	ToggleDropDownMenu(1, nil, GroupLootDropDown, addon.slots[ss], 0, 0)
 	--ToggleDropDownMenu(1, nil, GroupLootDropDown, LootFrame.selectedLootButton, 0, 0)
 end
 
 addon.UPDATE_MASTER_LOOT_LIST = function(self)
-	XUIDropDownMenu_Refresh(GroupLootDropDown)
+	UIDropDownMenu_Refresh(GroupLootDropDown)
 end
 
 addon:SetScript("OnEvent", function(self, event, ...)

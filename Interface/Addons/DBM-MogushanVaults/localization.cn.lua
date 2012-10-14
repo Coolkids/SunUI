@@ -1,5 +1,5 @@
 ﻿-- Simplified Chinese by Diablohu(diablohudream@gmail.com)
--- Last update: 9/27/2012
+-- Last update: 10/13/2012
 
 if GetLocale() ~= "zhCN" then return end
 local L
@@ -10,13 +10,19 @@ local L
 L= DBM:GetModLocalization(679)
 
 L:SetWarningLocalization({
-	SpecWarnOverloadSoon	= "七秒后：%s"
+	SpecWarnOverloadSoon	= "%s: 7秒后可施放",
+	specWarnMySD				= "你拉的BOSS点了全团石化",
+	specWarnBreakJasperChains	= "扯断红玉锁链！"
 })
 
 L:SetOptionLocalization({
 	SoundWOP			= "语音警告：重要技能",
 	InfoFrame			= "信息框：过载能量监视器",
-	SpecWarnOverloadSoon	= "特殊警报：即将超载"
+	AInfoFrame			= "信息框：简化过载监视器(不要和上边重选)",
+	specWarnMySD		= "特殊警报：当你拉的首領点了石化时(坦克)",
+	SpecWarnOverloadSoon	= "特殊警报：过载预警",
+	specWarnBreakJasperChains	= "特殊警报：可扯断$spell:130395",
+	ArrowOnJasperChains			= "DBM箭头：当你受到$spell:130395效果影响时"
 })
 
 L:SetMiscLocalization({
@@ -71,7 +77,7 @@ L:SetOptionLocalization({
 })
 
 L:SetMiscLocalization({
-	Pull		= "受死吧，你们!"
+	Pull		= "死亡时间到！"
 })
 
 
@@ -97,7 +103,9 @@ L:SetOptionLocalization({
 L = DBM:GetModLocalization(726)
 
 L:SetWarningLocalization({
-	specWarnDespawnFloor		= "中场即将消失!"
+	specWarnDespawnFloor		= "中场即将消失!",
+	specWarnCharge				= "聚焦能量 [%d] - 转换目标",
+	specWarnProtector			= "星穹保卫者 [%d] - 转换目标"
 })
 
 L:SetTimerLocalization({
@@ -110,6 +118,8 @@ L:SetOptionLocalization({
 	SoundDD						= "语音警告：為消掉$spell:117878播放额外音效",
 	optDBPull					= "语音警告：為正在坦$journal:6178的坦克播放$spell:117960警告",
 	specWarnDespawnFloor		= "特殊警告：中场地板消失前",
+	specWarnCharge				= "特殊警告：聚焦能量",
+	specWarnProtector			= "特殊警告：$journal:6178",
 	timerDespawnFloor			= "计时器：中场地板消失",
 	InfoFrame					= "资讯框：$spell:117878层数最高的5名团员",
 	optOC						= "\"能量超载\"叠加几层时，开始报警(每三层报警一次)",
@@ -148,9 +158,9 @@ L:SetOptionLocalization({
 })
 
 L:SetMiscLocalization({
-	Pull		= "这台机器啟动了!到下一层去!",--Emote
-	Rage		= "大帝之怒响彻群山。",--Yell
-	Strength	= "帝王之力出现在壁龕裡!",--Emote
-	Courage		= "帝王之勇出现在壁龕裡!",--Emote
-	Boss		= "两个泰坦魁儡出现在大壁龕裡!"--Emote
+	Pull		= "机器开始嗡嗡作响了!到下层去!",--Emote
+	Rage		= "皇帝之怒响彻群山。",--Yell
+	Strength	= "皇帝的力量出现在壁龛中!",--Emote
+	Courage		= "皇帝的勇气出现在壁龛中!",--Emote
+	Boss		= "两个巨型构造体出现在大型的壁龛中!"--Emote
 })

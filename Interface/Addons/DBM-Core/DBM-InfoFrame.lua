@@ -59,6 +59,7 @@ local initializeDropdown
 local maxlines
 local infoFrameThreshold 
 local pIndex
+local extraPIndex
 local iconModifier
 local headerText = "DBM Info Frame"	-- this is only used if DBM.InfoFrame:SetHeader(text) is not called before :Show()
 local currentEvent
@@ -232,9 +233,17 @@ end
 
 local function updatePlayerPower()
 	table.wipe(lines)
-	for i = 1, GetNumGroupMembers() do
-		if not UnitIsDeadOrGhost("raid"..i) and UnitPower("raid"..i, pIndex)/UnitPowerMax("raid"..i, pIndex)*100 >= infoFrameThreshold then
-			lines[UnitName("raid"..i)] = UnitPower("raid"..i, pIndex)
+	if IsInRaid() then
+		for i = 1, GetNumGroupMembers() do
+			if not UnitIsDeadOrGhost("raid"..i) and UnitPower("raid"..i, pIndex)/UnitPowerMax("raid"..i, pIndex)*100 >= infoFrameThreshold then
+				lines[UnitName("raid"..i)] = UnitPower("raid"..i, pIndex)
+			end
+		end
+	elseif IsInGroup() then
+		for i = 1, GetNumSubgroupMembers() do
+			if not UnitIsDeadOrGhost("party"..i) and UnitPower("party"..i, pIndex)/UnitPowerMax("party"..i, pIndex)*100 >= infoFrameThreshold then
+				lines[UnitName("party"..i)] = UnitPower("party"..i, pIndex)
+			end
 		end
 	end
 	if DBM.Options.InfoFrameShowSelf and not lines[UnitName("player")] and UnitPower("player", pIndex) > 0 then
@@ -251,35 +260,75 @@ local function updateEnemyPower()
 			lines[UnitName("boss"..i)] = UnitPower("boss"..i, pIndex)
 		end
 	end
+	if extraPIndex then
+		if UnitPower("player", extraPIndex) > 0 then
+			lines[UnitName("player")] = UnitPower("player", extraPIndex)
+		end
+	end
 	updateLines()
 end
 
 local function updateCobalyPower()
 	table.wipe(lines)	
 	for i = 1, 4 do
-		if UnitName("boss"..i) == EJ_GetSectionInfo(5773) then				--Jade
-			if infoFrameThreshold["Gsdnow"] then
-				lines["|cFF088A08"..UnitName("boss"..i).."|r |cFFCDCDC1["..EJ_GetSectionInfo(5785).."]|r"] = UnitPower("boss"..i)
-			else
-				lines["|cFF088A08"..UnitName("boss"..i).."|r"] = UnitPower("boss"..i)
+		local BossName
+		if pIndex then
+			BossName = UnitName("boss"..i)
+			if not UnitName("boss"..i.."target") then return end			
+			if BossName == EJ_GetSectionInfo(5691) then BossName = "紫色" end
+			if BossName == EJ_GetSectionInfo(5771) then BossName = "藍色" end
+			if BossName == EJ_GetSectionInfo(5773) then BossName = "綠色" end
+			if BossName == EJ_GetSectionInfo(5774) then BossName = "紅色" end
+			if UnitName("boss"..i) == EJ_GetSectionInfo(5773) then				--Jade
+				if infoFrameThreshold["Gsdnow"] then
+					lines["|cFF088A08"..BossName.."|cFFCDCDC1[石]|r"] = UnitPower("boss"..i)
+				else
+					lines["|cFF088A08"..BossName] = UnitPower("boss"..i)
+				end
+			elseif UnitName("boss"..i) == EJ_GetSectionInfo(5774) then			--Jasper
+				if infoFrameThreshold["Rsdnow"] then
+					lines["|cFFFF0404"..BossName.."|cFFCDCDC1[石]|r"] = UnitPower("boss"..i)
+				else
+					lines["|cFFFF0404"..BossName] = UnitPower("boss"..i)
+				end
+			elseif UnitName("boss"..i) == EJ_GetSectionInfo(5771) then			--Cobalt
+				if infoFrameThreshold["Bsdnow"] then
+					lines["|cFF0080FF"..BossName.."|cFFCDCDC1[石]|r"] = UnitPower("boss"..i)
+				else
+					lines["|cFF0080FF"..BossName] = UnitPower("boss"..i)
+				end
+			elseif UnitName("boss"..i) == EJ_GetSectionInfo(5691) then			--Amethyst
+				if infoFrameThreshold["Psdnow"] then
+					lines["|cFF9932CD"..BossName.."|cFFCDCDC1[石]|r"] = UnitPower("boss"..i)
+				else
+					lines["|cFF9932CD"..BossName] = UnitPower("boss"..i)
+				end
 			end
-		elseif UnitName("boss"..i) == EJ_GetSectionInfo(5774) then			--Jasper
-			if infoFrameThreshold["Rsdnow"] then
-				lines["|cFFFF0404"..UnitName("boss"..i).."|r |cFFCDCDC1["..EJ_GetSectionInfo(5785).."]|r"] = UnitPower("boss"..i)
-			else
-				lines["|cFFFF0404"..UnitName("boss"..i).."|r"] = UnitPower("boss"..i)
-			end
-		elseif UnitName("boss"..i) == EJ_GetSectionInfo(5771) then			--Cobalt
-			if infoFrameThreshold["Bsdnow"] then
-				lines["|cFF0080FF"..UnitName("boss"..i).."|r |cFFCDCDC1["..EJ_GetSectionInfo(5785).."]|r"] = UnitPower("boss"..i)
-			else
-				lines["|cFF0080FF"..UnitName("boss"..i).."|r"] = UnitPower("boss"..i)
-			end
-		elseif UnitName("boss"..i) == EJ_GetSectionInfo(5691) then			--Amethyst
-			if infoFrameThreshold["Psdnow"] then
-				lines["|cFF9932CD"..UnitName("boss"..i).."|r |cFFCDCDC1["..EJ_GetSectionInfo(5785).."]|r"] = UnitPower("boss"..i)
-			else
-				lines["|cFF9932CD"..UnitName("boss"..i).."|r"] = UnitPower("boss"..i)
+		else
+			if UnitName("boss"..i) == EJ_GetSectionInfo(5773) then				--Jade
+				if infoFrameThreshold["Gsdnow"] then
+					lines["|cFF088A08"..UnitName("boss"..i).."|r |cFFCDCDC1["..EJ_GetSectionInfo(5785).."]|r"] = UnitPower("boss"..i)
+				else
+					lines["|cFF088A08"..UnitName("boss"..i).."|r"] = UnitPower("boss"..i)
+				end
+			elseif UnitName("boss"..i) == EJ_GetSectionInfo(5774) then			--Jasper
+				if infoFrameThreshold["Rsdnow"] then
+					lines["|cFFFF0404"..UnitName("boss"..i).."|r |cFFCDCDC1["..EJ_GetSectionInfo(5785).."]|r"] = UnitPower("boss"..i)
+				else
+					lines["|cFFFF0404"..UnitName("boss"..i).."|r"] = UnitPower("boss"..i)
+				end
+			elseif UnitName("boss"..i) == EJ_GetSectionInfo(5771) then			--Cobalt
+				if infoFrameThreshold["Bsdnow"] then
+					lines["|cFF0080FF"..UnitName("boss"..i).."|r |cFFCDCDC1["..EJ_GetSectionInfo(5785).."]|r"] = UnitPower("boss"..i)
+				else
+					lines["|cFF0080FF"..UnitName("boss"..i).."|r"] = UnitPower("boss"..i)
+				end
+			elseif UnitName("boss"..i) == EJ_GetSectionInfo(5691) then			--Amethyst
+				if infoFrameThreshold["Psdnow"] then
+					lines["|cFF9932CD"..UnitName("boss"..i).."|r |cFFCDCDC1["..EJ_GetSectionInfo(5785).."]|r"] = UnitPower("boss"..i)
+				else
+					lines["|cFF9932CD"..UnitName("boss"..i).."|r"] = UnitPower("boss"..i)
+				end
 			end
 		end
 	end
@@ -598,7 +647,7 @@ function onUpdate(self, elapsed)
 			addedSelf = true
 			if currentEvent == "playerbuff" or currentEvent == "playerbaddebuff" or currentEvent == "playergooddebuff" or currentEvent == "health" or currentEvent == "playertargets" or (currentEvent == "playeraggro" and infoFrameThreshold == 3) then--Player name on frame bad a thing make it red.
 				self:AddDoubleLine(name, power, 255, 0, 0, 255, 255, 255)	-- (leftText, rightText, left.R, left.G, left.B, right.R, right.G, right.B)
-			elseif currentEvent == "playerbuffstacks" or currentEvent == "playerdebuffstacks" or (currentEvent == "playeraggro" and infoFrameThreshold == 0) then--Player name on frame is a good thing, make it green
+			elseif currentEvent == "playerbuffstacks" or currentEvent == "playerdebuffstacks" or (currentEvent == "playeraggro" and infoFrameThreshold == 0) or currentEvent == "enemypower" then--Player name on frame is a good thing, make it green
 				self:AddDoubleLine(name, power, 0, 255, 0, 255, 255, 255)	-- (leftText, rightText, left.R, left.G, left.B, right.R, right.G, right.B)
 			else--it's not defined a color, so default to white.
 				self:AddDoubleLine(name, power, color.R, color.G, color.B, 255, 255, 255)	-- (leftText, rightText, left.R, left.G, left.B, right.R, right.G, right.B)
@@ -624,6 +673,7 @@ function infoFrame:Show(maxLines, event, threshold, ...)
 	maxlines = maxLines
 	pIndex = select(1, ...)		-- used as 'filter' for player buff stacks
 	iconModifier = select(2, ...)
+	extraPIndex = select(3, ...)
 	currentEvent = event
 	frame = frame or createFrame()
 

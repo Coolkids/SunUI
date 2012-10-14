@@ -10,7 +10,7 @@
 ## X-DBM-Mod: 1
 ## X-DBM-Mod-Category: MOP
 ## X-DBM-Mod-Has-Heroic-Mode: 1
-## X-DBM-Mod-Name: Mogu'shan Palace
+## X-DBM-Mod-Name: Mogu'shan Vaults
 ## X-DBM-Mod-Name-zhTW: 魔古山寶庫  (MV)
 ## X-DBM-Mod-Name-zhCN: 魔古山宝库
 ## X-DBM-Mod-Sort: 1

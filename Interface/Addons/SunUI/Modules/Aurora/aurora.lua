@@ -2549,14 +2549,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		MasterLooterFrame.Item.NameBorderRight:Hide()
 		MasterLooterFrame.Item.NameBorderMid:Hide()
 		MasterLooterFrame.Item.IconBorder:Hide()
-
+		
 		MasterLooterFrame.Item.Icon:SetTexCoord(.08, .92, .08, .92)
 		MasterLooterFrame.Item.Icon:SetDrawLayer("ARTWORK")
 		MasterLooterFrame.Item.bg = S.CreateBG(MasterLooterFrame.Item.Icon)
-
 		MasterLooterFrame:HookScript("OnShow", function(self)
 			self.Item.bg:SetVertexColor(self.Item.IconBorder:GetVertexColor())
 			LootFrame:SetAlpha(.4)
+			self:SetPoint("TOPLEFT", DropDownList1, 170, 0);
 		end)
 
 		MasterLooterFrame:HookScript("OnHide", function(self)

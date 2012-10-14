@@ -6,13 +6,19 @@
 L= DBM:GetModLocalization(679)
 
 L:SetWarningLocalization({
-	SpecWarnOverloadSoon	= "%s castable in 7s!"
+	SpecWarnOverloadSoon		= "%s castable in 7s!",
+	specWarnMySD 				= "you pull the BOSS point of the group of petrochemical",
+	specWarnBreakJasperChains	= "Break Jasper Chains!"
 })
 
 L:SetOptionLocalization({
 	SoundWOP				= "Voice warning: important skills",
-	InfoFrame				= "InfoFrame: Overload Energy",
-	SpecWarnOverloadSoon	= "Show special warning before overload",
+	SpecWarnOverloadSoon		= "Show special warning before overload",
+	specWarnMySD		= "Show special warning when you pull the BOSS point of the group of petrochemical",
+	specWarnBreakJasperChains	= "Show special warning when it is safe to break $spell:130395",
+	ArrowOnJasperChains			= "Show DBM Arrow when you are affected by $spell:130395 ",
+	InfoFrame					= "Show info frame for active petrification",
+	AInfoFrame					= "Show simple info frame for active petrification"
 })
 
 L:SetMiscLocalization({
@@ -93,7 +99,9 @@ L:SetOptionLocalization({
 L = DBM:GetModLocalization(726)
 
 L:SetWarningLocalization({
-	specWarnDespawnFloor		= "Watch your step!"
+	specWarnDespawnFloor		= "Watch your step!",
+	specWarnCharge				= "Charge [%d]",
+	specWarnProtector			= "Protector [%d]"
 })
 
 L:SetTimerLocalization({
@@ -106,6 +114,8 @@ L:SetOptionLocalization({
 	SoundDD						= "Voice warning: when you Disappear $spell:117878",
 	optDBPull					= "Voice warning: warning $spell:117960 for tank who is pulling $journal:6178",
 	specWarnDespawnFloor		= "Show special warning before floor vanishes",
+	specWarnCharge				= "Show special warning: Charges",
+	specWarnProtector			= "Show special warning: $journal:6178",
 	timerDespawnFloor			= "show timer for when floor vanishes",
 	InfoFrame					= "InfoFrame: $spell:117878 Stacks",
 	optOC						= "How many \"OverLoad\" Stacks，Beginning warning",

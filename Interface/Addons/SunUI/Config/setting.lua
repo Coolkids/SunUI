@@ -223,7 +223,7 @@ G["MoveHandleDB"] = {
 	["Class"] = {"CENTER", "UIParent", "CENTER", -150, 150},
 	--施法条
 	["PlayerCastbar"] = {"BOTTOM", "UIParent", "BOTTOM",0, 110},
-	["TargetCastbar"] = {"CENTER", "UIParent", "CENTER",0, 95},
+	["TargetCastbar"] = {"CENTER", "UIParent", "CENTER",0, 105},
 	["FocusCastbar"] = {"TOP", "oUF_SunUIFocus", "BOTTOM", 0, -20},
 	--内置CD 团队CD
 	["ClassCD"] = {"LEFT", "UIParent", "LEFT", 30, 240},

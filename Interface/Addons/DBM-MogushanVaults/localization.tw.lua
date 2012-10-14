@@ -7,13 +7,19 @@ local L
 L= DBM:GetModLocalization(679)
 
 L:SetWarningLocalization({
-	SpecWarnOverloadSoon	= "七秒後：%s"
+	SpecWarnOverloadSoon		= "七秒後：%s",
+	specWarnMySD				= "你拉的王點了全團石化",
+	specWarnBreakJasperChains	= "拉斷晶紅鎖鏈!"
 })
 
 L:SetOptionLocalization({
 	SoundWOP			= "語音警告：重要技能",
 	InfoFrame			= "信息框：超載能量監視器",
-	SpecWarnOverloadSoon	= "特殊警報：即將超載"
+	AInfoFrame			= "信息框：簡化超載監視器(不要和上邊重選)",
+	SpecWarnOverloadSoon	= "特殊警報：即將超載",
+	specWarnMySD		= "特殊警報：你拉的王點了石化時(坦克)",
+	specWarnBreakJasperChains	= "特殊警報：當安全時拉斷$spell:130395",
+	ArrowOnJasperChains			= "DBM箭頭：當你獲得$spell:130395時"
 })
 
 L:SetMiscLocalization({
@@ -51,7 +57,7 @@ L:SetMiscLocalization({
 	Fire		= "噢，至高的神啊!藉由我來融化他們的血肉吧!",
 	Arcane		= "噢，上古的賢者!賜予我秘法的智慧!",
 	Nature		= "噢，偉大的靈魂!賜予我大地之力!",--I did not log this one, text is probably not right
-	Shadow		= "Great soul of champions past! Bear to me your shield!"
+	Shadow		= "英雄之靈!以盾護我之身!"
 })
 
 
@@ -92,7 +98,9 @@ L:SetOptionLocalization({
 L = DBM:GetModLocalization(726)
 
 L:SetWarningLocalization({
-	specWarnDespawnFloor		= "中場即將消失!"
+	specWarnDespawnFloor		= "中場即將消失!",
+	specWarnCharge				= "能量電荷 [%d] - 轉換目標",
+	specWarnProtector			= "星穹保衛者 [%d] - 轉換目標"
 })
 
 L:SetTimerLocalization({
@@ -105,6 +113,8 @@ L:SetOptionLocalization({
 	SoundDD						= "語音警告：為消掉$spell:117878播放額外音效",
 	optDBPull					= "語音警告：為正在坦$journal:6178的坦克播放$spell:117960警告",
 	specWarnDespawnFloor		= "特殊警告：中場地板消失前",
+	specWarnCharge				= "特殊警告：能量電荷",
+	specWarnProtector			= "特殊警告：$journal:6178",
 	timerDespawnFloor			= "計時器：中場地板消失",
 	InfoFrame					= "資訊框：$spell:117878層數最高的5名團員",
 	optOC						= "\"超載\"疊加幾層時，開始報警(每三層報警一次)",

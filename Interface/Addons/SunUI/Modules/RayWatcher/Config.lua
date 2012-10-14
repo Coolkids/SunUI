@@ -456,7 +456,7 @@ ns.watchers ={
 		{
 			name = "玩家右邊1",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", 110, 30},
+			setpoint = {"CENTER", UIParent, "CENTER", 110, 70},
 			mode = "ICON",
 			size = 30,
 				-- 吸血鬼之触
@@ -475,7 +475,7 @@ ns.watchers ={
 		{
 			name = "玩家右邊2",
 			direction = "LEFT",
-			setpoint = {"CENTER",UIParent, "CENTER", -110, 30},
+			setpoint = {"CENTER",UIParent, "CENTER", -110, 70},
 			mode = "ICON",
 			size = 30,
 				-- 心靈震爆
@@ -735,6 +735,24 @@ ns.watchers ={
 				{ spellID = 109075, unitId = "player", caster = "all", filter = "DEBUFF" },
 				--寄生体
 				{ spellID = 108601, unitId = "player", caster = "all", filter = "DEBUFF" },
+				--魔宫山宝库
+				--石头守卫
+				--碧玉锁链
+				{ spellID = 130395, unitId = "player", caster = "all", filter = "DEBUFF" },
+				--紫晶之池
+				{ spellID = 130774, unitId = "player", caster = "all", filter = "DEBUFF" },
+				--冯
+				--秘法共鸣
+				{ spellID = 116417, unitId = "player", caster = "all", filter = "DEBUFF" },
+				--烈焰星火
+				{ spellID = 116784, unitId = "player", caster = "all", filter = "DEBUFF" },
+				--野火
+				{ spellID = 116793, unitId = "player", caster = "all", filter = "DEBUFF" },
+				
+				--卡拉贡
+				--放逐
+				{ spellID = 116272, unitId = "player", caster = "all", filter = "DEBUFF" },
+				
 		},
 		{
 			name = "玩家PVPDebuff",
@@ -905,8 +923,8 @@ ns.watchers ={
 		{
 			name = "药水减伤等Buff",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", -319, 68},
-			size = 50,
+			setpoint = {"CENTER", UIParent, "CENTER", 110, 135},
+			size = 35,
 				-- 火山药水
 				{ spellID = 79476, unitId = "player", caster = "player", filter = "BUFF" },  
 				-- 英勇
@@ -958,8 +976,8 @@ ns.watchers ={
 		{
 			name = "玩家重要Buff",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", -319, 8},
-			size = 50,
+			setpoint = {"CENTER", UIParent, "CENTER", 110, 180},
+			size = 35,
 				-- 急速射击
 				{ spellID =  3045, unitId = "player", caster = "player", filter = "BUFF" }, 
 				-- 4T12特效

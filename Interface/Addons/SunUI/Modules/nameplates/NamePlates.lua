@@ -34,27 +34,27 @@ f:SetScript("OnEvent", function(self, event)
 		SetCVar("ShowClassColorInNameplate",1)
 	end
 end)
-local players = {["Coolkid"] = true,	["Coolkids"] = true,	["Kenans"] = true, ["ÔÂš‘Ü"] = true, ["ÔÂš‘Ğş"] = true, ["ÔÂš‘Šˆ"] = true,["ÔÂš‘«t"] = false,["ÔÂš‘è¯"] = true,["ÔÂš‘Ğı"] = true}
+local players = {["Coolkid"] = true,	["Coolkids"] = true,	["Kenans"] = true, ["æœˆæ®¤è»’"] = true, ["æœˆæ®¤ç„"] = true, ["æœˆæ®¤å¦¶"] = true,["æœˆæ®¤ç¹"] = false,["æœˆæ®¤ç’‡"] = true,["æœˆæ®¤æ—‹"] = true}
 local PlateBlacklist = {
-	--ÍöÕß´óÜŠ
-	["ÍöÕß¾üÍÅÊ³Ê¬¹í"] = true,
-	["Ê³ŒÆ¹í´óÜŠ"] = true,
+	--äº¡è€…å¤§è»
+	["äº¡è€…å†›å›¢é£Ÿå°¸é¬¼"] = true,
+	["é£Ÿå±é¬¼å¤§è»"] = true,
 	["Army of the Dead Ghoul"] = true,
 
-	--ÏİÚå
+	--é™·é˜±
 	["Venomous Snake"] = true,
-	["¶¾Éß"] = true,
-	["¾ç¶¾Éß"] = true,
+	["æ¯’è›‡"] = true,
+	["å‰§æ¯’è›‡"] = true,
 
 	["Viper"] = true,
-	["í‘Î²Éß"] = true,
+	["éŸ¿å°¾è›‡"] = true,
 	
 	--Misc
 	["Lava Parasite"] = true,
-	["ÈÛÑÒÏx"] = true,
-	["ÈÛÑÒ¼ÄÉú³æ"] = true,
+	["ç†”å²©èŸ²"] = true,
+	["ç†”å²©å¯„ç”Ÿè™«"] = true,
 	--DS
-	["¸¯»¯Ö®Ñª"] = players[DB.PlayerName],
+	["è…åŒ–ä¹‹è¡€"] = players[DB.PlayerName],
 }
 local DebuffWhiteList = {
 }
@@ -621,7 +621,7 @@ local function MatchGUID(frame, destGUID, spellID)
 	if frame.guid == destGUID then
 		for _,icon in ipairs(frame.icons) do 
 			if icon.spellID == spellID then 
-				icon:Hide() 
+				icon:Hide()
 			end 
 		end
 	end

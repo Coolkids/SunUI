@@ -84,9 +84,9 @@ function Module:OnEnable()
 		if arg2 == "SPELL_INTERRUPT" and arg5 == UnitName("player") and C["Interrupt"]then
 			local channel = IsInRaid() and "RAID" or GetNumSubgroupMembers() > 0 and "PARTY"
 			if channel then
-				SendChatMessage(GetSpellLink(arg12).." 打断→"..arg9.." 的"..GetSpellLink(arg15), channel)
+				SendChatMessage(GetSpellLink(arg12).." 打断→"..arg9..GetSpellLink(arg15), channel)
 			else
-				DEFAULT_CHAT_FRAME:AddMessage(GetSpellLink(arg12).." 打断→"..arg9.." 的"..GetSpellLink(arg15))
+				DEFAULT_CHAT_FRAME:AddMessage(GetSpellLink(arg12).." 打断→"..arg9..GetSpellLink(arg15))
 			end
 		end
 		--重要通道技能	
@@ -103,7 +103,7 @@ function Module:OnEnable()
 		if givelist[arg12] and arg5 == UnitName("player") and C["Give"] and arg2 == "SPELL_AURA_APPLIED" then
 			local channel = IsInRaid() and "RAID" or GetNumSubgroupMembers() > 0 and "PARTY"
 			if channel then
-				SendChatMessage("施放"..GetSpellLink(arg12).."→"..arg9.."", channel)
+				SendChatMessage(GetSpellLink(arg12).."→"..arg9.."", channel)
 			else
 				return
 				--DEFAULT_CHAT_FRAME:AddMessage("施放"..GetSpellLink(arg12).."给>>"..arg9.."<<")
@@ -133,7 +133,7 @@ function Module:OnEnable()
 		if resurrect[arg12] and arg5 == UnitName("player") and C["Resurrect"] and arg2 == "SPELL_RESURRECT" then
 			local channel = IsInRaid() and "RAID" or GetNumSubgroupMembers() > 0 and "PARTY"
 			if channel then
-				SendChatMessage("施放"..GetSpellLink(arg12).."复活→"..arg9, channel)
+				SendChatMessage(GetSpellLink(arg12).."复活→"..arg9, channel)
 			else
 				return
 			end

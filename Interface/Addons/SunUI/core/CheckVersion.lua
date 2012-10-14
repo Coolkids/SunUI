@@ -1,5 +1,4 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
-
 ----------------------------------------------------------------------------------------
 --	Check outdated UI version
 ----------------------------------------------------------------------------------------
@@ -26,4 +25,4 @@ frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 frame:RegisterEvent("GROUP_ROSTER_UPDATE")
 frame:RegisterEvent("CHAT_MSG_ADDON")
 frame:SetScript("OnEvent", check)
-RegisterAddonMessagePrefix("ShestakUIVersion")
+RegisterAddonMessagePrefix("SunUIVersion")

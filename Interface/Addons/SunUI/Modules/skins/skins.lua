@@ -45,7 +45,7 @@ Delay:SetScript("OnEvent", function()
 		end
 	end)
 	hooksecurefunc("HideUIPanel", function(frame)
-		if frame and frame ~= InspectFrame and frame ~= TaxiFrame and frame ~= FriendsFrame then
+		if frame and frame ~= InspectFrame and frame ~= TaxiFrame and frame ~= FriendsFrame and frame ~= MasterLooterFrame then
 			S.FadeOutFrameDamage(frame, 0.3)
 		end
 	end)

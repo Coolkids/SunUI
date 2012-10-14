@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7898 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7949 $"):sub(12, -3))
 mod:SetCreatureID(60009)--60781 Soul Fragment
 mod:SetModelID(41192)
 mod:SetZone()
@@ -36,6 +36,7 @@ local warnFlamingSpear				= mod:NewStackAnnounce(116942, 3, nil, mod:IsTank())
 local warnWildSpark					= mod:NewTargetCountAnnounce(116784, 4)
 local yellWildSpark					= mod:NewYell(116784)
 local warnDrawFlame					= mod:NewCountAnnounce(116711, 4)
+local warnWildfireInfusion			= mod:NewStackAnnounce(116821, 3, nil, mod:IsHealer())
 
 --Arcane/Staff
 local warnArcaneShock				= mod:NewStackAnnounce(131790, 3, nil, mod:IsTank())
@@ -46,6 +47,10 @@ local warnArcaneVelocity			= mod:NewCountAnnounce(116364, 4)
 local warnShadowBurn				= mod:NewStackAnnounce(131792, 3, nil, mod:IsTank())
 local warnChainsOfShadow			= mod:NewSpellAnnounce(118783, 2, nil, false)
 local warnSiphoningShield			= mod:NewCountAnnounce(117203, 4)
+
+--Tank Abilities
+local warnReversalLightningFists	= mod:NewTargetAnnounce(118302, 2)--this spell can interrupt Epicenter, so needs to warn.
+local warnNullBarrior				= mod:NewSpellAnnounce(115817, 2)
 
 --Nature/Fist
 local specWarnLightningLash			= mod:NewSpecialWarningStack(131788, mod:IsTank(), 3)
@@ -71,11 +76,14 @@ local specWarnShadowBurn			= mod:NewSpecialWarningStack(131792, mod:IsTank(), 3)
 local specWarnShadowBurnOther		= mod:NewSpecialWarningTarget(131792, mod:IsTank())
 local specWarnSiphoningShield		= mod:NewSpecialWarningSpell(117203)
 
+--Tank Abilities
+local specWarnNullBarrior			= mod:NewSpecialWarningSpell(115817) -- Null Barrier is important all members, espcially Earth and Arcane Phase.
+
 --Nature/Fist
 local timerLightningLash			= mod:NewTargetTimer(20, 131788, nil, mod:IsTank())
 local timerLightningLashCD			= mod:NewCDTimer(9, 131788, nil, mod:IsTank())--9-20 second variation.
 local timerLightningFistsCD			= mod:NewCDTimer(14, 116157)
-local timerEpicenterCD				= mod:NewCDTimer(30, 116018)
+local timerEpicenterCD				= mod:NewCDCountTimer(30, 116018)
 local timerEpicenter				= mod:NewBuffActiveTimer(10, 116018)
 
 --Fire/Spear
@@ -83,28 +91,31 @@ local timerFlamingSpear				= mod:NewTargetTimer(20, 116942, nil, mod:IsTank())
 local timerFlamingSpearCD			= mod:NewCDTimer(9, 116942, nil, mod:IsTank())--8-11second variation, usually 10 though.
 local timerWildSpark				= mod:NewTargetTimer(5, 116784)
 local timerDrawFlame				= mod:NewBuffActiveTimer(6, 116711)
-local timerDrawFlameCD				= mod:NewNextTimer(30, 116711)--30 seconds after last ended.
+local timerDrawFlameCD				= mod:NewNextCountTimer(30, 116711)--30 seconds after last ended.
 
 --Arcane/Staff
 local timerArcaneShock				= mod:NewTargetTimer(20, 131790, nil, mod:IsTank())
 local timerArcaneShockCD			= mod:NewCDTimer(9, 131790, nil, mod:IsTank())--not comfirmed
 local timerArcaneResonanceCD		= mod:NewCDTimer(15, 116417)--CD is also duration, it's just cast back to back to back.
-local timerArcaneVelocityCD			= mod:NewCDTimer(18, 116364)--18 seconds after last ended.
+local timerArcaneVelocityCD			= mod:NewCDCountTimer(18, 116364)--18 seconds after last ended.
 local timerArcaneVelocity			= mod:NewCastTimer(8, 116364)
 
 --Shadow/Shield (Heroic Only)
 local timerShadowBurn				= mod:NewTargetTimer(20, 131792, nil, mod:IsTank())
 local timerShadowBurnCD				= mod:NewCDTimer(9, 131792, nil, mod:IsTank())
 local timerChainsOfShadowCD			= mod:NewCDTimer(6, 118783, nil, false)--6-10sec variation noted
-local timerSiphoningShieldCD		= mod:NewCDTimer(45, 117203)--45-50sec variation noted
+local timerSiphoningShieldCD		= mod:NewCDCountTimer(45, 117203)--45-50sec variation noted
 
 --Tank Abilities
-local timerNullBarriorCD			= mod:NewCDTimer(60, 115817, nil, mod:IsTank() or mod:IsHealer())--I forget what CD of this was, 30 45 or 60, one of the 3
+local timerReversalLightningFists	= mod:NewBuffFadesTimer(20, 118302)
+local timerNullBarrior				= mod:NewBuffFadesTimer(6, 115817)
+local timerNullBarriorCD			= mod:NewCDTimer(55, 115817)
 
 
 --local soundEpicenter				= mod:NewSound(116018)
 
 local phase = 0
+local wildfireCount = 0
 local sparkCount = 0
 local fragmentCount = 5
 local specialCount = 0
@@ -125,6 +136,11 @@ end
 local WildSparkPrisonMarkers = {}
 local arcaneResonanceMarkers = {}
 
+local function warnWildfire()
+	warnWildfireInfusion:Cancel()
+	warnWildfireInfusion:Schedule(1, L.name, wildfireCount)
+end
+
 local function warnArcaneResonanceTargets()
 	warnArcaneResonance:Show(table.concat(arcaneResonanceTargets, "<, >"))
 	table.wipe(arcaneResonanceTargets)
@@ -132,6 +148,7 @@ end
 
 function mod:OnCombatStart(delay)
 	phase = 0
+	wildfireCount = 0
 	sparkCount = 0
 	specialCount = 0
 	table.wipe(arcaneResonanceTargets)
@@ -182,6 +199,9 @@ function mod:SPELL_AURA_APPLIED(args)
 			DBM.InfoFrame:SetHeader(GetSpellInfo(131792))
 			DBM.InfoFrame:Show(3, "playerdebuffstacks", 131792)
 		end
+	elseif args:IsSpellID(118302) then
+		warnReversalLightningFists:Show(args.destName)
+		timerReversalLightningFists:Start()
 	elseif args:IsSpellID(116784) then
 		sparkCount = sparkCount + 1
 		warnWildSpark:Show(sparkCount, args.destName)
@@ -205,6 +225,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnDrawFlame:Show(specialCount)
 		specWarnDrawFlame:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qyhy.mp3") --牽引火焰
+	elseif args:IsSpellID(116821) then
+		wildfireCount = 1
+		warnWildfire()
 	elseif args:IsSpellID(116417) then
 		-- seems that affects 2 players in 25man lfr. so use multiple target warning.
 		arcaneResonanceTargets[#arcaneResonanceTargets + 1] = args.destName
@@ -274,7 +297,7 @@ function mod:SPELL_AURA_APPLIED_DOSE(args)
 			end
 		end
 	elseif args:IsSpellID(131792) then
-		warnShadowBurn:Show(args.destName, 1)
+		warnShadowBurn:Show(args.destName, args.amount or 1)
 		timerShadowBurn:Start(args.destName)
 		timerShadowBurnCD:Start()
 		if args:IsPlayer() and (args.amount or 1) >= 3 then
@@ -284,6 +307,9 @@ function mod:SPELL_AURA_APPLIED_DOSE(args)
 				specWarnShadowBurnOther:Show(args.destName)
 			end
 		end
+	elseif args:IsSpellID(116821) then
+		wildfireCount = args.amount or 1
+		warnWildfire()
 	end
 end
 
@@ -296,6 +322,8 @@ function mod:SPELL_AURA_REMOVED(args)
 		timerArcaneShock:Cancel(args.destName)
 	elseif args:IsSpellID(131792) then
 		timerShadowBurn:Cancel(args.destName)
+	elseif args:IsSpellID(118302) then
+		timerReversalLightningFists:Cancel()
 	elseif args:IsSpellID(116018) then
 		timerEpicenter:Cancel()--Epicenter can be removed by Lightning Fists (tank can steal). So added remove stuff.
 	elseif args:IsSpellID(116784) then
@@ -310,10 +338,10 @@ function mod:SPELL_AURA_REMOVED(args)
 			WildSparkPrisonMarkers[args.destName] = free(WildSparkPrisonMarkers[args.destName])
 		end
 	elseif args:IsSpellID(116711) then
-		timerDrawFlameCD:Start()
+		timerDrawFlameCD:Start(nil, specialCount + 1)
 	elseif args:IsSpellID(116364) then
 		timerArcaneVelocity:Cancel()
-		timerArcaneVelocityCD:Start()
+		timerArcaneVelocityCD:Start(nil, specialCount + 1)
 	elseif args:IsSpellID(116417) then
 		if args:IsPlayer() then
 			AVPlayer = false
@@ -339,7 +367,7 @@ function mod:SPELL_CAST_START(args)
 		sndWOP:Schedule(7.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 		sndWOP:Schedule(8.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 		sndWOP:Schedule(9.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-		timerEpicenterCD:Start()
+		timerEpicenterCD:Start(nil, specialCount + 1)
 	elseif args:IsSpellID(116157) then
 		warnLightningFists:Show()
 		timerLightningFistsCD:Start()
@@ -352,7 +380,14 @@ function mod:SPELL_CAST_SUCCESS(args)
 		warnChainsOfShadow:Show()
 		timerChainsOfShadowCD:Start()
 	elseif args:IsSpellID(115817) then
-		timerNullBarriorCD:Start()
+		warnNullBarrior:Show()
+		specWarnNullBarrior:Show()
+		timerNullBarrior:Start()
+		if self:IsDifficulty("lfr25") then
+			timerNullBarriorCD:Start(25)
+		else
+			timerNullBarriorCD:Start()
+		end
 	end
 end
 
@@ -382,25 +417,27 @@ function mod:OnSync(msg)
 		warnPhase:Show(phase)
 		timerLightningLashCD:Start(7)
 		timerLightningFistsCD:Start(12)
-		timerEpicenterCD:Start(18)--It's either this, or this +10. Not yet sure what causes the +10
+		timerEpicenterCD:Start(18, 1)--It's either this, or this +10. Not yet sure what causes the +10
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zrxt.mp3") --自然形态
 	elseif msg == "Flame" then
 		phase = phase + 1
 		warnPhase:Show(phase)
 		timerFlamingSpearCD:Start(5.5)
-		timerDrawFlameCD:Start(35)--No variation, or not enough logs of fire phase.
+		timerDrawFlameCD:Start(35, 1)--No variation, or not enough logs of fire phase.
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_hyxt.mp3") --火焰形态
 	elseif msg == "Purple" then
 		phase = phase + 1
 		warnPhase:Show(phase)
 		timerArcaneShockCD:Start(7)
-		timerArcaneResonanceCD:Start(14)
-		timerArcaneVelocityCD:Start(16.5)--It's either this, or this +10. Not yet sure what causes the +10
+		-- 10/13 01:11:24.437  YELL: Oh sage of the ages! Instill to me your arcane wisdom!
+		-- 10/13 01:11:36.671  SPELL_CAST_SUCCESS,0xF150EA690000478E,"",0x10a48,0x0,0x0000000000000000,nil,0x80000000,0x80000000,116417,"",0x40
+		timerArcaneResonanceCD:Start(12)
+		timerArcaneVelocityCD:Start(16.5, 1)--It's either this, or this +10. Not yet sure what causes the +10
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_mfxt.mp3") --秘法形态
 	elseif msg == "Dark" then
 		phase = phase + 1
 		warnPhase:Show(phase)
-		timerSiphoningShieldCD:Start(4)--either this, or this +5. Not yet sure what causes the +5
+		timerSiphoningShieldCD:Start(4, 1)--either this, or this +5. Not yet sure what causes the +5
 		timerChainsOfShadowCD:Start(6)
 		timerShadowBurnCD:Start(9)--9-11 variation
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ayxt.mp3") --暗影形態
@@ -412,9 +449,13 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		specialCount = specialCount + 1
 		warnSiphoningShield:Show(specialCount)
 		specWarnSiphoningShield:Show()
-		timerSiphoningShieldCD:Start()
+		timerSiphoningShieldCD:Start(nil, specialCount + 1)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_yldp.mp3") --遠離盾牌
-		sndWOP:Schedule(13, "Interface\\AddOns\\DBM-Core\\extrasounds\\killspirit.mp3") --靈魂快打
+		sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndWOP:Schedule(2.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Schedule(3.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Schedule(4.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\killspirit.mp3") --靈魂快打
 	elseif spellId == 121631 and self:AntiSpam(2, 2) then--Draw Essence.
 		--Best place to cancel timers, vs duplicating cancel code in all 4 yells above.
 		specialCount = 0
