@@ -1,9 +1,14 @@
 ﻿local mod	= DBM:NewMod(677, "DBM-MogushanVaults", nil, 317)
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
-local sndADD	= mod:NewSound(nil, "SoundADD", false)
+local sndADD1A	= mod:NewSound(nil, "SoundADD1A", mod:IsDps())
+local sndADD1	= mod:NewSound(nil, "SoundADD1", mod:IsDps())
+local sndADD2A	= mod:NewSound(nil, "SoundADD2A", mod:IsDps())
+local sndADD2	= mod:NewSound(nil, "SoundADD2", mod:IsDps())
+local sndADD3A	= mod:NewSound(nil, "SoundADD3A", mod:IsDps())
+local sndADD3	= mod:NewSound(nil, "SoundADD3", mod:IsDps())
 
-mod:SetRevision(("$Revision: 7913 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7956 $"):sub(12, -3))
 mod:SetCreatureID(60399, 60400)--60396 (Rage), 60397 (Strength), 60398 (Courage), 60480 (Titan Spark), 60399 (Qin-xi), 60400 (Jan-xi)
 mod:SetModelID(41391)
 mod:SetZone()
@@ -137,7 +142,8 @@ end
 function mod:CHAT_MSG_MONSTER_YELL(msg)
 	if msg == L.Rage or msg:find(L.Rage) then
 		warnRageActivated:Schedule(11)
-		sndADD:Schedule(10, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qjbcx.mp3") --輕甲
+		sndADD1A:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qjbzb.mp3") --輕甲
+		sndADD1:Schedule(10, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qjbcx.mp3")
 		timerRageActivates:Start()--They actually spawn 11 seconds after yell
 	end
 end
@@ -145,7 +151,8 @@ end
 function mod:RAID_BOSS_EMOTE(msg)
 	if msg == L.Strength or msg:find(L.Strength) then
 		warnStrengthActivated:Schedule(9)
-		sndWOP:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zjbcx.mp3") --重甲
+		sndADD3A:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zjbzb.mp3") --重甲
+		sndADD3:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zjbcx.mp3")
 		specWarnStrengthActivated:Schedule(9)
 		timerStrengthActivates:Start()--They actually spawn 10 seconds after emote
 	elseif msg == L.Courage or msg:find(L.Courage) then
@@ -157,9 +164,8 @@ function mod:RAID_BOSS_EMOTE(msg)
 		else--first timer
 			timerCourageActivates:Update(65, 75)
 		end
-		if mod:IsDps() then
-			sndWOP:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_bjbcx.mp3") --半甲
-		end
+		sndADD2A:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_dbzb.mp3") --盾兵
+		sndADD2:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_dbkd.mp3")
 	elseif msg == L.Boss or msg:find(L.Boss) then
 		warnBossesActivated:Schedule(10)
 		specWarnBossesActivated:Schedule(10)

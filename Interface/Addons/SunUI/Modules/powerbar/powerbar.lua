@@ -1,19 +1,22 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
 local _
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SunUIPowerBar", "AceEvent-3.0")
-local powercolor = {
-	["FUEL"] = {0, 0.55, 0.5},
-	["SOUL_SHARDS"] = {0.5, 0.32, 0.55},
-	["HOLY_POWER"] = {0.95, 0.9, 0.6},
-	["FOCUS"] =  {.7,.45,.25},
-	["MANA"] = {0, 0.76, 1},
-	["LIGHT_FORCE"] =  {0.71, 1, 0.92},
-	["RUNIC_POWER"] =  {.45,.45,.75},
-	["ENERGY"] =  {1,1,0},
-	["AMMOSLOT"] =  {0.8 ,0.6, 0},
-	["RUNES"] =  {0.5 ,0.5, 0.5},
-	["RAGE"] =  {.7,.3,.3},
-}
+local powercolor = {}
+for power, color in next, PowerBarColor do
+	if (type(power) == "string") then
+		if power == "MANA" then 
+			powercolor[power] = {0, 0.76, 1} 
+		elseif power ==  "FUEL" then 
+			powercolor[power] = {0, 0.55, 0.5}
+		elseif  power ==  "FOCUS" then
+			powercolor[power] = {.7,.45,.25}
+		elseif  power ==  "RAGE" then
+			powercolor[power] = {.7,.3,.3}
+		else
+			powercolor[power] = {color.r, color.g, color.b}
+		end
+	end
+end
 function Module:CreateShadowOrbs()
 	if DB.MyClass ~= "PRIEST" then return end
 	local ShadowOrbs = CreateFrame("Frame", nil, UIParent)

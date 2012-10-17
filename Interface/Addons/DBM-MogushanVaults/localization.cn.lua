@@ -45,7 +45,11 @@ L:SetMiscLocalization({
 L= DBM:GetModLocalization(689)
 
 L:SetWarningLocalization({
-	WarnPhase	= "第 %d 阶段"
+	WarnPhase	= "第 %d 阶段",
+	specWarnDrawFlame = "牵引火焰 > %d <",
+	specWarnArcaneVelocity = "秘法动能 > %d <",
+	specWarnEpicenter = "远离地震 > %d <",
+	specWarnSiphoningShield = "远离盾牌 > %d <"
 })
 
 L:SetOptionLocalization({
@@ -53,7 +57,12 @@ L:SetOptionLocalization({
 	InfoFrame			= "资讯框：坦克减益状态层数监视",
 	HudMAP				= "高级定位监视(HUD)：$spell:116784的位置",
 	HudMAP2				= "高级定位监视(HUD)：$spell:116417",
-	WarnPhase			= "警告：阶段转换"
+	HudMAP3				= "高级定位监视(HUD)：$spell:115817",
+	WarnPhase			= "警告：阶段转换",
+	specWarnDrawFlame 	= "特殊警告：$spell:116711",
+	specWarnArcaneVelocity 	= "特殊警告：$spell:116364",
+	specWarnEpicenter 	= "特殊警告：$spell:116018",
+	specWarnSiphoningShield = "特殊警告：$spell:117203"
 })
 
 L:SetMiscLocalization({
@@ -149,7 +158,12 @@ L= DBM:GetModLocalization(677)
 L:SetOptionLocalization({
 	InfoFrame			= "资讯框：$spell:116525的目标",
 	SoundWOP			= "语音警告：重要技能",
-	SoundADD			= "语音警告：$spell:ej5678",
+	SoundADD1A			= "预先语音警告：$spell:ej5678 (5秒前)",
+	SoundADD1			= "语音警告：$spell:ej5678",
+	SoundADD2A			= "预先语音警告：$spell:ej5676 (8秒前)",
+	SoundADD2			= "语音警告：$spell:ej5676",
+	SoundADD3A			= "预先语音警告：$spell:ej5677 (8秒前)",
+	SoundADD3			= "语音警告：$spell:ej5677",
 	optBY				= "语音警告：仅提示此首领的毁灭风暴",
 	tarfoc				= "当前目标和专注目标",
 	Janxi				= "剑曦(左侧傀儡)",
@@ -158,9 +172,9 @@ L:SetOptionLocalization({
 })
 
 L:SetMiscLocalization({
-	Pull		= "机器开始嗡嗡作响了!到下层去!",--Emote
+	Pull		= "机器开始嗡嗡作响了！到下层去！",--Emote
 	Rage		= "皇帝之怒响彻群山。",--Yell
-	Strength	= "皇帝的力量出现在壁龛中!",--Emote
-	Courage		= "皇帝的勇气出现在壁龛中!",--Emote
-	Boss		= "两个巨型构造体出现在大型的壁龛中!"--Emote
+	Strength	= "皇帝的力量出现在壁龛中！",--Emote
+	Courage		= "皇帝的勇气出现在壁龛中！",--Emote
+	Boss		= "两个巨型构造体出现在大型的壁龛中！"--Emote
 })

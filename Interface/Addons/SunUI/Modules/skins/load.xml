@@ -7,4 +7,5 @@
 	<Script file='BubbleBobble.lua' />
 	<Script file='Postal.lua' />
 	<Script file='NugRunning.lua' />
+	<Script file='ReforgeLite.lua' />
 </Ui>

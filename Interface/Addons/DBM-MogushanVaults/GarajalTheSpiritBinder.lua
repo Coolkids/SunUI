@@ -3,7 +3,7 @@ local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndTT		= mod:NewSound(nil, "SoundTT", false)
 
-mod:SetRevision(("$Revision: 7939 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7955 $"):sub(12, -3))
 mod:SetCreatureID(60143)
 mod:SetModelID(41256)
 mod:SetZone()
@@ -40,6 +40,7 @@ local specWarnBanishment			= mod:NewSpecialWarningYou(116272)
 local specWarnBanishmentOther		= mod:NewSpecialWarningTarget(116272, mod:IsTank())
 local specWarnVoodooDolls			= mod:NewSpecialWarningSpell(122151, false)
 local specWarnGD					= mod:NewSpecialWarningYou(122181)
+local specWarnVoodooDollsMe			= mod:NewSpecialWarningYou(122151, false)
 
 local timerTotemCD					= mod:NewNextTimer(36, 116174)
 local timerBanishmentCD				= mod:NewNextTimer(65, 116272)
@@ -62,6 +63,7 @@ local voodooDollTargetIcons = {}
 mod:AddBoolOption("InfoFrame", true, "sound")
 
 local guids = {}
+local voodooDollWarned = false
 local guidTableBuilt = false--Entirely for DCs, so we don't need to reset between pulls cause it doesn't effect building table on combat start and after a DC then it will be reset to false always
 local function buildGuidTable()
 	table.wipe(guids)
@@ -72,7 +74,10 @@ end
 
 local function warnVoodooDollTargets()
 	warnVoodooDolls:Show(table.concat(voodooDollTargets, "<, >"))
-	specWarnVoodooDolls:Show()
+	if not voodooDollWarned then
+		specWarnVoodooDolls:Show()
+	end
+	voodooDollWarned = false
 	table.wipe(voodooDollTargets)
 end
 
@@ -115,6 +120,7 @@ do
 end
 
 function mod:OnCombatStart(delay)
+	voodooDollWarned = false
 	buildGuidTable()
 	table.wipe(voodooDollTargets)
 	table.wipe(crossedOverTargets)
@@ -137,13 +143,15 @@ end
 
 function mod:SPELL_AURA_APPLIED(args)--We don't use spell cast success for actual debuff on >player< warnings since it has a chance to be resisted.
 	if args:IsSpellID(122151) then
-		if self:LatencyCheck() then
-			self:SendSync("VoodooTargets", args.destGUID)
-		end
 		if args:IsPlayer() and (not mod:IsTank()) then
+			specWarnVoodooDollsMe:Show()
+			voodooDollWarned = true
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wwsn.mp3")--娃娃是你
 		elseif mod:IsHealer() and self:AntiSpam(2, 3) then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wdww.mp3")--巫毒娃娃(外場治療)
+		end
+		if self:LatencyCheck() then
+			self:SendSync("VoodooTargets", args.destGUID)
 		end
 	elseif args:IsSpellID(116161, 116160) then -- 116161 is normal and heroic, 116160 is lfr.
 		if args:IsPlayer() then

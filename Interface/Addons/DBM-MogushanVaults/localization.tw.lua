@@ -42,7 +42,11 @@ L:SetMiscLocalization({
 L= DBM:GetModLocalization(689)
 
 L:SetWarningLocalization({
-	WarnPhase	= "第 %d 階段"
+	WarnPhase	= "第 %d 階段",
+	specWarnDrawFlame = "牽引火焰 > %d <",
+	specWarnArcaneVelocity = "秘法動能 > %d <",
+	specWarnEpicenter = "遠離地震 > %d <",
+	specWarnSiphoningShield = "遠離盾牌 > %d <"
 })
 
 L:SetOptionLocalization({
@@ -50,7 +54,12 @@ L:SetOptionLocalization({
 	InfoFrame			= "資訊框：坦克減益狀態層數監視",
 	HudMAP				= "高級定位監視(HUD)：$spell:116784的位置",
 	HudMAP2				= "高級定位監視(HUD)：$spell:116417",
-	WarnPhase			= "警告：階段轉換"
+	HudMAP3				= "高級定位監視(HUD)：$spell:115817",
+	WarnPhase			= "警告：階段轉換",
+	specWarnDrawFlame 	= "特殊警告：$spell:116711",
+	specWarnArcaneVelocity 	= "特殊警告：$spell:116364",
+	specWarnEpicenter 	= "特殊警告：$spell:116018",
+	specWarnSiphoningShield = "特殊警告：$spell:117203"
 })
 
 L:SetMiscLocalization({
@@ -144,7 +153,12 @@ L= DBM:GetModLocalization(677)
 L:SetOptionLocalization({
 	InfoFrame			= "資訊框：$spell:116525的目標",
 	SoundWOP			= "語音警告：重要技能",
-	SoundADD			= "語音警告：$spell:ej5678",
+	SoundADD1A			= "預先語音警告：$spell:ej5678 (5秒前)",
+	SoundADD1			= "語音警告：$spell:ej5678",
+	SoundADD2A			= "預先語音警告：$spell:ej5676 (8秒前)",
+	SoundADD2			= "語音警告：$spell:ej5676",
+	SoundADD3A			= "預先語音警告：$spell:ej5677 (8秒前)",
+	SoundADD3			= "語音警告：$spell:ej5677",
 	optBY				= "語音警告：僅提示此首領的毀滅連擊",
 	tarfoc				= "當前目標和專注目標",
 	Janxi				= "臻璽(左側傀儡)",

@@ -1,6 +1,7 @@
 ﻿local mod	= DBM:NewMod(689, "DBM-MogushanVaults", nil, 317)
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
+local sndWOPD	= mod:NewSound(nil, "SoundWOP", true)
 
 mod:SetRevision(("$Revision: 7949 $"):sub(12, -3))
 mod:SetCreatureID(60009)--60781 Soul Fragment
@@ -55,26 +56,26 @@ local warnNullBarrior				= mod:NewSpellAnnounce(115817, 2)
 --Nature/Fist
 local specWarnLightningLash			= mod:NewSpecialWarningStack(131788, mod:IsTank(), 3)
 local specWarnLightningLashOther	= mod:NewSpecialWarningTarget(131788, mod:IsTank())
-local specWarnEpicenter				= mod:NewSpecialWarningRun(116018, nil, nil, nil, true)
+local specWarnEpicenter				= mod:NewSpecialWarning("specWarnEpicenter")
 
 --Fire/Spear
 local specWarnFlamingSpear			= mod:NewSpecialWarningStack(116942, mod:IsTank(), 3)
 local specWarnFlamingSpearOther		= mod:NewSpecialWarningTarget(116942, mod:IsTank())
 local specWarnWildSpark				= mod:NewSpecialWarningYou(116784)
 local specWarnWildfire				= mod:NewSpecialWarningMove(116793)
-local specWarnDrawFlame				= mod:NewSpecialWarningSpell(116711, nil, nil, nil, true)
+local specWarnDrawFlame				= mod:NewSpecialWarning("specWarnDrawFlame")
 
 --Arcane/Staff
 local specWarnArcaneShock			= mod:NewSpecialWarningStack(131790, mod:IsTank(), 3)
 local specWarnArcaneShockOther		= mod:NewSpecialWarningTarget(131790, mod:IsTank())
 local specWarnArcaneResonance		= mod:NewSpecialWarningYou(116417)
 local yellArcaneResonance			= mod:NewYell(116417)
-local specWarnArcaneVelocity		= mod:NewSpecialWarningSpell(116364, nil, nil, nil, true)
+local specWarnArcaneVelocity		= mod:NewSpecialWarning("specWarnArcaneVelocity")
 
 --Shadow/Shield (Heroic Only)
 local specWarnShadowBurn			= mod:NewSpecialWarningStack(131792, mod:IsTank(), 3)
 local specWarnShadowBurnOther		= mod:NewSpecialWarningTarget(131792, mod:IsTank())
-local specWarnSiphoningShield		= mod:NewSpecialWarningSpell(117203)
+local specWarnSiphoningShield		= mod:NewSpecialWarning("specWarnSiphoningShield")
 
 --Tank Abilities
 local specWarnNullBarrior			= mod:NewSpecialWarningSpell(115817) -- Null Barrier is important all members, espcially Earth and Arcane Phase.
@@ -104,7 +105,7 @@ local timerArcaneVelocity			= mod:NewCastTimer(8, 116364)
 local timerShadowBurn				= mod:NewTargetTimer(20, 131792, nil, mod:IsTank())
 local timerShadowBurnCD				= mod:NewCDTimer(9, 131792, nil, mod:IsTank())
 local timerChainsOfShadowCD			= mod:NewCDTimer(6, 118783, nil, false)--6-10sec variation noted
-local timerSiphoningShieldCD		= mod:NewCDCountTimer(45, 117203)--45-50sec variation noted
+local timerSiphoningShieldCD		= mod:NewCDCountTimer(38, 117203)--45-50sec variation noted
 
 --Tank Abilities
 local timerReversalLightningFists	= mod:NewBuffFadesTimer(20, 118302)
@@ -127,6 +128,7 @@ mod:AddBoolOption("InfoFrame", not mod:IsDps(), "sound")
 
 mod:AddBoolOption("HudMAP", true, "sound")
 mod:AddBoolOption("HudMAP2", true, "sound")
+mod:AddBoolOption("HudMAP3", true, "sound")
 local DBMHudMap = DBMHudMap
 local free = DBMHudMap.free
 local function register(e)	
@@ -135,6 +137,7 @@ local function register(e)
 end
 local WildSparkPrisonMarkers = {}
 local arcaneResonanceMarkers = {}
+local NullBarriorMarkers = {}
 
 local function warnWildfire()
 	warnWildfireInfusion:Cancel()
@@ -154,6 +157,7 @@ function mod:OnCombatStart(delay)
 	table.wipe(arcaneResonanceTargets)
 	table.wipe(WildSparkPrisonMarkers)
 	table.wipe(arcaneResonanceMarkers)
+	table.wipe(NullBarriorMarkers)
 	AVPlayer = false
 	AVend = false
 end
@@ -162,7 +166,7 @@ function mod:OnCombatEnd()
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Hide()
 	end
-	if self.Options.HudMAP or self.Options.HudMAP2 then
+	if self.Options.HudMAP or self.Options.HudMAP2 or self.Options.HudMAP3 then
 		DBMHudMap:FreeEncounterMarkers()
 	end
 end
@@ -223,7 +227,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		sparkCount = 0
 		specialCount = specialCount + 1
 		warnDrawFlame:Show(specialCount)
-		specWarnDrawFlame:Show()
+		specWarnDrawFlame:Show(specialCount)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qyhy.mp3") --牽引火焰
 	elseif args:IsSpellID(116821) then
 		wildfireCount = 1
@@ -242,7 +246,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		if self.Options.HudMAP2 then
 			if args:IsPlayer() then
-				arcaneResonanceMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("targeting", args.destName, 7, nil, 0, 1, 0, 0.8):Appear():RegisterForAlerts())
+				arcaneResonanceMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("highlight", args.destName, 7, nil, 0, 1, 0, 0.4):Appear():RegisterForAlerts():Rotate(360, 3))
 			else
 				arcaneResonanceMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("highlight", args.destName, 7, nil, 0, 1, 0, 0.8):Appear():RegisterForAlerts():Rotate(360, 3))
 			end
@@ -250,14 +254,16 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif args:IsSpellID(116364) then
 		specialCount = specialCount + 1
 		warnArcaneVelocity:Show(specialCount)
-		specWarnArcaneVelocity:Show()
+		specWarnArcaneVelocity:Show(specialCount)
 		timerArcaneVelocity:Start()
 		if not AVPlayer then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\gather.mp3")--快集合
-			sndWOP:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\scattersoon.mp3")--注意分散
+			sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\scattersoon.mp3")--注意分散
+		else
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_mfdd.mp3")--秘法動蕩
 		end
 		AVend = true
-		self:Schedule(3, function() AVend = false end)
+		self:Schedule(2, function() AVend = false end)
 	end
 end
 
@@ -347,6 +353,7 @@ function mod:SPELL_AURA_REMOVED(args)
 			AVPlayer = false
 			if AVend then
 				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\gather.mp3")--快集合
+				sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\scattersoon.mp3")--注意分散
 			end
 		end
 		if arcaneResonanceMarkers[args.destName] then
@@ -359,14 +366,14 @@ function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(116018) then
 		specialCount = specialCount + 1
 		warnEpicenter:Show(specialCount)
-		specWarnEpicenter:Show()
+		specWarnEpicenter:Show(specialCount)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_yldz.mp3") --遠離地震
 --		soundEpicenter:Play()
 		timerEpicenter:Start()
-		sndWOP:Schedule(6.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
-		sndWOP:Schedule(7.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-		sndWOP:Schedule(8.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-		sndWOP:Schedule(9.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		sndWOPD:Schedule(6.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndWOPD:Schedule(7.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOPD:Schedule(8.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOPD:Schedule(9.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		timerEpicenterCD:Start(nil, specialCount + 1)
 	elseif args:IsSpellID(116157) then
 		warnLightningFists:Show()
@@ -382,6 +389,10 @@ function mod:SPELL_CAST_SUCCESS(args)
 	elseif args:IsSpellID(115817) then
 		warnNullBarrior:Show()
 		specWarnNullBarrior:Show()
+		local spelltext = GetSpellInfo(115817)
+		if self.Options.HudMAP3 then
+			NullBarriorMarkers[args.sourceName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("highlight", args.sourceName, 5, 5, 0, 1, 0, 0.8):RegisterForAlerts(true, spelltext))
+		end
 		timerNullBarrior:Start()
 		if self:IsDifficulty("lfr25") then
 			timerNullBarriorCD:Start(25)
@@ -448,7 +459,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 	if spellId == 117203 and self:AntiSpam(2, 1) then--Siphoning Shield
 		specialCount = specialCount + 1
 		warnSiphoningShield:Show(specialCount)
-		specWarnSiphoningShield:Show()
+		specWarnSiphoningShield:Show(specialCount)
 		timerSiphoningShieldCD:Start(nil, specialCount + 1)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_yldp.mp3") --遠離盾牌
 		sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
@@ -470,5 +481,10 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		timerShadowBurnCD:Cancel()
 		timerSiphoningShieldCD:Cancel()
 		timerChainsOfShadowCD:Cancel()
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\scattersoon.mp3")
+		sndWOPD:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndWOPD:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOPD:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOPD:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	end
 end

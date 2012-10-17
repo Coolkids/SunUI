@@ -38,7 +38,7 @@ Delay:SetScript("OnEvent", function()
 	if UnitPopupMenus then
 		UnitPopupMenus["PLAYER"] = { "SET_FOCUS", "WHISPER", "INSPECT", "ACHIEVEMENTS", "INVITE", "TRADE", "FOLLOW", "DUEL", "PET_BATTLE_PVP_DUEL", "RAID_TARGET_ICON", "RAF_SUMMON", "RAF_GRANT_LEVEL", "MOVE_PLAYER_FRAME", "MOVE_TARGET_FRAME", "CANCEL" };
 	end
-	hooksecurefunc("ShowUIPanel", function(frame)
+	--[[ hooksecurefunc("ShowUIPanel", function(frame)
 		if frame and frame ~= InspectFrame and frame ~= TaxiFrame and frame ~= FriendsFrame then
 			frame:Show()
 			UIFrameFadeIn(frame, 0.3, 0, 1)
@@ -47,7 +47,8 @@ Delay:SetScript("OnEvent", function()
 	hooksecurefunc("HideUIPanel", function(frame)
 		if frame and frame ~= InspectFrame and frame ~= TaxiFrame and frame ~= FriendsFrame and frame ~= MasterLooterFrame then
 			S.FadeOutFrameDamage(frame, 0.3)
+			frame:SetAlpha(1)
 		end
-	end)
+	end) ]]
 	DEFAULT_CHAT_FRAME:AddMessage("|cffDDA0DDSun|r|cff44CCFFUI|r已加载，详细设置请输入/sunui")
 end)

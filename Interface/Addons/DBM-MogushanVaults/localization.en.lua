@@ -41,7 +41,11 @@ L:SetMiscLocalization({
 L= DBM:GetModLocalization(689)
 
 L:SetWarningLocalization({
-	WarnPhase	= "Phase %d"
+	WarnPhase					= "Phase %d",
+	specWarnDrawFlame			= "Draw Flame > %d <",
+	specWarnArcaneVelocity 		= "Arcane Velocity > %d <",
+	specWarnEpicenter 			= "Epicenter > %d <",
+	specWarnSiphoningShield 	= "Siphoning Shield > %d <"
 })
 
 L:SetOptionLocalization({
@@ -49,7 +53,12 @@ L:SetOptionLocalization({
 	InfoFrame			= "InfoFrame: Tank Debuff($spell:131788 $spell:116942 $spell:131790)",
 	HudMAP				= "HUDMAP: $spell:116784",
 	HudMAP2				= "HUDMAP: $spell:116417",
-	WarnPhase	= "Announce Phase transition"
+	HudMAP3				= "HUDMAP：$spell:115817",
+	WarnPhase	= "Announce Phase transition",
+	specWarnDrawFlame 	= "Voice warning: $spell:116711",
+	specWarnArcaneVelocity 	= "Voice warning: $spell:116364",
+	specWarnEpicenter 	= "Voice warning: $spell:116018",
+	specWarnSiphoningShield = "Voice warning: $spell:117203"
 })
 
 L:SetMiscLocalization({
@@ -145,7 +154,12 @@ L= DBM:GetModLocalization(677)
 L:SetOptionLocalization({
 	InfoFrame			= "Show info frame for players affected by $spell:116525",
 	SoundWOP			= "Voice warning: important skills",
-	SoundADD			= "Voice warning: $spell:ej5678 $spell:ej5677 $spell:ej5676 Refreshed",
+	SoundADD1A			= "Voice warning:$spell:ej5678 (5s before)",
+	SoundADD1			= "Voice warning:$spell:ej5678",
+	SoundADD2A			= "Voice warning:$spell:ej5676 (8s before)",
+	SoundADD2			= "Voice warning:$spell:ej5676",
+	SoundADD3A			= "Voice warning:$spell:ej5677 (8s before)",
+	SoundADD3			= "Voice warning:$spell:ej5677",
 	optBY 				= "Voice warning: only the tips of this boss's special attack ",
 	tarfoc 				= "target and focus of special attacks ",
 	Janxi 				= "Jan Xi special attack (on the left side) ",
