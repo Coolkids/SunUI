@@ -16,17 +16,13 @@ local show = {
 	none = true,
 }
 local class_spells = {
-	-- talent
-		-- type = "talent" 
-		-- talent = the location of the talent(from 1 to 18)
-	-- monk
 	[121283] = {
-		desc = "",
-		type = "talent",
-		class = "MONK",
-		talent = 7,
-		cd = 20,
-	}, -- Power Strike
+			desc = "",
+			type = "talent",
+			class = "MONK",
+			talent = 7,
+			cd = 20,
+		}, -- Power Strike
 	[122281] = {
 		desc = "",
 		type = "talent",
@@ -122,12 +118,262 @@ local class_spells = {
 		cd = 45,
 		duration = 8,
 	}, -- Will of the Necropolis	
+	
+	--warlock
+	[104317] = {
+		desc = "",
+		type = "spec",
+		class = "WARLOCK",
+		spec = {2},
+		cd = 20,
+	}, --
+	[34936] = {
+		desc = "",
+		type = "spec",
+		class = "WARLOCK",
+		spec = {3},
+		cd = 8,
+	}, --
+	
 
 	
 -- item
 	-- type = "item" 
 	-- item = {the item id}
 	
+	-- MOP 5.0
+	-- 509 496 483 Raid
+	[126646] = {
+		desc = "",
+		type = "item",
+		item = {87160,86323,86881},
+		cd = 105,
+		duration = 20,
+	}, -- Stuff of Nightmares
+	[126640] = {
+		desc = "",
+		type = "item",
+		item = {87163,86327,86885},
+		cd = 105,
+		duration = 20,
+	},
+	[126649] = {
+		desc = "",
+		type = "item",
+		item = {87167,86332,86890},
+		cd = 105,
+		duration = 20,
+	},
+	[126657] = {
+		desc = "",
+		type = "item",
+		item = {87172,86336,86894},
+		cd = 105,
+		duration = 20,
+	}, -- H
+	[126659] = {
+		desc = "",
+		type = "item",
+		item = {87175,86388,86907},
+		cd = 105,
+		duration = 20,
+	}, -- H
+	
+	-- 502 489 476 Raid
+	[126554] = {
+		desc = "",
+		type = "item",
+		item = {87057,86132,86791},
+		cd = 45,
+		duration = 20,
+	}, -- H
+	[126533] = {
+		desc = "",
+		type = "item",
+		item = {87063,86131,86790},
+		cd = 45,
+		duration = 20,
+	}, -- H
+	[126577] = {
+		desc = "",
+		type = "item",
+		item = {87065,86133,86792},
+		cd = 45,
+		duration = 20,
+	}, -- H
+	[126582] = {
+		desc = "",
+		type = "item",
+		item = {87072,86144,86802},
+		cd = 45,
+		duration = 20,
+	}, -- H
+	[126588] = {
+		desc = "",
+		type = "item",
+		item = {87075,86147,86805},
+		cd = 45,
+		duration = 20,
+	}, -- H
+	
+	-- pvp 483 458
+	[126707] = {
+		desc = "",
+		type = "item",
+		item = {84935,84349},
+		cd = 50,
+		duration = 20,
+	}, -- AGI
+	[126705] = {
+		desc = "",
+		type = "item",
+		item = {84941,84489},
+		cd = 50,
+		duration = 20,
+	}, -- SP
+	[126700] = {
+		desc = "",
+		type = "item",
+		item = {84937,84495},
+		cd = 50,
+		duration = 20,
+	}, -- STR
+	
+	-- Darkmoon Card 476
+	[128985] = {
+		desc = "",
+		type = "item",
+		item = {79331},
+		cd = 50,
+		duration = 15,
+	}, -- Relic of Yu'lon
+	[128986] = {
+		desc = "",
+		type = "item",
+		item = {79327},
+		cd = 45,
+		duration = 15,
+	}, -- Relic of Xuen STR
+	[128984] = {
+		desc = "",
+		type = "item",
+		item = {79328},
+		cd = 55,
+		duration = 15,
+	}, -- Relic of Xuen AGI
+	[128987] = {
+		desc = "",
+		type = "item",
+		item = {79330},
+		cd = 45,
+		duration = 20,
+	}, -- Relic of Chi Ji
+	
+	-- 470 
+	[127923] = {
+		desc = "",
+		type = "item",
+		item = {87572},
+		cd = 45,
+		duration = 10,
+	}, -- Mithril Wristwatch
+	[127928] = {
+		desc = "",
+		type = "item",
+		item = {87574},
+		cd = 45,
+		duration = 10,
+	}, -- Coren's Cold Chromium Coaster		
+	[127915] = {
+		desc = "",
+		type = "item",
+		item = {87573},
+		cd = 45,
+		duration = 10,
+	}, -- Thousand-Year Pickled Egg
+	
+	-- 463 Heroic
+	[126489] = {
+		desc = "",
+		type = "item",
+		item = {81267},
+		cd = 85,
+		duration = 25,
+	}, -- Searing Words
+	[126483] = {
+		desc = "",
+		type = "item",
+		item = {81125},
+		cd = 65,
+		duration = 20,
+	}, -- Windswept Pages		
+	[126236] = {
+		desc = "",
+		type = "item",
+		item = {81243},
+		cd = 50,
+		duration = 15,
+	}, -- Iron Protector Talisman
+	[126266] = {
+		desc = "",
+		type = "item",
+		item = {81133},
+		cd = 30,
+		duration = 10,
+	}, -- Empty Fruit Barrel
+	[126476] = {
+		desc = "",
+		type = "item",
+		item = {81192},
+		cd = 105,
+		duration = 30,
+	}, -- Vision of the Predator
+	[126513] = {
+		desc = "",
+		type = "item",
+		item = {81138},
+		cd = 105,
+		duration = 30,
+	}, -- Carbonic Carbuncle		
+	[126483] = {
+		desc = "",
+		type = "item",
+		item = {81125},
+		cd = 65,
+		duration = 20,
+	}, -- Windswept Pages
+	[126489] = {
+		desc = "",
+		type = "item",
+		item = {81267},
+		cd = 85,
+		duration = 25,
+	}, -- Searing Words
+	
+	-- 450 and others
+	[60234] = {
+		desc = "",
+		type = "item",
+		item = {75274},
+		cd = 55,
+		duration = 15,
+	}, -- Zen Alchemist Stone(Intellect)
+	[60233] = {
+		desc = "",
+		type = "item",
+		item = {75274},
+		cd = 55,
+		duration = 15,
+	}, -- Zen Alchemist Stone(Agility)
+	[60229] = {
+		desc = "",
+		type = "item",
+		item = {75274},
+		cd = 55,
+		duration = 15,
+	}, -- Zen Alchemist Stone(Strength)
+	
+	--old data. if you need these, release the comment.
 	-- Cataclysm 4.3
 	-- Ti'tahk, the Steps of Time
 	[109844] = {
@@ -1057,12 +1303,21 @@ local class_spells = {
 		item = {64761},
 		cd = 50,
 		duration = 20,
-	}, -- Bloodthirsty Gladiator's Insignia of Conquest		
-
+	}, -- Bloodthirsty Gladiator's Insignia of Conquest	
 -- item set
 	-- type = "itemset"
 	-- items = {all items of this set(including all difficulties)}
 	-- piece = the minimum pieces of the item set to get the bonus
+	
+	
+	[102545] = {
+		type = "itemset",
+		class = "DRUID",
+		items = {84377,84378,84379,84380,84381,84901,84832,84852,84871,84916},
+		piece = 4,
+		cd = 30,
+	}, -- Feral PVP 4P
+	
 	[105919] = {
 		type = "itemset",
 		class = "HUNTER",
@@ -1153,7 +1408,7 @@ local class_spells = {
 	
 	-- MOP
 	[125488] = {
-		desc = "need test",
+		desc = "",
 		type = "enchant",
 		enchant = {4893, 4116, 3728},
 		slot = 15,
@@ -1161,7 +1416,7 @@ local class_spells = {
 		duration = 15
 	},	-- Darkglow Embroidery
 	[125489] = {
-		desc = "need test",
+		desc = "",
 		type = "enchant",
 		enchant = {4894, 3730, 4118},
 		slot = 15,
@@ -1169,13 +1424,21 @@ local class_spells = {
 		duration = 15
 	}, -- Swordguard Embroidery
 	[125487] = {
-		desc = "need test",
+		desc = "",
 		type = "enchant",
 		enchant = {4892, 3722, 4115},
 		slot = 15,
-		cd = 60,
+		cd = 55,
 		duration = 15
 	}, -- Lightweave Embroidery
+	[104993] = {
+		desc = "",
+		type = "enchant",
+		enchant = {4442},
+		slot = 16,
+		cd = 50,
+		duration = 12
+	}, -- Jade Spirit
 }
 
 local EVENT = {

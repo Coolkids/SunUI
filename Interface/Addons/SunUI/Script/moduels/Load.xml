@@ -1,7 +1,6 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file='AutoLFG.lua'/>
 	<Script file = "BiggerTradeSkillUI.lua"/>
-	<Script file = "classCD.lua"/>
 	<Script file ="CloseUp.lua"/>
 	<Script file = "CombatNotification.lua"/>
 	<Script file ="Durability.lua"/>
@@ -9,9 +8,9 @@
 	<Script file = "Flump.lua"/>
 	<Script file='memory.lua'/>
 	<Script file ="Molinari.lua"/>
+	<Script file ="Pd.lua"/>
 	<Script file ="PVPx_off.lua"/>
 	<Script file ="tekKompare.lua"/>
-	<Script file = "RaidCD.lua"/>
 	<Script file ="sMirrorBars.lua"/>
 	<Script file ="TradeTab.lua"/>
 	<Script file ="warn.lua"/>

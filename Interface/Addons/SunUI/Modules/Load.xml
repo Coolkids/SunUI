@@ -13,6 +13,7 @@
 	<Include file="button\load.xml"/>
 	<Include file = "chat\load.xml"/>
 	<Include file ="Class\load.xml"/>
+	<Include file ="Cooldowns\load.xml"/>
 	<Include file ="layout\load.xml"/>
 	<Include file = "loot\load.xml"/>
 	<Include file = "map\load.xml"/>

@@ -249,7 +249,8 @@ end
 
 function ns:Getdifficulty()
 	local _, instanceType, difficulty, _, maxPlayers, playerDifficulty, isDynamicInstance = GetInstanceInfo()
-	if IsPartyLFG() and IsInLFGDungeon() and difficulty == 2 and instanceType == "raid" and maxPlayers == 25 then
+	print(instanceType, difficulty, maxPlayers, playerDifficulty, isDynamicInstance)
+	if IsPartyLFG() and IsInLFGDungeon() and difficulty == 7 then
 		return "lfr25"
 	elseif difficulty == 1 then
 		return instanceType == "raid" and "normal10" or "normal5"
@@ -1949,8 +1950,8 @@ function ns:UpdateIndicators(self)
 	for k, _ in pairs(self.Indicators) do
 		text = ""
 		if type(ns.general.IndicatorsSet[k]) == "table" then		
-			for i, v in pairs(ns.general.IndicatorsSet[k]) do			
-
+			for i, v in pairs(ns.general.IndicatorsSet[k]) do
+				if v.talent and v.talent ~= GetSpecialization() then break end
 				if type(ns.general.IndicatorsSet[k][i]) == "table" then	
 					if type(v.color) == "table" then
 						r, g, b = v.color.r, v.color.g, v.color.b
@@ -1966,6 +1967,7 @@ function ns:UpdateIndicators(self)
 						self.Indicators[k].expires = nil
 						self.Indicators[k].count = nil
 					else
+						--print(name)
 						if not v.mine or (v.mine and caster == "player") then
 							if v.count or v.etime then
 								if v.count and count ~= 0 then
@@ -2177,11 +2179,11 @@ function ns:UpdateAuras(self)
 	
 		local index = 1
 		while true do
-			local name, rank, texture, count, dtype, duration, expires, caster = UnitDebuff(unit, index)
-
+			local _, rank, texture, count, dtype, duration, expires, caster, _, _, name = UnitDebuff(unit, index)
 			if not name then break end
-
+			
 			show , priority = CustomFilter(k, false, name, rank, texture, count, dtype, duration, expires, caster)
+			--print(name, show)
 			if(show) then
 				if (priority > self.Auras[k].Button.cur) or (priority ~= 0 and priority == self.Auras[k].Button.cur and count > self.Auras[k].Button.Count) then
 					self.Auras[k].Button.cur		= priority
@@ -2200,7 +2202,7 @@ function ns:UpdateAuras(self)
 
 		index = 1
 		while true do
-			local name, rank, texture, count, dtype, duration, expires, caster = UnitBuff(unit, index)
+			local _, rank, texture, count, dtype, duration, expires, caster, _, _, name = UnitBuff(unit, index)
 			if not name then break end
 
 			show, priority = CustomFilter(k, true, name, rank, texture, count, dtype, duration, expires, caster)

@@ -1,6 +1,4 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
-
 	<Script file ="sh.lua"/>
 	<Script file ="petime.lua"/>
-	<Script file ="Pd.lua"/>
 </Ui>
