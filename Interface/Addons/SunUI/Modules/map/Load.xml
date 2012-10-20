@@ -8,5 +8,5 @@
 	<Script file = "map.lua"/>
 	<Script file = "ExploreMap.lua"/>
 	<Script file = "MapBossCount.lua"/>
-	<Script file = "MozzFullWorldMap.lua"/>
+	<Script file = "FogClear.lua"/>
 </Ui>

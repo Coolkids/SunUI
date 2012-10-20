@@ -149,6 +149,7 @@ G["MiniDB"] = {
 	["UIscale"] = true,
 	["AutoUIscale"] = false,
 	["Combat"] = false, 
+	["FogClear"] = true,
 	["Aurora"] = true, 
 	["uiScale"] = 0.9,
 	["FontScale"] = 1,	

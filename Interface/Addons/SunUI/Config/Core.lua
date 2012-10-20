@@ -1097,6 +1097,12 @@ function SunUIConfig.GenerateOptionsInternal()
 								desc = "透明模式",
 								order = 24,
 							},
+							FogClear = {
+								type = "toggle",
+								name = "显示未探索地区",
+								desc = "显示未探索地区",
+								order = 25,
+							},
 						}
 					},
 					group2 = {

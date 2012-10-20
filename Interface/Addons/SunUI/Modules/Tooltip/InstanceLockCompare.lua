@@ -39,7 +39,6 @@ local function ILockCompare(frame, link, ...)
 			if not myTip:IsVisible() and frame:IsVisible() then
 				myTip:SetParent(frame)
 				myTip:SetOwner(frame, "ANCHOR_NONE")
-				myTip:SetTemplate("Transparent")
 
 				local side = "left"
 				local rightDist = 0

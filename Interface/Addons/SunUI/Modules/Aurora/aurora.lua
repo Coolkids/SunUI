@@ -5742,6 +5742,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					local health, maxHealth, attack, speed, rarity = C_PetJournal.GetPetStats(petID);
 					if rarity then
 						pet.name:SetVertexColor(ITEM_QUALITY_COLORS[rarity-1].r, ITEM_QUALITY_COLORS[rarity-1].g, ITEM_QUALITY_COLORS[rarity-1].b)
+					else
+						pet.name:SetVertexColor(ITEM_QUALITY_COLORS[0].r, ITEM_QUALITY_COLORS[0].g, ITEM_QUALITY_COLORS[0].b)
 					end
 				end
 			end
