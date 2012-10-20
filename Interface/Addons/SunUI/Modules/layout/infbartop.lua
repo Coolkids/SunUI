@@ -3,7 +3,7 @@
 local S, C, L, DB = unpack(select(2, ...))
 local _
 local Core = LibStub("AceAddon-3.0"):GetAddon("SunUI")
-local Module = Core:NewModule("InfoPanelTop")
+local Module = Core:NewModule("InfoPanelTop", "AceTimer-3.0")
 local InfoBarStatusColor = {{1, 0, 0}, {1, 1, 0}, {0, 0.4, 1}}
 local bandwidthString = "%.2f Mbps"
 local percentageString = "%.2f%%"
@@ -134,15 +134,112 @@ local Stat = CreateFrame("Frame", "InfoPanel1", TopInfoPanel)
 	Stat:SetScript("OnUpdate", Update) 
 end
 -- BuildMemory
-local tTotal, tMem
-local function RefreshText()
+local L_MB = "mb"
+local L_KB = "kb"
+local Mem = {}
+local MemUse
+local gtotal
+local format = string.format
+local Memtext
+local function MemUseCalc()
 	UpdateAddOnMemoryUsage()
-	tTotal = 0
+	local total = 0
+
+	local IsAddOnLoaded = _G.IsAddOnLoaded
+	local GetAddOnMemoryUsage = _G.GetAddOnMemoryUsage
+	local GetAddOnInfo = _G.GetAddOnInfo
 	for i = 1, GetNumAddOns() do
-		tMem = GetAddOnMemoryUsage(i)
-		tTotal = tTotal + tMem
+		if IsAddOnLoaded(i) then
+			local memused = GetAddOnMemoryUsage(i)
+			total = total + memused
+		end
+	end
+	gtotal = total
+	if total > 1024 then
+		MemUse = format("%.2f "..L_MB, total / 1024)
+	else
+		MemUse = format("%.1f "..L_KB, total)
 	end
 end
+function Module:Update()
+	local current = format("%.1f", _G.collectgarbage("count") / 1024)
+	MemUseCalc()
+	local color = gtotal <= 1024*3 and {0,1} -- 1
+				or gtotal <= 1024*7 and {0.75,1} -- 5
+				or gtotal <= 1024*10 and {1,1} -- 12
+				or gtotal <= 1024*15  and {1,0.75} -- 18
+				or gtotal <= 1024*18 and {1,0.5} -- 25
+				or {1,0.1}
+	if gtotal < 1024 then
+		Memtext:SetText(string.format("|cff%02x%02x%02x", color[1]*255, color[2]*255, 0)..format("%.2f", gtotal).."|rkb")
+	else
+		Memtext:SetText(string.format("|cff%02x%02x%02x", color[1]*255, color[2]*255, 0)..format("%.2f", gtotal/1024).."|rmb")
+	end
+end
+
+Module:ScheduleRepeatingTimer("Update", 5)
+Module:ScheduleTimer("Update", 5)
+
+local function formatMemory(n)
+	if n > 1024 then
+		return format("%.2f "..L_MB, n / 1024)
+	else
+		return format("%.2f "..L_KB, n)
+	end
+end
+
+local function mySort(x,y)
+	return x.mem > y.mem
+end
+
+local memTbl = {}
+local function OnTooltipShow()
+	GameTooltip:AddLine("内存占用", .6,.8,1)
+	UpdateAddOnMemoryUsage()
+	local grandtotal = collectgarbage("count")
+	local total = 0
+
+	local tinsert = _G.table.insert
+	local IsAddOnLoaded = _G.IsAddOnLoaded
+	local GetAddOnMemoryUsage = _G.GetAddOnMemoryUsage
+	local GetAddOnInfo = _G.GetAddOnInfo
+	for i = 1, GetNumAddOns() do
+		if IsAddOnLoaded(i) then
+			local memused = GetAddOnMemoryUsage(i)
+			total = total + memused
+			tinsert(memTbl, {addon = select(2, GetAddOnInfo(i)), mem = memused})
+		end
+	end
+	ii = 0
+	table.sort(memTbl, mySort)
+	local txt = "|cffFFD700%d|r|cffffffff.|r %s"
+	local killPoint = tonumber(_G.SB_MEM_KILL) or 0
+	for k, v in _G.pairs(memTbl) do
+		local color = v.mem <= 102.4 and {0,1} -- 0 - 100
+					or v.mem <= 512 and {0.75,1} -- 100 - 512
+					or v.mem <= 1024 and {1,1} -- 512 - 1mb
+					or v.mem <= 2560 and {1,0.75} -- 1mb - 2.5mb
+					or v.mem <= 5120 and {1,0.5} -- 2.5mb - 5mb
+					or {1,0.1}
+		GameTooltip:AddDoubleLine(format(txt, k, v.addon), formatMemory(v.mem), 1,1,1, color[1], color[2], 0)
+		if k == killPoint then break end
+		if ii >= 69 then	break end
+		ii = ii + 1
+	end
+	for i = 1, #memTbl do memTbl[i] = nil end
+	local color = total <= 1024*3 and {0,1} -- 1
+				or total <= 1024*7 and {0.75,1} -- 5
+				or total <= 1024*10 and {1,1} -- 12
+				or total <= 1024*15  and {1,0.75} -- 18
+				or total <= 1024*18 and {1,0.5} -- 25
+				or {1,0.1}
+	GameTooltip:AddLine(" ")
+	GameTooltip:AddDoubleLine("非暴雪插件总计", formatMemory(total), .6,.8,1, color[1], color[2], 0)
+	GameTooltip:AddDoubleLine("一共占用", formatMemory(grandtotal), .6,.8,1, 0, 1, 0)
+	GameTooltip:AddLine("|cffeda55f点击回收内存", 1, 1, 1)
+	MemUse = total
+end
+
 local function BuildMemory()
 	local Stat = CreateFrame("Frame", "InfoPanel2", TopInfoPanel)
 	Stat:SetFrameStrata("BACKGROUND")
@@ -153,7 +250,7 @@ local function BuildMemory()
 	Text:SetPoint("LEFT", InfoPanel1, "RIGHT", 2, 0)
 	Text:SetShadowOffset(S.mult, -S.mult)
 	Text:SetShadowColor(0, 0, 0, 0.4)
-	
+	Memtext = Text
 	Stat:SetAllPoints(Text)
 	Stat:SetScript("OnMouseDown", function(self, button)
 		if button == "LeftButton" then 
@@ -162,14 +259,7 @@ local function BuildMemory()
 			collectgarbage()
 			UpdateAddOnMemoryUsage()
 			print(format("|cff66C6FF%s:|r %s", L["共释放内存"], S.FormatMemory(Before - gcinfo())))
-			RefreshText()
-			local color = tTotal/1024 <= 102.4 and {0,1} -- 1
-				or tTotal/1024 <= 512 and {0.75,1} -- 5
-				or tTotal/1024 <= 1024 and {1,1} -- 12
-				or tTotal/1024 <= 2560 and {1,0.75} -- 18
-				or tTotal/1024 <= 5120 and {1,0.5} -- 25
-				or {1,0.1}
-			Text:SetText(string.format("|cff%02x%02x%02x", color[1]*255, color[2]*255, 0)..format("%.2f", tTotal/1024).."|rm")
+			Module:Update()
 		else
 			if stAddonManager:IsShown() then 
 				stAddonManager:Hide()
@@ -179,47 +269,11 @@ local function BuildMemory()
 			end
 		end
 	end)
-	Stat.Timer = 0
-	Stat:SetScript("OnUpdate", function(self, elapsed)
-		self.Timer = self.Timer + elapsed
-		if self.Timer > 5 then
-			RefreshText()
-			local color = tTotal/1024 <= 1 and {0,1} -- 1
-				or tTotal/1024 <= 5 and {0.75,1} -- 5
-				or tTotal/1024 <= 12 and {1,1} -- 12
-				or tTotal/1024 <= 18 and {1,0.75} -- 18
-				or tTotal/1024 <= 25 and {1,0.5} -- 25
-				or {1,0.1}
-			Text:SetText(string.format("|cff%02x%02x%02x", color[1]*255, color[2]*255, 0)..format("%.2f", tTotal/1024).."|rm")
-			self.Timer = 0
-		end
-	end)
+	
 	Stat:SetScript("OnEnter", function(self)
-		UpdateAddOnMemoryUsage()
-		local memory = {}
-		local total = 0
-		for i = 1, GetNumAddOns() do
-			if IsAddOnLoaded(i) then
-				local mem = GetAddOnMemoryUsage(i)
-				tinsert (memory, {select(2, GetAddOnInfo(i)), mem})
-				total = total + mem
-			end
-		end
-		table.sort(memory, function(a, b)
-			return a[2] > b[2]
-		end)
+		if not InCombatLockdown() then collectgarbage() end
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
-		GameTooltip:AddDoubleLine('Mem Total Usage', S.FormatMemory(total), .6,.8,1, 1, 1, 1)
-		GameTooltip:AddLine(' ')
-		for i = 1, #memory do
-			local color = memory[i][2] <= 102.4 and {0,1} -- 0 - 100
-				or memory[i][2] <= 512 and {0.75,1} -- 100 - 512
-				or memory[i][2] <= 1024 and {1,1} -- 512 - 1mb
-				or memory[i][2] <= 2560 and {1,0.75} -- 1mb - 2.5mb
-				or memory[i][2] <= 5120 and {1,0.5} -- 2.5mb - 5mb
-				or {1,0.1}
-			GameTooltip:AddDoubleLine(memory[i][1], S.FormatMemory(memory[i][2]), 1, 1, 1, color[1], color[2], 0)
-		end
+		OnTooltipShow()
 		GameTooltip:Show()
 	end)
 	Stat:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
