@@ -1,4 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file='AuctionLite.lua' />
 	<Script file='DBM.lua' />
 	<Script file='skada.lua' />
 	<Script file='skins.lua' />
@@ -8,4 +9,5 @@
 	<Script file='Postal.lua' />
 	<Script file='NugRunning.lua' />
 	<Script file='ReforgeLite.lua' />
+	<Script file='Examiner.lua' />
 </Ui>

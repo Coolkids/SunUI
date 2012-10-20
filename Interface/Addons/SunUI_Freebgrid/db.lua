@@ -371,8 +371,8 @@ local Indicators_class_default = {
 				color   = {r = 1, g = 0.0, b = 0.0},
 			},
 			["2"] = {
-				id 		= {116781, 11459, 79038},		--5%暴击
-				talent    = 2,
+				id 		= {116781, 1459, 61316},		--5%暴击
+				talent    = 3,
 				isbuff	= true,
 				lack	= true,
 				color   = {r = .8, g = 1, b = 0.0},

@@ -42,6 +42,7 @@ local cl = {
 	[64843] = true,  -- 神圣赞美诗 *
 	[64901] = true,	-- 希望圣歌
 	[740] = true,  -- 宁静(ND) *
+	--[88685] = true,
 	--test
 	--[2050] = true,
 }
@@ -80,6 +81,7 @@ function Module:OnEnable()
 	frame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	frame:SetScript('OnEvent', function(self, event, ...)
 		local arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 = ...
+		--if arg5 == UnitName("player") then print(arg2, GetSpellLink(arg12)) end
 		--打断
 		if arg2 == "SPELL_INTERRUPT" and arg5 == UnitName("player") and C["Interrupt"]then
 			local channel = IsInRaid() and "RAID" or GetNumSubgroupMembers() > 0 and "PARTY"

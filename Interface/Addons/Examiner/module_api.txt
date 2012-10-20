@@ -1,0 +1,41 @@
+Creating an Examiner Module
+---------------------------
+Examiner:CreateModule(token,longName)
+
+Module Meta Functions
+---------------------
+CanCache()							-- Returns wheather or not the calling module is allowed to cache or not (module.canCache need to be true or this will ALWAYS return false)
+HasData(value)						-- Tells Examiner if we have data to show on our page
+HasButton(value)					-- Toggles wheather or not the module has a button in Examiner
+CreatePage(full,header)				-- Creates a standard page
+
+Module Table Entries
+--------------------
+There are several control variables in the module table, which affects how the module works and shown by Examiner.
+
+showItems		boolean		Show item slots on this module's page?
+canCache		boolean		When enabled, it will allow the user to select in the config if this module is allowed to cache. Use cfg.cache[mod.label] to check the setting.
+
+Module Script Events
+--------------------
+If one of these functions exists in your module, they are called when certain events happen in Examiner.
+You could for example have an OnCache() function in your module, then if the user has caching enabled, it would be called right after OnInspectReady().
+Do note that this event happens even if the user has disabled caching for this module. You could then add things to the entry table, and then load them on an OnCacheLoaded() call.
+The OnInitialize() function will be removed by the core once called.
+
+OnInitialize()						-- Fired once the module is initialized; then the function is removed
+OnInspect(unit,guid)				-- Fired when an inspect request is sent
+OnInspectReady(unit,guid)			-- Fired when inspect data has been received
+OnAchievementReady(unit,guid)		-- Fired when achievement data has been received
+OnHonorReady()						-- Fired when honor data has been received
+OnClearInspect()					-- Fired when clearing current inspection
+OnCache(entry)						-- Fired when we are caching the current unit
+OnCacheLoaded(entry,unit)			-- Fired when a cached entry has been loaded
+
+OnButtonClick(frame,button)
+OnConfigChanged(var,value)			-- Fired when a cfg variable is changed
+OnPageChanged(module,shown)
+OnCompare(isCompare,compareEntry)
+OnDetailsUpdate()
+
+OnDataChanged(mod)					-- PLANNED: Fired when a module changes its available data state

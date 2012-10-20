@@ -249,7 +249,7 @@ end
 
 function ns:Getdifficulty()
 	local _, instanceType, difficulty, _, maxPlayers, playerDifficulty, isDynamicInstance = GetInstanceInfo()
-	print(instanceType, difficulty, maxPlayers, playerDifficulty, isDynamicInstance)
+	--print(instanceType, difficulty, maxPlayers, playerDifficulty, isDynamicInstance)
 	if IsPartyLFG() and IsInLFGDungeon() and difficulty == 7 then
 		return "lfr25"
 	elseif difficulty == 1 then
@@ -1568,7 +1568,7 @@ function ns:UpdatePowerBar(self)
 			health:SetHeight(ns.db.height)
 		else
 			power:SetWidth(ns.db.width)
-			power:SetHeight(ns.db.height * ns.db.powerbarsize-1)
+			power:SetHeight(ns.db.height * ns.db.powerbarsize-2)
 			health:SetWidth(ns.db.width)
 			health:SetHeight((0.98 - ns.db.powerbarsize) * ns.db.height)
 		end
@@ -1593,7 +1593,7 @@ function ns:UpdatePowerBar(self)
 		end	
 	else
 		power:Hide()
-		health:SetHeight(ns.db.height)
+		health:SetHeight(ns.db.height-3)
         health:SetWidth(ns.db.width)
 	end
 end

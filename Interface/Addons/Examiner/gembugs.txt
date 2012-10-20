@@ -1,0 +1,4 @@
+Before patch 3.1 when you inspected others, it would perfectly show the metagem highlighted for them if the gem requirement were met,
+granted that the tooltip was being shown using GameTooltip:SetInventoryItem(unit,slotId).
+Ever since the patch though, gems and meta gems for inspection has been bugged and will not show up correctly.
+Gems does load after about 0.25 seconds (latencty may come into play here), but meta gems stay grayed out.

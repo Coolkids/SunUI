@@ -617,6 +617,7 @@ local function CheckUnit_Guid(frame, ...)
 end
 --Attempt to match a nameplate with a GUID from the combat log
 local function MatchGUID(frame, destGUID, spellID)
+	--print(frame, destGUID, spellID)
 	if not frame.guid then return end
 	if frame.guid == destGUID then
 		for _,icon in ipairs(frame.icons) do 
@@ -652,7 +653,8 @@ end
 NamePlates:SetScript("OnEvent", function(self ,event, ...)
 	local arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 = ...
 	if arg2 == "SPELL_AURA_REMOVED" then
-		if arg4 == UnitGUID("player") then
+		if arg4 == UnitGUID("player") or arg4 == UnitGUID("pet") or arg5 == "虛無觸鬚" or arg5 == "暗影触须" then
+			--print(GetSpellLink(arg12), "Hide", arg9)
 			ForEachPlate(MatchGUID, arg8, arg12)
 		end
 	end

@@ -1,0 +1,23 @@
+This file contains a list over the items, enchants and gems Examiner has problems scanning or is displayed incorrectly by WoW.
+
+-- Fletcher's Gloves --
+http://www.wowhead.com/?item=7348
+Should add ranged crit "RANGEDCRIT" as well as melee crit "MELEECRIT".
+Parry chance penalty is added as a fixed value and not a rating, would be impossible to incorporate into Examiner this way.
+
+
+
+-- Greater Inscription of the Oracle --
+http://www.wowhead.com/?item=28912
+The enchanted text from this is: "+6 Mana Regen and +22 Healing" but since the 2.3 patch, it also adds 33% of the healing
+to spell damage, but the enchant text was never updated.
+
+-- Inscription of Faith --
+http://www.wowhead.com/?item=28878
+The enchanted text from this is: "+29 Healing" but since the 2.3 patch, it also adds 33% of the healing
+to spell damage, but the enchant text was never updated.
+
+-- Greater Inscription of Faith --
+http://www.wowhead.com/?item=28887
+The enchanted text from this is: "+33 Healing and +4 Mana Regen" but since the 2.3 patch, it also adds 33% of the healing
+to spell damage, but the enchant text was never updated.

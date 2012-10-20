@@ -1107,7 +1107,6 @@ lib.gen_swing_timer = function(f)
 	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
 	
 	f.AltPowerBar = apb
-	
 	local r, g, b
 	local max
 	apb.text = S.MakeFontString(apb, 10)

@@ -624,7 +624,7 @@ local function Smooth(self, value)
         self.smoothing = value
     end
 end
-function UpdateHealthSmooth(self)
+local function UpdateHealthSmooth(self)
 	if self.smoothing == nil then return end
 	local val = self.smoothing
 	local limit = 30/GetFramerate()

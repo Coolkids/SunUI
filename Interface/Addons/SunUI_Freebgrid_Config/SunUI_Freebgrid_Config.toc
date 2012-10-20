@@ -1,6 +1,6 @@
 ﻿## Interface: 50001
-## Title: |cff70C0F5Freebgrid_Config|r
-## Title-zhTW: |cff70C0F5Freebgrid_Config|r
+## Title: SunUI_|cff70C0F5Freebgrid_Config|r
+## Title-zhTW: SunUI_|cff70C0F5Freebgrid_Config|r
 ## Notes: Freebgrid's configuration gui
 ## Notes-zhTW: Freebgrid's configuration gui
 ## Dependencies: SunUI_Freebgrid

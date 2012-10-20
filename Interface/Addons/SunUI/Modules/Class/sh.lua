@@ -41,11 +41,6 @@ Frame:SetScript("OnEvent", function(self, event)
 				local start, duration = GetSpellCooldown(spellIDs[DB.MyClass])
 				Frame.Cooldown:SetReverse(false)
 				CooldownFrame_SetTimer(Frame.Cooldown, start, duration, 1)
-				if start > 1.5 and duration > 1.5 then
-					ActionButton_HideOverlayGlow(self)
-				else
-					ActionButton_ShowOverlayGlow(self)
-				end
 			end
 		else self:Hide()
 		end
@@ -57,11 +52,6 @@ Frame:SetScript("OnEvent", function(self, event)
 				local start, duration = GetSpellCooldown(spellIDs[DB.MyClass])
 				Frame.Cooldown:SetReverse(false)
 				CooldownFrame_SetTimer(Frame.Cooldown, start, duration, 1)
-				if start > 1.5 and duration > 1.5 then
-					ActionButton_HideOverlayGlow(self)
-				else
-					ActionButton_ShowOverlayGlow(self)
-				end
 			end
 		else self:Hide()
 		end
@@ -73,11 +63,6 @@ Frame:SetScript("OnEvent", function(self, event)
 				local start, duration = GetSpellCooldown(spellIDs[DB.MyClass])
 				Frame.Cooldown:SetReverse(false)
 				CooldownFrame_SetTimer(Frame.Cooldown, start, duration, 1)
-				if start > 1.5 and duration > 1.5 then
-					ActionButton_HideOverlayGlow(self)
-				else
-					ActionButton_ShowOverlayGlow(self)
-				end
 			end
 		else self:Hide()
 		end

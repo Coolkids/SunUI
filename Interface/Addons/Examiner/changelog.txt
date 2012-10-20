@@ -1,0 +1,594 @@
+Examiner Changes | 2012 Oct 13
+------------------------------
+- Cache: Fixed the issue with Pandaren textures.
+- Feats: Changed the bits set when constructing a completed achievement link, from 32 to 31. This could apparently cause integer overflow.
+
+Examiner Changes | 2012 Aug 30
+------------------------------
+- Changed the TOC version to 50001 for the 5.0 Mists of Pandaria patch.
+- Replaced the use of GetNumPartyMembers() and GetNumRaidMembers() with GetNumGroupMembers().
+- Talents: This module has been completely disabled. With the changes to talents in MoP, a complete rewrite would be required.
+- Readded the "Glyphs" module in hopes that someone might fix it into a working state for the MoP expansion. It is not enabled by default.
+- Feats: Removed an error that occurred when an achievement tooltip with an uneven number of critieria was shown.
+- Removed the InspectPaperDollFrame.lua @ line 23 inspect workaround.
+- Will now set the global variable "INSPECTED_UNIT" to the last inspected unit.
+- Adjusted for the change in return values from the GetInspectGuildInfo() function. This might have broken the guild achievement chat linking feature.
+- LibGearExam: The "RangedSlot" entry has been removed.
+- LibGearExam: Replaced the attack power string value "ITEM_MOD_ATTACK_POWER_SHORT" with "STAT_ATTACK_POWER".
+- LibGearExam: No longer causes Lua errors if a certain stat string is no longer found.
+
+Examiner Changes | 2011 Sep 29
+------------------------------
+- Changed the TOC version to 40200 for the 4.2 patch.
+- Fixed a rare UnitIsUnit() error on UNIT_MODEL_CHANGED event due to the unit arg being passed as nil.
+- LibGearExam: Changed the base value for resilience. DR are still not taken into account.
+
+Examiner Changes | 2011 Jan 28
+------------------------------
+- The slash command "/ex si" which scans an item and lists its stats, will now display an alternative text for ratings, which will be either the rating or percentage, depending on your configuration.
+- GearList: Now scans gems directly from the inspected player, if possible, instead of from the itemlink. This means it will be able to detect empty prismatic sockets added from belt buckles or blacksmithing.
+- Feats: Now displays guild achievement points in paranthesis, instead of normal achievement points, when viewing guild achievements.
+- PvP: Fixed arena teams being occasionally shown in the wrong position.
+- LibGearExam: Changed the "Titanium Plating" from block value to parry.
+- LibGearExam: Added "Pyrium Weapon Chain" as well as "Adamantite Weapon Chain".
+- LibGearExam: Now detects mastery from gems and enchants.
+
+Examiner Changes | 2010 Dec 18
+------------------------------
+- When loading a cached entry, modules with no data will now properly hide their page.
+- Stats: Will no longer show "Rating" on a stat, when the option "Show ratings in percentages" is enabled.
+- GearList: Can now detect empty metagem and cogwheel sockets.
+- GearList: Now detects which items can be enchanted from the equip location, rather than slot. This means we can tell the difference between a shield and held in offhand item, which have different enchants.
+- ItemSlots: The option to always show item levels on the item slots, has had its default setting changed to true.
+- Feats: Only shows guild achievements when inspecting yourself. They do not work when inspecting others :(
+- Feats: When holding down the Control key, the tooltip will now show your achievement, instead of the inspected person's achievement.
+- Guild: Finished the module. It now shows the guild banner, guild name, level and members as well as an experience bar for the guild progession.
+- Guild: Caching enabled for this module, enable it from the configurations to store guild banner info in the cache.
+- Guild: This module now has its own button in the UI.
+- LibGearExam: Removed scan alert from the "+X Block Rating" enchant.
+- Core: Loading a cached entry will now properly load the extra guild information, such as ID, level, experience and number of members from the entry.
+- Core: Modules now also recieve an "OnPageChanged" event, even when a page is being hidden. Second parameter will determine if the page is shown or hidden.
+- Core: Changed back to using the "VARIABLE_LOADED" event instead of "ADDON_LOADED". This ensures Examiner can actually load external modules from another addon.
+
+Examiner Changes | 2010 Dec 06
+------------------------------
+- Fixed an error that could happen when no page was shown and you targeted an NPC.
+- Core: Optimised the inspection process.
+- Core: Now also hides the current page for players, if we failed to inspect them.
+- Core: Fixed some automatic cache loading issues, for when a unit were outside range.
+- Feats: Optimised the category drop down listing, they now reuse the same table, meaning less garbage.
+- Feats: Fixed an error that could happen when listing categories.
+- Feats: Now sets the bit flags of achievement links, when the achievement has been completed. This means that the criteria show as green instead of grey.
+- Feats: When linking one of your own achievements, it will no longer construct the link, but instead use the GetAchievementLink() function. This makes sure the criterion flags are set properly.
+- LibGearExam: Fixed resilience not being detected. It changed formatting just like haste did.
+- LibGearExam: Changed the base resilience stat rating to 9.58333 (repeating of course).
+- Enjoy the new expansion :)
+
+Examiner Changes | 2010 Dec 05
+------------------------------
+- Removed inspect throttling completely.
+- No longer poisons the global nametable with "lastButton".
+- Added new module "Module List". This new module will act as a "container" for all other modules which don't have a dedicated button. It will appear as a button named "More". This was required, as it was pretty much impossible to add more modules, without flooding the main UI with too many buttons.
+- Added new module "Gear List". Shows a complete overview of all gear items, with their enchants and gems, or the lack thereof.
+- Added new module "Item Usage". Builds a list with all items, used by the players in your current shown cache. This way, you can see which items are the most popular ones. Set a cache filter to refine results.
+- Added new module "Guild Details". This module has not yet been completed, but when done, it will contain the guild banner, guild level and number of members of the inspected person.
+- Core: Delayed inspecting removed! This was done by forcing the client to cache the item link when requesting inspect data, which meant they would be ready for when INSPECT_READY fires later on. Let me know if this causes any issues with missing gems or enchants.
+- Core: Now stores extra guild info, such as ID, level, experience and number of members.
+- Core: Always hides the current shown page when "inspecting" an NPC.
+- Core: New option "Smart Tooltip Anchor". With this option on, tooltips will appear next to the Examiner window, in a fixed position.
+- Core: The Examiner window will now appear in a greenish color while inspection is in progress. Once done, it will return to the normal grey. This should help a little when using mouseover inspect.
+- Config: Moved into the new "Module List" module, click the button "More" to find it.
+- Cache: Can now show race icon for Worgens and Goblins.
+- Cache: When loading a cached player, the page will now always change back to the previous shown one, unless you hold down shift.
+- Cache: A cached player will now display an asterisk when coming from a different realm.
+- Feats: Guild achievements are now browsable. They will appear in the bottom of the drop down menu, in a pretty aqua color.
+- Feats: Other people's personal as well as guild achievements, can now be linked so they show their name.
+
+Examiner Changes | 2010 Nov 26
+------------------------------
+- Talents: Fixed an issue with the nil bug in the mage talent tree data given by the API. Which caused an empty talent box to be shown in the Arcane tree.
+- LibGearExam: Now detects haste again using the new formatting.
+
+Examiner Changes | 2010 Nov 17
+------------------------------
+- The option to disable the throttle error message was removed.
+- A new option to disable the inspect throttle delay, has been added. Please read the option tooltip before you turn this option on.
+- Talents: Level estimation for enemy players more than 10 levels above you, are now estimated properly again. Since it uses the number of talent points spent, the level might be estimated incorrectly, and as you only gain a point every 2 level now, it can also show as one level short.
+- Reworked the "/ex reset" slash command to work a little better. It will no longer force Examiner to be unmovable again, but instead just center it on the screen.
+- The last inspect time variable was made back into a local, which means Examiner wont become blocked by TipTacTalents for example.
+- Changed the "VARIABLE_LOADED" event with "ADDON_LOADED".
+
+Examiner Changes | 2010 Nov 07
+------------------------------
+- If no items are loaded, it will no longer show all the empty item slot buttons. This also applies to when inspect is broken.
+- Added new slash command "/ex reset" to reset position of Examiner. Use this if you've moved Examiner offscreen.
+- Config: Check buttons now properly updates their state if a module changes an option.
+- ItemSlots: Added an advanced debugging tooltip when holding down Alt & Shift on an item. Doing this, will show a break down of the item string data, allowing you to see things like enchantID and reforgeID etc.
+- Stats: Details now shows the number of reforged items.
+
+Examiner Changes | 2010 Oct 27
+------------------------------
+- The core now handles all additional inspection feature requests, such as achievement and honor/arena inspection.
+- Added an option to disable the throttle error message if you inspect too often.
+- Item strings are now properly cached using the level number of the inspected player. This fixes the issue where viewing heirloom items, on a low level character, would show the stats for your level, instead of theirs.
+- The Examiner Scanner was made into a proper library named LibGearExam. Most of its localization was obtained from global strings in WoW, so the only thing that needs to be translated are patterns.
+- The variable "lastInspectRequest" used to throttle how often inspecting is done, by checking when the last request happened, has been made into a global, meaning other addons are welcome to use this as well.
+- Stats: Removed the details on total and average item slot values.
+- Options: Changing an option will now properly call the "OnConfigChange" function of the modules.
+
+Examiner Changes | 2010 Oct 23
+------------------------------
+- Cleaned up the old, now obsolete, pre 4.0 patch code.
+- Most modules will now try and use the default data gathering functions instead of inspect function when inspecting yourself. This means less delay when inspecting yourself, as well as better reliability, in case inspect breaks.
+- Moved the module core code into its own lua file "modcore.lua", to make code management easier.
+- Core: Inspecting is now somewhat throttled by force. You are only allowed to do one inspect every two second.
+- Core: Now properly clears the previous inspect data when loading from cache. This should fix some odd issues that could happen at times.
+- Config: The option to combine additive stats now adds intellect to spellpower.
+- Cache: When sorting entries by "time", it now formats it, so it is a little more useful.
+- Feats: "Feats of Strength Query" feature added back in. You can now see all available Feats of Strength achievements again.
+- Talents: Now uses the new event "INSPECT_READY" instead of the removed "INSPECT_TALENT_READY".
+- Talents: When you inspect yourself, talents are now viewable, even when inspect has broken.
+- Stats: No longer ignores the ranged slot when calculating average item level. Reason it was done before, was because of relics. Classes who used relics, often had to use a lower level item, as they were BiS.
+- Stats: Removed the temporary slash command "fixcacheitemlevels". Instead, it will now automatically add average item level data to the cached player, if you load an old entry without this data.
+- Scanner: The added 30% melee haste that paladins, shamans, death knights and druids gained in patch 3.1, has been removed from the calculations.
+- Scanner: Now calculates resilience correctly with the buff that doubled its effect.
+- Scanner: Added the set bonus with the text "Increases Intellect by (%d+)". Found on old set bonuses which previously had spell power.
+- Scanner: Healing removed as a stat, only Spell Power remains.
+- Scanner: Some patterns, which I believe to have been removed from the game, has been marked with an alert status. What this means is, if you inspect someone where one of these patterns matches, Examiner will alert you. Please report to me the pattern Examiner outputs.
+
+Examiner Changes | 2010 Oct 10
+------------------------------
+- Changed the TOC version to 40000 for the 4.0.1 pre Cataclysm patch.
+- Core: Fixed a bug, that if Examiner ran into a Lua error during the inspection process, it would keep requesting inspection data every frame update.
+- Core: The slash command "/ex rating" feature, now supports ratings with decimal points.
+- Scanner: Added a not 100% correct formula for rating conversions from level 81 to 85. Better than nothing though.
+- Scanner: Dodge, parry, block and resilience ratings are now properly calculated for characters level 33 and under.
+- Scanner: Fixed armor penetration rating being calculated with an incorrect base.
+- Scanner: Added support for mastery rating.
+- Feats: Added new category drop down item: "Tracked Achievements". This will list all your current tracked achievements.
+- Feats: Also added another new category "Recent Achievements", which shows the last 5 achievements earned.
+- Feats: It is now possible to sort achievements by their date of completion.
+- Feats: When the pre Cataclysm patch hits, the "Feats of Strength Query" drop down option is being removed. This was changed because Blizzard no longer allows you to randomly query achievements to see which ones exists.
+- Feats: The filter string will no longer try and match the category name.
+- Feats: Achievement tooltips no longer show achievement and category ID, they were pretty much just a debugging remnant. I have however added an option to add them back in, should anyone need it.
+- Talents: Added forward compatibility with patch 4.0.1, the pre Cataclysm patch. This is mostly to make sure it runs with as few issues as possible, expect another release after the patch.
+- Talents: Talents which grants an ability, now has a differnt border around them, to make them stand out. Requires 4.0 patch to show.
+
+Examiner Changes | 2010 Aug 14
+------------------------------
+- Fixed a bug in most modules, that could cause an error when linking an item, talent or achievement into chat.
+- Feats: Increased the width slightly of the drop down category selector.
+- Cache: Added a "Show Alts" filter. With this enabled, only your alts will be shown in the cache. Great for checking what gear they have. You must reinspect yourself on your alts for this to work.
+- Scanner: Set bonuses are now once again properly scanned. Not certain when this broke.
+- Glyphs: This module has been removed. I had originally added this because I hoped Blizzard would add glyph inspection into the API, but that never happened. Maybe one day it will return.
+
+Examiner Changes | 2010 Jun 27
+------------------------------
+- Fixed the "ChatFrameEditBox" issues.
+
+Examiner Changes | 2009 Dec 16
+------------------------------
+- Changed the TOC version to 30300 for the 3.3 patch.
+- Glyphs: Added a check for empty string returned as realm for units out of range. This will fix the error where it reported the "Player-" not being online.
+
+Examiner Changes | 2009 Nov 28
+------------------------------
+- Localisation: Updated the Russian translation, thanks to Hoofik.
+
+Examiner Changes | 2009 Nov 03
+------------------------------
+- ItemSlots: Added option to show item levels all the time, and not just when holding down the ALT key.
+- Scanner: Armor Penetration rating is now showing correct according to the new patch 3.2.2 value.
+- Scanner: Gems with armor penetration should now be detected.
+
+Examiner Changes | 2009 Aug 13
+------------------------------
+- Scanner: Ratings for dodge, parry and resilience has been corrected with the new patch 3.2 values.
+
+Examiner Changes | 2009 Aug 09
+------------------------------
+- Changed the TOC version to 30200 for the 3.2 patch.
+- Replaced the renamed "GetDifficultyColor" with "GetQuestDifficultyColor".
+- Core: The delayed gem scan workaround will now properly re-cache the items.
+- Stats: With the extra item tooltip lines added to in the 3.2 patch, the gem color detection should now work again.
+- Feats: It's again possible to click an achievement to see its previous and following ones.
+- Glyphs: Fixed a problem when requesting glyphs from players on other servers.
+- Scanner: Negative stats are now detected, such as the "-5 Stamina" seen on "Fletcher's Gloves".
+- Scanner: Optimised the line scanning a bit.
+- Localisation: Updated the translation for the Taiwan version of WoW, thanks again ericyen.
+- Localisation: The Korean translation has been updated, thanks chkid.
+
+Examiner Changes | 2009 May 24
+------------------------------
+- Core: Changed the delayed gem inspection workaround from 0.5 seconds to 0.6.
+- Core: The InspectUnit() function now supports a secondary parameter, setting this to false, makes Examiner not open. This could be useful for a plugin module that for example would inspect all people in the raid.
+- Core: Auto caching of a player is now properly done after the inspection is done. This allows modules to easily add extra data to be cached.
+- Stats: Prismatic gems now counts towards all colors for the "Gem Matches".
+- Stats: No longer gives an error when inspecting someone who is naked or who is wearing gray items.
+- Stats: The Average Item Level is now added to a cached entry.
+- Stats: Adds a new sort method to the cache module: "iLvlAverage".
+- Stats: Added a temporary slash command "/ex fixcacheitemlevels" that will give all your old cache entries and average itemlevel value, making it possible to sort cache by average item level.
+- ItemSlots: When you hold down the Alt key, the item level of each item is shown on the item slot button.
+- ItemSlots: Fixed a rare bug that could show a questionmark icon instead of an empty slot.
+- ItemSlots: Fixed a bug caused by not clearing inspect data before reloading the cached entry when clicking on an item shown as a questionmark.
+- Feats: The filter will now search the achievement rewards for a match.
+- Feats: This module can now cache the number of achievement points a player has.
+- Feats: Adds a new sort method to the cache module: "achievementPoints".
+- Cache: Filtering has been improved, you can now set a filter similar to the /who function, for example a filter set to "1-79" will show all non 80s. There is also a class filter, use "class:deathknight" to show all Death Knights. Read more in the "readme.txt" file.
+- Cache: Added two more entries to the cache menu, "Delete Shown Entries" and "Delete Hidden Entries". Using the new filtering, this is a good way to trim down your cached entries.
+- Cache: The sort methods has been reworked, in the way that other modules can add new ways to sort cached entries. For examiner, the "Stats" module will add an "iLvlAverage" sort method.
+- PvP: The Arena Point Calculator will now properly calculate points using 1500 rating if the given rating is less than 1500.
+- Core: Added a new function "Examiner:GetModuleFromToken(token)" for modules to use if they need to interact with eachother.
+
+Examiner Changes | 2009 May 10
+------------------------------
+- [Hotfix] It should now be possible to inspect others from a unitframe's right click menu again.
+- Major rewrite of Examiner. It is now build up from modules, this means it will be a lot easier to update, edit and maintain. It is even possible to add third party plugin modules that adds extra features to Examiner.
+- New Module: Glyphs. With this module you can examine other people's glyphs, although it does require them to have Examiner installed as well.
+- Added a workaround for the missing gems when inspecting, it will not always work, especially not when inspecting a mouseover unit.
+- It is now a lot more clear when watching a cached entry, then entire Examiner frame will get a slight tint of yellow.
+- The "Scan Unknown Items" option has been removed, as it was obsolete.
+- Caching is now completely disabled by default, if you want to cache other people you inspect, you'll have to enable it on the "Config" page.
+- ItemSlots: The tooltip that is shown when holding down the Alt key, will now has the stat names sorted.
+- Talents: A right click menu was added to this module, you can now pick the shown talent spec, either active, primary or secondary.
+- Feats: Lowered the increasing memory usage a little, by implementing a table recycler.
+- Stats: Both the "I" and "C" icons has been removed completely. The information previously available by hovering your mouse over these icons, has been moved into it's own list, right click the "Stats" button and change view, or use the shortcut [Ctrl + Click].
+- Stats: The detail page will now show a Combined and Average Item Slot Value number. These numbers are somewhat of a gear score, it will take item rarity into account, meaning that a person in level 200 epics rate higher than someone in level 200 blues, unlike how the Combined and Average Item Level numbers.
+- Feats: The highest profession skills are now shown on the details page, which is part of the Stats page.
+- Localisation: The "StatEntryOrder" table has been removed from the localisation file, it is now constructed using localised strings.
+- Localisation: Included a new Korean translation, thanks to chkid.
+- Localisation: New translation for the Taiwan version of WoW, thanks ericyen.
+- Scanner: Removed the feral attack power stat.
+- Scanner: Added 40 block value from "Titanium Plating" (Thanks chkid).
+- Scanner: Corrected armor penetration rating values, it now show the 25% increased values, which was changed in patch 3.1.
+- Scanner: Melee haste rating will now show 30% higher values for shamans, paladins, druids, and death knights, as changed in patch 3.1.
+- Scanner: Some enchants which previously only had a name, such as Icewalker or Vitality, was made into showing their stats. They should now be cought by the scanner again.
+- Scanner: Titanium Weapon Chain changed to increase hit rating by 28.
+
+Examiner Changes | 2009 Apr 18
+------------------------------
+- Changed the TOC version to 30100 for the 3.1 patch.
+- Scanner: Now detects Void Star Talisman (Warlock T5 Class Trinket) again.
+- Scanner: Removed the obsolete "Infused Amethyst" workaround.
+- Many localised strings has been moved out from the localisation files.
+- Examiner now uses the CUSTOM_CLASS_COLORS table to colorise classes if available.
+- Fixed a global namespace polluting the key "f" with a fontstring.
+- The talent frame has been completely rewritten to work with patch 3.1, and no longer uses the TalentFrameBase code of the default interface.
+- Removed the ability to send player stats through the addon whisper channel, to other people using the "Send To..." command. I don't think this feature was very much used, and even so, the code was very old and badly written.
+
+Examiner Changes | 2009 Mar 16
+------------------------------
+- Scanner: The DK enchant "Rune of the Stoneskin Gargoyle" which got added in the last realease, actually adds 25 real defense, and not defense rating. Because of this I've removed it again to not mess up the stats. Would be nice to add it properly, but would have to make some changes to the scanner then.
+- This was actually in the last release, but the average item level sum, no longer includes the relic/ranged slot because often classes which uses relics, have a low item level in that slot due to the lack of proper high level ones.
+- You can now link achievements as text with a money value, as the gold, silver and copper icons will get stripped and replaced with "g", "s" and "c".
+- Scanner: The Kirin Tor head enchant, which should have been added in the last release wasn't working. This has now been fixed, and it should be detected properly.
+- Added the new code for tracking achievmenets in patch 3.1.
+
+Examiner Changes | 2009 Feb 20
+------------------------------
+- Better handling of page changes, should stay more consistant while going from normal frames to talents and back. Also works better when inspecting an NPC and then a player or vice versa.
+- Scanner: The Wyrmrest head enchant should now properly have its mp5 detected.
+- Scanner: The "Surefooted", "Icewalker" and "Accuracy" enchants will now also increase spell hit and crit.
+- Scanner: Now also matches the crit rating on the Kirin Tor head enchant, which has a lower case "r" in Rating.
+- Scanner: Haste gems should now properly add to both spell and melee/ranged haste.
+- Scanner: Added the following enchants: "Titanium Weapon Chain", "Tuskarr's Vitality", "Wisdom" and "Greater Vitality".
+- Simplified the stat overview a little by not listing stats such as crit and haste under both the melee and spell category. Now there is a new category named "Basic Ratings" which will show the crit, hit and haste ratings.
+- The Russian translation has been updated by Hoofik of AshenVale (RU).
+- Scanner: The Death Knight enchant "Rune of the Stoneskin Gargoyle" now adds 25 defense rating.
+
+Examiner Changes | 2008 Dec 15
+------------------------------
+- Fixed an update problem with honor and arena teams, that sometimes didn't show all data unless you inspected them several times.
+- Removed hunter pet backgrounds, they don't really fit as well as the others.
+- Armor Penetration Rating should now be shown in percent again.
+- Scanner: Added the "Icewalker" boot enchant.
+- Scanner: Added the "Accuracy" weapon enchant.
+- Scanner: New MP5 enchant pattern added, "+X Mana/5 second". Unsure which shoulder enchant it is, but I just saw one with it.
+- You can now click on an achievement, and if it has any pre or followups, a list of them all will be shown. To go back to the normal display, just click any achievement, or select a new category from the list.
+- Updated the German translation, thanks to Thorakon.
+- The Feats dropdown menu now has a "Feats of Strength Query" entry, selecting this will show all the feats of strength achievements that exists in WoW. Added because the "Feats of Strength" category, unlike other categories, only shows the ones you or the inspected player has.
+
+Examiner Changes | 2008 Nov 11
+------------------------------
+- Added a missing "Armor Penetration Rating" pattern.
+- Removed the old Armor Penetration pattern, which no longer is used.
+- Shift right clicking the main buttons, now does something. Cache & Feats button will clear the filters. For the Stats button, it will clear compare.
+- If you are looking at your own achievements in Examiner, you can now shift click one to track it.
+- With the option "Act as UI Frame" disabled, Examiner will once again save its position between sessions.
+- The "Feats" frame now shows 8 achievements per page instead of 9.
+- If a cached entry has been loaded, the model should now properly be cleared so it doesn't show the last shown unit if Examiner got hidden and then shown again.
+- Included a new Frensh translation, thanks to Maxfunkey (aka Carambha of EU-Loardaeron).
+- The feats filter will now also match the achievement description in addition to the name and category.
+
+Examiner Changes | 2008 Nov 03
+------------------------------
+- Added the sort option "completed" for achievements.
+- Thanks to Maxfunkey (aka Carambha of EU-Lordearon), the German translation has been updated.
+- Added filter options to hide complete or incomplete Achievements from the list.
+- The Korean translation has been updated, thanks to omosiro.
+- Moved the dropdown code of the achievement page into its own Lua file. The reason I have to use my own dropdown code and not the one already existing in the UI, is because they do not support scrollbars.
+- Achievement now always show a custom tip, if you wish to see the default WoW tip for achievements, hold down the ALT key.
+
+Examiner Changes | 2008 Oct 30
+------------------------------
+- Readded Russian translation from "Darigaaz of SoulFlayer" and updated to 3.0 by "Hoofik of AshenVale".
+- Set the default value of the "Query Achievements" option to false, enable it if you want Examiner to query them.
+- You can now link talents into the chat.
+- The full category name is now listed for achievements.
+- Renamed the "Badge" button to "Feats", as it sounds more appropriate for Achievements and Statistics.
+- Filter option added for Achievements and Statistics, use the "Feats" button's right click menu or just shift click the "Feats" button to set it.
+- Added a drop down menu on the "Feats" page, use this to select the category of Achievements and Statistics you wish to see.
+- Achievements and Statistics are no longer updated and listed unless you are viewing the "Feats" page.
+- You can now disable sorting of both the cache list and feats, by selecting the "none" sort option from the dropdowns.
+- Viewing Achievements can now be done even if the player is out of normal inspect range.
+
+Examiner Changes | 2008 Oct 20
+------------------------------
+- Talent button disabled when inspecting yourself, as you cannot inspect your own talents anyway.
+- Added a new page to show Achievements and Statistics, I've called this for "Badges", of that simple reason that Achievements is too long a word to fit into the now very small buttons.
+- New option added to toggle if you want Examiner to query the achievements. This was added because with all the achievements that exists, it lags the client a second or so, when requesting them.
+- You can right click the "Badge" button to select how you wish the badges to be sorted.
+- Fixed a bug when showing the "Other Details" tip, and the unit was no longer in available.
+- Added the images from the talent sheet backgrounds of Death Knights and pets.
+
+Examiner Changes | 2008 Oct 16
+------------------------------
+- Changed the TOC version to 30000 for the Wrath of the Lich King patch.
+- Scanner: Updated the line scanning. No longer has the "healing exclusive" workaround, which was added back when healing items was added spell damage as well.
+- Scanner: Removed many "+Spell Damage" and "+Healing" patterns which I believe are now no longer in use, and added "+Spell Power" instead. There might be some use of the old on some enchants though.
+- No longer uses "this" or "argN" parameters, but instead uses "self" and specific localised variables.
+- Many small things which broke parts of Examiner has been corrected thanks to "Dridzt" who posted a working beta modification of Examiner.
+- Thanks to "quicksylver", the English localisation has been updated to the new format in WotLK.
+- Modified the parameters for "PanelTemplates_TabResize" and "FauxScrollFrame_OnVerticalScroll" to fit the new order in WotLK.
+- Scanner: Now includes the spell crit from "Chaotic Skyfire Diamond".
+- Should no longer update PvP info just because another mod requests inspect honor data.
+- Scanner: Added Armor Penetration as a rating rather than a fixed value as it's been in the past.
+- Scanner: Combined the item bonuses which grants crit, hit and haste to apply to both melee and spell power.
+- Added Health and Mana values under the "Other Details" tip, for some extra info as you can now get this without being grouped with the inspected.
+- Scanner: Fixed a few problems that sometimes caused it to scan gray lines. This at least happened on some meta gems where the gem requirements were not met.
+- Scanner: Corrected a few patterns, so it should now scan and split hit and crit up properly.
+- Changed the check box template on the configurations page, this uses a smaller font, just like it was before the 3.0 patch.
+
+Examiner Changes | 2008 May 03
+------------------------------
+- Scanner: Gems with the stat "Spell Haste Rating" are now included.
+- Fixed the "Send Inspect Data" feature.
+- Fixed a "UnitIsUnit()" error that could happen when requesting PvP information.
+- Changed the normal interpretation of the chatlink and dressup, from the fixed shift and control keys, into using the IsModifiedClick() function.
+
+Examiner Changes | 2008 Apr 08
+------------------------------
+- Scanner: Fixed a pattern that were unable to detect some mp5 formats when appearing on gems.
+- Now uses the new CopyTable() function, which is a part of the Blizzard interface in 2.4, instead of supplying its own.
+- Fixed some honor value messup, where yesterday's kills had swapped place with today's honor. This happened when I reworked the code in the last release.
+- Made a small workaround to show PvP data for when you inspect yourself. This is a fix for the bug introduced in the final patch of 2.4 where you cannot inspect your own PvP and Talent data. I made no workaround for talents though, as that would have required me to add extra frames to Examiner. Hopefully, Blizzard fixes this error soon.
+
+Examiner Changes | 2008 Mar 26
+------------------------------
+- Changed the TOC version to 20400 for the upcomming 2.4.0 patch.
+- When the cache is sorted by "time", it will now list the latest cached entries first.
+- Fixed the German translation skipping "Equip:" bonuses.
+- The gem color scanner should now hopefully work on a few more localized interfaces.
+- Optimized the event handler a little, it will no longer be called when the Examiner window is closed.
+- Examiner should no longer update the talents of other units if another addon uses the Inspect API. But any further requests without reinspecting, will result in talent data from a another unit.
+- Major rework of the code, the Examiner UI is no longer loaded from XML. Doesn't necessarily mean it runs faster, but it is more "clean" and doesn't use up so much global name space.
+- The cache list can now display up to ten entries at the time instead of eight.
+- Examiner will now try and determine the level of players who are more than 10 levels above you and showing as "??". This is done by counting the number of talents and adding nine to it.
+- Updated Examiner to follow the new inspect rules. It now uses the CanInspect() API function, as Blizzard made things a lot more consistant. You can inspect even the other faction, both gear as well as talents, as long as they are not marked for PvP. The inspect range for talents has been restricted to 30 yards, just as normal gear inspect.
+
+Examiner Changes | 2008 Jan 18
+------------------------------
+- Fixed a bug that caused the right click menus on the "Cache" and "Stats" buttons to generate errors and not work.
+- Examiner will now try and convert any unit token from "mouseover" into a "partyX" or "raidX" unit.
+- Reduced the garbage created on the cache and stat list update functions.
+
+Examiner Changes | 2008 Jan 17
+------------------------------
+- The gem color count should now properly include all gems.
+- The total number of gems in the inspected target's gear is now shown.
+- Put back in the "/ex clearcache" slash command.
+- Localisation: Updated the German translation, thanks again Siphony.
+- Localisation: Also updated the French translation, thanks to Pettigrow.
+- Fixed "Combined and Average Item Level" for people with a two hander equipped, this got broken in the last release when I added the gem color count.
+- If you inspect an opposite faction member which is cached, but you are low level compared to them and their level reads as "??", it will now use the level stored in the cache entry.
+
+Examiner Changes | 2007 Dec 21
+------------------------------
+- Each Arena Team will now show the personal rating, marked as "PR" in the bottom of the arena team frame.
+- Corrected a small bug, that made the "/ex si" and "/ex compare" use the level of the last person you inspected, to convert ratings, rather than your own level.
+- Fixed a bug that could invalidate the current unit token if you had inspected someone from "mouseover" unit prior.
+- If the active page is currectly set to none, it will no longer default to the stats page whenever you log back in or reload the UI.
+- Added a gem counter under the "Other Details" section. The count are not for the actual gem colors, but for the gem matches. This means a purple gem will count both for blue and red. This is useful to check for meta gem requirements.
+- You can now right click an item, to output an item link in the chatframe for each gem it contains.
+- Changed how item slots behave when the "Scan Unknown Cached Items" option is enabled. Examiner will query the server for the item stats, but this has a little delay which means it cannot be shown immediately. So it will show a questionmark for all items which had to be queried, just click either of them and Examiner will reload all of the items. This is a bit similar to when this option is disabled, except that wont make it query the server until you actually click the item, and even then it will only query one item at the time.
+- Fixed a bug with additive stats and comparing.
+- All stats which are in ratings, now show a tip when you move the mouse over the value. This tip will show the value in percent when the "Show Ratings in Percentage" is disabled, and the actual rating when the option is on.
+- Inspect of talents are no longer restricted to normal inspect range.
+- Scanner: The critical strike rating on the "Unstable Citrine" gem is now detected properly.
+- Scanner: Will now find the "+X  Weapon Damage" enchant, note the extra space.
+
+Examiner Changes | 2007 Nov 24
+------------------------------
+- Localisation: Updated the German translation.
+- Examiner can now be closed with the escape key, even when the "Act as UI Frame" option is disabled.
+- Changed how the item slots update when you mouse over them, they should now support addons as EQEquip and similar. Sorry about not getting this fixed before now.
+- Added a text filter to the cache list. You can set the filter from the Cache button's right click menu or by a Shift + Click on it. The filter will search the cache entry's name, realm and guild.
+- When ratings are shown in real percentages relative to the inspected target level, it will now properly show a percent sign after the value.
+- The option "Add Spell Damage to Schools" was changed to add all stats which are additive, thus was renamed to "Combine Additive Stats". It will now add Attack Power to Feral Attack Power and Ranged Attack Power as well.
+- Using the ALT key over an item to show the total sum of all stats from that single item, now supports compare against the item in the same slot of whoever was marked for compare.
+- Moved the "Other Details" section to a small icon marked "I" in the top left corner of the Stats frame, as I wanted to keep the list of stats clean. The cached entry icon is now on the top right side of the Stats frame as a result.
+- When inspecing a player outside of inspect range who has been cached, it will now properly show the talent spec under "Other Details".
+- The active page and background visibility are now saved between sessions.
+- If the background has been hidden, it will now still be shown when viewing talents.
+- When auto caching is enabled, Examiner will now cache yourself automatically as well.
+- Added confirmation box for clearing the cache.
+- Removed the "/ex send 'target'" slash command, use the one from the Stats button right click menu instead.
+
+Examiner Changes | 2007 Nov 15
+------------------------------
+- Cached people of the opposite faction will now have the "Talents" button enabled.
+- Fixed a problem with the arena team details showing wrong info and banners.
+
+Examiner Changes | 2007 Nov 12
+------------------------------
+- Changed the TOC version to 20300 for the 2.3 patch.
+- As a new feature in WoW 2.3, you can now inspect other people's talent trees.
+- Items that are unknown for the local item cache when you load a cached entry, will now show as a questionmark. You can then click on it to query the server for the item, but this may cause a disconnect.
+- Added the Arena Point Calculator as a command line function, the parameter is: "/ex arena 'rating'".
+- New "/ex scale 'value'" command line parameter to change the scale of the Examiner window.
+- The Cached Icon, the "C" in top left corner, will now show the zone and time since the entry was cached when you move your mouse over it.
+- A new keybind has been added, this one will just open up Examiner, but not inspect any new unit. This is useful if you just want to check on the last person you inspected, since Examiner currently has no way to open without inspecing someone.
+- New option: "Show Ratings in Percentage", with it enabled, rating values will be displayed as percentage relative to the inspected person's level.
+- The "Other Details" section under player stats will now show their talent spec point distribution (e.g. 41/20/0). As the actual talents aren't cached, this is the next best thing.
+- Scanner: Fixed a problem which made it ignore certain lines that did not start with a normal letter (A-Z) which was a problem for some translated languages.
+- Scanner: Added new pattern for the equip bonus which grants Spell Damage from Healing.
+- Scanner: Should now pick up specific spell school damage seen on certain green items.
+- Scanner: Added a missing MP5 pattern: "+Mana per 5 Seconds", which is seen on Royal Shadow Draenite.
+- Scanner: Added a missing MP5 pattern: "+Mana every 5 Sec", seen on Dazzling Deep Peridot.
+- Scanner: Will now add the healing and spell damage from the "Bronze Band of Force" ring.
+- Scanner: Added the new "Expertise" stat, which has replaced all the weapon skill ratings.
+- Scanner: Removed all weapon skill rating patterns, as they are now obsolete.
+- Scanner: Removed the workaround pattern "Critical Strike Rating +X" for the item "Gloves of Dexterous Manipulation" as it got fixed.
+- Scanner: Removed another workaround pattern "Strength +X" on the item "Bracers of Eradication" as it got fixed as well.
+
+Examiner Changes | 2007 Sep 29
+------------------------------
+- Updated the Korean translation, thanks again omosiro.
+- Updated the Arena Point Calculator for the new formula in the 2.2 patch.
+- Fixed a bug when you click an item while inspecting yourself.
+- Moved the localization files into a folder for themselves.
+
+Examiner Changes | 2007 Sep 11
+------------------------------
+- French translation added by Pettigrow of Sinstralis.
+- Added new section under the stats frame: "Other Details", this section shows the inspected unit token and the combined and average item level from all items (tabard and shirt excluded).
+- The right click menu from unit frames will now have "Inspect" enabled at any distance.
+
+Examiner Changes | 2007 Aug 17
+------------------------------
+- Changed the TOC version to 20200 again for the 2.2.0 patch.
+- You can now select how the cache entries are sorted, to do this, right click on the Cache button to show a menu. This menu also lets you clear out the entire cache.
+- Did something similar to the Stats button, added a drop down menu. Here you can add a person to the cache (even when caching is disabled), you can mark and unmark a person for compare, and you can use the send to function to send the inspect to another Examiner user.
+- Removed the mark/unmark for compare button in the Config frame.
+- Examiner will now ignore items which are not in the local item cache when loading a cached entry. This means I can now allow to have Examiner save the cache between sessions by default.
+- Fixed some syntax errors in "Templates.xml" which caused it to generate a few errors in the "FrameXML.log".
+- Fixed a line 1151 bug regarding UnitPlayerControlled() for when people are in loading range but outside inspect range.
+
+Examiner Changes | 2007 Aug 08
+------------------------------
+- Changed the TOC version back to 20100 since the 2.2.0 patch doesn't seem to come any time soon.
+- Scanner: Corrected a pattern the caused HP5 of the value 10 and above not to be detected.
+- The "/ex si" and "/ex compare" as well as pressing ALT over an item slot, now supports the option "Add Spell Damage to Schools".
+- If you have player from the oppesite faction in your cache, they should now load properly (Only relevent for PvE realms).
+- Added a new feature that allows you to send the current inspected player to another person with Examiner. This is done through AddOn Whisper Channel. Examiner will not accept addon messages by default, you have to enable it in the config.
+- Fixed some problems that could occur when the inspected unit actually became another player.
+- Scanner: Added "Fist Skill Rating" from equip bonus.
+- There is now a new option that lets you determine if it should "Auto Inspect" when targeting a new unit.
+- Scanner: Added another HP5 pattern "Restores X health every 5 sec.".
+- Corrected the Arena Point calculation for 2v2.
+- Scanner: Added "Strength +" which is found on "Bracers of Eradication" as socket bonus.
+- Optimized the scanner and the whole code in general.
+- Scanner: The T5 Warlock trinket Void Star Talisman is now being added to spell damage.
+- You can now delete a single cache entry, by Right-Clicking on it, while holding down the shift key.
+- Scanner: Added missing pattern for "+Shield Block Rating". Not sure where it went missing, supposedly I already added this in the 07.06.23 release.
+
+Examiner Changes | 2007 Jul 20
+------------------------------
+- Changed the TOC version to 20200 for the upcomming 2.2.0 patch.
+- Added "/ex compare 'itemLink1' 'itemLink2'" slash command to compare the stats on two items.
+- Examiner will now get the proper unit token, when you mouseover inspect a unit frame, instead of just using "mouseover".
+- You can now use Examiner to equip/un-equip items when inspecting yourself.
+- It will no longer re-inspect a person 2-4 times because of portrait or model updates. But will now correctly re-inspect if they change their gear.
+- Scanner: Made some optimations on how many lines it will actually scan for patterns, should only be about half of what it was before. Although it wasn't really slow to begin with, optimizations are always good.
+- Honor and Arena Team details can now be cached. This is disabled by default though, but you can enabled it the configurations.
+- Scanner: Will now show the stats on the Demon's Blood trinket (10779) from the quest "You Are Rakh'likh, Demon".
+- Scanner: Added yet another MP5 pattern: "Mana per 5 sec.". Guess it has become a tradition for each release.
+- Made the Arena Teams show in a fixed position, so 2v2 will always be on top, 3v3 always in the middle and 5v5 always at the bottom.
+- Changed the Arena Team layout a bit, and added a "Calculated Arena Points" label based on the teams rating.
+- Scanner: Added the "+Haste Rating" enchant (931).
+
+Examiner Changes | 2007 Jul 08
+------------------------------
+- You can now clear the cache from the UI with a Shift-Click on the Cache button.
+- Scanner: Added pattern to find the "Critical Strike Rating+" seen on item 28506.
+- Scanner: Added missing "+Resist All" Void Gem format.
+- When you inspect yourself, the PvP page will now list your current amount of honor points under the Lifetime Honor Points. A bit misleading perhaps, but there is not much room left to place it elsewhere.
+- Added a new function to show a tooltip of the total stats an item has, you can show this by holding down the ALT button when you move your mouse over an item.
+- Removed the "EXAMINER_RESISTANCES" and "EXAMINER_SCHOOLS" constants from the localization lua file as they don't need translation.
+- Fixed a comparing bug with resistances.
+- The guild detail for a player now shows the guild rank index in brackets just after the rank name.
+- You can now compare anyone with themselves. As marking someone for compare just takes a backup of their stats, it makes no sense that I had disabled this last release, so you could not compare one gear setup with another if it was on the same person. Well, you can now.
+- Scanner: Added a missing "+Health per 5 sec." formatting seen on some green items of Regeneration.
+- The cache list will now display a little tooltip to show more information about the cached player.
+- Fixed some stat refresh problems when marking and unmarking a target for compare.
+- Added support for Equip Compare, just hold down Shift when you hover your mouse over any item, and it will show your item(s) in the same slot next to the item tooltip.
+
+Examiner Changes | 2007 Jun 23
+------------------------------
+- You can now mark an inspected player for compare on the Config page. When you do this, all the following targets you inspect will list the difference in stats, rather than the actual stats.
+- Scanner: Added weapon skill patterns for guns, bows and crossbows.
+- Scanner: Added yet another MP5 pattern (this is getting silly), the one from the Magister's Armor Kit.
+- Scanner: Will now pick up the "Shield Block Rating" enchant to shields.
+- Fixed a bug when inspecting a mouseover unit out of range, from unit frames so close together they would not trigger a Mouseover Unit change event.
+- Scanner: The inconsistent "Infused Amethyst" gem from the Nightbane quest should now be included.
+- Included German translation, thanks to Haldamir of Gorgonnash.
+- Included Korean translation, thanks to omosiro.
+- Added 3 more strings to the misc section of the localized file so the recognition of Socket and Set bonuses will work on other locals as well.
+
+Examiner Changes | 2007 Jun 19
+------------------------------
+- Added a new option "Act as a UI Frame". When this is enabled, Examiner will be like other UI frames (Talents, Quest Log, Mailbox etc). But when disabled, you can move Examiner around as you like.
+- Stats from a cached player will now be marked with a "C" in the upper left corner.
+- When you inspect a player outside of inspection range, it will now load their cached data automatically, if they are in your cache.
+- Scanner: Made the code "somewhat" cleaner.
+- Scanner: Added yet another pattern for "MP5", because Blizzard are so inconsistent with the format of this stat on items!
+
+Examiner Changes | 2007 Jun 13
+------------------------------
+- Scanner: Should now include correct stats from the Mage and Warlock ZG enchants.
+- Changed the width of some of the text on the PvP frame, they should no longer get cut short if you use another font like ClearFonts.
+- Scanner: Added the "+health every 5 sec." formatting which appears on random green items.
+- Scanner: Added the new "Armor Penetration" stat: "Your attacks ignore X of your opponent's armor".
+- Scanner: Fixed a typo, so it should now properly pick up Arcane Resistance.
+- Scanner: Holy damage on the "Drape of the Righteous" is now getting included.
+- Scanner: Should now pick up "MP5" when given as a socket bonus.
+- Scanner: Added missing "Ranged Attack Power" stat.
+- Should be a bit easier to see the resistance values now.
+- Scanner: Now properly includes the defense rating from the paladin Zul'Gurub enchant.
+
+Examiner Changes | 2007 Jun 06
+------------------------------
+- Scanner: Added a few more weapon skill search patterns.
+- Cache are no longer saved between sessions. The reason for this is if you have someone cached and the server is reset, you wont be able to load the cached players gear properly because their items might not be in your local item cache, loading a cached person could even DC you.
+- Scanner: Added missing "+Block Value" when used as socket bonus.
+- Scanner: Added "Melee Haste Rating" and "Spell Haste Rating".
+- You can now inspect your own Arena teams, although it will only show this season's details (for now).
+- Fixed a bug where if you would inspect "mouseover" unit from outside inspect range, and then mousing over another unit which were inside inspect range to you, would inspect them instead.
+- Changing pages will now be more friendly and it will also no longer force you to the Stats page every time you inspect a new player.
+- Will now show the proper PvP rank name for opposite faction members.
+- Scanner: Will now properly scan the set bonuses and include them if they contain stats.
+- Gave the inspect window a higher priority, this means it should no longer close when you open dialogs such as the friends frame or the mailbox.
+
+Examiner Changes | 2007 Jun 04
+------------------------------
+- Added percentage to the Arena Team Wins and Losses.
+- Scanner: Added missing "+ Crit Rating" and "+ Resilience Rating" which are seen on some items as socket bonus.
+- Fixed a bug when someone outside of targeting range changed gear or swapped form.
+- You no longer have to reinspect a player for the "Add Spell Damage to Schools" option to take effect.
+
+Examiner Changes | 2007 Jun 02
+------------------------------
+- Scanner: Added "Vitality", "Savagery", "Surefooted", "Soulfrost" and "Sunfire" enchants.
+- Scanner: Added "+ All Resistances" enchant.
+- Scanner: Added ranged weapon scopes.
+- Added PvP frame, which shows Honor and Arena Teams.
+- Added Configurations frame, which has two options, "Enable Caching" and "Add Spell Damage to Schools".
+- A cache entry will no longer be made when inspecting yourself.
+- Fixed a bug that made it clear all items for a targeted unit, that changed gear or swapped form, outside of inspection range.
+
+Examiner Changes | 2007 May 31
+------------------------------
+- Fixed bug in the scanner causing it to stop working after having inspected someone with two identical rings or trinkets.
+- Hooked the default InspectUnit() function, so Examiner will pop up when selecting "Inspect" from the drop down menu.
+- Added slash command "/ex" in addition to "/examiner".
+- Will no longer create a cache entry of players from the oppersite faction.

@@ -5740,7 +5740,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				if index <= numPets then
 					local petID, speciesID, isOwned, customName, level, favorite, isRevoked, name, icon, petType, creatureID, sourceText, description, isWildPet, canBattle = C_PetJournal.GetPetInfoByIndex(index, isWild);
 					local health, maxHealth, attack, speed, rarity = C_PetJournal.GetPetStats(petID);
-					pet.name:SetVertexColor(ITEM_QUALITY_COLORS[rarity-1].r, ITEM_QUALITY_COLORS[rarity-1].g, ITEM_QUALITY_COLORS[rarity-1].b)
+					if rarity then
+						pet.name:SetVertexColor(ITEM_QUALITY_COLORS[rarity-1].r, ITEM_QUALITY_COLORS[rarity-1].g, ITEM_QUALITY_COLORS[rarity-1].b)
+					end
 				end
 			end
 		end

@@ -308,6 +308,7 @@ ns.auras_instances_debuffs = {
 			
 			-- Lilian Voss
 			[111585] = 7, -- Dark Blaze
+			[115350] = 7,--凝视
 			
 			-- Darkmaster Gandling
 			[108686] = 7, -- Immolate
