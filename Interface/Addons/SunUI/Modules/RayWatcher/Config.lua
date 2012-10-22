@@ -17,13 +17,24 @@ local S, C, L, DB = unpack(SunUI)
 ns.font = DB.Font
 ns.fontsize = 14
 ns.fontflag = 'THINOUTLINE'
-
+local playerbuff1 = {"BOTTOM", UIParent, "BOTTOM",-253, 205} --name = "玩家buff",
+local targetdebuff1 = {"TOP", UIParent, "BOTTOM", 100, 275} --name = "目标debuff",
+local playercd1 = {"BOTTOM", UIParent, "BOTTOM", -38, 135}  --name = "玩家技能CD",
+--牧师专用设置
+local msright = {"CENTER", UIParent, "CENTER", 105, 120}   --name = "玩家右邊1",
+local msleft =  {"CENTER", UIParent, "CENTER", 105, 85}  --name = "玩家右邊2",
+--全职业设置
+local alldebuff = {"TOP", UIParent, "TOP", 180, -157}  --name = "玩家Debuff",
+local pvpdebuff = {"TOP", UIParent, "TOP", 180, -111}  --name = "玩家PVPDebuff",
+local inbuff1 = {"CENTER", UIParent, "CENTER", 110, 165}  --name = "药水减伤等Buff",
+local enbuff = {"BOTTOM", UIParent, "BOTTOM",-253, 234}  --name = "玩家饰品附魔触发buff",
+local imbuff = {"CENTER", UIParent, "CENTER", 110, 210}  --name = "玩家重要Buff",
 ns.watchers ={
 	["DRUID"] = {
 		{
 			name = "玩家buff",
 			direction = "RIGHT",
-			setpoint =  {"BOTTOM", UIParent, "BOTTOM",-252, 205},
+			setpoint =  {unpack(playerbuff1)},
 			size = 24,
 				-- 节能施法
 				{ spellID = 16870, unitId = "player", caster = "player", filter = "BUFF" },
@@ -49,7 +60,7 @@ ns.watchers ={
 		{
 			name = "目标debuff",
 			direction = "RIGHT",
-			setpoint ={"TOP", UIParent, "BOTTOM", 101, 275},
+			setpoint ={unpack(targetdebuff1)},
 			size = 28,
 				-- 挫志咆哮(熊)
 				{ spellID =    99, unitId = "target", caster = "player", filter = "DEBUFF" },
@@ -79,7 +90,7 @@ ns.watchers ={
 		{
 			name = "玩家技能CD",
 			direction = "RIGHT",
-			setpoint = {"BOTTOM", UIParent, "BOTTOM", -38, 135},
+			setpoint = {unpack(playercd1)},
 			size = 24,
 				-- 狂暴恢复
 				{ spellID = 22842, filter = "CD" },
@@ -95,7 +106,7 @@ ns.watchers ={
 		{
 			name = "目标框上方",
 			direction = "RIGHT",
-			setpoint ={"TOP", UIParent, "BOTTOM", 101, 275},
+			setpoint ={unpack(targetdebuff1)},
 			size = 28,
 				-- 毒蛇钉刺
 				{ spellID =  118253 ,unitId = "target", caster = "player", filter = "DEBUFF" },
@@ -117,7 +128,7 @@ ns.watchers ={
 		{
 			name = "目標的目标框上方",
 			direction = "RIGHT",
-			setpoint = {"BOTTOM", UIParent, "BOTTOM",-252, 205},
+			setpoint = {unpack(playerbuff1)},
 			size = 24,
 				-- 急速射击
 				{ spellID =  3045, unitId = "player", caster = "player", filter = "BUFF" },
@@ -149,7 +160,7 @@ ns.watchers ={
 		{
 			name = "玩家技能CD",
 			direction = "RIGHT",
-			setpoint = {"BOTTOM", UIParent, "BOTTOM", -38, 135},
+			setpoint = {unpack(playercd1)},
 			size = 24,
 				-- 奇美拉射击
 				{ spellID = 53209, filter = "CD" },
@@ -167,7 +178,7 @@ ns.watchers ={
 		{
 			name = "目标框上方",
 			direction = "RIGHT",
-			setpoint ={"TOP", UIParent, "BOTTOM", 101, 275},
+			setpoint ={unpack(targetdebuff1)},
 			size = 28,
 			
 				-- 点燃
@@ -190,7 +201,7 @@ ns.watchers ={
 		{
 			name = "目标的目标上方",
 			direction = "RIGHT",
-			setpoint = {"BOTTOM", UIParent, "BOTTOM",-252, 205},
+			setpoint = {unpack(playerbuff1)},
 			size = 24,
 			  -- 奥术强化
 				{ spellID = 12042, unitId = "player", caster = "player", filter = "BUFF" },
@@ -223,7 +234,7 @@ ns.watchers ={
 		{
 			name = "玩家技能CD",
 			direction = "RIGHT",
-			setpoint = {"BOTTOM", UIParent, "BOTTOM", -38, 135},
+			setpoint = {unpack(playercd1)},
 			size = 24,
 				-- 唤醒
 				{ spellID = 12051, filter = "CD" },
@@ -237,7 +248,7 @@ ns.watchers ={
 		{
 			name = "玩家Buff",
 			direction = "RIGHT",
-			setpoint = {"BOTTOM", UIParent, "BOTTOM",-252, 205},
+			setpoint = {unpack(playerbuff1)},
 			size = 24,
 				-- 盾墙(防御姿态)
 				{ spellID =   871, unitId = "player", caster = "player", filter = "BUFF" },
@@ -273,7 +284,7 @@ ns.watchers ={
 		{
 			name = "目标Debuff",
 			direction = "RIGHT",
-			setpoint ={"TOP", UIParent, "BOTTOM", 101, 275},
+			setpoint ={unpack(targetdebuff1)},
 			size = 28,
 			
 			-- Charge Stun / Sturmangriffsbetäubung
@@ -302,7 +313,7 @@ ns.watchers ={
 		{
 			name = "玩家buff",
 			direction = "RIGHT",
-			setpoint =  {"BOTTOM", UIParent, "BOTTOM",-252, 205},
+			setpoint =  {unpack(playerbuff1)},
 			size = 24,
 				-- 嗜血
 				{ spellID =  2825, unitId = "player", caster = "all", filter = "BUFF" },
@@ -326,7 +337,7 @@ ns.watchers ={
 		{
 			name = "目标debuff",
 			direction = "RIGHT",
-			setpoint ={"TOP", UIParent, "BOTTOM", 101, 275},
+			setpoint ={unpack(targetdebuff1)},
 			size = 28,
 				-- 大地震击
 				{ spellID =  8042, unitId = "target", caster = "player", filter = "DEBUFF" },
@@ -346,7 +357,7 @@ ns.watchers ={
 		{
 			name = "玩家buff",
 			direction = "RIGHT",
-			setpoint =  {"BOTTOM", UIParent, "BOTTOM",-252, 205},
+			setpoint =  {unpack(playerbuff1)},
 			size = 24,
 				-- 圣佑术
 				{ spellID =   498, unitId = "player", caster = "player", filter = "BUFF" },
@@ -388,7 +399,7 @@ ns.watchers ={
 		{
 			name = "目标debuff",
 			direction = "RIGHT",
-			setpoint ={"TOP", UIParent, "BOTTOM", 101, 275},
+			setpoint = {unpack(targetdebuff1)},
 			size = 28,
 				-- 制裁之锤
 				{ spellID =   853, unitId = "target", caster = "player", filter = "DEBUFF" },
@@ -408,7 +419,7 @@ ns.watchers ={
 		{
 			name = "玩家buff",
 			direction = "RIGHT",
-			setpoint =  {"BOTTOM", UIParent, "BOTTOM",-252, 205},
+			setpoint =  {unpack(playerbuff1)},
 			size = 24,
 				-- 消散
 				{ spellID = 47585, unitId = "player", caster = "player", filter = "BUFF" },  
@@ -434,8 +445,14 @@ ns.watchers ={
 		{
 			name = "目标框體上方",
 			direction = "RIGHT",
-			setpoint ={"TOP", UIParent, "BOTTOM", 101, 275},
+			setpoint = {unpack(targetdebuff1)},
 			size = 28,
+				-- 吸血鬼之触
+				{ spellID = 34914, unitId = "target", caster = "player", filter = "DEBUFF" },
+				-- 暗言术:痛
+				{ spellID =   589, unitId = "target", caster = "player", filter = "DEBUFF" },
+				-- 噬灵疫病
+				{ spellID =  2944, unitId = "target", caster = "player", filter = "DEBUFF" },
 				-- 虚弱灵魂
 				{ spellID =  6788, unitId = "target", caster = "player", filter = "DEBUFF" },
 				-- T12 4件特效
@@ -456,28 +473,14 @@ ns.watchers ={
 		{
 			name = "玩家右邊1",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", 110, 70},
+			setpoint = {unpack(msright)},
 			mode = "ICON",
-			size = 30,
-				-- 吸血鬼之触
-				{ spellID = 34914, unitId = "target", caster = "player", filter = "DEBUFF" },
-				-- 暗言术:痛
-				{ spellID =   589, unitId = "target", caster = "player", filter = "DEBUFF" },
-				-- 噬灵疫病
-				{ spellID =  2944, unitId = "target", caster = "player", filter = "DEBUFF" },
+			size = 25,
 				--CD
 				--愈合祷言
 				{ spellID = 33076, filter = "CD" },
 				-- 治疗之环
 				{ spellID = 34861, filter = "CD" },
-				
-		},
-		{
-			name = "玩家右邊2",
-			direction = "LEFT",
-			setpoint = {"CENTER",UIParent, "CENTER", -110, 70},
-			mode = "ICON",
-			size = 30,
 				-- 心靈震爆
 				{ spellID = 8092, filter = "CD" },
 				-- 神圣之箭
@@ -489,19 +492,22 @@ ns.watchers ={
 				{ spellID = 88684, filter = "CD" },
 				-- 辉环
 				{ spellID = 120517, filter = "CD" },
+				
 		},
 		{
-			name = "玩家技能CD",
+			name = "玩家右邊2",
 			direction = "RIGHT",
-			setpoint = {"BOTTOM", UIParent, "BOTTOM", -38, 135},
-			size = 24,
+			setpoint = {unpack(msleft)},
+			mode = "ICON",
+			size = 25,
+				
 		},
 	},
 	["WARLOCK"]={
 		{
 			name = "玩家Buff",
 			direction = "RIGHT",
-			setpoint = {"BOTTOM", UIParent, "BOTTOM",-252, 205},
+			setpoint = {unpack(playerbuff1)},
 			mode = "ICON",
 			size = 24,
 				-- 暗影冥思
@@ -513,7 +519,7 @@ ns.watchers ={
 		},
 		{
 			name = "目标debuff",
-			setpoint ={"TOP", UIParent, "BOTTOM", 101, 275},
+			setpoint = {unpack(targetdebuff1)},
 			direction = "RIGHT",
 			mode = "ICON",
 			size = 28,
@@ -541,7 +547,7 @@ ns.watchers ={
 		{
 			name = "目標的目標上方",
 			direction = "RIGHT",
-			setpoint = {"BOTTOM", UIParent, "BOTTOM",-252, 205},
+			setpoint = {unpack(playerbuff1)},
 			size = 24,
 				-- 嫁祸诀窍
 				{ spellID = 57934, unitId = "player", caster = "player", filter = "BUFF" },			
@@ -556,7 +562,7 @@ ns.watchers ={
 		{
 			name = "目标框上方",
 			direction = "RIGHT",
-			setpoint = {"TOP", UIParent, "BOTTOM", 101, 235},
+			setpoint = {unpack(targetdebuff1)},
 			size = 28,
 				-- 肾击
 				{ spellID =   408, unitId = "target", caster = "player", filter = "DEBUFF" },
@@ -592,7 +598,7 @@ ns.watchers ={
 		{
 			name = "玩家技能CD",
 			direction = "RIGHT",
-			setpoint = {"BOTTOM", UIParent, "BOTTOM", -38, 135},
+			setpoint = {unpack(playercd1)},
 			size = 24,
 				-- 殺戮盛筵
 				{ spellID = 51690, filter = "CD" },
@@ -604,7 +610,7 @@ ns.watchers ={
 		{
 			name = "玩家Buff",
 			direction = "RIGHT",
-			setpoint = {"BOTTOM", UIParent, "BOTTOM",-252, 205},
+			setpoint = {unpack(playerbuff1)},
 			size = 24,
 				-- 反魔法护罩
 				{ spellID = 48707, unitId = "player", caster = "player", filter = "BUFF" },
@@ -636,7 +642,7 @@ ns.watchers ={
 		{
 			name = "目标debuff",
 			direction = "RIGHT",
-			setpoint ={"TOP", UIParent, "BOTTOM", 101, 275},
+			setpoint = {unpack(targetdebuff1)},
 			size = 28,
 				-- 血之疫病
 				{ spellID = 55078, unitId = "target", caster = "player", filter = "DEBUFF" },
@@ -650,8 +656,8 @@ ns.watchers ={
 		{
 			name = "玩家Debuff",
 			direction = "RIGHT",
-			setpoint = {"TOP", UIParent, "TOP", 160, -157},
-			size = 46,
+			setpoint = {unpack(alldebuff)},
+			size = 35,
 				-- 震懾波
 				{ spellID = 46968, unitId = "player", caster = "all", filter = "DEBUFF" },
 				-- 变羊
@@ -757,8 +763,8 @@ ns.watchers ={
 		{
 			name = "玩家PVPDebuff",
 			direction = "RIGHT",
-			setpoint = {"TOP", UIParent, "TOP", 160, -111},
-			size = 40,
+			setpoint = {unpack(pvpdebuff)},
+			size = 35,
 				--啃食
 		        { spellID = 47481, unitId = "player", caster = "all", filter = "DEBUFF" },
 				--絞殺
@@ -923,7 +929,7 @@ ns.watchers ={
 		{
 			name = "药水减伤等Buff",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", 110, 135},
+			setpoint = {unpack(inbuff1)},
 			size = 35,
 				-- 火山药水
 				{ spellID = 79476, unitId = "player", caster = "player", filter = "BUFF" },  
@@ -976,7 +982,7 @@ ns.watchers ={
 		{
 			name = "玩家重要Buff",
 			direction = "RIGHT",
-			setpoint = {"CENTER", UIParent, "CENTER", 110, 180},
+			setpoint = {unpack(imbuff)},
 			size = 35,
 				-- 急速射击
 				{ spellID =  3045, unitId = "player", caster = "player", filter = "BUFF" }, 
@@ -1033,10 +1039,10 @@ ns.watchers ={
 				--吸血鬼的拥抱
 				{ spellID = 15286, unitId = "player", caster = "player", filter = "BUFF" },
 		},
-				{
+		{
 			name = "玩家饰品附魔触发buff",
 			direction = "RIGHT",
-			setpoint ={"BOTTOM", UIParent, "BOTTOM",-252, 234},
+			setpoint = {unpack(enbuff)},
 			size = 24,
 				--电容器
 				{ spellID = 96890, unitId = "player", caster = "player", filter = "BUFF" }, 

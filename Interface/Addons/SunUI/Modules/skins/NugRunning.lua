@@ -2,96 +2,6 @@ if not IsAddOnLoaded("NugRunning") then return end
 local S, C, L, DB = unpack(select(2, ...))
 local _
 --(\d+)(\s*,.+name\s*=\s*)\"[^"]+\"Ìæ»»\1\2GetSpellInfo\(\1\)
-local bettertime = true
-local color = "|cffff0000"
-local universal_color = {0.45,0.45,0.45}
-
-local unpack = unpack
-local format = format
-
-local FormatTime
-do
-	local day, hour, minute = 86400, 3600, 60
-	function FormatTime(s)
-		if s >= day then
-			return format("%d%sd|r", ceil(s / day), color)
-		elseif s >= hour then
-			return format("%d%sh|r", ceil(s / hour), color)
-		elseif s >= minute * 4 then
-			return format("%d%sm|r", ceil(s / minute), color)
-		elseif s >= 5 then
-			return floor(s)
-		end
-		return format("%.1f", s)
-	end
-end
--- better time text; not called when "bettertime" is false
-local function SetTimeText(self, _, timeDigits)
-	self:SetText(FormatTime(timeDigits))
-end
--- Only set alpha on the bar, the icon and stacks when target is changed
-local ModifyElementAlpha
-do
-	local _
-	local elements = {"icon", "stacktext", "bar"}
-	function ModifyElementAlpha(self, alpha)
-		for _, elm in pairs(elements) do
-			self[elm]:SetAlpha(alpha)
-		end
-	end
-end
-
--- injecting our default settings
-hooksecurefunc(NugRunning, 'PLAYER_LOGIN', function(self,event,arg1)
-	--if(NRunDB_Global) and not NRunDB.set then table.wipe(NRunDB_Global) end
-	if not NRunDB_Global.set then
-		table.wipe(NRunDB_Global)
-		NRunDB.set = true
-		NRunDB.anchor = NRunDB.anchor or {}
-		NRunDB.anchor.point = NRunDB.anchor.point or "CENTER"
-		NRunDB.anchor.parent = NRunDB.anchor.parent or "UIParent"
-		NRunDB.anchor.to = NRunDB.anchor.to or "CENTER"
-		NRunDB.anchor.x = NRunDB.anchor.x or 253.2259143850206
-		NRunDB.anchor.y = NRunDB.anchor.y or -137.9071948009855
-		NRunDB.growth = NRunDB.growth or "up"
-		NRunDB.width = NRunDB.width or 110
-		NRunDB.height = NRunDB.height or 16
-		NRunDB.fontscale = NRunDB.fontscale or 1
-		NRunDB.nonTargetOpacity = NRunDB.nonTargetOpacity or 0.7
-		NRunDB.cooldownsEnabled = false
-		NRunDB.spellTextEnabled = (NRunDB.spellTextEnabled == nil and true) or NRunDB.spellTextEnabled
-		NRunDB.shortTextEnabled = (NRunDB.shortTextEnabled == nil and false) or NRunDB.shortTextEnabled
-		NRunDB.swapTarget = (NRunDB.swapTarget == nil and true) or NRunDB.swapTarget
-		NRunDB.localNames   = (NRunDB.localNames == nil and false) or NRunDB.localNames
-		NRunDB.totems = false --(NRunDB.totems == nil and true) or NRunDB.totems
-	end
-
-    NugRunning.anchor = NugRunning.CreateAnchor()
-    local pos = NRunDB_Global.anchor
-    NugRunning.anchor:SetPoint(pos.point, pos.parent, pos.to, pos.x, pos.y)
-	
-	NugRunning:SetupArrange()
-	
-	local up = CreateFrame"Frame"
-	up:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-	up:RegisterEvent("PLAYER_ENTERING_WORLD")
-	up:SetScript("OnEvent", function()
-		local pttree = GetSpecialization()
-		if (select(2,UnitClass("player"))=="DRUID" and pttree==1) or select(2,UnitClass("player")) == "DEATHKNIGHT" or (select(2,UnitClass("player")) == "SHAMAN") then
-			NugRunning.anchor:SetPoint(pos.point, pos.parent, pos.to, pos.x, pos.y+12)
-		else
-			NugRunning.anchor:SetPoint(pos.point, pos.parent, pos.to, pos.x, pos.y)
-		end
-	end)
-end)
-
-
----------------------------------------------------------------------------------------------------------------
-local TimerBarSetColor = function(self,r,g,b)
-    self.bar:SetStatusBarColor(r,g,b)
-	--self.bar:SetStatusBarColor(unpack(universal_color))
-    self.bar.bg:SetVertexColor(r*.3, g*.3, b*.3)
-end
 
 -- Replace bar creation function
 ConstructTimerBar = function(width, height)
@@ -162,7 +72,18 @@ ConstructTimerBar = function(width, height)
     f.spellText.SetName = SpellTextUpdate
     
 	f.SetColor = TimerBarSetColor
-    
+	local overlay = f.bar:CreateTexture(nil, "ARTWORK", nil, 3)
+    overlay:SetTexture("Interface\\Tooltips\\UI-Tooltip-Background")
+    overlay:SetVertexColor(0,0,0, 0.2)
+    overlay:Hide()
+    f.overlay = overlay
+    local status = f.bar:CreateTexture(nil, "ARTWORK", nil, 5)
+    status:SetTexture("Interface\\AddOns\\NugRunning\\white")
+    status:SetSize(width/2,height)
+    status:SetPoint("TOPLEFT", f.bar, "TOPLEFT",0,0)
+    status:Hide()
+    f.arrow = status
+	
     local at = ic:CreateTexture(nil,"OVERLAY")
     at:SetTexture([[Interface\SpellActivationOverlay\IconAlert]])
     at:SetTexCoord(0.00781250,0.50781250,0.27734375,0.52734375)
@@ -249,3 +170,190 @@ ConstructTimerBar = function(width, height)
 end
 
 NugRunning.ConstructTimerBar = ConstructTimerBar
+
+
+function NugRunning:DoNameplates()
+
+local next = next
+local table_remove = table.remove
+
+local makeicon = true
+
+local Nplates
+local plates = {}
+
+local oldTargetGUID
+local guidmap = {}
+
+local function OnHide(frame)
+    local frame_guid = frame.guid
+    if frame_guid then
+        guidmap[frame_guid] = nil
+        frame.guid = nil
+        if frame_guid == oldTargetGUID then
+            oldTargetGUID = nil
+        end
+    end
+    for _, timer in ipairs(frame.timers) do
+        timer:Hide()
+    end
+end
+
+local function HookFrames(...)
+    for index=1,select("#", ...) do
+        local frame = select(index, ...)
+        local region = frame:GetRegions()
+        local fname = frame:GetName()
+        if  not plates[frame] and
+            fname and string.find(fname, "NamePlate")
+        then
+            local hp, cb = frame:GetChildren()
+            local threat, hpborder, overlay, oldname, oldlevel, bossicon, raidicon, elite = frame:GetRegions()
+            local _, cbborder, cbshield, cbicon = cb:GetRegions()
+            frame.name = oldname
+            frame.timers = {}
+            -- frame.healthBar = healthBar
+            -- frame.castBar = castBar
+            plates[frame] = true
+            frame:HookScript("OnHide", OnHide)
+        end
+    end
+end
+
+NugRunningNameplates = CreateFrame("Frame")
+NugRunningNameplates:SetScript('OnUpdate', function(self, elapsed)
+    if(WorldFrame:GetNumChildren() ~= Nplates) then
+        Nplates = WorldFrame:GetNumChildren()
+        HookFrames(WorldFrame:GetChildren())
+    end
+    if UnitExists("target") then
+        local targetGUID = UnitGUID("target")
+        for frame in pairs(plates) do
+            if frame:IsShown() and frame:GetAlpha() == 1 and
+                (UnitName("target") == frame.name:GetText()) and
+                targetGUID ~= oldTargetGUID then
+                    guidmap[targetGUID] =  frame
+                    frame.guid = targetGUID
+                    oldTargetGUID = targetGUID
+                    local guidTimers = NugRunning:GetTimersByDstGUID(targetGUID)
+                    NugRunningNameplates:UpdateNPTimers(frame, guidTimers)
+                    return
+                    -- frame.name:SetText(targetGUID)
+            end
+        end
+    else
+        oldTargetGUID = nil
+    end
+end)
+
+local MiniOnUpdate = function(self, time)
+    self._elapsed = self._elapsed + time
+    if self._elapsed < 0.02 then return end
+    self._elapsed = 0
+
+    local endTime = self.endTime
+    local beforeEnd = endTime - GetTime()
+
+    self:SetValue(beforeEnd + self.startTime)
+end
+
+local backdrop = {
+        bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+        tile = true, tileSize = 0,
+        insets = {left = -1, right = -1, top = -1, bottom = -1},
+    }
+
+function NugRunningNameplates:CreateNameplateTimer(frame)
+    local f = CreateFrame("StatusBar", nil, frame)
+    f:SetStatusBarTexture(DB.Statusbar, "OVERLAY")
+    f:SetWidth(70)
+    local h = 7
+    f:SetHeight(h)
+
+    if makeicon then
+        local icon = f:CreateTexture("ARTWORK")
+        -- icon:SetTexCoord(.1, .9, .1, .9)
+        -- icon:SetHeight(h); icon:SetWidth(h)
+        icon:SetTexCoord(.1, .9, .1, .9)
+        icon:SetHeight(h*2); icon:SetWidth(2*h)
+        icon:SetPoint("BOTTOMRIGHT", f, "BOTTOMLEFT",-5,0)
+        -- backdrop.insets.left = -h -1
+		local border = CreateFrame("Frame", nil, f)
+		border:SetFrameLevel(1)
+		border:SetPoint("TOPLEFT", icon, -S.mult, S.mult)
+		border:SetPoint("BOTTOMRIGHT", icon, S.mult, -S.mult)
+		border:CreateBorder()
+        backdrop.insets.left = -(h*2) -1
+        f.icon = icon
+    end
+	f:CreateShadow()
+	S.CreateBack(f)
+    local bg = f:CreateTexture("BACKGROUND", nil, -5)
+    bg:SetTexture(nil)
+    bg:SetAllPoints(f)
+    f.bg = bg
+
+    f._elapsed = 0
+    f:SetScript("OnUpdate", MiniOnUpdate)
+
+    if not next(frame.timers) then
+        f:SetPoint("BOTTOM", frame, "TOP", 0, 3)
+    else
+        local prev = frame.timers[#frame.timers]
+        f:SetPoint("BOTTOM", prev, "TOP", 0,h)
+    end
+    table.insert(frame.timers, f)
+    return f
+end
+
+function NugRunningNameplates:Update(targetTimers, guidTimers)
+    local tGUID = UnitGUID("target")
+    if tGUID then
+        guidTimers[tGUID] = targetTimers
+    end
+    for guid, np in pairs(guidmap) do
+        local nrunTimers = guidTimers[guid]
+        self:UpdateNPTimers(np, nrunTimers)
+    end
+end
+
+function NugRunningNameplates:UpdateNPTimers(np, nrunTimers)
+    if nrunTimers then
+        local i = 1
+        while i <= #nrunTimers do
+            local timer = nrunTimers[i]
+            if not timer.opts.nameplates or timer.isGhost then
+                table_remove(nrunTimers, i)
+            else
+                i = i + 1
+            end
+        end
+
+        local max = math.max(#nrunTimers, #np.timers)
+        for i=1, max do
+            local npt = np.timers[i]
+            local nrunt = nrunTimers[i]
+            if not npt then npt = self:CreateNameplateTimer(np) end
+            if not nrunt  then
+                npt:Hide()
+            else
+                npt.startTime = nrunt.startTime
+                npt.endTime = nrunt.endTime
+                npt:SetMinMaxValues(nrunt.bar:GetMinMaxValues())
+                local r,g,b = nrunt.bar:GetStatusBarColor()
+                npt:SetStatusBarColor(r,g,b)
+                npt.bg:SetVertexColor(r*.4,g*.4,b*.4)
+                if npt.icon then
+                    npt.icon:SetTexture(nrunt.icon:GetTexture())
+                end
+                npt:Show()
+            end
+
+        end
+    else
+        for _, timer in ipairs(np.timers) do
+            timer:Hide()
+        end
+    end
+end
+end

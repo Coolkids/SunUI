@@ -193,7 +193,7 @@ L:SetGeneralLocalization({
 L = DBM:GetModLocalization("Rabbit")
 
 L:SetGeneralLocalization({
-	name = "暗月兔"
+	name = "暗月小兔"
 })
 
 --------------------------
@@ -202,24 +202,24 @@ L:SetGeneralLocalization({
 L = DBM:GetModLocalization("PlantsVsZombies")
 
 L:SetGeneralLocalization({
-	name = "植物大戰殭屍"
+	name = "植物大戰僵屍"
 })
 
 L:SetWarningLocalization({
-	warnTotalAdds	= "新一輪殭屍已出現的波數：%d",
-	specWarnWave	= "一大波殭屍"
+	warnTotalAdds	= "總共已進攻的殭屍群: %d",
+	specWarnWave	= "大群的殭屍!"
 })
 
 L:SetTimerLocalization{
-	timerWave		= "下一大波殭屍"
+	timerWave		= "下一次大群的殭屍"
 }
 
 L:SetOptionLocalization({
-	warnTotalAdds	= "警告：新一輪殭屍已出現的波數",
-	specWarnWave	= "特別警告：一大波殭屍開始",
-	timerWave		= "計時器：下一次大波殭屍"
+	warnTotalAdds	= "提示大群的殭屍的總數量",
+	specWarnWave	= "為大群的殭屍顯示特別警告",
+	timerWave		= "為下一次大群的殭屍顯示計時器"
 })
 
 L:SetMiscLocalization({
-	MassiveWave		= "一大波殭屍正在接近!"
+	MassiveWave		= "大群的殭屍要來啦!"
 })

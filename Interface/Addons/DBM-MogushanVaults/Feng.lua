@@ -3,7 +3,7 @@ local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndWOPD	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7949 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7963 $"):sub(12, -3))
 mod:SetCreatureID(60009)--60781 Soul Fragment
 mod:SetModelID(41192)
 mod:SetZone()
@@ -115,6 +115,8 @@ local timerNullBarriorCD			= mod:NewCDTimer(55, 115817)
 
 --local soundEpicenter				= mod:NewSound(116018)
 
+mod:AddBoolOption("RangeFrame", mod:IsRanged())
+
 local phase = 0
 local wildfireCount = 0
 local sparkCount = 0
@@ -163,6 +165,9 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd()
+	if self.Options.RangeFrame then
+		DBM.RangeCheck:Hide()
+	end
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Hide()
 	end
@@ -246,9 +251,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		if self.Options.HudMAP2 then
 			if args:IsPlayer() then
-				arcaneResonanceMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("highlight", args.destName, 7, nil, 0, 1, 0, 0.4):Appear():RegisterForAlerts():Rotate(360, 3))
+				arcaneResonanceMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("timer", args.destName, 8, nil, 0, 1, 0, 0.4):Appear():RegisterForAlerts():Rotate(360, 14))
 			else
-				arcaneResonanceMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("highlight", args.destName, 7, nil, 0, 1, 0, 0.8):Appear():RegisterForAlerts():Rotate(360, 3))
+				arcaneResonanceMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("timer", args.destName, 8, nil, 0, 1, 0, 0.8):Appear():RegisterForAlerts():Rotate(360, 14))
 			end
 		end
 	elseif args:IsSpellID(116364) then
@@ -430,12 +435,18 @@ function mod:OnSync(msg)
 		timerLightningFistsCD:Start(12)
 		timerEpicenterCD:Start(18, 1)--It's either this, or this +10. Not yet sure what causes the +10
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zrxt.mp3") --自然形态
+		if self.Options.RangeFrame then
+			DBM.RangeCheck:Hide()
+		end
 	elseif msg == "Flame" then
 		phase = phase + 1
 		warnPhase:Show(phase)
 		timerFlamingSpearCD:Start(5.5)
 		timerDrawFlameCD:Start(35, 1)--No variation, or not enough logs of fire phase.
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_hyxt.mp3") --火焰形态
+		if self.Options.RangeFrame then
+			DBM.RangeCheck:Hide()
+		end
 	elseif msg == "Purple" then
 		phase = phase + 1
 		warnPhase:Show(phase)
@@ -445,6 +456,9 @@ function mod:OnSync(msg)
 		timerArcaneResonanceCD:Start(12)
 		timerArcaneVelocityCD:Start(16.5, 1)--It's either this, or this +10. Not yet sure what causes the +10
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_mfxt.mp3") --秘法形态
+		if self.Options.RangeFrame then
+			DBM.RangeCheck:Show(8)
+		end
 	elseif msg == "Dark" then
 		phase = phase + 1
 		warnPhase:Show(phase)
@@ -452,6 +466,9 @@ function mod:OnSync(msg)
 		timerChainsOfShadowCD:Start(6)
 		timerShadowBurnCD:Start(9)--9-11 variation
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ayxt.mp3") --暗影形態
+		if self.Options.RangeFrame then
+			DBM.RangeCheck:Hide()
+		end
 	end
 end
 

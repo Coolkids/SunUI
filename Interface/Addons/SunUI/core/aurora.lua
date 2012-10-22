@@ -133,7 +133,7 @@ function S.Reskin(f, noGlow)
 	if f.RightSeparator then f.RightSeparator:Hide() end
 
 	S.CreateBD(f, .0)
-	S.CreateBack(f)
+	S.CreateBack(f, nil, nil, nil, 0.8, nil, nil, nil, 0.8)
 	--S.CreateGradient(f)
 
 	if not noGlow then

@@ -75,10 +75,32 @@ L:SetMiscLocalization({
 -------------------------------
 L= DBM:GetModLocalization(682)
 
+L:SetWarningLocalization({
+	specWarninTT 	= ">> 注意進內場 <<",
+	specWarnTotemE1 = "圖騰(%d)  >五組進<",
+	specWarnTotemE2 = "圖騰(%d)  >三組進<",
+	specWarnTotemE3 = "圖騰(%d)  >四組進<",
+	specWarnAdmin 	= "存在治療分配主控 (%s)"
+})
+
 L:SetOptionLocalization({
 	SoundWOP			= "語音警告：重要技能",
 	SoundTT				= "語音警告：$spell:116174",
+	optTT				= "\"靈魂圖騰\"入場報警策略(黑手之鄉公會戰術)",
+	none				= "不報警",
+	warn1				= "4/7/10組報警",
+	warn2				= "2/5/8組報警",
+	warn3				= "3/6/9組報警",
+	specWarninTT		= "特殊警告：當需要進入內場時顯示文字警告",
+	specWarnTotemEx		= "特殊：使用顯示分組和計數的圖騰警告(黑手之鄉公會戰術)",
+	specWarnTotemE1		= "特殊警告：計數式靈魂圖騰(147)",
+	specWarnTotemE2		= "特殊警告：計數式靈魂圖騰(258)",
+	specWarnTotemE3		= "特殊警告：計數式靈魂圖騰(369)",
+	soundTotemEx		= "特殊：當播放靈魂圖騰語音時按1~3循環播放計數語音",
+	specWarnAdmin		= "特殊警告：當存在主控端時",
 	SetIconOnVoodoo		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(122151),
+	GoTotemAdmin		= "主控：分配治療者跨界(英雄模式，團隊僅一人開啟)",
+	GoTotemClient		= "被控：接收治療者跨界警告(需存在主控)",
 	InfoFrame			= "資訊框：$spell:116161的玩家 (標注\"治療\"需團員選擇角色類型)"
 })
 

@@ -8,7 +8,7 @@ local sndADD2	= mod:NewSound(nil, "SoundADD2", mod:IsDps())
 local sndADD3A	= mod:NewSound(nil, "SoundADD3A", mod:IsDps())
 local sndADD3	= mod:NewSound(nil, "SoundADD3", mod:IsDps())
 
-mod:SetRevision(("$Revision: 7956 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7963 $"):sub(12, -3))
 mod:SetCreatureID(60399, 60400)--60396 (Rage), 60397 (Strength), 60398 (Courage), 60480 (Titan Spark), 60399 (Qin-xi), 60400 (Jan-xi)
 mod:SetModelID(41391)
 mod:SetZone()
@@ -44,10 +44,10 @@ local warnFocusedDefense		= mod:NewTargetAnnounce(116778, 4)
 local warnFocusedEnergy			= mod:NewTargetAnnounce(116829, 4)
 --Jan-xi and Qin-xi
 local warnBossesActivated		= mod:NewSpellAnnounce("ej5726", 3, 116815)
-local warnArcLeft				= mod:NewCountAnnounce(116968, 4, nil, mod:IsMelee())--Mostly informative, we cannot detect cast starts, only cast finishes, which is basically when it's going off.
-local warnArcRight				= mod:NewCountAnnounce(116971, 4, nil, mod:IsMelee())
-local warnArcCenter				= mod:NewCountAnnounce(116972, 4, nil, mod:IsMelee())
-local warnStomp					= mod:NewCountAnnounce(116969, 4, nil, mod:IsMelee())
+local warnArcLeft				= mod:NewCountAnnounce(116968, 4, nil, mod:IsMelee())--This is a pre warn, gives you time to move
+local warnArcRight				= mod:NewCountAnnounce(116971, 4, nil, mod:IsMelee())--This is a pre warn, gives you time to move
+local warnArcCenter				= mod:NewCountAnnounce(116972, 4, nil, mod:IsMelee())--This is a pre warn, gives you time to move
+local warnStomp					= mod:NewCountAnnounce(116969, 4, nil, mod:IsMelee())--This is NOT a pre warn, only fires when stomp ends cast. :(
 local warnTitanGas				= mod:NewCountAnnounce(116779, 4)
 
 --Rage

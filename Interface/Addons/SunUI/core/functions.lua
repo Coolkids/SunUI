@@ -181,7 +181,7 @@ function S.MakeMove(Frame, Text, key, a)
 end
 
 function S.CreateShadow(p, f, t) 
-if f.sw then return end
+	if f.sw then return end
 	
 	local borderr, borderg, borderb, bordera = 0, 0, 0, 1
 	local backdropr, backdropg, backdropb, backdropa =  .05, .05, .05, .9
@@ -247,10 +247,14 @@ function S.FadeOutFrameDamage(p, t, show)  --隐藏
 	end 
 end
 
-function S.CreateBack(f)
+function S.CreateBack(f, r1,g1,b1,a1,r2,g2,b2,a2)
 	local gradient = f:CreateTexture(nil, "BACKGROUND")
 	gradient:SetPoint("TOPLEFT")
 	gradient:SetPoint("BOTTOMRIGHT")
 	gradient:SetTexture(DB.Statusbar)
-	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+	if a1 and a2 then 
+		gradient:SetGradientAlpha("VERTICAL", r1 or .3, g1 or  .3, b1 or  .3, a1, r2 or  .1, g2 or  .1, b2 or  .1, a2)
+	else
+		gradient:SetGradientAlpha("VERTICAL", r1 or .3, g1 or  .3, b1 or  .3, .6, r2 or  .1, g2 or  .1, b2 or  .1, .6)
+	end
 end

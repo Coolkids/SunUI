@@ -4,7 +4,7 @@ local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndCC	= mod:NewSound(nil, "SoundCC", true)
 local sndDD = mod:NewSound(nil, "SoundDD", false)
 
-mod:SetRevision(("$Revision: 7954 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7971 $"):sub(12, -3))
 mod:SetCreatureID(60410)--Energy Charge (60913), Emphyreal Focus (60776), Cosmic Spark (62618), Celestial Protector (60793)
 mod:SetModelID(41399)
 mod:SetZone()
@@ -237,17 +237,17 @@ function mod:SPELL_CAST_START(args)
 		coresCount = coresCount + 1
 		specWarnCharge:Show(coresCount)
 		if coresCount == 1 then
-			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			sndWOP:Schedule(1.2, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		elseif coresCount == 2 then
-			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Schedule(1.2, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 		elseif coresCount == 3 then
-			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Schedule(1.2, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 		elseif coresCount == 4 then
-			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+			sndWOP:Schedule(1.2, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
 		elseif coresCount == 5 then
-			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+			sndWOP:Schedule(1.2, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
 		elseif coresCount == 6 then
-			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
+			sndWOP:Schedule(1.2, "Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
 		end
 	end
 end

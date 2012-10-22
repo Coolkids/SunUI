@@ -1,5 +1,5 @@
 ﻿-- Simplified Chinese by Diablohu(diablohudream@gmail.com) & yleaf(yaroot@gmail.com)
--- Last update: 2/12/2012
+-- Last update: 10/20/2012
 
 if GetLocale() ~= "zhCN" then return end
 
@@ -59,12 +59,12 @@ L:SetTimerLocalization({
 })
 
 L:SetOptionLocalization({
-	Submerged		= "当埃霍恩隐没时显示警报",
-	Emerged			= "当埃霍恩现身时显示警报",
-	specWarnAttack		= "当埃霍恩拥有易伤时显示特别警报",
-	SubmergTimer		= "为隐没显示计时条",
-	EmergeTimer		= "为现身显示计时条",
-	TimerCombat		= "为战斗开始显示计时条"
+	Submerged		= "警报：埃霍恩隐没",
+	Emerged			= "警报：埃霍恩现身",
+	specWarnAttack		= "特殊警报：埃霍恩拥有易伤",
+	SubmergTimer		= "计时条：隐没",
+	EmergeTimer		= "计时条：现身",
+	TimerCombat		= "计时条：战斗开始"
 })
 
 L:SetMiscLocalization({
@@ -86,13 +86,13 @@ L:SetWarningLocalization({
 })
 
 L:SetOptionLocalization({
-	specWarnBrew		= "为黑铁啤酒女郎的啤酒显示特别警报",
-	specWarnBrewStun	= "为黑铁啤酒女郎昏迷显示特别警报",
-	YellOnBarrel		= "当你中了空桶(晕)时大喊"
+	specWarnBrew		= "特殊警报：$spell:47376",
+	specWarnBrewStun	= "特殊警报：$spell:47340",
+	YellOnBarrel		= "当你中了$spell:51413时大喊"
 })
 
 L:SetMiscLocalization({
-	YellBarrel		= "我中了空桶(晕)"
+	YellBarrel		= "我中了空桶！"
 })
 
 -------------------------
@@ -107,7 +107,7 @@ L:SetGeneralLocalization({
 L:SetWarningLocalization({
 	WarnPhase				= "第%d阶段",
 	warnHorsemanSoldiers	= "跃动的南瓜出现了",
-	warnHorsemanHead		= "无头骑士激活"
+	warnHorsemanHead		= "打脑袋！"
 })
 
 L:SetTimerLocalization{
@@ -118,14 +118,13 @@ L:SetOptionLocalization({
 	WarnPhase				= "警报：阶段转换",
 	TimerCombatStart		= "计时条：战斗开始",
 	warnHorsemanSoldiers	= "警报：跃动的南瓜出现",
-	warnHorsemanHead		= "特殊警报：旋风斩（无头骑士的脑袋出现）"
+	warnHorsemanHead		= "特殊警报：无头骑士的脑袋出现"
 })
 
 L:SetMiscLocalization({
 	HorsemanSummon			= "无头骑士来了……",
 	HorsemanSoldiers	= "士兵们，起来战斗吧！为死去的骑士带来胜利的荣耀！"
 })
-
 
 ------------------------------
 --  The Abominable Greench  --
@@ -134,18 +133,6 @@ L = DBM:GetModLocalization("Greench")
 
 L:SetGeneralLocalization({
 	name = "讨厌的格林奇"
-})
-
-L:SetWarningLocalization({
-})
-
-L:SetTimerLocalization{
-}
-
-L:SetOptionLocalization({
-})
-
-L:SetMiscLocalization({
 })
 
 --------------------------
@@ -171,7 +158,7 @@ L:SetWarningLocalization({
 	warnGameOverNoQuest	= "游戏结束，本次可能的最高分数：%d",
 	warnGnoll			= "豺狼人出现",
 	warnHogger			= "霍格出现",
-	specWarnHogger		= "霍格出现！"
+	specWarnHogger		= "霍格！"
 })
 
 L:SetOptionLocalization({
@@ -209,7 +196,7 @@ L:SetGeneralLocalization({
 L = DBM:GetModLocalization("Rabbit")
 
 L:SetGeneralLocalization({
-	name = "暗月兔"
+	name = "暗月兔子"
 })
 
 --------------------------
@@ -222,8 +209,8 @@ L:SetGeneralLocalization({
 })
 
 L:SetWarningLocalization({
-	warnTotalAdds	= "新一轮僵尸已出现的波数：%d",
-	specWarnWave	= "一大波僵尸"
+	warnTotalAdds	= "上一次大波僵尸后僵尸计数：%d",
+	specWarnWave	= "一大波僵尸！"
 })
 
 L:SetTimerLocalization{
@@ -231,11 +218,11 @@ L:SetTimerLocalization{
 }
 
 L:SetOptionLocalization({
-	warnTotalAdds	= "警告：新一轮僵尸已出现的波数",
-	specWarnWave	= "特别警告：一大波僵尸开始",
-	timerWave		= "计时器：下一次大波僵尸"
+	warnTotalAdds	= "警报：每次大波僵尸之间的僵尸出现计数",
+	specWarnWave	= "特殊警报：一大波僵尸",
+	timerWave		= "计时条：下一大波僵尸"
 })
 
 L:SetMiscLocalization({
-	MassiveWave		= "一大波僵尸正在接近!"
+	MassiveWave		= "一大波僵尸正在靠近！"
 })

@@ -1,5 +1,5 @@
 ﻿-- Simplified Chinese by Diablohu(diablohudream@gmail.com)
--- Last update: 10/13/2012
+-- Last update: 10/21/2012
 
 if GetLocale() ~= "zhCN" then return end
 local L
@@ -66,9 +66,9 @@ L:SetOptionLocalization({
 })
 
 L:SetMiscLocalization({
-	Fire		= "噢，至高的神啊!藉由我来融化他们的血肉吧!",
-	Arcane		= "噢，上古的贤者!赐予我秘法的智慧!",
-	Nature		= "噢，伟大的灵魂!赐予我大地之力!",--I did not log this one, text is probably not right
+	Fire		= "噢，至高的神！借我之手融化他们的血肉吧！",
+	Arcane		= "噢，上古的贤者！赐予我魔法的智慧吧！",
+	Nature		= "噢，伟大的神灵！赐予我大地的力量！",
 	Shadow		= "Great soul of champions past! Bear to me your shield!"
 })
 
@@ -78,10 +78,32 @@ L:SetMiscLocalization({
 -------------------------------
 L= DBM:GetModLocalization(682)
 
+L:SetWarningLocalization({
+	specWarninTT 	= ">> 注意进内场 <<",
+	specWarnTotemE1 = "图腾(%d)  >五组进<",
+	specWarnTotemE2 = "图腾(%d)  >三组进<",
+	specWarnTotemE3 = "图腾(%d)  >四组进<",
+	specWarnAdmin 	= "存在治疗分配主控 (%s)"
+})
+
 L:SetOptionLocalization({
 	SoundWOP			= "语音警告：重要技能",
 	SoundTT				= "语音警告：$spell:116174",
+	optTT				= "\"灵魂图腾\"入场报警策略(黑手之乡公会战术)",
+	none				= "不报警",
+	warn1				= "4/7/10組报警",
+	warn2				= "2/5/8組报警",
+	warn3				= "3/6/9組报警",
+	specWarninTT		= "特殊警告：当需要进入内场时显示文字警告",
+	specWarnTotemEx		= "特殊：使用显示分组和计数的图腾警告(黑手之乡公会战术)",
+	specWarnTotemE1		= "特殊警告：计数式灵魂图腾(147)",
+	specWarnTotemE2		= "特殊警告：计数式灵魂图腾(258)",
+	specWarnTotemE3		= "特殊警告：计数式灵魂图腾(369)",
+	soundTotemEx		= "特殊：当播放灵魂图腾语音时按1~3循环播放计数语音",
+	specWarnAdmin		= "特殊警告：当存在主控端时",
 	SetIconOnVoodoo		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(122151),
+	GoTotemAdmin		= "主控：分配治疗者跨界(英雄模式，团队仅一人开啟)",
+	GoTotemClient		= "被控：接收治疗者跨界警告(需存在主控)",
 	InfoFrame			= "资讯框：$spell:116161的玩家 (标注\"治疗\"需团员选择角色类型)"
 })
 
@@ -148,7 +170,7 @@ L:SetOptionLocalization({
 })
 
 L:SetMiscLocalization({
-	Floor				= "能量漩涡的能量正在降低!"
+	Floor				= "能量涡流减弱了"
 })
 ------------
 -- Will of the Emperor --
@@ -178,3 +200,4 @@ L:SetMiscLocalization({
 	Courage		= "皇帝的勇气出现在壁龛中！",--Emote
 	Boss		= "两个巨型构造体出现在大型的壁龛中！"--Emote
 })
+

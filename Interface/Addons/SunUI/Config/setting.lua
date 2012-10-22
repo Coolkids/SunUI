@@ -224,7 +224,7 @@ G["MoveHandleDB"] = {
 	["Class"] = {"CENTER", "UIParent", "CENTER", -150, 150},
 	--施法条
 	["PlayerCastbar"] = {"BOTTOM", "UIParent", "BOTTOM",0, 110},
-	["TargetCastbar"] = {"CENTER", "UIParent", "CENTER",0, 105},
+	["TargetCastbar"] = {"TOP", "UIParent", "TOP",0, -170},
 	["FocusCastbar"] = {"TOP", "oUF_SunUIFocus", "BOTTOM", 0, -20},
 	--内置CD 团队CD
 	["ClassCD"] = {"LEFT", "UIParent", "LEFT", 30, 240},
@@ -234,7 +234,7 @@ G["MoveHandleDB"] = {
 	--鼠标提示
 	["Tooltip"] = {"BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -50, 160},
 	--仇恨监视
-	["Threat"] = {"BOTTOM", "UIParent", "BOTTOM", -175, 262},
+	["Threat"] = {"BOTTOM", "UIParent", "BOTTOM", -177, 262},
 	--宠物计时
 	["ShadowPet"] = {"BOTTOM", "UIParent", "BOTTOM", -322, 201},
 	--信息条
@@ -250,7 +250,7 @@ G["MoveHandleDB"] = {
 	--成就移动
 	["AchievementHolder"] = {"CENTER", "UIParent", "CENTER", 0, 130},
 	--警告框体
-	["Warn"] = {"CENTER", "UIParent", "TOP", 140, -240},
+	["Warn"] = {"TOP", "UIParent", "TOP", 0, -35},
 }
 G["PowerBarDB"] = {
 	["Open"] = true,

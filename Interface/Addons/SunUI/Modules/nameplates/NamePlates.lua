@@ -58,6 +58,9 @@ local PlateBlacklist = {
 }
 local DebuffWhiteList = {
 }
+local DebuffBlackList = {
+	[GetSpellInfo(15407)] = true,
+}
 -- format numbers
 local function round(val, idp)
   if idp and idp > 0 then
@@ -309,7 +312,7 @@ local function OnAura(frame, unit)
 		
 		if caster == "player" and duration>0 then match = true end
 		if DebuffWhiteList[name] then match = true end
-		
+		if DebuffBlackList[name] then match = false end
 		if duration and match == true then
 			if not frame.icons[i] then frame.icons[i] = CreateAuraIcon(frame) end
 			local icon = frame.icons[i]
@@ -652,11 +655,14 @@ end
 
 NamePlates:SetScript("OnEvent", function(self ,event, ...)
 	local arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 = ...
-	if arg2 == "SPELL_AURA_REMOVED" then
-		if arg4 == UnitGUID("player") or arg4 == UnitGUID("pet") or arg5 == "虛無觸鬚" or arg5 == "暗影触须" then
+	-- if arg4 == UnitGUID("player") then 
+		-- print(arg2, arg12)
+	-- end
+	if arg2 == "SPELL_AURA_BROKEN" or arg2 == "SPELL_AURA_BROKEN_SPELL" or arg2 == "SPELL_AURA_REMOVED" then
+		--if arg4 == UnitGUID("player") or arg4 == UnitGUID("pet") or arg5 == "虛無觸鬚" or arg5 == "暗影触须" then
 			--print(GetSpellLink(arg12), "Hide", arg9)
 			ForEachPlate(MatchGUID, arg8, arg12)
-		end
+		--end
 	end
 end)
 NamePlates:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")

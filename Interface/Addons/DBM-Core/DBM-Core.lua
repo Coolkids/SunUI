@@ -44,7 +44,7 @@
 --  Globals/Default Options  --
 -------------------------------
 DBM = {
-	Revision = tonumber(("$Revision: 7958 $"):sub(12, -3)),
+	Revision = tonumber(("$Revision: 7977 $"):sub(12, -3)),
 	DisplayVersion = "5.0.0 語音增強版", -- the string that is shown as version
 	ReleaseRevision = 7956 -- the revision of the latest stable version that is available
 }
@@ -91,11 +91,11 @@ DBM.DefaultOptions = {
 	ShowRecoveryMessage = true,
 	AutoRespond = true,
 	StatusEnabled = true,
-	WhisperStats = true,
+	WhisperStats = false,
 	HideBossEmoteFrame = false,
 	SpamBlockRaidWarning = true,
 	SpamBlockBossWhispers = false,
-	ShowMinimapButton = true,
+	ShowMinimapButton = false,
 	BlockVersionUpdateNotice = false,
 	ShowSpecialWarnings = true,
 	ShowLHFrame = true,
@@ -2524,9 +2524,6 @@ function DBM:StartCombat(mod, delay, synced)
 		elseif mod:IsDifficulty("heroic25") then
 			mod.stats.heroic25Pulls = mod.stats.heroic25Pulls + 1
 			difficultyText = PLAYER_DIFFICULTY2.." (25) - "
-		else--Unknown, just treat it as normal for stat purposes.
-			mod.stats.normalPulls = mod.stats.normalPulls + 1--Treat it as normal for kill stats.
-			difficultyText = ""--So lets just return no difficulty :)
 		end
 		if DBM.Options.ShowEngageMessage then
 			self:AddMsg(DBM_CORE_COMBAT_STARTED:format(difficultyText..mod.combatInfo.name))
@@ -2765,12 +2762,6 @@ function DBM:EndCombat(mod, wipe)
 				else
 					mod.stats.heroic25BestTime = math.min(bestTime or math.huge, thisTime)
 				end
-			else -- for field bosses.
-				if not mod.stats.normalKills or mod.stats.normalKills < 0 then mod.stats.normalKills = 0 end
-				if mod.stats.normalKills > mod.stats.normalPulls then mod.stats.normalKills = mod.stats.normalPulls end
-				mod.stats.normalKills = mod.stats.normalKills + 1
-				mod.stats.normalLastTime = thisTime
-				mod.stats.normalBestTime = math.min(bestTime or math.huge, thisTime)
 			end
 			local totalKills = (savedDifficulty == "lfr25" and mod.stats.lfr25Kills) or ((savedDifficulty == "heroic5" or savedDifficulty == "heroic10") and mod.stats.heroicKills) or (savedDifficulty == "challenge5" and mod.stats.challengeKills) or (savedDifficulty == "normal25" and mod.stats.normal25Kills) or (savedDifficulty == "heroic25" and mod.stats.heroic25Kills) or mod.stats.normalKills
 			if DBM.Options.ShowKillMessage then
@@ -2853,7 +2844,7 @@ function DBM:GetCurrentInstanceDifficulty()
 	elseif difficulty == 9 then--40 man raids have their own difficulty now, no longer returned as normal 10man raids
 		return "normal10"--Just use normal10 anyways, since that's where we been saving 40 man stuff for so long anyways, no reason to change it now, not like any 40 mans can be toggled between 10 and 40 where we NEED to tell the difference.
 	else
-		return "unknown"
+		return "normal5"
 	end
 end
 
