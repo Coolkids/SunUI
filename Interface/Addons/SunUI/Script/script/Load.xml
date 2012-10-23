@@ -8,7 +8,7 @@
 	<Script file ="ClassColorsBlizz.lua"/>
 	<Script file ="ClearFont_zhCN.lua"/>	
 	<Script file ="ClearFont_zhTW.lua"/>
-	<Script file ="colours.lua"/>
+	<Script file ="FriendColor.lua"/>
 	<Script file ="DragEmAll.lua"/>
 	<Script file ="Focuser.lua"/>
 	<Script file = "nibWatchFrameAdv.lua"/>

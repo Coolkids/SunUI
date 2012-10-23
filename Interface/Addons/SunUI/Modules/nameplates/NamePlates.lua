@@ -624,7 +624,8 @@ local function MatchGUID(frame, destGUID, spellID)
 	if not frame.guid then return end
 	if frame.guid == destGUID then
 		for _,icon in ipairs(frame.icons) do 
-			if icon.spellID == spellID then 
+			if icon.spellID == spellID then --
+				--print("Hide",GetSpellLink(icon.spellID))
 				icon:Hide()
 			end 
 		end

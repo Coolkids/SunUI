@@ -5,6 +5,7 @@
 local check = function(self, event, prefix, message, channel, sender)
 	if event == "CHAT_MSG_ADDON" then
 		if prefix ~= "SunUIVersion" or sender == UnitName("player") then return end
+		if tonumber(message) == nil then return end
 		if tonumber(message) > tonumber(GetAddOnMetadata("SunUI", "Version")) then
 			print("|cffad2424"..L_MISC_UI_OUTDATED.."|r")
 			self:UnregisterEvent("CHAT_MSG_ADDON")

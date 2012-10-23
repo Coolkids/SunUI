@@ -9,10 +9,10 @@ function Module:OnEnable()
 	Minimap:SetFrameStrata("MEDIUM")
 	Minimap:ClearAllPoints()
 	Minimap:SetSize(120, 120)
-	local h = CreateFrame("Frame", nil, Minimap)
-	h:Point("TOPLEFT",1,-1)
-	h:Point("BOTTOMRIGHT",-1,1)
-	h:CreateShadow()
+	--local h = CreateFrame("Frame", nil, Minimap)
+	--h:Point("TOPLEFT",1,-1)
+	--h:Point("BOTTOMRIGHT",-1,1)
+	Minimap:CreateShadow()
 	-- local PMinimap = CreateFrame("Frame", nil, Minimap)
 	-- PMinimap:SetFrameStrata("BACKGROUND")
 	-- PMinimap:SetFrameLevel(0)
@@ -196,33 +196,35 @@ function Module:OnEnable()
 	rdt:SetShadowColor(0, 0, 0, 0.4)
 	rd:SetAllPoints(rdt)
 	local function diff()
-		local difficulty = GetInstanceDifficulty()
-		if difficulty == 1 then
-			rdt:SetText("")
-		elseif difficulty == 2 then
-			rdt:SetText("5")
-		elseif difficulty == 3 then
-			rdt:SetText("5H")
-		elseif difficulty == 4 then
-			rdt:SetText("10")
-		elseif difficulty == 5 then
-			rdt:SetText("25")
-		elseif difficulty == 6 then
-			rdt:SetText("10H")
-		elseif difficulty == 7 then
-			rdt:SetText("25H")
-		elseif difficulty == 8 then
-			rdt:SetText("LFR")
-		--elseif difficulty == 9 then
-		elseif difficulty == 10 then
-			rdt:SetText("40")
+		if not IsInInstance()  then return end
+		local _, instanceType, difficulty, _, maxPlayers, _, dynamic  = GetInstanceInfo()
+	 	if (instanceType=='pvp') or (instanceType=='arena') then return end
+		local text = nil
+		if instanceType == 'party' then
+			if GetChallengeMode() then 
+				text = maxPlayers..'C'
+			elseif difficulty >= 2 then
+				text = maxPlayers..'H'
+			else
+				text = maxPlayers..'N'
+			end
+		elseif instanceType == 'raid' and dynamic then
+			if difficulty >= 7 then
+				text = 'LFR'
+			elseif difficulty >= 5 then
+				text = maxPlayers..'H'
+			else
+				text = maxPlayers..'N'
+			end
+		else
+			text = maxPlayers..'N'
 		end
-
 		if GuildInstanceDifficulty:IsShown() then
 			rdt:SetTextColor(0.40, 0.78, 1)
 		else
 			rdt:SetTextColor(1, 1, 1)
 		end
+		rdt:SetText(text)
 	end
 	rd:SetScript("OnEvent", diff)
 end
