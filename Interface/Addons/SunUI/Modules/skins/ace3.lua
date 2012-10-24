@@ -11,18 +11,18 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		widget.checkbg:Kill()
 		widget.highlight:Kill()
 
-		if not widget.skinnedCheckBG then
-			widget.skinnedCheckBG = CreateFrame('Frame', nil, widget.frame)
-			widget.skinnedCheckBG:Point('TOPLEFT', widget.checkbg, 'TOPLEFT', 4, -4)
-			widget.skinnedCheckBG:Point('BOTTOMRIGHT', widget.checkbg, 'BOTTOMRIGHT', -4, 4)
-			S.CreateBD(widget.skinnedCheckBG)
-		end
+		--if not widget.skinnedCheckBG then
+			--widget.skinnedCheckBG = CreateFrame('Frame', nil, widget.frame)
+			--widget.skinnedCheckBG:Point('TOPLEFT', widget.checkbg, 'TOPLEFT', 4, -4)
+			--widget.skinnedCheckBG:Point('BOTTOMRIGHT', widget.checkbg, 'BOTTOMRIGHT', -4, 4)
+			--S.CreateBD(widget.skinnedCheckBG)
+		--end
 
-		if widget.skinnedCheckBG.oborder then
-			widget.check:SetParent(widget.skinnedCheckBG.oborder)
-		else
-			widget.check:SetParent(widget.skinnedCheckBG)
-		end
+		--if widget.skinnedCheckBG.oborder then
+			--widget.check:SetParent(widget.skinnedCheckBG.oborder)
+		--else
+			--widget.check:SetParent(widget.skinnedCheckBG)
+		--end
 	elseif TYPE == "Dropdown" then
 		local frame = widget.dropdown
 		local button = widget.button

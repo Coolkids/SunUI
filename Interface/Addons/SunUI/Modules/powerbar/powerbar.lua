@@ -1,6 +1,6 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
 local _
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SunUIPowerBar", "AceEvent-3.0")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SunUIPowerBar", "AceTimer-3.0")
 local powercolor = {}
 for power, color in next, PowerBarColor do
 	if (type(power) == "string") then
@@ -706,6 +706,7 @@ function Module:HealthPowerBar()
 	bars:RegisterEvent("PLAYER_ENTERING_WORLD")
 	bars:RegisterEvent("PLAYER_REGEN_ENABLED")
 	bars:RegisterEvent("PLAYER_REGEN_DISABLED")
+	bars:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 	bars:SetScript("OnEvent", function(self, event)
 		if C["Fade"] then 
 			if event == "PLAYER_REGEN_DISABLED" then
@@ -713,11 +714,9 @@ function Module:HealthPowerBar()
 				UIFrameFadeIn(self, 1, self:GetAlpha(), 1)	
 			end
 			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" then
-				local _, power = UnitPowerType("player")
-				powertext:SetTextColor(unpack(powercolor[power]))
 				S.FadeOutFrameDamage(self, 1)
 			end
-			if event == "UPDATE_SHAPESHIFT_FORM"then
+			if event == "UPDATE_SHAPESHIFT_FORM" or event == "PLAYER_ENTERING_WORLD" or event == "ACTIVE_TALENT_GROUP_CHANGED" then
 				power:SetMinMaxValues(0, UnitPowerMax("player"))
 				local _, powerclass = UnitPowerType("player")
 				powertext:SetTextColor(unpack(powercolor[powerclass]))

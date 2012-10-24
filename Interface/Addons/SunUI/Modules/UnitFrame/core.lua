@@ -1249,7 +1249,7 @@ lib.gen_swing_timer = function(f)
     self.width = U["PetWidth"]
     self.height = U["PetHeight"]
     self.mystyle = "pet"
-    self.disallowVehicleSwap = true
+    self.disallowVehicleSwap = false
     genStyle(self)
     self.Power.frequentUpdates = true
 	self.Power.Smooth = true

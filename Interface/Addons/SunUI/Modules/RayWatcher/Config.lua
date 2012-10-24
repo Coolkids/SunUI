@@ -1038,6 +1038,10 @@ ns.watchers ={
 				{ spellID = 62606, unitId = "player", caster = "player", filter = "BUFF" },
 				--吸血鬼的拥抱
 				{ spellID = 15286, unitId = "player", caster = "player", filter = "BUFF" },
+				--免费愈合祷言
+				{ spellID = 123267, unitId = "player", caster = "player", filter = "BUFF" },
+				--免费盾
+				{ spellID = 123266, unitId = "player", caster = "player", filter = "BUFF" },
 		},
 		{
 			name = "玩家饰品附魔触发buff",

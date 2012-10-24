@@ -87,10 +87,20 @@ end
 
 local function HideObjects(parent)
 	for object in pairs(parent.queue) do
-		if(object:GetObjectType() == 'Texture') then
+		if object:GetObjectType() == "Texture" then
 			object:SetTexture(nil)
+			object.SetTexture = function() end
+		elseif object:GetObjectType() == "FontString" then
+			object.ClearAllPoints = function() end
+			object.SetFont = function() end
+			object.SetPoint = function() end
+			object:Hide()
+			object.Show = function() end
+			object.SetText = function() end
+			object.SetShadowOffset = function() end
 		else
 			object:Hide()
+			object.Show = function() end
 		end
 	end
 end
@@ -106,22 +116,7 @@ local totems = {
 	[GetSpellInfo(8190)] = [[Interface\Icons\Spell_fire_selfdestruct]],
 	[GetSpellInfo(5394)] = [[Interface\Icons\Inv_spear_04]],
 }
-local function UpdateTarget(frame,elapsed)
-	-- ffffuck GUID, we will do it 'smartass' way
-	if UnitExists("target") and frame:GetAlpha() == 1 then
-		--frame.hp.tar:SetBackdropBorderColor(1, .7, .2, 1)
-		frame.hp.tarT:SetVertexColor(1, .7, .2, 1)
-		frame.hp.tarB:SetVertexColor(1, .7, .2, 1)
-		frame.hp.tarL:SetVertexColor(1, .7, .2, 1)
-		frame.hp.tarR:SetVertexColor(1, .7, .2, 1)
-	else
-		--frame.hp.tar:SetBackdropBorderColor(0, 0, 0, 0)
-		frame.hp.tarT:SetVertexColor(0, 0, 0, 0)
-		frame.hp.tarB:SetVertexColor(0, 0, 0, 0)
-		frame.hp.tarL:SetVertexColor(0, 0, 0, 0)
-		frame.hp.tarR:SetVertexColor(0, 0, 0, 0)
-	end	
-end 
+
 local function UpdateThreat(frame,elapsed)
 	if(frame.region:IsShown()) then
 		local _, val = frame.region:GetVertexColor()
@@ -147,24 +142,24 @@ local function UpdateThreat(frame,elapsed)
 	local d =(valueHealth/maxHealth)*100
 
 		if(d < 100) and valueHealth > 1 then
-			frame.hp.value:SetText(SVal(valueHealth))
+			--frame.hp.value:SetText(SVal(valueHealth))
 			frame.hp.pct:SetText(format("%.1f %s",d,"%"))
 		else
-			frame.hp.value:SetText("")
+			--frame.hp.value:SetText("")
 			frame.hp.pct:SetText("")
 		end
 
 		if(d <= 35 and d >= 25) then
-			frame.hp.value:SetTextColor(253/255, 238/255, 80/255)
+			--frame.hp.value:SetTextColor(253/255, 238/255, 80/255)
 			frame.hp.pct:SetTextColor(253/255, 238/255, 80/255)
 		elseif(d < 25 and d >= 20) then
-			frame.hp.value:SetTextColor(250/255, 130/255, 0/255)
+			--frame.hp.value:SetTextColor(250/255, 130/255, 0/255)
 			frame.hp.pct:SetTextColor(250/255, 130/255, 0/255)
 		elseif(d < 20) then
-			frame.hp.value:SetTextColor(200/255, 20/255, 40/255)
+			--frame.hp.value:SetTextColor(200/255, 20/255, 40/255)
 			frame.hp.pct:SetTextColor(200/255, 20/255, 40/255)
 		else
-			frame.hp.value:SetTextColor(1,1,1)
+			--frame.hp.value:SetTextColor(1,1,1)
 			frame.hp.pct:SetTextColor(1,1,1)
 		end	
 end
@@ -306,7 +301,7 @@ local function OnAura(frame, unit)
 	if not frame.icons or not frame.unit or not C["Showdebuff"] then return end  --
 	local i = 1
 	for index = 1,40 do
-		if i > 5 then return end
+		if i > C["HPWidth"] / 20 then return end
 		local match
 		local name,_,_,_,_,duration,_,caster,_,_,spellid = UnitAura(frame.unit,index,"HARMFUL")
 		
@@ -317,7 +312,7 @@ local function OnAura(frame, unit)
 			if not frame.icons[i] then frame.icons[i] = CreateAuraIcon(frame) end
 			local icon = frame.icons[i]
 			if i == 1 then icon:Point("RIGHT",frame.icons,"RIGHT") end
-			if i ~= 1 and i <= 5 then icon:Point("RIGHT", frame.icons[i-1], "LEFT", -2, 0) end
+			if i ~= 1 and i <= C["HPWidth"] / 20 then icon:Point("RIGHT", frame.icons[i-1], "LEFT", -2, 0) end
 			i = i + 1
 			UpdateAuraIcon(icon, frame.unit, index, "HARMFUL")
 		end
@@ -357,8 +352,8 @@ local function UpdateObjects(frame)
 	frame.highlight:SetAllPoints(frame.hp)
 
 	-- color hp bg dependend on hp color
-    local BGr, BGg, BGb = frame.hp:GetStatusBarColor()
-	frame.hp.hpbg2:SetVertexColor(BGr*0.18, BGg*0.18, BGb*0.18)
+    --local BGr, BGg, BGb = frame.hp:GetStatusBarColor()
+	--frame.hp.hpbg2:SetVertexColor(BGr*0.18, BGg*0.18, BGb*0.18)
 	
 	local level, elite, mylevel = tonumber(frame.level:GetText()), frame.elite:IsShown(), UnitLevel("player")
 	local lvlr, lvlg, lvlb = frame.level:GetTextColor()
@@ -421,7 +416,7 @@ local function UpdateCastbar(frame)
 	if not frame.shield:IsShown() then
 		frame:SetStatusBarColor(.5,.65,.85)
 	else
-		frame:SetStatusBarColor(1,.49,0)
+		frame:SetStatusBarColor(1,0,0)
 	end
 end	
 
@@ -434,7 +429,8 @@ local OnValueChanged = function(self)
  	if not self.shield:IsShown() then
 		self:SetStatusBarColor(.5,.65,.85)
 	else
-		self:SetStatusBarColor(1,.49,0)
+		--self:SetStatusBarColor(1,.49,0)
+		self:SetStatusBarColor(1,0,0)
 	end 
 end
 
@@ -454,88 +450,38 @@ local function SkinObjects(frame)
 	overlay:SetVertexColor(0.25, 0.25, 0.25)
 	frame.highlight = overlay
 	
-	local offset = UIParent:GetScale() / hp:GetEffectiveScale()
-	local hpbg = hp:CreateTexture(nil, 'BACKGROUND')
-	hpbg:SetPoint('BOTTOMRIGHT', offset, -offset)
-	hpbg:SetPoint('TOPLEFT', -offset, offset)
-	hpbg:SetTexture(0, 0, 0)
-
-	hp.hpbg2 = hp:CreateTexture(nil, 'BORDER')
-	hp.hpbg2:SetAllPoints(hp)
-	hp.hpbg2:SetTexture(blankTex)	
-	
 	hp:HookScript('OnShow', UpdateObjects)
 	hp:SetStatusBarTexture(DB.Statusbar)
 	frame.hp = hp
-	
-	hp.hpGlow = CreateFrame("Frame", nil, hp)
-	hp.hpGlow:SetPoint("TOPLEFT", hp, "TOPLEFT", -3.5, 3.5)
-	hp.hpGlow:SetPoint("BOTTOMRIGHT", hp, "BOTTOMRIGHT", 3.5, -3.5)
-	hp.hpGlow:SetBackdrop(backdrop)
-	hp.hpGlow:SetBackdropColor(0, 0, 0)
-	hp.hpGlow:SetBackdropBorderColor(0, 0, 0)
+	hp:CreateShadow()
+	hp.hpGlow = hp.shadow
+	S.CreateBack(hp)
+	-- hp.hpGlow = CreateFrame("Frame", nil, hp)
+	-- hp.hpGlow:SetPoint("TOPLEFT", hp, "TOPLEFT", -3.5, 3.5)
+	-- hp.hpGlow:SetPoint("BOTTOMRIGHT", hp, "BOTTOMRIGHT", 3.5, -3.5)
+	-- hp.hpGlow:SetBackdrop(backdrop)
+	-- hp.hpGlow:SetBackdropColor(0, 0, 0)
+	-- hp.hpGlow:SetBackdropBorderColor(0, 0, 0)
 
 	-- pixel art starts here... making targeting border as the commented method above deforms after reloading UI
- 	hp.tar = CreateFrame("Frame", nil, hp)
-	hp.tar:SetFrameLevel(hp.hpGlow:GetFrameLevel()+1)
+ 	
+	--hp.value = hp:CreateFontString(nil, "OVERLAY")	
+	--hp.value:SetFont(DB.Font, C["Fontsize"]*S.Scale(1), "THINOUTLINE")
+	--hp.value:SetPoint("LEFT", hp, "RIGHT", 5, 0)
 	
-	hp.tarT = hp.tar:CreateTexture(nil, "PARENT")
-	hp.tarT:SetTexture(1,1,1,1)
-	hp.tarT:SetPoint("TOPLEFT", hp, "TOPLEFT",0,1)
-	hp.tarT:SetPoint("TOPRIGHT", hp, "TOPRIGHT",0,1)
-	hp.tarT:SetHeight(1)
-	hp.tarT:SetVertexColor(1,1,1,1)
-	
-	hp.tarB = hp.tar:CreateTexture(nil, "PARENT")
-	hp.tarB:SetTexture(1,1,1,1)
-	hp.tarB:SetPoint("BOTTOMLEFT", hp, "BOTTOMLEFT",0,-1)
-	hp.tarB:SetPoint("BOTTOMRIGHT", hp, "BOTTOMRIGHT",0,-1)
-	hp.tarB:SetHeight(1)
-	hp.tarB:SetVertexColor(1,1,1,1)
-	
-	hp.tarL = hp.tar:CreateTexture(nil, "PARENT")
-	hp.tarL:SetTexture(1,1,1,1)
-	hp.tarL:SetPoint("TOPLEFT", hp, "TOPLEFT",-1,1)
-	hp.tarL:SetPoint("BOTTOMLEFT", hp, "BOTTOMLEFT",-1,-1)
-	hp.tarL:SetWidth(1)
-	hp.tarL:SetVertexColor(1,1,1,1)
-	
-	hp.tarR = hp.tar:CreateTexture(nil, "PARENT")
-	hp.tarR:SetTexture(1,1,1,1)
-	hp.tarR:SetPoint("TOPRIGHT", hp, "TOPRIGHT",1,1)
-	hp.tarR:SetPoint("BOTTOMRIGHT", hp, "BOTTOMRIGHT",1,-1)
-	hp.tarR:SetWidth(1)
-	hp.tarR:SetVertexColor(1,1,1,1)
-	
-	
-	hp.value = hp.tar:CreateFontString(nil, "OVERLAY")	
-	hp.value:SetFont(DB.Font, C["Fontsize"]*S.Scale(1), "THINOUTLINE")
-	hp.value:SetPoint("LEFT", hp, "RIGHT", 5, 0)
-	
-	hp.pct = hp.tar:CreateFontString(nil, "OVERLAY")	
-	hp.pct:SetFont(DB.Font, C["Fontsize"]*S.Scale(1), "THINOUTLINE")
-	hp.pct:SetPoint("CENTER", hp, "CENTER", 0, 0)
+	hp.pct = hp:CreateFontString(nil, "OVERLAY")	
+	hp.pct:SetFont(DB.Font, C["Fontsize"], "THINOUTLINE")
+	hp.pct:SetPoint("LEFT", hp, "RIGHT", 5, 0)
 
 	local offset = UIParent:GetScale() / cb:GetEffectiveScale()
-	local cbbg = cb:CreateTexture(nil, 'BACKGROUND')
-	cbbg:SetPoint('BOTTOMRIGHT', offset, -offset)
-	cbbg:SetPoint('TOPLEFT', -offset, offset)
-	cbbg:SetTexture(0, 0, 0)
-
-	local cbbd = cb:CreateTexture(nil, 'BORDER')
-	cbbd:SetAllPoints(cb)
-	cbbd:SetTexture(.1, .1, .1)
-	cb.border = cbbd
+	cb:CreateShadow()
+	S.CreateBack(cb)
 
 	cbicon:ClearAllPoints()
 	cbicon:SetPoint("TOPRIGHT", hp, "TOPLEFT", -4, 1)		
 	cbicon:SetSize(C["CastBarIconSize"], C["CastBarIconSize"])
 	cbicon:SetTexCoord(.07, .93, .07, .93)
-	
-	local cbiconbg = cb:CreateTexture(nil, 'BACKGROUND')
-	cbiconbg:SetPoint('BOTTOMRIGHT', cbicon, offset, -offset)
-	cbiconbg:SetPoint('TOPLEFT', cbicon, -offset, offset)
-	cbiconbg:SetTexture(0, 0, 0)
+	S.CreateShadow(cb, cbicon)
 	
 	cb.icon = cbicon
 	cb.shield = cbshield
@@ -655,15 +601,17 @@ local function HookFrames(...)
 end
 
 NamePlates:SetScript("OnEvent", function(self ,event, ...)
-	local arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 = ...
-	-- if arg4 == UnitGUID("player") then 
-		-- print(arg2, arg12)
-	-- end
-	if arg2 == "SPELL_AURA_BROKEN" or arg2 == "SPELL_AURA_BROKEN_SPELL" or arg2 == "SPELL_AURA_REMOVED" then
-		--if arg4 == UnitGUID("player") or arg4 == UnitGUID("pet") or arg5 == "虛無觸鬚" or arg5 == "暗影触须" then
-			--print(GetSpellLink(arg12), "Hide", arg9)
-			ForEachPlate(MatchGUID, arg8, arg12)
-		--end
+	if event == "COMBAT_LOG_EVENT_UNFILTERED" then
+		local arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 = ...
+		-- if arg4 == UnitGUID("player") then 
+			-- print(arg2, arg12)
+		-- end
+		if arg2 == "SPELL_AURA_BROKEN" or arg2 == "SPELL_AURA_BROKEN_SPELL" or arg2 == "SPELL_AURA_REMOVED" then
+			--if arg4 == UnitGUID("player") or arg4 == UnitGUID("pet") or arg5 == "虛無觸鬚" or arg5 == "暗影触须" then
+				--print(GetSpellLink(arg12), "Hide", arg9)
+				ForEachPlate(MatchGUID, arg8, arg12)
+			--end
+		end
 	end
 end)
 NamePlates:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
@@ -678,10 +626,11 @@ function Module:OnEnable()
 			HookFrames(WorldFrame:GetChildren())
 		end
 		if(self.elapsed and self.elapsed > 0.1) then
-			for frame in pairs(frames) do
-				UpdateThreat(frame)
-				UpdateTarget(frame)
-			end
+			--for frame in pairs(frames) do
+				ForEachPlate(UpdateThreat, self.elapsed)
+				--UpdateThreat(frame)
+				--UpdateTarget(frame)
+			--end
 			self.elapsed = 0
 		else
 			self.elapsed = (self.elapsed or 0) + elapsed
