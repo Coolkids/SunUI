@@ -5,6 +5,9 @@ All rights reserved.
 local S, C, L, DB = unpack(select(2, ...))
 local _G =_G
 local _
+if IsAddOnLoaded("Mapster") or IsAddOnLoaded("Carbonite") then
+	return
+end
 local Mapster = LibStub("AceAddon-3.0"):GetAddon("SunUI")
 
 local MODNAME = "FogClear"

@@ -197,10 +197,11 @@ function Module:OnEnable()
 	rdt:SetShadowColor(0, 0, 0, 0.4)
 	rd:SetAllPoints(rdt)
 	local function diff()
-		if not IsInInstance()  then return end
+		local text = ""
+		if not IsInInstance()  then rdt:SetText(text) return end
 		local _, instanceType, difficulty, _, maxPlayers, _, dynamic  = GetInstanceInfo()
-	 	if (instanceType=='pvp') or (instanceType=='arena') then return end
-		local text = nil
+	 	if (instanceType=='pvp') or (instanceType=='arena') then rdt:SetText(text) return end
+		
 		if instanceType == 'party' then
 			if GetChallengeMode() then 
 				text = maxPlayers..'C'

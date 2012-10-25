@@ -217,7 +217,15 @@ function S.CreateShadow(p, f, t)
 	shadow:SetBackdropBorderColor( borderr, borderg, borderb, bordera )
 	f.sw = shadow
 end
-
+function S.CreateBorder(p, f) 
+	if f.border then return end
+	local border = CreateFrame("Frame", nil, p)
+	border:SetFrameLevel(1)
+	border:SetPoint("TOPLEFT", f, -S.mult, S.mult)
+	border:SetPoint("BOTTOMRIGHT", f, S.mult, -S.mult)
+	border:CreateBorder()
+	f.border = border
+end
 function S.FadeOutFrameDamage(p, t, show)  --隐藏
 	if type(p) == "table" then 
 		if p:GetAlpha()>0 then

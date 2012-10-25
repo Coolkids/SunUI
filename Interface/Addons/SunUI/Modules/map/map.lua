@@ -5,169 +5,148 @@ if IsAddOnLoaded("Mapster") or IsAddOnLoaded("Carbonite") then
 end
 local map_scale = 0.9								-- Mini World Map scale
 local isize = 20									-- group icons size
-SetCVar("questPOI", 1)
-SetCVar("lockedWorldMap", 0)
----------------- > Coordinates functions
+local WM = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("WorldMap", "AceEvent-3.0", "AceHook-3.0")
+
+local mpos = {"CENTER",UIParent,"CENTER",0,0}
 local player, cursor
-local function gen_string(point, X, Y)
-	local t = WorldMapButton:CreateFontString(nil, 'ARTWORK', 'GameFontNormal')
-	t:SetFont(DB.Font,15,"THINOUTLINE")
-	t:SetPoint('BOTTOMLEFT', WorldMapButton, point, X, Y)
-	t:SetJustifyH('LEFT')
-	return t
-end
-local function Cursor()
-	local left, top = WorldMapDetailFrame:GetLeft() or 0, WorldMapDetailFrame:GetTop() or 0
-	local width, height = WorldMapDetailFrame:GetWidth(), WorldMapDetailFrame:GetHeight()
-	local scale = WorldMapDetailFrame:GetEffectiveScale()
-	local x, y = GetCursorPosition()
-	local cx = (x/scale - left) / width
-	local cy = (top - y/scale) / height
-	if cx < 0 or cx > 1 or cy < 0 or cy > 1 then return end
-	return cx, cy
-end
-local function OnUpdate(player, cursor)
-	local cx, cy = Cursor()
-	local px, py = GetPlayerMapPosition("player")
-	if cx and cy then
-		cursor:SetFormattedText('Cursor: %.2d,%.2d', 100 * cx, 100 * cy)
+local EJbuttonWidth, EJbuttonHeight = 30, 30
+local EJbuttonImageWidth, EJbuttonImageHeigth = 21.6, 21.6
+
+--[[ function WM:ResizeEJBossButton()
+	if WORLDMAP_SETTINGS.size == WORLDMAP_WINDOWED_SIZE then
+		local index = 1
+		while _G["EJMapButton"..index] do
+			_G["EJMapButton"..index]:SetSize(EJbuttonWidth * WM.db.ejbuttonscale, EJbuttonHeight * WM.db.ejbuttonscale)
+			_G["EJMapButton"..index].bgImage:SetSize(EJbuttonImageWidth * WM.db.ejbuttonscale,EJbuttonImageHeigth * WM.db.ejbuttonscale)
+			index = index + 1
+		end
 	else
-		cursor:SetText("")
+		local index = 1
+		while _G["EJMapButton"..index] do
+			_G["EJMapButton"..index]:SetSize(EJbuttonWidth, EJbuttonHeight)
+			_G["EJMapButton"..index].bgImage:SetSize(EJbuttonImageWidth,EJbuttonImageHeigth)
+			index = index + 1
+		end
 	end
-	if px == 0 or py == 0 then
-		player:SetText("")
-	else
-		player:SetFormattedText('Player: %.2d,%.2d', 100 * px, 100 * py)
-	end
-	-- gotta change coords position for maximized world map
-	if WorldMapQuestScrollFrame:IsShown() then
-		player:SetPoint('BOTTOMLEFT', WorldMapButton, 'BOTTOM',-120,0)
-		cursor:SetPoint('BOTTOMLEFT', WorldMapButton, 'BOTTOM',50,0)
-	else
-		player:SetPoint('BOTTOMLEFT', WorldMapButton, 'BOTTOM',-120,-19)
-		cursor:SetPoint('BOTTOMLEFT', WorldMapButton, 'BOTTOM',50,-19)
-	end
-end
-local function UpdateCoords(self, elapsed)
-	self.elapsed = self.elapsed - elapsed
-	if self.elapsed <= 0 then
-		self.elapsed = 0.1
-		OnUpdate(player, cursor)
-	end
-end
-local tpt = {"LEFT", self, "BOTTOM"}
-local function gen_coords(self)
+end ]]
+function WM:CreateCoordString()
 	if player or cursor then return end
-	player = gen_string('BOTTOM',-120,-19)
-	cursor = gen_string('BOTTOM',50,-19)
+	player = WorldMapButton:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+	player:SetFont(DB.Font,14)
+	player:SetPoint("BOTTOMLEFT", WorldMapButton, "BOTTOM", -120, -22)
+	player:SetJustifyH("LEFT")
+	cursor = WorldMapButton:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+	cursor:SetFont(DB.Font,14)
+	cursor:SetPoint("BOTTOMLEFT", WorldMapButton, "BOTTOM", 50, -22)
+	cursor:SetJustifyH("LEFT")
 end
 
----------------- > Moving/removing world map elements
-if map_scale==1 then map_scale = 0.99 end -- dirty hack to prevent 'division by zero'!
-local function null() end
-local w = CreateFrame"Frame"
-w:SetScript("OnEvent", function(self, event, ...)
-	if event == "PLAYER_ENTERING_WORLD" then
-		SetCVar("questPOI", 1)
-		gen_coords(self)
-		local cond = false
-		BlackoutWorld:Hide()
-		BlackoutWorld.Show = null
-		BlackoutWorld.Hide = null
-		WORLDMAP_RATIO_MINI = map_scale
-		WORLDMAP_WINDOWED_SIZE = map_scale 
-		WORLDMAP_SETTINGS.size = map_scale 
-		WorldMapBlobFrame.Show = null
-		WorldMapBlobFrame.Hide = null
-		WorldMapQuestPOI_OnLeave = function()
-			WorldMapTooltip:Hide()
-		end
-		WorldMap_ToggleSizeDown()
-		for i = 1,40 do
-			local ri = _G["WorldMapRaid"..i]
-			ri:SetWidth(isize)
-			ri:SetHeight(isize)
-		end
-		if FeedbackUIMapTip then 
-			FeedbackUIMapTip:Hide()
-			FeedbackUIMapTip.Show = null
-		end
-	elseif event == "PLAYER_REGEN_DISABLED" then
-		WorldMapFrameSizeUpButton:Disable()
-		WorldMap_ToggleSizeDown()
-		WorldMapBlobFrame:DrawBlob(WORLDMAP_SETTINGS.selectedQuestId, false)
-		WorldMapBlobFrame:DrawBlob(WORLDMAP_SETTINGS.selectedQuestId, true)
-	elseif event == "PLAYER_REGEN_ENABLED" then
-		WorldMapFrameSizeUpButton:Enable()
-	elseif event == "WORLD_MAP_UPDATE" then
-		-- making sure that coordinates are not calculated when map is hidden
-		if not WorldMapFrame:IsVisible() and cond then
-			self.elapsed = nil
-			self:SetScript('OnUpdate', nil)
-			cond = false
-		else
-			self.elapsed = 0.1
-			self:SetScript('OnUpdate', UpdateCoords)
-			cond = true
-		end
-		if (GetNumDungeonMapLevels() == 0) then
-			WorldMapLevelUpButton:Hide()
-			WorldMapLevelDownButton:Hide()
-		else
-			WorldMapLevelUpButton:Show()
-			WorldMapLevelUpButton:ClearAllPoints()
-			WorldMapLevelUpButton:SetPoint("TOPLEFT", WorldMapFrameCloseButton, "BOTTOMLEFT", 8, 8)
-			WorldMapLevelUpButton:SetFrameStrata("MEDIUM")
-			WorldMapLevelUpButton:SetFrameLevel(100)
-			WorldMapLevelUpButton:SetParent("WorldMapFrame")
-			WorldMapLevelDownButton:ClearAllPoints()
-			WorldMapLevelDownButton:Show()
-			WorldMapLevelDownButton:SetPoint("TOP", WorldMapLevelUpButton, "BOTTOM",0,-2)
-			WorldMapLevelDownButton:SetFrameStrata("MEDIUM")
-			WorldMapLevelDownButton:SetFrameLevel(100)
-			WorldMapLevelDownButton:SetParent("WorldMapFrame")
-				
-			WorldMapFrameAreaLabel:SetFont(GameFontNormalSmall:GetFont(), 50, "OUTLINE")
-			WorldMapFrameAreaLabel:SetShadowOffset(2, -2)
-			WorldMapFrameAreaLabel:SetTextColor(0.90, 0.8294, 0.6407)	
-			
-			WorldMapFrameAreaDescription:SetFont(GameFontNormalSmall:GetFont(), 40, "OUTLINE")
-			WorldMapFrameAreaDescription:SetShadowOffset(2, -2)	
-			
-			WorldMapZoneInfo:SetFont(GameFontNormalSmall:GetFont(), 27, "OUTLINE")
-			WorldMapZoneInfo:SetShadowOffset(2, -2)	
-		end
+function WM:PLAYER_ENTERING_WORLD()
+	SetCVar("questPOI", 1)
+	SetCVar("lockedWorldMap", 0)
+	WM:CreateCoordString(self)
+	local cond = false
+	BlackoutWorld:Hide()
+	BlackoutWorld.Show = function() end
+	BlackoutWorld.Hide = function() end
+	WORLDMAP_RATIO_MINI = map_scale
+	WORLDMAP_WINDOWED_SIZE = map_scale 
+	WORLDMAP_SETTINGS.size = map_scale 
+	WorldMapBlobFrame.Show = function() end
+	WorldMapBlobFrame.Hide = function() end
+	WorldMapQuestPOI_OnLeave = function()
+		WorldMapTooltip:Hide()
 	end
-end)
-w:RegisterEvent("PLAYER_ENTERING_WORLD")
-w:RegisterEvent("WORLD_MAP_UPDATE")
-w:RegisterEvent("PLAYER_REGEN_DISABLED")
-w:RegisterEvent("PLAYER_REGEN_ENABLED")
+	WorldMap_ToggleSizeDown()
+	if FeedbackUIMapTip then 
+		FeedbackUIMapTip:Hide()
+		FeedbackUIMapTip.Show = function() end
+	end
+end
 
-WorldMapFrame.backdrop = CreateFrame("Frame", nil, WorldMapFrame)
-WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapFrame, -2, 2)
-WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapFrame, 2, -2)
---S.CreateBD(WorldMapFrame.backdrop)
-WorldMapFrame.backdrop:SetFrameLevel(0)
-S.CreateBD(WorldMapDetailFrame, 0)
-WorldMapDetailFrame.backdrop = CreateFrame("Frame", nil, WorldMapFrame)
-S.SetBD(WorldMapDetailFrame.backdrop)
-WorldMapDetailFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, -2, 2)
-WorldMapDetailFrame.backdrop:Point("BOTTOMRIGHT", WorldMapDetailFrame, 2, -2)
-WorldMapDetailFrame.backdrop:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel() - 2)
---WorldMapFrame:StripTextures()
-WorldMapFrame:DisableDrawLayer("BORDER")
----------------- > Styling mini World Map
--- for the love of GOD do not change values in this function
-local function m_MapShrink()
+function WM:PLAYER_REGEN_DISABLED()
+	WorldMapFrameSizeUpButton:Disable()
+	WorldMap_ToggleSizeDown()
+	WorldMapBlobFrame:DrawBlob(WORLDMAP_SETTINGS.selectedQuestId, false)
+	WorldMapBlobFrame:DrawBlob(WORLDMAP_SETTINGS.selectedQuestId, true)
+end
+
+function WM:PLAYER_REGEN_ENABLED()
+	WorldMapFrameSizeUpButton:Enable()
+end
+
+function WM:WORLD_MAP_UPDATE()
+	if (GetNumDungeonMapLevels() == 0) then
+		WorldMapLevelUpButton:Hide()
+		WorldMapLevelDownButton:Hide()
+	else
+		WorldMapLevelUpButton:Show()
+		WorldMapLevelUpButton:ClearAllPoints()
+		WorldMapLevelUpButton:SetPoint("TOPLEFT", WorldMapFrameCloseButton, "BOTTOMLEFT", 8, 8)
+		WorldMapLevelUpButton:SetFrameStrata("MEDIUM")
+		WorldMapLevelUpButton:SetFrameLevel(100)
+		WorldMapLevelUpButton:SetParent("WorldMapFrame")
+		WorldMapLevelDownButton:ClearAllPoints()
+		WorldMapLevelDownButton:Show()
+		WorldMapLevelDownButton:SetPoint("TOP", WorldMapLevelUpButton, "BOTTOM",0,-2)
+		WorldMapLevelDownButton:SetFrameStrata("MEDIUM")
+		WorldMapLevelDownButton:SetFrameLevel(100)
+		WorldMapLevelDownButton:SetParent("WorldMapFrame")
+	end
+end
+
+function WM:SkinWorldMap()
+	WorldMapFrame.backdrop = CreateFrame("Frame", nil, WorldMapFrame)
+	WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapFrame, -2, 2)
+	WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapFrame, 2, -2)
+	S.SetBD(WorldMapFrame.backdrop)
+	WorldMapFrame.backdrop:SetFrameLevel(0)
+
+	WorldMapDetailFrame.backdrop = CreateFrame("Frame", nil, WorldMapFrame)
+	S.SetBD(WorldMapDetailFrame.backdrop)
+	WorldMapDetailFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, -2, 2)
+	WorldMapDetailFrame.backdrop:Point("BOTTOMRIGHT", WorldMapDetailFrame, 2, -2)
+	WorldMapDetailFrame.backdrop:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel() - 2)
+
+	S.ReskinDropDown(WorldMapZoneMinimapDropDown)
+	S.ReskinDropDown(WorldMapContinentDropDown)
+	S.ReskinDropDown(WorldMapZoneDropDown)
+
+	S.ReskinDropDown(WorldMapShowDropDown)
+	WorldMapShowDropDown:ClearAllPoints()
+	WorldMapShowDropDown:SetPoint("TOPRIGHT", WorldMapButton, "BOTTOMRIGHT", 18, 2)
+
+	S.ReskinCheck(WorldMapQuestShowObjectives)
+	S.Reskin(WorldMapZoomOutButton)
+	WorldMapZoomOutButton:Point("LEFT", WorldMapZoneDropDown, "RIGHT", 0, 4)
+	WorldMapLevelUpButton:Point("TOPLEFT", WorldMapLevelDropDown, "TOPRIGHT", -2, 8)
+	WorldMapLevelDownButton:Point("BOTTOMLEFT", WorldMapLevelDropDown, "BOTTOMRIGHT", -2, 2)
+
+	S.ReskinCheck(WorldMapTrackQuest)
+	S.ReskinCheck(WorldMapShowDigSites)
+	WorldMapFrameSizeUpButton:SetFrameStrata("HIGH")
+	WorldMapFrameSizeUpButton.SetFrameStrata = function() end
+	WorldMapFrameSizeDownButton:SetFrameStrata("HIGH")
+	WorldMapFrameSizeDownButton:SetFrameLevel(99)
+	WorldMapFrameSizeDownButton.SetFrameStrata = function() end
+	WorldMapFrameCloseButton:SetFrameStrata("HIGH")
+	WorldMapFrameCloseButton:SetFrameLevel(99)
+	WorldMapFrameCloseButton.SetFrameStrata = function() end
+	WorldMapLevelUpButton:SetFrameStrata("HIGH")
+	WorldMapLevelUpButton:SetFrameLevel(99)
+	WorldMapLevelUpButton.SetFrameStrata = function() end
+	WorldMapLevelDownButton:SetFrameStrata("HIGH")
+	WorldMapLevelDownButton.SetFrameStrata = function() end
+end
+
+function WM:SmallSkin()
 	WorldMapDetailFrame.backdrop:Show()
 	WorldMapFrame.backdrop:Hide()
 	WorldMapDetailFrame.backdrop:ClearAllPoints()
 	WorldMapDetailFrame.backdrop:SetPoint("BOTTOMRIGHT", WorldMapButton, 8, -30)
 	WorldMapDetailFrame.backdrop:SetPoint("TOPLEFT", WorldMapButton, -8, 25)
-	--WorldMapDetailFrame.backdrop:SetFrameLevel(0)
+	WorldMapDetailFrame.backdrop:SetFrameLevel(0)
 	WorldMapDetailFrame.backdrop:SetFrameStrata(WorldMapDetailFrame:GetFrameStrata())
-
 	WorldMapFrame.scale = map_scale
 	WorldMapDetailFrame:SetScale(map_scale)
 	WorldMapButton:SetScale(map_scale)
@@ -186,12 +165,12 @@ local function m_MapShrink()
 	WorldMapFrameCloseButton:SetFrameStrata("MEDIUM")
 	WorldMapFrameCloseButton:SetScale(map_scale)
 	WorldMapFrameTitle:ClearAllPoints()
-	WorldMapFrameTitle:SetPoint("BOTTOM", WorldMapDetailFrame, "TOP", 0, 0)
+	WorldMapFrameTitle:SetPoint("BOTTOM", WorldMapDetailFrame, "TOP", 0, 5)
 	WorldMapTitleButton:SetFrameStrata("TOOLTIP")
 	WorldMapTitleButton:ClearAllPoints()
 	WorldMapTitleButton:SetPoint("BOTTOM", WorldMapDetailFrame, "TOP",0,0)
 	WorldMapTooltip:SetFrameStrata("TOOLTIP")
-	WorldMapLevelDropDown.Show = null
+	WorldMapLevelDropDown.Show = function() end
 	WorldMapLevelDropDown:Hide()
 	WorldMapQuestShowObjectives:SetScale(map_scale)
 	WorldMapQuestShowObjectives:SetScale(map_scale)
@@ -199,48 +178,24 @@ local function m_MapShrink()
 	WorldMapTrackQuest:SetScale(map_scale)
 	WorldMapLevelDownButton:SetScale(map_scale)
 	WorldMapLevelUpButton:SetScale(map_scale)
-	WorldMapShowDropDown:ClearAllPoints()
-	WorldMapShowDropDown:SetPoint("TOPRIGHT", WorldMapButton, "BOTTOMRIGHT",15,2)
 	WorldMapFrame_SetOpacity(WORLDMAP_SETTINGS.opacity)
 	WorldMapQuestShowObjectives_AdjustPosition()
-	WorldMapFrameTitle:ClearAllPoints()
-	WorldMapFrameTitle:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, 9, 5)
-	WorldMapFrameTitle:SetParent(WorldMapButton)
-	WorldMapFrameTitle:SetFont(DB.Font,28,"THINOUTLINE")
-	WorldMapFrameTitle:SetShadowOffset(0, 0)
-	WorldMapFrameTitle:SetTextColor(1, 1, 1)
-	WorldMapTrackQuest:SetParent(WorldMapButton)
-	WorldMapTrackQuest:ClearAllPoints()
-	WorldMapTrackQuest:SetPoint("TOPLEFT", WorldMapDetailFrame, 9, -5)
-	WorldMapTrackQuestText:SetFont(DB.Font,18,"THINOUTLINE")
-	WorldMapTrackQuestText:SetShadowOffset(0, 0)
-	WorldMapTrackQuestText:SetTextColor(1, 1, 1)
-	WorldMapQuestShowObjectives:SetPoint("BOTTOMRIGHT", WorldMapButton, "BOTTOMRIGHT")
-	WorldMapQuestShowObjectives.SetPoint = DB.dummy
-	WorldMapQuestShowObjectives:SetFrameStrata("HIGH")
-	WorldMapQuestShowObjectivesText:ClearAllPoints()
-	WorldMapQuestShowObjectivesText:Point("RIGHT", WorldMapQuestShowObjectives, "LEFT", -4, 1)
-	WorldMapQuestShowObjectivesText:SetTextColor(1, 1, 1)
-	WorldMapShowDigSites:SetParent(WorldMapButton)
-	WorldMapShowDigSites:ClearAllPoints()
-	WorldMapShowDigSites:SetPoint("BOTTOMRIGHT", WorldMapButton, "BOTTOMRIGHT", 0, 19)
-	WorldMapShowDigSitesText:SetFont(DB.Font,18,"THINOUTLINE")
-	WorldMapShowDigSitesText:SetShadowOffset(0, 0)
-	WorldMapShowDigSitesText:ClearAllPoints()
-	WorldMapShowDigSitesText:SetPoint("RIGHT",WorldMapShowDigSites,"LEFT",-4,1)
-	WorldMapShowDigSitesText:SetTextColor(1, 1, 1)
 end
-hooksecurefunc("WorldMap_ToggleSizeDown", m_MapShrink)
 
-local function m_MapEnlarge()
-	WorldMapFrame:SetParent(UIParent)
-	WorldMapDetailFrame:SetFrameLevel(50)
-	WorldMapButton:SetFrameLevel(55)
-	WorldMapFrame:EnableMouse(false)
-	WorldMapFrame:EnableKeyboard(false)
-	SetUIPanelAttribute(WorldMapFrame, "area", "center");
-	SetUIPanelAttribute(WorldMapFrame, "allowOtherPanels", true)
+function WM:LargeSkin()
+	if not InCombatLockdown() then
+		WorldMapFrame:SetParent(UIParent)
+		WorldMapFrame:EnableMouse(false)
+		WorldMapFrame:EnableKeyboard(false)
+		SetUIPanelAttribute(WorldMapFrame, "area", "center");
+		SetUIPanelAttribute(WorldMapFrame, "allowOtherPanels", true)
+	end
+
 	WorldMapDetailFrame.backdrop:Hide()
+	WorldMapFrame.backdrop:Show()
+	WorldMapFrame.backdrop:ClearAllPoints()
+	WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -25, 70)
+	WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 25, -30)
 	WorldMapQuestShowObjectives:SetScale(1)
 	WorldMapTrackQuest:SetScale(1)
 	WorldMapFrameCloseButton:SetScale(1)
@@ -252,48 +207,9 @@ local function m_MapEnlarge()
 	UIPanelWindows["WorldMapFrame"].area = "center"
 	WorldMapFrame:SetAttribute("UIPanelLayout-defined", nil)
 	WorldMapBossButtonFrame:Show()
-	
-	WorldMapFrameCloseButton:SetFrameStrata("HIGH")
-	WorldMapFrameSizeDownButton:SetFrameStrata("HIGH")
-	
-	WorldMapFrameTitle:ClearAllPoints()
-	WorldMapFrameTitle:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, 9, 5)
-	WorldMapFrameTitle:SetParent(WorldMapButton)
-	WorldMapFrameTitle:SetFont(DB.Font, 28, "OUTLINE")
-	WorldMapFrameTitle:SetShadowOffset(0, 0)
-	WorldMapFrameTitle:SetTextColor(1, 1, 1)
-	WorldMapQuestShowObjectives:SetParent(WorldMapButton)
-	WorldMapQuestShowObjectives:ClearAllPoints()
-	WorldMapQuestShowObjectives:SetPoint("BOTTOMRIGHT", WorldMapButton, "BOTTOMRIGHT")
-	WorldMapQuestShowObjectivesText:ClearAllPoints()
-	WorldMapQuestShowObjectivesText:SetPoint("RIGHT", WorldMapQuestShowObjectives, "LEFT", -4, 1)
-	WorldMapQuestShowObjectivesText:SetFont(DB.Font, 18, "OUTLINE")
-	WorldMapQuestShowObjectivesText:SetShadowOffset(0, 0)
-	WorldMapQuestShowObjectivesText:SetTextColor(1, 1, 1)
-	WorldMapTrackQuest:SetParent(WorldMapButton)
-	WorldMapTrackQuest:ClearAllPoints()
-	WorldMapTrackQuest:SetPoint("TOPLEFT", WorldMapDetailFrame, 9, -5)
-	WorldMapTrackQuestText:SetFont(DB.Font, 18, "OUTLINE")
-	WorldMapTrackQuestText:SetTextColor(1, 1, 1)
-	WorldMapShowDigSites:SetParent(WorldMapButton)
-	WorldMapShowDigSites:ClearAllPoints()
-	WorldMapShowDigSites:SetPoint("BOTTOMRIGHT", WorldMapButton, "BOTTOMRIGHT", 0, 19)
-	WorldMapShowDigSitesText:SetFont(DB.Font, 18, "OUTLINE")
-	WorldMapShowDigSitesText:SetShadowOffset(0, 0)
-	WorldMapShowDigSitesText:ClearAllPoints()
-	WorldMapShowDigSitesText:SetPoint("RIGHT",WorldMapShowDigSites,"LEFT",-4,1)
-	WorldMapShowDigSitesText:SetTextColor(1, 1, 1)
-
-	WorldMapFrame.backdrop:Show()
-	WorldMapFrame.backdrop:ClearAllPoints()
-	WorldMapFrame.backdrop:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", 245, -42) --, -10, 69)
-	WorldMapFrame.backdrop:SetPoint("BOTTOMRIGHT", WorldMapFrame, "BOTTOMRIGHT", -245 , 42)--, 321, -239)
-	S.CreateSD(WorldMapFrame.backdrop) 
-	
 end
-hooksecurefunc("WorldMap_ToggleSizeUp", m_MapEnlarge)
 
-function QuestSkin()
+function WM:QuestSkin()
 	if not InCombatLockdown() then
 		WorldMapFrame:SetParent(UIParent)
 		WorldMapFrame:EnableMouse(false)
@@ -305,6 +221,7 @@ function QuestSkin()
 	WorldMapFrame.backdrop:ClearAllPoints()
 	WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -25, 70)
 	WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 325, -235)  
+
 	if not WorldMapQuestDetailScrollFrame.backdrop then
 		WorldMapQuestDetailScrollFrame.backdrop = CreateFrame("Frame", nil, WorldMapQuestDetailScrollFrame)
 		S.CreateBD(WorldMapQuestDetailScrollFrame.backdrop)
@@ -312,30 +229,301 @@ function QuestSkin()
 		WorldMapQuestDetailScrollFrame.backdrop:Point("TOPLEFT", -22, 2)
 		WorldMapQuestDetailScrollFrame.backdrop:Point("BOTTOMRIGHT", 23, -4)
 	end
-	
+
 	if not WorldMapQuestRewardScrollFrame.backdrop then
 		WorldMapQuestRewardScrollFrame.backdrop = CreateFrame("Frame", nil, WorldMapQuestRewardScrollFrame)
 		S.CreateBD(WorldMapQuestRewardScrollFrame.backdrop)
 		WorldMapQuestRewardScrollFrame.backdrop:SetFrameLevel(0)
 		WorldMapQuestRewardScrollFrame.backdrop:Point("TOPLEFT", -2, 2)
-		WorldMapQuestRewardScrollFrame.backdrop:Point("BOTTOMRIGHT", 22, -4)				
+		WorldMapQuestRewardScrollFrame.backdrop:Point("BOTTOMRIGHT", 22, -4)
 	end
-	
+
 	if not WorldMapQuestScrollFrame.backdrop then
 		WorldMapQuestScrollFrame.backdrop = CreateFrame("Frame", nil, WorldMapQuestScrollFrame)
 		S.CreateBD(WorldMapQuestScrollFrame.backdrop)
 		WorldMapQuestScrollFrame.backdrop:SetFrameLevel(0)
 		WorldMapQuestScrollFrame.backdrop:Point("TOPLEFT", 0, 2)
-		WorldMapQuestScrollFrame.backdrop:Point("BOTTOMRIGHT", 24, -3)				
+		WorldMapQuestScrollFrame.backdrop:Point("BOTTOMRIGHT", 24, -3)
 	end
 end
-hooksecurefunc("WorldMapFrame_SetQuestMapView", QuestSkin)
-S.ReskinDropDown(WorldMapZoneMinimapDropDown)
-S.ReskinDropDown(WorldMapContinentDropDown)
-S.ReskinDropDown(WorldMapZoneDropDown)
 
-S.ReskinDropDown(WorldMapShowDropDown)	
-S.ReskinCheck(WorldMapQuestShowObjectives)
-S.Reskin(WorldMapZoomOutButton)
-S.ReskinCheck(WorldMapTrackQuest)
-S.ReskinCheck(WorldMapShowDigSites)
+local function Cursor()
+	local left, top = WorldMapDetailFrame:GetLeft() or 0, WorldMapDetailFrame:GetTop() or 0
+	local width, height = WorldMapDetailFrame:GetWidth(), WorldMapDetailFrame:GetHeight()
+	local scale = WorldMapDetailFrame:GetEffectiveScale()
+	local x, y = GetCursorPosition()
+	local cx = (x/scale - left) / width
+	local cy = (top - y/scale) / height
+	if cx < 0 or cx > 1 or cy < 0 or cy > 1 then return end
+	return cx, cy
+end
+
+local function OnUpdate(player, cursor)
+	local cx, cy = Cursor()
+	local px, py = GetPlayerMapPosition("player")
+	if cx and cy then
+		cursor:SetFormattedText(MOUSE_LABEL..": %.2d,%.2d", 100 * cx, 100 * cy)
+	else
+		cursor:SetText("")
+	end
+	if px == 0 or py == 0 then
+		player:SetText("")
+	else
+		player:SetFormattedText(PLAYER..": %.2d,%.2d", 100 * px, 100 * py)
+	end
+	-- gotta change coords position for maximized world map
+	if WorldMapQuestScrollFrame:IsShown() then
+		player:SetPoint("BOTTOMLEFT", WorldMapButton, "BOTTOM",-120,0)
+		cursor:SetPoint("BOTTOMLEFT", WorldMapButton, "BOTTOM",50,0)
+	else
+		player:SetPoint("BOTTOMLEFT", WorldMapButton, "BOTTOM",-120,-22)
+		cursor:SetPoint("BOTTOMLEFT", WorldMapButton, "BOTTOM",50,-22)
+	end
+end
+
+local function UpdateCoords(self, elapsed)
+	self.elapsed = (self.elapsed or 0.1) - elapsed
+	if self.elapsed <= 0 then
+		self.elapsed = 0.1
+		OnUpdate(player, cursor)
+		if GetUnitSpeed("player") ~= 0 and WORLDMAP_SETTINGS.size ~= WORLDMAP_WINDOWED_SIZE then
+			WorldMapFrame:SetAlpha(.5)
+		else
+			WorldMapFrame:SetAlpha(1)
+		end
+	end
+end
+
+function WM:OnUpdate(self, elapsed)
+	if self:IsShown() then
+		UpdateCoords(self, elapsed)
+	end
+	if InCombatLockdown() then
+		WorldMapFrameSizeDownButton:Disable()
+		WorldMapFrameSizeUpButton:Disable()
+	else
+		WorldMapFrameSizeDownButton:Enable()
+		WorldMapFrameSizeUpButton:Enable()
+	end
+	if WORLDMAP_SETTINGS.size == WORLDMAP_FULLMAP_SIZE then
+		WorldMapFrameSizeUpButton:Hide()
+		WorldMapFrameSizeDownButton:Show()
+	elseif WORLDMAP_SETTINGS.size == WORLDMAP_WINDOWED_SIZE then
+		WorldMapFrameSizeUpButton:Show()
+		WorldMapFrameSizeDownButton:Hide()
+	elseif WORLDMAP_SETTINGS.size == WORLDMAP_QUESTLIST_SIZE then
+		WorldMapFrameSizeUpButton:Hide()
+		WorldMapFrameSizeDownButton:Show()
+	end
+end
+
+function WM:FixSkin()
+	WorldMapFrame:SetFrameStrata("HIGH")
+	WorldMapFrame:StripTextures()
+	if WORLDMAP_SETTINGS.size == WORLDMAP_FULLMAP_SIZE then
+		self:LargeSkin()
+	elseif WORLDMAP_SETTINGS.size == WORLDMAP_WINDOWED_SIZE then
+		self:SmallSkin()
+	elseif WORLDMAP_SETTINGS.size == WORLDMAP_QUESTLIST_SIZE then
+		self:QuestSkin()
+	end
+
+	if not InCombatLockdown() then
+		WorldMapFrameSizeDownButton:Show()
+		WorldMapFrame:SetFrameLevel(10)
+	else
+		WorldMapFrameSizeDownButton:Disable()
+		WorldMapFrameSizeUpButton:Disable()
+	end
+
+	WorldMapFrameAreaLabel:SetFont(GameFontNormalSmall:GetFont(), 50, "OUTLINE")
+	WorldMapFrameAreaLabel:SetShadowOffset(S.mult, -S.mult)
+	WorldMapFrameAreaLabel:SetTextColor(0.90, 0.8294, 0.6407)
+
+	WorldMapFrameAreaDescription:SetFont(GameFontNormalSmall:GetFont(), 40, "OUTLINE")
+	WorldMapFrameAreaDescription:SetShadowOffset(S.mult, -S.mult)
+
+	WorldMapZoneInfo:SetFont(GameFontNormalSmall:GetFont(), 27, "OUTLINE")
+	WorldMapZoneInfo:SetShadowOffset(S.mult, -S.mult)
+end
+
+function WM:OnEnable()
+	--if self.db.scale==1 then self.db.scale = 0.99 end
+	self:SkinWorldMap()
+	WorldMapFrame:HookScript("OnShow", function() WM:FixSkin() end)
+	WorldMapFrame:HookScript("OnUpdate", function(self, elapsed) WM:OnUpdate(self, elapsed) end)
+	--self:SecureHook("EncounterJournal_AddMapButtons", "ResizeEJBossButton")
+	self:SecureHook("WorldMapFrame_SetFullMapView", "LargeSkin")
+	self:SecureHook("WorldMapFrame_SetQuestMapView", "QuestSkin")
+	self:SecureHook("WorldMap_ToggleSizeUp", "LargeSkin")
+	self:SecureHook("WorldMap_ToggleSizeDown", "SmallSkin")
+	self:RegisterEvent("PLAYER_ENTERING_WORLD")
+	self:RegisterEvent("WORLD_MAP_UPDATE")
+	self:RegisterEvent("PLAYER_REGEN_DISABLED")
+	self:RegisterEvent("PLAYER_REGEN_ENABLED")
+end
+
+--R
+--a. 地图玩家圆点标志显示小组编号，闪动红色表示交战状态，闪动灰色表示等待复活。 
+--b. 增强地图鼠标提示：按职业彩色显示玩家姓名，且在姓名前显示其组号和/或职业。 
+--取自iTiny 
+for i = 1, 4 do 
+   _G["WorldMapParty"..i]:SetWidth(24) 
+   _G["WorldMapParty"..i]:SetHeight(24) 
+end 
+for i = 1, 40 do 
+   _G["WorldMapRaid"..i]:SetWidth(24) 
+   _G["WorldMapRaid"..i]:SetHeight(24) 
+end 
+hooksecurefunc("WorldMapUnit_Update", function(self) 
+   if not self.group then 
+      self.group = self:CreateFontString(nil, "OVERLAY", "TextStatusBarText") 
+      self.group:SetPoint("CENTER", 1 , 2) 
+   end 
+   self.group:SetText("") 
+   if self.unit then 
+      if string.find(self.unit, "raid") then 
+         --self.group:SetText(select(3, GetRaidRosterInfo(string.sub(self.unit, 5)))) 
+      end 
+      if UnitAffectingCombat(self.unit) then 
+         self.icon:SetVertexColor(0.8, 0, 0) 
+      elseif UnitIsDeadOrGhost(self.unit) then 
+         self.icon:SetVertexColor(0.5, 0.5, 0.5) 
+      end 
+   end
+   if IsInRaid() then
+		local count = 0;
+		for i=1, MAX_RAID_MEMBERS do
+			local unit = "raid"..i
+			local partyX, partyY = GetPlayerMapPosition(unit)
+			if not ( (partyX == 0 and partyY == 0) or UnitIsUnit(unit, "player") ) then
+				count = count + 1
+			end
+		end
+		for i=count+1, MAX_RAID_MEMBERS do
+			_G["WorldMapRaid"..i]:Hide()
+		end
+	end
+end) 
+
+
+local function colorCode(eclass) 
+   local colorRGB = RAID_CLASS_COLORS[eclass] or NORMAL_FONT_COLOR 
+   return format("|CFF%2x%2x%2x", colorRGB.r*255, colorRGB.g*255, colorRGB.b*255) 
+end 
+
+local function MapUnit_OnEnter(self, motion, map) 
+   if map == "WorldMap" then 
+      WorldMapPOIFrame.allowBlobTooltip = false 
+   end 
+   local x, y = self:GetCenter() 
+   local parentX, parentY = self:GetParent():GetCenter() 
+   if ( x > parentX ) then 
+      if map == "WorldMap" then 
+         WorldMapTooltip:SetOwner(self, "ANCHOR_LEFT") 
+      else 
+         GameTooltip:SetOwner(self, "ANCHOR_LEFT") 
+      end 
+   else 
+      if map == "WorldMap" then 
+         WorldMapTooltip:SetOwner(self, "ANCHOR_RIGHT") 
+      else 
+         GameTooltip:SetOwner(self, "ANCHOR_RIGHT") 
+      end 
+   end 
+
+   local unitButton, unit 
+   local newLineString = "" 
+   local tooltipText = "" 
+   local name, subgroup, class, fileName, nameText, server 
+
+   if ( map == "WorldMap" and WorldMapPlayer:IsMouseOver() ) then 
+      name = UnitName(WorldMapPlayer.unit) 
+      if ( PlayerIsPVPInactive(WorldMapPlayer.unit) ) then 
+         tooltipText = format(PLAYER_IS_PVP_AFK, "---> "..name.." <---") 
+      else 
+         _, fileName = UnitClass(WorldMapPlayer.unit) 
+         tooltipText = "-> "..colorCode(fileName)..name.."|r".." <-" 
+      end 
+      newLineString = "\n" 
+   end 
+   for i=1, MAX_PARTY_MEMBERS do 
+      unitButton = _G[map.."Party"..i] 
+      if ( unitButton:IsVisible() and unitButton:IsMouseOver() ) then 
+         name = UnitName(unitButton.unit) 
+         class, fileName = UnitClass(unitButton.unit) 
+         if ( PlayerIsPVPInactive(unitButton.unit) ) then 
+            tooltipText = tooltipText..newLineString..format(PLAYER_IS_PVP_AFK, class.." "..name) 
+         else 
+            tooltipText = tooltipText..newLineString..class.." "..colorCode(fileName)..name.."|r" 
+         end 
+         newLineString = "\n" 
+      end 
+   end 
+   for i=1, MAX_RAID_MEMBERS do 
+      unitButton = _G[map.."Raid"..i] 
+      if ( unitButton:IsVisible() and unitButton:IsMouseOver() ) then 
+         if ( unitButton.name ) then 
+            if ( PlayerIsPVPInactive(unitButton.name) ) then 
+               tooltipText = tooltipText..newLineString..format(PLAYER_IS_PVP_AFK, unitButton.name) 
+            else 
+               tooltipText = tooltipText..newLineString..unitButton.name 
+            end 
+         else 
+            unit = unitButton.unit 
+            nameText, _, subgroup, _, class, fileName = GetRaidRosterInfo(string.sub(unit, 5)) 
+            _, _, name, server = string.find(nameText, "([^%-]+)%-(.+)") 
+            if PlayerIsPVPInactive(unit) then 
+               if name and server then 
+                  name = name.."-"..server 
+               else 
+                  name = nameText 
+               end 
+               tooltipText = tooltipText..newLineString..format(PLAYER_IS_PVP_AFK, "["..subgroup.."] "..class.." "..name) 
+            else 
+               if name and server then 
+                  name = colorCode(fileName)..name.."|r".."|CFFFFFFFF-|r|CFFFFD200"..server.."|r" 
+               else 
+                  name = colorCode(fileName)..nameText.."|r" 
+               end 
+               tooltipText = tooltipText..newLineString.."["..subgroup.."] "..class.." "..name 
+            end 
+         end 
+         newLineString = "\n" 
+      end 
+   end 
+   if map == "WorldMap" then 
+      for _, v in pairs(MAP_VEHICLES) do 
+         if ( v:IsVisible() and v:IsMouseOver() ) then 
+            if ( v.name ) then 
+               tooltipText = tooltipText..newLineString..v.name 
+            end 
+            newLineString = "\n" 
+         end 
+      end 
+      for i = 1, NUM_WORLDMAP_DEBUG_OBJECTS do 
+         unitButton = _G["WorldMapDebugObject"..i] 
+         if ( unitButton:IsVisible() and unitButton:IsMouseOver() ) then 
+            tooltipText = tooltipText..newLineString..unitButton.name 
+            newLineString = "\n" 
+         end 
+      end 
+      WorldMapTooltip:SetText(tooltipText) 
+      WorldMapTooltip:Show() 
+   else 
+      GameTooltip:SetText(tooltipText) 
+      GameTooltip:Show() 
+   end 
+end 
+
+function WorldMapUnit_OnEnter(self, motion) 
+   MapUnit_OnEnter(self, motion, "WorldMap") 
+end 
+
+hooksecurefunc("BattlefieldMinimap_LoadUI", function() 
+   if BattlefieldMinimap then 
+      function BattlefieldMinimapUnit_OnEnter(self, motion) 
+         MapUnit_OnEnter(self, motion, "BattlefieldMinimap") 
+      end 
+   end 
+end)

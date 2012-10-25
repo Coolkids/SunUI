@@ -5,7 +5,6 @@
 	<Script file ="AutoRepair.lua"/>
 	<Script file ="AutoSell.lua"/>
 	<Script file ="ClassColors.lua"/>
-	<Script file ="ClassColorsBlizz.lua"/>
 	<Script file ="ClearFont_zhCN.lua"/>	
 	<Script file ="ClearFont_zhTW.lua"/>
 	<Script file ="FriendColor.lua"/>

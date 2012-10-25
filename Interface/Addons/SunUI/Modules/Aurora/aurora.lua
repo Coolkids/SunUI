@@ -674,7 +674,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 					if button.icon and button.icon:GetTexture() then
 						button.icon:SetTexCoord(.08, .92, .08, .92)
-						S.CreateBG(button.icon)
+						S.CreateBorder(button, button.icon)
 					end
 					button.reskinned = true
 				end
@@ -6555,7 +6555,7 @@ Delay:SetScript("OnEvent", function()
 		sb:SetStatusBarTexture(DB.Statusbar)
 		S.CreateBD(FriendsTooltip)
 	end
-
+--[[ 
 	if not(IsAddOnLoaded("MetaMap") or IsAddOnLoaded("m_Map") or IsAddOnLoaded("Mapster") or IsAddOnLoaded("SunUI")) then
 		WorldMapFrameMiniBorderLeft:SetAlpha(0)
 		WorldMapFrameMiniBorderRight:SetAlpha(0)
@@ -6802,7 +6802,7 @@ Delay:SetScript("OnEvent", function()
 		local function isChatBubble(frame)
 			if frame:GetName() then return end
 			if not frame:GetRegions() then return end
-			return frame:GetRegions():GetTexture() == [[Interface\Tooltips\ChatBubble-Background]]
+			return frame:GetRegions():GetTexture() == ("Interface\\Tooltips\\ChatBubble-Background")
 		end
 
 		local last = 0
@@ -6825,5 +6825,5 @@ Delay:SetScript("OnEvent", function()
 				end
 			end
 		end)
-	end
+	end ]]
 end)

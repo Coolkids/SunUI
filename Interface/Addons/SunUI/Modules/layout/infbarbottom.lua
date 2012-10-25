@@ -1040,6 +1040,60 @@ local function BuildSpecswitch()
 	
 end
 
+local function DungeonHelper()
+	local Stat = CreateFrame("Frame", "InfoPanelBottom7", BottomInfoPanel)
+	Stat:SetFrameStrata("MEDIUM")
+	Stat:SetFrameLevel(3)
+	local Text  = S.MakeFontString(Stat)
+	--Text:SetTextColor(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)
+	Text:SetShadowOffset(S.mult, -S.mult)
+	Text:SetShadowColor(0, 0, 0, 0.4)
+	Text:SetPoint("LEFT", InfoPanelBottom4, "RIGHT", 3, 0)
+	Text:SetText("")
+	Stat:SetAllPoints(Text)
+	
+	--[[ for i = 1, GetNumRandomDungeons() do
+		local id, name = GetLFGRandomDungeonInfo(i)
+		print(id .. ": " .. name)
+		462 -- 随机MOP5H
+	end ]]
+	local function OnEvent()
+		local text = ""
+		local _, forTank, forHealer, forDamage, _, _, _ = GetLFGRoleShortageRewards(462, 1)
+		if forTank then 
+			text = text.."|cFFE06D1B"..TANK.."|r"
+		end
+		if forHealer then 
+			text = " "..text.."|cFF1B70E0"..HEALER.."|r"
+		end
+		if forDamage then 
+			text = " "..text.."|cFFE01B35"..DAMAGER.."|r"
+		end
+		if forTank or forHealer or forDamage then
+			text = text .. "奖励"
+		end
+		Text:SetText(text)
+		text = nil
+	end
+	Stat:SetScript("OnEvent", OnEvent)
+
+	Stat:RegisterEvent("LFG_OFFER_CONTINUE")
+	Stat:RegisterEvent("LFG_ROLE_CHECK_ROLE_CHOSEN")
+	Stat:RegisterEvent("LFG_QUEUE_STATUS_UPDATE")
+	Stat:RegisterEvent("LFG_PROPOSAL_UPDATE")
+	Stat:RegisterEvent("LFG_BOOT_PROPOSAL_UPDATE")
+	Stat:RegisterEvent("LFG_PROPOSAL_SHOW")
+	Stat:RegisterEvent("LFG_PROPOSAL_FAILED")
+	Stat:RegisterEvent("LFG_PROPOSAL_SUCCEEDED")
+	Stat:RegisterEvent("LFG_UPDATE")
+	Stat:RegisterEvent("LFG_ROLE_CHECK_SHOW")
+	Stat:RegisterEvent("LFG_ROLE_CHECK_HIDE")
+	Stat:RegisterEvent("LFG_ROLE_UPDATE")
+	Stat:RegisterEvent("LFG_UPDATE_RANDOM_INFO")
+	Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
+	Stat:RegisterEvent("LFG_COMPLETION_REWARD")
+	Stat:RegisterEvent("PARTY_MEMBERS_CHANGED")
+end
 function Module:OnEnable()
 	if C["InfoPanelDB"]["OpenBottom"] == true then
 		BuildClock()
@@ -1049,5 +1103,6 @@ function Module:OnEnable()
 		BuildStat2()
 		BuildStat1()
 		BuildSpecswitch()
+		DungeonHelper()
 	end
 end
