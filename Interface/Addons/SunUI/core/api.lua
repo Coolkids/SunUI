@@ -63,6 +63,31 @@ local function CreateBorder(f, r, g, b, a)
 	})
 	f:SetBackdropBorderColor(r or 0, g or 0, b or 0, a or 1)
 end
+local function SetOutside(obj, anchor, xOffset, yOffset)
+	xOffset = xOffset or 2
+	yOffset = yOffset or 2
+	anchor = anchor or obj:GetParent()
+
+	if obj:GetPoint() then
+		obj:ClearAllPoints()
+	end
+
+	obj:Point("TOPLEFT", anchor, "TOPLEFT", -xOffset, yOffset)
+	obj:Point("BOTTOMRIGHT", anchor, "BOTTOMRIGHT", xOffset, -yOffset)
+end
+
+local function SetInside(obj, anchor, xOffset, yOffset)
+	xOffset = xOffset or 2
+	yOffset = yOffset or 2
+	anchor = anchor or obj:GetParent()
+
+	if obj:GetPoint() then
+		obj:ClearAllPoints()
+	end
+
+	obj:Point("TOPLEFT", anchor, "TOPLEFT", xOffset, -yOffset)
+	obj:Point("BOTTOMRIGHT", anchor, "BOTTOMRIGHT", -xOffset, yOffset)
+end
 local function CreateShadow(f, t, offset, thickness, texture)
 	if f.shadow then return end
 	
@@ -154,7 +179,13 @@ local function StyleButton(button, setallpoints)
 		end
 	end
 end
+local function FadeIn(f)
+	UIFrameFadeIn(f, .4, f:GetAlpha(), 1)
+end
 
+local function FadeOut(f)
+	UIFrameFadeOut(f, .4, f:GetAlpha(), 0)
+end
 local function addapi(object)
 	local mt = getmetatable(object).__index
 	if not object.Size then mt.Size = Size end
@@ -166,6 +197,10 @@ local function addapi(object)
 	if not object.StyleButton then mt.StyleButton = StyleButton end
 	if not object.Kill then mt.Kill = Kill end
 	if not object.StripTextures then mt.StripTextures = StripTextures end
+	if not object.SetOutside then mt.SetOutside = SetOutside end
+	if not object.SetInside then mt.SetInside = SetInside end
+	if not object.FadeIn then mt.FadeIn = FadeIn end
+	if not object.FadeOut then mt.FadeOut = FadeOut end
 end
 local handled = {["Frame"] = true}
 local object = CreateFrame("Frame")

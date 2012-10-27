@@ -66,12 +66,6 @@ G["BuffDB"] = {
 	["IconPerRow"] = 16,
 	["FontSize"] = 13,
 }
-G["ThreatDB"] = {
-	["ThreatBarWidth"] = 180,
-	["NameTextL"] = 3,
-	["ThreatLimited"] = 3,
-	["VERTICAL "]=false,
-}
 G["ReminderDB"] = {
 	["ShowRaidBuff"] = true,
 	["ShowOnlyInParty"] = true,
@@ -88,7 +82,8 @@ G["UnitFrameDB"] = {
 	["focusCBuserplaced"] = true,
 	["BossHeight"] = 15,
 	["Scale"] = 1,
-	["EnableSwingTimer"] = false,
+	["EnableVengeanceBar"] = true,
+	["EnableThreat"] = true,
 	["PetHeight"] = 20,
 	["TargetCastBarHeight"] = 20,
 	["EnableBarFader"] = false,

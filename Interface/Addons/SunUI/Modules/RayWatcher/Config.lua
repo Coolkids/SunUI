@@ -1035,7 +1035,7 @@ ns.watchers ={
 				--5.0免费的心爆
 				{ spellID = 124430, unitId = "player", caster = "player", filter = "BUFF" },
 				--熊的手动档
-				{ spellID = 62606, unitId = "player", caster = "player", filter = "BUFF" },
+				{ spellID = 132402, unitId = "player", caster = "player", filter = "BUFF" },
 				--吸血鬼的拥抱
 				{ spellID = 15286, unitId = "player", caster = "player", filter = "BUFF" },
 				--免费愈合祷言

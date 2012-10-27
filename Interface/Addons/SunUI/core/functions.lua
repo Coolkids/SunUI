@@ -108,7 +108,7 @@ end
 RoleUpdater = CreateFrame("Frame")
 local function CheckRole(self, event, unit)
 	local tree = GetSpecialization()
-	if ((DB.MyClass == "PALADIN" and tree == 2) or (DB.MyClass == "WARRIOR" and tree == 3) or (DB.MyClass == "DEATHKNIGHT" and tree == 1)) or (DB.MyClass == "DRUID" and tree == 2 and GetBonusBarOffset() == 3) then
+	if ((DB.MyClass == "PALADIN" and tree == 2) or (DB.MyClass == "WARRIOR" and tree == 3) or (DB.MyClass == "DEATHKNIGHT" and tree == 1)) or (DB.MyClass == "DRUID" and tree == 3 and GetBonusBarOffset() == 3) then
 		DB.Role = "Tank"
 	else
 		local playerint = select(2, UnitStat("player", 4))

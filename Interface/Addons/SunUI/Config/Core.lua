@@ -18,7 +18,6 @@ function SunUIConfig:LoadDefaults()
 			NameplateDB = G["NameplateDB"],
 			TooltipDB = G["TooltipDB"],
 			BuffDB = G["BuffDB"],
-			ThreatDB = G["ThreatDB"],
 			ReminderDB = G["ReminderDB"],
 			SkinDB = G["SkinDB"],
 			UnitFrameDB = G["UnitFrameDB"],
@@ -537,46 +536,8 @@ function SunUIConfig.GenerateOptionsInternal()
 					},
 				}
 			},
-			ThreatDB = {
-				order = 9,
-				type = "group",
-				name = L["仇恨监视"],
-				get = function(info) return db.ThreatDB[ info[#info] ] end,
-				set = function(info, value) db.ThreatDB[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
-				args = {
-					ThreatBarWidth = {
-					type = "input",
-					name = L["仇恨条宽度"],
-					desc = L["仇恨条宽度"],
-					order = 1,
-					get = function() return tostring(db.ThreatDB.ThreatBarWidth) end,
-					set = function(_, value) db.ThreatDB.ThreatBarWidth = tonumber(value) end,
-					},
-					NameTextL = {
-						type = "input",
-						name = L["仇恨条姓名长度"],
-						desc = L["仇恨条姓名长度"],
-						order = 2,
-						get = function() return tostring(db.ThreatDB.NameTextL) end,
-						set = function(_, value) db.ThreatDB.NameTextL = tonumber(value) end,
-					},
-					ThreatLimited = {
-						type = "input",
-						name = L["显示仇恨人数"],
-						desc = L["显示仇恨人数"],
-						order = 3,
-						get = function() return tostring(db.ThreatDB.ThreatLimited) end,
-						set = function(_, value) db.ThreatDB.ThreatLimited = tonumber(value) end,
-					},
-					VERTICAL = {
-						type = "toggle",
-						name = "垂直",
-						order = 4,
-					},
-				}
-			},
 			ReminderDB = {
-				order = 10,
+				order = 9,
 				type = "group",
 				name = L["缺失提醒"],
 				get = function(info) return db.ReminderDB[ info[#info] ] end,
@@ -628,7 +589,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				}
 			},
 			SkinDB = {
-				order = 11,
+				order = 10,
 				type = "group",
 				name = L["界面皮肤"],
 				get = function(info) return db.SkinDB[ info[#info] ] end,
@@ -642,7 +603,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				}
 			},
 			UnitFrameDB = {
-				order = 12,
+				order = 11,
 				type = "group",
 				name = L["头像框体"],
 				get = function(info) return db.UnitFrameDB[ info[#info] ] end,
@@ -841,16 +802,20 @@ function SunUIConfig.GenerateOptionsInternal()
 								type = "toggle", order = 9,
 								name = L["开启竞技场框体"],			
 							},
-							EnableSwingTimer = {
+							EnableVengeanceBar = {
 								type = "toggle", order = 10,
-								name = L["开启物理攻击计时条"],			
+								name = "开启复仇监视",			
+							},
+							EnableThreat = {
+								type = "toggle", order = 11,
+								name = "开启仇恨监视",			
 							},
 							EnableBarFader = {
-								type = "toggle", order = 11,
+								type = "toggle", order = 12,
 								name = L["开启头像渐隐"],			
 							},
 							TargetAura = {
-								type = "select", order = 12,
+								type = "select", order = 13,
 								name = L["目标增减益"],
 								values = {[1] = L["显示"], [2] =L["不显示"], [3] = "Only Player"},
 							},
@@ -858,7 +823,7 @@ function SunUIConfig.GenerateOptionsInternal()
 								type = "select",
 								name = "玩家框体BUFF显示",
 								desc = "玩家框体BUFF显示",
-								order = 13,
+								order = 14,
 								values = {[1] = "debuff", [2] = "buff", [3] = "debuff+buff", [4] = "none"},
 							},
 						}
@@ -948,7 +913,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				}
 			},
 			MiniDB = {
-				order = 13,
+				order = 12,
 				type = "group",
 				name = "Mini",
 				get = function(info) return db.MiniDB[ info[#info] ] end,
@@ -1289,7 +1254,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				}
 			},
 			InfoPanelDB = {
-				order = 14,
+				order = 13,
 				type = "group",
 				name = L["信息面板"],
 				get = function(info) return db.InfoPanelDB[ info[#info] ] end,
@@ -1318,7 +1283,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				}
 			},	
 			Other = {
-				order = 15,
+				order = 98,
 				type = "group",
 				name = "Raid and Filger",
 				args = {
@@ -1354,7 +1319,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				}
 			},
 			PowerBarDB = {
-				order = 16,
+				order = 14,
 				type = "group",
 				name = "职业能量条",
 				get = function(info) return db.PowerBarDB[ info[#info] ] end,
@@ -1419,7 +1384,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				},
 			},
 			WarnDB = {
-				order = 17,
+				order = 15,
 				type = "group",
 				name = "警告提示",
 				get = function(info) return db.WarnDB[ info[#info] ] end,
@@ -1471,7 +1436,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				},
 			},
 			AnnounceDB = {
-				order = 18,
+				order = 16,
 				type = "group",
 				name = "施法通告",
 				get = function(info) return db.AnnounceDB[ info[#info] ] end,

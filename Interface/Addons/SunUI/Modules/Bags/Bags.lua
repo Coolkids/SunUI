@@ -180,7 +180,7 @@ function Bag:BagNew(bag, f)
 		end
 	end
 
-	ret = CreateFrame("Frame", "RayUIBag" .. bag, f)
+	ret = CreateFrame("Frame", "SunUIBag" .. bag, f)
 	ret.bagType = Bag:BagType(bag)
 
 	ret:SetID(bag)

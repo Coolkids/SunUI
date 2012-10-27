@@ -54,6 +54,11 @@ function Module:CreateShadowOrbs()
 					ShadowOrbs[i]:Hide()
 				end
 			end
+			-- if numShadowOrbs == numShadowOrbs then
+				-- UIFrameFlash(ShadowOrbs, 0.5, 0.5, 1.5, false, 0.5, 0.5)
+			-- else
+				-- UIFrameFlashStop(ShadowOrbs)
+			-- end
 		end
 		if C["Fade"] then 
 			if event == "PLAYER_REGEN_DISABLED" then

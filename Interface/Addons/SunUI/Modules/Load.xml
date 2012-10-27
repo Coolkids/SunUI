@@ -23,7 +23,6 @@
 	<!-- raywatch -->
 	<Include file="RayWatcher\load.xml"/>
 	<Include file = "skins\Load.xml"/>
-	<Include file = "threat\Load.xml"/>
 	<Include file ="tooltip\Load.xml"/>
 	<Include file = "unitframe\load.xml"/>
 </Ui>

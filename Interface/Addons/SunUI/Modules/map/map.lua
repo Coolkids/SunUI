@@ -286,11 +286,11 @@ local function UpdateCoords(self, elapsed)
 	if self.elapsed <= 0 then
 		self.elapsed = 0.1
 		OnUpdate(player, cursor)
-		if GetUnitSpeed("player") ~= 0 and WORLDMAP_SETTINGS.size ~= WORLDMAP_WINDOWED_SIZE then
-			WorldMapFrame:SetAlpha(.5)
-		else
-			WorldMapFrame:SetAlpha(1)
-		end
+		--if GetUnitSpeed("player") ~= 0 and WORLDMAP_SETTINGS.size ~= WORLDMAP_WINDOWED_SIZE then
+			--WorldMapFrame:SetAlpha(.5)
+		--else
+			--WorldMapFrame:SetAlpha(1)
+		--end
 	end
 end
 
@@ -391,7 +391,7 @@ hooksecurefunc("WorldMapUnit_Update", function(self)
          self.icon:SetVertexColor(0.5, 0.5, 0.5) 
       end 
    end
-   if IsInRaid() then
+   --[[ if IsInRaid() then
 		local count = 0;
 		for i=1, MAX_RAID_MEMBERS do
 			local unit = "raid"..i
@@ -403,7 +403,7 @@ hooksecurefunc("WorldMapUnit_Update", function(self)
 		for i=count+1, MAX_RAID_MEMBERS do
 			_G["WorldMapRaid"..i]:Hide()
 		end
-	end
+	end ]]
 end) 
 
 
@@ -526,4 +526,23 @@ hooksecurefunc("BattlefieldMinimap_LoadUI", function()
          MapUnit_OnEnter(self, motion, "BattlefieldMinimap") 
       end 
    end 
+end)
+local frame = CreateFrame("Frame")
+frame:RegisterEvent("WORLD_MAP_UPDATE")
+frame:SetScript("OnEvent", function()
+	--print("Fix Raid")
+	if IsInRaid() then
+		local count = 0;
+		for i=1, MAX_RAID_MEMBERS do
+			local unit = "raid"..i
+			local partyX, partyY = GetPlayerMapPosition(unit)
+			if not ( (partyX == 0 and partyY == 0) or UnitIsUnit(unit, "player") ) then
+				count = count + 1
+			end
+		end
+		for i=count+1, MAX_RAID_MEMBERS do
+			_G["WorldMapRaid"..i]:Hide()
+		end
+	end
+
 end)

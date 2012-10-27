@@ -1068,28 +1068,127 @@ lib.gen_targeticon = function(f)
     ti:SetJustifyH("LEFT")
     f:Tag(ti, '[mono:targeticon]')
 end
-  -- oUF_Swing
+  -- 复仇
 lib.gen_swing_timer = function(f)
-	if U["EnableSwingTimer"] then
-		sw = CreateFrame("StatusBar", f:GetName().."_Swing", f)
-		sw:SetStatusBarTexture(DB.Statusbar)
-		sw:SetStatusBarColor(.3, .3, .3)
-		sw:SetHeight(4)
-		sw:SetWidth(f.width)
-		sw:SetPoint("TOP", f.Power, "BOTTOM", 0, -3)
-		sw.bg = sw:CreateTexture(nil, "BORDER")
-		sw.bg:SetAllPoints(sw)
-		sw.bg:SetTexture(DB.Statusbar)
-		sw.bg:SetVertexColor(.1, .1, .1, 0.25)
-		sw.bd = CreateFrame("Frame", nil, sw)
-		sw.bd:SetFrameLevel(1)
-		sw.bd:SetPoint("TOPLEFT", -4, 4)
-		sw.bd:SetPoint("BOTTOMRIGHT", 4, -4)
-		sw.Text = lib.gen_fontstring(sw, DB.Font, U["FontSize"]*S.Scale(1), "THINOUTLINE")
-		sw.Text:SetPoint("CENTER", 0, 0)
-		sw.Text:SetTextColor(1, 1, 1)
-		f.Swing = sw
+	if U["EnableVengeanceBar"] then
+		local VengeanceBar = CreateFrame("Statusbar", "VengeanceBar", f)
+		VengeanceBar:SetStatusBarTexture(DB.Statusbar)
+		VengeanceBar:SetPoint("TOPLEFT", f.Health, "TOPRIGHT", 5, 0)
+		VengeanceBar:SetSize(f.Power:GetHeight()+2, f.Health:GetHeight()+f.Power:GetHeight()+6)
+		VengeanceBar:CreateShadow()
+		S.CreateBack(VengeanceBar)
+		VengeanceBar:SetOrientation("VERTICAL")
+		VengeanceBar.shadow:SetBackdropColor(.12, .12, .12, 1)
+		VengeanceBar.Text = VengeanceBar:CreateFontString(nil, "OVERLAY")
+		VengeanceBar.Text:SetPoint("CENTER")
+		VengeanceBar.Text:SetFont(DB.Font, U["FontSize"], "THINOUTLINE")
+		VengeanceBar.Text:Hide()
+		f.Vengeance = VengeanceBar
+		
+		VengeanceBar:SetScript("OnValueChanged", function(_, value)
+			local _, max = VengeanceBar:GetMinMaxValues()
+			r, g, b = oUF.ColorGradient(value, max, unpack(oUF.colors.smooth))
+			VengeanceBar:SetStatusBarColor(r, g, b)
+		end)
 	end
+  end
+   -- 仇恨
+lib.gen_threat = function(f)
+	if U["EnableThreat"] == false then return end
+	local ThreatBar = CreateFrame("Statusbar", "ThreatBar", f)
+	ThreatBar:SetStatusBarTexture(DB.Statusbar)
+	ThreatBar:SetPoint("TOPRIGHT", f.Health, "TOPLEFT", -5, 0)
+	ThreatBar:SetSize(f.Power:GetHeight()+2, f.Health:GetHeight()+f.Power:GetHeight()+6)
+	ThreatBar:CreateShadow()
+	S.CreateBack(ThreatBar)
+	ThreatBar:SetOrientation("VERTICAL")
+	ThreatBar.shadow:SetBackdropColor(.12, .12, .12, 1)
+	
+	local function Smooth(self, value)
+		if value == self:GetValue() then
+			self.smoothing = nil
+		else
+			self.smoothing = value
+		end
+	end
+	local function UpdateHealthSmooth(self)
+		if self.smoothing == nil then return end
+		local val = self.smoothing
+		local limit = 30/GetFramerate()
+		local cur = self:GetValue()
+		local new = cur + min((val-cur)/3, max(val-cur, limit))
+
+		if new ~= new then
+			new = val
+		end
+
+		self:SetValue_(new)
+		if cur == val or abs(new - val) < 2 then
+			self:SetValue_(val)
+			self.smoothing = nil
+		end
+	end
+	local function OnEvent(self, event, ...)
+		
+		local party = GetNumGroupMembers()
+		local raid = GetNumGroupMembers()
+		local pet = select(1, HasPetUI())
+		if event == "PLAYER_ENTERING_WORLD" then
+			self:Hide()
+			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+		elseif event == "PLAYER_REGEN_ENABLED" then
+			self:Hide()
+		elseif event == "PLAYER_REGEN_DISABLED" then
+			if party > 0 or raid > 0 or pet == 1 then
+				self:Show()
+			else
+				self:Hide()
+			end
+		else
+			if (InCombatLockdown()) and (party > 0 or raid > 0 or pet == 1) then
+				self:Show()
+			else
+				self:Hide()
+			end
+		end
+	end
+
+	local function OnUpdate(self, event, unit)
+		if UnitAffectingCombat(self.unit) then
+			local _, _, threatpct, rawthreatpct, _ = UnitDetailedThreatSituation(self.unit, self.tar)
+			local threatval = threatpct or 0
+			self:SetValue(threatval)
+			--self.text:SetText("仇恨:"..format("%3.1f", threatval).."%")
+			self.num = threatval
+			local r, g, b = S.ColorGradient(threatval/100, 0,.8,0,.8,.8,0,.8,0,0)
+			self:SetStatusBarColor(r, g, b)
+
+			if threatval > 0 then
+				self:SetAlpha(1)
+			else
+				self:SetAlpha(0)
+			end	
+			UpdateHealthSmooth(self)
+		end
+	end
+	ThreatBar.SetValue_ = ThreatBar.SetValue
+	ThreatBar.SetValue = Smooth
+	ThreatBar:RegisterEvent("PLAYER_ENTERING_WORLD")
+	ThreatBar:RegisterEvent("PLAYER_REGEN_ENABLED")
+	ThreatBar:RegisterEvent("PLAYER_REGEN_DISABLED")
+	ThreatBar:SetScript("OnEvent", OnEvent)
+	ThreatBar:SetScript("OnUpdate", OnUpdate)
+	ThreatBar.unit = "player"
+	ThreatBar.tar = ThreatBar.unit.."target"
+	ThreatBar:SetScript("OnEnter", function(self)
+		GameTooltip:ClearLines()
+		GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 5)
+		GameTooltip:AddDoubleLine("仇恨:", format("%3.1f", ThreatBar.num).."%")
+		GameTooltip:Show()
+		end)
+	ThreatBar:SetScript("OnLeave", function(self)
+		GameTooltip:Hide()
+	end)
   end
   -- alt power bar
   lib.gen_alt_powerbar = function(f)
@@ -1207,6 +1306,7 @@ lib.gen_swing_timer = function(f)
 		lib.gen_castbar(self)
 	end
     lib.gen_portrait(self)
+	lib.gen_threat(self)
 	if U["TargetAura"] ~= 2 then
 		lib.createAuras(self)
 	end

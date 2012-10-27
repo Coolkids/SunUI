@@ -1,28 +1,40 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
 local _
-
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI then return end
 local oldRegisterAsWidget = AceGUI.RegisterAsWidget
+
+local r, g, b = DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b
+local media = {
+	["backdrop"] = "Interface\\ChatFrame\\ChatFrameBackground",
+}
 AceGUI.RegisterAsWidget = function(self, widget)
 	local TYPE = widget.type
 	--print(TYPE)
 	if TYPE == "CheckBox" then
 		widget.checkbg:Kill()
 		widget.highlight:Kill()
+		widget.frame:SetHighlightTexture(media.backdrop)
+		local hl = widget.frame:GetHighlightTexture()
+		hl:Point("TOPLEFT", widget.checkbg, 5, -5)
+		hl:Point("BOTTOMRIGHT", widget.checkbg, -5, 5)
+		hl:SetVertexColor(r, g, b, .2)
 
-		--if not widget.skinnedCheckBG then
-			--widget.skinnedCheckBG = CreateFrame('Frame', nil, widget.frame)
-			--widget.skinnedCheckBG:Point('TOPLEFT', widget.checkbg, 'TOPLEFT', 4, -4)
-			--widget.skinnedCheckBG:Point('BOTTOMRIGHT', widget.checkbg, 'BOTTOMRIGHT', -4, 4)
-			--S.CreateBD(widget.skinnedCheckBG)
-		--end
+		if not widget.skinnedCheckBG then
+			widget.skinnedCheckBG = CreateFrame('Frame', nil, widget.frame)
+			widget.skinnedCheckBG:Point('TOPLEFT', widget.checkbg, 'TOPLEFT', 4, -4)
+			widget.skinnedCheckBG:Point('BOTTOMRIGHT', widget.checkbg, 'BOTTOMRIGHT', -4, 4)
+			S.CreateBD(widget.skinnedCheckBG, 0)
+			S.CreateBackdropTexture(widget.skinnedCheckBG)
+		end
 
-		--if widget.skinnedCheckBG.oborder then
-			--widget.check:SetParent(widget.skinnedCheckBG.oborder)
-		--else
-			--widget.check:SetParent(widget.skinnedCheckBG)
-		--end
+		if widget.skinnedCheckBG.oborder then
+			widget.check:SetParent(widget.skinnedCheckBG.oborder)
+		else
+			widget.check:SetParent(widget.skinnedCheckBG)
+		end
+		widget.check:SetDesaturated(true)
+		widget.check:SetVertexColor(r, g, b)
 	elseif TYPE == "Dropdown" then
 		local frame = widget.dropdown
 		local button = widget.button
@@ -30,30 +42,28 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		frame:StripTextures()
 		local bg = CreateFrame("Frame", nil, frame)
 		bg:Point("TOPLEFT", 16, 0)
-		bg:Point("BOTTOMRIGHT", -20, 0)
+		bg:Point("BOTTOMRIGHT", -15, 0)
 		bg:SetFrameLevel(frame:GetFrameLevel()-1)
-		S.CreateBD(bg,0)
+		S.CreateBD(bg, 0)
+		S.CreateBackdropTexture(bg)
 
-		local tex = bg:CreateTexture(nil, "BACKGROUND")
-		tex:SetPoint("TOPLEFT")
-		tex:SetPoint("BOTTOMRIGHT")
-		tex:SetTexture(DB.aurobackdrop)
-		tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
-
+		S.Reskin(button)
+		button:Size(25, 25)
 		button:ClearAllPoints()
-		button:SetPoint("RIGHT", frame, "RIGHT", -20, 0)
-	
-		button:SetDisabledTexture(DB.aurobackdrop)
+		button:Point("TOPRIGHT", frame, "TOPRIGHT", -15, 0)
+		button:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -15, 0)
+
+		button:SetDisabledTexture(media.backdrop)
 		local dis = button:GetDisabledTexture()
 		dis:SetVertexColor(0, 0, 0, .3)
 		dis:SetDrawLayer("OVERLAY")
 
 		local downtex = button:CreateTexture(nil, "ARTWORK")
 		downtex:SetTexture("Interface\\AddOns\\SunUI\\media\\arrow-down-active")
-		downtex:SetSize(8, 8)
+		downtex:Size(8, 8)
 		downtex:SetPoint("CENTER")
 		downtex:SetVertexColor(1, 1, 1)
-		
+
 		button:SetParent(bg)
 		text:SetParent(bg)
 		button:HookScript('OnClick', function(this)
@@ -66,34 +76,27 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		local text = frame.text
 		frame:StripTextures()
 
-		button:ClearAllPoints()
-		button:SetPoint("RIGHT", frame, "RIGHT", -20, 0)
-	
-		button:SetDisabledTexture(DB.aurobackdrop)
+		S.Reskin(button)
+		button:Size(20, 20)
+
+		button:SetDisabledTexture(media.backdrop)
 		local dis = button:GetDisabledTexture()
 		dis:SetVertexColor(0, 0, 0, .3)
 		dis:SetDrawLayer("OVERLAY")
 
 		local downtex = button:CreateTexture(nil, "ARTWORK")
 		downtex:SetTexture("Interface\\AddOns\\SunUI\\media\\arrow-down-active")
-		downtex:SetSize(8, 8)
+		downtex:Size(8, 8)
 		downtex:SetPoint("CENTER")
 		downtex:SetVertexColor(1, 1, 1)
 		frame.text:ClearAllPoints()
-		frame.text:SetPoint('RIGHT', button, 'LEFT', -2, 0)
-
-		button:ClearAllPoints()
-		button:SetPoint("RIGHT", frame, "RIGHT", -10, -6)
+		frame.text:Point('RIGHT', button, 'LEFT', -2, 0)
 
 		if not frame.backdrop then
 			frame.backdrop = CreateFrame("Frame", nil, frame)
-			frame.backdrop:SetPoint("TOPLEFT", -3, 3)
-			frame.backdrop:SetPoint("BOTTOMRIGHT", 3, -3)
-			local tex = frame.backdrop:CreateTexture(nil, "BACKGROUND")
-			tex:SetPoint("TOPLEFT")
-			tex:SetPoint("BOTTOMRIGHT")
-			tex:SetTexture(DB.aurobackdrop)
-			tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+			frame.backdrop:Point("TOPLEFT", -3, 3)
+			frame.backdrop:Point("BOTTOMRIGHT", 3, -3)
+			S.CreateBackdropTexture(frame.backdrop)
 			S.CreateBD(frame.backdrop)
 			if frame:GetFrameLevel() - 1 >= 0 then
 				frame.backdrop:SetFrameLevel(frame:GetFrameLevel() - 1)
@@ -101,36 +104,39 @@ AceGUI.RegisterAsWidget = function(self, widget)
 				frame.backdrop:SetFrameLevel(0)
 			end
 			if TYPE == "LSM30_Font" then
-				frame.backdrop:SetPoint("TOPLEFT", 20, -17)
+				frame.backdrop:Point("TOPLEFT", 20, -20)
 			elseif TYPE == "LSM30_Sound" then
-				frame.backdrop:SetPoint("TOPLEFT", 20, -17)
+				frame.backdrop:Point("TOPLEFT", 20, -20)
 				widget.soundbutton:SetParent(frame.backdrop)
 				widget.soundbutton:ClearAllPoints()
-				widget.soundbutton:SetPoint('LEFT', frame.backdrop, 'LEFT', 2, 0)
+				widget.soundbutton:Point('LEFT', frame.backdrop, 'LEFT', 2, 0)
 			elseif TYPE == "LSM30_Statusbar" then
-				frame.backdrop:SetPoint("TOPLEFT", 20, -17)
+				frame.backdrop:Point("TOPLEFT", 20, -20)
 				widget.bar:ClearAllPoints()
-				widget.bar:SetPoint('TOPLEFT', frame.backdrop, 'TOPLEFT', 2, -2)
-				widget.bar:SetPoint('BOTTOMRIGHT', frame.backdrop, 'BOTTOMRIGHT', -2, 2)
+				widget.bar:Point('TOPLEFT', frame.backdrop, 'TOPLEFT', 2, -2)
+				widget.bar:Point('BOTTOMRIGHT', frame.backdrop, 'BOTTOMRIGHT', -2, 2)
 				widget.bar:SetParent(frame.backdrop)
 			elseif TYPE == "LSM30_Border" or TYPE == "LSM30_Background" then
-				frame.backdrop:SetPoint("TOPLEFT", 42, -16)
+				frame.backdrop:Point("TOPLEFT", 42, -20)
 			end
 
-			frame.backdrop:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 2, -2)
+			frame.backdrop:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -8, 3)
 		end
 		button:SetParent(frame.backdrop)
+		button:ClearAllPoints()
+		button:Point("TOPRIGHT", frame, "TOPRIGHT", -8, -20)
+		button:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -8, 3)
 		text:SetParent(frame.backdrop)
 		button:HookScript('OnClick', function(this, button)
 			local self = this.obj
 			if self.dropdown then
 				S.CreateBD(self.dropdown)
 			end
-		end)		
+		end)
 	elseif TYPE == "EditBox" then
 		local frame = widget.editbox
 		local button = widget.button
-		-- frame:S.StripTextures()
+		-- frame:StripTextures()
 		_G[frame:GetName()..'Left']:Kill()
 		_G[frame:GetName()..'Middle']:Kill()
 		_G[frame:GetName()..'Right']:Kill()
@@ -150,31 +156,20 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		local HEIGHT = 12
 
 		frame:StripTextures()
-		S.CreateBD(frame,0)
-		frame:SetHeight(HEIGHT)
-		-- local slider = CreateFrame("Frame", nil, frame)
-		-- slider:SetPoint("TOPLEFT", frame:GetThumbTexture())
-		-- slider:SetPoint("BOTTOMRIGHT", frame:GetThumbTexture())
+		S.CreateBD(frame, 0)
+		frame:Height(HEIGHT)
+		S.CreateBackdropTexture(frame)
+
 		local slider = frame:GetThumbTexture()
 		slider:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
 		slider:SetBlendMode("ADD")
-		
-		-- S.CreateBD(slider, 0)
-		-- frame:SetThumbTexture(C["media"].blank)
-		-- frame:GetThumbTexture():SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
-		-- frame:GetThumbTexture():SetSize(HEIGHT-2,HEIGHT-2)
 
-		S.CreateBD(editbox,0)
-		editbox.SetBackdropColor = dummy
-		editbox.SetBackdropBorderColor = dummy
-		editbox:SetHeight(15)
-		editbox:SetPoint("TOP", frame, "BOTTOM", 0, -1)
-		
-		local tex = editbox:CreateTexture(nil, "BACKGROUND")
-		tex:SetPoint("TOPLEFT")
-		tex:SetPoint("BOTTOMRIGHT")
-		tex:SetTexture(DB.aurobackdrop)
-		tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+		S.CreateBD(editbox, 0)
+		editbox.SetBackdropColor = function() end
+		editbox.SetBackdropBorderColor = function() end
+		editbox:Height(15)
+		editbox:Point("TOP", frame, "BOTTOM", 0, -1)
+		S.CreateBackdropTexture(editbox)
 
 		lowtext:SetPoint("TOPLEFT", frame, "BOTTOMLEFT", 2, -2)
 		hightext:SetPoint("TOPRIGHT", frame, "BOTTOMRIGHT", -2, -2)
@@ -198,7 +193,7 @@ AceGUI.RegisterAsContainer = function(self, widget)
 		S.ReskinScroll(frame)
 	elseif TYPE == "InlineGroup" or TYPE == "TreeGroup" or TYPE == "TabGroup" or TYPE == "SimpleGroup" or TYPE == "Frame" or TYPE == "DropdownGroup" then
 		local frame = widget.content:GetParent()
-		S.CreateBD(frame,0)
+		S.CreateBD(frame, .3)
 		if TYPE == "Frame" then
 			frame:StripTextures()
 			for i=1, frame:GetNumChildren() do
@@ -209,13 +204,12 @@ AceGUI.RegisterAsContainer = function(self, widget)
 					child:StripTextures()
 				end
 			end
-			--frame:CreateSD()
-			--frame:CreateBD()
-			S.SetBD(frame)
-		end		
-		
+			S.CreateSD(frame)
+			S.CreateBD(frame)
+		end
+
 		if widget.treeframe then
-			S.CreateBD(widget.treeframe, 0)
+			S.CreateBD(widget.treeframe, .3)
 			frame:Point("TOPLEFT", widget.treeframe, "TOPRIGHT", 1, 0)
 		end
 

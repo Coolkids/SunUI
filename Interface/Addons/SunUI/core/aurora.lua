@@ -24,6 +24,7 @@ local media = {
 	["backdrop"] = "Interface\\ChatFrame\\ChatFrameBackground",
 	["checked"] = "Interface\\AddOns\\SunUI\\media\\CheckButtonHilight",
 	["glow"] = "Interface\\AddOns\\SunUI\\media\\glowTex",
+	["gloss"] = "Interface\\AddOns\\SunUI\\media\\gloss",
 }
 local frames = {}
 
@@ -523,4 +524,15 @@ function S.CreateBDFrame(f, a)
 	S.CreateBD(bg, a or .5)
 
 	return bg
+end
+
+function S.CreateBackdropTexture(f)
+	local tex = f:CreateTexture(nil, "BACKGROUND")
+    tex:SetDrawLayer("BACKGROUND", 1)
+	tex:SetInside(f, 1, 1)
+	tex:SetTexture(media.gloss)
+	--tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+	tex:SetVertexColor(0.1, 0.1, 0.1)
+	tex:SetAlpha(0.8)
+	f.backdropTexture = tex
 end

@@ -1,6 +1,7 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
 local _
 local _G = _G
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local AchievementHolder = CreateFrame("Frame", "AchievementHolder", UIParent)
 AchievementHolder:SetWidth(180)
 AchievementHolder:SetHeight(20)
@@ -18,7 +19,6 @@ SlashCmdList.TEST_ACHIEVEMENT = function()
 	AlertFrame_AnimateIn(CriteriaAlertFrame1)
 	AlertFrame_AnimateIn(DungeonCompletionAlertFrame1)
 	AlertFrame_AnimateIn(ScenarioAlertFrame1)
-
 	local _, itemLink = GetItemInfo(6948)
 	LootWonAlertFrame_ShowAlert(itemLink, -1, 1, 1)
 	MoneyWonAlertFrame_ShowAlert(1)
@@ -30,6 +30,8 @@ SLASH_TEST_ACHIEVEMENT1 = "/testalerts"
 hooksecurefunc("AlertFrame_FixAnchors", function()
 	AlertFrame:ClearAllPoints()
 	AlertFrame:SetAllPoints(AchievementHolder)
+	local a, _, _, _, _ = unpack(SunUIConfig.db.profile.MoveHandleDB.AchievementHolder)
+	if string.find(a, "TOP") then POSITION, ANCHOR_POINT, YOFFSET = "TOP", "BOTTOM", -10 end
 	GroupLootContainer:ClearAllPoints()
 	GroupLootContainer:SetPoint(POSITION, AlertFrame, ANCHOR_POINT)
 	
