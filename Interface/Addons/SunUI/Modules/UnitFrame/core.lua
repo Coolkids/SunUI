@@ -11,6 +11,7 @@ local P,U
 if IsAddOnLoaded("Stuf") or IsAddOnLoaded("PitBull4") or IsAddOnLoaded("ShadowedUnitFrames") then
 	return
 end
+local tex = "Interface\\Addons\\SunUI\\media\\dM3"
  -----------------------------
  -- local variables
  -----------------------------
@@ -146,11 +147,11 @@ lib.gen_hpbar = function(f)
 		s = CreateFrame("StatusBar", nil, f) 
 		s:SetAlpha(1)
 	end
-    s:SetStatusBarTexture(DB.Statusbar)
+    s:SetStatusBarTexture(tex)
 	local gradient = s:CreateTexture(nil, "BACKGROUND")
 	gradient:SetPoint("TOPLEFT")
 	gradient:SetPoint("BOTTOMRIGHT")
-	gradient:SetTexture(DB.Statusbar)
+	gradient:SetTexture(tex)
 	gradient:SetGradientAlpha("HORIZONTAL", .1, .1, .1, .5, .2, .2, .2, .4)
     fixStatusbar(s)
     s:SetHeight(f.height)
@@ -238,7 +239,7 @@ end
 lib.gen_ppbar = function(f)
     --statusbar
     local s = CreateFrame("StatusBar", nil, f)
-    s:SetStatusBarTexture(DB.Statusbar)
+    s:SetStatusBarTexture(tex)
     fixStatusbar(s)
     s:SetHeight(f.height/4)
     s:SetWidth(f.width)

@@ -1,4 +1,4 @@
-local _, ns = ...
+﻿local _, ns = ...
 local oGlow = ns.oGlow
 
 local frame = CreateFrame('Frame', nil, InterfaceOptionsFramePanelContainer)
@@ -37,7 +37,7 @@ function frame:CreateOptions()
 	local subtitle = ns.createFontString(self)
 	subtitle:SetPoint('TOPLEFT', title, 'BOTTOMLEFT', 0, -8)
 	subtitle:SetPoint('RIGHT', self, -32, 0)
-	subtitle:SetText'Now with 30% less toxic radiation!'
+	subtitle:SetText("oGlow设置")
 
 	local scroll = CreateFrame("ScrollFrame", nil, self)
 	scroll:SetPoint('TOPLEFT', subtitle, 'BOTTOMLEFT', 0, -8)
@@ -147,9 +147,9 @@ do
 	local createRow = function(parent, i)
 		local row = CreateFrame('Button', nil, parent)
 
-		row:SetBackdrop(_BACKDROP)
-		row:SetBackdropColor(.1, .1, .1, .5)
-		row:SetBackdropBorderColor(.3, .3, .3)
+		--row:SetBackdrop(_BACKDROP)
+		--row:SetBackdropColor(.1, .1, .1, .5)
+		--row:SetBackdropBorderColor(.3, .3, .3)
 
 		if(i == 1) then
 			row:SetPoint('TOP', 0, -8)
@@ -250,7 +250,7 @@ do
 		for pipe, active, name, desc in oGlow.IteratePipes() do
 			local row = sChild.rows[n] or createRow(sChild, n)
 
-			row:SetBackdropBorderColor(.3, .3, .3)
+			--row:SetBackdropBorderColor(.3, .3, .3)
 			row:SetHeight(24)
 
 			row.owner = self

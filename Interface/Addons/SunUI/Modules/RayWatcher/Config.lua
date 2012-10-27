@@ -1,5 +1,4 @@
-
------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 -- name = "目标debuff",
 -- setpoint = { "LEFT", UIParent, "CENTER", 198, -190 },
 -- direction = "UP",
@@ -652,6 +651,60 @@ ns.watchers ={
 				{ spellID = 81130, unitId = "target", caster = "player", filter = "DEBUFF" },		
 		},
 	},
+	["MONK"] = { 
+		{ 
+			name = "玩家buff", 
+			direction = "LEFT", 
+			setpoint ={unpack(playerbuff1)}, 
+			size = 24, 
+				--禅意珠   
+				{ spellID = 124081, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--强力金钟罩 
+				{ spellID = 118636, unitId = "player", caster = "player", filter = "BUFF" },
+				--金钟罩
+				{ spellID = 115295, unitId = "player", caster = "player", filter = "BUFF" }, 
+		}, 
+		{ 
+			name = "目标debuff", 
+			direction = "RIGHT", 
+			setpoint = {unpack(targetdebuff1)},
+			size = 28, 
+				--虚弱打击 
+				{ spellID = 115798, unitId = "target", caster = "player", filter = "DEBUFF" },  
+				--天矛鎖喉手 
+				{ spellID = 116709, unitId = "target", caster = "player", filter = "DEBUFF" },
+				--迷醉酒雾 
+				{ spellID = 123727, unitId = "target", caster = "player", filter = "DEBUFF" }, 
+				--火焰之息
+				{ spellID = 123725, unitId = "target", caster = "player", filter = "DEBUFF" }, 
+				--旭日东升踢
+				{ spellID = 130320, unitId = "target", caster = "player", filter = "DEBUFF" }, 
+		},
+		{
+			name = "玩家技能CD",
+			direction = "LEFT",
+			setpoint = {unpack(playercd1)},
+			size = 24,
+				--禅悟冥想 
+				{ spellID = 115176, filter = "CD" }, 
+				-- 业报之触 
+				{ spellID = 122470, filter = "CD" }, 
+				-- 豪能酒 
+				{ spellID = 115288, filter = "CD" }, 
+				-- 壮胆酒 
+				{ spellID = 115203, filter = "CD" }, 
+				-- 召喚玄牛雕像 
+				{ spellID = 115315, filter = "CD" }, 
+				-- 慈悲庇护 
+				{ spellID = 115213, filter = "CD" }, 
+				-- 旭日东升踢 
+				{ spellID = 107428, filter = "CD" }, 
+				-- 移花接木
+				{ spellID = 115072, filter = "CD" }, 
+				--真气珠 
+				{ spellID = 115098, unitId = "CD" },  
+		},
+	}, 
 	["ALL"]={
 		{
 			name = "玩家Debuff",
@@ -1042,6 +1095,36 @@ ns.watchers ={
 				{ spellID = 123267, unitId = "player", caster = "player", filter = "BUFF" },
 				--免费盾
 				{ spellID = 123266, unitId = "player", caster = "player", filter = "BUFF" },
+				--猛虎掌
+				{ spellID = 125359, unitId = "player", caster = "player", filter = "BUFF" },         
+				--虎眼酒
+				{ spellID = 125195, unitId = "player", caster = "player", filter = "BUFF" },
+				--法力茶 
+				{ spellID = 115867, unitId = "player", caster = "player", filter = "BUFF" },
+				--飘渺酒 
+				{ spellID = 128939, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--壮胆酒 
+				{ spellID = 120954, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--酒醒入定   
+				{ spellID = 115307, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--轻度醉拳 
+				{ spellID = 124275, unitId = "player", caster = "ALL", filter = "DEBUFF" }, 
+				--中度醉拳 
+				{ spellID = 124274, unitId = "player", caster = "ALL", filter = "DEBUFF" }, 
+				--重度醉拳 
+				{ spellID = 124273, unitId = "player", caster = "ALL", filter = "DEBUFF" }, 
+				--飘渺酒 
+				{ spellID = 115308, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--探云鞭：输出升级 
+				{ spellID = 123231, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--探云鞭：坦克升级！ 
+				{ spellID = 123232, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--探云鞭：治疗升级！ 
+				{ spellID = 123234, unitId = "player", caster = "player", filter = "BUFF" },   
+				--虎眼酒 
+				{ spellID = 116740, unitId = "player", caster = "player", filter = "BUFF" },   
+				--业报之触 
+				{ spellID = 125174, unitId = "player", caster = "player", filter = "BUFF" }, 
 		},
 		{
 			name = "玩家饰品附魔触发buff",
@@ -1172,6 +1255,20 @@ ns.watchers ={
 				{ spellID = 105785, unitId = "player", caster = "player", filter = "BUFF" },
 				--橙色匕首
 				{ spellID = 109941, unitId = "player", caster = "player", filter = "BUFF" },
+				--风歌(暴击)
+				{ spellID = 104509, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--风歌(精通)
+				{ spellID = 104510, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--风歌(急速)
+				{ spellID = 104423, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--风中的书页
+				{ spellID = 126483, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--千年腌蛋
+				{ spellID = 127915, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--空的水果桶
+				{ spellID = 126266, unitId = "player", caster = "player", filter = "BUFF" }, 
+				-- 敏捷(炼金石)
+				{ spellID =  60233, unitId = "player", caster = "player", filter = "BUFF" }, 
 		},
 	},
 }

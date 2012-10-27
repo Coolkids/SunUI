@@ -211,16 +211,34 @@ function Bag:SlotUpdate(b)
 		end	
 		b.frame:SetBackdropColor(0, 0, 0)
 		-- color slot according to item quality
-		if not b.frame.lock and b.rarity and b.rarity > 1 then
+		-- if not b.frame.lock and b.rarity and b.rarity > 1 then
+			-- b.frame.border:SetBackdropBorderColor(GetItemQualityColor(b.rarity))
+			-- _G[b.frame:GetName().."IconTexture"]:Point("TOPLEFT", 1.2, -1.2)
+			-- _G[b.frame:GetName().."IconTexture"]:Point("BOTTOMRIGHT", -1.2, 1.2)
+		-- elseif GetContainerItemQuestInfo(b.bag, b.slot) then
+			-- b.frame.border:SetBackdropBorderColor(1, 1, 0)
+			-- _G[b.frame:GetName().."IconTexture"]:Point("TOPLEFT", 1.2, -1.2)
+			-- _G[b.frame:GetName().."IconTexture"]:Point("BOTTOMRIGHT", -1.2, 1.2)
+		-- else
+			-- _G[b.frame:GetName().."IconTexture"]:SetAllPoints()
+		-- end
+		local isQuestItem, questId, isActive = GetContainerItemQuestInfo(b.bag, b.slot)
+		-- color slot according to item quality
+		if questId and not isActive then
+			b.frame:SetBackdropColor(0, 0, 0)
+			b.frame.border:SetBackdropBorderColor(1.0, 1, 0)
+			b.frame.questIcon:Show()
+		elseif questId or isQuestItem then
+			b.frame:SetBackdropColor(0, 0, 0)
+			b.frame.border:SetBackdropBorderColor(1.0, 1, 0)
+		elseif b.rarity and b.rarity > 1 then
 			b.frame.border:SetBackdropBorderColor(GetItemQualityColor(b.rarity))
-			_G[b.frame:GetName().."IconTexture"]:Point("TOPLEFT", 1.2, -1.2)
-			_G[b.frame:GetName().."IconTexture"]:Point("BOTTOMRIGHT", -1.2, 1.2)
-		elseif GetContainerItemQuestInfo(b.bag, b.slot) then
-			b.frame.border:SetBackdropBorderColor(1, 1, 0)
 			_G[b.frame:GetName().."IconTexture"]:Point("TOPLEFT", 1.2, -1.2)
 			_G[b.frame:GetName().."IconTexture"]:Point("BOTTOMRIGHT", -1.2, 1.2)
 		else
 			_G[b.frame:GetName().."IconTexture"]:SetAllPoints()
+			b.frame:SetBackdropColor(0, 0, 0, 0, 0)
+			b.frame.border:SetBackdropBorderColor(0, 0, 0)
 		end
 	else
 		b.name, b.rarity = nil, nil
@@ -316,6 +334,12 @@ function Bag:SlotNew(bag, slot)
 
 	ret.Cooldown = _G[ret.frame:GetName() .. "Cooldown"]
 	ret.Cooldown:Show()
+	
+	ret.frame.questIcon = _G[ret.frame:GetName().."IconQuestTexture"]
+	ret.frame.questIcon:SetTexture(TEXTURE_ITEM_QUEST_BANG)
+	ret.frame.questIcon:SetAllPoints(ret.frame)
+	ret.frame.questIcon:SetTexCoord(.08, .92, .08, .92)
+	ret.frame.questIcon:Hide()
 
 	self:SlotUpdate(ret)
 
