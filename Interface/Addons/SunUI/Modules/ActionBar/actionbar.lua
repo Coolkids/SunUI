@@ -492,25 +492,8 @@ function Module:CreatePetBar()
 	bar:RegisterEvent("UNIT_AURA")
 	bar:SetScript("OnEvent", function(self, event, arg1)
 		if event == "PLAYER_ENTERING_WORLD" then
-		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-		PetActionBarFrame.showgrid = 1
-			local button		
-			for i = 1, 10 do
-				button = _G["PetActionButton"..i]
-				button:ClearAllPoints()
-				table.insert(buttonList, button)
-				button:SetParent(self)
-				button:SetSize(C["ButtonSize"], C["ButtonSize"])
-				if i == 1 then
-					button:SetPoint("BOTTOMLEFT", 0,0)
-				else
-					button:SetPoint("LEFT", _G["PetActionButton"..(i - 1)], "RIGHT", C["ButtonSpacing"], 0)
-				end
-				button:Show()
-				self:SetAttribute("addchild", button)	
-			end
-			RegisterStateDriver(self, "visibility", "[pet,novehicleui,nopossessbar,nopetbattle] show; hide")
-			hooksecurefunc("PetActionBar_Update", PetBarUpdate)
+			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+			PetActionBarFrame.showgrid = 1
 		elseif event == "PET_BAR_UPDATE" or event == "PLAYER_CONTROL_LOST" or event == "PLAYER_CONTROL_GAINED" or event == "PLAYER_FARSIGHT_FOCUS_CHANGED"
 	or event == "UNIT_FLAGS" or (event == "UNIT_PET" and arg1 == "player") or (arg1 == "pet" and event == "UNIT_AURA") then
 				PetBarUpdate()
@@ -518,6 +501,24 @@ function Module:CreatePetBar()
 			PetActionBar_UpdateCooldowns()
 		end
 	end)
+	
+	local button		
+	for i = 1, 10 do
+		button = _G["PetActionButton"..i]
+		button:ClearAllPoints()
+		table.insert(buttonList, button)
+		button:SetParent(bar)
+		button:SetSize(C["ButtonSize"], C["ButtonSize"])
+		if i == 1 then
+			button:SetPoint("BOTTOMLEFT", 0,0)
+		else
+			button:SetPoint("LEFT", _G["PetActionButton"..(i - 1)], "RIGHT", C["ButtonSpacing"], 0)
+		end
+		button:Show()
+		bar:SetAttribute("addchild", button)	
+	end
+	RegisterStateDriver(bar, "visibility", "[pet,novehicleui,nopossessbar,nopetbattle] show; hide")
+	hooksecurefunc("PetActionBar_Update", PetBarUpdate)
 end
 function Module:CreateStanceBar()
 	local num = NUM_STANCE_SLOTS

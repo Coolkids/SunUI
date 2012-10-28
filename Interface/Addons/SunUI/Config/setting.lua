@@ -240,8 +240,7 @@ G["MoveHandleDB"] = {
 	--经验条
 	["expbar"] = {"TOP", "UIParent", "TOP", 0, -24},
 	--powerbar
-	["PowerBar"] = {"CENTER", "UIParent", "CENTER", 0, -80},
-	["HealthBar"] = {"CENTER", "UIParent", "CENTER", 0, -120},
+	["PowerBar"] = {"CENTER", "UIParent", "CENTER", 0, -120},
 	--成就移动
 	["AchievementHolder"] = {"CENTER", "UIParent", "CENTER", 0, 130},
 	--警告框体
@@ -254,7 +253,6 @@ G["PowerBarDB"] = {
 	["Scale"] = 1,
 	["Fade"] = true,
 	["HealthPower"] = false,
-	["HealthPowerWidth"] = 200,
 }
 G["WarnDB"] = {
 	["Open"] = true,

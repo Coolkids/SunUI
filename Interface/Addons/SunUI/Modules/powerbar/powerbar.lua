@@ -1,6 +1,7 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
 local _
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SunUIPowerBar", "AceTimer-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local powercolor = {}
 for power, color in next, PowerBarColor do
 	if (type(power) == "string") then
@@ -649,12 +650,13 @@ end
 
 function Module:HealthPowerBar()
 	local bars = CreateFrame("Statusbar", nil, UIParent)
-	bars:SetSize(C["Width"], 5)
-	MoveHandle.HealthBar	= S.MakeMove(bars, "SunUIHealthBar", "HealthBar", 1)
+	bars:SetSize(C["Width"], C["Height"]+2)
+	local a,b,c,d,e = unpack(SunUIConfig.db.profile.MoveHandleDB.PowerBar)
+	bars:SetPoint(a,b,c,d,e)
 	bars:SetStatusBarTexture(DB.Statusbar)
 	bars:SetMinMaxValues(0, UnitHealthMax("player"))
 	bars:SetValue(UnitHealth("player"))
-	bars:CreateShadow()
+	S.CreateBD(bars, 0)
 	bars:SetStatusBarColor(0.1, 0.8, 0.1, 0)
 	local gradient = bars:CreateTexture(nil, "BACKGROUND")
 	gradient:SetPoint("TOPLEFT")
@@ -667,7 +669,7 @@ function Module:HealthPowerBar()
 	--spar:SetBlendMode("ADD")
 	spar:SetVertexColor(1, 0, 0, 1) 
 	spar:SetSize(16, 16)
-	spar:SetPoint("CENTER", bars:GetStatusBarTexture(), "RIGHT", 0, -14)
+	spar:SetPoint("TOP", bars:GetStatusBarTexture(), "RIGHT", 0, -3)
 	local healthtext = S.MakeFontString(bars, select(2, GameFontNormalSmall:GetFont()))
 	healthtext:SetPoint("TOP", spar, "BOTTOM", 0, 5)
 	healthtext:SetTextColor(1, 0.22, 0.52)
@@ -676,7 +678,7 @@ function Module:HealthPowerBar()
 	bars.SetValue = Smooth
 	
 	local power = CreateFrame("Statusbar", nil, bars)
-	power:SetSize(C["Width"], 5)
+	power:SetSize(C["Width"], C["Height"]+2)
 	power:SetStatusBarTexture(DB.Statusbar)
 	power:SetAllPoints(bars)
 	power:SetStatusBarColor(0.1, 0.8, 0.1, 0)
@@ -686,7 +688,7 @@ function Module:HealthPowerBar()
 	--powerspar:SetBlendMode("ADD")
 	powerspar:SetVertexColor(.3,.45,.65, 1) 
 	powerspar:SetSize(16, 16)
-	powerspar:SetPoint("CENTER", power:GetStatusBarTexture(), "RIGHT", 0, 14)
+	powerspar:SetPoint("BOTTOM", power:GetStatusBarTexture(), "RIGHT", 0, 3)
 	local powertext = S.MakeFontString(bars, select(2, GameFontNormalSmall:GetFont()))
 	powertext:SetPoint("BOTTOM", powerspar, "TOP", 0, -5)
 	

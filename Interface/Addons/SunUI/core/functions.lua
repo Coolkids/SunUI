@@ -48,17 +48,17 @@ function S.FormatTime(Time, Short)
 			return "N/A"
 		end
 	else
-		if Time >= 86400 then
-			return format('%dd', floor(Time/86400 + 0.5))
-		elseif Time >= 3600 then
-			return format('%dh', floor(Time/3600 + 0.5))
-		elseif Time >= 60 then
-			return format('%dm', floor(Time/60))
-		elseif Time >= 0 then 
-			return format('%ds', floor(Time))
-		else
-			return "N/A"
+		local day, hour, minute = 86400, 3600, 60
+		if Time >= day then
+		  return format("%dd", floor(Time/day + 0.5)), Time % day
+		elseif Time >= hour then
+		  return format("%dh", floor(Time/hour + 0.5)), Time % hour
+		elseif Time >= minute then
+		  return format("%dm", floor(Time/minute + 0.5)), Time % minute
+		elseif Time >= minute / 12 then
+		  return floor(Time + 0.5) .. "s", (Time * 100 - floor(Time * 100))/100 .. "s"
 		end
+		return format("%.1fs", Time), (Time * 100 - floor(Time * 100))/100
 	end
 end
 

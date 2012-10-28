@@ -1103,6 +1103,7 @@ lib.gen_threat = function(f)
 	ThreatBar:CreateShadow()
 	S.CreateBack(ThreatBar)
 	ThreatBar:SetOrientation("VERTICAL")
+	ThreatBar:SetMinMaxValues(0, 100)
 	ThreatBar.shadow:SetBackdropColor(.12, .12, .12, 1)
 	
 	local function Smooth(self, value)

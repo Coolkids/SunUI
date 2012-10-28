@@ -2,6 +2,7 @@
 local S, C, L, DB = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Buff")
 local _
+local font = "Interface\\Addons\\SunUI\\Media\\font.ttf"
 -- making frame to hold all buff frame elements
 local PositionTempEnchant = function()
 	TemporaryEnchantFrame:SetParent(BuffFrameHolder)
@@ -24,12 +25,13 @@ local function CreateBuffStyle(buff, t)
 		buff:SetSize(C["BuffDB"]["IconSize"],C["BuffDB"]["IconSize"])
 		duration:SetParent(h)
 		duration:ClearAllPoints()
-		duration:Point("TOP", h, "BOTTOM", 2, -2)
-		duration:SetFont(DB.Font, C["BuffDB"]["FontSize"]*S.Scale(1), "THINOUTLINE")
+		duration:Point("TOP", h, "BOTTOM", 2, 3)
+		duration:SetFont(font, C["BuffDB"]["FontSize"]*S.Scale(1), "THINOUTLINE")
+		
 		count:SetParent(h)
 		count:ClearAllPoints()
 		count:SetPoint("TOPRIGHT", h, 3, -1)
-		count:SetFont(DB.Font, C["BuffDB"]["FontSize"]*S.Scale(1), "THINOUTLINE")
+		count:SetFont(font, C["BuffDB"]["FontSize"]*S.Scale(1), "THINOUTLINE")
 		buff:CreateShadow()
 		buff:StyleButton(true)
 	end
@@ -174,18 +176,28 @@ end
 -- hooking our modifications
 hooksecurefunc("BuffFrame_UpdateAllBuffAnchors", OverrideBuffAnchors)
 hooksecurefunc("DebuffButton_UpdateAnchors", OverrideDebuffAnchors)
-local f = CreateFrame"Frame"
-f:RegisterEvent("VARIABLES_LOADED")
-f:RegisterEvent("PLAYER_LOGIN")
-f:SetScript("OnEvent", function(self, event, ...)
-	if event == "VARIABLES_LOADED" then
-		SetCVar("consolidateBuffs",0) -- disabling consolidated buffs
-		--if cfg.disable_timers then cfg.disable_timers = 0 else cfg.disable_timers = 1 end
-		SetCVar("buffDurations", 1) -- enabling buff durations
-	else
-		local holder = CreateFrame("Frame", "BuffFrameHolder", UIParent)
-		holder:SetSize(C["BuffDB"]["IconSize"],C["BuffDB"]["IconSize"])
-		MoveHandle.Buff = S.MakeMoveHandle(holder, "Buff", "Buff")
-		initialize()
+hooksecurefunc("AuraButton_UpdateDuration", function(auraButton, timeLeft)
+	local Duration = auraButton.duration
+	if timeLeft then
+		Duration:SetText(S.FormatTime(timeLeft, true))
+		if timeLeft >= 86400 then
+			Duration:SetVertexColor(0.4, 0.4, 1)
+		elseif (timeLeft < 86400 and timeLeft >= 3600) then
+			Duration:SetVertexColor(0.4, 1, 1)
+		elseif (timeLeft < 60 and timeLeft >= 15) then
+			Duration:SetVertexColor(1, 1, 0)
+		elseif timeLeft < 15 then
+			Duration:SetVertexColor(1, 0, 0)
+		end
 	end
 end)
+function Module:OnInitialize()
+	SetCVar("consolidateBuffs",0)
+	SetCVar("buffDurations", 1)
+	local holder = CreateFrame("Frame", "BuffFrameHolder", UIParent)
+	holder:SetSize(C["BuffDB"]["IconSize"],C["BuffDB"]["IconSize"])
+	MoveHandle.Buff = S.MakeMoveHandle(holder, "Buff", "Buff")
+end
+function Module:OnEnable()
+	initialize()
+end

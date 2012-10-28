@@ -1371,14 +1371,6 @@ function SunUIConfig.GenerateOptionsInternal()
 							name = "生命值",
 							order = 5,
 							},
-							HealthPowerWidth = {
-								type = "input",
-								name = "生命值宽度",
-								desc = "框体宽度",
-								order = 6, disabled = function(info) return not db.PowerBarDB.HealthPower end,
-								get = function() return tostring(db.PowerBarDB.HealthPowerWidth) end,
-								set = function(_, value) db.PowerBarDB.HealthPowerWidth = tonumber(value) end,
-							},
 						}
 					},
 				},
