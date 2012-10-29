@@ -11,64 +11,6 @@ local P,U
 if IsAddOnLoaded("Stuf") or IsAddOnLoaded("PitBull4") or IsAddOnLoaded("ShadowedUnitFrames") then
 	return
 end
-local shieldlist = {
-	-- Mana Shield
-	[1463] = true,
-	-- Mage Ward
-	[543] = true,
-	-- Ice Barrier
-	[11426] = true,
-	-- Sacred Shield
-	[65148] = true,
-	-- Illuminated Healing
-	[86273] = true,
-	-- Divine Shield
-	[642] = true,
-	-- Stoneclaw Shield
-	[114893] = true,
-	-- Sacrifice
-	[7812] = true,
-	-- Twilight Ward
-	[6229] = true,
-	-- Fury Ward
-	[119839] = true,
-	-- Nether Ward
-	[91711] = true,
-	-- Sacrificial Pact
-	[108416] = true,
-	-- Dark Bargain
-	[110913] = true,
-	-- Fel Blossom
-	[28527] = true,
-	-- Power Word: Shield
-	[17] = true,
-	-- Divine Aegis
-	[47753] = true,
-	-- Spirit Shell
-	[114908] = true,
-	-- Val'anyr, Hammer of Ancient Kings proc
-	[64413] = true,
-	-- Darkmoon Card: Illusion
-	[57350] = true,
-	-- Egg Shell
-	[91308] = true,
-	[91296] = true,
-	-- Njord's Rune of Protection
-	[59616] = true,
-	[42740] = true,
-	-- Blood Shield
-	[77535] = true,
-	-- Anti-Magic Shell
-	[48707] = true,
-	-- Shield Barrier
-	[112048] = true,
-	-- Monk Shield
-	[116849] = true,
-	-- Guard - Absorbing 14232 damage. Heals done to yourself are increased by 30%.
-	[115295] = true,
-	-- Guard - Absorbing 14232 magical damage. Heals done to yourself are increased by 30%.
-	[123402] = true,
-}
 local tex = "Interface\\Addons\\SunUI\\media\\dM3"
  -----------------------------
  -- local variables
@@ -83,31 +25,6 @@ local lib = {}
 -----------------------------
 -- FUNCTIONS
 -----------------------------
-local function Smooth(self, value)
-	if value == self:GetValue() then
-		self.smoothing = nil
-	else
-		self.smoothing = value
-	end
-end
-local function UpdateHealthSmooth(self)
-	if self.smoothing == nil then return end
-	local val = self.smoothing
-	local limit = 30/GetFramerate()
-	local cur = self:GetValue()
-	local new = cur + min((val-cur)/3, max(val-cur, limit))
-
-	if new ~= new then
-		new = val
-	end
-
-	self:SetValue_(new)
-	if cur == val or abs(new - val) < 2 then
-		self:SetValue_(val)
-		self.smoothing = nil
-	end
-end
-	
 local dropdown = CreateFrame('Frame', 'oUF_SunUIDropDown', UIParent, 'UIDropDownMenuTemplate')
 --fontstring func
 lib.gen_fontstring = function(f, name, size, outline)
@@ -1153,7 +1070,7 @@ lib.gen_targeticon = function(f)
     f:Tag(ti, '[mono:targeticon]')
 end
   -- 复仇
-lib.gen_vengeance = function(f)
+lib.gen_swing_timer = function(f)
 	if U["EnableVengeanceBar"] then
 		local VengeanceBar = CreateFrame("Statusbar", "VengeanceBar", f)
 		VengeanceBar:SetStatusBarTexture(DB.Statusbar)
@@ -1189,7 +1106,32 @@ lib.gen_threat = function(f)
 	ThreatBar:SetMinMaxValues(0, 100)
 	ThreatBar.shadow:SetBackdropColor(.12, .12, .12, 1)
 	
+	local function Smooth(self, value)
+		if value == self:GetValue() then
+			self.smoothing = nil
+		else
+			self.smoothing = value
+		end
+	end
+	local function UpdateHealthSmooth(self)
+		if self.smoothing == nil then return end
+		local val = self.smoothing
+		local limit = 30/GetFramerate()
+		local cur = self:GetValue()
+		local new = cur + min((val-cur)/3, max(val-cur, limit))
+
+		if new ~= new then
+			new = val
+		end
+
+		self:SetValue_(new)
+		if cur == val or abs(new - val) < 2 then
+			self:SetValue_(val)
+			self.smoothing = nil
+		end
+	end
 	local function OnEvent(self, event, ...)
+		
 		local party = GetNumGroupMembers()
 		local raid = GetNumGroupMembers()
 		local pet = select(1, HasPetUI())
@@ -1249,69 +1191,7 @@ lib.gen_threat = function(f)
 	ThreatBar:SetScript("OnLeave", function(self)
 		GameTooltip:Hide()
 	end)
-end
-lib.gen_shield = function(f)
-	if not U["EnableShield"] then return end
-	local ShieldBar = CreateFrame("Statusbar", "ShieldBar", f)
-	ShieldBar:SetStatusBarTexture(DB.Statusbar)
-	ShieldBar:SetPoint("TOPLEFT", VengeanceBar or f.Health, "TOPRIGHT", 5, 0)
-	ShieldBar:SetSize(f.Power:GetHeight()+2, f.Health:GetHeight()+f.Power:GetHeight()+6)
-	ShieldBar:CreateShadow()
-	S.CreateBack(ShieldBar)
-	ShieldBar:SetOrientation("VERTICAL")
-	ShieldBar.shadow:SetBackdropColor(.12, .12, .12, 1)
-	VengeanceBar:HookScript("OnShow", function()
-		ShieldBar:SetPoint("TOPLEFT", VengeanceBar, "TOPRIGHT", 5, 0)
-	end)
-	VengeanceBar:HookScript("OnHide", function()
-		ShieldBar:SetPoint("TOPLEFT", f.Health, "TOPRIGHT", 5, 0)
-	end)
-	ShieldBar:Hide()
-	local SetMaxValue = false
-	local MaxValue = 0
-	local ShowSpell
-	local function OnEvent(self, event, unit)
-		if unit ~= "player" then return end
-		local spellId = select(11, UnitBuff('player', GetSpellInfo(17)))
-		if shieldlist[spellId] then
-			if not SetMaxValue then
-				ShowSpell = GetSpellInfo(spellId)
-				MaxValue = select(14, UnitBuff('player', ShowSpell))
-				self:SetMinMaxValues(0, MaxValue)
-				SetMaxValue = true
-				self:Show()
-			end
-		else
-			SetMaxValue = false
-			MaxValue = 0
-			self:Hide()
-		end
-	end
-
-	local function OnUpdate(self, elapsed)
-		if SetMaxValue then
-			local value = select(14, UnitBuff('player', ShowSpell))
-			self:SetValue(value)
-			local r, g, b = S.ColorGradient((MaxValue-value)/MaxValue, 0,.8,0,.8,.8,0,.8,0,0)
-			self:SetStatusBarColor(r, g, b)
-			UpdateHealthSmooth(self)
-		end
-	end
-	ShieldBar.SetValue_ = ShieldBar.SetValue
-	ShieldBar.SetValue = Smooth
-	ShieldBar:RegisterEvent("UNIT_AURA")
-	ShieldBar:SetScript("OnEvent", OnEvent)
-	ShieldBar:SetScript("OnUpdate", OnUpdate)
-	ShieldBar:SetScript("OnEnter", function(self)
-		GameTooltip:ClearLines()
-		GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 5)
-		GameTooltip:AddDoubleLine("护盾监视:", ShowSpell)
-		GameTooltip:Show()
-	end)
-	ShieldBar:SetScript("OnLeave", function(self)
-		GameTooltip:Hide()
-	end)
-end
+  end
   -- alt power bar
   lib.gen_alt_powerbar = function(f)
 	local apb = CreateFrame("StatusBar", nil, f)
@@ -1393,8 +1273,6 @@ end
     lib.gen_ppstrings(self)
     lib.gen_InfoIcons(self)
 	lib.gen_alt_powerbar(self)
-	lib.gen_vengeance(self)
-	lib.gen_shield(self)
     lib.createAuras(self)
 	lib.createBuffs(self)
     lib.createDebuffs(self)
@@ -1406,6 +1284,7 @@ end
 		lib.genMage(self)
 		lib.warlockpower(self)
 	end
+	lib.gen_swing_timer(self)
     self:Size(self.width,self.height)
   end  
   
