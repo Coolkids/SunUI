@@ -810,12 +810,16 @@ function SunUIConfig.GenerateOptionsInternal()
 								type = "toggle", order = 11,
 								name = "开启仇恨监视",			
 							},
-							EnableBarFader = {
+							EnableShield = {
 								type = "toggle", order = 12,
+								name = "开启护盾监视",			
+							},
+							EnableBarFader = {
+								type = "toggle", order = 13,
 								name = L["开启头像渐隐"],			
 							},
 							TargetAura = {
-								type = "select", order = 13,
+								type = "select", order = 14,
 								name = L["目标增减益"],
 								values = {[1] = L["显示"], [2] =L["不显示"], [3] = "Only Player"},
 							},
@@ -823,7 +827,7 @@ function SunUIConfig.GenerateOptionsInternal()
 								type = "select",
 								name = "玩家框体BUFF显示",
 								desc = "玩家框体BUFF显示",
-								order = 14,
+								order = 15,
 								values = {[1] = "debuff", [2] = "buff", [3] = "debuff+buff", [4] = "none"},
 							},
 						}
