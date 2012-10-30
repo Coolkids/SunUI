@@ -249,17 +249,6 @@ function Module:OnInitialize()
 			end
 		end
 		SLASH_SetDBM1 = "/SetDBM"
-		local players = {
-			["Coolkid"] = true,
-			["Coolkids"] = true,
-			["Kenans"] = true,
-			["月殤軒"] = true,
-			["月殤玄"] = true,
-			["月殤妶"] = true,
-			["月殤玹"] = true,
-			["月殤璇"] = true,
-			["月殤旋"] = true,
-		}
-		if players[DB.PlayerName] == true then UploadDBM() end
+		if S.IsCoolkid() then UploadDBM() end
 	end)
 end

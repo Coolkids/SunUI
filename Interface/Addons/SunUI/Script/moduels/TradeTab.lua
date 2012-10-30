@@ -104,6 +104,7 @@ function ProfessionTabs:EventHandler(Table, Parent)
 			Tab.SpellName = SpellName
 			Tab.SpellRank = SpellRank
 			Tab:SetNormalTexture(SpellTexture)
+			Tab:GetNormalTexture():SetTexCoord(0.08, 0.92, 0.08, 0.92)
 			Tab:SetAttribute("type", "spell")
 			Tab:SetAttribute("spell", SpellName)
 		end

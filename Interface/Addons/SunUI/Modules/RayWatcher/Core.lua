@@ -14,6 +14,47 @@ local CooldownFrame_SetTimer = CooldownFrame_SetTimer
 
 local normal = "Interface\\Addons\\RayWatcher\\media\\statusbar"
 
+local StartFlash = function(self, duration)
+	if not self.anim then
+		self.anim = self:CreateAnimationGroup("Flash")
+
+		self.anim.fadein = self.anim:CreateAnimation("ALPHA", "FadeIn")
+		self.anim.fadein:SetChange(0.8)
+		self.anim.fadein:SetOrder(2)
+
+		self.anim.fadeout = self.anim:CreateAnimation("ALPHA", "FadeOut")
+		self.anim.fadeout:SetChange(-0.8)
+		self.anim.fadeout:SetOrder(1)
+	end
+
+	self.anim.fadein:SetDuration(duration)
+	self.anim.fadeout:SetDuration(duration)
+	self.anim:Play()
+end
+
+local StopFlash = function(self)
+	if self.anim then
+		self.anim:Stop()
+	end
+    if self.cooldown then
+        self.cooldown:SetAlpha(1)
+    end
+end
+
+local function Flash(self)
+	local time = self.start + self.duration - GetTime()
+
+	if time < 0 then
+		StopFlash(self)
+	end
+
+	if time < 5 then
+		StartFlash(self, .75)
+	else
+		StopFlash(self)
+	end
+end
+
 local function Round(v, decimals)
 	if not decimals then decimals = 0 end
     return (("%%.%df"):format(decimals)):format(v)
@@ -112,7 +153,20 @@ function watcherPrototype:UpdateButton(button, index, icon, count, duration, exp
 	button.icon:SetTexCoord(.1, .9, .1, .9)
 	button.count:SetText(count > 1 and count or "")
 	if button.cooldown then
-		CooldownFrame_SetTimer(button.cooldown, filter == "CD" and expires or (expires - duration), duration, 1)
+		if filter:find("CD") then
+			button.cooldown:SetReverse(false)
+			CooldownFrame_SetTimer(button.cooldown, expires, duration, 1)
+		else
+			button.cooldown:SetReverse(true)
+			CooldownFrame_SetTimer(button.cooldown, expires - duration, duration, 1)
+		end
+	end
+	if filter:find("CD") then
+		button.start = expires
+		button.duration = duration
+	else
+		button.start = expires - duration
+		button.duration = duration
 	end
 	button.index = index
 	button.filter = filter
@@ -120,10 +174,15 @@ function watcherPrototype:UpdateButton(button, index, icon, count, duration, exp
 	button.spellID = spellID
 	if filter == "itemCD" then
 		button.spn = GetItemInfo(spellID)
+	elseif filter == "slotCD" then
+		local slotLink = GetInventoryItemLink("player", spellID)
+		button.spn = GetItemInfo(slotLink)
 	else
 		button.spn = GetSpellInfo(spellID)
 	end
-	button:Show()
+	if not button:IsShown() then
+		button:Show()
+	end
 end
 
 local function BarUpdate(self, elapsed)
@@ -186,7 +245,7 @@ function watcherPrototype:CheckAura(num)
 						if self.mode == "BAR" then
 							self.button[num]:SetScript("OnUpdate", BarUpdate)
 						else
-							self.button[num]:SetScript("OnUpdate", nil)
+							self.button[num]:SetScript("OnUpdate", Flash)
 						end
 						num = num + 1
 					end
@@ -210,7 +269,7 @@ function watcherPrototype:CheckAura(num)
 						if self.mode == "BAR" then
 							self.button[num]:SetScript("OnUpdate", BarUpdate)
 						else
-							self.button[num]:SetScript("OnUpdate", nil)
+							self.button[num]:SetScript("OnUpdate", Flash)
 						end
 						num = num + 1
 					end

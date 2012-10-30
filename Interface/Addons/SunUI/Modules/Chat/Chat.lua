@@ -113,7 +113,7 @@ local function ApplyChatStyle(self)
 	bb:SetHeight(16)
 	bb:SetWidth(16)
 	bb:ClearAllPoints()
-	bb:SetPoint("TOPRIGHT", _G[cf], "TOPRIGHT", 0, -6)
+	bb:SetPoint("TOPRIGHT", _G[cf], "TOPRIGHT", -5, -5)
 	flash:ClearAllPoints()
 	flash:Point("TOPLEFT", -3, 3)
 	flash:Point("BOTTOMRIGHT", 3, -3)
@@ -215,7 +215,7 @@ function Module:OnEnable()
 		for i = 1, NUM_CHAT_WINDOWS do
 			local cf = _G['ChatFrame'..i]
 			if cf then
-				S.CreateBD(cf, .6)
+				cf:CreateShadow("Background")
 			end
 		end
 	end

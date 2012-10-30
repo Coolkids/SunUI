@@ -7,9 +7,6 @@ local S, C, L, DB = unpack(select(2, ...))
 local _
 --when switching to the guild frame
 
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("socialtabs")
-function Module:OnInitialize()
-
 -- Always show looking for guild tab
 local lfguild = false
 
@@ -293,4 +290,3 @@ if (not IsTrialAccount()) then
 	f:RegisterEvent("PLAYER_GUILD_UPDATE");
 end
 f:RegisterEvent("PLAYER_LEVEL_UP");
-end

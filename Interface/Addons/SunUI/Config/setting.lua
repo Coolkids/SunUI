@@ -271,3 +271,10 @@ G["AnnounceDB"] = {
 	["Resurrect"] = true,
 	["Heal"] = true,
 }
+G["BagDB"] = {
+	["BagSize"] = 32,
+	["BankSize"] = 32,
+	["Spacing"] = 5,
+	["BagWidth"] = 400,
+	["BankWidth"] = 600,
+}

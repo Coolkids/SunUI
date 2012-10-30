@@ -663,6 +663,8 @@ ns.watchers ={
 				{ spellID = 118636, unitId = "player", caster = "player", filter = "BUFF" },
 				--金钟罩
 				{ spellID = 115295, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--猛虎掌
+				{ spellID = 125359, unitId = "player", caster = "player", filter = "BUFF" }, 
 		}, 
 		{ 
 			name = "目标debuff", 
@@ -1094,9 +1096,7 @@ ns.watchers ={
 				--免费愈合祷言
 				{ spellID = 123267, unitId = "player", caster = "player", filter = "BUFF" },
 				--免费盾
-				{ spellID = 123266, unitId = "player", caster = "player", filter = "BUFF" },
-				--猛虎掌
-				{ spellID = 125359, unitId = "player", caster = "player", filter = "BUFF" },         
+				{ spellID = 123266, unitId = "player", caster = "player", filter = "BUFF" },        
 				--虎眼酒
 				{ spellID = 125195, unitId = "player", caster = "player", filter = "BUFF" },
 				--法力茶 

@@ -27,6 +27,7 @@ function SunUIConfig:LoadDefaults()
 			PowerBarDB = G["PowerBarDB"],
 			WarnDB = G["WarnDB"],
 			AnnounceDB = G["AnnounceDB"],
+			BagDB = G["BagDB"],
 		},
 	}
 end	
@@ -1075,15 +1076,14 @@ function SunUIConfig.GenerateOptionsInternal()
 					name = L["UI缩放"],
 						args = {
 							uiScale = {
-								type = "input", order = 1,
+								type = "range", order = 1,
 								name = L["UI缩放大小"], desc = L["UI缩放大小"],
-								get = function() return tostring(db.MiniDB.uiScale) end,
-								set = function(_, value) db.MiniDB.uiScale = tonumber(value) end,
+								min = 0.65, max = 1.4, step = 0.01,
 							},
 							accept = {
 								type = "execute", order = 2,
 								name = L["应用"], desc = L["应用"],
-								func = function()  SetCVar("useUiScale", 1) SetCVar("uiScale", db.MiniDB.uiScale) RestartGx()end,
+								func = function()  SetCVar("useUiScale", 1) SetCVar("uiScale", db.MiniDB.uiScale) ReloadUI() end,
 							},	
 							NewLine = {
 								type = "description", order = 3,
@@ -1282,42 +1282,6 @@ function SunUIConfig.GenerateOptionsInternal()
 					},
 				}
 			},	
-			Other = {
-				order = 98,
-				type = "group",
-				name = "Raid and Filger",
-				args = {
-					UnlockRiad = {
-						type = "execute",
-						name = L["团队框架"],
-						order = 1,
-						func = function()
-							if not UnitAffectingCombat("player") then
-								if IsAddOnLoaded("SunUI_Freebgrid") then 
-									LoadAddOn('SunUI_Freebgrid_Config')
-									local RF = LibStub and LibStub("AceConfigDialog-3.0", true)
-											RF:Open("SunUI_Freebgrid")
-											RF:Close("SunUIConfig")
-								end
-							end
-						end
-					},
-					UnlockFilger = {
-					type = "execute",
-					name = L["技能监视"] ,
-					order = 1,
-					func = function()
-						--if not UnitAffectingCombat("player") then
-							--if IsAddOnLoaded("RayWatcher") then 
-								local bF = LibStub and LibStub("AceConfigDialog-3.0", true)
-										bF:Open("RayWatcherConfig")
-										bF:Close("SunUIConfig")
-							--end
-						--end
-					end
-					},
-				}
-			},
 			PowerBarDB = {
 				order = 14,
 				type = "group",
@@ -1489,6 +1453,88 @@ function SunUIConfig.GenerateOptionsInternal()
 						}
 					},
 				},
+			},
+			BagDB = {
+				order = 17,
+				type = "group",
+				name = "背包设置",
+				get = function(info) return db.BagDB[ info[#info] ] end,
+				set = function(info, value) db.BagDB[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+				args = {
+					group1 = {
+						type = "group", order = 1, guiInline = true,
+						name = "",
+						args = {
+							BagSize = {
+								type = "range", order = 1,
+								name = "背包图标", desc = "背包图标",
+								min = 20, max = 50, step = 1,
+							},
+							BankSize = {
+								type = "range", order = 2,
+								name = "银行图标", desc = "银行图标",
+								min = 20, max = 50, step = 1,
+							},
+							Spacing = {
+								type = "range", order = 3,
+								name = "图标间距", desc = "图标间距",
+								min = 0, max = 10, step = 1,
+							},
+							BagWidth = {
+								type = "input",
+								name = "背包框体宽度",
+								desc = "背包框体宽度",
+								order = 4,
+								get = function() return tostring(db.BagDB.BagWidth) end,
+								set = function(_, value) db.BagDB.BagWidth = tonumber(value) end,
+							},
+							BankWidth = {
+								type = "input",
+								name = "银行框体宽度",
+								desc = "银行框体宽度",
+								order = 5,
+								get = function() return tostring(db.BagDB.BankWidth) end,
+								set = function(_, value) db.BagDB.BankWidth = tonumber(value) end,
+							},
+						}
+					},
+				},
+			},
+			Other = {
+				order = 98,
+				type = "group",
+				name = "Raid and Filger",
+				args = {
+					UnlockRiad = {
+						type = "execute",
+						name = L["团队框架"],
+						order = 1,
+						func = function()
+							if not UnitAffectingCombat("player") then
+								if IsAddOnLoaded("SunUI_Freebgrid") then 
+									LoadAddOn('SunUI_Freebgrid_Config')
+									local RF = LibStub and LibStub("AceConfigDialog-3.0", true)
+											RF:Open("SunUI_Freebgrid")
+											RF:Close("SunUIConfig")
+								end
+							end
+						end
+					},
+					UnlockFilger = {
+					type = "execute",
+					name = L["技能监视"] ,
+					order = 1,
+					func = function()
+						--if not UnitAffectingCombat("player") then
+							--if IsAddOnLoaded("RayWatcher") then 
+								local bF = LibStub and LibStub("AceConfigDialog-3.0", true)
+										bF:Open("RayWatcherConfig")
+										bF:Close("SunUIConfig")
+							--end
+						--end
+					end
+					},
+				}
 			},
 		}
 	}

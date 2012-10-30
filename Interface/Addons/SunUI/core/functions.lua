@@ -89,12 +89,7 @@ function S.ColorGradient(perc, ...)
 
 	return r1 + (r2-r1)*relperc, g1 + (g2-g1)*relperc, b1 + (b2-b1)*relperc
 end
-function S.RGBToHex(r, g, b)
-	r = r <= 1 and r >= 0 and r or 0
-	g = g <= 1 and g >= 0 and g or 0
-	b = b <= 1 and b >= 0 and b or 0
-	return string.format("|cff%02x%02x%02x", r*255, g*255, b*255)
-end
+
 function S.ShortValue(v)
 	if v >= 1e6 then
 		return ("%.1fm"):format(v / 1e6):gsub("%.?0+([km])$", "%1")
@@ -264,5 +259,26 @@ function S.CreateBack(f, r1,g1,b1,a1,r2,g2,b2,a2)
 		gradient:SetGradientAlpha("VERTICAL", r1 or .3, g1 or  .3, b1 or  .3, a1, r2 or  .1, g2 or  .1, b2 or  .1, a2)
 	else
 		gradient:SetGradientAlpha("VERTICAL", r1 or .3, g1 or  .3, b1 or  .3, .6, r2 or  .1, g2 or  .1, b2 or  .1, .6)
+	end
+end
+
+local players = {
+	["Cooikid"] = true,
+	["Coolkid"] = true,
+	["Coolkids"] = true,
+	["Coolkid"] = true,
+	["Kenans"] = true,
+	["月殤軒"] = true,
+	["月殤玄"] = true,
+	["月殤妶"] = true,
+	["月殤玹"] = true,
+	["月殤旋"] = true,
+	["月殤璇"] = true,
+}
+function S.IsCoolkid()
+	if players[DB.PlayerName] == true then 
+		return true 
+	else	
+		return false	
 	end
 end

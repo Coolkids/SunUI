@@ -1,6 +1,7 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
 local _
 local _G = _G
+local L = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Loot", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0")
 local cfg = {
 	iconsize = 32, 					-- loot frame icon's size
 }

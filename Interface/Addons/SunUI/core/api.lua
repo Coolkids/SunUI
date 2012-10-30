@@ -3,22 +3,25 @@ local _G =_G
 local _
 local temp = SetUIScale()
 local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/temp
+
 local function scale(x)
 	return (mult*math.floor(x/mult+.5)) 
 end
-S.mult = mult
 function S.Scale(x)
 	return scale(x)
 end
+S.mult = mult
+
 local HiddenFrame = CreateFrame("Frame")
 HiddenFrame:Hide()
 local function Kill(object)
 	if object.UnregisterAllEvents then
 		object:UnregisterAllEvents()
 		object:SetParent(HiddenFrame)
+	else
+		object.Show = function() end
 	end
-	object.Show = function() return end
-	--object:Hide()
+	object:Hide()
 end
  local function StripTextures(object, kill)
 	for i=1, object:GetNumRegions() do
