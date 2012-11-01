@@ -1,19 +1,17 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
 local _G = _G
-local _
-local SetDesaturation = SetDesaturation
 if (IsAddOnLoaded("Dominos") or IsAddOnLoaded("Bartender4") or IsAddOnLoaded("Macaroon")) then
 	return 
 end
 
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("actionbar", "AceEvent-3.0")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("actionbar", "AceEvent-3.0", "AceHook-3.0")
 local buttonList = {}
 function Module:blizzHider()
 	local hider = CreateFrame("Frame")
 	hider:Hide()
 
 	local hideFrames = {MainMenuBar, MainMenuBarPageNumber, ActionBarDownButton, ActionBarUpButton, OverrideActionBarExpBar, OverrideActionBarHealthBar, OverrideActionBarPowerBar, OverrideActionBarPitchFrame, CharacterMicroButton, SpellbookMicroButton, TalentMicroButton, AchievementMicroButton, QuestLogMicroButton, GuildMicroButton, PVPMicroButton, LFDMicroButton, CompanionsMicroButton, EJMicroButton, MainMenuMicroButton, HelpMicroButton, MainMenuBarBackpackButton,CharacterBag0Slot,CharacterBag1Slot,CharacterBag2Slot,CharacterBag3Slot}
-	for _, frame in pairs(hideFrames) do
+	for k, frame in pairs(hideFrames) do
 		frame:SetParent(hider)
 	end
 
@@ -33,7 +31,7 @@ function Module:blizzHider()
 
 	local textureList = {"_BG","EndCapL","EndCapR","_Border","Divider1","Divider2","Divider3","ExitBG","MicroBGL","MicroBGR","_MicroBGMid","ButtonBGL","ButtonBGR","_ButtonBGMid"}
 
-	for _, tex in pairs(textureList) do
+	for k, tex in pairs(textureList) do
 		OverrideActionBar[tex]:SetAlpha(0)
 	end
 end
@@ -401,124 +399,27 @@ function Module:CreateOverrideBar()
 end
 function Module:CreatePetBar()
 	local num = NUM_PET_ACTION_SLOTS
-    local bar = CreateFrame("Frame","SunUIPetBar",UIParent, "SecureHandlerStateTemplate")
+    local bar = CreateFrame("Frame", "SunUIPetBar", UIParent, "SecureHandlerStateTemplate")
     bar:SetWidth(C["ButtonSize"]*num+C["ButtonSpacing"]*(num-1))
     bar:SetHeight(C["ButtonSize"])
     bar:SetScale(C["PetBarSacle"])
 	PetActionBarFrame:SetParent(bar)
+	PetActionBarFrame:EnableMouse(false)
     MoveHandle.SunUIPetBar = S.MakeMove(bar, "SunUI宠物条", "petbar", C["PetBarSacle"])
-	
-	local PetBarUpdate = function(self, event)
-		local petActionButton, petActionIcon, petAutoCastableTexture, petAutoCastShine
-		for i=1, NUM_PET_ACTION_SLOTS, 1 do
-			local buttonName = "PetActionButton" .. i
-			petActionButton = _G[buttonName]
-			petActionIcon = _G[buttonName.."Icon"]
-			petAutoCastableTexture = _G[buttonName.."AutoCastable"]
-			petAutoCastShine = _G[buttonName.."Shine"]
-			local name, subtext, texture, isToken, isActive, autoCastAllowed, autoCastEnabled = GetPetActionInfo(i)
-			
-			if not isToken then
-				petActionIcon:SetTexture(texture)
-				petActionButton.tooltipName = name
-			else
-				petActionIcon:SetTexture(_G[texture])
-				petActionButton.tooltipName = _G[name]
-			end
-
-			petActionButton.isToken = isToken
-			petActionButton.tooltipSubtext = subtext
-
-			if isActive and name ~= "PET_ACTION_FOLLOW" then
-				petActionButton:SetChecked(1)
-				if IsPetAttackAction(i) then
-					PetActionButton_StartFlash(petActionButton)
-				end
-			else
-				petActionButton:SetChecked(0)
-				if IsPetAttackAction(i) then
-					PetActionButton_StopFlash(petActionButton)
-				end			
-			end
-			
-			if autoCastAllowed then
-				petAutoCastableTexture:Show()
-			else
-				petAutoCastableTexture:Hide()
-			end
-			
-			if autoCastEnabled then
-				AutoCastShine_AutoCastStart(petAutoCastShine)
-			else
-				AutoCastShine_AutoCastStop(petAutoCastShine)
-			end
-			
-			-- grid display
-			if name then
-				petActionButton:SetAlpha(1)
-			else
-				petActionButton:SetAlpha(0)
-			end
-			
-			if texture then
-				if GetPetActionSlotUsable(i) then
-					SetDesaturation(petActionIcon, nil)
-				else
-					SetDesaturation(petActionIcon, 1)
-				end
-				petActionIcon:Show()
-			else
-				petActionIcon:Hide()
-			end
-			
-			if not PetHasActionBar() and texture and name ~= "PET_ACTION_FOLLOW" then
-				PetActionButton_StopFlash(petActionButton)
-				SetDesaturation(petActionIcon, 1)
-				petActionButton:SetChecked(0)
-			end
-		end
-	end	
-	bar:RegisterEvent("PLAYER_LOGIN")
-	bar:RegisterEvent("PLAYER_CONTROL_LOST")
-	bar:RegisterEvent("PLAYER_CONTROL_GAINED")
-	bar:RegisterEvent("PLAYER_ENTERING_WORLD")
-	bar:RegisterEvent("PLAYER_FARSIGHT_FOCUS_CHANGED")
-	bar:RegisterEvent("PET_BAR_UPDATE")
-	bar:RegisterEvent("PET_BAR_UPDATE_USABLE")
-	bar:RegisterEvent("PET_BAR_UPDATE_COOLDOWN")
-	bar:RegisterEvent("PET_BAR_HIDE")
-	bar:RegisterEvent("UNIT_PET")
-	bar:RegisterEvent("UNIT_FLAGS")
-	bar:RegisterEvent("UNIT_AURA")
-	bar:SetScript("OnEvent", function(self, event, arg1)
-		if event == "PLAYER_ENTERING_WORLD" then
-			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-			PetActionBarFrame.showgrid = 1
-		elseif event == "PET_BAR_UPDATE" or event == "PLAYER_CONTROL_LOST" or event == "PLAYER_CONTROL_GAINED" or event == "PLAYER_FARSIGHT_FOCUS_CHANGED"
-	or event == "UNIT_FLAGS" or (event == "UNIT_PET" and arg1 == "player") or (arg1 == "pet" and event == "UNIT_AURA") then
-				PetBarUpdate()
-		elseif event == "PET_BAR_UPDATE_COOLDOWN" then
-			PetActionBar_UpdateCooldowns()
-		end
-	end)
-	
 	local button		
-	for i = 1, 10 do
+	for i = 1, num do
 		button = _G["PetActionButton"..i]
+		button:SetSize(C["ButtonSize"], C["ButtonSize"])
 		button:ClearAllPoints()
 		table.insert(buttonList, button)
-		button:SetParent(bar)
-		button:SetSize(C["ButtonSize"], C["ButtonSize"])
 		if i == 1 then
-			button:SetPoint("BOTTOMLEFT", 0,0)
+			button:SetPoint("BOTTOMLEFT", bar, 0, 0)
 		else
-			button:SetPoint("LEFT", _G["PetActionButton"..(i - 1)], "RIGHT", C["ButtonSpacing"], 0)
+			local previous = _G["PetActionButton"..i-1]
+			button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
 		end
-		button:Show()
-		bar:SetAttribute("addchild", button)	
 	end
-	RegisterStateDriver(bar, "visibility", "[pet,novehicleui,nopossessbar,nopetbattle] show; hide")
-	hooksecurefunc("PetActionBar_Update", PetBarUpdate)
+	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui] hide; [@pet,exists,nodead] show; hide")
 end
 function Module:CreateStanceBar()
 	local num = NUM_STANCE_SLOTS
@@ -598,7 +499,7 @@ function Module:CreateExitVehicle()
 end
 
 function Module:UpdateSize(val)
-	for _, v in ipairs(buttonList) do 
+	for k, v in ipairs(buttonList) do 
 		if v then 
 			v:SetSize(val, val)
 		end

@@ -8,6 +8,7 @@ local Core = LibStub("AceAddon-3.0"):GetAddon("SunUI")
 local Module = Core:NewModule("UnitFrame")
 local _G = _G
 local P,U
+--if true then return end
 if IsAddOnLoaded("Stuf") or IsAddOnLoaded("PitBull4") or IsAddOnLoaded("ShadowedUnitFrames") then
 	return
 end
@@ -1495,11 +1496,10 @@ lib.gen_threat = function(f)
 	lib.gen_alt_powerbar(self)
 	self:Size(self.width,self.height)
   end  
+
 function Module:OnInitialize()
 	U = C["UnitFrameDB"]
 	P = C["PowerBarDB"]
-end
-function Module:OnEnable()
 	  -----------------------------
 	  -- SPAWN UNITS
 	  -----------------------------

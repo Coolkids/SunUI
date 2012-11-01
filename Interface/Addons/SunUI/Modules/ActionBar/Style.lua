@@ -2,68 +2,117 @@
  if (IsAddOnLoaded("Dominos") or IsAddOnLoaded("Bartender4") or IsAddOnLoaded("Macaroon")) then
 	return 
 end	
-local AB = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ActionStyle", "AceEvent-3.0")
-local _G = _G
-local _
-local function UpdateHotkey(button, actionButtonType)
-	local hotkey = _G[button:GetName() .. 'HotKey']
-	local text = hotkey:GetText()
-	if text == nil then return end
-	text = string.gsub(text, '(s%-)', 'S')
-	text = string.gsub(text, '(a%-)', 'A')
-	text = string.gsub(text, '(c%-)', 'C')
-	text = string.gsub(text, '(Mouse Button )', 'M')
-	text = string.gsub(text, '(滑鼠按鍵)', 'M')
-	text = string.gsub(text, '(鼠标按键)', 'M')
-	text = string.gsub(text, KEY_BUTTON3, 'M3')
-	text = string.gsub(text, '(Num Pad )', 'N')
-	text = string.gsub(text, KEY_PAGEUP, 'PU')
-	text = string.gsub(text, KEY_PAGEDOWN, 'PD')
-	text = string.gsub(text, KEY_SPACE, 'SpB')
-	text = string.gsub(text, KEY_INSERT, 'Ins')
-	text = string.gsub(text, KEY_HOME, 'Hm')
-	text = string.gsub(text, KEY_DELETE, 'Del')
-	text = string.gsub(text, KEY_MOUSEWHEELUP, 'MwU')
-	text = string.gsub(text, KEY_MOUSEWHEELDOWN, 'MwD')
-	text = string.gsub(text, '(數字鍵盤)', 'N')
+--if true then return end
+local AB = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ActionStyle", "AceEvent-3.0", "AceHook-3.0")
 
-	if hotkey:GetText() == _G['RANGE_INDICATOR'] then
-		hotkey:SetText('')
+function AB:GetScreenQuadrant(frame)
+	local x, y = frame:GetCenter()
+	local screenWidth = GetScreenWidth()
+	local screenHeight = GetScreenHeight()
+	local point
+
+	if not frame:GetCenter() then
+		return "UNKNOWN", frame:GetName()
+	end
+
+	if (x > (screenWidth / 4) and x < (screenWidth / 4)*3) and y > (screenHeight / 4)*3 then
+		point = "TOP"
+	elseif x < (screenWidth / 4) and y > (screenHeight / 4)*3 then
+		point = "TOPLEFT"
+	elseif x > (screenWidth / 4)*3 and y > (screenHeight / 4)*3 then
+		point = "TOPRIGHT"
+	elseif (x > (screenWidth / 4) and x < (screenWidth / 4)*3) and y < (screenHeight / 4) then
+		point = "BOTTOM"
+	elseif x < (screenWidth / 4) and y < (screenHeight / 4) then
+		point = "BOTTOMLEFT"
+	elseif x > (screenWidth / 4)*3 and y < (screenHeight / 4) then
+		point = "BOTTOMRIGHT"
+	elseif x < (screenWidth / 4) and (y > (screenHeight / 4) and y < (screenHeight / 4)*3) then
+		point = "LEFT"
+	elseif x > (screenWidth / 4)*3 and y < (screenHeight / 4)*3 and y > (screenHeight / 4) then
+		point = "RIGHT"
+	else
+		point = "CENTER"
+	end
+
+	return point
+end
+
+function AB:UpdateHotkey(button, actionButtonType)
+	local hotkey = _G[button:GetName() .. "HotKey"]
+	local text = hotkey:GetText()
+
+	text = string.gsub(text, "(s%-)", "S")
+	text = string.gsub(text, "(a%-)", "A")
+	text = string.gsub(text, "(c%-)", "C")
+	text = string.gsub(text, "(Mouse Button )", "M")
+	text = string.gsub(text, "(滑鼠按鍵)", "M")
+	text = string.gsub(text, "(鼠标按键)", "M")
+	text = string.gsub(text, KEY_BUTTON3, "M3")
+	text = string.gsub(text, "(Num Pad )", "N")
+	text = string.gsub(text, KEY_PAGEUP, "PU")
+	text = string.gsub(text, KEY_PAGEDOWN, "PD")
+	text = string.gsub(text, KEY_SPACE, "SpB")
+	text = string.gsub(text, KEY_INSERT, "Ins")
+	text = string.gsub(text, KEY_HOME, "Hm")
+	text = string.gsub(text, KEY_DELETE, "Del")
+	text = string.gsub(text, KEY_MOUSEWHEELUP, "MwU")
+	text = string.gsub(text, KEY_MOUSEWHEELDOWN, "MwD")
+	text = string.gsub(text, '(數字鍵盤)', 'N')
+	
+	if hotkey:GetText() == _G["RANGE_INDICATOR"] then
+		hotkey:SetText("")
 	else
 		hotkey:SetText(text)
 	end
 end
-local function Style(button, totem, flyout)
+
+function AB:Style(button)
 	local name = button:GetName()
+	local action = button.action
+
 	if name:match("MultiCast") then return end
 
-	local action = button.action
-		
-	if button.s == true then return end
+	if not button.equipped then
+		local equipped = button:CreateTexture(nil, "OVERLAY")
+		equipped:SetTexture(0, 1, 0, .3)
+		equipped:SetAllPoints()
+		equipped:Hide()
+		button.equipped = equipped
+	end
+
+	if action and IsEquippedAction(action) then
+		if not button.equipped:IsShown() then
+			button.equipped:Show()
+		end
+	else
+		if button.equipped:IsShown() then
+			button.equipped:Hide()
+		end
+	end
+
+	if button.styled then return end
+
 	local Icon = _G[name.."Icon"]
 	local Count = _G[name.."Count"]
-	local Flash = _G[name.."Flash"]
+	local Flash	 = _G[name.."Flash"]
 	local HotKey = _G[name.."HotKey"]
-	local Border = _G[name.."Border"]
+	local Border  = _G[name.."Border"]
 	local Btname = _G[name.."Name"]
-	local normal = _G[name.."NormalTexture"]
-	local normal2 = button:GetNormalTexture()
-	local cooldown = _G[name .. "Cooldown"]
-		 
-	if cooldown then
-		cooldown:ClearAllPoints()
-		cooldown:SetAllPoints(button)
+	local Normal  = _G[name.."NormalTexture"]
+	local Normal2 = button:GetNormalTexture()
+	local Cooldown = _G[name .. "Cooldown"]
+	local FloatingBG = _G[name.."FloatingBG"]
+
+	if Cooldown then
+		Cooldown:ClearAllPoints()
+		Cooldown:SetAllPoints(button)
 	end
 
 	if Flash then Flash:SetTexture(nil) end
-	if normal then normal:SetTexture(nil) end
-	if normal2 then normal2:SetTexture(nil) end
-	--if Border then Border:Kill() end
-	if Border then
-		Border:ClearAllPoints()
-		Border:SetPoint("TOPLEFT", -12, 12)
-		Border:SetPoint("BOTTOMRIGHT", 12, -12)
-	end
+	if Normal then Normal:SetTexture(nil) Normal:Hide() Normal:SetAlpha(0) end
+	if Normal2 then Normal2:SetTexture(nil) Normal2:Hide() Normal2:SetAlpha(0) end
+	if Border then Border:SetTexture(nil) end
 
 	if Count then
 		Count:ClearAllPoints()
@@ -72,29 +121,24 @@ local function Style(button, totem, flyout)
 		Count:SetFont(DB.Font, C["ActionBarDB"]["FontSize"], "OUTLINE")
 	end
 
-	if _G[name..'FloatingBG'] then
-		_G[name..'FloatingBG']:Kill()
+	if FloatingBG then
+		FloatingBG:Kill()
 	end
 
-		
-
-	if Btname then	
-		Btname:SetJustifyH("CENTER")
-		Btname:SetPoint("BOTTOMLEFT", -3, 1)
-		Btname:SetFont(DB.Font, C["ActionBarDB"]["MFontSize"], "OUTLINE")
-		if C["ActionBarDB"]["HideMacroName"] then
-				Btname:SetText("")
-				Btname:Hide()
-				Btname.Show = function() end
+	if Btname then
+		if C["ActionBarDB"]["HideMacroName"] ~= true then
+			Btname:SetDrawLayer("HIGHLIGHT")
+			Btname:Width(50)
 		end
 	end
 
 	if not button.shadow then
 		if not totem then
 			if not flyout then
-				button:SetSize(C["ActionBarDB"]["ButtonSize"], C["ActionBarDB"]["ButtonSize"])
+				button:SetWidth(C["ActionBarDB"]["ButtonSize"])
+				button:SetHeight(C["ActionBarDB"]["ButtonSize"])
 			end
-			 
+
 			button:CreateShadow("Background")
 		end
 
@@ -106,10 +150,9 @@ local function Style(button, totem, flyout)
 
 	if HotKey then
 		HotKey:ClearAllPoints()
-		HotKey:SetJustifyH("RIGHT")
-		HotKey:SetPoint("TOPRIGHT", 4, 1)
+		HotKey:SetPoint("TOPRIGHT", 0, 0)
 		HotKey:SetFont(DB.Font, C["ActionBarDB"]["FontSize"], "OUTLINE")
-		HotKey:SetShadowColor(0, 0, 0, 1)
+		HotKey:SetShadowColor(0, 0, 0, 0.3)
 		HotKey.ClearAllPoints = function() end
 		HotKey.SetPoint = function() end
 		if C["ActionBarDB"]["HideHotKey"] then
@@ -119,86 +162,42 @@ local function Style(button, totem, flyout)
 		end
 	end
 
-	if normal then
-		normal:ClearAllPoints()
-		normal:SetPoint("TOPLEFT")
-		normal:SetPoint("BOTTOMRIGHT")
-	end
-
 	button:StyleButton(true)
-	button.s = true
+
+	button.styled = true
 end
 
-local function StyleSmallButton(normal, button, icon, name, pet)
-	if button.shadow then return end
-
-	local Flash = _G[name.."Flash"]
-
-	button:SetNormalTexture("")
-	button.SetNormalTexture = function() end
-	button:StyleButton(true)
-
-	Flash:SetTexture(1, 1, 1, 0.3)
-
-	if not button.shadow then
-		button:CreateShadow("Background")
-	end
-
-	icon:SetTexCoord(.08, .92, .08, .92)
-	icon:ClearAllPoints()
-	if pet then
-		if C["ActionBarDB"]["ButtonSize"]*C["ActionBarDB"]["PetBarSacle"] < 30 then
-			local autocast = _G[name.."AutoCastable"]
-			autocast:SetAlpha(0)
-		end
-		local shine = _G[name.."Shine"]
-		shine:Size(C["ActionBarDB"]["ButtonSize"]*C["ActionBarDB"]["PetBarSacle"])
-		shine:ClearAllPoints()
-		shine:SetPoint("CENTER", button, 0, 0)
-		icon:SetAllPoints()
-		else
-			icon:SetAllPoints()
-		end
-
-		if normal then
-			normal:ClearAllPoints()
-			normal:SetPoint("TOPLEFT")
-			normal:SetPoint("BOTTOMRIGHT")
-		end
-	end
-
-local function StyleShift()
-	for i=1, NUM_SHAPESHIFT_SLOTS do
-		local name = "ShapeshiftButton"..i
-		local button = _G[name]
-		local icon = _G[name.."Icon"]
-		local normal = _G[name.."NormalTexture"]
-		StyleSmallButton(normal, button, icon, name)
+function AB:StyleShift()
+	for i=1, NUM_STANCE_SLOTS do
+		local name = "StanceButton"..i
+		local button  = _G[name]
+		local icon  = _G[name.."Icon"]
+		local normal  = _G[name.."NormalTexture"]
+		self:Style(button)
 	end
 end
 
-local function StylePet()
+function AB:StylePet()
 	for i=1, NUM_PET_ACTION_SLOTS do
 		local name = "PetActionButton"..i
-		local button = _G[name]
-		local icon = _G[name.."Icon"]
-		local normal = _G[name.."NormalTexture2"]
-		StyleSmallButton(normal, button, icon, name, true)
+		local button  = _G[name]
+		local icon  = _G[name.."Icon"]
+		local normal  = _G[name.."NormalTexture2"]
+		self:Style(button)
 	end
 end
 
 local buttons = 0
-local function SetupFlyoutButton()
+function AB:SetupFlyoutButton()
 	for i=1, buttons do
 		if _G["SpellFlyoutButton"..i] then
-			Style(_G["SpellFlyoutButton"..i])
+			self:Style(_G["SpellFlyoutButton"..i], nil, true)
 			_G["SpellFlyoutButton"..i]:StyleButton(true)
 		end
 	end
 end
-SpellFlyout:HookScript("OnShow", SetupFlyoutButton)
 
-local function StyleFlyout(button)
+function AB:StyleFlyout(button)
 	if not button.FlyoutBorder then return end
 	button.FlyoutBorder:SetAlpha(0)
 	button.FlyoutBorderShadow:SetAlpha(0)
@@ -229,81 +228,73 @@ local function StyleFlyout(button)
 	end
 
 	if button:GetAttribute("flyoutDirection") ~= nil then
-		local point, _, _, _, _ = button:GetPoint()
-		if point then 
-			if strfind(point, "TOP") then
-				button.FlyoutArrow:ClearAllPoints()
-				button.FlyoutArrow:SetPoint("LEFT", button, "LEFT", -arrowDistance, 0)
-				SetClampedTextureRotation(button.FlyoutArrow, 270)
-				if not InCombatLockdown() then button:SetAttribute("flyoutDirection", "LEFT") end
-			else
-				button.FlyoutArrow:ClearAllPoints()
-				button.FlyoutArrow:SetPoint("TOP", button, "TOP", 0, arrowDistance)
-				SetClampedTextureRotation(button.FlyoutArrow, 0)
-				if not InCombatLockdown() then button:SetAttribute("flyoutDirection", "UP") end
-			end
-		end
+        local layout = "HORIZONTAL"
+        if button:GetParent() and button:GetParent():GetParent() then
+            if button:GetParent():GetParent():GetHeight() > button:GetParent():GetParent():GetWidth() then
+                layout = "VERTICAL"
+            end
+        end
+		local point = AB:GetScreenQuadrant(button)
+
+        if layout == "HORIZONTAL" then
+            if point:find("TOP") then
+                button.FlyoutArrow:ClearAllPoints()
+                button.FlyoutArrow:SetPoint("BOTTOM", button, "BOTTOM", 0, -arrowDistance)
+                SetClampedTextureRotation(button.FlyoutArrow, 180)
+                if not InCombatLockdown() then button:SetAttribute("flyoutDirection", "BOTTOM") end
+            else
+                button.FlyoutArrow:ClearAllPoints()
+                button.FlyoutArrow:SetPoint("TOP", button, "TOP", 0,arrowDistance)
+                SetClampedTextureRotation(button.FlyoutArrow, 0)
+                if not InCombatLockdown() then button:SetAttribute("flyoutDirection", "TOP") end
+            end
+        else
+            if point:find("LEFT") then
+                button.FlyoutArrow:ClearAllPoints()
+                button.FlyoutArrow:SetPoint("RIGHT", button, "RIGHT", arrowDistance, 0)
+                SetClampedTextureRotation(button.FlyoutArrow, 90)
+                if not InCombatLockdown() then button:SetAttribute("flyoutDirection", "RIGHT") end
+            else
+                button.FlyoutArrow:ClearAllPoints()
+                button.FlyoutArrow:SetPoint("LEFT", button, "LEFT", -arrowDistance, 0)
+                SetClampedTextureRotation(button.FlyoutArrow, 270)
+                if not InCombatLockdown() then button:SetAttribute("flyoutDirection", "LEFT") end
+            end
+        end
 	end
 end
 
-local function UpdateOverlayGlow(button)
+function AB:UpdateOverlayGlow(button)
 	if button.overlay and button.shadow then
 		button.overlay:SetParent(button)
 		button.overlay:ClearAllPoints()
 		button.overlay:SetAllPoints(button.shadow)
 		button.overlay.ants:ClearAllPoints()
-		button.overlay.ants:Point("TOPLEFT", button.shadow, "TOPLEFT", -2, 2)
-		button.overlay.ants:Point("BOTTOMRIGHT", button.shadow, "BOTTOMRIGHT", 2, -2)
-		button.overlay.outerGlow:Point("TOPLEFT", button.shadow, "TOPLEFT", -2, 2)
-		button.overlay.outerGlow:Point("BOTTOMRIGHT", button.shadow, "BOTTOMRIGHT", 2, -2)
+		button.overlay.ants:SetPoint("TOPLEFT", button.shadow, "TOPLEFT", -2, 2)
+		button.overlay.ants:SetPoint("BOTTOMRIGHT", button.shadow, "BOTTOMRIGHT", 2, -2)
+		button.overlay.outerGlow:SetPoint("TOPLEFT", button.shadow, "TOPLEFT", -2, 2)
+		button.overlay.outerGlow:SetPoint("BOTTOMRIGHT", button.shadow, "BOTTOMRIGHT", 2, -2)
 	end
 end
-local function styleExtraActionButton(bu)
-    if not bu or (bu and bu.sun_styled) then return end
-    local name = bu:GetName()
- 
-	local normal = _G[name.."NormalTexture"]
-
-	if normal then normal:SetTexture(nil) end
-	bu.icon:SetTexCoord(.08, .92, .08, .92)
-	bu.icon:SetAllPoints()
-    bu.cooldown:SetAllPoints(bu)
-	bu:StyleButton(true)
-    bu.sun_styled = true
+function AB:OnInitialize()
+	self:SecureHook("ActionButton_UpdateHotkeys", "UpdateHotkey")
 end
-local function init()
-    --style the actionbar buttons
-    for i = 1, NUM_ACTIONBAR_BUTTONS do
-      Style(_G["ActionButton"..i])
-      Style(_G["MultiBarBottomLeftButton"..i])
-      Style(_G["MultiBarBottomRightButton"..i])
-      Style(_G["MultiBarRightButton"..i])
-      Style(_G["MultiBarLeftButton"..i])
-    end
-    for i = 1, 6 do
-      Style(_G["OverrideActionBarButton"..i])
-    end
-    --petbar buttons
-    for i=1, NUM_PET_ACTION_SLOTS do
-      StylePet(_G["PetActionButton"..i])
-    end
-    --stancebar buttons
-    for i=1, NUM_STANCE_SLOTS do
-      Style(_G["StanceButton"..i])
-    end
-    --possess buttons
-    for i=1, NUM_POSSESS_SLOTS do
-      Style(_G["PossessButton"..i])
-    end
-    --extraactionbutton1
-    styleExtraActionButton(ExtraActionButton1)
-end
-
-	
 function AB:OnEnable()
-	init()
-	hooksecurefunc("ActionButton_ShowOverlayGlow", UpdateOverlayGlow)
-	hooksecurefunc("ActionButton_Update", UpdateHotkey)
-	hooksecurefunc("ActionButton_UpdateHotkeys", UpdateHotkey)
-	hooksecurefunc("ActionButton_UpdateFlyout", StyleFlyout)
+	
+	self:SecureHook("ActionButton_ShowOverlayGlow", "UpdateOverlayGlow")
+	
+	self:SecureHook("ActionButton_Update", "Style")
+	self:SecureHook("ActionButton_UpdateFlyout", "StyleFlyout")
+	self:SecureHook("StanceBar_Update", "StyleShift")
+	self:SecureHook("StanceBar_UpdateState", "StyleShift")
+	self:SecureHook("PetActionBar_Update", "StylePet")
+	self:HookScript(SpellFlyout, "OnShow", "SetupFlyoutButton")
+
+	for i = 1, NUM_ACTIONBAR_BUTTONS do
+		self:Style(_G["ActionButton"..i])
+		self:Style(_G["MultiBarBottomLeftButton"..i])
+		self:Style(_G["MultiBarBottomRightButton"..i])
+		self:Style(_G["MultiBarRightButton"..i])
+		self:Style(_G["MultiBarLeftButton"..i])
+	end
 end

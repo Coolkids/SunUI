@@ -1788,8 +1788,13 @@ function SunUIConfig:OnEnable()
 		Button:SetText("|cffDDA0DDSun|r|cff44CCFFUI|r")
 		Button:SetPoint(GameMenuButtonHelp:GetPoint())
 		Button:SetScript("OnClick", function()
-			HideUIPanel(GameMenuFrame)
-			SunUIConfig:ShowConfig()
+			if not UnitAffectingCombat("player") then
+				HideUIPanel(GameMenuFrame)
+				SunUIConfig:ShowConfig()
+			else
+				HideUIPanel(GameMenuFrame)
+				print("战斗中无法打开控制台")
+			end
 		end)
 	GameMenuButtonHelp:SetPoint("TOP", Button, "BOTTOM", 0, -1)
 	GameMenuFrame:SetHeight(GameMenuFrame:GetHeight()+Button:GetHeight())

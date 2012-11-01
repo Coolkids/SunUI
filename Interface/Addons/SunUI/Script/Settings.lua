@@ -2,6 +2,7 @@
 local _
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Settings")
 local _G = _G
+--if true then return end
 ---------------- > Proper Ready Check sound
 local ShowReadyCheckHook = function(self, initiator, timeLeft)
 	if initiator ~= "player" then PlaySound("ReadyCheck") end
@@ -51,7 +52,7 @@ BNToastFrame:HookScript("OnShow", function(self)
 	self:SetPoint("BOTTOMLEFT", ChatFrame1Tab, "TOPLEFT", 0, 25)
 end)
 --装备红人
-DurabilityFrame = _G["DurabilityFrame"]
+local DurabilityFrame = _G["DurabilityFrame"]
 DurabilityFrame:UnregisterAllEvents()
 DurabilityFrame:Kill()
 DurabilityFrame:HookScript("OnShow", function(self)
@@ -101,8 +102,8 @@ helmcb:SetChecked(ShowingHelm())
 cloakcb:SetChecked(ShowingCloak())
 S.ReskinCheck(helmcb)
 S.ReskinCheck(cloakcb)
-function Module:OnEnable()
-	TimeManagerClockButton:Hide()
+function Module:OnInitialize()
+	if TimeManagerClockButton then TimeManagerClockButton:Hide() end
 	GameTimeFrame:Hide()
 	--分解不必再点确定
 
@@ -139,25 +140,6 @@ function Module:OnEnable()
 		Resurrect:SetScript("OnEvent", ResurrectEvent)
 	end
 
-	--隐藏团队
---[[ 	if C["MiniDB"]["HideRaid"] then
-		CompactRaidFrameManager:UnregisterAllEvents()
-		CompactRaidFrameManager.Show = function() end
-		CompactRaidFrameManager:Hide()
-		CompactRaidFrameContainer:UnregisterAllEvents()
-		CompactRaidFrameContainer.Show = function() end
-		CompactRaidFrameContainer:Hide()	
-	end ]]
-	-- 隐藏小队框体
-	if not C["UnitFrameDB"]["showparty"] then
-		for i = 1, MAX_PARTY_MEMBERS do
-			local PartyMemberFrame = _G["PartyMemberFrame"..i]
-			PartyMemberFrame:UnregisterAllEvents()
-			PartyMemberFrame:Hide()
-			PartyMemberFrame.Show = function() end
-		end
-		--UIParent:UnregisterEvent("RAID_ROSTER_UPDATE")
-	end
 	---------------- > Autoinvite by whisper
 	if C["MiniDB"]["Autoinvite"] then
 		local f = CreateFrame("frame")
@@ -171,10 +153,7 @@ function Module:OnEnable()
 
 	if C["MiniDB"]["HideRaidWarn"] then
 		_G["RaidWarningFrame"]:ClearAllPoints()
-		_G["RaidWarningFrame"]:Hide()
-		_G["RaidWarningFrame"]:UnregisterAllEvents()
-		_G["RaidWarningFrame"].Show = function() end
-		_G["RaidWarningFrame"].SetPoint = function() end
+		_G["RaidWarningFrame"]:Kill()
 	end
 
 	if C["MiniDB"]["AutoQuest"] then
@@ -306,22 +285,4 @@ function Module:OnEnable()
 		_G.idQuestAutomation = addon
 		QuestInfoDescriptionText.SetAlphaGradient=function() return false end
 	end
-	-- if C["MiniDB"]["FatigueWarner"] then
-		-- local function FatigueWarner_OnUpdate(self) 
-			-- local timer, value, maxvalue, scale, paused, label = GetMirrorTimerInfo(1) 
-			-- print(timer)
-			-- if timer == "EXHAUSTION" then 
-				-- PlaySoundFile("Sound\\Creature\\XT002Deconstructor\\UR_XT002_Special01.wav", "Master")
-			-- end 
-			-- self:SetScript("OnUpdate", nil) 
-		-- end 
-		 
-		-- local function FatigueWarner_OnEvent(self) 
-			-- self:SetScript("OnUpdate", FatigueWarner_OnUpdate) 
-		-- end 
-		-- local FatigueWarnerFrame = CreateFrame("frame")
-		-- FatigueWarnerFrame:RegisterEvent("MIRROR_TIMER_START")
-		-- FatigueWarnerFrame:RegisterEvent("MIRROR_TIMER_STOP")
-		-- FatigueWarnerFrame:SetScript("OnEvent", FatigueWarner_OnEvent)
-	-- end
 end

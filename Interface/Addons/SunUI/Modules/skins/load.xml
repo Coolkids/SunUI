@@ -10,4 +10,5 @@
 	<Script file='NugRunning.lua' />
 	<Script file='ReforgeLite.lua' />
 	<Script file='Examiner.lua' />
+	<Script file='BagSync.lua' />
 </Ui>
