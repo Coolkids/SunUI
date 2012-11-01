@@ -12,23 +12,6 @@ local player, cursor
 local EJbuttonWidth, EJbuttonHeight = 30, 30
 local EJbuttonImageWidth, EJbuttonImageHeigth = 21.6, 21.6
 
---[[ function WM:ResizeEJBossButton()
-	if WORLDMAP_SETTINGS.size == WORLDMAP_WINDOWED_SIZE then
-		local index = 1
-		while _G["EJMapButton"..index] do
-			_G["EJMapButton"..index]:SetSize(EJbuttonWidth * WM.db.ejbuttonscale, EJbuttonHeight * WM.db.ejbuttonscale)
-			_G["EJMapButton"..index].bgImage:SetSize(EJbuttonImageWidth * WM.db.ejbuttonscale,EJbuttonImageHeigth * WM.db.ejbuttonscale)
-			index = index + 1
-		end
-	else
-		local index = 1
-		while _G["EJMapButton"..index] do
-			_G["EJMapButton"..index]:SetSize(EJbuttonWidth, EJbuttonHeight)
-			_G["EJMapButton"..index].bgImage:SetSize(EJbuttonImageWidth,EJbuttonImageHeigth)
-			index = index + 1
-		end
-	end
-end ]]
 function WM:CreateCoordString()
 	if player or cursor then return end
 	player = WorldMapButton:CreateFontString(nil, "ARTWORK", "GameFontNormal")
@@ -148,7 +131,7 @@ function WM:SmallSkin()
 	WorldMapDetailFrame.backdrop:SetFrameLevel(0)
 	WorldMapDetailFrame.backdrop:SetFrameStrata(WorldMapDetailFrame:GetFrameStrata())
 	WorldMapFrame.scale = map_scale
-	WorldMapDetailFrame:SetScale(map_scale)
+	--WorldMapDetailFrame:SetScale(map_scale) --Block
 	WorldMapButton:SetScale(map_scale)
 	WorldMapFrameAreaFrame:SetScale(map_scale)
 	WorldMapTitleButton:Show()
@@ -318,7 +301,7 @@ function WM:OnUpdate(self, elapsed)
 end
 
 function WM:FixSkin()
-	WorldMapFrame:SetFrameStrata("HIGH")
+	--WorldMapFrame:SetFrameStrata("HIGH") --Block
 	WorldMapFrame:StripTextures()
 	if WORLDMAP_SETTINGS.size == WORLDMAP_FULLMAP_SIZE then
 		self:LargeSkin()
@@ -348,11 +331,9 @@ function WM:FixSkin()
 end
 
 function WM:OnEnable()
-	--if self.db.scale==1 then self.db.scale = 0.99 end
 	self:SkinWorldMap()
 	WorldMapFrame:HookScript("OnShow", function() WM:FixSkin() end)
 	WorldMapFrame:HookScript("OnUpdate", function(self, elapsed) WM:OnUpdate(self, elapsed) end)
-	--self:SecureHook("EncounterJournal_AddMapButtons", "ResizeEJBossButton")
 	self:SecureHook("WorldMapFrame_SetFullMapView", "LargeSkin")
 	self:SecureHook("WorldMapFrame_SetQuestMapView", "QuestSkin")
 	self:SecureHook("WorldMap_ToggleSizeUp", "LargeSkin")
