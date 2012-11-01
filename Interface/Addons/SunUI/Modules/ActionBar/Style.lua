@@ -126,7 +126,7 @@ function AB:Style(button)
 	end
 
 	if Btname then
-		if C["ActionBarDB"]["HideMacroName"] ~= true then
+		if C["ActionBarDB"]["HideMacroName"] then
 			Btname:SetDrawLayer("HIGHLIGHT")
 			Btname:Width(50)
 		end

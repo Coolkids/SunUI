@@ -103,10 +103,7 @@ cloakcb:SetChecked(ShowingCloak())
 S.ReskinCheck(helmcb)
 S.ReskinCheck(cloakcb)
 function Module:OnInitialize()
-	if TimeManagerClockButton then TimeManagerClockButton:Hide() end
-	GameTimeFrame:Hide()
 	--分解不必再点确定
-
 	if C["MiniDB"]["Disenchat"] then
 		local aotuClick = CreateFrame("Frame")
 		aotuClick:RegisterEvent("CONFIRM_DISENCHANT_ROLL")
@@ -155,7 +152,12 @@ function Module:OnInitialize()
 		_G["RaidWarningFrame"]:ClearAllPoints()
 		_G["RaidWarningFrame"]:Kill()
 	end
-
+	if not C["UnitFrameDB"]["showparty"] then
+		for i = 1, MAX_PARTY_MEMBERS do
+			local PartyMemberFrame = _G["PartyMemberFrame"..i]
+			PartyMemberFrame:Kill()
+		end
+	end
 	if C["MiniDB"]["AutoQuest"] then
 		local addon = CreateFrame('Frame')
 		addon.completed_quests = {}
@@ -285,4 +287,8 @@ function Module:OnInitialize()
 		_G.idQuestAutomation = addon
 		QuestInfoDescriptionText.SetAlphaGradient=function() return false end
 	end
+end
+function Module:OnEnable()
+	_G["TimeManagerClockButton"]:Hide()
+	GameTimeFrame:Hide()
 end
