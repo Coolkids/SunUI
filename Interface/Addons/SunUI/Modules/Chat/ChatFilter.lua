@@ -149,11 +149,11 @@ function Module:OnInitialize()
 		text = "^" .. text .. "$"
 		return text
 	end
-
 	local createmsg = deformat(LOOT_ITEM_CREATED_SELF)
 	local createmultimsg = deformat(LOOT_ITEM_CREATED_SELF_MULTIPLE)
 	local learnspellmsg = deformat(ERR_LEARN_SPELL_S)
 	local learnabilitymsg = deformat(ERR_LEARN_ABILITY_S)
+	local learnbeidongmsg = deformat(ERR_LEARN_PASSIVE_S)
 	local unlearnspellmsg = deformat(ERR_SPELL_UNLEARNED_S)
 	local petlearnspellmsg = deformat(ERR_PET_LEARN_SPELL_S)
 	local petlearnabilitymsg = deformat(ERR_PET_LEARN_ABILITY_S)
@@ -244,6 +244,9 @@ function Module:OnInitialize()
 		end
 		if (attribute == "Unlearn") then
 			SendMessage("CHAT_MSG_SYSTEM", format(L["UnlearnSpell"], table.concat(spells, "")))
+		end
+		if (attribute == "Beidong") then
+			SendMessage("CHAT_MSG_SYSTEM", format(ERR_LEARN_PASSIVE_S, table.concat(spells, "")))
 		end
 	end
 
@@ -498,9 +501,14 @@ function Module:OnInitialize()
 		if (Config.MergeTalentSpec) then
 			local learnID = strmatch(msg, learnspellmsg) or strmatch(msg, learnabilitymsg)
 			local unlearnID = strmatch(msg, unlearnspellmsg)
+			local beidong = strmatch(msg, learnbeidongmsg)
 			if (learnID and changingspec) then
 				learnID = tonumber(strmatch(learnID, "spell:(%d+)"))
 				queueTalentSpecSpam("Learn", learnID)
+				return true
+			elseif (beidong and changingspec) then
+				beidong = tonumber(strmatch(beidong, "spell:(%d+)"))
+				queueTalentSpecSpam("Beidong", beidong)
 				return true
 			elseif (unlearnID and changingspec) then
 				unlearnID = tonumber(strmatch(unlearnID, "spell:(%d+)"))

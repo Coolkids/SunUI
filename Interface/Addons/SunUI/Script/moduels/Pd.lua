@@ -1,5 +1,4 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
-local addonName = "ProfessionsDatabase"
 local dropdown
 
 -- up-to-date list of professions and the latest spellIds
@@ -133,7 +132,7 @@ end
 
 -- draw our own dropdown version (no more taint please!)
 local function DropDown_Init()
-  dropdown = CreateFrame("Frame", addonName.."DropDown", UIParent)
+  dropdown = CreateFrame("Frame", "ProfessionsDatabaseDropDown", UIParent)
   dropdown:EnableMouse(true)
   dropdown:SetFrameStrata("TOOLTIP")
   dropdown:SetBackdrop({
@@ -195,7 +194,7 @@ local function DropDown_Hide(self)
 end
 
 -- create button in spellbook (top right corner, a blue "?" icon)
-local button = CreateFrame("Button", addonName.."ToggleButton", SpellBookProfessionFrame)
+local button = CreateFrame("Button", "ProfessionsDatabaseToggleButton", SpellBookProfessionFrame)
 button:SetSize(16, 16)
 button:SetPoint("TOPRIGHT", button:GetParent(), "TOPRIGHT", -26, -3)
 button:SetScript("OnClick", DropDown_Toggle)
@@ -208,11 +207,11 @@ button:SetPushedTexture("Interface\\GossipFrame\\DailyActiveQuestIcon")
 button:SetHighlightTexture("Interface\\GossipFrame\\DailyActiveQuestIcon", "ADD")
 
 -- register slash command function
-SlashCmdList[addonName.."_CMD"] = function()
+SlashCmdList["ProfessionsDatabase_CMD"] = function()
   DropDown_Toggle()
 end
 
 -- register the slash commands
 for i, slash in pairs({"/pdb", "/profd", "/profdb"}) do
-  _G["SLASH_"..addonName.."_CMD"..i] = slash
+  _G["SLASH_ProfessionsDatabase_CMD"..i] = slash
 end

@@ -3,12 +3,12 @@ local _
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Settings")
 local _G = _G
 --if true then return end
+
 ---------------- > Proper Ready Check sound
 local ShowReadyCheckHook = function(self, initiator, timeLeft)
 	if initiator ~= "player" then PlaySound("ReadyCheck") end
 end
 hooksecurefunc("ShowReadyCheck", ShowReadyCheckHook)
-
 
 ---------------- > SetupUI
 SetCVar("screenshotQuality", 7)

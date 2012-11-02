@@ -8,4 +8,5 @@
 	<Script file = "functions.lua"/>
 	<Script file = "aurora.lua"/>
 	<Script file = "CheckVersion.lua"/>
+	<Script file = "tutorial.lua"/>
 </Ui>

@@ -157,11 +157,22 @@ end
 SLASH_VehicleSeatIndicatorLOCK1 = "/vs"
 SlashCmdList["VehicleSeatIndicatorLOCK"] = VSLOCK
 
-
+StaticPopupDialogs["CLEARSET"] = {
+	text = "确定清空所有设置么",
+	button1 = ACCEPT,
+	button2 = CANCEL,
+	OnAccept = function() 
+		wipe(SunUIConfig)
+		CoreVersion = 0
+		wipe(RayWatcherDB)
+		ReloadUI()
+	end,
+	timeout = 0,
+	whileDead = 1,
+}
 SlashCmdList["CLEARSUNUI"] = function()
 	if not UnitAffectingCombat("player") then
-		wipe(SunUIConfig)
-		wipe(CoreVersion)
+		StaticPopup_Show("CLEARSET")
 	end
 end
 SLASH_CLEARSUNUI1 = "/clearset"

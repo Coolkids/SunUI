@@ -31,7 +31,7 @@ G["ActionBarDB"] = {
 	["ExpbarWidth"] = 500,
 	["ExpbarHeight"] = 8,
 	["ExpbarUp"] = false,
-	["ExpbarFadeOut"] = false,
+	["ExpbarFadeOut"] = true,
 	["AllFade"] = false,
 	["Bar1Fade"] = false,
 	["Bar2Fade"] = false,
@@ -140,7 +140,6 @@ G["MiniDB"] = {
 	["AutoSell"] = true,
 	["FastError"] = true,
 	["ChatBackground"] = false,
-	["ChatBarFade"] = true,
 	["UIscale"] = true,
 	["AutoUIscale"] = false,
 	["Combat"] = false, 
@@ -164,15 +163,6 @@ G["MiniDB"] = {
 	["RaidCDWidth"] = 100,
 	["RaidCDHeight"] = 8,
 	["RaidCDDirection"] = 1,	
-	["AutoBuy"] = true,
-	["mageone"] = 20,
-	["magetwo"] = 20,
-	["magethree"] = 100,
-	["rogueone"] = 20,
-	["roguetwo"] = 20,
-	["roguethree"] = 20,
-	["roguefour"] = 20,
-	["roguefive"] = 20,
 }
 G["InfoPanelDB"] = {
 	["OpenTop"] = true,
@@ -242,7 +232,7 @@ G["MoveHandleDB"] = {
 	--powerbar
 	["PowerBar"] = {"CENTER", "UIParent", "CENTER", 0, -120},
 	--成就移动
-	["AchievementHolder"] = {"CENTER", "UIParent", "CENTER", 0, 130},
+	["AchievementHolder"] = {"CENTER", "UIParent", "CENTER", 0, -100},
 	--警告框体
 	["Warn"] = {"TOP", "UIParent", "TOP", 0, -35},
 }
@@ -277,4 +267,7 @@ G["BagDB"] = {
 	["Spacing"] = 5,
 	["BagWidth"] = 400,
 	["BankWidth"] = 600,
+}
+G["EquipmentDB"] = {
+	["Enable"] = true,
 }
