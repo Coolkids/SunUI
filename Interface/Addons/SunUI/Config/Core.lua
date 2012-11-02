@@ -1181,27 +1181,6 @@ function SunUIConfig.GenerateOptionsInternal()
 					},
 					group4 = {
 					type = "group", order = 4,
-					name = "SunUI Script",
-						args = {
-							Flump = {
-								type = "toggle",
-								name = L["启用施法通告"],
-								order = 1,
-							},
-							AutoBotton = {
-								type = "toggle",
-								name = L["打开任务物品按钮"],
-								order = 2,
-							},
-							BloodShield = {
-								type = "toggle",
-								name = L["打开坦克护盾监视"],
-								order = 3,
-							},
-						}
-					},
-					group5 = {
-					type = "group", order = 5,
 					name = "RaidCD",
 						args = {
 							RaidCD = {
@@ -1448,6 +1427,11 @@ function SunUIConfig.GenerateOptionsInternal()
 							type = "toggle",
 							name = "启用团队减伤通告",
 							order = 7,
+							},
+							Flump = {
+								type = "toggle",
+								name = "启用队友施法通告",
+								order = 8,
 							},
 						}
 					},

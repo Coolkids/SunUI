@@ -5,8 +5,6 @@
 	<Script file = "CombatNotification.lua"/>
 	<Script file ="Durability.lua"/>
 	<Script file ="FastError.lua"/>
-	<Script file = "Flump.lua"/>
-	
 	<Script file= "memory.lua"/>
 	<Script file ="Molinari.lua"/>
 	<Script file ="Pd.lua"/>

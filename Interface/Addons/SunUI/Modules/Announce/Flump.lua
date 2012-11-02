@@ -1,10 +1,9 @@
 local S, C, L, DB = unpack(select(2, ...))
 local _
- 
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Flump")
 function Module:OnInitialize()
-	C = C["MiniDB"]
-	if C["Flump"] ~= true then return end
+	if SunUIConfig.db.profile.AnnounceDB.Flump ~= true then return end
 	local Flump = CreateFrame("Frame")
 
 	local bot	 = "%s 使用了 a %s!"

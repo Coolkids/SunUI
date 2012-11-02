@@ -147,9 +147,6 @@ G["MiniDB"] = {
 	["Aurora"] = true, 
 	["uiScale"] = 0.9,
 	["FontScale"] = 1,	
-	["Flump"] = false,
-	["AutoBotton"] = true,
-	["BloodShield"] = false,
 	["ClassCDOpen"] = true,
 	["ClassFontSize"] = 12,
 	["ClassCDIcon"] = false,
@@ -260,13 +257,14 @@ G["AnnounceDB"] = {
 	["Give"] = true,
 	["Resurrect"] = true,
 	["Heal"] = true,
+	["Flump"] = false,
 }
 G["BagDB"] = {
 	["BagSize"] = 32,
 	["BankSize"] = 32,
 	["Spacing"] = 5,
 	["BagWidth"] = 400,
-	["BankWidth"] = 600,
+	["BankWidth"] = 580,
 }
 G["EquipmentDB"] = {
 	["Enable"] = true,
