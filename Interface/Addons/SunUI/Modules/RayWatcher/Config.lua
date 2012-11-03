@@ -1269,6 +1269,8 @@ ns.watchers ={
 				{ spellID = 126266, unitId = "player", caster = "player", filter = "BUFF" }, 
 				-- 敏捷(炼金石)
 				{ spellID =  60233, unitId = "player", caster = "player", filter = "BUFF" }, 
+				-- 宇宙之光
+				{ spellID =  126577, unitId = "player", caster = "player", filter = "BUFF" }, 
 		},
 	},
 }

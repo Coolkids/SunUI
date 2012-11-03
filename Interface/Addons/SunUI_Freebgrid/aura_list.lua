@@ -280,6 +280,7 @@ ns.auras_instances_debuffs = {
 			[119946] = 7, -- Ravage
 			[120167] = 7, --焚烧
 			[120195] = 7, --陨石术
+			[120160] = 7, --陨石术
 			-- Xin the Weaponmaster <King of the Clans> 武器大师席恩
 			[119684] = 7, --Ground Slam
 		},

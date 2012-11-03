@@ -8,7 +8,7 @@ local sndADD2	= mod:NewSound(nil, "SoundADD2", mod:IsDps())
 local sndADD3A	= mod:NewSound(nil, "SoundADD3A", mod:IsDps())
 local sndADD3	= mod:NewSound(nil, "SoundADD3", mod:IsDps())
 
-mod:SetRevision(("$Revision: 7963 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7993 $"):sub(12, -3))
 mod:SetCreatureID(60399, 60400)--60396 (Rage), 60397 (Strength), 60398 (Courage), 60480 (Titan Spark), 60399 (Qin-xi), 60400 (Jan-xi)
 mod:SetModelID(41391)
 mod:SetZone()
@@ -23,6 +23,8 @@ mod:RegisterEventsInCombat(
 	"UNIT_SPELLCAST_SUCCEEDED",
 	"CHAT_MSG_MONSTER_YELL",
 	"UNIT_DIED",
+	"SWING_DAMAGE",
+	"SWING_MISSED",
 	"UNIT_POWER"
 )
 
@@ -44,9 +46,9 @@ local warnFocusedDefense		= mod:NewTargetAnnounce(116778, 4)
 local warnFocusedEnergy			= mod:NewTargetAnnounce(116829, 4)
 --Jan-xi and Qin-xi
 local warnBossesActivated		= mod:NewSpellAnnounce("ej5726", 3, 116815)
-local warnArcLeft				= mod:NewCountAnnounce(116968, 4, nil, mod:IsMelee())--This is a pre warn, gives you time to move
-local warnArcRight				= mod:NewCountAnnounce(116971, 4, nil, mod:IsMelee())--This is a pre warn, gives you time to move
-local warnArcCenter				= mod:NewCountAnnounce(116972, 4, nil, mod:IsMelee())--This is a pre warn, gives you time to move
+local warnArcLeft				= mod:NewCountAnnounce(116968, 4, 89570, mod:IsMelee())--This is a pre warn, gives you time to move
+local warnArcRight				= mod:NewCountAnnounce(116971, 4, 87219, mod:IsMelee())--This is a pre warn, gives you time to move
+local warnArcCenter				= mod:NewCountAnnounce(116972, 4, 74922, mod:IsMelee())--This is a pre warn, gives you time to move
 local warnStomp					= mod:NewCountAnnounce(116969, 4, nil, mod:IsMelee())--This is NOT a pre warn, only fires when stomp ends cast. :(
 local warnTitanGas				= mod:NewCountAnnounce(116779, 4)
 
@@ -64,6 +66,8 @@ local specWarnBossesActivated	= mod:NewSpecialWarningSwitch("ej5726", mod:IsTank
 local specWarnCombo				= mod:NewSpecialWarningSpell("ej5672", mod:IsMelee())
 local specWarnTitanGas			= mod:NewSpecialWarningSpell(116779, nil, nil, nil, true)
 
+local specWarnFocused			= mod:NewSpecialWarningMove(116525)
+
 --Rage
 local timerRageActivates		= mod:NewNextTimer(11, "ej5678", nil, nil, nil, 116525)
 --Strength
@@ -77,7 +81,7 @@ local timerTitanGas				= mod:NewBuffActiveTimer(30, 116779)
 local timerTitanGasCD			= mod:NewNextCountTimer(150, 116779)
 
 mod:AddBoolOption("InfoFrame", false)
-
+mod:AddBoolOption("ArrowOnCombo", false)
 mod:AddDropdownOption("optBY", {"tarfoc", "Janxi", "Qinxi", "none"}, "tarfoc", "sound")
 
 local comboWarned = false
@@ -106,6 +110,9 @@ end
 function mod:OnCombatEnd()
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Hide()
+	end
+	if self.Options.ArrowOnCombo then
+		DBM.Arrow:Hide()
 	end
 end
 
@@ -182,7 +189,7 @@ function mod:RAID_BOSS_EMOTE(msg)
 			warnTitanGas:Show(titanGasCast)
 			specWarnTitanGas:Show()
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ttqt.mp3") --泰坦氣體
-			if titanGasCast < 4 then -- after Titan Gas casted 3 times, Titan Gas lasts permanently. (soft enrage)
+			if titanGasCast < 4 then -- after Titan Gas casted 4 times, Titan Gas lasts permanently. (soft enrage)
 				timerTitanGas:Start()
 				timerTitanGasCD:Start(150, titanGasCast+1)
 			end
@@ -217,6 +224,30 @@ function checkisstomp()
 	end)
 end
 
+function countsoundcombo()
+	if comboCount == 10 then
+		sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countten.mp3")
+	elseif comboCount == 9 then
+		sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countnine.mp3")
+	elseif comboCount == 8 then
+		sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\counteight.mp3")
+	elseif comboCount == 7 then
+		sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countseven.mp3")
+	elseif comboCount == 6 then
+		sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
+	elseif comboCount == 5 then
+		sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+	elseif comboCount == 4 then
+		sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+	elseif comboCount == 3 then
+		sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+	elseif comboCount == 2 then
+		sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+	elseif comboCount == 1 then
+		sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+	end
+end
+
 function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 	if spellId == 116556 and uId == "target" then
 		warnEnergizingSmash:Show()
@@ -225,52 +256,43 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 	end
 	if (not chooseboss(uId)) then return end
 	if spellId == 116968 and self:AntiSpam(2, 1) then--Arc Left
+		if self.Options.ArrowOnCombo then
+			if self:IsTank() then--Assume tank is in front of the boss
+				DBM.Arrow:ShowStatic(90, 3)
+			else--Assume anyone else is behind the boss
+				DBM.Arrow:ShowStatic(270, 3)
+			end
+		end
 		Isstomp = 1
 		comboCount = comboCount + 1
 		checkisstomp()
 		warnArcLeft:Show(comboCount)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_left.mp3") --左側
 		if mod:IsHealer() then
-			if comboCount == 5 then
-				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
-			end
-			if comboCount == 4 then
-				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
-			end
-			if comboCount == 3 then
-				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-			end
-			if comboCount == 2 then
-				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-			end
-			if comboCount == 1 then
-				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-			end
+			countsoundcombo()
 		end
 	elseif spellId == 116971 and self:AntiSpam(2, 2) then--Arc Right
+		if self.Options.ArrowOnCombo then
+			if self:IsTank() then--Assume tank is in front of the boss
+				DBM.Arrow:ShowStatic(270, 3)
+			else--Assume anyone else is behind the boss
+				DBM.Arrow:ShowStatic(90, 3)
+			end
+		end
 		Isstomp = 1
 		comboCount = comboCount + 1
 		checkisstomp()
 		warnArcRight:Show(comboCount)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_right.mp3") --右側
 		if mod:IsHealer() then
-			if comboCount == 5 then
-				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
-			end
-			if comboCount == 4 then
-				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
-			end
-			if comboCount == 3 then
-				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-			end
-			if comboCount == 2 then
-				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-			end
-			if comboCount == 1 then
-				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-			end
+			countsoundcombo()
 		end
 	elseif spellId == 116972 and self:AntiSpam(2, 3) then--Arc Center
+		if self.Options.ArrowOnCombo then
+			if self:IsTank() then--Assume tank is in front of the boss
+				DBM.Arrow:ShowStatic(0, 3)
+			end
+		end
 		Isstomp = 1
 		comboCount = comboCount + 1
 		checkisstomp()
@@ -278,21 +300,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_center.mp3") --前方
 --		specWarnArcCenter:Show()
 		if mod:IsHealer() then
-			if comboCount == 5 then
-				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
-			end
-			if comboCount == 4 then
-				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
-			end
-			if comboCount == 3 then
-				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-			end
-			if comboCount == 2 then
-				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-			end
-			if comboCount == 1 then
-				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-			end
+			countsoundcombo()
 		end
 	elseif (spellId == 116969 or spellId == 132425) and self:AntiSpam(2, 4) then--Stomp
 		comboCount = comboCount + 1
@@ -346,3 +354,12 @@ function mod:UNIT_POWER(uId)
 --		timerComboCD:Start()
 	end
 end
+
+function mod:SWING_DAMAGE(sourceGUID, _, _, _, destGUID)
+	local cid = self:GetCIDFromGUID(sourceGUID)
+	if cid == 60396 and destGUID == UnitGUID("player") and self:AntiSpam(3, 5) then
+		specWarnFocused:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3") --快躲開
+	end
+end
+mod.SWING_MISSED = mod.SWING_DAMAGE

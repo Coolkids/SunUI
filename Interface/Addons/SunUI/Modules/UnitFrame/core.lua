@@ -85,39 +85,28 @@ end
 UIDropDownMenu_Initialize(dropdown, init, 'MENU')
 
 lib.PostUpdateHealth = function(s, u, min, max)
-	if UnitIsDeadOrGhost(u) then s:SetValue(0) end
-end
-local ReverseBar
-do
--- reposition the status bar texture to fill from the right to left, thx Saiket
-	local UpdaterOnUpdate = function(Updater)
-		Updater:Hide()
-		local b = Updater:GetParent()
-		local tex = b:GetStatusBarTexture()
-		tex:ClearAllPoints()
-		tex:SetPoint("BOTTOMRIGHT")
-		tex:SetPoint("TOPLEFT", b, "TOPRIGHT", (b:GetValue()/select(2,b:GetMinMaxValues())-1)*b:GetWidth(), 0)
-	end
-	local OnChanged = function(bar)
-		bar.Updater:Show()
-	end
-	function ReverseBar(f)
-		local bar = CreateFrame("StatusBar", nil, f) --separate frame for OnUpdates
-		bar.Updater = CreateFrame("Frame", nil, bar)
-		bar.Updater:Hide()
-		bar.Updater:SetScript("OnUpdate", UpdaterOnUpdate)
-		bar:SetScript("OnSizeChanged", OnChanged)
-		bar:SetScript("OnValueChanged", OnChanged)
-		bar:SetScript("OnMinMaxChanged", OnChanged)
-		return bar;
+	--if UnitIsDeadOrGhost(u) then s:SetValue(0) end
+	local bg = CreateFrame("Frame", nil, s)
+	bg:SetFrameLevel(s:GetFrameLevel()+2)
+	bg:SetPoint("TOPRIGHT", s)
+	bg:SetPoint("BOTTOMLEFT", s:GetStatusBarTexture(), "BOTTOMRIGHT")
+	local b = bg:CreateTexture(nil, "BACKGROUND")
+	b:SetTexture(tex)
+	b:SetAllPoints(bg)
+	if not U["ReverseHPbars"] then 
+		b:SetVertexColor(s:GetStatusBarColor())
+	else
+		b:SetVertexColor(0.33, 0.33, 0.33, 1)
 	end
 end
-  
+
 -- worgen male portrait fix
 lib.PortraitPostUpdate = function(self, unit) 
 	if self:GetModel() and self:GetModel().find and self:GetModel():find("worgenmale") then
 		self:SetCamera(1)
 	end	
+	self:SetCamDistanceScale(1 - 0.01) --Blizzard bug fix
+	self:SetCamDistanceScale(1)
 end
   
 -- threat updater
@@ -139,21 +128,21 @@ end
 --gen healthbar func
 lib.gen_hpbar = function(f)
     --statusbar
-	local s
+	local s = CreateFrame("StatusBar", nil, f) 
 	if not U["ReverseHPbars"] then 
-		s = ReverseBar(f) 
-		s.PostUpdate = lib.PostUpdateHealth  
+		s:SetStatusBarTexture("")
 		s:SetAlpha(1)
-	else 
-		s = CreateFrame("StatusBar", nil, f) 
-		s:SetAlpha(1)
+		local gradient = s:CreateTexture(nil, "BACKGROUND")
+		gradient:SetPoint("TOPLEFT")
+		gradient:SetPoint("BOTTOMRIGHT")
+		gradient:SetTexture(tex)
+		gradient:SetGradientAlpha("HORIZONTAL", .1, .1, .1, .5, .2, .2, .2, .4)
+	else
+		s:SetStatusBarTexture(tex)
+		s:SetAlpha(0.9)
 	end
-    s:SetStatusBarTexture(tex)
-	local gradient = s:CreateTexture(nil, "BACKGROUND")
-	gradient:SetPoint("TOPLEFT")
-	gradient:SetPoint("BOTTOMRIGHT")
-	gradient:SetTexture(tex)
-	gradient:SetGradientAlpha("HORIZONTAL", .1, .1, .1, .5, .2, .2, .2, .4)
+    s.PostUpdate = lib.PostUpdateHealth
+	
     fixStatusbar(s)
     s:SetHeight(f.height)
     s:SetWidth(f.width)
@@ -161,16 +150,53 @@ lib.gen_hpbar = function(f)
     s:SetOrientation("HORIZONTAL") 
 	s:SetFrameLevel(5)
 	s:CreateShadow()
-    f.Health = s
+	-- debug
+    -- local spar =  s:CreateTexture(nil, "OVERLAY")
+	-- spar:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
+	-- spar:SetBlendMode("ADD")
+	-- spar:SetAlpha(1)
+	-- spar:SetPoint("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
+	-- spar:SetPoint("BOTTOMRIGHT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
+
+	local mhpb = CreateFrame("StatusBar", nil, f)
+	mhpb:SetFrameLevel(s:GetFrameLevel()+3)
+	mhpb:SetPoint("BOTTOMLEFT", s:GetStatusBarTexture(), "BOTTOMRIGHT")
+	mhpb:SetPoint("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT")
+	mhpb:SetWidth(s:GetWidth())
+	mhpb:SetStatusBarTexture(tex)
+	mhpb:SetStatusBarColor(0, 1, 0.5, 0.4)
+
+	local ohpb = CreateFrame("StatusBar", nil, f)
+	ohpb:SetFrameLevel(s:GetFrameLevel()+3)
+	ohpb:SetPoint("BOTTOMLEFT", mhpb:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
+	ohpb:SetPoint("TOPLEFT", mhpb:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+	ohpb:SetWidth(mhpb:GetWidth())
+	ohpb:SetStatusBarTexture(tex)
+	ohpb:SetStatusBarColor(0, 1, 0, 0.4)
+
+	f.HealPrediction = {
+		myBar = mhpb,
+		otherBar = ohpb,
+		maxOverflow = 1,
+		PostUpdate = function(frame)
+			if frame.myBar:GetValue() == 0 then frame.myBar:SetAlpha(0) else frame.myBar:SetAlpha(1) end
+			if frame.otherBar:GetValue() == 0 then frame.otherBar:SetAlpha(0) else frame.otherBar:SetAlpha(1) end
+		end
+	}
+	
+	f.Health = s
 end
   --3d portrait behind hp bar
 lib.gen_portrait = function(f)
     s = f.Health
 	local p = CreateFrame("PlayerModel", nil, f)
-	p:SetFrameLevel(s:GetFrameLevel()-1)
-    p:SetAllPoints()
+	--p:SetFrameStrata("LOW")
+	p:SetFrameLevel(s:GetFrameLevel()+1)
+	p:SetPoint("TOPLEFT", s, "TOPLEFT", 0, 0)
+	p:SetPoint("BOTTOMRIGHT", s, "BOTTOMRIGHT", 0, 0)
 	p:SetAlpha(U["Alpha3D"])
 	p.PostUpdate = lib.PortraitPostUpdate	
+	
     f.Portrait = p
 end
 --gen hp strings func
@@ -245,16 +271,26 @@ lib.gen_ppbar = function(f)
     s:SetHeight(f.height/4)
     s:SetWidth(f.width)
     s:SetPoint("TOPLEFT",f,"BOTTOMLEFT",0,-6)
-	s:SetAlpha(.8)
+	s:SetAlpha(1)
     if f.mystyle == "partypet" or f.mystyle == "arenatarget" then
       s:Hide()
     end
     s:CreateShadow()
-	local gradient = s:CreateTexture(nil, "BACKGROUND")
-	gradient:SetPoint("TOPLEFT")
-	gradient:SetPoint("BOTTOMRIGHT")
-	gradient:SetTexture(DB.Statusbar)
-	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .4, .1, .1, .1, .4)
+	if not U["ReverseHPbars"] then 
+		local gradient = s:CreateTexture(nil, "BACKGROUND")
+		gradient:SetPoint("TOPLEFT")
+		gradient:SetPoint("BOTTOMRIGHT")
+		gradient:SetTexture(tex)
+		gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .4, .1, .1, .1, .4)
+	else
+		local bg = CreateFrame("Frame", nil, s)
+		bg:SetFrameLevel(s:GetFrameLevel()-1)
+		bg:SetAllPoints(s)
+		local b = bg:CreateTexture(nil, "BACKGROUND")
+		b:SetTexture(tex)
+		b:SetAllPoints(s)
+		b:SetVertexColor(0.33, 0.33, 0.33, 1)
+	end
 	
     f.Power = s
 end
@@ -326,7 +362,7 @@ end
 lib.gen_castbar = function(f)
     local s = CreateFrame("StatusBar", "oUF_SunUICastbar"..f.mystyle, f)
     s:Size(f.width-(f.height/1.5+4),f.height/1.5)
-    s:SetStatusBarTexture(DB.Statusbar)
+    s:SetStatusBarTexture(tex)
     s:SetStatusBarColor(.3, .45, .65,1)
     s:SetFrameLevel(9)
     --color
@@ -342,7 +378,7 @@ lib.gen_castbar = function(f)
 	local gradient = h:CreateTexture(nil, "BACKGROUND")
 	gradient:SetPoint("TOPLEFT")
 	gradient:SetPoint("BOTTOMRIGHT")
-	gradient:SetTexture(DB.Statusbar)
+	gradient:SetTexture(tex)
 	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
 	
 	--spark
@@ -400,7 +436,7 @@ lib.gen_castbar = function(f)
       --latency only for player unit
 	  local z = s:CreateTexture(nil, "OVERLAY")
 	  z:SetBlendMode("ADD")
-      z:SetTexture(DB.Statusbar)
+      z:SetTexture(tex)
 	  --z:SetWidth(1) -- it should never fill the entire castbar when GetNetStats() returns 0
       z:SetVertexColor(.8,.31,.45)
       z:SetPoint("TOPRIGHT")
@@ -722,7 +758,7 @@ lib.gen_classpower = function(f)
             bars:SetSize((f.width-2*(count-1))/count, f.height/5)
             for i = 1, count do
                 bars[i] =CreateFrame("StatusBar", nil, bars)
-				bars[i]:SetStatusBarTexture(DB.Statusbar)
+				bars[i]:SetStatusBarTexture(tex)
 				bars[i]:GetStatusBarTexture():SetHorizTile(false)
 				bars[i]:SetSize((f.width-2*(count-1))/count, f.height/5)
 				 if (i == 1) then
@@ -753,16 +789,16 @@ lib.warlockpower = function(f)
 			local gradient = bars:CreateTexture(nil, "BACKGROUND")
 			gradient:SetPoint("TOPLEFT")
 			gradient:SetPoint("BOTTOMRIGHT")
-			gradient:SetTexture(DB.Statusbar)
+			gradient:SetTexture(tex)
 			gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
 			for i = 1, 4 do
 				bars[i] = CreateFrame("StatusBar", nil, f)
 				bars[i]:SetHeight(f.height/3)
-				bars[i]:SetStatusBarTexture(DB.Statusbar)
+				bars[i]:SetStatusBarTexture(tex)
 				local gradient = bars[i]:CreateTexture(nil, "BACKGROUND")
 				gradient:SetPoint("TOPLEFT")
 				gradient:SetPoint("BOTTOMRIGHT")
-				gradient:SetTexture(DB.Statusbar)
+				gradient:SetTexture(tex)
 				gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
 				bars[i]:CreateShadow()
 				if i == 1 then
@@ -785,7 +821,7 @@ lib.addHarmony = function(f)
 	for i=1,5 do
 		chibar[i] = CreateFrame("StatusBar",nil,chibar)
 		chibar[i]:SetSize((f.width-8)/5, f.height/4)
-		chibar[i]:SetStatusBarTexture(DB.Statusbar)
+		chibar[i]:SetStatusBarTexture(tex)
 		chibar[i]:SetStatusBarColor(0.0, 1.00 , 0.59)
 		chibar[i]:CreateShadow()
 		if i==1 then
@@ -837,7 +873,7 @@ lib.genShadowOrbs = function(f)
 	for i = 1,maxShadowOrbs do
 		ShadowOrbs[i] = CreateFrame("StatusBar", nil, f)
 		ShadowOrbs[i]:SetSize((f.width-2*(maxShadowOrbs-1))/maxShadowOrbs, f.height/4)
-		ShadowOrbs[i]:SetStatusBarTexture(DB.Statusbar)
+		ShadowOrbs[i]:SetStatusBarTexture(tex)
 		ShadowOrbs[i]:SetStatusBarColor(.86,.22,1)
 		ShadowOrbs[i]:CreateShadow()
 		if (i == 1) then
@@ -871,7 +907,7 @@ lib.genMage = function(f)
 	for i = 1,6 do
 		bars[i] = CreateFrame("StatusBar", nil, f)
 		bars[i]:SetSize((f.width-2*(6-1))/6, f.height/4)
-		bars[i]:SetStatusBarTexture(DB.Statusbar)
+		bars[i]:SetStatusBarTexture(tex)
 		bars[i]:SetStatusBarColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
 		bars[i]:CreateShadow()
 		bars[i]:Hide()
@@ -908,13 +944,13 @@ end
 	local lb = CreateFrame('StatusBar', nil, eb)
 	lb:SetPoint('LEFT', eb, 'LEFT')
 	lb:SetSize(f.width, 6)
-	lb:SetStatusBarTexture(DB.Statusbar)
+	lb:SetStatusBarTexture(tex)
 	lb:SetStatusBarColor(0.27, 0.47, 0.74)
 	eb.LunarBar = lb
 	local sb = CreateFrame('StatusBar', nil, eb)
 	sb:SetPoint('LEFT', lb:GetStatusBarTexture(), 'RIGHT', 0, 0)
 	sb:SetSize(f.width, 6)
-	sb:SetStatusBarTexture(DB.Statusbar)
+	sb:SetStatusBarTexture(tex)
 	sb:SetStatusBarColor(0.9, 0.6, 0.3)
 	eb.SolarBar = sb
   	local h = CreateFrame("Frame", nil, eb)
@@ -949,7 +985,7 @@ end
             bars:SetSize((f.width-8)/5, f.height/4)
             for i = 1, 5 do
                 bars[i] =CreateFrame("StatusBar", nil, bars)
-				bars[i]:SetStatusBarTexture(DB.Statusbar)
+				bars[i]:SetStatusBarTexture(tex)
 				bars[i]:GetStatusBarTexture():SetHorizTile(false)
 				bars[i]:SetSize((f.width-12)/5, f.height/4)
 				 if (i == 1) then
@@ -1074,7 +1110,7 @@ end
 lib.gen_swing_timer = function(f)
 	if U["EnableVengeanceBar"] then
 		local VengeanceBar = CreateFrame("Statusbar", "VengeanceBar", f)
-		VengeanceBar:SetStatusBarTexture(DB.Statusbar)
+		VengeanceBar:SetStatusBarTexture(tex)
 		VengeanceBar:SetPoint("TOPLEFT", f.Health, "TOPRIGHT", 5, 0)
 		VengeanceBar:SetSize(f.Power:GetHeight()+2, f.Health:GetHeight()+f.Power:GetHeight()+6)
 		VengeanceBar:CreateShadow()
@@ -1098,7 +1134,7 @@ lib.gen_swing_timer = function(f)
 lib.gen_threat = function(f)
 	if U["EnableThreat"] == false then return end
 	local ThreatBar = CreateFrame("Statusbar", "ThreatBar", f)
-	ThreatBar:SetStatusBarTexture(DB.Statusbar)
+	ThreatBar:SetStatusBarTexture(tex)
 	ThreatBar:SetPoint("TOPRIGHT", f.Health, "TOPLEFT", -5, 0)
 	ThreatBar:SetSize(f.Power:GetHeight()+2, f.Health:GetHeight()+f.Power:GetHeight()+6)
 	ThreatBar:CreateShadow()
@@ -1197,7 +1233,7 @@ lib.gen_threat = function(f)
   lib.gen_alt_powerbar = function(f)
 	local apb = CreateFrame("StatusBar", nil, f)
 	apb:Size(f.width, f.height/3)
-	apb:SetStatusBarTexture(DB.Statusbar)
+	apb:SetStatusBarTexture(tex)
 	apb:GetStatusBarTexture():SetHorizTile(false)
 	apb:SetStatusBarColor(1, 0, 0)
 	apb:SetPoint("TOP", f.Power, "BOTTOM", 0, -f.height/6)
@@ -1205,7 +1241,7 @@ lib.gen_threat = function(f)
 	local gradient = apb:CreateTexture(nil, "BACKGROUND")
 	gradient:SetPoint("TOPLEFT")
 	gradient:SetPoint("BOTTOMRIGHT")
-	gradient:SetTexture(DB.Statusbar)
+	gradient:SetTexture(tex)
 	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
 	
 	f.AltPowerBar = apb
@@ -1241,13 +1277,13 @@ lib.gen_threat = function(f)
 		if U["ClassColor"] then 
 			self.colors.smooth = {DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b}
 		else
-			self.colors.smooth = {1,0,0,199/255,97/255,20/255, 0.1,0.1,0.1} 
+			self.colors.smooth = {0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1}
 		end
 	else 
 		if U["ClassColor"] then 
 			self.colors.smooth = {DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b}
 		else
-			self.colors.smooth = {1,0,0,1,1,0,0,128/255,0}
+			self.colors.smooth = {173/255, 22/255, 27/255,173/255, 22/255, 27/255,173/255, 22/255, 27/255}
 		end
 	end
     self.Health.colorSmooth = true

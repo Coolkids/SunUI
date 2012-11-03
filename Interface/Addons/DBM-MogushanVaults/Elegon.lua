@@ -4,10 +4,11 @@ local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndCC	= mod:NewSound(nil, "SoundCC", true)
 local sndDD = mod:NewSound(nil, "SoundDD", false)
 
-mod:SetRevision(("$Revision: 7971 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8000 $"):sub(12, -3))
 mod:SetCreatureID(60410)--Energy Charge (60913), Emphyreal Focus (60776), Cosmic Spark (62618), Celestial Protector (60793)
 mod:SetModelID(41399)
 mod:SetZone()
+mod:SetUsedIcons(8, 7, 6)
 
 mod:RegisterCombat("combat")
 
@@ -15,15 +16,12 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED",
 	"SPELL_AURA_APPLIED_DOSE",
 	"SPELL_AURA_REMOVED",
+	"SPELL_CAST_SUCCESS",
 	"UNIT_SPELLCAST_SUCCEEDED",
 	"RAID_BOSS_EMOTE",
 	"UNIT_HEALTH",
 	"SPELL_CAST_START"
 )
-
---[[
-spellid = 116994 or spell = "Icy Touch"  and targetname = "Elegon" and sourcename = "Shiramune" and fulltype = SPELL_CAST_SUCCESS or spellid = 117960 and fulltype = SPELL_CAST_START or spellid = 117954 or spellid = 129711 or spell = "Draw Power" or spellid = 117204 or spellid = 117945 and not (fulltype = SPELL_DAMAGE) or spellid = 117949
---]]
 
 local warnPhase1					= mod:NewPhaseAnnounce(1, 2)--117727 Charge Vortex
 local warnBreath					= mod:NewSpellAnnounce(117960, 3)
@@ -31,6 +29,7 @@ local warnProtector					= mod:NewCountAnnounce(117954, 3)
 local warnArcingEnergy				= mod:NewSpellAnnounce(117945, 2)--Cast randomly at 2 players, it is avoidable.
 local warnClosedCircuit				= mod:NewTargetAnnounce(117949, 3, nil, mod:IsHealer())--what happens if you fail to avoid the above
 local warnTotalAnnihilation			= mod:NewCastAnnounce(129711, 4)--Protector dying(exploding)
+local warnStunned					= mod:NewTargetAnnounce(132226, 3, nil, mod:IsHealer())--Heroic
 local warnPhase2					= mod:NewPhaseAnnounce(2, 3)--124967 Draw Power
 local warnDrawPower					= mod:NewCountAnnounce(119387, 4)
 local warnPhase3					= mod:NewPhaseAnnounce(3, 3)--116994 Unstable Energy Starting
@@ -51,16 +50,21 @@ local specWarnRadiatingEnergies		= mod:NewSpecialWarningSpell(118310, nil, nil, 
 local timerBreathCD					= mod:NewCDTimer(18, 117960)
 local timerProtectorCD				= mod:NewCDTimer(35.5, 117954)
 local timerArcingEnergyCD			= mod:NewCDTimer(11.5, 117945)
-local timerCharge					= mod:NewNextTimer(15, 119358)
-local timerDespawnFloor				= mod:NewTimer(7, "timerDespawnFloor", 116994)
---Some timer work needs to be added for the adds spawning and reaching outer bubble
---(ie similar to yorsahj oozes reach, only for how long you have to kill adds before you fail and phase 2 ends)
+local timerFocusPower				= mod:NewCastTimer(16, 119358)
+local timerDespawnFloor				= mod:NewTimer(6.5, "timerDespawnFloor", 116994)--6.5-7.5 variation. 6.5 is safed to use so you don't fall and die.
 
 local berserkTimer					= mod:NewBerserkTimer(570)
 
+mod:AddBoolOption("SetIconOnDestabilized", true)
+mod:AddBoolOption("HealthFrame", false)
+
 local phase2Started = false
 local protectorCount = 0
+local powerCount = 0
 local closedCircuitTargets = {}
+local stunTargets = {}
+local stunIcon = 8
+local focusActivated = 0
 local LowHP = {}
 local sentAEHP = {}
 local warnedAEHP = {}
@@ -92,10 +96,19 @@ local function warnClosedCircuitTargets()
 	end
 end
 
+local function warnStunnedTargets()
+	warnStunned:Show(table.concat(stunTargets, "<, >"))
+	table.wipe(stunTargets)
+end
+
 function mod:OnCombatStart(delay)
 	protectorCount = 0
 	coresCount = 0
+	stunIcon = 8
+	focusActivated = 0
+	powerCount = 0
 	table.wipe(closedCircuitTargets)
+	table.wipe(stunTargets)
 	timerBreathCD:Start(8-delay)
 	table.wipe(LowHP)
 	table.wipe(sentAEHP)
@@ -104,7 +117,7 @@ function mod:OnCombatStart(delay)
 	if not mod:IsDps() then
 		sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3") --準備火息
 	end
-	timerProtectorCD:Start(12-delay)
+	timerProtectorCD:Start(10-delay)
 	berserkTimer:Start(-delay)
 end
 
@@ -117,7 +130,8 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(124967) and not phase2Started then--Phase 2 begin/Phase 1 end
 		phase2Started = true--because if you aren't fucking up, you should get more then one draw power.
-		protectorCount = 0--better to reset protector Count on phase2.
+		protectorCount = 0
+		powerCount = 0
 		warnPhase2:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ptwo.mp3") --P2
 		POSn = self.Options.optPos == "posA" and "A" or self.Options.optPos == "posB" and "B" or self.Options.optPos == "posC" and "C" or self.Options.optPos == "posD" and "D" or self.Options.optPos == "posE" and "E" or self.Options.optPos == "posF" and "F" or self.Options.optPos == "nonepos" and "NONE"
@@ -125,7 +139,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			DBM.Arrow:ShowRunTo(chargePos[POSn][1]/100,chargePos[POSn][2]/100)
 		end
 		timerBreathCD:Cancel()
-		timerCharge:Start()
+		timerFocusPower:Start()
 		if not mod:IsHealer() then
 			sndWOP:Schedule(12, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 			sndWOP:Schedule(13, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
@@ -137,6 +151,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		timerProtectorCD:Cancel()	
 	elseif args:IsSpellID(116994) then--Phase 3 begin/Phase 2 end
+		focusActivated = 0
 		phase2Started = false
 --		warnPhase3:Show()
 --		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\pthree.mp3") --P3
@@ -148,12 +163,22 @@ function mod:SPELL_AURA_APPLIED(args)
 			warnedCZ = true
 		end
 	elseif args:IsSpellID(119387) then -- do not add other spellids.
-		warnDrawPower:Show(args.amount or 1)
-		specWarnDrawPower:Show(args.amount or 1)
+		powerCount = powerCount + 1
+		warnDrawPower:Show(powerCount)
+		specWarnDrawPower:Show(powerCount)
 	elseif args:IsSpellID(118310) then--Below 50% health
 		warnRadiatingEnergies:Show()
 		specWarnRadiatingEnergies:Show()--Give a good warning so people standing outside barrior don't die.
+	elseif args:IsSpellID(132226) then
+		stunTargets[#stunTargets + 1] = args.destName
+		if self.Options.SetIconOnDestabilized then
+			self:SetIcon(args.destName, stunIcon)
+			stunIcon = stunIcon - 1
+		end
+		self:Unschedule(warnStunnedTargets)
+		self:Schedule(0.3, warnStunnedTargets)
 	elseif args:IsSpellID(132265, 116598) and self:AntiSpam(30, 2) then
+		DBM.Flash:Show(1, 0, 0)
 		warnPhase3:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\pthree.mp3") --P3
 		coresCount = 0
@@ -192,6 +217,20 @@ function mod:SPELL_AURA_REMOVED(args)
 	end
 end
 
+function mod:SPELL_CAST_SUCCESS(args)
+	if args:IsSpellID(116598, 132265) then--Cast when these are activated
+		focusActivated = focusActivated + 1
+		if not DBM.BossHealth:HasBoss(args.sourceGUID) then
+			DBM.BossHealth:AddBoss(args.sourceGUID, args.sourceName)
+		end
+		if focusActivated == 6 then
+--			timerDespawnFloor:Start()
+		end
+	elseif args:IsSpellID(116989) then--Cast when defeated (or rathor 1 HP)
+		DBM.BossHealth:RemoveBoss(args.sourceGUID)
+	end
+end
+
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(117960) then
 		warnBreath:Show()
@@ -207,7 +246,11 @@ function mod:SPELL_CAST_START(args)
 		protectorCount = protectorCount + 1
 		warnProtector:Show(protectorCount)
 		specWarnProtector:Show(protectorCount)
-		timerProtectorCD:Start()
+		if self:IsDifficulty("heroic10", "heroic25") then
+			timerProtectorCD:Start(26)--26-28 variation on heroic
+		else
+			timerProtectorCD:Start()--35-37 on normal
+		end
 		warnedPH = false
 		if mod:IsDps() then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_bwzkd.mp3") --保衛者快打
@@ -233,21 +276,27 @@ function mod:SPELL_CAST_START(args)
 		self:Unschedule(warnClosedCircuitTargets)
 		self:Schedule(0.3, warnClosedCircuitTargets)
 	elseif args:IsSpellID(119358) then
+		local _, _, _, _, startTime, endTime = UnitCastingInfo("boss1")
+		local castTime
+		if startTime and endTime then
+			castTime = ((endTime or 0) - (startTime or 0)) / 1000
+			timerFocusPower:Start(castTime)
+		end
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_dqkd.mp3") --電球快打
 		coresCount = coresCount + 1
 		specWarnCharge:Show(coresCount)
 		if coresCount == 1 then
-			sndWOP:Schedule(1.2, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		elseif coresCount == 2 then
-			sndWOP:Schedule(1.2, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 		elseif coresCount == 3 then
-			sndWOP:Schedule(1.2, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 		elseif coresCount == 4 then
-			sndWOP:Schedule(1.2, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
 		elseif coresCount == 5 then
-			sndWOP:Schedule(1.2, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
 		elseif coresCount == 6 then
-			sndWOP:Schedule(1.2, "Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
+			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
 		end
 	end
 end

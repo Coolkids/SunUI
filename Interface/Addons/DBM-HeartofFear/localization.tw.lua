@@ -8,6 +8,8 @@ L= DBM:GetModLocalization(745)
 
 L:SetOptionLocalization({
 	specwarnPlatform	= "特別警告：當戰鬥露臺改變時",
+	specwarnExhale		= "特別警告：$spell:122761",
+	specwarnExhaleB		= "特別警告：$spell:122761的預先警告",
 	MindControlIcon		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(122740),
 	SoundWOP			= "語音警告：重要技能",
 	HudMAP				= "高級定位監視(HUD)：$spell:122761目標的位置",
@@ -29,7 +31,9 @@ L:SetMiscLocalization({
 })
 
 L:SetWarningLocalization({
-	specwarnPlatform	= "作戰區改變!"
+	specwarnPlatform	= "作戰區改變!",
+	specwarnExhale		= "吐氣[%d] : %s",
+	specwarnExhaleB		= "即將 >>%d層<< 吐氣"
 })
 
 ------------
@@ -79,9 +83,10 @@ L:SetOptionLocalization({
 	SoundWOP			= "語音警告：重要技能",
 	SoundDQ				= "語音警告：$spell:122149的驅散",
 	APArrow				= "DBM箭頭：$spell:121881的位置",
-	NearAP				= "特殊功能：$spell:121881在你20碼範圍內才播放語音(僅影響語音)",
+	NearAP				= "特殊功能：$spell:121881在你30碼範圍內才播放語音(僅影響語音)",
 	ReapetAP			= "特殊功能：若你的$spell:121881在5秒內無人打破則不停呼救",
 	HudMAP				= "高級定位監視(HUD)：$spell:121885的位置",
+	RangeFrame			= "距離監視(3碼)：$spell:121881",
 	AmberPrisonIcons	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(121885)
 })
 
@@ -94,10 +99,30 @@ L:SetMiscLocalization({
 ------------
 L= DBM:GetModLocalization(737)
 
-L:SetOptionLocalization({
-	SoundWOP			= "語音警告：重要技能"
+L:SetWarningLocalization({
+	warnAmberExplosion			= "%s 正在釋放 %s",
+	warnInterruptsAvailable		= "可打斷 %s: %s",
+	specwarnWillPower			= "意志過低!",
+	specwarnAmberExplosionYou	= "打斷 >你自己的< %s!"--Struggle for Control interrupt.
 })
 
+L:SetTimerLocalization{
+	timerAmberExplosionAMCD		= "下一次 %s: %s"
+}
+
+L:SetOptionLocalization({
+	SoundWOP			= "語音警告：重要技能",
+	warnAmberExplosion			= "警告：$spell:122398",
+	warnInterruptsAvailable		= "警告：誰可以打斷$spell:122402",
+	specwarnWillPower			= "特殊警告：你的傀儡意志過低",
+	specwarnAmberExplosionYou	= "特殊警告：打斷你自己的$spell:122398",
+	timerAmberExplosionAMCD		= "計時器：琥珀巨怪的下一次$spell:122402",
+	InfoFrame					= "資訊框：玩家的意志力"
+})
+
+L:SetMiscLocalization({
+	WillPower					= "意志力"
+})
 ------------
 -- Grand Empress Shek'zeer --
 ------------

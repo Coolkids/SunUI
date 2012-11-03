@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7777 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8025 $"):sub(12, -3))
 mod:SetCreatureID(62837)--62847 Dissonance Field, 63591 Kor'thik Reaver, 63589 Set'thik Windblade
 mod:SetModelID(42730)
 mod:SetZone()
@@ -27,6 +27,7 @@ local warnAmberTrap				= mod:NewSpellAnnounce(125826, 3)--Trap ready
 local warnTrapped				= mod:NewTargetAnnounce(125822, 1)--Trap used
 local warnFixate				= mod:NewTargetAnnounce(125390, 3, nil, false)--Spammy
 local warnAdvance				= mod:NewSpellAnnounce(125304, 4)
+local warnVisions				= mod:NewTargetAnnounce(124862, 4)--Visions of Demise
 
 local specwarnSonicDischarge	= mod:NewSpecialWarningSpell(123504, nil, nil, nil, true)
 local specWarnEyes				= mod:NewSpecialWarningStack(123707, mod:IsTank(), 4)
@@ -37,7 +38,8 @@ local specwarnAmberTrap			= mod:NewSpecialWarningSpell(125826, false)
 local specwarnFixate			= mod:NewSpecialWarningYou(125390, false)--Could be spammy, make optional, will use info frame to display this more constructively
 local specWarnDispatch			= mod:NewSpecialWarningInterrupt(124077, mod:IsMelee())
 local specWarnAdvance			= mod:NewSpecialWarningSpell(125304)
-local specWarnDead				= mod:NewSpecialWarningYou(124862)
+local specwarnVisions			= mod:NewSpecialWarningYou(124862)
+local yellVisions				= mod:NewYell(124862)
 
 local timerScreechCD			= mod:NewNextTimer(7, 123735)
 local timerCryOfTerror			= mod:NewTargetTimer(20, 123788, nil, mod:IsHealer())
@@ -52,11 +54,17 @@ mod:AddBoolOption("RangeFrame", mod:IsRanged())
 
 local sentLowHP = {}
 local warnedLowHP = {}
+local visonsTargets = {}
+
+local function warnVisionsTargets()
+	warnVisions:Show(table.concat(visonsTargets, "<, >"))
+	table.wipe(visonsTargets)
+end
 
 local ptwo = false
-local lastplayer = ""
+local lastplayer = nil
 
---mod:AddBoolOption("HudMAP", true, "sound")
+mod:AddBoolOption("HudMAP", true, "sound")
 local DBMHudMap = DBMHudMap
 local free = DBMHudMap.free
 local function register(e)	
@@ -71,6 +79,7 @@ function mod:OnCombatStart(delay)
 	timerPhase2:Start(-delay)
 	table.wipe(sentLowHP)
 	table.wipe(warnedLowHP)
+	table.wipe(visonsTargets)
 	table.wipe(DeadMarkers)
 	ptwo = false
 	if self.Options.RangeFrame then
@@ -112,6 +121,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerCryOfTerror:Start(args.destName)
 		timerCryOfTerrorCD:Start()
 		if args:IsPlayer() then
+			DBM.Flash:Show(1, 0, 0)
 			specwarnCryOfTerror:Show()
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kjyy.mp3") --快進音域
 		end
@@ -123,15 +133,22 @@ function mod:SPELL_AURA_APPLIED(args)
 			specwarnFixate:Show()
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\justrun.mp3") --快跑
 		end
-	--[[
-	elseif args:IsSpellID(124862, 124863, 124868) then   --死亡幻覺
+	elseif args:IsSpellID(124862) then
+		visonsTargets[#visonsTargets + 1] = args.destName
 		if args:IsPlayer() then
-			specWarnDead:Show()
+			specwarnVisions:Show()
+			yellVisions:Yell()
+			DBM.Flash:Show(1, 0, 0)
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runout.mp3") --離開人群
+			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Schedule(2.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Schedule(3.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		end
+		self:Unschedule(warnVisionsTargets)
+		self:Schedule(0.3, warnVisionsTargets)
 		if self.Options.HudMAP then
 			DeadMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("targeting", args.destName, 9, nil, 0, 1, 0, 1):Appear():RegisterForAlerts())
-		end]]
+		end
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
@@ -149,11 +166,10 @@ function mod:SPELL_AURA_REMOVED(args)
 		end
 	elseif args:IsSpellID(124097) then  --樹脂
 		lastplayer = args.destName
-	--[[
-	elseif args:IsSpellID(124862, 124863, 124868) then
+	elseif args:IsSpellID(124862) then
 		if DeadMarkers[args.destName] then
 			DeadMarkers[args.destName] = free(DeadMarkers[args.destName])
-		end]]
+		end
 	end
 end
 

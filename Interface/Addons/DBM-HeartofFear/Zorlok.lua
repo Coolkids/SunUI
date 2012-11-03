@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7656 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8004 $"):sub(12, -3))
 mod:SetCreatureID(62980)
 mod:SetModelID(42807)
 mod:SetZone()
@@ -32,10 +32,16 @@ local warnConvert			= mod:NewTargetAnnounce(122740, 4)
 local specwarnPlatform		= mod:NewSpecialWarning("specwarnPlatform")
 local specwarnForce			= mod:NewSpecialWarningSpell(122713)
 local specwarnConvert		= mod:NewSpecialWarningSwitch(122740, not mod:IsHealer())
-local specwarnExhale		= mod:NewSpecialWarningTarget(122761, mod:IsHealer() or mod:IsTank())
+local specwarnExhale		= mod:NewSpecialWarning("specwarnExhale")
+local specwarnExhaleB		= mod:NewSpecialWarning("specwarnExhaleB")
 local specwarnAttenuation	= mod:NewSpecialWarningSpell(127834, nil, nil, nil, true)
 
 --Timers aren't worth a crap, at all, this is a timerless fight and will probably stay that way unless blizz redesigns it.
+--Update, blizzard didn't redesign it, so don't uncomment these timers, they are wrong and will always be wrong until every single failsafe is discovered.
+--Every time i figure one failsafe out, i find out it's wrong under a different condition
+--basically this fight works like zon ozz, where if a certain condition is present, timers get changed. Problem is, in phase 4, there are about 5 or more failsafes active at same time
+--EVERY ability drastically alters every other abilities cd, making it impossible with any level of accuracy to support even remotely accurate timers.
+--I'm not adding a timer if the variation for it is gonna be "anywhere between 40 seconds and 90 seconds". Cause yeah, that's not very useful.
 --local timerExhaleCD			= mod:NewCDTimer(41, 122761)
 local timerExhale				= mod:NewTargetTimer(6, 122761)
 --local timerForceCD			= mod:NewCDTimer(48, 122713)--Phase 1, every 41 seconds since exhale keeps resetting it, phase 2, 48 seconds or as wildly high as 76 seconds if exhale resets it late in it's natural CD
@@ -50,6 +56,9 @@ local MCTargets = {}
 local MCIcon = 8
 --local recentPlatformChange = false
 --local platform = 0
+
+local tqcount = 0
+
 
 mod:AddBoolOption("HudMAP", true, "sound")
 mod:AddBoolOption("HudMAP2", true, "sound")
@@ -68,7 +77,6 @@ local function showMCWarning()
 	warnConvert:Show(table.concat(MCTargets, "<, >"))
 	table.wipe(MCTargets)
 	MCIcon = 8
-	sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\findmc.mp3") --注意心控
 end
 
 local function ArrowRTI(rindex)
@@ -97,15 +105,16 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(122852) then
 		warnInhale:Show(args.destName, args.amount or 1)
+		tqcount = args.amount or 1
 	elseif args:IsSpellID(122761) then
 		warnExhale:Show(args.destName)
-		specwarnExhale:Show(args.destName)
+		specwarnExhale:Show(tqcount, args.destName)
 		timerExhale:Start(args.destName)
 		if args.destName == UnitName("player") then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\targetyou.mp3") --目標是你
 		end
 		if self.Options.HudMAP then
-			local spelltext = GetSpellInfo(122761)
+			local spelltext = GetSpellInfo(122761).." - "..args.destName
 			ExhaleMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("targeting", args.destName, 3, 6, 1, 0, 0, 1):SetLabel(spelltext))
 		end
 	elseif args:IsSpellID(122740) then
@@ -117,8 +126,11 @@ function mod:SPELL_AURA_APPLIED(args)
 		self:Unschedule(showMCWarning)
 		self:Schedule(0.9, showMCWarning)
 		if self.Options.HudMAP2 then
-			local spelltext2 = GetSpellInfo(122740)
+			local spelltext2 = args.destName
 			MindControlMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("targeting", args.destName, 3, nil, 1, 0, 0, 1):SetLabel(spelltext2))
+		end
+		if self:AntiSpam(2, 2) then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\findmc.mp3") --注意心控
 		end
 	end
 end
@@ -171,6 +183,7 @@ function mod:SPELL_CAST_START(args)
 		end
 	elseif args:IsSpellID(122761) and self:AntiSpam(2, 1) then
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_tqzb.mp3") --吐氣準備
+		specwarnExhaleB:Show(tqcount)
 --[[	elseif args:IsSpellID(123791) and recentPlatformChange then--No one is in melee range of boss, he's aoeing. (i.e., he's arrived at new platform)
 		recentPlatformChange = false--we want to ignore when this happens as a result of players doing fight wrong. Only interested in platform changes.--]]
 	end

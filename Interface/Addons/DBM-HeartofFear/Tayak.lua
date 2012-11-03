@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7757 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8014 $"):sub(12, -3))
 mod:SetCreatureID(62543)
 mod:SetModelID(43141)
 mod:SetZone()
@@ -19,13 +19,13 @@ mod:RegisterEventsInCombat(
 	"UNIT_SPELLCAST_SUCCEEDED"
 )
 
-local warnTempestSlash					= mod:NewSpellAnnounce(122839, 2)
-local warnOverwhelmingAssault			= mod:NewTargetAnnounce(123474, 3, nil, mod:IsTank() or mod:IsHealer())
+local warnTempestSlash					= mod:NewSpellAnnounce(125692, 2)
+local warnOverwhelmingAssault			= mod:NewStackAnnounce(123474, 3, nil, mod:IsTank() or mod:IsHealer())
 local warnWindStep						= mod:NewTargetAnnounce(123175, 3)
-local warnUnseenStrike					= mod:NewTargetAnnounce(122949, 4)
+local warnUnseenStrike					= mod:NewTargetAnnounce(123017, 4)
 local warnIntensify						= mod:NewStackAnnounce(123471, 2)
 local warnBladeTempest					= mod:NewCastAnnounce(125310, 4)--Phase 1 heroic
-local warnStormUnleashed				= mod:NewSpellAnnounce(123814, 3)--Phase 2
+local warnStormUnleashed				= mod:NewSpellAnnounce(123815, 3)--Phase 2
 
 local specWarnUnseenStrike				= mod:NewSpecialWarningTarget(122949)--Everyone needs to know this, and run to this person.
 local yellUnseenStrike					= mod:NewYell(122949)
@@ -34,15 +34,16 @@ local specWarnOverwhelmingAssaultOther	= mod:NewSpecialWarning("SpecWarnOverwhel
 local specWarnBladeTempest				= mod:NewSpecialWarningRun(125310, true)
 local specWarnStormUnleashed			= mod:NewSpecialWarningSpell(123814, nil, nil, nil, true)
 
-local timerTempestSlashCD				= mod:NewNextTimer(15.5, 122839)
+local timerTempestSlashCD				= mod:NewNextTimer(15.5, 125692)
 local timerOverwhelmingAssault			= mod:NewTargetTimer(45, 123474, nil, mod:IsTank())
-local timerOverwhelmingAssaultCD		= mod:NewCDTimer(25.5, 123474, nil, mod:IsTank() or mod:IsHealer())--Only ability with a variation in 2 pulls so far. this one can vary 25-35 seconds. lowest CD is used because it's most common
-local timerWindStepCD					= mod:NewNextTimer(30, 123175)
-local timerUnseenStrikeCD				= mod:NewNextTimer(61, 122949)
+local timerOverwhelmingAssaultCD		= mod:NewCDTimer(20.5, 123474, nil, mod:IsTank() or mod:IsHealer())--Only ability with a variation in 2 pulls so far. He will use every 20.5 seconds unless he's casting something else, then it can be delayed as much as an extra 15-20 seconds. TODO: See if there is a way to detect when variation is going to occur and call update timer.
+local timerWindStepCD					= mod:NewCDTimer(25, 123175)
+local timerUnseenStrikeCD				= mod:NewNextTimer(61, 123017)
 local timerIntensifyCD					= mod:NewNextTimer(60, 123471)
 local timerBladeTempest					= mod:NewBuffActiveTimer(9, 125310)
 local timerBladeTempestCD				= mod:NewNextTimer(60, 125310)--Always cast after immediately intensify since they essencially have same CD
---local timerStormUnleashedCD			= mod:NewCDTimer(60, 123814)--Timer for switching sides, assuming it's time based and not health based, unsure yet, need more data. Also,the side swap does NOT show in transcriptor or CLEU AT ALL. Will need to use /yell to figure it out.
+
+local berserkTimer						= mod:NewBerserkTimer(480)
 
 local ptwo = false
 
@@ -66,7 +67,7 @@ local UnseenStrikeMarkers = {}
 
 function mod:OnCombatStart(delay)
 	timerTempestSlashCD:Start(10-delay)
-	timerOverwhelmingAssaultCD:Start(15.5-delay)
+	timerOverwhelmingAssaultCD:Start(15.5-delay)--Possibly wrong, the cd was shortened since beta, need better log with engage timestamp
 	if not mod:IsDps() then
 		sndWOP:Schedule(12, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_yzgj.mp3") --壓制準備
 	end
@@ -74,6 +75,7 @@ function mod:OnCombatStart(delay)
 	timerUnseenStrikeCD:Start(30.5-delay)
 	sndWOP:Schedule(27, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wxdjzb.mp3") --無形打擊準備
 	timerIntensifyCD:Start(-delay)
+	berserkTimer:Start(-delay)
 	if self:IsDifficulty("heroic10", "heroic25") then
 		timerBladeTempestCD:Start(-delay)
 		sndWOP:Schedule(57, "Interface\\AddOns\\DBM-Core\\extrasounds\\wwsoon.mp3") --準備旋風
@@ -90,6 +92,9 @@ end
 function mod:OnCombatEnd()
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
+	end
+	if self.Options.UnseenStrikeArrow then
+		DBM.Arrow:Hide()
 	end
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Hide()
@@ -137,7 +142,7 @@ function mod:SPELL_CAST_START(args)
 		sndWOP:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 		sndWOP:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 		sndWOP:Schedule(9, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-		timerBladeTempestCD:Start()--Start CD here, since this might miss.
+		timerBladeTempestCD:Start()
 		sndWOP:Schedule(57, "Interface\\AddOns\\DBM-Core\\extrasounds\\wwsoon.mp3") --準備旋風
 	end
 end
@@ -186,7 +191,7 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, _, _, _, target)
 		sndWOP:Schedule(3.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		sndWOP:Schedule(50, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wxdjzb.mp3") --無形打擊準備
 		if self.Options.UnseenStrikeArrow then
-			DBM.Arrow:ShowRunTo(target, 1)
+			DBM.Arrow:ShowRunTo(target, 5)
 			self:Schedule(5, function()
 				DBM.Arrow:Hide()
 			end)

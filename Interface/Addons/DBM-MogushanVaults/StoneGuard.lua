@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7964 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8009 $"):sub(12, -3))
 mod:SetCreatureID(60051, 60043, 59915, 60047)--Cobalt: 60051, Jade: 60043, Jasper: 59915, Amethyst: 60047
 mod:SetModelID(41892)
 mod:SetZone()
@@ -26,6 +26,7 @@ local warnCobaltMine				= mod:NewTargetAnnounce(129424, 4)
 local warnJadeShards				= mod:NewSpellAnnounce(116223, 3, nil, false)
 local warnJasperChains				= mod:NewTargetAnnounce(130395, 4)
 local warnAmethystPool				= mod:NewTargetAnnounce(130774, 3, nil, false)
+local warnPowerDown					= mod:NewSpellAnnounce(116529, 4, nil, not mod:IsTank())
 local warnGSD						= mod:NewSpellAnnounce(116008)
 local warnBSD						= mod:NewSpellAnnounce(115861)
 local warnPSD						= mod:NewSpellAnnounce(116060)
@@ -40,14 +41,14 @@ local specWarnCobaltMineNear		= mod:NewSpecialWarningClose(129424)
 local yellCobaltMine				= mod:NewYell(129424)
 local specWarnAmethystPool			= mod:NewSpecialWarningMove(130774)
 local yellAmethystPool				= mod:NewYell(130774, nil, false)
-
+local specWarnPowerDown				= mod:NewSpecialWarningSpell(116529, not mod:IsTank())
 local specWarnMySD					= mod:NewSpecialWarning("specWarnMySD")
 
 local timerCobaltMineCD				= mod:NewNextTimer(10.5, 129424)--12-15second variations
 local timerPetrification			= mod:NewNextTimer(76, 125091)
-local timerJadeShardsCD				= mod:NewNextTimer(20.5, 116223)--Always 20.5 seconds
+local timerJadeShardsCD				= mod:NewNextTimer(20.5, 116223, nil, false)--Always 20.5 seconds
 local timerJasperChainsCD			= mod:NewCDTimer(12, 130395)--11-13
-local timerAmethystPoolCD			= mod:NewCDTimer(6, 130774)
+local timerAmethystPoolCD			= mod:NewCDTimer(6, 130774, nil, false)
 
 local berserkTimer					= mod:NewBerserkTimer(420)
 
@@ -134,6 +135,9 @@ function mod:ClobaltMineTarget(targetname)
 		specWarnCobaltMine:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
 		yellCobaltMine:Yell()
+		if activePetrification ~= "Cobalt" then
+			DBM.Flash:Show(1, 0, 0)
+		end
 	else
 		local uId = DBM:GetRaidUnitId(targetname)
 		if uId then
@@ -145,6 +149,9 @@ function mod:ClobaltMineTarget(targetname)
 			local inRange = DBM.RangeCheck:GetDistance("player", x, y)
 			if inRange and inRange < 8 then
 				specWarnCobaltMineNear:Show(targetname)
+				if activePetrification ~= "Cobalt" then
+					DBM.Flash:Show(1, 0, 0)
+				end
 				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
 			end
 		end
@@ -297,7 +304,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			playerHasChains = true
 			yellJasperChains:Yell()
 			local uId = getBossuId(Jasper)
-			if uId and UnitPower(uId) <= 80 and activePetrification == "Jasper" then--Make sure his energy isn't already high, otherwise breaking chains when jasper will only be active for a few seconds is bad
+			if uId and (UnitPower(uId) <= 80) and (activePetrification == "Jasper") then--Make sure his energy isn't already high, otherwise breaking chains when jasper will only be active for a few seconds is bad
 				specWarnBreakJasperChains:Show()
 				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ldsl.mp3") --拉斷鎖鏈
 				DBM.Arrow:Hide()
@@ -347,6 +354,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 			timerPetrification:Cancel()
 			SDSTAT = L.SDNOT
 			ChecknextOverload()
+			activePetrification = nil
 		else
 			ChecknextOverload()
 		end
@@ -356,6 +364,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 			timerPetrification:Cancel()
 			SDSTAT = L.SDNOT
 			ChecknextOverload()
+			activePetrification = nil
 		else
 			ChecknextOverload()
 		end
@@ -365,6 +374,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 			timerPetrification:Cancel()
 			SDSTAT = L.SDNOT
 			ChecknextOverload()
+			activePetrification = nil
 		else
 			ChecknextOverload()
 		end
@@ -374,6 +384,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 			timerPetrification:Cancel()
 			SDSTAT = L.SDNOT
 			ChecknextOverload()
+			activePetrification = nil
 		else
 			ChecknextOverload()
 		end
@@ -392,6 +403,10 @@ end
 function mod:RAID_BOSS_EMOTE(msg, boss)
 	if msg == L.Overload or msg:find(L.Overload) then--Cast trigger is an emote 7 seconds before, CLEU only shows explosion. Just like nefs electrocute
 		self:SendSync("Overload", boss == Cobalt and "Cobalt" or boss == Jade and "Jade" or boss == Jasper and "Jasper" or boss == Amethyst and "Amethyst" or "Unknown")
+	elseif msg:find("spell:116529") then
+		warnPowerDown:Show()
+		specWarnPowerDown:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_dzcz.mp3")--地磚重置
 	end
 end
 
@@ -461,7 +476,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		end
 		if playerHasChains then
 			local uId = getBossuId(Jasper)
-			if uId and UnitPower(uId) <= 80 then--Make sure his energy isn't already high, otherwise breaking chains when jasper will only be active for a few seconds is bad
+			if uId and (UnitPower(uId) <= 80) and (activePetrification == "Jasper") then
 				specWarnBreakJasperChains:Show()
 				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ldsl.mp3") --拉斷鎖鏈
 				DBM.Arrow:Hide()

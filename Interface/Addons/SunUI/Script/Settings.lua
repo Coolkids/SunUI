@@ -150,6 +150,9 @@ function Module:OnInitialize()
 
 	if C["MiniDB"]["HideRaidWarn"] then
 		_G["RaidWarningFrame"]:ClearAllPoints()
+		_G["RaidWarningFrame"]:UnregisterAllEvents()
+		RaidWarningFrame.Show = function() end
+		RaidWarningFrame.SetPoint = function() end
 		_G["RaidWarningFrame"]:Kill()
 	end
 	if not C["UnitFrameDB"]["showparty"] then

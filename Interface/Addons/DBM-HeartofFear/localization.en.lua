@@ -12,6 +12,8 @@ L:SetWarningLocalization({
 
 L:SetOptionLocalization({
 	specwarnPlatform	= "Show special warning when boss changes platforms",
+	specwarnExhale		= "Show special warning for $spell:122761",
+	specwarnExhaleB		= "Show special warning for pre $spell:122761",
 	MindControlIcon		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(122740),
 	SoundWOP			= "Voice warning: important skills",
 	HudMAP				= "HudMAP: $spell:122761 targeting",
@@ -32,6 +34,11 @@ L:SetMiscLocalization({
 	Defeat		= "We will not give in to the despair of the dark void. If Her will for us is to perish, then it shall be so."
 })
 
+L:SetWarningLocalization({
+	specwarnPlatform	= "Combat zone changed",
+	specwarnExhale		= "Exhale[%d] : %s",
+	specwarnExhaleB		= "Next: >>%d<< Exhale"
+})
 
 ------------
 -- Blade Lord Ta'yak --
@@ -64,7 +71,7 @@ L:SetOptionLocalization({
 	three				= "3 tanks (20 stacks)",
 	SoundWOP			= "Voice warning: important skills",
 	SpecWarnPungencyOther = "Special warning: $spell:123081",
-	HudMAP				= "HUDMAP: $spell:122835µÄÎ»ÖÃ",
+	HudMAP				= "HUDMAP: $spell:122835",
 	SoundFS				= "Countdown: $spell:122735"
 })
 
@@ -84,6 +91,7 @@ L:SetOptionLocalization({
 	NearAP				= "voice warning: only warn within 20 yards of $spell:121881",
 	ReapetAP			= "special warning: if your $spell:121881 without breaking in 5 seconds then keeping yell",
 	HudMAP				= "HUDMAP:$spell:121885",
+	RangeFrame			= "RangeFrame(3):$spell:121881",
 	AmberPrisonIcons	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(121885)
 })
 
@@ -97,8 +105,29 @@ L:SetMiscLocalization({
 ------------
 L= DBM:GetModLocalization(737)
 
+L:SetWarningLocalization({
+	warnAmberExplosion			= "%s is casting %s",
+	warnInterruptsAvailable		= "Interupts available for %s: %s",
+	specwarnWillPower			= "Low Will Power!",
+	specwarnAmberExplosionYou	= "Interrupt YOUR %s!"--Struggle for Control interrupt.
+})
+
+L:SetTimerLocalization{
+	timerAmberExplosionAMCD		= "Next %s: %s"
+}
+
 L:SetOptionLocalization({
-	SoundWOP			= "voice warning: important skills"
+	SoundWOP			= "voice warning: important skills",
+	warnAmberExplosion			= "Show warning (with source) when $spell:122398 is cast",
+	warnInterruptsAvailable		= "Announce who has Amber Strike interrupts available for $spell:122402",
+	specwarnWillPower			= "Show special warning when will power is low in construct",
+	specwarnAmberExplosionYou	= "Show special warning to interrupt your own $spell:122398",
+	timerAmberExplosionAMCD		= "Show timer for Amber Monstrosity's next $spell:122402",
+	InfoFrame					= "Show info frame for players will power (WIP)"
+})
+
+L:SetMiscLocalization({
+	WillPower					= "Will Power"
 })
 
 ------------

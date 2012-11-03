@@ -6509,28 +6509,28 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end) ]]
 	end
 	--RaidFrame Skin
-		for i = 1, 8 do
-			if _G["RaidGroup"..i] then 
-				_G["RaidGroup"..i]:StripTextures()
-			else
-				return
-			end
-			for f = 1, 5 do
-				if _G["RaidGroup"..i.."Slot"..f] then 
-					_G["RaidGroup"..i.."Slot"..f]:Hide()
-				else
-					return
-				end
-			end
-		end
-		for i = 1, 40 do
-			if _G["RaidGroupButton"..i] then
-				_G["RaidGroupButton"..i]:StripTextures()
-				S.Reskin(_G["RaidGroupButton"..i])
-			else
-				return
-			end
-		end
+		-- for i = 1, 8 do
+			-- if _G["RaidGroup"..i] then 
+				-- _G["RaidGroup"..i]:StripTextures()
+			-- else
+				-- return
+			-- end
+			-- for f = 1, 5 do
+				-- if _G["RaidGroup"..i.."Slot"..f] then 
+					-- _G["RaidGroup"..i.."Slot"..f]:Kill()
+				-- else
+					-- return
+				-- end
+			-- end
+		-- end
+		-- for i = 1, 40 do
+			-- if _G["RaidGroupButton"..i] then
+				-- _G["RaidGroupButton"..i]:StripTextures()
+				-- S.Reskin(_G["RaidGroupButton"..i])
+			-- else
+				-- return
+			-- end
+		-- end
 end)
 
 local Delay = CreateFrame("Frame")

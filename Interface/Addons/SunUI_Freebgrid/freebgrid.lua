@@ -325,10 +325,7 @@ function ns:UpdateBlizzardRaidFrame()
 	if GetDisplayedAllyFrames() == "raid" then	
 		if ns.db.hideblzraid then
 			CompactRaidFrameManager:Kill()
-			CompactRaidFrameContainer:Kill()
-			CompactUnitFrame_UpateVisible = function() end
-			CompactUnitFrame_UpdateAll = function() end
-			CompactUnitFrameProfiles_ApplyProfile = function() end
+			CompactRaidFrameContainer:Kill()	
 		else
 			if not _G["CompactRaidFrameManager"]:IsEventRegistered("PARTY_MEMBERS_CHANGED") then		
 				_G["CompactRaidFrameManager"]:RegisterEvent("RAID_ROSTER_UPDATE")
@@ -346,9 +343,7 @@ function ns:UpdateBlizzardPartyFrameDisplayStatus()
 	for i = 1, 4 do	
 		local frame = _G["PartyMemberFrame"..i]
 		if ns.db.hideblzparty then			
-			frame:SetAlpha(0)
-			frame:SetScale(0.01)
-			frame:UnregisterAllEvents() 
+			frame:Kill()
 			frame:SetScript("OnEvent", nil)
 			frame:SetScript("OnUpdate", nil)
 			RegisterStateDriver(frame, "visibility", "hide")
@@ -1374,14 +1369,16 @@ function ns:UpdateHealthColor(self)
 			if ns.db.definecolors then
 				healthBar:SetStatusBarColor(ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b, 1)
 				if ns.db.mode then 
-					healthBar.bg:SetTexture(nil)
+					healthBar.bg:SetTexture(ns.db.texturePath)
+					healthBar.bg:SetVertexColor(173/255, 22/255, 27/255, 0.6)
 				else
 					healthBar.bg:SetVertexColor(ns.db.deadcolor.r*.2, ns.db.deadcolor.g*.2, ns.db.deadcolor.b*.2, 1)
 				end
 			else
 				healthBar:SetStatusBarColor(ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b,.6)
 				if ns.db.mode then 
-					healthBar.bg:SetTexture(nil)
+					healthBar.bg:SetTexture(ns.db.texturePath)
+					healthBar.bg:SetVertexColor(173/255, 22/255, 27/255, 0.6)
 				else
 					healthBar.bg:SetVertexColor(ns.db.deadcolor.r*.2, ns.db.deadcolor.g*.2, ns.db.deadcolor.b*.2,.6)
 				end

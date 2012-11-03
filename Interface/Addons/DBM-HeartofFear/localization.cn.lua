@@ -8,6 +8,8 @@ L= DBM:GetModLocalization(745)
 
 L:SetOptionLocalization({
 	specwarnPlatform	= "特别警告：当战斗露台改变时",
+	specwarnExhale		= "特别警告：$spell:122761",
+	specwarnExhaleB		= "特别警告：$spell:122761的预先警告",
 	MindControlIcon		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(122740),
 	SoundWOP			= "语音警告：重要技能",
 	HudMAP				= "高级定位监视(HUD)：$spell:122761目标的位置",
@@ -29,7 +31,9 @@ L:SetMiscLocalization({
 })
 
 L:SetWarningLocalization({
-	specwarnPlatform	= "作战区改变!"
+	specwarnPlatform	= "作战区改变!",
+	specwarnExhale		= "吐气[%d] : %s",
+	specwarnExhaleB		= "即将 >>%d层<< 吐气"
 })
 
 ------------
@@ -82,6 +86,7 @@ L:SetOptionLocalization({
 	NearAP				= "特殊功能：$spell:121881在你20码范围内才播放语音(仅影响语音)",
 	ReapetAP			= "特殊功能：若你的$spell:121881在5秒内无人打破则不停呼救",
 	HudMAP				= "高级定位监视(HUD)：$spell:121885的位置",
+	RangeFrame			= "距离监视(3码)：$spell:121881",
 	AmberPrisonIcons	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(121885)
 })
 
@@ -94,8 +99,29 @@ L:SetMiscLocalization({
 ------------
 L= DBM:GetModLocalization(737)
 
+L:SetWarningLocalization({
+	warnAmberExplosion			= "%s 正在释放 %s",
+	warnInterruptsAvailable		= "可打断 %s: %s",
+	specwarnWillPower			= "意志过低!",
+	specwarnAmberExplosionYou	= "打断 >你自己的< %s!"--Struggle for Control interrupt.
+})
+
+L:SetTimerLocalization{
+	timerAmberExplosionAMCD		= "下一次 %s: %s"
+}
+
 L:SetOptionLocalization({
-	SoundWOP			= "语音警告：重要技能"
+	SoundWOP			= "语音警告：重要技能",
+	warnAmberExplosion			= "警告：$spell:122398",
+	warnInterruptsAvailable		= "警告：谁可以打断$spell:122402",
+	specwarnWillPower			= "特殊警告：你的傀儡意志过低",
+	specwarnAmberExplosionYou	= "特殊警告：打断你自己的$spell:122398",
+	timerAmberExplosionAMCD		= "计时器：琥珀巨怪的下一次$spell:122402",
+	InfoFrame					= "资讯框：玩家的意志力"
+})
+
+L:SetMiscLocalization({
+	WillPower					= "意志力"
 })
 
 ------------

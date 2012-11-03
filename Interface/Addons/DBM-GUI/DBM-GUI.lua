@@ -614,7 +614,7 @@ function PanelPrototype:AutoSetDimensionDD()
 	
 	local kids = { self.frame:GetChildren() }
 	for _, child in pairs(kids) do
-		need_height = need_height + child:GetHeight() + 10
+		need_height = need_height + child:GetHeight() + 2
 	end
 	self.frame.myheight = need_height
 	self.frame:SetHeight(need_height)

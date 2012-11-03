@@ -182,9 +182,9 @@ L:SetOptionLocalization({
 })
 
 L:SetMiscLocalization({
-	Kkxka		= "柯克席克蟲群使者",
-	Kkxkb		= "柯克席克護國者",
-	Kkxkc		= "柯克席克吞噬者"
+	Kkxka		= "柯克席克喚蟲者",
+	Kkxkb		= "柯克席克捲風者",
+	Kkxkc		= "柯克席克護衛兵"
 })
 
 -----------------------

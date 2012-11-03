@@ -77,31 +77,66 @@ L= DBM:GetModLocalization(682)
 
 L:SetWarningLocalization({
 	specWarninTT 	= ">> 注意進內場 <<",
-	specWarnTotemE1 = "圖騰(%d)  >五組進<",
-	specWarnTotemE2 = "圖騰(%d)  >三組進<",
-	specWarnTotemE3 = "圖騰(%d)  >四組進<",
-	specWarnAdmin 	= "存在治療分配主控 (%s)"
+	SpecWarnjs		= "<%s> → %s"
 })
 
 L:SetOptionLocalization({
 	SoundWOP			= "語音警告：重要技能",
 	SoundTT				= "語音警告：$spell:116174",
-	optTT				= "\"靈魂圖騰\"入場報警策略(黑手之鄉公會戰術)",
-	none				= "不報警",
-	warn1				= "4/7/10組報警",
-	warn2				= "2/5/8組報警",
-	warn3				= "3/6/9組報警",
+	optTT				= "\"靈魂圖騰\"循環計數語音",
+	none				= "不播放計數語音",
+	warn3				= "按1~3循環計數",
+	warn4				= "按1~4循環計數",
 	specWarninTT		= "特殊警告：當需要進入內場時顯示文字警告",
-	specWarnTotemEx		= "特殊：使用顯示分組和計數的圖騰警告(黑手之鄉公會戰術)",
-	specWarnTotemE1		= "特殊警告：計數式靈魂圖騰(147)",
-	specWarnTotemE2		= "特殊警告：計數式靈魂圖騰(258)",
-	specWarnTotemE3		= "特殊警告：計數式靈魂圖騰(369)",
-	soundTotemEx		= "特殊：當播放靈魂圖騰語音時按1~3循環播放計數語音",
-	specWarnAdmin		= "特殊警告：當存在主控端時",
+	GoTotemAdmin		= "主控：分配跨界(僅英雄模式有效,僅能由隊長開啟)",
+	GoTotemClient		= "被控：接收跨界警告(僅英雄模式有效,需存在主控)",
+	optAdminTT			= "主控選項：分配幾名DPS入場(此項不包括治療,總是分配一名治療入場)",
+	send1				= "一人",
+	send2				= "二人(10人模式推薦)",
+	send3				= "三人(25人模式推薦)",
+	send4				= "四人",
+	IgnoreTT1			= "主控選項：忽略分配圖騰1",
+	IgnoreTT2			= "主控選項：忽略分配圖騰2",
+	IgnoreTT3			= "主控選項：忽略分配圖騰3",
+	IgnoreTT4			= "主控選項：忽略分配圖騰4",
+	IgnoreTT5			= "主控選項：忽略分配圖騰5",
+	IgnoreTT6			= "主控選項：忽略分配圖騰6",
+	IgnoreTT7			= "主控選項：忽略分配圖騰7",
+	IgnoreTT8			= "主控選項：忽略分配圖騰8",
+	IgnoreTT9			= "主控選項：忽略分配圖騰9",
+	IgnoreTT10			= "主控選項：忽略分配圖騰10",
+	IgnoreTT11			= "主控選項：忽略分配圖騰11",
+	IgnoreTT12			= "主控選項：忽略分配圖騰12",
+	IgnoreTT13			= "主控選項：忽略分配圖騰13",
+	IgnoreTT14			= "主控選項：忽略分配圖騰14",
+	IgnoreTT15			= "主控選項：忽略分配圖騰15",
+	IgnoreTT16			= "主控選項：忽略分配圖騰16",
+	IgnoreTT17			= "主控選項：忽略分配圖騰17",
+	SpecWarnjs			= "特殊警告：減傷鏈",
 	SetIconOnVoodoo		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(122151),
-	GoTotemAdmin		= "主控：分配治療者跨界(英雄模式，團隊僅一人開啟)",
-	GoTotemClient		= "被控：接收治療者跨界警告(需存在主控)",
-	InfoFrame			= "資訊框：$spell:116161的玩家 (標注\"治療\"需團員選擇角色類型)"
+	InfoFrame			= "資訊框：$spell:116161的玩家 (標注\"治療\"需團員選擇角色類型)",
+	optjs				= "<黑手之鄉>@眾星之子 公會專用減傷提示模塊",
+	non					= "老子誰的減傷都不看",
+	druid				= "乳德的減傷",
+	priest				= "戒律的減傷",
+	paltank				= "坦騎的減傷",
+	palheal				= "乳騎的減傷",
+	warrior1			= "戰神A的減傷",
+	warrior2			= "戰神B的減傷",
+	monktank			= "坦僧的減傷",
+	paldps1				= "懲戒A的減傷",
+	paldps2				= "懲戒B的減傷",
+	optindex			= "被控選項：DPS入場優先級(不影響治療,總是分配魔法最低治療入場)",
+	noidex				= "我不想進",
+	index1				= "序列1(最高優先級)",
+	index2				= "序列2",
+	index3				= "序列3",
+	index4				= "序列4",
+	index5				= "序列5",
+	index6				= "序列6",
+	index7				= "序列7",
+	index8				= "序列8",
+	index9				= "序列9"
 })
 
 L:SetMiscLocalization({
@@ -113,14 +148,35 @@ L:SetMiscLocalization({
 ----------------------
 L = DBM:GetModLocalization(687)
 
+L:SetWarningLocalization({
+	specWarnDDL 	= ">> 下一次 到你斷 <<",
+	specWarnQBH		= "下一刀殲滅 去背後!",
+	specWarnQBHT	= "下一刀是殲滅!",
+	specWarnDSoon	= "三秒後 >>護盾<<"
+})
+
 L:SetOptionLocalization({
 	RangeFrame			= "距離監視(8碼)",
 	SoundWOP			= "語音警告：重要技能",
-	SoundDS				= "語音警告：$spell:117697和$spell:117961的驅散",
+	SoundDSA			= "語音警告：為各種護盾提前預警",
 	InfoFrame			= "資訊框：$spell:118303的目標",
 	HudMAP				= "高級定位監視(HUD)：$spell:118047的位置",
 	HudMAP2				= "高級定位監視(HUD)：$spell:118303的目標",
-	SoundCT				= "語音警告：$spell:117833的打斷"
+	SoundCT				= "語音警告：$spell:117833的打斷",
+	optDD				= "近戰打斷鏈",
+	nodd				= "我不打斷",
+	DD1					= "打斷1",
+	DD2					= "打斷2",
+	DD3					= "打斷3",
+	DD4					= "打斷4",
+	optKZ				= "盜王控制鏈",
+	noKZ				= "我不控制",
+	KZ1					= "控制1",
+	KZ2					= "控制2",
+	specWarnDDL 		= "特殊警告：下一次到你打斷",
+	specWarnQBH			= "特殊警告：下一刀殲滅",
+	specWarnQBHT		= "特殊警告：下一刀是殲滅(坦克)",
+	specWarnDSoon		= "特殊警告：護盾即將到來"
 })
 
 ------------
@@ -148,6 +204,7 @@ L:SetOptionLocalization({
 	specWarnProtector			= "特殊警告：$journal:6178",
 	timerDespawnFloor			= "計時器：中場地板消失",
 	InfoFrame					= "資訊框：$spell:117878層數最高的5名團員",
+	SetIconOnDestabilized		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(132226),
 	optOC						= "\"超載\"疊加幾層時，開始報警(每三層報警一次)",
 	six							= "6層",
 	nine						= "9層",
@@ -174,6 +231,7 @@ L= DBM:GetModLocalization(677)
 
 L:SetOptionLocalization({
 	InfoFrame			= "資訊框：$spell:116525的目標",
+	ArrowOnCombo	= "為$journal:5673顯示DBM箭頭\n注:這是假設坦克在前方而其他人在後方",
 	SoundWOP			= "語音警告：重要技能",
 	SoundADD1A			= "預先語音警告：$spell:ej5678 (5秒前)",
 	SoundADD1			= "語音警告：$spell:ej5678",

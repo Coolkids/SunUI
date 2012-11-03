@@ -1,5 +1,5 @@
 ﻿-- Simplified Chinese by Diablohu(diablohudream@gmail.com)
--- Last update: 10/21/2012
+-- Last update: 10/31/2012
 
 if GetLocale() ~= "zhCN" then return end
 local L
@@ -69,7 +69,7 @@ L:SetMiscLocalization({
 	Fire		= "噢，至高的神！借我之手融化他们的血肉吧！",
 	Arcane		= "噢，上古的贤者！赐予我魔法的智慧吧！",
 	Nature		= "噢，伟大的神灵！赐予我大地的力量！",
-	Shadow		= "Great soul of champions past! Bear to me your shield!"
+	Shadow		= "先烈的英灵！用你的盾保护我吧！"
 })
 
 
@@ -80,51 +80,106 @@ L= DBM:GetModLocalization(682)
 
 L:SetWarningLocalization({
 	specWarninTT 	= ">> 注意进内场 <<",
-	specWarnTotemE1 = "图腾(%d)  >五组进<",
-	specWarnTotemE2 = "图腾(%d)  >三组进<",
-	specWarnTotemE3 = "图腾(%d)  >四组进<",
-	specWarnAdmin 	= "存在治疗分配主控 (%s)"
+	SpecWarnjs		= "<%s> → %s"
 })
 
 L:SetOptionLocalization({
 	SoundWOP			= "语音警告：重要技能",
 	SoundTT				= "语音警告：$spell:116174",
-	optTT				= "\"灵魂图腾\"入场报警策略(黑手之乡公会战术)",
-	none				= "不报警",
-	warn1				= "4/7/10組报警",
-	warn2				= "2/5/8組报警",
-	warn3				= "3/6/9組报警",
+	optTT				= "\"灵魂图腾\"循环计数语音",
+	none				= "不播放计数语音",
+	warn3				= "按1~3循环计数",
+	warn4				= "按1~4循环计数",
 	specWarninTT		= "特殊警告：当需要进入内场时显示文字警告",
-	specWarnTotemEx		= "特殊：使用显示分组和计数的图腾警告(黑手之乡公会战术)",
-	specWarnTotemE1		= "特殊警告：计数式灵魂图腾(147)",
-	specWarnTotemE2		= "特殊警告：计数式灵魂图腾(258)",
-	specWarnTotemE3		= "特殊警告：计数式灵魂图腾(369)",
-	soundTotemEx		= "特殊：当播放灵魂图腾语音时按1~3循环播放计数语音",
-	specWarnAdmin		= "特殊警告：当存在主控端时",
+	GoTotemAdmin		= "主控：分配跨界(仅英雄模式有效,仅能由队长开啟)",
+	GoTotemClient		= "被控：接收跨界警告(仅英雄模式有效,需存在主控)",
+	optAdminTT			= "主控选项：分配几名DPS入场(此项不包括治疗,总是分配一名治疗入场)",
+	send1				= "一人",
+	send2				= "二人(10人模式推荐)",
+	send3				= "三人(10人模式推荐)",
+	send4				= "四人",
+	IgnoreTT1			= "主控选项：忽略分配图腾1",
+	IgnoreTT2			= "主控选项：忽略分配图腾2",
+	IgnoreTT3			= "主控选项：忽略分配图腾3",
+	IgnoreTT4			= "主控选项：忽略分配图腾4",
+	IgnoreTT5			= "主控选项：忽略分配图腾5",
+	IgnoreTT6			= "主控选项：忽略分配图腾6",
+	IgnoreTT7			= "主控选项：忽略分配图腾7",
+	IgnoreTT8			= "主控选项：忽略分配图腾8",
+	IgnoreTT9			= "主控选项：忽略分配图腾9",
+	IgnoreTT10			= "主控选项：忽略分配图腾10",
+	IgnoreTT11			= "主控选项：忽略分配图腾11",
+	IgnoreTT12			= "主控选项：忽略分配图腾12",
+	IgnoreTT13			= "主控选项：忽略分配图腾13",
+	IgnoreTT14			= "主控选项：忽略分配图腾14",
+	IgnoreTT15			= "主控选项：忽略分配图腾15",
+	IgnoreTT16			= "主控选项：忽略分配图腾16",
+	IgnoreTT17			= "主控选项：忽略分配图腾17",
+	SpecWarnjs			= "特殊警告：减伤链",
 	SetIconOnVoodoo		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(122151),
-	GoTotemAdmin		= "主控：分配治疗者跨界(英雄模式，团队仅一人开啟)",
-	GoTotemClient		= "被控：接收治疗者跨界警告(需存在主控)",
-	InfoFrame			= "资讯框：$spell:116161的玩家 (标注\"治疗\"需团员选择角色类型)"
+	InfoFrame			= "资讯框：$spell:116161的玩家 (标注\"治疗\"需团员选择角色类型)",
+	optjs				= "<黑手之乡>@眾星之子 公会专用减伤提示模块",
+	non					= "老子谁的减伤都不看",
+	druid				= "乳德的减伤",
+	priest				= "戒律的减伤",
+	paltank				= "坦骑的减伤",
+	palheal				= "乳骑的减伤",
+	warrior1			= "战神A的减伤",
+	warrior2			= "战神B的减伤",
+	monktank			= "坦僧的减伤",
+	paldps1				= "惩戒A的减伤",
+	paldps2				= "惩戒B的减伤",
+	optindex			= "被控选项：DPS入场优先级(不影响治疗,总是分配魔法最低治疗入场)",
+	noidex				= "我不想进",
+	index1				= "序列1(最高优先级)",
+	index2				= "序列2",
+	index3				= "序列3",
+	index4				= "序列4",
+	index5				= "序列5",
+	index6				= "序列6",
+	index7				= "序列7",
+	index8				= "序列8",
+	index9				= "序列9"
 })
 
 L:SetMiscLocalization({
 	Pull		= "死亡时间到！"
 })
 
-
 ----------------------
 -- The Spirit Kings --
 ----------------------
 L = DBM:GetModLocalization(687)
 
+L:SetWarningLocalization({
+	specWarnDDL 	= ">> 下一次 到你断 <<",
+	specWarnQBH		= "下一刀歼灭 去背后!",
+	specWarnQBHT	= "下一刀是歼灭!",
+	specWarnDSoon	= "三秒后 >>护盾<<"
+})
+
 L:SetOptionLocalization({
 	RangeFrame			= "距离监视(8码)",
 	SoundWOP			= "语音警告：重要技能",
-	SoundDS				= "语音警告：$spell:117697和$spell:117961的驱散",
+	SoundDSA			= "语音警告：為各种护盾提前预警",
 	InfoFrame			= "资讯框：$spell:118303的目标",
 	HudMAP				= "高级定位监视(HUD)：$spell:118047的位置",
 	HudMAP2				= "高级定位监视(HUD)：$spell:118303的目标",
-	SoundCT				= "语音警告：$spell:117833的打断"
+	SoundCT				= "语音警告：$spell:117833的打断",
+	optDD				= "打断链",
+	nodd				= "我不打断",
+	DD1					= "打断1",
+	DD2					= "打断2",
+	DD3					= "打断3",
+	DD4					= "打断4",
+	optKZ				= "盗王控制链",
+	noKZ				= "我不控制",
+	KZ1					= "控制1",
+	KZ2					= "控制2",
+	specWarnDDL 		= "特殊警告：下一次到你打断",
+	specWarnQBH			= "特殊警告：下一刀歼灭",
+	specWarnQBHT		= "特殊警告：下一刀歼灭(坦克)",
+	specWarnDSoon		= "特殊警告：护盾即将到来"
 })
 
 
@@ -153,6 +208,7 @@ L:SetOptionLocalization({
 	specWarnProtector			= "特殊警告：$journal:6178",
 	timerDespawnFloor			= "计时器：中场地板消失",
 	InfoFrame					= "资讯框：$spell:117878层数最高的5名团员",
+	SetIconOnDestabilized		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(132226),
 	optOC						= "\"能量超载\"叠加几层时，开始报警(每三层报警一次)",
 	six							= "6层",
 	nine						= "9层",
@@ -179,6 +235,7 @@ L= DBM:GetModLocalization(677)
 
 L:SetOptionLocalization({
 	InfoFrame			= "资讯框：$spell:116525的目标",
+	ArrowOnCombo			= "DBM箭头：连击",
 	SoundWOP			= "语音警告：重要技能",
 	SoundADD1A			= "预先语音警告：$spell:ej5678 (5秒前)",
 	SoundADD1			= "语音警告：$spell:ej5678",

@@ -3,7 +3,7 @@ local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local LibRange = LibStub("LibRangeCheck-2.0")
 
-mod:SetRevision(("$Revision: 7834 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8028 $"):sub(12, -3))
 mod:SetCreatureID(62397)
 mod:SetModelID(42645)
 mod:SetZone()
@@ -16,15 +16,18 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_REFRESH",
 	"SPELL_AURA_REMOVED",
 	"SPELL_CAST_START",
+	"SPELL_DAMAGE",
+	"SPELL_MISSED",
 	"RAID_BOSS_EMOTE",
 	"UNIT_DIED",
 	"UNIT_SPELLCAST_SUCCEEDED",
-	"SPELL_DAMAGE",
-	"SPELL_MISSED"
+	"UNIT_AURA"
 )
 local isDispeller = select(2, UnitClass("player")) == "MAGE"
 	    		 or select(2, UnitClass("player")) == "PRIEST"
 	    		 or select(2, UnitClass("player")) == "SHAMAN" 
+			 
+local warnWhirlingBlade					= mod:NewTargetAnnounce(121896, 4)--Target scanning not tested
 local warnRainOfBlades					= mod:NewSpellAnnounce(122406, 4)
 local warnRecklessness					= mod:NewTargetAnnounce(125873, 3)
 local warnImpalingSpear					= mod:NewPreWarnAnnounce(122224, 5, 3)--Pre warn your CC is about to break. Maybe need to localize it later to better explain what option is for.
@@ -32,10 +35,10 @@ local warnAmberPrison					= mod:NewTargetAnnounce(121881, 3)
 local warnCorrosiveResin				= mod:NewTargetAnnounce(122064, 3)
 local warnMending						= mod:NewCastAnnounce(122193, 4)
 local warnQuickening					= mod:NewCastAnnounce(122149, 4)
-local warnKorthikStrike					= mod:NewSpellAnnounce(123963, 3)--Target scanning does NOT work
+local warnKorthikStrike					= mod:NewTargetAnnounce(123963, 3)
+local warnWindBomb						= mod:NewTargetAnnounce(131830, 4)
 
 local specWarnWhirlingBlade				= mod:NewSpecialWarningSpell(121896, nil, nil, nil, true)
-local specWarnWindBomb					= mod:NewSpecialWarningSpell(131813)
 local specWarnRainOfBlades				= mod:NewSpecialWarningSpell(122406, nil, nil, nil, true)
 local specWarnRecklessness				= mod:NewSpecialWarningTarget(125873)
 local specWarnReinforcements			= mod:NewSpecialWarningSpell("ej6554", mod:IsTank())
@@ -43,12 +46,16 @@ local specWarnAmberPrison				= mod:NewSpecialWarningYou(121881)
 local yellAmberPrison					= mod:NewYell(121881)
 local specWarnAmberPrisonOther			= mod:NewSpecialWarningSpell(121881, false)--Only people who are freeing these need to know this.
 local specWarnCorrosiveResin			= mod:NewSpecialWarningRun(122064)
-local yellCorrosiveResin				= mod:NewYell(122064)
+local yellCorrosiveResin				= mod:NewYell(122064, nil, false)
 local specWarnCorrosiveResinPool		= mod:NewSpecialWarningMove(122125)
-local specWarnMending					= mod:NewSpecialWarningInterrupt(122193, false)--Whoever is doing this or feels responsible should turn it on.
+local specWarnMending					= mod:NewSpecialWarningInterrupt(122193)--Whoever is doing this or feels responsible should turn it on.
 local specWarnQuickening				= mod:NewSpecialWarningSpell(122149, false)--^^
 local specWarnQuickeningDispel			= mod:NewSpecialWarningSpell(122149, isDispeller)
-local specWarnKorthikStrike				= mod:NewSpecialWarningSpell(123963, nil, nil, nil, true)--Depends on if target scanning works, otherwise, tanks going to get a lot of wrong spam, :)
+local specWarnKorthikStrike				= mod:NewSpecialWarningYou(123963)
+local specWarnKorthikStrikeOther		= mod:NewSpecialWarningTarget(123963, mod:IsHealer())
+local yellKorthikStrike					= mod:NewYell(123963)
+local specWarnWindBomb					= mod:NewSpecialWarningMove(131830)
+local yellWindBomb						= mod:NewYell(131830)
 
 local timerWhirlingBladeCD				= mod:NewNextTimer(45.5, 121896)
 local timerRainOfBladesCD				= mod:NewNextTimer(61.5, 122406)--60 CD, but Cd starts when last cast ends, IE 60+cast time. Starting cd off cast start is 61.5, but on pull it's 60.0
@@ -59,7 +66,8 @@ local timerAmberPrisonCD				= mod:NewNextTimer(36, 121876)--each add has their o
 local timerCorrosiveResinCD				= mod:NewNextTimer(36, 122064)--^^
 local timerMendingCD					= mod:NewNextTimer(36, 122193, nil, false)--To reduce bar spam, only those dealing with this should turn CD bar on, off by default
 local timerQuickeningCD					= mod:NewNextTimer(36, 122149, nil, false)--^^
-local timerKorthikStrikeCD				= mod:NewCDTimer(40.5, 123963)--^^
+local timerKorthikStrikeCD				= mod:NewCDTimer(32, 123963)--^^
+local timerWindBombCD					= mod:NewCDTimer(6, 131830)--^^
 
 local berserkTimer						= mod:NewBerserkTimer(480)
 
@@ -67,12 +75,25 @@ mod:AddBoolOption("SoundDQ", mod:IsDps() and isDispeller, "sound")
 mod:AddBoolOption("AmberPrisonIcons", true)
 mod:AddBoolOption("NearAP", true, "sound")
 mod:AddBoolOption("ReapetAP", true, "sound")
+mod:AddBoolOption("RangeFrame", true, "sound")
 
 local apnear = 20
 local addsCount = 0
 local amberPrisonIcon = 2
+local strikeTarget = GetSpellInfo(123963)
+local strikeWarned = false
 local amberPrisonTargets = {}
 local ptwo = false
+
+local windBombTargets = {}
+local guids = {}
+local guidTableBuilt = false--Entirely for DCs, so we don't need to reset between pulls cause it doesn't effect building table on combat start and after a DC then it will be reset to false always
+local function buildGuidTable()
+	table.wipe(guids)
+	for i = 1, DBM:GetGroupMembers() do
+		guids[UnitGUID("raid"..i) or "none"] = GetRaidRosterInfo(i)
+	end
+end
 
 mod:AddBoolOption("HudMAP", true, "sound")
 local DBMHudMap = DBMHudMap
@@ -83,22 +104,17 @@ local function register(e)
 end
 local AmberPrisonMarkerscast = {}
 local AmberPrisonMarkers = {}
+local windBombTargets = {}
 
 local function warnAmberPrisonTargets()
 	warnAmberPrison:Show(table.concat(amberPrisonTargets, "<, >"))
 	table.wipe(amberPrisonTargets)
 end
 
-local function isTank(unit)
-	-- 1. check blizzard tanks first
-	-- 2. check blizzard roles second
-	if GetPartyAssignment("MAINTANK", unit, 1) then
-		return true
-	end
-	if UnitGroupRolesAssigned(unit) == "TANK" then
-		return true
-	end
-	return false
+local function warnWindBombTargets()
+	warnWindBomb:Show(table.concat(windBombTargets, "<, >"))
+	table.wipe(windBombTargets)
+	timerWindBombCD:Start()
 end
 
 function mod:checkdebuff()
@@ -111,8 +127,10 @@ end
 function mod:OnCombatStart(delay)
 	addsCount = 0
 	amberPrisonIcon = 2
+	strikeWarned = false
 	ptwo = false
 	table.wipe(amberPrisonTargets)
+	table.wipe(windBombTargets)
 	timerWhirlingBladeCD:Start(35.5-delay)
 	timerRainOfBladesCD:Start(60-delay)
 	berserkTimer:Start(-delay)
@@ -123,11 +141,17 @@ function mod:OnCombatStart(delay)
 	end
 	table.wipe(AmberPrisonMarkerscast)
 	table.wipe(AmberPrisonMarkers)
+	if self.Options.RangeFrame then
+		DBM.RangeCheck:Show(3)
+	end
 end
 
 function mod:OnCombatEnd()
 	if self.Options.HudMAP then
 		DBMHudMap:FreeEncounterMarkers()
+	end
+	if self.Options.RangeFrame then
+		DBM.RangeCheck:Hide()
 	end
 end
 
@@ -150,10 +174,6 @@ function mod:SPELL_AURA_APPLIED(args)
 			end
 			if not self:IsDifficulty("lfr25") then
 				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runout.mp3") --離開人群
-				DBM.RangeCheck:Show(3)
-				self:Schedule(5, function()
-					DBM.RangeCheck:Hide()
-				end)
 			end
 		else
 			self:Unschedule(warnAmberPrisonTargets)
@@ -167,7 +187,7 @@ function mod:SPELL_AURA_APPLIED(args)
 					x, y = GetPlayerMapPosition(uId)
 				end
 				local inRange = DBM.RangeCheck:GetDistance("player", x, y)
-				apnear = self.Options.NearAP and 20 or 200
+				apnear = self.Options.NearAP and 30 or 200
 				if inRange and inRange < apnear then
 					if not UnitDebuff("player", GetSpellInfo(122055)) then
 						if math.random(1, 2) == 1 then
@@ -203,7 +223,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_lumang.mp3") --魯莽
 		timerRecklessness:Start()
 		timerReinforcementsCD:Start(50, addsCount)--We count them cause some groups may elect to kill a 2nd group of adds and start a second bar to form before first ends.
-	elseif args:IsSpellID(122149) and self:AntiSpam(1, 5) then
+	elseif args:IsSpellID(122149) and self:AntiSpam(2, 5) then
 		if isDispeller and self.Options.SoundDQ then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\dispelnow.mp3") --快驅散
 			specWarnQuickeningDispel:Show()
@@ -263,11 +283,11 @@ function mod:SPELL_CAST_START(args)
 		timerCorrosiveResinCD:Start(36, args.sourceGUID)
 	elseif args:IsSpellID(122193) then
 		warnMending:Show()
-		specWarnMending:Show(args.sourceName)
-		timerMendingCD:Start(36, args.sourceGUID)
-		if (args.sourceGUID == UnitGUID("target")) or (args.sourceGUID == UnitGUID("focus")) then
+		if args.sourceGUID == UnitGUID("target") or args.sourceGUID == UnitGUID("focus") then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3")--快打斷
+			specWarnMending:Show(args.sourceName)
 		end
+		timerMendingCD:Start(36, args.sourceGUID)
 	elseif args:IsSpellID(122149) then
 		warnQuickening:Show()
 		specWarnQuickening:Show(args.sourceName)
@@ -275,6 +295,21 @@ function mod:SPELL_CAST_START(args)
 	end
 end
 
+function mod:SPELL_DAMAGE(_, _, _, _, destGUID, destName, _, _, spellId)
+	if spellId == 131830 then
+		windBombTargets[#windBombTargets + 1] = destName
+		self:Unschedule(warnWindBombTargets)
+		self:Schedule(0.3, warnWindBombTargets)
+		if destGUID == UnitGUID("player") and self:AntiSpam(3, 3) then
+			specWarnWindBomb:Show()
+			yellWindBomb:Yell()
+		end
+	elseif spellId == 122125 and destGUID == UnitGUID("player") and self:AntiSpam(3, 4) then
+		specWarnCorrosiveResinPool:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
+	end
+end
+mod.SPELL_MISSED = mod.SPELL_DAMAGE
 
 function mod:RAID_BOSS_EMOTE(msg)
 	if msg == L.Reinforcements or msg:find(L.Reinforcements) then
@@ -305,21 +340,37 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 --	"<175.6> [CLEU] SPELL_CAST_START#false#0xF130F3C200000FC7#Kor'thik Elite Blademaster#2632#8#0x0000000000000000#nil#-2147483648#-2147483648#122409#Kor'thik Strike#1", -- [10536]
 	elseif spellId == 123963 and self:AntiSpam(2, 2) then--Kor'thik Strike Trigger, only triggered once, then all non CCed Kor'thik cast the strike about 2 sec later
 		warnKorthikStrike:Show()
---		specWarnKorthikStrike:Show()
 		timerKorthikStrikeCD:Start()
 	elseif spellId == 131813 and self:AntiSpam(2, 3) then
 		if not ptwo then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ptwo.mp3")--P2
-			specWarnWindBomb:Show()
 		end
 		ptwo = true
 	end
 end
 
-function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
-	if spellId == 122125 and destGUID == UnitGUID("player") and self:AntiSpam(3, 4) then
-		specWarnCorrosiveResinPool:Show()
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
+function mod:UNIT_AURA(uId)
+	if uId ~= "player" then return end
+	if UnitDebuff("player", strikeTarget) and not strikeWarned then--Warn you that you have a meteor
+		specWarnKorthikStrike:Show()
+		yellKorthikStrike:Yell()
+		strikeWarned = true
+		self:SendSync("KorthikStrikeTarget", UnitGUID("player"))--Screw target scanning, this way is much better, never wrong.
+	elseif not UnitDebuff("player", strikeTarget) and strikeWarned then--reset warned status if you don't have debuff
+		strikeWarned = false
 	end
 end
-mod.SPELL_MISSED = mod.SPELL_DAMAGE
+
+function mod:OnSync(msg, guid)
+	--Make sure we build a table if we DCed mid fight, before we try comparing any syncs to that table.
+	if not guidTableBuilt then
+		buildGuidTable()
+		guidTableBuilt = true
+	end
+	if msg == "KorthikStrikeTarget" and guids[guid] then
+		warnKorthikStrike:Show(guids[guid])
+		if guid ~= UnitGUID("player") then--make sure YOU aren't target before warning "other"
+			specWarnKorthikStrikeOther:Show(guids[guid])
+		end
+	end
+end
