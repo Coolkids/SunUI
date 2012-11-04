@@ -203,7 +203,7 @@ or (GetLocale() == "zhTW") and {
 	texture = "材質",
 	defaultfont = "預設",
 	Offline = "離綫",
-	Dead = "死亡",
+	Dead = "|cffff0000死亡|r",
 	Ghost = "幽靈",
 	AFK = "離開",
 	default = "默認",
