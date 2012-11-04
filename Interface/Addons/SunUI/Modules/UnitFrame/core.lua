@@ -1374,6 +1374,7 @@ lib.gen_threat = function(f)
 	self.Health.colorClass = true
 	self.Health.colorReaction = true
 	end
+	self.Health.Smooth = true
     self.Power.colorPower = true
     self.Power.multiplier = 0.3	
 	if U["TargetRange"] then
@@ -1392,6 +1393,7 @@ lib.gen_threat = function(f)
     self.disallowVehicleSwap = false
     genStyle(self)
     self.Power.frequentUpdates = true
+	self.Health.Smooth = true
 	self.Power.Smooth = true
     self.Power.colorPower = true
     self.Power.multiplier = 0.3
@@ -1418,6 +1420,8 @@ lib.gen_threat = function(f)
 	self.Health.colorClass = true
 	self.Health.colorReaction = true
 	end
+	self.Health.Smooth = true
+	self.Power.Smooth = true
     self.Power.frequentUpdates = true
     self.Power.colorPower = true
     self.Power.multiplier = 0.3
@@ -1459,6 +1463,7 @@ lib.gen_threat = function(f)
 	self.Health.colorReaction = true
 	end
     self.Health.Smooth = true
+	self.Power.Smooth = true
     self.Power.frequentUpdates = true
     self.Power.colorPower = true
     self.Power.multiplier = 0.3
@@ -1486,6 +1491,8 @@ lib.gen_threat = function(f)
 	self.Health.colorClass = true
 	self.Health.colorReaction = true
 	end
+	self.Health.Smooth = true
+	self.Power.Smooth = true
     self.Power.frequentUpdates = true
     self.Power.colorPower = true
     self.Power.multiplier = 0.3
@@ -1507,7 +1514,8 @@ lib.gen_threat = function(f)
     self.height = self.width
     self.mystyle = "arenatarget"
     genStyle(self)
-    
+    self.Health.Smooth = true
+	self.Power.Smooth = true
 	self:Size(self.width,self.height)
   end  
   
@@ -1518,9 +1526,11 @@ lib.gen_threat = function(f)
     self.mystyle = "boss"
     genStyle(self)
 	if U["ClassColor"] then
-	self.Health.colorClass = true
-	self.Health.colorReaction = true
+		self.Health.colorClass = true
+		self.Health.colorReaction = true
 	end
+	self.Health.Smooth = true
+	self.Power.Smooth = true
     self.Power.frequentUpdates = true
     self.Power.colorPower = true
     self.Power.multiplier = 0.3

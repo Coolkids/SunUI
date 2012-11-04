@@ -536,3 +536,19 @@ function S.CreateBackdropTexture(f)
 	tex:SetAlpha(0.8)
 	f.backdropTexture = tex
 end
+
+function S.ReskinColourSwatch(f)
+	local name = f:GetName()
+
+	local bg = _G[name.."SwatchBg"]
+
+	f:SetNormalTexture(media.backdrop)
+	local nt = f:GetNormalTexture()
+
+	nt:Point("TOPLEFT", 3, -3)
+	nt:Point("BOTTOMRIGHT", -3, 3)
+
+	bg:SetTexture(0, 0, 0)
+	bg:Point("TOPLEFT", 2, -2)
+	bg:Point("BOTTOMRIGHT", -2, 2)
+end

@@ -107,11 +107,11 @@ local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("RaidCD")
 	local OnMouseDown = function(self, button)
 		if button == "LeftButton" then
 			if GetNumGroupMembers() > 0 then
-				SendChatMessage(sformat("SunUI_RaidCD".." %s: %s", self.left:GetText(), self.right:GetText()), "RAID")
+				SendChatMessage(sformat("SunUI_RaidCD".." %s: %s", self.left:GetText().."-"..self.spell, self.right:GetText()), "RAID")
 			elseif GetNumSubgroupMembers() > 0 and not UnitInRaid("player") then
-				SendChatMessage(sformat("SunUI_RaidCD".." %s: %s", self.left:GetText(), self.right:GetText()), "PARTY")
+				SendChatMessage(sformat("SunUI_RaidCD".." %s: %s", self.left:GetText().."-"..self.spell, self.right:GetText()), "PARTY")
 			else
-				SendChatMessage(sformat("SunUI_RaidCD".." %s: %s", self.left:GetText(), self.right:GetText()), "SAY")
+				SendChatMessage(sformat("SunUI_RaidCD".." %s: %s", self.left:GetText().."-"..self.spell, self.right:GetText()), "SAY")
 			end
 		elseif button == "RightButton" then
 			StopTimer(self)

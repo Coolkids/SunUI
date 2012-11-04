@@ -82,7 +82,7 @@ ConstructTimerBar = function(width, height)
     status:SetSize(width/2,height)
     status:SetPoint("TOPLEFT", f.bar, "TOPLEFT",0,0)
     status:Hide()
-    f.arrow = status
+    f.status = status
 	
     local at = ic:CreateTexture(nil,"OVERLAY")
     at:SetTexture([[Interface\SpellActivationOverlay\IconAlert]])

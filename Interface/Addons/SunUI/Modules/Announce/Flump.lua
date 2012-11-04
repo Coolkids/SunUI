@@ -119,6 +119,8 @@ local raidwide_2 = {
 	[62618] = true, -- Power Word: Barrier
 	-- Shaman
 	[98008] = true, -- Spirit Link Totem
+	[115310] = true,  --五气归元
+	[115176] = true,  --冥思禅功
 }
 
 local summons = {
