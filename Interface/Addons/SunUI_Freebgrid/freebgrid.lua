@@ -1369,16 +1369,14 @@ function ns:UpdateHealthColor(self)
 			if ns.db.definecolors then
 				healthBar:SetStatusBarColor(ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b, 1)
 				if ns.db.mode then 
-					healthBar.bg:SetTexture(ns.db.texturePath)
-					healthBar.bg:SetVertexColor(173/255, 22/255, 27/255, 0.6)
+					healthBar.bg:SetTexture(nil)
 				else
 					healthBar.bg:SetVertexColor(ns.db.deadcolor.r*.2, ns.db.deadcolor.g*.2, ns.db.deadcolor.b*.2, 1)
 				end
 			else
 				healthBar:SetStatusBarColor(ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b,.6)
 				if ns.db.mode then 
-					healthBar.bg:SetTexture(ns.db.texturePath)
-					healthBar.bg:SetVertexColor(173/255, 22/255, 27/255, 0.6)
+					healthBar.bg:SetTexture(nil)
 				else
 					healthBar.bg:SetVertexColor(ns.db.deadcolor.r*.2, ns.db.deadcolor.g*.2, ns.db.deadcolor.b*.2,.6)
 				end

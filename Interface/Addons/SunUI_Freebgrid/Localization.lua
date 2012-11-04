@@ -17,7 +17,7 @@ ns.Locale = (GetLocale() == "zhCN") and {
 	texture = "材质",
 	defaultfont = "默认",
 	Offline = "离线",
-	Dead = "死亡",
+	Dead = "|cffff0000死亡|r",
 	Ghost = "幽灵",
 	AFK = "离开",
 	default = "默认",
