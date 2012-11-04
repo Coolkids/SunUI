@@ -1271,6 +1271,12 @@ ns.watchers ={
 				{ spellID =  60233, unitId = "player", caster = "player", filter = "BUFF" }, 
 				-- 宇宙之光
 				{ spellID =  126577, unitId = "player", caster = "player", filter = "BUFF" }, 
+				-- MoP暗月卡 治疗
+				{ spellID =  128987, unitId = "player", caster = "player", filter = "BUFF" }, 
+				-- MoP暗月卡 法系DPS
+				{ spellID =  128985, unitId = "player", caster = "player", filter = "BUFF" },
+				-- 秦太的强化印记(LFR)
+				{ spellID =  126588, unitId = "player", caster = "player", filter = "BUFF" },
 		},
 	},
 }

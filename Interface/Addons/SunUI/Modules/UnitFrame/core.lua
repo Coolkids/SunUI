@@ -85,18 +85,13 @@ end
 UIDropDownMenu_Initialize(dropdown, init, 'MENU')
 
 lib.PostUpdateHealth = function(s, u, min, max)
-	--if UnitIsDeadOrGhost(u) then s:SetValue(0) end
-	local bg = CreateFrame("Frame", nil, s)
-	bg:SetFrameLevel(s:GetFrameLevel()+2)
-	bg:SetPoint("TOPRIGHT", s)
-	bg:SetPoint("BOTTOMLEFT", s:GetStatusBarTexture(), "BOTTOMRIGHT")
-	local b = bg:CreateTexture(nil, "BACKGROUND")
-	b:SetTexture(tex)
-	b:SetAllPoints(bg)
+	if UnitIsDeadOrGhost(u) then s:SetValue(0) end
+	s.bd:SetPoint("TOPRIGHT", s)
+	s.bd:SetPoint("BOTTOMLEFT", s:GetStatusBarTexture(), "BOTTOMRIGHT")
 	if not U["ReverseHPbars"] then 
-		b:SetVertexColor(s:GetStatusBarColor())
+		s.bd.b:SetVertexColor(s:GetStatusBarColor())
 	else
-		b:SetVertexColor(0.33, 0.33, 0.33, 1)
+		s.bd.b:SetVertexColor(0.33, 0.33, 0.33, 1)
 	end
 end
 
@@ -141,6 +136,11 @@ lib.gen_hpbar = function(f)
 		s:SetStatusBarTexture(tex)
 		s:SetAlpha(0.9)
 	end
+	local bg = CreateFrame("Frame", nil, s)
+	bg:SetFrameLevel(s:GetFrameLevel()+2)
+	bg.b = bg:CreateTexture(nil, "BACKGROUND")
+	bg.b:SetTexture(tex)
+	bg.b:SetAllPoints(bg)
     s.PostUpdate = lib.PostUpdateHealth
 	
     fixStatusbar(s)
@@ -185,6 +185,7 @@ lib.gen_hpbar = function(f)
 	}
 	
 	f.Health = s
+	f.Health.bd = bg
 end
   --3d portrait behind hp bar
 lib.gen_portrait = function(f)
