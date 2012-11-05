@@ -1,9 +1,13 @@
-## Author: Shinisuryu
+﻿## Author: Shinisuryu
 ## Interface: 50001
 ## Notes: Enhances shift-click interface at vendors.
-## Title: BuyEmAll (3.1.1)
-## Version: 3.1.1
+## Title: BuyEmAll (3.1.2)
+## Version: 3.1.2
 ## SavedVariablesPerCharacter: BEAConfirmToggle
+## LoadManagers: AddonLoader
+## X-LoadOn-Merchant: true
+## X-LoadOn-Slash: /buyemall
+
 Localization.deDE.lua
 Localization.enUS.lua
 Localization.esES.lua

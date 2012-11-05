@@ -4225,10 +4225,18 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 					bu.reskinned = true
 				end
-				if bu:IsShown() then
+				if bu:IsShown() and bu.itemLink then
 					local _, _, quality = GetItemInfo(bu.itemLink)
 					bu.Name:SetTextColor(GetItemQualityColor(quality))
 				end
+			end
+		end)
+
+		hooksecurefunc("BlackMarketFrame_UpdateHotItem", function(self)
+			local hotDeal = self.HotDeal
+			if hotDeal:IsShown() and hotDeal.itemLink then
+				local _, _, quality = GetItemInfo(hotDeal.itemLink)
+				hotDeal.Name:SetTextColor(GetItemQualityColor(quality))
 			end
 		end)
 	elseif addon == "Blizzard_Calendar" then

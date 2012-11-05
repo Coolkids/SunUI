@@ -13,6 +13,7 @@ It's ALIVE!!! Muahahahahhahahaa!!!!!!
 function BuyEmAll:OnLoad()
 	-- Set up confirmation dialog
 	StaticPopupDialogs["BUYEMALL_CONFIRM"] = {
+		preferredIndex = 3,
 		text = L.CONFIRM,
 		button1 = YES,
 		button2 = NO,
@@ -22,6 +23,7 @@ function BuyEmAll:OnLoad()
 	}
 	self.ConfirmNoItemID = 0;
 	StaticPopupDialogs["BUYEMALL_CONFIRM2"] = {
+		preferredIndex = 3,
 		text = L.CONFIRM,
 		button1 = YES,
 		button2 = NO,

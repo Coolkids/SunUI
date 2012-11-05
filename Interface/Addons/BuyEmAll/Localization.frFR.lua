@@ -1,18 +1,18 @@
-﻿-- Thanks to Layrajha
+﻿-- Thanks to Layrajha!
 
-if GetLocale() ~= "frFR" then
-	return
+if GetLocale() == "frFR" then
+	BUYEMALL_LOCALS = {
+	-- MAX 			= "Max",
+	STACK 			= "Pile",
+	CONFIRM 		= "Voulez-vous vraiment acheter\n %d × %s?",
+	-- STACK_PURCH	= "Stack Purchase",
+	STACK_SIZE	 	= "Taille de pile",
+	-- PARTIAL 		= "Partial stack",
+	MAX_PURCH		= "Achat maximum",
+	FIT				= "Vous pouvez transporter",
+	AFFORD			= "Vous pouvez payer",
+	AVAILABLE		= "Le marchand a",
+}
 end
 
-local L = BUYEMALL_LOCALS
-
--- L.MAX 			= "Max"
-L.STACK 		= "Pile"
-L.CONFIRM 		= "Voulez-vous vraiment acheter\n %d × %s?"
--- L.STACK_PURCH	= "Stack Purchase"
-L.STACK_SIZE 	= "Taille de pile"
--- L.PARTIAL 		= "Partial stack"
-L.MAX_PURCH		= "Achat maximum"
-L.FIT			= "Vous pouvez transporter"
-L.AFFORD		= "Vous pouvez payer"
-L.AVAILABLE		= "Le marchand a"
+local L = BUYEMALL_LOCALS;

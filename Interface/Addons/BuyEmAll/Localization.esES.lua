@@ -1,18 +1,18 @@
--- Thanks to jsr1976!
+ï»¿-- Thanks to jsr1976!
 
-if GetLocale() ~= "esES" and GetLocale() ~= "esMX" then
-	return
+if GetLocale() == "esES" or GetLocale() == "esMX" then
+	BUYEMALL_LOCALS = {
+	MAX				= "Max",
+	STACK			= "MontÃ³n",
+	CONFIRM			= "Estas seguro que quieres comprar\n %d Ã— %s?",
+	STACK_PURCH		= "MontÃ³n Comprada",
+	STACK_SIZE		= "TamaÃ±o del MontÃ³n",
+	PARTIAL			= "MontÃ³n Parcial",
+	MAX_PURCH		= "Compra el Maximo",
+	FIT				= "Puede caber",
+	AFFORD			= "Puedes darte el lujo",
+	AVAILABLE		= "Vendedor tiene",
+}
 end
  
-local L = BUYEMALL_LOCALS
-
-L.MAX				= "Max"
-L.STACK				= "Montón"
-L.CONFIRM			= "Estas seguro que quieres comprar\n %d × %s?"
-L.STACK_PURCH		= "Montón Comprada"
-L.STACK_SIZE		= "Tamaño del Montón"
-L.PARTIAL			= "Montón Parcial"
-L.MAX_PURCH			= "Compra el Maximo"
-L.FIT				= "Puede caber"
-L.AFFORD			= "Puedes darte el lujo"
-L.AVAILABLE			= "Vendedor tiene"
+local L = BUYEMALL_LOCALS;
