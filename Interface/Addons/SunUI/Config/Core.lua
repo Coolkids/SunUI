@@ -983,7 +983,7 @@ function SunUIConfig.GenerateOptionsInternal()
 								disabled = function(info) return not db.MiniDB.Autoinvite end,
 								order = 10,
 								get = function() return tostring(db.MiniDB.INVITE_WORD) end,
-								set = function(_, value) db.MiniDB.INVITE_WORD = tonumber(value) end,
+								set = function(_, value) db.MiniDB.INVITE_WORD = tostring(value) end,
 							},
 							igonoreOld = {
 								type = "toggle",

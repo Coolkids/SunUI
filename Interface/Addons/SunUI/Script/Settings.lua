@@ -142,7 +142,7 @@ function Module:OnInitialize()
 		local f = CreateFrame("frame")
 		f:RegisterEvent("CHAT_MSG_WHISPER")
 		f:SetScript("OnEvent", function(self,event,arg1,arg2)
-			if (not UnitExists("party1") or IsPartyLeader("player")) and arg1:lower():match(C["MiniDB"]["INVITE_WORD"]) then
+			if (not UnitExists("party1") or UnitIsGroupLeader("player")) and arg1:lower():match(C["MiniDB"]["INVITE_WORD"]) then
 				InviteUnit(arg2)
 			end
 		end)

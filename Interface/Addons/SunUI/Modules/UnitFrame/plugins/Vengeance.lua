@@ -2,9 +2,7 @@ local S, C, L, DB = unpack(select(2, ...))
 local _, ns = ...
 local oUF = ns.oUF or oUF
 
--- local vengeance = GetSpellInfo(93098)
---local vengeance = GetSpellInfo(76691)
-vengeance = GetSpellInfo(132365)
+local vengeance = GetSpellInfo(132365)
 local function valueChanged(self, event, unit)
 	if unit ~= "player" then return end
 	local bar = self.Vengeance

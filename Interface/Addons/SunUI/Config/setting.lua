@@ -229,7 +229,7 @@ G["MoveHandleDB"] = {
 	--powerbar
 	["PowerBar"] = {"CENTER", "UIParent", "CENTER", 0, -120},
 	--成就移动
-	["AchievementHolder"] = {"CENTER", "UIParent", "CENTER", 0, -100},
+	["AchievementHolder"] = {"RIGHT", "UIParent", "RIGHT", -220, -100},
 	--警告框体
 	["Warn"] = {"TOP", "UIParent", "TOP", 0, -35},
 }

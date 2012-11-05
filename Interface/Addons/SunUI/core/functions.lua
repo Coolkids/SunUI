@@ -99,24 +99,68 @@ function S.ShortValue(v)
 		return v
 	end
 end
-
+local roles = {
+	["PALADIN"] = {
+		[1] = "Caster",
+		[2] = "Tank",
+		[3] = "Melee",
+	},
+	["PRIEST"] = {
+		[1] = "Caster",
+		[2] = "Caster",
+		[3] = "Caster",
+	},
+	["WARLOCK"] = {
+		[1] = "Caster",
+		[2] = "Caster",
+		[3] = "Caster",
+	},
+	["WARRIOR"] = {
+		[1] = "Melee",
+		[2] = "Melee",
+		[3] = "Tank",	
+	},
+	["HUNTER"] = {
+		[1] = "Melee",
+		[2] = "Melee",
+		[3] = "Melee",
+	},
+	["SHAMAN"] = {
+		[1] = "Caster",
+		[2] = "Melee",
+		[3] = "Caster",	
+	},
+	["ROGUE"] = {
+		[1] = "Melee",
+		[2] = "Melee",
+		[3] = "Melee",
+	},
+	["MAGE"] = {
+		[1] = "Caster",
+		[2] = "Caster",
+		[3] = "Caster",
+	},
+	["DEATHKNIGHT"] = {
+		[1] = "Tank",
+		[2] = "Melee",
+		[3] = "Melee",	
+	},
+	["DRUID"] = {
+		[1] = "Caster",
+		[2] = "Melee",
+		[3] = "Tank",	
+		[4] = "Caster"
+	},
+	["MONK"] = {
+		[1] = "Tank",
+		[2] = "Caster",
+		[3] = "Melee",	
+	},
+}
 RoleUpdater = CreateFrame("Frame")
 local function CheckRole(self, event, unit)
 	local tree = GetSpecialization()
-	if ((DB.MyClass == "PALADIN" and tree == 2) or (DB.MyClass == "WARRIOR" and tree == 3) or (DB.MyClass == "DEATHKNIGHT" and tree == 1)) or (DB.MyClass == "DRUID" and tree == 3 and GetBonusBarOffset() == 3) then
-		DB.Role = "Tank"
-	else
-		local playerint = select(2, UnitStat("player", 4))
-		local playeragi	= select(2, UnitStat("player", 2))
-		local base, posBuff, negBuff = UnitAttackPower("player");
-		local playerap = base + posBuff + negBuff;
-		
-		if ((playerap > playerint) or (playeragi > playerint)) and not (DB.MyClass == "SHAMAN" and tree ~= 1 and tree ~= 3) or DB.MyClass == "HUNTER" or (DB.MyClass == "SHAMAN" and tree == 2) or DB.MyClass == "ROGUE" then
-			DB.Role = "Melee"
-		else
-			DB.Role = "Caster"
-		end
-	end
+	DB.Role = roles[DB.MyClass][tree]
 end	
 RoleUpdater:RegisterEvent("PLAYER_ENTERING_WORLD")
 RoleUpdater:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
