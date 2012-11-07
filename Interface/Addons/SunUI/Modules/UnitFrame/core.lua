@@ -12,7 +12,7 @@ local P,U
 if IsAddOnLoaded("Stuf") or IsAddOnLoaded("PitBull4") or IsAddOnLoaded("ShadowedUnitFrames") then
 	return
 end
-local tex = "Interface\\Addons\\SunUI\\media\\dM3"
+
  -----------------------------
  -- local variables
  -----------------------------
@@ -85,11 +85,12 @@ end
 UIDropDownMenu_Initialize(dropdown, init, 'MENU')
 
 lib.PostUpdateHealth = function(s, u, min, max)
-	if UnitIsDeadOrGhost(u) then s:SetValue(0) end
+	--if UnitIsDeadOrGhost(u) then s:SetValue(0) end
 	s.bd:SetPoint("TOPRIGHT", s)
 	s.bd:SetPoint("BOTTOMLEFT", s:GetStatusBarTexture(), "BOTTOMRIGHT")
 	if not U["ReverseHPbars"] then 
-		s.bd.b:SetVertexColor(s:GetStatusBarColor())
+		local r,g,b = s:GetStatusBarColor()
+		S.CreateTop(s.bd.b, r, g, b)
 	else
 		s.bd.b:SetVertexColor(0.33, 0.33, 0.33, 1)
 	end
@@ -127,19 +128,16 @@ lib.gen_hpbar = function(f)
 	if not U["ReverseHPbars"] then 
 		s:SetStatusBarTexture("")
 		s:SetAlpha(1)
-		local gradient = s:CreateTexture(nil, "BACKGROUND")
-		gradient:SetPoint("TOPLEFT")
-		gradient:SetPoint("BOTTOMRIGHT")
-		gradient:SetTexture(tex)
-		gradient:SetGradientAlpha("HORIZONTAL", .1, .1, .1, .5, .2, .2, .2, .4)
+		S.CreateBack(s)
 	else
-		s:SetStatusBarTexture(tex)
+		s:SetStatusBarTexture(DB.Statusbar)
 		s:SetAlpha(0.9)
 	end
+	
 	local bg = CreateFrame("Frame", nil, s)
 	bg:SetFrameLevel(s:GetFrameLevel()+2)
 	bg.b = bg:CreateTexture(nil, "BACKGROUND")
-	bg.b:SetTexture(tex)
+	bg.b:SetTexture(DB.Statusbar)
 	bg.b:SetAllPoints(bg)
     s.PostUpdate = lib.PostUpdateHealth
 	
@@ -163,17 +161,17 @@ lib.gen_hpbar = function(f)
 	mhpb:SetPoint("BOTTOMLEFT", s:GetStatusBarTexture(), "BOTTOMRIGHT")
 	mhpb:SetPoint("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT")
 	mhpb:SetWidth(s:GetWidth())
-	mhpb:SetStatusBarTexture(tex)
-	mhpb:SetStatusBarColor(0, 1, 0.5, 0.4)
-
+	mhpb:SetStatusBarTexture(DB.Statusbar)
+	mhpb:SetStatusBarColor(0, 1, 0.5, 1)
+	S.CreateTop(mhpb:GetStatusBarTexture(), 0, 1, 0.5)
 	local ohpb = CreateFrame("StatusBar", nil, f)
 	ohpb:SetFrameLevel(s:GetFrameLevel()+3)
 	ohpb:SetPoint("BOTTOMLEFT", mhpb:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
 	ohpb:SetPoint("TOPLEFT", mhpb:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
 	ohpb:SetWidth(mhpb:GetWidth())
-	ohpb:SetStatusBarTexture(tex)
-	ohpb:SetStatusBarColor(0, 1, 0, 0.4)
-
+	ohpb:SetStatusBarTexture(DB.Statusbar)
+	ohpb:SetStatusBarColor(0, 1, 0, 1)
+	S.CreateTop(ohpb:GetStatusBarTexture(), 0, 1, 0)
 	f.HealPrediction = {
 		myBar = mhpb,
 		otherBar = ohpb,
@@ -262,12 +260,11 @@ lib.gen_hpstrings = function(f, unit)
 		end)
 	end
 end
-  
 --gen powerbar func
 lib.gen_ppbar = function(f)
     --statusbar
     local s = CreateFrame("StatusBar", nil, f)
-    s:SetStatusBarTexture(tex)
+    s:SetStatusBarTexture(DB.Statusbar)
     fixStatusbar(s)
     s:SetHeight(f.height/4)
     s:SetWidth(f.width)
@@ -278,22 +275,22 @@ lib.gen_ppbar = function(f)
     end
     s:CreateShadow()
 	if not U["ReverseHPbars"] then 
-		local gradient = s:CreateTexture(nil, "BACKGROUND")
-		gradient:SetPoint("TOPLEFT")
-		gradient:SetPoint("BOTTOMRIGHT")
-		gradient:SetTexture(tex)
-		gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .4, .1, .1, .1, .4)
+		S.CreateBack(s)
 	else
 		local bg = CreateFrame("Frame", nil, s)
 		bg:SetFrameLevel(s:GetFrameLevel()-1)
 		bg:SetAllPoints(s)
 		local b = bg:CreateTexture(nil, "BACKGROUND")
-		b:SetTexture(tex)
+		b:SetTexture(DB.Statusbar)
 		b:SetAllPoints(s)
 		b:SetVertexColor(0.33, 0.33, 0.33, 1)
 	end
-	
+	local sbg = s:GetStatusBarTexture()
     f.Power = s
+	f.Power.PostUpdate = function() 
+		local r,g,b = s:GetStatusBarColor()
+		S.CreateTop(sbg, r, g, b)
+	end
 end
 --filling up powerbar with text strings
 lib.gen_ppstrings = function(f, unit)
@@ -363,7 +360,7 @@ end
 lib.gen_castbar = function(f)
     local s = CreateFrame("StatusBar", "oUF_SunUICastbar"..f.mystyle, f)
     s:Size(f.width-(f.height/1.5+4),f.height/1.5)
-    s:SetStatusBarTexture(tex)
+    s:SetStatusBarTexture(DB.Statusbar)
     s:SetStatusBarColor(.3, .45, .65,1)
     s:SetFrameLevel(9)
     --color
@@ -376,11 +373,7 @@ lib.gen_castbar = function(f)
     h:SetFrameLevel(0)
 	h:SetAllPoints()
 	h:CreateShadow()
-	local gradient = h:CreateTexture(nil, "BACKGROUND")
-	gradient:SetPoint("TOPLEFT")
-	gradient:SetPoint("BOTTOMRIGHT")
-	gradient:SetTexture(tex)
-	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+	S.CreateBack(h)
 	
 	--spark
 	local sp =  s:CreateTexture(nil, "OVERLAY")
@@ -437,7 +430,7 @@ lib.gen_castbar = function(f)
       --latency only for player unit
 	  local z = s:CreateTexture(nil, "OVERLAY")
 	  z:SetBlendMode("ADD")
-      z:SetTexture(tex)
+      z:SetTexture(DB.Statusbar)
 	  --z:SetWidth(1) -- it should never fill the entire castbar when GetNetStats() returns 0
       z:SetVertexColor(.8,.31,.45)
       z:SetPoint("TOPRIGHT")
@@ -459,7 +452,8 @@ lib.gen_castbar = function(f)
 	else
       s:SetPoint("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
     end
-
+	local sbg =  s:GetStatusBarTexture()
+	s.bd = sbg
 	s.OnUpdate = cast.OnCastbarUpdate
 	s.PostCastStart = cast.PostCastStart
 	s.PostChannelStart = cast.PostCastStart
@@ -759,7 +753,7 @@ lib.gen_classpower = function(f)
             bars:SetSize((f.width-2*(count-1))/count, f.height/5)
             for i = 1, count do
                 bars[i] =CreateFrame("StatusBar", nil, bars)
-				bars[i]:SetStatusBarTexture(tex)
+				bars[i]:SetStatusBarTexture(DB.Statusbar2)
 				bars[i]:GetStatusBarTexture():SetHorizTile(false)
 				bars[i]:SetSize((f.width-2*(count-1))/count, f.height/5)
 				 if (i == 1) then
@@ -787,20 +781,11 @@ lib.warlockpower = function(f)
 			bars:SetWidth(f.width)
 			bars:SetHeight(f.height/3)
 			bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
-			local gradient = bars:CreateTexture(nil, "BACKGROUND")
-			gradient:SetPoint("TOPLEFT")
-			gradient:SetPoint("BOTTOMRIGHT")
-			gradient:SetTexture(tex)
-			gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
 			for i = 1, 4 do
 				bars[i] = CreateFrame("StatusBar", nil, f)
 				bars[i]:SetHeight(f.height/3)
-				bars[i]:SetStatusBarTexture(tex)
-				local gradient = bars[i]:CreateTexture(nil, "BACKGROUND")
-				gradient:SetPoint("TOPLEFT")
-				gradient:SetPoint("BOTTOMRIGHT")
-				gradient:SetTexture(tex)
-				gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+				bars[i]:SetStatusBarTexture(DB.Statusbar2)
+				S.CreateBack(bars[i])
 				bars[i]:CreateShadow()
 				if i == 1 then
 					bars[i]:SetPoint("LEFT", bars)
@@ -822,7 +807,7 @@ lib.addHarmony = function(f)
 	for i=1,5 do
 		chibar[i] = CreateFrame("StatusBar",nil,chibar)
 		chibar[i]:SetSize((f.width-8)/5, f.height/4)
-		chibar[i]:SetStatusBarTexture(tex)
+		chibar[i]:SetStatusBarTexture(DB.Statusbar2)
 		chibar[i]:SetStatusBarColor(0.0, 1.00 , 0.59)
 		chibar[i]:CreateShadow()
 		if i==1 then
@@ -874,7 +859,7 @@ lib.genShadowOrbs = function(f)
 	for i = 1,maxShadowOrbs do
 		ShadowOrbs[i] = CreateFrame("StatusBar", nil, f)
 		ShadowOrbs[i]:SetSize((f.width-2*(maxShadowOrbs-1))/maxShadowOrbs, f.height/4)
-		ShadowOrbs[i]:SetStatusBarTexture(tex)
+		ShadowOrbs[i]:SetStatusBarTexture(DB.Statusbar2)
 		ShadowOrbs[i]:SetStatusBarColor(.86,.22,1)
 		ShadowOrbs[i]:CreateShadow()
 		if (i == 1) then
@@ -908,7 +893,7 @@ lib.genMage = function(f)
 	for i = 1,6 do
 		bars[i] = CreateFrame("StatusBar", nil, f)
 		bars[i]:SetSize((f.width-2*(6-1))/6, f.height/4)
-		bars[i]:SetStatusBarTexture(tex)
+		bars[i]:SetStatusBarTexture(DB.Statusbar2)
 		bars[i]:SetStatusBarColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
 		bars[i]:CreateShadow()
 		bars[i]:Hide()
@@ -945,13 +930,13 @@ end
 	local lb = CreateFrame('StatusBar', nil, eb)
 	lb:SetPoint('LEFT', eb, 'LEFT')
 	lb:SetSize(f.width, 6)
-	lb:SetStatusBarTexture(tex)
+	lb:SetStatusBarTexture(DB.Statusbar2)
 	lb:SetStatusBarColor(0.27, 0.47, 0.74)
 	eb.LunarBar = lb
 	local sb = CreateFrame('StatusBar', nil, eb)
 	sb:SetPoint('LEFT', lb:GetStatusBarTexture(), 'RIGHT', 0, 0)
 	sb:SetSize(f.width, 6)
-	sb:SetStatusBarTexture(tex)
+	sb:SetStatusBarTexture(DB.Statusbar2)
 	sb:SetStatusBarColor(0.9, 0.6, 0.3)
 	eb.SolarBar = sb
   	local h = CreateFrame("Frame", nil, eb)
@@ -986,7 +971,7 @@ end
             bars:SetSize((f.width-8)/5, f.height/4)
             for i = 1, 5 do
                 bars[i] =CreateFrame("StatusBar", nil, bars)
-				bars[i]:SetStatusBarTexture(tex)
+				bars[i]:SetStatusBarTexture(DB.Statusbar2)
 				bars[i]:GetStatusBarTexture():SetHorizTile(false)
 				bars[i]:SetSize((f.width-12)/5, f.height/4)
 				 if (i == 1) then
@@ -1111,7 +1096,7 @@ end
 lib.gen_swing_timer = function(f)
 	if U["EnableVengeanceBar"] then
 		local VengeanceBar = CreateFrame("Statusbar", "VengeanceBar", f)
-		VengeanceBar:SetStatusBarTexture(tex)
+		VengeanceBar:SetStatusBarTexture(DB.Statusbar2)
 		VengeanceBar:SetPoint("TOPLEFT", f.Health, "TOPRIGHT", 5, 0)
 		VengeanceBar:SetSize(f.Power:GetHeight()+2, f.Health:GetHeight()+f.Power:GetHeight()+6)
 		VengeanceBar:CreateShadow()
@@ -1135,7 +1120,7 @@ lib.gen_swing_timer = function(f)
 lib.gen_threat = function(f)
 	if U["EnableThreat"] == false then return end
 	local ThreatBar = CreateFrame("Statusbar", "ThreatBar", f)
-	ThreatBar:SetStatusBarTexture(tex)
+	ThreatBar:SetStatusBarTexture(DB.Statusbar2)
 	ThreatBar:SetPoint("TOPRIGHT", f.Health, "TOPLEFT", -5, 0)
 	ThreatBar:SetSize(f.Power:GetHeight()+2, f.Health:GetHeight()+f.Power:GetHeight()+6)
 	ThreatBar:CreateShadow()
@@ -1234,16 +1219,12 @@ lib.gen_threat = function(f)
   lib.gen_alt_powerbar = function(f)
 	local apb = CreateFrame("StatusBar", nil, f)
 	apb:Size(f.width, f.height/3)
-	apb:SetStatusBarTexture(tex)
+	apb:SetStatusBarTexture(DB.Statusbar2)
 	apb:GetStatusBarTexture():SetHorizTile(false)
 	apb:SetStatusBarColor(1, 0, 0)
 	apb:SetPoint("TOP", f.Power, "BOTTOM", 0, -f.height/6)
 	apb:CreateShadow()
-	local gradient = apb:CreateTexture(nil, "BACKGROUND")
-	gradient:SetPoint("TOPLEFT")
-	gradient:SetPoint("BOTTOMRIGHT")
-	gradient:SetTexture(tex)
-	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+	S.CreateBack(apb)
 	
 	f.AltPowerBar = apb
 	local r, g, b

@@ -1,25 +1,24 @@
 local S, C, L, DB = unpack(select(2, ...))
 local _
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Cooldown", "AceEvent-3.0")
+local font = "Interface\\Addons\\SunUI\\Media\\font.ttf"
 -- want hex color instead of RGB?
-function Module:OnInitialize()
 --constants!
 OmniCC = true --hack to work around detection from other addons for OmniCC
-local ICON_SIZE = 36 --the normal size for an icon (don't change this)
+local ICON_SIZE = 30 --the normal size for an icon (don't change this)
 local DAY, HOUR, MINUTE = 86400, 3600, 60 --used for formatting text
 local DAYISH, HOURISH, MINUTEISH = 3600 * 23.5, 60 * 59.5, 59.5 --used for formatting text at transition points
 local HALFDAYISH, HALFHOURISH, HALFMINUTEISH = DAY/2 + 0.5, HOUR/2 + 0.5, MINUTE/2 + 0.5 --used for calculating next update times
 
 --configuration settings
-local FONT_FACE = DB.Font --what font to use
-local FONT_SIZE = 22 --the base font size to use at a scale of 1
+local FONT_FACE = font --what font to use
+local FONT_SIZE = 21 --the base font size to use at a scale of 1
 local MIN_SCALE = 0.3 --the minimum scale we want to show cooldown counts at, anything below this will be hidden
 local MIN_DURATION = 1.8 --the minimum duration to show cooldown text for
 local EXPIRING_DURATION = 2 --the minimum number of seconds a cooldown must be to use to display in the expiring format
 
 local EXPIRING_FORMAT = S.RGBToHex(1, 0, 0)..'%.1f|r' --format for timers that are soon to expire
 local SECONDS_FORMAT = S.RGBToHex(1, 1, 0)..'%d|r' --format for timers that have seconds remaining
-local MINUTES_FORMAT = S.RGBToHex(1, 1, 1)..'%dm|r' --format for timers that have minutes remaining
+local MINUTES_FORMAT = S.RGBToHex(.6,.8,1)..'%dm|r' --format for timers that have minutes remaining
 local HOURS_FORMAT = S.RGBToHex(0.4, 1, 1)..'%dh|r' --format for timers that have hours remaining
 local DAYS_FORMAT = S.RGBToHex(0.4, 0.4, 1)..'%dh|r' --format for timers that have days remaining
 
@@ -29,7 +28,7 @@ local min = math.min
 local GetTime = GetTime
 -- remove decimal from a number
 
-Round = function(number, decimals)
+local function Round(number, decimals)
 	if not decimals then decimals = 0 end
     return (("%%.%df"):format(decimals)):format(number)
 end
@@ -125,7 +124,7 @@ local function Timer_Create(self)
 	timer:SetScript('OnUpdate', Timer_OnUpdate)
 
 	local text = timer:CreateFontString(nil, 'OVERLAY')
-	text:SetPoint("CENTER", 2.5, 1)       --文字位置
+	text:SetPoint("CENTER", 2, 0)       --文字位置
 	text:SetJustifyH("CENTER")
 	text:SetJustifyV("CENTER")
 	timer.text = text
@@ -214,4 +213,3 @@ if _G["ActionBarButtonEventsFrame"].frames then
 end
 
 hooksecurefunc("ActionBarButtonEventsFrame_RegisterFrame", actionButton_Register)
-end

@@ -300,10 +300,13 @@ function S.CreateBack(f, r1,g1,b1,a1,r2,g2,b2,a2)
 	gradient:SetPoint("BOTTOMRIGHT")
 	gradient:SetTexture(DB.Statusbar)
 	if a1 and a2 then 
-		gradient:SetGradientAlpha("VERTICAL", r1 or .3, g1 or  .3, b1 or  .3, a1, r2 or  .1, g2 or  .1, b2 or  .1, a2)
+		gradient:SetGradientAlpha("VERTICAL", r1 or 0, g1 or  0, b1 or  0, a1, r2 or  .35, g2 or  .35, b2 or  .35, a2)
 	else
-		gradient:SetGradientAlpha("VERTICAL", r1 or .3, g1 or  .3, b1 or  .3, .6, r2 or  .1, g2 or  .1, b2 or  .1, .6)
+		gradient:SetGradientAlpha("VERTICAL", r1 or 0, g1 or  0, b1 or  0, 0.3, r2 or  .35, g2 or  .35, b2 or  .35, .35)
 	end
+end
+function S.CreateTop(f, r, g, b)
+	f:SetGradientAlpha("VERTICAL", r, g, b, 1, r/3, g/3, b/3, 1)
 end
 
 local players = {

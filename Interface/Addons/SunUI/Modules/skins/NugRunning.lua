@@ -29,15 +29,12 @@ ConstructTimerBar = function(width, height)
                         "OUTLINE")
     f.stacktext:SetJustifyH("RIGHT")
     f.stacktext:SetVertexColor(1,1,1)
-    f.stacktext:SetPoint("RIGHT", ic, "RIGHT",1,-5)
+    f.stacktext:SetPoint("LEFT", ic, "RIGHT",-9,-3)
     
     f.bar = CreateFrame("StatusBar",nil,f)
 	f.bar:CreateShadow()
-	local gradient = f.bar:CreateTexture(nil, "BACKGROUND")
-	gradient:SetPoint("TOPLEFT")
-	gradient:SetPoint("BOTTOMRIGHT")
-	gradient:SetTexture(DB.Statusbar)
-	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+	S.CreateBack(f.bar)
+	
     f.bar:SetFrameStrata("MEDIUM")
     f.bar:SetStatusBarTexture(DB.Statusbar)
     f.bar:GetStatusBarTexture():SetDrawLayer("ARTWORK")
@@ -55,7 +52,7 @@ ConstructTimerBar = function(width, height)
 	f.bar.bg:SetAllPoints(f.bar)
 	--f.bar.bg:SetTexture(tex)
     
-     f.timeText = f.bar:CreateFontString();
+	f.timeText = f.bar:CreateFontString();
     f.timeText:SetFont(NugRunningConfig.timeFont.font, NugRunningConfig.timeFont.size, "THINOUTLINE")
     f.timeText:SetJustifyH("LEFT")
     f.timeText:SetVertexColor(1,1,1)
@@ -168,10 +165,12 @@ ConstructTimerBar = function(width, height)
 
     return f
 end
-
 NugRunning.ConstructTimerBar = ConstructTimerBar
-
-
+hooksecurefunc(NugRunning.TimerBar, "SetColor", function(self,r,g,b)
+    self.bar:SetStatusBarColor(r,g,b)
+	local s = self.bar:GetStatusBarTexture()
+	S.CreateTop(s, r, g, b)
+end)
 function NugRunning:DoNameplates()
 
 local next = next

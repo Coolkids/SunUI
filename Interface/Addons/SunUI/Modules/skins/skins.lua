@@ -51,4 +51,5 @@ Delay:SetScript("OnEvent", function()
 		end
 	end) ]]
 	DEFAULT_CHAT_FRAME:AddMessage("|cffDDA0DDSun|r|cff44CCFFUI|r已加载，详细设置请输入/sunui")
+	DEFAULT_CHAT_FRAME:AddMessage("更新下载请到个人主页:http://url.cn/5YbLQe")
 end)

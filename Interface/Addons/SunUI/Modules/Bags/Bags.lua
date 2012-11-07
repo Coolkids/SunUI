@@ -3,7 +3,7 @@ local _
 local _G = _G
 local B = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Bags", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0")
 local Unusable
-
+local font = "Interface\\Addons\\SunUI\\Media\\font.ttf"
 if DB.MyClass == "DEATHKNIGHT" then
 	Unusable = {{3, 4, 10, 11, 13, 14, 15, 16}, {6}}
 elseif DB.MyClass == "DRUID" then
@@ -391,7 +391,7 @@ function B:Layout(isBank)
 					f.Bags[bagID][slotID]:SetCheckedTexture(nil)
 					f.Bags[bagID][slotID].count:ClearAllPoints()
 					f.Bags[bagID][slotID].count:Point("BOTTOMRIGHT", 0, 2)
-					f.Bags[bagID][slotID].count:SetFont(DB.Font, S.mult*12, "OUTLINE")
+					f.Bags[bagID][slotID].count:SetFont(font, S.mult*12, "OUTLINE")
 					f.Bags[bagID][slotID].questIcon = _G[f.Bags[bagID][slotID]:GetName().."IconQuestTexture"]
 					f.Bags[bagID][slotID].questIcon:SetTexture(TEXTURE_ITEM_QUEST_BANG)
 					f.Bags[bagID][slotID].questIcon:SetAllPoints(f.Bags[bagID][slotID])

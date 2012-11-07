@@ -265,18 +265,7 @@ function Module:CreateBar5()
 			local button = _G["MultiBarLeftButton"..i]
 			button:ClearAllPoints()
 		end
-		local players = {
-			["Coolkid"] = true,
-			["Coolkids"] = true,
-			["Kenans"] = true,
-			["月殤軒"] = true,
-			["月殤玄"] = true,
-			["月殤妶"] = true,
-			["月殤玹"] = true,
-			["月殤璇"] = true,
-			["月殤旋"] = true,
-		}
-		if players[DB.PlayerName] == true then 
+		if S.IsCoolkid() == true then 
 			_G["MultiBarLeftButton1"]:ClearAllPoints()
 			_G["MultiBarLeftButton2"]:ClearAllPoints()
 		end

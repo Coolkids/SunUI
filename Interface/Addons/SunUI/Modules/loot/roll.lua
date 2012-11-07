@@ -89,7 +89,7 @@ end
 
 local function CreateRollFrame()
 	local frame = CreateFrame("Frame", nil, UIParent)
-	frame:Size(240, 5)
+	frame:Size(240, 8)
 	frame:SetScript("OnEvent", OnEvent)
 	frame:RegisterEvent("CANCEL_LOOT_ROLL")
 	frame:Hide()
@@ -111,27 +111,26 @@ local function CreateRollFrame()
 	
 	local status = CreateFrame("StatusBar", nil, frame)
 	status:CreateShadow()
-	status:Size(240, 5)
+	status:Size(240, 8)
 	status:Point("BOTTOMLEFT", frame, "BOTTOMLEFT")
 	status:SetScript("OnUpdate", StatusUpdate)
 	status:SetFrameLevel(status:GetFrameLevel() - 1)
 	status:SetStatusBarTexture(DB.Statusbar)
 	status:SetStatusBarColor(0.8, 0.8, 0.8, 0.9)
+	
 	status.parent = frame
 	frame.status = status
+	frame.status.bg = status:GetStatusBarTexture()
 	
 	local spark = frame:CreateTexture(nil, "OVERLAY")
 	spark:Width(14)
-	spark:Height(25)
+	spark:Height(20)
 	spark:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
 	spark:SetBlendMode("ADD")
 	status.spark = spark
 	
-	local gradient = status:CreateTexture(nil, "BACKGROUND")
-	gradient:SetPoint("TOPLEFT")
-	gradient:SetPoint("BOTTOMRIGHT")
-	gradient:SetTexture(DB.Statusbar)
-	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+	S.CreateBack(status)
+	
 			
 	--local need, needtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Dice-Up", "Interface\\Buttons\\UI-GroupLoot-Dice-Highlight", "Interface\\Buttons\\UI-GroupLoot-Dice-Down", 1, NEED, "LEFT", frame.button, "RIGHT", 5, -1)
 	--local greed, greedtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Coin-Up", "Interface\\Buttons\\UI-GroupLoot-Coin-Highlight", "Interface\\Buttons\\UI-GroupLoot-Coin-Down", 2, GREED, "LEFT", need, "RIGHT", 0, -1)
@@ -213,7 +212,7 @@ local function START_LOOT_ROLL(rollID, time)
 	f.fsloot:SetText(name)
 	f.status:SetStatusBarColor(color.r, color.g, color.b, 0.7)
 	f.button.icon.border:SetBackdropBorderColor(color.r, color.g, color.b, 0.7)
-
+	S.CreateTop(f.status.bg, color.r, color.g, color.b)
 	f.status:SetMinMaxValues(0, time)
 	f.status:SetValue(time)
 

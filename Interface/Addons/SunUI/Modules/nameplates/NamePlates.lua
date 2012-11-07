@@ -34,7 +34,7 @@ f:SetScript("OnEvent", function(self, event)
 		SetCVar("ShowClassColorInNameplate",1)
 	end
 end)
-local players = {["Coolkid"] = true,	["Coolkids"] = true,	["Kenans"] = true, ["月殤軒"] = true, ["月殤玄"] = true, ["月殤妶"] = true,["月殤玹"] = false,["月殤璇"] = true,["月殤旋"] = true}
+
 local PlateBlacklist = {
 	--亡者大軍
 	["亡者军团食尸鬼"] = true,
@@ -54,9 +54,60 @@ local PlateBlacklist = {
 	["熔岩蟲"] = true,
 	["熔岩寄生虫"] = true,
 	--DS
-	["腐化之血"] = players[DB.PlayerName],
+	["腐化之血"] = S.IsCoolkid(),
 }
 local DebuffWhiteList = {
+	-- Death Knight
+		[GetSpellInfo(47476)] = true, --strangulate
+	-- Druid
+		[GetSpellInfo(33786)] = true, --Cyclone
+		[GetSpellInfo(2637)] = true, --Hibernate
+		[GetSpellInfo(339)] = true, --Entangling Roots
+		[GetSpellInfo(80964)] = true, --Skull Bash
+		[GetSpellInfo(78675)] = true, --Solar Beam
+	-- Hunter
+		[GetSpellInfo(3355)] = true, --Freezing Trap Effect
+		--[GetSpellInfo(60210)] = true, --Freezing Arrow Effect
+		[GetSpellInfo(1513)] = true, --scare beast
+		[GetSpellInfo(19503)] = true, --scatter shot
+		[GetSpellInfo(34490)] = true, --silence shot
+	-- Mage
+		[GetSpellInfo(31661)] = true, --Dragon's Breath
+		[GetSpellInfo(61305)] = true, --Polymorph
+		[GetSpellInfo(122)] = true, --Frost Nova
+		[GetSpellInfo(82691)] = true, --Ring of Frost
+	-- Paladin
+		[GetSpellInfo(20066)] = true, --Repentance
+		[GetSpellInfo(10326)] = true, --Turn Evil
+		[GetSpellInfo(853)] = true, --Hammer of Justice
+	-- Priest
+		[GetSpellInfo(605)] = true, --Mind Control
+		[GetSpellInfo(64044)] = true, --Psychic Horror
+		[GetSpellInfo(8122)] = true, --Psychic Scream
+		[GetSpellInfo(9484)] = true, --Shackle Undead
+		[GetSpellInfo(15487)] = true, --Silence
+	-- Rogue
+		[GetSpellInfo(2094)] = true, --Blind
+		[GetSpellInfo(1776)] = true, --Gouge
+		[GetSpellInfo(6770)] = true, --Sap
+	-- Shaman
+		[GetSpellInfo(51514)] = true, --Hex
+		[GetSpellInfo(3600)] = true, --Earthbind
+		[GetSpellInfo(8056)] = true, --Frost Shock
+		[GetSpellInfo(63685)] = true, --Freeze
+	-- Warlock
+		[GetSpellInfo(710)] = true, --Banish
+		[GetSpellInfo(6789)] = true, --Death Coil
+		[GetSpellInfo(5782)] = true, --Fear
+		[GetSpellInfo(5484)] = true, --Howl of Terror
+		[GetSpellInfo(6358)] = true, --Seduction
+		[GetSpellInfo(30283)] = true, --Shadowfury
+	-- Warrior
+		[GetSpellInfo(20511)] = true, --Intimidating Shout
+	-- Racial
+		[GetSpellInfo(25046)] = true, --Arcane Torrent
+		[GetSpellInfo(20549)] = true, --War Stomp
+	--PVE
 }
 local DebuffBlackList = {
 	[GetSpellInfo(15407)] = true,
@@ -132,8 +183,11 @@ local function UpdateThreat(frame,elapsed)
 	
 	if not frame.oldglow:IsShown() then
 		frame.hp.hpGlow:SetBackdropBorderColor(0, 0, 0)
+		frame.hp.border:SetBackdropBorderColor(0, 0, 0, 1)
 	else
-		frame.hp.hpGlow:SetBackdropBorderColor(frame.oldglow:GetVertexColor())
+		local r, g, b = frame.oldglow:GetVertexColor()
+		frame.hp.hpGlow:SetBackdropBorderColor(r, g, b)
+		frame.hp.border:SetBackdropBorderColor(0, 0, 0, 0)
 	end
 	
 	-- show current health value
@@ -471,7 +525,7 @@ local function SkinObjects(frame)
 	
 	hp.pct = hp:CreateFontString(nil, "OVERLAY")	
 	hp.pct:SetFont(DB.Font, C["Fontsize"], "THINOUTLINE")
-	hp.pct:SetPoint("LEFT", hp, "RIGHT", 5, 0)
+	hp.pct:SetPoint("CENTER", hp, "CENTER", 0, 0)
 
 	local offset = UIParent:GetScale() / cb:GetEffectiveScale()
 	cb:CreateShadow()
@@ -569,15 +623,26 @@ local function MatchGUID(frame, destGUID, spellID)
 	--print(frame, destGUID, spellID)
 	if not frame.guid then return end
 	if frame.guid == destGUID then
-		for _,icon in ipairs(frame.icons) do 
-			if icon.spellID == spellID then --
-				--print("Hide",GetSpellLink(icon.spellID))
+		for k,icon in ipairs(frame.icons) do 
+			if icon.spellID == spellID then
+				--print("Hide",frame.oldname:GetText(),GetSpellLink(icon.spellID))
 				icon:Hide()
 			end 
 		end
 	end
 end
-
+--dead
+local function MatchDDeadGUID(frame, destGUID)
+	--print(frame, destGUID, spellID)
+	if not frame.guid then return end
+	if frame.guid == destGUID then
+		for k,icon in ipairs(frame.icons) do 
+			if icon.spellID then
+				icon:Hide()
+			end 
+		end
+	end
+end
 --Run a function for all visible nameplates, we use this for the blacklist, to check unitguid, and to hide drunken text
 local function ForEachPlate(functionToRun, ...)
 	for frame in pairs(frames) do
@@ -609,16 +674,18 @@ NamePlates:SetScript("OnEvent", function(self ,event, ...)
 		if arg2 == "SPELL_AURA_BROKEN" or arg2 == "SPELL_AURA_BROKEN_SPELL" or arg2 == "SPELL_AURA_REMOVED" then
 			--if arg4 == UnitGUID("player") or arg4 == UnitGUID("pet") or arg5 == "虛無觸鬚" or arg5 == "暗影触须" then
 				--print(GetSpellLink(arg12), "Hide", arg9)
-				ForEachPlate(MatchGUID, arg8, arg12)
+			ForEachPlate(MatchGUID, arg8, arg12)
 			--end
+		end
+		if arg2 == "UNIT_DIED" then
+			ForEachPlate(MatchDDeadGUID, arg8)
 		end
 	end
 end)
 NamePlates:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+
 function Module:OnInitialize()
 	C = C["NameplateDB"]
-end
-function Module:OnEnable()
 	if C["enable"] ~= true then return end
 	CreateFrame('Frame'):SetScript('OnUpdate', function(self, elapsed)
 		if(WorldFrame:GetNumChildren() ~= numChildren) then

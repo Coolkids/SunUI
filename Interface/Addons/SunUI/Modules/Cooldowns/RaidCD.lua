@@ -126,11 +126,7 @@ local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("RaidCD")
 		bar:SetMinMaxValues(0, 100)
 	
 		bar:SetReverseFill(true)
-		local gradient = bar:CreateTexture(nil, "BACKGROUND")
-		gradient:SetPoint("TOPLEFT")
-		gradient:SetPoint("BOTTOMRIGHT")
-		gradient:SetTexture(DB.Statusbar)
-		gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+		S.CreateBack(bar)
 		
 		bar.left = CreateFS(bar)
 		bar.left:SetPoint("LEFT", 2, C["MiniDB"].RaidCDHeight)
@@ -175,6 +171,8 @@ local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("RaidCD")
 		local color = RAID_CLASS_COLORS[select(2, UnitClass(name))]
 		if color then
 			bar:SetStatusBarColor(color.r, color.g, color.b)
+			local s = bar:GetStatusBarTexture()
+			S.CreateTop(s, color.r, color.g, color.b)
 		else
 			bar:SetStatusBarColor(0.3, 0.7, 0.3)
 		end
