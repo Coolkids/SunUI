@@ -28,10 +28,10 @@ G["ActionBarDB"] = {
 	["Bar1Layout"] = 1,
 	["BigSize4"] = 52,
 	["ExtraBarSacle"] = 1.5,
-	["ExpbarWidth"] = 500,
-	["ExpbarHeight"] = 8,
-	["ExpbarUp"] = false,
-	["ExpbarFadeOut"] = true,
+	["ExpbarWidth"] = 120,
+	["ExpbarHeight"] = 5,
+	["ExpbarUp"] = true,
+	["ExpbarFadeOut"] = false,
 	["AllFade"] = false,
 	["Bar1Fade"] = false,
 	["Bar2Fade"] = false,
@@ -220,12 +220,12 @@ G["MoveHandleDB"] = {
 	--宠物计时
 	["ShadowPet"] = {"BOTTOM", "UIParent", "BOTTOM", -322, 201},
 	--信息条
-	["InfoPanel"] = {"TOPLEFT", "Minimap", "TOPRIGHT", 5,3},
+	["InfoPanel"] = {"TOPLEFT", "Minimap", "TOPRIGHT", 20, 3},
 	--Mini
 	["BloodShield"] = {"BOTTOM", "UIParent", "BOTTOM", -285,  172},
 	["AutoButton"] = {"RIGHT", "UIParent", "RIGHT", -270, 188},
 	--经验条
-	["expbar"] = {"TOP", "UIParent", "TOP", 0, -24},
+	["expbar"] = {"LEFT", "Minimap", "RIGHT", 5,0},
 	--powerbar
 	["PowerBar"] = {"CENTER", "UIParent", "CENTER", 0, -120},
 	--成就移动

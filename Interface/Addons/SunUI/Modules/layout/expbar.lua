@@ -4,6 +4,7 @@ local _
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ExpBar", "AceEvent-3.0")
 local ExpBar = nil
 local es, hs
+local exptitle1 , exptitle2, exptext1, exptext2 = "", "", "", ""
 local FactionInfo = {
 	[1] = {{ 170/255, 70/255,  70/255 }, L["仇恨"], "FFaa4646"},
 	[2] = {{ 170/255, 70/255,  70/255 }, L["敌对"], "FFaa4646"},
@@ -38,25 +39,17 @@ function Module:BuildExpBar()
 	h:SetFrameLevel(ExpBar:GetFrameLevel()-2)
 	h:SetAllPoints()
 	S.CreateBack(ExpBar)
-	local Text = CreateFrame("Frame", nil, ExpBar)
-	Text:SetAllPoints()
-	Text:SetFrameLevel(4)
-	ExpBar.Text = S.MakeFontString(Text, 10)
-	ExpBar.Text:SetPoint("CENTER")
-	ExpBar.Text:SetAlpha(0)
 	if C["ActionBarDB"]["ExpbarFadeOut"] then
 		ExpBar:SetAlpha(0)
 	end
 	ExpBar:SetScript("OnEnter",function(self)
 		if InCombatLockdown() then return end
-		self.Text:SetAlpha(1)
 		if C["ActionBarDB"]["ExpbarFadeOut"] then
 			UIFrameFadeIn(self, 2, self:GetAlpha(), 1)
 		end
 	end)
 	ExpBar:SetScript("OnLeave",function(self)
 		if InCombatLockdown() then return end
-		self.Text:SetAlpha(0)
 		if C["ActionBarDB"]["ExpbarFadeOut"] then
 			UIFrameFadeOut(self, 2, self:GetAlpha(), 0)
 		end
@@ -69,6 +62,18 @@ function Module:BuildExpBar()
 		ExpBar.Rest:SetOrientation("VERTICAL")
 	end
 	MoveHandle.ExpBar = S.MakeMoveHandle(ExpBar, "经验条", "expbar")
+	
+	ExpBar:SetScript("OnEnter", function(self)
+		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
+		GameTooltip:ClearLines()
+		GameTooltip:AddDoubleLine(exptitle1, exptitle2)
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddDoubleLine(exptext1, exptext2)
+		GameTooltip:Show()
+	end)
+	ExpBar:SetScript("OnMouseDown", function(self, button)
+		ToggleCharacter("ReputationFrame")
+	end)
 end
 
 function Module:Register()
@@ -93,12 +98,18 @@ function Module:OnEvent()
 			S.CreateTop(es, FactionInfo[standingID][1][1], FactionInfo[standingID][1][2], FactionInfo[standingID][1][3])
 			ExpBar:SetMinMaxValues(barMin, barMax)
 			ExpBar:SetValue(barValue)
-			ExpBar.Text:SetText(barValue-barMin.." / "..barMax-barMin.."    "..floor(((barValue-barMin)/(barMax-barMin))*1000)/10 .."% | ".. name.. "(".._G["FACTION_STANDING_LABEL"..standingID]..")")
+			exptitle1 = S.ToHex(FactionInfo[standingID][1][1], FactionInfo[standingID][1][2], FactionInfo[standingID][1][3])..name.."|r"
+			exptitle2 = S.ToHex(FactionInfo[standingID][1][1], FactionInfo[standingID][1][2], FactionInfo[standingID][1][3]).._G["FACTION_STANDING_LABEL"..standingID].."|r"
+			exptext1 = barValue-barMin.." / "..barMax-barMin
+			exptext2 = floor(((barValue-barMin)/(barMax-barMin))*1000)/10 .."%"
 		else
 			ExpBar:SetStatusBarColor(0.0, 0.4, 0.8, 1)
 			ExpBar:SetMinMaxValues(0, 1)
 			ExpBar:SetValue(1)
-			ExpBar.Text:SetText("")
+			exptitle1 = ""
+			exptitle2 = ""
+			exptext1 = ""
+			exptext2 = ""
 		end
 	else
 		ExpBar:SetStatusBarColor(0.4, 0.1, 0.6, 1)
@@ -108,7 +119,10 @@ function Module:OnEvent()
 		ExpBar:SetMinMaxValues(0, playerMaxXP)
 		ExpBar.Rest:SetMinMaxValues(0, playerMaxXP)
 		if exhaustionXP then
-			ExpBar.Text:SetText(SVal(currXP).." / "..SVal(playerMaxXP).."    "..floor((currXP/playerMaxXP)*1000)/10 .."%" .. " (+"..SVal(exhaustionXP )..")")
+			exptitle1 = S.ToHex(0.4, 0.1, 0.6)..SVal(currXP).." / "..SVal(playerMaxXP).."|r"..S.ToHex(0.0, 0.4, 0.8).."+"..SVal(exhaustionXP).."|r"
+			exptitle2 = floor((currXP/playerMaxXP)*1000)/10 .."%"
+			exptext1 = ""
+			exptext2 = ""
 			if exhaustionXP+currXP >= playerMaxXP then
 				ExpBar:SetValue(currXP)
 				ExpBar.Rest:SetValue(playerMaxXP)
@@ -119,13 +133,16 @@ function Module:OnEvent()
 		else
 			ExpBar:SetValue(currXP)
 			ExpBar.Rest:SetValue(0)
-			ExpBar.Text:SetText(SVal(currXP).." / "..SVal(playerMaxXP).."    "..floor((currXP/playerMaxXP)*1000)/10 .."%")
+			exptitle1 = S.ToHex(0.4, 0.1, 0.6)..SVal(currXP).." / "..SVal(playerMaxXP).."|r"
+			exptitle2 = floor((currXP/playerMaxXP)*1000)/10 .."%"
+			exptext1 = ""
+			exptext2 = ""
 		end
 	end
+	
 end
 
 function Module:OnEnable()
-	if C["InfoPanelDB"]["OpenBottom"] ~= true then return end
 	Module:BuildExpBar()
 	Module:Register()
 end

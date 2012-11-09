@@ -88,6 +88,7 @@ local Stat = CreateFrame("Frame", "InfoPanel1", TopInfoPanel)
 		end
 	end
 	local int = 1
+	local fps = 0
 	local function Update(self, t)
 		int = int - t
 		local fpscolor
@@ -95,21 +96,20 @@ local Stat = CreateFrame("Frame", "InfoPanel1", TopInfoPanel)
 
 		if int < 0 then
 			local _, _, latencyHome, latencyWorld = GetNetStats()
-			if floor(GetFramerate()) >= 30 then
+			fps = floor(GetFramerate())
+			if fps >= 30 then
 				fpscolor = "|cff0CD809"
-			elseif (floor(GetFramerate()) > 15 and floor(GetFramerate()) < 30) then
+			elseif (fps > 15 and fps < 30) then
 				fpscolor = "|cffE8DA0F"
 			else
 				fpscolor = "|cffD80909"
 			end
-			Text:SetText(fpscolor..floor(GetFramerate()).."|r".."fps  "..colorlatency(latencyHome).."|r/"..colorlatency(latencyWorld).."|r".."ms")
+			Text:SetText(fpscolor..fps.."|r".."fps  "..colorlatency(latencyHome).."|r/"..colorlatency(latencyWorld).."|r".."ms")
 			int = 0.8
 		end
 	end
 	Stat:SetScript("OnEnter", function(self)
-		GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 6);
-		GameTooltip:ClearAllPoints()
-		GameTooltip:SetPoint("BOTTOM", self, "TOP", 0, 1)
+		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine("System",0,.6,1)
 		GameTooltip:AddLine(" ")
@@ -121,6 +121,7 @@ local Stat = CreateFrame("Frame", "InfoPanel1", TopInfoPanel)
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(L["延迟"], 0.4, 0.78, 1)
 		GameTooltip:AddLine(" ")
+		GameTooltip:AddDoubleLine("FPS", fps, 0.75, 0.9, 1)
 		GameTooltip:AddDoubleLine(L["本地延迟"], latencyHome.."ms", 0.75, 0.9, 1, r1, g1, b1)
 		GameTooltip:AddDoubleLine(L["世界延迟"], latencyWorld.."ms", 0.75, 0.9, 1, r2, g2, b2)
 		if bandwidth ~= 0 then
@@ -141,13 +142,13 @@ local MemUse
 local gtotal
 local format = string.format
 local Memtext
+local memTbl = {}
+local IsAddOnLoaded = _G.IsAddOnLoaded
+local GetAddOnMemoryUsage = _G.GetAddOnMemoryUsage
+local GetAddOnInfo = _G.GetAddOnInfo
 local function MemUseCalc()
 	UpdateAddOnMemoryUsage()
 	local total = 0
-
-	local IsAddOnLoaded = _G.IsAddOnLoaded
-	local GetAddOnMemoryUsage = _G.GetAddOnMemoryUsage
-	local GetAddOnInfo = _G.GetAddOnInfo
 	for i = 1, GetNumAddOns() do
 		if IsAddOnLoaded(i) then
 			local memused = GetAddOnMemoryUsage(i)
@@ -177,8 +178,8 @@ function Module:Update()
 	end
 end
 
-Module:ScheduleRepeatingTimer("Update", 5)
-Module:ScheduleTimer("Update", 5)
+Module:ScheduleRepeatingTimer("Update", 10)
+Module:ScheduleTimer("Update", 10)
 
 local function formatMemory(n)
 	if n > 1024 then
@@ -192,29 +193,23 @@ local function mySort(x,y)
 	return x.mem > y.mem
 end
 
-local memTbl = {}
-local function OnTooltipShow()
+local function OnTooltipShow(self)
 	GameTooltip:AddLine("内存占用", .6,.8,1)
-	UpdateAddOnMemoryUsage()
 	local grandtotal = collectgarbage("count")
-	local total = 0
-
-	local tinsert = _G.table.insert
-	local IsAddOnLoaded = _G.IsAddOnLoaded
-	local GetAddOnMemoryUsage = _G.GetAddOnMemoryUsage
-	local GetAddOnInfo = _G.GetAddOnInfo
-	for i = 1, GetNumAddOns() do
-		if IsAddOnLoaded(i) then
-			local memused = GetAddOnMemoryUsage(i)
-			total = total + memused
-			tinsert(memTbl, {addon = select(2, GetAddOnInfo(i)), mem = memused})
+	if not self.timer or self.timer + 5 < time() then
+		self.timer = time()
+		wipe(memTbl)
+		UpdateAddOnMemoryUsage()
+		for i = 1, GetNumAddOns() do
+			if IsAddOnLoaded(i) then
+				local addon, name = GetAddOnInfo(i)
+				tinsert(memTbl, {addon = name or addon, mem = GetAddOnMemoryUsage(i)})
+			end
 		end
+		table.sort(memTbl, mySort)
 	end
-	ii = 0
-	table.sort(memTbl, mySort)
 	local txt = "|cffFFD700%d|r|cffffffff.|r %s"
-	local killPoint = tonumber(_G.SB_MEM_KILL) or 0
-	for k, v in _G.pairs(memTbl) do
+	for k, v in pairs(memTbl) do
 		local color = v.mem <= 102.4 and {0,1} -- 0 - 100
 					or v.mem <= 512 and {0.75,1} -- 100 - 512
 					or v.mem <= 1024 and {1,1} -- 512 - 1mb
@@ -222,22 +217,17 @@ local function OnTooltipShow()
 					or v.mem <= 5120 and {1,0.5} -- 2.5mb - 5mb
 					or {1,0.1}
 		GameTooltip:AddDoubleLine(format(txt, k, v.addon), formatMemory(v.mem), 1,1,1, color[1], color[2], 0)
-		if k == killPoint then break end
-		if ii >= 69 then	break end
-		ii = ii + 1
 	end
-	for i = 1, #memTbl do memTbl[i] = nil end
-	local color = total <= 1024*3 and {0,1} -- 1
-				or total <= 1024*7 and {0.75,1} -- 5
-				or total <= 1024*10 and {1,1} -- 12
-				or total <= 1024*15  and {1,0.75} -- 18
-				or total <= 1024*18 and {1,0.5} -- 25
+	local color = gtotal <= 1024*3 and {0,1} -- 1
+				or gtotal <= 1024*7 and {0.75,1} -- 5
+				or gtotal <= 1024*10 and {1,1} -- 12
+				or gtotal <= 1024*15  and {1,0.75} -- 18
+				or gtotal <= 1024*18 and {1,0.5} -- 25
 				or {1,0.1}
 	GameTooltip:AddLine(" ")
-	GameTooltip:AddDoubleLine("非暴雪插件总计", formatMemory(total), .6,.8,1, color[1], color[2], 0)
+	GameTooltip:AddDoubleLine("非暴雪插件总计", formatMemory(gtotal), .6,.8,1, color[1], color[2], 0)
 	GameTooltip:AddDoubleLine("一共占用", formatMemory(grandtotal), .6,.8,1, 0, 1, 0)
 	GameTooltip:AddLine("|cffeda55f点击回收内存", 1, 1, 1)
-	MemUse = total
 end
 
 local function BuildMemory()
@@ -271,9 +261,9 @@ local function BuildMemory()
 	end)
 	
 	Stat:SetScript("OnEnter", function(self)
-		if not InCombatLockdown() then collectgarbage() end
+		--if not InCombatLockdown() then collectgarbage() end
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
-		OnTooltipShow()
+		OnTooltipShow(self)
 		GameTooltip:Show()
 	end)
 	Stat:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
@@ -344,12 +334,9 @@ local function BuildGold()
 		if (SunUIConfig.gold[myPlayerRealm]==nil) then SunUIConfig.gold[myPlayerRealm]={}; end
 		SunUIConfig.gold[myPlayerRealm][myPlayerName] = GetMoney();
 		self:SetScript("OnEnter", function()
-			 
 				GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 				self.hovered = true 
-				GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 6);
-				GameTooltip:ClearAllPoints()
-				GameTooltip:SetPoint("BOTTOM", self, "TOP", 0, 1)
+
 				GameTooltip:ClearLines()
 				GameTooltip:AddLine(CURRENCY,0,.6,1)
 				GameTooltip:AddLine(" ")
