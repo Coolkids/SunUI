@@ -239,7 +239,7 @@ G["PowerBarDB"] = {
 	["Height"] = 5,
 	["Scale"] = 1,
 	["Fade"] = true,
-	["HealthPower"] = false,
+	["HealthPower"] = true,
 }
 G["WarnDB"] = {
 	["Open"] = true,
