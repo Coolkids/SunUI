@@ -4,7 +4,7 @@ local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndCC	= mod:NewSound(nil, "SoundCC", true)
 local sndDD = mod:NewSound(nil, "SoundDD", false)
 
-mod:SetRevision(("$Revision: 8000 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8064 $"):sub(12, -3))
 mod:SetCreatureID(60410)--Energy Charge (60913), Emphyreal Focus (60776), Cosmic Spark (62618), Celestial Protector (60793)
 mod:SetModelID(41399)
 mod:SetZone()

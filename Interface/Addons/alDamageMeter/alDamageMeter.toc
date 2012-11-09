@@ -3,7 +3,7 @@
 ## Title: |cff777777al|rDamageMeter
 ## Version: 40300.8
 ## Notes: Damage meter
-
+## RequiredDeps: SunUI
 
 embeds.xml
 alDamageMeter.lua

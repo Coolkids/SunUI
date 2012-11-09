@@ -1453,3 +1453,30 @@ minimapSize = {
 	},
 }
 mod.minimapSize = minimapSize
+
+function mod:ShowCanvas()
+	if not self.canvas:IsVisible() then
+		zoomScale = targetZoomScale
+		self:UpdateZoneData()
+		self.canvas:SetAlpha(0)
+		self.canvas:Show()
+	end
+	targetCanvasAlpha = db.alpha
+end
+
+function mod:HideCanvas()
+	targetCanvasAlpha = 0
+end
+
+function mod:Toggle(flag)
+	if flag == nil then
+		flag = not self.canvas:IsVisible() or (targetCanvasAlpha == 0)
+	end
+	if flag then
+		self:ShowCanvas()
+	elseif not flag then
+		self:HideCanvas()
+	else
+		self:HideCanvas()
+	end
+end

@@ -36,7 +36,7 @@ local function UpdatePet(self,elapsed)
 			local r, g, b = S.ColorGradient(GetPetTimeRemaining()/timeing,1, 0, 0, 1, 1, 0, 0.8, 0.87, 0.9)
 			self.right:SetTextColor(r, g, b)
 			self:SetStatusBarColor(r, g, b)
-			S.CreateTop(self.bg, color.r, color.g, color.b)
+			S.CreateTop(self.bg, r, g, b)
 		else
 			self:SetValue(0)
 			self.right:SetText("")

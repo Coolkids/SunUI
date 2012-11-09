@@ -3,6 +3,7 @@ local S, C, L, DB = unpack(select(2, ...))
 local _
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ExpBar", "AceEvent-3.0")
 local ExpBar = nil
+local es, hs
 local FactionInfo = {
 	[1] = {{ 170/255, 70/255,  70/255 }, L["仇恨"], "FFaa4646"},
 	[2] = {{ 170/255, 70/255,  70/255 }, L["敌对"], "FFaa4646"},
@@ -27,18 +28,16 @@ function Module:BuildExpBar()
 	ExpBar:SetFrameLevel(3)
 	ExpBar:CreateShadow()
 	ExpBar:SetStatusBarTexture(DB.Statusbar)
+	es = ExpBar:GetStatusBarTexture()
 	ExpBar.Rest = CreateFrame("StatusBar", nil, ExpBar)
 	ExpBar.Rest:SetAllPoints()
 	ExpBar.Rest:SetStatusBarTexture(DB.Statusbar)
 	ExpBar.Rest:SetFrameLevel(ExpBar:GetFrameLevel()-1)
+	hs = ExpBar.Rest:GetStatusBarTexture()
 	local h = CreateFrame("StatusBar", nil, ExpBar)
 	h:SetFrameLevel(ExpBar:GetFrameLevel()-2)
 	h:SetAllPoints()
-	local gradient = h:CreateTexture(nil, "BACKGROUND")
-	gradient:SetPoint("TOPLEFT")
-	gradient:SetPoint("BOTTOMRIGHT")
-	gradient:SetTexture(DB.Statusbar)
-	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+	S.CreateBack(ExpBar)
 	local Text = CreateFrame("Frame", nil, ExpBar)
 	Text:SetAllPoints()
 	Text:SetFrameLevel(4)
@@ -91,6 +90,7 @@ function Module:OnEvent()
 		ExpBar.Rest:SetValue(0)
 		if name then
 			ExpBar:SetStatusBarColor(unpack(FactionInfo[standingID][1]))
+			S.CreateTop(es, FactionInfo[standingID][1][1], FactionInfo[standingID][1][2], FactionInfo[standingID][1][3])
 			ExpBar:SetMinMaxValues(barMin, barMax)
 			ExpBar:SetValue(barValue)
 			ExpBar.Text:SetText(barValue-barMin.." / "..barMax-barMin.."    "..floor(((barValue-barMin)/(barMax-barMin))*1000)/10 .."% | ".. name.. "(".._G["FACTION_STANDING_LABEL"..standingID]..")")
@@ -102,7 +102,9 @@ function Module:OnEvent()
 		end
 	else
 		ExpBar:SetStatusBarColor(0.4, 0.1, 0.6, 1)
+		S.CreateTop(es, 0.4, 0.1, 0.6)
 		ExpBar.Rest:SetStatusBarColor(0.0, 0.4, 0.8, 1)
+		S.CreateTop(hs, 0.0, 0.4, 0.8)
 		ExpBar:SetMinMaxValues(0, playerMaxXP)
 		ExpBar.Rest:SetMinMaxValues(0, playerMaxXP)
 		if exhaustionXP then

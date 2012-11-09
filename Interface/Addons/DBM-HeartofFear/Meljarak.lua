@@ -1,9 +1,10 @@
 ﻿local mod	= DBM:NewMod(741, "DBM-HeartofFear", nil, 330)
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
+local sndJR	= mod:NewSound(nil, "SoundJR", true)
 local LibRange = LibStub("LibRangeCheck-2.0")
 
-mod:SetRevision(("$Revision: 8028 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8051 $"):sub(12, -3))
 mod:SetCreatureID(62397)
 mod:SetModelID(42645)
 mod:SetZone()
@@ -11,9 +12,13 @@ mod:SetUsedIcons(1, 2)
 
 mod:RegisterCombat("combat")
 
-mod:RegisterEventsInCombat(
-	"SPELL_AURA_APPLIED",
+-- CC can be cast before combat. So needs to seperate SPELL_AURA_APPLIED for pre-used CCs before combat.
+mod:RegisterEvents(
 	"SPELL_AURA_REFRESH",
+	"SPELL_AURA_APPLIED"
+)
+
+mod:RegisterEventsInCombat(
 	"SPELL_AURA_REMOVED",
 	"SPELL_CAST_START",
 	"SPELL_DAMAGE",
@@ -26,11 +31,11 @@ mod:RegisterEventsInCombat(
 local isDispeller = select(2, UnitClass("player")) == "MAGE"
 	    		 or select(2, UnitClass("player")) == "PRIEST"
 	    		 or select(2, UnitClass("player")) == "SHAMAN" 
-			 
+
 local warnWhirlingBlade					= mod:NewTargetAnnounce(121896, 4)--Target scanning not tested
 local warnRainOfBlades					= mod:NewSpellAnnounce(122406, 4)
 local warnRecklessness					= mod:NewTargetAnnounce(125873, 3)
-local warnImpalingSpear					= mod:NewPreWarnAnnounce(122224, 5, 3)--Pre warn your CC is about to break. Maybe need to localize it later to better explain what option is for.
+local warnImpalingSpear					= mod:NewPreWarnAnnounce(122224, 20, 3)--Pre warn your CC is about to break. Maybe need to localize it later to better explain what option is for.
 local warnAmberPrison					= mod:NewTargetAnnounce(121881, 3)
 local warnCorrosiveResin				= mod:NewTargetAnnounce(122064, 3)
 local warnMending						= mod:NewCastAnnounce(122193, 4)
@@ -96,6 +101,8 @@ local function buildGuidTable()
 end
 
 mod:AddBoolOption("HudMAP", true, "sound")
+mod:AddDropdownOption("optHud", {"auto", "always", "none"}, "auto", "sound")
+
 local DBMHudMap = DBMHudMap
 local free = DBMHudMap.free
 local function register(e)	
@@ -104,6 +111,7 @@ local function register(e)
 end
 local AmberPrisonMarkerscast = {}
 local AmberPrisonMarkers = {}
+local windBombTargetsMarkers = {}
 local windBombTargets = {}
 
 local function warnAmberPrisonTargets()
@@ -141,13 +149,17 @@ function mod:OnCombatStart(delay)
 	end
 	table.wipe(AmberPrisonMarkerscast)
 	table.wipe(AmberPrisonMarkers)
+	table.wipe(windBombTargetsMarkers)
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Show(3)
+	end
+	if self.Options.HudMAP or (self.Options.optHud == "auto") or (self.Options.optHud == "always") then
+		DBMHudMap:Toggle(true)
 	end
 end
 
 function mod:OnCombatEnd()
-	if self.Options.HudMAP then
+	if self.Options.HudMAP or (self.Options.optHud == "auto") or (self.Options.optHud == "always") then
 		DBMHudMap:FreeEncounterMarkers()
 	end
 	if self.Options.RangeFrame then
@@ -157,9 +169,10 @@ end
 
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(122224) and args.sourceName == UnitName("player") then
-		warnImpalingSpear:Schedule(45)
+		warnImpalingSpear:Cancel()
+		warnImpalingSpear:Schedule(30)
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kzjs.mp3")
-		sndWOP:Schedule(45, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kzjs.mp3") --控制即將結束	
+		sndWOP:Schedule(30, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kzjs.mp3") --控制即將結束	
 		timerImpalingSpear:Start(args.destName)
 	elseif args:IsSpellID(121881) then--Not a mistake, 121881 is targeting spellid.
 		amberPrisonTargets[#amberPrisonTargets + 1] = args.destName
@@ -170,7 +183,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnAmberPrison:Show()
 			yellAmberPrison:Yell()
 			if self.Options.ReapetAP then
-				self:ScheduleMethod(5, "checkdebuff")
+				self:ScheduleMethod(7, "checkdebuff")
 			end
 			if not self:IsDifficulty("lfr25") then
 				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runout.mp3") --離開人群
@@ -190,10 +203,12 @@ function mod:SPELL_AURA_APPLIED(args)
 				apnear = self.Options.NearAP and 30 or 200
 				if inRange and inRange < apnear then
 					if not UnitDebuff("player", GetSpellInfo(122055)) then
-						if math.random(1, 2) == 1 then
-							sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\helpme.mp3") --救我
-						else
-							sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\helpme2.mp3")
+						if self:AntiSpam(2, 7) then
+							if math.random(1, 2) == 1 then
+								sndJR:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\helpme.mp3") --救我
+							else
+								sndJR:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\helpme2.mp3")
+							end
 						end
 					end
 				end
@@ -223,15 +238,10 @@ function mod:SPELL_AURA_APPLIED(args)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_lumang.mp3") --魯莽
 		timerRecklessness:Start()
 		timerReinforcementsCD:Start(50, addsCount)--We count them cause some groups may elect to kill a 2nd group of adds and start a second bar to form before first ends.
-	elseif args:IsSpellID(122149) and self:AntiSpam(2, 5) then
+	elseif args:IsSpellID(122149) and self:AntiSpam(2, 6) then
 		if isDispeller and self.Options.SoundDQ then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\dispelnow.mp3") --快驅散
 			specWarnQuickeningDispel:Show()
-		end
-	elseif args:IsSpellID(121885) then
-		if self.Options.HudMAP then
-			local spelltext = GetSpellInfo(121885)
-			AmberPrisonMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("targeting", args.destName, 3, nil, 1, 0, 0, 1):SetLabel(spelltext))
 		end
 	end
 end
@@ -244,9 +254,6 @@ function mod:SPELL_AURA_REMOVED(args)
 		timerImpalingSpear:Cancel(args.destName)
 	elseif args:IsSpellID(121885) and self.Options.AmberPrisonIcons then--Not a mistake, 121885 is frozon spellid
 		self:SetIcon(args.destName, 0)
-		if AmberPrisonMarkers[args.destName] then
-			AmberPrisonMarkers[args.destName] = free(AmberPrisonMarkers[args.destName])
-		end
 	end
 end
 
@@ -300,11 +307,22 @@ function mod:SPELL_DAMAGE(_, _, _, _, destGUID, destName, _, _, spellId)
 		windBombTargets[#windBombTargets + 1] = destName
 		self:Unschedule(warnWindBombTargets)
 		self:Schedule(0.3, warnWindBombTargets)
-		if destGUID == UnitGUID("player") and self:AntiSpam(3, 3) then
+		if ((self.Options.optHud == "auto") or (self.Options.optHud == "always")) and (not self:IsDifficulty("lfr25")) then
+			windBombTargetsMarkers[destName] = register(DBMHudMap:PlaceStaticMarkerOnPartyMember("fatring", destName, 7, nil, 1, 1, 1, 0.5):Appear():RegisterForAlerts())
+		end
+		if destGUID == UnitGUID("player") and self:AntiSpam(3, 4) then
+			if self.Options.optHud == "auto" then
+				DBMHudMap:Toggle(true)
+				self:Schedule(4, function()
+					DBMHudMap:Toggle(false)
+				end)
+			end
 			specWarnWindBomb:Show()
 			yellWindBomb:Yell()
+			DBM.Flash:Show(1, 0, 0)
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
 		end
-	elseif spellId == 122125 and destGUID == UnitGUID("player") and self:AntiSpam(3, 4) then
+	elseif spellId == 122125 and destGUID == UnitGUID("player") and self:AntiSpam(3, 5) then
 		specWarnCorrosiveResinPool:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
 	end
@@ -335,15 +353,20 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 	if spellId == 124850 and self:AntiSpam(2, 1) then--Whirling Blade (Throw Cast spellid)
 		specWarnWhirlingBlade:Show()
 		timerWhirlingBladeCD:Start()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_fd.mp3") --飛刀
 --	"<173.1> [UNIT_SPELLCAST_SUCCEEDED] The Kor'thik [[boss4:Kor'thik Strike::0:123963]]", -- [10366]
 --	"<175.6> [CLEU] SPELL_CAST_START#false#0xF130F3C200000FC8#Kor'thik Elite Blademaster#2632#0#0x0000000000000000#nil#-2147483648#-2147483648#122409#Kor'thik Strike#1", -- [10535]
 --	"<175.6> [CLEU] SPELL_CAST_START#false#0xF130F3C200000FC7#Kor'thik Elite Blademaster#2632#8#0x0000000000000000#nil#-2147483648#-2147483648#122409#Kor'thik Strike#1", -- [10536]
 	elseif spellId == 123963 and self:AntiSpam(2, 2) then--Kor'thik Strike Trigger, only triggered once, then all non CCed Kor'thik cast the strike about 2 sec later
-		warnKorthikStrike:Show()
 		timerKorthikStrikeCD:Start()
 	elseif spellId == 131813 and self:AntiSpam(2, 3) then
 		if not ptwo then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ptwo.mp3")--P2
+			if self.Options.optHud ~= "always" then
+				DBMHudMap:Toggle(false)
+			else
+				DBMHudMap:Toggle(true)
+			end
 		end
 		ptwo = true
 	end
@@ -352,6 +375,8 @@ end
 function mod:UNIT_AURA(uId)
 	if uId ~= "player" then return end
 	if UnitDebuff("player", strikeTarget) and not strikeWarned then--Warn you that you have a meteor
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
+		DBM.Flash:Show(1, 0, 0)
 		specWarnKorthikStrike:Show()
 		yellKorthikStrike:Yell()
 		strikeWarned = true

@@ -76,20 +76,16 @@ L= DBM:GetModLocalization(682)
 
 L:SetWarningLocalization({
 	specWarninTT 	= ">> 注意进内场 <<",
-	specWarnTotemE1 = "ToTem(%d)  >Party 5<",
-	specWarnTotemE2 = "ToTem(%d)  >Party 3<",
-	specWarnTotemE3 = "ToTem(%d)  >Party 4<",
 	SpecWarnjs		= "<%s> → %s"
 })
 
 L:SetOptionLocalization({
 	SoundWOP			= "Voice warning: important skills",
 	SoundTT				= "Voice warning: $spell:116174",
-	optTT				= "\"TOTEM\" Strategy",
-	none				= "None",
-	warn1				= "4/7/10",
-	warn2				= "2/5/8",
-	warn3				= "3/6/9",
+	countTT				= "\"TOTEM\" Count",
+	countnone			= "None",
+	count3				= "1~3",
+	count4				= "1~4",
 	specWarninTT		= "warning:display text warning When you need to enter totem",
 	specWarnTotemEx		= "warning:Display grouping and counting totem warning",
 	specWarnTotemE1		= "warning:counting totem(147)",

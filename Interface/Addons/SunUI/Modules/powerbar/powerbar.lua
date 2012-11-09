@@ -57,11 +57,6 @@ function Module:CreateShadowOrbs()
 					ShadowOrbs[i]:Hide()
 				end
 			end
-			-- if numShadowOrbs == numShadowOrbs then
-				-- UIFrameFlash(ShadowOrbs, 0.5, 0.5, 1.5, false, 0.5, 0.5)
-			-- else
-				-- UIFrameFlashStop(ShadowOrbs)
-			-- end
 		end
 		if C["Fade"] then 
 			if event == "PLAYER_REGEN_DISABLED" then
@@ -677,11 +672,7 @@ function Module:HealthPowerBar()
 	bars:SetValue(UnitHealth("player"))
 	S.CreateBD(bars, 0)
 	bars:SetStatusBarColor(0.1, 0.8, 0.1, 0)
-	local gradient = bars:CreateTexture(nil, "BACKGROUND")
-	gradient:SetPoint("TOPLEFT")
-	gradient:SetPoint("BOTTOMRIGHT")
-	gradient:SetTexture(DB.Statusbar)
-	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+	S.CreateBack(bars)
 	
 	local spar =  bars:CreateTexture(nil, "OVERLAY")
 	spar:SetTexture("Interface\\Addons\\SunUI\\Media\\Arrow")

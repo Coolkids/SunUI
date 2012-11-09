@@ -1894,7 +1894,11 @@ function ns:UpdateIndicatorTimer(self, elapsed)
 		end
 		if tbl[k]:IsShown() and (k == "Cen" or k == "BR") then
 			if tbl[k].count then
+				local timeLeft = tbl[k].ex - GetTime()
 				text = tostring(tbl[k].count)
+				if timeLeft <= 5 then
+					text = ns:hex(1, 0, 0)..text.."|r"
+				end
 			end
 			if tbl[k].expires then
 				local timeLeft = tbl[k].expires - GetTime()
@@ -1906,6 +1910,9 @@ function ns:UpdateIndicatorTimer(self, elapsed)
 						text = text.."-"..FormatTime(timeLeft)
 					else
 						text = FormatTime(timeLeft)
+					end
+					if timeLeft <= 5 then
+						text = ns:hex(1, 0, 0)..text.."|r"
 					end
 				end
 			end
@@ -1967,8 +1974,10 @@ function ns:UpdateIndicators(self)
 							if v.count or v.etime then
 								if v.count and count ~= 0 then
 									self.Indicators[k].count = count
+									self.Indicators[k].ex = expires	
 								end
 								if v.etime then	
+									self.Indicators[k]:SetFont(DB.Font, ns.db.symbolsize, ns.db.outline)
 									self.Indicators[k].expires = expires	
 								end
 							elseif not v.lack then

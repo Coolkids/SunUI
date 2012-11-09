@@ -1568,9 +1568,9 @@ local CreateBar = function()
 		bar:SetStatusBarTexture(DB.Statusbar)
 		bar:SetMinMaxValues(0, 100)
 		
-		bar:SetReverseFill(true)
+		--bar:SetReverseFill(true)
 		S.CreateBack(bar)
-		
+		S.CreateSpark(bar, C["ClassCDHeight"], C["ClassCDHeight"])
 		
 		bar.left = CreateFS(bar)
 		bar.left:Point("LEFT", 2, C["ClassCDHeight"])

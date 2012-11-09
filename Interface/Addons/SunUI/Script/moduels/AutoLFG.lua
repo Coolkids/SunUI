@@ -28,18 +28,17 @@ C = C["MiniDB"]
 	end
 
 	local DurationWidget = function()
-		ALFG:SetSize(LFGDungeonReadyDialog:GetWidth()*0.75,4)
-		ALFG:SetPoint("BOTTOM",LFGDungeonReadyDialog,0,16)
+		ALFG:SetSize(LFGDungeonReadyDialog:GetWidth()*0.8,6)
+		ALFG:SetPoint("BOTTOM",LFGDungeonReadyDialog,0,12)
 		ALFG.durationBar:SetStatusBarTexture(DB.Statusbar)
 		ALFG.durationBar:SetPoint("TOPLEFT",ALFG)
 		ALFG.durationBar:SetPoint("BOTTOMRIGHT",ALFG)
 		ALFG.durationBar:SetFrameLevel(LFGDungeonReadyDialog:GetFrameLevel()+1)
-		ALFG.durationBar:SetStatusBarColor(1,.7,0,1)
-		ALFG.durationBar.Border:SetBackdrop({edgeFile = "Interface\\Buttons\\WHITE8x8",bgFile = "Interface\\Buttons\\WHITE8x8", edgeSize = 1})
-		ALFG.durationBar.Border:SetBackdropColor(0,0,0,0)
-		ALFG.durationBar.Border:SetBackdropBorderColor(0,0,0,1)
-		ALFG.durationBar.Border:SetPoint("TOPLEFT",ALFG,-1,1)
-		ALFG.durationBar.Border:SetPoint("BOTTOMRIGHT",ALFG,1,-1)
+		ALFG:CreateShadow()
+		S.CreateBack(ALFG.durationBar)
+		S.CreateTop(ALFG.durationBar:GetStatusBarTexture(), 1,.7,0,1)
+		S.CreateSpark(ALFG.durationBar, 6, 6)
+		
 		ALFG.durationTime:SetFontObject(GameFontNormalLarge)
 		do local f,s,g =  ALFG.durationTime:GetFont()
 			ALFG.durationTime:SetFont(f,12,g)
@@ -80,7 +79,7 @@ C = C["MiniDB"]
 			local nameInfo = LFGDungeonReadyDialogInstanceInfoFrame.name:GetText()	
 			local curKilled = 0
 			local maxKilled = 0
-			if killedInfo then 
+			if killedInfo then
 				local i,j = string.find(killedInfo,"%/")
 				curKilled = string.sub(killedInfo,i-1,j-1)
 				maxKilled = string.sub(killedInfo,i+1,i+1)

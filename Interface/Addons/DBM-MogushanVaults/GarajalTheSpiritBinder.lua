@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8027 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8052 $"):sub(12, -3))
 mod:SetCreatureID(60143)
 mod:SetModelID(41256)
 mod:SetZone()
@@ -87,7 +87,7 @@ mod:AddDropdownOption("optAdminTT", {"send1", "send2", "send3", "send4"}, "send3
 
 mod:AddDropdownOption("optindex", {"noidex", "index1", "index2", "index3", "index4", "index5", "index6", "index7", "index8", "index9"}, "noidex", "sound")
 
-mod:AddDropdownOption("optTT", {"none", "warn3", "warn4"}, "none", "sound")
+mod:AddDropdownOption("countTT", {"countnone", "count3", "count4"}, "countnone", "sound")
 
 if GetGuildInfo("player") == "黑手之鄉" then
 	mod:AddDropdownOption("optjs", {"non", "paltank", "monktank", "druid", "priest", "palheal", "warrior1", "warrior2", "paldps1", "paldps2"}, "non", "sound")
@@ -496,7 +496,7 @@ function mod:OnSync(msg, guid)
 		end
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_lhtt.mp3")
 		
-		if self.Options.optTT == "warn4" then
+		if self.Options.countTT == "count4" then
 			if totemn % 4 == 1 then
 				sndWOP:Schedule(1.2, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 			elseif totemn % 4 == 2 then
@@ -506,7 +506,7 @@ function mod:OnSync(msg, guid)
 			else
 				sndWOP:Schedule(1.2, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
 			end
-		elseif self.Options.optTT == "warn3" then
+		elseif self.Options.countTT == "count3" then
 			if totemn % 3 == 1 then
 				sndWOP:Schedule(1.2, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 			elseif totemn % 3 == 2 then

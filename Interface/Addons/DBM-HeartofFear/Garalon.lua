@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8015 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8059 $"):sub(12, -3))
 mod:SetCreatureID(63191)--Also has CID 62164. He has 2 CIDs for a single target, wtf? It seems 63191 is one players attack though so i'll try just it.
 mod:SetModelID(42368)
 mod:SetZone()
@@ -14,11 +14,12 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED",
 	"SPELL_AURA_APPLIED_DOSE",
 	"SPELL_AURA_REMOVED",
+	"SPELL_AURA_REMOVED_DOSE",
 	"SPELL_CAST_START",
 	"SPELL_CAST_SUCCESS",
-	"RAID_BOSS_EMOTE",
 	"SPELL_DAMAGE",
-	"SPELL_MISSED"
+	"SPELL_MISSED",
+	"RAID_BOSS_EMOTE"
 )
 
 --[[WoL Reg Expression (you can remove icy touch if you don't have a DK pull bosses, i use it for pull time)
@@ -39,12 +40,13 @@ local specwarnLeg				= mod:NewSpecialWarningSwitch("ej6270", mod:IsMelee())--If 
 local specwarnPheromoneTrail	= mod:NewSpecialWarningMove(123120)--Because this starts doing damage BEFORE the visual is there.
 
 local specwarnPungency			= mod:NewSpecialWarningStack(123081, mod:IsTank(), 20)
-local specWarnPungencyOther		= mod:NewSpecialWarning("SpecWarnPungencyOther", mod:IsTank() or mod:IsHealer())
+local specWarnPungencyOtherFix	= mod:NewSpecialWarning("specWarnPungencyOtherFix")
 
+local timerCrush				= mod:NewCastTimer(3.5, 122774)--Was 3 second, hotfix went live after my kill log, don't know what new hotfixed cast time is, 3.5, 4? Needs verification.
 local timerFuriousSwipeCD		= mod:NewCDTimer(8, 122735)
 local timerMendLegCD			= mod:NewCDTimer(30, 123495)
 local timerFury					= mod:NewBuffActiveTimer(30, 122754)
-local timerPungency				= mod:NewBuffFadesTimer(120, 123081)
+local timerPungency				= mod:NewTargetTimer(120, 123081)
 
 local berserkTimer				= mod:NewBerserkTimer(420)
 
@@ -54,7 +56,7 @@ local sndFS		= mod:NewSound(nil, "SoundFS", mod:IsTank())
 mod:AddBoolOption("InfoFrame", not mod:IsDps(), "sound")
 
 local brokenLegs = 0
-local Pn = 20
+--local Pn = 20
 
 mod:AddBoolOption("HudMAP", true, "sound")
 local DBMHudMap = DBMHudMap
@@ -66,7 +68,7 @@ end
 
 local PheromonesMarkers = {}
 
-mod:AddDropdownOption("optTankMode", {"two", "three"}, "two", "sound")
+--mod:AddDropdownOption("optTankMode", {"two", "three"}, "two", "sound")
 
 function mod:OnCombatStart(delay)
 	brokenLegs = 0
@@ -75,10 +77,6 @@ function mod:OnCombatStart(delay)
 	sndFS:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 	sndFS:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 	sndFS:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-	if mod.Options.InfoFrame then
-		DBM.InfoFrame:SetHeader(GetSpellInfo(123081))
-		DBM.InfoFrame:Show(3, "playerdebuffstacks", 123081)
-	end
 	table.wipe(PheromonesMarkers)
 end
 
@@ -96,6 +94,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnFury:Show(args.destName, args.amount or 1)
 		timerFury:Start()
 	elseif args:IsSpellID(122786) and args:GetDestCreatureID() == 63191 then--This one also hits both the leg and the boss, so filter second one here as well.
+		-- this warn seems not works? needs review.
 		warnBrokenLeg:Show(args.destName, args.amount or 1)
 	elseif args:IsSpellID(122835) then
 		warnPheromones:Show(args.destName)
@@ -127,9 +126,19 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif args:IsSpellID(123081) then
 		if self:IsDifficulty("normal25", "heroic25") then--Is it also 4 min on LFR?
 			timerPungency:Start(240, args.destName)
+		elseif self:IsDifficulty("lfr25") then
+			timerPungency:Start(20, args.destName)
 		else
 			timerPungency:Start(args.destName)
 		end
+		if (args.amount or 1) >= 15 and args.amount % 5 == 0 then
+			specWarnPungencyOtherFix:Show(args.destName, args.amount)
+		end
+		if mod.Options.InfoFrame then
+			DBM.InfoFrame:SetHeader(GetSpellInfo(123081))
+			DBM.InfoFrame:Show(1, "other", args.amount or 1, args.destName)
+		end
+		--[[
 		Pn = self.Options.optTankMode == "two" and 30 or self.Options.optTankMode == "three" and 20
 		if args:IsPlayer() then
 			if (args.amount or 1) >= Pn and args.amount % 2 == 0 then
@@ -140,14 +149,15 @@ function mod:SPELL_AURA_APPLIED(args)
 				specWarnPungencyOther:Show(args.destName, args.amount)
 			end
 		end
+		]]
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
 function mod:SPELL_AURA_REMOVED(args)
-	if args:IsSpellID(122786) then
+	if args:IsSpellID(122786) and args:GetDestCreatureID() == 63191 then
 		brokenLegs = (args.amount or 0)
-		warnBrokenLeg:Show(brokenLegs)
+		warnBrokenLeg:Show(args.destName, brokenLegs)
 	elseif args:IsSpellID(122835) then
 		if self.Options.PheromonesIcon then
 			self:SetIcon(args.destName, 0)
@@ -160,9 +170,6 @@ function mod:SPELL_AURA_REMOVED(args)
 		end
 	elseif args:IsSpellID(123081) then
 		timerPungency:Cancel(args.destName)
-		if mod:IsTank() then
-			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\changemt.mp3")--換坦嘲諷
-		end
 	end
 end
 mod.SPELL_AURA_REMOVED_DOSE = mod.SPELL_AURA_REMOVED
@@ -182,10 +189,7 @@ function mod:SPELL_CAST_START(args)
 end
 
 function mod:SPELL_CAST_SUCCESS(args)
-	if args:IsSpellID(122774) then
-		warnCrush:Show()
---		specwarnCrush:Show()
-	elseif args:IsSpellID(123495) then
+	if args:IsSpellID(123495) then
 		warnMendLeg:Show()
 		timerMendLegCD:Start()
 		if brokenLegs == 4 then--all his legs were broken when heal was cast, which means dps was on body.
@@ -207,7 +211,9 @@ mod.SPELL_MISSED = mod.SPELL_DAMAGE
 
 function mod:RAID_BOSS_EMOTE(msg)
 	if msg:find("spell:122774") then
+		warnCrush:Show()
 		specwarnCrush:Show()
+		timerCrush:Start()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_nyjd.mp3") --碾壓
 	end
 end

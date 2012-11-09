@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8004 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8062 $"):sub(12, -3))
 mod:SetCreatureID(62980)
 mod:SetModelID(42807)
 mod:SetZone()
@@ -50,6 +50,8 @@ local timerForce				= mod:NewBuffActiveTimer(12.5, 122713)
 local timerAttenuation			= mod:NewBuffActiveTimer(14, 127834)
 --local timerConvertCD			= mod:NewCDTimer(41, 122740)--totally don't know this CD, but it's probably 41 like other specials in phase 1.
 
+local berserkTimer				= mod:NewBerserkTimer(660)
+
 mod:AddBoolOption("MindControlIcon", true)
 
 local MCTargets = {}
@@ -92,6 +94,7 @@ function mod:OnCombatStart(delay)
 --	recentPlatformChange = false
 --	platform = 0
 	table.wipe(MCTargets)
+	berserkTimer:Start(-delay)
 	table.wipe(ExhaleMarkers)
 	table.wipe(MindControlMarkers)
 end

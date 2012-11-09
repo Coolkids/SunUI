@@ -416,13 +416,13 @@ ns.auras_instances_debuffs = {
 			[122949] = 22, -- Unseen Strike
 			[124783] = 24, -- Storm Unleashed
 			[123600] = 25, -- Storm Unleashed?
-
+			[123017] = 25, -- 無形打擊
 			-- Garalon
 			[122774] = 31, -- Crush, stun from the crush ability.
 			[123120] = 34, --- Pheromone Trail
 			[122835] = 32, -- Pheromones, The buff indicating who is carrying the pheramone.
 			[123081] = 33, -- Punchency, The stacking debuff causing the raid damage.
-
+			[122835] = 34, --費洛蒙
 			--Wind Lord Mel'jarak
 			[122055] = 42, -- Residue, The debuff after breaking a prsion preventing further breaking.
 			[121881] = 41, -- Amber Prison, not sure what the differance is but both were used.

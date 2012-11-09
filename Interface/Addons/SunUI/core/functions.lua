@@ -306,9 +306,16 @@ function S.CreateBack(f, r1,g1,b1,a1,r2,g2,b2,a2)
 	end
 end
 function S.CreateTop(f, r, g, b)
-	f:SetGradientAlpha("VERTICAL", r, g, b, 1, r/3, g/3, b/3, 1)
+	f:SetGradientAlpha("VERTICAL", r, g, b, 1, r/2, g/2, b/2, 1)
 end
-
+function S.CreateSpark(f, w, h)
+	local spark =  f:CreateTexture(nil, "OVERLAY")
+	spark:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
+	spark:SetBlendMode("ADD")
+	spark:SetAlpha(.8)
+	spark:SetPoint("TOPLEFT", f:GetStatusBarTexture(), "TOPRIGHT", -w, h)
+	spark:SetPoint("BOTTOMRIGHT", f:GetStatusBarTexture(), "BOTTOMRIGHT", w, -h)
+end
 local players = {
 	["Cooikid"] = true,
 	["Coolkid"] = true,

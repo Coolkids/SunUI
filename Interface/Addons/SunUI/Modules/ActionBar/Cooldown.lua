@@ -3,8 +3,8 @@ local _
 local font = "Interface\\Addons\\SunUI\\Media\\font.ttf"
 -- want hex color instead of RGB?
 --constants!
-OmniCC = true --hack to work around detection from other addons for OmniCC
-local ICON_SIZE = 30 --the normal size for an icon (don't change this)
+--OmniCC = true --hack to work around detection from other addons for OmniCC
+local ICON_SIZE = 36 --the normal size for an icon (don't change this)
 local DAY, HOUR, MINUTE = 86400, 3600, 60 --used for formatting text
 local DAYISH, HOURISH, MINUTEISH = 3600 * 23.5, 60 * 59.5, 59.5 --used for formatting text at transition points
 local HALFDAYISH, HALFHOURISH, HALFMINUTEISH = DAY/2 + 0.5, HOUR/2 + 0.5, MINUTE/2 + 0.5 --used for calculating next update times

@@ -2,8 +2,8 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7622 $"):sub(12, -3))
-mod:SetCreatureID(61243)--61243 (Gekkan), 61337 (Glintrok Ironhide), 61338 (Glintrok Skulker), 61339 (Glintrok Oracle), 61340 (Glintrok Hexxer)
+mod:SetRevision(("$Revision: 8030 $"):sub(12, -3))
+mod:SetCreatureID(61243, 61337, 61338, 61339, 61340)--61243 (Gekkan), 61337 (Glintrok Ironhide), 61338 (Glintrok Skulker), 61339 (Glintrok Oracle), 61340 (Glintrok Hexxer)
 mod:SetModelID(41920)
 mod:SetZone()
 

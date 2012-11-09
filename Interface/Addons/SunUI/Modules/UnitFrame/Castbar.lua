@@ -17,6 +17,8 @@ local channelingTicks = {
 	[GetSpellInfo(15407)] = 3, -- "Mind Flay"
 	[GetSpellInfo(48045)] = 5, -- "Mind Sear"
 	[GetSpellInfo(47540)] = 2, -- "Penance"
+	[GetSpellInfo(64901)] = 4, --Ï£ÍûÀñËÌ
+	--[GetSpellInfo(131474)] = 8, --test
 	-- mage
 	[GetSpellInfo(5143)] = 5, -- "Arcane Missiles"
 	[GetSpellInfo(10)] = 5, -- "Blizzard"
@@ -34,9 +36,11 @@ cast.setBarTicks = function(castBar, ticknum)
 				ticks[k]:SetVertexColor(0.8, 0.6, 0.6)
 				ticks[k]:Width(4)
 				ticks[k]:Height(castBar:GetHeight())
+				S.CreateTop(ticks[k], 0.8, 0.6, 0.6)
 			end
 			ticks[k]:ClearAllPoints()
 			ticks[k]:Point("CENTER", castBar, "LEFT", delta * k, 0 )
+			
 			ticks[k]:Show()
 		end
 	else
@@ -102,6 +106,7 @@ cast.PostCastStart = function(self, unit, name, rank, text)
 		if not sf.sendTime then sf.sendTime = GetTime() end
 		sf.timeDiff = GetTime() - sf.sendTime
 		sf.timeDiff = sf.timeDiff > self.max and self.max or sf.timeDiff
+		
 		sf:Width(self:GetWidth() * sf.timeDiff / self.max)
 		sf:Show()
 		if not UnitInVehicle("player") then sf:Show() else sf:Hide() end

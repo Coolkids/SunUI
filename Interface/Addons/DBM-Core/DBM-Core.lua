@@ -44,7 +44,7 @@
 --  Globals/Default Options  --
 -------------------------------
 DBM = {
-	Revision = tonumber(("$Revision: 8028 $"):sub(12, -3)),
+	Revision = tonumber(("$Revision: 8065 $"):sub(12, -3)),
 	DisplayVersion = "5.0.0 語音增強版", -- the string that is shown as version
 	ReleaseRevision = 7956 -- the revision of the latest stable version that is available
 }
@@ -1816,11 +1816,11 @@ do
 	-- IRE = Instance Info Requested Ended/Canceled
 	-- II = Instance Info
 	
-	syncHandlers["M"] = function(sender, mod, revision, event, arg)
+	syncHandlers["M"] = function(sender, mod, revision, event, ...)
 		mod = DBM:GetModByName(mod or "")
-		if mod and event and arg and revision then
+		if mod and event and revision then
 			revision = tonumber(revision) or 0
-			mod:ReceiveSync(event, arg, sender, revision)
+			mod:ReceiveSync(event, sender, revision, ...)
 		end
 	end
 
@@ -5120,24 +5120,35 @@ end
 -----------------------
 --  Synchronization  --
 -----------------------
-function bossModPrototype:SendSync(event, arg)
+function bossModPrototype:SendSync(event, ...)
 	event = event or ""
-	arg = arg or ""
+	local arg = select("#", ...) > 0 and strjoin("\t", tostringall(...)) or ""
 	local str = ("%s\t%s\t%s\t%s"):format(self.id, self.revision or 0, event, arg)
-	local spamId = self.id..event..arg
+	local spamId = self.id .. event .. arg -- *not* the same as the sync string, as it doesn't use the revision information
 	local time = GetTime()
 	if not modSyncSpam[spamId] or (time - modSyncSpam[spamId]) > 2.5 then
-		self:ReceiveSync(event, arg, nil, self.revision or 0)
+		self:ReceiveSync(event, nil, self.revision or 0, tostringall(...))
 		sendSync("M", str)
 	end
 end
 
-function bossModPrototype:ReceiveSync(event, arg, sender, revision)
-	local spamId = self.id..event..arg
+function bossModPrototype:ReceiveSync(event, sender, revision, ...)
+	local spamId = self.id .. event .. strjoin("\t", ...)
 	local time = GetTime()
 	if (not modSyncSpam[spamId] or (time - modSyncSpam[spamId]) > 2.5) and self.OnSync and (not (self.blockSyncs and sender)) and (not sender or (not self.minSyncRevision or revision >= self.minSyncRevision)) then
 		modSyncSpam[spamId] = time
-		self:OnSync(event, arg, sender)
+		-- we have to use the sender as last argument for compatibility reasons (stupid old API...)
+		-- avoid table allocations for frequently used number of arguments
+		if select("#", ...) <= 1 then
+			-- syncs with no arguments have an empty argument (also for compatibility reasons)
+			self:OnSync(event, ... or "", sender)
+		elseif select("#", ...) == 2 then
+			self:OnSync(event, ..., select(2, ...), sender)
+		else
+			local tmp = { ... }
+			tmp[#tmp + 1] = sender
+			self:OnSync(event, unpack(tmp))
+		end
 	end
 end
 

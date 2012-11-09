@@ -359,8 +359,12 @@ local UpdateBars = function()
 		color = RAID_CLASS_COLORS[cur.class]
 		if dmconf.classcolorbar and color then
 			bar[i]:SetStatusBarColor(color.r, color.g, color.b)
+			local s = bar[i]:GetStatusBarTexture()
+			S.CreateTop(s, color.r, color.g, color.b)
 		else
 			bar[i]:SetStatusBarColor(unpack(dmconf.barcolor))
+			local s = bar[i]:GetStatusBarTexture()
+			S.CreateTop(s, dmconf.barcolor[1], dmconf.barcolor[2], dmconf.barcolor[2])
 		end
 		if sMode == DAMAGE or sMode == SHOW_COMBAT_HEALING then
 			bar[i].right:SetFormattedText("%s (%s)", truncate(cur[sMode].amount), truncate(perSecond(cur)))
@@ -892,7 +896,7 @@ local OnEvent = function(self, event, ...)
 			MainFrame = CreateFrame("Frame", addon_name.."Frame", UIParent)
 			MainFrame:SetSize(dmconf.width, dmconf.maxbars*(dmconf.barheight+dmconf.spacing)-dmconf.spacing)
 			MainFrame:SetPoint(anchor, x, y)
-			S.CreateBD(MainFrame)
+			MainFrame:CreateShadow("Background")
 			MainFrame:SetMovable(true)
 			MainFrame:EnableMouse(true)
 			MainFrame:EnableMouseWheel(true)

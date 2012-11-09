@@ -60,6 +60,7 @@ local maxlines
 local infoFrameThreshold 
 local pIndex
 local extraPIndex
+local lowestFirst
 local iconModifier
 local headerText = "DBM Info Frame"	-- this is only used if DBM.InfoFrame:SetHeader(text) is not called before :Show()
 local currentEvent
@@ -477,7 +478,7 @@ local function updatePlayerDebuffStacks()
 		for i = 1, GetNumGroupMembers() do
 			local uId = "raid"..i
 			if UnitDebuff(uId, GetSpellInfo(infoFrameThreshold)) and not UnitIsDeadOrGhost(uId) then
-				if (UnitName(uId) == UnitName("boss1target")) or UnitDebuff(uId, GetSpellInfo(122835)) then
+				if UnitName(uId) == UnitName("boss1target") then
 					UnitBossTarget = UnitName(uId).." |cFFFF0000← boss|r"
 				else
 					UnitBossTarget = UnitName(uId)
@@ -674,9 +675,13 @@ function infoFrame:Show(maxLines, event, threshold, ...)
 	pIndex = select(1, ...)		-- used as 'filter' for player buff stacks
 	iconModifier = select(2, ...)
 	extraPIndex = select(3, ...)
+	lowestFirst = select(4, ...)
 	currentEvent = event
 	frame = frame or createFrame()
 
+	if lowestFirst then
+		sortingAsc = true
+	end
 	if event == "health" then
 		sortingAsc = true	-- Person who misses the most HP to be at threshold is listed on top
 		updateHealth()

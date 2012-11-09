@@ -203,7 +203,7 @@ lib.gen_hpstrings = function(f, unit)
     --creating helper frame here so our font strings don't inherit healthbar parameters
     local h = CreateFrame("Frame", nil, f)
     h:SetAllPoints(f.Health)
-    h:SetFrameLevel(15)
+    h:SetFrameLevel(10)
     local name = lib.gen_fontstring(h, DB.Font, U["FontSize"]*S.Scale(1), "THINOUTLINE")
     local hpval = lib.gen_fontstring(h, DB.Font,U["FontSize"]*S.Scale(1), "THINOUTLINE")
     if f.mystyle == "target" or f.mystyle == "tot" then
@@ -430,11 +430,12 @@ lib.gen_castbar = function(f)
       --latency only for player unit
 	  local z = s:CreateTexture(nil, "OVERLAY")
 	  z:SetBlendMode("ADD")
-      z:SetTexture(DB.Statusbar)
+      --z:SetTexture(DB.Statusbar)
 	  --z:SetWidth(1) -- it should never fill the entire castbar when GetNetStats() returns 0
-      z:SetVertexColor(.8,.31,.45)
+      --z:SetVertexColor(.8,.31,.45)
       z:SetPoint("TOPRIGHT")
       z:SetPoint("BOTTOMRIGHT")
+	  S.CreateTop(z, .8,.31,.45)
 	  --if UnitInVehicle("player") then z:Hide() end
       s.SafeZone = z
       --custom latency display

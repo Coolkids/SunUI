@@ -41,12 +41,7 @@ ConstructTimerBar = function(width, height)
     f.bar:SetHeight(height/2)
     f.bar:SetWidth(width - height )
 	f.bar:SetPoint("BOTTOMRIGHT",f,"BOTTOMRIGHT",0,0)
-    local spar =  f.bar:CreateTexture(nil, "OVERLAY")
-	spar:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
-	spar:SetBlendMode("ADD")
-	spar:SetAlpha(.8)
-	spar:SetPoint("TOPLEFT", f.bar:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
-	spar:SetPoint("BOTTOMRIGHT", f.bar:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
+    S.CreateSpark(f.bar, 10, 10)
     
 	f.bar.bg = f.bar:CreateTexture(nil, "BORDER")
 	f.bar.bg:SetAllPoints(f.bar)
