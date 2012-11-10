@@ -42,18 +42,6 @@ function Module:BuildExpBar()
 	if C["ActionBarDB"]["ExpbarFadeOut"] then
 		ExpBar:SetAlpha(0)
 	end
-	ExpBar:SetScript("OnEnter",function(self)
-		if InCombatLockdown() then return end
-		if C["ActionBarDB"]["ExpbarFadeOut"] then
-			UIFrameFadeIn(self, 2, self:GetAlpha(), 1)
-		end
-	end)
-	ExpBar:SetScript("OnLeave",function(self)
-		if InCombatLockdown() then return end
-		if C["ActionBarDB"]["ExpbarFadeOut"] then
-			UIFrameFadeOut(self, 2, self:GetAlpha(), 0)
-		end
-	end)
 	if not C["ActionBarDB"]["ExpbarUp"] then
 		ExpBar:SetSize(C["ActionBarDB"]["ExpbarWidth"], C["ActionBarDB"]["ExpbarHeight"])
 	else
@@ -64,6 +52,10 @@ function Module:BuildExpBar()
 	MoveHandle.ExpBar = S.MakeMoveHandle(ExpBar, "经验条", "expbar")
 	
 	ExpBar:SetScript("OnEnter", function(self)
+		if InCombatLockdown() then return end
+		if C["ActionBarDB"]["ExpbarFadeOut"] then
+			UIFrameFadeIn(self, 1, self:GetAlpha(), 1)
+		end
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 		GameTooltip:ClearLines()
 		GameTooltip:AddDoubleLine(exptitle1, exptitle2)
@@ -73,6 +65,13 @@ function Module:BuildExpBar()
 	end)
 	ExpBar:SetScript("OnMouseDown", function(self, button)
 		ToggleCharacter("ReputationFrame")
+	end)
+	ExpBar:SetScript("OnLeave",function(self)
+		if InCombatLockdown() then return end
+		if C["ActionBarDB"]["ExpbarFadeOut"] then
+			UIFrameFadeOut(self, 1, self:GetAlpha(), 0)
+		end
+		GameTooltip:Hide()
 	end)
 end
 

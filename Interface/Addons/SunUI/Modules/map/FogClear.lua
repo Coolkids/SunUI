@@ -18,6 +18,7 @@ local mod, floor, ceil = math.fmod, math.floor, math.ceil
 local strlower, format = string.lower, string.format
 local wipe, tinsert, pairs = table.wipe, table.insert, pairs
 
+
 local errata = {
 	-- Eastern Kingdoms
 	["Arathi"] = {
@@ -1362,6 +1363,7 @@ local errata = {
 	},
 	['*'] = {},
 }
+
 errata.Hyjal_terrain1 = errata.Hyjal
 errata.Uldum_terrain1 = errata.Uldum
 errata.Gilneas_terrain1 = errata.Gilneas

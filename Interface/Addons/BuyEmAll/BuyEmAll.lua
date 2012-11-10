@@ -211,7 +211,6 @@ function BuyEmAll:AltCurrencyHandling(itemIndex, frame)
 			self.AltCurrency1Tex = select(10, GetItemInfo(self.AltCurrency1));
 			price1 = select(2,GetMerchantItemCostItem(itemIndex, 1));
 			Afford1 = floor(GetItemCount(self.AltCurrency1) / price1) * self.preset;
-			if (self.AltCurrency1 == 79254) then Afford1 = Afford1 + (floor(GetItemCount(61978) / price1) * self.preset) end
 		end
 	end
 	if (NumAltCurrency == 2) or (NumAltCurrency == 3) then
@@ -278,7 +277,17 @@ function BuyEmAll:AltCurrencyHandling(itemIndex, frame)
 end
 
 function BuyEmAll:AltCurrencyTranslating(Texture)
-	if (strmatch(Texture, "-(%a+)-") == "Honor") then
+	if (strmatch(Texture, "%a+_%d+$") == "variety_01") then
+		return 61;
+	elseif (strmatch(Texture, "%a+_%d+$") == "ribbon_01") then
+		return 81;
+	elseif (strmatch(Texture, "_(%a+)$") == "artofwar") then
+		return 241;
+	elseif (strmatch(Texture, "_(%w+)$") == "argentdawn3") then
+		return 361;
+	elseif (strmatch(Texture, "$a+_%a+$") == "zone_tolbarad") then
+		return 391;
+	elseif (strmatch(Texture, "-(%a+)-") == "Honor") then
 		return 392;
 	elseif (strmatch(Texture, "-(%a+)-") == "Conquest") then
 		return 390;
@@ -286,12 +295,18 @@ function BuyEmAll:AltCurrencyTranslating(Texture)
 		return 395;
 	elseif (strmatch(Texture, "-(%a+)$") == "valor") then
 		return 396;
+	elseif (strmatch(Texture, "_(%a+)$") == "idolofferocity") then
+		return 402;
+	elseif (strmatch(Texture, "_(%a+)$") == "markoftheworldtree") then
+		return 416;
+	elseif (strmatch(Texture, "%a+_%d+$") == "darkmoon_01") then
+		return 515;
+	elseif (strmatch(Texture, "%a+_%a+$") == "titan_fragment") then
+		return 698;
 	elseif (strmatch(Texture, "_(%a+)$") == "sealofkings") then
 		return 614;
 	elseif (strmatch(Texture, "%a+_%a+$") == "primal_shadow") then
 		return 615;
-	elseif (Texture == "Interface\\Icons\\inv_relics_idolofferocity") then
-		return 402;
 	end
 end
 
