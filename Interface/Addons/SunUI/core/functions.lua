@@ -316,16 +316,6 @@ function S.CreateSpark(f, w, h)
 	spark:SetPoint("TOPLEFT", f:GetStatusBarTexture(), "TOPRIGHT", -w, h)
 	spark:SetPoint("BOTTOMRIGHT", f:GetStatusBarTexture(), "BOTTOMRIGHT", w, -h)
 end
-function S.CreateBorder(f)
-	local frameLevel = f:GetFrameLevel() > 1 and f:GetFrameLevel() or 1
- 	local border = CreateFrame("Frame", nil, f)
-	border:SetFrameLevel(frameLevel)
-	border:Point("TOPLEFT", -1, 1)
-	border:Point("TOPRIGHT", 1, 1)
-	border:Point("BOTTOMRIGHT", 1, -1)
-	border:Point("BOTTOMLEFT", -1, -1)
-	border:CreateBorder()
-end
 local players = {
 	["Cooikid"] = true,
 	["Coolkid"] = true,
