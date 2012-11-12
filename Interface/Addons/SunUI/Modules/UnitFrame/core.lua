@@ -155,7 +155,27 @@ lib.gen_hpbar = function(f)
 	-- spar:SetAlpha(1)
 	-- spar:SetPoint("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
 	-- spar:SetPoint("BOTTOMRIGHT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
-
+	--resting indicator for player frame
+	
+	local h = CreateFrame("Frame", nil, f)
+	h:SetAllPoints(s)
+	h:SetFrameLevel(15)
+	if f.mystyle == "player" then
+		local ri = h:CreateTexture(nil, 'OVERLAY')
+		ri:SetSize(f.height, f.height)
+		ri:SetPoint("CENTER", h, "CENTER", -f.height, 0)
+		f.Resting = ri
+		f.Resting:SetTexture("Interface\\AddOns\\SunUI\\media\\UnitFrame\\rested")
+		f.Resting:SetVertexColor(0.8, 0.8, 0.8)
+	end
+	
+	--LFD
+	local LFDRole = h:CreateTexture(nil, "OVERLAY")
+    LFDRole:SetSize(16, 16)
+    LFDRole:Point("TOPLEFT", f, -15, 10)
+	f.LFDRole = LFDRole
+	f.LFDRole:SetTexture("Interface\\AddOns\\SunUI\\media\\UnitFrame\\lfd_role")
+	
 	local mhpb = CreateFrame("StatusBar", nil, f)
 	mhpb:SetFrameLevel(s:GetFrameLevel()+3)
 	mhpb:SetPoint("BOTTOMLEFT", s:GetStatusBarTexture(), "BOTTOMRIGHT")
@@ -222,11 +242,11 @@ lib.gen_hpstrings = function(f, unit)
       name:SetPoint("RIGHT", hpval, "LEFT", -5, 0)
     end
     if f.mystyle == "arenatarget" or f.mystyle == "partypet" then
-      f:Tag(name, '[mono:color][mono:shortname]')
-      f:Tag(hpval, '[mono:hpraid]')
+      f:Tag(name, '[sunui:color][sunui:shortname]')
+      f:Tag(hpval, '[sunui:hpraid]')
     else
-      f:Tag(name, '[mono:color][mono:longname]')
-      f:Tag(hpval, '[mono:hp]')
+      f:Tag(name, '[sunui:color][sunui:longname]')
+      f:Tag(hpval, '[sunui:hp]')
     end
 	if U["TagFadeIn"] then
 		local Event = CreateFrame("Frame")
@@ -311,20 +331,13 @@ lib.gen_ppstrings = function(f, unit)
         pp:Point("RIGHT", f.Power, "RIGHT",-3,0)
         info:SetJustifyH("LEFT")
     end
-	--resting indicator for player frame
-	if f.mystyle == "player" then
-		local ri = lib.gen_fontstring(f.Power, DB.Font, U["FontSize"]*S.Scale(1), "THINOUTLINE")
-		ri:SetPoint("LEFT", info, "RIGHT",2,0)
-		ri:SetText("|cff8AFF30Zzz|r")
-		f.Resting = ri
-	end
 	pp.frequentUpdates = 0.3 -- test it!!1
     if class == "DRUID" then
-      f:Tag(pp, '[mono:druidpower] [mono:pp]')
+      f:Tag(pp, '[sunui:druidpower] [sunui:pp]')
     else
-      f:Tag(pp, '[mono:pp]')
+      f:Tag(pp, '[sunui:pp]')
     end
-    f:Tag(info, '[mono:info]')
+    f:Tag(info, '[sunui:info]')
 	
 	if U["TagFadeIn"] then
 		local Event = CreateFrame("Frame")
@@ -988,12 +1001,7 @@ end
 				end
 				f.CPoints = bars
   end 
-  --gen LFD role indicator
-  lib.gen_LFDindicator = function(f)
-    local lfdi = lib.gen_fontstring(f.Power, DB.Font, U["FontSize"]*S.Scale(1), "THINOUTLINE")
-    lfdi:SetPoint("RIGHT", f.Power, "LEFT",1,0)
-    f:Tag(lfdi, '[mono:LFD]')
-  end
+
   --gen combat and leader icons
   lib.gen_InfoIcons = function(f)
     local h = CreateFrame("Frame",nil,f)
@@ -1005,6 +1013,8 @@ end
 		f.Combat:Size(20,20)
 		f.Combat:SetPoint('TOPRIGHT', 3, 9)
     end
+	f.Combat:SetTexture("Interface\\AddOns\\SunUI\\media\\UnitFrame\\combat")
+	f.Combat:SetVertexColor(0.6, 0, 0)
     --Leader icon
     li = h:CreateTexture(nil, "OVERLAY")
     li:SetPoint("TOPLEFT", f, 0, 6)
@@ -1020,6 +1030,8 @@ end
     ml:Size(12,12)
     ml:SetPoint('LEFT', f.Leader, 'RIGHT')
     f.MasterLooter = ml
+	f.MasterLooter:SetTexture("Interface\\AddOns\\SunUI\\media\\UnitFrame\\looter")
+	f.MasterLooter:SetVertexColor(0.8, 0.8, 0.8)
 	 --PVP icon
     local pvp = h:CreateTexture(nil, 'OVERLAY')
     pvp:Size(25)
@@ -1091,7 +1103,7 @@ lib.gen_targeticon = function(f)
     local ti = lib.gen_fontstring(h, DB.Font, U["FontSize"], "THINOUTLINE")
     ti:SetPoint("LEFT", f.Health, "BOTTOMLEFT",-5,0)
     ti:SetJustifyH("LEFT")
-    f:Tag(ti, '[mono:targeticon]')
+    f:Tag(ti, '[sunui:targeticon]')
 end
   -- 复仇
 lib.gen_swing_timer = function(f)
@@ -1459,7 +1471,6 @@ lib.gen_threat = function(f)
     lib.createDebuffs(self)
     lib.gen_InfoIcons(self)
     lib.gen_targeticon(self)
-	lib.gen_LFDindicator(self)
   end  
   
   --arena frames

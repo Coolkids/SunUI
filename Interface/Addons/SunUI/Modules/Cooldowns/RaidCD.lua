@@ -95,7 +95,9 @@ end
 
 local OnEnter = function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-	GameTooltip:AddDoubleLine(self.spell, self.right:GetText())
+	GameTooltip:SetSpellByID(self.spellId)
+	GameTooltip:AddLine(" ")
+	GameTooltip:AddDoubleLine(self.left:GetText(), self.right:GetText())
 	GameTooltip:SetClampedToScreen(true)
 	GameTooltip:Show()
 end
@@ -107,11 +109,11 @@ end
 local OnMouseDown = function(self, button)
 	if button == "LeftButton" then
 		if GetNumGroupMembers() > 0 then
-			SendChatMessage(sformat("SunUI_RaidCD".." %s: %s", self.left:GetText().."-"..self.spell, self.right:GetText()), "RAID")
+			SendChatMessage(self.left:GetText().."-"..GetSpellLink(self.spellId)..":"..self.right:GetText(), "RAID")
 		elseif GetNumSubgroupMembers() > 0 and not UnitInRaid("player") then
-			SendChatMessage(sformat("SunUI_RaidCD".." %s: %s", self.left:GetText().."-"..self.spell, self.right:GetText()), "PARTY")
+			SendChatMessage(self.left:GetText().."-"..GetSpellLink(self.spellId)..":"..self.right:GetText(), "PARTY")
 		else
-			SendChatMessage(sformat("SunUI_RaidCD".." %s: %s", self.left:GetText().."-"..self.spell, self.right:GetText()), "SAY")
+			SendChatMessage(self.left:GetText().."-"..GetSpellLink(self.spellId)..":"..self.right:GetText(), "SAY")
 		end
 	elseif button == "RightButton" then
 		StopTimer(self)
@@ -166,6 +168,7 @@ local StartTimer = function(name, spellId)
 	bar.icon:SetNormalTexture(icon)
 	bar.icon:GetNormalTexture():SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	bar.spell = spell
+	bar.spellId = spellId
 	bar.name = name
 	bar:Show()
 	local color = RAID_CLASS_COLORS[select(2, UnitClass(name))]

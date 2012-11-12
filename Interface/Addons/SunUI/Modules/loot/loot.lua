@@ -322,16 +322,16 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 			else
 				slot.count:Hide()
 			end
-			if quality <= 1 then 
+			if (quality and quality <= 1) then 
 				slot.overlay:SetBackdropBorderColor(0, 0, 0)
 				slot:SetBackdropBorderColor(0, 0, 0)
 			else
-				slot.overlay:SetBackdropBorderColor(color.r, color.g, color.b)
-				slot:SetBackdropBorderColor(color.r, color.g, color.b)
+				slot.overlay:SetBackdropBorderColor(color.r or 0, color.g or 0, color.b or 0)
+				slot:SetBackdropBorderColor(color.r or 0, color.g or 0, color.b or 0)
 			end
-			slot.quality = quality
+			slot.quality = quality or 0
 			slot.name:SetText(item)
-			slot.name:SetTextColor(color.r, color.g, color.b)
+			slot.name:SetTextColor(color.r or 0, color.g or 0, color.b or 0)
 			slot.icon:SetTexture(texture)
 			m = math.max(m, quality)
 

@@ -1,8 +1,8 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
-local _
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SunUIPowerBar", "AceTimer-3.0")
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local powercolor = {}
+local space = 4
 for power, color in next, PowerBarColor do
 	if (type(power) == "string") then
 		if power == "MANA" then 
@@ -28,7 +28,7 @@ function Module:CreateShadowOrbs()
 	
 	for i = 1,maxShadowOrbs do
 		ShadowOrbs[i] = CreateFrame("StatusBar", nil, ShadowOrbs)
-		ShadowOrbs[i]:SetSize((C["Width"]-2*(maxShadowOrbs-1))/maxShadowOrbs, C["Height"])
+		ShadowOrbs[i]:SetSize((C["Width"]-space*(maxShadowOrbs-1))/maxShadowOrbs, C["Height"])
 		ShadowOrbs[i]:SetScale(C["Scale"])
 		ShadowOrbs[i]:SetStatusBarTexture(DB.Statusbar)
 		ShadowOrbs[i]:SetStatusBarColor(.86,.22,1)
@@ -39,7 +39,7 @@ function Module:CreateShadowOrbs()
 		if (i == 1) then
 			ShadowOrbs[i]:SetPoint("LEFT", ShadowOrbs, "LEFT")
 		else
-			ShadowOrbs[i]:SetPoint("LEFT", ShadowOrbs[i-1], "RIGHT", 2, 0)
+			ShadowOrbs[i]:SetPoint("LEFT", ShadowOrbs[i-1], "RIGHT", space, 0)
 		end
 	end
 	ShadowOrbs:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -60,10 +60,11 @@ function Module:CreateShadowOrbs()
 		end
 		if C["Fade"] then 
 			if event == "PLAYER_REGEN_DISABLED" then
-				UIFrameFadeIn(ShadowOrbs, 1, ShadowOrbs:GetAlpha(), 1)	
+				self:Show()
+				UIFrameFadeIn(self, 1, self:GetAlpha(), 1)	
 			end
 			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" then
-				UIFrameFadeOut(ShadowOrbs, 1, ShadowOrbs:GetAlpha(), 0)
+				S.FadeOutFrameDamage(self, 1)
 			end
 		end
 	end)
@@ -77,7 +78,7 @@ function Module:CreateMonkBar()
 	MoveHandle.PowerBar = S.MakeMove(chibar, "SunUIPowerBar", "PowerBar", C["Scale"])
 	for i=1,5 do
 		chibar[i] = CreateFrame("StatusBar",nil,chibar)
-		chibar[i]:SetSize((C["Width"]-8)/5, C["Height"])
+		chibar[i]:SetSize((C["Width"]-space*(5-1))/5, C["Height"])
 		chibar[i]:SetScale(C["Scale"])
 		chibar[i]:SetStatusBarTexture(DB.Statusbar)
 		chibar[i]:SetStatusBarColor(0.0, 1.00 , 0.59)
@@ -87,7 +88,7 @@ function Module:CreateMonkBar()
 		if i==1 then
 			chibar[i]:SetPoint("LEFT", chibar, "LEFT")
 		else
-			chibar[i]:SetPoint("LEFT", chibar[i-1], "RIGHT", 2, 0)
+			chibar[i]:SetPoint("LEFT", chibar[i-1], "RIGHT", space, 0)
 		end
 		chibar[i]:Hide()
 	end
@@ -104,12 +105,12 @@ function Module:CreateMonkBar()
 				if chimax == 4 then
 					chibar[5]:Hide()
 					for i = 1,4 do
-						chibar[i]:SetWidth((C["Width"]-6)/4)
+						chibar[i]:SetWidth((C["Width"]-space*(4-1))/4)
 					end
 				elseif chimax == 5 then
 					chibar[5]:Show()
 					for i = 1,5 do
-						chibar[i]:SetWidth((C["Width"]-8)/5)
+						chibar[i]:SetWidth((C["Width"]-space*(5-1))/5)
 					end
 				end
 			end
@@ -123,10 +124,11 @@ function Module:CreateMonkBar()
 		end
 		if C["Fade"] then 
 			if event == "PLAYER_REGEN_DISABLED" then
-				UIFrameFadeIn(chibar, 1, chibar:GetAlpha(), 1)
+				self:Show()
+				UIFrameFadeIn(self, 1, self:GetAlpha(), 1)
 			end
 			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" then
-				UIFrameFadeOut(chibar, 1, chibar:GetAlpha(), 0)
+				S.FadeOutFrameDamage(self, 1)
 			end
 		end
 	end)
@@ -183,10 +185,11 @@ local function OnEvent(self, event, unit)
 	end
 	if C["Fade"] then 
 		if event == "PLAYER_REGEN_DISABLED" then
+			self:Show()
 			UIFrameFadeIn(self, 1, self:GetAlpha(), 1)
 		end
 		if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" then
-			UIFrameFadeOut(self, 1, self:GetAlpha(), 0)
+			S.FadeOutFrameDamage(self, 1)
 		end
 	end
 end
@@ -208,12 +211,12 @@ function Module:CreateQSDKPower()
 		bars[i] =CreateFrame("StatusBar", nil, bars)
 		bars[i]:SetStatusBarTexture(DB.Statusbar)
 		bars[i]:GetStatusBarTexture():SetHorizTile(false)
-		bars[i]:SetSize((C["Width"]-2*(count-1))/count, C["Height"])
+		bars[i]:SetSize((C["Width"]-space*(count-1))/count, C["Height"])
 		bars[i]:SetScale(C["Scale"])
 		if (i == 1) then
 			bars[i]:SetPoint("LEFT", bars, "LEFT")
 		else
-			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 2, 0)
+			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", space, 0)
 		end
         if DB.MyClass == "PALADIN" then
             bars[i]:SetStatusBarColor(0.9, 0.9, 0)
@@ -254,10 +257,11 @@ function Module:CreateQSDKPower()
 			end
 			if C["Fade"] then 
 				if event == "PLAYER_REGEN_DISABLED" then
-					UIFrameFadeIn(bars, 1, bars:GetAlpha(), 1)
+					self:Show()
+					UIFrameFadeIn(self, 1, self:GetAlpha(), 1)
 				end
 				if event == "PLAYER_REGEN_ENABLED" then
-					UIFrameFadeOut(bars, 1, bars:GetAlpha(), 0)
+					S.FadeOutFrameDamage(self, 1)
 				end
 			end
 		end)
@@ -273,12 +277,12 @@ function Module:CreateCombatPoint()
 		CombatPointBar[i] =CreateFrame("StatusBar", nil, CombatPointBar)
 		CombatPointBar[i]:SetStatusBarTexture(DB.Statusbar)
 		CombatPointBar[i]:GetStatusBarTexture():SetHorizTile(false)
-		CombatPointBar[i]:SetSize((C["Width"]-2*4)/5, C["Height"])
+		CombatPointBar[i]:SetSize((C["Width"]-space*4)/5, C["Height"])
 		CombatPointBar[i]:SetScale(C["Scale"])
 		if (i == 1) then
 			CombatPointBar[i]:SetPoint("LEFT", CombatPointBar, "LEFT")
 		else
-			CombatPointBar[i]:SetPoint("LEFT", CombatPointBar[i-1], "RIGHT", 2, 0)
+			CombatPointBar[i]:SetPoint("LEFT", CombatPointBar[i-1], "RIGHT", space, 0)
 		end
 		local s = CombatPointBar[i]:GetStatusBarTexture()
 		if i ~= 5 then 
@@ -426,7 +430,7 @@ function Module:CreateEclipse()
 		end
 		if C["Fade"] then 
 			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" or event == "UPDATE_SHAPESHIFT_FORM" then
-				UIFrameFadeOut(eb, 2, eb:GetAlpha(), 0)
+				S.FadeOutFrameDamage(eb, 1)
 			end
 		end
 	end)
@@ -454,14 +458,14 @@ function Module:FuckWarlock()
 	MoveHandle.PowerBar = S.MakeMove(bars, "SunUIPowerBar", "PowerBar", C["Scale"])
 	for i = 1, 4 do
 		bars[i] = CreateFrame("StatusBar", nil, bars)
-		bars[i]:SetSize((C["Width"]-2*(4-1))/4, C["Height"])
+		bars[i]:SetSize((C["Width"]-space*(4-1))/4, C["Height"])
 		bars[i]:SetStatusBarTexture(DB.Statusbar)
 		S.CreateBack(bars[i])
 		bars[i]:CreateShadow()
 		if i == 1 then
 			bars[i]:SetPoint("LEFT", bars)
 		else
-			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 2, 0)
+			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", space, 0)
 		end
 	end
 	bars:RegisterEvent("UNIT_POWER")
@@ -591,10 +595,11 @@ function Module:FuckWarlock()
 		end
 		if C["Fade"] then 
 			if event == "PLAYER_REGEN_DISABLED" then
+				self:Show()
 				UIFrameFadeIn(self, 1, self:GetAlpha(), 1)
 			end
 			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" or event == "PLAYER_TALENT_UPDATE" then
-				UIFrameFadeOut(self, 1, self:GetAlpha(), 0)
+				S.FadeOutFrameDamage(self, 1)
 			end
 		end
 	end)
@@ -608,7 +613,7 @@ function Module:Mage()
 	
 	for i = 1,6 do
 		bars[i] = CreateFrame("StatusBar", nil, f)
-		bars[i]:SetSize((C["Width"]-2*(6-1))/6, C["Height"])
+		bars[i]:SetSize((C["Width"]-space*(6-1))/6, C["Height"])
 		bars[i]:SetStatusBarTexture(DB.Statusbar)
 		bars[i]:SetStatusBarColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
 		local s = bars[i]:GetStatusBarTexture()
@@ -618,7 +623,7 @@ function Module:Mage()
 		if (i == 1) then
 			bars[i]:SetPoint("LEFT", bars)
 		else
-			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 2, 0)
+			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", space, 0)
 		end
 	end
 	bars:RegisterEvent("PLAYER_ENTERING_WORLD")

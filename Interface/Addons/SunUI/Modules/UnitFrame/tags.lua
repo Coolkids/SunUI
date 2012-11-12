@@ -72,7 +72,7 @@ pcolors = setmetatable({
 	}, {__index = oUF.colors.power}),
 }, {__index = oUF.colors})
 -- name color tags
-oUF.Tags.Methods['mono:color'] = function(u, r)
+oUF.Tags.Methods['sunui:color'] = function(u, r)
 	local _, class = UnitClass(u)
 	local reaction = UnitReaction(u, "player")
 	
@@ -86,10 +86,10 @@ oUF.Tags.Methods['mono:color'] = function(u, r)
 		return hex(1, 1, 1)
 	end
 end
-oUF.Tags.Events['mono:color'] = 'UNIT_REACTION UNIT_HEALTH UNIT_POWER'
+oUF.Tags.Events['sunui:color'] = 'UNIT_REACTION UNIT_HEALTH UNIT_POWER'
 
 -- type and level information
-oUF.Tags.Methods['mono:info'] = function(u) 
+oUF.Tags.Methods['sunui:info'] = function(u) 
 	local level = UnitLevel(u)
     local race = UnitRace(u) or nil
 	local typ = UnitClassification(u)
@@ -113,12 +113,12 @@ oUF.Tags.Methods['mono:info'] = function(u)
 		end
     end
 end
-oUF.Tags.Events['mono:info'] = 'UNIT_LEVEL PLAYER_LEVEL_UP UNIT_CLASSIFICATION_CHANGED'
+oUF.Tags.Events['sunui:info'] = 'UNIT_LEVEL PLAYER_LEVEL_UP UNIT_CLASSIFICATION_CHANGED'
 
 -- health value tags
-oUF.Tags.Methods['mono:hp']  = function(u) -- THIS IS FUCKING MADNESS!!! 
+oUF.Tags.Methods['sunui:hp']  = function(u) -- THIS IS FUCKING MADNESS!!! 
   if UnitIsDead(u) or UnitIsGhost(u) or not UnitIsConnected(u) then
-    return oUF.Tags.Methods['mono:DDG'](u)
+    return oUF.Tags.Methods['sunui:DDG'](u)
   else
 	local per = oUF.Tags.Methods['perhp'](u).."%" or 0
 	local def =oUF.Tags.Methods['missinghp'](u) or 0
@@ -159,22 +159,22 @@ oUF.Tags.Methods['mono:hp']  = function(u) -- THIS IS FUCKING MADNESS!!!
     end
   end
 end
-oUF.Tags.Events['mono:hp'] = 'UNIT_HEALTH UNIT_CONNECTION'
+oUF.Tags.Events['sunui:hp'] = 'UNIT_HEALTH UNIT_CONNECTION'
 
-oUF.Tags.Methods['mono:hpraid']  = function(u) 
+oUF.Tags.Methods['sunui:hpraid']  = function(u) 
 	local min, max = UnitHealth(u), UnitHealthMax(u)
 	local per = oUF.Tags.Methods['perhp'](u)
 	local def = oUF.Tags.Methods['missinghp'](u)
 	if UnitIsDead(u) or UnitIsGhost(u) or not UnitIsConnected(u) then
-		return oUF.Tags.Methods['mono:DDG'](u)
+		return oUF.Tags.Methods['sunui:DDG'](u)
 	elseif min~=max and per < 90 then
 		return "|cffe15f8b - "..SVal(def).."|r"
 	end
 end
-oUF.Tags.Events['mono:hpraid'] = 'UNIT_HEALTH UNIT_CONNECTION'
+oUF.Tags.Events['sunui:hpraid'] = 'UNIT_HEALTH UNIT_CONNECTION'
 
 -- power value tags
-oUF.Tags.Methods['mono:pp'] = function(u)
+oUF.Tags.Methods['sunui:pp'] = function(u)
 	local _, str = UnitPowerType(u)
 	local per = oUF.Tags.Methods['perpp'](u).."%" or 0
 	if str then
@@ -185,35 +185,35 @@ oUF.Tags.Methods['mono:pp'] = function(u)
 		end
 	end
 end
-oUF.Tags.Events['mono:pp'] = 'UNIT_POWER UNIT_MAXPOWER'
+oUF.Tags.Events['sunui:pp'] = 'UNIT_POWER UNIT_MAXPOWER'
 
-oUF.Tags.Methods['mono:druidpower'] = function(u)
+oUF.Tags.Methods['sunui:druidpower'] = function(u)
 	local min, max = UnitPower(u, 0), UnitPowerMax(u, 0)
 	return u == 'player' and UnitPowerType(u) ~= 0 and min ~= max and ('|cff5F9BFF%d%%|r |'):format(min / max * 100)
 end
-oUF.Tags.Events['mono:druidpower'] = 'UNIT_POWER UNIT_MAXPOWER UPDATE_SHAPESHIFT_FORM'
+oUF.Tags.Events['sunui:druidpower'] = 'UNIT_POWER UNIT_MAXPOWER UPDATE_SHAPESHIFT_FORM'
 
 -- name tags
-oUF.Tags.Methods['mono:name'] = function(u, r)
+oUF.Tags.Methods['sunui:name'] = function(u, r)
 	local name = UnitName(r or u)
 	return utf8sub(name, 12, true)
 end
-oUF.Tags.Events['mono:name'] = 'UNIT_NAME_UPDATE UNIT_CONNECTION'
+oUF.Tags.Events['sunui:name'] = 'UNIT_NAME_UPDATE UNIT_CONNECTION'
 
-oUF.Tags.Methods['mono:longname'] = function(u, r)
+oUF.Tags.Methods['sunui:longname'] = function(u, r)
 	local name = UnitName(r or u)
 	return utf8sub(name, 20, true)
 end
-oUF.Tags.Events['mono:longname'] = 'UNIT_NAME_UPDATE UNIT_CONNECTION'
+oUF.Tags.Events['sunui:longname'] = 'UNIT_NAME_UPDATE UNIT_CONNECTION'
 
-oUF.Tags.Methods['mono:shortname'] = function(u, r)
+oUF.Tags.Methods['sunui:shortname'] = function(u, r)
 	local name = UnitName(r or u)
 	return utf8sub(name, 3, false)
 end
-oUF.Tags.Events['mono:shortname'] = 'UNIT_NAME_UPDATE UNIT_CONNECTION'
+oUF.Tags.Events['sunui:shortname'] = 'UNIT_NAME_UPDATE UNIT_CONNECTION'
 
 -- unit status tag
-oUF.Tags.Methods['mono:DDG'] = function(u)
+oUF.Tags.Methods['sunui:DDG'] = function(u)
 	if not UnitIsConnected(u) then
 		return "|cffCFCFCF 离线|r"
 	elseif UnitIsGhost(u) then
@@ -222,25 +222,12 @@ oUF.Tags.Methods['mono:DDG'] = function(u)
 		return "|cffCFCFCF 死亡|r"
 	end
 end
-oUF.Tags.Events['mono:DDG'] = 'UNIT_NAME_UPDATE UNIT_HEALTH UNIT_CONNECTION'--'UNIT_MAXHEALTH'
+oUF.Tags.Events['sunui:DDG'] = 'UNIT_NAME_UPDATE UNIT_HEALTH UNIT_CONNECTION'--'UNIT_MAXHEALTH'
 
 -- current target indicator tag
-oUF.Tags.Methods['mono:targeticon'] = function(u)
+oUF.Tags.Methods['sunui:targeticon'] = function(u)
 	if UnitIsUnit(u, 'target') then
 		return "|cffE6A743 >|r"
 	end
 end
-oUF.Tags.Events['mono:targeticon'] = 'PLAYER_TARGET_CHANGED'
-
--- LFD role tag
-oUF.Tags.Methods['mono:LFD'] = function(u)
-	local role = UnitGroupRolesAssigned(u)
-	if role == "HEALER" then
-		return "|cff8AFF30H|r"
-	elseif role == "TANK" then
-		return "|cffFFF130T|r"
-	elseif role == "DAMAGER" then
-		return "|cffFF6161D|r"
-	end
-end
-oUF.Tags.Events['mono:LFD'] = 'PLAYER_ROLES_ASSIGNED GROUP_MEMBERS_CHANGED'
+oUF.Tags.Events['sunui:targeticon'] = 'PLAYER_TARGET_CHANGED'

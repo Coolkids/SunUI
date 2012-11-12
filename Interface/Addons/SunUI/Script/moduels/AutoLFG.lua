@@ -3,7 +3,7 @@ local S, C, L, DB = unpack(select(2, ...))
 local _
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("AutoLFG")
 function Module:OnInitialize()
-C = C["MiniDB"]
+	C = C["MiniDB"]
 
 	local Locale = {
 		zhCN = {
@@ -28,15 +28,15 @@ C = C["MiniDB"]
 	end
 
 	local DurationWidget = function()
-		ALFG:SetSize(LFGDungeonReadyDialog:GetWidth()*0.8,6)
+		ALFG:SetSize(LFGDungeonReadyDialog:GetWidth()*0.8,8)
 		ALFG:SetPoint("BOTTOM",LFGDungeonReadyDialog,0,12)
 		ALFG.durationBar:SetStatusBarTexture(DB.Statusbar)
-		ALFG.durationBar:SetPoint("TOPLEFT",ALFG)
-		ALFG.durationBar:SetPoint("BOTTOMRIGHT",ALFG)
+		ALFG.durationBar:Point("TOPLEFT", ALFG, 1, -1)
+		ALFG.durationBar:Point("BOTTOMRIGHT", ALFG, -1, 1)
 		ALFG.durationBar:SetFrameLevel(LFGDungeonReadyDialog:GetFrameLevel()+1)
-		ALFG:CreateShadow()
+		ALFG:CreateBorder()
 		S.CreateBack(ALFG.durationBar)
-		S.CreateTop(ALFG.durationBar:GetStatusBarTexture(), 1,.7,0,1)
+		S.CreateTop(ALFG.durationBar:GetStatusBarTexture(), 1,.7, 0, 1)
 		S.CreateSpark(ALFG.durationBar, 6, 6)
 		
 		ALFG.durationTime:SetFontObject(GameFontNormalLarge)
@@ -59,7 +59,7 @@ C = C["MiniDB"]
 				local newTime = GetTime()
 				if (newTime - oldTime) < duration then
 					local width = ALFG:GetWidth() * (newTime - oldTime)/duration
-					ALFG.durationBar:SetPoint("BOTTOMRIGHT",ALFG,0-width,0)
+					ALFG.durationBar:SetPoint("BOTTOMRIGHT",ALFG,0-width,1)
 					ALFG.durationTime:SetText(string.format("%d",(duration - (newTime - oldTime))))		
 					flag = flag + 1
 					if flag >= 10 then

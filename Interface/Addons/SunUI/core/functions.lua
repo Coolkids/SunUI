@@ -294,19 +294,23 @@ function S.FadeOutFrameDamage(p, t, show)  --隐藏
 	end 
 end
 
-function S.CreateBack(f, r1,g1,b1,a1,r2,g2,b2,a2)
+function S.CreateBack(f, orientation)
 	local gradient = f:CreateTexture(nil, "BACKGROUND")
 	gradient:SetPoint("TOPLEFT")
 	gradient:SetPoint("BOTTOMRIGHT")
 	gradient:SetTexture(DB.Statusbar)
-	if a1 and a2 then 
-		gradient:SetGradientAlpha("VERTICAL", r1 or 0, g1 or  0, b1 or  0, a1, r2 or  .35, g2 or  .35, b2 or  .35, a2)
+	if orientation then
+		gradient:SetGradientAlpha("HORIZONTAL",  0, 0, 0, 0.3, .35, .35, .35, .35)
 	else
-		gradient:SetGradientAlpha("VERTICAL", r1 or 0, g1 or  0, b1 or  0, 0.3, r2 or  .35, g2 or  .35, b2 or  .35, .35)
+		gradient:SetGradientAlpha("VERTICAL",  0, 0, 0, 0.3, .35, .35, .35, .35)
 	end
 end
-function S.CreateTop(f, r, g, b)
-	f:SetGradientAlpha("VERTICAL", r, g, b, 1, r/2, g/2, b/2, 1)
+function S.CreateTop(f, r, g, b, orientation)
+	if orientation then
+		f:SetGradientAlpha("HORIZONTAL", r, g, b, 1, r/2, g/2, b/2, 1)
+	else
+		f:SetGradientAlpha("VERTICAL", r, g, b, 1, r/2, g/2, b/2, 1)
+	end
 end
 function S.CreateSpark(f, w, h)
 	local spark =  f:CreateTexture(nil, "OVERLAY")

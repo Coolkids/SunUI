@@ -38,16 +38,17 @@ function Module:BuildExpBar()
 	local h = CreateFrame("StatusBar", nil, ExpBar)
 	h:SetFrameLevel(ExpBar:GetFrameLevel()-2)
 	h:SetAllPoints()
-	S.CreateBack(ExpBar)
 	if C["ActionBarDB"]["ExpbarFadeOut"] then
 		ExpBar:SetAlpha(0)
 	end
 	if not C["ActionBarDB"]["ExpbarUp"] then
 		ExpBar:SetSize(C["ActionBarDB"]["ExpbarWidth"], C["ActionBarDB"]["ExpbarHeight"])
+		S.CreateBack(ExpBar)
 	else
 		ExpBar:SetSize(C["ActionBarDB"]["ExpbarHeight"], C["ActionBarDB"]["ExpbarWidth"])
 		ExpBar:SetOrientation("VERTICAL")
 		ExpBar.Rest:SetOrientation("VERTICAL")
+		S.CreateBack(ExpBar, true) 
 	end
 	MoveHandle.ExpBar = S.MakeMoveHandle(ExpBar, "经验条", "expbar")
 	
@@ -94,7 +95,11 @@ function Module:OnEvent()
 		ExpBar.Rest:SetValue(0)
 		if name then
 			ExpBar:SetStatusBarColor(unpack(FactionInfo[standingID][1]))
-			S.CreateTop(es, FactionInfo[standingID][1][1], FactionInfo[standingID][1][2], FactionInfo[standingID][1][3])
+			if not C["ActionBarDB"]["ExpbarUp"] then
+				S.CreateTop(es, FactionInfo[standingID][1][1], FactionInfo[standingID][1][2], FactionInfo[standingID][1][3])
+			else
+				S.CreateTop(es, FactionInfo[standingID][1][1], FactionInfo[standingID][1][2], FactionInfo[standingID][1][3], true)
+			end
 			ExpBar:SetMinMaxValues(barMin, barMax)
 			ExpBar:SetValue(barValue)
 			exptitle1 = S.ToHex(FactionInfo[standingID][1][1], FactionInfo[standingID][1][2], FactionInfo[standingID][1][3])..name.."|r"
@@ -112,9 +117,14 @@ function Module:OnEvent()
 		end
 	else
 		ExpBar:SetStatusBarColor(0.4, 0.1, 0.6, 1)
-		S.CreateTop(es, 0.4, 0.1, 0.6)
 		ExpBar.Rest:SetStatusBarColor(0.0, 0.4, 0.8, 1)
-		S.CreateTop(hs, 0.0, 0.4, 0.8)
+		if not C["ActionBarDB"]["ExpbarUp"] then
+			S.CreateTop(es, 0.4, 0.1, 0.6)
+			S.CreateTop(hs, 0.0, 0.4, 0.8)
+		else
+			S.CreateTop(es, 0.4, 0.1, 0.6, true)
+			S.CreateTop(hs, 0.0, 0.4, 0.8, true)
+		end
 		ExpBar:SetMinMaxValues(0, playerMaxXP)
 		ExpBar.Rest:SetMinMaxValues(0, playerMaxXP)
 		if exhaustionXP then
