@@ -28,9 +28,9 @@ SlashCmdList["FRAME"] = function(arg)
 		if yOfs then
 			ChatFrame1:AddMessage("Y: |cffFFD100"..format("%.2f",yOfs))
 		end
-		--if relativeTo then
-			--ChatFrame1:AddMessage("Point: |cffFFD100"..point.."|r anchored to "..relativeTo:GetName().."'s |cffFFD100"..relativePoint)
-		--end
+		if relativeTo then
+			ChatFrame1:AddMessage("Point: |cffFFD100"..point.."|r anchored to "..relativeTo:GetName().."'s |cffFFD100"..relativePoint)
+		end
 		ChatFrame1:AddMessage("|cffCC0000~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 	elseif arg == nil then
 		ChatFrame1:AddMessage("Invalid frame name")

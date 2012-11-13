@@ -1,11 +1,4 @@
-﻿
-
-
-
-
-
-
-<Ui xmlns="http://www.blizzard.com/wow/ui/">
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Include file="Libs\load.xml"/>
 	<Script file = "core\Init.lua"/>
 	<Include file="locale\load.xml"/>
@@ -14,8 +7,6 @@
 	<Include file="core\load.xml"/>
 	<Include file="developer\load.xml"/>
 	<Script file = "core\AddonManager.lua"/>
-	<!--Fix UIDropdown-->
-	<Include file = "core\!UIDropDownMenuFix\UIDropDownMenu.xml"/>
 	<!-- module -->
 	<Include file="Modules\load.xml"/>
 	<!-- script -->

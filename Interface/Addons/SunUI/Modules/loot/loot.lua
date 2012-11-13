@@ -32,7 +32,7 @@ LootTargetPortrait:SetWidth(50)
 LootTargetPortrait:CreateShadow("Background")
 	
 local lb = CreateFrame("Button", "Loot_D", addon, "UIPanelScrollDownButtonTemplate")		-- Link button
-local LDD = CreateFrame("Frame", "Loot_b", addon, "XUIDropDownMenuTemplate")				-- Link dropdown menu frame
+local LDD = CreateFrame("Frame", "Loot_b", addon, "UIDropDownMenuTemplate")				-- Link dropdown menu frame
 lb:SetFrameStrata("DIALOG")
 LDD:SetFrameStrata("DIALOG")
 local sq, ss, sn
@@ -48,7 +48,7 @@ end
 
 
 local function OnLinkClick(self)
-    XToggleDropDownMenu(1, nil, LDD, lb, 0, 0)
+    ToggleDropDownMenu(1, nil, LDD, lb, 0, 0)
 end
 
 local function LDD_OnClick(self)
@@ -80,7 +80,7 @@ local function LDD_Initialize(self, level)
     info.text = "Announce to"
     info.notCheckable = true
     info.isTitle = true
-    XUIDropDownMenu_AddButton(info, level)
+    UIDropDownMenu_AddButton(info, level)
     
     --announce chanels
     info = {}
@@ -88,28 +88,28 @@ local function LDD_Initialize(self, level)
     info.value = "raid"
     info.notCheckable = 1
     info.func = LDD_OnClick
-    XUIDropDownMenu_AddButton(info, level)
+    UIDropDownMenu_AddButton(info, level)
     
     info = {}
     info.text = "  guild"
     info.value = "guild"
     info.notCheckable = 1
     info.func = LDD_OnClick
-    XUIDropDownMenu_AddButton(info, level)
+    UIDropDownMenu_AddButton(info, level)
 	
 	info = {}
     info.text = "  party"
     info.value = "party"
     info.notCheckable = 1
     info.func = LDD_OnClick
-    XUIDropDownMenu_AddButton(info, level)
+    UIDropDownMenu_AddButton(info, level)
 
     info = {}
     info.text = "  say"
     info.value = "say"
     info.notCheckable = 1
     info.func = LDD_OnClick
-    XUIDropDownMenu_AddButton(info, level)
+    UIDropDownMenu_AddButton(info, level)
     
     info = nil
 end
@@ -253,7 +253,7 @@ lb:SetFrameStrata("TOOLTIP")
 lb:RegisterForClicks("RightButtonUp", "LeftButtonUp")
 lb:SetScript("OnClick", OnLinkClick)
 lb:Hide()
-XUIDropDownMenu_Initialize(LDD, LDD_Initialize, "MENU")
+UIDropDownMenu_Initialize(LDD, LDD_Initialize, "MENU")
 MasterLooterFrame:SetFrameStrata("FULLSCREEN")
 
 addon.slots = {}

@@ -1,9 +1,4 @@
-﻿<!-- -->
-
-
-
-
-<Ui xmlns="http://www.blizzard.com/wow/ui/">
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Include file = "aurora\Load.xml"/>
 	<Include file = "actionBar\Load.xml"/>
 	<Include file = "Announce\load.xml"/>

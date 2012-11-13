@@ -8,6 +8,11 @@ local InfoBarStatusColor = {{1, 0, 0}, {1, 1, 0}, {0, 0.4, 1}}
 local bandwidthString = "%.2f Mbps"
 local percentageString = "%.2f%%"
 local wm
+local damageframe = {
+	"alDamageMeterFrame",
+	"SkadaBarWindowSkada",
+	"NumerationFrame",
+}
 --团队工具
 local function RaidTools()
 	if C["MiniDB"]["MiniMapPanels"] ~= true then return end
@@ -447,7 +452,7 @@ function Module:OnInitialize()
 			GameTooltip:Hide()
 		end)
 		S.Reskin(maphide)
-		
+		local findframe = false
 		local mapdamage = CreateFrame("Button", nil, UIParent)
 		mapdamage:SetHeight(8)
 		mapdamage:SetWidth(50)
@@ -456,21 +461,18 @@ function Module:OnInitialize()
 		mapdamage:SetPoint("TOP", 90, -5)
 		mapdamage:SetAlpha(0)
 		mapdamage:SetScript("OnMouseDown", function(self, button)
-			if alDamageMeterFrame then
-				if alDamageMeterFrame:IsShown() then 
-					S.FadeOutFrameDamage(alDamageMeterFrame, 1.5)
-				else
-					alDamageMeterFrame:Show()
-					UIFrameFadeIn(alDamageMeterFrame, 1.5, alDamageMeterFrame:GetAlpha(), 1)
+			for k,v in pairs(damageframe) do
+				if _G[v] then
+					findframe = true
+					if _G[v]:IsShown() then 
+						S.FadeOutFrameDamage(_G[v], 1.5)
+					else
+						_G[v]:Show()
+						UIFrameFadeIn(_G[v], 1.5, _G[v]:GetAlpha(), 1)
+					end
 				end
-			elseif SkadaBarWindowSkada then
-				if SkadaBarWindowSkada:IsShown() then 
-					S.FadeOutFrameDamage(SkadaBarWindowSkada, 1.5)
-				else
-					SkadaBarWindowSkada:Show()
-					UIFrameFadeIn(SkadaBarWindowSkada, 1.5, SkadaBarWindowSkada:GetAlpha(), 1)
-				end
-			else
+			end
+			if not findframe then
 				DEFAULT_CHAT_FRAME:AddMessage("SunUI:暂时不兼容其他伤害统计.")
 			end
 		end)
