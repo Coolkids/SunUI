@@ -636,9 +636,9 @@ local function BuildDurability()
 			table.sort(Slots, function(a, b) return a[3] < b[3] end)
 			local value = floor(Slots[1][3]*100)
 			if value < 40 then
-				Text:SetText("|cffff0000".."警告: |r "..Slots[1][2].."耐久过低!")
+				Text:SetText("|cffff0000"..L["警告"].."|r "..Slots[1][2]..L["耐久过低"])
 			else
-				Text:SetText("      ")
+				Text:SetText("  ")
 			end
 	end)
 	Stat:SetScript("OnEnter", function(self)
@@ -1070,7 +1070,7 @@ local function DungeonHelper()
 			text = " "..text.."|cFFE01B35"..DAMAGER.."|r"
 		end
 		if forTank or forHealer or forDamage then
-			text = text .. "奖励"
+			text = text .. L["奖励"]
 		end
 		Text:SetText(text)
 		text = nil

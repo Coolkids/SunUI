@@ -22,7 +22,7 @@ local numChildren = -1
 local frames = {}
 
 local NamePlates = CreateFrame("Frame")
-
+NamePlates:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
 local f = CreateFrame"Frame"
 f:RegisterEvent("PLAYER_LOGIN")
 f:RegisterEvent("VARIABLES_LOADED")
@@ -491,7 +491,26 @@ end
 local OnSizeChanged = function(self)
 	self.needFix = true
 end
+-- We need to reset everything when a nameplate it hidden 重置所有框体内容
+local function OnHide(frame)
+	frame.hp:SetStatusBarColor(frame.hp.rcolor, frame.hp.gcolor, frame.hp.bcolor)
+	frame.overlay:Hide()
+	frame.cb:Hide()
+	frame.unit = nil
+	frame.guid = nil
+	frame.hasClass = nil
+	frame.isFriendly = nil
+	frame.hp.rcolor = nil
+	frame.hp.gcolor = nil
+	frame.hp.bcolor = nil
+	if frame.icons then
+		for _, icon in ipairs(frame.icons) do
+			icon:Hide()
+		end
+	end
 
+	frame:SetScript("OnUpdate", nil)
+end
 local function SkinObjects(frame)
 	local hp, cb = frame:GetChildren()
 
@@ -593,7 +612,7 @@ local function SkinObjects(frame)
 
 	UpdateObjects(hp)
 	UpdateCastbar(cb)
-
+	frame:HookScript("OnHide", OnHide)
 	frames[frame] = true
 end
 local function CheckBlacklist(frame, ...)
@@ -602,6 +621,7 @@ local function CheckBlacklist(frame, ...)
 		frame.hp:Hide()
 		frame.cb:Hide()
 		frame.overlay:Hide()
+		frame.hp.oldlevel:Hide()
 	end
 end
 local function CheckUnit_Guid(frame, ...)
@@ -665,23 +685,14 @@ local function HookFrames(...)
 	end
 end
 
-NamePlates:SetScript("OnEvent", function(self ,event, ...)
-	if event == "COMBAT_LOG_EVENT_UNFILTERED" then
-		local arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 = ...
-		-- if arg4 == UnitGUID("player") then 
-			-- print(arg2, arg12)
-		-- end
-		if arg2 == "SPELL_AURA_BROKEN" or arg2 == "SPELL_AURA_BROKEN_SPELL" or arg2 == "SPELL_AURA_REMOVED" then
-			--if arg4 == UnitGUID("player") or arg4 == UnitGUID("pet") or arg5 == "虛無觸鬚" or arg5 == "暗影触须" then
-				--print(GetSpellLink(arg12), "Hide", arg9)
-			ForEachPlate(MatchGUID, arg8, arg12)
-			--end
-		end
-		if arg2 == "UNIT_DIED" then
-			ForEachPlate(MatchDDeadGUID, arg8)
+function NamePlates:COMBAT_LOG_EVENT_UNFILTERED(_, event, ...)
+	if event == "SPELL_AURA_REMOVED" then
+		local _, sourceGUID, _, _, _, destGUID, _, _, _, spellID = ...
+		if sourceGUID == UnitGUID("player") then
+			ForEachPlate(MatchGUID, destGUID, spellID)
 		end
 	end
-end)
+end
 NamePlates:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 
 function Module:OnInitialize()
@@ -707,19 +718,13 @@ function Module:OnInitialize()
 		ForEachPlate(CheckUnit_Guid)
 	end)
 	if C["Combat"] then
-		NamePlates:RegisterEvent("PLAYER_REGEN_DISABLED")
-		NamePlates:HookScript("OnEvent", function(self ,event, ...)
-			if event == "PLAYER_REGEN_DISABLED" then
-				SetCVar("nameplateShowEnemies", 1)
-			end
-		end)
+		function NamePlates:PLAYER_REGEN_DISABLED()
+			SetCVar("nameplateShowEnemies", 1)
+		end
 	end
 	if C["NotCombat"] then
-		NamePlates:RegisterEvent("PLAYER_REGEN_ENABLED")
-		NamePlates:HookScript("OnEvent", function(self ,event, ...)
-			if event == "PLAYER_REGEN_ENABLED" then
-				SetCVar("nameplateShowEnemies", 0)
-			end
-		end)
+		function NamePlates:PLAYER_REGEN_ENABLED()
+			SetCVar("nameplateShowEnemies", 0)
+		end
 	end
 end

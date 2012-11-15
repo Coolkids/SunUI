@@ -24,7 +24,7 @@ local function AltzFrame()
 		altztop.text = altztop:CreateFontString(nil, "OVERLAY")
 		altztop.text:SetPoint("CENTER", altztop, "CENTER", 0, 25)
 		altztop.text:SetFont(DB.Font, 30, "NONE")
-		altztop.text:SetText("|cffb3b3b3欢迎使用|r|cff00d2ffSun|r|cffb3b3b3UI|r")
+		altztop.text:SetText("|cffb3b3b3"..L["欢迎使用"].."|r|cff00d2ffSun|r|cffb3b3b3UI|r")
 		
 		altztop.logo = altztop:CreateFontString(nil, "OVERLAY")
 		altztop.logo:SetPoint("LEFT", altztop, "LEFT", 30, -10)
@@ -34,19 +34,19 @@ local function AltzFrame()
 		altztop.url = altztop:CreateFontString(nil, "OVERLAY")
 		altztop.url:SetPoint("TOP", altztop.logo, "BOTTOM", 0, -3)
 		altztop.url:SetFont(DB.Font, 12, "NONE")
-		altztop.url:SetText("|cffb3b3b3个人主页http://url.cn/5YbLQe|r")
+		altztop.url:SetText("|cffb3b3b3"..L["个人主页"].."http://url.cn/5YbLQe|r")
 		
 		altztop.afk = altztop:CreateFontString(nil, "OVERLAY")
 		altztop.afk:SetPoint("TOP", altztop.text, "BOTTOM", 0, -5)
 		altztop.afk:SetFont(DB.Font, 24, "NONE")
-		altztop.afk:SetText("|cffb3b3b3您现在处于|r|cff00d2ffAFK|r|cffb3b3b3状态|r")
+		altztop.afk:SetText("|cffb3b3b3"..L["您现在处于"].."|r|cff00d2ffAFK|r|cffb3b3b3"..L["状态"].."|r")
 		
 		altztop.text2 = altztop:CreateFontString(nil, "OVERLAY")
 		altztop.text2:SetPoint("BOTTOM", altztop, "BOTTOM", 0, 5)
 		altztop.text2:SetFont(DB.Font, 12, "NONE")
-		altztop.text2:SetText("|cffb3b3b3点我解锁|r")
+		altztop.text2:SetText("|cffb3b3b3"..L["点我解锁"].."|r")
 		
-	local week = {"星期天","星期一","星期二","星期三","星期四","星期五","星期六"}
+	local week = {L["星期天"], L["星期一"], L["星期二"], L["星期三"], L["星期四"], L["星期五"], L["星期六"]}
 	local w,m,d,y = CalendarGetDate()
 	local interval = 0
 	altztop:SetScript('OnUpdate', function(self, elapsed)

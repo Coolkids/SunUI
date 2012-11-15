@@ -89,16 +89,16 @@ function Module:OnEnable()
 		if arg2 == "SPELL_INTERRUPT" and arg5 == UnitName("player") and C["Interrupt"]then
 			local channel = IsInRaid() and "RAID" or GetNumSubgroupMembers() > 0 and "PARTY"
 			if channel then
-				SendChatMessage(GetSpellLink(arg12).." 打断→"..arg9..GetSpellLink(arg15), channel)
+				SendChatMessage(GetSpellLink(arg12)..L["打断"]..arg9..GetSpellLink(arg15), channel)
 			else
-				DEFAULT_CHAT_FRAME:AddMessage(GetSpellLink(arg12).." 打断→"..arg9..GetSpellLink(arg15))
+				DEFAULT_CHAT_FRAME:AddMessage(GetSpellLink(arg12)..L["打断"]..arg9..GetSpellLink(arg15))
 			end
 		end
 		--重要通道技能	
 		if cl[arg12] and arg5 == UnitName("player") and C["Channel"] and arg2 == "SPELL_CAST_SUCCESS" then
 			local channel = IsInRaid() and "RAID" or GetNumSubgroupMembers() > 0 and "PARTY"
 			if channel then
-				SendChatMessage("正在施放"..GetSpellLink(arg12), channel)
+				SendChatMessage(L["正在施放"]..GetSpellLink(arg12), channel)
 			else
 				return
 				--DEFAULT_CHAT_FRAME:AddMessage("正在施放"..GetSpellLink(arg12))
@@ -118,7 +118,7 @@ function Module:OnEnable()
 		if heal[arg12] and arg5 == UnitName("player") and C["Heal"] and (arg2 == "SPELL_CAST_SUCCESS" or arg2 == "SPELL_SUMMON") then
 			local channel = IsInRaid() and "RAID" or GetNumSubgroupMembers() > 0 and "PARTY"
 			if channel then
-				SendChatMessage("已施放"..GetSpellLink(arg12), channel)
+				SendChatMessage(L["已施放"]..GetSpellLink(arg12), channel)
 			else
 				return
 				--DEFAULT_CHAT_FRAME:AddMessage("已施放"..GetSpellLink(arg12))
@@ -128,7 +128,7 @@ function Module:OnEnable()
 		if baoming[arg12] and arg5 == UnitName("player") and C["BaoM"] and arg2 == "SPELL_CAST_SUCCESS" then
 			local channel = IsInRaid() and "RAID" or GetNumSubgroupMembers() > 0 and "PARTY"
 			if channel then
-				SendChatMessage("已施放"..GetSpellLink(arg12), channel)
+				SendChatMessage(L["已施放"]..GetSpellLink(arg12), channel)
 			else
 				return
 				--DEFAULT_CHAT_FRAME:AddMessage("已施放"..GetSpellLink(arg12))
@@ -138,7 +138,7 @@ function Module:OnEnable()
 		if resurrect[arg12] and arg5 == UnitName("player") and C["Resurrect"] and arg2 == "SPELL_RESURRECT" then
 			local channel = IsInRaid() and "RAID" or GetNumSubgroupMembers() > 0 and "PARTY"
 			if channel then
-				SendChatMessage(GetSpellLink(arg12).."复活→"..arg9, channel)
+				SendChatMessage(GetSpellLink(arg12)..L["复活"]..arg9, channel)
 			else
 				return
 			end

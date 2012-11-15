@@ -33,24 +33,24 @@ function Module:BuildExpBar()
 	ExpBar.Rest = CreateFrame("StatusBar", nil, ExpBar)
 	ExpBar.Rest:SetAllPoints()
 	ExpBar.Rest:SetStatusBarTexture(DB.Statusbar)
-	ExpBar.Rest:SetFrameLevel(ExpBar:GetFrameLevel()-1)
+	ExpBar.Rest:SetFrameLevel(2)
 	hs = ExpBar.Rest:GetStatusBarTexture()
 	local h = CreateFrame("StatusBar", nil, ExpBar)
-	h:SetFrameLevel(ExpBar:GetFrameLevel()-2)
+	h:SetFrameLevel(1)
 	h:SetAllPoints()
 	if C["ActionBarDB"]["ExpbarFadeOut"] then
 		ExpBar:SetAlpha(0)
 	end
 	if not C["ActionBarDB"]["ExpbarUp"] then
 		ExpBar:SetSize(C["ActionBarDB"]["ExpbarWidth"], C["ActionBarDB"]["ExpbarHeight"])
-		S.CreateBack(ExpBar)
+		S.CreateBack(h)
 	else
 		ExpBar:SetSize(C["ActionBarDB"]["ExpbarHeight"], C["ActionBarDB"]["ExpbarWidth"])
 		ExpBar:SetOrientation("VERTICAL")
 		ExpBar.Rest:SetOrientation("VERTICAL")
-		S.CreateBack(ExpBar, true) 
+		S.CreateBack(h, true) 
 	end
-	MoveHandle.ExpBar = S.MakeMoveHandle(ExpBar, "经验条", "expbar")
+	MoveHandle.ExpBar = S.MakeMoveHandle(ExpBar, L["经验条"], "expbar")
 	
 	ExpBar:SetScript("OnEnter", function(self)
 		if InCombatLockdown() then return end
@@ -60,8 +60,10 @@ function Module:BuildExpBar()
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 		GameTooltip:ClearLines()
 		GameTooltip:AddDoubleLine(exptitle1, exptitle2)
-		GameTooltip:AddLine(" ")
-		GameTooltip:AddDoubleLine(exptext1, exptext2)
+		if exptext1 ~= "" or exptext2 ~= "" then
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddDoubleLine(exptext1, exptext2)
+		end
 		GameTooltip:Show()
 	end)
 	ExpBar:SetScript("OnMouseDown", function(self, button)
@@ -83,7 +85,6 @@ function Module:Register()
 	Module:RegisterEvent("UPDATE_EXHAUSTION", "OnEvent")
 	Module:RegisterEvent("UPDATE_FACTION", "OnEvent")
 end
-
 
 function Module:OnEvent()
 	local currXP = UnitXP("player")
@@ -128,7 +129,7 @@ function Module:OnEvent()
 		ExpBar:SetMinMaxValues(0, playerMaxXP)
 		ExpBar.Rest:SetMinMaxValues(0, playerMaxXP)
 		if exhaustionXP then
-			exptitle1 = S.ToHex(0.4, 0.1, 0.6)..SVal(currXP).." / "..SVal(playerMaxXP).."|r"..S.ToHex(0.0, 0.4, 0.8).."+"..SVal(exhaustionXP).."|r"
+			exptitle1 = "|cffFFD700"..SVal(currXP).." / "..SVal(playerMaxXP).."|r"..S.ToHex(0.0, 0.4, 0.8).."+"..SVal(exhaustionXP).."|r"
 			exptitle2 = floor((currXP/playerMaxXP)*1000)/10 .."%"
 			exptext1 = ""
 			exptext2 = ""

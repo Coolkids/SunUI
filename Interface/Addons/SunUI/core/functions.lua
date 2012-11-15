@@ -8,7 +8,7 @@ function S.MakeFontString(parent, size, fontStyle)
 	local fs = parent:CreateFontString(nil, "OVERLAY")
 	fs:SetFont(DB.Font, size or fontHeight, fontStyle or "OUTLINE")
 	fs:SetShadowColor(0, 0, 0)
-	fs:SetShadowOffset(1.25, -1.25)
+	fs:SetShadowOffset(S.mult, -S.mult)
 	return fs
 end
 

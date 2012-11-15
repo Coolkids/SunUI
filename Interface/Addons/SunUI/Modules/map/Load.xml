@@ -10,4 +10,5 @@
 	<Script file = "MapBossCount.lua"/>
 	<Script file = "FogClear.lua"/>
 	<Script file = "collectorbutton.lua"/>
+	<Script file = "FarmMode.lua"/>
 </Ui>

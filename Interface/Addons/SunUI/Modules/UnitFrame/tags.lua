@@ -91,7 +91,7 @@ oUF.Tags.Events['sunui:color'] = 'UNIT_REACTION UNIT_HEALTH UNIT_POWER'
 -- type and level information
 oUF.Tags.Methods['sunui:info'] = function(u) 
 	local level = UnitLevel(u)
-    local race = UnitRace(u) or nil
+    local race = UnitRace(u) or ""
 	local typ = UnitClassification(u)
 	local color = GetQuestDifficultyColor(level)
 	if level <= 0 then
@@ -117,47 +117,18 @@ oUF.Tags.Events['sunui:info'] = 'UNIT_LEVEL PLAYER_LEVEL_UP UNIT_CLASSIFICATION_
 
 -- health value tags
 oUF.Tags.Methods['sunui:hp']  = function(u) -- THIS IS FUCKING MADNESS!!! 
-  if UnitIsDead(u) or UnitIsGhost(u) or not UnitIsConnected(u) then
-    return oUF.Tags.Methods['sunui:DDG'](u)
-  else
-	local per = oUF.Tags.Methods['perhp'](u).."%" or 0
-	local def =oUF.Tags.Methods['missinghp'](u) or 0
-    local min, max = UnitHealth(u), UnitHealthMax(u)
-    if u == "player" then
-      if min~=max then 
-        --return SVal(min).." | |cffe15f8b"..-def.."|r"
-		return SVal(min).." - |cffe15f8b"..per.."|r"
-      else
-        return SVal(min).." - "..per 
-      end
-    elseif u == "target" then
-      if min~=max then 
-        if UnitIsPlayer("target") then
-          if UnitIsEnemy("player","target") then
-            return per.." - "..min
-          else
-            if def then return per.." - "..SVal(min) end
-          end
-        else
-          return  per.." - "..SVal(min)
-        end
-      else
-        return  per.." - "..SVal(min)
-      end
-    elseif u == "focus" or u == "pet" or u == "focustarget" or u == "targettarget" then
-      return per
-    else
-      if UnitIsPlayer(u) and not UnitIsEnemy("player",u) then
-        if min~=max then 
-          return SVal(min)..per
-        else
-          return SVal(min).." - ".. per
-        end
-      else    
-        return SVal(min).." - ".."|cffe15f8b"..per.."|r"
-      end
-    end
-  end
+	if UnitIsDead(u) or UnitIsGhost(u) or not UnitIsConnected(u) then
+		return oUF.Tags.Methods['sunui:DDG'](u)
+	else
+		local per = oUF.Tags.Methods['perhp'](u).."%" or 0
+		local def =oUF.Tags.Methods['missinghp'](u) or 0
+		local min, max = UnitHealth(u), UnitHealthMax(u)
+		if min~=max and min/max < 0.5 then
+			return "|cffe15f8b"..SVal(min).." - "..per.."|r"
+		else
+			return SVal(min).." - "..per 
+		end
+	end
 end
 oUF.Tags.Events['sunui:hp'] = 'UNIT_HEALTH UNIT_CONNECTION'
 
@@ -167,7 +138,7 @@ oUF.Tags.Methods['sunui:hpraid']  = function(u)
 	local def = oUF.Tags.Methods['missinghp'](u)
 	if UnitIsDead(u) or UnitIsGhost(u) or not UnitIsConnected(u) then
 		return oUF.Tags.Methods['sunui:DDG'](u)
-	elseif min~=max and per < 90 then
+	elseif min~=max and per < 50 then
 		return "|cffe15f8b - "..SVal(def).."|r"
 	end
 end
@@ -179,9 +150,9 @@ oUF.Tags.Methods['sunui:pp'] = function(u)
 	local per = oUF.Tags.Methods['perpp'](u).."%" or 0
 	if str then
 		if str == "MANA" then 
- 		return hex(pcolors.power[str] or {250/255,  75/255,  60/255})..SVal(UnitPower(u)).." - "..per
+			return hex(pcolors.power[str] or {250/255,  75/255,  60/255})..SVal(UnitPower(u)).." - "..per
 		else
-		return hex(pcolors.power[str] or {250/255,  75/255,  60/255})..SVal(UnitPower(u))
+			return hex(pcolors.power[str] or {250/255,  75/255,  60/255})..SVal(UnitPower(u))
 		end
 	end
 end

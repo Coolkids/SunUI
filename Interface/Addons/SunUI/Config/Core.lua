@@ -87,7 +87,7 @@ end
 function SunUIConfig.GenerateOptionsInternal()
 	local _, _, L, _ = unpack(SunUI)
 	StaticPopupDialogs["CFG_RELOAD"] = {
-		text = "改变参数需重载应用设置",
+		text = L["改变参数需重载应用设置"],
 		button1 = ACCEPT,
 		button2 = CANCEL,
 		OnAccept = function() ReloadUI() end,
@@ -102,7 +102,7 @@ function SunUIConfig.GenerateOptionsInternal()
 			Header = {
 				order = 1,
 				type = "header",
-				name = "版本号:"..GetAddOnMetadata("SunUI", "Version"),
+				name = L["版本号:"]..GetAddOnMetadata("SunUI", "Version"),
 				width = "full",		
 			},
 			Unlock = {
@@ -200,7 +200,7 @@ function SunUIConfig.GenerateOptionsInternal()
 							},
 							UnLock = {
 								type = "execute",
-								name = "按鍵綁定",
+								name = L["按键绑定"],
 								order = 4,
 								func = function()
 									SlashCmdList.MOUSEOVERBIND()
@@ -279,27 +279,25 @@ function SunUIConfig.GenerateOptionsInternal()
 							},
 							ExpbarWidth= {
 								type = "input",
-								name = "经验条宽度",
-								desc = "经验条宽度",
+								name = L["经验条宽度"],
 								order = 2,
 								get = function() return tostring(db.ActionBarDB.ExpbarWidth) end,
 								set = function(_, value) db.ActionBarDB.ExpbarWidth = tonumber(value) end,
 							},
 							ExpbarHeight= {
 								type = "input",
-								name = "经验条高度",
-								desc = "经验条高度",
+								name = L["经验条高度"],
 								order = 3,
 								get = function() return tostring(db.ActionBarDB.ExpbarHeight) end,
 								set = function(_, value) db.ActionBarDB.ExpbarHeight = tonumber(value) end,
 							},
 							ExpbarUp = {
 								type = "toggle", order = 4,
-								name = "经验条垂直模式",		
+								name = L["经验条垂直模式"],		
 							},
 							ExpbarFadeOut = {
 								type = "toggle", order = 5,
-								name = "经验条渐隐",		
+								name = L["经验条渐隐"],		
 							},
 						}
 					},
@@ -309,43 +307,43 @@ function SunUIConfig.GenerateOptionsInternal()
 						args = {		
 							AllFade = {
 								type = "toggle", order = 2,
-								name = "全部动作条渐隐",		
+								name = L["全部动作条渐隐"],		
 							},
 							Bar1Fade = {
 								type = "toggle", order = 3,
 								disabled = function(info) return db.ActionBarDB.AllFade end,
-								name = "Bar1渐隐",		
+								name = L["Bar1渐隐"],		
 							},
 							Bar2Fade = {
 								type = "toggle", order = 4,
 								disabled = function(info) return db.ActionBarDB.AllFade end,
-								name = "Bar2渐隐",		
+								name = L["Bar2渐隐"],		
 							},
 							Bar3Fade = {
 								type = "toggle", order = 5,
 								disabled = function(info) return db.ActionBarDB.AllFade end,
-								name = "Bar3渐隐",		
+								name = L["Bar3渐隐"],		
 							},
 							Bar4Fade = {
 								type = "toggle", order = 6,
 								disabled = function(info) return db.ActionBarDB.AllFade end,
-								name = "Bar4渐隐",		
+								name = L["Bar4渐隐"],		
 							},
 							Bar5Fade = {
 								type = "toggle", order = 7,
 								disabled = function(info) return db.ActionBarDB.AllFade end,
-								name = "Bar5渐隐",		
+								name = L["Bar5渐隐"],		
 							},
 							StanceBarFade = {
 								type = "toggle", order = 8,
 								disabled = function(info) return db.ActionBarDB.AllFade end,
-								name = "姿态栏渐隐",		
+								name = L["姿态栏渐隐"],		
 							},
 							
 							PetBarFade = {
 								type = "toggle", order = 9,
 								disabled = function(info) return db.ActionBarDB.AllFade end,
-								name = "宠物渐隐",		
+								name = L["宠物渐隐"],		
 							},
 						}
 					},
@@ -355,22 +353,22 @@ function SunUIConfig.GenerateOptionsInternal()
 						args = {
 							BigSize1 = {
 								type = "range", order = 1,
-								name = "Big1大小", desc = L["动作条按钮大小"],
+								name = L["Big1大小"], desc = L["动作条按钮大小"],
 								min = 6, max = 80, step = 1,
 							},
 							BigSize2 = {
 								type = "range", order = 2,
-								name = "Big2大小", desc = L["动作条按钮大小"],
+								name = L["Big2大小"], desc = L["动作条按钮大小"],
 								min = 6, max = 80, step = 1,
 							},
 							BigSize3 = {
 								type = "range", order = 3,
-								name = "Big3大小", desc = L["动作条按钮大小"],
+								name = L["Big3大小"], desc = L["动作条按钮大小"],
 								min = 6, max = 80, step = 1,
 							},
 							BigSize4 = {
 								type = "range", order = 4,
-								name = "Big4大小", desc = L["动作条按钮大小"],
+								name = L["Big4大小"], desc = L["动作条按钮大小"],
 								min = 6, max = 80, step = 1,
 							},
 						}
@@ -501,7 +499,7 @@ function SunUIConfig.GenerateOptionsInternal()
 								},
 								NotCombat = {
 									type = "toggle",
-									name = "启用脱离战斗隐藏",
+									name = L["启用脱离战斗隐藏"],
 									order = 8,
 								},
 								Showdebuff = {
@@ -734,34 +732,34 @@ function SunUIConfig.GenerateOptionsInternal()
 						},
 						BigFocus = {
 							type = "toggle", order = 12,
-							name = "BigFocus",
+							name = L["焦点放大"],
 						},
 						CastBar = {
 							type = "toggle", order = 13,
-							name = "施法条开关",
+							name = L["施法条开关"],
 						},
 						TargetRange = {
 							type = "toggle", order = 14,
-							name = "距离监视",
-							desc = "超过40码头像渐隐",
+							name = L["距离监视"],
+							desc = L["超过40码头像渐隐"],
 						}, 
 						RangeAlpha = {
 							type = "range", order = 15,
-							name = "距离监视透明度",
-							desc = "超出距离头像透明度",
+							name = L["距离监视透明度"],
+							desc = L["超出距离头像透明度"],
 							min = 0, max = 1, step = 0.1,
 							get = function() return db.UnitFrameDB.RangeAlpha end,
 							set = function(_, value) db.UnitFrameDB.RangeAlpha = value end,
 						}, 
 						FocusDebuff = {
 							type = "toggle", order = 16,disabled = function(info) return not db.UnitFrameDB.showfocus end,
-							name = "焦点debuff过滤",
-							desc = "只显示玩家释放的debuff",
+							name = L["焦点debuff过滤"],
+							desc = L["只显示玩家释放的debuff"],
 						}, 
 						TagFadeIn = {
 							type = "toggle", order = 17,
-							name = "头像文字渐隐",
-							desc = "非战斗非指向时隐藏",
+							name = L["头像文字渐隐"],
+							desc = L["非战斗非指向时隐藏"],
 						}, 
 					}
 					},
@@ -771,8 +769,8 @@ function SunUIConfig.GenerateOptionsInternal()
 						args = {
 							ReverseHPbars = {
 								type = "toggle", order = 1,
-								name = "血条非透明模式",
-								desc = "不打钩为透明模式",
+								name = L["血条非透明模式"],
+								desc = L["不打钩为透明模式"],
 								get = function() return db.UnitFrameDB.ReverseHPbars end,
 								set = function(_, value) db.UnitFrameDB.ReverseHPbars = value end,
 							},
@@ -798,7 +796,7 @@ function SunUIConfig.GenerateOptionsInternal()
 							},
 							Party3D = {
 							type = "toggle", order = 7,disabled = function(info) return not db.UnitFrameDB.showparty end,
-							name = "小队头像",
+							name = L["小队头像"],
 							},
 							showboss = {
 								type = "toggle", order = 8,
@@ -810,11 +808,11 @@ function SunUIConfig.GenerateOptionsInternal()
 							},
 							EnableVengeanceBar = {
 								type = "toggle", order = 10,
-								name = "开启复仇监视",			
+								name = L["开启复仇监视"],
 							},
 							EnableThreat = {
 								type = "toggle", order = 11,
-								name = "开启仇恨监视",			
+								name = L["开启仇恨监视"],			
 							},
 							EnableBarFader = {
 								type = "toggle", order = 12,
@@ -827,8 +825,7 @@ function SunUIConfig.GenerateOptionsInternal()
 							},
 							PlayerBuff = {
 								type = "select",
-								name = "玩家框体BUFF显示",
-								desc = "玩家框体BUFF显示",
+								name = L["玩家框体BUFF显示"],
 								order = 14,
 								values = {[1] = "debuff", [2] = "buff", [3] = "debuff+buff", [4] = "none"},
 							},
@@ -959,12 +956,13 @@ function SunUIConfig.GenerateOptionsInternal()
 										text = L["警告"],
 										button1 = OKAY,
 										OnAccept = function()
+											db.MiniDB.Icicle = value
 										end,
 										timeout = 0,
 										hideOnEscape = 1,
 									}
 									StaticPopup_Show("alarm")
-									db.MiniDB.Icicle = value end,
+								end,
 							},
 							MiniMapPanels = {
 								type = "toggle",
@@ -987,14 +985,14 @@ function SunUIConfig.GenerateOptionsInternal()
 							},
 							igonoreOld = {
 								type = "toggle",
-								name = "副本排队助手",
+								name = L["副本排队助手"],
 								desc = L["启用自动离开有进度的随机副本或团队"],
 								order = 11,
 							},
 							HideRaid = {
 								type = "toggle",
 								name = "Hide Blz RAID Frame",
-								desc = "隐藏暴雪团队框架",
+								desc = L["隐藏暴雪团队框架"],
 								order = 12,
 							},
 							HideRaidWarn = {
@@ -1005,68 +1003,60 @@ function SunUIConfig.GenerateOptionsInternal()
 							Disenchat = {
 								type = "toggle",
 								name = "Quick Disenchat",
-								desc = "快速分解",
+								desc = L["快速分解"],
 								order = 14,
 							},
 							Resurrect = {
 								type = "toggle",
 								name = "Auto AcceptResurrect",
-								desc = "自动接受复活",
+								desc = L["自动接受复活"],
 								order = 15,
 							},
 							IPhoneLock = {
 								type = "toggle",
 								name = "SlideLock",
-								desc = "AFK锁屏",
+								desc = L["AFK锁屏"],
 								order = 16,
 							},
 							AutoQuest = {
 								type = "toggle",
 								name = "AutoQuest",
-								desc = "自动交接任务",
+								desc = L["自动交接任务"],
 								order = 17,
-							},
-							FatigueWarner = {
-								type = "toggle",
-								name = "FatigueWarner",
-								desc = "疲劳报警",
-								order = 18,
 							},
 							DNDFilter = {
 								type = "toggle",
 								name = "DNDFilter",
-								desc = "过滤DND/AFK自动回复消息",
-								order = 19,
+								desc = L["过滤DND/AFK自动回复消息"],
+								order = 18,
 							},
 							TimeStamps = {
 								type = "toggle",
 								name = "TimeStamps",
-								desc = "聊天时间戳",
-								order = 20,
+								desc = L["聊天时间戳"],
+								order = 19,
 							},
 							ChatBackground = {
 								type = "toggle",
-								name = "聊天框背景",
-								desc = "聊天框背景",
-								order = 21,
+								name = L["聊天框背景"],
+								order = 20,
 							},
 							Combat = {
 								type = "toggle",
-								name = "战斗提醒",
-								desc = "进出战斗提醒",
-								order = 23,
+								name = L["战斗提醒"],
+								desc = L["进出战斗提醒"],
+								order = 21,
 							},
 							Aurora = {
 								type = "toggle",
-								name = "Aurora主题",
-								desc = "透明模式",
-								order = 24,
+								name = L["Aurora主题"],
+								desc = L["透明模式"],
+								order = 22,
 							},
 							FogClear = {
 								type = "toggle",
-								name = "显示未探索地区",
-								desc = "显示未探索地区",
-								order = 25,
+								name = L["显示未探索地区"],
+								order = 23,
 							},
 						}
 					},
@@ -1109,12 +1099,13 @@ function SunUIConfig.GenerateOptionsInternal()
 										text = L["警告"],
 										button1 = OKAY,
 										OnAccept = function()
+											db.MiniDB.ClassCDOpen = value
 										end,
 										timeout = 0,
 										hideOnEscape = 1,
 									}
 									StaticPopup_Show("alarm")
-									db.MiniDB.ClassCDOpen = value end,
+								end,
 							},
 							group = {
 								type = "group", order = 2,
@@ -1123,7 +1114,7 @@ function SunUIConfig.GenerateOptionsInternal()
 								args = {
 									ClassCDIcon = {
 										type = "toggle",
-										name = "启用图标模式",
+										name = L["启用图标模式"],
 										order = 1,
 									},
 									ClassCDIconSize = {
@@ -1263,7 +1254,7 @@ function SunUIConfig.GenerateOptionsInternal()
 			PowerBarDB = {
 				order = 14,
 				type = "group",
-				name = "职业能量条",
+				name = L["职业能量条"],
 				get = function(info) return db.PowerBarDB[ info[#info] ] end,
 				set = function(info, value) db.PowerBarDB[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
 				args = {
@@ -1273,7 +1264,7 @@ function SunUIConfig.GenerateOptionsInternal()
 						args = {
 							Open = {
 							type = "toggle",
-							name = "启用职业能量条",
+							name = L["启用职业能量条"],
 							order = 1,
 							},
 						}
@@ -1284,17 +1275,15 @@ function SunUIConfig.GenerateOptionsInternal()
 						args = {
 							Width = {
 								type = "input",
-								name = "框体宽度",
-								desc = "框体宽度",
+								name = L["框体宽度"],
 								order = 1,
 								get = function() return tostring(db.PowerBarDB.Width) end,
 								set = function(_, value) db.PowerBarDB.Width = tonumber(value) end,
 							},
 							Height = {
 								type = "input",
-								name = "框体高度",
-								desc = "框体高度",
-								order = 1,
+								name = L["框体高度"],
+								order = 2,
 								get = function() return tostring(db.PowerBarDB.Height) end,
 								set = function(_, value) db.PowerBarDB.Height = tonumber(value) end,
 							},
@@ -1305,12 +1294,12 @@ function SunUIConfig.GenerateOptionsInternal()
 							},
 							Fade = {
 							type = "toggle",
-							name = "渐隐",
+							name = L["渐隐"],
 							order = 4,
 							},
 							HealthPower = {
 							type = "toggle",
-							name = "生命值",
+							name = L["生命值"],
 							order = 5,
 							},
 						}
@@ -1320,7 +1309,7 @@ function SunUIConfig.GenerateOptionsInternal()
 			WarnDB = {
 				order = 15,
 				type = "group",
-				name = "警告提示",
+				name = L["警告提示"],
 				get = function(info) return db.WarnDB[ info[#info] ] end,
 				set = function(info, value) db.WarnDB[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
 				args = {
@@ -1330,7 +1319,7 @@ function SunUIConfig.GenerateOptionsInternal()
 						args = {
 							Open = {
 							type = "toggle",
-							name = "启用警告提示",
+							name = L["启用警告提示"],
 							order = 1,
 							},
 						}
@@ -1341,28 +1330,26 @@ function SunUIConfig.GenerateOptionsInternal()
 						args = {
 							Width = {
 								type = "input",
-								name = "框体宽度",
-								desc = "框体宽度",
+								name = L["框体宽度"],
 								order = 1,
 								get = function() return tostring(db.WarnDB.Width) end,
 								set = function(_, value) db.WarnDB.Width = tonumber(value) end,
 							},
 							Height = {
 								type = "input",
-								name = "框体高度",
-								desc = "框体高度",
+								name = L["框体高度"],
 								order = 1,
 								get = function() return tostring(db.WarnDB.Height) end,
 								set = function(_, value) db.WarnDB.Height = tonumber(value) end,
 							},
 							FontSize = {
 								type = "range", order = 3,
-								name = "字体大小", desc = "字体大小",
+								name = L["字体大小"],
 								min = 1, max = 28, step = 1,
 							},
 							Health = {
 							type = "toggle",
-							name = "低血量", desc = "开启低血量报警",
+							name = L["低血量"], desc = L["开启低血量报警"],
 							order = 4,
 							},
 						}
@@ -1372,7 +1359,7 @@ function SunUIConfig.GenerateOptionsInternal()
 			AnnounceDB = {
 				order = 16,
 				type = "group",
-				name = "施法通告",
+				name = L["施法通告"],
 				get = function(info) return db.AnnounceDB[ info[#info] ] end,
 				set = function(info, value) db.AnnounceDB[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
 				args = {
@@ -1382,8 +1369,8 @@ function SunUIConfig.GenerateOptionsInternal()
 						args = {
 							Open = {
 							type = "toggle",
-							name = "启用施法通告",
-							desc = "只是通告自己施放的法术",
+							name = L["启用施法通告"],
+							desc = L["只是通告自己施放的法术"],
 							order = 1,
 							},
 						}
@@ -1394,43 +1381,43 @@ function SunUIConfig.GenerateOptionsInternal()
 						args = {
 							Interrupt = {
 							type = "toggle",
-							name = "启用打断通告",
+							name = L["启用打断通告"],
 							order = 1,
 							},
 							Channel = {
 							type = "toggle",
-							name = "启用治疗大招通告",
+							name = L["启用治疗大招通告"],
 							order = 2,
 							},
 							Mislead = {
 							type = "toggle",
-							name = "启用误导通告",
+							name = L["启用误导通告"],
 							order = 3,
 							},
 							BaoM = {
 							type = "toggle",
-							name = "启用保命技能通告",
+							name = L["启用保命技能通告"],
 							order = 4,
 							},
 							Give = {
 							type = "toggle",
-							name = "启用给出大招通告",
-							desc = "包含天使,痛苦压制,保护等等",
+							name = L["启用给出大招通告"],
+							desc = L["包含天使,痛苦压制,保护等等"],
 							order = 5,
 							},
 							Resurrect = {
 							type = "toggle",
-							name = "启用复活技能通告",
+							name = L["启用复活技能通告"],
 							order = 6,
 							},
 							Heal = {
 							type = "toggle",
-							name = "启用团队减伤通告",
+							name = L["启用团队减伤通告"],
 							order = 7,
 							},
 							Flump = {
 								type = "toggle",
-								name = "启用队友施法通告",
+								name = L["启用队友施法通告"],
 								order = 8,
 							},
 						}
@@ -1450,31 +1437,29 @@ function SunUIConfig.GenerateOptionsInternal()
 						args = {
 							BagSize = {
 								type = "range", order = 1,
-								name = "背包图标", desc = "背包图标",
+								name = L["背包图标"],
 								min = 20, max = 50, step = 1,
 							},
 							BankSize = {
 								type = "range", order = 2,
-								name = "银行图标", desc = "银行图标",
+								name = L["银行图标"],
 								min = 20, max = 50, step = 1,
 							},
 							Spacing = {
 								type = "range", order = 3,
-								name = "图标间距", desc = "图标间距",
+								name = L["图标间距"], desc = L["图标间距"],
 								min = 0, max = 10, step = 1,
 							},
 							BagWidth = {
 								type = "input",
-								name = "背包框体宽度",
-								desc = "背包框体宽度",
+								name = L["背包框体宽度"],
 								order = 4,
 								get = function() return tostring(db.BagDB.BagWidth) end,
 								set = function(_, value) db.BagDB.BagWidth = tonumber(value) end,
 							},
 							BankWidth = {
 								type = "input",
-								name = "银行框体宽度",
-								desc = "银行框体宽度",
+								name = L["银行框体宽度"],
 								order = 5,
 								get = function() return tostring(db.BagDB.BankWidth) end,
 								set = function(_, value) db.BagDB.BankWidth = tonumber(value) end,
@@ -1486,7 +1471,7 @@ function SunUIConfig.GenerateOptionsInternal()
 			EquipmentDB = {
 				order = 18,
 				type = "group",
-				name = "自动换装",
+				name = L["自动换装"],
 				get = function(info) return db.EquipmentDB[ info[#info] ] end,
 				set = function(info, value) db.EquipmentDB[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
 				args = {
@@ -1496,7 +1481,7 @@ function SunUIConfig.GenerateOptionsInternal()
 						args = {
 							Enable = {
 								type = "toggle",
-								name = "启用自动换装",
+								name = L["启用自动换装"],
 								order = 1,
 								get = function()
 									return db.EquipmentDB.Enable
@@ -1515,7 +1500,7 @@ function SunUIConfig.GenerateOptionsInternal()
 						args = {
 							FirstName = {
 								type = "select",
-								name = "选择主天赋装备",
+								name = L["选择主天赋装备"],
 								order = 1,
 								get = function()
 									return db.EquipmentDB.FirstName
@@ -1529,7 +1514,7 @@ function SunUIConfig.GenerateOptionsInternal()
 							},
 							SecondName = {
 								type = "select",
-								name = "选择副天赋装备",
+								name = L["选择副天赋装备"],
 								order = 2,
 								get = function()
 									return db.EquipmentDB.SecondName
@@ -1594,7 +1579,7 @@ function SunUIConfig:OnEnable()
 				SunUIConfig:ShowConfig()
 			else
 				HideUIPanel(GameMenuFrame)
-				print("战斗中无法打开控制台")
+				print(L["战斗中无法打开控制台"])
 			end
 		end)
 	GameMenuButtonHelp:SetPoint("TOP", Button, "BOTTOM", 0, -1)
