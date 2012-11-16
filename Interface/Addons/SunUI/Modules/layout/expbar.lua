@@ -44,6 +44,7 @@ function Module:BuildExpBar()
 	if not C["ActionBarDB"]["ExpbarUp"] then
 		ExpBar:SetSize(C["ActionBarDB"]["ExpbarWidth"], C["ActionBarDB"]["ExpbarHeight"])
 		S.CreateBack(h)
+		S.CreateMark(ExpBar)
 	else
 		ExpBar:SetSize(C["ActionBarDB"]["ExpbarHeight"], C["ActionBarDB"]["ExpbarWidth"])
 		ExpBar:SetOrientation("VERTICAL")

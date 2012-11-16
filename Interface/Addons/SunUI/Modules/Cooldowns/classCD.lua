@@ -1570,7 +1570,7 @@ local CreateBar = function()
 		
 		--bar:SetReverseFill(true)
 		S.CreateBack(bar)
-		S.CreateSpark(bar, C["ClassCDHeight"], C["ClassCDHeight"])
+		S.CreateMark(bar)
 		
 		bar.left = CreateFS(bar)
 		bar.left:Point("LEFT", 2, C["ClassCDHeight"])

@@ -320,6 +320,16 @@ function S.CreateSpark(f, w, h)
 	spark:SetPoint("TOPLEFT", f:GetStatusBarTexture(), "TOPRIGHT", -w, h)
 	spark:SetPoint("BOTTOMRIGHT", f:GetStatusBarTexture(), "BOTTOMRIGHT", w, -h)
 end
+function S.CreateMark(f)
+	local s = CreateFrame("StatusBar", nil, f)
+	s:SetFrameLevel(f:GetFrameLevel()+1)
+	s:SetAllPoints()
+	local spark =  s:CreateTexture(nil, "OVERLAY")
+	spark:SetVertexColor(0, 0, 0, 1)
+	spark:SetTexture("Interface\\AddOns\\SunUI\\media\\mark")
+	spark:SetPoint("TOPLEFT", f:GetStatusBarTexture(), "TOPRIGHT", -10, 0)
+	spark:SetPoint("BOTTOMRIGHT", f:GetStatusBarTexture(), "BOTTOMRIGHT", 10, 0)
+end
 local players = {
 	["Cooikid"] = true,
 	["Coolkid"] = true,

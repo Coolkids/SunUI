@@ -129,7 +129,7 @@ local CreateBar = function()
 
 	--bar:SetReverseFill(true)
 	S.CreateBack(bar)
-	S.CreateSpark(bar, C["MiniDB"].RaidCDHeight, C["MiniDB"].RaidCDHeight)
+	S.CreateMark(bar)
 	bar.left = CreateFS(bar)
 	bar.left:SetPoint("LEFT", 2, C["MiniDB"].RaidCDHeight)
 	bar.left:SetJustifyH("LEFT")

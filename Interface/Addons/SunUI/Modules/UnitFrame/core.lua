@@ -125,10 +125,18 @@ end
 lib.gen_hpbar = function(f)
     --statusbar
 	local s = CreateFrame("StatusBar", nil, f) 
+	local h = CreateFrame("Frame", nil, f)
+	h:SetAllPoints(s)
+	h:SetFrameLevel(9)
 	if not U["ReverseHPbars"] then 
 		s:SetStatusBarTexture("")
 		s:SetAlpha(1)
 		S.CreateBack(s)
+		local spark =  h:CreateTexture(nil, "OVERLAY")
+		spark:SetVertexColor(0, 0, 0, 1)
+		spark:SetTexture("Interface\\AddOns\\SunUI\\media\\mark")
+		spark:SetPoint("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT", -10, 0)
+		spark:SetPoint("BOTTOMRIGHT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 10, 0)
 	else
 		s:SetStatusBarTexture(DB.Statusbar)
 		s:SetAlpha(0.9)
@@ -139,6 +147,7 @@ lib.gen_hpbar = function(f)
 	bg.b = bg:CreateTexture(nil, "BACKGROUND")
 	bg.b:SetTexture(DB.Statusbar)
 	bg.b:SetAllPoints(bg)
+	bg:SetAlpha(0.6)
     s.PostUpdate = lib.PostUpdateHealth
 	
     fixStatusbar(s)
@@ -146,7 +155,7 @@ lib.gen_hpbar = function(f)
     s:SetWidth(f.width)
     s:SetPoint("TOPLEFT",0,0)
     s:SetOrientation("HORIZONTAL") 
-	s:SetFrameLevel(5)
+	s:SetFrameLevel(4)
 	s:CreateShadow()
 	-- debug
     -- local spar =  s:CreateTexture(nil, "OVERLAY")
@@ -156,10 +165,7 @@ lib.gen_hpbar = function(f)
 	-- spar:SetPoint("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
 	-- spar:SetPoint("BOTTOMRIGHT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
 	--resting indicator for player frame
-	
-	local h = CreateFrame("Frame", nil, f)
-	h:SetAllPoints(s)
-	h:SetFrameLevel(15)
+		
 	if f.mystyle == "player" then
 		local ri = h:CreateTexture(nil, 'OVERLAY')
 		ri:SetSize(f.height, f.height)
@@ -296,6 +302,7 @@ lib.gen_ppbar = function(f)
     s:CreateShadow()
 	if not U["ReverseHPbars"] then 
 		S.CreateBack(s)
+		S.CreateMark(s)
 	else
 		local bg = CreateFrame("Frame", nil, s)
 		bg:SetFrameLevel(s:GetFrameLevel()-1)
@@ -390,11 +397,10 @@ lib.gen_castbar = function(f)
 	
 	--spark
 	local sp =  s:CreateTexture(nil, "OVERLAY")
-	sp:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
-	sp:SetBlendMode("ADD")
-	sp:SetAlpha(.8)
-	sp:SetPoint("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
-	sp:SetPoint("BOTTOMRIGHT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
+	sp:SetVertexColor(0, 0, 0, 1)
+	sp:SetTexture("Interface\\AddOns\\SunUI\\media\\mark")
+	sp:SetPoint("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT", -10, 0)
+	sp:SetPoint("BOTTOMRIGHT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 10, 0)
     --spell text
     local txt = lib.gen_fontstring(s, DB.Font, (U["FontSize"]+1)*S.Scale(1), "THINOUTLINE")
    
@@ -436,7 +442,6 @@ lib.gen_castbar = function(f)
 		s:SetSize(U["PlayerCastBarWidth"],U["PlayerCastBarHeight"])
 		MoveHandle.Castbarplayer = S.MakeMoveHandle(s, L["玩家施法条"], "PlayerCastbar")
 		i:SetSize(s:GetHeight(),s:GetHeight())
-		sp:SetHeight(s:GetHeight()*2.5)
 	  else
 		s:Point("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
 	  end
@@ -462,7 +467,6 @@ lib.gen_castbar = function(f)
 	  s:Size(U["TargetCastBarWidth"],U["TargetCastBarHeight"])
 	  MoveHandle.Castbartarget = S.MakeMoveHandle(s, L["目标施法条"], "TargetCastbar")
 	  i:Size(s:GetHeight(),s:GetHeight())
-      sp:SetHeight(s:GetHeight()*2.5)
 	else
       s:SetPoint("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
     end
@@ -1271,17 +1275,20 @@ lib.gen_threat = function(f)
 	if U["ReverseHPbars"] then 
 		if U["ClassColor"] then 
 			self.colors.smooth = {DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b}
+			self.Health.colorSmooth = true
 		else
-			self.colors.smooth = {0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1}
+			self.colors.health = {0.1, 0.1, 0.1}
+			self.Health.colorHealth = true 
 		end
 	else 
 		if U["ClassColor"] then 
 			self.colors.smooth = {DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b}
+			self.Health.colorSmooth = true
 		else
-			self.colors.smooth = {173/255, 22/255, 27/255,173/255, 22/255, 27/255,173/255, 22/255, 27/255}
+			self.colors.health = {228/255, 38/255, 141/255}
+			self.Health.colorHealth = true 
 		end
 	end
-    self.Health.colorSmooth = true
 	self.Health.multiplier = 0.3
 	self.Health.colorDisconnected = true
   end

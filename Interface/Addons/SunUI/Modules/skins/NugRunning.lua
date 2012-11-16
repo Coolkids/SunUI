@@ -41,7 +41,7 @@ ConstructTimerBar = function(width, height)
     f.bar:SetHeight(height/2)
     f.bar:SetWidth(width - height )
 	f.bar:SetPoint("BOTTOMRIGHT",f,"BOTTOMRIGHT",0,0)
-    S.CreateSpark(f.bar, 10, 10)
+    S.CreateMark(f.bar)
     
 	f.bar.bg = f.bar:CreateTexture(nil, "BORDER")
 	f.bar.bg:SetAllPoints(f.bar)
@@ -130,7 +130,7 @@ ConstructTimerBar = function(width, height)
     m:SetAlpha(1)
     
     local texture = m:CreateTexture(nil, "OVERLAY")
-    texture:SetTexture("Interface\\AddOns\\SunUI\\Modules\\skins\\mark")
+    texture:SetTexture("Interface\\AddOns\\SunUI\\media\\mark")
     texture:SetVertexColor(0,0,0,1)
     texture:SetAllPoints(m)
     m.texture = texture

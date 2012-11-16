@@ -40,11 +40,12 @@ Event:SetScript("OnEvent", function()
 				end
 
 				if not tbar.styled then
-					tbar:SetReverseFill(true)
+					--tbar:SetReverseFill(true)
 					tbar:Point("TOPLEFT", frame, "TOPLEFT", -1, 1)
 					tbar:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 1, -1)
 					tbar:CreateShadow()
 					S.CreateBack(tbar)
+					S.CreateMark(tbar)
 					tbar.styled = true
 				end
 				
