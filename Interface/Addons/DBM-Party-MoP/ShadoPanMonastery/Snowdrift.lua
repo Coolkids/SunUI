@@ -2,10 +2,11 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7886 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8080 $"):sub(12, -3))
 mod:SetCreatureID(56541)
 mod:SetModelID(39887)
 mod:SetZone()
+mod:SetMinSyncRevision(7888)
 
 -- pre-bosswave. Novice -> Black Sash (Fragrant Lotus, Flying Snow). this runs automaticially.
 -- maybe we need Black Sash wave warns.
@@ -19,13 +20,7 @@ mod:RegisterEventsInCombat(
 	"UNIT_SPELLCAST_SUCCEEDED"
 )
 
-mod:RegisterEvents(
-	"CHAT_MSG_MONSTER_YELL",
-	"RAID_BOSS_WHISPER"
-)
-
 --Chi blast warns very spammy. and not useful.
-local warnRemainingNovice	= mod:NewAnnounce("warnRemainingNovice", 2, 122863, false)
 local warnFistsOfFury		= mod:NewSpellAnnounce(106853, 3)
 local warnTornadoKick		= mod:NewSpellAnnounce(106434, 3)
 local warnPhase2			= mod:NewPhaseAnnounce(2)
@@ -46,7 +41,6 @@ local remainingNovice = 20
 
 function mod:OnCombatStart(delay)
 	phase = 1
-	self:UnregisterShortTermEvents()
 end
 
 function mod:SPELL_AURA_APPLIED(args)
@@ -79,54 +73,6 @@ function mod:SPELL_CAST_START(args)
 		timerTornadoKickCD:Start()
 	end
 end
-
-function mod:CHAT_MSG_MONSTER_YELL(msg)
-	if msg == L.NovicesDefeated or msg:find(L.NovicesDefeated) then
-		self:SendSync("NovicesEnd")
-	end
-end
-
-function mod:RAID_BOSS_WHISPER(msg)
-	if msg:find("spell:106774") then--May not be accurate at higher dps levels, this does NOT fire when event starts, it fires when a mob chooses you specificly for it's fixate, if 5th spawned mob chooses you, 1st mob could already be dead
-		self:SendSync("NovicesStart")
-	end
-end
-
-function mod:OnSync(msg)
-	if msg == "NovicesStart" then
-		remainingNovice = 20
-		self:RegisterShortTermEvents(
-			"SPELL_DAMAGE",
-			"SWING_DAMAGE",
-			"SPELL_PERIODIC_DAMAGE",
-			"RANGE_DAMAGE"
-		)
-	elseif msg == "NovicesEnd" then
-		self:UnregisterShortTermEvents()
-	end
-end
-
-function mod:SWING_DAMAGE(_, _, _, _, destGUID, _, _, _, _, overkill)
-	if (overkill or 0) > 0 then -- prevent to waste cpu. only pharse cid when event have overkill parameter.
-		local cid = self:GetCIDFromGUID(destGUID)
-		if cid == 56395 then--Hack for mobs that don't fire UNIT_DIED event.
-			remainingNovice = remainingNovice - 1
-			warnRemainingNovice:Show(remainingNovice)
-		end
-	end
-end
-
-function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId, _, _, _, overkill)
-	if (overkill or 0) > 0 then -- prevent to waste cpu. only pharse cid when event have overkill parameter.
-		local cid = self:GetCIDFromGUID(destGUID)
-		if cid == 56395 then--Hack for mobs that don't fire UNIT_DIED event.
-			remainingNovice = remainingNovice - 1
-			warnRemainingNovice:Show(remainingNovice)
-		end
-	end
-end
-mod.SPELL_PERIODIC_DAMAGE = mod.SPELL_DAMAGE
-mod.RANGE_DAMAGE = mod.SPELL_DAMAGE
 
 function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 	if spellId == 110324 and self:AntiSpam(2) then

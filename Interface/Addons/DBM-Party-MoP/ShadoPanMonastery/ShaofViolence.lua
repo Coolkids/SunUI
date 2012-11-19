@@ -2,12 +2,13 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7902 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8106 $"):sub(12, -3))
 mod:SetCreatureID(56719)
 mod:SetModelID(43283)
 mod:SetZone()
 
 mod:RegisterCombat("combat")
+mod:RegisterKill("yell", L.Kill)
 
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED",
@@ -42,7 +43,7 @@ end
 
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(106877) then
-		self:ScheduleMethod(0.1, "ShaSpikeTarget")
+		self:ScheduleMethod(0.2, "ShaSpikeTarget")
 		timerShaSpikeCD:Start()
 	end
 end

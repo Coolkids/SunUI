@@ -3,7 +3,7 @@ local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndDSA	= mod:NewSound(nil, "SoundDSA", true)
 
-mod:SetRevision(("$Revision: 8010 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8130 $"):sub(12, -3))
 mod:SetCreatureID(60701, 60708, 60709, 60710)--Adds: 60731 Undying Shadow, 60958 Pinning Arrow
 mod:SetModelID(41813)
 mod:SetZone()
@@ -81,14 +81,14 @@ local specWarnSleightOfHand		= mod:NewSpecialWarningTarget(118162)--Heroic Abili
 local timerChargingShadowsCD	= mod:NewCDTimer(12, 117685)
 local timerUndyingShadowsCD		= mod:NewCDTimer(41.5, 117506)--For most part it's right, but i also think on normal he can only summon a limited amount cause he did seem to skip one? leaving a CD for now until know for sure.
 local timerFixate			  	= mod:NewTargetTimer(20, 118303)
-local timerCoalescingShadowsCD	= mod:NewNextTimer(60, 117539)--EJ says 30sec but logs more recent then last EJ update show 60 seconds on heroic (so probably adjusted since EJ was last revised)
+local timerCoalescingShadowsCD	= mod:NewNextTimer(60, 117539)
 local timerShieldOfDarknessCD  	= mod:NewNextTimer(42.5, 117697)
 --Meng
 local timerMaddeningShoutCD		= mod:NewCDTimer(47, 117708)--47-50 sec variation. So a CD timer instead of next.
 local timerDeliriousCD			= mod:NewCDTimer(20.5, 117837, nil, mod:CanRemoveEnrage())
 --Qiang
-local timerAnnihilateCD			= mod:NewNextTimer(32.5, 117948)
-local timerFlankingOrdersCD		= mod:NewNextTimer(40, 117910)
+local timerAnnihilateCD			= mod:NewNextTimer(39, 117948)
+local timerFlankingOrdersCD		= mod:NewCDTimer(40, 117910)--Every 40 seconds on normal, but on heroic it has a 40-50 second variation so has to be a CD bar instead of next
 local timerImperviousShieldCD	= mod:NewCDTimer(42, 117961)
 --Subetai
 local timerVolleyCD				= mod:NewNextTimer(41, 118094)
@@ -146,7 +146,7 @@ local mengfirstime = 0
 local countzsb = 0
 
 local countxk = 0
-
+local diedShadow = {}
 local shadowdd = 0
 local ctdd = 0
 
@@ -166,6 +166,7 @@ function mod:OnCombatStart(delay)
 	subetaiActive = false
 	table.wipe(bossesActivated)
 	table.wipe(pinnedTargets)
+	table.wipe(diedShadow)
 	table.wipe(PillageMarkers)
 	table.wipe(FixatelMarkers)
 	berserkTimer:Start(-delay)
@@ -192,7 +193,8 @@ function mod:OnCombatEnd()
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(117539) then
+	if args:IsSpellID(117539) and not diedShadow[args.destGUID] then--They only ressurrect once so only start timer once per GUID
+		diedShadow[args.destGUID] = true
 		timerCoalescingShadowsCD:Start(args.destGUID)--Basically, the rez timer for a defeated Undying Shadow that is going to re-animate in 60 seconds.
 	elseif args:IsSpellID(117837) then
 		warnDelirious:Show(args.destName)
@@ -365,7 +367,11 @@ function mod:SPELL_CAST_START(args)
 	elseif args:IsSpellID(117948) then
 		warnAnnihilate:Show()
 		specWarnAnnihilate:Show()
-		timerAnnihilateCD:Start()
+		if self:IsDifficulty("heroic10", "heroic25") then
+			timerAnnihilateCD:Start(32.5)
+		else
+			timerAnnihilateCD:Start()
+		end
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\shockwave.mp3") --震懾波
 		timerJL:Start(8)
 		countzsb = countzsb + 1
@@ -568,17 +574,19 @@ function mod:CHAT_MSG_MONSTER_YELL(msg, boss)
 	elseif boss == Subetai then
 		subetaiActive = true
 		timerVolleyCD:Start(5)
-		timerRainOfArrowsCD:Start(15)
 		timerPillageCD:Start(25)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_dwjh.mp3") --盜王激活
 		if self:IsDifficulty("heroic10", "heroic25") then
 			timerSleightOfHandCD:Start(40.7)
+			timerRainOfArrowsCD:Start(40)
 			sndDSA:Schedule(37.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_dwhd.mp3") -- 盜王護盾準備
 			self:Schedule(37.5, function()
 				if UnitName("target") == Subetai then
 					specWarnDSoon:Show()
 				end
 			end)
+		else
+			timerRainOfArrowsCD:Start(15)
 		end
 		if self.Options.RangeFrame then
 			DBM.RangeCheck:Show(8)

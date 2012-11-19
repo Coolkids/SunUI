@@ -75,7 +75,7 @@ L:SetMiscLocalization({
 L= DBM:GetModLocalization(682)
 
 L:SetWarningLocalization({
-	specWarninTT 	= ">> 注意进内场 <<",
+	specWarninTT 	= ">> Go To Totem <<",
 	SpecWarnjs		= "<%s> → %s"
 })
 
@@ -144,6 +144,7 @@ L = DBM:GetModLocalization(726)
 L:SetWarningLocalization({
 	specWarnDespawnFloor		= "Watch your step!",
 	specWarnCharge				= "Charge [%d]",
+	specwarnYB					= "Annihilation >>YOU MUST TARGET<<",
 	specWarnProtector			= "Protector [%d]"
 })
 
@@ -175,7 +176,21 @@ L:SetOptionLocalization({
 	posC						= "number 3",
 	posD 						= "number 4",
 	posE 						= "number 5",
-	posF 						= "number 6"
+	posF 						= "number 6",
+	optYB						= "First Annihilation Target",
+	noYB						= "NO",
+	YB1							= "first",
+	YB2							= "second",
+	YB3							= "third",
+	YB4							= "fourth",
+	YB5							= "fifth",
+	optYBT						= "Second Annihilation Target",
+	noYBT						= "NO",
+	YBT1						= "first",
+	YBT2						= "second",
+	YBT3						= "third",
+	YBT4						= "fourth",
+	YBT5						= "fifth"
 })
 
 L:SetMiscLocalization({

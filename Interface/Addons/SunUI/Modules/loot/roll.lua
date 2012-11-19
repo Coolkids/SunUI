@@ -122,13 +122,15 @@ local function CreateRollFrame()
 	frame.status = status
 	frame.status.bg = status:GetStatusBarTexture()
 	
-	local spark = frame:CreateTexture(nil, "OVERLAY")
-	spark:Width(14)
-	spark:Height(20)
-	spark:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
-	spark:SetBlendMode("ADD")
+	local s = CreateFrame("StatusBar", nil, frame)
+	s:SetFrameLevel(frame:GetFrameLevel()+1)
+	s:SetAllPoints()
+	local spark =  s:CreateTexture(nil, "OVERLAY")
+	spark:SetVertexColor(0, 0, 0, 1)
+	spark:SetTexture("Interface\\AddOns\\SunUI\\media\\mark")
+	spark:SetPoint("TOPLEFT", status:GetStatusBarTexture(), "TOPRIGHT", -10, 0)
+	spark:SetPoint("BOTTOMRIGHT", status:GetStatusBarTexture(), "BOTTOMRIGHT", 10, 0)
 	status.spark = spark
-	
 	S.CreateBack(status)
 	
 			

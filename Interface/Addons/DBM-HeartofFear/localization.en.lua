@@ -7,8 +7,12 @@ L= DBM:GetModLocalization(745)
 
 L:SetOptionLocalization({
 	specwarnPlatform	= "Show special warning when boss changes platforms",
+	ArrowOnAttenuation	= "Show DBM Arrow during $spell:127834 to indicate which direction to move",
+	specwarnAttenuationL	= "Show special warning when left Attenuation",
+	specwarnAttenuationR	= "Show special warning when right Attenuation",
 	specwarnExhale		= "Show special warning for $spell:122761",
 	specwarnExhaleB		= "Show special warning for pre $spell:122761",
+	specwarnDR			= "Show special warning for Damage reduction skills",
 	MindControlIcon		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(122740),
 	SoundWOP			= "Voice warning: important skills",
 	HudMAP				= "HudMAP: $spell:122761 targeting",
@@ -21,7 +25,21 @@ L:SetOptionLocalization({
 	arrow4				= "Triangle",
 	arrow5				= "moon",
 	arrow6				= "Square",
-	arrow7				= "Fork"
+	arrow7				= "Fork",
+	optDR				= "P1 Damage reduction skills",
+	noDR				= "none",
+	DR1					= "P1 first",
+	DR2					= "P1 second",
+	DR3					= "P1 third",
+	DR4					= "P1 fourth",
+	DR5					= "P1 fifth",
+	optDRT				= "P2 Damage reduction skills",
+	noDRT				= "none",
+	DRT1				= "P2 first",
+	DRT2				= "P2 second",
+	DRT3				= "P2 third",
+	DRT4				= "P2 fourth",
+	DRT5				= "P2 fifth"
 })
 
 L:SetMiscLocalization({
@@ -31,7 +49,10 @@ L:SetMiscLocalization({
 
 L:SetWarningLocalization({
 	specwarnPlatform	= "Combat zone changed",
+	specwarnAttenuationL	= "LEFT!",
+	specwarnAttenuationR	= "RIGHR!",
 	specwarnExhale		= "Exhale[%d] : %s",
+	specwarnDR			= ">>Damage reduction skill!<<",
 	specwarnExhaleB		= "Next: >>%d<< Exhale"
 })
 
@@ -58,7 +79,13 @@ L:SetWarningLocalization({
 -------------------------------
 L= DBM:GetModLocalization(713)
 
+L:SetWarningLocalization({
+	specwarnUnder	= "Move out of purple ring!",
+	specWarnPungencyOtherFix 		= "%s - (%d)"
+})
+
 L:SetOptionLocalization({
+	specwarnUnder	= "Show special warning when you are under boss",
 	PheromonesIcon	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(122835),
 	InfoFrame			= "InfoFrame:$spell:123081",
 	optTankMode			= "Special warning:how to change tank",
@@ -70,8 +97,8 @@ L:SetOptionLocalization({
 	SoundFS				= "Countdown: $spell:122735"
 })
 
-L:SetWarningLocalization({
-	specWarnPungencyOtherFix 		= "%s - (%d)"
+L:SetMiscLocalization({
+	UnderHim	= "under him"
 })
 
 ----------------------
@@ -106,6 +133,7 @@ L:SetMiscLocalization({
 L= DBM:GetModLocalization(737)
 
 L:SetWarningLocalization({
+	warnReshapeLifeTutor		= "1: Interrupt/debuff target, 2: Interrupt yourself, 3: Regen Health/Willpower, 4: Escape Vehicle",
 	warnAmberExplosion			= ">%s< is casting %s",
 	warnInterruptsAvailable		= "Interupts available for %s: %s",
 	specwarnWillPower			= "Low Will Power!",
@@ -120,6 +148,7 @@ L:SetTimerLocalization{
 
 L:SetOptionLocalization({
 	SoundWOP			= "voice warning: important skills",
+	warnReshapeLifeTutor		= "Display ability purpose rundown of Mutated Construct abilities",
 	warnAmberExplosion			= "Show warning (with source) when $spell:122398 is cast",
 	warnInterruptsAvailable		= "Announce who has Amber Strike interrupts available for $spell:122402",
 	specwarnWillPower			= "Show special warning when will power is low in construct",
@@ -127,7 +156,8 @@ L:SetOptionLocalization({
 	specwarnAmberExplosionAM	= "Show special warning to interrupt Amber Montrosity's $spell:122402",
 	specwarnAmberExplosionOther	= "Show special warning to interrupt loose Mutated Construct's $spell:122398",
 	timerAmberExplosionAMCD		= "Show timer for Amber Monstrosity's next $spell:122402",
-	InfoFrame					= "Show info frame for players will power"
+	InfoFrame					= "Show info frame for players will power",
+	FixNameplates				= "Automatically disable interfering nameplates on pull\n(restores settings upon leaving combat)"
 })
 
 L:SetMiscLocalization({
@@ -139,7 +169,12 @@ L:SetMiscLocalization({
 ------------
 L= DBM:GetModLocalization(743)
 
+L:SetWarningLocalization({
+	warnAmberTrap		= "Amber Trap progress: (%d/5)",
+})
+
 L:SetOptionLocalization({
+	warnAmberTrap		= "Show warning (with progress) when $spell:125826 is making", -- maybe bad translation.
 	InfoFrame		= "Show info frame for players affected by $spell:125390",
 	RangeFrame		= "Show range frame (5) for $spell:123735",
 	SoundWOP		= "voice warning: important skills",

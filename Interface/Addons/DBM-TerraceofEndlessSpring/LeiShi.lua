@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7841 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8122 $"):sub(12, -3))
 mod:SetCreatureID(62983)--62995 Animated Protector
 mod:SetModelID(42811)
 
@@ -29,7 +29,7 @@ local specWarnSpray						= mod:NewSpecialWarningStack(123121, mod:IsTank(), 6)
 local specWarnSprayNT					= mod:NewSpecialWarningMove(123121)
 local specWarnSprayOther				= mod:NewSpecialWarningTarget(123121, mod:IsTank())
 
---local timerSpecialCD					= mod:NewTimer(22, "timerSpecialCD", 123250)--Not even this is 100% reliable. it's iffy at best, but she seems to use specials about 22-25 seconds after last one ended, except when last one was protect, then next one is used IMMEDIATELY upon protect ending. Timers for this fight are just jacked.
+local timerSpecialCD					= mod:NewTimer(22, "timerSpecialCD", 123250)--Not even this is 100% reliable. it's iffy at best, but she seems to use specials about 22-25 seconds after last one ended, except when last one was protect, then next one is used IMMEDIATELY upon protect ending. Timers for this fight are just jacked.
 local timerSpray						= mod:NewTargetTimer(10, 123121, nil, mod:IsTank() or mod:IsHealer())
 local timerGetAway						= mod:NewBuffActiveTimer(30, 123461)
 
@@ -39,7 +39,7 @@ local hideActive = false
 
 function mod:OnCombatStart(delay)
 	hideActive = false
---	timerSpecialCD:Start(52-delay)--the ONLY timer that ever seems to be right, is FIRST special.
+	timerSpecialCD:Start(42.5-delay)--the ONLY timer that ever seems to be right, is FIRST special.
 	berserkTimer:Start(-delay)
 end
 
@@ -110,6 +110,7 @@ function mod:SPELL_CAST_START(args)
 		warnHide:Show()
 		specWarnHide:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_yszb.mp3") --隱身準備
+		sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\scattersoon.mp3")--注意分散
 		self:RegisterShortTermEvents(
 			"INSTANCE_ENCOUNTER_ENGAGE_UNIT"--We register on hide, because it also fires just before hide, every time and don't want to trigger "hide over" at same time as hide.
 		)

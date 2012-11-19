@@ -187,6 +187,7 @@ L = DBM:GetModLocalization(726)
 L:SetWarningLocalization({
 	specWarnDespawnFloor		= "中場即將消失!",
 	specWarnCharge				= "能量電荷 [%d] - 轉換目標",
+	specwarnYB					= "本輪>>分擔異變<<!",
 	specWarnProtector			= "星穹保衛者 [%d] - 轉換目標"
 })
 
@@ -202,6 +203,7 @@ L:SetOptionLocalization({
 	specWarnDespawnFloor		= "特殊警告：中場地板消失前",
 	specWarnCharge				= "特殊警告：能量電荷",
 	specWarnProtector			= "特殊警告：$journal:6178",
+	specwarnYB					= "特殊警告：本輪需要分擔異變",
 	timerDespawnFloor			= "計時器：中場地板消失",
 	InfoFrame					= "資訊框：$spell:117878層數最高的5名團員",
 	SetIconOnDestabilized		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(132226),
@@ -218,7 +220,21 @@ L:SetOptionLocalization({
 	posC 						= "3號位",
 	posD						= "4號位",
 	posE 						= "5號位",
-	posF 						= "6號位"
+	posF 						= "6號位",
+	optYB						= "第一輪<異變>分擔",
+	noYB						= "沒我事",
+	YB1							= "第一次",
+	YB2							= "第二次",
+	YB3							= "第三次",
+	YB4							= "第四次",
+	YB5							= "第五次",
+	optYBT						= "第二輪<異變>分擔",
+	noYBT						= "沒我事",
+	YBT1						= "第一次",
+	YBT2						= "第二次",
+	YBT3						= "第三次",
+	YBT4						= "第四次",
+	YBT5						= "第五次"
 })
 
 L:SetMiscLocalization({

@@ -127,6 +127,10 @@ L:SetOptionLocalization({
 	SoundWOP			= "語音警告：重要技能"
 })
 
+L:SetMiscLocalization({
+	Kill		= "只要你們心中還存有暴力，我就..會回來...",
+})
+
 -----------------------
 -- Taran Zhu --
 -----------------------

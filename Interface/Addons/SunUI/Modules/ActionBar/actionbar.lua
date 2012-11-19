@@ -103,7 +103,7 @@ function Module:CreateBar2()
 		end
 	end
 	--show/hide the frame on a given state driver
-	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui] hide; show")
+	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
 end
 function Module:CreateBar3()
 	local bar = CreateFrame("Frame","SunUIActionBar3",UIParent, "SecureHandlerStateTemplate")
@@ -143,7 +143,7 @@ function Module:CreateBar3()
 				button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0) 
 			end
 		end
-		RegisterStateDriver(bar, "visibility", "[petbattle] hide; [vehicleui] hide; show")
+		RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
 	elseif C["Bar3Layout"] == 2 then
 	for i = 1, 12 do
 		button = _G["MultiBarBottomRightButton"..i]
@@ -168,8 +168,8 @@ function Module:CreateBar3()
 				button:SetPoint("LEFT", _G["MultiBarBottomRightButton"..i-1], "RIGHT", C["ButtonSpacing"], 0)	
 			end
 		end
-		RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui] hide; show")
-		RegisterStateDriver(bar2, "visibility", "[petbattle][overridebar][vehicleui] hide; show")
+		RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
+		RegisterStateDriver(bar2, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
 	end
 end
 function Module:CreateBar4()
@@ -220,7 +220,7 @@ function Module:CreateBar4()
 				end
 		end
 	end
-	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui] hide; show")
+	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
 end
 function Module:CreateBar5()
 	if C["Big4Layout"] == 1 then
@@ -269,10 +269,10 @@ function Module:CreateBar5()
 			_G["MultiBarLeftButton1"]:ClearAllPoints()
 			_G["MultiBarLeftButton2"]:ClearAllPoints()
 		end
-		RegisterStateDriver(bar51, "visibility", "[petbattle][overridebar][vehicleui] hide; show")
-		RegisterStateDriver(bar52, "visibility", "[petbattle][overridebar][vehicleui] hide; show")
-		RegisterStateDriver(bar53, "visibility", "[petbattle][overridebar][vehicleui] hide; show")
-		RegisterStateDriver(bar54, "visibility", "[petbattle][overridebar][vehicleui] hide; show")
+		RegisterStateDriver(bar51, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
+		RegisterStateDriver(bar52, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
+		RegisterStateDriver(bar53, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
+		RegisterStateDriver(bar54, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
 	elseif C["Big4Layout"] == 2 then
 		local bar = CreateFrame("Frame","SunUIActionBar5",UIParent, "SecureHandlerStateTemplate")
 		if C["Bar5Layout"] == 2 then
@@ -319,7 +319,7 @@ function Module:CreateBar5()
 				end
 			end
 		end
-		RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui] hide; show")
+		RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
 	end
 end
 function Module:CreateExtrabarBar()
@@ -378,8 +378,8 @@ function Module:CreateOverrideBar()
 		end
 	end
 	--show/hide the frame on a given state driver
-	RegisterStateDriver(bar, "visibility", "[petbattle] hide; [overridebar][vehicleui] show; hide")
-	RegisterStateDriver(OverrideActionBar, "visibility", "[overridebar][vehicleui] show; hide")
+	RegisterStateDriver(bar, "visibility", "[petbattle] hide; [overridebar][vehicleui][possessbar,@vehicle,exists] show; hide")
+	RegisterStateDriver(OverrideActionBar, "visibility", "[overridebar][vehicleui][possessbar,@vehicle,exists] show; hide")
 end
 function Module:CreatePetBar()
 	local num = NUM_PET_ACTION_SLOTS
@@ -403,7 +403,7 @@ function Module:CreatePetBar()
 			button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
 		end
 	end
-	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui] hide; [@pet,exists,nodead] show; hide")
+	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; [@pet,exists,nodead] show; hide")
 end
 function Module:CreateStanceBar()
 	local num = NUM_STANCE_SLOTS

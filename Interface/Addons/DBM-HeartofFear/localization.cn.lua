@@ -1,5 +1,5 @@
 ﻿-- Simplified Chinese by Diablohu(diablohudream@gmail.com)
--- Last update: 11/06/2012
+-- Last update: 11/14/2012
 
 if GetLocale() ~= "zhCN" then return end
 local L
@@ -11,8 +11,12 @@ L= DBM:GetModLocalization(745)
 
 L:SetOptionLocalization({
 	specwarnPlatform	= "特别警告：当战斗露台改变时",
+	ArrowOnAttenuation	= "DBM箭头：当$spell:127834出现时指示移动的方向",
 	specwarnExhale		= "特别警告：$spell:122761",
 	specwarnExhaleB		= "特别警告：$spell:122761的预先警告",
+	specwarnAttenuationL	= "特别警告：左旋音波",
+	specwarnAttenuationR	= "特别警告：右旋音波",
+	specwarnDR				= "特别警告：注意开减伤",
 	MindControlIcon		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(122740),
 	SoundWOP			= "语音警告：重要技能",
 	HudMAP				= "高级定位监视(HUD)：$spell:122761目标的位置",
@@ -25,7 +29,21 @@ L:SetOptionLocalization({
 	arrow4				= "三角",
 	arrow5				= "月亮",
 	arrow6				= "方块",
-	arrow7				= "叉叉"
+	arrow7				= "叉叉",
+	optDR				= "P1阶段<力与魄>减伤",
+	noDR				= "不关我事",
+	DR1					= "P1第一次",
+	DR2					= "P1第二次",
+	DR3					= "P1第三次",
+	DR4					= "P1第四次",
+	DR5					= "P1第五次",
+	optDRT				= "P2阶段<力与魄>减伤",
+	noDRT				= "不关我事",
+	DRT1				= "P2第一次",
+	DRT2				= "P2第二次",
+	DRT3				= "P2第三次",
+	DRT4				= "P2第四次",
+	DRT5				= "P2第五次"
 })
 
 L:SetMiscLocalization({
@@ -35,7 +53,10 @@ L:SetMiscLocalization({
 
 L:SetWarningLocalization({
 	specwarnPlatform	= "作战区改变!",
+	specwarnAttenuationL	= "← ← ←左左左",
+	specwarnAttenuationR	= "右右右→ → →",
 	specwarnExhale		= "吐气[%d] : %s",
+	specwarnDR			= ">>本轮你开减伤<<",
 	specwarnExhaleB		= "即将 >>%d层<< 吐气"
 })
 
@@ -62,7 +83,13 @@ L:SetWarningLocalization({
 -------------------------------
 L= DBM:GetModLocalization(713)
 
+L:SetWarningLocalization({
+	specwarnUnder	= "离开紫圈!",
+	specWarnPungencyOtherFix = "%s 敏感 (%d)"
+})
+
 L:SetOptionLocalization({
+	specwarnUnder		= "特别警告：你在BOSS下方",
 	PheromonesIcon		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(122835),
 	InfoFrame			= "资讯框：$spell:123081层数监视",
 	optTankMode			= "特别警告：费洛蒙换坦策略",
@@ -74,8 +101,8 @@ L:SetOptionLocalization({
 	SoundFS				= "坦克倒计时：$spell:122735"
 })
 
-L:SetWarningLocalization({
-	specWarnPungencyOtherFix 		= "%s 敏感性 (%d)"
+L:SetMiscLocalization({
+	UnderHim	= "下面"
 })
 ----------------------
 -- Wind Lord Mel'jarak --
@@ -108,6 +135,7 @@ L:SetMiscLocalization({
 L= DBM:GetModLocalization(737)
 
 L:SetWarningLocalization({
+	warnReshapeLifeTutor		= "1:中断/益伤目标,, 2:中断自己, 3:回复体力/意志力, 4:脱离傀儡",
 	warnAmberExplosion			= "%s 正在施放 %s",
 	warnInterruptsAvailable		= "可打断 %s: %s",
 	specwarnWillPower			= "意志低下！",
@@ -122,6 +150,7 @@ L:SetTimerLocalization{
 
 L:SetOptionLocalization({
 	SoundWOP			= "语音警告：重要技能",
+	warnReshapeLifeTutor		= "显示突变魁儡的能力说明效果",
 	warnAmberExplosion			= "警报：$spell:122398正在施放，并警报来源",
 	warnInterruptsAvailable		= "警报：可使用$spell:122402打断琥珀打击的成员",
 	specwarnWillPower			= "特殊警报：在畸形体中意志低下时",
@@ -129,7 +158,8 @@ L:SetOptionLocalization({
 	specwarnAmberExplosionAM	= "特殊警报：打断琥珀畸怪的$spell:122402",
 	specwarnAmberExplosionOther	= "特殊警报：打断畸形体的$spell:122398",
 	timerAmberExplosionAMCD		= "计时条：琥珀畸怪的下一次$spell:122402",
-	InfoFrame					= "信息框：意志值（功能开发中）"
+	InfoFrame					= "信息框：意志值",
+	FixNameplates				= "在战斗开始后自动关闭影响战斗的姓名面板\n（战斗结束后会自动恢复原始设置）"
 })
 
 L:SetMiscLocalization({
@@ -141,7 +171,12 @@ L:SetMiscLocalization({
 ------------
 L= DBM:GetModLocalization(743)
 
+L:SetWarningLocalization({
+	warnAmberTrap		= "琥珀陷阱：%d/5",
+})
+
 L:SetOptionLocalization({
+	warnAmberTrap		= "警报：$spell:125826的生成，并提示进度", -- maybe bad translation.
 	InfoFrame			= "信息框：受$spell:125390效果影响的玩家",
 	SoundWOP			= "语音警告：重要技能",
 	HudMAP				= "高级定位监视(HUD)：$spell:124863的位置",
@@ -151,6 +186,6 @@ L:SetOptionLocalization({
 
 L:SetMiscLocalization({
 	PlayerDebuffs		= "凝视",
-	YellPhase3			= "No more excuses, Empress! Eliminate these cretins or I will kill you myself!"
+	YellPhase3			= "别找借口了，女皇！消灭这些傻瓜，否则我会亲手杀了你！"
 
 })

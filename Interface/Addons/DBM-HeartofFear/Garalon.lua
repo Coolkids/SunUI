@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8059 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8072 $"):sub(12, -3))
 mod:SetCreatureID(63191)--Also has CID 62164. He has 2 CIDs for a single target, wtf? It seems 63191 is one players attack though so i'll try just it.
 mod:SetModelID(42368)
 mod:SetZone()
@@ -19,7 +19,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_SUCCESS",
 	"SPELL_DAMAGE",
 	"SPELL_MISSED",
-	"RAID_BOSS_EMOTE"
+	"CHAT_MSG_RAID_BOSS_EMOTE"
 )
 
 --[[WoL Reg Expression (you can remove icy touch if you don't have a DK pull bosses, i use it for pull time)
@@ -32,8 +32,10 @@ local warnBrokenLeg				= mod:NewStackAnnounce(122786, 2)
 local warnMendLeg				= mod:NewSpellAnnounce(123495, 1)
 local warnCrush					= mod:NewSpellAnnounce(122774, 3)--On normal, only cast if you do fight wrong (be it on accident or actually on purpose. however, on heroic, this might have a CD)
 
+local specwarnUnder				= mod:NewSpecialWarning("specwarnUnder")
 local specwarnPheromonesTarget	= mod:NewSpecialWarningTarget(122835, false)
 local specwarnPheromonesYou		= mod:NewSpecialWarningYou(122835)
+local yellPheromones			= mod:NewYell(122835)
 local specwarnPheromonesNear	= mod:NewSpecialWarningClose(122835)
 local specwarnCrush				= mod:NewSpecialWarningSpell(122774, true, nil, nil, true)--Maybe set to true later, not sure. Some strats on normal involve purposely having tanks rapidly pass debuff and create lots of stomps
 local specwarnLeg				= mod:NewSpecialWarningSwitch("ej6270", mod:IsMelee())--If no legs are up (ie all dead), when one respawns, this special warning can be used to alert of a respawned leg and to switch back.
@@ -43,6 +45,7 @@ local specwarnPungency			= mod:NewSpecialWarningStack(123081, mod:IsTank(), 20)
 local specWarnPungencyOtherFix	= mod:NewSpecialWarning("specWarnPungencyOtherFix")
 
 local timerCrush				= mod:NewCastTimer(3.5, 122774)--Was 3 second, hotfix went live after my kill log, don't know what new hotfixed cast time is, 3.5, 4? Needs verification.
+local timerCrushCD				= mod:NewNextTimer(37.5, 122774)
 local timerFuriousSwipeCD		= mod:NewCDTimer(8, 122735)
 local timerMendLegCD			= mod:NewCDTimer(30, 123495)
 local timerFury					= mod:NewBuffActiveTimer(30, 122754)
@@ -73,11 +76,16 @@ local PheromonesMarkers = {}
 function mod:OnCombatStart(delay)
 	brokenLegs = 0
 	timerFuriousSwipeCD:Start(-delay)--8-11 sec on pull
-	berserkTimer:Start(-delay)
+	if not self:IsDifficulty("lfr25") then
+		berserkTimer:Start(-delay)
+	end
 	sndFS:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 	sndFS:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 	sndFS:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-	table.wipe(PheromonesMarkers)
+	table.wipe(PheromonesMarkers)	
+	if self:IsDifficulty("heroic10", "heroic25") then
+		timerCrushCD:Start(30-delay)
+	end
 end
 
 function mod:OnCombatEnd()
@@ -101,6 +109,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		specwarnPheromonesTarget:Show(args.destName)
 		if args:IsPlayer() then
 			specwarnPheromonesYou:Show()
+			yellPheromones:Yell()
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\targetyou.mp3") --目標是你
 		else
 			local uId = DBM:GetRaidUnitId(args.destName)
@@ -209,11 +218,19 @@ function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
 end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE
 
-function mod:RAID_BOSS_EMOTE(msg)
+function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, _, _, _, target)
 	if msg:find("spell:122774") then
 		warnCrush:Show()
 		specwarnCrush:Show()
-		timerCrush:Start()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_nyjd.mp3") --碾壓
+		timerCrush:Start()
+		if msg:find(L.UnderHim) and target == UnitName("player") then
+			specwarnUnder:Show()--it's a bit of a too little too late warning, but hopefully it'll help people in LFR understand it's not place to be and less likely to repeat it, eventually thining out LFR failure rate to this.
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_lkzq.mp3") --離開紫圈
+		end
+		if msg:find(L.Heroicrush) then
+			timerCrushCD:Cancel()
+			timerCrushCD:Start()
+		end
 	end
 end

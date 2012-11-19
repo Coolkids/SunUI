@@ -47,6 +47,9 @@ local specWarnDrawPower				= mod:NewSpecialWarningStack(119387, nil, 1)
 local specWarnDespawnFloor			= mod:NewSpecialWarning("specWarnDespawnFloor", nil, nil, nil, true)
 local specWarnRadiatingEnergies		= mod:NewSpecialWarningSpell(118310, nil, nil, nil, true)
 
+local specwarnYB			= mod:NewSpecialWarning("specwarnYB")
+
+
 local timerBreathCD					= mod:NewCDTimer(18, 117960)
 local timerProtectorCD				= mod:NewCDTimer(35.5, 117954)
 local timerArcingEnergyCD			= mod:NewCDTimer(11.5, 117945)
@@ -70,12 +73,20 @@ local sentAEHP = {}
 local warnedAEHP = {}
 local warned = 0
 local coresCount = 0
+
+local ptwo = false
+local warnfailed = false
+local YBTargets = {}
+
 local Protector = EJ_GetSectionInfo(6178)
 mod:AddBoolOption("optDBPull", false, "sound")
 mod:AddDropdownOption("optOC", {"six", "nine", "twelve", "fifteen", "none"}, "six", "sound")
 mod:AddDropdownOption("optPos", {"nonepos", "posA", "posB", "posC", "posD", "posE", "posF"}, "nonepos", "sound")
 
+mod:AddDropdownOption("optYB", {"noYB", "YB1", "YB2", "YB3", "YB4", "YB5"}, "noYB", "sound")
+mod:AddDropdownOption("optYBT", {"noYBT", "YBT1", "YBT2", "YBT3", "YBT4", "YBT5"}, "noYBT", "sound")
 
+local pthree = false
 local OCn = 0
 local POSn = ""
 
@@ -101,6 +112,11 @@ local function warnStunnedTargets()
 	table.wipe(stunTargets)
 end
 
+local function warnYBfendan()
+	print("本輪分擔: <"..table.concat(YBTargets, ">, <")..">")
+	table.wipe(YBTargets)
+end
+
 function mod:OnCombatStart(delay)
 	protectorCount = 0
 	coresCount = 0
@@ -109,11 +125,15 @@ function mod:OnCombatStart(delay)
 	powerCount = 0
 	table.wipe(closedCircuitTargets)
 	table.wipe(stunTargets)
+	table.wipe(YBTargets)
 	timerBreathCD:Start(8-delay)
 	table.wipe(LowHP)
 	table.wipe(sentAEHP)
 	table.wipe(warnedAEHP)
 	warned = 0
+	pthree = false
+	ptwo = false
+	warnfailed = false
 	if not mod:IsDps() then
 		sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3") --準備火息
 	end
@@ -130,6 +150,7 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(124967) and not phase2Started then--Phase 2 begin/Phase 1 end
 		phase2Started = true--because if you aren't fucking up, you should get more then one draw power.
+		ptwo = true
 		protectorCount = 0
 		powerCount = 0
 		warnPhase2:Show()
@@ -159,8 +180,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		OCn = self.Options.optOC == "six" and 6 or self.Options.optOC == "nine" and 9 or self.Options.optOC == "twelve" and 12 or self.Options.optOC == "fifteen" and 15 or self.Options.optOC == "none" and 99
 		if (args.amount or 1) >= OCn and args.amount % 3 == 0 and self:IsInCombat() then--Warn every 3 stacks at 6 and above.
 			specWarnOvercharged:Show(args.amount)
-			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_czgg.mp3") --超載過高
-			warnedCZ = true
+			if not pthree then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_czgg.mp3") --超載過高
+			end
 		end
 	elseif args:IsSpellID(119387) then -- do not add other spellids.
 		powerCount = powerCount + 1
@@ -206,6 +228,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\phasechange.mp3")
 		warned = warned + 1
 		if warned == 2 then
+			pthree = true
 			self:Schedule(2, function()
 				if not UnitDebuff("player", GetSpellInfo(117870)) then
 					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kjzc.mp3") --快進中場
@@ -256,6 +279,13 @@ function mod:SPELL_CAST_START(args)
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_bwzkd.mp3") --保衛者快打
 		else
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_bwzcx.mp3") --保衛者出現
+		end
+		if self:IsDifficulty("heroic10", "heroic25") then
+			if (((self.Options.optYB == "YB1" and protectorCount == 1) or (self.Options.optYB == "YB2" and protectorCount == 2) or (self.Options.optYB == "YB3" and protectorCount == 3) or (self.Options.optYB == "YB4" and protectorCount == 4) or (self.Options.optYB == "YB5" and protectorCount == 5)) and not ptwo) or (((self.Options.optYBT == "YBT1" and protectorCount == 1) or (self.Options.optYBT == "YBT2" and protectorCount == 2) or (self.Options.optYBT == "YBT3" and protectorCount == 3) or (self.Options.optYBT == "YBT4" and protectorCount == 4) or (self.Options.optYBT == "YBT5" and protectorCount == 5)) and ptwo) then
+				sndWOP:Schedule(4, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ybfd.mp3") --分擔異變
+				specwarnYB:Schedule(4)
+				self:SendSync("YBnow", UnitName("player"))
+			end
 		end
 	elseif args:IsSpellID(117945) then
 		warnArcingEnergy:Show()
@@ -336,11 +366,16 @@ function mod:OnSync(msg, guid)
 		if mod:IsHealer() then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\aesoon.mp3") --準備AE
 		end
+	elseif msg == "YBnow" and guid then
+		YBTargets[#YBTargets + 1] = guid
+		self:Unschedule(warnYBfendan)
+		self:Schedule(2, warnYBfendan)
 	end
 end
 
 function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
-	if spellId == 127362 and self:AntiSpam(5, 3) then
+	if spellId == 127362 and not warnfailed and self:AntiSpam(5, 3) then
+		warnfailed = true
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\failed.mp3") --~
 	end
 end

@@ -65,6 +65,7 @@ local testd = 0
 local dpssendn = 0
 
 local incombat = false
+local cansend = false
 
 --local countdownCrossedOver			= mod:NewCountdown(29, 116161)
 local berserkTimer					= mod:NewBerserkTimer(360)
@@ -444,48 +445,48 @@ function mod:OnSync(msg, guid)
 	if msg == "SummonTotem" and self:AntiSpam(10, 3) then
 		totemn = totemn + 1
 		warnTotem:Show(totemn)
-
-		if self.Options.GoTotemAdmin and UnitIsGroupLeader("player") then
-			if mod:IsDifficulty("heroic10", "heroic25") then
-				self:Schedule(1, choosehealther)
-				self:Schedule(1, choosedps)
-			end
-		end
+		cansend = false
 		
 		if incombat then
 			if self.Options.GoTotemClient then
 				getraidindex()
 				if not UnitDebuff("player", GetSpellInfo(122151)) and not UnitDebuff("player", GetSpellInfo(116161)) and not UnitBuff("player", GetSpellInfo(117543)) and not UnitIsDeadOrGhost("player") then
 					if UnitDebuff("player", GetSpellInfo(117723)) then
-						_, _, _, _, _, duration, expires, _, _ = UnitDebuff("player", GetSpellInfo(117723))
-						if expires - GetTime() < 6 then
-							if mod:IsHealer() then
-								self:SendSync("HealthSend", myraidindex)
-							elseif mod:IsDps() then
-								if mychooseindex~=99 then
-									local sendtime = mychooseindex/10 - 0.09
-									self:Schedule(sendtime, function()
-										self:SendSync("DpsSend", myraidindex)
-									end)
+						for i = 1, 40 do
+							if select(11, UnitDebuff("player", i)) == 117723 then
+								_, _, _, _, _, duration, expires, _, _ = UnitDebuff("player", i)
+								if expires - GetTime() < 6 then
+									cansend = true
 								end
+								break
 							end
 						end
 					else
-						if mod:IsHealer() then
-							self:SendSync("HealthSend", myraidindex)
-						elseif mod:IsDps() then
-							if mychooseindex~=99 then
-								local sendtime = mychooseindex/10 - 0.09
-								self:Schedule(sendtime, function()
-									self:SendSync("DpsSend", myraidindex)
-								end)
-							end
+						cansend = true
+					end
+				end
+				if cansend then
+					if mod:IsHealer() then
+						self:SendSync("HealthSend", myraidindex)
+					elseif mod:IsDps() then
+						if mychooseindex~=99 then
+							local sendtime = mychooseindex/10 - 0.09
+							self:Schedule(sendtime, function()
+								self:SendSync("DpsSend", myraidindex)
+							end)
 						end
 					end
 				end
 			end
 		end
 		
+		if self.Options.GoTotemAdmin and UnitIsGroupLeader("player") then
+			if mod:IsDifficulty("heroic10", "heroic25") then
+				self:Schedule(1.5, choosehealther)
+				self:Schedule(1.5, choosedps)
+			end
+		end
+
 		specWarnTotem:Show()
 		if self:IsDifficulty("normal25", "heroic25") then
 			timerTotemCD:Start(20, totemn+1)

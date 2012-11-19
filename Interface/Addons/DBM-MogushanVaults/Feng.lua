@@ -3,7 +3,7 @@ local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndWOPD	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8026 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8083 $"):sub(12, -3))
 mod:SetCreatureID(60009)--60781 Soul Fragment
 mod:SetModelID(41192)
 mod:SetZone()

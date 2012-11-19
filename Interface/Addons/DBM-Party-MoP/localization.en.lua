@@ -123,6 +123,10 @@ L:SetOptionLocalization({
 	SoundWOP 		= "voice warning: important skills"
 })
 
+L:SetMiscLocalization({
+	Kill		= "So long has violence lurks in your heart...I will return...",
+})
+
 -----------------------
 -- Taran Zhu --
 -----------------------

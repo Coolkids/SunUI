@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8065 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8127 $"):sub(12, -3))
 mod:SetCreatureID(62837)--62847 Dissonance Field, 63591 Kor'thik Reaver, 63589 Set'thik Windblade
 mod:SetModelID(42730)
 mod:SetZone()
@@ -25,7 +25,7 @@ local warnCryOfTerror			= mod:NewTargetAnnounce(123788, 3, nil, mod:IsHealer())
 local warnEyes					= mod:NewStackAnnounce(123707, 2, nil, mod:IsTank())
 local warnSonicDischarge		= mod:NewSoonAnnounce(123504, 4)--Iffy reliability but better then nothing i suppose.
 local warnRetreat				= mod:NewSpellAnnounce(125098, 4)
-local warnAmberTrap				= mod:NewSpellAnnounce(125826, 3)--Trap ready
+local warnAmberTrap				= mod:NewAnnounce("warnAmberTrap", 2, 125826)
 local warnTrapped				= mod:NewTargetAnnounce(125822, 1)--Trap used
 local warnStickyResin			= mod:NewTargetAnnounce(124097, 3)
 local warnFixate				= mod:NewTargetAnnounce(125390, 3, nil, false)--Spammy
@@ -48,7 +48,7 @@ local specWarnDispatch			= mod:NewSpecialWarningInterrupt(124077, mod:IsMelee())
 local specWarnAdvance			= mod:NewSpecialWarningSpell(125304)
 local specwarnVisions			= mod:NewSpecialWarningYou(124862)
 local specwarnXJ				= mod:NewSpecialWarningMove(123184)
-local yellVisions				= mod:NewYell(124862)
+local yellVisions				= mod:NewYell(124862, nil, false)
 local specWarnConsumingTerror	= mod:NewSpecialWarningSpell(124849, not mod:IsTank())
 
 local timerScreechCD			= mod:NewNextTimer(7, 123735, nil, mod:IsRanged())
@@ -61,6 +61,9 @@ local timerPhase2				= mod:NewNextTimer(151, 125098)--152 until trigger, but pro
 local timerCalamityCD			= mod:NewCDTimer(6, 124845, nil, mod:IsHealer())
 local timerVisionsCD			= mod:NewCDTimer(19.5, 124862)
 local timerConsumingTerrorCD	= mod:NewCDTimer(32, 124849, nil, not mod:IsTank())
+
+local timerQJ					= mod:NewTargetTimer(120, 124821)
+local timerDQ					= mod:NewBuffFadesTimer(30, 124827)
 
 mod:AddBoolOption("InfoFrame")--On by default because these do more then just melee, they interrupt spellcasting (bad for healers)
 mod:AddBoolOption("RangeFrame", mod:IsRanged())
@@ -83,6 +86,7 @@ end
 local ptwo = false
 
 mod:AddBoolOption("HudMAP", true, "sound")
+mod:AddBoolOption("HudMAP2", false, "sound")
 local DBMHudMap = DBMHudMap
 local free = DBMHudMap.free
 local function register(e)	
@@ -90,6 +94,7 @@ local function register(e)
 	return e
 end
 local DeadMarkers = {}
+local QJMarkers = {}
 
 function mod:OnCombatStart(delay)
 	phase3Started = false
@@ -101,6 +106,7 @@ function mod:OnCombatStart(delay)
 	table.wipe(warnedLowHP)
 	table.wipe(visonsTargets)
 	table.wipe(DeadMarkers)
+	table.wipe(QJMarkers)
 	ptwo = false
 	warnedhp = false
 	if self.Options.RangeFrame then
@@ -118,6 +124,9 @@ function mod:OnCombatEnd()
 	end
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
+	end
+	if self.Options.HudMAP or self.Options.HudMAP2 then
+		DBMHudMap:FreeEncounterMarkers()
 	end
 end
 
@@ -146,6 +155,8 @@ function mod:SPELL_AURA_APPLIED(args)
 			specwarnCryOfTerror:Show()
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kjyy.mp3") --快進音域
 		end
+	elseif args:IsSpellID(124748) then
+		warnAmberTrap:Show(args.amount or 1)
 	elseif args:IsSpellID(125822) then
 		warnTrapped:Show(args.destName)
 	elseif args:IsSpellID(125390) then
@@ -164,6 +175,9 @@ function mod:SPELL_AURA_APPLIED(args)
 			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 			sndWOP:Schedule(2.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 			sndWOP:Schedule(3.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		end
+		if mod:IsHealer() then
+			sndWOP:Schedule(4, "Interface\\AddOns\\DBM-Core\\extrasounds\\dispelnow.mp3")
 		end
 		self:Unschedule(warnVisionsTargets)
 		self:Schedule(0.3, warnVisionsTargets)
@@ -193,6 +207,20 @@ function mod:SPELL_AURA_APPLIED(args)
 				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3") --快躲開
 			end
 		end
+	elseif args:IsSpellID(124821) then
+		timerQJ:Start(120, args.destName)
+		if self.Options.HudMAP2 then
+			QJMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("timer", args.destName, 2, nil, 0, 1, 0, 1):Appear():RegisterForAlerts():Rotate(360, 120))
+		end
+	elseif args:IsSpellID(124827) then
+		if args:IsPlayer() then
+			timerDQ:Start()
+		end
+	elseif args:IsSpellID(124077) then
+		if args.sourceGUID == UnitGUID("target") then--Only show warning for your own target.
+			specWarnDispatch:Show(args.sourceName)
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3")--快打斷
+		end
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
@@ -216,6 +244,15 @@ function mod:SPELL_AURA_REMOVED(args)
 		if DeadMarkers[args.destName] then
 			DeadMarkers[args.destName] = free(DeadMarkers[args.destName])
 		end
+	elseif args:IsSpellID(124821) then
+		timerQJ:Cancel(args.destName)
+		if QJMarkers[args.destName] then
+			QJMarkers[args.destName] = free(QJMarkers[args.destName])
+		end
+	elseif args:IsSpellID(124827) then
+		if args:IsPlayer() then
+			timerDQ:Cancel()
+		end
 	end
 end
 
@@ -223,6 +260,8 @@ function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(123735) then
 		warnScreech:Show()
 		timerScreechCD:Start()
+	elseif args:IsSpellID(124748) then
+		warnAmberTrap:Show(1)
 	elseif args:IsSpellID(125826) then
 		warnAmberTrap:Show()
 		specwarnAmberTrap:Show()
@@ -236,6 +275,9 @@ function mod:SPELL_CAST_SUCCESS(args)
 	elseif args:IsSpellID(125451) and not phase3Started then
 		phase3Started = true
 		self:UnregisterShortTermEvents()
+		if self.Options.RangeFrame then
+			DBM.RangeCheck:Hide()
+		end
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ptwo.mp3")
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
@@ -253,12 +295,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 end
 
 function mod:SPELL_CAST_START(args)
-	if args:IsSpellID(124077) then
-		if args.sourceGUID == UnitGUID("target") then--Only show warning for your own target.
-			specWarnDispatch:Show(args.sourceName)
-			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3")--快打斷
-		end
-	elseif args:IsSpellID(124849) then
+	if args:IsSpellID(124849) then
 		warnConsumingTerror:Show()
 		specWarnConsumingTerror:Show()
 		timerConsumingTerrorCD:Start()
@@ -277,6 +314,9 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 	if (msg == L.YellPhase3 or msg:find(L.YellPhase3)) and not phase3Started then
 		phase3Started = true
 		self:UnregisterShortTermEvents()
+		if self.Options.RangeFrame then
+			DBM.RangeCheck:Hide()
+		end
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ptwo.mp3")
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
@@ -351,7 +391,7 @@ end
 function mod:UNIT_HEALTH_FREQUENT_UNFILTERED(uId)
 	local cid = self:GetUnitCreatureId(uId)
 	local guid = UnitGUID(uId)
-	if cid == 62847 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.08 and not sentLowHP[guid] then
+	if cid == 62847 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.1 and not sentLowHP[guid] then
 		sentLowHP[guid] = true
 		self:SendSync("lowhealth", guid)
 	end	
