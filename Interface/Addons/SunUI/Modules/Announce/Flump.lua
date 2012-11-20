@@ -246,13 +246,13 @@ local function is_tank(name)
 end
 
 local function get_owner(guid, source)
-	if GetNumRaidMembers() > 0 then
+	if GetNumGroupMembers() > 0 then
 		for i=1,40 do
 			if UnitExists("raid"..i.."pet") and UnitGUID("raid"..i.."pet") == guid then
 				return UnitName("raid"..i)
 			end
 		end
-	elseif GetNumPartyMembers() > 0 then
+	elseif GetNumSubgroupMembers() > 0 then
 		for i=1,5 do
 			local unit = i < 5 and "party"..i or "player"
 			if UnitExists(unit.."pet") and UnitGUID(unit.."pet") == guid then
