@@ -165,6 +165,7 @@ function Module:OnInitialize()
 		local addon = CreateFrame('Frame')
 		addon.completed_quests = {}
 		addon.incomplete_quests = {}
+		local isRepeatableAuto = false --是否开启可重复交接任务自动交接（比如一包食材换徽记）
 
 		function addon:canAutomate ()
 		  if IsShiftKeyDown() then
@@ -225,13 +226,17 @@ function Module:OnInitialize()
 		  local button
 		  local text
 
-		  for i = 1, 32 do
+		  for i = 1, GetNumGossipActiveQuests()+GetNumGossipAvailableQuests() do
 			button = _G['GossipTitleButton' .. i]
 			if button:IsVisible() then
-			  text = self:strip_text(button:GetText())
-			  ABCDE={button:GetText(), text}
+			  text = self:strip_text(button:GetText())	  
 			  if button.type == 'Available' then
-				button:Click()
+				local isRepeatable = select(i+4,GetGossipAvailableQuests())
+				   if  isRepeatable and isRepeatableAuto then
+					   button:Click()
+				   elseif not isRepeatable then
+					   button:Click()
+				   end
 			  elseif button.type == 'Active' then
 				if self.completed_quests[text] then
 				  button:Click()
@@ -267,8 +272,13 @@ function Module:OnInitialize()
 
 		function addon:QUEST_COMPLETE (event)
 		  if not self:canAutomate() then return end
-		  if GetNumQuestChoices() <= 1 then
-			GetQuestReward(1)
+		  
+		  if GetNumQuestChoices() <= 1  then
+			--GetQuestReward(QuestFrameRewardPanel.itemChoice)
+			if ( GetNumQuestChoices() == 1 ) then 
+			  QuestInfoFrame.itemChoice = 1  
+			end
+			GetQuestReward(QuestInfoFrame.itemChoice)
 		  end
 		end
 

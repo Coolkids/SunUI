@@ -2,7 +2,9 @@ if not IsAddOnLoaded("NugRunning") then return end
 local S, C, L, DB = unpack(select(2, ...))
 local _
 --(\d+)(\s*,.+name\s*=\s*)\"[^"]+\"Ìæ»»\1\2GetSpellInfo\(\1\)
-
+NugRunningConfig.nameFont = { font = DB.Font, size = 12, alpha = 0.5 }
+NugRunningConfig.timeFont = { font = "interface\\addons\\SunUI\\Media\\font.ttf", size = 12, alpha = 1 }
+NugRunningConfig.stackFont = { font = DB.Font, size = 12 }
 -- Replace bar creation function
 ConstructTimerBar = function(width, height)
     local f = CreateFrame("Frame",nil,UIParent)
@@ -63,24 +65,30 @@ ConstructTimerBar = function(width, height)
     f.spellText:SetPoint("RIGHT", f.bar, "RIGHT",0,height/2)
     f.spellText.SetName = SpellTextUpdate
     
-	f.SetColor = TimerBarSetColor
 	local overlay = f.bar:CreateTexture(nil, "ARTWORK", nil, 3)
     overlay:SetTexture("Interface\\Tooltips\\UI-Tooltip-Background")
     overlay:SetVertexColor(0,0,0, 0.2)
     overlay:Hide()
     f.overlay = overlay
-    local status = f.bar:CreateTexture(nil, "ARTWORK", nil, 5)
-    status:SetTexture("Interface\\AddOns\\NugRunning\\white")
-    status:SetSize(width/2,height)
-    status:SetPoint("TOPLEFT", f.bar, "TOPLEFT",0,0)
-    status:Hide()
-    f.status = status
+	
+	f.SetColor = TimerBarSetColor
+	
+	local powertext = f.bar:CreateFontString()
+    powertext:SetFont(NugRunningConfig.stackFont.font,
+                      NugRunningConfig.stackFont.size-2)
+    powertext:SetPoint("BOTTOMLEFT", f.bar, "BOTTOMLEFT",13,0)
+
+    local sbg = f.bar:CreateTexture(nil, "ARTWORK", nil, 5)
+    sbg:SetTexture("Interface\\Tooltips\\UI-Tooltip-Background")
+    sbg:SetVertexColor(0,0,0, .6)
+    sbg:SetAllPoints(powertext)
+    powertext.bg = sbg
+    f.status = powertext
+	
 	
     local at = ic:CreateTexture(nil,"OVERLAY")
     at:SetTexture([[Interface\SpellActivationOverlay\IconAlert]])
     at:SetTexCoord(0.00781250,0.50781250,0.27734375,0.52734375)
-    --at:SetTexture([[Interface\AchievementFrame\UI-Achievement-IconFrame]])
-    --at:SetTexCoord(0,0.5625,0,0.5625)
     at:SetWidth(height*1.6)
     at:SetHeight(height*1.6)
     at:SetPoint("CENTER",f.icon,"CENTER",0,0)

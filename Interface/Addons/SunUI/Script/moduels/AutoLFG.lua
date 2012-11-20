@@ -37,7 +37,7 @@ function Module:OnInitialize()
 		ALFG:CreateBorder()
 		S.CreateBack(ALFG.durationBar)
 		S.CreateTop(ALFG.durationBar:GetStatusBarTexture(), 1,.7, 0, 1)
-		S.CreateSpark(ALFG.durationBar, 6, 6)
+		S.CreateMark(ALFG.durationBar)
 		
 		ALFG.durationTime:SetFontObject(GameFontNormalLarge)
 		do local f,s,g =  ALFG.durationTime:GetFont()

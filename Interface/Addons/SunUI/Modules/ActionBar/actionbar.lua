@@ -66,7 +66,7 @@ function Module:CreateBar1()
 			end
 		end
 	end
-	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui] hide; show")
+	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
 end
 function Module:CreateBar2()
 	local bar = CreateFrame("Frame","SunUIActionBar2",UIParent, "SecureHandlerStateTemplate")
