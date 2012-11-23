@@ -52,3 +52,40 @@ Delay:SetScript("OnEvent", function()
 	DEFAULT_CHAT_FRAME:AddMessage("|cffDDA0DDSun|r|cff44CCFFUI|r已加载，详细设置请输入/sunui")
 	DEFAULT_CHAT_FRAME:AddMessage("更新下载请到个人主页:http://url.cn/5YbLQe")
 end)
+local isCoolkid = S.IsCoolkid()
+local damageframe = {
+	"alDamageMeterFrame",
+	"SkadaBarWindowSkada",
+	"NumerationFrame",
+}
+if isCoolkid then
+	local Coolkid = CreateFrame("Frame")
+	Coolkid:RegisterEvent("PLAYER_ENTERING_WORLD")
+	Coolkid:RegisterEvent("PLAYER_REGEN_ENABLED")
+	Coolkid:RegisterEvent("PLAYER_REGEN_DISABLED")
+	Coolkid:SetScript("OnEvent", function(self, event)
+		if event == "PLAYER_ENTERING_WORLD" then
+			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+			for k,v in pairs(damageframe) do
+				if _G[v] and _G[v]:IsShown() then
+					S.FadeOutFrameDamage(_G[v], 1)
+				end
+			end
+		end
+		if event == "PLAYER_REGEN_DISABLED" then
+			for k,v in pairs(damageframe) do
+				if _G[v] and not _G[v]:IsShown() then
+					self:Show()
+					UIFrameFadeIn(self, 1, self:GetAlpha(), 1)	
+				end
+			end
+		end
+		if event == "PLAYER_REGEN_ENABLED" then
+			for k,v in pairs(damageframe) do
+				if _G[v] and _G[v]:IsShown() then
+					S.FadeOutFrameDamage(_G[v], 1)
+				end
+			end
+		end
+	end)
+end

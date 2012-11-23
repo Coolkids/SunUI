@@ -75,12 +75,14 @@ ConstructTimerBar = function(width, height)
 	
 	local powertext = f.bar:CreateFontString()
     powertext:SetFont(NugRunningConfig.stackFont.font,
-                      NugRunningConfig.stackFont.size-2)
-    powertext:SetPoint("BOTTOMLEFT", f.bar, "BOTTOMLEFT",13,0)
-
+                      NugRunningConfig.stackFont.size)
+    powertext:SetPoint("BOTTOMLEFT", f.bar, "BOTTOMRIGHT",2,0)
+	powertext:SetShadowColor(0, 0, 0)
+	powertext:SetShadowOffset(S.mult, -S.mult)
+	
     local sbg = f.bar:CreateTexture(nil, "ARTWORK", nil, 5)
     sbg:SetTexture("Interface\\Tooltips\\UI-Tooltip-Background")
-    sbg:SetVertexColor(0,0,0, .6)
+    sbg:SetVertexColor(0,0,0, 0)
     sbg:SetAllPoints(powertext)
     powertext.bg = sbg
     f.status = powertext
@@ -174,6 +176,23 @@ hooksecurefunc(NugRunning.TimerBar, "SetColor", function(self,r,g,b)
 	local s = self.bar:GetStatusBarTexture()
 	S.CreateTop(s, r, g, b)
 end)
+
+function NugRunning.TimerBar.SetPowerStatus(self, status, powerdiff)
+    if status == "HIGH" then
+        self.status:SetTextColor(.1,1,.1)
+        self.status:SetText("+"..powerdiff)
+        self.status:Show()
+        self.status.bg:Hide()
+    elseif status == "LOW" then
+        self.status:SetTextColor(1,.1,.1)
+        self.status:SetText(powerdiff)
+        self.status:Show()
+        self.status.bg:Hide()
+    else
+        self.status:Hide()
+        self.status.bg:Hide()
+    end
+end
 function NugRunning:DoNameplates()
 
 local next = next

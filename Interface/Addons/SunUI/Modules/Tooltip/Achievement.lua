@@ -41,9 +41,9 @@ local function hookSetHyperlink(tooltip, refString)
 		if earnedBy then
 			tooltip:AddLine(format(ACHIEVEMENT_EARNED_BY, earnedBy))
 			if not wasEarnedByMe then
-				tooltip:AddLine(format(ACHIEVEMENT_NOT_COMPLETED_BY, T.name))
-			elseif T.name ~= earnedBy then
-				tooltip:AddLine(format(ACHIEVEMENT_COMPLETED_BY, T.name))
+				tooltip:AddLine(format(ACHIEVEMENT_NOT_COMPLETED_BY, DB.PlayerName))
+			elseif DB.PlayerName ~= earnedBy then
+				tooltip:AddLine(format(ACHIEVEMENT_COMPLETED_BY, DB.PlayerName))
 			end
 		end
 	elseif numCriteria == 0 then

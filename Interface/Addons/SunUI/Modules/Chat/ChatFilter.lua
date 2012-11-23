@@ -6,8 +6,8 @@ function Module:OnInitialize()
 	if C["MiniDB"]["ChatFilter"] ~= true then return end
 	local Config = {
 		["Enabled"] = true, --Enable the ChatFilter. // 是否开启本插件
-		["ScanOurself"] = nil, --Scan ourself. // 是否扫描自己的聊天信息
-		["ScanFriend"] = nil, --Scan friends. // 是否扫描好友的聊天信息
+		["ScanOurself"] = false, --Scan ourself. // 是否扫描自己的聊天信息
+		["ScanFriend"] = false, --Scan friends. // 是否扫描好友的聊天信息
 		["ScanTeam"] = true, --Scan raid/party members. // 是否扫描队友的聊天信息
 		["ScanGuild"] = true, --Scan guildies. // 是否扫描公会成员的聊天信息
 		
@@ -385,7 +385,11 @@ function Module:OnInitialize()
 				end
 				if (guid and tonumber(guid) and tonumber(guid:sub(-12, -9), 16) >0) then return end
 			end
-			if (not Config.ScanOurself and UnitIsUnit(player,"player")) then return end
+			if not Config.ScanOurself then 
+				if player and UnitIsUnit(player,"player") then
+					return
+				end
+			end
 			if (not Config.ScanFriend and not CanComplainChat(lineId)) then return end
 			if (not Config.ScanTeam and (UnitInRaid(player) or UnitInParty(player))) then return end
 			if (not Config.ScanGuild and UnitIsInMyGuild(player)) then return end

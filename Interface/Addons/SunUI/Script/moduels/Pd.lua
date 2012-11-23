@@ -4,18 +4,18 @@ local dropdown
 -- up-to-date list of professions and the latest spellIds
 local PROFESSIONS = {
   {
-    80731, -- Alchemy
-    76666, -- Blacksmithing
-    74258, -- Enchanting
-    82774, -- Engineering
-    86008, -- Inscription
-    73318, -- Jewelcrafting
-    81199, -- Leatherworking
-    75156, -- Tailoring
+    105206, -- Alchemy
+    110396, -- Blacksmithing
+    110400, -- Enchanting
+    110403, -- Engineering
+    110417, -- Inscription
+    110420, -- Jewelcrafting
+    110423, -- Leatherworking
+    110426, -- Tailoring
   },
   {
-    88053, -- Cooking
-    74559, -- First Aid
+    104381, -- Cooking
+    110406, -- First Aid
   },
 }
 

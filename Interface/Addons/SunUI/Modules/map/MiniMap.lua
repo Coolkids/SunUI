@@ -1,32 +1,53 @@
 ﻿-- Engines
 local S, C, L, DB = unpack(select(2, ...))
 local _
-
- 
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("MiniMap", "AceTimer-3.0")
 function Module:OnEnable()
 	Minimap:SetMaskTexture("Interface\\ChatFrame\\ChatFrameBackground")
 	Minimap:SetFrameStrata("MEDIUM")
 	Minimap:ClearAllPoints()
 	Minimap:SetSize(120, 120)
+	
+	MoveHandle.Minimap = S.MakeMoveHandle(Minimap, L["小地图"], "Minimap")
 	--local h = CreateFrame("Frame", nil, Minimap)
 	--h:Point("TOPLEFT",1,-1)
 	--h:Point("BOTTOMRIGHT",-1,1)
 	Minimap:CreateShadow()
-	-- local PMinimap = CreateFrame("Frame", nil, Minimap)
-	-- PMinimap:SetFrameStrata("BACKGROUND")
-	-- PMinimap:SetFrameLevel(0)
-	-- PMinimap:SetPoint("TOPLEFT", Minimap, "TOPLEFT", -100, 100)
-	-- PMinimap:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMRIGHT", 100, -100)
-	-- PMinimap.texture = PMinimap:CreateTexture(nil)
-	-- PMinimap.texture:SetAllPoints(PMinimap)
-	-- PMinimap.texture:SetTexture("World\\GENERIC\\ACTIVEDOODADS\\INSTANCEPORTAL\\GENERICGLOW2.BLP")
-	-- PMinimap.texture:SetVertexColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
-	-- PMinimap.texture:SetBlendMode("ADD")
+	local PMinimap = CreateFrame("Frame", nil, Minimap)
+	PMinimap:SetFrameStrata("BACKGROUND")
+	PMinimap:SetFrameLevel(0)
+	PMinimap:SetPoint("TOPLEFT", Minimap, "TOPLEFT", -100, 100)
+	PMinimap:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMRIGHT", 100, -100)
+	PMinimap.texture = PMinimap:CreateTexture(nil)
+	PMinimap.texture:SetAllPoints(PMinimap)
+	PMinimap.texture:SetTexture("World\\GENERIC\\ACTIVEDOODADS\\INSTANCEPORTAL\\GENERICGLOW2.BLP")
+	PMinimap.texture:SetVertexColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
+	PMinimap.texture:SetBlendMode("ADD")
+	
+	PMinimap.texture.anim = PMinimap.texture:CreateAnimationGroup()
+	
+	PMinimap.texture.anim.fadeout = PMinimap.texture.anim:CreateAnimation("ALPHA")
+	PMinimap.texture.anim.fadeout:SetChange(-1)
+	PMinimap.texture.anim.fadeout:SetOrder(1)
+	PMinimap.texture.anim.fadeout:SetDuration(3)
 
-
-	MoveHandle.Minimap = S.MakeMoveHandle(Minimap, L["小地图"], "Minimap")
-
+	PMinimap.texture.anim.fade = PMinimap.texture.anim:CreateAnimation("ALPHA")
+	PMinimap.texture.anim.fade:SetChange(0)
+	PMinimap.texture.anim.fade:SetOrder(2)
+	PMinimap.texture.anim.fade:SetDuration(2)
+	
+	PMinimap.texture.anim.fadein = PMinimap.texture.anim:CreateAnimation("ALPHA")
+	PMinimap.texture.anim.fadein:SetChange(1)
+	PMinimap.texture.anim.fadein:SetOrder(3)
+	PMinimap.texture.anim.fadein:SetDuration(3)
+	
+	PMinimap.texture.anim.fade2 = PMinimap.texture.anim:CreateAnimation("ALPHA")
+	PMinimap.texture.anim.fade2:SetChange(0)
+	PMinimap.texture.anim.fade2:SetOrder(4)
+	PMinimap.texture.anim.fade2:SetDuration(2)
+	
+	PMinimap.texture.anim:SetLooping("REPEAT")
+	PMinimap.texture.anim:Play()
 
 	--LFGSearchStatus:SetClampedToScreen(true)
 	--LFGDungeonReadyStatus:SetClampedToScreen(true)
@@ -118,21 +139,21 @@ function Module:OnEnable()
 
 	local menuFrame = CreateFrame("Frame", "MinimapRightClickMenu", UIParent, "UIDropDownMenuTemplate")
 	local menuList = {
-		{text = L["角色信息"], func = function() ToggleCharacter("PaperDollFrame") end},
-		{text = L["法术书"], func = function() ToggleSpellBook("spell") end},
-		{text = L["天赋"], func = function() ToggleTalentFrame() end},
-		{text = L["成就"], func = function() ToggleAchievementFrame() end},
-		{text = L["任务日志"], func = function() ToggleFrame(QuestLogFrame) end},
-		{text = L["社交"], func = function() ToggleFriendsFrame(1) end},
-		{text = L["公会"], func = function() ToggleGuildFrame(1) end},
-		{text = "PvP", func = function() ToggleFrame(PVPFrame) end},
-		{text = L["地城查找器"], func = function() ToggleFrame(PVEFrame) end},
-		{text = L["帮助"], func = function() ToggleHelpFrame() end},
-		{text = L["行事历"], func = function() if(not CalendarFrame) then LoadAddOn("Blizzard_Calendar") end Calendar_Toggle() end},
-		{text = L["地城手册"],func = function() ToggleEncounterJournal() end},
-		{text = "Bags",func = function() ToggleAllBags() end},
-		{text = "系统菜单",func = function() ToggleFrame(GameMenuFrame) end},
-		{text = "坐骑",func = function() TogglePetJournal() end},
+		{text = CHARACTER_BUTTON, func = function() ToggleCharacter("PaperDollFrame") end},
+		{text = SPELLBOOK_ABILITIES_BUTTON, func = function() ToggleSpellBook("spell") end},
+		{text = TALENTS_BUTTON, func = function() ToggleTalentFrame() end},
+		{text = ACHIEVEMENT_BUTTON, func = function() ToggleAchievementFrame() end},
+		{text = QUESTLOG_BUTTON, func = function() ToggleFrame(QuestLogFrame) end},
+		{text = SOCIAL_BUTTON, func = function() ToggleFriendsFrame(1) end},
+		{text = GUILD, func = function() ToggleGuildFrame(1) end},
+		{text = PLAYER_V_PLAYER, func = function() ToggleFrame(PVPFrame) end},
+		{text = LFG_TITLE, func = function() ToggleFrame(PVEFrame) end},
+		{text = HELP_BUTTON, func = function() ToggleHelpFrame() end},
+		{text = SLASH_CALENDAR2:gsub("/(.*)","%1"), func = function() if(not CalendarFrame) then LoadAddOn("Blizzard_Calendar") end Calendar_Toggle() end},
+		{text = PET_JOURNAL,func = function() TogglePetJournal() end},
+		{text = ENCOUNTER_JOURNAL,func = function() ToggleEncounterJournal() end},
+		{text = MAINMENU_BUTTON,func = function() ToggleFrame(GameMenuFrame) end},
+		{text = INVTYPE_BAG,func = function() ToggleAllBags() end},
 	}
 
 	Minimap:SetScript("OnMouseUp", function(self, button)
