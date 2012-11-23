@@ -3,6 +3,7 @@ local Core = LibStub("AceAddon-3.0"):GetAddon("SunUI")
 local Module = Core:NewModule("AFKLock")
 local resolution = GetCVar('gxResolution')
 local screenheight = tonumber(string.match(resolution, "%d+x(%d+)"))
+local isAfk = false
 local function AltzFrame()
 	--新建框体
 	local altztop = CreateFrame("Frame", nil, WorldFrame)
@@ -74,14 +75,17 @@ local function AltzFrame()
 	launcher:Hide()
 	--滚起来
 	launcher:SetScript("OnEvent", function(self)
-		if UnitIsAFK("player") then 
+		if UnitIsAFK("player") then
 			altztop:Show()
 			outaltz:Show()
 			S.FadeOutFrameDamage(UIParent, 0.5)
 			UIFrameFadeIn(altztop, 1, 0, 1)
+			isAfk = true
 		else
-			S.FadeOutFrameDamage(altztop, 0.5)
-			UIFrameFadeIn(UIParent, 1, UIParent:GetAlpha(), 1)
+			if isAfk then 
+				S.FadeOutFrameDamage(altztop, 0.5)
+				UIFrameFadeIn(UIParent, 1, UIParent:GetAlpha(), 1)
+			end
 		end
 	end)
 end

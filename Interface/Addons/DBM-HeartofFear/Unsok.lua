@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8132 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8147 $"):sub(12, -3))
 mod:SetCreatureID(62511)
 mod:SetModelID(43126)
 mod:SetZone()
@@ -43,7 +43,7 @@ local warnAmberCarapace			= mod:NewTargetAnnounce(122540, 4)--Monstrosity Shield
 local warnMassiveStomp			= mod:NewCastAnnounce(122408, 3)
 local warnAmberExplosionSoon	= mod:NewSoonAnnounce(122402, 3)
 local warnFling					= mod:NewSpellAnnounce(122413, 3)--think this always does his aggro target but not sure. If it does random targets it will need target scanning.
---local warnInterruptsAvailable	= mod:NewAnnounce("warnInterruptsAvailable", 1, 122398)
+local warnInterruptsAvailable	= mod:NewAnnounce("warnInterruptsAvailable", 1, 122398)
 
 --Boss
 local specwarnAmberScalpel			= mod:NewSpecialWarningYou(121994)
@@ -83,6 +83,8 @@ local timerStruggleForControl	= mod:NewTargetTimer(5, 122395)
 local timerMassiveStompCD		= mod:NewCDTimer(18, 122408)--18-25 seconds variation
 local timerFlingCD				= mod:NewCDTimer(25, 122413)--25-40sec variation.
 local timerAmberExplosionAMCD	= mod:NewTimer(46, "timerAmberExplosionAMCD", 122402)--Special timer just for amber monstrosity. easier to cancel, easier to tell apart. His bar is the MOST important and needs to be seperate from any other bar option.
+
+local berserkTimer				= mod:NewBerserkTimer(600)
 
 local countdownAmberExplosionAM	= mod:NewCountdown(46, 122402)
 
@@ -143,6 +145,15 @@ function mod:ScalpelTarget()
 	end
 end
 
+local function warnAmberExplosionCast(spellId, source)
+	if #canInterrupt == 0 then--This will never happen if fired by "InterruptAvailable" sync since it should always be 1 or greater. This is just a fallback if contructs > 0 and we scheduled "warnAmberExplosionCast" there
+		specwarnAmberExplosion:Show(spellId == 122402 and Monstrosity or MutatedConstruct)--No interupts, warn the raid to prep for aoe damage with beware! alert.
+	else--Interrupts available, lets call em out as a great tool to give raid leader split second decisions on who to allocate to the task (so they don't all waste it on same target and not have for next one).
+		warnInterruptsAvailable:Show(spellId == 122402 and Monstrosity or MutatedConstruct, table.concat(canInterrupt, "<, >"))
+	end
+	table.wipe(canInterrupt)
+end
+
 function mod:OnCombatStart(delay)
 	warnedWill = true--avoid wierd bug on pull
 	buildGuidTable()
@@ -155,6 +166,9 @@ function mod:OnCombatStart(delay)
 	timerAmberScalpelCD:Start(9-delay)
 	timerReshapeLifeCD:Start(20-delay)
 	timerParasiticGrowthCD:Start(23.5-delay)
+	if not self:IsDifficulty("lfr25") then
+		berserkTimer:Start(-delay)
+	end
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:SetHeader(L.WillPower)--This is a work in progress
 		DBM.InfoFrame:Show(5, "playerpower", 1, ALTERNATE_POWER_INDEX, nil, nil, true)--At a point i need to add an arg that lets info frame show the 5 LOWEST not the 5 highest, instead of just showing 10
@@ -340,7 +354,7 @@ function mod:SPELL_CAST_START(args)
 			specwarnAmberExplosion:Show(args.sourceName)
 		else--There is a construct, lets pass it to interrupt checker to determine if we still fire specwarnAmberExplosion
 			self:Unschedule(warnAmberExplosionCast)
-			self:Schedule(0.5, warnAmberExplosionCast, 122402)
+			self:Schedule(0.5, warnAmberExplosionCast, 122402, "Contructs")
 		end
 	elseif args:IsSpellID(122408) then
 		warnMassiveStomp:Show()
@@ -398,15 +412,6 @@ function mod:UNIT_POWER(uId)
 	end
 end
 
-local function warnAmberExplosionCast(spellId)
-	if #canInterrupt == 0 then--This will never happen if fired by "InterruptAvailable" sync since it should always be 1 or greater. This is just a fallback if contructs > 0 and we scheduled "warnAmberExplosionCast" there
-		specwarnAmberExplosion:Show(spellId == 122402 and Monstrosity or MutatedConstruct)--No interupts, warn the raid to prep for aoe damage with beware! alert.
-	else--Interrupts available, lets call em out as a great tool to give raid leader split second decisions on who to allocate to the task (so they don't all waste it on same target and not have for next one).
---		warnInterruptsAvailable:Show(spellId == 122402 and Monstrosity or MutatedConstruct, table.concat(canInterrupt, "<, >"))
-	end
-	table.wipe(canInterrupt)
-end
-
 function mod:OnSync(msg, str)
 	if not guidTableBuilt then
 		buildGuidTable()
@@ -420,6 +425,6 @@ function mod:OnSync(msg, str)
 	if msg == "InterruptAvailable" and guids[guid] and spellId then
 		canInterrupt[#canInterrupt + 1] = guids[guid]
 		self:Unschedule(warnAmberExplosionCast)
-		self:Schedule(0.5, warnAmberExplosionCast, spellId)
+		self:Schedule(0.5, warnAmberExplosionCast, spellId, "Interrupt")
 	end
 end

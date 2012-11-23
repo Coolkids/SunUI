@@ -135,8 +135,8 @@ function AB:Style(button)
 	if not button.shadow then
 		if not totem then
 			if not flyout then
-				button:SetWidth(C["ActionBarDB"]["ButtonSize"])
-				button:SetHeight(C["ActionBarDB"]["ButtonSize"])
+				--button:SetWidth(C["ActionBarDB"]["ButtonSize"])
+				--button:SetHeight(C["ActionBarDB"]["ButtonSize"])
 			end
 
 			button:CreateShadow("Background")

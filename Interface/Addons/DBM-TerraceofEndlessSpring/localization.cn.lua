@@ -56,7 +56,8 @@ L:SetTimerLocalization({
 L:SetOptionLocalization({
 	warnHideOver			= "警告：当$spell:123244结束时",
 	timerSpecialCD			= "计时器：下一次特殊技能",
-	SoundWOP				= "语音警告：重要技能"
+	SoundWOP				= "语音警告：重要技能",
+	SetIconOnGuard		= "为$journal:6224设置团队标记"
 })
 
 L:SetMiscLocalization{

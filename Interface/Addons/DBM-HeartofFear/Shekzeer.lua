@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8127 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8137 $"):sub(12, -3))
 mod:SetCreatureID(62837)--62847 Dissonance Field, 63591 Kor'thik Reaver, 63589 Set'thik Windblade
 mod:SetModelID(42730)
 mod:SetZone()
@@ -260,10 +260,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(123735) then
 		warnScreech:Show()
 		timerScreechCD:Start()
-	elseif args:IsSpellID(124748) then
-		warnAmberTrap:Show(1)
 	elseif args:IsSpellID(125826) then
-		warnAmberTrap:Show()
 		specwarnAmberTrap:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_xjwc.mp3") --陷阱完成
 	elseif args:IsSpellID(124845) then
@@ -397,9 +394,16 @@ function mod:UNIT_HEALTH_FREQUENT_UNFILTERED(uId)
 	end	
 	if uId == "player" then
 		if UnitDebuff("player", GetSpellInfo(123184)) then
-			if UnitHealth(uId) / UnitHealthMax(uId) <= 0.5 and not warnedhp then
-				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\checkhp.mp3")--注意血量
-				warnedhp = true
+			if self:IsDifficulty("heroic10", "heroic25") then
+				if UnitHealth(uId) / UnitHealthMax(uId) <= 0.8 and not warnedhp then
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\checkhp.mp3")--注意血量
+					warnedhp = true
+				end
+			else
+				if UnitHealth(uId) / UnitHealthMax(uId) <= 0.5 and not warnedhp then
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\checkhp.mp3")
+					warnedhp = true
+				end
 			end
 		else
 			warnedhp = false

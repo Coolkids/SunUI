@@ -207,10 +207,13 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnLightningPrison:Show()
 			yellLightningPrison:Yell()
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runout.mp3") --跑開人群
+			sndWOP:Schedule(0.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Schedule(2.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		end
 		if self.Options.HudMAP then
 			if args:IsPlayer() then
-				LightningPrisonCastMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("targeting", args.destName, 8, 3, 1, 1, 1, 1):RegisterForAlerts():Appear())
+				LightningPrisonCastMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("timer", args.destName, 8, 2.8, 1, 1, 1, 0.2):RegisterForAlerts():Rotate(360, 3):Appear())
 			else
 				LightningPrisonCastMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("timer", args.destName, 8, 2.8, 1, 1, 1, 1):RegisterForAlerts():Rotate(360, 3):Appear())
 			end

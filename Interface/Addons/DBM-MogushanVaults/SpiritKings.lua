@@ -3,7 +3,7 @@ local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndDSA	= mod:NewSound(nil, "SoundDSA", true)
 
-mod:SetRevision(("$Revision: 8130 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8143 $"):sub(12, -3))
 mod:SetCreatureID(60701, 60708, 60709, 60710)--Adds: 60731 Undying Shadow, 60958 Pinning Arrow
 mod:SetModelID(41813)
 mod:SetZone()
@@ -37,11 +37,11 @@ local warnUndyingShadows		= mod:NewSpellAnnounce(117506, 3)--Target scanning?
 local warnFixate				= mod:NewTargetAnnounce(118303, 4)--Maybe spammy late fight, if zian is first boss you get? (adds are immortal, could be many up)
 local warnShieldOfDarkness		= mod:NewTargetAnnounce(117697, 4)
 --Meng
-local warnCrazyThought			= mod:NewCastAnnounce(117833, 2, nil, false)--Just doesn't seem all that important right now.
+local warnCrazyThought			= mod:NewCastAnnounce(117833, 2, nil, nil, false)--Just doesn't seem all that important right now.
 local warnMaddeningShout		= mod:NewSpellAnnounce(117708, 4)
 local warnCrazed				= mod:NewTargetAnnounce(117737, 3)--Basically stance change
 local warnCowardice				= mod:NewTargetAnnounce(117756, 3)--^^
-local warnDelirious				= mod:NewTargetAnnounce(117837, 3, nil, mod:CanRemoveEnrage())--Heroic Ability
+local warnDelirious				= mod:NewTargetAnnounce(117837, 4, nil, mod:CanRemoveEnrage() or mod:IsTank())--Heroic Ability
 --Qiang
 local warnAnnihilate			= mod:NewCastAnnounce(117948, 4)
 local warnFlankingOrders		= mod:NewSpellAnnounce(117910, 4)
@@ -178,6 +178,20 @@ function mod:OnCombatStart(delay)
 	shadowdd = 0
 	ctdd = 0
 	fixHdead = 0
+	qiangActive = true
+	timerAnnihilateCD:Start(10.5)
+	timerFlankingOrdersCD:Start(25)
+	sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zwjh.mp3") --戰王激活
+	sndWOP:Schedule(21, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_bczb.mp3")
+	if self:IsDifficulty("heroic10", "heroic25") then
+		timerImperviousShieldCD:Start(40.7)
+		sndDSA:Schedule(37.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zwhd.mp3") -- 戰王護盾準備
+		self:Schedule(37.5, function()
+			if UnitName("target") == Qiang then
+				specWarnDSoon:Show()
+			end
+		end)
+	end
 end
 
 function mod:OnCombatEnd()
@@ -234,7 +248,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_hqcx.mp3") --黑球出現
 		end
 		if self.Options.HudMAP2 then
-			local spelltext = GetSpellInfo(118303)
+			local spelltext = GetSpellInfo(118303).."-"..args.destName
 			FixatelMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("targeting", args.destName, 3, nil, 1, 0, 0, 1):SetLabel(spelltext))
 		end
 	elseif args:IsSpellID(118135) then
@@ -355,7 +369,7 @@ function mod:SPELL_CAST_START(args)
 		if mengActive then
 			if countxk == 1 then
 				timerMaddeningShoutCD:Start()
-				sndWOP:Schedule(42, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jknh.mp3")
+				sndWOP:Schedule(40, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jknh.mp3")
 			else
 				timerMaddeningShoutCD:Start(50)
 				sndWOP:Schedule(45, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jknh.mp3")
@@ -481,7 +495,7 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, _, _, _, target)
 			warnPillage:Show(target)
 			if self.Options.HudMAP then
 				local spelltext = GetSpellInfo(118047)
-				PillageMarkers[target] = register(DBMHudMap:PlaceStaticMarkerOnPartyMember("highlight", target, 9, 3, 0, 1, 0, 1):RegisterForAlerts(true, spelltext))
+				PillageMarkers[target] = register(DBMHudMap:PlaceStaticMarkerOnPartyMember("highlight", target, 9, 3, 0, 1, 0, 0.2):RegisterForAlerts(true, spelltext))
 			end
 			if target == UnitName("player") then
 				specWarnPillage:Show()
@@ -539,11 +553,11 @@ function mod:CHAT_MSG_MONSTER_YELL(msg, boss)
 	elseif boss == Meng then
 		mengActive = true
 		if self:IsDifficulty("heroic10", "heroic25") then
-			timerMaddeningShoutCD:Start(20.5)
-			sndWOP:Schedule(15, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jknh.mp3")
-		else
 			timerMaddeningShoutCD:Start(40)
 			sndWOP:Schedule(35, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jknh.mp3")
+		else
+			timerMaddeningShoutCD:Start(20.5)
+			sndWOP:Schedule(15, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jknh.mp3")
 		end
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kwjh.mp3") --狂王激活
 		if self:IsDifficulty("heroic10", "heroic25") then
@@ -557,6 +571,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg, boss)
 			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ddzb.mp3") --打斷準備
 		end
 	elseif boss == Qiang then
+	--[[
 		qiangActive = true
 		timerAnnihilateCD:Start(10.5)
 		timerFlankingOrdersCD:Start(25)
@@ -570,7 +585,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg, boss)
 					specWarnDSoon:Show()
 				end
 			end)
-		end
+		end]]
 	elseif boss == Subetai then
 		subetaiActive = true
 		timerVolleyCD:Start(5)

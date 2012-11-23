@@ -66,6 +66,7 @@ local dpssendn = 0
 
 local incombat = false
 local cansend = false
+local scaned = false
 
 --local countdownCrossedOver			= mod:NewCountdown(29, 116161)
 local berserkTimer					= mod:NewBerserkTimer(360)
@@ -446,6 +447,7 @@ function mod:OnSync(msg, guid)
 		totemn = totemn + 1
 		warnTotem:Show(totemn)
 		cansend = false
+		scaned = false
 		
 		if incombat then
 			if self.Options.GoTotemClient then
@@ -454,6 +456,7 @@ function mod:OnSync(msg, guid)
 					if UnitDebuff("player", GetSpellInfo(117723)) then
 						for i = 1, 40 do
 							if select(11, UnitDebuff("player", i)) == 117723 then
+								scaned = true
 								_, _, _, _, _, duration, expires, _, _ = UnitDebuff("player", i)
 								if expires - GetTime() < 6 then
 									cansend = true
@@ -461,6 +464,7 @@ function mod:OnSync(msg, guid)
 								break
 							end
 						end
+						if not scaned then cansend = true end
 					else
 						cansend = true
 					end

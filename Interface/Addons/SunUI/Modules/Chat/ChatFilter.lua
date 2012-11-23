@@ -108,6 +108,8 @@ function Module:OnInitialize()
 			"FishUI",
 			"準備開火",
 			"代刷",
+			"失誤於",
+			"戰鬥結束報告",
 		},
 	}
 	-----------------------------------------------------------------------
@@ -557,7 +559,7 @@ function Module:OnInitialize()
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_ACHIEVEMENT", ChatFilter_Achievement)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD_ACHIEVEMENT", ChatFilter_Achievement)
 	local function KillRaidAlerter(self, event, msg)
-		if strmatch(msg, "^(%*%*).+(%*%*)$") then
+		if strmatch(msg, "^(%*%*).+(%*%*)$") or strmatch(msg, "失誤於") or strmatch(msg, "FishUI") then
 			return true
 		end
 	end

@@ -174,6 +174,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif args:IsSpellID(116994) then--Phase 3 begin/Phase 2 end
 		focusActivated = 0
 		phase2Started = false
+		protectorCount = 0
 --		warnPhase3:Show()
 --		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\pthree.mp3") --P3
 	elseif args:IsSpellID(117878) and args:IsPlayer() then
