@@ -10,6 +10,12 @@ local ShowReadyCheckHook = function(self, initiator, timeLeft)
 end
 hooksecurefunc("ShowReadyCheck", ShowReadyCheckHook)
 
+hooksecurefunc("DoEmote", function(emote)
+	if emote == "READ" and UnitChannelInfo("player") then
+		CancelEmote()
+	end
+end)
+
 ---------------- > SetupUI
 SetCVar("screenshotQuality", 7)
 if GetCVar("scriptProfile") == "1" then SetCVar("scriptProfile", 0) end

@@ -51,7 +51,7 @@ cast.setBarTicks = function(castBar, ticknum)
 end
 
 cast.OnCastbarUpdate = function(self, elapsed)
-if not self.Lag then self.Lag = 0 end  ------------------------------------AND THIS SDALKSJD:LKJASLDKJA:LSKDJ:LKASJD:
+--if not self.Lag then self.Lag = "" end  ------------------------------------AND THIS SDALKSJD:LKJASLDKJA:LSKDJ:LKASJD:
 if GetNetStats() == 0 then return end -- test
 	local currentTime = GetTime()
 	if self.casting or self.channeling then

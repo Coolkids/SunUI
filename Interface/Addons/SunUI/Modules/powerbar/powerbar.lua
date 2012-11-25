@@ -306,10 +306,7 @@ function Module:CreateCombatPoint()
 			if DB.MyClass == "DRUID" then 
 				local form = GetShapeshiftFormID()
 				if(not form) then
-					local ptt = GetSpecialization()
-					if(ptt and ptt == 1) then -- player has balance spec
-						self:Hide()
-					end
+					self:Hide()
 				elseif(form ~= CAT_FORM) then
 					self:Hide()
 				else
@@ -336,6 +333,7 @@ function Module:CreateEclipse()
 	local ECLIPSE_BAR_LUNAR_BUFF_ID = ECLIPSE_BAR_LUNAR_BUFF_ID
 	local SPELL_POWER_ECLIPSE = SPELL_POWER_ECLIPSE
 	local MOONKIN_FORM = MOONKIN_FORM
+	local showBar = false
 	local eb = CreateFrame('Frame', nil, UIParent)
 	eb:SetSize(C["Width"], C["Height"])
 	MoveHandle.PowerBar = S.MakeMove(eb, "SunUIPowerBar", "PowerBar", C["Scale"])
@@ -347,6 +345,7 @@ function Module:CreateEclipse()
 	lb:SetStatusBarColor(0.27, 0.47, 0.74)
 	local s = lb:GetStatusBarTexture()
 	S.CreateTop(s, 0.27, 0.47, 0.74)
+	S.CreateMark(lb)
 	eb.LunarBar = lb
 	local sb = CreateFrame('StatusBar', nil, eb)
 	sb:SetPoint('LEFT', lb:GetStatusBarTexture(), 'RIGHT', 0, 0)
@@ -373,18 +372,15 @@ function Module:CreateEclipse()
 		if event == "ECLIPSE_DIRECTION_CHANGE" or event == "PLAYER_ENTERING_WORLD" then
 			local dir = GetEclipseDirection()
 			if dir=="sun" then
-				ebInd:SetText("|cff4478BC>>>|r")
+				ebInd:SetText("|cff4478BC-->|r")
 			elseif dir=="moon" then
-				ebInd:SetText("|cffE5994C<<<|r")
+				ebInd:SetText("|cffE5994C<--|r")
 			end
 		end
 		if event == "PLAYER_TALENT_UPDATE" or event == "UPDATE_SHAPESHIFT_FORM" or event == "PLAYER_REGEN_DISABLED" then
 			local form = GetShapeshiftFormID()
 			if(not form) then
-				local ptt = GetSpecialization()
-				if(ptt and ptt == 1) then -- player has balance spec
-					showBar = true
-				end
+				showBar = false
 			elseif(form == MOONKIN_FORM) then
 				showBar = true
 			end
@@ -396,6 +392,9 @@ function Module:CreateEclipse()
 				end
 			else
 				eb:Hide()
+				if eb:GetAlpha() > 1 then
+					UIFrameFadeOut(eb, 1, eb:GetAlpha(), 0)
+				end
 			end
 		end
 		if event == "UNIT_POWER" then
@@ -429,7 +428,7 @@ function Module:CreateEclipse()
 			end
 		end
 		if C["Fade"] then 
-			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" or event == "UPDATE_SHAPESHIFT_FORM" then
+			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" then
 				S.FadeOutFrameDamage(eb, 1)
 			end
 		end

@@ -629,7 +629,7 @@ local menu = function (self)
 end
 
 local function unitFrameStyleSetup(button)
-
+	button:SetFrameLevel(3)
 	button.menu = menu
 
     local bg = CreateFrame("Frame", nil, button)
@@ -637,19 +637,13 @@ local function unitFrameStyleSetup(button)
     bg:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT")
     bg:SetFrameLevel(3)
     if ns.db.mode then 
-		bg:SetBackdrop(nil)
-		local gradient = button:CreateTexture(nil, "BACKGROUND")
-		gradient:SetPoint("TOPLEFT")
-		gradient:SetPoint("BOTTOMRIGHT")
-		gradient:SetTexture(DB.Statusbar)
-		gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+
 	else
-		S.CreateBD(bg)
+		--S.CreateBD(bg)
 		--bg:SetBackdrop(backdrop)
 		--bg:SetBackdropColor(0, 0, 0, .5)
 	end
 	button.BG = bg
-
     local Border = CreateFrame("Frame", nil, button)
     Border:SetPoint("TOPLEFT", button, "TOPLEFT")
     Border:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT")
@@ -662,11 +656,20 @@ local function unitFrameStyleSetup(button)
 
     local Health = CreateFrame"StatusBar"
     Health:SetParent(button)
-    Health.bg = Health:CreateTexture(nil, "BORDER")
-    Health.bg:SetAllPoints(Health)
+	Health:SetFrameLevel(1)
+	Health.bd = CreateFrame("Frame", nil, Health)
+	Health.bd:SetFrameLevel(Health:GetFrameLevel()+2)
+    Health.bg = Health.bd:CreateTexture(nil, "BACKGROUND")
+    Health.bg:SetAllPoints(Health.bd)
 	button.HealthBar = Health
-
-    local name = button.BG:CreateFontString(nil, "OVERLAY")
+	button.HealthBar.bd = Health.bd
+	
+	local help = CreateFrame("Frame", nil, button)
+	help:SetAllPoints(Health)
+    help:SetFrameLevel(4)
+	button.help = help
+	
+    local name = help:CreateFontString(nil, "OVERLAY")
     name:SetPoint("CENTER")
     name:SetJustifyH("CENTER")
     name:SetFont(ns.db.fontPath, ns.db.fontsize, ns.db.outline)
@@ -674,7 +677,7 @@ local function unitFrameStyleSetup(button)
     name:SetWidth(ns.db.width)
     button.Name = name
 	
-	local StatusText = button.HealthBar:CreateFontString(nil, "OVERLAY")
+	local StatusText = help:CreateFontString(nil, "OVERLAY")
     StatusText:SetPoint("TOP", button.Name, "BOTTOM", 0, -2)
     StatusText:SetFont(ns.db.fontPath, ns.db.fontsizeEdge, ns.db.outline)
 	StatusText:SetShadowOffset(ns.db.shadowoffset, -ns.db.shadowoffset)
@@ -707,7 +710,7 @@ local function unitFrameStyleSetup(button)
     threat:SetBackdropBorderColor(0, 0, 0, 1)
     --button.ThreatBorder = threat.shadow
 	button.ThreatBorder = threat
-    local hl = button.HealthBar:CreateTexture(nil, "OVERLAY")
+    local hl = help:CreateTexture(nil, "OVERLAY")
     hl:SetAllPoints(button)
     hl:SetTexture([=[Interface\AddOns\SunUI_Freebgrid\media\white.tga]=])
     hl:SetVertexColor(1, 1, 1, .1)
@@ -721,7 +724,7 @@ local function unitFrameStyleSetup(button)
     Gcd:SetStatusBarColor(.4, .5, .4, .6)
 	Gcd:SetMinMaxValues(0, 1)
     Gcd:SetValue(0)
-    Gcd:SetFrameLevel(4)
+    Gcd:SetFrameLevel(5)
     Gcd:SetOrientation(ns.db.porientation)
     Gcd:Hide()
     button.Gcd = Gcd	
@@ -735,47 +738,47 @@ local function unitFrameStyleSetup(button)
     fBorder:Hide()
     button.FocusHighlight = fBorder
 
-	local dispelicon = button.HealthBar:CreateTexture(nil, 'OVERLAY')
+	local dispelicon = help:CreateTexture(nil, 'OVERLAY')
     dispelicon:SetPoint("RIGHT", button, -3, 0)
     dispelicon:SetSize(ns.db.dispeliconsize, ns.db.dispeliconsize)
     button.DispelIcon = dispelicon
 	
-    local ricon = button.HealthBar:CreateTexture(nil, 'OVERLAY')
+    local ricon = help:CreateTexture(nil, 'OVERLAY')
     ricon:SetPoint("TOPRIGHT", button, -15, 6)
     ricon:SetSize(ns.db.leadersize + 2, ns.db.leadersize + 2)
 	ricon:SetTexture([[Interface\TargetingFrame\UI-RaidTargetingIcons]])
     button.RaidIcon = ricon
 
-    local Leader = button.HealthBar:CreateTexture(nil, "OVERLAY")
+    local Leader = help:CreateTexture(nil, "OVERLAY")
     Leader:SetPoint("TOPLEFT", button, 0, 8)
     Leader:SetSize(ns.db.leadersize, ns.db.leadersize )
 	Leader:SetTexture([[Interface\GroupFrame\UI-Group-LeaderIcon]])
 	button.LeaderIcon = Leader
 
-    local Assistant = button.HealthBar:CreateTexture(nil, "OVERLAY")
+    local Assistant = help:CreateTexture(nil, "OVERLAY")
     Assistant:SetPoint("TOPLEFT", button, 0, 8)
     Assistant:SetSize(ns.db.leadersize, ns.db.leadersize)
 	Assistant:SetTexture([[Interface\GroupFrame\UI-Group-AssistantIcon]])
 	button.AssistantIcon = Assistant
 
-    local masterlooter = button.HealthBar:CreateTexture(nil, 'OVERLAY')
+    local masterlooter = help:CreateTexture(nil, 'OVERLAY')
     masterlooter:SetSize(ns.db.leadersize, ns.db.leadersize)
     masterlooter:SetPoint('LEFT', button.LeaderIcon, 'RIGHT')
 	masterlooter:SetTexture([[Interface\GroupFrame\UI-Group-MasterLooter]])
     button.MasterLooterIcon = masterlooter
 
-	local roleicon = button.HealthBar:CreateTexture(nil, 'OVERLAY')
+	local roleicon = help:CreateTexture(nil, 'OVERLAY')
 	roleicon:SetSize(ns.db.leadersize + 4, ns.db.leadersize + 4)
 	roleicon:SetPoint('RIGHT', button, 'LEFT', ns.db.leadersize, 0)
 	button.RoleIcon = roleicon
 
-	local ResurrectIcon = button.HealthBar:CreateTexture(nil, 'OVERLAY')
+	local ResurrectIcon = help:CreateTexture(nil, 'OVERLAY')
     ResurrectIcon:SetPoint("TOP", button, 0, -2)
     ResurrectIcon:SetSize(ns.db.leadersize + 6, ns.db.leadersize + 6)
 	ResurrectIcon:SetTexture([[Interface\RaidFrame\Raid-Icon-Rez]])
 	button.ResurrectIcon = ResurrectIcon
 
-    local ReadyCheck = button.HealthBar:CreateTexture(nil, "OVERLAY")
+    local ReadyCheck = help:CreateTexture(nil, "OVERLAY")
     ReadyCheck:SetPoint("TOP", button)
     ReadyCheck:SetSize(ns.db.leadersize + 4, ns.db.leadersize + 4)
 	button.readyCheckIcon = ReadyCheck
@@ -1316,15 +1319,20 @@ end
 function ns:UpdateHealthBarLayout(self)   --ÑשÊ½
 	local healthBar = self.HealthBar
 	local power = self.PowerBar
-    healthBar:SetStatusBarTexture(ns.db.texturePath)
-    healthBar:SetOrientation(ns.db.orientation)
     
+    healthBar:SetOrientation(ns.db.orientation)
+	S.CreateMark(healthBar)
 	if ns.db.mode then
-		healthBar:SetReverseFill(true)
-		healthBar.bg:SetTexture(nil)
-	else
-		healthBar:SetReverseFill(false)
+		healthBar:SetStatusBarTexture("")
+		S.CreateBack(healthBar)
+		S.CreateMark(healthBar)
 		healthBar.bg:SetTexture(ns.db.texturePath)
+		healthBar.bd:SetAlpha(0.6)
+		S.CreateTop(healthBar.bg, 228/255, 38/255, 141/255)
+	else
+		healthBar:SetStatusBarTexture(ns.db.texturePath)
+		-- healthBar:SetReverseFill(false)
+		-- healthBar.bg:SetTexture(ns.db.texturePath)
 	end	
 	
     if not ns.db.powerbar or not power:IsShown() then		
@@ -1358,7 +1366,7 @@ function ns:UpdateHealthColor(self)
 	if UnitIsFriend("player",unit) then
 		local r, g, b
 		local _, class = UnitClass(unit)
-
+		local healthBartexture = healthBar:GetStatusBarTexture()
 		if type(ns.RaidClassColors[class]) == "table" and not string.match(unit, "pet") then
 			r, g, b  = ns.RaidClassColors[class].r, ns.RaidClassColors[class].g, ns.RaidClassColors[class].b
 		else
@@ -1368,27 +1376,23 @@ function ns:UpdateHealthColor(self)
 		if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
 			if ns.db.definecolors then
 				healthBar:SetStatusBarColor(ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b, 1)
-				if ns.db.mode then 
-					healthBar.bg:SetTexture(nil)
-				else
+				if not ns.db.mode then 
 					healthBar.bg:SetVertexColor(ns.db.deadcolor.r*.2, ns.db.deadcolor.g*.2, ns.db.deadcolor.b*.2, 1)
 				end
 			else
 				healthBar:SetStatusBarColor(ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b,.6)
-				if ns.db.mode then 
-					healthBar.bg:SetTexture(nil)
-				else
+				if not ns.db.mode then 
 					healthBar.bg:SetVertexColor(ns.db.deadcolor.r*.2, ns.db.deadcolor.g*.2, ns.db.deadcolor.b*.2,.6)
 				end
 			end
+			S.CreateTop(healthBartexture, ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b)
 			return
 		end
 
 		if  self.inVehicle then
 			healthBar:SetStatusBarColor(ns.db.vehiclecolor.r, ns.db.vehiclecolor.g, ns.db.vehiclecolor.b)
-			if ns.db.mode then 
-				healthBar.bg:SetTexture(nil)
-			else
+			S.CreateTop(healthBartexture, ns.db.vehiclecolor.r, ns.db.vehiclecolor.g, ns.db.vehiclecolor.b)
+			if not ns.db.mode then 
 				healthBar.bg:SetVertexColor(ns.db.vehiclecolor.r*.2, ns.db.vehiclecolor.g*.2, ns.db.vehiclecolor.b*.2)
 			end
 			return
@@ -1396,34 +1400,30 @@ function ns:UpdateHealthColor(self)
 			if ns.db.classbgcolor then
 				healthBar.bg:SetVertexColor(r, g, b)
 			else
-				if ns.db.mode then 
-					healthBar.bg:SetTexture(nil)
-				else
+				if not ns.db.mode then 
 					healthBar.bg:SetVertexColor(ns.db.hpbgcolor.r, ns.db.hpbgcolor.g, ns.db.hpbgcolor.b)
 				end
 			end			
 			healthBar:SetStatusBarColor(ns.db.hpcolor.r, ns.db.hpcolor.g, ns.db.hpcolor.b)
+			S.CreateTop(healthBartexture, ns.db.hpcolor.r, ns.db.hpcolor.g, ns.db.hpcolor.b)
 			return 
 		elseif ns.db.reversecolors  then
-			if ns.db.mode then 
-				healthBar.bg:SetTexture(nil)
-			else
+			if not ns.db.mode then 
 				healthBar.bg:SetVertexColor(r*.2, g*.2, b*.2)
 			end
 			healthBar:SetStatusBarColor(r, g, b)
+			S.CreateTop(healthBartexture, r, g, b)
 		else
-			if ns.db.mode then 
-				healthBar.bg:SetTexture(nil)
-			else
+			if not ns.db.mode then 
 				healthBar.bg:SetVertexColor(r, g, b)
 			end
 			healthBar:SetStatusBarColor(0, 0, 0, .8)
+			S.CreateTop(healthBartexture, 0, 0, 0)
 		end		
 	else
 		healthBar:SetStatusBarColor(ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
-		if ns.db.mode then 
-			healthBar.bg:SetTexture(nil)
-		else
+		S.CreateTop(healthBartexture, ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
+		if not ns.db.mode then
 			healthBar.bg:SetVertexColor(ns.db.enemycolor.r*.2, ns.db.enemycolor.g*.2, ns.db.enemycolor.b*.2)
 		end
 	end
@@ -1466,12 +1466,14 @@ function ns:UpdateHealth(self)
 			self.HealthBar:SetValue(UnitHealthMax(unit))
 		end
 	else
-		if ns.db.mode then 
-			self.HealthBar:SetValue(UnitHealthMax(unit) - UnitHealth(unit)) 
-		else
-			self.HealthBar:SetValue(UnitHealth(unit))
-		end
+		--if ns.db.mode then 
+			--self.HealthBar:SetValue(UnitHealthMax(unit) - UnitHealth(unit)) 
+		--else
+		self.HealthBar:SetValue(UnitHealth(unit))
+		--end
 	end
+	healthBar.bd:SetPoint("TOPRIGHT", healthBar)
+	healthBar.bd:SetPoint("BOTTOMLEFT", healthBar:GetStatusBarTexture(), "BOTTOMRIGHT")
 end
 
 function ns:UpdateHealPredictionBarColor(self)
@@ -1565,13 +1567,23 @@ function ns:UpdatePowerBar(self)
 			power:SetWidth(ns.db.width)
 			power:SetHeight(ns.db.height * ns.db.powerbarsize-2)
 			health:SetWidth(ns.db.width)
-			health:SetHeight((0.98 - ns.db.powerbarsize) * ns.db.height)
+			if ns.db.mode then
+				health:SetHeight((0.98 - ns.db.powerbarsize) * ns.db.height)
+			else
+				health:SetHeight((0.98 - ns.db.powerbarsize) * ns.db.height+1)
+			end
 		end
 
 		power:SetStatusBarTexture(ns.db.texturePath)
 		power:SetOrientation(ns.db.porientation)
-		power.bg:SetTexture(ns.db.texturePath)
-
+		
+		if ns.db.mode then
+			power.bg:SetTexture("")
+			S.CreateBack(power)
+			S.CreateMark(power)
+		else
+			power.bg:SetTexture(ns.db.texturePath)
+		end
 		power:ClearAllPoints()
 		if ns.db.orientation == "HORIZONTAL" and ns.db.porientation == "VERTICAL" then
 			power:Point("LEFT", 1, 0)
@@ -1606,6 +1618,7 @@ end
 
 function ns:UpdatePower(self)
 	local power = self.PowerBar
+	local powertexture = self.PowerBar:GetStatusBarTexture()
 	local unit = self.displayedUnit or self.unit
 	if not UnitExists(unit) or not power:IsShown() then return end 
 	
@@ -1615,12 +1628,14 @@ function ns:UpdatePower(self)
 	if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
 		power.bg:SetVertexColor(ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b, .6)
         power:SetStatusBarColor(ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b, .6)
+		S.CreateTop(powertexture, ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b)
 		return
 	end
 	
     if ns.db.powerdefinecolors then
         power.bg:SetVertexColor(ns.db.powerbgcolor.r, ns.db.powerbgcolor.g, ns.db.powerbgcolor.b)
         power:SetStatusBarColor(ns.db.powercolor.r, ns.db.powercolor.g, ns.db.powercolor.b)
+		S.CreateTop(powertexture, ns.db.powercolor.r, ns.db.powercolor.g, ns.db.powercolor.b)
         return
     end
 
@@ -1639,9 +1654,11 @@ function ns:UpdatePower(self)
 	if ns.db.reversecolors or ns.db.powerclass then
 		power.bg:SetVertexColor(r*.2, g*.2, b*.2)
 		power:SetStatusBarColor(r, g, b)
+		S.CreateTop(powertexture, r, g, b)
 	else
 		power.bg:SetVertexColor(r, g, b)
 		power:SetStatusBarColor(0, 0, 0, .8)
+		S.CreateTop(powertexture, 0, 0, 0)
 	end
 end
 
@@ -2009,42 +2026,42 @@ function ns:CreateIndicators(self)
 	local symbols = ns.media.symbols
 	self.Indicators = {}
 	
-	local TL = self.HealthBar:CreateFontString(nil, "OVERLAY")
+	local TL = self.help:CreateFontString(nil, "OVERLAY")
 	TL:SetPoint("TOPLEFT", self.HealthBar,"TOPLEFT", 0, -1)
 	TL:SetShadowOffset(ns.db.shadowoffset, -ns.db.shadowoffset)
 	TL:SetFont(indicator, ns.db.indicatorsize, ns.db.outline)
 	TL:Hide()
 	self.Indicators.TL = TL
 
-	local TR = self.HealthBar:CreateFontString(nil, "OVERLAY")
+	local TR = self.help:CreateFontString(nil, "OVERLAY")
 	TR:SetPoint("TOPRIGHT", self.HealthBar, 2, -1)
 	TR:SetShadowOffset(ns.db.shadowoffset, -ns.db.shadowoffset)
 	TR:SetFont(indicator, ns.db.indicatorsize, ns.db.outline)
 	TR:Hide()
 	self.Indicators.TR = TR
 
-	local BL = self.HealthBar:CreateFontString(nil, "OVERLAY")
+	local BL = self.help:CreateFontString(nil, "OVERLAY")
 	BL:SetPoint("BOTTOMLEFT", self.HealthBar, 0, 0)
 	BL:SetShadowOffset(ns.db.shadowoffset, -ns.db.shadowoffset)
 	BL:SetFont(indicator, ns.db.indicatorsize, ns.db.outline)
 	BL:Hide()
 	self.Indicators.BL = BL
 
-	local RC = self.HealthBar:CreateFontString(nil, "OVERLAY")
+	local RC = self.help:CreateFontString(nil, "OVERLAY")
 	RC:SetPoint("RIGHT", self.HealthBar, 2, -1)
 	RC:SetShadowOffset(ns.db.shadowoffset, -ns.db.shadowoffset)
 	RC:SetFont(indicator, ns.db.indicatorsize, ns.db.outline)
 	RC:Hide()
 	self.Indicators.RC = RC
 
-	local BR = self.HealthBar:CreateFontString(nil, "OVERLAY")
+	local BR = self.help:CreateFontString(nil, "OVERLAY")
 	BR:SetPoint("BOTTOMRIGHT", self.HealthBar, 0, -2)
 	BR:SetShadowOffset(ns.db.shadowoffset, -ns.db.shadowoffset)
 	BR:SetFont(symbols, ns.db.symbolsize, ns.db.outline)
 	BR:Hide()
 	self.Indicators.BR = BR
 
-	local Cen = self.HealthBar:CreateFontString(nil, "OVERLAY")
+	local Cen = self.help:CreateFontString(nil, "OVERLAY")
 	Cen:SetPoint("TOP", 0, -2)
 	Cen:SetJustifyH("CENTER")
 	Cen:SetShadowOffset(ns.db.shadowoffset, -ns.db.shadowoffset)

@@ -88,12 +88,6 @@ lib.PostUpdateHealth = function(s, u, min, max)
 	--if UnitIsDeadOrGhost(u) then s:SetValue(0) end
 	s.bd:SetPoint("TOPRIGHT", s)
 	s.bd:SetPoint("BOTTOMLEFT", s:GetStatusBarTexture(), "BOTTOMRIGHT")
-	if not U["ReverseHPbars"] then 
-		local r,g,b = s:GetStatusBarColor()
-		S.CreateTop(s.bd.b, r, g, b)
-	else
-		s.bd.b:SetVertexColor(0.33, 0.33, 0.33, 1)
-	end
 end
 
 -- worgen male portrait fix
@@ -148,6 +142,11 @@ lib.gen_hpbar = function(f)
 	bg.b:SetTexture(DB.Statusbar)
 	bg.b:SetAllPoints(bg)
 	bg:SetAlpha(0.6)
+	if not U["ReverseHPbars"] then
+		S.CreateTop(bg.b, 228/255, 38/255, 141/255)
+	else
+		bg:SetVertexColor(0.33, 0.33, 0.33, 1)
+	end
     s.PostUpdate = lib.PostUpdateHealth
 	
     fixStatusbar(s)

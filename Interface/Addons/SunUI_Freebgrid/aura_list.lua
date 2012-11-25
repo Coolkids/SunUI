@@ -316,7 +316,7 @@ ns.auras_instances_debuffs = {
 		},
             
 		[877] = { --Shado-Pan Monastery 影踪禅院 
-
+			[107140] = 7, --磁能障壁
 			-- Sha of Violence
 			[106872] = 7, -- Disorienting Smash
 			
@@ -422,18 +422,18 @@ ns.auras_instances_debuffs = {
 			[123120] = 34, --- Pheromone Trail
 			[122835] = 32, -- Pheromones, The buff indicating who is carrying the pheramone.
 			[123081] = 33, -- Punchency, The stacking debuff causing the raid damage.
-			[122835] = 34, --費洛蒙
+			[122835] = 30, --費洛蒙
 			--Wind Lord Mel'jarak
 			[122055] = 42, -- Residue, The debuff after breaking a prsion preventing further breaking.
 			[121881] = 41, -- Amber Prison, not sure what the differance is but both were used.
 			[122064] = 43, -- Corrosive Resin, the dot you clear by moving/jumping.
-
+			--[] = 45,
 			-- Amber-Shaper Un'sok 
 			[122064] = 53, -- Corrosive Resin
 			[122784] = 52, -- Reshape Life, Both were used.
 			[122504] = 54, --Burning Amber.
 			[121949] = 51, -- Parasitic Growth, the dot that scales with healing taken.
-		
+			[122370] = 51,
 			--Grand Empress Shek'zeer
 			[125390] = 61, --Fixate.
 			[123707] = 62, --Eyes of the Empress.

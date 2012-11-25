@@ -17,8 +17,8 @@ Launch:SetScript("OnEvent", function(self, event)
 
 
 		-- Resize the main window
-		TradeSkillFrame:SetWidth(570)
-		TradeSkillFrame:SetHeight(525)
+		_G["TradeSkillFrame"]:SetWidth(570)
+		_G["TradeSkillFrame"]:SetHeight(525)
 
 		-- Hide Horizontal bar in the default UI
 		TradeSkillHorizontalBarLeft:Hide()

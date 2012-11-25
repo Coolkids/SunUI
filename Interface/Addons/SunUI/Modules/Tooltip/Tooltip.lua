@@ -9,15 +9,16 @@ function Module:OnInitialize()
 	C=C["TooltipDB"]
 end
 local reactionlist  = {
-	[1] = "仇恨",
-	[2] = "敌对",
-	[3] = "冷淡",
-	[4] = "中立",
-	[5] = "友好",
-	[6] = "尊敬",
-	[7] = "崇敬",
-	[8] = "崇拜",
+	[1] = FACTION_STANDING_LABEL1,
+	[2] = FACTION_STANDING_LABEL2,
+	[3] = FACTION_STANDING_LABEL3,
+	[4] = FACTION_STANDING_LABEL4,
+	[5] = FACTION_STANDING_LABEL5,
+	[6] = FACTION_STANDING_LABEL6,
+	[7] = FACTION_STANDING_LABEL7,
+	[8] = FACTION_STANDING_LABEL8,
 }
+local tooptexture = GameTooltipStatusBar:GetStatusBarTexture()
 function Module:OnEnable()
 	local gcol = {.35, 1, .6}										-- Guild Color
 	local pgcol = {1, .12, .8} 									-- Player's Guild Color
@@ -148,6 +149,8 @@ function Module:OnEnable()
 				local guild, rank, tmp2 = GetGuildInfo(unit)
 				local playerGuild = GetGuildInfo("player")
 				GameTooltipStatusBar:SetStatusBarColor(unpack({GameTooltip_UnitColor(unit)}))
+				local r, g, b = unpack({GameTooltip_UnitColor(unit)})
+				S.CreateTop(tooptexture, r, g, b)
 				if guild then
 					if guild:len()> 30 then guild = guild:sub(1, 30).."..." end
 					GameTooltipTextLeft2:SetFormattedText("<%s>"..hex(1, 1, 1).." %s|r", guild, rank.."  ("..tmp2..")")
@@ -184,6 +187,7 @@ function Module:OnEnable()
 						end
 					end
 					GameTooltipStatusBar:SetStatusBarColor(r, g, b)
+					S.CreateTop(tooptexture, r, g, b)
 				end
 			end
 			if UnitIsPVP(unit) then
@@ -241,10 +245,13 @@ function Module:OnEnable()
 					g = FACTION_BAR_COLORS[reaction].g;
 					b = FACTION_BAR_COLORS[reaction].b;
 					GameTooltipStatusBar:SetStatusBarColor(r, g, b)
+					S.CreateTop(tooptexture, r, g, b)
 				end
 			end
 			if UnitIsPlayer(unit) then
 				GameTooltipStatusBar:SetStatusBarColor(unpack({GameTooltip_UnitColor(unit)}))
+				local r, g, b = unpack({GameTooltip_UnitColor(unit)})
+				S.CreateTop(tooptexture, r, g, b)
 			end
 			min, max = UnitHealth(unit), UnitHealthMax(unit)
 			if not self.text then

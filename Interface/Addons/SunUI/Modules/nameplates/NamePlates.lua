@@ -180,17 +180,13 @@ local function UpdateThreat(frame,elapsed)
 		frame.name:SetTextColor(1, 1, 1)
 	end
 	frame.hp:SetStatusBarColor(frame.r, frame.g, frame.b)
-	
-	if not frame.oldglow:IsShown() then
-		frame.hp.hpGlow:SetScale(1)
-		frame.hp.hpGlow:SetBackdropBorderColor(0, 0, 0)
-		frame.hp.border:SetBackdropBorderColor(0, 0, 0, 1)
-	else
-		frame.hp.hpGlow:SetScale(0.5)
-		local r, g, b = frame.oldglow:GetVertexColor()
-		frame.hp.hpGlow:SetBackdropBorderColor(r, g, b)
-		frame.hp.border:SetBackdropBorderColor(0, 0, 0, 0)
-	end
+	S.CreateTop(frame.hp.toptexture, frame.r, frame.g, frame.b)
+	-- if not frame.oldglow:IsShown() then
+		-- frame.hp.hpGlow:SetBackdropBorderColor(0, 0, 0)
+	-- else
+		-- local r, g, b = frame.oldglow:GetVertexColor()
+		-- frame.hp.hpGlow:SetBackdropBorderColor(r, g, b)
+	-- end
 	
 	-- show current health value
     local minHealth, maxHealth = frame.healthOriginal:GetMinMaxValues()
@@ -383,15 +379,19 @@ local function UpdateObjects(frame)
 		if g + b == 0 then
 			newr, newg, newb = 0.7, 0.2, 0.1
 			frame.hp:SetStatusBarColor(0.7, 0.2, 0.1)
+			S.CreateTop(frame.hp.toptexture, 0.7, 0.2, 0.1)
 		elseif r + b == 0 then
 			newr, newg, newb = 0.2, 0.6, 0.1
 			frame.hp:SetStatusBarColor(0.2, 0.6, 0.1)
+			S.CreateTop(frame.hp.toptexture, 0.2, 0.6, 0.1)
 		elseif r + g == 0 then
 			newr, newg, newb = 0.31, 0.45, 0.63
 			frame.hp:SetStatusBarColor(0.31, 0.45, 0.63)
+			S.CreateTop(frame.hp.toptexture, 0.31, 0.45, 0.63)
 		elseif 2 - (r + g) < 0.05 and b == 0 then
 			newr, newg, newb = 0.71, 0.71, 0.35
 			frame.hp:SetStatusBarColor(0.71, 0.71, 0.35)
+			S.CreateTop(frame.hp.toptexture, 0.71, 0.71, 0.35)
 		else
 			newr, newg, newb = r, g, b
 		end
@@ -468,10 +468,14 @@ local function UpdateCastbar(frame)
     frame:SetPoint("TOP",frame.border,0,0)
     frame:SetPoint("BOTTOM",frame.border,0,0)
     frame:SetPoint("LEFT",frame.border,0,0)
+	local texture = frame:GetStatusBarTexture()
+	frame.cbtexture = texture
 	if not frame.shield:IsShown() then
 		frame:SetStatusBarColor(.5,.65,.85)
+		S.CreateTop(texture, .5,.65,.85)
 	else
 		frame:SetStatusBarColor(1,0,0)
+		S.CreateTop(texture, 1,0,0)
 	end
 end	
 
@@ -483,9 +487,10 @@ local OnValueChanged = function(self)
 	-- have to define not protected casts colors again due to some weird bug reseting colors when you start channeling a spell 
  	if not self.shield:IsShown() then
 		self:SetStatusBarColor(.5,.65,.85)
+		S.CreateTop(self.cbtexture,.5,.65,.85)
 	else
-		--self:SetStatusBarColor(1,.49,0)
 		self:SetStatusBarColor(1,0,0)
+		S.CreateTop(self.cbtexture, 1,0,0)
 	end 
 end
 
@@ -528,10 +533,21 @@ local function SkinObjects(frame)
 	hp:SetStatusBarTexture(DB.Statusbar)
 	frame.hp = hp
 	hp:CreateShadow()
-	hp.hpGlow = hp.shadow
-	S.CreateBack(hp)
+	hp.shadow:Hide()
+	hp.border:SetFrameLevel(0)
+	hp.hpGlow = hp.border
+	local texture = hp:GetStatusBarTexture()
+	hp.toptexture = texture
 	S.CreateMark(hp)
 	S.CreateMark(cb)
+	local hpbg = CreateFrame("Frame", nil, hp)
+	hpbg:SetAllPoints(hp)
+	hpbg:SetFrameLevel(0)
+	local gradient = hpbg:CreateTexture(nil, "BACKGROUND")
+	gradient:SetPoint("TOPLEFT")
+	gradient:SetPoint("BOTTOMRIGHT")
+	gradient:SetTexture(DB.Statusbar)
+	gradient:SetGradientAlpha("VERTICAL",  0, 0, 0, 0.6, .35, .35, .35, .65)
 	-- hp.hpGlow = CreateFrame("Frame", nil, hp)
 	-- hp.hpGlow:SetPoint("TOPLEFT", hp, "TOPLEFT", -3.5, 3.5)
 	-- hp.hpGlow:SetPoint("BOTTOMRIGHT", hp, "BOTTOMRIGHT", 3.5, -3.5)
@@ -724,10 +740,12 @@ function Module:OnInitialize()
 		function NamePlates:PLAYER_REGEN_DISABLED()
 			SetCVar("nameplateShowEnemies", 1)
 		end
+		NamePlates:RegisterEvent("PLAYER_REGEN_DISABLED")
 	end
 	if C["NotCombat"] then
 		function NamePlates:PLAYER_REGEN_ENABLED()
 			SetCVar("nameplateShowEnemies", 0)
 		end
+		NamePlates:RegisterEvent("PLAYER_REGEN_ENABLED")
 	end
 end

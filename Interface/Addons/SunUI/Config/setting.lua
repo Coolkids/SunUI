@@ -49,7 +49,7 @@ G["NameplateDB"] = {
 	["HPHeight"] = 6,
 	["CastBarIconSize"] = 15,
 	["Fontsize"] = 12,
-	["CastBarHeight"] = 4,
+	["CastBarHeight"] = 6,
 	["Combat"] = true,
 	["NotCombat"] = false,
 }
