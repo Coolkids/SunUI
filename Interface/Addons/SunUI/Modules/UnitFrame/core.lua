@@ -141,11 +141,12 @@ lib.gen_hpbar = function(f)
 	bg.b = bg:CreateTexture(nil, "BACKGROUND")
 	bg.b:SetTexture(DB.Statusbar)
 	bg.b:SetAllPoints(bg)
-	bg:SetAlpha(0.6)
 	if not U["ReverseHPbars"] then
+		bg:SetAlpha(0.6)
 		S.CreateTop(bg.b, 228/255, 38/255, 141/255)
 	else
-		bg:SetVertexColor(0.33, 0.33, 0.33, 1)
+		bg:SetAlpha(1)
+		bg.b:SetVertexColor(0.33, 0.33, 0.33, 1)
 	end
     s.PostUpdate = lib.PostUpdateHealth
 	

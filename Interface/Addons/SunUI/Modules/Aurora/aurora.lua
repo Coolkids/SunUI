@@ -6706,7 +6706,7 @@ Delay:SetScript("OnEvent", function()
 		sb:Point("BOTTOMRIGHT", GameTooltip, "TOPRIGHT", -1, 3)
 		sb:SetStatusBarTexture(DB.Statusbar)
 		S.CreateBD(FriendsTooltip)
-		
+		S.CreateMark(sb)
 		-- pet battle stuff
 
 		local tooltips = {PetBattlePrimaryAbilityTooltip, PetBattlePrimaryUnitTooltip, FloatingBattlePetTooltip, BattlePetTooltip, FloatingPetBattleAbilityTooltip}
