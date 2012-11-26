@@ -1331,8 +1331,7 @@ function ns:UpdateHealthBarLayout(self)   --ÑשÊ½
 		S.CreateTop(healthBar.bg, 228/255, 38/255, 141/255)
 	else
 		healthBar:SetStatusBarTexture(ns.db.texturePath)
-		-- healthBar:SetReverseFill(false)
-		-- healthBar.bg:SetTexture(ns.db.texturePath)
+		healthBar.bg:SetTexture(ns.db.texturePath)
 	end	
 	
     if not ns.db.powerbar or not power:IsShown() then		
