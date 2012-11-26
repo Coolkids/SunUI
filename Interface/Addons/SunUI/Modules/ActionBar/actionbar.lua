@@ -264,6 +264,7 @@ function Module:CreateBar5()
 		for i=5, 12 do
 			local button = _G["MultiBarLeftButton"..i]
 			button:ClearAllPoints()
+			button:Kill()
 		end
 		if S.IsCoolkid() == true then 
 			_G["MultiBarLeftButton1"]:ClearAllPoints()

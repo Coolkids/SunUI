@@ -1389,8 +1389,13 @@ function ns:UpdateHealthColor(self)
 		end
 
 		if  self.inVehicle then
-			healthBar:SetStatusBarColor(ns.db.vehiclecolor.r, ns.db.vehiclecolor.g, ns.db.vehiclecolor.b)
-			S.CreateTop(healthBartexture, ns.db.vehiclecolor.r, ns.db.vehiclecolor.g, ns.db.vehiclecolor.b)
+			if ns.db.mode then
+				healthBar.bg:SetVertexColor(ns.db.vehiclecolor.r, ns.db.vehiclecolor.g, ns.db.vehiclecolor.b)
+				S.CreateTop(healthBar.bg, ns.db.vehiclecolor.r, ns.db.vehiclecolor.g, ns.db.vehiclecolor.b)
+			else
+				healthBar:SetStatusBarColor(ns.db.vehiclecolor.r, ns.db.vehiclecolor.g, ns.db.vehiclecolor.b)
+				S.CreateTop(healthBartexture, ns.db.vehiclecolor.r, ns.db.vehiclecolor.g, ns.db.vehiclecolor.b)
+			end
 			if not ns.db.mode then 
 				healthBar.bg:SetVertexColor(ns.db.vehiclecolor.r*.2, ns.db.vehiclecolor.g*.2, ns.db.vehiclecolor.b*.2)
 			end
@@ -1420,9 +1425,11 @@ function ns:UpdateHealthColor(self)
 			S.CreateTop(healthBartexture, 0, 0, 0)
 		end		
 	else
-		healthBar:SetStatusBarColor(ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
-		S.CreateTop(healthBartexture, ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
-		if not ns.db.mode then
+		if ns.db.mode then
+			S.CreateTop(healthBar.bg, ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
+		else
+			healthBar:SetStatusBarColor(ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
+			S.CreateTop(healthBartexture, ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
 			healthBar.bg:SetVertexColor(ns.db.enemycolor.r*.2, ns.db.enemycolor.g*.2, ns.db.enemycolor.b*.2)
 		end
 	end
