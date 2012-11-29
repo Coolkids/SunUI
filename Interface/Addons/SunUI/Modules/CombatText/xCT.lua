@@ -220,9 +220,9 @@ local config = {
     -- xCT+ Frames' Justification
     -- --------------------------------------------------------------------------------------
         --[[Justification Options: "RIGHT", "LEFT", "CENTER" ]]
-        ["justify_1"] = "LEFT",             -- Damage Incoming Frame            (frame is called "xCTdmg")
-        ["justify_2"] = "LEFT",            -- Healing Incoming Frame           (frame is called "xCTheal")
-        ["justify_3"] = "LEFT",           -- General Buffs Gains/Drops Frame  (frame is called "xCTgen")
+        ["justify_1"] = "RIGHT",             -- Damage Incoming Frame            (frame is called "xCTdmg")
+        ["justify_2"] = "RIGHT",            -- Healing Incoming Frame           (frame is called "xCTheal")
+        ["justify_3"] = "RIGHT",           -- General Buffs Gains/Drops Frame  (frame is called "xCTgen")
         ["justify_4"] = "RIGHT",            -- Healing/Damage Outgoing Frame    (frame is called "xCTdone")
         ["justify_5"] = "CENTER",           -- Loot/Money Gains Frame           (frame is called "xCTloot")
         ["justify_6"] = "RIGHT",            -- Criticals Outgoing Frame         (frame is called "xCTcrit")
@@ -1272,15 +1272,19 @@ local function OnEvent(self, event, subevent, ...)
 
             elseif subevent == "ENERGIZE" and COMBAT_TEXT_SHOW_ENERGIZE == "1" then
                 if  tonumber(arg2) > 0 then
-                    if arg3 and arg3 == "MANA" or arg3 == "RAGE" or arg3 == "FOCUS" or arg3 == "ENERGY" or arg3 == "RUNIC_POWER" or arg3 == "SOUL_SHARDS" or arg3 == "HOLY_POWER" then
-                        (xCTpwr or xCTgen):AddMessage("+"..arg2.." ".._G[arg3], PowerBarColor[arg3].r, PowerBarColor[arg3].g, PowerBarColor[arg3].b)
+                   if arg3 and arg3 == "MANA" or arg3 == "RAGE" or arg3 == "FOCUS" or arg3 == "ENERGY" or arg3 == "RUNIC_POWER" or arg3 == "SOUL_SHARDS" or arg3 == "HOLY_POWER" or arg3 == "CHI" or arg3 == "SHADOW_ORBS" then
+						local a
+						if arg3 == "SHADOW_ORBS" then a = "SOUL_SHARDS" else a = arg3 end
+                        (xCTpwr or xCTgen):AddMessage("+"..arg2.." ".._G[arg3], PowerBarColor[a].r, PowerBarColor[a].g, PowerBarColor[a].b)
                     end
                 end
 
             elseif subevent == "PERIODIC_ENERGIZE" and COMBAT_TEXT_SHOW_PERIODIC_ENERGIZE == "1" then
                 if  tonumber(arg2) > 0 then
-                    if arg3 and arg3 == "MANA" or arg3 == "RAGE" or arg3 == "FOCUS" or arg3 == "ENERGY" or arg3 == "RUNIC_POWER" or arg3 == "SOUL_SHARDS" or arg3 == "HOLY_POWER" then
-                        (xCTpwr or xCTgen):AddMessage("+"..arg2.." ".._G[arg3], PowerBarColor[arg3].r, PowerBarColor[arg3].g, PowerBarColor[arg3].b)
+                   if arg3 and arg3 == "MANA" or arg3 == "RAGE" or arg3 == "FOCUS" or arg3 == "ENERGY" or arg3 == "RUNIC_POWER" or arg3 == "SOUL_SHARDS" or arg3 == "HOLY_POWER" or arg3 == "CHI" or arg3 == "SHADOW_ORBS" then
+						local a
+						if arg3 == "SHADOW_ORBS" then a = "SOUL_SHARDS" else a = arg3 end
+                        (xCTpwr or xCTgen):AddMessage("+"..arg2.." ".._G[arg3], PowerBarColor[a].r, PowerBarColor[a].g, PowerBarColor[a].b)
                     end
                 end
                 

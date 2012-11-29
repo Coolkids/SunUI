@@ -8,7 +8,7 @@ local sndADD2	= mod:NewSound(nil, "SoundADD2", mod:IsDps())
 local sndADD3A	= mod:NewSound(nil, "SoundADD3A", mod:IsDps())
 local sndADD3	= mod:NewSound(nil, "SoundADD3", mod:IsDps())
 
-mod:SetRevision(("$Revision: 8141 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8183 $"):sub(12, -3))
 mod:SetCreatureID(60399, 60400)--60396 (Rage), 60397 (Strength), 60398 (Courage), 60480 (Titan Spark), 60399 (Qin-xi), 60400 (Jan-xi)
 mod:SetModelID(41391)
 mod:SetZone()
@@ -33,7 +33,7 @@ mod:RegisterEvents(
 )
 
 --Rage
-local warnRageActivated			= mod:NewSpellAnnounce("ej5678", 3, 116525)
+local warnRageActivated			= mod:NewCountAnnounce("ej5678", 3, 116525)
 local warnFocusedAssault		= mod:NewTargetAnnounce(116525, 2, nil, false)--Completely and totally spammy, this option is just here for those that want this info despite the spam.
 --Strength
 local warnStrengthActivated		= mod:NewCountAnnounce("ej5677", 3, 116550)
@@ -42,8 +42,7 @@ local warnEnergizingSmash		= mod:NewSpellAnnounce(116550, 3, nil, mod:IsMelee())
 local warnCourageActivated		= mod:NewCountAnnounce("ej5676", 3, 116778)
 local warnFocusedDefense		= mod:NewTargetAnnounce(116778, 4)
 --Sparks (Heroic Only)
---local warnSpark					= mod:NewCountAnnounce("ej5674", 3)--Probably not very accurate. Not without wasting stupid amounts of cpu same way we do on spine. :\
-local warnFocusedEnergy			= mod:NewTargetAnnounce(116829, 4)
+--local warnFocusedEnergy			= mod:NewTargetAnnounce(116829, 4)
 --Jan-xi and Qin-xi
 local warnBossesActivatedSoon	= mod:NewPreWarnAnnounce("ej5726", 10, 3, 116815)
 local warnBossesActivated		= mod:NewSpellAnnounce("ej5726", 3, 116815)
@@ -70,18 +69,22 @@ local specWarnTitanGas			= mod:NewSpecialWarningSpell(116779, nil, nil, nil, tru
 local specWarnFocused			= mod:NewSpecialWarningMove(116525)
 
 --Rage
-local timerRageActivates		= mod:NewNextTimer(30, "ej5678", nil, nil, nil, 116525)
+local timerRageActivates		= mod:NewNextCountTimer(30, "ej5678", nil, nil, nil, 116525)
 --Strength
-local timerStrengthActivates	= mod:NewNextCountTimer(50, "ej5677", nil, nil, nil, 116550)
+local timerStrengthActivates	= mod:NewNextCountTimer(50, "ej5677", nil, nil, nil, 116550)--It's actually 50-55 variation but 50 is good enough.
 --Courage
 local timerCourageActivates		= mod:NewNextCountTimer(100, "ej5676", nil, nil, nil, 116778)
 --Jan-xi and Qin-xi
 local timerBossesActivates		= mod:NewNextTimer(107, "ej5726", nil, nil, nil, 116815)--Might be a little funny sounding "Next Jan-xi and Qin-xi" May just localize it later.
---local timerComboCD				= mod:NewCDTimer(14.2, "ej5672", nil, nil, nil, 116835)--20 seconds after last one ENDED (or rathor, how long it takes to charge up 20 energy) We start timer at 1 energy though so more like 19 seconds.
 local timerTitanGas				= mod:NewBuffActiveTimer(30, 116779)
 local timerTitanGasCD			= mod:NewNextCountTimer(150, 116779)
 
 local berserkTimer				= mod:NewBerserkTimer(780)
+
+for i = 1, 10 do
+	mod:AddBoolOption("ragebomb"..i, false, "sound")
+end
+local specWarnBomb				= mod:NewSpecialWarning("specWarnBomb")
 
 mod:AddBoolOption("InfoFrame", false)
 mod:AddBoolOption("ArrowOnCombo", mod:IsTank())--Very accurate for tank, everyone else not so much (tanks always in front, and boss always faces tank, so if he spins around on you, you expect it, melee on other hand have backwards arrows if you spun him around.
@@ -93,15 +96,42 @@ local comboCount = 0
 local titanGasCast = 0
 local courageCount = 0
 local strengthCount = 0
+local rageCount = 1
 local focusedAssault = GetSpellInfo(116525)
-
 local Isstomp = 0
+local ragetime = 0
+
+local rageTimers = {
+	[1] = 15,
+	[2] = 33,
+	[3] = 33,
+	[4] = 33,
+	[5] = 33,
+	[6] = 33,
+	[7] = 83,
+	[8] = 33,
+	[9] = 33,
+	[10]= 83,
+	[11]= 33,
+	[12]= 33,
+	[13]= 83,
+	[14]= 83,
+--Rest are all 33
+}
+
+local function MyBomb()
+	if (mod.Options.ragebomb1 and rageCount == 1) or (mod.Options.ragebomb2 and rageCount == 2) or (mod.Options.ragebomb3 and rageCount == 3) or (mod.Options.ragebomb4 and rageCount == 4) or (mod.Options.ragebomb5 and rageCount == 5) or (mod.Options.ragebomb6 and rageCount == 6) or (mod.Options.ragebomb7 and rageCount == 7) or (mod.Options.ragebomb8 and rageCount == 8) or (mod.Options.ragebomb9 and rageCount == 9) or (mod.Options.ragebomb10 and rageCount == 10) then
+		return true
+	end
+	return false
+end
 
 function mod:OnCombatStart(delay)
 	comboWarned = false
 	sparkCount = 0
 	comboCount = 0
 	titanGasCast = 0
+	rageCount = 1
 	Isstomp = 0
 	strengthCount = 0
 	courageCount = 0
@@ -114,6 +144,7 @@ function mod:OnCombatStart(delay)
 		timerCourageActivates:Start(75-delay, 1)
 		timerBossesActivates:Start(-delay)
 	end
+	timerRageActivates:Start(15, rageCount)
 	berserkTimer:Start(-delay)
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:SetHeader(focusedAssault)
@@ -145,7 +176,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			end
 		end
 	elseif args:IsSpellID(116829) then
-		warnFocusedEnergy:Show(args.destName)
+--		warnFocusedEnergy:Show(args.destName)
 		if args:IsPlayer() then
 			specWarnFocusedEnergy:Show()
 		end
@@ -157,18 +188,6 @@ function mod:SPELL_AURA_REMOVED(args)
 		if args:IsPlayer() then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\safenow.mp3") --安全
 		end
-	end
-end
-
-function mod:CHAT_MSG_MONSTER_YELL(msg)
-	if msg == L.Rage or msg:find(L.Rage) then--Apparently they only yell about 33% of time so this isn't completely reliable
-		--Maybe make a sequence table assuming this data is right https://docs.google.com/spreadsheet/ccc?key=0AjsIknfmLMegdDRKTE5wa3ZyQy1ScUVPOHBJX053clE#gid=0
-		--Important note, they use first rages as pull timestamp, that is NOT what dbm does. It also appears they treat yells/emotes as spawns, and not account for 10 second delay either.
-		--TODO, make a table if this later factoring in the above points so it's accurate for the way DBM does it.
-		warnRageActivated:Schedule(11)
-		timerRageActivates:Start(11)--They actually spawn 11 seconds after yell
-		sndADD1A:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qjbzb.mp3") --輕甲
-		sndADD1:Schedule(10, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qjbcx.mp3")
 	end
 end
 
@@ -193,6 +212,40 @@ local function addsDelay(add)
 		else
 			timerStrengthActivates:Start(50, strengthCount+1)
 		end
+	elseif add == "Rage" then
+		rageCount = rageCount + 1
+		warnRageActivated:Show(rageCount)
+		ragetime = rageTimers[rageCount] or 33
+		--Titan gas delay has funny interaction with these and causes 30 or 60 second delays. Pretty much have to use a table.
+		timerRageActivates:Start(ragetime, rageCount)
+		mod:Schedule(ragetime, addsDelay, "Rage")--Because he doesn't always yell, schedule next one here as a failsafe
+		if mod:IsDifficulty("heroic10", "heroic25") and MyBomb() then
+			specWarnBomb:Schedule(ragetime - 5, rageCount)
+			sndWOP:Schedule(ragetime - 5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_bpzb.mp3") --爆破準備
+		end
+		sndADD1A:Schedule(ragetime - 6, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qjbzb.mp3") --輕甲
+		sndADD1:Schedule(ragetime - 1, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qjbcx.mp3")	
+	elseif add == "Boss" then
+		warnBossesActivated:Show()
+		specWarnBossesActivated:Show(10)
+		if not mod:IsDifficulty("heroic10", "heroic25") then
+			timerTitanGasCD:Start(113, 1)
+		end
+	end
+end
+
+function mod:CHAT_MSG_MONSTER_YELL(msg)
+	if msg == L.Rage or msg:find(L.Rage) then--Apparently boss only yells sometimes, so this isn't completely reliable
+		self:Unschedule(addsDelay, "Rage")--Unschedule any failsafes that triggered and resync to yell
+		self:Schedule(14, addsDelay, "Rage")
+		if rageCount == 1 then
+			sndADD1A:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qjbzb.mp3") --輕甲
+			sndADD1:Schedule(10, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qjbcx.mp3")
+			if mod:IsDifficulty("heroic10", "heroic25") and MyBomb() then
+				specWarnBomb:Schedule(6, rageCount)
+				sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_bpzb.mp3") --爆破準備
+			end
+		end
 	end
 end
 
@@ -207,11 +260,7 @@ function mod:RAID_BOSS_EMOTE(msg)
 		sndADD2:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_dbkd.mp3")
 	elseif msg == L.Boss or msg:find(L.Boss) then
 		warnBossesActivatedSoon:Show()
-		warnBossesActivated:Schedule(10)
-		specWarnBossesActivated:Schedule(10)
-		if not self:IsDifficulty("heroic10", "heroic25") then
-			timerTitanGasCD:Start(123, 1)
-		end
+		self:Schedule(10, addsDelay, "Boss")
 		sndWOP:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_szcz.mp3") --雙子
 	elseif msg:find("spell:116779") then
 		if self:IsDifficulty("heroic10", "heroic25") then--On heroic the boss activates this perminantly on pull and it's always present
@@ -285,8 +334,6 @@ end
 function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 	if spellId == 116556 and uId == "target" then
 		warnEnergizingSmash:Show()
---[[	elseif spellId == 117746 then--Spark Spawning
-		self:SendSync("SparkSpawned")--]]
 	end
 	if (not chooseboss(uId)) then return end
 	if spellId == 116968 and self:AntiSpam(2, 1) then--Arc Left
@@ -342,40 +389,6 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 	end
 end
 
---Although, again, it might fail in sync handler antispam throttle if multiple spawn within a single second. Might need more work.
---[[function mod:OnSync(msg)
-	if msg == "SparkSpawned" then
-		sparkCount = sparkCount + 1
-		warnSpark:Show(sparkCount)
-	end
-end-]]
-
---[[function mod:UNIT_DIED(args)
-	local cid = self:GetCIDFromGUID(args.destGUID)
-	if cid == 60480 and sparkCount > 0 then--Titan Spark
-		sparkCount = sparkCount - 1
-		warnSpark:Show(sparkCount)
-	end
-end--]]
-
---[[
-"<121.7> MANA#0#1#20#0#0", -- [1]--Start Power Gain
-"<138.5> MANA#0#18#20#0#0", -- [18]--Beware! here to give 2.4ish sec warning of incoming special.
-"<139.7> MANA#0#19#20#0#0", -- [19]
-"<140.5> MANA#0#20#20#0#0", -- [20]--Full Power
-"<140.9> Qin-xi [boss2:Arc Right::0:116971]", -- [22]--Begin Combo
-"<144.1> Qin-xi [boss2:Arc Center::0:116972]", -- [24]
-"<149.8> Qin-xi [boss2:Stomp::0:116969]", -- [26]
-"<150.6> Qin-xi [boss2:Arc Right::0:116971]", -- [28]
-"<153.8> Qin-xi [boss2:Arc Left::0:116968]", -- [30]
-"<157.0> Qin-xi [boss2:Arc Right::0:116971]", -- [31]
-"<162.2> Qin-xi [boss2:Stomp::0:116969]", -- [33]
-"<162.6> Qin-xi [boss2:Arc Center::0:116972]", -- [35]
-"<166.3> Qin-xi [boss2:Arc Left::0:116968]", -- [37]
---]]
--- Seems that Jan-xi and Qin-xi mana are not identical. So as time goes, this stuff can be broken.
--- also timerComboCD is not be fixed. their mana increases 1 or 2 randomly every boss's melee attacks.
--- 
 function mod:UNIT_POWER(uId)
 	if (not chooseboss(uId)) then return end
 	if (self:GetUnitCreatureId(uId) == 60399 or self:GetUnitCreatureId(uId) == 60400) and UnitPower(uId) == 18 and not comboWarned then

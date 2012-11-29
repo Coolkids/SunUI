@@ -6,12 +6,24 @@ local L
 ------------
 L= DBM:GetModLocalization(683)
 
+L:SetWarningLocalization({
+	specWarnDDL 	= ">> 下一次 到你斷 <<"
+})
+
 L:SetOptionLocalization({
 	RangeFrame			= "距離監視(8碼)：$spell:111850(智能)",
 	HudMAP				= "高級定位監視(HUD)：$spell:111850的位置",
 	SetIconOnPrison		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(117436),
 	SoundDW				= "語音警告：$spell:117283的驅散",
-	SoundWOP			= "語音警告：重要技能"
+	SoundWOP			= "語音警告：重要技能",
+	optDDall			= "只有在你的目標是水王時才提示打斷鏈(不選則總是提示)",
+	specWarnDDL 		= "特殊警告：下一次到你打斷",
+	optDD				= "水王打斷鏈",
+	nodd				= "我不打斷",
+	DD1					= "打斷1",
+	DD2					= "打斷2",
+	DD3					= "打斷3",
+	DD4					= "打斷4",
 })
 
 

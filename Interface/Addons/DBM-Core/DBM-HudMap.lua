@@ -335,6 +335,7 @@ function mod:OnEnable()
 	self:RegisterEvent("ZONE_CHANGED_NEW_AREA",	"UpdateZoneData")
 	self:RegisterEvent("ZONE_CHANGED_INDOORS", 	"UpdateZoneData")
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	self:RegisterEvent("READY_CHECK", 	"Readysound")
 	updateFrame:SetScript("OnUpdate", onUpdate)
 	self.canvas:SetAlpha(db.alpha)
 	self:UpdateCanvasPosition()
@@ -1292,6 +1293,10 @@ function mod:CoordsToPosition(x, y)
 		return x * 1500, (1 - y) * 1000
 	end
 	return x * zoneScale[1], (1 - y) * zoneScale[2]
+end
+
+function mod:Readysound()
+	PlaySoundFile("Sound\\Interface\\levelup2.wav", "Master")
 end
 
 function mod:UpdateZoneData()

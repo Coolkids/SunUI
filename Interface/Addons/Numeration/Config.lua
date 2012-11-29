@@ -4,8 +4,8 @@ local S, C, L, DB = unpack(SunUI)
 -- window settings
 n.windowsettings = {
 	pos = {"BOTTOMRIGHT", -8, 25},
-	width = 280,
-	maxlines = 9,
+	width = 200,
+	maxlines = 7,
 	backgroundalpha = 0.6,
 	fontshadow = true,
 	scrollbar = false,
@@ -13,7 +13,7 @@ n.windowsettings = {
 	titleheight = 16,
 	titlealpha = 0.9,
 	titlefont = DB.Font,
-	titlefontstyle = "NONE",
+	titlefontstyle = "OUTLINE",
 	titlefontsize = 14,
 	titlefontcolor = {1, 1, 1},
 	buttonhighlightcolor = {1, .82, 0},
@@ -23,7 +23,7 @@ n.windowsettings = {
 	linealpha = 1,
 	linetexture = DB.Statusbar,
 	linefont = DB.Font,
-	linefontstyle = "NONE",
+	linefontstyle = "OUTLINE",
 	linefontsize = 12,
 	linefontcolor = {1, 1, 1},
 }
@@ -34,6 +34,7 @@ n.coresettings = {
 	minfightlength = 15,
 	combatseconds = 3,
 	shortnumbers = true,
+	silent_reset = true,
 }
 
 -- available types and their order

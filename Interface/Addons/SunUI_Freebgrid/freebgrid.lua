@@ -629,7 +629,7 @@ local menu = function (self)
 end
 
 local function unitFrameStyleSetup(button)
-	button:SetFrameLevel(3)
+	button:SetFrameLevel(4)
 	button.menu = menu
 
     local bg = CreateFrame("Frame", nil, button)
@@ -658,7 +658,7 @@ local function unitFrameStyleSetup(button)
     Health:SetParent(button)
 	Health:SetFrameLevel(1)
 	Health.bd = CreateFrame("Frame", nil, Health)
-	Health.bd:SetFrameLevel(Health:GetFrameLevel()+2)
+	Health.bd:SetFrameLevel(2)
     Health.bg = Health.bd:CreateTexture(nil, "BACKGROUND")
     Health.bg:SetAllPoints(Health.bd)
 	button.HealthBar = Health
@@ -666,10 +666,25 @@ local function unitFrameStyleSetup(button)
 	
 	local help = CreateFrame("Frame", nil, button)
 	help:SetAllPoints(Health)
-    help:SetFrameLevel(4)
+    help:SetFrameLevel(6)
 	button.help = help
 	
-    local name = help:CreateFontString(nil, "OVERLAY")
+	local help2 = CreateFrame("Frame", nil, button)
+	help2:SetAllPoints(Health)
+    help2:SetFrameLevel(5)
+	button.help2 = help2
+	
+	local help3 = CreateFrame("Frame", nil, button)
+	help3:SetAllPoints(Health)
+    help3:SetFrameLevel(4)
+	button.help3 = help3
+	
+	local help4 = CreateFrame("Frame", nil, button)
+	help4:SetAllPoints(Health)
+    help4:SetFrameLevel(3)
+	button.help4 = help4
+	
+    local name = help3:CreateFontString(nil, "OVERLAY")
     name:SetPoint("CENTER")
     name:SetJustifyH("CENTER")
     name:SetFont(ns.db.fontPath, ns.db.fontsize, ns.db.outline)
@@ -677,7 +692,7 @@ local function unitFrameStyleSetup(button)
     name:SetWidth(ns.db.width)
     button.Name = name
 	
-	local StatusText = help:CreateFontString(nil, "OVERLAY")
+	local StatusText = help3:CreateFontString(nil, "OVERLAY")
     StatusText:SetPoint("TOP", button.Name, "BOTTOM", 0, -2)
     StatusText:SetFont(ns.db.fontPath, ns.db.fontsizeEdge, ns.db.outline)
 	StatusText:SetShadowOffset(ns.db.shadowoffset, -ns.db.shadowoffset)
@@ -686,6 +701,7 @@ local function unitFrameStyleSetup(button)
 
     local Power = CreateFrame"StatusBar"
     Power:SetParent(button)
+	Power:SetFrameLevel(1)
     Power.bg = Power:CreateTexture(nil, "BORDER")
     Power.bg:SetAllPoints(Power)
 	button.PowerBar = Power
@@ -785,6 +801,7 @@ local function unitFrameStyleSetup(button)
 
 	button.Auras = {}
     local auras = CreateFrame("Frame", nil, button)
+	auras:SetFrameLevel(7)
     auras:SetSize(ns.db.aurasize, ns.db.aurasize)
     auras:SetPoint("CENTER", button.HealthBar)
     auras.size = ns.db.aurasize
@@ -792,6 +809,7 @@ local function unitFrameStyleSetup(button)
 	button.Auras.first.Button = ns:CreateAuraIcon(button.Auras.first)
 	
 	local secauras = CreateFrame("Frame", nil, button)
+	secauras:SetFrameLevel(7)
     secauras:SetSize(ns.db.secaurasize, ns.db.secaurasize)
     secauras:SetPoint("LEFT", button.HealthBar)
     secauras.size = ns.db.secaurasize
@@ -1323,12 +1341,14 @@ function ns:UpdateHealthBarLayout(self)   --样式
     healthBar:SetOrientation(ns.db.orientation)
 	S.CreateMark(healthBar)
 	if ns.db.mode then
-		healthBar:SetStatusBarTexture("")
+		healthBar:SetStatusBarTexture(" ")
+		healthBar:SetStatusBarColor(0,0,0,0)
 		S.CreateBack(healthBar)
 		S.CreateMark(healthBar)
 		healthBar.bg:SetTexture(ns.db.texturePath)
 		healthBar.bd:SetAlpha(0.6)
-		S.CreateTop(healthBar.bg, 228/255, 38/255, 141/255)
+		S.CreateTop(healthBar.bg, DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b) --职业颜色背景
+		--S.CreateTop(healthBar.bg, 228/255, 38/255, 141/255)  --紫色背景
 	else
 		healthBar:SetStatusBarTexture(ns.db.texturePath)
 		healthBar.bg:SetTexture(ns.db.texturePath)
@@ -1374,63 +1394,65 @@ function ns:UpdateHealthColor(self)
 
 		if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
 			if ns.db.definecolors then
-				healthBar:SetStatusBarColor(ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b, 1)
-				if not ns.db.mode then 
-					healthBar.bg:SetVertexColor(ns.db.deadcolor.r*.2, ns.db.deadcolor.g*.2, ns.db.deadcolor.b*.2, 1)
+				if ns.db.mode then
+					S.CreateTop(healthBar.bg, ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b)
+				else
+					S.CreateTop(healthBartexture, ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b)
+					S.CreateTop(healthBar.bg, ns.db.deadcolor.r*.2, ns.db.deadcolor.g*.2, ns.db.deadcolor.b*.2, 1)
 				end
 			else
-				healthBar:SetStatusBarColor(ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b,.6)
-				if not ns.db.mode then 
-					healthBar.bg:SetVertexColor(ns.db.deadcolor.r*.2, ns.db.deadcolor.g*.2, ns.db.deadcolor.b*.2,.6)
+				if ns.db.mode then
+					S.CreateTop(healthBar.bg, r, g, b)
+				else
+					S.CreateTop(healthBartexture, ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b)
+					S.CreateTop(healthBar.bg, ns.db.deadcolor.r*.2, ns.db.deadcolor.g*.2, ns.db.deadcolor.b*.2,.6)
 				end
 			end
-			S.CreateTop(healthBartexture, ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b)
+			--S.CreateTop(healthBartexture, ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b)
 			return
 		end
 
 		if  self.inVehicle then
 			if ns.db.mode then
-				healthBar.bg:SetVertexColor(ns.db.vehiclecolor.r, ns.db.vehiclecolor.g, ns.db.vehiclecolor.b)
 				S.CreateTop(healthBar.bg, ns.db.vehiclecolor.r, ns.db.vehiclecolor.g, ns.db.vehiclecolor.b)
 			else
-				healthBar:SetStatusBarColor(ns.db.vehiclecolor.r, ns.db.vehiclecolor.g, ns.db.vehiclecolor.b)
+				S.CreateTop(healthBar.bg, ns.db.vehiclecolor.r*.2, ns.db.vehiclecolor.g*.2, ns.db.vehiclecolor.b*.2)
 				S.CreateTop(healthBartexture, ns.db.vehiclecolor.r, ns.db.vehiclecolor.g, ns.db.vehiclecolor.b)
-			end
-			if not ns.db.mode then 
-				healthBar.bg:SetVertexColor(ns.db.vehiclecolor.r*.2, ns.db.vehiclecolor.g*.2, ns.db.vehiclecolor.b*.2)
 			end
 			return
 		elseif ns.db.definecolors then
 			if ns.db.classbgcolor then
-				healthBar.bg:SetVertexColor(r, g, b)
+				S.CreateTop(healthBar.bg, r, g, b)
 			else
-				if not ns.db.mode then 
-					healthBar.bg:SetVertexColor(ns.db.hpbgcolor.r, ns.db.hpbgcolor.g, ns.db.hpbgcolor.b)
+				if ns.db.mode then
+					S.CreateTop(healthBar.bg, ns.db.hpcolor.r, ns.db.hpcolor.g, ns.db.hpcolor.b)
+				else
+					S.CreateTop(healthBartexture, ns.db.hpcolor.r, ns.db.hpcolor.g, ns.db.hpcolor.b)
+					S.CreateTop(healthBar.bg, ns.db.hpbgcolor.r, ns.db.hpbgcolor.g, ns.db.hpbgcolor.b)
 				end
 			end			
-			healthBar:SetStatusBarColor(ns.db.hpcolor.r, ns.db.hpcolor.g, ns.db.hpcolor.b)
-			S.CreateTop(healthBartexture, ns.db.hpcolor.r, ns.db.hpcolor.g, ns.db.hpcolor.b)
 			return 
 		elseif ns.db.reversecolors  then
-			if not ns.db.mode then 
-				healthBar.bg:SetVertexColor(r*.2, g*.2, b*.2)
+			if ns.db.mode then 
+				S.CreateTop(healthBar.bg, r, g, b)
+			else
+				S.CreateTop(healthBar.bg, r*.2, g*.2, b*.2)
+				S.CreateTop(healthBartexture, r, g, b)
 			end
-			healthBar:SetStatusBarColor(r, g, b)
-			S.CreateTop(healthBartexture, r, g, b)
 		else
-			if not ns.db.mode then 
-				healthBar.bg:SetVertexColor(r, g, b)
+			if ns.db.mode then
+				S.CreateTop(healthBar.bg, DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
+			else
+				S.CreateTop(healthBar.bg, r, g, b)
 			end
-			healthBar:SetStatusBarColor(0, 0, 0, .8)
-			S.CreateTop(healthBartexture, 0, 0, 0)
+			--S.CreateTop(healthBartexture, 0, 0, 0)
 		end		
 	else
 		if ns.db.mode then
 			S.CreateTop(healthBar.bg, ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
 		else
-			healthBar:SetStatusBarColor(ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
 			S.CreateTop(healthBartexture, ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
-			healthBar.bg:SetVertexColor(ns.db.enemycolor.r*.2, ns.db.enemycolor.g*.2, ns.db.enemycolor.b*.2)
+			S.CreateTop(healthBar.bg, ns.db.enemycolor.r*.2, ns.db.enemycolor.g*.2, ns.db.enemycolor.b*.2)
 		end
 	end
 end
@@ -1466,31 +1488,25 @@ function ns:UpdateHealth(self)
 	local healthBar = self.HealthBar
 	local unit = self.displayedUnit or self.unit
 	if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
-		if ns.db.mode then 
-			self.HealthBar:SetValue(0)
-		else
-			self.HealthBar:SetValue(UnitHealthMax(unit))
-		end
+		self.HealthBar:SetValue(0)
 	else
-		--if ns.db.mode then 
-			--self.HealthBar:SetValue(UnitHealthMax(unit) - UnitHealth(unit)) 
-		--else
 		self.HealthBar:SetValue(UnitHealth(unit))
-		--end
 	end
 	healthBar.bd:SetPoint("TOPRIGHT", healthBar)
 	healthBar.bd:SetPoint("BOTTOMLEFT", healthBar:GetStatusBarTexture(), "BOTTOMRIGHT")
 end
 
 function ns:UpdateHealPredictionBarColor(self)
-	self.myHealPredictionBar:GetStatusBarTexture():SetTexture(ns.db.myhealcolor.r, ns.db.myhealcolor.g, ns.db.myhealcolor.b, ns.db.myhealcolor.a)
-	self.otherHealPredictionBar:GetStatusBarTexture():SetTexture(ns.db.otherhealcolor.r, ns.db.otherhealcolor.g, ns.db.otherhealcolor.b, ns.db.otherhealcolor.a)
+	--self.myHealPredictionBar:GetStatusBarTexture():SetTexture(ns.db.myhealcolor.r, ns.db.myhealcolor.g, ns.db.myhealcolor.b, ns.db.myhealcolor.a)
+	S.CreateTop(self.myHealPredictionBar:GetStatusBarTexture(), ns.db.myhealcolor.r, ns.db.myhealcolor.g, ns.db.myhealcolor.b)
+	--self.otherHealPredictionBar:GetStatusBarTexture():SetTexture(ns.db.otherhealcolor.r, ns.db.otherhealcolor.g, ns.db.otherhealcolor.b, ns.db.otherhealcolor.a)
+	S.CreateTop(self.otherHealPredictionBar:GetStatusBarTexture(), ns.db.otherhealcolor.r, ns.db.otherhealcolor.g, ns.db.otherhealcolor.b)
 end
 
 function ns:UpdateHealPredictionBarLayout(self)
 	local healthBar = self.HealthBar
-	
-	self.myHealPredictionBar = CreateFrame('StatusBar', nil, healthBar)
+	local help = self.help4
+	self.myHealPredictionBar = CreateFrame('StatusBar', nil, help)
 	if ns.db.orientation == "VERTICAL" then
 		self.myHealPredictionBar:SetPoint("BOTTOMLEFT", healthBar:GetStatusBarTexture(), "TOPLEFT", 0, 0)
 		self.myHealPredictionBar:SetPoint("BOTTOMRIGHT", healthBar:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
@@ -1501,10 +1517,10 @@ function ns:UpdateHealPredictionBarLayout(self)
 		self.myHealPredictionBar:SetPoint("BOTTOMLEFT", healthBar:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
 		self.myHealPredictionBar:SetSize(ns.db.width, 0)
 	end
-	self.myHealPredictionBar:SetStatusBarTexture("", "BORDER")	
+	self.myHealPredictionBar:SetStatusBarTexture(DB.Statusbar, "BORDER")	
 	self.myHealPredictionBar:Hide()
 
-	self.otherHealPredictionBar = CreateFrame('StatusBar', nil, healthBar)
+	self.otherHealPredictionBar = CreateFrame('StatusBar', nil, help)
 	if ns.db.orientation == "VERTICAL" then
 		self.otherHealPredictionBar:SetPoint("BOTTOMLEFT", self.myHealPredictionBar:GetStatusBarTexture(), "TOPLEFT", 0, 0)
 		self.otherHealPredictionBar:SetPoint("BOTTOMRIGHT", self.myHealPredictionBar:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
@@ -1515,7 +1531,7 @@ function ns:UpdateHealPredictionBarLayout(self)
 		self.otherHealPredictionBar:SetPoint("BOTTOMLEFT", self.myHealPredictionBar:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
 		self.otherHealPredictionBar:SetSize(ns.db.width, 0)
 	end
-	self.otherHealPredictionBar:SetStatusBarTexture("", "BORDER")
+	self.otherHealPredictionBar:SetStatusBarTexture(DB.Statusbar, "BORDER")
 	self.otherHealPredictionBar:Hide() 
 	
 	ns:UpdateHealPredictionBarColor(self)
@@ -1632,15 +1648,15 @@ function ns:UpdatePower(self)
 	power:SetValue(UnitPower(unit, GetUnitPowerID(self)))
 	
 	if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
-		power.bg:SetVertexColor(ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b, .6)
-        power:SetStatusBarColor(ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b, .6)
+		S.CreateTop(power.bg, ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b, .6)
+       -- power:SetStatusBarColor(ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b, .6)
 		S.CreateTop(powertexture, ns.db.deadcolor.r, ns.db.deadcolor.g, ns.db.deadcolor.b)
 		return
 	end
 	
     if ns.db.powerdefinecolors then
-        power.bg:SetVertexColor(ns.db.powerbgcolor.r, ns.db.powerbgcolor.g, ns.db.powerbgcolor.b)
-        power:SetStatusBarColor(ns.db.powercolor.r, ns.db.powercolor.g, ns.db.powercolor.b)
+        S.CreateTop(power.bg, ns.db.powerbgcolor.r, ns.db.powerbgcolor.g, ns.db.powerbgcolor.b)
+        --power:SetStatusBarColor(ns.db.powercolor.r, ns.db.powercolor.g, ns.db.powercolor.b)
 		S.CreateTop(powertexture, ns.db.powercolor.r, ns.db.powercolor.g, ns.db.powercolor.b)
         return
     end
@@ -1658,12 +1674,12 @@ function ns:UpdatePower(self)
 	end
 
 	if ns.db.reversecolors or ns.db.powerclass then
-		power.bg:SetVertexColor(r*.2, g*.2, b*.2)
-		power:SetStatusBarColor(r, g, b)
+		S.CreateTop(power.bg, r*.2, g*.2, b*.2)
+		--power:SetStatusBarColor(r, g, b)
 		S.CreateTop(powertexture, r, g, b)
 	else
-		power.bg:SetVertexColor(r, g, b)
-		power:SetStatusBarColor(0, 0, 0, .8)
+		S.CreateTop(power.bg, r, g, b)
+		--power:SetStatusBarColor(0, 0, 0, .8)
 		S.CreateTop(powertexture, 0, 0, 0)
 	end
 end

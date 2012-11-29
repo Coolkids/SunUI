@@ -17,6 +17,8 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_SUCCESS",
 	"SPELL_CAST_START",
 	"CHAT_MSG_MONSTER_YELL",
+	"SPELL_DAMAGE",
+	"SPELL_MISSED",
 	"UNIT_SPELLCAST_SUCCEEDED"
 )
 
@@ -62,10 +64,15 @@ local timerCalamityCD			= mod:NewCDTimer(6, 124845, nil, mod:IsHealer())
 local timerVisionsCD			= mod:NewCDTimer(19.5, 124862)
 local timerConsumingTerrorCD	= mod:NewCDTimer(32, 124849, nil, not mod:IsTank())
 
+local berserkTimer				= mod:NewBerserkTimer(900)
+
 local timerQJ					= mod:NewTargetTimer(120, 124821)
 local timerDQ					= mod:NewBuffFadesTimer(30, 124827)
 
 mod:AddBoolOption("InfoFrame")--On by default because these do more then just melee, they interrupt spellcasting (bad for healers)
+
+mod:AddBoolOption("InfoYB", true, "sound")
+
 mod:AddBoolOption("RangeFrame", mod:IsRanged())
 mod:AddBoolOption("StickyResinIcons", true)
 
@@ -76,6 +83,10 @@ local resinIcon = 2
 local shaName = EJ_GetEncounterInfo(709)
 local phase3Started = false
 local warnedhp = false
+local hp = 100
+
+local ybhp = {}
+local sh = {}
 
 local function warnVisionsTargets()
 	warnVisions:Show(table.concat(visonsTargets, "<, >"))
@@ -104,13 +115,20 @@ function mod:OnCombatStart(delay)
 	timerPhase2:Start(-delay)
 	table.wipe(sentLowHP)
 	table.wipe(warnedLowHP)
+	table.wipe(ybhp)
 	table.wipe(visonsTargets)
 	table.wipe(DeadMarkers)
 	table.wipe(QJMarkers)
 	ptwo = false
 	warnedhp = false
+	hp = 100
+	hp1 = 100
+	hp2 = 100
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Show(5)
+	end
+	if not self:IsDifficulty("lfr25") then
+		berserkTimer:Start(-delay)
 	end
 	self:RegisterShortTermEvents(
 		"UNIT_HEALTH_FREQUENT_UNFILTERED"
@@ -388,10 +406,22 @@ end
 function mod:UNIT_HEALTH_FREQUENT_UNFILTERED(uId)
 	local cid = self:GetUnitCreatureId(uId)
 	local guid = UnitGUID(uId)
-	if cid == 62847 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.1 and not sentLowHP[guid] then
-		sentLowHP[guid] = true
-		self:SendSync("lowhealth", guid)
-	end	
+	if cid == 62847 then
+		if self:IsDifficulty("heroic10", "heroic25") then
+			if UnitHealth(uId) / UnitHealthMax(uId) <= 0.17 and not sentLowHP[guid] then
+				sentLowHP[guid] = true
+				self:SendSync("lowhealth", guid)
+			end
+		else
+			if UnitHealth(uId) / UnitHealthMax(uId) <= 0.10 and not sentLowHP[guid] then
+				sentLowHP[guid] = true
+				self:SendSync("lowhealth", guid)
+			end
+		end
+		hp = UnitHealth(uId)
+		hp = math.floor(hp)
+		self:SendSync("ybhealth", guid, hp)
+	end
 	if uId == "player" then
 		if UnitDebuff("player", GetSpellInfo(123184)) then
 			if self:IsDifficulty("heroic10", "heroic25") then
@@ -411,11 +441,44 @@ function mod:UNIT_HEALTH_FREQUENT_UNFILTERED(uId)
 	end
 end
 
-function mod:OnSync(msg, guid)
+function mod:OnSync(msg, guid, hp)
 	if msg == "lowhealth" and guid and not warnedLowHP[guid] then
 		warnedLowHP[guid] = true
 		warnSonicDischarge:Show()--This only works if someone in raid is actually targeting them :(
 		specwarnSonicDischarge:Show()--But is extremly useful when they are.
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ybbz.mp3") --音波爆炸準備
+	elseif msg == "ybhealth" and guid and hp then
+		if self.Options.InfoYB then
+			if not ybhp[guid] then ybhp[guid] = hp end
+			if ybhp[guid] > hp then ybhp[guid] = hp end
+			table.wipe(sh)
+			for k,v in pairs(ybhp) do
+				table.insert(sh,{K=k,V=v})
+			end
+			table.sort (sh,function(a,b) return a.V< b.V end)
+			DBM.InfoFrame:SetHeader(GetSpellInfo(123184))
+			if #sh == 2 then
+				DBM.InfoFrame:Show(1, "other", sh[2].V, sh[1].V)
+			elseif #sh == 1 then
+				DBM.InfoFrame:Show(1, "other", "-", sh[1].V)
+			end
+		end
 	end
 end
+
+function mod:SPELL_DAMAGE(sourceGUID, _, _, _, _, _, _, _, spellId)
+	if spellId == 123504 then
+		if self.Options.InfoYB then
+			if ybhp[sourceGUID] then ybhp[sourceGUID] = nil end
+			table.wipe(sh)
+			for k,v in pairs(ybhp) do
+				table.insert(sh,{K=k,V=v})
+			end
+			if #sh == 0 then
+				DBM.InfoFrame:SetHeader(GetSpellInfo(123184))
+				DBM.InfoFrame:Show(1, "other", "-", "-")
+			end
+		end
+	end
+end
+mod.SPELL_MISSED = mod.SPELL_DAMAGE

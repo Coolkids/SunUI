@@ -245,6 +245,10 @@ L:SetMiscLocalization({
 ------------
 L= DBM:GetModLocalization(677)
 
+L:SetWarningLocalization({
+	specWarnBomb				= "小怪(%d) >> 準備爆破 <<!!"
+})
+
 L:SetOptionLocalization({
 	InfoFrame			= "資訊框：$spell:116525的目標",
 	ArrowOnCombo	= "為$journal:5673顯示DBM箭頭\n注:這是假設坦克在前方而其他人在後方",
@@ -255,6 +259,17 @@ L:SetOptionLocalization({
 	SoundADD2			= "語音警告：$spell:ej5676",
 	SoundADD3A			= "預先語音警告：$spell:ej5677 (8秒前)",
 	SoundADD3			= "語音警告：$spell:ej5677",
+	ragebomb1			= "英雄模式：爆破第1組輕甲兵",
+	ragebomb2			= "英雄模式：爆破第2組輕甲兵",
+	ragebomb3			= "英雄模式：爆破第3組輕甲兵",
+	ragebomb4			= "英雄模式：爆破第4組輕甲兵",
+	ragebomb5			= "英雄模式：爆破第5組輕甲兵",
+	ragebomb6			= "英雄模式：爆破第6組輕甲兵",
+	ragebomb7			= "英雄模式：爆破第7組輕甲兵",
+	ragebomb8			= "英雄模式：爆破第8組輕甲兵",
+	ragebomb9			= "英雄模式：爆破第9組輕甲兵",
+	ragebomb10			= "英雄模式：爆破第10組輕甲兵",
+	specWarnBomb		= "特殊警告：本輪需要爆破小怪",
 	optBY				= "語音警告：僅提示此首領的毀滅連擊",
 	tarfoc				= "當前目標和專注目標",
 	Janxi				= "臻璽(左側傀儡)",

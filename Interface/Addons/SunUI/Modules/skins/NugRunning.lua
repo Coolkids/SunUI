@@ -5,6 +5,19 @@ local _
 NugRunningConfig.nameFont = { font = DB.Font, size = 12, alpha = 0.5 }
 NugRunningConfig.timeFont = { font = "interface\\addons\\SunUI\\Media\\font.ttf", size = 12, alpha = 1 }
 NugRunningConfig.stackFont = { font = DB.Font, size = 12 }
+NugRunningConfig.dotpowerFont = { font = "interface\\addons\\SunUI\\Media\\font.ttf", size = 11,  alpha = 1  }
+
+NugRunningConfig.anchors = {
+    main = {
+        { name = "player", gap = 6, alpha = 1 },
+        { name = "target", gap = 6, alpha = 1},
+        { name = "buffs", gap = 6, alpha = 1},
+        { name = "offtargets", gap = 6, alpha = .7},
+    },
+    secondary = {
+        { name = "procs", gap = 6, alpha = .8},
+    },
+}
 -- Replace bar creation function
 ConstructTimerBar = function(width, height)
     local f = CreateFrame("Frame",nil,UIParent)
@@ -74,8 +87,9 @@ ConstructTimerBar = function(width, height)
 	f.SetColor = TimerBarSetColor
 	
 	local powertext = f.bar:CreateFontString()
-    powertext:SetFont(NugRunningConfig.stackFont.font,
-                      NugRunningConfig.stackFont.size)
+   powertext:SetFont(NugRunningConfig.dotpowerFont.font,
+                      NugRunningConfig.dotpowerFont.size,
+                      "THINOUTLINE")
     powertext:SetPoint("BOTTOMLEFT", f.bar, "BOTTOMRIGHT",2,0)
 	powertext:SetShadowColor(0, 0, 0)
 	powertext:SetShadowOffset(S.mult, -S.mult)

@@ -1,4 +1,4 @@
-## Interface: 50001
+## Interface: 50100
 ## Title: |cff00d2ffSun|r|cffffffffUI|r Fishing
 ## Notes: 双击钓鱼
 ## Version: beta 1.0

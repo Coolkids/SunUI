@@ -85,7 +85,8 @@ L= DBM:GetModLocalization(713)
 
 L:SetWarningLocalization({
 	specwarnUnder	= "离开紫圈!",
-	specWarnPungencyOtherFix = "%s 敏感 (%d)"
+	specWarnPungencyOtherFix = "%s 敏感 (%d)",
+	specwarnCrushH	= "重碾 (%d)"
 })
 
 L:SetOptionLocalization({
@@ -102,7 +103,8 @@ L:SetOptionLocalization({
 })
 
 L:SetMiscLocalization({
-	UnderHim	= "下面"
+	UnderHim	= "下面",
+	Heroicrush	= "他的对手"
 })
 ----------------------
 -- Wind Lord Mel'jarak --
@@ -178,8 +180,10 @@ L:SetWarningLocalization({
 L:SetOptionLocalization({
 	warnAmberTrap		= "警报：$spell:125826的生成，并提示进度", -- maybe bad translation.
 	InfoFrame			= "信息框：受$spell:125390效果影响的玩家",
+	InfoYB				= "信息框：音波能量监视(团队中必须有人做焦点)",
 	SoundWOP			= "语音警告：重要技能",
 	HudMAP				= "高级定位监视(HUD)：$spell:124863的位置",
+	HudMAP2				= "高级定位监视(HUD)：$spell:124821的位置",
 	RangeFrame			= "距离监视（5码）：$spell:123735",
 	StickyResinIcons	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(124097)
 })

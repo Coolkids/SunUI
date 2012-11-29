@@ -90,12 +90,7 @@ do
 
       local r, g, b = unpack(settings.colors[type]) 
 	  frame:CreateShadow("")
-	  frame:SetReverseFill(true)
-		local gradient = frame:CreateTexture(nil, "BACKGROUND")
-		gradient:SetPoint("TOPLEFT")
-		gradient:SetPoint("BOTTOMRIGHT")
-		gradient:SetTexture(DB.Statusbar)
-		gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+	  S.CreateBack(frame)
 		
 
       local text = frame:CreateFontString(nil, 'OVERLAY') 
@@ -114,8 +109,10 @@ do
       frame:SetSize(settings.width, settings.height) 
 
       frame:SetStatusBarTexture(settings.texture) 
-      frame:SetStatusBarColor(r, g, b) 
 
+	  S.CreateTop(frame:GetStatusBarTexture(), r, g, b)
+	  S.CreateMark(frame)
+	  
       frame.type = type 
       frame.text = text 
 

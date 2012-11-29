@@ -203,7 +203,6 @@ local function OnMouseDown(...)
 end
 btn:RegisterEvent("PLAYER_ENTERING_WORLD")
 btn:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
-btn:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
 btn:SetScript("OnEvent", function(self, event)
 	if event == "PLAYER_ENTERING_WORLD" then
 		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
@@ -211,8 +210,9 @@ btn:SetScript("OnEvent", function(self, event)
 			knowFish = true
 			WorldFrame:HookScript("OnMouseDown", OnMouseDown)
 		end
+		isPole = IsFishPole()
 	end
-	if event == "PLAYER_EQUIPMENT_CHANGED" or event == "PLAYER_ENTERING_WORLD" then
+	if event == "PLAYER_EQUIPMENT_CHANGED" then
 		isPole = IsFishPole()
 	end
 	if not InCombatLockdown() and knowFish and isPole then

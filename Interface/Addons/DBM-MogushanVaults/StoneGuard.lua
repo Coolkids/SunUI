@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8086 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8194 $"):sub(12, -3))
 mod:SetCreatureID(60051, 60043, 59915, 60047)--Cobalt: 60051, Jade: 60043, Jasper: 59915, Amethyst: 60047
 mod:SetModelID(41892)
 mod:SetZone()
@@ -22,7 +22,7 @@ local warnCobaltOverload			= mod:NewSpellAnnounce(115840, 4)
 local warnJadeOverload				= mod:NewSpellAnnounce(115842, 4)
 local warnJasperOverload			= mod:NewSpellAnnounce(115843, 4)
 local warnAmethystOverload			= mod:NewSpellAnnounce(115844, 4)
-local warnCobaltMine				= mod:NewTargetAnnounce(129424, 4)
+local warnCobaltMine				= mod:NewSpellAnnounce(129424, 4)
 local warnJadeShards				= mod:NewSpellAnnounce(116223, 3, nil, false)
 local warnJasperChains				= mod:NewTargetAnnounce(130395, 4)
 local warnAmethystPool				= mod:NewTargetAnnounce(130774, 3, nil, false)
@@ -129,6 +129,7 @@ local function isTank(unit)
 	return false
 end
 
+--[[
 function mod:ClobaltMineTarget(targetname)
 	warnCobaltMine:Show(targetname)
 	if targetname == UnitName("player") then
@@ -179,6 +180,7 @@ function mod:ScanHandler(ScansCompleted)
 		end
 	end
 end
+--]]
 
 local RPN, GPN, BPN, PPN = 0, 0, 0, 0
 local Nextoverloadboss
@@ -231,7 +233,7 @@ end
 
 function mod:OnCombatStart(delay)
 	activePetrification = nil
-	scansDone = 0
+--	scansDone = 0
 	playerHasChains = false
 	table.wipe(jasperChainsTargets)
 	table.wipe(amethystPoolTargets)
@@ -495,8 +497,9 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 			end
 		end
 	elseif spellId == 129424 and self:AntiSpam(2, 5) then
-		scansDone = 0
-		self:ScanHandler()
+--		scansDone = 0
+--		self:ScanHandler()
+		warnCobaltMine:Show()
 		timerCobaltMineCD:Start()
 	end
 end

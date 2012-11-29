@@ -1,8 +1,5 @@
 local S, C, L, DB = unpack(select(2, ...))
-local _
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SkinSkada", "AceEvent-3.0")
-if not IsAddOnLoaded("Skada") then return end
-
 local function StripOptions(options)
 	options.baroptions.args.barspacing = nil
 	options.titleoptions.args.texture = nil
@@ -12,7 +9,6 @@ local function StripOptions(options)
 	options.titleoptions.args.color = nil
 	options.windowoptions = nil
 end
-
 
 local function LoadSkin()
 	local Skada = Skada
@@ -68,6 +64,7 @@ local Skada_Skin = CreateFrame("Frame")
 Skada_Skin:RegisterEvent("PLAYER_ENTERING_WORLD")
 Skada_Skin:SetScript("OnEvent", function(self)
 	self:UnregisterAllEvents()
-	self = nil				
+	self = nil
+	if not IsAddOnLoaded("Skada") then return end
 	LoadSkin()
 end)

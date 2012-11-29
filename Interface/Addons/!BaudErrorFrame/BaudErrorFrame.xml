@@ -90,7 +90,7 @@
 	</Button>
 	<Frame name="BaudErrorFrame" toplevel="true" frameStrata="DIALOG" enableMouse="true" parent="UIParent" hidden="true" movable="true">
 		<Size>
-			<AbsDimension x="600" y="500"/>
+			<AbsDimension x="650" y="500"/>
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER"/>

@@ -1,10 +1,11 @@
-## Interface: 50001
+## Interface: 50100
 ## Title: |cff00d2ffSun|r|cffffffffUI|r
 ## Notes: 整合插件
 ## Version: 20121127
 ## Author:dtzy, Ray, 楼上的你妈妈叫你吃饭, other Authors, Coolkid
 ## SavedVariables: SunUIConfig, RayWatcherDB, stAddonProfiles, stLockedAddons
 ## SavedVariablesPerCharacter: CoreVersion
+## RequiredDeps: Blizzard_CombatText
 ## X-WoWBox-Ver: 1
 ## X-WoWBox-ID: 3341
 

@@ -1368,6 +1368,8 @@ errata.Hyjal_terrain1 = errata.Hyjal
 errata.Uldum_terrain1 = errata.Uldum
 errata.Gilneas_terrain1 = errata.Gilneas
 errata.Gilneas_terrain2 = errata.Gilneas
+errata.Krasarang_terrain1 = errata.Krasarang
+
 local db
 local defaults = {
 	profile = {

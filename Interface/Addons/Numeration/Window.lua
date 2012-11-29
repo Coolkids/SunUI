@@ -88,7 +88,7 @@ function window:OnInitialize()
 	self:EnableMouseWheel(true)
 	self:SetMovable(true)
 	self:RegisterForDrag("LeftButton")
-	self:SetScript("OnDragStart", function() if IsAltKeyDown() then self:StartMoving() end end)
+	self:SetScript("OnDragStart", function() if IsShiftKeyDown() then self:StartMoving() end end)
 	self:SetScript("OnDragStop", function()
 		self:StopMovingOrSizing()
 

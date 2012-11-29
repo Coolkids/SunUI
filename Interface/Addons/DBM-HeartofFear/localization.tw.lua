@@ -82,7 +82,8 @@ L= DBM:GetModLocalization(713)
 
 L:SetWarningLocalization({
 	specwarnUnder	= "離開紫圈!",
-	specWarnPungencyOtherFix = "%s 敏感 (%d)"
+	specWarnPungencyOtherFix = "%s 敏感 (%d)",
+	specwarnCrushH	= "碾碎 (%d)"
 })
 
 L:SetOptionLocalization({
@@ -178,6 +179,7 @@ L:SetWarningLocalization({
 L:SetOptionLocalization({
 	warnAmberTrap		= "警告：$spell:125826的生成和進度", -- maybe bad translation.
 	InfoFrame			= "資訊框：被$spell:125390的團員",
+	InfoYB				= "資訊框：音波能量監視(團隊中必須有人做焦點)",
 	SoundWOP			= "語音警告：重要技能",
 	HudMAP				= "高級定位監視(HUD)：$spell:124863的位置",
 	HudMAP2				= "高級定位監視(HUD)：$spell:124821的位置",

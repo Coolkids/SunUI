@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8126 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8153 $"):sub(12, -3))
 mod:SetCreatureID(62543)
 mod:SetModelID(43141)
 mod:SetZone()
@@ -144,7 +144,9 @@ function mod:SPELL_AURA_APPLIED(args)
 			end
 		end
 	elseif args:IsSpellID(123471) then
-		warnIntensify:Show(args.destName, args.amount or 1)
+		if ptwo and (args.amount or 1) % 3 == 0 or not ptwo then
+			warnIntensify:Show(args.destName, args.amount or 1)
+		end
 		timerIntensifyCD:Start(intensifyCD)
 	end
 end

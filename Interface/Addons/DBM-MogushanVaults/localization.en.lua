@@ -201,6 +201,10 @@ L:SetMiscLocalization({
 ------------
 L= DBM:GetModLocalization(677)
 
+L:SetWarningLocalization({
+	specWarnBomb				= ">> Bomb(%d) <<"
+})
+
 L:SetOptionLocalization({
 	InfoFrame			= "Show info frame for players affected by $spell:116525",
 	ArrowOnCombo	= "Show DBM Arrow during $journal:5673\nNOTE: This assumes tank is in front of boss and anyone else is behind.",

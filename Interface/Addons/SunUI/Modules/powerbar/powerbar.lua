@@ -98,8 +98,8 @@ function Module:CreateMonkBar()
 	chibar:RegisterEvent("PLAYER_REGEN_DISABLED")
 	chibar:RegisterEvent("PLAYER_REGEN_ENABLED")
 	chibar:SetScript("OnEvent",function(self, event, unit)
-		local chinum = UnitPower("player",SPELL_POWER_LIGHT_FORCE)
-		local chimax = UnitPowerMax("player",SPELL_POWER_LIGHT_FORCE)
+		local chinum = UnitPower("player",SPELL_POWER_CHI)
+		local chimax = UnitPowerMax("player",SPELL_POWER_CHI)
 		if unit == "player" then
 			if chinum ~= chimax then
 				if chimax == 4 then

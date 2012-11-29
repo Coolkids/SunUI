@@ -28,15 +28,17 @@ function Module:OnInitialize()
 	end
 
 	local DurationWidget = function()
-		ALFG:SetSize(LFGDungeonReadyDialog:GetWidth()*0.8,8)
+		ALFG:SetSize(LFGDungeonReadyDialog:GetWidth()*0.8,5)
 		ALFG:SetPoint("BOTTOM",LFGDungeonReadyDialog,0,12)
 		ALFG.durationBar:SetStatusBarTexture(DB.Statusbar)
-		ALFG.durationBar:Point("TOPLEFT", ALFG, 1, -1)
-		ALFG.durationBar:Point("BOTTOMRIGHT", ALFG, -1, 1)
+		ALFG.durationBar:SetPoint("TOPLEFT", ALFG)
+		ALFG.durationBar:SetPoint("BOTTOMRIGHT", ALFG)
+		ALFG.durationBar:SetMinMaxValues(0, 40)
 		ALFG.durationBar:SetFrameLevel(LFGDungeonReadyDialog:GetFrameLevel()+1)
-		ALFG:CreateBorder()
+		--ALFG:CreateBorder()
+		ALFG.durationBar:CreateShadow()
 		S.CreateBack(ALFG.durationBar)
-		S.CreateTop(ALFG.durationBar:GetStatusBarTexture(), 1,.7, 0, 1)
+		S.CreateTop(ALFG.durationBar:GetStatusBarTexture(), 1,.7, 0)
 		S.CreateMark(ALFG.durationBar)
 		
 		ALFG.durationTime:SetFontObject(GameFontNormalLarge)
@@ -58,8 +60,8 @@ function Module:OnInitialize()
 			if obj.nextUpdate > interval then
 				local newTime = GetTime()
 				if (newTime - oldTime) < duration then
-					local width = ALFG:GetWidth() * (newTime - oldTime)/duration
-					ALFG.durationBar:SetPoint("BOTTOMRIGHT",ALFG,0-width,1)
+					--print((newTime - oldTime)) duration - (newTime - oldTime)
+					ALFG.durationBar:SetValue(duration - (newTime - oldTime))
 					ALFG.durationTime:SetText(string.format("%d",(duration - (newTime - oldTime))))		
 					flag = flag + 1
 					if flag >= 10 then

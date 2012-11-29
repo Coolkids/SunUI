@@ -1,8 +1,0 @@
-## Interface: 50001
-## Version: 12.10.13
-## Title: Examiner
-## Author: Aezay (Earthen Ring EU)
-## Notes: Advanced Inspection Mod of Gear, Talents, Honor, Arena and Achievements.
-## SavedVariables: Examiner_Config, Examiner_Cache
-LibGearExam\LibGearExam.xml
-Examiner.xml

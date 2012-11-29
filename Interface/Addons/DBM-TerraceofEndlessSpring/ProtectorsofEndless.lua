@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8123 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8159 $"):sub(12, -3))
 mod:SetCreatureID(60585, 60586, 60583)--60583 Protector Kaolan, 60585 Elder Regail, 60586 Elder Asani
 mod:SetModelID(41503)--Protector Kaolan, 41502 and 41504 are elders
 mod:SetZone()
@@ -13,6 +13,7 @@ mod:RegisterCombat("combat")
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED",
 	"SPELL_AURA_APPLIED_DOSE",
+	"SPELL_AURA_REMOVED",
 	"SPELL_CAST_START",
 	"SPELL_CAST_SUCCESS",
 	"SPELL_DAMAGE",
@@ -55,6 +56,9 @@ local specWarnExpelCorruption		= mod:NewSpecialWarningSpell(117975, nil, nil, ni
 --Minions of Fear
 local specWarnCorruptedEssence		= mod:NewSpecialWarningStack(118191, true, 7)--Amount may need adjusting depending on what becomes an accepted strategy
 
+local specWarnwarterDD				= mod:NewSpecialWarningInterrupt(118312)
+local specWarnDDL				= mod:NewSpecialWarning("specWarnDDL")
+
 --Elder Asani
 local timerCleansingWatersCD		= mod:NewNextTimer(32.5, 117309)
 local timerCorruptingWatersCD		= mod:NewNextTimer(42, 117227)
@@ -80,8 +84,13 @@ local prisonTargets = {}
 local prisonIcon = 1--Will try to start from 1 and work up, to avoid using icons you are probalby putting on bosses (unless you really fail at spreading).
 local prisonDebuff = GetSpellInfo(79339)
 local prisonCount = 0
+local watercount = 0
 
 mod:AddBoolOption("HudMAP", true, "sound")
+
+mod:AddBoolOption("optDDall", true, "sound")
+
+mod:AddDropdownOption("optDD", {"nodd", "DD1", "DD2", "DD3"}, "nodd", "sound")
 local DBMHudMap = DBMHudMap
 local free = DBMHudMap.free
 local function register(e)	
@@ -99,26 +108,6 @@ do
 		return UnitDebuff(uId, prisonDebuff)
 	end
 end
-
-local function checkdebuffend(destname)
-    if UnitDebuff(destname, GetSpellInfo(117436)) then
-        mod:Schedule(0.1, function()
-			checkdebuffend(destname)
-		end)
-	else
-		prisonCount = prisonCount - 1
-		if prisonCount == 0 and mod.Options.RangeFrame then
-			DBM.RangeCheck:Hide()
-		end
-		if mod.Options.SetIconOnPrison then
-			mod:SetIcon(destname, 0)
-		end
-		if LightningPrisonMarkers[destname] then
-			LightningPrisonMarkers[destname] = free(LightningPrisonMarkers[destname])
-		end
-	end
-end
-
 
 local function warnPrisonTargets()
 	if mod.Options.RangeFrame then
@@ -167,11 +156,12 @@ function mod:OnCombatStart(delay)
 	totalTouchOfSha = 0
 	prisonCount = 0
 	scansDone = 0
+	watercount = 0
 	table.wipe(prisonTargets)
 	table.wipe(LightningPrisonCastMarkers)
 	table.wipe(LightningPrisonMarkers)
 	timerCleansingWatersCD:Start(10-delay)
-	timerLightningPrisonCD:Start(15.5-delay)--May be off a tiny bit, (or a lot of blizzard doesn't fix bug where cast doesn't happen at all)
+	timerLightningPrisonCD:Start(15.5-delay)
 	if self:IsDifficulty("normal10", "heroic10") then
 		timerTouchOfShaCD:Start(35-delay)
 	else
@@ -231,7 +221,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.HudMAP then
 			if not args:IsPlayer() then
 				LightningPrisonMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("highlight", args.destName, 8, nil, 0, 1, 0, 1):RegisterForAlerts())
-				checkdebuffend(args.destName)
 			end
 		end
 	elseif args:IsSpellID(117283) then
@@ -278,7 +267,6 @@ function mod:SPELL_AURA_REMOVED(args)
 		totalTouchOfSha = totalTouchOfSha - 1
 	elseif args:IsSpellID(117436) then
 		prisonCount = prisonCount - 1
-		--print("BUG is FIXED!")
 		if prisonCount == 0 and self.Options.RangeFrame then
 			DBM.RangeCheck:Hide()
 		end
@@ -329,6 +317,18 @@ function mod:SPELL_CAST_START(args)
 		else
 			timerLightningStormCD:Start(41)
 		end
+	elseif args:IsSpellID(118312) then --水箭
+		watercount = watercount + 1
+		if (args.sourceGUID == UnitGUID("target") and self.Options.optDDall) or (not self.Options.optDDall) then
+			if ((mod.Options.optDD == "DD1") and (watercount % 3 == 1)) or ((mod.Options.optDD == "DD2") and (watercount % 3 == 2)) or ((mod.Options.optDD == "DD3") and (watercount % 3 == 0)) then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3") --快打斷
+				specWarnwarterDD:Show(args.sourceName)
+			end	
+			if ((mod.Options.optDD == "DD1") and (watercount % 3 == 0)) or ((mod.Options.optDD == "DD2") and (watercount % 3 == 1)) or ((mod.Options.optDD == "DD3") and (watercount % 3 == 2)) then
+				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ddzb.mp3") --打斷準備
+				specWarnDDL:Schedule(1)
+			end
+		end
 	end
 end
 
@@ -337,7 +337,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 		warnDefiledGround:Show()
 		timerDefiledGroundCD:Start()
 		for i = 1, 3 do
-			if UnitName("boss"..i) == args.sourcename then
+			if UnitName("boss"..i) == args.sourceName then
 				if UnitName("boss"..i.."target") == UnitName("player") then
 					specWarnDefiledGround:Show()
 					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開

@@ -3,12 +3,12 @@ local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndJK		= mod:NewSound(nil, "SoundJK", true)
 
-mod:SetRevision(("$Revision: 8117 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8186 $"):sub(12, -3))
 mod:SetCreatureID(62442)--62919 Unstable Sha, 62969 Embodied Terror
 mod:SetModelID(42532)
+mod:SetReCombatTime(60)--fix lfr combat re-starts after killed.
 
 mod:RegisterCombat("combat")
-mod:RegisterKill("yell", L.Victory)
 
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED",
@@ -55,7 +55,7 @@ local timerTerrorizeCD					= mod:NewNextTimer(14, 123012)--Besides being cast 14
 local timerSunBreathCD					= mod:NewCDTimer(29, 122855)
 --local timerLightOfDayCD					= mod:NewCDTimer(30.5, "ej6551", nil, mod:IsHealer(), nil, 123716)--Don't have timing for this yet, heroic logs i was sent always wiped VERY early in light phase.
 
-local berserkTimer						= mod:NewBerserkTimer(500)--a little over 8 min, basically 3rd dark phase is auto berserk.
+local berserkTimer						= mod:NewBerserkTimer(490)--a little over 8 min, basically 3rd dark phase is auto berserk.
 
 local terrorName = EJ_GetSectionInfo(6316)
 local targetScansDone = 0
@@ -219,6 +219,8 @@ function mod:SPELL_CAST_SUCCESS(args)
 		if not mod:IsDps() then
 			sndWOP:Schedule(26, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
 		end
+	elseif args:IsSpellID(124176) then
+		DBM:EndCombat(self)
 	end
 end
 

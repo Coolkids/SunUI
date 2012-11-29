@@ -86,6 +86,9 @@ UIDropDownMenu_Initialize(dropdown, init, 'MENU')
 
 lib.PostUpdateHealth = function(s, u, min, max)
 	--if UnitIsDeadOrGhost(u) then s:SetValue(0) end
+	if not U["ReverseHPbars"] then
+		s:SetStatusBarColor(0,0,0,0)
+	end
 	s.bd:SetPoint("TOPRIGHT", s)
 	s.bd:SetPoint("BOTTOMLEFT", s:GetStatusBarTexture(), "BOTTOMRIGHT")
 end
@@ -123,8 +126,8 @@ lib.gen_hpbar = function(f)
 	h:SetAllPoints(s)
 	h:SetFrameLevel(9)
 	if not U["ReverseHPbars"] then 
-		s:SetStatusBarTexture("")
-		s:SetAlpha(1)
+		s:SetStatusBarTexture(DB.Statusbar)
+		s:SetStatusBarColor(0,0,0,0)
 		S.CreateBack(s)
 		local spark =  h:CreateTexture(nil, "OVERLAY")
 		spark:SetVertexColor(0, 0, 0, 1)
@@ -143,7 +146,11 @@ lib.gen_hpbar = function(f)
 	bg.b:SetAllPoints(bg)
 	if not U["ReverseHPbars"] then
 		bg:SetAlpha(0.6)
-		S.CreateTop(bg.b, 228/255, 38/255, 141/255)
+		if U["ClassColor"] then 
+			S.CreateTop(bg.b, DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)
+		else
+			S.CreateTop(bg.b, 228/255, 38/255, 141/255)
+		end
 	else
 		bg:SetAlpha(1)
 		bg.b:SetVertexColor(0.33, 0.33, 0.33, 1)
@@ -157,14 +164,6 @@ lib.gen_hpbar = function(f)
     s:SetOrientation("HORIZONTAL") 
 	s:SetFrameLevel(4)
 	s:CreateShadow()
-	-- debug
-    -- local spar =  s:CreateTexture(nil, "OVERLAY")
-	-- spar:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
-	-- spar:SetBlendMode("ADD")
-	-- spar:SetAlpha(1)
-	-- spar:SetPoint("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
-	-- spar:SetPoint("BOTTOMRIGHT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
-	--resting indicator for player frame
 		
 	if f.mystyle == "player" then
 		local ri = h:CreateTexture(nil, 'OVERLAY')
@@ -841,8 +840,8 @@ lib.addHarmony = function(f)
 	chibar:RegisterEvent("UNIT_POWER")
 	chibar:RegisterEvent("UNIT_DISPLAYPOWER")
 	chibar:SetScript("OnEvent",function()
-		local chinum = UnitPower("player",SPELL_POWER_LIGHT_FORCE)
-		local chimax = UnitPowerMax("player",SPELL_POWER_LIGHT_FORCE)
+		local chinum = UnitPower("player",SPELL_POWER_CHI)
+		local chimax = UnitPowerMax("player",SPELL_POWER_CHI)
 		if chinum ~= chimax then
 			if chimax == 4 then
 				chibar[5]:Hide()
@@ -1285,10 +1284,10 @@ lib.gen_threat = function(f)
 	else 
 		if U["ClassColor"] then 
 			self.colors.smooth = {DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b}
-			self.Health.colorSmooth = true
+			sself.Health.colorHealth = false
 		else
 			self.colors.health = {228/255, 38/255, 141/255}
-			self.Health.colorHealth = true 
+			self.Health.colorHealth = false 
 		end
 	end
 	self.Health.multiplier = 0.3

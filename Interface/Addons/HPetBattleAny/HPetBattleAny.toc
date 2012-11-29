@@ -1,4 +1,4 @@
-﻿## Interface: 50001
+﻿## Interface: 50100
 ## Title: Hshine
 ## Notes: Hshine
 ## Title:|cFFBF00FF[H]|r Something About Pet Battle

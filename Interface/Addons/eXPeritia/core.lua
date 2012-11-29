@@ -5,7 +5,7 @@
 local eXPeritia = CreateFrame("Frame", "eXPeritia", UIParent)
 local _G = getfenv(0)
 eXPeritia:SetPoint("TOP", UIParent, "TOP", 0, -100)  -- Position of bar
- 
+local _
 local LargeValue = function(value)
   if(value > 999 or value < -999) then
     return string.format("|cffffffff%.0f|rk", value / 1e3)

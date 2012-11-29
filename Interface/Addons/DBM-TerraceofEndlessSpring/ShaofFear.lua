@@ -3,7 +3,7 @@ local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndDD	= mod:NewSound(nil, "SoundDD", mod:IsTank())
 
-mod:SetRevision(("$Revision: 8137 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8165 $"):sub(12, -3))
 mod:SetCreatureID(60999)--61042 Cheng Kang, 61046 Jinlun Kun, 61038 Yang Guoshi, 61034 Terror Spawn
 mod:SetModelID(41772)
 
@@ -53,7 +53,7 @@ end
 
 function mod:OnCombatStart(delay)
 	warnBreathOfFearSoon:Schedule(23.4-delay)
-	if self:IsDifficulty("lfr25") then
+	if self:IsDifficulty("normal10", "heroic10", "lfr25") then
 		timerOminousCackleCD:Start(40-delay)
 	else
 		timerOminousCackleCD:Start(25.5-delay)
@@ -158,7 +158,7 @@ function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(119593, 119692, 119693) then--This seems to have multiple spellids, depending on which platform he's going to send you to. TODO, figure out which is which platform and add additional warnings
 		specWarnOminousCackle:Show()
 		if self:IsDifficulty("normal10", "heroic10", "lfr25") then
-			timerOminousCackleCD:Start(90)--Far less often on LFR
+			timerOminousCackleCD:Start(90.5)--Far less often on LFR
 		else
 			timerOminousCackleCD:Start()
 		end
@@ -172,10 +172,10 @@ function mod:SPELL_CAST_START(args)
 	elseif args:IsSpellID(119888) and platformMob and args.sourceName == platformMob then
 		specWarnDeathBlossom:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jykd.mp3") --劍雨快躲
-		sndWOP:Schedule(2.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
-		sndWOP:Schedule(3.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-		sndWOP:Schedule(4.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-		sndWOP:Schedule(5.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		sndWOP:Schedule(4, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	end
 end
 

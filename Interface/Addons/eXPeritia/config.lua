@@ -1,5 +1,5 @@
 if(not eXPeritia or not LibStub) then return nil end
-
+local _
 local tempDB
 local panel = CreateFrame("Frame", nil, UIParent)
 panel.name = "eXPeritia"
