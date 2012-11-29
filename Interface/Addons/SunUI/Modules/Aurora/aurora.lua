@@ -434,7 +434,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			PetModelFrameRotateLeftButton:Hide()
 			PetModelFrameRotateRightButton:Hide()
 			PetModelFrameShadowOverlay:Hide()
-			PetPaperDollXPBar1:Hide()
 			PetPaperDollPetModelBg:SetAlpha(0)
 		end
 
