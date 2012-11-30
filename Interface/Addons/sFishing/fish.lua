@@ -36,6 +36,13 @@ local fishlure = {
 		["d"] = 10,
 		["w"] = true,
 	},
+	{	["id"] = 88710,
+		["n"] = "Weather-Beaten Fishing Hat",		  -- 150 for 10 minutes
+		["b"] = 150,
+		["s"] = 1,
+		["d"] = 10,
+		["w"] = true,
+	},
 	{	["id"] = 7307,
 		["n"] = "Flesh Eating Worm",					  -- 75 for 10 mins
 		["b"] = 75,
@@ -211,6 +218,7 @@ btn:SetScript("OnEvent", function(self, event)
 			WorldFrame:HookScript("OnMouseDown", OnMouseDown)
 		end
 		isPole = IsFishPole()
+		UpdateLureInventory()
 	end
 	if event == "PLAYER_EQUIPMENT_CHANGED" then
 		isPole = IsFishPole()
