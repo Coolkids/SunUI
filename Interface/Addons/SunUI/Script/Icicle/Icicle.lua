@@ -182,7 +182,7 @@ function Module:OnInitialize()
 					if a:find("NamePlate") then
 						if not f.icicle then f.icicle = 0 end
 						if f:IsVisible() then
-							local _, _, _, eman = f:GetRegions()
+							local _, _, _, eman = f:GetChildren():GetRegions()
 							local name = eman:GetText()
 							if db[name] ~= nil then
 								if f.icicle ~= db[name] then
