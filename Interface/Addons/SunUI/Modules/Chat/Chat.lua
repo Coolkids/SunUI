@@ -35,8 +35,8 @@ ChatTypeInfo.CHANNEL.sticky = 1
 ChatTypeInfo.BN_WHISPER.sticky = 0
 ---------------- > Channel names
 -- Global strings
-_G.CHAT_INSTANCE_CHAT_GET = "|Hchannel:Battleground|h".."[BG]".."|h %s:\32"
-_G.CHAT_INSTANCE_CHAT_LEADER_GET = "|Hchannel:Battleground|h".."[BG]".."|h %s:\32"
+_G.CHAT_INSTANCE_CHAT_GET = "|Hchannel:INSTANCE_CHAT|h".."[I]".."|h %s:\32"
+_G.CHAT_INSTANCE_CHAT_LEADER_GET = "|Hchannel:INSTANCE_CHAT|h".."[IL]".."|h %s:\32"
 _G.CHAT_GUILD_GET = "|Hchannel:Guild|h".."[G]".."|h %s:\32"
 _G.CHAT_OFFICER_GET = "|Hchannel:o|h".."[O]".."|h %s:\32"
 _G.CHAT_PARTY_GET = "|Hchannel:Party|h".."[P]".."|h %s:\32"

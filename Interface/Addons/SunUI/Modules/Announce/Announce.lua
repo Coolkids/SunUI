@@ -87,7 +87,7 @@ function Module:OnEnable()
 		--if arg5 == UnitName("player") then print(arg2, GetSpellLink(arg12)) end
 		--打断
 		if arg2 == "SPELL_INTERRUPT" and arg5 == UnitName("player") and C["Interrupt"]then
-			local channel = IsInRaid() and "RAID" or GetNumSubgroupMembers() > 0 and "PARTY"
+			local channel = IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT" or IsInRaid() and "RAID" or IsInGroup() and "PARTY"
 			if channel then
 				SendChatMessage(GetSpellLink(arg12)..L["打断"]..arg9..GetSpellLink(arg15), channel)
 			else
@@ -96,7 +96,7 @@ function Module:OnEnable()
 		end
 		--重要通道技能	
 		if cl[arg12] and arg5 == UnitName("player") and C["Channel"] and arg2 == "SPELL_CAST_SUCCESS" then
-			local channel = IsInRaid() and "RAID" or GetNumSubgroupMembers() > 0 and "PARTY"
+			local channel = IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT" or IsInRaid() and "RAID" or IsInGroup() and "PARTY"
 			if channel then
 				SendChatMessage(L["正在施放"]..GetSpellLink(arg12), channel)
 			else
@@ -106,7 +106,7 @@ function Module:OnEnable()
 		end
 		--重要给出去的技能
 		if givelist[arg12] and arg5 == UnitName("player") and C["Give"] and arg2 == "SPELL_AURA_APPLIED" then
-			local channel = IsInRaid() and "RAID" or GetNumSubgroupMembers() > 0 and "PARTY"
+			local channel = IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT" or IsInRaid() and "RAID" or IsInGroup() and "PARTY"
 			if channel then
 				SendChatMessage(GetSpellLink(arg12).."→"..arg9.."", channel)
 			else
@@ -116,7 +116,7 @@ function Module:OnEnable()
 		end
 		--治疗大招
 		if heal[arg12] and arg5 == UnitName("player") and C["Heal"] and (arg2 == "SPELL_CAST_SUCCESS" or arg2 == "SPELL_SUMMON") then
-			local channel = IsInRaid() and "RAID" or GetNumSubgroupMembers() > 0 and "PARTY"
+			local channel = IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT" or IsInRaid() and "RAID" or IsInGroup() and "PARTY"
 			if channel then
 				SendChatMessage(L["已施放"]..GetSpellLink(arg12), channel)
 			else
@@ -126,7 +126,7 @@ function Module:OnEnable()
 		end
 		--保命技能
 		if baoming[arg12] and arg5 == UnitName("player") and C["BaoM"] and arg2 == "SPELL_CAST_SUCCESS" then
-			local channel = IsInRaid() and "RAID" or GetNumSubgroupMembers() > 0 and "PARTY"
+			local channel = IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT" or IsInRaid() and "RAID" or IsInGroup() and "PARTY"
 			if channel then
 				SendChatMessage(L["已施放"]..GetSpellLink(arg12), channel)
 			else
@@ -136,7 +136,7 @@ function Module:OnEnable()
 		end
 		--复活技能
 		if resurrect[arg12] and arg5 == UnitName("player") and C["Resurrect"] and arg2 == "SPELL_RESURRECT" then
-			local channel = IsInRaid() and "RAID" or GetNumSubgroupMembers() > 0 and "PARTY"
+			local channel = IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT" or IsInRaid() and "RAID" or IsInGroup() and "PARTY"
 			if channel then
 				SendChatMessage(GetSpellLink(arg12)..L["复活"]..arg9, channel)
 			else
@@ -145,7 +145,7 @@ function Module:OnEnable()
 		end
 		--误导
 		if mislead[arg12] and arg5 == UnitName("player") and C["Mislead"] and arg2 == "SPELL_CAST_SUCCESS" then
-			local channel = IsInRaid() and "RAID" or GetNumSubgroupMembers() > 0 and "PARTY"
+			local channel = IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT" or IsInRaid() and "RAID" or IsInGroup() and "PARTY"
 			if channel then
 				SendChatMessage(GetSpellLink(arg12).."→"..arg9, channel)
 			else

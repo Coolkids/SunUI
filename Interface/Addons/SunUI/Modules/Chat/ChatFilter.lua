@@ -418,8 +418,8 @@ function Module:OnInitialize()
 					end
 				end
 				if (guid and tonumber(guid) and tonumber(guid:sub(-12, -9), 16) >0) then return end
-				if (event ~= "CHAT_MSG_GUILD" and event ~= "CHAT_MSG_OFFICER") then
-					if (Config.FilterRaidAlert and strfind(msg, "%*%*(.+)%*%*")) or strfind(msg, "失誤於") or strfind(msg, "失误于") or strfind(msg, "FishUI") then return true end
+				if event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" or event == "CHAT_MSG_RAID" or event == "CHAT_MSG_RAID_LEADER" or event == "CHAT_MSG_RAID_WARNING" then
+					if (Config.FilterRaidAlert and strfind(msg, "^%*%*(.+)%*%*$")) or strfind(msg, "失誤於") or strfind(msg, "失误于") or strfind(msg, "FishUI") then return true end
 				end
 			end
 			if (not Config.ScanOurself and UnitIsUnit(player,"player")) then return end

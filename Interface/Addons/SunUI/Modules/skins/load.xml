@@ -11,4 +11,5 @@
 	<Script file='ReforgeLite.lua' />
 	<Script file='Examiner.lua' />
 	<Script file='BagSync.lua' />
+	<Script file='LossOfControl.lua' />
 </Ui>
