@@ -569,7 +569,7 @@ local function SkinObjects(frame, nameFrame)
 	frame.name = name
 	
 	
-	level:SetFont(DB.Font, C["Fontsize"]*S.Scale(1), "THINOUTLINE")
+	--level:SetFont(DB.Font, C["Fontsize"]*S.Scale(1), "THINOUTLINE")
 	--level:SetShadowOffset(1.25, -1.25)
 	frame.level = level
 

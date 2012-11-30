@@ -1364,11 +1364,11 @@ local errata = {
 	['*'] = {},
 }
 
-errata.Hyjal_terrain1 = errata.Hyjal
-errata.Uldum_terrain1 = errata.Uldum
-errata.Gilneas_terrain1 = errata.Gilneas
-errata.Gilneas_terrain2 = errata.Gilneas
-errata.Krasarang_terrain1 = errata.Krasarang
+-- errata.Hyjal_terrain1 = errata.Hyjal
+-- errata.Uldum_terrain1 = errata.Uldum
+-- errata.Gilneas_terrain1 = errata.Gilneas
+-- errata.Gilneas_terrain2 = errata.Gilneas
+-- errata.Krasarang_terrain1 = errata.Krasarang
 
 local db
 local defaults = {
@@ -1461,6 +1461,9 @@ local function updateOverlayTextures(frame, frameName, textureCache, scale, alph
 	end
 
 	local pathPrefix = "Interface\\WorldMap\\"..mapFileName.."\\"
+	--print(mapFileName)
+	if strmatch(mapFileName, "%_terrain(.+)") then mapFileName = mapFileName:gsub("%_terrain(.+)","") end
+	--print(mapFileName)
 	local overlayMap = self.overlays[mapFileName]
 
 	local numOverlays = self.hooks.GetNumMapOverlays()

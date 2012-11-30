@@ -21,6 +21,7 @@ local function AltzFrame()
 		altztop.date:SetPoint("TOP", altztop.clock, "BOTTOM", 0, -3)
 		altztop.date:SetFont(DB.Font, 17, "NONE")
 		altztop.date:SetTextColor(0.7, 0.7, 0.7)
+		altztop.date:SetText(date"%A, %B %d")
 		
 		altztop.text = altztop:CreateFontString(nil, "OVERLAY")
 		altztop.text:SetPoint("CENTER", altztop, "CENTER", 0, 25)
@@ -46,15 +47,12 @@ local function AltzFrame()
 		altztop.text2:SetPoint("BOTTOM", altztop, "BOTTOM", 0, 5)
 		altztop.text2:SetFont(DB.Font, 12, "NONE")
 		altztop.text2:SetText("|cffb3b3b3"..L["点我解锁"].."|r")
-		
-	local week = {L["星期天"], L["星期一"], L["星期二"], L["星期三"], L["星期四"], L["星期五"], L["星期六"]}
-	local w,m,d,y = CalendarGetDate()
+	
 	local interval = 0
 	altztop:SetScript('OnUpdate', function(self, elapsed)
 		interval = interval - elapsed
 		if interval <= 0 then
 			self.clock:SetText(format("%s:%s:%s",date("%H"),date("%M"),date("%S")))
-			self.date:SetText(format("%s,%s/%s",week[w],m,d))
 			interval = .5
 		end
 	end)

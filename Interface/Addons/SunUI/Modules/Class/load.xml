@@ -2,4 +2,5 @@
 	<Script file ="sh.lua"/>
 	<Script file ="petime.lua"/>
 	<Script file ="Ignite.lua"/>
+	<Script file ="spiritshell.lua"/>
 </Ui>

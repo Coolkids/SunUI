@@ -1,8 +1,8 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
-if DB.MyClass ~= "MAGE" then return end
+if DB.MyClass ~= "PRIEST" then return end
 local _
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("IgniteWatch")
-local spellid = 12654
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Spirit_Shell_Watch")
+local spellid = 114908
 local frame, damage, name
 local spellname = GetSpellInfo(spellid)
 frame = CreateFrame("Button", nil, UIParent)
@@ -32,7 +32,7 @@ local function TalentUpdate()
 				self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 			end
 			local tree = GetSpecialization()
-			if tree ~= 2 then
+			if tree ~= 1 then
 				self:UnregisterEvent("UNIT_AURA")
 				self:UnregisterEvent("PLAYER_TARGET_CHANGED")
 			else
@@ -47,12 +47,13 @@ end
 local function UpdateDamage()
 	frame:HookScript("OnEvent", function(self, event, unit)
 		if event == "PLAYER_TARGET_CHANGED" or (event == "UNIT_AURA" and unit == "target")  then
-			local name = UnitDebuff("target", spellname, _, "PLAYER")
-			local value = select(15, UnitDebuff("target", spellname, _, "PLAYER")) or 0
+			local name = UnitBuff("target", spellname, _, "PLAYER")
+			local max = S.ShortValue(UnitHealthMax("player") * 0.6)
+			local value = select(15, UnitBuff("target", spellname, _, "PLAYER")) or 0
 			value = S.ShortValue(value)
 			if name then
 				self:Show()
-				damage:SetText(value)
+				damage:SetText(value.."/"..max)
 			else
 				self:Hide()
 			end

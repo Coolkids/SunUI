@@ -1284,7 +1284,7 @@ lib.gen_threat = function(f)
 	else 
 		if U["ClassColor"] then 
 			self.colors.smooth = {DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b}
-			sself.Health.colorHealth = false
+			self.Health.colorHealth = false
 		else
 			self.colors.health = {228/255, 38/255, 141/255}
 			self.Health.colorHealth = false 
