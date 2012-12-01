@@ -7,7 +7,6 @@ local function pending(self, unit)
 	local num, str = UnitPowerType(unit)
 	if(self.Castbar and UnitCastingInfo(unit)) then return true end
 	if(UnitAffectingCombat(unit)) then return true end
-	if(unit == 'pet' and GetPetHappiness() and GetPetHappiness() < 3) then return true end
 	if(UnitExists(unit..'target')) then	return true end
 	if(UnitHealth(unit) < UnitHealthMax(unit)) then return true end
 	if((str == 'RAGE' or str == 'RUNIC_POWER') and UnitPower(unit) > 0) then return true end

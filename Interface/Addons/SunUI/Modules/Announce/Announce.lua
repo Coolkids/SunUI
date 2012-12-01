@@ -89,9 +89,9 @@ function Module:OnEnable()
 		if arg2 == "SPELL_INTERRUPT" and arg5 == UnitName("player") and C["Interrupt"]then
 			local channel = IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT" or IsInRaid() and "RAID" or IsInGroup() and "PARTY"
 			if channel then
-				SendChatMessage(GetSpellLink(arg12)..L["打断"]..arg9..GetSpellLink(arg15), channel)
+				SendChatMessage(GetSpellLink(arg12).."→"..arg9..GetSpellLink(arg15), channel)
 			else
-				DEFAULT_CHAT_FRAME:AddMessage(GetSpellLink(arg12)..L["打断"]..arg9..GetSpellLink(arg15))
+				DEFAULT_CHAT_FRAME:AddMessage(GetSpellLink(arg12).."→"..arg9..GetSpellLink(arg15))
 			end
 		end
 		--重要通道技能	

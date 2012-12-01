@@ -572,7 +572,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 				if statusbar then
 					statusbar:SetStatusBarTexture(DB.Statusbar)
-
+					local r,g,b = statusbar:GetStatusBarColor()
+					S.CreateTop(statusbar:GetStatusBarTexture(), r, g, b)
+					S.CreateMark(statusbar)
 					if not statusbar.reskinned then
 						S.CreateBD(statusbar, .25)
 						statusbar.reskinned = true
@@ -981,7 +983,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			bu.statusBar:Height(13)
 			bu.statusBar:SetStatusBarTexture(DB.Statusbar)
-			bu.statusBar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .6, 0, 0, .8, 0)
+			local r,g,b = bu.statusBar:GetStatusBarColor()
+			S.CreateTop(bu.statusBar:GetStatusBarTexture(), r, g, b)
+			S.CreateMark(bu.statusBar)
+			--bu.statusBar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .6, 0, 0, .8, 0)
 			bu.statusBar.rankText:SetPoint("CENTER")
 
 			local _, p = bu.statusBar:GetPoint()
@@ -3432,6 +3437,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.CreateBD(AuctionProgressFrame)
 
 		AuctionProgressBar:SetStatusBarTexture(DB.Statusbar)
+		local r,g,b = AuctionProgressBar:GetStatusBarColor()
+		S.CreateTop(AuctionProgressBar:GetStatusBarTexture(), r, g, b)
+		S.CreateMark(AuctionProgressBar)
 		local ABBD = CreateFrame("Frame", nil, AuctionProgressBar)
 		ABBD:Point("TOPLEFT", -1, 1)
 		ABBD:Point("BOTTOMRIGHT", 1, -1)
@@ -3729,7 +3737,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		AchievementFrameFilterDropDownText:Point("CENTER", -10, 1)
 
 		AchievementFrameSummaryCategoriesStatusBar:SetStatusBarTexture(DB.Statusbar)
-		AchievementFrameSummaryCategoriesStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
+		local r,g,b = AchievementFrameSummaryCategoriesStatusBar:GetStatusBarColor()
+		S.CreateTop(AchievementFrameSummaryCategoriesStatusBar:GetStatusBarTexture(), r, g, b)
+		S.CreateMark(AchievementFrameSummaryCategoriesStatusBar)
+		--AchievementFrameSummaryCategoriesStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
 		AchievementFrameSummaryCategoriesStatusBarLeft:Hide()
 		AchievementFrameSummaryCategoriesStatusBarMiddle:Hide()
 		AchievementFrameSummaryCategoriesStatusBarRight:Hide()
@@ -3862,7 +3873,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local bar = _G["AchievementFrameProgressBar"..index]
 			if not bar.reskinned then
 				bar:SetStatusBarTexture(DB.Statusbar)
-
+				local r,g,b = bar:GetStatusBarColor()
+				S.CreateTop(bar:GetStatusBarTexture(), r, g, b)
+				S.CreateMark(bar)
 				_G["AchievementFrameProgressBar"..index.."BG"]:SetTexture(0, 0, 0, .25)
 				_G["AchievementFrameProgressBar"..index.."BorderLeft"]:Hide()
 				_G["AchievementFrameProgressBar"..index.."BorderCenter"]:Hide()
@@ -3919,7 +3932,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local label = _G["AchievementFrameSummaryCategoriesCategory"..i.."Label"]
 
 			bu:SetStatusBarTexture(DB.Statusbar)
-			bar:SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
+			local r,g,b = bu:GetStatusBarColor()
+			S.CreateTop(bar, r, g, b)
+			S.CreateMark(bu)
+			--bar:SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
 			label:SetTextColor(1, 1, 1)
 			label:Point("LEFT", bu, "LEFT", 6, 0)
 
@@ -3969,7 +3985,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		for _, bar in pairs(bars) do
 			local name = bar:GetName()
 			bar:SetStatusBarTexture(DB.Statusbar)
-			bar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
+			local r,g,b = bar:GetStatusBarColor()
+			S.CreateTop(bar:GetStatusBarTexture(), r, g, b)
+			S.CreateMark(bar)
+			--bar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
 			_G[name.."Left"]:Hide()
 			_G[name.."Middle"]:Hide()
 			_G[name.."Right"]:Hide()
@@ -5829,7 +5848,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		card.PetInfo.level:SetTextColor(1, 1, 1)
 
 		card.PetInfo.icon:SetTexCoord(.08, .92, .08, .92)
-		S.CreateBG(card.PetInfo.icon)
+		card.PetInfo.icon.bg = S.CreateBG(card.PetInfo.icon)
 
 		S.CreateBD(card, .25)
 
@@ -5838,6 +5857,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		card.xpBar:SetStatusBarTexture(DB.Statusbar)
+		local r,g,b = card.xpBar:GetStatusBarColor()
+		S.CreateTop(card.xpBar:GetStatusBarTexture(), r, g, b)
+		S.CreateMark(card.xpBar)
 		S.CreateBDFrame(card.xpBar, .25)
 
 		PetJournalPetCardHealthFramehealthStatusBarLeft:Hide()
@@ -5846,6 +5868,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		PetJournalPetCardHealthFramehealthStatusBarBGMiddle:Hide()
 
 		card.HealthFrame.healthBar:SetStatusBarTexture(DB.Statusbar)
+		local r2,g2,b2 = card.HealthFrame.healthBar:GetStatusBarColor()
+		S.CreateTop(card.HealthFrame.healthBar:GetStatusBarTexture(), r2, g2, b2)
+		S.CreateMark(card.HealthFrame.healthBar)
 		S.CreateBDFrame(card.HealthFrame.healthBar, .25)
 
 		for i = 1, 6 do
@@ -5892,6 +5917,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 
 			bu.xpBar:SetStatusBarTexture(DB.Statusbar)
+			local r,g,b = bu.xpBar:GetStatusBarColor()
+			S.CreateTop(bu.xpBar:GetStatusBarTexture(), r,g,b)
+			S.CreateMark(bu.xpBar)
 			S.CreateBDFrame(bu.xpBar, .25)
 
 			_G["PetJournalLoadoutPet"..i.."HealthFramehealthStatusBarLeft"]:Hide()
@@ -5900,6 +5928,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			_G["PetJournalLoadoutPet"..i.."HealthFramehealthStatusBarBGMiddle"]:Hide()
 
 			bu.healthFrame.healthBar:SetStatusBarTexture(DB.Statusbar)
+			local r2,g2,b2 = bu.healthFrame.healthBar:GetStatusBarColor()
+			S.CreateTop(bu.healthFrame.healthBar:GetStatusBarTexture(), r2,g2,b2)
+			S.CreateMark(bu.healthFrame.healthBar)
 			S.CreateBDFrame(bu.healthFrame.healthBar, .25)
 
 			for j = 1, 3 do
@@ -6334,8 +6365,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.Reskin(TradeSkillFilterButton)
 
 		TradeSkillRankFrame:SetStatusBarTexture(DB.Statusbar)
+		local r,g,b = TradeSkillRankFrame:GetStatusBarColor()
+		S.CreateTop(TradeSkillRankFrame:GetStatusBarTexture(), r,g,b)
+		S.CreateMark(TradeSkillRankFrame)
 		TradeSkillRankFrame.SetStatusBarColor = function() end
-		TradeSkillRankFrame:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
+		--TradeSkillRankFrame:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
 
 		local bg = CreateFrame("Frame", nil, TradeSkillRankFrame)
 		bg:Point("TOPLEFT", -1, 1)
@@ -6465,7 +6499,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 					skillButton.SubSkillRankBar:SetHeight(12)
 					skillButton.SubSkillRankBar:SetStatusBarTexture(media.backdrop)
-					skillButton.SubSkillRankBar:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
+					local r,g,b = skillButton.SubSkillRankBar:GetStatusBarColor()
+					S.CreateTop(skillButton.SubSkillRankBar:GetStatusBarTexture(), r,g,b)
+					S.CreateMark(skillButton.SubSkillRankBar)
+					--skillButton.SubSkillRankBar:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
 					S.CreateBDFrame(skillButton.SubSkillRankBar, .25)
 
 				end
@@ -6575,8 +6612,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ClassTrainerStatusBarBackground:Hide()
 		ClassTrainerStatusBar:Point("TOPLEFT", ClassTrainerFrame, "TOPLEFT", 64, -35)
 		ClassTrainerStatusBar:SetStatusBarTexture(DB.Statusbar)
-
-		ClassTrainerStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
+		local r,g,b = ClassTrainerStatusBar:GetStatusBarColor()
+		S.CreateTop(ClassTrainerStatusBar:GetStatusBarTexture(), r,g,b)
+		S.CreateMark(ClassTrainerStatusBar)
+		--ClassTrainerStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
 
 		local bd = CreateFrame("Frame", nil, ClassTrainerStatusBar)
 		bd:Point("TOPLEFT", -1, 1)

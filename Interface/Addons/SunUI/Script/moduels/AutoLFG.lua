@@ -7,11 +7,11 @@ function Module:OnInitialize()
 
 	local Locale = {
 		zhCN = {
-			ignore = "|cffffff00AutoLFG:自动离开队列(%s:已击杀%d/%d个首领)|r",
+			ignore = "|cffffff00AutoLFG:警告!! 队列(%s:已击杀%d/%d个首领)|r",
 		},
-		zhTW = {ignore = "|cffffff00AutoLFG:自動離開隊列(%s:已擊殺%d/%d個首領)|r",},
+		zhTW = {ignore = "|cffffff00AutoLFG:警告!! 隊列(%s:已擊殺%d/%d個首領)|r",},
 		enUS = {
-			ignore = "|cffffff00AutoLFG:Auto leave the queue(%s:%d/%d Bosses defeated)|r"
+			ignore = "|cffffff00AutoLFG:the queue(%s:%d/%d Bosses defeated)|r"
 		},
 	}
 	local L = Locale[GetLocale()]
@@ -23,30 +23,29 @@ function Module:OnInitialize()
 	LFGDungeonReadyDialog.nextUpdate = 0
 
 	local leaveLFG = function(name,curKilled,maxKilled)
-		LFGDungeonReadyDialogLeaveQueueButton:Click()
+		--LFGDungeonReadyDialogLeaveQueueButton:Click()
 		print(string.format(L.ignore,name,curKilled,maxKilled))
 	end
 
 	local DurationWidget = function()
-		ALFG:SetSize(LFGDungeonReadyDialog:GetWidth()*0.8,5)
+		ALFG:SetSize(LFGDungeonReadyDialog:GetWidth()*0.8,6)
 		ALFG:SetPoint("BOTTOM",LFGDungeonReadyDialog,0,12)
 		ALFG.durationBar:SetStatusBarTexture(DB.Statusbar)
-		ALFG.durationBar:SetPoint("TOPLEFT", ALFG)
-		ALFG.durationBar:SetPoint("BOTTOMRIGHT", ALFG)
+		ALFG.durationBar:SetPoint("TOPLEFT", ALFG, 1, -1)
+		ALFG.durationBar:SetPoint("BOTTOMRIGHT", ALFG, -1, 1)
 		ALFG.durationBar:SetMinMaxValues(0, 40)
 		ALFG.durationBar:SetFrameLevel(LFGDungeonReadyDialog:GetFrameLevel()+1)
-		--ALFG:CreateBorder()
-		ALFG.durationBar:CreateShadow()
+		ALFG:CreateBorder()
+		--ALFG.durationBar:CreateShadow()
 		S.CreateBack(ALFG.durationBar)
 		S.CreateTop(ALFG.durationBar:GetStatusBarTexture(), 1,.7, 0)
 		S.CreateMark(ALFG.durationBar)
 		
 		ALFG.durationTime:SetFontObject(GameFontNormalLarge)
-		do local f,s,g =  ALFG.durationTime:GetFont()
-			ALFG.durationTime:SetFont(f,12,g)
-			ALFG.durationTime:SetText("")
-			ALFG.durationTime:SetPoint("RIGHT",LFGDungeonReadyDialogLeaveQueueButton,-8,0)
-		end
+		local f,s,g =  ALFG.durationTime:GetFont()
+		ALFG.durationTime:SetFont(f,12,g)
+		ALFG.durationTime:SetText("")
+		ALFG.durationTime:SetPoint("RIGHT",LFGDungeonReadyDialogLeaveQueueButton,-8,0)
 	end
 
 	local PostUpdateDurationBar = function()
@@ -60,7 +59,7 @@ function Module:OnInitialize()
 			if obj.nextUpdate > interval then
 				local newTime = GetTime()
 				if (newTime - oldTime) < duration then
-					--print((newTime - oldTime)) duration - (newTime - oldTime)
+					--print((newTime - oldTime)) --duration - (newTime - oldTime)
 					ALFG.durationBar:SetValue(duration - (newTime - oldTime))
 					ALFG.durationTime:SetText(string.format("%d",(duration - (newTime - oldTime))))		
 					flag = flag + 1
@@ -77,27 +76,28 @@ function Module:OnInitialize()
 	end
 
 	local IgnoreOldDungeon = function()
-		local killedInfo = LFGDungeonReadyDialogInstanceInfoFrame.statusText:GetText()
-			local nameInfo = LFGDungeonReadyDialogInstanceInfoFrame.name:GetText()	
-			local curKilled = 0
-			local maxKilled = 0
-			if killedInfo then
-				local i,j = string.find(killedInfo,"%/")
-				curKilled = string.sub(killedInfo,i-1,j-1)
-				maxKilled = string.sub(killedInfo,i+1,i+1)
-				if tonumber(curKilled) > 0 and C["igonoreOld"] then
-					leaveLFG(nameInfo,curKilled,maxKilled)
-				end
+		local proposalExists, id, typeID, subtypeID, name, texture, role, hasResponded, bogus, completedEncounters, numMembers, isLeader, extra, totalEncounters = GetLFGProposal(); 
+		if totalEncounters and totalEncounters > 0 then
+			LFGDungeonReadyDialogInstanceInfoFrame.statusText:SetFormattedText(BOSSES_KILLED, completedEncounters, totalEncounters)
+			if C["igonoreOld"] then
+				leaveLFG(name,completedEncounters,totalEncounters)
 			end
+		end
 	end
 
 	--init
-	do DurationWidget() end
+	DurationWidget()
 	ALFG:RegisterEvent("LFG_PROPOSAL_SHOW")
+	ALFG:RegisterEvent("LFG_PROPOSAL_UPDATE")
 	ALFG:SetScript("OnEvent",function(self,e)
-		if LFGDungeonReadyDialog:IsShown() then
-			PostUpdateDurationBar()
-			IgnoreOldDungeon()	
+		if e == "LFG_PROPOSAL_SHOW" then
+			if LFGDungeonReadyDialog:IsShown() then
+				PostUpdateDurationBar()
+				IgnoreOldDungeon()	
+			end
+		end
+		if e == "LFG_PROPOSAL_UPDATE" then
+			IgnoreOldDungeon()
 		end
 	end)
 

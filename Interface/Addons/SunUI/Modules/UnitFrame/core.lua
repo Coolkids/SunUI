@@ -1395,6 +1395,7 @@ lib.gen_threat = function(f)
     self.mystyle = "pet"
     self.disallowVehicleSwap = false
     genStyle(self)
+	BarFader(self)
     self.Power.frequentUpdates = true
 	self.Health.Smooth = true
 	self.Power.Smooth = true
