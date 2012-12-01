@@ -1275,8 +1275,10 @@ ns.watchers ={
 				{ spellID =  128987, unitId = "player", caster = "player", filter = "BUFF" }, 
 				-- MoP暗月卡 法系DPS
 				{ spellID =  128985, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 秦太的强化印记(LFR)
+				-- 秦太的强化印记
 				{ spellID =  126588, unitId = "player", caster = "player", filter = "BUFF" },
+				-- 玉魂
+				{ spellID =  104993, unitId = "player", caster = "all", filter = "BUFF" },
 		},
 	},
 }

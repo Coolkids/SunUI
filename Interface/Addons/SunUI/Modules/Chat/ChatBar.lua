@@ -5,7 +5,7 @@ function Module:BuildChatbar()
 	local Channel = {
 		{"/s", "/e ", "/y"},
 		{"/g", "/o"},
-		{"/p", "/bg"},
+		{"/p", "/i", "/bg"},
 		{"/ra", "/rw"},
 		{"/1", "/2"},
 		{"/3", "/4", "/5"},

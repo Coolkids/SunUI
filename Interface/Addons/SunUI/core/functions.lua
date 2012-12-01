@@ -321,8 +321,9 @@ function S.CreateSpark(f, w, h)
 	spark:SetPoint("BOTTOMRIGHT", f:GetStatusBarTexture(), "BOTTOMRIGHT", w, -h)
 end
 function S.CreateMark(f)
+	local frameLevel = f:GetFrameLevel() > 1 and (f:GetFrameLevel()-1) or 0
 	local s = CreateFrame("StatusBar", nil, f)
-	s:SetFrameLevel(f:GetFrameLevel())
+	s:SetFrameLevel(frameLevel)
 	s:SetAllPoints()
 	local spark =  s:CreateTexture(nil, "OVERLAY")
 	spark:SetVertexColor(0, 0, 0, 1)
