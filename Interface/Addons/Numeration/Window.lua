@@ -1,5 +1,6 @@
 local addon = select(2, ...)
 local l = addon.locale
+local s = addon.windowsettings
 local S, C, L, DB = unpack(SunUI)
 local window = CreateFrame("Frame", "NumerationFrame", UIParent)
 addon.window = window
@@ -9,7 +10,11 @@ local lines = {}
 local noop = function() end
 local backAction = noop
 local reportAction = noop
-
+local backdrop = {
+	bgFile = [[Interface\ChatFrame\ChatFrameBackground]],
+	edgeFile = "", tile = true, tileSize = 16, edgeSize = 0,
+	insets = {left = 0, right = 0, top = 0, bottom = 0}
+}
 local clickFunction = function(self, btn)
 	if btn == "LeftButton" then
 		self.detailAction(self)
@@ -76,9 +81,7 @@ local reportActionFunction = function(num)
 	EasyMenu(menuTable[2].menuList, dropdown, "cursor", 0 , 0, "MENU")
 end
 
-local s
 function window:OnInitialize()
-	s = addon.windowsettings
 	self.maxlines = s.maxlines
 	self:SetWidth(s.width)
 	self:SetHeight(3+s.titleheight+s.maxlines*(s.lineheight+s.linegap))
@@ -88,7 +91,7 @@ function window:OnInitialize()
 	self:EnableMouseWheel(true)
 	self:SetMovable(true)
 	self:RegisterForDrag("LeftButton")
-	self:SetScript("OnDragStart", function() if IsShiftKeyDown() then self:StartMoving() end end)
+	self:SetScript("OnDragStart", function() if IsAltKeyDown() then self:StartMoving() end end)
 	self:SetScript("OnDragStop", function()
 		self:StopMovingOrSizing()
 
@@ -102,7 +105,7 @@ function window:OnInitialize()
 		addon:SetOption("x", xOfs/uis)
 		addon:SetOption("y", yOfs/uis)
 	end)
-
+	
 	self:CreateShadow("Background")
 
 	local x, y = addon:GetOption("x"), addon:GetOption("y")
@@ -126,15 +129,18 @@ function window:OnInitialize()
 
 	local reset = CreateFrame("Button", nil, self)
 	self.reset = reset
-	--reset:CreateShadow("Background")
-	reset:SetWidth(s.titleheight-2)
-	reset:SetHeight(s.titleheight-2)
+	reset:SetBackdrop(backdrop)
+	reset:SetBackdropColor(0, 0, 0, s.titlealpha)
+	reset:SetWidth(s.titleheight)
+	reset:SetHeight(s.titleheight)
 	reset:SetPoint("TOPRIGHT", -1, -1)
 	reset:SetScript("OnMouseUp", function()
 		updateReportChannels()
 		numReports = 9
 		EasyMenu(menuTable, dropdown, "cursor", 0 , 0, "MENU")
 	end)
+	reset:SetScript("OnEnter", function() reset:SetBackdropColor(s.buttonhighlightcolor[1], s.buttonhighlightcolor[2], s.buttonhighlightcolor[3], .3) end)
+	reset:SetScript("OnLeave", function() reset:SetBackdropColor(0, 0, 0, s.titlealpha) end)
 
 	reset.text = reset:CreateFontString(nil, "ARTWORK")
 	reset.text:SetFont(s.linefont, s.linefontsize, s.linefontstyle)
@@ -144,11 +150,14 @@ function window:OnInitialize()
 	S.Reskin(reset)
 	local segment = CreateFrame("Button", nil, self)
 	self.segment = segment
+	segment:SetBackdrop(backdrop)
+	segment:SetBackdropColor(0, 0, 0, s.titlealpha/2)
 	segment:SetWidth(s.titleheight-2)
 	segment:SetHeight(s.titleheight-2)
 	segment:SetPoint("RIGHT", reset, "LEFT", -2, 0)
 	segment:SetScript("OnMouseUp", function() addon.nav.view = "Sets" addon.nav.set = nil addon:RefreshDisplay() dropdown:Show() end)
 	segment:SetScript("OnEnter", function()
+		segment:SetBackdropColor(s.buttonhighlightcolor[1], s.buttonhighlightcolor[2], s.buttonhighlightcolor[3], .3)
 		GameTooltip:SetOwner(segment, "ANCHOR_BOTTOMRIGHT")
 		local name = ""
 		if addon.nav.set == "current" then
@@ -162,20 +171,19 @@ function window:OnInitialize()
 		GameTooltip:AddLine(name)
 		GameTooltip:Show()
 	end)
-	segment:SetScript("OnLeave", function() GameTooltip:Hide() end)
-
+	segment:SetScript("OnLeave", function() segment:SetBackdropColor(0, 0, 0, s.titlealpha/2) GameTooltip:Hide() end)
+	S.Reskin(segment)
 	segment.text = segment:CreateFontString(nil, "ARTWORK")
 	segment.text:SetFont(s.linefont, s.linefontsize, s.linefontstyle)
 	segment.text:SetShadowOffset(s.fontshadow and 1 or 0, s.fontshadow and -1 or 0)
 	segment.text:SetPoint("CENTER", 0, 0)
 	segment.text:SetText("")
-	S.Reskin(segment)
 
 	local title = self:CreateTexture(nil, "ARTWORK")
 	self.title = title
 	title:SetTexture(s.linetexture)
 	title:SetVertexColor(.25, .66, .35, s.titlealpha)
-	title:SetPoint("TOPLEFT", 2, -1)
+	title:SetPoint("TOPLEFT", 1, -1)
 	title:SetPoint("BOTTOMRIGHT", reset, "BOTTOMLEFT", -1, 0)
 
 	local font = self:CreateFontString(nil, "ARTWORK")
@@ -216,7 +224,6 @@ function window:UpdateSegment(segment)
 end
 
 function window:SetTitle(name, r, g, b)
-	--self.title:SetVertexColor(r, g, b, s.titlealpha)
 	S.CreateTop(self.title, r, g, b)
 	self.titletext:SetText(name)
 end
@@ -264,7 +271,6 @@ local SetRightText = function(f, ...)
 end
 
 local SetColor = function(f, r, g, b, a)
-	--f:SetStatusBarColor(r, g, b, a or s.linealpha)
 	local texture = f:GetStatusBarTexture()
 	S.CreateTop(texture, r, g, b)
 end

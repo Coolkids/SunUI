@@ -1,9 +1,7 @@
 local S, C, L, DB = unpack(select(2, ...))
-local Delay = CreateFrame("Frame")
-Delay:RegisterEvent("PLAYER_ENTERING_WORLD")
-Delay:SetScript("OnEvent", function()
-	Delay:UnregisterEvent("PLAYER_ENTERING_WORLD")
-	if not IsAddOnLoaded("BagSync") then return end
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SkinBagSync", "AceEvent-3.0")
+
+local function Skin()
 	if BagSync_SearchFrame then
 		BagSync_SearchFrame:StripTextures()
 		S.SetBD(BagSync_SearchFrame)
@@ -13,4 +11,9 @@ Delay:SetScript("OnEvent", function()
 		BagSync_TokensFrame:StripTextures()
 		S.SetBD(BagSync_TokensFrame)
 	end
-end)
+end
+
+function Module:OnInitialize()
+	if not IsAddOnLoaded("BagSync") then return end
+	Skin()
+end

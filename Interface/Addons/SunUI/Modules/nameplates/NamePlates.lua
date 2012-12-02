@@ -36,6 +36,7 @@ f:SetScript("OnEvent", function(self, event)
 end)
 
 local PlateBlacklist = {
+	--["訓練假人"] = true,
 	--亡者大軍
 	["亡者军团食尸鬼"] = true,
 	["食屍鬼大軍"] = true,
@@ -176,11 +177,11 @@ local function UpdateThreat(frame,elapsed)
 		else
 			frame.name:SetTextColor(1, 0, 0)
 		end
-		--S.CreateTop(frame.hp.toptexture, frame.r, frame.g, frame.b)
 	else
 		frame.name:SetTextColor(1, 1, 1)
 	end
-	
+	--print(frame.r, frame.g, frame.b)
+	--S.CreateTop(frame.toptexture, frame.r, frame.g, frame.b)
     local minHealth, maxHealth = frame.healthOriginal:GetMinMaxValues()
     local valueHealth = frame.healthOriginal:GetValue()
 	local d =(valueHealth/maxHealth)*100
@@ -367,29 +368,34 @@ end
 local function UpdateObjects(frame)
 	local frame = frame:GetParent()
 	local r, g, b = frame.hp:GetStatusBarColor()
-		local newr, newg, newb
+	local texture = frame.hp:GetStatusBarTexture()
+	frame.toptexture = texture
+	local newr, newg, newb
 		if g + b == 0 then
 			newr, newg, newb = 0.7, 0.2, 0.1
-			S.CreateTop(frame.hp.toptexture, 0.7, 0.2, 0.1)
+			--S.CreateTop(texture, 0.7, 0.2, 0.1)
 		elseif r + b == 0 then
 			newr, newg, newb = 0.2, 0.6, 0.1
-			S.CreateTop(frame.hp.toptexture, 0.2, 0.6, 0.1)
+			--S.CreateTop(texture, 0.2, 0.6, 0.1)
 		elseif r + g == 0 then
 			newr, newg, newb = 0.31, 0.45, 0.63
-			S.CreateTop(frame.hp.toptexture, 0.31, 0.45, 0.63)
+			--S.CreateTop(texture, 0.31, 0.45, 0.63)
 		elseif 2 - (r + g) < 0.05 and b == 0 then
 			newr, newg, newb = 0.71, 0.71, 0.35
-			S.CreateTop(frame.hp.toptexture, 0.71, 0.71, 0.35)
+			--S.CreateTop(texture, 0.71, 0.71, 0.35)
 		else
 			newr, newg, newb = r, g, b
 		end
 	frame.r, frame.g, frame.b = newr, newg, newb
-	
+	S.CreateTop(texture, newr, newg, newb)
 	frame.hp:ClearAllPoints()
 	frame.hp:SetSize(C["HPWidth"], C["HPHeight"])	
 	frame.hp:SetPoint('CENTER', frame, 0, 10)
 	frame.hp:GetStatusBarTexture():SetHorizTile(true)
-	
+	if not frame.hp.mark then
+		S.CreateMark(frame.hp)
+		frame.hp.mark = true
+	end
 	frame.name:SetText(frame.oldname:GetText())
 	
 	frame.highlight:ClearAllPoints()
@@ -513,17 +519,13 @@ local function SkinObjects(frame, nameFrame)
 	overlay:SetTexture(DB.Statusbar)
 	overlay:SetVertexColor(0.25, 0.25, 0.25)
 	frame.highlight = overlay
-	
-	hp:HookScript('OnShow', UpdateObjects)
+
 	hp:SetStatusBarTexture(DB.Statusbar)
 	frame.hp = hp
 	hp:CreateShadow()
 	hp.shadow:Hide()
 	hp.border:SetFrameLevel(0)
 	hp.hpGlow = hp.border
-	local texture = hp:GetStatusBarTexture()
-	hp.toptexture = texture
-	S.CreateMark(hp)
 	S.CreateMark(cb)
 	local hpbg = CreateFrame("Frame", nil, hp)
 	hpbg:SetAllPoints(hp)
@@ -619,7 +621,7 @@ local function CheckBlacklist(frame, ...)
 		frame.hp:Hide()
 		frame.cb:Hide()
 		frame.overlay:Hide()
-		frame.hp.level:Hide()
+		frame.level:Hide()
 	end
 end
 local function CheckUnit_Guid(frame, ...)
@@ -699,7 +701,7 @@ function Module:OnInitialize()
 			numChildren = WorldFrame:GetNumChildren()
 			HookFrames(WorldFrame:GetChildren())
 		end
-		if(self.elapsed and self.elapsed > 0.2) then
+		if(self.elapsed and self.elapsed > 0.1) then
 			ForEachPlate(UpdateThreat, self.elapsed)
 			self.elapsed = 0
 		else

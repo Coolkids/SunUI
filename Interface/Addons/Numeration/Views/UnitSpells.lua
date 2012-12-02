@@ -35,10 +35,7 @@ function view:Init()
 	addon.window:SetBackAction(backAction)
 end
 
-local sorttbl = {}
-local nameToValue = {}
-local nameToPetName = {}
-local nameToId = {}
+local sorttbl, nameToValue, nameToPetName, nameToId = {}, {}, {}, {}
 local sorter = function(n1, n2)
 	return nameToValue[n1] > nameToValue[n2]
 end

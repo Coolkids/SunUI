@@ -4,14 +4,15 @@ addon.collect = collect
 
 local spellName = addon.spellName
 local deathlogHealFilter = {
-	[spellName[5394]] = true,	-- Healing Stream Totem
-	[spellName[117313]] = true,	-- Bloodthirst Heal
-	[spellName[15290]] = true,	-- Vampiric Embrace
 	[spellName[115547]] = true,	-- Glyph of Avenging Wrath
+	[spellName[15290]] = true,	-- Vampiric Embrace
 	[spellName[127626]] = true,	-- Devouring Plague
 	[spellName[112974]] = true,	-- Leeching Poison
+	[spellName[5394]] = true,	-- Healing Stream Totem
+	[spellName[108503]] = true,	-- Grimoire of Sacrifice
 	[spellName[63106]] = true,	-- Siphon Life
 	[spellName[108366]] = true,	-- Soul Leech
+	[spellName[117313]] = true,	-- Bloodthirst Heal
 }
 local deathlogTrackBuffs = {
 	-- Death Knight
@@ -60,8 +61,7 @@ local deathlogTrackBuffs = {
 	[spellName[97463]] = true,	-- Rallying Cry
 }
 
-local deathData = {}
-local tblCache = {}
+local deathData, tblCache = {}, {}
 local clearEvts = function(playerID)
 	local dd = deathData[playerID]
 	if not dd then return end

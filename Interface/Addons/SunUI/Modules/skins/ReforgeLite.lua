@@ -1,8 +1,7 @@
 local S, C, L, DB = unpack(select(2, ...))
-local Delay = CreateFrame("Frame")
-Delay:RegisterEvent("PLAYER_ENTERING_WORLD")
-Delay:SetScript("OnEvent", function()
-	Delay:UnregisterEvent("PLAYER_ENTERING_WORLD")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SkinReforgeLite", "AceEvent-3.0")
+
+local function Skin()
 	if not IsAddOnLoaded("ReforgeLite") then return end
 	hooksecurefunc(ReforgeLite, 'CreateFrame', function(self)
 		self:StripTextures()
@@ -134,4 +133,8 @@ Delay:SetScript("OnEvent", function()
 	  S.ReskinCheck(btn)
 	  return btn
 	end
-end)
+end
+
+function Module:OnEnable()
+	Module:RegisterEvent("ADDON_LOADED", Skin)
+end

@@ -23,8 +23,7 @@ function view:Init()
 	addon.window:SetBackAction(backAction)
 end
 
-local sorttbl = {}
-local targetToValue = {}
+local sorttbl, targetToValue = {}, {}
 local sorter = function(n1, n2)
 	return targetToValue[n1] > targetToValue[n2]
 end

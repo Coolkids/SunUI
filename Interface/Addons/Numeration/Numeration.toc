@@ -3,7 +3,7 @@
 ## Notes: yet another Damage Meter addon
 ## Author: nekoh, Wetxius
 ## Thanks: Shestak
-## Version: 2.0.1
+## Version: 2.1
 ## RequiredDeps: SunUI
 ## OptionalDeps: !ClassColors
 ## SavedVariablesPerCharacter: NumerationCharDB, NumerationCharOptions

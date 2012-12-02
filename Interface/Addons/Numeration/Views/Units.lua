@@ -23,9 +23,7 @@ function view:Init()
 	addon.window:SetBackAction(backAction)
 end
 
-local sorttbl = {}
-local nameToValue = {}
-local nameToTime = {}
+local sorttbl, nameToValue, nameToTime = {}, {}, {}
 local calcValueTime = function(set, name, etype, merged)
 	local u = set.unit[name]
 	if not u then return false end

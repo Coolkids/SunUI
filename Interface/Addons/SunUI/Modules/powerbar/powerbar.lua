@@ -31,7 +31,6 @@ function Module:CreateShadowOrbs()
 		ShadowOrbs[i]:SetSize((C["Width"]-space*(maxShadowOrbs-1))/maxShadowOrbs, C["Height"])
 		ShadowOrbs[i]:SetScale(C["Scale"])
 		ShadowOrbs[i]:SetStatusBarTexture(DB.Statusbar)
-		ShadowOrbs[i]:SetStatusBarColor(.86,.22,1)
 		local s = ShadowOrbs[i]:GetStatusBarTexture()
 		S.CreateTop(s, .86,.22,1)
 		ShadowOrbs[i]:CreateShadow()
@@ -81,7 +80,6 @@ function Module:CreateMonkBar()
 		chibar[i]:SetSize((C["Width"]-space*(5-1))/5, C["Height"])
 		chibar[i]:SetScale(C["Scale"])
 		chibar[i]:SetStatusBarTexture(DB.Statusbar)
-		chibar[i]:SetStatusBarColor(0.0, 1.00 , 0.59)
 		local s = chibar[i]:GetStatusBarTexture()
 		S.CreateTop(s, 0.0, 1.00 , 0.59)
 		chibar[i]:CreateShadow()
@@ -155,7 +153,6 @@ local UpdateType = function(self, rid, alt)
 	local rune = self[runemap[rid]]
 	local colors = runes[GetRuneType(rid) or alt]
 	local r, g, b = colors[1], colors[2], colors[3]
-	rune:SetStatusBarColor(r, g, b)
 	local s = rune:GetStatusBarTexture()
 	S.CreateTop(s, r, g, b)
 end
@@ -219,7 +216,6 @@ function Module:CreateQSDKPower()
 			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", space, 0)
 		end
         if DB.MyClass == "PALADIN" then
-            bars[i]:SetStatusBarColor(0.9, 0.9, 0)
 			local s = bars[i]:GetStatusBarTexture()
 			S.CreateTop(s, 0.9, 0.9, 0)
 			bars[i]:Hide()
@@ -286,10 +282,8 @@ function Module:CreateCombatPoint()
 		end
 		local s = CombatPointBar[i]:GetStatusBarTexture()
 		if i ~= 5 then 
-			CombatPointBar[i]:SetStatusBarColor(0.9, 0.9, 0)
 			S.CreateTop(s, 0.9, 0.9, 0)
 		else
-			CombatPointBar[i]:SetStatusBarColor(1, 0.2, 0.2)
 			S.CreateTop(s, 1, 0.2, 0.2)
 		end
 		CombatPointBar[i]:CreateShadow()
@@ -342,7 +336,6 @@ function Module:CreateEclipse()
 	lb:SetPoint('LEFT', eb, 'LEFT')
 	lb:SetSize(C["Width"], C["Height"])
 	lb:SetStatusBarTexture(DB.Statusbar)
-	lb:SetStatusBarColor(0.27, 0.47, 0.74)
 	local s = lb:GetStatusBarTexture()
 	S.CreateTop(s, 0.27, 0.47, 0.74)
 	S.CreateMark(lb)
@@ -351,7 +344,6 @@ function Module:CreateEclipse()
 	sb:SetPoint('LEFT', lb:GetStatusBarTexture(), 'RIGHT', 0, 0)
 	sb:SetSize(C["Width"], C["Height"])
 	sb:SetStatusBarTexture(DB.Statusbar)
-	sb:SetStatusBarColor(0.9, 0.6, 0.3)
 	local s = sb:GetStatusBarTexture()
 	S.CreateTop(s, 0.9, 0.6, 0.3)
 	eb.SolarBar = sb
@@ -513,7 +505,6 @@ function Module:FuckWarlock()
 						else
 							wsb[i]:SetWidth(w - s)
 						end
-						wsb[i]:SetStatusBarColor(unpack(Colors[SPEC_WARLOCK_DESTRUCTION]))
 						local s = wsb[i]:GetStatusBarTexture()
 						S.CreateTop(s, Colors[SPEC_WARLOCK_DESTRUCTION][1], Colors[SPEC_WARLOCK_DESTRUCTION][2], Colors[SPEC_WARLOCK_DESTRUCTION][3])
 					end
@@ -534,7 +525,6 @@ function Module:FuckWarlock()
 						else
 							wsb[i]:SetWidth(w - s)
 						end
-						wsb[i]:SetStatusBarColor(unpack(Colors[SPEC_WARLOCK_AFFLICTION]))
 						local s = wsb[i]:GetStatusBarTexture()
 						S.CreateTop(s, Colors[SPEC_WARLOCK_AFFLICTION][1], Colors[SPEC_WARLOCK_AFFLICTION][2], Colors[SPEC_WARLOCK_AFFLICTION][3])
 					end
@@ -545,7 +535,6 @@ function Module:FuckWarlock()
 					wsb[3]:Hide()
 					wsb[4]:Hide()
 					wsb[1]:SetWidth(wsb:GetWidth())
-					wsb[1]:SetStatusBarColor(unpack(Colors[SPEC_WARLOCK_DEMONOLOGY]))
 					local s = wsb[1]:GetStatusBarTexture()
 					S.CreateTop(s, Colors[SPEC_WARLOCK_DEMONOLOGY][1], Colors[SPEC_WARLOCK_DEMONOLOGY][2], Colors[SPEC_WARLOCK_DEMONOLOGY][3])
 				end
@@ -614,7 +603,6 @@ function Module:Mage()
 		bars[i] = CreateFrame("StatusBar", nil, f)
 		bars[i]:SetSize((C["Width"]-space*(6-1))/6, C["Height"])
 		bars[i]:SetStatusBarTexture(DB.Statusbar)
-		bars[i]:SetStatusBarColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
 		local s = bars[i]:GetStatusBarTexture()
 		S.CreateTop(s, DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
 		bars[i]:CreateShadow()

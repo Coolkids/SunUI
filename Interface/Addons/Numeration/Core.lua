@@ -1,6 +1,7 @@
 local addonname, addon = ...
 Numeration = addon
 local l = addon.locale
+local s = addon.coresettings
 local boss = LibStub("LibBossIDs")
 addon.events = CreateFrame("Frame")
 addon.events:SetScript("OnEvent", function(self, event, ...)
@@ -94,9 +95,7 @@ local function fullNumber(self, num)
 	return ("%i"):format(num)
 end
 
-local s
 function addon:InitOptions()
-	s = self.coresettings
 	self.ids = {}
 	do
 		for i, tbl in ipairs(self.types) do

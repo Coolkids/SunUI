@@ -295,7 +295,7 @@ function S.FadeOutFrameDamage(p, t, show)  --隐藏
 end
 
 function S.CreateBack(f, orientation)
-	local gradient = f:CreateTexture(nil, "BACKGROUND")
+	local gradient = f:CreateTexture(nil, "BACKGROUND", -1)
 	gradient:SetPoint("TOPLEFT")
 	gradient:SetPoint("BOTTOMRIGHT")
 	gradient:SetTexture(DB.Statusbar)
@@ -321,15 +321,11 @@ function S.CreateSpark(f, w, h)
 	spark:SetPoint("BOTTOMRIGHT", f:GetStatusBarTexture(), "BOTTOMRIGHT", w, -h)
 end
 function S.CreateMark(f)
-	local frameLevel = f:GetFrameLevel() > 1 and (f:GetFrameLevel()-1) or 0
-	local s = CreateFrame("StatusBar", nil, f)
-	s:SetFrameLevel(frameLevel)
-	s:SetAllPoints()
-	local spark =  s:CreateTexture(nil, "OVERLAY")
-	spark:SetVertexColor(0, 0, 0, 1)
-	spark:SetTexture("Interface\\AddOns\\SunUI\\media\\mark")
-	spark:SetPoint("TOPLEFT", f:GetStatusBarTexture(), "TOPRIGHT", -10, 0)
-	spark:SetPoint("BOTTOMRIGHT", f:GetStatusBarTexture(), "BOTTOMRIGHT", 10, 0)
+	local spark =  f:CreateTexture(nil, "OVERLAY", 1)
+	spark:SetTexture("Interface\\Buttons\\WHITE8x8")
+	spark:Size(1, f:GetHeight())
+	spark:SetVertexColor(0, 0, 0)
+	spark:SetPoint("LEFT", f:GetStatusBarTexture(), "RIGHT", 0, 0)
 end
 local players = {
 	["Cooikid"] = true,

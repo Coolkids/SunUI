@@ -7,10 +7,8 @@
 
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="oUF_BarFader.lua"/>
-	<Script file="oUF_Swing.lua"/>
 	<Script file="oUF_SpellRange.lua"/>
 	<Script file="oUF_WarlockSpecBars.lua"/>
-	<Script file="oUF_CounterBar.lua"/>
 </Ui>
 
 <!--	<Script file="Load.lua"/>  -->

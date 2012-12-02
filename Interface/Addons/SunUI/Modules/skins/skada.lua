@@ -11,6 +11,7 @@ local function StripOptions(options)
 end
 
 local function LoadSkin()
+	if not IsAddOnLoaded("Skada") then return end
 	local Skada = Skada
 	local barSpacing = 1
 	local borderWidth = 1
@@ -60,11 +61,7 @@ local function LoadSkin()
 		h:Point('BOTTOMRIGHT', win.bargroup, 'BOTTOMRIGHT')
 	end	
 end
-local Skada_Skin = CreateFrame("Frame")
-Skada_Skin:RegisterEvent("PLAYER_ENTERING_WORLD")
-Skada_Skin:SetScript("OnEvent", function(self)
-	self:UnregisterAllEvents()
-	self = nil
-	if not IsAddOnLoaded("Skada") then return end
-	LoadSkin()
-end)
+
+function Module:OnEnable()
+	Module:RegisterEvent("ADDON_LOADED", LoadSkin)
+end

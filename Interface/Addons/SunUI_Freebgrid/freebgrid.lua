@@ -1339,12 +1339,10 @@ function ns:UpdateHealthBarLayout(self)   --样式
 	local power = self.PowerBar
     
     healthBar:SetOrientation(ns.db.orientation)
-	S.CreateMark(healthBar)
 	if ns.db.mode then
 		healthBar:SetStatusBarTexture(" ")
 		healthBar:SetStatusBarColor(0,0,0,0)
 		S.CreateBack(healthBar)
-		S.CreateMark(healthBar)
 		healthBar.bg:SetTexture(ns.db.texturePath)
 		healthBar.bd:SetAlpha(0.6)
 		S.CreateTop(healthBar.bg, DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b) --职业颜色背景
@@ -1374,6 +1372,8 @@ function ns:UpdateHealthBarLayout(self)   --样式
 		healthBar:Point("LEFT", 1, 0)
 		healthBar:Point("RIGHT", -1, 0)
     end
+
+	S.CreateMark(healthBar)
 end
 
 function ns:UpdateHealthColor(self)
@@ -1493,7 +1493,7 @@ function ns:UpdateHealth(self)
 		self.HealthBar:SetValue(UnitHealth(unit))
 	end
 	healthBar.bd:SetPoint("TOPRIGHT", healthBar)
-	healthBar.bd:SetPoint("BOTTOMLEFT", healthBar:GetStatusBarTexture(), "BOTTOMRIGHT")
+	healthBar.bd:Point("BOTTOMLEFT", healthBar:GetStatusBarTexture(), "BOTTOMRIGHT", 1, 0)
 end
 
 function ns:UpdateHealPredictionBarColor(self)

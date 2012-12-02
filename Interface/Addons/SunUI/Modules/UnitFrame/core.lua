@@ -981,11 +981,11 @@ end
   lib.gen_cp = function(f)
 	if class ~= "ROGUE" and class ~= "DRUID" then return end
      local colors = {
-			[1]	= {0.05, 0.43, 0.72},
-			[2]	= {0.71, 0.21, 0.82},
-			[3]	= {0.24, 0.67, 0.23},
-			[4]	= {0.95, 0.71, 0.00},
-			[5]	= {0.72, 0.05, 0.05},}
+			[1]	= {0.9, 0.9, 0},
+			[2]	= {0.9, 0.9, 0},
+			[3]	= {0.9, 0.9, 0},
+			[4]	= {0.9, 0.9, 0},
+			[5]	= {1, 0.2, 0.2},}
 			local bars = CreateFrame("Frame", nil, f)
 			bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
             bars:SetSize((f.width-8)/5, f.height/4)
@@ -1126,12 +1126,14 @@ lib.gen_swing_timer = function(f)
 		VengeanceBar.Text:SetPoint("CENTER")
 		VengeanceBar.Text:SetFont(DB.Font, U["FontSize"], "THINOUTLINE")
 		VengeanceBar.Text:Hide()
+		VengeanceBar.SetStatusBarColor = function() end
 		f.Vengeance = VengeanceBar
 		
 		VengeanceBar:SetScript("OnValueChanged", function(_, value)
 			local _, max = VengeanceBar:GetMinMaxValues()
 			r, g, b = oUF.ColorGradient(value, max, unpack(oUF.colors.smooth))
-			VengeanceBar:SetStatusBarColor(r, g, b)
+			local texture = self:GetStatusBarTexture()
+			S.CreateTop(texture, r, g, b, true)
 		end)
 	end
   end
@@ -1139,14 +1141,13 @@ lib.gen_swing_timer = function(f)
 lib.gen_threat = function(f)
 	if U["EnableThreat"] == false then return end
 	local ThreatBar = CreateFrame("Statusbar", "ThreatBar", f)
-	ThreatBar:SetStatusBarTexture(DB.Statusbar2)
+	ThreatBar:SetStatusBarTexture(DB.Statusbar)
 	ThreatBar:SetPoint("TOPRIGHT", f.Health, "TOPLEFT", -5, 0)
 	ThreatBar:SetSize(f.Power:GetHeight()+2, f.Health:GetHeight()+f.Power:GetHeight()+6)
 	ThreatBar:CreateShadow()
 	S.CreateBack(ThreatBar, true)
 	ThreatBar:SetOrientation("VERTICAL")
 	ThreatBar:SetMinMaxValues(0, 100)
-	--ThreatBar.shadow:SetBackdropColor(.12, .12, .12, 1)
 	
 	local function Smooth(self, value)
 		if value == self:GetValue() then
@@ -1202,10 +1203,10 @@ lib.gen_threat = function(f)
 			local _, _, threatpct, rawthreatpct, _ = UnitDetailedThreatSituation(self.unit, self.tar)
 			local threatval = threatpct or 0
 			self:SetValue(threatval)
-			--self.text:SetText("仇恨:"..format("%3.1f", threatval).."%")
 			self.num = threatval
 			local r, g, b = S.ColorGradient(threatval/100, 0,.8,0,.8,.8,0,.8,0,0)
-			self:SetStatusBarColor(r, g, b)
+			local texture = self:GetStatusBarTexture()
+			S.CreateTop(texture, r, g, b, true)
 
 			if threatval > 0 then
 				self:SetAlpha(1)
@@ -1238,7 +1239,7 @@ lib.gen_threat = function(f)
   lib.gen_alt_powerbar = function(f)
 	local apb = CreateFrame("StatusBar", nil, f)
 	apb:Size(f.width, f.height/3)
-	apb:SetStatusBarTexture(DB.Statusbar2)
+	apb:SetStatusBarTexture(DB.Statusbar)
 	apb:GetStatusBarTexture():SetHorizTile(false)
 	apb:SetStatusBarColor(1, 0, 0)
 	apb:SetPoint("TOP", f.Power, "BOTTOM", 0, -f.height/6)
@@ -1251,9 +1252,10 @@ lib.gen_threat = function(f)
 	apb.text = S.MakeFontString(apb, 10)
 	apb.text:SetPoint("CENTER")
 	apb:SetScript("OnValueChanged", function(_, value)
-		_, max = apb:GetMinMaxValues()
-		r, g, b = oUF.ColorGradient(value, max, unpack(oUF.colors.smooth))
-		apb:SetStatusBarColor(r, g, b)
+		local _, max = apb:GetMinMaxValues()
+		local texture = apb:GetStatusBarTexture()
+		r, g, b = oUF.ColorGradient((max-value), max, unpack(oUF.colors.smooth))
+		S.CreateTop(texture, r, g, b)
 		apb.text:SetText(value.."/"..max)
 	end)
   end

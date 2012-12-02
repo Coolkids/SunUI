@@ -1,9 +1,7 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
-local _
-local Delay = CreateFrame("Frame")
-Delay:RegisterEvent("PLAYER_ENTERING_WORLD")
-Delay:SetScript("OnEvent", function()
-	Delay:UnregisterEvent("PLAYER_ENTERING_WORLD")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SkinPostal", "AceEvent-3.0")
+
+local function Skin()
 	if not IsAddOnLoaded("Postal") then return end
 	if MailFrame then
 		S.Reskin(PostalSelectOpenButton)
@@ -17,4 +15,8 @@ Delay:SetScript("OnEvent", function()
 		Postal_BlackBookButton:SetPoint("LEFT", SendMailNameEditBox, "RIGHT", 3, 0)
 		S.ReskinArrow(Postal_BlackBookButton, "down")
 	end
-end)
+end
+
+function Module:OnEnable()
+	Module:RegisterEvent("ADDON_LOADED", Skin)
+end

@@ -21,8 +21,7 @@ function view:Init()
 	addon.window:SetBackAction(backAction)
 end
 
-local sorttbl = {}
-local unitToValue = {}
+local sorttbl, unitToValue = {}, {}
 local sorter = function(u1, u2)
 	return unitToValue[u1] > unitToValue[u2]
 end

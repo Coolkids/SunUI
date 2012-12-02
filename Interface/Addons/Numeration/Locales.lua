@@ -1,4 +1,4 @@
-﻿local n = select(2, ...)
+local n = select(2, ...)
 
 if GetLocale() == "ruRU" then
 	n.locale = {

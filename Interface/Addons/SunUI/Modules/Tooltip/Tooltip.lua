@@ -269,7 +269,7 @@ function Module:OnEnable()
 			end
 		end
 	end)
-			
+	
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
 		if C["Cursor"] then
 			tooltip:SetOwner(parent, "ANCHOR_CURSOR")

@@ -1,6 +1,6 @@
 local addon = select(2, ...)
-local view = {}
 local l = addon.locale
+local view = {}
 addon.views["Deathlog-Detail"] = view
 view.first = 999
 

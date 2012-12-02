@@ -105,17 +105,16 @@ function watcherPrototype:CreateButton(mode)
 	if mode=="BAR" then
 		button.statusbar = CreateFrame("StatusBar", nil, button)
 		button.statusbar:SetFrameStrata("BACKGROUND")
-		local shadow = CreateFrame("Frame", nil, button.statusbar)
-		shadow:SetAllPoints()
-		shadow:CreateShadow("Background")
+		button.statusbar:CreateShadow()
+		S.CreateBack(button.statusbar)
 		if self.barwidth == nil then 
 			print("SunUI:RayWatch,'Bar'模式计时条宽度未定义,恢复默认宽度155,如果您有设置宽度值请重新登录,如果您依旧看到次消息请向作者反馈")
 			self.barwidth = 155
 		end
 		button.statusbar:SetWidth(self.barwidth - 6)
-		button.statusbar:SetHeight(5)
+		button.statusbar:SetHeight(6)
 		button.statusbar:SetStatusBarTexture(DB.Statusbar)
-		button.statusbar:SetStatusBarColor(colors[myclass].r, colors[myclass].g, colors[myclass].b, 1)
+		S.CreateTop(button.statusbar:GetStatusBarTexture(), colors[myclass].r, colors[myclass].g, colors[myclass].b)
 		if ( self.iconside == "RIGHT" ) then
 			button.statusbar:SetPoint("BOTTOMRIGHT", button, "BOTTOMLEFT", -5, 2)
 		else
@@ -123,19 +122,14 @@ function watcherPrototype:CreateButton(mode)
 		end
 		button.statusbar:SetMinMaxValues(0, 1)
 		button.statusbar:SetValue(1)
-		local spark = button.statusbar:CreateTexture(nil, "OVERLAY")
-		spark:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
-		spark:SetBlendMode("ADD")
-		spark:SetAlpha(.8)
-		spark:SetPoint("TOPLEFT", button.statusbar:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
-		spark:SetPoint("BOTTOMRIGHT", button.statusbar:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
+		S.CreateMark(button.statusbar)
 		button.time = button:CreateFontString(nil, "OVERLAY")
 		button.time:SetFont(ns.font, ns.fontsize, ns.fontflag)
-		button.time:SetPoint("BOTTOMRIGHT", button.statusbar, "TOPRIGHT", 0, 2)
+		button.time:SetPoint("BOTTOMRIGHT", button.statusbar, "TOPRIGHT", 0, 4)
 		button.time:SetText("60")
 		button.name = button:CreateFontString(nil, "OVERLAY")
 		button.name:SetFont(ns.font, ns.fontsize, ns.fontflag)
-		button.name:SetPoint("BOTTOMLEFT", button.statusbar, "TOPLEFT", 0, 2)
+		button.name:SetPoint("BOTTOMLEFT", button.statusbar, "TOPLEFT", 0, 4)
 		button.name:SetText("技能名称")
 		button.mode = "BAR"
 	else			

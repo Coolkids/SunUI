@@ -197,7 +197,5 @@ function Module:OnInitialize()
 	local holder = CreateFrame("Frame", "BuffFrameHolder", UIParent)
 	holder:SetSize(C["BuffDB"]["IconSize"],C["BuffDB"]["IconSize"])
 	MoveHandle.Buff = S.MakeMoveHandle(holder, "Buff", "Buff")
-end
-function Module:OnEnable()
 	initialize()
 end

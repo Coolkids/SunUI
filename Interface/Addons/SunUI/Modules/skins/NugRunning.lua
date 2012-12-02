@@ -62,7 +62,7 @@ ConstructTimerBar = function(width, height)
 	f.bar.bg:SetAllPoints(f.bar)
 	--f.bar.bg:SetTexture(tex)
     
-	f.timeText = f.bar:CreateFontString();
+	f.timeText = f.bar:CreateFontString(nil, "OVERLAY", 2);
     f.timeText:SetFont(NugRunningConfig.timeFont.font, NugRunningConfig.timeFont.size, "THINOUTLINE")
     f.timeText:SetJustifyH("LEFT")
     f.timeText:SetVertexColor(1,1,1)
@@ -70,7 +70,7 @@ ConstructTimerBar = function(width, height)
 		
 	f.timeText.SetFormattedText = SetTimeText
     
-	f.spellText = f.bar:CreateFontString();
+	f.spellText = f.bar:CreateFontString(nil, "OVERLAY", 2);
     f.spellText:SetFont(NugRunningConfig.nameFont.font, NugRunningConfig.nameFont.size, "THINOUTLINE")
     f.spellText:SetWidth(f.bar:GetWidth()*0.7)
     f.spellText:SetHeight(height/2+1)
