@@ -392,10 +392,6 @@ local function UpdateObjects(frame)
 	frame.hp:SetSize(C["HPWidth"], C["HPHeight"])	
 	frame.hp:SetPoint('CENTER', frame, 0, 10)
 	frame.hp:GetStatusBarTexture():SetHorizTile(true)
-	if not frame.hp.mark then
-		S.CreateMark(frame.hp)
-		frame.hp.mark = true
-	end
 	frame.name:SetText(frame.oldname:GetText())
 	
 	frame.highlight:ClearAllPoints()
@@ -526,7 +522,7 @@ local function SkinObjects(frame, nameFrame)
 	hp.shadow:Hide()
 	hp.border:SetFrameLevel(0)
 	hp.hpGlow = hp.border
-	S.CreateMark(cb)
+	
 	local hpbg = CreateFrame("Frame", nil, hp)
 	hpbg:SetAllPoints(hp)
 	hpbg:SetFrameLevel(0)

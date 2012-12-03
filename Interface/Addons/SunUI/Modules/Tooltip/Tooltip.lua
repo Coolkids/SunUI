@@ -141,7 +141,8 @@ function Module:OnEnable()
 			local creatureType = UnitCreatureType(unit) or ""
 			local unitName = UnitName(unit)
 			local unitLevel = UnitLevel(unit)
-			local diffColor = unitLevel > 0 and GetQuestDifficultyColor(UnitLevel(unit)) or QuestDifficultyColors["impossible"]
+			local diffColor = unitLevel > 0 and GetQuestDifficultyColor(unitLevel) or QuestDifficultyColors["impossible"]
+			--print(diffColor.r, diffColor.g, diffColor.b, unitLevel)
 			if unitLevel < 0 then unitLevel = '??' end
 			if UnitIsPlayer(unit) then
 				local unitRace = UnitRace(unit)

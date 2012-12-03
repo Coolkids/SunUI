@@ -1386,6 +1386,7 @@ function ns:UpdateHealthColor(self)
 		local r, g, b
 		local _, class = UnitClass(unit)
 		local healthBartexture = healthBar:GetStatusBarTexture()
+		self:SetAlpha(1)
 		if type(ns.RaidClassColors[class]) == "table" and not string.match(unit, "pet") then
 			r, g, b  = ns.RaidClassColors[class].r, ns.RaidClassColors[class].g, ns.RaidClassColors[class].b
 		else
@@ -1449,10 +1450,11 @@ function ns:UpdateHealthColor(self)
 		end		
 	else
 		if ns.db.mode then
-			S.CreateTop(healthBar.bg, ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
+			self:SetAlpha(0.4)
 		else
-			S.CreateTop(healthBartexture, ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
-			S.CreateTop(healthBar.bg, ns.db.enemycolor.r*.2, ns.db.enemycolor.g*.2, ns.db.enemycolor.b*.2)
+			self:SetAlpha(0.4)
+			S.CreateTop(healthBar.bg, ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
+			--S.CreateTop(healthBartexture, ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
 		end
 	end
 end

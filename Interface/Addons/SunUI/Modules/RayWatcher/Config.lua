@@ -1034,7 +1034,13 @@ ns.watchers ={
 				{ spellID = 105739, unitId = "player", caster = "all", filter = "BUFF" },
 				-- 佯攻
 				{ spellID =  1966, unitId = "player", caster = "player", filter = "BUFF" }, 
-
+				--MOP
+				--玉蛟智力
+				{ spellID = 105702, unitId = "player", caster = "all", filter = "BUFF" }, 
+				--蘑菇力量
+				{ spellID = 105706, unitId = "player", caster = "all", filter = "BUFF" }, 
+				--兔妖敏捷
+				{ spellID = 105697, unitId = "player", caster = "all", filter = "BUFF" }, 
 		},
 		{
 			name = "玩家重要Buff",

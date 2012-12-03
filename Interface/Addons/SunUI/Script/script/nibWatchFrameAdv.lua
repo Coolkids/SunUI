@@ -224,3 +224,18 @@ end
 nWFA:RegisterEvent("PLAYER_LOGIN")
 nWFA:RegisterEvent("PLAYER_ENTERING_WORLD")
 nWFA:SetScript("OnEvent", EventHandler)
+
+S.Reskin(WatchFrameCollapseExpandButton)
+local downtex = WatchFrameCollapseExpandButton:CreateTexture(nil, "ARTWORK")
+downtex:SetSize(8, 8)
+downtex:SetPoint("CENTER", 1, 0)
+downtex:SetVertexColor(1, 1, 1)
+
+if WatchFrame.userCollapsed then
+	downtex:SetTexture("Interface\\AddOns\\SunUI\\media\\arrow-down-active")
+else
+	downtex:SetTexture("Interface\\AddOns\\SunUI\\media\\arrow-up-active")
+end
+
+hooksecurefunc("WatchFrame_Collapse", function() downtex:SetTexture("Interface\\AddOns\\SunUI\\media\\arrow-down-active") end)
+	hooksecurefunc("WatchFrame_Expand", function() downtex:SetTexture("Interface\\AddOns\\SunUI\\media\\arrow-up-active") end)

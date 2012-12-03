@@ -9,12 +9,23 @@ local function StripOptions(options)
 	options.titleoptions.args.color = nil
 	options.windowoptions = nil
 end
-
+ local function SkinBar(self)
+	for _,window in ipairs(self:GetWindows()) do
+		for i,v in pairs(window.bargroup:GetBars()) do
+			if not v.BarStyled then
+				v.texture.SetVertexColor = function(t, r, g, b) 
+					S.CreateTop(v.texture, r, g, b)
+				end
+				v.BarStyled = true
+			end
+		end
+	end
+end
 local function LoadSkin()
 	if not IsAddOnLoaded("Skada") then return end
 	local Skada = Skada
-	local barSpacing = 1
-	local borderWidth = 1
+	local barSpacing = S.Scale(1)
+	local borderWidth = S.Scale(1)
 	local barmod = Skada.displays["bar"]
 
 	barmod.AddDisplayOptions_ = barmod.AddDisplayOptions
@@ -41,27 +52,32 @@ local function LoadSkin()
 
 		skada:SetTexture(DB.Statusbar)
 		skada:SetSpacing(barSpacing)
-		--skada:SetFrameLevel(5)
 		--local titlefont = CreateFont("TitleFont"..win.db.name)
+		--titlefont:SetFont(DB.Font, select(2, ChatFrame1:GetFont()), "OUTLINE")
 		--win.bargroup.button:SetNormalFontObject(titlefont)
 
+		local color = win.db.title.color
+		win.bargroup.button:SetBackdropColor(0, 0, 0, 1)
+
 		skada:SetBackdrop(nil)
-		local h = CreateFrame("Frame", nil, skada)
-		h:SetAllPoints()
-		h:SetFrameLevel(skada:GetFrameLevel()-1)
-		if not h.shadow then
-			h:CreateShadow("Background")
+		if not skada.shadow then
+			skada:CreateShadow("Background")
 		end
-		h:ClearAllPoints()
+		skada.shadow:ClearAllPoints()
 		if win.db.enabletitle then
-			h:Point('TOPLEFT', win.bargroup.button, 'TOPLEFT')
+			skada.shadow:Point('TOPLEFT', win.bargroup.button, 'TOPLEFT', -5, 5)
 		else
-			h:Point('TOPLEFT', win.bargroup, 'TOPLEFT')
+			skada.shadow:Point('TOPLEFT', win.bargroup, 'TOPLEFT', -5, 5)
 		end
-		h:Point('BOTTOMRIGHT', win.bargroup, 'BOTTOMRIGHT')
+		skada.shadow:Point('BOTTOMRIGHT', win.bargroup, 'BOTTOMRIGHT', 5, -5)
+
+		win.bargroup.button:SetFrameStrata("MEDIUM")
+		win.bargroup.button:SetFrameLevel(5)
+		win.bargroup:SetFrameStrata("MEDIUM")
 	end	
+	hooksecurefunc(Skada, "UpdateDisplay",SkinBar)
 end
 
 function Module:OnEnable()
-	Module:RegisterEvent("ADDON_LOADED", LoadSkin)
+	LoadSkin()
 end

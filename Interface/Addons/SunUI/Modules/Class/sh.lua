@@ -73,3 +73,25 @@ Frame:RegisterEvent("UNIT_HEALTH")
 Frame:RegisterEvent("PLAYER_TARGET_CHANGED")
 Frame:RegisterEvent("UNIT_POWER")
 Frame:RegisterEvent("SPELL_UPDATE_COOLDOWN")	
+
+if DB.MyClass == "PRIEST" then
+	local talent = CreateFrame("Frame", nil, UIParent)
+	talent:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+	talent:RegisterEvent("PLAYER_ENTERING_WORLD")
+	talent:RegisterEvent("PLAYER_TALENT_UPDATE")
+	talent:HookScript("OnEvent", function(self, event)
+		if event == "PLAYER_TALENT_UPDATE" or event == "ACTIVE_TALENT_GROUP_CHANGED" or event == "PLAYER_ENTERING_WORLD" then
+			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+			local tree = GetSpecialization()
+			if tree ~= 3 then
+				Frame:UnregisterAllEvents()
+			else
+				Frame:RegisterEvent("UNIT_HEALTH")
+				Frame:RegisterEvent("PLAYER_TARGET_CHANGED")
+				Frame:RegisterEvent("UNIT_POWER")
+				Frame:RegisterEvent("SPELL_UPDATE_COOLDOWN")
+				self:Hide()
+			end
+		end
+	end)
+end

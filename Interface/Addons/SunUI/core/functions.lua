@@ -294,22 +294,22 @@ function S.FadeOutFrameDamage(p, t, show)  --隐藏
 	end 
 end
 
-function S.CreateBack(f, orientation)
+function S.CreateBack(f, orientation, a)
 	local gradient = f:CreateTexture(nil, "BACKGROUND", -1)
 	gradient:SetPoint("TOPLEFT")
 	gradient:SetPoint("BOTTOMRIGHT")
 	gradient:SetTexture(DB.Statusbar)
 	if orientation then
-		gradient:SetGradientAlpha("HORIZONTAL",  0, 0, 0, 0.3, .35, .35, .35, .35)
+		gradient:SetGradientAlpha("HORIZONTAL",  0, 0, 0, a or 0.3, .35, .35, .35, a or .35)
 	else
-		gradient:SetGradientAlpha("VERTICAL",  0, 0, 0, 0.3, .35, .35, .35, .35)
+		gradient:SetGradientAlpha("VERTICAL",  0, 0, 0, a or 0.3, .35, .35, .35, a or .35)
 	end
 end
-function S.CreateTop(f, r, g, b, orientation)
+function S.CreateTop(f, r, g, b, orientation, a)
 	if orientation then
-		f:SetGradientAlpha("HORIZONTAL", r, g, b, 1, r/2, g/2, b/2, 1)
+		f:SetGradientAlpha("HORIZONTAL", r, g, b, a or 1, r/2, g/2, b/2, a or 1)
 	else
-		f:SetGradientAlpha("VERTICAL", r, g, b, 1, r/2, g/2, b/2, 1)
+		f:SetGradientAlpha("VERTICAL", r, g, b, a or 1, r/2, g/2, b/2, a or 1)
 	end
 end
 function S.CreateSpark(f, w, h)
@@ -320,10 +320,10 @@ function S.CreateSpark(f, w, h)
 	spark:SetPoint("TOPLEFT", f:GetStatusBarTexture(), "TOPRIGHT", -w, h)
 	spark:SetPoint("BOTTOMRIGHT", f:GetStatusBarTexture(), "BOTTOMRIGHT", w, -h)
 end
-function S.CreateMark(f)
+function S.CreateMark(f, w)
 	local spark =  f:CreateTexture(nil, "OVERLAY", 1)
 	spark:SetTexture("Interface\\Buttons\\WHITE8x8")
-	spark:Size(1, f:GetHeight())
+	spark:Size(1, w or f:GetHeight())
 	spark:SetVertexColor(0, 0, 0)
 	spark:SetPoint("LEFT", f:GetStatusBarTexture(), "RIGHT", 0, 0)
 end
