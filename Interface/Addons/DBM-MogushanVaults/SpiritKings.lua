@@ -3,7 +3,7 @@ local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndDSA	= mod:NewSound(nil, "SoundDSA", true)
 
-mod:SetRevision(("$Revision: 8195 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8200 $"):sub(12, -3))
 mod:SetCreatureID(60701, 60708, 60709, 60710)--Adds: 60731 Undying Shadow, 60958 Pinning Arrow
 mod:SetModelID(41813)
 mod:SetZone()
@@ -35,6 +35,7 @@ local isDispeller = select(2, UnitClass("player")) == "MAGE"
 local warnChargedShadows		= mod:NewTargetAnnounce(117685, 2)
 local warnUndyingShadows		= mod:NewSpellAnnounce(117506, 3)--Target scanning?
 local warnFixate				= mod:NewTargetAnnounce(118303, 4)--Maybe spammy late fight, if zian is first boss you get? (adds are immortal, could be many up)
+local warnShieldOfDarknessSoon	= mod:NewAnnounce("DarknessSoon", 3, 117697, nil, nil, true)
 local warnShieldOfDarkness		= mod:NewTargetAnnounce(117697, 4)
 --Meng
 local warnCrazyThought			= mod:NewCastAnnounce(117833, 2, nil, nil, false)--Just doesn't seem all that important right now.
@@ -45,7 +46,8 @@ local warnDelirious				= mod:NewTargetAnnounce(117837, 4, nil, mod:CanRemoveEnra
 --Qiang
 local warnAnnihilate			= mod:NewCastAnnounce(117948, 4)
 local warnFlankingOrders		= mod:NewSpellAnnounce(117910, 4)
-local warnImperviousShield		= mod:NewTargetAnnounce(117961, 3)--Heroic Ability
+local warnImperviousShieldSoon	= mod:NewPreWarnAnnounce(117961, 5, 3)--Less dangerous than Shield of darkness, doesn't need as much spam
+local warnImperviousShield		= mod:NewTargetAnnounce(117961, 4)--Heroic Ability
 --Subetai
 local warnVolley				= mod:NewSpellAnnounce(118094, 3)--118088 trigger ID, but we use the other ID cause it has a tooltip/icon
 local warnPinnedDown			= mod:NewTargetAnnounce(118135, 4)--We warn for this one since it's more informative then warning for just Rain of Arrows
@@ -59,13 +61,13 @@ local specWarnUndyingShadow		= mod:NewSpecialWarningSwitch("ej5854", mod:IsDps()
 local specWarnFixate			= mod:NewSpecialWarningYou(118303)
 local yellFixate				= mod:NewYell(118303)
 local specWarnCoalescingShadows	= mod:NewSpecialWarningMove(117558)
-local specWarnShadowBlast		= mod:NewSpecialWarningInterrupt(117628, mod:IsMelee())
+local specWarnShadowBlast		= mod:NewSpecialWarningInterrupt(117628, false)--very spammy. better to optional use
 local specWarnShieldOfDarkness	= mod:NewSpecialWarningTarget(117697, nil, nil, nil, true)--Heroic Ability
 local specWarnShieldOfDarknessD	= mod:NewSpecialWarningDispel(117697, isDispeller)--Heroic Ability
 --Meng
 local specWarnMaddeningShout	= mod:NewSpecialWarningSpell(117708, nil, nil, nil, true)
 local specWarnCrazyThought		= mod:NewSpecialWarningInterrupt(117833, false)--At discretion of whoever to enable. depending on strat, you may NOT want to interrupt these (or at least not all of them)
-local specWarnDelirious			= mod:NewSpecialWarningDispel(117837, mod:CanRemoveEnrage())--Heroic Ability
+local specWarnDelirious			= mod:NewSpecialWarningDispel(117837, mod:CanRemoveEnrage() or mod:IsTank())--Heroic Ability
 --Qiang
 local specWarnAnnihilate		= mod:NewSpecialWarningSpell(117948)--Maybe tweak options later or add a bool for it, cause on heroic, it's not likely ranged will be in front of Qiang if Zian or Subetai are up.
 local specWarnFlankingOrders	= mod:NewSpecialWarningSpell(117910, nil, nil, nil, true)
@@ -185,6 +187,7 @@ function mod:OnCombatStart(delay)
 	sndWOP:Schedule(21, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_bczb.mp3")
 	if self:IsDifficulty("heroic10", "heroic25") then
 		timerImperviousShieldCD:Start(40.7)
+		warnImperviousShieldSoon:Schedule(35.7)
 		sndDSA:Schedule(37.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zwhd.mp3") -- 戰王護盾準備
 		self:Schedule(37.5, function()
 			if UnitName("target") == Qiang then
@@ -329,6 +332,11 @@ function mod:SPELL_CAST_START(args)
 		end
 	elseif args:IsSpellID(117697) then
 		warnShieldOfDarkness:Show(args.sourceName)
+		warnShieldOfDarknessSoon:Schedule(37.5, 5)--Start pre warning with regular warnings only as you don't move at this point yet.
+		warnShieldOfDarknessSoon:Schedule(38.5, 4)
+		warnShieldOfDarknessSoon:Schedule(39.5, 3)
+		warnShieldOfDarknessSoon:Schedule(40.5, 2)
+		warnShieldOfDarknessSoon:Schedule(41.5, 1)
 		timerShieldOfDarknessCD:Start()
 		sndDSA:Schedule(39, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wwhd.mp3") -- 巫王護盾準備
 		self:Schedule(39, function()
@@ -392,13 +400,27 @@ function mod:SPELL_CAST_START(args)
 	elseif args:IsSpellID(117961) then
 		warnImperviousShield:Show(args.sourceName)
 		specWarnImperviousShield:Show(args.sourceName)
-		timerImperviousShieldCD:Start()
-		sndDSA:Schedule(39, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zwhd.mp3") -- 戰王護盾準備
-		self:Schedule(39, function()
-			if UnitName("target") == Qiang then
-				specWarnDSoon:Show()
-			end
-		end)
+		if self:IsDifficulty("heroic10") then
+			warnImperviousShieldSoon:Schedule(57)
+			timerImperviousShieldCD:Start(62)
+			countdownImperviousShield:Start(62)
+			sndDSA:Schedule(59, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zwhd.mp3") -- 戰王護盾準備
+			self:Schedule(59, function()
+				if UnitName("target") == Qiang then
+					specWarnDSoon:Show()
+				end
+			end)
+		else
+			warnImperviousShieldSoon:Schedule(37)
+			timerImperviousShieldCD:Start()
+			countdownImperviousShield:Start(42)
+			sndDSA:Schedule(39, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zwhd.mp3") -- 戰王護盾準備
+			self:Schedule(39, function()
+				if UnitName("target") == Qiang then
+					specWarnDSoon:Show()
+				end
+			end)
+		end
 		if isDispellerZ then
 			specWarnImperviousShield:Show(args.sourceName)
 			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\dispelnow.mp3")
@@ -444,12 +466,13 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		timerRainOfArrowsCD:Start()
 --	"<63.5 21:23:16> [UNIT_SPELLCAST_SUCCEEDED] Qiang the Merciless [[boss1:Inactive Visual::0:118205]]", -- [14066]
 --	"<63.5 21:23:16> [UNIT_SPELLCAST_SUCCEEDED] Qiang the Merciless [[boss1:Cancel Activation::0:118219]]", -- [14068]
-	elseif spellId == 118205 and self:AntiSpam(2, 3) then--Cancel Activation
+	elseif spellId == 118205 and self:AntiSpam(2, 3) then--Inactive Visual
 		if UnitName(uId) == Zian then
 			zianActive = false
 			timerChargingShadowsCD:Cancel()
 			timerShieldOfDarknessCD:Cancel()
 			sndDSA:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wwhd.mp3")
+			warnShieldOfDarknessSoon:Cancel()
 			timerUndyingShadowsCD:Start(30)--This boss retains Undying Shadows
 			if self.Options.RangeFrame and not subetaiActive then--Close range frame, but only if zian is also not active, otherwise we still need it
 				DBM.RangeCheck:Hide()
@@ -463,10 +486,12 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 			sndWOP:Schedule(28, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jknh.mp3")
 		elseif UnitName(uId) == Qiang then
 			qiangActive = false
+			timerJL:Cancel()
 			timerAnnihilateCD:Cancel()
 			sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jmzb.mp3")
 			timerImperviousShieldCD:Cancel()
 			sndDSA:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zwhd.mp3")
+			warnImperviousShieldSoon:Cancel()
 			timerFlankingOrdersCD:Start(30)--This boss retains Flanking Orders
 			sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_bczb.mp3")
 			sndWOP:Schedule(27, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_bczb.mp3")
@@ -489,7 +514,7 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, _, _, _, target)
 		if subetaiActive then
 			timerPillageCD:Start()
 		else
---			timerPillageCD:Start(75)--Not yet known. Probably 75
+			timerPillageCD:Start(75)
 		end
 		if target then
 			warnPillage:Show(target)
@@ -519,8 +544,6 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, _, _, _, target)
 end
 
 --Phase change controller. Even for pull.
---Using bossname is better then localizing their yells because each boss has 2 or 3 engage yells.
---Besides, if they ever get the dang EJ to match the game, we won't even need to localize boss names even.
 function mod:CHAT_MSG_MONSTER_YELL(msg, boss)
 	if not self:IsInCombat() or bossesActivated[boss] then return end--Ignore yells out of combat or from bosses we already activated.
 	if not bossesActivated[boss] then bossesActivated[boss] = true end--Once we activate off bosses first yell, add them to ignore.
@@ -535,6 +558,11 @@ function mod:CHAT_MSG_MONSTER_YELL(msg, boss)
 			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ddzb.mp3") --打斷準備
 		end
 		if self:IsDifficulty("heroic10", "heroic25") then
+			warnShieldOfDarknessSoon:Schedule(35, 5)--Start pre warning with regular warnings only as you don't move at this point yet.
+			warnShieldOfDarknessSoon:Schedule(36, 4)
+			warnShieldOfDarknessSoon:Schedule(37, 3)
+			warnShieldOfDarknessSoon:Schedule(38, 2)
+			warnShieldOfDarknessSoon:Schedule(39, 1)
 			timerShieldOfDarknessCD:Start(40)
 			sndDSA:Schedule(37.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wwhd.mp3") -- 巫王護盾準備
 			self:Schedule(37.5, function()
@@ -554,6 +582,10 @@ function mod:CHAT_MSG_MONSTER_YELL(msg, boss)
 		warnActivated:Show(boss)
 		mengActive = true
 		if self:IsDifficulty("heroic10", "heroic25") then
+			timerDeliriousCD:Start()
+			if mod:CanRemoveEnrage() then
+				sndWOP:Schedule(18, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kwjn.mp3") -- 狂王激怒準備
+			end
 			timerMaddeningShoutCD:Start(40)
 			sndWOP:Schedule(35, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jknh.mp3")
 		else
@@ -561,12 +593,6 @@ function mod:CHAT_MSG_MONSTER_YELL(msg, boss)
 			sndWOP:Schedule(15, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jknh.mp3")
 		end
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kwjh.mp3") --狂王激活
-		if self:IsDifficulty("heroic10", "heroic25") then
-			timerDeliriousCD:Start()
-			if mod:CanRemoveEnrage() then
-				sndWOP:Schedule(18, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kwjn.mp3") -- 狂王激怒準備
-			end
-		end
 		if mod.Options.optDD == "DD1" then
 			specWarnDDL:Schedule(1)
 			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ddzb.mp3") --打斷準備

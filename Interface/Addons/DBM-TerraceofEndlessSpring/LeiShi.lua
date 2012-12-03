@@ -1,14 +1,15 @@
 ﻿local mod	= DBM:NewMod(729, "DBM-TerraceofEndlessSpring", nil, 320)
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
+local sndMW		= mod:NewSound(nil, "SoundMW", true)
 
-mod:SetRevision(("$Revision: 8159 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8206 $"):sub(12, -3))
 mod:SetCreatureID(62983)--62995 Animated Protector
 mod:SetModelID(42811)
 
 mod:RegisterCombat("combat")
 mod:RegisterKill("yell", L.Victory)--Kill detection is aweful. No death, no special cast. yell is like 40 seconds AFTER victory. terrible.
-mod:SetUsedIcons(8, 7, 6, 5)
+mod:SetUsedIcons(8, 7, 6, 5, 4)
 
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED",
@@ -30,6 +31,8 @@ local specWarnGetAway					= mod:NewSpecialWarningSpell(123461, nil, nil, nil, tr
 local specWarnSpray						= mod:NewSpecialWarningStack(123121, mod:IsTank(), 6)
 local specWarnSprayNT					= mod:NewSpecialWarningMove(123121)
 local specWarnSprayOther				= mod:NewSpecialWarningTarget(123121, mod:IsTank())
+
+local specWarnJK						= mod:NewSpecialWarning("specWarnJK")
 
 local timerSpecialCD					= mod:NewTimer(22, "timerSpecialCD", 123250)--Not even this is 100% reliable. it's iffy at best, but she seems to use specials about 22-25 seconds after last one ended, except when last one was protect, then next one is used IMMEDIATELY upon protect ending. Timers for this fight are just jacked.
 local timerSpray						= mod:NewTargetTimer(10, 123121, nil, mod:IsTank() or mod:IsHealer())
@@ -127,6 +130,15 @@ function mod:SPELL_AURA_REMOVED(args)
 	elseif args:IsSpellID(123461) then
 		timerGetAway:Cancel()
 --		timerSpecialCD:Start()--Probably wrong so disabled. i still can't find this fights true pattern since it's all over the place and never matches up.
+	elseif args:IsSpellID(123712) and not hideActive then
+		self:Schedule(3, function()
+			if not hideActive then
+				if not UnitDebuff("boss1", GetSpellInfo(123712)) then
+					sndMW:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qsmw.mp3") --缺少迷霧
+					specWarnJK:Show()
+				end
+			end
+		end)
 	end
 end
 

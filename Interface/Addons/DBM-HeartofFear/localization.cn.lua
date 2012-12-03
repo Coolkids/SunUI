@@ -65,18 +65,30 @@ L:SetWarningLocalization({
 ------------
 L= DBM:GetModLocalization(744)
 
+L:SetWarningLocalization({
+	SpecWarnOverwhelmingAssaultOther 		= "%s 被压制 (%d层)",
+	SpecWarnJSA								= ">>>注意开减伤<<<"
+})
+
 L:SetOptionLocalization({
 	UnseenStrikeArrow	= "DBM箭头：$spell:122949的目标",
 	InfoFrame			= "资讯框：$spell:123474",
 	RangeFrame			= "距离监视(8码)：$spell:123175",
-	SpecWarnOverwhelmingAssaultOther = "特别警告：$spell:123081的层数",
+	SpecWarnOverwhelmingAssaultOther = "特别警告：$spell:123474的层数",
 	HudMAP				= "高级定位监视(HUD)：$spell:122949的位置",
-	SoundWOP			= "语音警告：重要技能"
+	SoundWOP			= "语音警告：重要技能",
+	SpecWarnJSA			= "特殊警告：注意开减伤",
+	unseenjs1			= "减伤提示：无影击1",
+	unseenjs2			= "减伤提示：无影击2",
+	unseenjs3			= "减伤提示：无影击3",
+	unseenjs4			= "减伤提示：无影击4",
+	unseenjs5			= "减伤提示：无影击5",
+	unseenjs6			= "减伤提示：无影击6",
+	unseenjs7			= "减伤提示：无影击7",
+	unseenjs8			= "减伤提示：无影击8",
+	unseenjs9			= "减伤提示：无影击9"
 })
 
-L:SetWarningLocalization({
-	SpecWarnOverwhelmingAssaultOther 		= "%s 被压制 (%d层)"
-})
 
 -------------------------------
 -- Garalon --
@@ -97,6 +109,7 @@ L:SetOptionLocalization({
 	two					= "二坦模式 (30层敏感以上提示)",
 	three				= "三坦模式 (20层敏感以上提示)",
 	SoundWOP			= "语音警告：重要技能",
+	SoundZN				= "语音警告：碾碎倒计时(英雄模式)",
 	specWarnPungencyOtherFix = "特别警告：当别人的$spell:123081达到设定层数时",
 	HudMAP				= "高级定位监视(HUD)：$spell:122835的位置",
 	SoundFS				= "坦克倒计时：$spell:122735"
@@ -111,10 +124,30 @@ L:SetMiscLocalization({
 ----------------------
 L= DBM:GetModLocalization(741)
 
+L:SetWarningLocalization({
+	specWarnQuickeningX = "%s - 快驱散!",
+	specWarnBH			= "给 >> %s <<保护!"
+})
+
 L:SetOptionLocalization({
 	SoundWOP			= "语音警告：重要技能",
-	SoundDQ				= "语音警告：$spell:122149的驱散",
+	specWarnBH			= "特殊警告：当需要给冲锋保护时",
+	InfoFrame			= "资讯框：$spell:122149层数监视",
+	optQS				= "加速驱散链",
+	noQS				= "不提示",
+	QS1					= "顺序1",
+	QS2					= "顺序2",
+	QS3					= "顺序3",
+	allQS				= "总是提示",
+	optBH				= "冲锋保护链",
+	noBH				= "不提示",
+	BH1					= "顺序1",
+	BH2					= "顺序2",
+	BH3					= "顺序3",
+	BH4					= "顺序4",
+	allBH				= "总是提示",
 	SoundJR				= "语音警告：当你没有残渣时提示救琥珀",
+	specWarnQuickeningX	= "特殊警告：当需要驱散/窃取$spell:122149时",
 	APArrow				= "DBM箭头：$spell:121881的位置",
 	NearAP				= "特殊功能：$spell:121881在你20码范围内才播放语音(仅影响语音)",
 	ReapetAP			= "特殊功能：若你的$spell:121881在5秒内无人打破则不停呼救",
@@ -182,6 +215,7 @@ L:SetOptionLocalization({
 	InfoFrame			= "信息框：受$spell:125390效果影响的玩家",
 	InfoYB				= "信息框：音波能量监视(团队中必须有人做焦点)",
 	SoundWOP			= "语音警告：重要技能",
+	SoundYB				= "语音警告：為音波爆炸倒数",
 	HudMAP				= "高级定位监视(HUD)：$spell:124863的位置",
 	HudMAP2				= "高级定位监视(HUD)：$spell:124821的位置",
 	RangeFrame			= "距离监视（5码）：$spell:123735",

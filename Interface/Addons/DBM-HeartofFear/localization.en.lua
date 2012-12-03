@@ -65,13 +65,14 @@ L:SetOptionLocalization({
 	UnseenStrikeArrow	= "Show DBM Arrow when someone is affected by $spell:122949",
 	RangeFrame			= "Show range frame (8) for $spell:123175",
 	InfoFrame			= "InfoFrame:$spell:123474",
-	SpecWarnOverwhelmingAssaultOther = "Special warning: $spell:123081",
+	SpecWarnOverwhelmingAssaultOther = "Special warning: $spell:123474",
 	HudMAP				= "HUDMAP:$spell:122949",
 	SoundWOP			= "Voice warning: important skills"
 })
 
 L:SetWarningLocalization({
-	SpecWarnOverwhelmingAssaultOther 		= "%s - (%d)"
+	SpecWarnOverwhelmingAssaultOther 		= "%s - (%d)",
+	SpecWarnJSA								= ">>Damage reduction skill!<<"
 })
 
 -------------------------------

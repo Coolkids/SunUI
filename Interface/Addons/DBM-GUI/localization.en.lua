@@ -56,6 +56,7 @@ L.EnableMiniMapIcon			= "Show minimap button"
 L.UseMasterVolume			= "Use Master audio channel to play sound files."
 L.DisableCinematics			= "Disable in-game cinematics in instances"
 L.DisableCinematicsOutside	= "Disable in-game cinematics outside instances"
+L.EnableReadyCheckSound			= "Always Play Ready Check Sound"
 L.SKT_Enabled				= "Always show speed kill timer (Overrides boss-specific option)"
 L.Latency_Text				= "Set max latency sync threshold: %d"
 

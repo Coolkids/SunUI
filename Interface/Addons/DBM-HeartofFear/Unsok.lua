@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8190 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8207 $"):sub(12, -3))
 mod:SetCreatureID(62511)
 mod:SetModelID(43126)
 mod:SetZone()
@@ -40,7 +40,7 @@ local warnLivingAmber			= mod:NewSpellAnnounce("ej6261", 2, nil, false)--122348 
 local warnBurningAmber			= mod:NewCountAnnounce("ej6567", 2, nil, false)--Keep track of Burning Amber Puddles. Spammy, but nessesary for heroic for someone managing them.
 --Amber Monstrosity
 local warnAmberCarapace			= mod:NewTargetAnnounce(122540, 4)--Monstrosity Shielding Boss (phase 2 start)
-local warnMassiveStomp			= mod:NewCastAnnounce(122408, 3, nil, mod:IsHealer() or mod:IsMelee())
+local warnMassiveStomp			= mod:NewCastAnnounce(122408, 3, nil, nil, mod:IsHealer() or mod:IsMelee())
 local warnAmberExplosionSoon	= mod:NewSoonAnnounce(122402, 3)
 local warnFling					= mod:NewSpellAnnounce(122413, 3, nil, mod:IsTank())--think this always does his aggro target but not sure. If it does random targets it will need target scanning.
 local warnInterruptsAvailable	= mod:NewAnnounce("warnInterruptsAvailable", 1, 122398)
@@ -146,9 +146,12 @@ function mod:ScalpelTarget()
 	end
 end
 
-local function warnAmberExplosionCast(spellId, source)
+local function warnAmberExplosionCast(spellId)
 	if #canInterrupt == 0 then--This will never happen if fired by "InterruptAvailable" sync since it should always be 1 or greater. This is just a fallback if contructs > 0 and we scheduled "warnAmberExplosionCast" there
 		specwarnAmberExplosion:Show(spellId == 122402 and Monstrosity or MutatedConstruct)--No interupts, warn the raid to prep for aoe damage with beware! alert.
+		if spellId == 122398 then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_hpbz.mp3") --琥珀爆炸
+		end
 	else--Interrupts available, lets call em out as a great tool to give raid leader split second decisions on who to allocate to the task (so they don't all waste it on same target and not have for next one).
 		warnInterruptsAvailable:Show(spellId == 122402 and Monstrosity or MutatedConstruct, table.concat(canInterrupt, "<, >"))
 	end
@@ -269,7 +272,6 @@ function mod:SPELL_AURA_APPLIED(args)
 			timerAmberExplosionCD:Start(15, args.destName)--Only player needs to see this, they are only person who can do anything about it.
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_nbzh.mp3") --你被轉化
 			if IsAddOnLoaded("TidyPlates_ThreatPlates") then
-				TPTPNormal = TidyPlatesThreat.db.profile.nameplate.toggle["Normal"]--Returns true or false, use TidyPlatesNormal to save that value on pull
 				if TPTPNormal == true then
 					TidyPlatesThreat.db.profile.nameplate.toggle["Normal"] = false
 					TidyPlates:ReloadTheme()--Call the Tidy plates update methods
@@ -329,22 +331,15 @@ function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(122398) then
 		warnAmberExplosion:Show(args.sourceName, args.spellName)
 		if args:GetSrcCreatureID() == 62701 then--Cast by a wild construct not controlled by player
-			--This doesn't work, for no logical reason what so ever.
 			if playerIsConstruct and GetTime() - lastStrike >= 4 then--Player is construct and Amber Strike will be available before cast ends.
 				specwarnAmberExplosionOther:Show(args.spellName, args.sourceName)
 				if self:LatencyCheck() then--if you're too laggy we don't want you telling us you can interrupt it 2-3 seconds from now. we only care if you can interrupt it NOW
 					self:SendSync("InterruptAvailable", UnitGUID("player")..":122398")
 				end
 			end
-			--^^
 			timerAmberExplosionCD:Start(18, args.sourceName, args.sourceGUID)--Longer CD if it's a non player controlled construct. Everyone needs to see this bar because there is no way to interrupt these.
-			if Constructs == 0 then--No constructs, thus no interrupt. Give a beware warning.
-				specwarnAmberExplosion:Show(args.sourceName)
-				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_hpbz.mp3") --琥珀爆炸
-			else--There is a construct, lets pass it to interrupt checker to determine if we still fire specwarnAmberExplosion
-				self:Unschedule(warnAmberExplosionCast)
-				self:Schedule(0.5, warnAmberExplosionCast, 122398)
-			end
+			self:Unschedule(warnAmberExplosionCast)
+			self:Schedule(0.5, warnAmberExplosionCast, 122398)--Always check available interrupts and special warn if not
 		elseif args.sourceGUID == UnitGUID("player") then--Cast by YOU
 			specwarnAmberExplosionYou:Show(args.spellName)
 			DBM.Flash:Show(1, 0, 0)
@@ -352,26 +347,20 @@ function mod:SPELL_CAST_START(args)
 			timerAmberExplosionCD:Start(13, args.sourceName)--Only player needs to see this, they are only person who can do anything about it.
 		end
 	elseif args:IsSpellID(122402) then--Amber Monstrosity
-		--This doesn't work, for no logical reason what so ever.
 		if playerIsConstruct and GetTime() - lastStrike >= 4 then--Player is construct and Amber Strike will be available before cast ends.
 			specwarnAmberExplosionAM:Show(args.spellName, args.sourceName)--On heroic, not interrupting amber montrosity is an auto wipe. this is single handedly the most important special warning of all!!!!!!
 			if self:LatencyCheck() then--if you're too laggy we don't want you telling us you can interrupt it 2-3 seconds from now. we only care if you can interrupt it NOW
 				self:SendSync("InterruptAvailable", UnitGUID("player")..":122402")
 			end
 		end
-		--^^
 		warnAmberExplosion:Show(args.sourceName, args.spellName)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jgbz.mp3") --巨怪爆炸
 		warnAmberExplosionSoon:Cancel()
 		warnAmberExplosionSoon:Schedule(41)
 		timerAmberExplosionAMCD:Start(46, args.spellName, args.sourceName)
 		countdownAmberExplosionAM:Start(46)
-		if Constructs == 0 then--No constructs, thus no interrupt. Give a beware warning.
-			specwarnAmberExplosion:Show(args.sourceName)
-		else--There is a construct, lets pass it to interrupt checker to determine if we still fire specwarnAmberExplosion
-			self:Unschedule(warnAmberExplosionCast)
-			self:Schedule(0.5, warnAmberExplosionCast, 122402, "Contructs")
-		end
+		self:Unschedule(warnAmberExplosionCast)
+		self:Schedule(0.5, warnAmberExplosionCast, 122402)--Always check available interrupts and special warn if not
 	elseif args:IsSpellID(122408) then
 		warnMassiveStomp:Show()
 		if not playerIsConstruct then
@@ -394,10 +383,10 @@ function mod:SPELL_CAST_SUCCESS(args)
 		self:ScheduleMethod(0.2, "ScalpelTarget")
 	elseif args:IsSpellID(122532) then
 		Puddles = Puddles + 1
---		warnBurningAmber:Show(Puddles)
+		warnBurningAmber:Show(Puddles)
 	elseif args:IsSpellID(123156) then
 		Puddles = Puddles - 1
---		warnBurningAmber:Show(Puddles)
+		warnBurningAmber:Show(Puddles)
 	elseif args:IsSpellID(122389) and args.sourceGUID == UnitGUID("player") then--Amber Strike
 		lastStrike = GetTime()
 	end
@@ -441,6 +430,6 @@ function mod:OnSync(msg, str)
 	if msg == "InterruptAvailable" and guids[guid] and spellId then
 		canInterrupt[#canInterrupt + 1] = guids[guid]
 		self:Unschedule(warnAmberExplosionCast)
-		self:Schedule(0.5, warnAmberExplosionCast, spellId, "Interrupt")
+		self:Schedule(0.5, warnAmberExplosionCast, spellId)
 	end
 end

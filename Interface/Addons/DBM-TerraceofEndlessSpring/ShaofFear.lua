@@ -3,7 +3,7 @@ local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndDD	= mod:NewSound(nil, "SoundDD", mod:IsTank())
 
-mod:SetRevision(("$Revision: 8165 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8201 $"):sub(12, -3))
 mod:SetCreatureID(60999)--61042 Cheng Kang, 61046 Jinlun Kun, 61038 Yang Guoshi, 61034 Terror Spawn
 mod:SetModelID(41772)
 
@@ -32,9 +32,9 @@ local specWarnDreadSpray				= mod:NewSpecialWarningSpell(120047, nil, nil, nil, 
 local specWarnDeathBlossom				= mod:NewSpecialWarningSpell(119888, nil, nil, nil, true)--Cast, warns the entire raid.
 local specWarnShot						= mod:NewSpecialWarningStack(119086, true, 2)
 
-local timerThrashCD						= mod:NewCDTimer(7, 131996, nil, mod:IsTank() or mod:IsHealer())--Every 7-12 seconds.
+local timerThrashCD						= mod:NewCDTimer(9, 131996, nil, mod:IsTank() or mod:IsHealer())--Every 9-12 seconds.
 local timerBreathOfFearCD				= mod:NewNextTimer(33.3, 119414)--Based off bosses energy, he casts at 100 energy, and gains about 3 energy per second, so every 33-34 seconds is a breath.
-local timerOminousCackleCD				= mod:NewNextTimer(55, 119693)
+local timerOminousCackleCD				= mod:NewNextTimer(45.5, 119693)
 local timerDreadSpray					= mod:NewBuffActiveTimer(8, 120047)
 local timerDreadSprayCD					= mod:NewNextTimer(20.5, 120047)
 --local timerTerrorSpawnCD				= mod:NewNextTimer(60, 119108)--every 60 or so seconds, maybe a little more maybe a little less, not sure. this is just based on instinct after seeing where 30 fit.
@@ -127,7 +127,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerDreadSpray:Start()
 		timerDreadSprayCD:Start()
 		if mod:IsHealer() then
-			sndWOP:Schedule(19, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kbpszb.mp3")--恐怖噴散準備
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kbpszb.mp3")--恐怖噴散
 		end
 	elseif args:IsSpellID(118977) and args:IsPlayer() then--Fearless, you're leaving platform
 		onPlatform = false
@@ -166,9 +166,6 @@ function mod:SPELL_CAST_START(args)
 		platformGUIDs[args.sourceGUID] = true
 		platformMob = args.sourceName--Get name of your platform mob so we can determine which mob you have engaged
 		timerDreadSprayCD:Start(10.5, args.sourceGUID)--We can accurately start perfectly accurate spray cd bar off their first shoot cast.
-		if mod:IsHealer() then
-			sndWOP:Schedule(9, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kbpszb.mp3")--恐怖噴散準備
-		end
 	elseif args:IsSpellID(119888) and platformMob and args.sourceName == platformMob then
 		specWarnDeathBlossom:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jykd.mp3") --劍雨快躲

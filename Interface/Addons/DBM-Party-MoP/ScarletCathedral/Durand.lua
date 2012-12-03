@@ -19,10 +19,10 @@ local warnFlashofSteel			= mod:NewSpellAnnounce(115627, 3)
 local warnDashingStrike			= mod:NewSpellAnnounce(115676, 3)
 local warnMassRes				= mod:NewCastAnnounce(113134, 4)
 local warnDeepSleep				= mod:NewSpellAnnounce(9256, 2)
-local warnHeal					= mod:NewCastAnnounce(12039, 4)
+local warnHeal					= mod:NewCastAnnounce(130857, 4)
 
 local specWarnMassRes			= mod:NewSpecialWarningInterrupt(113134, true)
-local specWarnHeal				= mod:NewSpecialWarningInterrupt(12039, true)
+local specWarnHeal				= mod:NewSpecialWarningInterrupt(130857, true)
 
 local timerFlashofSteel			= mod:NewCDTimer(26, 115627)--not confirmed.
 local timerDashingStrike		= mod:NewCDTimer(26, 115676)--not confirmed.
@@ -50,8 +50,8 @@ function mod:SPELL_CAST_START(args)
 		warnMassRes:Show()
 		specWarnMassRes:Show(args.sourceName)
 		timerMassResCD:Start()
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3")--快打斷
-	elseif args:IsSpellID(12039) then
+--		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3")--快打斷
+	elseif args:IsSpellID(130857) then
 		warnHeal:Show()
 		specWarnHeal:Show(args.sourceName)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3")--快打斷

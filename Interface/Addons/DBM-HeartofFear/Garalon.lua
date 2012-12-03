@@ -58,6 +58,7 @@ local berserkTimer				= mod:NewBerserkTimer(420)
 --mod:AddBoolOption("InfoFrame", true)--Not sure how to do yet, i need to see 25 man first to get a real feel for number of people with debuff at once.
 mod:AddBoolOption("PheromonesIcon", true)
 local sndFS		= mod:NewSound(nil, "SoundFS", mod:IsTank())
+local sndZN		= mod:NewSound(nil, "SoundZN", mod:IsHealer())
 mod:AddBoolOption("InfoFrame", not mod:IsDps(), "sound")
 
 local brokenLegs = 0
@@ -89,6 +90,11 @@ function mod:OnCombatStart(delay)
 	table.wipe(PheromonesMarkers)	
 	if self:IsDifficulty("heroic10", "heroic25") then
 		timerCrushCD:Start(30-delay, Crushcount + 1)
+		sndZN:Schedule(25.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+		sndZN:Schedule(26.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndZN:Schedule(27.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndZN:Schedule(28.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndZN:Schedule(29.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	end
 end
 
@@ -239,7 +245,17 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, _, _, _, target)
 		end
 		if msg:find(L.Heroicrush) then
 			timerCrushCD:Cancel()
+			sndZN:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+			sndZN:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+			sndZN:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndZN:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndZN:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 			timerCrushCD:Start(37.5, Crushcount + 1)
+			sndZN:Schedule(33, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+			sndZN:Schedule(34, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+			sndZN:Schedule(35, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndZN:Schedule(36, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndZN:Schedule(37, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		end
 	end
 end

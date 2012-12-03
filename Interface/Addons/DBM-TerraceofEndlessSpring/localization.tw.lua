@@ -55,7 +55,8 @@ L:SetMiscLocalization{
 L= DBM:GetModLocalization(729)
 
 L:SetWarningLocalization({
-	warnHideOver			= "%s 已結束"
+	warnHideOver			= "%s 已結束",
+	specWarnJK				= "首領缺少驚恐迷霧!!"
 })
 
 L:SetTimerLocalization({
@@ -65,7 +66,9 @@ L:SetTimerLocalization({
 L:SetOptionLocalization({
 	warnHideOver			= "警告：當$spell:123244結束時",
 	timerSpecialCD			= "計時器：下一次特殊技能",
+	specWarnJK				= "特殊警告：缺少驚恐迷霧超過3秒",
 	SoundWOP				= "語音警告：重要技能",
+	SoundMW					= "語音警告：缺少驚恐迷霧",
 	SetIconOnGuard		= "為$journal:6224設置團隊標記"
 })
 

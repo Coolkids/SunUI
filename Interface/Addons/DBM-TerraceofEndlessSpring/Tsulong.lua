@@ -3,12 +3,13 @@ local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndJK		= mod:NewSound(nil, "SoundJK", true)
 
-mod:SetRevision(("$Revision: 8186 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8199 $"):sub(12, -3))
 mod:SetCreatureID(62442)--62919 Unstable Sha, 62969 Embodied Terror
 mod:SetModelID(42532)
 mod:SetReCombatTime(60)--fix lfr combat re-starts after killed.
 
 mod:RegisterCombat("combat")
+mod:RegisterKill("yell", L.Victory)
 
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED",
@@ -215,11 +216,20 @@ function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(122752) then
 		warnShadowBreath:Show()
 		specWarnShadowBreath:Show()
-		timerShadowBreathCD:Start()
-		if not mod:IsDps() then
-			sndWOP:Schedule(26, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
+		if self:IsDifficulty("heroic10", "heroic25") then
+			timerShadowBreathCD:Start(25)
+		else
+			timerShadowBreathCD:Start()
 		end
-	elseif args:IsSpellID(124176) then
+		if not mod:IsDps() then
+			sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
+			if self:IsDifficulty("heroic10", "heroic25") then
+				sndWOP:Schedule(23, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
+			else
+				sndWOP:Schedule(26, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
+			end
+		end
+	elseif args:IsSpellID(124176, 123630) then
 		DBM:EndCombat(self)
 	end
 end

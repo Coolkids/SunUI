@@ -92,7 +92,7 @@ function FlashShake(event, ar, ag, ab)
 		startShake()
 	else
 		if not warnfailed then
-			print("|cffff0000錯誤:|r DBM無法使用震動效果 因為你本次登錄後啟用過\"單位名條\".")
+--			print("|cffff0000錯誤:|r DBM無法使用震動效果 因為你本次登錄後啟用過\"單位名條\".")
 			warnfailed = true
 		end
 	end

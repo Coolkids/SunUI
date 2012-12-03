@@ -44,7 +44,7 @@
 --  Globals/Default Options  --
 -------------------------------
 DBM = {
-	Revision = tonumber(("$Revision: 8195 $"):sub(12, -3)),
+	Revision = tonumber(("$Revision: 8210 $"):sub(12, -3)),
 	DisplayVersion = "5.1 語音增強版", -- the string that is shown as version
 	ReleaseRevision = 8187 -- the revision of the latest stable version that is available
 }
@@ -146,6 +146,7 @@ DBM.DefaultOptions = {
 	AlwaysShowSpeedKillTimer = true,
 	DisableCinematics = false,
 	DisableCinematicsOutside = false,
+	EnableReadyCheckSound = true,
 --	HelpMessageShown = false,
 	MoviesSeen = {},
 	MovieFilters = {},
@@ -350,11 +351,11 @@ do
 	end
 
 	function argsMT.__index:GetSrcCreatureID()
-		return tonumber(self.sourceGUID:sub(7, 10), 16) or 0
+		return tonumber(self.sourceGUID:sub(6, 10), 16) or 0
 	end
 	
 	function argsMT.__index:GetDestCreatureID()
-		return tonumber(self.destGUID:sub(7, 10), 16) or 0
+		return tonumber(self.destGUID:sub(6, 10), 16) or 0
 	end
 	
 	local function handleEvent(self, event, ...)
@@ -1589,7 +1590,7 @@ function DBM:UPDATE_MOUSEOVER_UNIT()
 	if IsInInstance() or UnitIsDead("player") or UnitIsDead("mouseover") then return end--If you're in an instance no reason to waste cpu. If THE BOSS dead, no reason to load a mod for it. To prevent rare lua error, needed to filter on player dead.
 	local guid = UnitGUID("mouseover")
 	if guid and (bit.band(guid:sub(1, 5), 0x00F) == 3 or bit.band(guid:sub(1, 5), 0x00F) == 5) then
-		local cId = tonumber(guid:sub(7, 10), 16)
+		local cId = tonumber(guid:sub(6, 10), 16)
 		if (cId == 17711 or cId == 18728) and not IsAddOnLoaded("DBM-Outlands") then--Burning Crusade World Bosses: Doomwalker and Kazzak
 			for i, v in ipairs(DBM.AddOns) do
 				if v.modId == "DBM-Outlands" then
@@ -1626,7 +1627,7 @@ function DBM:PLAYER_TARGET_CHANGED()
 	if IsInInstance() or UnitIsDead("target") then return end--If you're in an instance no reason to waste cpu. If it's dead, no reason to load a mod for it.
 	local guid = UnitGUID("target")
 	if guid and (bit.band(guid:sub(1, 5), 0x00F) == 3 or bit.band(guid:sub(1, 5), 0x00F) == 5) then
-		local cId = tonumber(guid:sub(7, 10), 16)
+		local cId = tonumber(guid:sub(6, 10), 16)
 		if (cId == 17711 or cId == 18728) and not IsAddOnLoaded("DBM-Outlands") then
 			for i, v in ipairs(DBM.AddOns) do
 				if v.modId == "DBM-Outlands" then
@@ -2275,7 +2276,7 @@ do
 			local id = (i == 0 and "target") or uId..i.."target"
 			local guid = UnitGUID(id)
 			if guid and (bit.band(guid:sub(1, 5), 0x00F) == 3 or bit.band(guid:sub(1, 5), 0x00F) == 5) then
-				local cId = tonumber(guid:sub(7, 10), 16)
+				local cId = tonumber(guid:sub(6, 10), 16)
 				targetList[cId] = id
 			end
 		end
@@ -2356,7 +2357,7 @@ do
 			local bossUnitId = "boss"..i
 			local bossExists = UnitExists(bossUnitId)
 			local bossGUID = bossExists and not UnitIsDead(bossUnitId) and UnitGUID(bossUnitId) -- check for UnitIsVisible maybe?
-			local bossCId = bossGUID and tonumber(bossGUID:sub(7, 10), 16)
+			local bossCId = bossGUID and tonumber(bossGUID:sub(6, 10), 16)
 			if bossCId and (type(cId) == "number" and cId == bossCId or type(cId) == "table" and checkEntry(cId, bossCId)) then
 				return true
 			end
@@ -2578,7 +2579,7 @@ function DBM:StartCombat(mod, delay, synced)
 end
 
 function DBM:UNIT_HEALTH(uId)
-	local cId = UnitGUID(uId) and tonumber(UnitGUID(uId):sub(7, 10), 16)
+	local cId = UnitGUID(uId) and tonumber(UnitGUID(uId):sub(6, 10), 16)
 	if not cId then
 		return
 	end
@@ -2816,7 +2817,7 @@ end
 
 function DBM:UNIT_DIED(args)
 	if bit.band(args.destGUID:sub(1, 5), 0x00F) == 3 or bit.band(args.destGUID:sub(1, 5), 0x00F) == 5  then
-		self:OnMobKill(tonumber(args.destGUID:sub(7, 10), 16))
+		self:OnMobKill(tonumber(args.destGUID:sub(6, 10), 16))
 	end
 end
 DBM.UNIT_DESTROYED = DBM.UNIT_DIED
@@ -3412,11 +3413,11 @@ end
 
 function bossModPrototype:GetUnitCreatureId(uId)
 	local guid = UnitGUID(uId)
-	return (guid and (tonumber(guid:sub(7, 10), 16))) or 0
+	return (guid and (tonumber(guid:sub(6, 10), 16))) or 0
 end
 
 function bossModPrototype:GetCIDFromGUID(guid)
-	return (guid and (tonumber(guid:sub(7, 10), 16))) or 0
+	return (guid and (tonumber(guid:sub(6, 10), 16))) or 0
 end
 
 function bossModPrototype:GetBossTarget(cid)
@@ -4952,7 +4953,7 @@ end
 function bossModPrototype:GetBossHPString(cId)
 	for i = 1, 5 do
 		local guid = UnitGUID("boss"..i)
-		if guid and tonumber(guid:sub(7, 10), 16) == cId then
+		if guid and tonumber(guid:sub(6, 10), 16) == cId then
 			return math.floor(UnitHealth("boss"..i) / UnitHealthMax("boss"..i) * 100) .. "%"
 		end
 	end
@@ -4960,7 +4961,7 @@ function bossModPrototype:GetBossHPString(cId)
 	for i = 0, math.max(GetNumGroupMembers(), GetNumSubgroupMembers()) do
 		local unitId = ((i == 0) and "target") or idType..i.."target"
 		local guid = UnitGUID(unitId)
-		if guid and (tonumber(guid:sub(7, 10), 16)) == cId then
+		if guid and (tonumber(guid:sub(6, 10), 16)) == cId then
 			return math.floor(UnitHealth(unitId)/UnitHealthMax(unitId) * 100).."%"
 		end
 	end

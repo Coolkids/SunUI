@@ -2,8 +2,8 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8153 $"):sub(12, -3))
-mod:SetCreatureID(62980)
+mod:SetRevision(("$Revision: 8196 $"):sub(12, -3))
+mod:SetCreatureID(62980)--63554 (Special invisible Vizier that casts the direction based spellid versions of attenuation)
 mod:SetModelID(42807)
 mod:SetZone()
 
@@ -105,7 +105,11 @@ function mod:OnCombatStart(delay)
 	qpcount = 0
 	ptwo = false
 	table.wipe(MCTargets)
-	berserkTimer:Start(-delay)
+	if self:IsDifficulty("heroic10", "heroic25") then
+		berserkTimer:Start(-delay)
+	else
+		berserkTimer:Start(600-delay)--still 10 min on normal. they only raised it to 11 minutes on heroic apparently.
+	end
 	table.wipe(ExhaleMarkers)
 	table.wipe(MindControlMarkers)
 end

@@ -1,6 +1,7 @@
 ﻿local mod	= DBM:NewMod(743, "DBM-HeartofFear", nil, 330)
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
+local sndYB		= mod:NewSound(nil, "SoundYB", true)
 
 mod:SetRevision(("$Revision: 8137 $"):sub(12, -3))
 mod:SetCreatureID(62837)--62847 Dissonance Field, 63591 Kor'thik Reaver, 63589 Set'thik Windblade
@@ -76,14 +77,19 @@ mod:AddBoolOption("InfoYB", true, "sound")
 mod:AddBoolOption("RangeFrame", mod:IsRanged())
 mod:AddBoolOption("StickyResinIcons", true)
 
-local sentLowHP = {}
 local warnedLowHP = {}
+local warnedLowHP5 = {}
+local warnedLowHP4 = {}
+local warnedLowHP3 = {}
+local warnedLowHP2 = {}
+local warnedLowHP1 = {}
 local visonsTargets = {}
 local resinIcon = 2
 local shaName = EJ_GetEncounterInfo(709)
 local phase3Started = false
 local warnedhp = false
 local hp = 100
+local warnhp = 11
 
 local ybhp = {}
 local sh = {}
@@ -113,8 +119,12 @@ function mod:OnCombatStart(delay)
 	timerScreechCD:Start(-delay)
 	timerEyesCD:Start(-delay)
 	timerPhase2:Start(-delay)
-	table.wipe(sentLowHP)
 	table.wipe(warnedLowHP)
+	table.wipe(warnedLowHP5)
+	table.wipe(warnedLowHP4)
+	table.wipe(warnedLowHP3)
+	table.wipe(warnedLowHP2)
+	table.wipe(warnedLowHP1)
 	table.wipe(ybhp)
 	table.wipe(visonsTargets)
 	table.wipe(DeadMarkers)
@@ -407,19 +417,7 @@ function mod:UNIT_HEALTH_FREQUENT_UNFILTERED(uId)
 	local cid = self:GetUnitCreatureId(uId)
 	local guid = UnitGUID(uId)
 	if cid == 62847 then
-		if self:IsDifficulty("heroic10", "heroic25") then
-			if UnitHealth(uId) / UnitHealthMax(uId) <= 0.17 and not sentLowHP[guid] then
-				sentLowHP[guid] = true
-				self:SendSync("lowhealth", guid)
-			end
-		else
-			if UnitHealth(uId) / UnitHealthMax(uId) <= 0.10 and not sentLowHP[guid] then
-				sentLowHP[guid] = true
-				self:SendSync("lowhealth", guid)
-			end
-		end
 		hp = UnitHealth(uId)
-		hp = math.floor(hp)
 		self:SendSync("ybhealth", guid, hp)
 	end
 	if uId == "player" then
@@ -442,26 +440,48 @@ function mod:UNIT_HEALTH_FREQUENT_UNFILTERED(uId)
 end
 
 function mod:OnSync(msg, guid, hp)
-	if msg == "lowhealth" and guid and not warnedLowHP[guid] then
-		warnedLowHP[guid] = true
-		warnSonicDischarge:Show()--This only works if someone in raid is actually targeting them :(
-		specwarnSonicDischarge:Show()--But is extremly useful when they are.
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ybbz.mp3") --音波爆炸準備
-	elseif msg == "ybhealth" and guid and hp then
+	if msg == "ybhealth" and guid and hp then
+		if not ybhp[guid] then ybhp[guid] = hp end
+		if ybhp[guid] > hp then ybhp[guid] = hp end
+		table.wipe(sh)
+		for k,v in pairs(ybhp) do
+			table.insert(sh,{K=k,V=v})
+		end
+		table.sort (sh,function(a,b) return a.V< b.V end)
 		if self.Options.InfoYB then
-			if not ybhp[guid] then ybhp[guid] = hp end
-			if ybhp[guid] > hp then ybhp[guid] = hp end
-			table.wipe(sh)
-			for k,v in pairs(ybhp) do
-				table.insert(sh,{K=k,V=v})
-			end
-			table.sort (sh,function(a,b) return a.V< b.V end)
 			DBM.InfoFrame:SetHeader(GetSpellInfo(123184))
 			if #sh == 2 then
 				DBM.InfoFrame:Show(1, "other", sh[2].V, sh[1].V)
 			elseif #sh == 1 then
 				DBM.InfoFrame:Show(1, "other", "-", sh[1].V)
 			end
+		end
+		warnhp = tonumber(ybhp[guid])
+		if warnhp < 11 and not warnedLowHP[guid] then
+			warnedLowHP[guid] = true
+			warnSonicDischarge:Show()--This only works if someone in raid is actually targeting them :(
+			specwarnSonicDischarge:Show()--But is extremly useful when they are.
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ybbz.mp3") --音波爆炸準備
+		end
+		if warnhp == 5  and not warnedLowHP5[guid] then
+			warnedLowHP5[guid] = true
+			sndYB:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+		end
+		if warnhp == 4  and not warnedLowHP4[guid] then
+			warnedLowHP4[guid] = true
+			sndYB:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		end
+		if warnhp == 3  and not warnedLowHP3[guid] then
+			warnedLowHP3[guid] = true
+			sndYB:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		end
+		if warnhp == 2  and not warnedLowHP2[guid] then
+			warnedLowHP2[guid] = true
+			sndYB:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		end
+		if warnhp == 1  and not warnedLowHP1[guid] then
+			warnedLowHP1[guid] = true
+			sndYB:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		end
 	end
 end
@@ -475,8 +495,7 @@ function mod:SPELL_DAMAGE(sourceGUID, _, _, _, _, _, _, _, spellId)
 				table.insert(sh,{K=k,V=v})
 			end
 			if #sh == 0 then
-				DBM.InfoFrame:SetHeader(GetSpellInfo(123184))
-				DBM.InfoFrame:Show(1, "other", "-", "-")
+				DBM.InfoFrame:Hide()
 			end
 		end
 	end

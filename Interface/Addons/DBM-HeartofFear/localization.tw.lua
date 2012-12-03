@@ -62,17 +62,28 @@ L:SetWarningLocalization({
 ------------
 L= DBM:GetModLocalization(744)
 
+L:SetWarningLocalization({
+	SpecWarnOverwhelmingAssaultOther 		= "%s 被壓制 (%d層)",
+	SpecWarnJSA								= "注意開減傷"
+})
+
 L:SetOptionLocalization({
 	UnseenStrikeArrow	= "DBM箭頭：$spell:122949的目標",
 	InfoFrame			= "資訊框：$spell:123474",
 	RangeFrame			= "距離監視(8碼)：$spell:123175",
-	SpecWarnOverwhelmingAssaultOther = "特別警告：$spell:123081的層數",
+	SpecWarnOverwhelmingAssaultOther = "特別警告：$spell:123474的層數",
 	HudMAP				= "高級定位監視(HUD)：$spell:122949的位置",
-	SoundWOP			= "語音警告：重要技能"
-})
-
-L:SetWarningLocalization({
-	SpecWarnOverwhelmingAssaultOther 		= "%s 被壓制 (%d層)"
+	SoundWOP			= "語音警告：重要技能",
+	SpecWarnJSA			= "特殊警告：注意開減傷",
+	unseenjs1			= "減傷提示：無形打擊1",
+	unseenjs2			= "減傷提示：無形打擊2",
+	unseenjs3			= "減傷提示：無形打擊3",
+	unseenjs4			= "減傷提示：無形打擊4",
+	unseenjs5			= "減傷提示：無形打擊5",
+	unseenjs6			= "減傷提示：無形打擊6",
+	unseenjs7			= "減傷提示：無形打擊7",
+	unseenjs8			= "減傷提示：無形打擊8",
+	unseenjs9			= "減傷提示：無形打擊9"
 })
 
 -------------------------------
@@ -91,9 +102,11 @@ L:SetOptionLocalization({
 	PheromonesIcon		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(122835),
 	InfoFrame			= "資訊框：$spell:123081層數監視",
 	optTankMode			= "特別警告：費洛蒙換坦策略",
+	specwarnCrushH		= "特別警告：碾碎的次數",
 	two					= "二坦模式 (30層敏感以上提示)",
 	three				= "三坦模式 (20層敏感以上提示)",
 	SoundWOP			= "語音警告：重要技能",
+	SoundZN				= "語音警告：碾碎倒計時(英雄模式)",
 	specWarnPungencyOtherFix = "特別警告：當$spell:123081達到15層時",
 	HudMAP				= "高級定位監視(HUD)：$spell:122835的位置",
 	SoundFS				= "坦克倒計時：$spell:122735"
@@ -109,9 +122,28 @@ L:SetMiscLocalization({
 ----------------------
 L= DBM:GetModLocalization(741)
 
+L:SetWarningLocalization({
+	specWarnQuickeningX = "%s - 快驅散!",
+	specWarnBH			= "給 >> %s <<保護!"
+})
+
 L:SetOptionLocalization({
 	SoundWOP			= "語音警告：重要技能",
-	SoundDQ				= "語音警告：$spell:122149的驅散",
+	InfoFrame			= "資訊框：$spell:122149層數監視",
+	optQS				= "敏捷活化驅散鏈",
+	noQS				= "不提示",
+	QS1					= "順序1",
+	QS2					= "順序2",
+	QS3					= "順序3",
+	allQS				= "總是提示",
+	specWarnBH			= "特殊警告：當需要給衝鋒保護時",
+	optBH				= "衝鋒保護鏈",
+	noBH				= "不提示",
+	BH1					= "順序1",
+	BH2					= "順序2",
+	BH3					= "順序3",
+	BH4					= "順序4",
+	allBH				= "總是提示",
 	SoundJR				= "語音警告：當你沒有殘渣時提示救琥珀",
 	APArrow				= "DBM箭頭：$spell:121881的位置",
 	NearAP				= "特殊功能：$spell:121881在你30碼範圍內才播放語音(僅影響語音)",
@@ -122,6 +154,7 @@ L:SetOptionLocalization({
 	always				= "總是顯示",
 	none				= "不顯示",
 	RangeFrame			= "距離監視(3碼)：$spell:121881",
+	specWarnQuickeningX	= "特殊警告：當需要驅散/竊取$spell:122149時",
 	AmberPrisonIcons	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(121885)
 })
 
@@ -181,6 +214,7 @@ L:SetOptionLocalization({
 	InfoFrame			= "資訊框：被$spell:125390的團員",
 	InfoYB				= "資訊框：音波能量監視(團隊中必須有人做焦點)",
 	SoundWOP			= "語音警告：重要技能",
+	SoundYB				= "語音警告：為音波爆炸倒數",
 	HudMAP				= "高級定位監視(HUD)：$spell:124863的位置",
 	HudMAP2				= "高級定位監視(HUD)：$spell:124821的位置",
 	RangeFrame			= "距離監視(5碼)：$spell:123735",
