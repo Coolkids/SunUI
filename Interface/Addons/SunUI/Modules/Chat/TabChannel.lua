@@ -7,26 +7,26 @@ function ChatEdit_CustomTabPressed(self)
          self:SetAttribute("chatType", "CHANNEL");
          self.text = "/"..Ash_Tabcus.." "..self.text
          ChatEdit_UpdateHeader(self);
-      elseif (GetNumSubgroupMembers()>0) then
+      elseif IsInGroup() then
          self:SetAttribute("chatType", "PARTY");
          ChatEdit_UpdateHeader(self);
-      elseif (GetNumGroupMembers()>0) then
+      elseif IsInRaid() then
          self:SetAttribute("chatType", "RAID");
          ChatEdit_UpdateHeader(self);
       elseif (GetNumBattlefieldScores()>0) then
          self:SetAttribute("chatType", "BATTLEGROUND");
          ChatEdit_UpdateHeader(self);
-	  elseif IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
+	  elseif not IsInGroup(LE_PARTY_CATEGORY_HOME) and IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
 		 self:SetAttribute("chatType", "INSTANCE");
          ChatEdit_UpdateHeader(self);
-      elseif (IsInGuild()) then
+      elseif IsInGuild() then
          self:SetAttribute("chatType", "GUILD");
          ChatEdit_UpdateHeader(self);
       else
          return;
       end
    elseif (self:GetAttribute("chatType") == "PARTY") then
-      if (GetNumGroupMembers()>0) then
+      if IsInRaid() then
          self:SetAttribute("chatType", "RAID");
          ChatEdit_UpdateHeader(self);
       elseif (GetNumBattlefieldScores()>0) then
@@ -59,13 +59,13 @@ function ChatEdit_CustomTabPressed(self)
       self:SetAttribute("chatType", "SAY");
       ChatEdit_UpdateHeader(self);
    elseif (self:GetAttribute("chatType") == "CHANNEL") then
-      if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
+      if not IsInGroup(LE_PARTY_CATEGORY_HOME) and IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
 		 self:SetAttribute("chatType", "INSTANCE");
          ChatEdit_UpdateHeader(self);
-	  elseif (GetNumSubgroupMembers()>0) then
+	  elseif IsInGroup() then
          self:SetAttribute("chatType", "PARTY");
          ChatEdit_UpdateHeader(self);
-      elseif (GetNumGroupMembers()>0) then
+      elseif IsInRaid() then
          self:SetAttribute("chatType", "RAID");
          ChatEdit_UpdateHeader(self);
       elseif (GetNumBattlefieldScores()>0) then

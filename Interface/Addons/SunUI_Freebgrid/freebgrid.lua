@@ -1359,7 +1359,7 @@ function ns:UpdateHealthBarLayout(self)   --样式
 		healthBar:SetWidth((0.98 - ns.db.powerbarsize)*ns.db.width)
 		healthBar:SetHeight((0.98 - ns.db.powerbarsize)*ns.db.height)
     end
-
+	
     healthBar:ClearAllPoints()
 	healthBar:Point("TOP", 0, -1)
     if ns.db.orientation == "VERTICAL" and ns.db.porientation == "VERTICAL" then
@@ -1372,8 +1372,6 @@ function ns:UpdateHealthBarLayout(self)   --样式
 		healthBar:Point("LEFT", 1, 0)
 		healthBar:Point("RIGHT", -1, 0)
     end
-
-	S.CreateMark(healthBar)
 end
 
 function ns:UpdateHealthColor(self)
@@ -1386,7 +1384,6 @@ function ns:UpdateHealthColor(self)
 		local r, g, b
 		local _, class = UnitClass(unit)
 		local healthBartexture = healthBar:GetStatusBarTexture()
-		self:SetAlpha(1)
 		if type(ns.RaidClassColors[class]) == "table" and not string.match(unit, "pet") then
 			r, g, b  = ns.RaidClassColors[class].r, ns.RaidClassColors[class].g, ns.RaidClassColors[class].b
 		else
@@ -1450,9 +1447,8 @@ function ns:UpdateHealthColor(self)
 		end		
 	else
 		if ns.db.mode then
-			self:SetAlpha(0.4)
+			S.CreateTop(healthBar.bg, ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
 		else
-			self:SetAlpha(0.4)
 			S.CreateTop(healthBar.bg, ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
 			--S.CreateTop(healthBartexture, ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
 		end
@@ -1604,7 +1600,6 @@ function ns:UpdatePowerBar(self)
 		if ns.db.mode then
 			power.bg:SetTexture("")
 			S.CreateBack(power)
-			S.CreateMark(power)
 		else
 			power.bg:SetTexture(ns.db.texturePath)
 		end

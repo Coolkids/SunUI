@@ -2,6 +2,7 @@
 ----------------------------------------------------------------------------------------
 --	Check outdated UI version
 ----------------------------------------------------------------------------------------
+local version = tonumber(GetAddOnMetadata("SunUI", "Version"))
 local check = function(self, event, prefix, message, channel, sender)
 	if event == "CHAT_MSG_ADDON" then
 		if prefix ~= "SunUIVersion" or sender == UnitName("player") then return end
@@ -11,12 +12,14 @@ local check = function(self, event, prefix, message, channel, sender)
 			self:UnregisterEvent("CHAT_MSG_ADDON")
 		end
 	else
-		if UnitInRaid("player") then
-			SendAddonMessage("SunUIVersion", tonumber(GetAddOnMetadata("SunUI", "Version")), "RAID")
-		elseif UnitInParty("player") then
-			SendAddonMessage("SunUIVersion", tonumber(GetAddOnMetadata("SunUI", "Version")), "PARTY")
+		if not IsInGroup(LE_PARTY_CATEGORY_HOME) and IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
+			SendAddonMessage("SunUIVersion", version, "INSTANCE_CHAT")
+		elseif IsInRaid() then
+			SendAddonMessage("SunUIVersion", version, "RAID")
+		elseif IsInGroup() then
+			SendAddonMessage("SunUIVersion", version, "PARTY")
 		elseif IsInGuild() then
-			SendAddonMessage("SunUIVersion", tonumber(GetAddOnMetadata("SunUI", "Version")), "GUILD")
+			SendAddonMessage("SunUIVersion", version, "GUILD")
 		end
 	end
 end
