@@ -1016,9 +1016,10 @@ end
 		f.Combat = h:CreateTexture(nil, 'OVERLAY')
 		f.Combat:Size(20,20)
 		f.Combat:SetPoint('TOPRIGHT', 3, 9)
+		f.Combat:SetTexture("Interface\\AddOns\\SunUI\\media\\UnitFrame\\combat")
+		f.Combat:SetVertexColor(0.6, 0, 0)
     end
-	f.Combat:SetTexture("Interface\\AddOns\\SunUI\\media\\UnitFrame\\combat")
-	f.Combat:SetVertexColor(0.6, 0, 0)
+	
     --Leader icon
     li = h:CreateTexture(nil, "OVERLAY")
     li:SetPoint("TOPLEFT", f, 0, 6)
