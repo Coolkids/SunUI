@@ -505,3 +505,27 @@ function Module:OnEnable()
 	Module:CreateStanceBar()
 	Module:CreateExitVehicle()
 end
+
+
+local LibActionButton = LibStub and LibStub("LibActionButton-1.0", true)
+local activeButtons = LibActionButton and LibActionButton.activeButtons or ActionBarActionEventsFrame.frames
+
+
+local Fixer = CreateFrame("Frame")
+
+local function Reset()
+	for button in pairs(activeButtons) do
+		button.cooldown:SetLossOfControlCooldown(0, 0)
+	end
+end
+
+local function Enable()
+	Fixer:RegisterEvent("LOSS_OF_CONTROL_ADDED")
+	Fixer:RegisterEvent("LOSS_OF_CONTROL_UPDATE")
+
+	Fixer:SetScript("OnEvent", Reset)
+end
+
+Fixer:RegisterEvent("PLAYER_ENTERING_WORLD")
+
+Fixer:SetScript("OnEvent", Enable)

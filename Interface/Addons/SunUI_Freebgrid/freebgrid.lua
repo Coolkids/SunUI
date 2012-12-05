@@ -84,7 +84,7 @@ local Freebgrid_OnLeave = function(self)
 
     if not ns.db.tooltip then UnitFrame_OnLeave(self) end
     self.Highlight:Hide()
-
+	GameTooltip:Hide() 
     if self.Freebarrow:IsShown() and ns.db.arrowmouseover then
        self.Freebarrow:Hide()
     end
@@ -1339,16 +1339,16 @@ function ns:UpdateHealthBarLayout(self)   --样式
 	local power = self.PowerBar
     
     healthBar:SetOrientation(ns.db.orientation)
+	healthBar:SetStatusBarTexture(ns.db.texturePath)
 	if ns.db.mode then
-		healthBar:SetStatusBarTexture(" ")
+		
 		healthBar:SetStatusBarColor(0,0,0,0)
 		S.CreateBack(healthBar)
 		healthBar.bg:SetTexture(ns.db.texturePath)
-		healthBar.bd:SetAlpha(0.6)
+		healthBar.bd:SetAlpha(0.8)
 		S.CreateTop(healthBar.bg, DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b) --职业颜色背景
 		--S.CreateTop(healthBar.bg, 228/255, 38/255, 141/255)  --紫色背景
 	else
-		healthBar:SetStatusBarTexture(ns.db.texturePath)
 		healthBar.bg:SetTexture(ns.db.texturePath)
 	end	
 	
@@ -1380,7 +1380,8 @@ function ns:UpdateHealthColor(self)
 	
 	if not unit then return end 
 			
-	if UnitIsFriend("player",unit) then
+	--if UnitIsFriend("player",unit) then
+	if	not UnitCanAttack("player", unit) then
 		local r, g, b
 		local _, class = UnitClass(unit)
 		local healthBartexture = healthBar:GetStatusBarTexture()
@@ -1389,7 +1390,10 @@ function ns:UpdateHealthColor(self)
 		else
 			r, g, b  = 0.2, 0.9, 0.1
 		end
-
+		if ns.db.mode then
+			healthBar:SetStatusBarColor(0,0,0,0)
+			S.CreateTop(healthBar.bg, DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
+		end
 		if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
 			if ns.db.definecolors then
 				if ns.db.mode then
@@ -1412,7 +1416,9 @@ function ns:UpdateHealthColor(self)
 
 		if  self.inVehicle then
 			if ns.db.mode then
-				S.CreateTop(healthBar.bg, ns.db.vehiclecolor.r, ns.db.vehiclecolor.g, ns.db.vehiclecolor.b)
+				healthBar.bg:SetVertexColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b, 0)
+				healthBar:SetStatusBarColor(ns.db.vehiclecolor.r, ns.db.vehiclecolor.g, ns.db.vehiclecolor.b,1)
+				S.CreateTop(healthBartexture, ns.db.vehiclecolor.r, ns.db.vehiclecolor.g, ns.db.vehiclecolor.b)
 			else
 				S.CreateTop(healthBar.bg, ns.db.vehiclecolor.r*.2, ns.db.vehiclecolor.g*.2, ns.db.vehiclecolor.b*.2)
 				S.CreateTop(healthBartexture, ns.db.vehiclecolor.r, ns.db.vehiclecolor.g, ns.db.vehiclecolor.b)
@@ -1447,9 +1453,13 @@ function ns:UpdateHealthColor(self)
 		end		
 	else
 		if ns.db.mode then
-			S.CreateTop(healthBar.bg, ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
+			healthBar:SetStatusBarTexture(ns.db.texturePath)
+			healthBar.bg:SetVertexColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b, 0)
+			healthBar:SetStatusBarColor(ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b,1)	
+			S.CreateTop(healthBar:GetStatusBarTexture(), ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
+			
 		else
-			S.CreateTop(healthBar.bg, ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
+			S.CreateTop(healthBartexture, ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
 			--S.CreateTop(healthBartexture, ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
 		end
 	end
@@ -1491,7 +1501,7 @@ function ns:UpdateHealth(self)
 		self.HealthBar:SetValue(UnitHealth(unit))
 	end
 	healthBar.bd:SetPoint("TOPRIGHT", healthBar)
-	healthBar.bd:Point("BOTTOMLEFT", healthBar:GetStatusBarTexture(), "BOTTOMRIGHT", 1, 0)
+	healthBar.bd:Point("BOTTOMLEFT", healthBar:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
 end
 
 function ns:UpdateHealPredictionBarColor(self)

@@ -133,7 +133,6 @@ G["MiniDB"] = {
 	["Disenchat"] = true,
 	["LockUIscale"] = false,
 	["Resurrect"] = false,
-	["igonoreOld"] = false,
 	["HideRaidWarn"] = true,
 	["HideRaid"] = true,
 	["AutoSell"] = true,

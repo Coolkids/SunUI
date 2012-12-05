@@ -41,6 +41,7 @@ local menuTable = {
 			{text = CHAT_MSG_SAY, arg1 = "SAY", func = reportFunction, notCheckable = 1},
 			{text = PARTY, arg1 = "PARTY", func = reportFunction, notCheckable = 1},
 			{text = RAID, arg1 = "RAID", func = reportFunction, notCheckable = 1},
+			{text = INSTANCE, arg1 = "INSTANCE", func = reportFunction, notCheckable = 1},
 			{text = GUILD, arg1 = "GUILD", func = reportFunction, notCheckable = 1},
 			{text = OFFICER, arg1 = "OFFICER", func = reportFunction, notCheckable = 1},
 			{text = TARGET, func = function() reportFunction(self, "WHISPER", UnitName("target")) end, notCheckable = 1},
@@ -66,7 +67,7 @@ local menuTable = {
 }
 
 local updateReportChannels = function()
-	menuTable[2].menuList[8].menuList = table.wipe(menuTable[2].menuList[8].menuList)
+	menuTable[2].menuList[8].menuList = table.wipe(menuTable[2].menuList[9].menuList)
 	for i = 1, GetNumDisplayChannels() do
 		local name, _, _, channelNumber, _, active, category = GetChannelDisplayInfo(i)
 		if category == "CHANNEL_CATEGORY_CUSTOM" then

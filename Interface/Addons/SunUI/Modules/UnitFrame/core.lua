@@ -1128,7 +1128,7 @@ lib.gen_swing_timer = function(f)
 		VengeanceBar.SetStatusBarColor = function() end
 		f.Vengeance = VengeanceBar
 		
-		VengeanceBar:SetScript("OnValueChanged", function(_, value)
+		VengeanceBar:SetScript("OnValueChanged", function(self, value)
 			local _, max = VengeanceBar:GetMinMaxValues()
 			r, g, b = oUF.ColorGradient(value, max, unpack(oUF.colors.smooth))
 			local texture = self:GetStatusBarTexture()

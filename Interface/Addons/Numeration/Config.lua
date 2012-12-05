@@ -34,7 +34,7 @@ n.coresettings = {
 	minfightlength = 15,
 	combatseconds = 3,
 	shortnumbers = true,
-	silent_reset = false,
+	silent_reset = true,
 }
 
 -- available types and their order

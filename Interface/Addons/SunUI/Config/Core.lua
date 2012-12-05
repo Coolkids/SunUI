@@ -172,7 +172,7 @@ function SunUIConfig.GenerateOptionsInternal()
 						},	
 						Bar5Layout = {
 							type = "select", order = 5,
-							name = L["bar5布局"], desc = L["请选择主动作条布局"],disabled = function(info) return (db.ActionBarDB.Big4Layout == 1) end,
+							name = L["bar5布局"], desc = L["请选择主动作条布局"].."\n need"..L["不要4方块布局"],disabled = function(info) return (db.ActionBarDB.Big4Layout == 1) end,
 							values = {[1] = "12x1布局", [2] = "6x2布局"},
 						},	
 						Big4Layout = {
@@ -982,12 +982,6 @@ function SunUIConfig.GenerateOptionsInternal()
 								order = 10,
 								get = function() return tostring(db.MiniDB.INVITE_WORD) end,
 								set = function(_, value) db.MiniDB.INVITE_WORD = tostring(value) end,
-							},
-							igonoreOld = {
-								type = "toggle",
-								name = L["副本排队助手"],
-								desc = L["启用自动离开有进度的随机副本或团队"],
-								order = 11,
 							},
 							HideRaid = {
 								type = "toggle",
