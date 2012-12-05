@@ -300,9 +300,9 @@ function S.CreateBack(f, orientation, a)
 	gradient:SetPoint("BOTTOMRIGHT")
 	gradient:SetTexture(DB.Statusbar)
 	if orientation then
-		gradient:SetGradientAlpha("HORIZONTAL",  0, 0, 0, a or 0.3, .35, .35, .35, a or .35)
+		gradient:SetGradientAlpha("HORIZONTAL",  0, 0, 0, a or 0.5, .35, .35, .35, a or .45)
 	else
-		gradient:SetGradientAlpha("VERTICAL",  0, 0, 0, a or 0.3, .35, .35, .35, a or .35)
+		gradient:SetGradientAlpha("VERTICAL",  0, 0, 0, a or 0.5, .35, .35, .35, a or .45)
 	end
 end
 function S.CreateTop(f, r, g, b, orientation, a)

@@ -278,11 +278,8 @@ local function formatTime(s)
 		return format("%dh", ceil(s / hour))
 	elseif s >= minute then
 		return format("%dm", ceil(s / minute))
-	elseif s >= minute / 12 then
-		return floor(s)
 	end
-	
-	return format("%.1f", s)
+	return format("%.f", s)
 end
 
 local function UpdateAuraTimer(self, elapsed)
@@ -298,9 +295,7 @@ local function UpdateAuraTimer(self, elapsed)
 		if self.timeLeft > 0 then
 			local time = formatTime(self.timeLeft)
 			self.text:SetText(time)
-			if self.timeLeft <= 5 then
-				self.text:SetTextColor(1, 0, 0)
-			elseif self.timeLeft <= minute then
+			if self.timeLeft <= minute then
 				self.text:SetTextColor(1, 1, 0)
 			else
 				self.text:SetTextColor(1, 1, 1)
