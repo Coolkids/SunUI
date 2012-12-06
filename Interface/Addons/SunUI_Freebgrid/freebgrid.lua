@@ -1377,14 +1377,14 @@ end
 function ns:UpdateHealthColor(self)
 	local healthBar = self.HealthBar
 	local unit = self.displayedUnit or self.unit
-	
+	local healthBartexture = healthBar:GetStatusBarTexture()
 	if not unit then return end 
 			
 	--if UnitIsFriend("player",unit) then
 	if	not UnitCanAttack("player", unit) then
 		local r, g, b
 		local _, class = UnitClass(unit)
-		local healthBartexture = healthBar:GetStatusBarTexture()
+		--local healthBartexture = healthBar:GetStatusBarTexture()
 		if type(ns.RaidClassColors[class]) == "table" and not string.match(unit, "pet") then
 			r, g, b  = ns.RaidClassColors[class].r, ns.RaidClassColors[class].g, ns.RaidClassColors[class].b
 		else
@@ -1453,14 +1453,11 @@ function ns:UpdateHealthColor(self)
 		end		
 	else
 		if ns.db.mode then
-			healthBar:SetStatusBarTexture(ns.db.texturePath)
 			healthBar.bg:SetVertexColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b, 0)
 			healthBar:SetStatusBarColor(ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b,1)	
-			S.CreateTop(healthBar:GetStatusBarTexture(), ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
-			
+			S.CreateTop(healthBartexture, ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
 		else
 			S.CreateTop(healthBartexture, ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
-			--S.CreateTop(healthBartexture, ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
 		end
 	end
 end
@@ -1513,8 +1510,9 @@ end
 
 function ns:UpdateHealPredictionBarLayout(self)
 	local healthBar = self.HealthBar
-	local help = self.help4
-	self.myHealPredictionBar = CreateFrame('StatusBar', nil, help)
+	self.myHealPredictionBar = CreateFrame('StatusBar', nil, healthBar)
+	self.myHealPredictionBar:SetFrameLevel(3)
+	self.myHealPredictionBar:SetStatusBarTexture(DB.Statusbar, "BORDER")
 	if ns.db.orientation == "VERTICAL" then
 		self.myHealPredictionBar:SetPoint("BOTTOMLEFT", healthBar:GetStatusBarTexture(), "TOPLEFT", 0, 0)
 		self.myHealPredictionBar:SetPoint("BOTTOMRIGHT", healthBar:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
@@ -1524,11 +1522,12 @@ function ns:UpdateHealPredictionBarLayout(self)
 		self.myHealPredictionBar:SetPoint("TOPLEFT", healthBar:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
 		self.myHealPredictionBar:SetPoint("BOTTOMLEFT", healthBar:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
 		self.myHealPredictionBar:SetSize(ns.db.width, 0)
-	end
-	self.myHealPredictionBar:SetStatusBarTexture(DB.Statusbar, "BORDER")	
+	end	
 	self.myHealPredictionBar:Hide()
 
-	self.otherHealPredictionBar = CreateFrame('StatusBar', nil, help)
+	self.otherHealPredictionBar = CreateFrame('StatusBar', nil, healthBar)
+	self.otherHealPredictionBar:SetStatusBarTexture(DB.Statusbar, "BORDER")
+	self.otherHealPredictionBar:SetFrameLevel(3)
 	if ns.db.orientation == "VERTICAL" then
 		self.otherHealPredictionBar:SetPoint("BOTTOMLEFT", self.myHealPredictionBar:GetStatusBarTexture(), "TOPLEFT", 0, 0)
 		self.otherHealPredictionBar:SetPoint("BOTTOMRIGHT", self.myHealPredictionBar:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
@@ -1539,7 +1538,6 @@ function ns:UpdateHealPredictionBarLayout(self)
 		self.otherHealPredictionBar:SetPoint("BOTTOMLEFT", self.myHealPredictionBar:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
 		self.otherHealPredictionBar:SetSize(ns.db.width, 0)
 	end
-	self.otherHealPredictionBar:SetStatusBarTexture(DB.Statusbar, "BORDER")
 	self.otherHealPredictionBar:Hide() 
 	
 	ns:UpdateHealPredictionBarColor(self)

@@ -16,7 +16,7 @@ function ChatEdit_CustomTabPressed(self)
       elseif (GetNumBattlefieldScores()>0) then
          self:SetAttribute("chatType", "INSTANCE");
          ChatEdit_UpdateHeader(self);
-	  elseif IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
+	  elseif not IsInGroup(LE_PARTY_CATEGORY_HOME) and IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
 		 self:SetAttribute("chatType", "INSTANCE");
          ChatEdit_UpdateHeader(self);
       elseif IsInGuild() then
@@ -59,7 +59,7 @@ function ChatEdit_CustomTabPressed(self)
       self:SetAttribute("chatType", "SAY");
       ChatEdit_UpdateHeader(self);
    elseif (self:GetAttribute("chatType") == "CHANNEL") then
-      if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
+      if not IsInGroup(LE_PARTY_CATEGORY_HOME) and IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
 		 self:SetAttribute("chatType", "INSTANCE");
          ChatEdit_UpdateHeader(self);
 	  elseif IsInGroup() then

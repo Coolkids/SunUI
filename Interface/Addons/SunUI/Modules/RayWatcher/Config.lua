@@ -469,7 +469,7 @@ ns.watchers ={
 				-- 心灵鑚刺雕文 
 				{ spellID = 81292, unitId = "player", caster = "player", filter = "BUFF" },
 				--恐惧之心4号的易伤
-				{ spellID = 123059, unitId = "player", caster = "player", filter = "BUFF" },
+				{ spellID = 123059, unitId = "target", caster = "all", filter = "BUFF" },
 		},
 		{
 			name = "玩家右邊1",

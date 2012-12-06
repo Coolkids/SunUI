@@ -127,7 +127,7 @@ local fmtHealing = function(entry)
 	local spellId = entry[2]
 	local amount, overhealing = entry[3], entry[4]
 	local critical = entry[5]
-	return string.format("%i#HT#%s:%i:%s:%s", spellId, srcName, amount, overhealing > 0 and overhealing or "", critical and "!" or "")
+	return string.format("%i#HT#%s:%i:%s:%s", spellId, srcName, amount or 0, overhealing > 0 and overhealing or "", critical and "!" or "")
 end
 local fmtDeBuff = function(entry)
 	local spellId = entry[1]

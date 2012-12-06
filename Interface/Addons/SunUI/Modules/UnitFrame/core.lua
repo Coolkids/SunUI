@@ -86,9 +86,6 @@ UIDropDownMenu_Initialize(dropdown, init, 'MENU')
 
 lib.PostUpdateHealth = function(s, u, min, max)
 	--if UnitIsDeadOrGhost(u) then s:SetValue(0) end
-	if not U["ReverseHPbars"] then
-		s:SetStatusBarColor(0,0,0,0)
-	end
 	s.bd:SetPoint("TOPRIGHT", s)
 	s.bd:SetPoint("BOTTOMLEFT", s:GetStatusBarTexture(), "BOTTOMRIGHT")
 end
@@ -125,36 +122,44 @@ lib.gen_hpbar = function(f)
 	local h = CreateFrame("Frame", nil, f)
 	h:SetAllPoints(s)
 	h:SetFrameLevel(9)
-	if not U["ReverseHPbars"] then 
-		s:SetStatusBarTexture(DB.Statusbar)
-		s:SetStatusBarColor(0,0,0,0)
-		S.CreateBack(s)
-		local spark =  h:CreateTexture(nil, "OVERLAY")
-		spark:SetVertexColor(0, 0, 0, 1)
-		spark:SetTexture("Interface\\AddOns\\SunUI\\media\\mark")
-		spark:SetPoint("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT", -10, 0)
-		spark:SetPoint("BOTTOMRIGHT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 10, 0)
-	else
-		s:SetStatusBarTexture(DB.Statusbar)
-		s:SetAlpha(0.9)
-	end
-	
 	local bg = CreateFrame("Frame", nil, s)
 	bg:SetFrameLevel(s:GetFrameLevel()+2)
 	bg.b = bg:CreateTexture(nil, "BACKGROUND")
 	bg.b:SetTexture(DB.Statusbar)
 	bg.b:SetAllPoints(bg)
 	if not U["ReverseHPbars"] then
-		bg:SetAlpha(0.6)
-		if U["ClassColor"] then 
-			S.CreateTop(bg.b, DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)
-		else
-			S.CreateTop(bg.b, 228/255, 38/255, 141/255)
+		--if U["ClassColor"] then 
+			--S.CreateTop(bg.b, DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)
+		--else
+			--S.CreateTop(bg.b, 228/255, 38/255, 141/255)
+		--end
+		s:SetStatusBarTexture(DB.Statusbar)
+		s:SetStatusBarColor(0,0,0,0)
+		S.CreateBack(s)
+		s.SetStatusBarColor = function(t, r, g, b)
+			S.CreateTop(bg.b, r, g, b)
 		end
+		local spark =  h:CreateTexture(nil, "OVERLAY")
+		spark:SetVertexColor(0, 0, 0, 1)
+		spark:SetTexture("Interface\\AddOns\\SunUI\\media\\mark")
+		spark:SetPoint("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT", -10, 0)
+		spark:SetPoint("BOTTOMRIGHT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 10, 0)
+		
+		bg:SetAlpha(0.65)
 	else
+		s:SetStatusBarTexture(DB.Statusbar)
+		s.SetStatusBarColor = function(t, r, g, b)
+			S.CreateTop(s:GetStatusBarTexture(), r, g, b)
+		end
+		s:SetAlpha(0.9)
 		bg:SetAlpha(1)
-		bg.b:SetVertexColor(0.33, 0.33, 0.33, 1)
+		if U["ClassColor"] then 
+			S.CreateTop(bg.b, 0.15, 0.15, 0.15)
+		else
+			S.CreateTop(bg.b, 0.6, 0.6, 0.6)
+		end
 	end
+
     s.PostUpdate = lib.PostUpdateHealth
 	
     fixStatusbar(s)
@@ -231,7 +236,7 @@ lib.gen_hpstrings = function(f, unit)
     h:SetFrameLevel(10)
     local name = lib.gen_fontstring(h, DB.Font, U["FontSize"]*S.Scale(1), "THINOUTLINE")
     local hpval = lib.gen_fontstring(h, DB.Font,U["FontSize"]*S.Scale(1), "THINOUTLINE")
-    if f.mystyle == "target" or f.mystyle == "tot" then
+    if f.mystyle == "target" then
       name:SetPoint("RIGHT", f.Health, "RIGHT",-3,0)
       hpval:SetPoint("LEFT", f.Health, "LEFT",3,0)
       name:SetJustifyH("RIGHT")
@@ -240,6 +245,9 @@ lib.gen_hpstrings = function(f, unit)
       name:SetPoint("CENTER", f.Health, "CENTER",0,6)
       name:SetJustifyH("LEFT")
       hpval:SetPoint("CENTER", f.Health, "CENTER",0,-6)
+	elseif f.mystyle == "tot" then
+      name:SetPoint("CENTER", f.Health, "CENTER",0,0)
+      hpval:Hide()
     else
       name:SetPoint("LEFT", f.Health, "LEFT",3,0)
       hpval:SetPoint("RIGHT", f.Health, "RIGHT",-3,0)
@@ -309,7 +317,7 @@ lib.gen_ppbar = function(f)
 		local b = bg:CreateTexture(nil, "BACKGROUND")
 		b:SetTexture(DB.Statusbar)
 		b:SetAllPoints(s)
-		b:SetVertexColor(0.33, 0.33, 0.33, 1)
+		S.CreateTop(b, 0.15, 0.15, 0.15)
 	end
 	local sbg = s:GetStatusBarTexture()
     f.Power = s
@@ -1280,7 +1288,7 @@ lib.gen_threat = function(f)
 			self.colors.smooth = {DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b}
 			self.Health.colorSmooth = true
 		else
-			self.colors.health = {0.1, 0.1, 0.1}
+			self.colors.health = {0.15, 0.15, 0.15}
 			self.Health.colorHealth = true 
 		end
 	else 
@@ -1289,7 +1297,7 @@ lib.gen_threat = function(f)
 			self.Health.colorHealth = false
 		else
 			self.colors.health = {228/255, 38/255, 141/255}
-			self.Health.colorHealth = false 
+			self.Health.colorHealth = true 
 		end
 	end
 	self.Health.multiplier = 0.3
@@ -1337,8 +1345,8 @@ lib.gen_threat = function(f)
     self.mystyle = "target"
     genStyle(self)
 	if U["ClassColor"] then
-	self.Health.colorClass = true
-	self.Health.colorReaction = true
+		self.Health.colorClass = true
+		self.Health.colorReaction = true
 	end
     self.Health.Smooth = true
     self.Power.frequentUpdates = true
@@ -1375,8 +1383,8 @@ lib.gen_threat = function(f)
     self.mystyle = "tot"
     genStyle(self)
     if U["ClassColor"] then
-	self.Health.colorClass = true
-	self.Health.colorReaction = true
+		self.Health.colorClass = true
+		self.Health.colorReaction = true
 	end
 	self.Health.Smooth = true
     self.Power.colorPower = true
@@ -1422,8 +1430,8 @@ lib.gen_threat = function(f)
     self.mystyle = "focus"
     genStyle(self)
 	if U["ClassColor"] then
-	self.Health.colorClass = true
-	self.Health.colorReaction = true
+		self.Health.colorClass = true
+		self.Health.colorReaction = true
 	end
 	self.Health.Smooth = true
 	self.Power.Smooth = true
@@ -1464,8 +1472,8 @@ lib.gen_threat = function(f)
     self.mystyle = "party"
     genStyle(self)
 	if U["ClassColor"] then
-	self.Health.colorClass = true
-	self.Health.colorReaction = true
+		self.Health.colorClass = true
+		self.Health.colorReaction = true
 	end
     self.Health.Smooth = true
 	self.Power.Smooth = true
