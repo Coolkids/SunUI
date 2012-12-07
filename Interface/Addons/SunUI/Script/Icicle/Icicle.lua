@@ -182,8 +182,9 @@ function Module:OnInitialize()
 					if a:find("NamePlate") then
 						if not f.icicle then f.icicle = 0 end
 						if f:IsVisible() then
-							local _, _, _, eman = f:GetChildren():GetRegions()
+							local eman = select(2, f:GetChildren()):GetRegions()
 							local name = eman:GetText()
+							--print(a, name)
 							if db[name] ~= nil then
 								if f.icicle ~= db[name] then
 									f.icicle = #db[name]
@@ -206,6 +207,11 @@ function Module:OnInitialize()
 
 	local IcicleEvent = {}
 	function IcicleEvent.COMBAT_LOG_EVENT_UNFILTERED(event, ...)
+		--test
+		-- if not plateframe:GetScript("OnUpdate") then
+			-- plateframe:SetScript("OnUpdate", getplate)
+			-- purgeframe:SetScript("OnUpdate", uppurge)
+		-- end
 		local _, eventType, _, _, srcName, srcFlags, _, _, _, _, _, spellID, spellName = ...
 		if DB.IcicleCds[spellID] and bit.band(srcFlags, COMBATLOG_OBJECT_REACTION_HOSTILE) ~= 0 then
 			local Name = strmatch(srcName, "[%P]+")

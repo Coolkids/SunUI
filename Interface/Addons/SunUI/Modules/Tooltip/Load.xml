@@ -13,7 +13,6 @@
 	<Script file="SpellID.lua"/>
 	<Script file="ItemCount.lua"/>
 	<Script file="UnitRole.lua"/>
-	<!--Script file="ReforgeInfo.lua"/-->
 	<Script file="Symbiosis.lua"/>
 	<Script file="CheckItemTransmogrify.lua"/>
 	<Script file="InstanceLockCompare.lua"/>

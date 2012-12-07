@@ -418,8 +418,8 @@ function Module:OnInitialize()
 					end
 				end
 				if (guid and tonumber(guid) and tonumber(guid:sub(-12, -9), 16) >0) then return end
-				if event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" or event == "CHAT_MSG_RAID" or event == "CHAT_MSG_RAID_LEADER" or event == "CHAT_MSG_RAID_WARNING" then
-					if (Config.FilterRaidAlert and strfind(msg, "^%*%*(.+)%*%*$")) or strfind(msg, "失誤於") or strfind(msg, "失误于") or strfind(string.lower(msg), "fishui") then return true end
+				if event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" or event == "CHAT_MSG_RAID" or event == "CHAT_MSG_RAID_LEADER" or event == "CHAT_MSG_RAID_WARNING" or event == "CHAT_MSG_INSTANCE_CHAT"  or event == "CHAT_MSG_INSTANCE_CHAT_LEADER" then
+					if (Config.FilterRaidAlert and strfind(msg, "^%*%*(.+)%*%*$")) or strfind(msg, "失誤於") or strfind(msg, "失误于") or strfind(msg, "fishui") or strfind(msg, "fails(.+)%((.+)%)") then return true end
 				end
 			end
 			if (not Config.ScanOurself and UnitIsUnit(player,"player")) then return end
@@ -600,6 +600,8 @@ function Module:OnInitialize()
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID", ChatFilter_Rubbish)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID_LEADER", ChatFilter_Rubbish)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID_WARNING", ChatFilter_Rubbish)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT", ChatFilter_Rubbish)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT_LEADER", ChatFilter_Rubbish)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", ChatFilter_Rubbish)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", ChatFilter_Rubbish)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", ChatFilter_Rubbish)

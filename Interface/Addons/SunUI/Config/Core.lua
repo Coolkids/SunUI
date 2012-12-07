@@ -950,19 +950,6 @@ function SunUIConfig.GenerateOptionsInternal()
 								type = "toggle",
 								name = L["PVP冷却计时"], desc = L["警告"],
 								order = 6,
-								get = function() return db.MiniDB.Icicle end,
-								set = function(_, value) 
-									StaticPopupDialogs["alarm"] = {
-										text = L["警告"],
-										button1 = OKAY,
-										OnAccept = function()
-											db.MiniDB.Icicle = value
-										end,
-										timeout = 0,
-										hideOnEscape = 1,
-									}
-									StaticPopup_Show("alarm")
-								end,
 							},
 							MiniMapPanels = {
 								type = "toggle",
@@ -1087,19 +1074,6 @@ function SunUIConfig.GenerateOptionsInternal()
 								type = "toggle",
 								name = L["启动内置CD"], desc = L["警告"],
 								order = 1,
-								get = function() return db.MiniDB.ClassCDOpen end,
-								set = function(_, value) 
-									StaticPopupDialogs["alarm"] = {
-										text = L["警告"],
-										button1 = OKAY,
-										OnAccept = function()
-											db.MiniDB.ClassCDOpen = value
-										end,
-										timeout = 0,
-										hideOnEscape = 1,
-									}
-									StaticPopup_Show("alarm")
-								end,
 							},
 							group = {
 								type = "group", order = 2,
