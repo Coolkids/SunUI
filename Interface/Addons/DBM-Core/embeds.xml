@@ -7,6 +7,7 @@
 	<Include file="libs\AceEvent-3.0\AceEvent-3.0.xml"/>
 	<Include file="libs\AceDB-3.0\AceDB-3.0.xml"/>
 	<Include file="libs\AceGUI-3.0\AceGUI-3.0.xml"/>
+	<Include file="Libs\AceTimer-3.0\AceTimer-3.0.xml"/>
 	<Script file="libs\LibRangeCheck-2.0\LibRangeCheck-2.0.lua"/>	
 </Ui>
  

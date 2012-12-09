@@ -6,6 +6,7 @@ local sndDD	= mod:NewSound(nil, "SoundDD", mod:IsTank())
 mod:SetRevision(("$Revision: 8201 $"):sub(12, -3))
 mod:SetCreatureID(60999)--61042 Cheng Kang, 61046 Jinlun Kun, 61038 Yang Guoshi, 61034 Terror Spawn
 mod:SetModelID(41772)
+mod:SetZone()
 
 mod:RegisterCombat("combat")
 
@@ -14,7 +15,9 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED_DOSE",
 	"SPELL_CAST_START",
 	"UNIT_SPELLCAST_SUCCEEDED",
-	"UNIT_DIED"
+	"UNIT_DIED",
+	"SPELL_DAMAGE",
+	"SPELL_MISSED"
 )
 
 local warnThrash						= mod:NewSpellAnnounce(131996, 4, nil, mod:IsTank() or mod:IsHealer())
@@ -31,13 +34,27 @@ local specWarnTerrorSpawn				= mod:NewSpecialWarningSwitch("ej6088",  mod:IsDps(
 local specWarnDreadSpray				= mod:NewSpecialWarningSpell(120047, nil, nil, nil, true)--Platform ability, particularly nasty damage, and fear.
 local specWarnDeathBlossom				= mod:NewSpecialWarningSpell(119888, nil, nil, nil, true)--Cast, warns the entire raid.
 local specWarnShot						= mod:NewSpecialWarningStack(119086, true, 2)
+local specWarnshuipoYou					= mod:NewSpecialWarningMove(120519)
+local specWarnzhuanyiguangYou			= mod:NewSpecialWarningYou(120268)
+local specWarnshuipo				= mod:NewSpecialWarningSpell(120519, nil, nil, nil, true)
+local specWarnyinmo				= mod:NewSpecialWarning("specWarnyinmo")
+local specWarnweisuo				= mod:NewSpecialWarning("specWarnweisuo")
+local specWarnshuipomove				= mod:NewSpecialWarningMove(120521)
+local specWarnzhanli				= mod:NewSpecialWarningYou(120669)
+local specWarnzhanliOther			= mod:NewSpecialWarningTarget(120669, mod:IsTank() or mod:IsHealer())
 
-local timerThrashCD						= mod:NewCDTimer(9, 131996, nil, mod:IsTank() or mod:IsHealer())--Every 9-12 seconds.
+local timerThrashCD					= mod:NewCDTimer(9, 131996, nil, mod:IsTank() or mod:IsHealer())--Every 9-12 seconds.
+local timerHThrashCD					= mod:NewCDTimer(9, 131996, nil, mod:IsTank() or mod:IsHealer())--Every 7-12 seconds.
 local timerBreathOfFearCD				= mod:NewNextTimer(33.3, 119414)--Based off bosses energy, he casts at 100 energy, and gains about 3 energy per second, so every 33-34 seconds is a breath.
 local timerOminousCackleCD				= mod:NewNextTimer(45.5, 119693)
 local timerDreadSpray					= mod:NewBuffActiveTimer(8, 120047)
 local timerDreadSprayCD					= mod:NewNextTimer(20.5, 120047)
+local timerSpecialCD					= mod:NewTimer(10, "timerSpecialCD", 126554)
+local timerweisuo					= mod:NewNextCountTimer(50,120629)
+local timeryinmo					= mod:NewNextCountTimer(50,120458)
+local yellshuipo				= mod:NewYell(120519)
 --local timerTerrorSpawnCD				= mod:NewNextTimer(60, 119108)--every 60 or so seconds, maybe a little more maybe a little less, not sure. this is just based on instinct after seeing where 30 fit.
+local timerFearless						= mod:NewBuffFadesTimer(30, 118977)
 
 local berserkTimer						= mod:NewBerserkTimer(900)
 
@@ -45,6 +62,23 @@ local ominousCackleTargets = {}
 local platformGUIDs = {}
 local onPlatform = false--Used to determine when YOU are sent to a platform, so we know to activate platformMob on next shoot
 local platformMob = nil--Use this so we can filter platform events and show you only ones for YOUR platform while ignoring other platforms events.
+local phase = 1
+local ThrashCount = 0
+local kongjuCount = 0
+local yinmoCount = 0
+
+mod:AddBoolOption("InfoFrame")
+mod:AddBoolOption("HudMAP", true, "sound")
+mod:AddBoolOption("ShaAssist", true, "sound")
+
+local DBMHudMap = DBMHudMap
+local free = DBMHudMap.free
+local function register(e)	
+	DBMHudMap:RegisterEncounterMarker(e)
+	return e
+end
+
+local waterMarkers = {}
 
 local function warnOminousCackleTargets()
 	warnOminousCackle:Show(table.concat(ominousCackleTargets, "<, >"))
@@ -58,6 +92,11 @@ function mod:OnCombatStart(delay)
 	else
 		timerOminousCackleCD:Start(25.5-delay)
 	end
+	phase = 1
+	ThrashCount=0
+	kongjuCount=0
+	yinmoCount=0
+	table.wipe(waterMarkers)
 --	timerTerrorSpawnCD:Start(25.5-delay)--still not perfect, it's hard to do yells when you're always the tank sent out of range of them. I need someone else to do /yell when they spawn and give me timing
 --	self:ScheduleMethod(25.5-delay, "TerrorSpawns")
 	timerBreathOfFearCD:Start(-delay)
@@ -78,6 +117,12 @@ function mod:OnCombatStart(delay)
 			end
 		end
 	end)
+end
+
+function mod:OnCombatEnd()
+	if self.Options.InfoFrame then
+		DBM.InfoFrame:Hide()
+	end
 end
 
 --This may now be depricated, i think blizz synced these up to omninous cackle.
@@ -110,6 +155,11 @@ function mod:SPELL_AURA_APPLIED(args)
 			end
 		end)
 	elseif args:IsSpellID(129147) then
+		if self.Options.ShaAssist then
+			ShaOfFearAssistEnabled = true
+		else
+			ShaOfFearAssistEnabled = false
+		end
 		ominousCackleTargets[#ominousCackleTargets + 1] = args.destName
 		if args:IsPlayer() then
 			onPlatform = true
@@ -123,6 +173,11 @@ function mod:SPELL_AURA_APPLIED(args)
 		self:Schedule(2, warnOminousCackleTargets)--this actually staggers a bit, so wait the full 2 seconds to get em all in one table
 		--"<76.6> [CLEU] SPELL_AURA_APPLIED#false#0x0100000000181B61#Lycanx#1298#0#0x0100000000181B61#Lycanx#1298#0#129147#Ominous Cackle#32#DEBUFF", -- [12143]
 		--"<78.3> [CLEU] SPELL_AURA_APPLIED#false#0x0100000000011E0F#Derevka#1300#0#0x0100000000011E0F#Derevka#1300#0#129147#Ominous Cackle#32#DEBUFF", -- [12440]
+	elseif args:IsSpellID(132007) then
+		if not mod:IsDps() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kjtj.mp3")--恐惧痛击
+		end
+		ThrashCount = 0
 	elseif args:IsSpellID(120047) and platformMob and args.sourceName == platformMob  then--might change
 		timerDreadSpray:Start()
 		timerDreadSprayCD:Start()
@@ -132,18 +187,73 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif args:IsSpellID(118977) and args:IsPlayer() then--Fearless, you're leaving platform
 		onPlatform = false
 		platformMob = nil
+		timerFearless:Start()
 	elseif args:IsSpellID(131996) and not onPlatform then
 		warnThrash:Show()
 		specWarnThrash:Show()
 		if not mod:IsDps() then
-			sndDD:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\doubleat.mp3")--雙重攻擊
+			sndDD:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\doubleat.mp3")--雙重攻擊	
+			timerThrashCD:Start()
+			if phase == 2 then
+				ThrashCount = ThrashCount + 1
+				if ThrashCount == 3 then
+					timerThrashCD:Cancel()
+					timerHThrashCD:Start()
+					sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_tjzb.mp3")
+				end
+			end
 		end
-		timerThrashCD:Start()
 	elseif args:IsSpellID(119086) then
 		if args:IsPlayer() and (args.amount or 1) >= 2 and self:AntiSpam(3, 2) then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\firecircle.mp3")--注意火圈
 			specWarnShot:Show(args.amount)
 		end
+	elseif args:IsSpellID(120519) then --水魄
+		if self.Options.HudMAP then
+			waterMarkers[args.destName] = register(DBMHudMap:PlaceStaticMarkerOnPartyMember("highlight", args.destName, 3, 3, 0, 1, 0, 0.5):Appear():RegisterForAlerts())
+		end
+		if args:IsPlayer() then
+			specWarnshuipoYou:Show()
+			yellshuipo:Yell()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runout.mp3")
+		end
+	elseif args:IsSpellID(120268) then
+		if args:IsPlayer() then
+			specWarnzhuanyiguangYou:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zyg.mp3") --轉移光
+		end
+	elseif args:IsSpellID(120669) then--顫慄
+		if args:IsPlayer() then
+			specWarnzhanli:Show()
+		else
+			specWarnzhanliOther:Show(args.destName)
+			if mod:IsTank() or mod:IsHealer() then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\changemt.mp3")--換坦嘲諷
+			end
+		end
+	elseif args:IsSpellID(120629) and self:AntiSpam(2, 6) then
+		kongjuCount = kongjuCount + 1
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wsks.mp3")
+		sndWOP:Schedule(45, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wszb.mp3")
+		specWarnweisuo:Show(kongjuCount)
+		timerSpecialCD:Start()
+		timerweisuo:Start(50, kongjuCount + 1)
+	elseif args:IsSpellID(129378) then --消逝之光P2
+		phase = 2
+		timerSpecialCD:Start()
+		timerOminousCackleCD:Cancel()
+		berserkTimer:Cancel()
+		timeryinmo:Start(16)
+		if mod.Options.InfoFrame then
+			DBM.InfoFrame:SetHeader(GetSpellInfo(120629))
+			DBM.InfoFrame:Show(10, "playerbaddebuff", 120629)
+		end
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_tenkj.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
@@ -173,18 +283,30 @@ function mod:SPELL_CAST_START(args)
 		sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 		sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 		sndWOP:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+	elseif args:IsSpellID(120519) then --水魄
+		timerSpecialCD:Start()
+		specWarnshuipo:Show()
+	elseif args:IsSpellID(120455) then --隐没
+		timerSpecialCD:Cancel()
+		yinmoCount = yinmoCount + 1
+		specWarnyinmo:Show(yinmoCount)		
+		timeryinmo:Start(50, yinmoCount + 1)	
+		sndWOP:Schedule(45, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ymzb.mp3")
+	elseif args:IsSpellID(120672) then
+		timerSpecialCD:Start()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\shockwave.mp3") --震懾波
 	end
 end
 
 function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 	if spellId == 119108 and self:AntiSpam(2, 3) then
 		if not onPlatform then
+			warnConjureTerrorSpawns:Show()	
 			specWarnTerrorSpawn:Show()
 			if mod:IsDps() then
 				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kdkjzz.mp3") --快打恐懼之子
 			end
 		end
-		warnConjureTerrorSpawns:Show()
 	end
 end
 
@@ -193,8 +315,13 @@ function mod:UNIT_DIED(args)
 	if cid == 61042 or cid == 61046 or cid == 61038 then
 		timerDreadSpray:Cancel(args.destGUID)
 		timerDreadSprayCD:Cancel(args.destGUID)
-		if mod:IsHealer() then
-			sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kbpszb.mp3")
-		end
 	end
 end
+
+function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
+	if spellId == 120521 and destGUID == UnitGUID("player") and self:AntiSpam(3, 7) then
+		specWarnshuipomove:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3") --快躲開
+	end
+end
+mod.SPELL_MISSED = mod.SPELL_DAMAGE

@@ -303,12 +303,12 @@ function FriendsMenu_Initialize(dropDownList, buttonSet)
 	local inInstance, instanceType = IsInInstance();
 	local inParty = 0;
 	local inRaid = 0;
-	if ( (GetNumSubgroupMembers() > 0) or (GetNumGroupMembers() > 0) ) then
+	if IsInGroup() then
 		inParty = 1;
 	end
 
 	local inRaid = 0;
-	if ( (GetNumSubgroupMembers() > 0) and (GetNumGroupMembers() > 0) ) then
+	if IsInRaid() then
 		inRaid = 1;
 	end
 

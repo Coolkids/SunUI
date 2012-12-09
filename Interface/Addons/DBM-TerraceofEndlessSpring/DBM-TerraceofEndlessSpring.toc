@@ -6,7 +6,7 @@
 ## Author: Nitram/Tandanu
 ## LoadOnDemand: 1
 ## RequiredDeps: DBM-Core
-## SavedVariablesPerCharacter: DBMTerraceofEndlessSpring_SavedVars, DBMTerraceofEndlessSpring_SavedStats
+## SavedVariablesPerCharacter: DBMTerraceofEndlessSpring_SavedVars, DBMTerraceofEndlessSpring_SavedStats, ShaAssistDB
 ## X-DBM-Mod: 1
 ## X-DBM-Mod-Category: MOP
 ## X-DBM-Mod-Has-Heroic-Mode: 1
@@ -23,3 +23,4 @@ ProtectorsofEndless.lua
 Tsulong.lua
 LeiShi.lua
 ShaofFear.lua
+ShaOfFearAssist.lua

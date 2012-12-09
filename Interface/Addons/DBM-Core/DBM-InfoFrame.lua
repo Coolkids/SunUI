@@ -470,6 +470,25 @@ local function updatePlayerBuffStacks()
 	updateLines()
 end
 
+local function updateBossDebuffStacks()
+	table.wipe(lines)
+	local UnitDebuffTime
+	if IsInRaid() then
+		for i = 1, 5 do
+			local uId = "boss"..i
+			if UnitDebuff(uId, GetSpellInfo(infoFrameThreshold)) then
+				if select(7, UnitDebuff(uId, GetSpellInfo(infoFrameThreshold))) > GetTime() then
+					UnitDebuffTime = math.ceil(select(7, UnitDebuff(uId, GetSpellInfo(infoFrameThreshold))) - GetTime()).."s"
+				else
+					UnitDebuffTime = ""
+				end
+				lines[UnitName(uId)] = "["..select(4, UnitDebuff(uId, GetSpellInfo(infoFrameThreshold))).."層]  "..UnitDebuffTime
+			end			
+		end
+	end
+	updateLines()
+end
+
 local function updatePlayerDebuffStacks()
 	table.wipe(lines)
 	local UnitBossTarget
@@ -628,6 +647,8 @@ function onUpdate(self, elapsed)
 		updatePlayerTargets()
 	elseif currentEvent == "playerdebuffstacks" then
 		updatePlayerDebuffStacks()
+	elseif currentEvent == "bossdebuffstacks" then
+		updateBossDebuffStacks()
 	elseif currentEvent == "other" then
 		updateOther()
 	elseif currentEvent == "time" then
@@ -709,6 +730,8 @@ function infoFrame:Show(maxLines, event, threshold, ...)
 		updateOther()
 	elseif currentEvent == "time" then
 		updateTime()
+	elseif currentEvent == "bossdebuffstacks" then
+		updateBossDebuffStacks()
 	elseif currentEvent == "test" then
 	else		
 		error("DBM-InfoFrame: Unsupported event", 2)

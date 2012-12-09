@@ -404,7 +404,7 @@ function Module:CreatePetBar()
 			button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
 		end
 	end
-	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; [@pet,exists,nodead] show; hide")
+	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; [@pet,exists] show; hide")
 end
 function Module:CreateStanceBar()
 	local num = NUM_STANCE_SLOTS

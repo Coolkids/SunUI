@@ -1,9 +1,9 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SkinPostal", "AceEvent-3.0")
-
-local function Skin()
+local style = false
+local function Skin(self, event, addon)
 	if not IsAddOnLoaded("Postal") then return end
-	if MailFrame then
+	if not style then
 		S.Reskin(PostalSelectOpenButton)
 		S.Reskin(PostalSelectReturnButton)
 		S.Reskin(PostalOpenAllButton)
@@ -14,6 +14,7 @@ local function Skin()
 		--Postal_OpenAllMenuButton:SetSize(Postal_ModuleMenuButton:GetHeight()+6, Postal_ModuleMenuButton:GetHeight()+7)
 		Postal_BlackBookButton:SetPoint("LEFT", SendMailNameEditBox, "RIGHT", 3, 0)
 		S.ReskinArrow(Postal_BlackBookButton, "down")
+		style = true
 	end
 end
 

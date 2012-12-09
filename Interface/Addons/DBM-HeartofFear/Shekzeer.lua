@@ -418,7 +418,9 @@ function mod:UNIT_HEALTH_FREQUENT_UNFILTERED(uId)
 	local guid = UnitGUID(uId)
 	if cid == 62847 then
 		hp = UnitHealth(uId)
-		self:SendSync("ybhealth", guid, hp)
+		if self:LatencyCheck() then
+			self:SendSync("ybhealth", guid, hp)
+		end
 	end
 	if uId == "player" then
 		if UnitDebuff("player", GetSpellInfo(123184)) then
@@ -441,8 +443,7 @@ end
 
 function mod:OnSync(msg, guid, hp)
 	if msg == "ybhealth" and guid and hp then
-		if not ybhp[guid] then ybhp[guid] = hp end
-		if ybhp[guid] > hp then ybhp[guid] = hp end
+		ybhp[guid] = hp
 		table.wipe(sh)
 		for k,v in pairs(ybhp) do
 			table.insert(sh,{K=k,V=v})

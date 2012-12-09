@@ -1,8 +1,9 @@
 local S, C, L, DB = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SkinReforgeLite", "AceEvent-3.0")
-
+local style = false
 local function Skin()
 	if not IsAddOnLoaded("ReforgeLite") then return end
+	if style then return end
 	hooksecurefunc(ReforgeLite, 'CreateFrame', function(self)
 		self:StripTextures()
 		S.ReskinClose(self.close)
@@ -133,6 +134,7 @@ local function Skin()
 	  S.ReskinCheck(btn)
 	  return btn
 	end
+	style = true
 end
 
 function Module:OnEnable()

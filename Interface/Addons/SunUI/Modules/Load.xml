@@ -3,6 +3,7 @@
 	<Include file = "actionBar\Load.xml"/>
 	<Include file = "Announce\load.xml"/>
 	<Include file = "AutoEquipment\load.xml"/>
+	<Include file = "Automation\load.xml"/>
 	<Include file = "bags\load.xml"/>
 	<Include file = "buff\load.xml"/>
 	<Include file = "buffreminder\Load.xml"/>
@@ -16,8 +17,13 @@
 	<Include file = "map\load.xml"/>
 	<Include file = "nameplates\load.xml"/>
 	<Include file = "powerbar\load.xml"/>
+	<Include file ="Quest\load.xml"/>
 	<Include file= "RayWatcher\load.xml"/>
 	<Include file = "skins\Load.xml"/>
 	<Include file = "tooltip\Load.xml"/>
 	<Include file = "unitframe\load.xml"/>
+	<Include file ="FriendsMenuXP\load.xml"/>
+	<Include file ="Icicle\load.xml"/>
+	<Include file ="TheBurningTrade\load.xml"/>
+	<Include file ="oGlow\load.xml"/>
 </Ui>

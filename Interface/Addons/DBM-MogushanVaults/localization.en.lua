@@ -122,13 +122,15 @@ L:SetWarningLocalization({
 	specWarnDDL 	= ">> Next:You Interrupt<<",
 	specWarnQBH		= "Next: Annihilate!",
 	specWarnQBHT	= "Next: Annihilate!",
-	specWarnDSoon	= "3s: >> Shield! <<"
+	specWarnDSoon	= "3s: >> Shield! <<",
+	DarknessSoon		= "Shield of Darkness in %ds"
 })
 
 L:SetOptionLocalization({
 	RangeFrame			= "Show range frame (8)",
 	SoundWOP			= "Voice warning: important skills",
 	SoundDS				= "Voice warning: Dispel $spell:117697 and $spell:117961",
+	DarknessSoon		= "Show pre-warning countdown for $spell:117697 (5s before)",
 	InfoFrame			= "InfoFrame: $spell:118303",
 	HudMAP				= "HudMAP: $spell:118047",
 	HudMAP2				= "HudMAP：$spell:118303",

@@ -42,6 +42,7 @@ local specwarnCrushH				= mod:NewSpecialWarning("specwarnCrushH")
 local specwarnCrush				= mod:NewSpecialWarningSpell(122774, true, nil, nil, true)--Maybe set to true later, not sure. Some strats on normal involve purposely having tanks rapidly pass debuff and create lots of stomps
 local specwarnLeg				= mod:NewSpecialWarningSwitch("ej6270", mod:IsMelee())--If no legs are up (ie all dead), when one respawns, this special warning can be used to alert of a respawned leg and to switch back.
 local specwarnPheromoneTrail	= mod:NewSpecialWarningMove(123120)--Because this starts doing damage BEFORE the visual is there.
+local specWarnJSA				= mod:NewSpecialWarning("SpecWarnJSA")
 
 local specwarnPungency			= mod:NewSpecialWarningStack(123081, mod:IsTank(), 20)
 local specWarnPungencyOtherFix	= mod:NewSpecialWarning("specWarnPungencyOtherFix")
@@ -64,6 +65,17 @@ mod:AddBoolOption("InfoFrame", not mod:IsDps(), "sound")
 local brokenLegs = 0
 local Crushcount = 0
 --local Pn = 20
+
+for i = 1, 9 do
+	mod:AddBoolOption("unseenjs"..i, false, "sound")
+end
+
+local function MyJS()
+	if (mod.Options.unseenjs1 and Crushcount == 0) or (mod.Options.unseenjs2 and Crushcount == 1) or (mod.Options.unseenjs3 and Crushcount == 2) or (mod.Options.unseenjs4 and Crushcount == 3) or (mod.Options.unseenjs5 and Crushcount == 4) or (mod.Options.unseenjs6 and Crushcount == 5) or (mod.Options.unseenjs7 and Crushcount == 6) or (mod.Options.unseenjs8 and Crushcount == 7) or (mod.Options.unseenjs9 and Crushcount == 8) then
+		return true
+	end
+	return false
+end
 
 mod:AddBoolOption("HudMAP", true, "sound")
 local DBMHudMap = DBMHudMap
@@ -95,6 +107,10 @@ function mod:OnCombatStart(delay)
 		sndZN:Schedule(27.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 		sndZN:Schedule(28.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 		sndZN:Schedule(29.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		if MyJS() then
+			specWarnJSA:Schedule(24)
+			sndWOP:Schedule(24, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zyjs.mp3") --注意減傷
+		end
 	end
 end
 
@@ -154,7 +170,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		else
 			timerPungency:Start(args.destName)
 		end
-		if (args.amount or 1) >= 15 and args.amount % 5 == 0 then
+		if (args.amount or 1) >= 10 and args.amount % 5 == 0 then
 			specWarnPungencyOtherFix:Show(args.destName, args.amount)
 		end
 		if mod.Options.InfoFrame then
@@ -256,6 +272,10 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, _, _, _, target)
 			sndZN:Schedule(35, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 			sndZN:Schedule(36, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 			sndZN:Schedule(37, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			if MyJS() then
+				specWarnJSA:Schedule(32)
+				sndWOP:Schedule(32, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zyjs.mp3") --注意減傷
+			end
 		end
 	end
 end

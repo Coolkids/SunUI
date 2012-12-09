@@ -1,10 +1,7 @@
 ﻿<!-- -->
-
-
-
-
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="Tooltip.lua"/>
+	<Script file="CastBy.lua"/>
 	<Script file="HyperLink.lua"/>
 	<Script file="Achievement.lua"/>
 	<Script file="Talents.lua"/>
@@ -16,4 +13,5 @@
 	<Script file="Symbiosis.lua"/>
 	<Script file="CheckItemTransmogrify.lua"/>
 	<Script file="InstanceLockCompare.lua"/>
+	<Script file="MultiItemRef.lua"/>
 </Ui>

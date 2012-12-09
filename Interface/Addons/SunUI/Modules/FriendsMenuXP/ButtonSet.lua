@@ -321,7 +321,7 @@ FriendsMenuXP_Buttons["ARMORY"] = {
 			host = "http://tw.battle.net/wow/"
 			link = "zh"
 		elseif GetLocale()=="zhCN" then
-			host = "http://www.battlenet.com.cn/wow"
+			host = "http://www.battlenet.com.cn/wow/"
 			link = "zh"
 		elseif GetLocale()=="koKR" then
 			host = "http://kr.wowarmory.com/"

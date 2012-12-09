@@ -1498,7 +1498,7 @@ function ns:UpdateHealth(self)
 		self.HealthBar:SetValue(UnitHealth(unit))
 	end
 	healthBar.bd:SetPoint("TOPRIGHT", healthBar)
-	healthBar.bd:Point("BOTTOMLEFT", healthBar:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
+	healthBar.bd:SetPoint("BOTTOMLEFT", healthBar:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
 end
 
 function ns:UpdateHealPredictionBarColor(self)
@@ -1512,31 +1512,31 @@ function ns:UpdateHealPredictionBarLayout(self)
 	local healthBar = self.HealthBar
 	self.myHealPredictionBar = CreateFrame('StatusBar', nil, healthBar)
 	self.myHealPredictionBar:SetFrameLevel(3)
-	self.myHealPredictionBar:SetStatusBarTexture(DB.Statusbar, "BORDER")
+	self.myHealPredictionBar:SetStatusBarTexture(DB.Statusbar)
 	if ns.db.orientation == "VERTICAL" then
 		self.myHealPredictionBar:SetPoint("BOTTOMLEFT", healthBar:GetStatusBarTexture(), "TOPLEFT", 0, 0)
 		self.myHealPredictionBar:SetPoint("BOTTOMRIGHT", healthBar:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
-		self.myHealPredictionBar:SetSize(0, ns.db.height)
+		self.myHealPredictionBar:SetHeight(ns.db.height)
 		self.myHealPredictionBar:SetOrientation"VERTICAL"
 	else
 		self.myHealPredictionBar:SetPoint("TOPLEFT", healthBar:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
 		self.myHealPredictionBar:SetPoint("BOTTOMLEFT", healthBar:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
-		self.myHealPredictionBar:SetSize(ns.db.width, 0)
+		self.myHealPredictionBar:SetWidth(ns.db.width)
 	end	
 	self.myHealPredictionBar:Hide()
 
 	self.otherHealPredictionBar = CreateFrame('StatusBar', nil, healthBar)
-	self.otherHealPredictionBar:SetStatusBarTexture(DB.Statusbar, "BORDER")
+	self.otherHealPredictionBar:SetStatusBarTexture(DB.Statusbar)
 	self.otherHealPredictionBar:SetFrameLevel(3)
 	if ns.db.orientation == "VERTICAL" then
 		self.otherHealPredictionBar:SetPoint("BOTTOMLEFT", self.myHealPredictionBar:GetStatusBarTexture(), "TOPLEFT", 0, 0)
 		self.otherHealPredictionBar:SetPoint("BOTTOMRIGHT", self.myHealPredictionBar:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
-		self.otherHealPredictionBar:SetSize(0, ns.db.height)
+		self.otherHealPredictionBar:SetHeight(ns.db.height)
 		self.otherHealPredictionBar:SetOrientation"VERTICAL"
 	else
 		self.otherHealPredictionBar:SetPoint("TOPLEFT", self.myHealPredictionBar:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
 		self.otherHealPredictionBar:SetPoint("BOTTOMLEFT", self.myHealPredictionBar:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
-		self.otherHealPredictionBar:SetSize(ns.db.width, 0)
+		self.otherHealPredictionBar:SetWidth(ns.db.width)
 	end
 	self.otherHealPredictionBar:Hide() 
 	

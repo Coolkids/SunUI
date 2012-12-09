@@ -403,7 +403,7 @@ function mod:SPELL_CAST_START(args)
 		if self:IsDifficulty("heroic10") then
 			warnImperviousShieldSoon:Schedule(57)
 			timerImperviousShieldCD:Start(62)
-			countdownImperviousShield:Start(62)
+--			countdownImperviousShield:Start(62)
 			sndDSA:Schedule(59, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zwhd.mp3") -- 戰王護盾準備
 			self:Schedule(59, function()
 				if UnitName("target") == Qiang then
@@ -413,7 +413,7 @@ function mod:SPELL_CAST_START(args)
 		else
 			warnImperviousShieldSoon:Schedule(37)
 			timerImperviousShieldCD:Start()
-			countdownImperviousShield:Start(42)
+--			countdownImperviousShield:Start(42)
 			sndDSA:Schedule(39, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zwhd.mp3") -- 戰王護盾準備
 			self:Schedule(39, function()
 				if UnitName("target") == Qiang then

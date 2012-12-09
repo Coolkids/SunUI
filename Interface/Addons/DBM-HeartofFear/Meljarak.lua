@@ -180,11 +180,32 @@ function mod:OnCombatEnd()
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(122224) and args.sourceName == UnitName("player") then
+	if args:IsSpellID(122224, 61721) and args.sourceName == UnitName("player") then
 		warnImpalingSpear:Cancel()
 		warnImpalingSpear:Schedule(30)
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kzjs.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countten.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countnine.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counteight.mp3")	
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countseven.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")	
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")	
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kzjs.mp3")
 		sndWOP:Schedule(30, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kzjs.mp3") --控制即將結束	
+		sndWOP:Schedule(40, "Interface\\AddOns\\DBM-Core\\extrasounds\\countten.mp3")
+		sndWOP:Schedule(41, "Interface\\AddOns\\DBM-Core\\extrasounds\\countnine.mp3")
+		sndWOP:Schedule(42, "Interface\\AddOns\\DBM-Core\\extrasounds\\counteight.mp3")	
+		sndWOP:Schedule(43, "Interface\\AddOns\\DBM-Core\\extrasounds\\countseven.mp3")
+		sndWOP:Schedule(44, "Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
+		sndWOP:Schedule(45, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")	
+		sndWOP:Schedule(46, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")	
+		sndWOP:Schedule(47, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Schedule(48, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Schedule(49, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")	
 		timerImpalingSpear:Start(args.destName)
 	elseif args:IsSpellID(121881) then--Not a mistake, 121881 is targeting spellid.
 		amberPrisonTargets[#amberPrisonTargets + 1] = args.destName
@@ -270,11 +291,31 @@ end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
 function mod:SPELL_AURA_REFRESH(args)
-	if args:IsSpellID(122224) and args.sourceName == UnitName("player") then
+	if args:IsSpellID(122224, 61721) and args.sourceName == UnitName("player") then
 		warnImpalingSpear:Cancel()
 		warnImpalingSpear:Schedule(30)
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kzjs.mp3")
-		sndWOP:Schedule(30, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kzjs.mp3") --控制即將結束	
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countten.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countnine.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counteight.mp3")	
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countseven.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")	
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")	
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		sndWOP:Schedule(30, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kzjs.mp3") --控制即將結束
+		sndWOP:Schedule(40, "Interface\\AddOns\\DBM-Core\\extrasounds\\countten.mp3")
+		sndWOP:Schedule(41, "Interface\\AddOns\\DBM-Core\\extrasounds\\countnine.mp3")
+		sndWOP:Schedule(42, "Interface\\AddOns\\DBM-Core\\extrasounds\\counteight.mp3")	
+		sndWOP:Schedule(43, "Interface\\AddOns\\DBM-Core\\extrasounds\\countseven.mp3")
+		sndWOP:Schedule(44, "Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
+		sndWOP:Schedule(45, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")	
+		sndWOP:Schedule(46, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")	
+		sndWOP:Schedule(47, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Schedule(48, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Schedule(49, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")		
 		timerImpalingSpear:Start(args.destName)
 	elseif args:IsSpellID(125873) then
 		addsCount = addsCount + 1
@@ -287,8 +328,18 @@ function mod:SPELL_AURA_REFRESH(args)
 end
 
 function mod:SPELL_AURA_REMOVED(args)
-	if args:IsSpellID(122224) and args.sourceName == UnitName("player") then
+	if args:IsSpellID(122224, 61721) and args.sourceName == UnitName("player") then
 		warnImpalingSpear:Cancel()
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countten.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countnine.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counteight.mp3")	
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countseven.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")	
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")	
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kzjs.mp3")
 		timerImpalingSpear:Cancel(args.destName)
 	elseif args:IsSpellID(121885) and self.Options.AmberPrisonIcons then--Not a mistake, 121885 is frozon spellid

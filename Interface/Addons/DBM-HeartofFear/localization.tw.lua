@@ -94,7 +94,8 @@ L= DBM:GetModLocalization(713)
 L:SetWarningLocalization({
 	specwarnUnder	= "離開紫圈!",
 	specWarnPungencyOtherFix = "%s 敏感 (%d)",
-	specwarnCrushH	= "碾碎 (%d)"
+	specwarnCrushH	= "碾碎 (%d)",
+	SpecWarnJSA		= "5秒後碾壓 >>注意減傷<<"
 })
 
 L:SetOptionLocalization({
@@ -109,7 +110,17 @@ L:SetOptionLocalization({
 	SoundZN				= "語音警告：碾碎倒計時(英雄模式)",
 	specWarnPungencyOtherFix = "特別警告：當$spell:123081達到15層時",
 	HudMAP				= "高級定位監視(HUD)：$spell:122835的位置",
-	SoundFS				= "坦克倒計時：$spell:122735"
+	SoundFS				= "坦克倒計時：$spell:122735",
+	SpecWarnJSA			= "特殊警告：注意開減傷",
+	unseenjs1			= "減傷提示：碾碎1",
+	unseenjs2			= "減傷提示：碾碎2",
+	unseenjs3			= "減傷提示：碾碎3",
+	unseenjs4			= "減傷提示：碾碎4",
+	unseenjs5			= "減傷提示：碾碎5",
+	unseenjs6			= "減傷提示：碾碎6",
+	unseenjs7			= "減傷提示：碾碎7",
+	unseenjs8			= "減傷提示：碾碎8",
+	unseenjs9			= "減傷提示：碾碎9"
 })
 
 L:SetMiscLocalization({
@@ -124,7 +135,7 @@ L= DBM:GetModLocalization(741)
 
 L:SetWarningLocalization({
 	specWarnQuickeningX = "%s - 快驅散!",
-	specWarnBH			= "給 >> %s <<保護!"
+	specWarnBH			= "保護: >> %s <<"
 })
 
 L:SetOptionLocalization({
@@ -160,7 +171,7 @@ L:SetOptionLocalization({
 
 L:SetMiscLocalization({
 	Helpme				= "救我 ~~~",
-	Reinforcements		= "Wind Lord Mel'jarak calls for reinforcements!"
+	Reinforcements		= "風領主瑪爾加拉克召喚增援!"
 })
 
 ------------
@@ -192,8 +203,12 @@ L:SetOptionLocalization({
 	specwarnAmberExplosionAM	= "特殊警告：打斷琥珀巨怪的$spell:122402",
 	specwarnAmberExplosionOther	= "特殊警告：打斷無人控制傀儡體的$spell:122398",
 	timerAmberExplosionAMCD		= "計時器：琥珀巨怪的下一次$spell:122402",
-	InfoFrame					= "資訊框：玩家的意志力",
-	FixNameplates				= "開戰自動禁用干擾的單位名條(離開戰鬥後恢復)"
+	AdvInfoFrame				= "資訊框：意志力與首領$spell:123059",
+	FixNameplates				= "開戰自動禁用干擾的單位名條(離開戰鬥後恢復)",
+	optInfoFrame				= "<能量與動搖>監視資訊框",
+	noIF						= "不監視",
+	IF1							= "主要監視能量(DPS)",
+	IF2							= "主要監視動搖(TANK)"
 })
 
 L:SetMiscLocalization({

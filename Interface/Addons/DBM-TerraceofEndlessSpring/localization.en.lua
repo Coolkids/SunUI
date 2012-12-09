@@ -70,6 +70,15 @@ L:SetMiscLocalization{
 ----------------------
 L= DBM:GetModLocalization(709)
 
+L:SetWarningLocalization({
+	specWarnyinmo		= "Submerge >%d<",
+	specWarnweisuo		= "Huddle in Terror >%d<",
+})
+
+L:SetTimerLocalization({
+	timerSpecialCD			= "Next Special"
+})
+
 L:SetOptionLocalization ({
 	SoundDD = "voice warning: $spell:131996",
 	SoundWOP = "voice warning: important skills"

@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8207 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8234 $"):sub(12, -3))
 mod:SetCreatureID(62511)
 mod:SetModelID(43126)
 mod:SetZone()
@@ -88,12 +88,17 @@ local berserkTimer				= mod:NewBerserkTimer(600)
 
 local countdownAmberExplosionAM	= mod:NewCountdown(46, 122402)
 
-mod:AddBoolOption("InfoFrame", true)
 mod:AddBoolOption("FixNameplates", true)--Because having 215937495273598637205175t9 hostile nameplates on screen when you enter a construct is not cool.
+
+mod:AddDropdownOption("optInfoFrame", {"noIF", "IF1", "IF2"}, "IF1", "sound")
+
 
 local Phase = 1
 local Puddles = 0
 local Constructs = 0
+local bossdebuff = 0
+local boss2debuff = 0
+local otherconstruct = nil
 local playerIsConstruct = false
 local warnedWill = false
 local lastStrike = 0
@@ -165,6 +170,7 @@ function mod:OnCombatStart(delay)
 	Puddles = 0
 	Constructs = 0
 	lastStrike = 0
+	otherconstruct = nil
 	table.wipe(canInterrupt)
 	playerIsConstruct = false
 	timerAmberScalpelCD:Start(9-delay)
@@ -173,9 +179,12 @@ function mod:OnCombatStart(delay)
 	if not self:IsDifficulty("lfr25") then
 		berserkTimer:Start(-delay)
 	end
-	if self.Options.InfoFrame then
-		DBM.InfoFrame:SetHeader(L.WillPower)--This is a work in progress
+	if self.Options.optInfoFrame == "IF1" then
+		DBM.InfoFrame:SetHeader("首領動搖:"..bossdebuff)
 		DBM.InfoFrame:Show(5, "playerpower", 1, ALTERNATE_POWER_INDEX, nil, nil, true)--At a point i need to add an arg that lets info frame show the 5 LOWEST not the 5 highest, instead of just showing 10
+	elseif self.Options.optInfoFrame == "IF2" then
+		DBM.InfoFrame:SetHeader("我的能量:"..UnitPower("player", ALTERNATE_POWER_INDEX))
+		DBM.InfoFrame:Show(2, "bossdebuffstacks", 123059)
 	end
 	if self.Options.FixNameplates then
 		--Blizz settings either return 1 or nil, we pull users original settings first, then change em if appropriate after.
@@ -205,7 +214,7 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd()
-	if self.Options.InfoFrame then
+	if self.Options.optInfoFrame == "IF1" or self.Options.optInfoFrame == "IF2" then
 		DBM.InfoFrame:Hide()
 	end
 	if self.Options.FixNameplates then
@@ -230,12 +239,26 @@ function mod:OnCombatEnd()
 end 
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(123059) and not args:GetDestCreatureID() == 62691 then--Only track debuffs on boss, constructs, or monstrosity, ignore oozes.
+	if args:IsSpellID(123059) and args:GetDestCreatureID() ~= 62691 then--Only track debuffs on boss, constructs, or monstrosity, ignore oozes.
 		warnDestabalize:Show(args.destName, args.amount or 1)
 		if self:IsDifficulty("lfr25") then
 			timerDestabalize:Start(60, args.destName)
 		else
 			timerDestabalize:Start(args.destName)
+		end
+		
+		if args:GetDestCreatureID() == 62511 then
+			bossdebuff = args.amount or 1
+		elseif args:GetDestCreatureID() == 62711 then
+			boss2debuff = args.amount or 1
+		end
+		
+		if self.Options.optInfoFrame == "IF1" then
+			if Phase == 2 then
+				DBM.InfoFrame:SetHeader("大黃動搖:"..boss2debuff)
+			else
+				DBM.InfoFrame:SetHeader("首領動搖:"..bossdebuff)
+			end
 		end
 	elseif args:IsSpellID(121949) then
 		warnParasiticGrowth:Show(args.destName)
@@ -264,6 +287,9 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif args:IsSpellID(122784) then
 		Constructs = Constructs + 1
 		warnReshapeLife:Show(args.destName)
+		if args.destName ~= UnitName("player") then
+			otherconstruct = args.destName
+		end
 		if args:IsPlayer() then
 			playerIsConstruct = true
 			warnedWill = true -- fix bad low will special warning on entering Construct. After entering vehicle, this will be return to false. (on alt.power changes)
@@ -300,6 +326,9 @@ function mod:SPELL_AURA_REMOVED(args)
 		timerDestabalize:Cancel(args.destName)
 	elseif args:IsSpellID(122370) then
 		Constructs = Constructs - 1
+		if args.destName == otherconstruct then
+			otherconstruct = nil
+		end
 		if args:IsPlayer() then
 			playerIsConstruct = false
 			if IsAddOnLoaded("TidyPlates_ThreatPlates") then
@@ -324,6 +353,19 @@ function mod:SPELL_AURA_REMOVED(args)
 		countdownAmberExplosionAM:Cancel()
 		warnAmberExplosionSoon:Cancel()
 		--He does NOT reset reshape live cd here, he finishes out last CD first, THEN starts using new one.
+	elseif args:IsSpellID(123059) then
+		if args:GetDestCreatureID() == 62511 then
+			bossdebuff = 0
+		elseif args:GetDestCreatureID() == 62711 then
+			boss2debuff = 0
+		end
+		if self.Options.optInfoFrame == "IF1" then
+			if Phase == 2 then
+				DBM.InfoFrame:SetHeader("大黃動搖:"..boss2debuff)
+			else
+				DBM.InfoFrame:SetHeader("首領動搖:"..bossdebuff)
+			end
+		end
 	end
 end
 
@@ -414,6 +456,13 @@ function mod:UNIT_POWER(uId)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_yzgd.mp3") --意志過低
 	elseif UnitPower(uId, ALTERNATE_POWER_INDEX) >= 32 and warnedWill then
 		warnedWill = false
+	end
+	if self.Options.optInfoFrame == "IF2" then
+		if otherconstruct and (Phase < 3) and (not self:IsDifficulty("lfr25")) then
+			DBM.InfoFrame:SetHeader("我的能量:"..UnitPower("player", ALTERNATE_POWER_INDEX).."  其他能量"..UnitPower(otherconstruct, ALTERNATE_POWER_INDEX))
+		else
+			DBM.InfoFrame:SetHeader("我的能量:"..UnitPower("player", ALTERNATE_POWER_INDEX))
+		end
 	end
 end
 

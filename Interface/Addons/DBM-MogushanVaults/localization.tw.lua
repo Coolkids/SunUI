@@ -152,7 +152,8 @@ L:SetWarningLocalization({
 	specWarnDDL 	= ">> 下一次 到你斷 <<",
 	specWarnQBH		= "下一刀殲滅 去背後!",
 	specWarnQBHT	= "下一刀是殲滅!",
-	specWarnDSoon	= "三秒後 >>護盾<<"
+	specWarnDSoon	= "三秒後 >>護盾<<",
+	DarknessSoon	= "黑暗護盾 %d秒"
 })
 
 L:SetOptionLocalization({
@@ -162,6 +163,7 @@ L:SetOptionLocalization({
 	InfoFrame			= "資訊框：$spell:118303的目標",
 	HudMAP				= "高級定位監視(HUD)：$spell:118047的位置",
 	HudMAP2				= "高級定位監視(HUD)：$spell:118303的目標",
+	DarknessSoon		= "黑暗護盾即將到來",
 	SoundCT				= "語音警告：$spell:117833的打斷",
 	optDD				= "近戰打斷鏈",
 	nodd				= "我不打斷",

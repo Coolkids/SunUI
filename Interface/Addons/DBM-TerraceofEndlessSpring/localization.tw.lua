@@ -82,7 +82,22 @@ L:SetMiscLocalization{
 ----------------------
 L= DBM:GetModLocalization(709)
 
+L:SetWarningLocalization({
+	specWarnyinmo		= "隐没 > %d <",
+	specWarnweisuo		= "恐惧畏缩 > %d <",
+})
+
+L:SetTimerLocalization({
+	timerSpecialCD			= "下一次P2特殊技能"
+})
+
 L:SetOptionLocalization({
 	SoundDD				= "語音警告：$spell:131996",
-	SoundWOP			= "語音警告：重要技能"
+	SoundWOP			= "語音警告：重要技能",
+	HudMAP				= "高級定位監視(HUD)：$spell:120519",
+	InfoFrame			= "資訊框：$spell:120629",
+	timerSpecialCD		= "計時器：下一次P2特殊技能",
+	specWarnyinmo		= "特殊警告：$spell:120455",
+	specWarnweisuo		= "特殊警告：$spell:120629",
+	ShaAssist			= "啟用恐怖噴散方向指示圖"
 })
