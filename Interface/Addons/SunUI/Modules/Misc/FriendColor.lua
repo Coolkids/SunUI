@@ -1,6 +1,6 @@
 local S, C, L, DB = unpack(select(2, ...))
 local _
-function Hook_FriendsList_Update()
+local function Hook_FriendsList_Update()
 	local friendOffset = HybridScrollFrame_GetOffset(FriendsFrameFriendsScrollFrame);
 	if not friendOffset then
 		return;

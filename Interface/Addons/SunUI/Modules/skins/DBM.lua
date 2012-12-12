@@ -37,7 +37,9 @@ local function SkinDBMBar(self)
 				tbar:SetStatusBarTexture(DB.Statusbar)
 				S.CreateTop(tbar:GetStatusBarTexture(), DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
 				tbar.SetStatusBarTexture = function() end
-				tbar.SetStatusBarColor = function() end
+				tbar.SetStatusBarColor = function() 
+					S.CreateTop(tbar:GetStatusBarTexture(), DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
+				end
 				tbar:Point("TOPLEFT", frame, "TOPLEFT", -1, 1)
 				tbar:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 1, -1)
 				tbar:CreateShadow()
@@ -76,17 +78,7 @@ local function SkinDBMBar(self)
 				timer.SetFont = function() end
 				timer.styled = true
 			end
-			frame:Show()
-			hooksecurefunc(bar, "ApplyStyle", function(self)
-				local frame = self.frame
-				local frame_name = frame:GetName()
-				local bar = _G[frame_name.."Bar"]
-				bar:SetStatusBarTexture(DB.Statusbar)
-				S.CreateTop(bar:GetStatusBarTexture(), DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
-				bar.SetStatusBarTexture = function() end
-				bar.SetStatusBarColor = function() end
-			end)
-			bar:Update(0)
+			
 			bar.injected = true
 		end
 	end
@@ -140,11 +132,16 @@ local function SkinBoss()
 			h:Point("TOPLEFT", bar, "TOPLEFT", 1, -1)
 			h:Point("BOTTOMRIGHT", bar, "BOTTOMRIGHT", -1, 1)
 			h:CreateShadow()
+			S.CreateBack(h)
+			S.CreateMark(progress, 8)
 			bar.styled=true
 		end	
 	
 		if not progress.styled then
 			progress:SetStatusBarTexture(DB.Statusbar)
+			progress.SetStatusBarColor = function(t, r, g, b)
+				S.CreateTop(progress:GetStatusBarTexture(), r, g, b)
+			end
 			progress.styled=true
 		end				
 		progress:ClearAllPoints()
@@ -220,12 +217,13 @@ SlashCmdList["SetDBM"] = function()
 	end
 end
 SLASH_SetDBM1 = "/SetDBM"
-local function SkinGUI(event, ...)
-	if IsAddOnLoaded("DBM-GUI") then
+local function SkinGUI(event, addon)
+	if addon == "DBM-GUI" then
 		local skinned = false
 		DBM_GUI_OptionsFrame:HookScript("OnShow", function()
 			if skinned then return end
 			DBM_GUI_OptionsFrame:StripTextures()
+			DBM_GUI_OptionsFramePanelContainer:StripTextures()
 			DBM_GUI_OptionsFrameBossMods:StripTextures()
 			DBM_GUI_OptionsFrameDBMOptions:StripTextures()
 			S.SetBD(DBM_GUI_OptionsFrame)
@@ -238,7 +236,21 @@ local function SkinGUI(event, ...)
 		S.ReskinScroll(DBM_GUI_OptionsFramePanelContainerFOVScrollBar)
 	end
 end
-
+local function SkinRangeCheck()
+	S.SetBD(DBMRangeCheck)
+	DBMRangeCheck:StripTextures()
+	if DBMRangeCheckRadar then
+		DBMRangeCheckRadar:SetSize(110, 110)
+		DBMRangeCheckRadar:SetBackdropBorderColor(65/255, 74/255, 79/255)
+		S.SetBD(DBMRangeCheckRadar)
+		DBMRangeCheckRadar.text:SetFont(DB.Font, 13*S.Scale(1), "THINOUTLINE")
+		DBMRangeCheckRadar.text:Point("BOTTOMLEFT", DBMRangeCheckRadar, "TOPLEFT", 0, 5)
+	end
+end
+local function SkinInfoFrame()
+	DBMInfoFrame:StripTextures()
+	S.SetBD(DBMInfoFrame)
+end
 function Module:OnEnable()
 	if not C["SkinDB"]["EnableDBMSkin"] then return end
 	if not IsAddOnLoaded("DBM-Core") then return end
@@ -246,24 +258,8 @@ function Module:OnEnable()
 	hooksecurefunc(DBM.BossHealth,"Show",SkinBossTitle)
 	hooksecurefunc(DBM.BossHealth,"AddBoss",SkinBoss)
 	hooksecurefunc(DBM.BossHealth,"UpdateSettings",SkinBoss)
-	DBM.RangeCheck:Show()
-	DBM.RangeCheck:Hide()
-	DBMRangeCheck:HookScript("OnShow",function(self)
-		self.shadow = CreateFrame("Frame", nil, self)
-		self.shadow:SetFrameLevel(1)
-		self.shadow:SetFrameStrata(self:GetFrameStrata())
-		self.shadow:SetPoint("TOPLEFT", -5, 5)
-		self.shadow:SetPoint("BOTTOMRIGHT", 5, -5)
-	end)
-
-	DBMRangeCheckRadar:HookScript("OnShow",function(self)
-		self:SetSize(110, 110)
-		self:SetBackdropBorderColor(65/255, 74/255, 79/255)
-		S.SetBD(self)
-		self.text:SetFont(DB.Font, 13*S.Scale(1), "THINOUTLINE")
-		self.text:Point("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
-	end)
-
+	hooksecurefunc(DBM.RangeCheck, "Show", SkinRangeCheck)
+	hooksecurefunc(DBM.InfoFrame, "Show", SkinInfoFrame)
 	local RaidNotice_AddMessage_=RaidNotice_AddMessage
 	RaidNotice_AddMessage=function(noticeFrame, textString, colorInfo)
 		if textString:find(" |T") then

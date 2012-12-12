@@ -1,111 +1,32 @@
 local S, C, L, DB = unpack(select(2, ...))
 local _
 if not (GetLocale() == "zhTW") then return end
--- /////////////////////////////////////////////////////////////////////////////
--- =============================================================================
---  ClearFont v4.01a 台服用戶端
---  （根據ClearFont v20000-2 版本漢化修改）
---  原作者：KIRKBURN（原作者已不再更新！）
---  官方網頁：http://www.clearfont.co.uk/
---  漢化修改：五區 元素之力 逆襲的藍/台服 巴納紮爾 逆襲的蘭
---  發佈頁面：http://bbs.game.mop.com/viewthread.php?tid=1503056
---  發佈日期：2010.10.19
--- -----------------------------------------------------------------------------
---  CLEARFONT.LUA - STANDARD WOW UI FONTS
---	A. ClearFont 框架 及為了以後代碼的簡潔而預先定義字體位置
---	B. 標準的WOW用戶介面部分
---	C. 每當一個插件載入時都重新載入的功能
---	D. 第一次啟動時應用以上設定
--- =============================================================================
--- /////////////////////////////////////////////////////////////////////////////
-
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ClearFont_zhTW", "AceEvent-3.0")
-function Module:OnInitialize()
-
--- =============================================================================
---  A. ClearFont 框架 及為了以後代碼的簡潔而預先定義字體位置
---  你可以根據範例添加屬於自己的字體
--- =============================================================================
-
-	ClearFont = CreateFrame("Frame", "ClearFont");
 
 -- 指出在哪里尋找字體
-	local CLEAR_FONT_BASE = "Fonts\\";
-
+local CLEAR_FONT_BASE = "Fonts\\";
 -- 金幣、堆疊、按鍵綁定等字體
-	local CLEAR_FONT_NUMBER = CLEAR_FONT_BASE .. "FRIZQT__.TTF";
+local CLEAR_FONT_NUMBER = CLEAR_FONT_BASE .. "FRIZQT__.TTF";
 -- 生命條、經驗條上的字體
-	local CLEAR_FONT_EXP = CLEAR_FONT_BASE .. "ARIALN.TTF";
+local CLEAR_FONT_EXP = CLEAR_FONT_BASE .. "ARIALN.TTF";
 -- 任務說明和書信、石碑的正文字體
-	local CLEAR_FONT_QUEST = CLEAR_FONT_BASE .. "bLEI00D.TTF";
+local CLEAR_FONT_QUEST = CLEAR_FONT_BASE .. "bLEI00D.TTF";
 -- 戰鬥傷害數值提示
-	local CLEAR_FONT_DAMAGE = CLEAR_FONT_BASE .. "bKAI00M.TTF";
+local CLEAR_FONT_DAMAGE = CLEAR_FONT_BASE .. "bKAI00M.TTF";
 -- 遊戲介面中的主要字體
-	local CLEAR_FONT = CLEAR_FONT_BASE .. "bLEI00D.TTF";
+local CLEAR_FONT = CLEAR_FONT_BASE .. "bLEI00D.TTF";
 -- 物品、技能的說明字體
-	local CLEAR_FONT_ITEM = CLEAR_FONT_BASE .. "bHEI00M.TTF";
+local CLEAR_FONT_ITEM = CLEAR_FONT_BASE .. "bHEI00M.TTF";
 -- 聊天字體
-	local CLEAR_FONT_CHAT = CLEAR_FONT_BASE .. "bHEI01B.TTF";
-
--- 添加屬於自己的字體 （範例）
---	local YOUR_FONT_STYLE = CLEAR_FONT_BASE .. "YourFontName.ttf";
-
-
--- -----------------------------------------------------------------------------
--- 全局字體比例調整（當你覺得所有字體都太大或太小時調整這個參數）
---  範例：你想把所有字體縮小到80%，那麼可以將"1.0"改成"0.8"
--- -----------------------------------------------------------------------------
-
-	local CF_SCALE = C["MiniDB"]["FontScale"]*S.Scale(1)
-
-
--- -----------------------------------------------------------------------------
--- 檢查存在的字體並改變它們
--- -----------------------------------------------------------------------------
-
-	local function CanSetFont(object) 
-	   return (type(object)=="table" 
-		   and object.SetFont and object.IsObjectType 
-		      and not object:IsObjectType("SimpleHTML")); 
-	end
-
-
-
-
--- =============================================================================
---  B. WOW用戶介面設計
--- =============================================================================
---   這是**修改字體大小/特效**最重要的部分
---   主要的字體被最先列出，其餘部分字體按照字母表順序排列
---   以下列出只包括 ClearFont 修改了的範例部分，並不是所有方面都會顯示出來（範例：陰影）
--- -----------------------------------------------------------------------------
---  對於以下可用代碼的解釋
---   不帶描邊:		Font:SetFont(SOMETHING_TEXT_FONT, x * scale)
---   普通描邊:		Font:SetFont(SOMETHING_TEXT_FONT, x * scale, "OUTLINE")
---   粗描邊:			Font:SetFont(SOMETHING_TEXT_FONT, x * scale, "THICKOUTLINE")
---   字體顏色:		Font:SetTextColor(r, g, b)
---   陰影顏色:		Font:SetShadowColor(r, g, b) 
---   陰影位置:		Font:SetShadowOffset(x, y) 
---   透明度:			Font:SetAlpha(x)
---
---  範例：			SetFont(CLEAR_FONT, 13 * CF_SCALE)
---   在括弧裏的第一部分是(A.)中申明過的字體代號，第二部分是字體大小
--- =============================================================================
-
-
-	function ClearFont:ApplySystemFonts()
-
-
--- -----------------------------------------------------------------------------
--- 特殊遊戲世界的"3D"字體（Dark Imakuni）
---  ***注意*** ClearFont 不能定義這些字體的大小和特效（受限於Blizzard默認遊戲框架）
--- -----------------------------------------------------------------------------
---  這些行語句會在用默認團隊框架“設置MT/MA”時導致問題
---  如果你不用到“設置MT/MA”，可以保留這些行語句，不會有任何問題！
---  遮罩這些語句的方法，在對應代碼**行首**加上“--”
---   範例：--	STANDARD_TEXT_FONT = CLEAR_FONT_CHAT;
--- -----------------------------------------------------------------------------
-
+local CLEAR_FONT_CHAT = CLEAR_FONT_BASE .. "bHEI01B.TTF";
+local CF_SCALE = 1
+local function CanSetFont(object) 
+   return (type(object)=="table" 
+	   and object.SetFont and object.IsObjectType 
+		  and not object:IsObjectType("SimpleHTML")); 
+end
+local function ApplySystemFonts(event, addon)
+	if addon ~= "SunUI" then return end
 -- 聊天泡泡
 	STANDARD_TEXT_FONT = CLEAR_FONT_CHAT;
 
@@ -118,126 +39,10 @@ function Module:OnInitialize()
 -- 被攻擊目標上方彈出的傷害指示（與插件SCT/DCT無關）
 	DAMAGE_TEXT_FONT = CLEAR_FONT_DAMAGE;
 
-
 -- ----------------------------------------------------------------------------- 
 -- 下拉功能表字體大小（Note by Kirkburn）
---  ***注意*** ClearFont 只能定義這個字體的大小（受限於Blizzard默認遊戲框架）
--- ----------------------------------------------------------------------------- 
---  這些行語句會在用默認團隊框架“設置MT/MA”時導致問題
---  如果你不用到“設置MT/MA”，可以保留這些行語句，不會有任何問題！
---  遮罩這些語句的方法，在對應代碼**行首**加上“--”
---   範例：--	UIDROPDOWNMENU_DEFAULT_TEXT_HEIGHT = 12 * CF_SCALE;
--- ----------------------------------------------------------------------------- 
 
 	UIDROPDOWNMENU_DEFAULT_TEXT_HEIGHT = 12 * CF_SCALE;
-
-
--- -----------------------------------------------------------------------------
--- 職業色彩（以下均為預設值/默認遮罩）
--- -----------------------------------------------------------------------------
-
---	RAID_CLASS_COLORS = {
---		["HUNTER"] = { r = 0.67, g = 0.83, b = 0.45 },			-- 獵人
---		["WARLOCK"] = { r = 0.58, g = 0.51, b = 0.79 },			-- 術士
---		["PRIEST"] = { r = 1.0, g = 1.0, b = 1.0 },				-- 牧師
---		["PALADIN"] = { r = 0.96, g = 0.55, b = 0.73 },			-- 聖騎士
---		["MAGE"] = { r = 0.41, g = 0.8, b = 0.94 },				-- 法師
---		["ROGUE"] = { r = 1.0, g = 0.96, b = 0.41 },			-- 潛行者
---		["DRUID"] = { r = 1.0, g = 0.49, b = 0.04 },			-- 德魯伊
---		["SHAMAN"] = { r = 0.14, g = 0.35, b = 1.0 },			-- 薩滿
---		["WARRIOR"] = { r = 0.78, g = 0.61, b = 0.43 }			-- 戰士
---		["DEATHKNIGHT"] = { r = 0.77, g = 0.12 , b = 0.23 },	-- 死亡騎士
---	};
-
-
--- -----------------------------------------------------------------------------
--- 系統字體（以下均為預設值/默認遮罩）
--- 這類字體是系統字體模版，主要用來被其他字體繼承（New in WotLK/3.x）
--- -----------------------------------------------------------------------------
-
---	SystemFont_Tiny:SetFont(CLEAR_FONT, 9 * CF_SCALE)
-	
---	SystemFont_Small:SetFont(CLEAR_FONT, 10 * CF_SCALE)
-	
---	SystemFont_Outline_Small:SetFont(CLEAR_FONT_CHAT, 12 * CF_SCALE, "OUTLINE")
-
---	SystemFont_Outline:SetFont(CLEAR_FONT_CHAT, 15 * CF_SCALE)
-	
---	SystemFont_Shadow_Small:SetFont(CLEAR_FONT, 15 * CF_SCALE)
---	SystemFont_Shadow_Small:SetShadowColor(0, 0, 0) 
---	SystemFont_Shadow_Small:SetShadowOffset(1, -1) 
-
---	SystemFont_InverseShadow_Small:SetFont(CLEAR_FONT, 10 * CF_SCALE)
---	SystemFont_InverseShadow_Small:SetShadowColor(0.4, 0.4, 0.4) 
---	SystemFont_InverseShadow_Small:SetShadowOffset(1, -1) 
---	SystemFont_InverseShadow_Small:SetAlpha(0.75)
-	
---	SystemFont_Med1:SetFont(CLEAR_FONT, 13 * CF_SCALE)
-
---	SystemFont_Shadow_Med1:SetFont(CLEAR_FONT, 15 * CF_SCALE)
---	SystemFont_Shadow_Med1:SetTextColor(0, 0, 0)
---	SystemFont_Shadow_Med1:SetShadowOffset(1, -1) 
-	
---	SystemFont_Med2:SetFont(CLEAR_FONT_DAMAGE, 14 * CF_SCALE)
-
---	SystemFont_Shadow_Med2:SetFont(CLEAR_FONT, 16 * CF_SCALE)
---	SystemFont_Shadow_Med2:SetShadowColor(0, 0, 0) 
---	SystemFont_Shadow_Med2:SetShadowOffset(1, -1) 
-	
---	SystemFont_Med3:SetFont(CLEAR_FONT_DAMAGE, 13 * CF_SCALE)
-	
---	SystemFont_Shadow_Med3:SetFont(CLEAR_FONT_DAMAGE, 15 * CF_SCALE)
---	SystemFont_Shadow_Med3:SetTextColor(0, 0, 0)
---	SystemFont_Shadow_Med3:SetShadowOffset(1, -1) 
-	
---	SystemFont_Large:SetFont(CLEAR_FONT, 13 * CF_SCALE)
-	
---	SystemFont_Shadow_Large:SetFont(CLEAR_FONT, 17 * CF_SCALE)
---	SystemFont_Shadow_Large:SetTextColor(0, 0, 0)
---	SystemFont_Shadow_Large:SetShadowOffset(1, -1) 
-	
---	SystemFont_Huge1:SetFont(CLEAR_FONT, 20 * CF_SCALE)
-
---	SystemFont_Shadow_Huge1:SetFont(CLEAR_FONT, 20 * CF_SCALE)
---	SystemFont_Shadow_Huge1:SetTextColor(0, 0, 0)
---	SystemFont_Shadow_Huge1:SetShadowOffset(1, -1) 
-	
---	SystemFont_OutlineThick_Huge2:SetFont(CLEAR_FONT, 22 * CF_SCALE, "THICKOUTLINE")
-	
---	SystemFont_Shadow_Outline_Huge2:SetFont(CLEAR_FONT, 25 * CF_SCALE, "OUTLINE")
---	SystemFont_Shadow_Outline_Huge2:SetTextColor(0, 0, 0)
---	SystemFont_Shadow_Outline_Huge2:SetShadowOffset(2, -2)
-	
---	SystemFont_Shadow_Huge3:SetFont(CLEAR_FONT, 25 * CF_SCALE)
---	SystemFont_Shadow_Huge3:SetTextColor(0, 0, 0)
---	SystemFont_Shadow_Huge3:SetShadowOffset(1, -1) 
-	
---	SystemFont_OutlineThick_Huge4:SetFont(CLEAR_FONT, 26 * CF_SCALE, "THICKOUTLINE")
-	
---	SystemFont_OutlineThick_WTF:SetFont(CLEAR_FONT_CHAT, 112 * CF_SCALE, "THICKOUTLINE")
-	
---	ReputationDetailFont:SetFont(CLEAR_FONT, 13 * CF_SCALE)
---	ReputationDetailFont:SetTextColor(1, 1, 1)
---	ReputationDetailFont:SetShadowColor(0, 0, 0) 
---	ReputationDetailFont:SetShadowOffset(1, -1) 
-
---	FriendsFont_Normal:SetFont(CLEAR_FONT, 15 * CF_SCALE)
---	FriendsFont_Normal:SetShadowColor(0, 0, 0) 
---	FriendsFont_Normal:SetShadowOffset(1, -1) 
-
---	FriendsFont_Large:SetFont(CLEAR_FONT, 17 * CF_SCALE)
---	FriendsFont_Large:SetShadowColor(0, 0, 0) 
---	FriendsFont_Large:SetShadowOffset(1, -1) 
-
---	FriendsFont_UserText:SetFont(CLEAR_FONT_CHAT, 11 * CF_SCALE)
---	FriendsFont_UserText:SetShadowColor(0, 0, 0) 
---	FriendsFont_UserText:SetShadowOffset(1, -1) 
-
---	GameFont_Gigantic:SetFont(CLEAR_FONT, 41 * CF_SCALE)
---	GameFont_Gigantic:SetShadowColor(0, 0, 0) 
---	GameFont_Gigantic:SetShadowOffset(1, -1) 
---	GameFont_Gigantic:SetTextColor(1.0, 0.82, 0)
-
 
 -- -----------------------------------------------------------------------------
 -- 主遊戲字體: 隨處可見的主要的字體
@@ -547,7 +352,6 @@ function Module:OnInitialize()
 -- 成就系統記錄的日期
 	if (CanSetFont(AchievementDateFont)) then			AchievementDateFont:SetFont(CLEAR_FONT, 11 * CF_SCALE); end		-- 預設值：13
 
-
 -- -----------------------------------------------------------------------------
 -- 新騎乘、車輛系統相關（待確認，New in WotLK/3.2+）
 -- -----------------------------------------------------------------------------
@@ -555,40 +359,13 @@ function Module:OnInitialize()
 	if (CanSetFont(VehicleMenuBarStatusBarText)) then		VehicleMenuBarStatusBarText:SetFont(CLEAR_FONT, 15 * CF_SCALE); end		-- 預設值：15
 	if (CanSetFont(VehicleMenuBarStatusBarText)) then		VehicleMenuBarStatusBarText:SetTextColor(1.0, 1.0, 1.0); end	-- 預設值：(1.0, 1.0, 1.0)
 
-
 -- -----------------------------------------------------------------------------
 -- 焦點框架字體（待確認，New in CTM/4.0+）
 -- -----------------------------------------------------------------------------
 
 	if (CanSetFont(FocusFontSmall)) then				FocusFontSmall:SetFont(CLEAR_FONT, 15 * CF_SCALE); end		-- 預設值：16
-
-
-	end
-
-
-
-
--- =============================================================================
---  C. 每當一個插件載入時都重新載入的功能
---  他們真喜歡搞亂我的插件！
--- =============================================================================
-
-	ClearFont:SetScript("OnEvent",
-			function() 
-				if (event == "ADDON_LOADED") then
-					ClearFont:ApplySystemFonts()
-				end
-			end);
-
-	ClearFont:RegisterEvent("ADDON_LOADED");
-
-
-
-
--- =============================================================================
---  D. 第一次啟動時應用以上設定
---  讓球能夠滾起來
--- =============================================================================
-
-	ClearFont:ApplySystemFonts()
+end
+function Module:OnInitialize()
+	CF_SCALE = C["MiniDB"]["FontScale"]*S.Scale(1)
+	Module:RegisterEvent("ADDON_LOADED", ApplySystemFonts);
 end

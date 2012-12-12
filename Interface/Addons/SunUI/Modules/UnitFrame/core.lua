@@ -221,7 +221,7 @@ local function gen_hpstrings(f, unit)
 		name:SetJustifyH("LEFT")
 		hpval:SetPoint("CENTER", f.Health, "CENTER",0,-6)
 	elseif f.mystyle == "tot" then
-		name:SetPoint("CENTER", f.Health, "CENTER",0,0)
+		name:SetPoint("RIGHT", f.Health, "RIGHT",-3,0)
 		hpval:Hide()
     else
 		name:SetPoint("LEFT", f.Health, "LEFT",3,0)
@@ -1015,6 +1015,13 @@ local function gen_RaidMark(f)
     local ri = h:CreateTexture(nil,'OVERLAY',h)
     ri:SetPoint("CENTER", f, "CENTER", 0, 0)
     ri:Size(S.Scale(20), S.Scale(20))
+	if f.mystyle == "tot" then
+		ri:SetPoint("LEFT", f, "LEFT", 3, 0)
+	elseif f.mystyle == "player" then
+		ri:SetPoint("BOTTOMLEFT", f, "BOTTOMRIGHT", 3, 0)
+	elseif f.mystyle == "target" then
+		ri:SetPoint("BOTTOMRIGHT", f, "BOTTOMLEFT", -3, 0)
+	end
     f.RaidIcon = ri
 end
   --gen hilight texture

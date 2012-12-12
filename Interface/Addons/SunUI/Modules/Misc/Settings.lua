@@ -61,9 +61,7 @@ end)
 local DurabilityFrame = _G["DurabilityFrame"]
 DurabilityFrame:UnregisterAllEvents()
 DurabilityFrame:Kill()
-DurabilityFrame:HookScript("OnShow", function(self)
-	self:Hide()
-end)
+DurabilityFrame.OnShow  = function() end
 ----------------- > Cloak / Helm toggle check boxes at PaperDollFrame
 local GameTooltip = GameTooltip
 local helmcb = CreateFrame("CheckButton", nil, PaperDollFrame)
@@ -74,7 +72,7 @@ helmcb:SetPoint("TOPLEFT", CharacterHeadSlot, "BOTTOMRIGHT", 5, 5)
 helmcb:SetScript("OnClick", function() ShowHelm(not ShowingHelm()) end)
 helmcb:SetScript("OnEnter", function(self)
  	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-	GameTooltip:SetText("显示头盔")
+	GameTooltip:SetText(OPTION_TOOLTIP_SHOW_HELM)
 end)
 helmcb:SetScript("OnLeave", function() GameTooltip:Hide() end)
 helmcb:SetScript("OnEvent", function() helmcb:SetChecked(ShowingHelm()) end)
@@ -93,7 +91,7 @@ cloakcb:SetPoint("TOPLEFT", CharacterBackSlot, "BOTTOMRIGHT", 5, 5)
 cloakcb:SetScript("OnClick", function() ShowCloak(not ShowingCloak()) end)
 cloakcb:SetScript("OnEnter", function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-	GameTooltip:SetText("显示披风")
+	GameTooltip:SetText(OPTION_TOOLTIP_SHOW_CLOAK)
 end)
 cloakcb:SetScript("OnLeave", function() GameTooltip:Hide() end)
 cloakcb:SetScript("OnEvent", function() cloakcb:SetChecked(ShowingCloak()) end)
@@ -164,6 +162,9 @@ function Module:OnInitialize()
 	if not C["UnitFrameDB"]["showparty"] then
 		for i = 1, MAX_PARTY_MEMBERS do
 			local PartyMemberFrame = _G["PartyMemberFrame"..i]
+			PartyMemberFrame:UnregisterAllEvents()
+			PartyMemberFrame.Show = function() end
+			PartyMemberFrame.SetPoint = function() end
 			PartyMemberFrame:Kill()
 		end
 	end
