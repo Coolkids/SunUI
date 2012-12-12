@@ -56,8 +56,8 @@ function AB:UpdateHotkey(button, actionButtonType)
 	text = string.gsub(text, KEY_INSERT, "Ins")
 	text = string.gsub(text, KEY_HOME, "Hm")
 	text = string.gsub(text, KEY_DELETE, "Del")
-	text = string.gsub(text, KEY_MOUSEWHEELUP, "MwU")
-	text = string.gsub(text, KEY_MOUSEWHEELDOWN, "MwD")
+	text = string.gsub(text, KEY_MOUSEWHEELUP, "MU")
+	text = string.gsub(text, KEY_MOUSEWHEELDOWN, "MD")
 	text = string.gsub(text, '(數字鍵盤)', 'N')
 	
 	if hotkey:GetText() == _G["RANGE_INDICATOR"] then

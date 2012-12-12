@@ -1,15 +1,4 @@
 ﻿local S, C, L, DB, _ = unpack(select(2, ...))
--- local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("AddonManager")
--- function Module.ResetToDefault()
-	-- wipe(stAddonProfiles)
-	-- wipe(stLockedAddons)
--- end
--- function Module:OnInitialize()
-------------------------------------------------------
--- MEDIA & CONFIG ------------------------------------
-------------------------------------------------------
-local _G =_G
-local _
 local font = { DB.Font, 12*S.Scale(1), "THINOUTLINE" }
 local barTex = DB.Statusbar
 local blankTex = DB.Solid

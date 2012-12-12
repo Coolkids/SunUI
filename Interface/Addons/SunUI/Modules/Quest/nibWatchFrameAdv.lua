@@ -238,4 +238,24 @@ else
 end
 
 hooksecurefunc("WatchFrame_Collapse", function() downtex:SetTexture("Interface\\AddOns\\SunUI\\media\\arrow-down-active") end)
-	hooksecurefunc("WatchFrame_Expand", function() downtex:SetTexture("Interface\\AddOns\\SunUI\\media\\arrow-up-active") end)
+hooksecurefunc("WatchFrame_Expand", function() downtex:SetTexture("Interface\\AddOns\\SunUI\\media\\arrow-up-active") end)
+
+----------------------------------------------------------------------------------------
+--	Skin WatchFrame item buttons
+----------------------------------------------------------------------------------------
+hooksecurefunc("WatchFrameItem_UpdateCooldown", function(self)
+	if not self.skinned and not InCombatLockdown() then
+		local icon = _G[self:GetName().."IconTexture"]
+		local border = _G[self:GetName().."NormalTexture"]
+		local count = _G[self:GetName().."Count"]
+		local hotkey = _G[self:GetName().."HotKey"]
+
+		self:CreateShadow()
+		icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+		count:ClearAllPoints()
+		count:SetPoint("BOTTOMRIGHT", 0, 2)
+		border:SetTexture(nil)
+		self:StyleButton(true)
+		self.skinned = true
+	end
+end)

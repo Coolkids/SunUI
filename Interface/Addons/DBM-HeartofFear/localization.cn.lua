@@ -99,7 +99,8 @@ L:SetWarningLocalization({
 	specwarnUnder	= "离开紫圈!",
 	specWarnPungencyOtherFix = "%s 敏感 (%d)",
 	specwarnCrushH	= "重碾 (%d)",
-	SpecWarnJSA		= "5秒后重碾 >>注意减伤<<"
+	SpecWarnJSA		= "5秒后重碾 >>注意减伤<<",
+	specWarnFLM		= ">%s<信息素, 准备接手!"
 })
 
 L:SetOptionLocalization({
@@ -114,7 +115,25 @@ L:SetOptionLocalization({
 	specWarnPungencyOtherFix = "特别警告：当别人的$spell:123081达到设定层数时",
 	HudMAP				= "高级定位监视(HUD)：$spell:122835的位置",
 	SoundFS				= "坦克倒计时：$spell:122735",
-	SpecWarnJSA			= "特殊警告：注意開減傷",
+	SpecWarnJSA			= "特殊警告：注意开减伤",
+	specWarnFLM			= "特殊警告：准备接手信息素",
+	endflm				= "最后一个信息素传递者勾选以形成循环提示",
+	flmxs				= "信息素传递提示+(例如:此处选10下边选3即选為13)",
+	x0					= "0+",
+	x10					= "10+",
+	x20					= "20+",
+	flm0				= "0",
+	flm1				= "1",
+	flm2				= "2",
+	flm3				= "3",
+	flm4				= "4",
+	flm5				= "5",
+	flm6				= "6",
+	flm7				= "7",
+	flm8				= "8",
+	flm9				= "9",
+	flm10				= "10",
+	flmcd				= "信息素传递提示",
 	unseenjs1			= "减伤提示：重碾1",
 	unseenjs2			= "减伤提示：重碾2",
 	unseenjs3			= "减伤提示：重碾3",

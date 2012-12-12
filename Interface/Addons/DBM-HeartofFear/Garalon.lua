@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8072 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8247 $"):sub(12, -3))
 mod:SetCreatureID(63191)--Also has CID 62164. He has 2 CIDs for a single target, wtf? It seems 63191 is one players attack though so i'll try just it.
 mod:SetModelID(42368)
 mod:SetZone()
@@ -43,6 +43,7 @@ local specwarnCrush				= mod:NewSpecialWarningSpell(122774, true, nil, nil, true
 local specwarnLeg				= mod:NewSpecialWarningSwitch("ej6270", mod:IsMelee())--If no legs are up (ie all dead), when one respawns, this special warning can be used to alert of a respawned leg and to switch back.
 local specwarnPheromoneTrail	= mod:NewSpecialWarningMove(123120)--Because this starts doing damage BEFORE the visual is there.
 local specWarnJSA				= mod:NewSpecialWarning("SpecWarnJSA")
+local specWarnFLM				= mod:NewSpecialWarning("specWarnFLM")
 
 local specwarnPungency			= mod:NewSpecialWarningStack(123081, mod:IsTank(), 20)
 local specWarnPungencyOtherFix	= mod:NewSpecialWarning("specWarnPungencyOtherFix")
@@ -61,23 +62,20 @@ mod:AddBoolOption("PheromonesIcon", true)
 local sndFS		= mod:NewSound(nil, "SoundFS", mod:IsTank())
 local sndZN		= mod:NewSound(nil, "SoundZN", mod:IsHealer())
 mod:AddBoolOption("InfoFrame", not mod:IsDps(), "sound")
-
+mod:AddBoolOption("HudMAP", true, "sound")
 local brokenLegs = 0
 local Crushcount = 0
 --local Pn = 20
+
+local flmxschoose = 0
+local flmcdchoose = 0
+local flmchoose = 0
+local flmcount = 0
 
 for i = 1, 9 do
 	mod:AddBoolOption("unseenjs"..i, false, "sound")
 end
 
-local function MyJS()
-	if (mod.Options.unseenjs1 and Crushcount == 0) or (mod.Options.unseenjs2 and Crushcount == 1) or (mod.Options.unseenjs3 and Crushcount == 2) or (mod.Options.unseenjs4 and Crushcount == 3) or (mod.Options.unseenjs5 and Crushcount == 4) or (mod.Options.unseenjs6 and Crushcount == 5) or (mod.Options.unseenjs7 and Crushcount == 6) or (mod.Options.unseenjs8 and Crushcount == 7) or (mod.Options.unseenjs9 and Crushcount == 8) then
-		return true
-	end
-	return false
-end
-
-mod:AddBoolOption("HudMAP", true, "sound")
 local DBMHudMap = DBMHudMap
 local free = DBMHudMap.free
 local function register(e)	
@@ -89,12 +87,33 @@ local PheromonesMarkers = {}
 
 --mod:AddDropdownOption("optTankMode", {"two", "three"}, "two", "sound")
 
+mod:AddBoolOption("endflm", false, "sound")
+
+mod:AddDropdownOption("flmxs", {"x0", "x10", "x20"}, "x0", "sound")
+mod:AddDropdownOption("flmcd", {"flm0", "flm1", "flm2", "flm3", "flm4", "flm5", "flm6", "flm7", "flm8", "flm9"}, "flm0", "sound")
+
+local function MyJS()
+	if (mod.Options.unseenjs1 and Crushcount == 0) or (mod.Options.unseenjs2 and Crushcount == 1) or (mod.Options.unseenjs3 and Crushcount == 2) or (mod.Options.unseenjs4 and Crushcount == 3) or (mod.Options.unseenjs5 and Crushcount == 4) or (mod.Options.unseenjs6 and Crushcount == 5) or (mod.Options.unseenjs7 and Crushcount == 6) or (mod.Options.unseenjs8 and Crushcount == 7) or (mod.Options.unseenjs9 and Crushcount == 8) then
+		return true
+	end
+	return false
+end
+
+local function checkflmnumber()
+	flmxschoose =  mod.Options.flmxs == "x0" and 0 or mod.Options.flmxs == "x10" and 10 or mod.Options.flmxs == "x20" and 20
+	flmcdchoose = mod.Options.flmcd == "flm0" and 0 or mod.Options.flmcd == "flm1" and 1 or mod.Options.flmcd == "flm2" and 2 or mod.Options.flmcd == "flm3" and 3 or mod.Options.flmcd == "flm4" and 4 or mod.Options.flmcd == "flm5" and 5 or mod.Options.flmcd == "flm6" and 6 or mod.Options.flmcd == "flm7" and 7 or mod.Options.flmcd == "flm8" and 8 or mod.Options.flmcd == "flm9" and 9 or mod.Options.flmcd == "flm10" and 10
+	flmchoose = flmxschoose + flmcdchoose
+end
+
 function mod:OnCombatStart(delay)
 	brokenLegs = 0
 	Crushcount = 0
+	flmcount = 0
 	timerFuriousSwipeCD:Start(-delay)--8-11 sec on pull
 	if not self:IsDifficulty("lfr25") then
 		berserkTimer:Start(-delay)
+	else
+		berserkTimer:Start(720-delay)
 	end
 	sndFS:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 	sndFS:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
@@ -112,6 +131,7 @@ function mod:OnCombatStart(delay)
 			sndWOP:Schedule(24, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zyjs.mp3") --注意減傷
 		end
 	end
+	checkflmnumber()
 end
 
 function mod:OnCombatEnd()
@@ -141,6 +161,9 @@ function mod:SPELL_AURA_APPLIED(args)
 			specwarnPheromonesYou:Show()
 			yellPheromones:Yell()
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\targetyou.mp3") --目標是你
+			if self.Options.endflm then
+				self:SendSync("EndPheromone", UnitName("player"))
+			end
 		else
 			local uId = DBM:GetRaidUnitId(args.destName)
 			if uId then
@@ -177,18 +200,20 @@ function mod:SPELL_AURA_APPLIED(args)
 			DBM.InfoFrame:SetHeader(GetSpellInfo(123081))
 			DBM.InfoFrame:Show(1, "other", args.amount or 1, args.destName)
 		end
-		--[[
-		Pn = self.Options.optTankMode == "two" and 30 or self.Options.optTankMode == "three" and 20
-		if args:IsPlayer() then
-			if (args.amount or 1) >= Pn and args.amount % 2 == 0 then
-				specwarnPungency:Show(args.amount)
-			end
-		else
-			if (args.amount or 1) >= Pn and args.amount % 2 == 0 and not UnitDebuff("player", GetSpellInfo(123081)) and not UnitIsDeadOrGhost("player") then
-				specWarnPungencyOther:Show(args.destName, args.amount)
+		checkflmnumber()
+		if (args.amount or 1) == 3 then
+			flmcount = flmcount + 1
+			if flmchoose == flmcount + 1 then
+				if not UnitIsDeadOrGhost("player") then
+					specWarnFLM:Show(args.destName)
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_xxszb.mp3") --信息素準備
+					self:SendSync("MyPheromone", UnitName("player").."("..flmchoose..")")
+				else
+					self:SendSync("MyPheromone", UnitName("player").."("..flmchoose.."_DEAD)")
+					self:Schedule(2, function() self:SendSync("NextPheromone") end)
+				end
 			end
 		end
-		]]
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
@@ -275,6 +300,27 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, _, _, _, target)
 			if MyJS() then
 				specWarnJSA:Schedule(32)
 				sndWOP:Schedule(32, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zyjs.mp3") --注意減傷
+			end
+		end
+	end
+end
+
+function mod:OnSync(msg, guid)
+	if msg == "EndPheromone" and guid then
+		flmcount = -1
+		print(guid.."發送信息：一次循環已結束")
+	elseif msg == "MyPheromone" and guid then
+		print(guid.."：下一輪接手")
+	elseif msg == "NextPheromone" then
+		flmcount = flmcount + 1
+		if flmchoose == flmcount + 1 then
+			if not UnitIsDeadOrGhost("player") then
+				specWarnFLM:Show(args.destName)
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_xxszb.mp3") --信息素準備
+				self:SendSync("MyPheromone", UnitName("player").."("..flmchoose..")")
+			else
+				self:SendSync("MyPheromone", UnitName("player").."("..flmchoose.."_DEAD)")
+				self:SendSync("NextPheromone", flmchoose)
 			end
 		end
 	end

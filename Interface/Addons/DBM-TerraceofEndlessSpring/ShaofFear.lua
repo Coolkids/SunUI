@@ -3,7 +3,7 @@ local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndDD	= mod:NewSound(nil, "SoundDD", mod:IsTank())
 
-mod:SetRevision(("$Revision: 8201 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8251 $"):sub(12, -3))
 mod:SetCreatureID(60999)--61042 Cheng Kang, 61046 Jinlun Kun, 61038 Yang Guoshi, 61034 Terror Spawn
 mod:SetModelID(41772)
 mod:SetZone()
@@ -14,6 +14,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED",
 	"SPELL_AURA_APPLIED_DOSE",
 	"SPELL_CAST_START",
+	"SPELL_CAST_SUCCESS",
 	"UNIT_SPELLCAST_SUCCEEDED",
 	"UNIT_DIED",
 	"SPELL_DAMAGE",
@@ -67,7 +68,10 @@ local ThrashCount = 0
 local kongjuCount = 0
 local yinmoCount = 0
 
+local kbpscount = 0
+
 mod:AddBoolOption("InfoFrame")
+mod:AddBoolOption("pscount", true, "sound")
 mod:AddBoolOption("HudMAP", true, "sound")
 mod:AddBoolOption("ShaAssist", true, "sound")
 
@@ -93,9 +97,10 @@ function mod:OnCombatStart(delay)
 		timerOminousCackleCD:Start(25.5-delay)
 	end
 	phase = 1
-	ThrashCount=0
-	kongjuCount=0
-	yinmoCount=0
+	ThrashCount = 0
+	kongjuCount = 0
+	yinmoCount = 0
+	kbpscount = 0
 	table.wipe(waterMarkers)
 --	timerTerrorSpawnCD:Start(25.5-delay)--still not perfect, it's hard to do yells when you're always the tank sent out of range of them. I need someone else to do /yell when they spawn and give me timing
 --	self:ScheduleMethod(25.5-delay, "TerrorSpawns")
@@ -181,13 +186,19 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif args:IsSpellID(120047) and platformMob and args.sourceName == platformMob  then--might change
 		timerDreadSpray:Start()
 		timerDreadSprayCD:Start()
-		if mod:IsHealer() then
+		if not self.Options.pscount then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kbpszb.mp3")--恐怖噴散
 		end
 	elseif args:IsSpellID(118977) and args:IsPlayer() then--Fearless, you're leaving platform
 		onPlatform = false
 		platformMob = nil
 		timerFearless:Start()
+		--Breath of fear timer recovery
+		local shaPower = UnitPower("boss1") --Get Boss Power
+		shaPower = shaPower / 3 --Divide it by 3 (cause he gains 3 power per second and we need to know how many seconds to subtrack from fear CD)
+		if shaPower < 28 then--Don't bother recovery if breath is in 5 or less seconds, we'll get a new one when it's cast.
+			timerBreathOfFearCD:Start(33.3-shaPower)
+		end
 	elseif args:IsSpellID(131996) and not onPlatform then
 		warnThrash:Show()
 		specWarnThrash:Show()
@@ -295,6 +306,27 @@ function mod:SPELL_CAST_START(args)
 	elseif args:IsSpellID(120672) then
 		timerSpecialCD:Start()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\shockwave.mp3") --震懾波
+	end
+end
+
+function mod:SPELL_CAST_SUCCESS(args)
+	if args:IsSpellID(120047) then
+		if not onPlatform then return end
+		kbpscount = 0
+	elseif args:IsSpellID(119983) then
+		if not onPlatform then return end
+		kbpscount = kbpscount + 1
+		if self.Options.pscount then
+			if kbpscount == 1 then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3") --恐怖噴散計數
+			elseif (kbpscount == 2) or (kbpscount == 5) or (kbpscount == 6) or (kbpscount == 10) or (kbpscount == 14) then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			elseif (kbpscount == 3) or (kbpscount == 7) or (kbpscount == 9) or (kbpscount == 11) or (kbpscount == 15) then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			elseif (kbpscount == 4) or (kbpscount == 8) or (kbpscount == 12) or (kbpscount == 13) or (kbpscount == 16) then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+			end
+		end
 	end
 end
 

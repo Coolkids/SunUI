@@ -4,7 +4,7 @@ if IsAddOnLoaded("TidyPlates") or IsAddOnLoaded("Aloft") or IsAddOnLoaded("dName
 	return
 end
 
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("NamePlates")
+local N = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("NamePlates", "AceEvent-3.0")
 local   cfg={
 	TotemIcon = true, 				-- Toggle totem icons
 	TotemSize = 20,				-- Totem icon size
@@ -23,17 +23,6 @@ local frames = {}
 
 local NamePlates = CreateFrame("Frame")
 NamePlates:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
-local f = CreateFrame"Frame"
-f:RegisterEvent("PLAYER_LOGIN")
-f:RegisterEvent("VARIABLES_LOADED")
-f:SetScript("OnEvent", function(self, event)
-	if(event=="PLAYER_LOGIN") then
-		SetCVar("bloatthreat",0)
-		SetCVar("bloattest",0)
-		SetCVar("bloatnameplates",0.0)
-		SetCVar("ShowClassColorInNameplate",1)
-	end
-end)
 
 local PlateBlacklist = {
 	--["訓練假人"] = true,
@@ -428,7 +417,6 @@ local function UpdateObjects(frame)
 				frame.icon:Show()
 				frame.Ticon:Show()
 				frame.icon:SetTexture(totems[frame.oldname:GetText()])
-				--frame.name:ClearAllPoints()
 			end
 		else
 			if frame.totem then
@@ -642,18 +630,7 @@ local function MatchGUID(frame, destGUID, spellID)
 		end
 	end
 end
---dead
-local function MatchDDeadGUID(frame, destGUID)
-	--print(frame, destGUID, spellID)
-	if not frame.guid then return end
-	if frame.guid == destGUID then
-		for k,icon in ipairs(frame.icons) do 
-			if icon.spellID then
-				icon:Hide()
-			end 
-		end
-	end
-end
+
 --Run a function for all visible nameplates, we use this for the blacklist, to check unitguid, and to hide drunken text
 local function ForEachPlate(functionToRun, ...)
 	for frame in pairs(frames) do
@@ -683,10 +660,16 @@ function NamePlates:COMBAT_LOG_EVENT_UNFILTERED(_, event, ...)
 	end
 end
 NamePlates:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-
-function Module:OnInitialize()
+local function SetCV()
+	SetCVar("bloatthreat",0)
+	SetCVar("bloattest",0)
+	SetCVar("bloatnameplates",0.0)
+	SetCVar("ShowClassColorInNameplate",1)
+end
+function N:OnInitialize()
 	C = C["NameplateDB"]
 	if C["enable"] ~= true then return end
+	N:RegisterEvent("PLAYER_LOGIN", SetCV)
 	NamePlates:SetScript('OnUpdate', function(self, elapsed)
 		if(WorldFrame:GetNumChildren() ~= numChildren) then
 			numChildren = WorldFrame:GetNumChildren()

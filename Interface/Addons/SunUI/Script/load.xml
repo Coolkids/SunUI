@@ -1,5 +1,0 @@
-﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file ="Settings.lua"/>
-	<Include file="moduels\load.xml"/>
-	<Include file="script\load.xml"/>
-</Ui>

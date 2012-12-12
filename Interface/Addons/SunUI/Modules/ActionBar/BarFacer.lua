@@ -1,9 +1,49 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
-local _
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("AutoHide", "AceEvent-3.0")
+local autohide = CreateFrame("Frame", "BarFade", UIParent)
+
+local function pending()
+	if UnitAffectingCombat("player") then return true end
+	if UnitExists("target") then return true end
+	if UnitInVehicle("player") then return true end
+	if SpellBookFrame:IsShown() then return true end
+	if IsAddOnLoaded("Blizzard_MacroUI") and MacroFrame:IsShown() then return true end
+end
+
+local function FadeOutActionButton() 
+	if BarFade:GetAlpha()>0 then
+		local fadeInfo = {};
+		fadeInfo.mode = "OUT";
+		fadeInfo.timeToFade = 0.5;
+		fadeInfo.finishedFunc = function()BarFade:Hide()  end
+		fadeInfo.startAlpha = BarFade:GetAlpha()
+		fadeInfo.endAlpha = 0
+		UIFrameFade(BarFade, fadeInfo)
+	end 
+end
+
+local function FadeInActionButton()
+	if BarFade:GetAlpha()<1 then
+		BarFade:Show()
+		UIFrameFadeIn(BarFade, 0.5,BarFade:GetAlpha(), 1)
+	end
+end
+
+local function On_ADDON_LOADED(self, event, addon)
+	if addon == "Blizzard_MacroUI" then
+		self:UnregisterEvent("ADDON_LOADED")
+		MacroFrame:HookScript("OnShow", function(self, event)
+			FadeInActionButton()
+		end)
+		MacroFrame:HookScript("OnHide", function(self, event)
+			if not pending() then
+				FadeOutActionButton()
+			end
+		end)
+	end
+end
+
 function Module:UpdateAutoHide()
-	
-	local autohide = CreateFrame("Frame", "BarFade", UIParent)
 	if C["ActionBarDB"]["AllFade"] then 
 		if SunUIStanceBar then SunUIStanceBar:SetParent(BarFade) end
 		if SunUIPetBar then SunUIPetBar:SetParent(BarFade) end
@@ -39,33 +79,6 @@ function Module:UpdateAutoHide()
 	autohide:RegisterEvent("UNIT_ENTERED_VEHICLE")
 	autohide:RegisterEvent("UNIT_EXITED_VEHICLE")
 
-	local function pending()
-		if UnitAffectingCombat("player") then return true end
-		if UnitExists("target") then return true end
-		if UnitInVehicle("player") then return true end
-		if SpellBookFrame:IsShown() then return true end
-		if IsAddOnLoaded("Blizzard_MacroUI") and MacroFrame:IsShown() then return true end
-	end
-
-	local function FadeOutActionButton() 
-		if BarFade:GetAlpha()>0 then
-			local fadeInfo = {};
-			fadeInfo.mode = "OUT";
-			fadeInfo.timeToFade = 0.5;
-			fadeInfo.finishedFunc = function()BarFade:Hide()  end
-			fadeInfo.startAlpha = BarFade:GetAlpha()
-			fadeInfo.endAlpha = 0
-			UIFrameFade(BarFade, fadeInfo)
-		end 
-	end
-
-	local function FadeInActionButton()
-		if BarFade:GetAlpha()<1 then
-			BarFade:Show()
-			UIFrameFadeIn(BarFade, 0.5,BarFade:GetAlpha(), 1)
-		end
-	end
-
 	autohide:SetScript("OnEvent", function(self, event, arg1, ...)
 		if event == "PLAYER_ENTERING_WORLD" then
 			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
@@ -86,23 +99,9 @@ function Module:UpdateAutoHide()
 			FadeOutActionButton()
 		end
 	end)
-
-	local a = CreateFrame("Frame")
-	a:RegisterEvent("ADDON_LOADED")
-	a:SetScript("OnEvent", function(self, event, addon)
-		if addon == "Blizzard_MacroUI" then
-			self:UnregisterEvent("ADDON_LOADED")
-			MacroFrame:HookScript("OnShow", function(self, event)
-				FadeInActionButton()
-			end)
-			MacroFrame:HookScript("OnHide", function(self, event)
-				if not pending() then
-					FadeOutActionButton()
-				end
-			end)
-		end
-end)
 end
+	
 function Module:OnEnable()
 	Module:UpdateAutoHide()
+	Module:RegisterEvent("ADDON_LOADED", On_ADDON_LOADED)
 end 

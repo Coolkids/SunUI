@@ -1,23 +1,21 @@
 local S, C, L, DB = unpack(select(2, ...))
-local _
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Flump")
-function Module:OnInitialize()
-	if SunUIConfig.db.profile.AnnounceDB.Flump ~= true then return end
-	local Flump = CreateFrame("Frame")
 
-	local bot	 = "%s 使用了 a %s!"
-	local used	 = "%s 使用了 %s!"
-	local sw	 = "%s 从 %s 身上消失了!"
-	local cast	 = "%s 施放 %s 在 %s!"
-	local fade	 = "%s 的 %s 从 %s 身上消失了!"
-	local feast  = "%s 已准备 %s!"
-	local gs	 = "%s's %s consumed: %s heal!"
-	local res	 = "%s%s 的 %s 复活了 %s%s!"
-	local portal = "%s 放置了 %s!"
-	local create = "%s 制造了 %s!"
-	local dispel = "%s%s 的 %s 驱散 %s%s 的 %s 失败!"
-	local ss	 = "%s died with a %s!"
+local Flump = CreateFrame("Frame")
+
+local bot	 = "%s 使用了 a %s!"
+local used	 = "%s 使用了 %s!"
+local sw	 = "%s 从 %s 身上消失了!"
+local cast	 = "%s 施放 %s 在 %s!"
+local fade	 = "%s 的 %s 从 %s 身上消失了!"
+local feast  = "%s 已准备 %s!"
+local gs	 = "%s's %s consumed: %s heal!"
+local res	 = "%s%s 的 %s 复活了 %s%s!"
+local portal = "%s 放置了 %s!"
+local create = "%s 制造了 %s!"
+local dispel = "%s%s 的 %s 驱散 %s%s 的 %s 失败!"
+local ss	 = "%s died with a %s!"
 
 local on_off = { [true] = "|cff00ff00on|r", [false] = "|cffff0000off|r" }
 local option = "|cff3399ff%s|r set to |cff99ffcc%s|r"
@@ -263,6 +261,9 @@ local function get_owner(guid, source)
 	return source
 end
 
+
+	
+
 function Flump:COMBAT_LOG_EVENT_UNFILTERED(timestamp, event, hideCaster, srcGUID, srcName, srcFlags, srcRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, school, ...)
 
 	-- [X] died with a Soulstone!
@@ -412,155 +413,155 @@ function Flump:PLAYER_REGEN_DISABLED()
 	self:UnregisterEvent("UNIT_HEALTH")
 end
 
-	function Flump:CheckEnable(isEnteringWorld)
-		_, instance = IsInInstance()
-		if FlumpStatusDB.enabled and (instance == "raid" or (self.db.party and instance == "party")) then
-			if not self.db.lfr and instance == "raid" and IsPartyLFG() and IsInLFGDungeon() then
-				self:UnregisterEvents()
-				return
-			end
-			if isEnteringWorld then
-				local tank_found = false
-				local max_group = 5 - (GetInstanceDifficulty() % 2) * 3
-				if instance == "raid" then
-					for i=1,40 do
-						local name, _, group = GetRaidRosterInfo(i)
-						if name and group <= max_group and is_tank(name) then
-							tank_found = true
-							break
-						end
-					end
-				elseif instance == "party" then
-					for i=1,5 do
-						local name = UnitName(i < 5 and format("party%d", i) or "player")
-						if name and is_tank(name) then
-							tank_found = true
-							break
-						end
-					end
-				end
-				if not tank_found then
-					if instance == "party" then
-						printf("需要确定职业角色 |TInterface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES:14:14:0:0:64:64:0:17:22:41|t 才能只用技能通报.")
-					elseif max_group == 5 then
-						printf("需要确定职业角色 |TInterface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES:14:14:0:0:64:64:0:17:22:41|t 或者主坦克 |TInterface\\GroupFrame\\UI-Group-MainTankIcon:16:10:0:1:16:16:1:13:0:16|t i才能只用技能通报.")
-					elseif max_group == 2 then
-						printf("需要确定职业角色 |TInterface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES:14:14:0:0:64:64:0:17:22:41|t 或者主坦克 |TInterface\\GroupFrame\\UI-Group-MainTankIcon:16:10:0:1:16:16:1:13:0:16|t 才能只用技能通报")
-					else
-						printf("需要确定职业角色 |TInterface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES:14:14:0:0:64:64:0:17:22:41|t 或者主坦克 |TInterface\\GroupFrame\\UI-Group-MainTankIcon:16:10:0:1:16:16:1:13:0:16|t才能只用技能通报.")
-					end
-				end
-			end
-			self:RegisterEvents()
-		else
+function Flump:CheckEnable(isEnteringWorld)
+	_, instance = IsInInstance()
+	if FlumpStatusDB.enabled and (instance == "raid" or (self.db.party and instance == "party")) then
+		if not self.db.lfr and instance == "raid" and IsPartyLFG() and IsInLFGDungeon() then
 			self:UnregisterEvents()
+			return
 		end
-	end
-
-	function Flump:PLAYER_ENTERING_WORLD()
-		self:CheckEnable(true)
-	end
-
-	function Flump:RegisterEvents()
-		self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-		self:RegisterEvent("PLAYER_REGEN_DISABLED")
-		channel_id = GetChannelName(self.db.channel1)
-		party_channel_id = GetChannelName(self.db.channel2)
-	end
-
-	function Flump:UnregisterEvents()
-		self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-		self:UnregisterEvent("PLAYER_REGEN_DISABLED")
-		self:UnregisterEvent("UNIT_HEALTH")
-		wipe(reincarnations)
-	end
-
-	function Flump:PrintCommands()
-		printf("%s", "Command List")
-		print("     |cff3399FFlist|r displays this list")
-		print("  |cffFFFF99e.g. |cffFF9933/flump party|r |cffFFFF99to toggle...|r")
-		print("     |cff3399FFparty|r [|cff99FFCC" .. on_off[self.db.party] .. "|r] Should announcements be sent in Party instances?")
-		print("     |cff3399FFlfr|r [|cff99FFCC" .. on_off[self.db.lfr] .. "|r] Should announcements be sent in Raid Finder instances?")
-		print("     |cff3399FFfade|r [|cff99FFCC" .. on_off[self.db.fade] .. "|r] Should spells fading be announced?")
-		print("     |cff3399FFmanacd|r [|cff99FFCC" .. on_off[self.db.manacd] .. "|r] Should announcements be sent for mana cooldowns?")
-		print("     |cff3399FFtricks|r [|cff99FFCC" .. on_off[self.db.tricks] .. "|r] Should Tricks/Misdirection be announced for tanks?")
-		print("  |cffFFFF99e.g.|r |cffFF9933/flump mana 50000|r |cffFFFF99to set...|r")
-		print("     |cff3399FFmana|r [|cff99FFCC" .. self.db.mana .. "|r] How much mana must a player have to be considered a healer?")
-		print("     |cff3399FFoutput1|r [|cff99FFCC" .. self.db.output1 .. "|r] Where should Raid instance announcements be sent?")
-		print("     |cff3399FFchannel1|r [|cff99FFCC" .. self.db.channel1 .. "|r] For private channels (Raid), set |cff3399FFoutput1|r to |cff99FFCCCHANNEL|r")
-		print("     |cff3399FFoutput2|r [|cff99FFCC" .. self.db.output2 .. "|r] Where should Party instance announcements be sent?")
-		print("     |cff3399FFchannel2|r [|cff99FFCC" .. self.db.channel2 .. "|r] For private channels (Party), set |cff3399FFoutput2|r to |cff99FFCCCHANNEL|r")
-	end
-
-	function Flump:CreateSlashCommands()
-
-		SLASH_FLUMP1 = "/flump"
-		SlashCmdList.FLUMP = function(msg)
-		
-			local cmd, arg = string.split(" ", msg, 2)
-			cmd = string.lower(cmd or "")
-			arg = arg or ""
-			
-			if cmd == "" then
-				if FlumpStatusDB.enabled then
-					FlumpStatusDB.enabled = false
-					self:UnregisterEvents()
-					printf("%s - type |cffFF9933/flump list|r for more options.", on_off[FlumpStatusDB.enabled])
-				else
-					FlumpStatusDB.enabled = true
-					self:RegisterEvents()
-					printf("%s - type |cffFF9933/flump list|r for more options.", on_off[FlumpStatusDB.enabled])
+		if isEnteringWorld then
+			local tank_found = false
+			local max_group = 5 - (GetInstanceDifficulty() % 2) * 3
+			if instance == "raid" then
+				for i=1,40 do
+					local name, _, group = GetRaidRosterInfo(i)
+					if name and group <= max_group and is_tank(name) then
+						tank_found = true
+						break
+					end
 				end
-				self:CheckEnable(true)
-			elseif cmd == "party" then
-				self.db.party = not self.db.party
-				printf(option, "Party Instances", on_off[self.db.party])
-			elseif cmd == "fade" then
-				self.db.fade = not self.db.fade
-				printf(option, "Fade Announcements", on_off[self.db.fade])
-			elseif cmd == "tricks" then
-				self.db.tricks = not self.db.tricks
-				printf(option, "Tricks of the Trade/Misdirection", on_off[self.db.tricks])
-			elseif cmd == "manacd" then
-				self.db.manacd = not self.db.manacd
-				printf(option, "Mana Cooldowns", on_off[self.db.manacd])
-			elseif cmd == "lfr" then
-				self.db.lfr = not self.db.lfr
-				printf(option, "LFR Announcements", on_off[self.db.lfr])
-				self:CheckEnable()
-			else
-				if arg ~= "" then
-					if cmd == "mana" then
-						self.db.mana = tonumber(arg)
-						printf(option, "Healer Mana Threshold", arg)
-					elseif cmd == "output1" then
-						self.db.output1 = arg:upper()
-						printf(option, "Output [Raid Instances]", arg)
-					elseif cmd == "channel1" then
-						self.db.channel1 = arg
-						printf(option, "Channel [Raid Instances]", arg)
-					elseif cmd == "output2" then
-						self.db.output2 = arg:upper()
-						printf(option, "Output [Party Instances]", arg)
-					elseif cmd == "channel2" then
-						self.db.channel2 = arg
-						printf(option, "Channel [Party Instances]", arg)
-					else
-						self:PrintCommands()
+			elseif instance == "party" then
+				for i=1,5 do
+					local name = UnitName(i < 5 and format("party%d", i) or "player")
+					if name and is_tank(name) then
+						tank_found = true
+						break
 					end
+				end
+			end
+			if not tank_found then
+				if instance == "party" then
+					printf("需要确定职业角色 |TInterface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES:14:14:0:0:64:64:0:17:22:41|t 才能只用技能通报.")
+				elseif max_group == 5 then
+					printf("需要确定职业角色 |TInterface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES:14:14:0:0:64:64:0:17:22:41|t 或者主坦克 |TInterface\\GroupFrame\\UI-Group-MainTankIcon:16:10:0:1:16:16:1:13:0:16|t i才能只用技能通报.")
+				elseif max_group == 2 then
+					printf("需要确定职业角色 |TInterface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES:14:14:0:0:64:64:0:17:22:41|t 或者主坦克 |TInterface\\GroupFrame\\UI-Group-MainTankIcon:16:10:0:1:16:16:1:13:0:16|t 才能只用技能通报")
 				else
-					if self.db[cmd] then
-						printf(option, cmd, self.db[cmd])
-					else
-						self:PrintCommands()
-					end
+					printf("需要确定职业角色 |TInterface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES:14:14:0:0:64:64:0:17:22:41|t 或者主坦克 |TInterface\\GroupFrame\\UI-Group-MainTankIcon:16:10:0:1:16:16:1:13:0:16|t才能只用技能通报.")
+				end
+			end
+		end
+		self:RegisterEvents()
+	else
+		self:UnregisterEvents()
+	end
+end
+
+function Flump:PLAYER_ENTERING_WORLD()
+	self:CheckEnable(true)
+end
+
+function Flump:RegisterEvents()
+	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	self:RegisterEvent("PLAYER_REGEN_DISABLED")
+	channel_id = GetChannelName(self.db.channel1)
+	party_channel_id = GetChannelName(self.db.channel2)
+end
+
+function Flump:UnregisterEvents()
+	self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	self:UnregisterEvent("PLAYER_REGEN_DISABLED")
+	self:UnregisterEvent("UNIT_HEALTH")
+	wipe(reincarnations)
+end
+
+function Flump:PrintCommands()
+	printf("%s", "Command List")
+	print("     |cff3399FFlist|r displays this list")
+	print("  |cffFFFF99e.g. |cffFF9933/flump party|r |cffFFFF99to toggle...|r")
+	print("     |cff3399FFparty|r [|cff99FFCC" .. on_off[self.db.party] .. "|r] Should announcements be sent in Party instances?")
+	print("     |cff3399FFlfr|r [|cff99FFCC" .. on_off[self.db.lfr] .. "|r] Should announcements be sent in Raid Finder instances?")
+	print("     |cff3399FFfade|r [|cff99FFCC" .. on_off[self.db.fade] .. "|r] Should spells fading be announced?")
+	print("     |cff3399FFmanacd|r [|cff99FFCC" .. on_off[self.db.manacd] .. "|r] Should announcements be sent for mana cooldowns?")
+	print("     |cff3399FFtricks|r [|cff99FFCC" .. on_off[self.db.tricks] .. "|r] Should Tricks/Misdirection be announced for tanks?")
+	print("  |cffFFFF99e.g.|r |cffFF9933/flump mana 50000|r |cffFFFF99to set...|r")
+	print("     |cff3399FFmana|r [|cff99FFCC" .. self.db.mana .. "|r] How much mana must a player have to be considered a healer?")
+	print("     |cff3399FFoutput1|r [|cff99FFCC" .. self.db.output1 .. "|r] Where should Raid instance announcements be sent?")
+	print("     |cff3399FFchannel1|r [|cff99FFCC" .. self.db.channel1 .. "|r] For private channels (Raid), set |cff3399FFoutput1|r to |cff99FFCCCHANNEL|r")
+	print("     |cff3399FFoutput2|r [|cff99FFCC" .. self.db.output2 .. "|r] Where should Party instance announcements be sent?")
+	print("     |cff3399FFchannel2|r [|cff99FFCC" .. self.db.channel2 .. "|r] For private channels (Party), set |cff3399FFoutput2|r to |cff99FFCCCHANNEL|r")
+end
+
+function Flump:CreateSlashCommands()
+
+	SLASH_FLUMP1 = "/flump"
+	SlashCmdList.FLUMP = function(msg)
+	
+		local cmd, arg = string.split(" ", msg, 2)
+		cmd = string.lower(cmd or "")
+		arg = arg or ""
+		
+		if cmd == "" then
+			if FlumpStatusDB.enabled then
+				FlumpStatusDB.enabled = false
+				self:UnregisterEvents()
+				printf("%s - type |cffFF9933/flump list|r for more options.", on_off[FlumpStatusDB.enabled])
+			else
+				FlumpStatusDB.enabled = true
+				self:RegisterEvents()
+				printf("%s - type |cffFF9933/flump list|r for more options.", on_off[FlumpStatusDB.enabled])
+			end
+			self:CheckEnable(true)
+		elseif cmd == "party" then
+			self.db.party = not self.db.party
+			printf(option, "Party Instances", on_off[self.db.party])
+		elseif cmd == "fade" then
+			self.db.fade = not self.db.fade
+			printf(option, "Fade Announcements", on_off[self.db.fade])
+		elseif cmd == "tricks" then
+			self.db.tricks = not self.db.tricks
+			printf(option, "Tricks of the Trade/Misdirection", on_off[self.db.tricks])
+		elseif cmd == "manacd" then
+			self.db.manacd = not self.db.manacd
+			printf(option, "Mana Cooldowns", on_off[self.db.manacd])
+		elseif cmd == "lfr" then
+			self.db.lfr = not self.db.lfr
+			printf(option, "LFR Announcements", on_off[self.db.lfr])
+			self:CheckEnable()
+		else
+			if arg ~= "" then
+				if cmd == "mana" then
+					self.db.mana = tonumber(arg)
+					printf(option, "Healer Mana Threshold", arg)
+				elseif cmd == "output1" then
+					self.db.output1 = arg:upper()
+					printf(option, "Output [Raid Instances]", arg)
+				elseif cmd == "channel1" then
+					self.db.channel1 = arg
+					printf(option, "Channel [Raid Instances]", arg)
+				elseif cmd == "output2" then
+					self.db.output2 = arg:upper()
+					printf(option, "Output [Party Instances]", arg)
+				elseif cmd == "channel2" then
+					self.db.channel2 = arg
+					printf(option, "Channel [Party Instances]", arg)
+				else
+					self:PrintCommands()
+				end
+			else
+				if self.db[cmd] then
+					printf(option, cmd, self.db[cmd])
+				else
+					self:PrintCommands()
 				end
 			end
 		end
 	end
+end
 
-	function Flump:ADDON_LOADED(addon)
-
+function Flump:ADDON_LOADED(addon)
+	if addon == "SunUI" then
 		local defaults = {
 			lfr = true,
 			party = true,
@@ -597,8 +598,10 @@ end
 		self:CreateSlashCommands()
 		self:CheckEnable()
 		self:RegisterEvent("PLAYER_ENTERING_WORLD")
-		
 	end
+end
 
+function Module:OnInitialize()
+	if SunUIConfig.db.profile.AnnounceDB.Flump ~= true then return end
 	Flump:RegisterEvent("ADDON_LOADED")
 end

@@ -1,10 +1,10 @@
 ﻿-- Engines
 local S, C, L, DB = unpack(select(2, ...))
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Buff")
+local Buff = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Buff", "AceHook-3.0")
 local _
 local font = "Interface\\Addons\\SunUI\\Media\\font.ttf"
 -- making frame to hold all buff frame elements
-local PositionTempEnchant = function()
+local function PositionTempEnchant()
 	TemporaryEnchantFrame:SetParent(BuffFrameHolder)
 	TemporaryEnchantFrame:ClearAllPoints()
 	TemporaryEnchantFrame:SetAllPoints(BuffFrameHolder)
@@ -41,7 +41,7 @@ local function CreateBuffStyle(buff, t)
 	buff.styled = true
 end
 
-local function OverrideBuffAnchors()
+function Buff:OverrideBuffAnchors()
 	local buff, previousBuff, aboveBuff;
 	local numBuffs = 0;
 	for i=1, BUFF_ACTUAL_DISPLAY do
@@ -93,7 +93,7 @@ local function OverrideBuffAnchors()
 	end
 end
 
-local function OverrideDebuffAnchors(buttonName, i)
+function Buff:OverrideDebuffAnchors(buttonName, i)
 	local color
 	local buffName = buttonName..i
 	local dtype = select(5, UnitDebuff("player",i))   
@@ -173,10 +173,7 @@ local initialize = function()
 	end
 end
 
--- hooking our modifications
-hooksecurefunc("BuffFrame_UpdateAllBuffAnchors", OverrideBuffAnchors)
-hooksecurefunc("DebuffButton_UpdateAnchors", OverrideDebuffAnchors)
-hooksecurefunc("AuraButton_UpdateDuration", function(auraButton, timeLeft)
+function Buff:UpdateTime(auraButton, timeLeft)
 	local Duration = auraButton.duration
 	if timeLeft then
 		Duration:SetText(S.FormatTime(timeLeft, true))
@@ -190,12 +187,16 @@ hooksecurefunc("AuraButton_UpdateDuration", function(auraButton, timeLeft)
 			Duration:SetVertexColor(1, 0, 0)
 		end
 	end
-end)
-function Module:OnInitialize()
+end
+
+function Buff:OnInitialize()
 	SetCVar("consolidateBuffs",0)
 	SetCVar("buffDurations", 1)
 	local holder = CreateFrame("Frame", "BuffFrameHolder", UIParent)
 	holder:SetSize(C["BuffDB"]["IconSize"],C["BuffDB"]["IconSize"])
 	MoveHandle.Buff = S.MakeMoveHandle(holder, "Buff", "Buff")
 	initialize()
+	self:SecureHook("BuffFrame_UpdateAllBuffAnchors", "OverrideBuffAnchors")
+	self:SecureHook("DebuffButton_UpdateAnchors", "OverrideDebuffAnchors")
+	self:SecureHook("AuraButton_UpdateDuration", "UpdateTime")
 end

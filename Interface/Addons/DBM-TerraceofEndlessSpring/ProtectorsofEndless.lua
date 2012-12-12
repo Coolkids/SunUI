@@ -1,6 +1,7 @@
 ﻿local mod	= DBM:NewMod(683, "DBM-TerraceofEndlessSpring", nil, 320)
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
+local sndSDQ	= mod:NewSound(nil, "SoundSDQ", mod:IsHealer())
 
 mod:SetRevision(("$Revision: 8159 $"):sub(12, -3))
 mod:SetCreatureID(60585, 60586, 60583)--60583 Protector Kaolan, 60585 Elder Regail, 60586 Elder Asani
@@ -72,6 +73,7 @@ local timerDefiledGroundCD			= mod:NewNextTimer(15.5, 117986, nil, mod:IsMelee()
 local timerExpelCorruptionCD		= mod:NewNextTimer(38.5, 117975)--It's a next timer, except first cast. that one variates.
 
 mod:AddBoolOption("SoundDW", mod:IsDps() and isDispeller, "sound")
+
 local berserkTimer					= mod:NewBerserkTimer(490)
 
 mod:AddBoolOption("RangeFrame")--For Lightning Prison
@@ -215,8 +217,8 @@ function mod:SPELL_AURA_APPLIED(args)
 			self:SetIcon(args.destName, prisonIcon)
 			prisonIcon = prisonIcon + 1
 		end
-		if mod:IsHealer() and self:AntiSpam(2, 2) then
-			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qssd.mp3")--驅散閃電
+		if self:AntiSpam(2, 2) then
+			sndSDQ:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qssd.mp3")--驅散閃電
 		end
 		if self.Options.HudMAP then
 			if not args:IsPlayer() then

@@ -1,5 +1,5 @@
 ﻿## Interface: 50100
-## X-Min-Interface: 50001
+## X-Min-Interface: 50100
 ## Title:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Brawlers|r
 ## Title-zhCN:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0搏击俱乐部|r
 ## Title-zhTW:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0鬥陣俱樂部|r
@@ -13,9 +13,17 @@
 ## X-DBM-Mod-Name-zhCN: 搏击俱乐部
 ## X-DBM-Mod-Name-zhTW: 鬥陣俱樂部
 ## X-DBM-Mod-Sort: 15
-## X-DBM-Mod-LoadZoneID: 922
+## X-DBM-Mod-LoadZoneID: 922,925
 localization.en.lua
 localization.cn.lua
 localization.tw.lua
 MapSizes.lua
 Brawlers.lua
+Rank1.lua
+Rank2.lua
+Rank3.lua
+Rank4.lua
+Rank5.lua
+Rank6.lua
+Rank7.lua
+Rank8.lua

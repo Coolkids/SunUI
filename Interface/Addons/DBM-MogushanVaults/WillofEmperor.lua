@@ -8,7 +8,7 @@ local sndADD2	= mod:NewSound(nil, "SoundADD2", mod:IsDps())
 local sndADD3A	= mod:NewSound(nil, "SoundADD3A", mod:IsDps())
 local sndADD3	= mod:NewSound(nil, "SoundADD3", mod:IsDps())
 
-mod:SetRevision(("$Revision: 8197 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8239 $"):sub(12, -3))
 mod:SetCreatureID(60399, 60400)--60396 (Rage), 60397 (Strength), 60398 (Courage), 60480 (Titan Spark), 60399 (Qin-xi), 60400 (Jan-xi)
 mod:SetModelID(41391)
 mod:SetZone()
@@ -115,7 +115,6 @@ local rageTimers = {
 	[11]= 33,
 	[12]= 33,
 	[13]= 83,
-	[14]= 83,
 --Rest are all 33
 }
 
@@ -251,10 +250,12 @@ end
 
 function mod:RAID_BOSS_EMOTE(msg)
 	if msg == L.Strength or msg:find(L.Strength) then
+		self:Unschedule(addsDelay, "Strength")
 		self:Schedule(7, addsDelay, "Strength")
 		sndADD3A:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zjbzb.mp3") --重甲
 		sndADD3:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zjbcx.mp3")
 	elseif msg == L.Courage or msg:find(L.Courage) then
+		self:Unschedule(addsDelay, "Courage")
 		self:Schedule(8, addsDelay, "Courage")
 		sndADD2A:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_dbzb.mp3") --盾兵
 		sndADD2:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_dbkd.mp3")

@@ -655,6 +655,7 @@ local function UpdateHealthSmooth(self)
 end
 
 function Module:HealthPowerBar()
+	if not C["HealthPower"] then return end
 	local bars = CreateFrame("Statusbar", nil, UIParent)
 	bars:SetSize(C["Width"], C["Height"])
 	local a,b,c,d,e = unpack(SunUIConfig.db.profile.MoveHandleDB.PowerBar)
@@ -668,7 +669,6 @@ function Module:HealthPowerBar()
 	
 	local spar =  bars:CreateTexture(nil, "OVERLAY")
 	spar:SetTexture("Interface\\Addons\\SunUI\\Media\\Arrow")
-	--spar:SetBlendMode("ADD")
 	spar:SetVertexColor(1, 0, 0, 1) 
 	spar:SetSize(16, 16)
 	spar:SetPoint("TOP", bars:GetStatusBarTexture(), "RIGHT", 0, -4)
@@ -687,7 +687,6 @@ function Module:HealthPowerBar()
 	power:SetMinMaxValues(0, UnitPowerMax("player"))
 	local powerspar =  power:CreateTexture(nil, "OVERLAY")
 	powerspar:SetTexture("Interface\\Addons\\SunUI\\Media\\ArrowT")
-	--powerspar:SetBlendMode("ADD")
 	powerspar:SetVertexColor(.3,.45,.65, 1) 
 	powerspar:SetSize(16, 16)
 	powerspar:SetPoint("BOTTOM", power:GetStatusBarTexture(), "RIGHT", 0, 4)

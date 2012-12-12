@@ -1,13 +1,13 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
-local _G =_G
-local _
-local temp = SetUIScale()
-local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/temp
 
-local function scale(x)
+local sceenheight = string.match(GetCVar("gxResolution"), "%d+x(%d+)")
+local scale = max(0.64, min(1.15, GetCVar('uiScale') or UIParent:GetScale() or 768/sceenheight))
+local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/scale
+
+local function sceenscale(x)
 	return (mult*math.floor(x/mult+.5)) 
 end
-S.Scale = function(x) return scale(x) end
+S.Scale = function(x) return sceenscale(x) end
 S.mult = mult
 
 local HiddenFrame = CreateFrame("Frame")

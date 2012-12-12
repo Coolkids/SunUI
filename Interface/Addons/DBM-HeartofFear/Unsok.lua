@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8234 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8256 $"):sub(12, -3))
 mod:SetCreatureID(62511)
 mod:SetModelID(43126)
 mod:SetZone()
@@ -77,7 +77,7 @@ local timerParasiticGrowthCD	= mod:NewCDTimer(35, 121949, nil, mod:IsHealer())--
 local timerParasiticGrowth		= mod:NewTargetTimer(30, 121949, nil, mod:IsHealer())
 --Construct
 local timerAmberExplosionCD		= mod:NewNextSourceTimer(13, 122398)--13 second cd on player controled units, 18 seconds on non player controlled constructs
-local timerDestabalize			= mod:NewTargetTimer(10, 123059, nil, false)
+local timerDestabalize			= mod:NewTargetTimer(15, 123059, nil, false)
 local timerStruggleForControl	= mod:NewTargetTimer(5, 122395, nil, false)
 --Amber Monstrosity
 local timerMassiveStompCD		= mod:NewCDTimer(18, 122408, nil, mod:IsHealer() or mod:IsMelee())--18-25 seconds variation
@@ -85,8 +85,6 @@ local timerFlingCD				= mod:NewCDTimer(25, 122413, nil, mod:IsTank())--25-40sec 
 local timerAmberExplosionAMCD	= mod:NewTimer(46, "timerAmberExplosionAMCD", 122402)--Special timer just for amber monstrosity. easier to cancel, easier to tell apart. His bar is the MOST important and needs to be seperate from any other bar option.
 
 local berserkTimer				= mod:NewBerserkTimer(600)
-
-local countdownAmberExplosionAM	= mod:NewCountdown(46, 122402)
 
 mod:AddBoolOption("FixNameplates", true)--Because having 215937495273598637205175t9 hostile nameplates on screen when you enter a construct is not cool.
 
@@ -96,6 +94,7 @@ mod:AddDropdownOption("optInfoFrame", {"noIF", "IF1", "IF2"}, "IF1", "sound")
 local Phase = 1
 local Puddles = 0
 local Constructs = 0
+local constructCount = 0--NOT same as Constructs variable above. this is one is for counting them mainly in phase 1
 local bossdebuff = 0
 local boss2debuff = 0
 local otherconstruct = nil
@@ -169,6 +168,7 @@ function mod:OnCombatStart(delay)
 	Phase = 1
 	Puddles = 0
 	Constructs = 0
+	constructCount = 0
 	lastStrike = 0
 	otherconstruct = nil
 	table.wipe(canInterrupt)
@@ -272,21 +272,31 @@ function mod:SPELL_AURA_APPLIED(args)
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jscz.mp3") --寄生成長
 		end
 	elseif args:IsSpellID(122540) then
+		constructCount = 0
 		Phase = 2
 		warnAmberCarapace:Show(args.destName)
-		specwarnAmberMonstrosity:Show()
+		if not playerIsConstruct then
+			specwarnAmberMonstrosity:Show()
+		end
 		timerMassiveStompCD:Start(20)
 		timerFlingCD:Start(33)
 		warnAmberExplosionSoon:Schedule(50.5)
 		timerAmberExplosionAMCD:Start(55.5, amberExplosion, Monstrosity)
-		countdownAmberExplosionAM:Start(55.5)
+		sndWOP:Schedule(48.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countseven.mp3")
+		sndWOP:Schedule(49.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
+		sndWOP:Schedule(50.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+		sndWOP:Schedule(51.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndWOP:Schedule(52.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Schedule(53.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Schedule(54.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ptwo.mp3")--P2
 	elseif args:IsSpellID(122395) and Phase < 3 then
 		warnStruggleForControl:Show(args.destName)
 		timerStruggleForControl:Start(args.destName)
 	elseif args:IsSpellID(122784) then
 		Constructs = Constructs + 1
-		warnReshapeLife:Show(args.destName)
+		constructCount = constructCount + 1
+		warnReshapeLife:Show(args.destName.."("..constructCount..")")
 		if args.destName ~= UnitName("player") then
 			otherconstruct = args.destName
 		end
@@ -345,12 +355,20 @@ function mod:SPELL_AURA_REMOVED(args)
 	elseif args:IsSpellID(121949) then
 		timerParasiticGrowth:Cancel(args.destName)
 	elseif args:IsSpellID(122540) then--Phase 3
+		constructCount = 0
 		Phase = 3
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\pthree.mp3")--p3
 		timerMassiveStompCD:Cancel()
 		timerFlingCD:Cancel()
 		timerAmberExplosionAMCD:Cancel()
-		countdownAmberExplosionAM:Cancel()
+		timerDestabalize:Cancel(Monstrosity)
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countseven.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		warnAmberExplosionSoon:Cancel()
 		--He does NOT reset reshape live cd here, he finishes out last CD first, THEN starts using new one.
 	elseif args:IsSpellID(123059) then
@@ -400,7 +418,13 @@ function mod:SPELL_CAST_START(args)
 		warnAmberExplosionSoon:Cancel()
 		warnAmberExplosionSoon:Schedule(41)
 		timerAmberExplosionAMCD:Start(46, args.spellName, args.sourceName)
-		countdownAmberExplosionAM:Start(46)
+		sndWOP:Schedule(39, "Interface\\AddOns\\DBM-Core\\extrasounds\\countseven.mp3")
+		sndWOP:Schedule(40, "Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
+		sndWOP:Schedule(41, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+		sndWOP:Schedule(42, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndWOP:Schedule(43, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Schedule(44, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Schedule(45, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		self:Unschedule(warnAmberExplosionCast)
 		self:Schedule(0.5, warnAmberExplosionCast, 122402)--Always check available interrupts and special warn if not
 	elseif args:IsSpellID(122408) then
@@ -412,7 +436,9 @@ function mod:SPELL_CAST_START(args)
 		timerMassiveStompCD:Start()
 	elseif args:IsSpellID(122413) then
 		warnFling:Show()
-		specwarnFling:Show()
+		if not playerIsConstruct then
+			specwarnFling:Show()
+		end
 		timerFlingCD:Start()
 	end
 end

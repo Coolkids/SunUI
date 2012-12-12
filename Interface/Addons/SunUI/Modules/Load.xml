@@ -26,4 +26,6 @@
 	<Include file ="Icicle\load.xml"/>
 	<Include file ="TheBurningTrade\load.xml"/>
 	<Include file ="oGlow\load.xml"/>
+	
+	<Include file ="Misc\load.xml"/>
 </Ui>

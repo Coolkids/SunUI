@@ -206,8 +206,8 @@ local config = {
 --some init
 local addon, ns = ...
 local ct = config
-ct.myname = UnitName("player")
-ct.myclass = select(2, UnitClass("player"))
+ct.myname = DB.PlayerName
+ct.myclass = DB.MyClass
 
 --[[  Filter Auras
   Allows you to filter auras (by name only). Some settings that affect this filter:

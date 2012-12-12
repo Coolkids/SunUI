@@ -95,7 +95,8 @@ L:SetWarningLocalization({
 	specwarnUnder	= "離開紫圈!",
 	specWarnPungencyOtherFix = "%s 敏感 (%d)",
 	specwarnCrushH	= "碾碎 (%d)",
-	SpecWarnJSA		= "5秒後碾壓 >>注意減傷<<"
+	SpecWarnJSA		= "5秒後碾壓 >>注意減傷<<",
+	specWarnFLM		= ">%s<弗洛蒙, 準備接手!"
 })
 
 L:SetOptionLocalization({
@@ -112,6 +113,24 @@ L:SetOptionLocalization({
 	HudMAP				= "高級定位監視(HUD)：$spell:122835的位置",
 	SoundFS				= "坦克倒計時：$spell:122735",
 	SpecWarnJSA			= "特殊警告：注意開減傷",
+	specWarnFLM			= "特殊警告：準備接手弗洛蒙",
+	endflm				= "最後的費洛蒙傳遞者勾選以形成循環提示",
+	flmxs				= "費洛蒙傳遞提示+(例如:此處選10下邊選3即選為13)",
+	x0					= "0+",
+	x10					= "10+",
+	x20					= "20+",
+	flm0				= "0",
+	flm1				= "1",
+	flm2				= "2",
+	flm3				= "3",
+	flm4				= "4",
+	flm5				= "5",
+	flm6				= "6",
+	flm7				= "7",
+	flm8				= "8",
+	flm9				= "9",
+	flm10				= "10",
+	flmcd				= "費洛蒙傳遞提示",
 	unseenjs1			= "減傷提示：碾碎1",
 	unseenjs2			= "減傷提示：碾碎2",
 	unseenjs3			= "減傷提示：碾碎3",

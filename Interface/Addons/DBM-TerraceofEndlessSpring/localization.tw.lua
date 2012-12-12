@@ -15,6 +15,7 @@ L:SetOptionLocalization({
 	HudMAP				= "高級定位監視(HUD)：$spell:111850的位置",
 	SetIconOnPrison		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(117436),
 	SoundDW				= "語音警告：$spell:117283的驅散",
+	SoundSDQ			= "語音警告：$spell:117436的驅散",
 	SoundWOP			= "語音警告：重要技能",
 	optDDall			= "只有在你的目標是水王時才提示打斷鏈(不選則總是提示)",
 	specWarnDDL 		= "特殊警告：下一次到你打斷",
@@ -94,6 +95,7 @@ L:SetTimerLocalization({
 L:SetOptionLocalization({
 	SoundDD				= "語音警告：$spell:131996",
 	SoundWOP			= "語音警告：重要技能",
+	pscount				= "語音警告：為恐怖噴散計數",
 	HudMAP				= "高級定位監視(HUD)：$spell:120519",
 	InfoFrame			= "資訊框：$spell:120629",
 	timerSpecialCD		= "計時器：下一次P2特殊技能",

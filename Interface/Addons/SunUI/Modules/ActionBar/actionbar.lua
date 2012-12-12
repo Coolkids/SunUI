@@ -3,8 +3,9 @@ local _G = _G
 if (IsAddOnLoaded("Dominos") or IsAddOnLoaded("Bartender4") or IsAddOnLoaded("Macaroon")) then
 	return 
 end
-
+local C
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("actionbar", "AceEvent-3.0", "AceHook-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local buttonList = {}
 function Module:blizzHider()
 	local hider = CreateFrame("Frame")
@@ -490,9 +491,10 @@ function Module:UpdateSize(val)
 		end
 	end
 end
-
+function Module:OnInitialize()
+	C = SunUIConfig.db.profile.ActionBarDB
+end
 function Module:OnEnable()
-	C = C["ActionBarDB"]
 	Module:blizzHider()
 	Module:CreateBar1()
 	Module:CreateBar2()

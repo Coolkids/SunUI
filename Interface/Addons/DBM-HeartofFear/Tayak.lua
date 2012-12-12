@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8236 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8257 $"):sub(12, -3))
 mod:SetCreatureID(62543)
 mod:SetModelID(43141)
 mod:SetZone()
@@ -45,7 +45,7 @@ local timerIntensifyCD					= mod:NewNextTimer(60, 123471)
 local timerBladeTempest					= mod:NewBuffActiveTimer(9, 125310)
 local timerBladeTempestCD				= mod:NewNextTimer(60, 125310)--Always cast after immediately intensify since they essencially have same CD
 
-local berserkTimer						= mod:NewBerserkTimer(480)
+local berserkTimer						= mod:NewBerserkTimer(490)
 
 --local soundBladeTempest					= mod:NewSound(125310)
 

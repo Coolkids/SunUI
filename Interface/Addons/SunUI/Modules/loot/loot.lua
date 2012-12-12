@@ -39,7 +39,6 @@ local sq, ss, sn
 local OnEnter = function(self)
 	local slot = self:GetID()
 	if GetLootSlotType(slot) == 1 then
--- 	if(LootSlotIsItem(slot)) then
 		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 		GameTooltip:SetLootItem(slot)
 		CursorUpdate(self)
@@ -56,18 +55,17 @@ local function LDD_OnClick(self)
 	Announce(val)
 end
 
-function Announce(chn)
+local function Announce(chn)
     local nums = GetNumLootItems()
     if(nums == 0) then return end
     if UnitIsPlayer("target") or not UnitExists("target") then -- Chests are hard to identify!
 		SendChatMessage("*** Loot from chest ***", chn)
 	else
-		SendChatMessage("*** Loot from "..UnitName("target").." ***", chn)
+		SendChatMessage("*** "..UnitName("target").." ***", chn)
 	end
     for i = 1, GetNumLootItems() do
         if GetLootSlotType(i) == 1 then
             local link = GetLootSlotLink(i)
-            --local messlink = "- %s" -- testing
             SendChatMessage(link, chn)
         end
     end
@@ -77,7 +75,7 @@ local function LDD_Initialize(self, level)
     level = level or 1
 	local info = {}
     
-    info.text = "Announce to"
+    info.text = "--------------------"
     info.notCheckable = true
     info.isTitle = true
     UIDropDownMenu_AddButton(info, level)
@@ -115,13 +113,7 @@ local function LDD_Initialize(self, level)
 end
 
 local OnLeave = function(self)
-	--if(self.quality > 1) then
-		local color = ITEM_QUALITY_COLORS[self.quality]
-		--self.drop:SetVertexColor(color.r, color.g, color.b)
-	--else
-	--	self.drop:Hide()
-	--end
-
+	local color = ITEM_QUALITY_COLORS[self.quality]
 	GameTooltip:Hide()
 	ResetCursor()
 end
@@ -130,7 +122,6 @@ local OnClick = function(self)
 	if(IsModifiedClick()) then
 		HandleModifiedItemClick(GetLootSlotLink(self:GetID()))
 	else
-		--StaticPopup_Hide"CONFIRM_LOOT_DISTRIBUTION"
 		ss = self:GetID()
 		sq = self.quality
 		sn = self.name:GetText()
@@ -377,7 +368,6 @@ end
 
 addon.OPEN_MASTER_LOOT_LIST = function(self)
 	ToggleDropDownMenu(1, nil, GroupLootDropDown, addon.slots[ss], 0, 0)
-	--ToggleDropDownMenu(1, nil, GroupLootDropDown, LootFrame.selectedLootButton, 0, 0)
 end
 
 addon.UPDATE_MASTER_LOOT_LIST = function(self)
@@ -398,7 +388,3 @@ addon:Hide()
 -- Fuzz
 LootFrame:UnregisterAllEvents()
 table.insert(UISpecialFrames, "SunUI_Loot")
-
---[[ StaticPopupDialogs["CONFIRM_LOOT_DISTRIBUTION"].OnAccept = function(self, data)
-	GiveMasterLoot(self:GetID(), data)
-end ]]

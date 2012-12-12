@@ -1,7 +1,8 @@
 local S, C, L, DB = unpack(select(2, ...))
-if IsAddOnLoaded("Aurora") then return end
-local _
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Aurora", "AceEvent-3.0")
 local merchatcolor = false
+local alpha = .5
+local class = DB.MyClass
 local media = {
 	["arrowUp"] = "Interface\\AddOns\\SunUI\\media\\arrow-up-active",
 	["arrowDown"] = "Interface\\AddOns\\SunUI\\media\\arrow-down-active",
@@ -28,22 +29,15 @@ end
 local function clearArrow(f)
 	f.downtex:SetVertexColor(1, 1, 1)
 end
-local frames = {}
-local alpha = .5
-local _G = _G
-local _, class = UnitClass("player")
+
 local r, g, b
 if CUSTOM_CLASS_COLORS then
 	r, g, b = CUSTOM_CLASS_COLORS[class].r, CUSTOM_CLASS_COLORS[class].g, CUSTOM_CLASS_COLORS[class].b
 else
 	r, g, b = RAID_CLASS_COLORS[class].r, RAID_CLASS_COLORS[class].g, RAID_CLASS_COLORS[class].b
 end
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Aurora", "AceEvent-3.0")
-local _G = _G
-local Skin = CreateFrame("Frame", nil, UIParent)
-Skin:RegisterEvent("ADDON_LOADED")
-Skin:SetScript("OnEvent", function(self, event, addon)
-	if not C["MiniDB"]["Aurora"] then return end
+
+local function SkinBlz(event, addon)
 	if addon=="SunUI" then 
 		-- [[ Headers ]]
 		local header = {"GameMenuFrame", "InterfaceOptionsFrame", "AudioOptionsFrame", "VideoOptionsFrame", "ChatConfigFrame", "ColorPickerFrame"}
@@ -6671,409 +6665,96 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		S.Reskin(VoidStorageTransferButton)
 		S.ReskinClose(VoidStorageBorderFrame:GetChildren(), nil)
 		S.ReskinInput(VoidItemSearchBox)
-	elseif addon == "DBM-Core" then
-	--[[ 	local first = true
-		hooksecurefunc(DBM.RangeCheck, "Show", function()
-			if first == true then
-				DBMRangeCheck:SetBackdrop(nil)
-				local bd = CreateFrame("Frame", nil, DBMRangeCheck)
-				bd:SetPoint("TOPLEFT")
-				bd:SetPoint("BOTTOMRIGHT")
-				bd:SetFrameLevel(DBMRangeCheck:GetFrameLevel()-1)
-				S.CreateBD(bd)
-				first = false
-			end
-		end) ]]
-	elseif addon == "Recount" then
-	--[[ 	if IsAddOnLoaded("CowTip") or IsAddOnLoaded("TipTac") or IsAddOnLoaded("FreebTip") or IsAddOnLoaded("lolTip") or IsAddOnLoaded("StarTip") or IsAddOnLoaded("TipTop") then return end
-
-		hooksecurefunc(LibStub("LibDropdown-1.0"), "OpenAce3Menu", function()
-			S.CreateBD(LibDropdownFrame0, alpha)
-		end) ]]
 	end
-	--RaidFrame Skin
-		-- for i = 1, 8 do
-			-- if _G["RaidGroup"..i] then 
-				-- _G["RaidGroup"..i]:StripTextures()
-			-- else
-				-- return
-			-- end
-			-- for f = 1, 5 do
-				-- if _G["RaidGroup"..i.."Slot"..f] then 
-					-- _G["RaidGroup"..i.."Slot"..f]:Kill()
-				-- else
-					-- return
-				-- end
-			-- end
-		-- end
-		-- for i = 1, 40 do
-			-- if _G["RaidGroupButton"..i] then
-				-- _G["RaidGroupButton"..i]:StripTextures()
-				-- S.Reskin(_G["RaidGroupButton"..i])
-			-- else
-				-- return
-			-- end
-		-- end
-end)
+end
 
-local Delay = CreateFrame("Frame")
-Delay:RegisterEvent("PLAYER_ENTERING_WORLD")
-Delay:SetScript("OnEvent", function()
-	Delay:UnregisterEvent("PLAYER_ENTERING_WORLD")
+local function SkinTooltip()
+	Module:UnregisterEvent("PLAYER_ENTERING_WORLD")
+	local tooltips = {
+		"GameTooltip",
+		"ItemRefTooltip",
+		"ShoppingTooltip1",
+		"ShoppingTooltip2",
+		"ShoppingTooltip3",
+		"WorldMapTooltip",
+		"ChatMenu",
+		"EmoteMenu",
+		"LanguageMenu",
+		"VoiceMacroMenu",
+	}
 
-	if not(IsAddOnLoaded("CowTip") or IsAddOnLoaded("TipTac") or IsAddOnLoaded("FreebTip") or IsAddOnLoaded("lolTip") or IsAddOnLoaded("StarTip") or IsAddOnLoaded("TipTop")) then
-		local tooltips = {
-			"GameTooltip",
-			"ItemRefTooltip",
-			"ShoppingTooltip1",
-			"ShoppingTooltip2",
-			"ShoppingTooltip3",
-			"WorldMapTooltip",
-			"ChatMenu",
-			"EmoteMenu",
-			"LanguageMenu",
-			"VoiceMacroMenu",
-		}
+	local backdrop = {
+		bgFile = media.backdrop,
+		edgeFile = media.backdrop,
+		edgeSize = S.mult,
+	}
 
-		local backdrop = {
-			bgFile = media.backdrop,
-			edgeFile = media.backdrop,
-			edgeSize = S.mult,
-		}
-
-		-- so other stuff which tries to look like GameTooltip doesn't mess up
-		local getBackdrop = function()
-			return backdrop
-		end
-
-		local getBackdropColor = function()
-			return 0, 0, 0, .6
-		end
-
-		local getBackdropBorderColor = function()
-			return 0, 0, 0
-		end
-
-		for i = 1, #tooltips do
-			local t = _G[tooltips[i]]
-			t:SetBackdrop(nil)
-			local bg = CreateFrame("Frame", nil, t)
-			bg:SetPoint("TOPLEFT")
-			bg:SetPoint("BOTTOMRIGHT")
-			bg:SetFrameLevel(t:GetFrameLevel()-1)
-			bg:SetBackdrop(backdrop)
-			bg:SetBackdropColor(0, 0, 0, .6)
-			bg:SetBackdropBorderColor(0, 0, 0)
-
-			t.GetBackdrop = getBackdrop
-			t.GetBackdropColor = getBackdropColor
-			t.GetBackdropBorderColor = getBackdropBorderColor
-		end
-
-		local sb = _G["GameTooltipStatusBar"]
-		sb:Height(6)
-		sb:ClearAllPoints()
-		sb:Point("BOTTOMLEFT", GameTooltip, "TOPLEFT", 1, 3)
-		sb:Point("BOTTOMRIGHT", GameTooltip, "TOPRIGHT", -1, 3)
-		sb:SetStatusBarTexture(DB.Statusbar)
-		S.CreateBD(FriendsTooltip)
-		S.CreateMark(sb)
-		-- pet battle stuff
-
-		local tooltips = {PetBattlePrimaryAbilityTooltip, PetBattlePrimaryUnitTooltip, FloatingBattlePetTooltip, BattlePetTooltip, FloatingPetBattleAbilityTooltip}
-		for _, f in pairs(tooltips) do
-			f:DisableDrawLayer("BACKGROUND")
-			local bg = CreateFrame("Frame", nil, f)
-			bg:SetAllPoints()
-			bg:SetFrameLevel(0)
-			S.CreateBD(bg)
-		end
-
-		PetBattlePrimaryUnitTooltip.Delimiter:SetTexture(0, 0, 0)
-		PetBattlePrimaryUnitTooltip.Delimiter:SetHeight(1)
-		PetBattlePrimaryAbilityTooltip.Delimiter1:SetHeight(1)
-		PetBattlePrimaryAbilityTooltip.Delimiter1:SetTexture(0, 0, 0)
-		PetBattlePrimaryAbilityTooltip.Delimiter2:SetHeight(1)
-		PetBattlePrimaryAbilityTooltip.Delimiter2:SetTexture(0, 0, 0)
-		FloatingPetBattleAbilityTooltip.Delimiter1:SetHeight(1)
-		FloatingPetBattleAbilityTooltip.Delimiter1:SetTexture(0, 0, 0)
-		FloatingPetBattleAbilityTooltip.Delimiter2:SetHeight(1)
-		FloatingPetBattleAbilityTooltip.Delimiter2:SetTexture(0, 0, 0)
-		FloatingBattlePetTooltip.Delimiter:SetTexture(0, 0, 0)
-		FloatingBattlePetTooltip.Delimiter:SetHeight(1)
-		S.ReskinClose(FloatingBattlePetTooltip.CloseButton)
-		S.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
-		
-	end
---[[ 
-	if not(IsAddOnLoaded("MetaMap") or IsAddOnLoaded("m_Map") or IsAddOnLoaded("Mapster") or IsAddOnLoaded("SunUI")) then
-		WorldMapFrameMiniBorderLeft:SetAlpha(0)
-		WorldMapFrameMiniBorderRight:SetAlpha(0)
-
-		local scale = WORLDMAP_WINDOWED_SIZE
-		local mapbg = CreateFrame("Frame", nil, WorldMapDetailFrame)
-		mapbg:Point("TOPLEFT", -1 / scale, 1 / scale)
-		mapbg:Point("BOTTOMRIGHT", 1 / scale, -1 / scale)
-		mapbg:SetFrameLevel(0)
-		mapbg:SetBackdrop({
-			bgFile = media.backdrop,
-		})
-		mapbg:SetBackdropColor(0, 0, 0)
-
-		local frame = CreateFrame("Frame",nil,WorldMapButton)
-		frame:SetFrameStrata("HIGH")
-
-		local function skinmap()
-			WorldMapFrameMiniBorderLeft:SetAlpha(0)
-			WorldMapFrameMiniBorderRight:SetAlpha(0)
-			WorldMapFrameCloseButton:ClearAllPoints()
-			WorldMapFrameCloseButton:Point("TOPRIGHT", WorldMapButton, "TOPRIGHT", 3, 3)
-			WorldMapFrameCloseButton:SetFrameStrata("HIGH")
-			WorldMapFrameSizeUpButton:ClearAllPoints()
-			WorldMapFrameSizeUpButton:Point("TOPRIGHT", WorldMapButton, "TOPRIGHT", 3, -18)
-			WorldMapFrameSizeUpButton:SetFrameStrata("HIGH")
-			WorldMapFrameTitle:ClearAllPoints()
-			WorldMapFrameTitle:Point("BOTTOMLEFT", WorldMapDetailFrame, 9, 5)
-			WorldMapFrameTitle:SetParent(frame)
-			WorldMapFrameTitle:SetTextColor(1, 1, 1)
-			WorldMapQuestShowObjectives:SetPoint("BOTTOMRIGHT", WorldMapButton, "BOTTOMRIGHT")
-			WorldMapQuestShowObjectives.SetPoint = function() end
-			WorldMapQuestShowObjectives:SetFrameStrata("HIGH")
-			WorldMapQuestShowObjectivesText:ClearAllPoints()
-			WorldMapQuestShowObjectivesText:Point("RIGHT", WorldMapQuestShowObjectives, "LEFT", -4, 1)
-			WorldMapQuestShowObjectivesText:SetTextColor(1, 1, 1)
-			WorldMapTrackQuest:SetParent(frame)
-			WorldMapTrackQuest:ClearAllPoints()
-			WorldMapTrackQuest:Point("TOPLEFT", WorldMapDetailFrame, 9, -5)
-			WorldMapTrackQuestText:SetTextColor(1, 1, 1)
-			WorldMapShowDigSites:SetFrameStrata("HIGH")
-			WorldMapShowDigSites:ClearAllPoints()
-			WorldMapShowDigSites:Point("BOTTOMRIGHT", WorldMapButton, "BOTTOMRIGHT", 0, 19)
-			WorldMapShowDigSitesText:ClearAllPoints()
-			WorldMapShowDigSitesText:Point("RIGHT", WorldMapShowDigSites, "LEFT", -4, 1)
-			WorldMapShowDigSitesText:SetTextColor(1, 1, 1)
-			WorldMapFrameTitle:SetFont(DB.Font, 12 / scale, "THINOUTLINE")
-			WorldMapFrameTitle:SetShadowOffset(0, 0)
-			WorldMapQuestShowObjectivesText:SetFont(DB.Font, 12, "OUTLINE")
-			WorldMapQuestShowObjectivesText:SetShadowOffset(0, 0)
-			WorldMapTrackQuestText:SetFont(DB.Font, 12 / scale, "OUTLINE")
-			WorldMapTrackQuestText:SetShadowOffset(0, 0)
-			WorldMapShowDigSitesText:SetFont(DB.Font, 12, "OUTLINE")
-			WorldMapShowDigSitesText:SetShadowOffset(0, 0)
-		end
-
-		skinmap()
-		hooksecurefunc("WorldMap_ToggleSizeDown", skinmap)
-
-		S.ReskinDropDown(WorldMapLevelDropDown)
-		S.ReskinCheck(WorldMapShowDigSites)
-		S.ReskinCheck(WorldMapQuestShowObjectives)
-		S.ReskinCheck(WorldMapTrackQuest)
+	-- so other stuff which tries to look like GameTooltip doesn't mess up
+	local getBackdrop = function()
+		return backdrop
 	end
 
-	if not(IsAddOnLoaded("Baggins") or IsAddOnLoaded("Stuffing") or IsAddOnLoaded("Combuctor") or IsAddOnLoaded("cargBags") or IsAddOnLoaded("famBags") or IsAddOnLoaded("ArkInventory") or IsAddOnLoaded("Bagnon")) then
-		BackpackTokenFrame:GetRegions():Hide()
-
-		for i = 1, 12 do
-			local con = _G["ContainerFrame"..i]
-
-			for j = 1, 7 do
-				select(j, con:GetRegions()):SetAlpha(0)
-			end
-
-			for k = 1, MAX_CONTAINER_ITEMS do
-				local item = "ContainerFrame"..i.."Item"..k
-				local button = _G[item]
-				local icon = _G[item.."IconTexture"]
-
-				_G[item.."IconQuestTexture"]:SetAlpha(0)
-
-				button:SetNormalTexture("")
-				button:SetPushedTexture("")
-
-				icon:Point("TOPLEFT", 1, -1)
-				icon:Point("BOTTOMRIGHT", -1, 1)
-				icon:SetTexCoord(.08, .92, .08, .92)
-
-				S.CreateBD(button, 0)
-			end
-
-			local f = CreateFrame("Frame", nil, con)
-			f:Point("TOPLEFT", 8, -4)
-			f:Point("BOTTOMRIGHT", -4, 3)
-			f:SetFrameLevel(con:GetFrameLevel()-1)
-			S.CreateBD(f)
-
-			S.ReskinClose(_G["ContainerFrame"..i.."CloseButton"], "TOPRIGHT", con, "TOPRIGHT", -6, -6)
-		end
-
-		for i = 1, 3 do
-			local ic = _G["BackpackTokenFrameToken"..i.."Icon"]
-			ic:SetDrawLayer("OVERLAY")
-			ic:SetTexCoord(.08, .92, .08, .92)
-			S.CreateBG(ic)
-		end
-
-		if not IsAddOnLoaded("oGlow") then
-			hooksecurefunc("ContainerFrame_Update", function(frame)
-				local name = frame:GetName()
-				local bu
-				for i = 1, frame.size do
-					bu = _G[name.."Item"..i]
-					if _G[name.."Item"..i.."IconQuestTexture"]:IsShown() then
-						bu:SetBackdropBorderColor(1, 0, 0)
-					else
-						bu:SetBackdropBorderColor(0, 0, 0)
-					end
-				end
-			end)
-
-			hooksecurefunc("BankFrameItemButton_Update", function(bu)
-				if not bu.isBag then
-					if _G[bu:GetName().."IconQuestTexture"]:IsShown() then
-						bu:SetBackdropBorderColor(1, 0, 0)
-					else
-						bu:SetBackdropBorderColor(0, 0, 0)
-					end
-				end
-			end)
-		end
-
-		S.SetBD(BankFrame)
-		BankFrame:DisableDrawLayer("BACKGROUND")
-		BankFrame:DisableDrawLayer("BORDER")
-		BankFrame:DisableDrawLayer("OVERLAY")
-		BankPortraitTexture:Hide()
-		BankFrameMoneyFrameInset:Hide()
-		BankFrameMoneyFrameBorder:Hide()
-
-
-		S.Reskin(BankFramePurchaseButton)
-		S.ReskinClose(BankFrameCloseButton)
-
-		for i = 1, 28 do
-			local item = "BankFrameItem"..i
-			local button = _G[item]
-			local icon = _G[item.."IconTexture"]
-
-			_G[item.."IconQuestTexture"]:SetAlpha(0)
-
-			button:SetNormalTexture("")
-			button:SetPushedTexture("")
-
-			icon:Point("TOPLEFT", 1, -1)
-			icon:Point("BOTTOMRIGHT", -1, 1)
-			icon:SetTexCoord(.08, .92, .08, .92)
-
-			S.CreateBD(button, 0)
-		end
-
-		for i = 1, 7 do
-			local bag = _G["BankFrameBag"..i]
-			local ic = _G["BankFrameBag"..i.."IconTexture"]
-			_G["BankFrameBag"..i.."HighlightFrameTexture"]:SetTexture(media.checked)
-
-			bag:SetNormalTexture("")
-			bag:SetPushedTexture("")
-
-			ic:Point("TOPLEFT", 1, -1)
-			ic:Point("BOTTOMRIGHT", -1, 1)
-			ic:SetTexCoord(.08, .92, .08, .92)
-
-			S.CreateBD(bag, 0)
-		end
+	local getBackdropColor = function()
+		return 0, 0, 0, .6
 	end
 
-	if not(IsAddOnLoaded("Butsu") or IsAddOnLoaded("LovelyLoot") or IsAddOnLoaded("XLoot")) then
-		LootFramePortraitOverlay:Hide()
-
-		select(19, LootFrame:GetRegions()):Point("TOP", LootFrame, "TOP", 0, -7)
-		hooksecurefunc("LootFrame_UpdateButton", function(index)
-			local ic = _G["LootButton"..index.."IconTexture"]
-
-			if not ic.bg then
-				local bu = _G["LootButton"..index]
-
-				_G["LootButton"..index.."IconQuestTexture"]:SetAlpha(0)
-				_G["LootButton"..index.."NameFrame"]:Hide()
-
-				bu:SetNormalTexture("")
-				bu:SetPushedTexture("")
-
-				local bd = CreateFrame("Frame", nil, bu)
-				bd:SetPoint("TOPLEFT")
-				bd:SetPoint("BOTTOMRIGHT", 114, 0)
-				bd:SetFrameLevel(bu:GetFrameLevel()-1)
-				S.CreateBD(bd, .25)
-
-				ic:SetTexCoord(.08, .92, .08, .92)
-				ic.bg = S.CreateBG(ic)
-			end
-
-			if select(6, GetLootSlotInfo(index)) then
-				ic.bg:SetVertexColor(1, 0, 0)
-			else
-				ic.bg:SetVertexColor(0, 0, 0)
-			end
-		end)
-
-		LootFrameDownButton:ClearAllPoints()
-		LootFrameDownButton:SetPoint("BOTTOMRIGHT", -8, 6)
-		LootFramePrev:ClearAllPoints()
-		LootFramePrev:SetPoint("LEFT", LootFrameUpButton, "RIGHT", 4, 0)
-		LootFrameNext:ClearAllPoints()
-		LootFrameNext:SetPoint("RIGHT", LootFrameDownButton, "LEFT", -4, 0)
-
-		S.ReskinPortraitFrame(LootFrame, true)
-		S.ReskinArrow(LootFrameUpButton, "up")
-		S.ReskinArrow(LootFrameDownButton, "down")
+	local getBackdropBorderColor = function()
+		return 0, 0, 0
 	end
-	local chatBubbles = false
-	if chatBubbles then
-		local bubbleHook = CreateFrame("Frame")
 
-		local function styleBubble(frame)
-			for i = 1, frame:GetNumRegions() do
-				local region = select(i, frame:GetRegions())
-				if region:GetObjectType() == "Texture" then
-					region:SetTexture(nil)
-				end
-			end
+	for i = 1, #tooltips do
+		local t = _G[tooltips[i]]
+		t:SetBackdrop(nil)
+		local bg = CreateFrame("Frame", nil, t)
+		bg:SetPoint("TOPLEFT")
+		bg:SetPoint("BOTTOMRIGHT")
+		bg:SetFrameLevel(t:GetFrameLevel()-1)
+		bg:SetBackdrop(backdrop)
+		bg:SetBackdropColor(0, 0, 0, .6)
+		bg:SetBackdropBorderColor(0, 0, 0)
 
-			frame:SetBackdrop({
-				bgFile = media.backdrop,
-				edgeFile = media.backdrop,
-				edgeSize = UIParent:GetScale(),
-			})
-			frame:SetBackdropColor(0, 0, 0, .5)
-			frame:SetBackdropBorderColor(0, 0, 0)
-		end
+		t.GetBackdrop = getBackdrop
+		t.GetBackdropColor = getBackdropColor
+		t.GetBackdropBorderColor = getBackdropBorderColor
+	end
 
-		local function isChatBubble(frame)
-			if frame:GetName() then return end
-			if not frame:GetRegions() then return end
-			return frame:GetRegions():GetTexture() == ("Interface\\Tooltips\\ChatBubble-Background")
-		end
+	local sb = _G["GameTooltipStatusBar"]
+	sb:Height(6)
+	sb:ClearAllPoints()
+	sb:Point("BOTTOMLEFT", GameTooltip, "TOPLEFT", 1, 3)
+	sb:Point("BOTTOMRIGHT", GameTooltip, "TOPRIGHT", -1, 3)
+	sb:SetStatusBarTexture(DB.Statusbar)
+	S.CreateBD(FriendsTooltip)
+	S.CreateMark(sb)
+	-- pet battle stuff
 
-		local last = 0
-		local numKids = 0
+	local tooltips = {PetBattlePrimaryAbilityTooltip, PetBattlePrimaryUnitTooltip, FloatingBattlePetTooltip, BattlePetTooltip, FloatingPetBattleAbilityTooltip}
+	for _, f in pairs(tooltips) do
+		f:DisableDrawLayer("BACKGROUND")
+		local bg = CreateFrame("Frame", nil, f)
+		bg:SetAllPoints()
+		bg:SetFrameLevel(0)
+		S.CreateBD(bg)
+	end
 
-		bubbleHook:SetScript("OnUpdate", function(self, elapsed)
-			last = last + elapsed
-			if last > .1 then
-				last = 0
-				local newNumKids = WorldFrame:GetNumChildren()
-				if newNumKids ~= numKids then
-					for i=numKids + 1, newNumKids do
-						local frame = select(i, WorldFrame:GetChildren())
+	PetBattlePrimaryUnitTooltip.Delimiter:SetTexture(0, 0, 0)
+	PetBattlePrimaryUnitTooltip.Delimiter:SetHeight(1)
+	PetBattlePrimaryAbilityTooltip.Delimiter1:SetHeight(1)
+	PetBattlePrimaryAbilityTooltip.Delimiter1:SetTexture(0, 0, 0)
+	PetBattlePrimaryAbilityTooltip.Delimiter2:SetHeight(1)
+	PetBattlePrimaryAbilityTooltip.Delimiter2:SetTexture(0, 0, 0)
+	FloatingPetBattleAbilityTooltip.Delimiter1:SetHeight(1)
+	FloatingPetBattleAbilityTooltip.Delimiter1:SetTexture(0, 0, 0)
+	FloatingPetBattleAbilityTooltip.Delimiter2:SetHeight(1)
+	FloatingPetBattleAbilityTooltip.Delimiter2:SetTexture(0, 0, 0)
+	FloatingBattlePetTooltip.Delimiter:SetTexture(0, 0, 0)
+	FloatingBattlePetTooltip.Delimiter:SetHeight(1)
+	S.ReskinClose(FloatingBattlePetTooltip.CloseButton)
+	S.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
+end
 
-						if isChatBubble(frame) then
-							styleBubble(frame)
-						end
-					end
-					numKids = newNumKids
-				end
-			end
-		end)
-	end ]]
-end)
+function Module:OnInitialize()
+	if not C["MiniDB"]["Aurora"] and IsAddOnLoaded("Aurora") then return end
+	Module:RegisterEvent("ADDON_LOADED", SkinBlz)
+	Module:RegisterEvent("PLAYER_ENTERING_WORLD", SkinTooltip)
+end

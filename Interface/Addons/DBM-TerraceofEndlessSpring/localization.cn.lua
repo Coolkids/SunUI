@@ -18,6 +18,7 @@ L:SetOptionLocalization({
 	HudMAP				= "高级定位监视(HUD)：$spell:111850的位置",
 	SetIconOnPrison		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(117436),
 	SoundDW				= "语音警告：$spell:117283的驱散",
+	SoundSDQ			= "语音警告：$spell:117436的驱散",
 	SoundWOP			= "语音警告：重要技能",
 	optDDall			= "只有在你的目标是水王时才提示打断链(不选则总是提示)",
 	specWarnDDL 		= "特殊警告：下一次到你打断",

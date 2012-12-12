@@ -39,3 +39,75 @@ L:SetMiscLocalization({
 	Lost7			= "what a mess",
 	Lost8			= "His name was",--LoL at fight club reference here
 })
+
+------------
+-- Rank 1 --
+------------
+L= DBM:GetModLocalization("BrawlRank1")
+
+L:SetGeneralLocalization({
+	name = "Rank 1"
+})
+
+------------
+-- Rank 2 --
+------------
+L= DBM:GetModLocalization("BrawlRank2")
+
+L:SetGeneralLocalization({
+	name = "Rank 2"
+})
+
+------------
+-- Rank 3 --
+------------
+L= DBM:GetModLocalization("BrawlRank3")
+
+L:SetGeneralLocalization({
+	name = "Rank 3"
+})
+
+------------
+-- Rank 4 --
+------------
+L= DBM:GetModLocalization("BrawlRank4")
+
+L:SetGeneralLocalization({
+	name = "Rank 4"
+})
+
+------------
+-- Rank 5 --
+------------
+L= DBM:GetModLocalization("BrawlRank5")
+
+L:SetGeneralLocalization({
+	name = "Rank 5"
+})
+
+------------
+-- Rank 6 --
+------------
+L= DBM:GetModLocalization("BrawlRank6")
+
+L:SetGeneralLocalization({
+	name = "Rank 6"
+})
+
+------------
+-- Rank 7 --
+------------
+L= DBM:GetModLocalization("BrawlRank7")
+
+L:SetGeneralLocalization({
+	name = "Rank 7"
+})
+
+------------
+-- Rank 8 --
+------------
+L= DBM:GetModLocalization("BrawlRank8")
+
+L:SetGeneralLocalization({
+	name = "Rank 8"
+})

@@ -196,31 +196,6 @@ local function LinkHoverOnLoad()
 end
 LinkHoverOnLoad()
 
-function Module:OnEnable()
-	---------------- > afk/dnd msg filter
-	if C["MiniDB"]["DNDFilter"] then  
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL_JOIN", function(msg) return true end)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL_LEAVE", function(msg) return true end)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_AFK", function(msg) return true end)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_DND", function(msg) return true end)
-	end
-	if C["MiniDB"]["TimeStamps"] then 
-		if GetCVar("showTimestamps") == "none" then  
-			SetCVar("showTimestamps", [[%H:%M:%S]])
-		end
-	else
-		SetCVar("showTimestamps", "none")
-	end
-	if C["MiniDB"]["ChatBackground"] then 
-		for i = 1, NUM_CHAT_WINDOWS do
-			local cf = _G['ChatFrame'..i]
-			if cf then
-				cf:CreateShadow("Background")
-			end
-		end
-	end
-end
-
 ----------------------------------------------------------------------------------------
 --	Copy Chat
 ----------------------------------------------------------------------------------------
@@ -319,4 +294,29 @@ end
 for i = 1, 10 do
 	local tab = _G[format("%s%d%s", "ChatFrame", i, "Tab")]
 	tab:SetScript("OnDoubleClick", Copy)
+end
+
+function Module:OnEnable()
+	---------------- > afk/dnd msg filter
+	if C["MiniDB"]["DNDFilter"] then  
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL_JOIN", function(msg) return true end)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL_LEAVE", function(msg) return true end)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_AFK", function(msg) return true end)
+		ChatFrame_AddMessageEventFilter("CHAT_MSG_DND", function(msg) return true end)
+	end
+	if C["MiniDB"]["TimeStamps"] then 
+		if GetCVar("showTimestamps") == "none" then  
+			SetCVar("showTimestamps", [[%H:%M:%S]])
+		end
+	else
+		SetCVar("showTimestamps", "none")
+	end
+	if C["MiniDB"]["ChatBackground"] then 
+		for i = 1, NUM_CHAT_WINDOWS do
+			local cf = _G['ChatFrame'..i]
+			if cf then
+				cf:CreateShadow("Background")
+			end
+		end
+	end
 end

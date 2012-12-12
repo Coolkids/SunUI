@@ -1,12 +1,11 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("AutoAccept")
+local AAQ = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("AutoAccept", "AceEvent-3.0")
 local isRepeatableAuto = false --是否开启可重复交接任务自动交接（比如一包食材换徽记）
 
-local addon = CreateFrame('Frame')
-addon.completed_quests = {}
-addon.incomplete_quests = {}
+completed_quests = {}
+incomplete_quests = {}
 	
-function addon:canAutomate ()
+function AAQ:canAutomate ()
 	if IsShiftKeyDown() then
 		return false
 	else
@@ -14,7 +13,7 @@ function addon:canAutomate ()
 	end
 end
 
-function addon:strip_text (text)
+function AAQ:strip_text (text)
 	if not text then return end
 	text = text:gsub('|c%x%x%x%x%x%x%x%x(.-)|r','%1')
 	text = text:gsub('%[.*%]%s*','')
@@ -23,23 +22,23 @@ function addon:strip_text (text)
 	return text
 end
 
-function addon:QUEST_PROGRESS ()
-	if not self:canAutomate() then return end
+local function On_QUEST_PROGRESS ()
+	if not AAQ:canAutomate() then return end
 	if IsQuestCompletable() then
 		CompleteQuest()
 	end
 end
 
-function addon:QUEST_LOG_UPDATE ()
-	if not self:canAutomate() then return end
+local function On_QUEST_LOG_UPDATE ()
+	if not AAQ:canAutomate() then return end
 	local start_entry = GetQuestLogSelection()
 	local num_entries = GetNumQuestLogEntries()
 	local title
 	local is_complete
 	local no_objectives
 
-	self.completed_quests = {}
-	self.incomplete_quests = {}
+	completed_quests = {}
+	incomplete_quests = {}
 
 	if num_entries > 0 then
 		for i = 1, num_entries do
@@ -48,9 +47,9 @@ function addon:QUEST_LOG_UPDATE ()
 			no_objectives = GetNumQuestLeaderBoards(i) == 0
 			if title then
 				if is_complete or no_objectives then
-					self.completed_quests[title] = true
+					completed_quests[title] = true
 				else
-					self.incomplete_quests[title] = true
+					incomplete_quests[title] = true
 				end
 			end
 		end
@@ -59,8 +58,8 @@ function addon:QUEST_LOG_UPDATE ()
 	SelectQuestLogEntry(start_entry)
 end
 
-function addon:GOSSIP_SHOW ()
-	if not self:canAutomate() then return end
+local function On_GOSSIP_SHOW ()
+	if not AAQ:canAutomate() then return end
 
 	local button
 	local text
@@ -68,7 +67,7 @@ function addon:GOSSIP_SHOW ()
 	for i = 1, GetNumGossipActiveQuests()+GetNumGossipAvailableQuests() do
 		button = _G['GossipTitleButton' .. i]
 		if button:IsVisible() then
-		text = self:strip_text(button:GetText())	  
+		text = AAQ:strip_text(button:GetText())	  
 			if button.type == 'Available' then
 				local isRepeatable = select(i+4,GetGossipAvailableQuests())
 					if  isRepeatable and isRepeatableAuto then
@@ -77,7 +76,7 @@ function addon:GOSSIP_SHOW ()
 						button:Click()
 					end
 			elseif button.type == 'Active' then
-				if self.completed_quests[text] then
+				if completed_quests[text] then
 					button:Click()
 				end
 			end
@@ -85,8 +84,8 @@ function addon:GOSSIP_SHOW ()
 	end
 end
 
-function addon:QUEST_GREETING (...)
-	if not self:canAutomate() then return end
+local function On_QUEST_GREETING ()
+	if not AAQ:canAutomate() then return end
 
 	local button
 	local text
@@ -94,23 +93,23 @@ function addon:QUEST_GREETING (...)
 	for i = 1, 32 do
 		button = _G['QuestTitleButton' .. i]
 		if button:IsVisible() then
-			text = self:strip_text(button:GetText())
-			if self.completed_quests[text] then
+			text = AAQ:strip_text(button:GetText())
+			if completed_quests[text] then
 				button:Click()
-			elseif not self.incomplete_quests[text] then
+			elseif not incomplete_quests[text] then
 				button:Click()
 			end
 		end
 	end
 end
 
-function addon:QUEST_DETAIL ()
-	if not self:canAutomate() then return end
+local function On_QUEST_DETAIL ()
+	if not AAQ:canAutomate() then return end
 	AcceptQuest()
 end
 
-function addon:QUEST_COMPLETE (event)
-	if not self:canAutomate() then return end
+local function On_QUEST_COMPLETE ()
+	if not AAQ:canAutomate() then return end
   
 	if GetNumQuestChoices() <= 1	then
 	--GetQuestReward(QuestFrameRewardPanel.itemChoice)
@@ -121,24 +120,17 @@ function addon:QUEST_COMPLETE (event)
 	end
 end
 
-function addon.onevent (self, event, ...)
-	if self[event] then
-		self[event](self, ...)
-	end
-end
 
 QuestInfoDescriptionText.SetAlphaGradient=function() return false end
-_G.idQuestAutomation = addon
 
-function Module:OnInitialize()
+function AAQ:OnInitialize()
 	if C["MiniDB"]["AutoQuest"] then
-		addon:SetScript('OnEvent', addon.onevent)
-		addon:RegisterEvent('GOSSIP_SHOW')
-		addon:RegisterEvent('QUEST_COMPLETE')
-		addon:RegisterEvent('QUEST_DETAIL')
-		addon:RegisterEvent('QUEST_FINISHED')
-		addon:RegisterEvent('QUEST_GREETING')
-		addon:RegisterEvent('QUEST_LOG_UPDATE')
-		addon:RegisterEvent('QUEST_PROGRESS')
+		AAQ:RegisterEvent("GOSSIP_SHOW", On_GOSSIP_SHOW)
+		AAQ:RegisterEvent("QUEST_COMPLETE", On_QUEST_COMPLETE)
+		AAQ:RegisterEvent("QUEST_DETAIL", On_QUEST_DETAIL)
+		AAQ:RegisterEvent("QUEST_GREETING", On_QUEST_GREETING)
+		AAQ:RegisterEvent("QUEST_LOG_UPDATE", On_QUEST_LOG_UPDATE)
+		AAQ:RegisterEvent("QUEST_PROGRESS", On_QUEST_PROGRESS)
+		--self:RegisterEvent('QUEST_FINISHED')
 	end
 end
