@@ -7,10 +7,7 @@
 	<Include file="core\load.xml"/>
 	<Include file="developer\load.xml"/>
 	<Script file = "core\AddonManager.lua"/>
-	<!-- module -->
 	<Include file="Modules\load.xml"/>
-	<!-- script -->
-	<Include file="Script\load.xml"/>
 </Ui>
 
 <!--	<Script file="Load.lua"/>  -->

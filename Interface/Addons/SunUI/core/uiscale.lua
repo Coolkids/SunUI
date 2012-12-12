@@ -1,5 +1,5 @@
 local S, C, L, DB = unpack(select(2, ...))
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SunUI fixPX")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SunUI fixPX", "AceEvent-3.0")
 --  自动设置聊天框体和UI缩放
 local function SetChatFrame()
 	ChatFrame1:ClearAllPoints()
@@ -125,9 +125,9 @@ local function NeedReloadUI()
 	end
 end
 
-local Graphic = CreateFrame("Frame")
-Graphic:RegisterEvent("PLAYER_ENTERING_WORLD")
-Graphic:SetScript("OnEvent", function(self, event)
+
+
+local function Fix1px()
 	-- we adjust UIParent to screen #1 if Eyefinity is found
 	if eyefinity then
 		local width = eyefinity
@@ -153,5 +153,16 @@ Graphic:SetScript("OnEvent", function(self, event)
 	VideoOptionsFrameApply:HookScript("OnClick", NeedReloadUI)
 	
 	-- unload
-	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-end)
+	Module:UnregisterEvent("PLAYER_ENTERING_WORLD")
+end
+function Module:OnInitialize()
+	Module:RegisterEvent("PLAYER_ENTERING_WORLD", Fix1px)
+
+	local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/C["MiniDB"]["uiScale"]
+
+	local function sceenscale(x)
+		return (mult*math.floor(x/mult+.5)) 
+	end
+	S.Scale = function(x) return sceenscale(x) end
+	S.mult = mult
+end
