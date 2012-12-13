@@ -6,15 +6,10 @@ local window = CreateFrame("Frame", "NumerationFrame", UIParent)
 addon.window = window
 
 local lines = {}
-
 local noop = function() end
 local backAction = noop
 local reportAction = noop
-local backdrop = {
-	bgFile = [[Interface\ChatFrame\ChatFrameBackground]],
-	edgeFile = "", tile = true, tileSize = 16, edgeSize = 0,
-	insets = {left = 0, right = 0, top = 0, bottom = 0}
-}
+
 local clickFunction = function(self, btn)
 	if btn == "LeftButton" then
 		self.detailAction(self)
@@ -41,7 +36,7 @@ local menuTable = {
 			{text = CHAT_MSG_SAY, arg1 = "SAY", func = reportFunction, notCheckable = 1},
 			{text = PARTY, arg1 = "PARTY", func = reportFunction, notCheckable = 1},
 			{text = RAID, arg1 = "RAID", func = reportFunction, notCheckable = 1},
-			{text = INSTANCE, arg1 = "INSTANCE", func = reportFunction, notCheckable = 1},
+			{text = INSTANCE, arg1 = "INSTANCE_CHAT", func = reportFunction, notCheckable = 1},
 			{text = GUILD, arg1 = "GUILD", func = reportFunction, notCheckable = 1},
 			{text = OFFICER, arg1 = "OFFICER", func = reportFunction, notCheckable = 1},
 			{text = TARGET, func = function() reportFunction(self, "WHISPER", UnitName("target")) end, notCheckable = 1},
@@ -67,11 +62,11 @@ local menuTable = {
 }
 
 local updateReportChannels = function()
-	menuTable[2].menuList[8].menuList = table.wipe(menuTable[2].menuList[9].menuList)
+	menuTable[2].menuList[9].menuList = table.wipe(menuTable[2].menuList[9].menuList)
 	for i = 1, GetNumDisplayChannels() do
 		local name, _, _, channelNumber, _, active, category = GetChannelDisplayInfo(i)
 		if category == "CHANNEL_CATEGORY_CUSTOM" then
-			tinsert(menuTable[2].menuList[8].menuList, {text = name, arg1 = "CHANNEL", arg2 = channelNumber, func = reportFunction, notCheckable = 1})
+			tinsert(menuTable[2].menuList[9].menuList, {text = name, arg1 = "CHANNEL", arg2 = channelNumber, func = reportFunction, notCheckable = 1})
 		end
 	end
 end
@@ -106,7 +101,7 @@ function window:OnInitialize()
 		addon:SetOption("x", xOfs/uis)
 		addon:SetOption("y", yOfs/uis)
 	end)
-	
+
 	self:CreateShadow("Background")
 
 	local x, y = addon:GetOption("x"), addon:GetOption("y")
@@ -142,13 +137,13 @@ function window:OnInitialize()
 	end)
 	reset:SetScript("OnEnter", function() reset:SetBackdropColor(s.buttonhighlightcolor[1], s.buttonhighlightcolor[2], s.buttonhighlightcolor[3], .3) end)
 	reset:SetScript("OnLeave", function() reset:SetBackdropColor(0, 0, 0, s.titlealpha) end)
-
+	S.Reskin(reset)
 	reset.text = reset:CreateFontString(nil, "ARTWORK")
 	reset.text:SetFont(s.linefont, s.linefontsize, s.linefontstyle)
 	reset.text:SetShadowOffset(s.fontshadow and 1 or 0, s.fontshadow and -1 or 0)
 	reset.text:SetPoint("CENTER", 1, 0)
 	reset.text:SetText(">")
-	S.Reskin(reset)
+
 	local segment = CreateFrame("Button", nil, self)
 	self.segment = segment
 	segment:SetBackdrop(backdrop)

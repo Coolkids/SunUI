@@ -18,8 +18,6 @@ local ReminderBuffs = {
 		["Aspects"] = { --aspects group
 			["spells"] = {
 				[13165] = true, -- hawk
-				[5118] = true, -- cheetah
-				[82661] = true, -- fox	
 				[109260] = true, --铁鹰守护
 			},
 			["combat"] = true,
@@ -38,33 +36,16 @@ local ReminderBuffs = {
 		},		
 	},
 	WARLOCK = {
-		["Armors"] = { --armors group
-			["spells"] = {		
-			},
-			["combat"] = true,
-			["instance"] = true,
-		},
 	},
 	PALADIN = {
-		["Seals"] = { --Seals group
-			["spells"] = {		
-			},
-			["combat"] = true,
-			["instance"] = true,
-		},
 		["Righteous Fury"] = { -- righteous fury group
 			["spells"] = {
+				[25780] = true,
 			},
 			["role"] = "Tank",
 			["instance"] = true,
 			["reversecheck"] = true,
 			["negate_reversecheck"] = 1, --Holy paladins use RF sometimes
-		},
-		["Auras"] = { -- auras
-			["spells"] = {
-			},
-			["instance"] = true,
-			["personal"] = true,
 		},
 	},
 	SHAMAN = {
@@ -103,7 +84,7 @@ local ReminderBuffs = {
 			},
 			["negate_spells"] = {
 				[57330] = true, -- horn of Winter
-				[19506] = true, -- roar of courage (hunter pet)						
+				[93435] = true, -- roar of courage (hunter pet)						
 			},
 			["combat"] = true,
 			["role"] = "Melee",
@@ -116,7 +97,7 @@ local ReminderBuffs = {
 			},
 			["negate_spells"] = {
 				[6673] = true, -- battle Shout
-				[19506] = true, -- roar of courage (hunter pet)			
+				[93435] = true, -- roar of courage (hunter pet)			
 			},
 			["combat"] = true,
 		},
@@ -129,12 +110,19 @@ local ReminderBuffs = {
 		},
 	},
 	ROGUE = { 
-		["Shields"] = { -- auras
+		["Poison1"] = { -- auras
 			["spells"] = {
-				[2823] = true,
-				[8679] = true,
-				[3408] = true,
-				[5761] = true,
+				[2823] = true, -- 致命毒藥
+				[8679] = true, -- 致傷毒藥
+			},
+			["combat"] = true,
+		},
+		["Poison2"] = { -- auras
+			["spells"] = {
+				[108211] = true, -- 吸血毒藥
+				[3408] = true, -- 致殘毒藥
+				[5761] = true, -- 麻痹毒藥
+				[108215] = true, -- 癱瘓毒藥
 			},
 			["combat"] = true,
 		},
@@ -366,7 +354,7 @@ local function OnEvent(self, event, arg1, arg2)
 		else
 			self:Hide()
 			return
-		end	
+		end
 	end
 end
 

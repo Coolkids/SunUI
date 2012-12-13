@@ -2,17 +2,17 @@
 local S, C, L, DB = unpack(select(2, ...))
 local _
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("MiniMap", "AceTimer-3.0")
-function Module:OnEnable()
+
+local function SkinMiniMap()
 	Minimap:SetMaskTexture("Interface\\ChatFrame\\ChatFrameBackground")
 	Minimap:SetFrameStrata("MEDIUM")
 	Minimap:ClearAllPoints()
 	Minimap:SetSize(120, 120)
 	
 	MoveHandle.Minimap = S.MakeMoveHandle(Minimap, L["小地图"], "Minimap")
-	--local h = CreateFrame("Frame", nil, Minimap)
-	--h:Point("TOPLEFT",1,-1)
-	--h:Point("BOTTOMRIGHT",-1,1)
 	Minimap:CreateShadow()
+end
+local function CreateFlash()
 	local PMinimap = CreateFrame("Frame", nil, Minimap)
 	PMinimap:SetFrameStrata("BACKGROUND")
 	PMinimap:SetFrameLevel(0)
@@ -48,10 +48,8 @@ function Module:OnEnable()
 	
 	PMinimap.texture.anim:SetLooping("REPEAT")
 	PMinimap.texture.anim:Play()
-
-	--LFGSearchStatus:SetClampedToScreen(true)
-	--LFGDungeonReadyStatus:SetClampedToScreen(true)
-
+end
+local function HideMinimapButton()
 	local frames = {
 		"GameTimeFrame",
 		"MinimapBorderTop",
@@ -72,17 +70,12 @@ function Module:OnEnable()
 		end
 	end
 	MinimapCluster:EnableMouse(false)
-
 	-- Tracking
 	MiniMapTrackingBackground:SetAlpha(0)
 	MiniMapTrackingButton:SetAlpha(0)
 	MiniMapTracking:ClearAllPoints()
 	MiniMapTracking:SetPoint("BOTTOMLEFT", Minimap, -5, -5)
 	MiniMapTracking:SetScale(1)
-
-	-- BG icon
-	--MiniMapBattlefieldFrame:ClearAllPoints()
-	--MiniMapBattlefieldFrame:SetPoint("TOP", Minimap, "TOP", 2, 8)
 
 	--Random Group icon
 	QueueStatusMinimapButton:ClearAllPoints()
@@ -115,17 +108,18 @@ function Module:OnEnable()
 	GameTimeCalendarInvitesTexture:SetPoint("TOPRIGHT")
 
 	if FeedbackUIButton then
-	FeedbackUIButton:ClearAllPoints()
-	FeedbackUIButton:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 6, -6)
-	FeedbackUIButton:SetScale(0.8)
+		FeedbackUIButton:ClearAllPoints()
+		FeedbackUIButton:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 6, -6)
+		FeedbackUIButton:SetScale(0.8)
 	end
 
 	if StreamingIcon then
-	StreamingIcon:ClearAllPoints()
-	StreamingIcon:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 8, 8)
-	StreamingIcon:SetScale(0.8)
+		StreamingIcon:ClearAllPoints()
+		StreamingIcon:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 8, 8)
+		StreamingIcon:SetScale(0.8)
 	end
-
+end
+local function MouseScroll()
 	-- Enable mouse scrolling
 	Minimap:EnableMouseWheel(true)
 	Minimap:SetScript("OnMouseWheel", function(self, z)
@@ -136,7 +130,8 @@ function Module:OnEnable()
 			Minimap:SetZoom(c-1)
 		end
 	end)
-
+end
+local function RightClickMenu()
 	local menuFrame = CreateFrame("Frame", "MinimapRightClickMenu", UIParent, "UIDropDownMenuTemplate")
 	local menuList = {
 		{text = CHARACTER_BUTTON, func = function() ToggleCharacter("PaperDollFrame") end},
@@ -163,6 +158,8 @@ function Module:OnEnable()
 			Minimap_OnClick(self)
 		end
 	end)
+end
+local function LocationInfo()
 	local SubLoc = CreateFrame("Frame", "Sub Location", Minimap)
 	local SubText = SubLoc:CreateFontString(nil)
 	local SubText2 = SubLoc:CreateFontString(nil)
@@ -175,8 +172,7 @@ function Module:OnEnable()
 	SubText2:SetText("")
 	SubText:SetText("")
 	Minimap:HookScript('OnEnter', function() 
-		SubText:Show() 
-		SubText2:Show() 
+		SubLoc:Show() 
 		SubText2:SetText(GetZoneText())
 		SubText:SetText(GetSubZoneText()) 
 		UIFrameFadeIn(SubLoc, 1, SubLoc:GetAlpha(), 1)
@@ -192,15 +188,10 @@ function Module:OnEnable()
 		SubText:SetTextColor(r,g,b) 
 	end)
 	Minimap:HookScript('OnLeave', function() 
-		local fadeInfo = {}
-		fadeInfo.mode = "OUT"
-		fadeInfo.timeToFade = 1
-		fadeInfo.finishedFunc = function() SubLoc:Hide() end	--隐藏
-		fadeInfo.startAlpha = SubLoc:GetAlpha()
-		fadeInfo.endAlpha = 0
-		UIFrameFade(SubLoc, fadeInfo)
+		S.FadeOutFrameDamage(SubLoc)
 	end)
-	
+end	
+local function Difficultyflag()
 		---Hide Instance Difficulty flag 隐藏难度标志
 	MiniMapInstanceDifficulty:ClearAllPoints()
 	MiniMapInstanceDifficulty:Hide()
@@ -250,4 +241,13 @@ function Module:OnEnable()
 		rdt:SetText(text)
 	end
 	rd:SetScript("OnEvent", diff)
+end
+function Module:OnEnable()
+	SkinMiniMap()
+	CreateFlash()
+	HideMinimapButton()
+	MouseScroll()
+	RightClickMenu()
+	LocationInfo()
+	Difficultyflag()
 end

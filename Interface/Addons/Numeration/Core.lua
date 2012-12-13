@@ -424,12 +424,13 @@ addon.UNIT_PET = addon.UpdateGUIDS
 addon.UNIT_NAME_UPDATE = addon.UpdateGUIDS
 function addon:ZONE_CHANGED_NEW_AREA(force)
 	local _, zoneType = IsInInstance()
+	local difficulty = GetInstanceDifficulty()
 
 	if force == true or zoneType ~= self.zoneType then
 		self.zoneType = zoneType
 
-		if not NumerationCharOptions.onlyinstance or zoneType == "party" or zoneType == "raid" or zoneType == nil then
-			if zoneType == "party" or zoneType == "raid" or zoneType == "pvp" or zoneType == nil then
+		if not NumerationCharOptions.onlyinstance or difficulty ~= 1 then
+			if difficulty ~= 1 then
 				local curZone = GetRealZoneText()
 				if curZone ~= NumerationCharDB.zone then
 					NumerationCharDB.zone = curZone
@@ -447,7 +448,6 @@ function addon:ZONE_CHANGED_NEW_AREA(force)
 			self.events:RegisterEvent("UNIT_PET")
 			self.events:RegisterEvent("UNIT_NAME_UPDATE")
 
-			self.events:RegisterEvent("UNIT_HEALTH")
 			self.events:RegisterEvent("PLAYER_REGEN_DISABLED")
 			self.events:RegisterEvent("PLAYER_REGEN_ENABLED")
 
@@ -464,7 +464,6 @@ function addon:ZONE_CHANGED_NEW_AREA(force)
 			self.events:UnregisterEvent("UNIT_PET")
 			self.events:UnregisterEvent("UNIT_NAME_UPDATE")
 
-			self.events:UnregisterEvent("UNIT_HEALTH")
 			self.events:UnregisterEvent("PLAYER_REGEN_DISABLED")
 			self.events:UnregisterEvent("PLAYER_REGEN_ENABLED")
 
@@ -482,8 +481,7 @@ function addon:ZONE_CHANGED_NEW_AREA(force)
 	end
 end
 
-local inCombat = nil
-local meDead = nil
+local inCombat, RaidInCombat = nil, nil
 local combatTimer = CreateFrame("Frame")
 combatTimer:Hide()
 combatTimer:SetScript("OnUpdate", function(self, elapsed)
@@ -496,26 +494,15 @@ function combatTimer:Activate()
 	self.timer = s.combatseconds
 	self:Show()
 end
-function addon:UNIT_HEALTH(unit)
-	if unit ~= "player" then return end
-	local dead = UnitIsDead("player")
-	if dead ~= meDead then
-		meDead = dead
-		if inCombat then return end
-		if meDead then
-			combatTimer:Hide()
-		else
-			combatTimer:Activate()
-		end
-	end
-end
+
 function addon:PLAYER_REGEN_DISABLED()
 	inCombat = true
 	combatTimer:Hide()
 end
+
 function addon:PLAYER_REGEN_ENABLED()
 	inCombat = nil
-	if not meDead then
+	if not RaidInCombat then
 		combatTimer:Activate()
 	end
 end
@@ -525,11 +512,11 @@ function addon:IsRaidInCombat()
 		local unit = IsInRaid() and "raid" or "party"
 		for i = 1, GetNumGroupMembers(), 1 do
 			if UnitExists(unit..i) and UnitAffectingCombat(unit..i) then
-				inCombat = true
+				RaidInCombat = true
 			end
 		end
 	end
-	inCombat = nil
+	RaidInCombat = nil
 end
 
 function addon:EnterCombatEvent(timestamp, guid, name)
@@ -541,7 +528,7 @@ function addon:EnterCombatEvent(timestamp, guid, name)
 
 	current.now = timestamp
 	if not current.boss then
-		local mobid = boss.BossIDs[tonumber(guid:sub(7, 10), 16)]
+		local mobid = boss.BossIDs[tonumber(guid:sub(6, 10), 16)]
 		if mobid then
 			current.name = mobid == true and name or mobid
 			current.boss = true
@@ -549,7 +536,7 @@ function addon:EnterCombatEvent(timestamp, guid, name)
 			current.name = name
 		end
 	end
-	if not inCombat and not meDead then
+	if not inCombat and not RaidInCombat then
 		combatTimer:Activate()
 	end
 end
@@ -570,7 +557,7 @@ function addon:LeaveCombatEvent()
 	end
 end
 
-function addon:COMBAT_LOG_EVENT_UNFILTERED(e, timestamp, eventtype, hideCaster, srcGUID, srcName, srcFlags, srcRaidFlags, dstGUID, dstName, dstFlags, dstRaidFlags, ...)
+function addon:COMBAT_LOG_EVENT_UNFILTERED(e, timestamp, eventtype, _, srcGUID, srcName, srcFlags, _, dstGUID, dstName, dstFlags, _, ...)
 	if self.collect[eventtype] then
 		self.collect[eventtype](timestamp, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, ...)
 	end

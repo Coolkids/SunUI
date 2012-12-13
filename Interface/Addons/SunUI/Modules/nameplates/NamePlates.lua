@@ -4,7 +4,7 @@ if IsAddOnLoaded("TidyPlates") or IsAddOnLoaded("Aloft") or IsAddOnLoaded("dName
 	return
 end
 
-local N = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("NamePlates", "AceEvent-3.0")
+local N = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("NamePlates", "AceEvent-3.0", "AceTimer-3.0")
 local   cfg={
 	TotemIcon = true, 				-- Toggle totem icons
 	TotemSize = 20,				-- Totem icon size
@@ -20,9 +20,6 @@ local backdrop = {
 
 local numChildren = -1
 local frames = {}
-
-local NamePlates = CreateFrame("Frame")
-NamePlates:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
 
 local PlateBlacklist = {
 	--["訓練假人"] = true,
@@ -651,7 +648,7 @@ local function HookFrames(...)
 	end
 end
 
-function NamePlates:COMBAT_LOG_EVENT_UNFILTERED(_, event, ...)
+local function On_COMBAT_LOG_EVENT_UNFILTERED(times, temp, event, ...)
 	if event == "SPELL_AURA_REMOVED" then
 		local _, sourceGUID, _, _, _, destGUID, _, _, _, spellID = ...
 		if sourceGUID == UnitGUID("player") then
@@ -659,42 +656,35 @@ function NamePlates:COMBAT_LOG_EVENT_UNFILTERED(_, event, ...)
 		end
 	end
 end
-NamePlates:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 local function SetCV()
 	SetCVar("bloatthreat",0)
 	SetCVar("bloattest",0)
 	SetCVar("bloatnameplates",0.0)
 	SetCVar("ShowClassColorInNameplate",1)
 end
+function N:UpdateNP()
+	if(WorldFrame:GetNumChildren() ~= numChildren) then
+		numChildren = WorldFrame:GetNumChildren()
+		HookFrames(WorldFrame:GetChildren())
+	end
+	ForEachPlate(UpdateThreat, self.elapsed)
+	ForEachPlate(CheckBlacklist)
+	ForEachPlate(CheckUnit_Guid)
+end
 function N:OnInitialize()
 	C = C["NameplateDB"]
 	if C["enable"] ~= true then return end
 	N:RegisterEvent("PLAYER_LOGIN", SetCV)
-	NamePlates:SetScript('OnUpdate', function(self, elapsed)
-		if(WorldFrame:GetNumChildren() ~= numChildren) then
-			numChildren = WorldFrame:GetNumChildren()
-			HookFrames(WorldFrame:GetChildren())
-		end
-		if(self.elapsed and self.elapsed > 0.1) then
-			ForEachPlate(UpdateThreat, self.elapsed)
-			self.elapsed = 0
-		else
-			self.elapsed = (self.elapsed or 0) + elapsed
-		end
-
-		ForEachPlate(CheckBlacklist)
-		ForEachPlate(CheckUnit_Guid)
-	end)
+	N:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", On_COMBAT_LOG_EVENT_UNFILTERED)
+	N:ScheduleRepeatingTimer("UpdateNP", 0.1)
 	if C["Combat"] then
-		function NamePlates:PLAYER_REGEN_DISABLED()
+		N:RegisterEvent("PLAYER_REGEN_DISABLED", function()
 			SetCVar("nameplateShowEnemies", 1)
-		end
-		NamePlates:RegisterEvent("PLAYER_REGEN_DISABLED")
+		end)	
 	end
 	if C["NotCombat"] then
-		function NamePlates:PLAYER_REGEN_ENABLED()
+		N:RegisterEvent("PLAYER_REGEN_ENABLED", function()
 			SetCVar("nameplateShowEnemies", 0)
-		end
-		NamePlates:RegisterEvent("PLAYER_REGEN_ENABLED")
+		end)
 	end
 end

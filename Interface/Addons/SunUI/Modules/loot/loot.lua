@@ -45,14 +45,8 @@ local OnEnter = function(self)
 	end 
 end
 
-
 local function OnLinkClick(self)
     ToggleDropDownMenu(1, nil, LDD, lb, 0, 0)
-end
-
-local function LDD_OnClick(self)
-    local val = self.value
-	Announce(val)
 end
 
 local function Announce(chn)
@@ -71,14 +65,18 @@ local function Announce(chn)
     end
 end
 
-local function LDD_Initialize(self, level)  
-    level = level or 1
+local function LDD_OnClick(self)
+    local val = self.value
+	Announce(val)
+end
+
+local function LDD_Initialize()  
 	local info = {}
     
-    info.text = "--------------------"
+    info.text = TitleText
     info.notCheckable = true
     info.isTitle = true
-    UIDropDownMenu_AddButton(info, level)
+    UIDropDownMenu_AddButton(info)
     
     --announce chanels
     info = {}
@@ -86,28 +84,28 @@ local function LDD_Initialize(self, level)
     info.value = "raid"
     info.notCheckable = 1
     info.func = LDD_OnClick
-    UIDropDownMenu_AddButton(info, level)
+    UIDropDownMenu_AddButton(info)
     
     info = {}
     info.text = "  guild"
     info.value = "guild"
     info.notCheckable = 1
     info.func = LDD_OnClick
-    UIDropDownMenu_AddButton(info, level)
+    UIDropDownMenu_AddButton(info)
 	
 	info = {}
     info.text = "  party"
     info.value = "party"
     info.notCheckable = 1
     info.func = LDD_OnClick
-    UIDropDownMenu_AddButton(info, level)
+    UIDropDownMenu_AddButton(info)
 
     info = {}
     info.text = "  say"
     info.value = "say"
     info.notCheckable = 1
     info.func = LDD_OnClick
-    UIDropDownMenu_AddButton(info, level)
+    UIDropDownMenu_AddButton(info)
     
     info = nil
 end
@@ -238,12 +236,12 @@ title:SetToplevel(true)
 lb:ClearAllPoints()
 lb:SetWidth(20)
 lb:SetHeight(14)
-lb:SetScale(0.85)
-lb:SetPoint("TOPRIGHT", addon, "TOPRIGHT", -35, -9)
+lb:SetScale(0.9)
+lb:SetPoint("TOPRIGHT", addon, "TOPRIGHT", -30, -5)
 lb:SetFrameStrata("TOOLTIP")
 lb:RegisterForClicks("RightButtonUp", "LeftButtonUp")
 lb:SetScript("OnClick", OnLinkClick)
-lb:Hide()
+S.ReskinArrow(lb, "down")
 UIDropDownMenu_Initialize(LDD, LDD_Initialize, "MENU")
 MasterLooterFrame:SetFrameStrata("FULLSCREEN")
 
