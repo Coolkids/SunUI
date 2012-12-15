@@ -636,22 +636,12 @@ local function unitFrameStyleSetup(button)
     bg:SetPoint("TOPLEFT", button, "TOPLEFT")
     bg:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT")
     bg:SetFrameLevel(3)
-    if ns.db.mode then 
-
-	else
-		--S.CreateBD(bg)
-		--bg:SetBackdrop(backdrop)
-		--bg:SetBackdropColor(0, 0, 0, .5)
-	end
 	button.BG = bg
     local Border = CreateFrame("Frame", nil, button)
     Border:SetPoint("TOPLEFT", button, "TOPLEFT")
     Border:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT")
     Border:SetFrameLevel(button.BG:GetFrameLevel() - 1)
-    --Border:SetBackdrop(border)
-   -- Border:SetBackdropColor(0, 0, 0, 1)
 	S.CreateBD(Border, 0)
-	--Border:SetBackdropBorderColor(0, 0, 0, .5)
 	button.Border = Border
 
     local Health = CreateFrame"StatusBar"
@@ -665,21 +655,25 @@ local function unitFrameStyleSetup(button)
 	button.HealthBar.bd = Health.bd
 	
 	local help = CreateFrame("Frame", nil, button)
+	help:SetParent(button)
 	help:SetAllPoints(Health)
     help:SetFrameLevel(6)
 	button.help = help
 	
 	local help2 = CreateFrame("Frame", nil, button)
+	help2:SetParent(button)
 	help2:SetAllPoints(Health)
     help2:SetFrameLevel(5)
 	button.help2 = help2
 	
 	local help3 = CreateFrame("Frame", nil, button)
+	help3:SetParent(button)
 	help3:SetAllPoints(Health)
     help3:SetFrameLevel(4)
 	button.help3 = help3
 	
 	local help4 = CreateFrame("Frame", nil, button)
+	help4:SetParent(button)
 	help4:SetAllPoints(Health)
     help4:SetFrameLevel(3)
 	button.help4 = help4
@@ -1231,19 +1225,16 @@ function ns:UpdateThreatBorder(self)
 	if(status and status > 0) then
         local r, g, b = GetThreatStatusColor(status)
         self.ThreatBorder:SetBackdropBorderColor(r, g, b, 1)
-        --self.Border:SetBackdropColor(r, g, b, 1)
     else
 		if (ns.db.lowmana and UnitIsConnected(unit) and not UnitIsDeadOrGhost(unit)) then
 			local _, ptype = UnitPowerType(unit)
 			if ptype == 'MANA' and math.floor(UnitPower(unit)/UnitPowerMax(unit)*100+.5) < ns.db.manapercent then		
 				self.ThreatBorder:SetBackdropBorderColor(0, 0, 1, 1)						
-				--self.Border:SetBackdropColor(0, 0, 1, 1)
 				return
 			end
 		end
 		
 		self.ThreatBorder:SetBackdropBorderColor(0, 0, 0, .5)
-       -- self.Border:SetBackdropColor(0, 0, 0, .5)
     end
 end
 
@@ -1502,9 +1493,7 @@ function ns:UpdateHealth(self)
 end
 
 function ns:UpdateHealPredictionBarColor(self)
-	--self.myHealPredictionBar:GetStatusBarTexture():SetTexture(ns.db.myhealcolor.r, ns.db.myhealcolor.g, ns.db.myhealcolor.b, ns.db.myhealcolor.a)
 	S.CreateTop(self.myHealPredictionBar:GetStatusBarTexture(), ns.db.myhealcolor.r, ns.db.myhealcolor.g, ns.db.myhealcolor.b)
-	--self.otherHealPredictionBar:GetStatusBarTexture():SetTexture(ns.db.otherhealcolor.r, ns.db.otherhealcolor.g, ns.db.otherhealcolor.b, ns.db.otherhealcolor.a)
 	S.CreateTop(self.otherHealPredictionBar:GetStatusBarTexture(), ns.db.otherhealcolor.r, ns.db.otherhealcolor.g, ns.db.otherhealcolor.b)
 end
 
@@ -1548,10 +1537,31 @@ function ns:UpdateHealPrediction(self)
 	local overflow = ns.db.healoverflow and 1.20 or 1
     local myIncomingHeal = UnitGetIncomingHeals(unit, "player") or 0
     local allIncomingHeal = UnitGetIncomingHeals(unit) or 0
-
+	local healthBar = self.HealthBar
     local health = self.HealthBar:GetValue()
     local maxHealth = UnitHealthMax(unit)
+	
+	if ns.db.orientation == "VERTICAL" then
+		self.myHealPredictionBar:SetPoint("BOTTOMLEFT", healthBar:GetStatusBarTexture(), "TOPLEFT", 0, 0)
+		self.myHealPredictionBar:SetPoint("BOTTOMRIGHT", healthBar:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+		self.myHealPredictionBar:SetHeight(ns.db.height)
+		self.myHealPredictionBar:SetOrientation"VERTICAL"
+	else
+		self.myHealPredictionBar:SetPoint("TOPLEFT", healthBar:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+		self.myHealPredictionBar:SetPoint("BOTTOMLEFT", healthBar:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
+		self.myHealPredictionBar:SetWidth(ns.db.width)
+	end	
 
+	if ns.db.orientation == "VERTICAL" then
+		self.otherHealPredictionBar:SetPoint("BOTTOMLEFT", self.myHealPredictionBar:GetStatusBarTexture(), "TOPLEFT", 0, 0)
+		self.otherHealPredictionBar:SetPoint("BOTTOMRIGHT", self.myHealPredictionBar:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+		self.otherHealPredictionBar:SetHeight(ns.db.height)
+		self.otherHealPredictionBar:SetOrientation"VERTICAL"
+	else
+		self.otherHealPredictionBar:SetPoint("TOPLEFT", self.myHealPredictionBar:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+		self.otherHealPredictionBar:SetPoint("BOTTOMLEFT", self.myHealPredictionBar:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
+		self.otherHealPredictionBar:SetWidth(ns.db.width)
+	end
     if ( health + allIncomingHeal > maxHealth * overflow ) then
         allIncomingHeal = maxHealth * overflow - health
     end

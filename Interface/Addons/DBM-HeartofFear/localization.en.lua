@@ -134,31 +134,38 @@ L:SetMiscLocalization({
 L= DBM:GetModLocalization(737)
 
 L:SetWarningLocalization({
+	warnReshapeLife				= "%s on >%s< (%d)",--Localized because i like class colors on warning and shoving a number into targetname broke it using the generic.
 	warnReshapeLifeTutor		= "1: Interrupt/debuff target, 2: Interrupt yourself, 3: Regen Health/Willpower, 4: Escape Vehicle",
 	warnAmberExplosion			= ">%s< is casting %s",
-	warnInterruptsAvailable		= "Interupts available for %s: %s",
-	specwarnWillPower			= "Low Will Power!",
+	warnInterruptsAvailable		= "Interupts available for %s: >%s<",
+	specwarnHupo				= "Construct(%d): %s",
+	warnWillPower				= "Current Will Power: %s",
+	specwarnOOYou				= ">>OOZES Taget You<<",
+	specwarnOOYouD				= ">>OOZES DIED!<<",
+	specwarnWillPower			= "Low Will Power! - 5s remaining",
 	specwarnAmberExplosionYou	= "Interrupt YOUR %s!",--Struggle for Control interrupt.
 	specwarnAmberExplosionAM	= "%s: Interrupt %s!",--Amber Montrosity
 	specwarnAmberExplosionOther	= "%s: Interrupt %s!"--Amber Montrosity
 })
 
-L:SetTimerLocalization{
-	timerAmberExplosionAMCD		= "%s CD: %s"
-}
+L:SetTimerLocalization({
+	timerAmberExplosionAMCD		= "%s CD: Monstrosity"
+})
 
 L:SetOptionLocalization({
 	SoundWOP			= "voice warning: important skills",
+	warnReshapeLife				= DBM_CORE_AUTO_ANNOUNCE_OPTIONS.target:format(122784, GetSpellInfo(122784)),
 	warnReshapeLifeTutor		= "Display ability purpose rundown of Mutated Construct abilities",
 	warnAmberExplosion			= "Show warning (with source) when $spell:122398 is cast",
-	warnInterruptsAvailable		= "Announce who has Amber Strike interrupts available for $spell:122402",
+	warnInterruptsAvailable		= "Announce who has Amber Strike interrupts available for\n $spell:122402",
+	warnWillPower				= "Announce current will power at 75, 50, 25, 10, and 5.",
 	specwarnWillPower			= "Show special warning when will power is low in construct",
 	specwarnAmberExplosionYou	= "Show special warning to interrupt your own $spell:122398",
-	specwarnAmberExplosionAM	= "Show special warning to interrupt Amber Montrosity's $spell:122402",
-	specwarnAmberExplosionOther	= "Show special warning to interrupt loose Mutated Construct's $spell:122398",
+	specwarnAmberExplosionAM	= "Show special warning to interrupt Amber Montrosity's\n $spell:122402",
+	specwarnAmberExplosionOther	= "Show special warning to interrupt loose Mutated Construct's\n $spell:122398",
 	timerAmberExplosionAMCD		= "Show timer for Amber Monstrosity's next $spell:122402",
 	AdvInfoFrame				= "Show info frame for players will power and boss $spell:123059",
-	FixNameplates				= "Automatically disable interfering nameplates on pull\n(restores settings upon leaving combat)"
+	FixNameplates				= "Automatically disable interfering nameplates while a construct\n(restores settings upon leaving combat)"
 })
 
 L:SetMiscLocalization({

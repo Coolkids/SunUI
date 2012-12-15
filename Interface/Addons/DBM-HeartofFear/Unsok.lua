@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8256 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8264 $"):sub(12, -3))
 mod:SetCreatureID(62511)
 mod:SetModelID(43126)
 mod:SetZone()
@@ -18,6 +18,8 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_SUCCESS",
 	"SPELL_DAMAGE",
 	"SPELL_MISSED",
+	"SWING_DAMAGE",
+	"SWING_MISSED",
 	"UNIT_POWER"
 )
 
@@ -27,7 +29,8 @@ mod:RegisterEventsInCombat(
 --]]
 --Boss
 local warnReshapeLifeTutor		= mod:NewAnnounce("warnReshapeLifeTutor", 1, 122784)--Another LFR focused warning really.
-local warnReshapeLife			= mod:NewTargetAnnounce(122784, 4)
+local warnReshapeLife			= mod:NewAnnounce("warnReshapeLife", 4, 122784)
+local warnWillPower				= mod:NewAnnounce("warnWillPower", 3, 63050)
 local warnAmberScalpel			= mod:NewTargetAnnounce(121994, 3)
 local warnParasiticGrowth		= mod:NewTargetAnnounce(121949, 4, nil, mod:IsHealer())
 local warnAmberGlob				= mod:NewTargetAnnounce(125502, 4)--Heroic drycode, might need some tweaks
@@ -69,6 +72,10 @@ local specwarnAmberMonstrosity	= mod:NewSpecialWarningSwitch("ej6254", not mod:I
 local specwarnFling				= mod:NewSpecialWarningSpell(122413, mod:IsTank())
 local specwarnMassiveStomp		= mod:NewSpecialWarningSpell(122408, nil, nil, nil, true)
 
+local specwarnHupo				= mod:NewSpecialWarning("specwarnHupo")
+local specwarnOOYou				= mod:NewSpecialWarning("specwarnOOYou")
+local specwarnOOYouD				= mod:NewSpecialWarning("specwarnOOYouD")
+
 --Boss
 local timerReshapeLifeCD		= mod:NewNextTimer(50, 122784)--50 second cd in phase 1-2, 15 second in phase 3. if no construct is up, cd is ignored and boss casts it anyways to make sure 1 is always up.
 local timerAmberScalpelCD		= mod:NewCDTimer(40, 121994)--40 seconds after last one ENDED
@@ -95,11 +102,13 @@ local Phase = 1
 local Puddles = 0
 local Constructs = 0
 local constructCount = 0--NOT same as Constructs variable above. this is one is for counting them mainly in phase 1
+local hupocount = 0
 local bossdebuff = 0
 local boss2debuff = 0
 local otherconstruct = nil
 local playerIsConstruct = false
 local warnedWill = false
+local willNumber = 100--Last warned player will power number (not same as actual player will power)
 local lastStrike = 0
 local scansDone = 0
 local Totems = nil
@@ -112,6 +121,9 @@ local MutatedConstruct = EJ_GetSectionInfo(6249)
 local canInterrupt = {}
 local guids = {}
 local guidTableBuilt = false--Entirely for DCs, so we don't need to reset between pulls cause it doesn't effect building table on combat start and after a DC then it will be reset to false always
+
+local warnedoo = {}
+
 local function buildGuidTable()
 	table.wipe(guids)
 	for i = 1, DBM:GetGroupMembers() do
@@ -119,7 +131,26 @@ local function buildGuidTable()
 	end
 end
 
+local function updateInfoFrame()
+	if mod.Options.optInfoFrame == "IF1" then
+		if Phase == 2 then
+			DBM.InfoFrame:SetHeader("大黃動搖:"..boss2debuff)
+		else
+			DBM.InfoFrame:SetHeader("首領動搖:"..bossdebuff)
+		end
+		DBM.InfoFrame:Show(5, "playerpower", 1, ALTERNATE_POWER_INDEX, nil, nil, true)--At a point i need to add an arg that lets info frame show the 5 LOWEST not the 5 highest, instead of just showing 10
+	elseif mod.Options.optInfoFrame == "IF2" then
+		if otherconstruct and (Phase < 3) then
+			DBM.InfoFrame:SetHeader("我的能量:"..UnitPower("player", ALTERNATE_POWER_INDEX).."  其他能量"..UnitPower(otherconstruct, ALTERNATE_POWER_INDEX))
+		else
+			DBM.InfoFrame:SetHeader("我的能量:"..UnitPower("player", ALTERNATE_POWER_INDEX))
+		end
+		DBM.InfoFrame:Show(2, "bossdebuffstacks", 123059)
+	end
+end
+
 function mod:ScalpelTarget()
+	if playerIsConstruct then return end--Don't need this info as a construct
 	scansDone = scansDone + 1
 	local targetname = DBM:GetUnitFullName("boss1targettarget")--Not a mistake, just clever use of available api to get the target of an invisible mob the boss is targeting ;)
 	if UnitExists("boss1targettarget") and not UnitIsUnit("boss1", "boss1targettarget") then
@@ -164,14 +195,17 @@ end
 
 function mod:OnCombatStart(delay)
 	warnedWill = true--avoid wierd bug on pull
+	willNumber = 100
 	buildGuidTable()
 	Phase = 1
 	Puddles = 0
 	Constructs = 0
 	constructCount = 0
+	hupocount = 0
 	lastStrike = 0
 	otherconstruct = nil
 	table.wipe(canInterrupt)
+	table.wipe(warnedoo)
 	playerIsConstruct = false
 	timerAmberScalpelCD:Start(9-delay)
 	timerReshapeLifeCD:Start(20-delay)
@@ -179,13 +213,7 @@ function mod:OnCombatStart(delay)
 	if not self:IsDifficulty("lfr25") then
 		berserkTimer:Start(-delay)
 	end
-	if self.Options.optInfoFrame == "IF1" then
-		DBM.InfoFrame:SetHeader("首領動搖:"..bossdebuff)
-		DBM.InfoFrame:Show(5, "playerpower", 1, ALTERNATE_POWER_INDEX, nil, nil, true)--At a point i need to add an arg that lets info frame show the 5 LOWEST not the 5 highest, instead of just showing 10
-	elseif self.Options.optInfoFrame == "IF2" then
-		DBM.InfoFrame:SetHeader("我的能量:"..UnitPower("player", ALTERNATE_POWER_INDEX))
-		DBM.InfoFrame:Show(2, "bossdebuffstacks", 123059)
-	end
+	updateInfoFrame()
 	if self.Options.FixNameplates then
 		--Blizz settings either return 1 or nil, we pull users original settings first, then change em if appropriate after.
 		Totems = GetCVarBool("nameplateShowEnemyTotems")
@@ -201,20 +229,16 @@ function mod:OnCombatStart(delay)
 		if Pets then
 			SetCVar("nameplateShowEnemyPets", 0)
 		end
-		--Check for Tidy plates threat plates (it has additional options to even further hide worthless nameplates on unsok.
+		--Check for threat plates on pull and save users setting.
 		if IsAddOnLoaded("TidyPlates_ThreatPlates") then
 			TPTPNormal = TidyPlatesThreat.db.profile.nameplate.toggle["Normal"]--Returns true or false, use TidyPlatesNormal to save that value on pull
-			if TPTPNormal == true then
-				TidyPlatesThreat.db.profile.nameplate.toggle["Normal"] = false
-				TidyPlates:ReloadTheme()--Call the Tidy plates update methods
-				TidyPlates:ForceUpdate()
-			end
 		end
 	end
 end
 
 function mod:OnCombatEnd()
 	if self.Options.optInfoFrame == "IF1" or self.Options.optInfoFrame == "IF2" then
+		Phase = 0
 		DBM.InfoFrame:Hide()
 	end
 	if self.Options.FixNameplates then
@@ -245,24 +269,18 @@ function mod:SPELL_AURA_APPLIED(args)
 			timerDestabalize:Start(60, args.destName)
 		else
 			timerDestabalize:Start(args.destName)
-		end
-		
+		end		
 		if args:GetDestCreatureID() == 62511 then
 			bossdebuff = args.amount or 1
 		elseif args:GetDestCreatureID() == 62711 then
 			boss2debuff = args.amount or 1
 		end
-		
-		if self.Options.optInfoFrame == "IF1" then
-			if Phase == 2 then
-				DBM.InfoFrame:SetHeader("大黃動搖:"..boss2debuff)
-			else
-				DBM.InfoFrame:SetHeader("首領動搖:"..bossdebuff)
-			end
-		end
+		updateInfoFrame()
 	elseif args:IsSpellID(121949) then
 		warnParasiticGrowth:Show(args.destName)
-		specwarnParasiticGrowth:Show(args.destName)
+		if not playerIsConstruct then--Healers do need to know this, but it's still a distraction as a construct for sound, they got the reg warning.
+			specwarnParasiticGrowth:Show(args.destName)
+		end
 		if args:IsPlayer() then
 			specwarnParasiticGrowthYou:Show()
 		end
@@ -281,7 +299,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerMassiveStompCD:Start(20)
 		timerFlingCD:Start(33)
 		warnAmberExplosionSoon:Schedule(50.5)
-		timerAmberExplosionAMCD:Start(55.5, amberExplosion, Monstrosity)
+		timerAmberExplosionAMCD:Start(55.5, amberExplosion)
 		sndWOP:Schedule(48.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countseven.mp3")
 		sndWOP:Schedule(49.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
 		sndWOP:Schedule(50.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
@@ -290,13 +308,15 @@ function mod:SPELL_AURA_APPLIED(args)
 		sndWOP:Schedule(53.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 		sndWOP:Schedule(54.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ptwo.mp3")--P2
-	elseif args:IsSpellID(122395) and Phase < 3 then
+	elseif args:IsSpellID(122395) and Phase < 3 and not playerIsConstruct then
 		warnStruggleForControl:Show(args.destName)
 		timerStruggleForControl:Start(args.destName)
 	elseif args:IsSpellID(122784) then
 		Constructs = Constructs + 1
 		constructCount = constructCount + 1
-		warnReshapeLife:Show(args.destName.."("..constructCount..")")
+		hupocount = hupocount + 1
+		specwarnHupo:Show(hupocount, args.destName)
+		warnReshapeLife:Show(args.spellName, args.destName, constructCount)
 		if args.destName ~= UnitName("player") then
 			otherconstruct = args.destName
 		end
@@ -307,7 +327,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			warnReshapeLifeTutor:Show()
 			timerAmberExplosionCD:Start(15, args.destName)--Only player needs to see this, they are only person who can do anything about it.
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_nbzh.mp3") --你被轉化
-			if IsAddOnLoaded("TidyPlates_ThreatPlates") then
+			if self.Options.FixNameplates and IsAddOnLoaded("TidyPlates_ThreatPlates") then
 				if TPTPNormal == true then
 					TidyPlatesThreat.db.profile.nameplate.toggle["Normal"] = false
 					TidyPlates:ReloadTheme()--Call the Tidy plates update methods
@@ -341,7 +361,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		end
 		if args:IsPlayer() then
 			playerIsConstruct = false
-			if IsAddOnLoaded("TidyPlates_ThreatPlates") then
+			if self.Options.FixNameplates and IsAddOnLoaded("TidyPlates_ThreatPlates") then
 				if TPTPNormal == true and not TidyPlatesThreat.db.profile.nameplate.toggle["Normal"] then--Normal plates were on when we pulled but aren't on now.
 					TidyPlatesThreat.db.profile.nameplate.toggle["Normal"] = true--Turn them back on
 					TidyPlates:ReloadTheme()--Call the Tidy plates update methods
@@ -370,6 +390,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		warnAmberExplosionSoon:Cancel()
+		updateInfoFrame()
 		--He does NOT reset reshape live cd here, he finishes out last CD first, THEN starts using new one.
 	elseif args:IsSpellID(123059) then
 		if args:GetDestCreatureID() == 62511 then
@@ -377,13 +398,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		elseif args:GetDestCreatureID() == 62711 then
 			boss2debuff = 0
 		end
-		if self.Options.optInfoFrame == "IF1" then
-			if Phase == 2 then
-				DBM.InfoFrame:SetHeader("大黃動搖:"..boss2debuff)
-			else
-				DBM.InfoFrame:SetHeader("首領動搖:"..bossdebuff)
-			end
-		end
+		updateInfoFrame()
 	end
 end
 
@@ -417,7 +432,7 @@ function mod:SPELL_CAST_START(args)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jgbz.mp3") --巨怪爆炸
 		warnAmberExplosionSoon:Cancel()
 		warnAmberExplosionSoon:Schedule(41)
-		timerAmberExplosionAMCD:Start(46, args.spellName, args.sourceName)
+		timerAmberExplosionAMCD:Start(46, args.spellName)
 		sndWOP:Schedule(39, "Interface\\AddOns\\DBM-Core\\extrasounds\\countseven.mp3")
 		sndWOP:Schedule(40, "Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
 		sndWOP:Schedule(41, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
@@ -428,14 +443,14 @@ function mod:SPELL_CAST_START(args)
 		self:Unschedule(warnAmberExplosionCast)
 		self:Schedule(0.5, warnAmberExplosionCast, 122402)--Always check available interrupts and special warn if not
 	elseif args:IsSpellID(122408) then
-		warnMassiveStomp:Show()
 		if not playerIsConstruct then
+			warnMassiveStomp:Show()--Don't even need normal warning as a construct, it just doesn't matter
 			specwarnMassiveStomp:Show()
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\stompsoon.mp3") --準備踐踏
 		end
-		timerMassiveStompCD:Start()
+		timerMassiveStompCD:Start()--Still start timer so you still have it when you leave construct
 	elseif args:IsSpellID(122413) then
-		warnFling:Show()
+		warnFling:Show()--Tanks and healers still need to know this even as a construct
 		if not playerIsConstruct then
 			specwarnFling:Show()
 		end
@@ -452,6 +467,10 @@ function mod:SPELL_CAST_SUCCESS(args)
 	elseif args:IsSpellID(122532) then
 		Puddles = Puddles + 1
 		warnBurningAmber:Show(Puddles)
+		if warnedoo[args.sourceGUID] and not playerIsConstruct then
+			specwarnOOYouD:Show()
+			warnedoo[args.sourceGUID] = nil
+		end
 	elseif args:IsSpellID(123156) then
 		Puddles = Puddles - 1
 		warnBurningAmber:Show(Puddles)
@@ -475,20 +494,31 @@ end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE
 
 function mod:UNIT_POWER(uId)
+	if Phase ~= 0 then updateInfoFrame() end
 	if uId ~= "player" then return end
-	if UnitPower(uId, ALTERNATE_POWER_INDEX) < 28 and not warnedWill then
+	local playerWill = UnitPower(uId, ALTERNATE_POWER_INDEX)
+	if playerWill > willNumber then willNumber = playerWill end--Will power has gone up since last warning so reset that warning.
+	if playerWill == 75 and willNumber > 75 then
+		willNumber = 75
+		warnWillPower:Show(willNumber)
+	elseif playerWill == 50 and willNumber > 50 then
+		willNumber = 50
+		warnWillPower:Show(willNumber)
+	elseif playerWill == 25 and willNumber > 25 then
+		willNumber = 25
+		warnWillPower:Show(willNumber)
+	elseif playerWill >= 22 and warnedWill then
+		warnedWill = false
+	elseif playerWill < 18 and not warnedWill then--5 seconds before 0 (after subtracking a budget of 8 for interrupt)
 		warnedWill = true
 		specwarnWillPower:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_yzgd.mp3") --意志過低
-	elseif UnitPower(uId, ALTERNATE_POWER_INDEX) >= 32 and warnedWill then
-		warnedWill = false
-	end
-	if self.Options.optInfoFrame == "IF2" then
-		if otherconstruct and (Phase < 3) and (not self:IsDifficulty("lfr25")) then
-			DBM.InfoFrame:SetHeader("我的能量:"..UnitPower("player", ALTERNATE_POWER_INDEX).."  其他能量"..UnitPower(otherconstruct, ALTERNATE_POWER_INDEX))
-		else
-			DBM.InfoFrame:SetHeader("我的能量:"..UnitPower("player", ALTERNATE_POWER_INDEX))
-		end
+	elseif playerWill == 10 and willNumber > 10 then
+		willNumber = 10
+		warnWillPower:Show(willNumber)
+	elseif playerWill == 5 and willNumber > 5 then
+		willNumber = 5
+		warnWillPower:Show(willNumber)
 	end
 end
 
@@ -508,3 +538,13 @@ function mod:OnSync(msg, str)
 		self:Schedule(0.5, warnAmberExplosionCast, spellId)
 	end
 end
+
+function mod:SWING_DAMAGE(sourceGUID, _, _, _, destGUID)
+	local cid = self:GetCIDFromGUID(sourceGUID)
+	if cid == 62691 and destGUID == UnitGUID("player") and not warnedoo[sourceGUID] and not playerIsConstruct then
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\didi.mp3")
+		specwarnOOYou:Show()
+		warnedoo[sourceGUID] = true
+	end
+end
+mod.SWING_MISSED = mod.SWING_DAMAGE

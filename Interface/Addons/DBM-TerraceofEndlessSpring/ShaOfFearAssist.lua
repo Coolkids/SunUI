@@ -538,6 +538,37 @@ local function pointInTriangle(pt, v1, v2, v3)
 	return ((b1 == b2) and (b2 == b3));
 end
 
+function addon:updateData()
+	if not platform then platform = "test" end -- XXX debug
+	if platform == "test" and dreadSprayCounter == 0 then dreadSprayCounter = 1 end -- XXX debug
+	if type(platform) == "number" or platform == "test" then
+		local srcX, srcY = GetPlayerMapPosition("player")
+		if srcX == 0 and srcY == 0 then
+			SetMapToCurrentZone()
+			srcX, srcY = GetPlayerMapPosition("player")
+		end
+		srcX, srcY = srcX*mapData[1], srcY*mapData[2]
+
+		addon:setMyDot(srcX, srcY)
+
+		for i=1, 8 do
+			if type(platform) == "number" or platform == "test" then
+				addon:setPieColor(i, "white")
+			end
+		end
+
+		if platform == "test" then
+			sprayedPieVerySoon, sprayedPieSoon, suggestedSafePie = 1, 2, 3 --XXX debug
+		end
+		addon:setPieColor(sprayedPieVerySoon, "red")
+		addon:setPieColor(sprayedPieSoon, "orange")
+
+		if suggestedSafePie then addon:setPieColor(suggestedSafePie, "green") end
+	else
+		addon:clearPieColors()
+	end
+end
+	
 do
 	-- dx and dy are in yards
 	-- facing is radians with 0 being north, counting up clockwise
@@ -611,42 +642,6 @@ do
 		local dy = (srcY - bossY)
 
 		setDot(dx, dy, myblip)
-	end
-
-	function addon:updateData()
-		if not platform then platform = "test" end -- XXX debug
-		if platform == "test" and dreadSprayCounter == 0 then dreadSprayCounter = 1 end -- XXX debug
-		if type(platform) == "number" or platform == "test" then
-			local srcX, srcY = GetPlayerMapPosition("player")
-			if srcX == 0 and srcY == 0 then
-				SetMapToCurrentZone()
-				srcX, srcY = GetPlayerMapPosition("player")
-			end
-			srcX, srcY = srcX*mapData[1], srcY*mapData[2]
-
-			addon:setMyDot(srcX, srcY)
-
-			for i=1, 8 do
-				if type(platform) == "number" or platform == "test" then
-					local a, b, c = getPiePoints(i, platform)
-					if pointInTriangle({srcX, srcY}, a, b, c) then
-						addon:setPieColor(i, "blue")
-					else
-						addon:setPieColor(i, "white")
-					end
-				end
-			end
-
-			if platform == "test" then
-				sprayedPieVerySoon, sprayedPieSoon, suggestedSafePie = 1, 2, 3 --XXX debug
-			end
-			addon:setPieColor(sprayedPieVerySoon, "red")
-			addon:setPieColor(sprayedPieSoon, "orange")
-
-			if suggestedSafePie then addon:setPieColor(suggestedSafePie, "green") end
-		else
-			addon:clearPieColors()
-		end
 	end
 end
 
@@ -887,7 +882,7 @@ end)
 local total = 0
 addon:SetScript("OnUpdate", function(self, elapsed)
 	total = total + elapsed
-	if total > 0.05 then
+	if total > 0.1 then
 		if windowShown then
 			addon:updateData()
 		end

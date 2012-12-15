@@ -158,39 +158,39 @@ local totems = {
 local function UpdateThreat(frame,elapsed)
 	if(frame.threat:IsShown()) then
 		local _, val = frame.threat:GetVertexColor()
+		frame.hp.shadow:Show()
 		if(val > 0.7) then
 			frame.name:SetTextColor(1, 1, 0)
+			frame.hp.shadow:SetBackdropBorderColor(1, 1, 0, 0.6)
 		else
 			frame.name:SetTextColor(1, 0, 0)
+			frame.hp.shadow:SetBackdropBorderColor(1, 0, 0, 0.5)
 		end
 	else
+		frame.hp.shadow:Hide()
 		frame.name:SetTextColor(1, 1, 1)
 	end
 	--print(frame.r, frame.g, frame.b)
-	--S.CreateTop(frame.toptexture, frame.r, frame.g, frame.b)
+	local r,g,b = frame.hp:GetStatusBarColor()
+	if r + b + b > 2 then return end
+	S.CreateTop(frame.toptexture, frame.r, frame.g, frame.b)
     local minHealth, maxHealth = frame.healthOriginal:GetMinMaxValues()
     local valueHealth = frame.healthOriginal:GetValue()
 	local d =(valueHealth/maxHealth)*100
 
 		if(d < 100) and valueHealth > 1 then
-			--frame.hp.value:SetText(SVal(valueHealth))
 			frame.hp.pct:SetText(format("%.1f %s",d,"%"))
 		else
-			--frame.hp.value:SetText("")
 			frame.hp.pct:SetText("")
 		end
 
 		if(d <= 35 and d >= 25) then
-			--frame.hp.value:SetTextColor(253/255, 238/255, 80/255)
 			frame.hp.pct:SetTextColor(253/255, 238/255, 80/255)
 		elseif(d < 25 and d >= 20) then
-			--frame.hp.value:SetTextColor(250/255, 130/255, 0/255)
 			frame.hp.pct:SetTextColor(250/255, 130/255, 0/255)
 		elseif(d < 20) then
-			--frame.hp.value:SetTextColor(200/255, 20/255, 40/255)
 			frame.hp.pct:SetTextColor(200/255, 20/255, 40/255)
 		else
-			--frame.hp.value:SetTextColor(1,1,1)
 			frame.hp.pct:SetTextColor(1,1,1)
 		end	
 end
@@ -352,21 +352,17 @@ local function UpdateObjects(frame)
 	local texture = frame.hp:GetStatusBarTexture()
 	frame.toptexture = texture
 	local newr, newg, newb
-		if g + b == 0 then
-			newr, newg, newb = 0.7, 0.2, 0.1
-			--S.CreateTop(texture, 0.7, 0.2, 0.1)
-		elseif r + b == 0 then
-			newr, newg, newb = 0.2, 0.6, 0.1
-			--S.CreateTop(texture, 0.2, 0.6, 0.1)
-		elseif r + g == 0 then
-			newr, newg, newb = 0.31, 0.45, 0.63
-			--S.CreateTop(texture, 0.31, 0.45, 0.63)
-		elseif 2 - (r + g) < 0.05 and b == 0 then
-			newr, newg, newb = 0.71, 0.71, 0.35
-			--S.CreateTop(texture, 0.71, 0.71, 0.35)
-		else
-			newr, newg, newb = r, g, b
-		end
+	if g + b == 0 then
+		newr, newg, newb = 0.7, 0.2, 0.1
+	elseif r + b == 0 then
+		newr, newg, newb = 0.2, 0.6, 0.1
+	elseif r + g == 0 then
+		newr, newg, newb = 0.31, 0.45, 0.63
+	elseif 2 - (r + g) < 0.05 and b == 0 then
+		newr, newg, newb = 0.71, 0.71, 0.35
+	else
+		newr, newg, newb = r, g, b
+	end
 	frame.r, frame.g, frame.b = newr, newg, newb
 	S.CreateTop(texture, newr, newg, newb)
 	frame.hp:ClearAllPoints()
@@ -381,7 +377,7 @@ local function UpdateObjects(frame)
 	local level, elite, mylevel = tonumber(frame.level:GetText()), frame.elite:IsShown(), UnitLevel("player")
 	local lvlr, lvlg, lvlb = frame.level:GetTextColor()
 	frame.level:ClearAllPoints()
-	frame.level:SetPoint("RIGHT", frame.hp, "LEFT", -2, 0)
+	frame.level.Show = function() end
 	frame.level:Hide()
 	if frame.boss:IsShown() then
 		frame.level:SetText("B")
@@ -437,10 +433,8 @@ local function UpdateCastbar(frame)
 	local texture = frame:GetStatusBarTexture()
 	frame.cbtexture = texture
 	if not frame.shield:IsShown() then
-		frame:SetStatusBarColor(.5,.65,.85)
 		S.CreateTop(texture, .5,.65,.85)
 	else
-		frame:SetStatusBarColor(1,0,0)
 		S.CreateTop(texture, 1,0,0)
 	end
 end	
@@ -450,12 +444,9 @@ local OnValueChanged = function(self)
 		UpdateCastbar(self)
 		self.needFix = nil
 	end
-	-- have to define not protected casts colors again due to some weird bug reseting colors when you start channeling a spell 
  	if not self.shield:IsShown() then
-		self:SetStatusBarColor(.5,.65,.85)
 		S.CreateTop(self.cbtexture,.5,.65,.85)
 	else
-		self:SetStatusBarColor(1,0,0)
 		S.CreateTop(self.cbtexture, 1,0,0)
 	end 
 end
@@ -465,16 +456,10 @@ local OnSizeChanged = function(self)
 end
 -- We need to reset everything when a nameplate it hidden 重置所有框体内容
 local function OnHide(frame)
-	frame.hp:SetStatusBarColor(frame.hp.rcolor, frame.hp.gcolor, frame.hp.bcolor)
 	frame.overlay:Hide()
 	frame.cb:Hide()
 	frame.unit = nil
 	frame.guid = nil
-	frame.hasClass = nil
-	frame.isFriendly = nil
-	frame.hp.rcolor = nil
-	frame.hp.gcolor = nil
-	frame.hp.bcolor = nil
 	if frame.icons then
 		for _, icon in ipairs(frame.icons) do
 			icon:Hide()

@@ -20,10 +20,11 @@ function ReforgeLite:GetSpellHitBonus ()
   return GetSpellHitModifier () or 0
 end
 function ReforgeLite:GetExpertiseBonus ()
-  if MOP then
-    return GetExpertise () - GetCombatRatingBonus (CR_EXPERTISE)
+  local _, class = UnitClass ("player")
+  if class == "HUNTER" then
+    return select(3, GetExpertise()) - GetCombatRatingBonus(CR_EXPERTISE)
   else
-    return GetExpertise () - math.floor (GetCombatRatingBonus (CR_EXPERTISE))
+    return GetExpertise() - GetCombatRatingBonus(CR_EXPERTISE)
   end
 end
 function ReforgeLite:GetNeededMeleeHit ()
@@ -40,14 +41,10 @@ function ReforgeLite:GetNeededMeleeHit ()
 end
 function ReforgeLite:GetNeededSpellHit ()
   local diff = self.pdb.targetLevel
-  if MOP then
+  if diff <= 3 then
     return math.max(0, 6 + 3 * diff)
   else
-    if diff <= 2 then
-      return math.max (0, 4 + diff)
-    else
-      return 11 * diff - 16
-    end
+    return 11 * diff - 18
   end
 end
 function ReforgeLite:GetNeededExpertiseSoft ()
@@ -602,7 +599,7 @@ function ReforgeLite:InitPresets ()
       if type (v) == "function" then
         v = v ()
       end
-      info.text = k:gsub("<(.*)>",function(s) return ReforgeLiteLocale[s] end)
+      info.text = k:gsub("<([^>]*)>",function(s) return ReforgeLiteLocale[s] end)
       info.value = v
       if v.caps or v.weights or v.leaf or v.prio then
         info.func = function ()

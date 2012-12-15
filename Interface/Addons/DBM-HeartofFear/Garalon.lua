@@ -302,6 +302,15 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, _, _, _, target)
 				sndWOP:Schedule(32, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zyjs.mp3") --注意減傷
 			end
 		end
+	elseif msg:find(L.Ptwostart) then
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ptwo.mp3")
+		sndZN:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+		sndZN:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndZN:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndZN:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndZN:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+	elseif msg:find("spell:128555") then
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\dead.mp3")
 	end
 end
 

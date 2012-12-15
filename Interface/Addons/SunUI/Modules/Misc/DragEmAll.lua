@@ -60,12 +60,11 @@ local frames = {
 	["EncounterJournal"] = false, -- only in 4.2
 	["RaidParentFrame"] = false,
 	["TutorialFrame"] = false,
-
   -- AddOns
 	["LudwigFrame"] = false,
   --5.0fix
 	["PVEFrame"] = false,
-
+	["LFGDungeonReadyDialog"] = false,
 }
 
 -- Frames provided by load on demand addons, hooked when the addon is loaded.

@@ -74,7 +74,7 @@ L:SetOptionLocalization({
 	SpecWarnOverwhelmingAssaultOther = "特別警告：$spell:123474的層數",
 	HudMAP				= "高級定位監視(HUD)：$spell:122949的位置",
 	SoundWOP			= "語音警告：重要技能",
-	SpecWarnJSA			= "特殊警告：注意開減傷",
+	SpecWarnJSA			= "特別警告：注意開減傷",
 	unseenjs1			= "減傷提示：無形打擊1",
 	unseenjs2			= "減傷提示：無形打擊2",
 	unseenjs3			= "減傷提示：無形打擊3",
@@ -112,8 +112,8 @@ L:SetOptionLocalization({
 	specWarnPungencyOtherFix = "特別警告：當$spell:123081達到15層時",
 	HudMAP				= "高級定位監視(HUD)：$spell:122835的位置",
 	SoundFS				= "坦克倒計時：$spell:122735",
-	SpecWarnJSA			= "特殊警告：注意開減傷",
-	specWarnFLM			= "特殊警告：準備接手弗洛蒙",
+	SpecWarnJSA			= "特別警告：注意開減傷",
+	specWarnFLM			= "特別警告：準備接手弗洛蒙",
 	endflm				= "最後的費洛蒙傳遞者勾選以形成循環提示",
 	flmxs				= "費洛蒙傳遞提示+(例如:此處選10下邊選3即選為13)",
 	x0					= "0+",
@@ -144,7 +144,8 @@ L:SetOptionLocalization({
 
 L:SetMiscLocalization({
 	UnderHim	= "在他下面",
-	Heroicrush	= "他的對手"
+	Heroicrush	= "他的對手",
+	Ptwostart	= "加拉隆巨大的裝甲開始破裂並粉碎!"
 })
 
 ----------------------
@@ -159,6 +160,7 @@ L:SetWarningLocalization({
 
 L:SetOptionLocalization({
 	SoundWOP			= "語音警告：重要技能",
+	SoundDS				= "語音警告：為控制結束倒數10秒",
 	InfoFrame			= "資訊框：$spell:122149層數監視",
 	optQS				= "敏捷活化驅散鏈",
 	noQS				= "不提示",
@@ -166,7 +168,7 @@ L:SetOptionLocalization({
 	QS2					= "順序2",
 	QS3					= "順序3",
 	allQS				= "總是提示",
-	specWarnBH			= "特殊警告：當需要給衝鋒保護時",
+	specWarnBH			= "特別警告：當需要給衝鋒保護時",
 	optBH				= "衝鋒保護鏈",
 	noBH				= "不提示",
 	BH1					= "順序1",
@@ -184,7 +186,7 @@ L:SetOptionLocalization({
 	always				= "總是顯示",
 	none				= "不顯示",
 	RangeFrame			= "距離監視(3碼)：$spell:121881",
-	specWarnQuickeningX	= "特殊警告：當需要驅散/竊取$spell:122149時",
+	specWarnQuickeningX	= "特別警告：當需要驅散/竊取$spell:122149時",
 	AmberPrisonIcons	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(121885)
 })
 
@@ -199,28 +201,38 @@ L:SetMiscLocalization({
 L= DBM:GetModLocalization(737)
 
 L:SetWarningLocalization({
-	warnReshapeLifeTutor		= "1:中斷/益傷目標,, 2:中斷自己, 3:回復體力/意志力, 4:脫離魁儡",
-	warnAmberExplosion			= "%s 正在釋放 %s",
-	warnInterruptsAvailable		= "可打斷 %s: %s",
-	specwarnWillPower			= "意志過低!",
+	warnReshapeLife				= "%s：>%s< (%d)",
+	warnReshapeLifeTutor		= "1:中斷/易傷目標, 2:中斷自己, 3:回復體力/意志力, 4:脫離傀儡",
+	warnAmberExplosion			= ">%s< 正在施放 %s",
+	warnInterruptsAvailable		= "可打斷 %s: >%s<",
+	warnWillPower				= "當前意志: %s",
+	specwarnWillPower			= "意志過低! - 還剩5秒",
+	specwarnHupo				= "轉化(%d): %s",
+	specwarnOOYou				= ">>有軟泥追你<<",
+	specwarnOOYouD				= ">>追你的軟泥死掉了<<",
 	specwarnAmberExplosionYou	= "打斷 >你自己的< %s!",--Struggle for Control interrupt.
-	specwarnAmberExplosionAM	= "%s：打斷 %s!",--Amber Montrosity
-	specwarnAmberExplosionOther	= "%s：打斷 %s!"--Amber Montrosity
+	specwarnAmberExplosionAM	= "%s: 打斷 %s!",--Amber Montrosity
+	specwarnAmberExplosionOther	= "%s: 打斷 %s!"--Amber Montrosity
 })
 
-L:SetTimerLocalization{
-	timerAmberExplosionAMCD		= "%s 冷卻：%s"
-}
+L:SetTimerLocalization({
+	timerAmberExplosionAMCD		= "下一次%s: 琥珀巨怪"
+})
 
 L:SetOptionLocalization({
 	SoundWOP					= "語音警告：重要技能",
-	warnReshapeLifeTutor		= "顯示突變魁儡的能力說明效果",
-	warnAmberExplosion			= "警告：$spell:122398",
+	warnReshapeLife				= DBM_CORE_AUTO_ANNOUNCE_OPTIONS.target:format(122784, GetSpellInfo(122784)),
+	warnReshapeLifeTutor		= "警告：突變傀儡的能力說明",
+	warnAmberExplosion			= "警告：$spell:122398的釋放及來源",
 	warnInterruptsAvailable		= "警告：誰可以打斷$spell:122402",
-	specwarnWillPower			= "特殊警告：你的傀儡意志過低",
-	specwarnAmberExplosionYou	= "特殊警告：打斷你自己的$spell:122398",
-	specwarnAmberExplosionAM	= "特殊警告：打斷琥珀巨怪的$spell:122402",
-	specwarnAmberExplosionOther	= "特殊警告：打斷無人控制傀儡體的$spell:122398",
+	warnWillPower				= "警告：當前意志剩餘75/50/25/10/5時",
+	specwarnHupo				= "特別警告：琥珀傀儡",
+	specwarnOOYou				= "特別警告：有軟泥追你",
+	specwarnOOYouD				= "特別警告：追你的軟泥死掉了",
+	specwarnWillPower			= "特別警告：你的傀儡意志過低",
+	specwarnAmberExplosionYou	= "特別警告：打斷你自己的$spell:122398",
+	specwarnAmberExplosionAM	= "特別警告：打斷琥珀巨怪的$spell:122402",
+	specwarnAmberExplosionOther	= "特別警告：打斷無人控制傀儡體的$spell:122398",
 	timerAmberExplosionAMCD		= "計時器：琥珀巨怪的下一次$spell:122402",
 	AdvInfoFrame				= "資訊框：意志力與首領$spell:123059",
 	FixNameplates				= "開戰自動禁用干擾的單位名條(離開戰鬥後恢復)",

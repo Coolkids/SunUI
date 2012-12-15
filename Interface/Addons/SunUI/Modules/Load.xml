@@ -12,7 +12,7 @@
 	<Include file = "Class\load.xml"/>
 	<Include file = "CombatText\load.xml"/>
 	<Include file = "Cooldowns\load.xml"/>
-	<Include file = "layout\load.xml"/>
+	<Include file = "infobar\load.xml"/>
 	<Include file = "loot\load.xml"/>
 	<Include file = "map\load.xml"/>
 	<Include file = "nameplates\load.xml"/>

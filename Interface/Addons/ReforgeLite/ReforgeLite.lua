@@ -1,4 +1,4 @@
--- ReforgeLite v1.19 by d07.RiV (Iroared)
+-- ReforgeLite v1.21 by d07.RiV (Iroared)
 -- All rights reserved
 
 local function DeepCopy (t, cache)
@@ -164,8 +164,12 @@ function ReforgeLite:UpgradeDB ()
   end
   if pdb.prio then
     for i = 1, #pdb.prio do
-      pdb.prio[i].preset = pdb.prio[i].preset or 1
-      pdb.prio[i].value = pdb.prio[i].value or 0
+      if pdb.prio[i] then
+        pdb.prio[i].preset = pdb.prio[i].preset or 1
+        pdb.prio[i].value = pdb.prio[i].value or 0
+      else
+        pdb.prio[i] = {stat = 0, capped = false, preset = 1, value = 0}
+      end
     end
   end
 end
@@ -1234,7 +1238,7 @@ end
 
 function ReforgeLite:GetReforgeID (item)
   local id = tonumber (item:match ("item:%d+:%d+:%d+:%d+:%d+:%d+:%-?%d+:%-?%d+:%d+:(%d+)"))
-  return (id ~= 0 and (id - self.REFORGE_TABLE_BASE) or nil)
+  return (id and id ~= 0 and (id - self.REFORGE_TABLE_BASE) or nil)
 end
 
 function ReforgeLite:UpdateItems ()
@@ -1246,7 +1250,7 @@ function ReforgeLite:UpdateItems ()
     if item and texture then
       v.item = item
       v.texture:SetTexture (texture)
-      stats = GetItemStats (item) or {}
+      stats = GetItemStatsUp (item) or {}
       local reforge = self:GetReforgeID (item)
       if reforge then
         reforgeSrc, reforgeDst = self.itemStats[self.reforgeTable[reforge][1]].name, self.itemStats[self.reforgeTable[reforge][2]].name
@@ -1485,7 +1489,7 @@ function ReforgeLite:IsReforgeMatching (item, reforge, override)
     return reforge == oreforge
   end
 
-  local stats = GetItemStats (item)
+  local stats = GetItemStatsUp (item)
 
   local deltas = {}
   for i = 1, #self.itemStats do
@@ -1586,7 +1590,7 @@ function ReforgeLite:DoReforgeUpdate ()
             ReforgeItem (0)
           elseif self.pdb.method.items[i].reforge then
             local id = 0
-            local stats = GetItemStats (item)
+            local stats = GetItemStatsUp (item)
             for s = 1, #self.reforgeTable do
               if (stats[self.itemStats[self.reforgeTable[s][1]].name] or 0) ~= 0 and (stats[self.itemStats[self.reforgeTable[s][2]].name] or 0) == 0 then
                 id = id + 1

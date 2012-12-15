@@ -161,6 +161,7 @@ L:SetWarningLocalization({
 
 L:SetOptionLocalization({
 	SoundWOP			= "语音警告：重要技能",
+	SoundDS				= "语音警告：为控制结束倒数10秒",
 	specWarnBH			= "特殊警告：当需要给冲锋保护时",
 	InfoFrame			= "资讯框：$spell:122149层数监视",
 	optQS				= "加速驱散链",
@@ -200,31 +201,41 @@ L:SetMiscLocalization({
 L= DBM:GetModLocalization(737)
 
 L:SetWarningLocalization({
-	warnReshapeLifeTutor		= "1:中断/益伤目标,, 2:中断自己, 3:回复体力/意志力, 4:脱离傀儡",
+	warnReshapeLife				= "%s：>%s< (%d)",--Localized because i like class colors on warning and shoving a number into targetname broke it using the generic.
+	warnReshapeLifeTutor		= "1：打断/减益目标，2：打断自己，3：回复生命/意志，4：离开构造体",
 	warnAmberExplosion			= "%s 正在施放 %s",
-	warnInterruptsAvailable		= "可打断 %s: %s",
-	specwarnWillPower			= "意志低下！",
+	warnInterruptsAvailable		= "可打断 %s: >%s<",
+	warnWillPower				= "当前意志：%s",
+	specwarnHupo				= "转化(%d): %s",
+	specwarnOOYou				= ">>有软泥追你<<",
+	specwarnOOYouD				= ">>追你的软泥死掉了<<",
+	specwarnWillPower			= "意志低下！- 还剩5秒",
 	specwarnAmberExplosionYou	= "打断 >你自己的< %s！",--Struggle for Control interrupt.
 	specwarnAmberExplosionAM	= "%s：打断 %s!",--Amber Montrosity
 	specwarnAmberExplosionOther	= "%s：打断 %s!"--Amber Montrosity
 })
 
-L:SetTimerLocalization{
-	timerAmberExplosionAMCD		= "下一次%s: %s"
-}
+L:SetTimerLocalization({
+	timerAmberExplosionAMCD		= "下一次%s：琥珀畸怪"
+})
 
 L:SetOptionLocalization({
 	SoundWOP			= "语音警告：重要技能",
-	warnReshapeLifeTutor		= "显示突变魁儡的能力说明效果",
+	warnReshapeLife				= DBM_CORE_AUTO_ANNOUNCE_OPTIONS.target:format(122784, GetSpellInfo(122784)),
+	warnReshapeLifeTutor		= "当变为变异构造体时显示技能及其作用",
 	warnAmberExplosion			= "警报：$spell:122398正在施放，并警报来源",
 	warnInterruptsAvailable		= "警报：可使用$spell:122402打断琥珀打击的成员",
-	specwarnWillPower			= "特殊警报：在畸形体中意志低下时",
+	warnWillPower				= "警报：当前意志剩余75、50、25、10以及5点时",
+	specwarnHupo				= "特殊警报：变异构造体",
+	specwarnWillPower			= "特殊警报：在变异构造体中意志低下时",
+	specwarnOOYou				= "特殊警告：有软泥追你",
+	specwarnOOYouD				= "特殊警告：追你的软泥死掉了",
 	specwarnAmberExplosionYou	= "特殊警报：打断自己的$spell:122398",
 	specwarnAmberExplosionAM	= "特殊警报：打断琥珀畸怪的$spell:122402",
-	specwarnAmberExplosionOther	= "特殊警报：打断畸形体的$spell:122398",
+	specwarnAmberExplosionOther	= "特殊警报：打断变异构造体的$spell:122398",
 	timerAmberExplosionAMCD		= "计时条：琥珀畸怪的下一次$spell:122402",
 	AdvInfoFrame				= "信息框：意志值与首领$spell:123059",
-	FixNameplates				= "在战斗开始后自动关闭影响战斗的姓名面板\n（战斗结束后会自动恢复原始设置）",
+	FixNameplates				= "在变为变异构造体后自动关闭影响战斗的姓名板\n（战斗结束后会自动恢复原始设置）",
 	optInfoFrame				= "<能量与动摇>信息框",
 	noIF						= "不监视",
 	IF1							= "主要监视能量(DPS)",

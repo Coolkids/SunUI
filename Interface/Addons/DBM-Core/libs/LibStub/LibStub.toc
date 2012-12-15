@@ -9,9 +9,5 @@
 ## X-Curse-Project-Name: LibStub
 ## X-Curse-Project-ID: libstub
 ## X-Curse-Repository-ID: wow/libstub/mainline
-## X-Curse-Packaged-Version: v1.4b-3-g3f9f6c4
-## X-Curse-Project-Name: HudMap
-## X-Curse-Project-ID: hudmap
-## X-Curse-Repository-ID: wow/hudmap/mainline
 
 LibStub.lua

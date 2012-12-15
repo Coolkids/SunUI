@@ -1,6 +1,7 @@
 ﻿-- Engines
 local S, C, L, DB = unpack(select(2, ...))
 local Buff = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Buff", "AceHook-3.0")
+local holder = CreateFrame("Frame", "BuffFrameHolder", UIParent)
 local _
 local font = "Interface\\Addons\\SunUI\\Media\\font.ttf"
 -- making frame to hold all buff frame elements
@@ -192,7 +193,6 @@ end
 function Buff:OnInitialize()
 	SetCVar("consolidateBuffs",0)
 	SetCVar("buffDurations", 1)
-	local holder = CreateFrame("Frame", "BuffFrameHolder", UIParent)
 	holder:SetSize(C["BuffDB"]["IconSize"],C["BuffDB"]["IconSize"])
 	MoveHandle.Buff = S.MakeMoveHandle(holder, "Buff", "Buff")
 	initialize()

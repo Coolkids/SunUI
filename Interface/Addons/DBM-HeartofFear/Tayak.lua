@@ -40,7 +40,7 @@ local timerOverwhelmingAssault			= mod:NewTargetTimer(45, 123474, nil, mod:IsTan
 local timerOverwhelmingAssaultCD		= mod:NewCDTimer(20.5, 123474, nil, mod:IsTank() or mod:IsHealer())--Only ability with a variation in 2 pulls so far. He will use every 20.5 seconds unless he's casting something else, then it can be delayed as much as an extra 15-20 seconds. TODO: See if there is a way to detect when variation is going to occur and call update timer.
 local timerWindStepCD					= mod:NewCDTimer(25, 123175)
 local timerUnseenStrike					= mod:NewCastTimer(5, 123017)
-local timerUnseenStrikeCD				= mod:NewNextCountTimer(55, 123017) -- this spell seems to have 2 cooldowns. some fight 55, some  61. 
+local timerUnseenStrikeCD				= mod:NewNextCountTimer(61, 123017) -- this spell seems to have 2 cooldowns. some fight 55, some  61. 
 local timerIntensifyCD					= mod:NewNextTimer(60, 123471)
 local timerBladeTempest					= mod:NewBuffActiveTimer(9, 125310)
 local timerBladeTempestCD				= mod:NewNextTimer(60, 125310)--Always cast after immediately intensify since they essencially have same CD
@@ -84,8 +84,8 @@ local function checkUnseenEmote()
 		unseencount = unseencount + 1
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\gather.mp3") --快集合
 		timerUnseenStrike:Start(4.2)
-		timerUnseenStrikeCD:Start(54.2, unseencount + 1)
-		sndWOP:Schedule(49.2, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wxdjzb.mp3") --無形打擊準備
+		timerUnseenStrikeCD:Start(61, unseencount + 1)
+		sndWOP:Schedule(56, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wxdjzb.mp3") --無形打擊準備
 		-- recover Unseen Strike Target Warning
 		warnUnseenStrike = mod:NewTargetAnnounce(123017, 4)
 		specWarnUnseenStrike = mod:NewSpecialWarningTarget(122949)
@@ -233,7 +233,7 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, _, _, _, target)
 		warnUnseenStrike:Show(target)
 		specWarnUnseenStrike:Show(target)
 		timerUnseenStrike:Start()
-		timerUnseenStrikeCD:Start(55, unseencount + 1)
+		timerUnseenStrikeCD:Start(61, unseencount + 1)
 		if target == UnitName("player") then
 			yellUnseenStrike:Yell()
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\targetyou.mp3") --目標是你
@@ -247,7 +247,7 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, _, _, _, target)
 		sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 		sndWOP:Schedule(2.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 		sndWOP:Schedule(3.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-		sndWOP:Schedule(50, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wxdjzb.mp3") --無形打擊準備
+		sndWOP:Schedule(55, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wxdjzb.mp3") --無形打擊準備
 		if self.Options.UnseenStrikeArrow then
 			DBM.Arrow:ShowRunTo(target, 5, 5)
 		end

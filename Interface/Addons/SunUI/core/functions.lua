@@ -173,10 +173,15 @@ CheckRole()
 
 function S.MakeMoveHandle(Frame, Text, key)
 	local MoveHandle = CreateFrame("Frame", nil, UIParent)
-	MoveHandle:SetSize(Frame:GetWidth(), Frame:GetHeight())
+	MoveHandle:Size(Frame:GetWidth(), Frame:GetHeight())
 	MoveHandle:SetFrameStrata("HIGH")
-	MoveHandle:SetBackdrop({bgFile = DB.Solid})
+	MoveHandle:SetBackdrop({
+		bgFile = DB.Solid,
+		edgeFile = DB.GlowTex, edgeSize = S.Scale(1),
+		insets = {left = S.Scale(1), right = S.Scale(1), top = S.Scale(1), bottom = S.Scale(1)},
+	})
 	MoveHandle:SetBackdropColor(0, 0, 0, 0.9)
+	MoveHandle:SetBackdropBorderColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b, 0.9)
 	MoveHandle.Text = S.MakeFontString(MoveHandle)
 	MoveHandle.Text:SetPoint("CENTER")
 	MoveHandle.Text:SetText(Text)
@@ -196,11 +201,16 @@ function S.MakeMoveHandle(Frame, Text, key)
 end
 function S.MakeMove(Frame, Text, key, a)
 	local MoveHandle = CreateFrame("Frame", nil, UIParent)
-	MoveHandle:SetSize(Frame:GetWidth(), Frame:GetHeight())
+	MoveHandle:Size(Frame:GetWidth(), Frame:GetHeight())
 	MoveHandle:SetScale(a)
 	MoveHandle:SetFrameStrata("HIGH")
-	MoveHandle:SetBackdrop({bgFile = DB.Solid})
+	MoveHandle:SetBackdrop({
+		bgFile = DB.Solid,
+		edgeFile = DB.GlowTex, edgeSize = S.Scale(1),
+		insets = {left = S.Scale(1), right = S.Scale(1), top = S.Scale(1), bottom = S.Scale(1)},
+	})
 	MoveHandle:SetBackdropColor(0, 0, 0, 0.9)
+	MoveHandle:SetBackdropBorderColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b, 0.9)
 	MoveHandle.Text = S.MakeFontString(MoveHandle)
 	MoveHandle.Text:SetPoint("CENTER")
 	MoveHandle.Text:SetText(Text)

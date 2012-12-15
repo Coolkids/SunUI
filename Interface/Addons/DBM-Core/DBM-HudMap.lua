@@ -1,4 +1,4 @@
-DBMHudMap = LibStub("AceAddon-3.0"):NewAddon("DBMHudMap", "AceEvent-3.0")
+﻿DBMHudMap = LibStub("AceAddon-3.0"):NewAddon("DBMHudMap", "AceEvent-3.0")
 local mod = DBMHudMap
 
 --[[ Default upvals 

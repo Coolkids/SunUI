@@ -5,6 +5,8 @@ if (IsAddOnLoaded("Dominos") or IsAddOnLoaded("Bartender4") or IsAddOnLoaded("Ma
 end
 local C
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("actionbar", "AceEvent-3.0", "AceHook-3.0")
+local LibActionButton = LibStub and LibStub("LibActionButton-1.0", true)
+local activeButtons = LibActionButton and LibActionButton.activeButtons or ActionBarActionEventsFrame.frames
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local buttonList = {}
 function Module:blizzHider()
@@ -491,6 +493,38 @@ function Module:UpdateSize(val)
 		end
 	end
 end
+local function ShowGrid()
+	SetActionBarToggles(1, 1, 1, 1, 0)
+	SetCVar("alwaysShowActionBars", 0)
+	ActionButton_HideGrid = DB.dummy
+	for i = 1, 12 do
+		local button = _G[format("ActionButton%d", i)]
+		button:SetAttribute("showgrid", 1)
+		ActionButton_ShowGrid(button)
+
+		button = _G[format("MultiBarRightButton%d", i)]
+		button:SetAttribute("showgrid", 1)
+		ActionButton_ShowGrid(button)
+
+		button = _G[format("MultiBarBottomRightButton%d", i)]
+		button:SetAttribute("showgrid", 1)
+		ActionButton_ShowGrid(button)
+
+		button = _G[format("MultiBarLeftButton%d", i)]
+		button:SetAttribute("showgrid", 1)
+		ActionButton_ShowGrid(button)
+
+		button = _G[format("MultiBarBottomLeftButton%d", i)]
+		button:SetAttribute("showgrid", 1)
+		ActionButton_ShowGrid(button)
+	end
+end
+
+local function HideLossCD()
+	for button in pairs(activeButtons) do
+		button.cooldown:SetLossOfControlCooldown(0, 0)
+	end
+end
 function Module:OnInitialize()
 	C = SunUIConfig.db.profile.ActionBarDB
 end
@@ -506,28 +540,7 @@ function Module:OnEnable()
 	Module:CreatePetBar()
 	Module:CreateStanceBar()
 	Module:CreateExitVehicle()
+	ShowGrid()
+	Module:RegisterEvent("LOSS_OF_CONTROL_ADDED", HideLossCD)
+	Module:RegisterEvent("LOSS_OF_CONTROL_UPDATE", HideLossCD)
 end
-
-
-local LibActionButton = LibStub and LibStub("LibActionButton-1.0", true)
-local activeButtons = LibActionButton and LibActionButton.activeButtons or ActionBarActionEventsFrame.frames
-
-
-local Fixer = CreateFrame("Frame")
-
-local function Reset()
-	for button in pairs(activeButtons) do
-		button.cooldown:SetLossOfControlCooldown(0, 0)
-	end
-end
-
-local function Enable()
-	Fixer:RegisterEvent("LOSS_OF_CONTROL_ADDED")
-	Fixer:RegisterEvent("LOSS_OF_CONTROL_UPDATE")
-
-	Fixer:SetScript("OnEvent", Reset)
-end
-
-Fixer:RegisterEvent("PLAYER_ENTERING_WORLD")
-
-Fixer:SetScript("OnEvent", Enable)

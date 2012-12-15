@@ -13,6 +13,7 @@ mod:RegisterCombat("combat")
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED",
 	"SPELL_AURA_APPLIED_DOSE",
+	"SPELL_AURA_REMOVED",
 	"SPELL_CAST_START",
 	"SPELL_CAST_SUCCESS",
 	"UNIT_SPELLCAST_SUCCEEDED",
@@ -70,6 +71,8 @@ local yinmoCount = 0
 
 local kbpscount = 0
 
+local playkbpsound = false
+
 mod:AddBoolOption("InfoFrame")
 mod:AddBoolOption("pscount", true, "sound")
 mod:AddBoolOption("HudMAP", true, "sound")
@@ -106,6 +109,7 @@ function mod:OnCombatStart(delay)
 --	self:ScheduleMethod(25.5-delay, "TerrorSpawns")
 	timerBreathOfFearCD:Start(-delay)
 	onPlatform = false
+	playkbpsound = false
 	platformMob = nil
 	table.wipe(ominousCackleTargets)
 	table.wipe(platformGUIDs)
@@ -191,6 +195,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif args:IsSpellID(118977) and args:IsPlayer() then--Fearless, you're leaving platform
 		onPlatform = false
+		playkbpsound = false
 		platformMob = nil
 		timerFearless:Start()
 		--Breath of fear timer recovery
@@ -272,6 +277,10 @@ mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(120047) then
 		timerDreadSpray:Cancel(args.sourceGUID)
+	elseif args:IsSpellID(129147) then
+		if args:IsPlayer() then
+			playkbpsound = true
+		end
 	end
 end
 
@@ -294,9 +303,10 @@ function mod:SPELL_CAST_START(args)
 		sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 		sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 		sndWOP:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-	elseif args:IsSpellID(120519) then --水魄
+	elseif args:IsSpellID(120519) then 
 		timerSpecialCD:Start()
 		specWarnshuipo:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_spzb.mp3") --水魄準備
 	elseif args:IsSpellID(120455) then --隐没
 		timerSpecialCD:Cancel()
 		yinmoCount = yinmoCount + 1
@@ -311,10 +321,10 @@ end
 
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(120047) then
-		if not onPlatform then return end
+		if not playkbpsound then return end
 		kbpscount = 0
 	elseif args:IsSpellID(119983) then
-		if not onPlatform then return end
+		if not playkbpsound then return end
 		kbpscount = kbpscount + 1
 		if self.Options.pscount then
 			if kbpscount == 1 then

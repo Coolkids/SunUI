@@ -1,8 +1,8 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SunUIPowerBar", "AceTimer-3.0")
-local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local powercolor = {}
 local space = 4
+local Holder = CreateFrame("Statusbar", nil, UIParent)
 for power, color in next, PowerBarColor do
 	if (type(power) == "string") then
 		if power == "MANA" then 
@@ -23,7 +23,7 @@ function Module:CreateShadowOrbs()
 	local ShadowOrbs = CreateFrame("Frame", nil, UIParent)
 	ShadowOrbs:SetSize(C["Width"], C["Height"])
 	ShadowOrbs:SetScale(C["Scale"])
-	MoveHandle.PowerBar = S.MakeMove(ShadowOrbs, "SunUIPowerBar", "PowerBar", C["Scale"])
+	ShadowOrbs:SetPoint("CENTER", Holder)
 	local maxShadowOrbs = UnitPowerMax('player', SPELL_POWER_SHADOW_ORBS)
 	
 	for i = 1,maxShadowOrbs do
@@ -63,6 +63,7 @@ function Module:CreateShadowOrbs()
 				UIFrameFadeIn(self, 1, self:GetAlpha(), 1)	
 			end
 			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" then
+				self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 				S.FadeOutFrameDamage(self, 1)
 			end
 		end
@@ -74,7 +75,7 @@ function Module:CreateMonkBar()
 	local chibar = CreateFrame("Frame",nil,UIParent)
 	chibar:SetSize(C["Width"], C["Height"])
 	chibar:SetScale(C["Scale"])
-	MoveHandle.PowerBar = S.MakeMove(chibar, "SunUIPowerBar", "PowerBar", C["Scale"])
+	chibar:SetPoint("CENTER", Holder)
 	for i=1,5 do
 		chibar[i] = CreateFrame("StatusBar",nil,chibar)
 		chibar[i]:SetSize((C["Width"]-space*(5-1))/5, C["Height"])
@@ -126,6 +127,7 @@ function Module:CreateMonkBar()
 				UIFrameFadeIn(self, 1, self:GetAlpha(), 1)
 			end
 			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" then
+				self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 				S.FadeOutFrameDamage(self, 1)
 			end
 		end
@@ -186,6 +188,7 @@ local function OnEvent(self, event, unit)
 			UIFrameFadeIn(self, 1, self:GetAlpha(), 1)
 		end
 		if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" then
+			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 			S.FadeOutFrameDamage(self, 1)
 		end
 	end
@@ -203,7 +206,7 @@ function Module:CreateQSDKPower()
 	local bars = CreateFrame("Frame", nil, UIParent)
 	bars:SetSize(C["Width"], C["Height"])
 	bars:SetScale(C["Scale"])
-	MoveHandle.PowerBar = S.MakeMove(bars, "SunUIPowerBar", "PowerBar", C["Scale"])
+	bars:SetPoint("CENTER", Holder)
 	for i = 1, count do
 		bars[i] =CreateFrame("StatusBar", nil, bars)
 		bars[i]:SetStatusBarTexture(DB.Statusbar)
@@ -267,7 +270,7 @@ function Module:CreateCombatPoint()
 	if DB.MyClass ~= "ROGUE" and DB.MyClass ~= "DRUID" then return end
 	local CombatPointBar = CreateFrame("Frame", nil, UIParent)
 	CombatPointBar:SetSize(C["Width"], C["Height"])
-	CombatPointBar:SetScale(C["Scale"])
+	CombatPointBar:SetPoint("CENTER", Holder)
 	MoveHandle.PowerBar = S.MakeMove(CombatPointBar, "SunUIPowerBar", "PowerBar", C["Scale"])
 	for i = 1, 5 do
 		CombatPointBar[i] =CreateFrame("StatusBar", nil, CombatPointBar)
@@ -330,7 +333,7 @@ function Module:CreateEclipse()
 	local showBar = false
 	local eb = CreateFrame('Frame', nil, UIParent)
 	eb:SetSize(C["Width"], C["Height"])
-	MoveHandle.PowerBar = S.MakeMove(eb, "SunUIPowerBar", "PowerBar", C["Scale"])
+	eb:SetPoint("CENTER", Holder)
 	eb:CreateShadow()
 	local lb = CreateFrame('StatusBar', nil, eb)
 	lb:SetPoint('LEFT', eb, 'LEFT')
@@ -421,6 +424,7 @@ function Module:CreateEclipse()
 		end
 		if C["Fade"] then 
 			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" then
+				self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 				S.FadeOutFrameDamage(eb, 1)
 			end
 		end
@@ -446,7 +450,7 @@ function Module:FuckWarlock()
 	}
 	local bars = CreateFrame('Frame', nil, UIParent)
 	bars:SetSize(C["Width"], C["Height"])
-	MoveHandle.PowerBar = S.MakeMove(bars, "SunUIPowerBar", "PowerBar", C["Scale"])
+	bars:SetPoint("CENTER", Holder)
 	for i = 1, 4 do
 		bars[i] = CreateFrame("StatusBar", nil, bars)
 		bars[i]:SetSize((C["Width"]-space*(4-1))/4, C["Height"])
@@ -587,6 +591,7 @@ function Module:FuckWarlock()
 				UIFrameFadeIn(self, 1, self:GetAlpha(), 1)
 			end
 			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" or event == "PLAYER_TALENT_UPDATE" then
+				self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 				S.FadeOutFrameDamage(self, 1)
 			end
 		end
@@ -597,7 +602,7 @@ function Module:Mage()
 	
 	local bars = CreateFrame("Frame", nil, UIParent)
 	bars:SetSize(C["Width"], C["Height"])
-	MoveHandle.PowerBar = S.MakeMove(bars, "SunUIPowerBar", "PowerBar", C["Scale"])
+	bars:SetPoint("CENTER", Holder)
 	
 	for i = 1,6 do
 		bars[i] = CreateFrame("StatusBar", nil, f)
@@ -658,8 +663,7 @@ function Module:HealthPowerBar()
 	if not C["HealthPower"] then return end
 	local bars = CreateFrame("Statusbar", nil, UIParent)
 	bars:SetSize(C["Width"], C["Height"])
-	local a,b,c,d,e = unpack(SunUIConfig.db.profile.MoveHandleDB.PowerBar)
-	bars:SetPoint(a,b,c,d,e)
+	bars:SetPoint("CENTER", Holder)
 	bars:SetStatusBarTexture(DB.Statusbar)
 	bars:SetMinMaxValues(0, UnitHealthMax("player"))
 	bars:SetValue(UnitHealth("player"))
@@ -701,10 +705,6 @@ function Module:HealthPowerBar()
 		if self.elapsed < .2 then
 			local healthnum = UnitHealth("player")
 			local powernum = UnitPower("player")
-			local maxhealth = UnitHealthMax("player")
-			local maxpower = UnitPowerMax("player")
-			self:SetMinMaxValues(0, maxhealth)
-			power:SetMinMaxValues(0, maxpower)
 			self:SetValue(healthnum)
 			power:SetValue(powernum)
 			healthtext:SetText(S.ShortValue(healthnum))
@@ -719,6 +719,8 @@ function Module:HealthPowerBar()
 	bars:RegisterEvent("PLAYER_REGEN_ENABLED")
 	bars:RegisterEvent("PLAYER_REGEN_DISABLED")
 	bars:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+	bars:RegisterEvent("PLAYER_LEVEL_UP")
+	bars:RegisterEvent("UNIT_INVENTORY_CHANGED")
 	bars:SetScript("OnEvent", function(self, event)
 		if C["Fade"] then 
 			if event == "PLAYER_REGEN_DISABLED" then
@@ -726,19 +728,29 @@ function Module:HealthPowerBar()
 				UIFrameFadeIn(self, 1, self:GetAlpha(), 1)	
 			end
 			if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" then
+				self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+				self:SetMinMaxValues(0, UnitHealthMax("player"))
+				power:SetMinMaxValues(0, UnitPowerMax("player"))
 				S.FadeOutFrameDamage(self, 1)
 			end
 			if event == "UPDATE_SHAPESHIFT_FORM" or event == "PLAYER_ENTERING_WORLD" or event == "ACTIVE_TALENT_GROUP_CHANGED" then
+				self:SetMinMaxValues(0, UnitHealthMax("player"))
 				power:SetMinMaxValues(0, UnitPowerMax("player"))
 				local _, powerclass = UnitPowerType("player")
 				powertext:SetTextColor(unpack(powercolor[powerclass]))
+			end
+			if event == "PLAYER_LEVEL_UP" or event == "UNIT_INVENTORY_CHANGED" then
+					self:SetMinMaxValues(0, UnitHealthMax("player"))
+					power:SetMinMaxValues(0, UnitPowerMax("player"))
 			end
 		end
 	end)
 end
 function Module:OnEnable()
 	C = C["PowerBarDB"]
-	if not C["Open"] then return end
+	if not C["Open"] then Holder = nil return end
+	Holder:SetSize(C["Width"], C["Height"])
+	MoveHandle.PowerBar = S.MakeMove(Holder, "SunUIPowerBar", "PowerBar", C["Scale"])
 	Module:CreateShadowOrbs()
 	Module:CreateMonkBar()
 	Module:CreateQSDKPower()

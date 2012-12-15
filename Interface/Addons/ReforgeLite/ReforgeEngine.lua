@@ -114,7 +114,7 @@ end
 function ReforgeLite:IsMethodValid(method)
   for i = 1, #method.items do
     local item = GetInventoryItemLink ("player", self.itemData[i].slotId)
-    local stats = (item and GetItemStats(item) or {})
+    local stats = (item and GetItemStatsUp(item) or {})
     if method.items[i].src and method.items[i].dst then
       if (stats[self.itemStats[method.items[i].src].name] or 0) == 0 then
         return false
@@ -137,7 +137,7 @@ function ReforgeLite:UpdateMethodStats (method)
   method.stats[self.STATS.SPIRIT] = method.stats[self.STATS.SPIRIT] / self.spiritBonus
   for i = 1, #method.items do
     local item = GetInventoryItemLink ("player", self.itemData[i].slotId)
-    local stats = (item and GetItemStats(item) or {})
+    local stats = (item and GetItemStatsUp(item) or {})
     local reforge = (item and self:GetReforgeID(item))
     if reforge then
       local src, dst = self.reforgeTable[reforge][1], self.reforgeTable[reforge][2]
@@ -182,7 +182,7 @@ function ReforgeLite:ResetMethod ()
   for i = 1, #self.itemData do
     method.items[i] = {}
     local item = GetInventoryItemLink ("player", self.itemData[i].slotId)
-    local stats = (item and GetItemStats (item) or {})
+    local stats = (item and GetItemStatsUp (item) or {})
     local reforge = (item and self:GetReforgeID (item))
     if reforge then
       method.items[i].reforge = reforge
@@ -348,7 +348,7 @@ function ReforgeLite:InitReforgeClassic ()
     method.items[i] = {}
     method.items[i].stats = {}
     local item = GetInventoryItemLink ("player", self.itemData[i].slotId)
-    local stats = (item and GetItemStats (item) or {})
+    local stats = (item and GetItemStatsUp (item) or {})
     for j = 1, #self.itemStats do
       method.items[i].stats[j] = (stats[self.itemStats[j].name] or 0)
       statsSum = statsSum + method.items[i].stats[j]
@@ -379,7 +379,7 @@ function ReforgeLite:InitReforgeClassic ()
     end
   end
 
-  data.cheat = math.ceil(statsSum / 800)
+  data.cheat = math.ceil(statsSum / 1000)
   if data.cheat < 1 then
     data.cheat = 1
   end
