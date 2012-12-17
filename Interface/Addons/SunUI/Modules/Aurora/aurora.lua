@@ -4707,7 +4707,7 @@ local function SkinBlz(event, addon)
 			glyph:HookScript("OnUpdate", onUpdate)
 		end
 
-		hooksecurefunc("GlyphFrame_Update", function()
+		hooksecurefunc("GlyphFrame_Update", function(self)
 			local spec = GetSpecialization(_, _, PlayerTalentFrame.talentGroup)
 			if spec then
 				local _, _, _, icon = GetSpecializationInfo(spec, false, self.isPet)
@@ -6726,31 +6726,6 @@ local function SkinTooltip()
 	sb:SetStatusBarTexture(DB.Statusbar)
 	S.CreateBD(FriendsTooltip)
 	S.CreateMark(sb)
-	-- pet battle stuff
-
-	local tooltips = {PetBattlePrimaryAbilityTooltip, PetBattlePrimaryUnitTooltip, FloatingBattlePetTooltip, BattlePetTooltip, FloatingPetBattleAbilityTooltip}
-	for _, f in pairs(tooltips) do
-		f:DisableDrawLayer("BACKGROUND")
-		local bg = CreateFrame("Frame", nil, f)
-		bg:SetAllPoints()
-		bg:SetFrameLevel(0)
-		S.CreateBD(bg)
-	end
-
-	PetBattlePrimaryUnitTooltip.Delimiter:SetTexture(0, 0, 0)
-	PetBattlePrimaryUnitTooltip.Delimiter:SetHeight(1)
-	PetBattlePrimaryAbilityTooltip.Delimiter1:SetHeight(1)
-	PetBattlePrimaryAbilityTooltip.Delimiter1:SetTexture(0, 0, 0)
-	PetBattlePrimaryAbilityTooltip.Delimiter2:SetHeight(1)
-	PetBattlePrimaryAbilityTooltip.Delimiter2:SetTexture(0, 0, 0)
-	FloatingPetBattleAbilityTooltip.Delimiter1:SetHeight(1)
-	FloatingPetBattleAbilityTooltip.Delimiter1:SetTexture(0, 0, 0)
-	FloatingPetBattleAbilityTooltip.Delimiter2:SetHeight(1)
-	FloatingPetBattleAbilityTooltip.Delimiter2:SetTexture(0, 0, 0)
-	FloatingBattlePetTooltip.Delimiter:SetTexture(0, 0, 0)
-	FloatingBattlePetTooltip.Delimiter:SetHeight(1)
-	S.ReskinClose(FloatingBattlePetTooltip.CloseButton)
-	S.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
 end
 
 function Module:OnInitialize()

@@ -1,6 +1,5 @@
 local S, C, L, DB = unpack(select(2, ...))
-local _
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Warnning")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Warnning", "AceEvent-3.0")
 
 local f = CreateFrame("Frame", nil, UIParent)
 f:SetToplevel(true)
@@ -27,26 +26,28 @@ f.tex.anim.fadein:SetDuration(0.5)
 
 f.tex.anim:SetLooping("REPEAT")
 
-f:RegisterEvent("PLAYER_DEAD")
-f:RegisterEvent("UNIT_HEALTH")
-f:SetScript("OnEvent", function(self, event, unit)
+
+local function Health(event, unit)
 	if unit ~= "player" then return end
-	if ( UnitHealth("player")/UnitHealthMax("player") < 0.25 ) and not UnitIsDead("player") and not UnitIsGhost("player") then
-		self:Show()
-		if not self.tex.anim:IsPlaying() then
-			self.tex.anim:Play()
+	if ( UnitHealth("player")/UnitHealthMax("player") < 0.3 ) and not UnitIsDead("player") and not UnitIsGhost("player") then
+		f:Show()
+		if not f.tex.anim:IsPlaying() then
+			f.tex.anim:Play()
 		end
 	else
-		self:Hide()
-		if self.tex.anim:IsPlaying() then
-			self.tex.anim:Stop()
+		f:Hide()
+		if f.tex.anim:IsPlaying() then
+			f.tex.anim:Stop()
 		end
 	end
-end)
+end
 
 function Module:OnEnable()
-	if not C["WarnDB"]["Open"] then
-		f:UnregisterAllEvents()
+	if C["WarnDB"]["Open"] then
+		Module:RegisterEvent("PLAYER_DEAD", Health)
+		Module:RegisterEvent("UNIT_HEALTH", Health)
+	else
 		f = nil
+		f.tex.anim = nil
 	end
 end

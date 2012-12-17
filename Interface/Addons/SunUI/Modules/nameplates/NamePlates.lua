@@ -172,8 +172,9 @@ local function UpdateThreat(frame,elapsed)
 	end
 	--print(frame.r, frame.g, frame.b)
 	local r,g,b = frame.hp:GetStatusBarColor()
-	if r + b + b > 2 then return end
-	S.CreateTop(frame.toptexture, frame.r, frame.g, frame.b)
+	if r + b + b < 2 then 
+		S.CreateTop(frame.toptexture, frame.r, frame.g, frame.b)
+	end
     local minHealth, maxHealth = frame.healthOriginal:GetMinMaxValues()
     local valueHealth = frame.healthOriginal:GetValue()
 	local d =(valueHealth/maxHealth)*100

@@ -25,7 +25,7 @@ local function SVal(Val)
     end
 end
 function Module:BuildExpBar()
-	ExpBar = CreateFrame("StatusBar", nil, UIParent)
+	ExpBar = CreateFrame("StatusBar", "SunUIExpBar", UIParent)
 	ExpBar:SetFrameLevel(3)
 	ExpBar:CreateShadow()
 	ExpBar:SetStatusBarTexture(DB.Statusbar)

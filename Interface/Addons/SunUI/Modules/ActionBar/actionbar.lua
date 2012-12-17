@@ -9,6 +9,7 @@ local LibActionButton = LibStub and LibStub("LibActionButton-1.0", true)
 local activeButtons = LibActionButton and LibActionButton.activeButtons or ActionBarActionEventsFrame.frames
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local buttonList = {}
+local temp = ActionButton_HideGrid
 function Module:blizzHider()
 	local hider = CreateFrame("Frame")
 	hider:Hide()
@@ -494,29 +495,49 @@ function Module:UpdateSize(val)
 	end
 end
 local function ShowGrid()
-	SetActionBarToggles(1, 1, 1, 1, 0)
-	SetCVar("alwaysShowActionBars", 0)
-	ActionButton_HideGrid = DB.dummy
-	for i = 1, 12 do
-		local button = _G[format("ActionButton%d", i)]
-		button:SetAttribute("showgrid", 1)
-		ActionButton_ShowGrid(button)
+	if GetCVar("alwaysShowActionBars") == "1" then 
+		SetActionBarToggles(1, 1, 1, 1, 0)
+		ActionButton_HideGrid = DB.dummy
+		for i = 1, 12 do
+			local button = _G[format("ActionButton%d", i)]
+			button:SetAttribute("showgrid", 1)
+			ActionButton_ShowGrid(button)
 
-		button = _G[format("MultiBarRightButton%d", i)]
-		button:SetAttribute("showgrid", 1)
-		ActionButton_ShowGrid(button)
+			button = _G[format("MultiBarRightButton%d", i)]
+			button:SetAttribute("showgrid", 1)
+			ActionButton_ShowGrid(button)
 
-		button = _G[format("MultiBarBottomRightButton%d", i)]
-		button:SetAttribute("showgrid", 1)
-		ActionButton_ShowGrid(button)
+			button = _G[format("MultiBarBottomRightButton%d", i)]
+			button:SetAttribute("showgrid", 1)
+			ActionButton_ShowGrid(button)
 
-		button = _G[format("MultiBarLeftButton%d", i)]
-		button:SetAttribute("showgrid", 1)
-		ActionButton_ShowGrid(button)
+			button = _G[format("MultiBarLeftButton%d", i)]
+			button:SetAttribute("showgrid", 1)
+			ActionButton_ShowGrid(button)
 
-		button = _G[format("MultiBarBottomLeftButton%d", i)]
-		button:SetAttribute("showgrid", 1)
-		ActionButton_ShowGrid(button)
+			button = _G[format("MultiBarBottomLeftButton%d", i)]
+			button:SetAttribute("showgrid", 1)
+			ActionButton_ShowGrid(button)
+		end
+	else
+		ActionButton_HideGrid = temp
+		for i = 1, 12 do
+			local button = _G[format("ActionButton%d", i)]
+			button:SetAttribute("showgrid", 0)
+			ActionButton_HideGrid(button)
+			button = _G[format("MultiBarRightButton%d", i)]
+			button:SetAttribute("showgrid", 0)
+			ActionButton_HideGrid(button)
+			button = _G[format("MultiBarBottomRightButton%d", i)]
+			button:SetAttribute("showgrid", 0)
+			ActionButton_HideGrid(button)
+			button = _G[format("MultiBarLeftButton%d", i)]
+			button:SetAttribute("showgrid", 0)
+			ActionButton_HideGrid(button)
+			button = _G[format("MultiBarBottomLeftButton%d", i)]
+			button:SetAttribute("showgrid", 0)
+			ActionButton_HideGrid(button)
+		end
 	end
 end
 
@@ -541,6 +562,7 @@ function Module:OnEnable()
 	Module:CreateStanceBar()
 	Module:CreateExitVehicle()
 	ShowGrid()
+	Module:RegisterEvent("CVAR_UPDATE", ShowGrid)
 	Module:RegisterEvent("LOSS_OF_CONTROL_ADDED", HideLossCD)
 	Module:RegisterEvent("LOSS_OF_CONTROL_UPDATE", HideLossCD)
 end
