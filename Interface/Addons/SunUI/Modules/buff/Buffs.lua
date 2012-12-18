@@ -2,6 +2,7 @@
 local S, C, L, DB = unpack(select(2, ...))
 local Buff = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Buff", "AceHook-3.0")
 local holder = CreateFrame("Frame", "BuffFrameHolder", UIParent)
+local debuffholder = CreateFrame("Frame", "DeBuffFrameHolder", UIParent)
 local _
 local font = "Interface\\Addons\\SunUI\\Media\\font.ttf"
 -- making frame to hold all buff frame elements
@@ -106,7 +107,7 @@ function Buff:OverrideDebuffAnchors(buttonName, i)
 	if not buff.styled then CreateBuffStyle(buff) end
 	
 	if i == 1 then
-		MoveHandle.Debuff = S.MakeMoveHandle(buff, "Debuff", "Debuff")
+		buff:SetPoint("CENTER", debuffholder)
 	else
 		buff:SetPoint("RIGHT", _G[buttonName..(i-1)], "LEFT", -8, 0)
 		if C["BuffDB"]["DebuffDirection"] == 1 then
@@ -194,7 +195,9 @@ function Buff:OnInitialize()
 	SetCVar("consolidateBuffs",0)
 	SetCVar("buffDurations", 1)
 	holder:SetSize(C["BuffDB"]["IconSize"],C["BuffDB"]["IconSize"])
+	debuffholder:SetSize(C["BuffDB"]["IconSize"],C["BuffDB"]["IconSize"])
 	MoveHandle.Buff = S.MakeMoveHandle(holder, "Buff", "Buff")
+	MoveHandle.Debuff = S.MakeMoveHandle(debuffholder, "Debuff", "Debuff")
 	initialize()
 	self:SecureHook("BuffFrame_UpdateAllBuffAnchors", "OverrideBuffAnchors")
 	self:SecureHook("DebuffButton_UpdateAnchors", "OverrideDebuffAnchors")
