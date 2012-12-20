@@ -129,6 +129,7 @@ DBM_CORE_ANNOUNCE_BREAK_OVER		= "休息已结束"
 DBM_CORE_TIMER_PULL					= "开怪倒计时"
 DBM_CORE_ANNOUNCE_PULL				= "%d秒后开怪"
 DBM_CORE_ANNOUNCE_PULL_NOW			= "开怪！"
+DBM_CORE_ANNOUNCE_PULL_CANCEL		= "取消了开怪倒计时"
 
 DBM_CORE_ACHIEVEMENT_TIMER_SPEED_KILL = "成就：快速击杀"
 
@@ -263,3 +264,8 @@ DBM_INSTANCE_INFO_STATS_AWAY		= "暂离：%s"
 DBM_INSTANCE_INFO_STATS_NO_RESPONSE	= "新版DBM未安装：%s"
 DBM_INSTANCE_INFO_RESULTS			= "副本进度扫描结果。" --Note that instances might show up more than once if there are players with localized WoW clients in your raid.
 DBM_INSTANCE_INFO_SHOW_RESULTS		= "回复请求的玩家：%s\n|HDBM:showRaidIdResults|h|cff3588ff[点击显示结果]|r|h"
+
+DBM_CORE_LAG_CHECKING				= "延时检测--五秒后反馈结果..."
+DBM_CORE_LAG_HEADER					= "Deadly Boss Mods - 延时检测"
+DBM_CORE_LAG_ENTRY					= "%s：世界延时[%d毫秒] / 本地延时[%d毫秒]"
+DBM_CORE_LAG_FOOTER					= "未反馈此次检测的团员:%s"

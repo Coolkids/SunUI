@@ -92,7 +92,9 @@ mod:AddBoolOption("HudMAP", true, "sound")
 
 mod:AddBoolOption("optDDall", true, "sound")
 
-mod:AddDropdownOption("optDD", {"nodd", "DD1", "DD2", "DD3"}, "nodd", "sound")
+mod:AddBoolOption("optDD4", false, "sound")
+
+mod:AddDropdownOption("optDD", {"nodd", "DD1", "DD2", "DD3", "DD4"}, "nodd", "sound")
 local DBMHudMap = DBMHudMap
 local free = DBMHudMap.free
 local function register(e)	
@@ -321,14 +323,27 @@ function mod:SPELL_CAST_START(args)
 		end
 	elseif args:IsSpellID(118312) then --水箭
 		watercount = watercount + 1
-		if (args.sourceGUID == UnitGUID("target") and self.Options.optDDall) or (not self.Options.optDDall) then
-			if ((mod.Options.optDD == "DD1") and (watercount % 3 == 1)) or ((mod.Options.optDD == "DD2") and (watercount % 3 == 2)) or ((mod.Options.optDD == "DD3") and (watercount % 3 == 0)) then
-				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3") --快打斷
-				specWarnwarterDD:Show(args.sourceName)
-			end	
-			if ((mod.Options.optDD == "DD1") and (watercount % 3 == 0)) or ((mod.Options.optDD == "DD2") and (watercount % 3 == 1)) or ((mod.Options.optDD == "DD3") and (watercount % 3 == 2)) then
-				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ddzb.mp3") --打斷準備
-				specWarnDDL:Schedule(1)
+		if self.Options.optDD4 then
+			if (args.sourceGUID == UnitGUID("target") and self.Options.optDDall) or (not self.Options.optDDall) then
+				if ((mod.Options.optDD == "DD1") and (watercount % 4 == 1)) or ((mod.Options.optDD == "DD2") and (watercount % 4 == 2)) or ((mod.Options.optDD == "DD3") and (watercount % 4 == 3)) or ((mod.Options.optDD == "DD4") and (watercount % 4 == 0)) then
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3") --快打斷
+					specWarnwarterDD:Show(args.sourceName)
+				end	
+				if ((mod.Options.optDD == "DD1") and (watercount % 4 == 0)) or ((mod.Options.optDD == "DD2") and (watercount % 4 == 1)) or ((mod.Options.optDD == "DD3") and (watercount % 4 == 2)) or ((mod.Options.optDD == "DD4") and (watercount % 4 == 3)) then
+					sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ddzb.mp3") --打斷準備
+					specWarnDDL:Schedule(1)
+				end
+			end
+		else
+			if (args.sourceGUID == UnitGUID("target") and self.Options.optDDall) or (not self.Options.optDDall) then
+				if ((mod.Options.optDD == "DD1") and (watercount % 3 == 1)) or ((mod.Options.optDD == "DD2") and (watercount % 3 == 2)) or ((mod.Options.optDD == "DD3") and (watercount % 3 == 0)) then
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3") --快打斷
+					specWarnwarterDD:Show(args.sourceName)
+				end	
+				if ((mod.Options.optDD == "DD1") and (watercount % 3 == 0)) or ((mod.Options.optDD == "DD2") and (watercount % 3 == 1)) or ((mod.Options.optDD == "DD3") and (watercount % 3 == 2)) then
+					sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ddzb.mp3") --打斷準備
+					specWarnDDL:Schedule(1)
+				end
 			end
 		end
 	end

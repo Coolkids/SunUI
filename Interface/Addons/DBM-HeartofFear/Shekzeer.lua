@@ -3,7 +3,7 @@ local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndYB		= mod:NewSound(nil, "SoundYB", true)
 
-mod:SetRevision(("$Revision: 8137 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8319 $"):sub(12, -3))
 mod:SetCreatureID(62837)--62847 Dissonance Field, 63591 Kor'thik Reaver, 63589 Set'thik Windblade
 mod:SetModelID(42730)
 mod:SetZone()
@@ -23,8 +23,8 @@ mod:RegisterEventsInCombat(
 	"UNIT_SPELLCAST_SUCCEEDED"
 )
 
-local warnScreech				= mod:NewSpellAnnounce(123735, 3, nil, mod:IsRanged())
-local warnCryOfTerror			= mod:NewTargetAnnounce(123788, 3, nil, mod:IsHealer())
+local warnScreech				= mod:NewSpellAnnounce(123735, 3, nil, false)--Not useful.
+local warnCryOfTerror			= mod:NewTargetAnnounce(123788, 3, nil, mod:IsRanged())
 local warnEyes					= mod:NewStackAnnounce(123707, 2, nil, mod:IsTank())
 local warnSonicDischarge		= mod:NewSoonAnnounce(123504, 4)--Iffy reliability but better then nothing i suppose.
 local warnRetreat				= mod:NewSpellAnnounce(125098, 4)
@@ -37,6 +37,7 @@ local warnVisions				= mod:NewTargetAnnounce(124862, 4)--Visions of Demise
 local warnPhase3				= mod:NewPhaseAnnounce(3)
 local warnCalamity				= mod:NewSpellAnnounce(124845, 3, nil, mod:IsHealer())
 local warnConsumingTerror		= mod:NewSpellAnnounce(124849, 4, nil, not mod:IsTank())
+local warnHeartofFear			= mod:NewTargetAnnounce(125638, 4)
 
 local specwarnSonicDischarge	= mod:NewSpecialWarningSpell(123504, nil, nil, nil, true)
 local specWarnEyes				= mod:NewSpecialWarningStack(123707, mod:IsTank(), 4)
@@ -53,6 +54,8 @@ local specwarnVisions			= mod:NewSpecialWarningYou(124862)
 local specwarnXJ				= mod:NewSpecialWarningMove(123184)
 local yellVisions				= mod:NewYell(124862, nil, false)
 local specWarnConsumingTerror	= mod:NewSpecialWarningSpell(124849, not mod:IsTank())
+local specWarnHeartOfFear		= mod:NewSpecialWarningYou(125638)
+local yellHeartOfFear			= mod:NewYell(125638)
 
 local timerScreechCD			= mod:NewNextTimer(7, 123735, nil, mod:IsRanged())
 local timerCryOfTerror			= mod:NewTargetTimer(20, 123788, nil, mod:IsHealer())
@@ -64,6 +67,7 @@ local timerPhase2				= mod:NewNextTimer(151, 125098)--152 until trigger, but pro
 local timerCalamityCD			= mod:NewCDTimer(6, 124845, nil, mod:IsHealer())
 local timerVisionsCD			= mod:NewCDTimer(19.5, 124862)
 local timerConsumingTerrorCD	= mod:NewCDTimer(32, 124849, nil, not mod:IsTank())
+local timerHeartOfFear			= mod:NewBuffFadesTimer(6, 125638)
 
 local berserkTimer				= mod:NewBerserkTimer(900)
 
@@ -84,6 +88,7 @@ local warnedLowHP3 = {}
 local warnedLowHP2 = {}
 local warnedLowHP1 = {}
 local visonsTargets = {}
+local resinTargets = {}
 local resinIcon = 2
 local shaName = EJ_GetEncounterInfo(709)
 local phase3Started = false
@@ -185,6 +190,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif args:IsSpellID(124748) then
 		warnAmberTrap:Show(args.amount or 1)
+		table.wipe(resinTargets)
 	elseif args:IsSpellID(125822) then
 		warnTrapped:Show(args.destName)
 	elseif args:IsSpellID(125390) then
@@ -213,19 +219,22 @@ function mod:SPELL_AURA_APPLIED(args)
 			DeadMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("targeting", args.destName, 9, nil, 0, 1, 0, 1):Appear():RegisterForAlerts())
 		end
 	elseif args:IsSpellID(124097) then
-		warnStickyResin:Show(args.destName)
-		if args:IsPlayer() then
+		if args:IsPlayer() and self:AntiSpam(5, 2) then --prevent spam in heroic
 			specwarnStickyResin:Show()
 			DBM.Flash:Show(1, 0, 0)
 			yellStickyResin:Yell()
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_szkp.mp3") --樹脂
 		end
-		if self.Options.StickyResinIcons then
-			self:SetIcon(args.destName, resinIcon)
-			if resinIcon == 2 then
-				resinIcon = 1
-			else
-				resinIcon = 2
+		if not resinTargets[args.destName] then --prevent spam in heroic
+			resinTargets[args.destName] = true
+			warnStickyResin:Show(args.destName)
+			if self.Options.StickyResinIcons then
+				self:SetIcon(args.destName, resinIcon)
+				if resinIcon == 2 then
+					resinIcon = 1
+				else
+					resinIcon = 2
+				end
 			end
 		end
 	elseif args:IsSpellID(123184) then
@@ -248,6 +257,14 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args.sourceGUID == UnitGUID("target") then--Only show warning for your own target.
 			specWarnDispatch:Show(args.sourceName)
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3")--快打斷
+		end
+	elseif args:IsSpellID(123845) then
+		warnHeartOfFear:Show(args.destName)
+		if args:IsPlayer() then
+			specWarnHeartOfFear:Show()
+			yellHeartOfFear:Yell()
+			timerHeartOfFear:Start()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_lxkp.mp3")--連線快跑
 		end
 	end
 end
@@ -361,6 +378,7 @@ end
 function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 	if spellId == 125098 and self:AntiSpam(2, 1) then--Yell is about 1.5 seconds faster then this event, BUT, it also requires localizing. I don't think doing it this way hurts anything.
 		self:UnregisterShortTermEvents()
+		table.wipe(resinTargets)
 		timerScreechCD:Cancel()
 		timerCryOfTerrorCD:Cancel()
 		timerEyesCD:Cancel()

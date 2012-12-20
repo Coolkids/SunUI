@@ -44,9 +44,9 @@
 --  Globals/Default Options  --
 -------------------------------
 DBM = {
-	Revision = tonumber(("$Revision: 8275 $"):sub(12, -3)),
+	Revision = tonumber(("$Revision: 8355 $"):sub(12, -3)),
 	DisplayVersion = "5.1 語音增強版", -- the string that is shown as version
-	ReleaseRevision = 8187 -- the revision of the latest stable version that is available
+	ReleaseRevision = 8290 -- the revision of the latest stable version that is available
 }
 
 -- Legacy crap; that stupid "Version" field was never a good idea.
@@ -864,6 +864,15 @@ SlashCmdList["DEADLYBOSSMODS"] = function(msg)
 		end
 		DBM:Schedule(timer, SendChatMessage, DBM_CORE_ANNOUNCE_PULL_NOW, channel)
 		sendSync("PT", timer)
+	elseif cmd:sub(1, 5) == "cpull" then
+		if DBM:GetRaidRank() == 0 then
+			return DBM:AddMsg(DBM_ERROR_NO_PERMISSION)
+		end
+		sendSync("CPT")
+	elseif cmd:sub(1, 3) == "lag" then
+		sendSync("L")
+		DBM:AddMsg(DBM_CORE_LAG_CHECKING)
+		DBM:Schedule(5, function() DBM:ShowLag() end)
 	elseif cmd:sub(1, 5) == "arrow" then
 		if not DBM:IsInRaid() then
 			DBM:AddMsg(DBM_ARROW_NO_RAIDGROUP)
@@ -1008,6 +1017,39 @@ do
 	--]]
 end
 
+
+do
+	local sortLag = {}
+	local nolagResponse = {}
+	local function sortit(v1, v2)
+		return (v1.worldlag or 0) < (v2.worldlag or 0)
+	end
+	function DBM:ShowLag()
+		for i, v in pairs(raid) do
+			table.insert(sortLag, v)
+		end
+		table.sort(sortLag, sortit)
+		self:AddMsg(DBM_CORE_LAG_HEADER)
+		for i, v in ipairs(sortLag) do
+			if v.worldlag then
+				self:AddMsg(DBM_CORE_LAG_ENTRY:format(v.name, v.worldlag, v.homelag))
+			else
+				table.insert(nolagResponse, v.name)
+			end
+		end
+		if #nolagResponse > 0 then
+			DBM:AddMsg(DBM_CORE_LAG_FOOTER:format(table.concat(nolagResponse, ", ")))
+			for i = #nolagResponse, 1, -1 do
+				nolagResponse[i] = nil
+			end
+		end
+		for i = #sortLag, 1, -1 do
+			sortLag[i] = nil
+		end
+	end
+end
+
+
 -------------------
 --  Pizza Timer  --
 -------------------
@@ -1022,15 +1064,6 @@ do
 			sendSync("U", ("%s\t%s"):format(time, text))
 		end
 		if sender then DBM:ShowPizzaInfo(text, sender) end
-		if text == DBM_CORE_TIMER_PULL then
-			PlaySoundFile("Interface\\AddOns\\DBM-Core\\Sounds\\win.ogg", "Master")
-			if time > 5 then DBM:Schedule(time-5.5, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\5.mp3", "Master") end
-			if time > 5 then DBM:Schedule(time-4.5, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\4.mp3", "Master") end
-			if time > 3 then DBM:Schedule(time-3.5, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\3.mp3", "Master") end
-			if time > 3 then DBM:Schedule(time-2.5, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\2.mp3", "Master") end
-			if time > 3 then DBM:Schedule(time-1.5, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\1.mp3", "Master") end
-			if time > 3 then DBM:Schedule(time-0.5, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\extrasounds\\com_go.mp3", "Master") end
-		end
 	end
 
 	function DBM:AddToPizzaIgnore(name)
@@ -1802,6 +1835,7 @@ end
 do
 	local syncHandlers = {}
 	local whisperSyncHandlers = {}
+	local pullnow = false
 	
 	-- DBM uses the following prefixes since 4.1 as pre-4.1 sync code is going to be incompatible anways, so this is the perfect opportunity to throw away the old and long names
 	-- M = Mod
@@ -1843,6 +1877,26 @@ do
 		if cId then DBM:OnMobKill(cId, true) end
 	end
 	
+	syncHandlers["CPT"] = function(sender)
+		if not DBM.Options.CountdownPullTimer or select(2, IsInInstance()) == "pvp" or DBM:GetRaidRank(sender) == 0 or not pullnow then
+			return
+		end
+		DBM.Bars:CancelBar(DBM_CORE_TIMER_PULL)
+		local channel = (IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT") or (IsInRaid() and "RAID_WARNING") or "PARTY"
+		for i = 1, 5 do
+			DBM:Unschedule(SendChatMessage, DBM_CORE_ANNOUNCE_PULL:format(i), channel)
+		end
+		DBM:Unschedule(SendChatMessage, DBM_CORE_ANNOUNCE_PULL_NOW, channel)
+		DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\5.mp3", "Master")
+		DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\4.mp3", "Master")
+		DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\3.mp3", "Master")
+		DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\2.mp3", "Master")
+		DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\1.mp3", "Master")
+		DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\extrasounds\\com_go.mp3", "Master")
+		DBM:AddMsg("<"..sender..">"..DBM_CORE_ANNOUNCE_PULL_CANCEL)
+		pullnow = false
+	end
+	
 	local dummyMod -- dummy mod for the pull sound effect
 	syncHandlers["PT"] = function(sender, timer)
 		if not DBM.Options.CountdownPullTimer or select(2, IsInInstance()) == "pvp" or DBM:GetRaidRank(sender) == 0 then
@@ -1852,11 +1906,20 @@ do
 		if timer < 2 or timer > 60 then
 			return
 		end
+		pullnow = true
 		if not dummyMod then
 			dummyMod = DBM:NewMod("PullTimerCountdownDummy")
 			dummyMod.countdown = dummyMod:NewCountdown(0, 0)
 		end
 --		dummyMod.countdown:Start(timer)
+		PlaySoundFile("Interface\\AddOns\\DBM-Core\\Sounds\\win.ogg", "Master")
+		if timer > 5 then DBM:Schedule(timer-5.5, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\5.mp3", "Master") end
+		if timer > 5 then DBM:Schedule(timer-4.5, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\4.mp3", "Master") end
+		if timer > 3 then DBM:Schedule(timer-3.5, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\3.mp3", "Master") end
+		if timer > 3 then DBM:Schedule(timer-2.5, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\2.mp3", "Master") end
+		if timer > 3 then DBM:Schedule(timer-1.5, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\1.mp3", "Master") end
+		if timer > 3 then DBM:Schedule(timer-0.5, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\extrasounds\\com_go.mp3", "Master") end
+		DBM:Schedule(timer, function() pullnow = false end)
 	end
 	
 	-- TODO: is there a good reason that version information is broadcasted and not unicasted?
@@ -1897,7 +1960,19 @@ do
 			end
 		end
 	end
-
+	
+	syncHandlers["L"] = function(sender)
+		sendSync("LAG", ("%d\t%d"):format(select(3, GetNetStats()), select(4, GetNetStats())))
+	end
+	
+	syncHandlers["LAG"] = function(sender, homelag, worldlag)
+		homelag, worldlag = tonumber(homelag or ""), tonumber(worldlag or "")
+		if homelag and worldlag and raid[sender] then
+			raid[sender].homelag = homelag
+			raid[sender].worldlag = worldlag
+		end
+	end
+	
 	syncHandlers["U"] = function(sender, time, text)
 		if select(2, IsInInstance()) == "pvp" then return end -- no pizza timers in battlegrounds
 		if DBM:GetRaidRank(sender) == 0 then return end
@@ -2457,6 +2532,8 @@ function checkWipe(confirm)
 	if #inCombat > 0 then
 		local wipe = true
 		if IsInScenarioGroup() then -- prevent wipe on ghost in Scenario Group.
+			wipe = false
+		elseif IsEncounterInProgress() then
 			wipe = false
 		else
 			local uId = (IsInRaid() and "raid") or "party"

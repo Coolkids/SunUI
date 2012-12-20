@@ -248,7 +248,8 @@ L:SetMiscLocalization({
 L= DBM:GetModLocalization(677)
 
 L:SetWarningLocalization({
-	specWarnBomb				= "小怪(%d) >> 準備爆破 <<!!"
+	specWarnBomb				= "小怪(%d) >> 爆破 <<",
+	specWarnKZ					= "小怪(%d) >> 控制 <<",
 })
 
 L:SetOptionLocalization({
@@ -261,17 +262,18 @@ L:SetOptionLocalization({
 	SoundADD2			= "語音警告：$spell:ej5676",
 	SoundADD3A			= "預先語音警告：$spell:ej5677 (8秒前)",
 	SoundADD3			= "語音警告：$spell:ej5677",
-	ragebomb1			= "英雄模式：爆破第1組輕甲兵",
-	ragebomb2			= "英雄模式：爆破第2組輕甲兵",
-	ragebomb3			= "英雄模式：爆破第3組輕甲兵",
-	ragebomb4			= "英雄模式：爆破第4組輕甲兵",
-	ragebomb5			= "英雄模式：爆破第5組輕甲兵",
-	ragebomb6			= "英雄模式：爆破第6組輕甲兵",
-	ragebomb7			= "英雄模式：爆破第7組輕甲兵",
-	ragebomb8			= "英雄模式：爆破第8組輕甲兵",
-	ragebomb9			= "英雄模式：爆破第9組輕甲兵",
-	ragebomb10			= "英雄模式：爆破第10組輕甲兵",
+	ragebomb1			= "英雄模式：爆破第3組",
+	ragebomb2			= "英雄模式：爆破第6組",
+	ragebomb3			= "英雄模式：爆破第9組",
+	ragebomb4			= "英雄模式：爆破第12組",
+	ragebomb5			= "英雄模式：爆破第15組",
 	specWarnBomb		= "特殊警告：本輪需要爆破小怪",
+	specWarnKZ			= "特殊警告：本輪需要控制小怪",
+	optKZ				= "輕甲兵控制鏈",
+	kza					= "第一輪",
+	kzb					= "第二輪",
+	kzc					= "第三輪",
+	nokz				= "我不控制",
 	optBY				= "語音警告：僅提示此首領的毀滅連擊",
 	tarfoc				= "當前目標和專注目標",
 	Janxi				= "臻璽(左側傀儡)",

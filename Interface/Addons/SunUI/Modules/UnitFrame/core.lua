@@ -567,7 +567,7 @@ local function createAuras(f)
 		a:SetPoint('TOPLEFT', f, 'BOTTOMLEFT', 0, 15)
 	end
     a['growth-x'] = 'RIGHT'
-    a['growth-y'] = 'RIGHT' 
+    a['growth-y'] = 'UP' 
     a.initialAnchor = 'TOPLEFT'
     a.gap = false
     a.spacing = 3
@@ -949,12 +949,13 @@ local function gen_cp(f)
 		[5]	= {1, 0.2, 0.2},}
 	local bars = CreateFrame("Frame", nil, f)
 	bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+	bars:SetFrameLevel(f:GetFrameLevel()+1)
 	bars:SetSize((f.width-8)/5, f.height/4)
 	for i = 1, 5 do
 		bars[i] =CreateFrame("StatusBar", nil, bars)
 		bars[i]:SetStatusBarTexture(DB.Statusbar2)
 		bars[i]:GetStatusBarTexture():SetHorizTile(false)
-		bars[i]:SetSize((f.width-12)/5, f.height/4)
+		bars[i]:SetSize((f.width-12)/5, f.height/8)
 		if (i == 1) then
 			bars[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
 		else
@@ -966,6 +967,12 @@ local function gen_cp(f)
 		bars[i].bg:CreateShadow("Background")
 		i=i-1
 	end
+	bars[1]:SetScript("OnShow", function()
+		f.Auras:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 0, -13)
+	end)
+	bars[1]:SetScript("OnHide", function()
+		f.Auras:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 0, -18)
+	end)
 	f.CPoints = bars
 end 
 
@@ -1018,9 +1025,9 @@ local function gen_RaidMark(f)
 	if f.mystyle == "tot" then
 		ri:SetPoint("LEFT", f, "LEFT", 3, 0)
 	elseif f.mystyle == "player" then
-		ri:SetPoint("BOTTOMLEFT", f, "BOTTOMRIGHT", 3, 0)
+		ri:SetPoint("BOTTOMLEFT", f, "TOPRIGHT", 3, 0)
 	elseif f.mystyle == "target" then
-		ri:SetPoint("BOTTOMRIGHT", f, "BOTTOMLEFT", -3, 0)
+		ri:SetPoint("BOTTOMRIGHT", f, "TOPLEFT", -3, 0)
 	end
     f.RaidIcon = ri
 end

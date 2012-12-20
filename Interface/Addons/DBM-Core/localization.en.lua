@@ -124,6 +124,7 @@ DBM_CORE_ANNOUNCE_BREAK_OVER		= "Break time is over"
 DBM_CORE_TIMER_PULL					= "Pull in"
 DBM_CORE_ANNOUNCE_PULL				= "Pull in %d sec"
 DBM_CORE_ANNOUNCE_PULL_NOW			= "Pull now!"
+DBM_CORE_ANNOUNCE_PULL_CANCEL		= "Cancel Pull Countdown!"
 
 DBM_CORE_ACHIEVEMENT_TIMER_SPEED_KILL = "Speed Kill"
 
@@ -258,3 +259,8 @@ DBM_INSTANCE_INFO_STATS_AWAY		= "Away: %s"
 DBM_INSTANCE_INFO_STATS_NO_RESPONSE	= "No recent DBM version installed: %s"
 DBM_INSTANCE_INFO_RESULTS			= "Instance ID scan results. Note that instances might show up more than once if there are players with localized WoW clients in your raid."
 DBM_INSTANCE_INFO_SHOW_RESULTS		= "Players yet to respond: %s\n|HDBM:showRaidIdResults|h|cff3588ff[Show results now]|r|h"
+
+DBM_CORE_LAG_CHECKING				= "Delayed check - 5 seconds later output results..."
+DBM_CORE_LAG_HEADER					= "Deadly Boss Mods - Delayed check"
+DBM_CORE_LAG_ENTRY					= "%s£ºWorld delay[%d ms] / Home delay[%d ms]"
+DBM_CORE_LAG_FOOTER					= "Without Member:%s"

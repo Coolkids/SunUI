@@ -55,9 +55,11 @@ L:SetTimerLocalization({
 
 L:SetOptionLocalization({
 	warnHideOver			= "Show warning when $spell:123244 has ended",
-	timerSpecialCD			= "Show timer for when next special ability will be cast.",
+	timerSpecialCD			= "Show timer for when next special ability will be cast",
 	SoundWOP 				= "voice warning: important skills",
-	SetIconOnGuard		= "Set icons on $journal:6224"
+	SetIconOnGuardfix		= "Set icons on $journal:6224",
+	RangeFrame				= "Show range frame (3) for $spell:123121\n(Only shows tanks)",
+	GWHealthFrame			= "Show remaining health frame for $spell:123461 fades\n(Requires boss health frame enabled)" -- maybe bad wording, needs review
 })
 
 L:SetMiscLocalization{
@@ -73,6 +75,7 @@ L= DBM:GetModLocalization(709)
 L:SetWarningLocalization({
 	specWarnyinmo		= "Submerge >%d<",
 	specWarnweisuo		= "Huddle in Terror >%d<",
+	specWarnfuxian		= ">%d< Sons",
 })
 
 L:SetTimerLocalization({
@@ -80,6 +83,7 @@ L:SetTimerLocalization({
 })
 
 L:SetOptionLocalization ({
+	RangeFrame			= "Show range frame (2) for $spell:119519",
 	SoundDD = "voice warning: $spell:131996",
 	SoundWOP = "voice warning: important skills"
 })

@@ -388,7 +388,11 @@ function SunUIConfig.GenerateOptionsInternal()
 						desc = L["图标大小"],
 						order = 1,
 						get = function() return tostring(db.BuffDB.IconSize) end,
-						set = function(_, value) db.BuffDB.IconSize = tonumber(value) end,
+						set = function(_, value) 
+							db.BuffDB.IconSize = tonumber(value) 
+							local Buff = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("Buff")
+							Buff:UpdateSet()
+						end,
 					},
 					IconPerRow = {
 						type = "input",
@@ -1397,7 +1401,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				type = "group",
 				name = "背包设置",
 				get = function(info) return db.BagDB[ info[#info] ] end,
-				set = function(info, value) db.BagDB[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+				set = function(info, value) db.BagDB[ info[#info] ] = value; end,
 				args = {
 					group1 = {
 						type = "group", order = 1, guiInline = true,
@@ -1407,30 +1411,54 @@ function SunUIConfig.GenerateOptionsInternal()
 								type = "range", order = 1,
 								name = L["背包图标"],
 								min = 20, max = 50, step = 1,
+								set = function(info, value)
+									db.BagDB.BagSize = value
+									local B = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("Bags")
+									B:Layout(false) 
+								end,
 							},
 							BankSize = {
 								type = "range", order = 2,
 								name = L["银行图标"],
 								min = 20, max = 50, step = 1,
+								set = function(info, value)
+									db.BagDB.BankSize = value
+									local B = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("Bags")
+									B:Layout(true) 
+								end,
 							},
 							Spacing = {
 								type = "range", order = 3,
 								name = L["图标间距"], desc = L["图标间距"],
 								min = 0, max = 10, step = 1,
+								set = function(info, value)
+									db.BagDB.Spacing = value
+									local B = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("Bags")
+									B:Layout(true)
+									B:Layout(false) 
+								end,
 							},
 							BagWidth = {
 								type = "input",
 								name = L["背包框体宽度"],
 								order = 4,
 								get = function() return tostring(db.BagDB.BagWidth) end,
-								set = function(_, value) db.BagDB.BagWidth = tonumber(value) end,
+								set = function(_, value) 
+									db.BagDB.BagWidth = tonumber(value) 
+									local B = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("Bags")
+									B:Layout(false) 
+								end,
 							},
 							BankWidth = {
 								type = "input",
 								name = L["银行框体宽度"],
 								order = 5,
 								get = function() return tostring(db.BagDB.BankWidth) end,
-								set = function(_, value) db.BagDB.BankWidth = tonumber(value) end,
+								set = function(_, value) 
+									db.BagDB.BankWidth = tonumber(value) 
+									local B = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("Bags")
+									B:Layout(true) 
+								end,
 							},
 						}
 					},

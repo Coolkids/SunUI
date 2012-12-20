@@ -1,9 +1,8 @@
 ﻿local mod	= DBM:NewMod(729, "DBM-TerraceofEndlessSpring", nil, 320)
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
---local sndMW		= mod:NewSound(nil, "SoundMW", true)
 
-mod:SetRevision(("$Revision: 8232 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8325 $"):sub(12, -3))
 mod:SetCreatureID(62983)--62995 Animated Protector
 mod:SetModelID(42811)
 
@@ -16,13 +15,14 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED_DOSE",
 	"SPELL_AURA_REMOVED",
 	"SPELL_CAST_START",
+	"CHAT_MSG_TARGETICONS",
 	"UNIT_SPELLCAST_SUCCEEDED"
 )
 
 local warnProtect						= mod:NewSpellAnnounce(123250, 2)
-local warnHide							= mod:NewSpellAnnounce(123244, 3)
+local warnHide							= mod:NewCountAnnounce(123244, 3)
 local warnHideOver						= mod:NewAnnounce("warnHideOver", 2, 123244)--Because we can. with creativeness, the boss returning is detectable a full 1-2 seconds before even visible. A good signal to stop aoe and get ready to return norm DPS
-local warnGetAway						= mod:NewSpellAnnounce(123461, 3)
+local warnGetAway						= mod:NewCountAnnounce(123461, 3)
 local warnSpray							= mod:NewStackAnnounce(123121, 3, nil, mod:IsTank() or mod:IsHealer())
 
 local specWarnAnimatedProtector			= mod:NewSpecialWarningSwitch("ej6224", not mod:IsHealer())
@@ -32,33 +32,112 @@ local specWarnSpray						= mod:NewSpecialWarningStack(123121, mod:IsTank(), 6)
 local specWarnSprayNT					= mod:NewSpecialWarningMove(123121)
 local specWarnSprayOther				= mod:NewSpecialWarningTarget(123121, mod:IsTank())
 
-local specWarnJK						= mod:NewSpecialWarning("specWarnJK")
-
---local timerSpecialCD					= mod:NewTimer(22, "timerSpecialCD", 123250)--Not even this is 100% reliable. it's iffy at best, but she seems to use specials about 22-25 seconds after last one ended, except when last one was protect, then next one is used IMMEDIATELY upon protect ending. Timers for this fight are just jacked.
+local timerSpecialCD					= mod:NewTimer(49.5, "timerSpecialCD", 123250)--Variable, 49.5-55 seconds
 local timerSpray						= mod:NewTargetTimer(10, 123121, nil, mod:IsTank() or mod:IsHealer())
 local timerGetAway						= mod:NewBuffActiveTimer(30, 123461)
+local timerScaryFogCD					= mod:NewNextTimer(10, 123705)
 
 local berserkTimer						= mod:NewBerserkTimer(600)
 
-mod:AddBoolOption("SetIconOnGuard", true)
+mod:AddBoolOption("RangeFrame", true)
+mod:AddBoolOption("HealthFrame", true)
+mod:AddBoolOption("GWHealthFrame", true)
+mod:AddBoolOption("SetIconOnGuardfix", false)
 
+local getAwayHP = 0 -- because max health is different between Asian and US 25-man encounter. Calculate manually.
+local specialsCast = 0
 local hideActive = false
-
-local guardIcons = {}
-local creatureIcon = 8
+local lastProtect = 0
+local specialRemaining = 0
+local guards = {}
 local guardActivated = 0
-local iconsSet = 0
+local iconsSet = {[1] = false, [2] = false, [3] = false, [4] = false, [5] = false, [6] = false, [7] = false, [8] = false}
 
-local function resetGuardIconState()
-	table.wipe(guardIcons)
-	creatureIcon = 8
-	iconsSet = 0
+local function resetguardstate()
+	table.wipe(guards)
+	iconsSet = {[1] = false, [2] = false, [3] = false, [4] = false, [5] = false, [6] = false, [7] = false, [8] = false}
+end
+
+local function getAvailableIcons()
+	for i = 8, 1, -1 do
+		if not iconsSet[i] then
+			return i
+		end
+	end
+	return 8
+end
+
+local function isTank(unit)
+	-- 1. check blizzard tanks first
+	-- 2. check blizzard roles second
+	-- 3. check boss1's highest threat target
+	if GetPartyAssignment("MAINTANK", unit, 1) then
+		return true
+	end
+	if UnitGroupRolesAssigned(unit) == "TANK" then
+		return true
+	end
+	if UnitExists("boss1target") and UnitDetailedThreatSituation(unit, "boss1") then
+		return true
+	end
+	return false
+end
+
+local bossTank
+do
+	bossTank = function(uId)
+		return isTank(uId)
+	end
+end
+
+local showDamagedHealthBar, hideDamagedHealthBar
+do
+	local frame = CreateFrame("Frame") -- using a separate frame avoids the overhead of the DBM event handlers which are not meant to be used with frequently occuring events like all damage events...
+	local damagedMob
+	local hpRemaining = 0
+	local maxhp = 0
+	local function getDamagedHP()
+		return math.max(1, math.floor(hpRemaining / maxhp * 100))
+	end
+	frame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	frame:SetScript("OnEvent", function(self, event, timestamp, subEvent, _, _, _, _, _, destGUID, _, _, _, ...)
+		if damagedMob == destGUID then
+			local damage
+			if subEvent == "SWING_DAMAGE" then 
+				damage = select( 1, ... ) 
+			elseif subEvent == "RANGE_DAMAGE" or subEvent == "SPELL_DAMAGE" or subEvent == "SPELL_PERIODIC_DAMAGE" then 
+				damage = select( 4, ... )
+			end
+			if damage then
+				hpRemaining = hpRemaining - damage
+			end
+		end
+	end)
+	
+	function showDamagedHealthBar(self, mob, spellName, health)
+		damagedMob = mob
+		hpRemaining = health
+		maxhp = health
+		DBM.BossHealth:RemoveBoss(getDamagedHP)
+		DBM.BossHealth:AddBoss(getDamagedHP, spellName)
+	end
+	
+	function hideDamagedHealthBar()
+		DBM.BossHealth:RemoveBoss(getDamagedHP)
+	end
 end
 
 function mod:OnCombatStart(delay)
-	guardActivated = 0
+	if self.Options.RangeFrame then
+		DBM.RangeCheck:Show(3, bossTank)
+	end
+	resetguardstate()
+	getAwayHP = 0
+	specialsCast = 0
 	hideActive = false
---	timerSpecialCD:Start(42.5-delay)--FIRST special not match if your party is high DPS. 
+	lastProtect = 0
+	specialRemaining = 0
+	timerSpecialCD:Start(32.5-delay)--Variable, 32.5-37 (or aborted if 80% protect happens first)
 	if self:IsDifficulty("heroic10", "heroic25") then
 		berserkTimer:Start(420-delay)
 	else
@@ -68,30 +147,48 @@ end
 
 function mod:OnCombatEnd()
 	self:UnregisterShortTermEvents()
+	if self.Options.RangeFrame then
+		DBM.RangeCheck:Hide()
+	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(123250) then
+		local elapsed, total = timerSpecialCD:GetTime()
+		specialRemaining = total - elapsed
+		lastProtect = GetTime()		
 		warnProtect:Show()
 		specWarnAnimatedProtector:Show()
+		self:Schedule(0.2, function()
+			timerSpecialCD:Cancel()
+		end)
 		if mod:IsDps() then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_bwzkd.mp3") --保衛者快打
 		else
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_bwzcx.mp3") --保衛者出現
 		end
-	elseif args:IsSpellID(123505) and self.Options.SetIconOnGuard then
+	elseif args:IsSpellID(123505) and self.Options.SetIconOnGuardfix then
 		if guardActivated == 0 then
-			resetGuardIconState()
+			resetguardstate()
 		end
 		guardActivated = guardActivated + 1
-		if not guardIcons[args.sourceGUID] then
-			guardIcons[args.destGUID] = creatureIcon
-			creatureIcon = creatureIcon - 1
+		if not guards[args.sourceGUID] then
+			guards[args.destGUID] = true
 		end
 	elseif args:IsSpellID(123461) then
-		warnGetAway:Show()
+		specialsCast = specialsCast + 1
+		warnGetAway:Show(specialsCast)
 		specWarnGetAway:Show()
-		timerGetAway:Start()
+		timerSpecialCD:Start()
+		if self:IsDifficulty("heroic10", "heroic25") then
+			timerGetAway:Start(45)
+		else
+			timerGetAway:Start()
+		end
+		if self.Options.GWHealthFrame then
+			local getAwayHealth = math.floor(UnitHealthMax("boss1") * 0.04)
+			showDamagedHealthBar(self, args.sourceGUID, args.spellName, getAwayHealth)
+		end
 		if mod:IsHealer() then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\healall.mp3") --注意群療
 		else
@@ -118,54 +215,94 @@ function mod:SPELL_AURA_APPLIED(args)
 		if not hideActive and self:UnitIsTank(args.destName) then--filter out all the splash sprays that go out during hide.
 			timerSpray:Start(args.destName)
 		end
+	elseif args:IsSpellID(123705) and self:AntiSpam() then
+		timerScaryFogCD:Start()
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
 function mod:SPELL_AURA_REMOVED(args)
-	if args:IsSpellID(123250) and self.Options.SetIconOnGuard then
-		guardActivated = 0
+	if args:IsSpellID(123250) then
+		local protectElapsed = GetTime() - lastProtect
+		local specialCD = specialRemaining - protectElapsed
+		if specialCD < 5 then
+			timerSpecialCD:Start(5)
+		else
+			timerSpecialCD:Start(specialCD)
+		end
+		if self.Options.SetIconOnGuardfix then
+			guardActivated = 0
+		end
 	elseif args:IsSpellID(123121) then
 		timerSpray:Cancel(args.destName)
 	elseif args:IsSpellID(123461) then
 		timerGetAway:Cancel()
---[[	timerSpecialCD:Start()--Probably wrong so disabled. i still can't find this fights true pattern since it's all over the place and never matches up.
-	elseif args:IsSpellID(123712) and not hideActive then
-		self:Schedule(3, function()
-			if not hideActive then
-				if not UnitDebuff("boss1", GetSpellInfo(123712)) then
-					sndMW:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qsmw.mp3") --缺少迷霧
-					specWarnJK:Show()
-				end
-			end
-		end)]]
+		if self.Options.GWHealthFrame then
+			hideDamagedHealthBar()
+		end
 	end
 end
 
 mod:RegisterOnUpdateHandler(function(self)
-	if self.Options.SetIconOnGuard and (DBM:GetRaidRank() == 2 and (iconsSet < guardActivated)) then
+	if self.Options.SetIconOnGuardfix and guardActivated > 0 and DBM:GetRaidRank() > 0 then
 		for i = 1, DBM:GetGroupMembers() do
 			local uId = "raid"..i.."target"
 			local guid = UnitGUID(uId)
-			if guardIcons[guid] then
-				SetRaidTarget(uId, guardIcons[guid])
-				iconsSet = iconsSet + 1
-				guardIcons[guid] = nil
+			if guards[guid] then
+				local existingIcons = GetRaidTargetIndex(uId)
+				if not existingIcons then
+					local icon = getAvailableIcons()
+					SetRaidTarget(uId, icon)
+					iconsSet[icon] = true
+					self:SendSync("iconSet", icon)
+				elseif existingIcons then
+					iconsSet[existingIcons] = true
+				end
+				guards[guid] = nil
 			end
 		end
+		local guid2 = UnitGUID("mouseover")
+		if guards[guid2] then
+			local existingIcons = GetRaidTargetIndex("mouseover")
+			if not existingIcons then
+				local icon = getAvailableIcons()
+				SetRaidTarget("mouseover", icon)
+				iconsSet[icon] = true
+				self:SendSync("iconSet", icon)
+			elseif existingIcons then
+				iconsSet[existingIcons] = true
+			end
+			guards[guid2] = nil
+		end
 	end
-end, 1)
+end, 0.05)
+
+function mod:OnSync(msg, icon)
+	if msg == "iconSet" and icon then
+		iconsSet[icon] = true
+	end
+end
 
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(123244) then
+		specialsCast = specialsCast + 1
 		hideActive = true
-		warnHide:Show()
+		warnHide:Show(specialsCast)
 		specWarnHide:Show()
+		timerSpecialCD:Start()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_yszb.mp3") --隱身準備
 		sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\scattersoon.mp3")--注意分散
 		self:RegisterShortTermEvents(
 			"INSTANCE_ENCOUNTER_ENGAGE_UNIT"--We register on hide, because it also fires just before hide, every time and don't want to trigger "hide over" at same time as hide.
 		)
+	end
+end
+
+function mod:CHAT_MSG_TARGETICONS(msg)
+	--TARGET_ICON_SET = "|Hplayer:%s|h[%s]|h sets |TInterface\\TargetingFrame\\UI-RaidTargetingIcon_%d:0|t on %s.";
+	local icon = tonumber(string.sub(string.match(msg, "RaidTargetingIcon_%d"), -1))
+	if icon then
+		iconsSet[icon] = true
 	end
 end
 
@@ -176,5 +313,4 @@ function mod:INSTANCE_ENCOUNTER_ENGAGE_UNIT(event)
 	self:UnregisterShortTermEvents()--Once boss appears, unregister event, so we ignore the next two that will happen, which will be 2nd time after reappear, and right before next Hide.
 	warnHideOver:Show(GetSpellInfo(123244))
 	sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ysjs.mp3") --隱身結束
---	timerSpecialCD:Start()--Probably wrong so disabled. i still can't find this fights true pattern since it's all over the place and never matches up.
 end

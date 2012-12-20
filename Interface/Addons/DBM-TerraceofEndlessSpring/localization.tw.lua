@@ -18,6 +18,7 @@ L:SetOptionLocalization({
 	SoundSDQ			= "語音警告：$spell:117436的驅散",
 	SoundWOP			= "語音警告：重要技能",
 	optDDall			= "只有在你的目標是水王時才提示打斷鏈(不選則總是提示)",
+	optDD4				= "使用四人打斷鏈(不選則前3人循環)",
 	specWarnDDL 		= "特殊警告：下一次到你打斷",
 	optDD				= "水王打斷鏈",
 	nodd				= "我不打斷",
@@ -57,7 +58,6 @@ L= DBM:GetModLocalization(729)
 
 L:SetWarningLocalization({
 	warnHideOver			= "%s 已結束",
-	specWarnJK				= "首領缺少驚恐迷霧!!"
 })
 
 L:SetTimerLocalization({
@@ -67,10 +67,10 @@ L:SetTimerLocalization({
 L:SetOptionLocalization({
 	warnHideOver			= "警告：當$spell:123244結束時",
 	timerSpecialCD			= "計時器：下一次特殊技能",
-	specWarnJK				= "特殊警告：缺少驚恐迷霧超過3秒",
 	SoundWOP				= "語音警告：重要技能",
-	SoundMW					= "語音警告：缺少驚恐迷霧",
-	SetIconOnGuard		= "為$journal:6224設置團隊標記"
+	SetIconOnGuardfix		= "為$journal:6224設置團隊標記",
+	RangeFrame				= "距離監視(3碼)：$spell:123121(與坦克距離)",
+	GWHealthFrame			= "剩餘生命:$spell:123461"
 })
 
 L:SetMiscLocalization{
@@ -84,8 +84,9 @@ L:SetMiscLocalization{
 L= DBM:GetModLocalization(709)
 
 L:SetWarningLocalization({
-	specWarnyinmo		= "隐没 > %d <",
-	specWarnweisuo		= "恐惧畏缩 > %d <",
+	specWarnyinmo		= "隱沒 > %d <",
+	specWarnfuxian		= "浮現! 新出現>%d<個畏懼之子",
+	specWarnweisuo		= "恐懼畏縮 > %d <", 
 })
 
 L:SetTimerLocalization({
@@ -95,11 +96,13 @@ L:SetTimerLocalization({
 L:SetOptionLocalization({
 	SoundDD				= "語音警告：$spell:131996",
 	SoundWOP			= "語音警告：重要技能",
+	RangeFrame			= "距離監視（2碼）：$spell:119519",
 	pscount				= "語音警告：為恐怖噴散計數",
 	HudMAP				= "高級定位監視(HUD)：$spell:120519",
 	InfoFrame			= "資訊框：$spell:120629",
 	timerSpecialCD		= "計時器：下一次P2特殊技能",
 	specWarnyinmo		= "特殊警告：$spell:120455",
+	specWarnfuxian		= "特殊警告：$spell:120458",
 	specWarnweisuo		= "特殊警告：$spell:120629",
 	ShaAssist			= "啟用恐怖噴散方向指示圖"
 })

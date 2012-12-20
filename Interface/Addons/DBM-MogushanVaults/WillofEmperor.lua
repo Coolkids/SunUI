@@ -81,13 +81,15 @@ local timerTitanGasCD			= mod:NewNextCountTimer(150, 116779)
 
 local berserkTimer				= mod:NewBerserkTimer(780)
 
-for i = 1, 10 do
+for i = 1, 5 do
 	mod:AddBoolOption("ragebomb"..i, false, "sound")
 end
 local specWarnBomb				= mod:NewSpecialWarning("specWarnBomb")
+local specWarnKZ				= mod:NewSpecialWarning("specWarnKZ")
 
 mod:AddBoolOption("InfoFrame", false)
 mod:AddBoolOption("ArrowOnCombo", mod:IsTank())--Very accurate for tank, everyone else not so much (tanks always in front, and boss always faces tank, so if he spins around on you, you expect it, melee on other hand have backwards arrows if you spun him around.
+mod:AddDropdownOption("optKZ", {"kza", "kzb", "kzc", "nokz"}, "nokz", "sound")
 mod:AddDropdownOption("optBY", {"tarfoc", "Janxi", "Qinxi", "none"}, "tarfoc", "sound")
 
 local comboWarned = false
@@ -119,7 +121,14 @@ local rageTimers = {
 }
 
 local function MyBomb()
-	if (mod.Options.ragebomb1 and rageCount == 1) or (mod.Options.ragebomb2 and rageCount == 2) or (mod.Options.ragebomb3 and rageCount == 3) or (mod.Options.ragebomb4 and rageCount == 4) or (mod.Options.ragebomb5 and rageCount == 5) or (mod.Options.ragebomb6 and rageCount == 6) or (mod.Options.ragebomb7 and rageCount == 7) or (mod.Options.ragebomb8 and rageCount == 8) or (mod.Options.ragebomb9 and rageCount == 9) or (mod.Options.ragebomb10 and rageCount == 10) then
+	if (mod.Options.ragebomb1 and rageCount == 3) or (mod.Options.ragebomb2 and rageCount == 6) or (mod.Options.ragebomb3 and rageCount == 9) or (mod.Options.ragebomb4 and rageCount == 12) or (mod.Options.ragebomb5 and rageCount == 15) then
+		return true
+	end
+	return false
+end
+
+local function MyKZ()
+	if (mod.Options.optKZ == "kza" and rageCount % 3 == 1) or (mod.Options.optKZ == "kzb" and rageCount % 3 == 2) or (mod.Options.optKZ == "kzc" and rageCount % 3 == 0) then
 		return true
 	end
 	return false
@@ -212,15 +221,21 @@ local function addsDelay(add)
 			timerStrengthActivates:Start(50, strengthCount+1)
 		end
 	elseif add == "Rage" then
-		rageCount = rageCount + 1
 		warnRageActivated:Show(rageCount)
+		rageCount = rageCount + 1
 		ragetime = rageTimers[rageCount] or 33
 		--Titan gas delay has funny interaction with these and causes 30 or 60 second delays. Pretty much have to use a table.
 		timerRageActivates:Start(ragetime, rageCount)
 		mod:Schedule(ragetime, addsDelay, "Rage")--Because he doesn't always yell, schedule next one here as a failsafe
-		if mod:IsDifficulty("heroic10", "heroic25") and MyBomb() then
-			specWarnBomb:Schedule(ragetime - 5, rageCount)
-			sndWOP:Schedule(ragetime - 5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_bpzb.mp3") --爆破準備
+		if mod:IsDifficulty("heroic10", "heroic25") then
+			if MyBomb() then
+				specWarnBomb:Schedule(ragetime + 1, rageCount)
+				sndWOP:Schedule(ragetime + 1, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_bpzb.mp3") --爆破準備
+			end
+			if MyKZ() then
+				specWarnKZ:Schedule(ragetime - 5, rageCount)
+				sndWOP:Schedule(ragetime - 5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kzzb.mp3")
+			end
 		end
 		sndADD1A:Schedule(ragetime - 6, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qjbzb.mp3") --輕甲
 		sndADD1:Schedule(ragetime - 1, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qjbcx.mp3")	
@@ -240,10 +255,11 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		if rageCount == 1 then
 			sndADD1A:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qjbzb.mp3") --輕甲
 			sndADD1:Schedule(10, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qjbcx.mp3")
-			if mod:IsDifficulty("heroic10", "heroic25") and MyBomb() then
-				specWarnBomb:Schedule(6, rageCount)
-				sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_bpzb.mp3") --爆破準備
+			if mod:IsDifficulty("heroic10", "heroic25") and MyKZ() then
+				specWarnKZ:Schedule(6, rageCount)
+				sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kzzb.mp3") --控制準備
 			end
+			timerRageActivates:Start(14, rageCount)
 		end
 	end
 end

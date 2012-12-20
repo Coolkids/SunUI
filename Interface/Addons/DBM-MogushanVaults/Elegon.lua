@@ -4,11 +4,11 @@ local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndCC	= mod:NewSound(nil, "SoundCC", true)
 local sndDD = mod:NewSound(nil, "SoundDD", false)
 
-mod:SetRevision(("$Revision: 8203 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8337 $"):sub(12, -3))
 mod:SetCreatureID(60410)--Energy Charge (60913), Emphyreal Focus (60776), Cosmic Spark (62618), Celestial Protector (60793)
 mod:SetModelID(41399)
 mod:SetZone()
-mod:SetUsedIcons(8, 7, 6, 5, 4, 3)
+mod:SetUsedIcons(8, 7, 6)
 
 mod:RegisterCombat("combat")
 
@@ -29,7 +29,7 @@ local warnProtector					= mod:NewCountAnnounce(117954, 3)
 local warnArcingEnergy				= mod:NewSpellAnnounce(117945, 2)--Cast randomly at 2 players, it is avoidable.
 local warnClosedCircuit				= mod:NewTargetAnnounce(117949, 3, nil, mod:IsHealer())--what happens if you fail to avoid the above
 local warnTotalAnnihilation			= mod:NewCastAnnounce(129711, 4)--Protector dying(exploding)
-local warnStunned					= mod:NewTargetAnnounce(132226, 3, nil, mod:IsHealer())--Heroic
+local warnStunned					= mod:NewTargetAnnounce(132222, 3, nil, mod:IsHealer())--Heroic / 132222 is stun debuff, 132226 is 2 min debuff. 
 local warnPhase2					= mod:NewPhaseAnnounce(2, 3)--124967 Draw Power
 local warnDrawPower					= mod:NewCountAnnounce(119387, 4)
 local warnPhase3					= mod:NewPhaseAnnounce(3, 3)--116994 Unstable Energy Starting
@@ -53,6 +53,8 @@ local specwarnYB			= mod:NewSpecialWarning("specwarnYB")
 local timerBreathCD					= mod:NewCDTimer(18, 117960)
 local timerProtectorCD				= mod:NewCDTimer(35.5, 117954)
 local timerArcingEnergyCD			= mod:NewCDTimer(11.5, 117945)
+local timerTotalAnnihilation		= mod:NewCastTimer(4, 129711)
+local timerDestabilized				= mod:NewBuffFadesTimer(120, 132226)
 local timerFocusPower				= mod:NewCastTimer(16, 119358)
 local timerDespawnFloor				= mod:NewTimer(6.5, "timerDespawnFloor", 116994)--6.5-7.5 variation. 6.5 is safed to use so you don't fall and die.
 
@@ -190,6 +192,10 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnRadiatingEnergies:Show()
 		specWarnRadiatingEnergies:Show()--Give a good warning so people standing outside barrior don't die.
 	elseif args:IsSpellID(132226) then
+		if args:IsPlayer() then
+			timerDestabilized:Start()
+		end
+	elseif args:IsSpellID(132222) then
 		stunTargets[#stunTargets + 1] = args.destName
 		if self.Options.SetIconOnDestabilized then
 			self:SetIcon(args.destName, stunIcon)
@@ -233,6 +239,10 @@ function mod:SPELL_AURA_REMOVED(args)
 				end
 			end)
 		end
+	elseif args:IsSpellID(132226) then
+		if args:IsPlayer() then
+			timerDestabilized:Cancel()
+		end
 	elseif args:IsSpellID(117878) and args:IsPlayer() and self:IsInCombat() then
 		sndDD:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\di.mp3") --~
 	end
@@ -264,26 +274,8 @@ function mod:SPELL_CAST_START(args)
 			end
 		end
 	elseif args:IsSpellID(117954) then
-		protectorCount = protectorCount + 1
-		warnProtector:Show(protectorCount)
-		specWarnProtector:Show(protectorCount)
-		if self:IsDifficulty("heroic10", "heroic25") then
-			timerProtectorCD:Start(26)--26-28 variation on heroic
-		else
-			timerProtectorCD:Start()--35-37 on normal
-		end
-		warnedPH = false
-		if mod:IsDps() then
-			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_bwzkd.mp3") --保衛者快打
-		else
-			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_bwzcx.mp3") --保衛者出現
-		end
-		if self:IsDifficulty("heroic10", "heroic25") then
-			if (((self.Options.optYB == "YB1" and protectorCount == 1) or (self.Options.optYB == "YB2" and protectorCount == 2) or (self.Options.optYB == "YB3" and protectorCount == 3) or (self.Options.optYB == "YB4" and protectorCount == 4) or (self.Options.optYB == "YB5" and protectorCount == 5)) and not ptwo) or (((self.Options.optYBT == "YBT1" and protectorCount == 1) or (self.Options.optYBT == "YBT2" and protectorCount == 2) or (self.Options.optYBT == "YBT3" and protectorCount == 3) or (self.Options.optYBT == "YBT4" and protectorCount == 4) or (self.Options.optYBT == "YBT5" and protectorCount == 5)) and ptwo) then
-				sndWOP:Schedule(4, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ybfd.mp3") --分擔異變
-				specwarnYB:Schedule(4)
-				self:SendSync("YBnow", UnitName("player"))
-			end
+		if self:LatencyCheck() then
+			self:SendSync("Summonprotector")
 		end
 	elseif args:IsSpellID(117945) then
 		warnArcingEnergy:Show()
@@ -291,6 +283,7 @@ function mod:SPELL_CAST_START(args)
 	elseif args:IsSpellID(129711) then
 		warnTotalAnnihilation:Show()
 		specWarnTotalAnnihilation:Show()
+		timerTotalAnnihilation:Start()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbbz.mp3") --準備爆炸
 		if mod:IsHealer() then
 			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
@@ -371,6 +364,28 @@ function mod:OnSync(msg, guid)
 		YBTargets[#YBTargets + 1] = guid
 		self:Unschedule(warnYBfendan)
 		self:Schedule(2, warnYBfendan)
+	elseif msg == "Summonprotector" and self:AntiSpam(10, 4) then
+		protectorCount = protectorCount + 1
+		warnProtector:Show(protectorCount)
+		specWarnProtector:Show(protectorCount)
+		if self:IsDifficulty("heroic10", "heroic25") then
+			timerProtectorCD:Start(26)--26-28 variation on heroic
+		else
+			timerProtectorCD:Start()--35-37 on normal
+		end
+		warnedPH = false
+		if mod:IsDps() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_bwzkd.mp3") --保衛者快打
+		else
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_bwzcx.mp3") --保衛者出現
+		end
+		if self:IsDifficulty("heroic10", "heroic25") then
+			if (((self.Options.optYB == "YB1" and protectorCount == 1) or (self.Options.optYB == "YB2" and protectorCount == 2) or (self.Options.optYB == "YB3" and protectorCount == 3) or (self.Options.optYB == "YB4" and protectorCount == 4) or (self.Options.optYB == "YB5" and protectorCount == 5)) and not ptwo) or (((self.Options.optYBT == "YBT1" and protectorCount == 1) or (self.Options.optYBT == "YBT2" and protectorCount == 2) or (self.Options.optYBT == "YBT3" and protectorCount == 3) or (self.Options.optYBT == "YBT4" and protectorCount == 4) or (self.Options.optYBT == "YBT5" and protectorCount == 5)) and ptwo) then
+				sndWOP:Schedule(4, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ybfd.mp3") --分擔異變
+				specwarnYB:Schedule(4)
+				self:SendSync("YBnow", UnitName("player"))
+			end
+		end
 	end
 end
 

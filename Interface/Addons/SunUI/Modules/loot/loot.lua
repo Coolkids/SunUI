@@ -303,7 +303,7 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 		for i=1, items do
 			local slot = addon.slots[i] or createSlot(i)
 			local texture, item, quantity, quality, locked = GetLootSlotInfo(i)
-			local color = ITEM_QUALITY_COLORS[quality]
+			local color = ITEM_QUALITY_COLORS[quality or 1]
 
 			if(quantity and quantity > 1) then
 				slot.count:SetText(quantity)
@@ -315,7 +315,7 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 				slot.overlay:SetBackdropBorderColor(0, 0, 0)
 				slot:SetBackdropBorderColor(0, 0, 0)
 			else
-				slot.overlay:SetBackdropBorderColor(color.r or 0, color.g or 0, color.b or 0)
+				slot.overlay:SetBackdropBorderColor(color.r , color.g, color.b)
 				slot:SetBackdropBorderColor(color.r or 0, color.g or 0, color.b or 0)
 			end
 			slot.quality = quality or 0

@@ -40,6 +40,7 @@ local specWarnshuipoYou					= mod:NewSpecialWarningMove(120519)
 local specWarnzhuanyiguangYou			= mod:NewSpecialWarningYou(120268)
 local specWarnshuipo				= mod:NewSpecialWarningSpell(120519, nil, nil, nil, true)
 local specWarnyinmo				= mod:NewSpecialWarning("specWarnyinmo")
+local specWarnfuxian				= mod:NewSpecialWarning("specWarnfuxian")
 local specWarnweisuo				= mod:NewSpecialWarning("specWarnweisuo")
 local specWarnshuipomove				= mod:NewSpecialWarningMove(120521)
 local specWarnzhanli				= mod:NewSpecialWarningYou(120669)
@@ -70,6 +71,8 @@ local kongjuCount = 0
 local yinmoCount = 0
 
 local kbpscount = 0
+local kjzz = 0
+local kjzznow = 0
 
 local playkbpsound = false
 
@@ -104,6 +107,7 @@ function mod:OnCombatStart(delay)
 	kongjuCount = 0
 	yinmoCount = 0
 	kbpscount = 0
+	kjzz = 0
 	table.wipe(waterMarkers)
 --	timerTerrorSpawnCD:Start(25.5-delay)--still not perfect, it's hard to do yells when you're always the tank sent out of range of them. I need someone else to do /yell when they spawn and give me timing
 --	self:ScheduleMethod(25.5-delay, "TerrorSpawns")
@@ -118,6 +122,7 @@ function mod:OnCombatStart(delay)
 		if not onPlatform then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_tenkj.mp3") --10秒後恐懼之息
 			if not mod:IsTank() then
+				DBM.Flash:Show(1, 0, 0)
 				sndWOP:Schedule(5.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
 				sndWOP:Schedule(6.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
 				sndWOP:Schedule(7.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
@@ -155,6 +160,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			if not onPlatform then
 				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_tenkj.mp3") --10秒後恐懼之息
 				if not mod:IsTank() then
+					DBM.Flash:Show(1, 0, 0)
 					sndWOP:Schedule(5.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
 					sndWOP:Schedule(6.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
 					sndWOP:Schedule(7.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
@@ -298,6 +304,7 @@ function mod:SPELL_CAST_START(args)
 		timerDreadSprayCD:Start(10.5, args.sourceGUID)--We can accurately start perfectly accurate spray cd bar off their first shoot cast.
 	elseif args:IsSpellID(119888) and platformMob and args.sourceName == platformMob then
 		specWarnDeathBlossom:Show()
+		DBM.Flash:Show(1, 0, 0)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jykd.mp3") --劍雨快躲
 		sndWOP:Schedule(4, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
 		sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
@@ -310,9 +317,16 @@ function mod:SPELL_CAST_START(args)
 	elseif args:IsSpellID(120455) then --隐没
 		timerSpecialCD:Cancel()
 		yinmoCount = yinmoCount + 1
-		specWarnyinmo:Show(yinmoCount)		
+		specWarnyinmo:Show(yinmoCount)
 		timeryinmo:Start(50, yinmoCount + 1)	
 		sndWOP:Schedule(45, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ymzb.mp3")
+	elseif args:IsSpellID(120458) then --浮現
+		kjzznow = math.modf(yinmoCount/2) + 1
+		specWarnfuxian:Show(kjzznow)
+		kjzz = kjzz + kjzznow
+		if mod.Options.InfoFrame then
+			DBM.InfoFrame:SetHeader(GetSpellInfo(120629).."  ["..EJ_GetSectionInfo(6107)..": "..kjzz.."]")
+		end
 	elseif args:IsSpellID(120672) then
 		timerSpecialCD:Start()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\shockwave.mp3") --震懾波
@@ -357,6 +371,11 @@ function mod:UNIT_DIED(args)
 	if cid == 61042 or cid == 61046 or cid == 61038 then
 		timerDreadSpray:Cancel(args.destGUID)
 		timerDreadSprayCD:Cancel(args.destGUID)
+	elseif cid == 61003 then
+		kjzz = kjzz - 1
+		if mod.Options.InfoFrame then
+			DBM.InfoFrame:SetHeader(GetSpellInfo(120629).."  ["..EJ_GetSectionInfo(6107)..": "..kjzz.."]")
+		end
 	end
 end
 

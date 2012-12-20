@@ -204,7 +204,8 @@ L:SetMiscLocalization({
 L= DBM:GetModLocalization(677)
 
 L:SetWarningLocalization({
-	specWarnBomb				= ">> Bomb(%d) <<"
+	specWarnBomb				= ">> Bomb(%d) <<",
+	specWarnKZ					= ">> Control(%d) <<",
 })
 
 L:SetOptionLocalization({

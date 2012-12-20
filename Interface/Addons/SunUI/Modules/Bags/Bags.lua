@@ -2,6 +2,7 @@ local S, C, L, DB = unpack(select(2, ...))
 local _
 local _G = _G
 local B = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Bags", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local Unusable
 local font = "Interface\\Addons\\SunUI\\Media\\font.ttf"
 if DB.MyClass == "DEATHKNIGHT" then
@@ -184,25 +185,17 @@ function B:UpdateSlot(bagID, slotID)
 		local isQuestItem, questId, isActive = GetContainerItemQuestInfo(bagID, slotID)
 		-- color slot according to item quality
 		if questId and not isActive then
-			--slot.iconTexture:SetInside()
-			--slot:StyleButton()
 			slot:SetBackdropColor(0, 0, 0)
 			slot.border:SetBackdropBorderColor(1, 0.8, 0.2)
 			slot.questIcon:Show()
 		elseif questId or isQuestItem then
-			--slot.iconTexture:SetInside()
-			--slot:StyleButton()
 			slot:SetBackdropColor(0, 0, 0)
 			slot.border:SetBackdropBorderColor(1, 1, 0)
 		elseif slot.rarity and slot.rarity > 1 then
 			local r, g, b = GetItemQualityColor(slot.rarity)
-			--slot.iconTexture:SetInside()
-			--slot:StyleButton()
 			slot:SetBackdropColor(0, 0, 0)
 			slot.border:SetBackdropBorderColor(r, g, b)
 		else
-			--slot.iconTexture:SetAllPoints()
-			--slot:StyleButton(true)
 			slot:SetBackdropColor(0, 0, 0, 0, 0)
 			slot.border:SetBackdropBorderColor(0, 0, 0)
 		end
@@ -279,9 +272,9 @@ end
 function B:Layout(isBank)
 	local f = self:GetContainerFrame(isBank)
 	if not f then return end
-	local buttonSize = isBank and C["BagDB"]["BankSize"] or C["BagDB"]["BagSize"]
-	local buttonSpacing = C["BagDB"]["Spacing"]
-	local containerWidth = isBank and C["BagDB"]["BankWidth"] or C["BagDB"]["BagWidth"]
+	local buttonSize = isBank and C["BankSize"] or C["BagSize"]
+	local buttonSpacing = C["Spacing"]
+	local containerWidth = isBank and C["BankWidth"] or C["BagWidth"]
 	local numContainerColumns = math.floor(containerWidth / (buttonSize + buttonSpacing))
 	local holderWidth = ((buttonSize + buttonSpacing) * numContainerColumns) - buttonSpacing
 	local numContainerRows = 0
@@ -575,8 +568,8 @@ function B:ContructContainerFrame(name, isBank)
 		f.sortButton = CreateFrame("Button", nil, f)
 		f.sortButton:Point("TOPLEFT", f, "TOPLEFT", 14, -4)
 		f.sortButton:Size(55, 10)
-		f.sortButton.ttText = "整理银行"
-		f.sortButton.ttText2 = "整理银行"
+		f.sortButton.ttText = L["整理背包"]
+		f.sortButton.ttText2 = L["整理背包"]
 		f.sortButton.ttText2desc = "左键逆向,右键正向"
 		f.sortButton:SetScript("OnEnter", self.Tooltip_Show)
 		f.sortButton:SetScript("OnLeave", self.Tooltip_Hide)
@@ -590,7 +583,7 @@ function B:ContructContainerFrame(name, isBank)
 		f.bagsButton = CreateFrame("Button", nil, f)
 		f.bagsButton:Point("LEFT", f.sortButton, "RIGHT", 3, 0)
 		f.bagsButton:Size(55, 10)
-		f.bagsButton.ttText = "显示背包"
+		f.bagsButton.ttText = BAGSLOTTEXT
 		f.bagsButton:SetScript("OnEnter", self.Tooltip_Show)
 		f.bagsButton:SetScript("OnLeave", self.Tooltip_Hide)
 		f.bagsButton:SetScript("OnClick", function()
@@ -674,7 +667,7 @@ function B:ContructContainerFrame(name, isBank)
 		f.sortButton:Point("TOPLEFT", f, "TOPLEFT", 14, -4)
 		f.sortButton:Size(55, 10)
 		f.sortButton.ttText = L["整理背包"]
-		f.sortButton.ttText2 = "整理背包"
+		f.sortButton.ttText2 = L["整理背包"]
 		f.sortButton.ttText2desc = "左键逆向,右键正向"
 		f.sortButton:SetScript("OnEnter", self.Tooltip_Show)
 		f.sortButton:SetScript("OnLeave", self.Tooltip_Hide)
@@ -687,7 +680,7 @@ function B:ContructContainerFrame(name, isBank)
 		f.bagsButton = CreateFrame("Button", nil, f)
 		f.bagsButton:Point("LEFT", f.sortButton, "RIGHT", 3, 0)
 		f.bagsButton:Size(55, 10)
-		f.bagsButton.ttText = "显示背包"
+		f.bagsButton.ttText = BAGSLOTTEXT
 		f.bagsButton:SetScript("OnEnter", self.Tooltip_Show)
 		f.bagsButton:SetScript("OnLeave", self.Tooltip_Hide)
 		f.bagsButton:SetScript("OnClick", function() ToggleFrame(f.ContainerHolder) end)
@@ -793,11 +786,12 @@ function B:PLAYER_ENTERING_WORLD()
 	ToggleBackpack()
 	self:UpdateGoldText()
 end
-
+function B:OnInitialize()
+	C = SunUIConfig.db.profile.BagDB
+end
 function B:OnEnable()
 	self.BagFrames = {}
 	self.BagFrame = self:ContructContainerFrame("SunUI_Bags")
-	--Hook onto Blizzard Functions
 	self:SecureHook("OpenAllBags", "OpenBags")
 	self:SecureHook("CloseAllBags", "CloseBags")
 	self:SecureHook("ToggleBag", "ToggleBags")

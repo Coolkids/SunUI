@@ -125,6 +125,7 @@ DBM_CORE_ANNOUNCE_BREAK_OVER		= "休息時間已經結束"
 DBM_CORE_TIMER_PULL					= "戰鬥準備"
 DBM_CORE_ANNOUNCE_PULL				= "%d秒後拉怪"
 DBM_CORE_ANNOUNCE_PULL_NOW			= "拉怪囉!"
+DBM_CORE_ANNOUNCE_PULL_CANCEL		= "取消了戰鬥準備倒計時"
 
 DBM_CORE_ACHIEVEMENT_TIMER_SPEED_KILL 		= "快速擊殺"
 
@@ -259,3 +260,8 @@ DBM_INSTANCE_INFO_STATS_AWAY		= "離開:%s"
 DBM_INSTANCE_INFO_STATS_NO_RESPONSE	= "沒有安裝最新版本的DBM:%s"
 DBM_INSTANCE_INFO_RESULTS			= "副本ID掃描結果。注意如果團隊中有不同語言版本的魔獸客戶端，那麼同一副本可能會出現不止一次。"
 DBM_INSTANCE_INFO_SHOW_RESULTS		= "回复請求的玩家: %s\n|HDBM:showRaidIdResults|h|cff3588ff[查看結果]|r|h"
+
+DBM_CORE_LAG_CHECKING				= "延遲檢測--五秒後反饋結果..."
+DBM_CORE_LAG_HEADER					= "Deadly Boss Mods - 延遲檢測"
+DBM_CORE_LAG_ENTRY					= "%s：世界延時[%d毫秒] / 本地延時[%d毫秒]"
+DBM_CORE_LAG_FOOTER					= "未反饋此次檢測的團員:%s"

@@ -834,7 +834,6 @@ local function unitFrameStyleSetup(button)
 	end
 	
     button:SetScale(ns.db.scale)
-	
 end
 
 local function defaultUnitFrameSetup(header, name)

@@ -22,25 +22,34 @@ L:SetOptionLocalization({
 L:SetMiscLocalization({
 --	Bizmo			= "Bizmo",
 	--I wish there was a better way to do this....so much localizing. :(
-	Rank			= "Rank (%d+)",--Experimental "Entering arena" detection by scanning for Rank plus number
+--	Rank			= "Rank (%d+)",--Experimental "Entering arena" detection by scanning for Rank plus number
 --	EnteringArena1	= "Now entering the arena",
 --	EnteringArena2	= "Here's our challenger",
 --	EnteringArena3	= "Look out... here comes",
 --	EnteringArena4	= "Put your hands together",
-	Victory1		= "is our victor",
-	Victory2		= "Congratulations",
-	Victory3		= "Brilliant victory",
-	Victory4		= "wins",
-	Victory5		= "Keep 'em comin'",
-	Victory6		= "Great job not dying",
-	Lost1			= "were you even trying",
-	Lost2			= "Now would you kindly remove your corpse",
-	Lost3			= "So much blood! Nice",
-	Lost4			= "Get back in line and try again",
-	Lost5			= "you're gonna have to break a few eggs",
-	Lost6			= "try not to die so much",
-	Lost7			= "what a mess",
-	Lost8			= "His name was",--LoL at fight club reference here
+	Rank1			= "第1階",
+	Rank2			= "第2階",
+	Rank3			= "第3階",
+	Rank4			= "第4階",
+	Rank5			= "第5階",
+	Rank6			= "第6階",
+	Rank7			= "第7階",
+	Rank8			= "第8階",
+	Victory1		= "是我們的贏家",
+	Victory2		= "恭喜",
+	Victory3		= "非常好",
+	Victory4		= "獲勝!",
+	Victory5		= "竟然還活著",
+	Victory6		= "贏得漂亮",
+	Lost1			= "麻煩請你把自己的屍體搬走",
+	Lost2			= "你到底有沒有在打",
+	Lost3			= "能不能找個牧師還是什麼的來一下",
+	Lost4			= "回去排好隊再來試一次",
+	Lost5			= "結局...不盡如人意",
+	Lost6			= "繼續加油",
+	Lost7			= "要做煎蛋，你就得先打幾個蛋",
+	Lost8			= "名字叫",--LoL at fight club reference here
+	Lost9			= "想辦法別死這麼大"
 })
 
 ------------
