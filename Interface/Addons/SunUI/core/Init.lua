@@ -29,3 +29,4 @@ DB.aurobackdrop = "Interface\\ChatFrame\\ChatFrameBackground"
 DB.onepx = "Interface\\Buttons\\WHITE8x8"
 DB.Warning = Media.."Warning.mp3"
 DB.MyRealm = GetRealmName()
+DB.FontSize = select(2, GameFontNormal:GetFont())

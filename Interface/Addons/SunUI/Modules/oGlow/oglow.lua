@@ -20,7 +20,7 @@ local event_metatable = {
 local oGlow = CreateFrame("Frame", "oGlow")
 
 function oGlow:ADDON_LOADED(event, addon)
-	if addon == "SunUI" then
+	if addon == "SunUI" and not IsAddOnLoaded("oGlow") then
 		for pipe in next, pipesTable do
 			self:EnablePipe(pipe)
 

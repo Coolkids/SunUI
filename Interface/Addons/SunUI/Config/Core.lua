@@ -1250,14 +1250,22 @@ function SunUIConfig.GenerateOptionsInternal()
 								name = L["框体宽度"],
 								order = 1,
 								get = function() return tostring(db.PowerBarDB.Width) end,
-								set = function(_, value) db.PowerBarDB.Width = tonumber(value) end,
+								set = function(_, value)
+									db.PowerBarDB.Width = tonumber(value)
+									local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIPowerBar")
+									Module:UpdateSize()
+								end,
 							},
 							Height = {
 								type = "input",
 								name = L["框体高度"],
 								order = 2,
 								get = function() return tostring(db.PowerBarDB.Height) end,
-								set = function(_, value) db.PowerBarDB.Height = tonumber(value) end,
+								set = function(_, value) 
+									db.PowerBarDB.Height = tonumber(value)
+									local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIPowerBar")
+									Module:UpdateSize()
+								end,
 							},
 							Scale = {
 								type = "range", order = 3,disabled =function(info) return true end,
@@ -1268,6 +1276,12 @@ function SunUIConfig.GenerateOptionsInternal()
 							type = "toggle",
 							name = L["渐隐"],
 							order = 4,
+								get = function() return db.PowerBarDB.Fade end,
+								set = function(_, value)
+									db.PowerBarDB.Fade = value
+									local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIPowerBar")
+									Module:UpdateFade()
+								end,
 							},
 							HealthPower = {
 							type = "toggle",

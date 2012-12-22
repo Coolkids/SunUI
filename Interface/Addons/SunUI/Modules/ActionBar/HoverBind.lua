@@ -69,9 +69,9 @@ SlashCmdList.MOUSEOVERBIND = function()
 					self:AddLine(bind.button.name, 1, 1, 1)
 					bind.button.bindings = {GetBindingKey(spellmacro.." "..bind.button.name)}
 					if #bind.button.bindings == 0 then
-						self:AddLine("没有绑定快捷键", 0.6, 0.6, 0.6)
+						self:AddLine(OPTION_TOOLTIP_AUTO_SELF_CAST_NONE_KEY, 0.6, 0.6, 0.6)
 					else
-						self:AddDoubleLine("绑定", "按键", 0.6, 0.6, 0.6, 0.6, 0.6, 0.6)
+						self:AddDoubleLine(KEY1, KEY_BINDING, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6)
 						for i = 1, #bind.button.bindings do
 							self:AddDoubleLine(i, bind.button.bindings[i])
 						end
@@ -92,11 +92,11 @@ SlashCmdList.MOUSEOVERBIND = function()
 
 				bind.button.bindings = {GetBindingKey(spellmacro.." "..bind.button.name)}
 					if #bind.button.bindings == 0 then
-						GameTooltip:AddLine("没有绑定快捷键", 0.6, 0.6, 0.6)
+						GameTooltip:AddLine(OPTION_TOOLTIP_AUTO_SELF_CAST_NONE_KEY, 0.6, 0.6, 0.6)
 					else
-						GameTooltip:AddDoubleLine("绑定", "按键", 0.6, 0.6, 0.6, 0.6, 0.6, 0.6)
+						GameTooltip:AddDoubleLine(KEY1, KEY_BINDING, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6)
 						for i = 1, #bind.button.bindings do
-							GameTooltip:AddDoubleLine("绑定"..i, bind.button.bindings[i], 1, 1, 1)
+							GameTooltip:AddDoubleLine(KEY1..i, bind.button.bindings[i], 1, 1, 1)
 						end
 					end
 				GameTooltip:Show()
@@ -120,9 +120,9 @@ SlashCmdList.MOUSEOVERBIND = function()
 					self:AddLine(bind.button.name, 1, 1, 1)
 					bind.button.bindings = {GetBindingKey(bind.button.bindstring)}
 					if #bind.button.bindings == 0 then
-						self:AddLine("没有绑定快捷键", 0.6, 0.6, 0.6)
+						self:AddLine(OPTION_TOOLTIP_AUTO_SELF_CAST_NONE_KEY, 0.6, 0.6, 0.6)
 					else
-						self:AddDoubleLine("绑定", "按键", 0.6, 0.6, 0.6, 0.6, 0.6, 0.6)
+						self:AddDoubleLine(KEY1, KEY_BINDING, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6)
 						for i = 1, #bind.button.bindings do
 							self:AddDoubleLine(i, bind.button.bindings[i])
 						end
@@ -163,9 +163,9 @@ SlashCmdList.MOUSEOVERBIND = function()
 					self:SetPoint("BOTTOM", bind, "TOP", 0, 1)
 					self:AddLine(bind.button.name, 1, 1, 1)
 					if #bind.button.bindings == 0 then
-						self:AddLine("没有绑定快捷键", 0.6, 0.6, 0.6)
+						self:AddLine(OPTION_TOOLTIP_AUTO_SELF_CAST_NONE_KEY, 0.6, 0.6, 0.6)
 					else
-						self:AddDoubleLine("绑定", "按键", 0.6, 0.6, 0.6, 0.6, 0.6, 0.6)
+						self:AddDoubleLine(KEY1, KEY_BINDING, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6)
 						for i = 1, #bind.button.bindings do
 							self:AddDoubleLine(i, bind.button.bindings[i])
 						end
@@ -192,7 +192,7 @@ SlashCmdList.MOUSEOVERBIND = function()
 				for i = 1, #self.button.bindings do
 					SetBinding(self.button.bindings[i])
 				end
-				print("|cffffff00".."已经清除所有快捷键设置.".."|r".." |cff00ff00"..self.button.name.."|r|cffffff00.|r")
+				print("|cffffff00"..UNBIND.."|r".." |cff00ff00"..self.button.name.."|r|cffffff00.|r")
 				self:Update(self.button, self.spellmacro)
 				if self.spellmacro ~= "MACRO" then GameTooltip:Hide() end
 				return
@@ -214,7 +214,7 @@ SlashCmdList.MOUSEOVERBIND = function()
 			else
 				SetBinding(alt..ctrl..shift..key, self.spellmacro.." "..self.button.name)
 			end
-			print(alt..ctrl..shift..key.." |cff00ff00bound to |r"..self.button.name..".")
+			print(alt..ctrl..shift..key.." |cff00ff00"..KEY1.."|r"..self.button.name..".")
 			self:Update(self.button, self.spellmacro)
 			if self.spellmacro ~= "MACRO" then GameTooltip:Hide() end
 		end
@@ -234,10 +234,10 @@ SlashCmdList.MOUSEOVERBIND = function()
 			local which = GetCurrentBindingSet()
 			if save then
 				SaveBindings(which)
-				print("|cffffff00".."所有快捷键设置被保存.".."|r")
+				print("|cffffff00"..KEY_BOUND.."|r")
 			else
 				LoadBindings(which)
-				print("|cffffff00".."所有新的快捷键设置被取消.".."|r")
+				print("|cffffff00"..UNCHECK_ALL.."|r")
 			end
 			self.enabled = false
 			self:HideFrame()
@@ -246,7 +246,7 @@ SlashCmdList.MOUSEOVERBIND = function()
 		end
 
 		StaticPopupDialogs.KEYBIND_MODE = {
-			text = "按键绑定",
+			text = KEY_BINDING,
 			button1 = APPLY,
 			button2 = CANCEL,
 			OnAccept = function() bind:Deactivate(true) end,

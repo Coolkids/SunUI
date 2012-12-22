@@ -6,10 +6,6 @@ local UF = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("UnitFrame")
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local P,U
 
-if IsAddOnLoaded("Stuf") or IsAddOnLoaded("PitBull4") or IsAddOnLoaded("ShadowedUnitFrames") then
-	return
-end
-
 oUF.colors.power['MANA'] = {.3,.45,.65}
 oUF.colors.power['RAGE'] = {.7,.3,.3}
 oUF.colors.power['FOCUS'] = {.7,.45,.25}
@@ -1526,6 +1522,9 @@ local function CreateBossStyle(self, unit)
 end  
 
 function UF:OnInitialize()
+	if IsAddOnLoaded("Stuf") or IsAddOnLoaded("PitBull4") or IsAddOnLoaded("ShadowedUnitFrames") then
+		return
+	end
 	U = SunUIConfig.db.profile.UnitFrameDB
 	P = SunUIConfig.db.profile.PowerBarDB
 

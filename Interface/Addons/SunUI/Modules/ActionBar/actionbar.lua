@@ -1,8 +1,5 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
 local _G = _G
-if (IsAddOnLoaded("Dominos") or IsAddOnLoaded("Bartender4") or IsAddOnLoaded("Macaroon")) then
-	return 
-end
 local C
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("actionbar", "AceEvent-3.0", "AceHook-3.0")
 local LibActionButton = LibStub and LibStub("LibActionButton-1.0", true)
@@ -548,6 +545,9 @@ local function HideLossCD()
 	end
 end
 function Module:OnInitialize()
+	if (IsAddOnLoaded("Dominos") or IsAddOnLoaded("Bartender4") or IsAddOnLoaded("Macaroon")) then
+		return 
+	end
 	C = SunUIConfig.db.profile.ActionBarDB
 end
 function Module:OnEnable()

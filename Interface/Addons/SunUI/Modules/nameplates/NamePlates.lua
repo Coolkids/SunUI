@@ -1,10 +1,8 @@
 local S, C, L, DB = unpack(select(2, ...))
 local _
-if IsAddOnLoaded("TidyPlates") or IsAddOnLoaded("Aloft") or IsAddOnLoaded("dNamePlates") or IsAddOnLoaded("caelNamePlates") then
-	return
-end
 
 local N = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("NamePlates", "AceEvent-3.0", "AceTimer-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local   cfg={
 	TotemIcon = true, 				-- Toggle totem icons
 	TotemSize = 20,				-- Totem icon size
@@ -143,28 +141,58 @@ local function HideObjects(parent)
 	end
 end
 local totems = {
-	[GetSpellInfo(2484)] = [[Interface\Icons\Spell_nature_strengthofearthtotem02]],
-	[GetSpellInfo(8143)] = [[Interface\Icons\Spell_nature_tremortotem]],	
-	[GetSpellInfo(16190)] = [[Interface\Icons\Spell_frost_summonwaterelemental]],	
-	[GetSpellInfo(8177)] = [[Interface\Icons\Spell_nature_groundingtotem]],	
-	[GetSpellInfo(2062)] = [[Interface\Icons\Spell_nature_earthelemental_totem]],
-	[GetSpellInfo(2894)] = [[Interface\Icons\spell_fire_elemental_totem]],	
-	[GetSpellInfo(98008)] = [[Interface\Icons\spell_shaman_spiritlink]],	
-	[GetSpellInfo(3599)] = [[Interface\Icons\Spell_fire_searingtotem]],
-	[GetSpellInfo(8190)] = [[Interface\Icons\Spell_fire_selfdestruct]],
-	[GetSpellInfo(5394)] = [[Interface\Icons\Inv_spear_04]],
+	--火
+	[GetSpellInfo(2894)] = GetSpellTexture(2894), --火元素圖騰
+	[GetSpellInfo(8190)] = GetSpellTexture(8190),--熔岩圖騰
+	[GetSpellInfo(3599)] = GetSpellTexture(3599), --灼熱圖騰
+	--风
+	[GetSpellInfo(108269)] = GetSpellTexture(108269), --電容圖騰
+	[GetSpellInfo(8177)] = GetSpellTexture(8177), --根基圖騰
+	[GetSpellInfo(120668)] = GetSpellTexture(120668), --風暴鞭笞圖騰
+	[GetSpellInfo(108273)] = GetSpellTexture(108273), --風行圖騰
+	[GetSpellInfo(98008)] = GetSpellTexture(98008), --靈魂連結圖騰
+	--地
+	[GetSpellInfo(2484)] = GetSpellTexture(2484),--地縛圖騰
+	[GetSpellInfo(8143)] = GetSpellTexture(8143), --戰慄圖騰
+	[GetSpellInfo(2062)] = GetSpellTexture(2062), --土元素圖騰
+	--水
+	[GetSpellInfo(5394)] = GetSpellTexture(5394), --治療之泉圖騰
+	[GetSpellInfo(108280)] = GetSpellTexture(108280), --療癒之潮圖騰
+	[GetSpellInfo(16190)] = GetSpellTexture(16190), --法力之潮圖
+	--test
+	--["訓練假人"]  = GetSpellTexture(2894),
 }
-
+local function TotemIcon(frame)
+	if totems[frame.oldname:GetText()] then		
+		if not frame.totem then
+			frame.icon:SetTexCoord(.08, .92, .08, .92)
+			frame.totem = true
+		end
+		if frame.name ~= name and not frame.icon:IsShown() then
+			--print("Show", GetTime())
+			frame.icon:Show()
+			frame.Ticon:Show()
+			frame.icon:SetTexture(totems[frame.oldname:GetText()])
+		end
+	else
+		if frame.totem then
+			frame.icon:Hide()
+			frame.Ticon:Hide()
+			frame.icon:SetTexture()
+			frame.totem = nil
+		end
+	end
+end
 local function UpdateThreat(frame,elapsed)
 	if(frame.threat:IsShown()) then
 		local _, val = frame.threat:GetVertexColor()
 		frame.hp.shadow:Show()
 		if(val > 0.7) then
 			frame.name:SetTextColor(1, 1, 0)
-			frame.hp.shadow:SetBackdropBorderColor(1, 1, 0, 0.6)
+			frame.hp.shadow:SetBackdropBorderColor(1, 1, 0, 1)
 		else
 			frame.name:SetTextColor(1, 0, 0)
-			frame.hp.shadow:SetBackdropBorderColor(1, 0, 0, 0.5)
+			frame.hp.shadow:SetBackdropBorderColor(1, 0, 0, 1)
 		end
 	else
 		frame.hp.shadow:Hide()
@@ -179,21 +207,15 @@ local function UpdateThreat(frame,elapsed)
     local valueHealth = frame.healthOriginal:GetValue()
 	local d =(valueHealth/maxHealth)*100
 
-		if(d < 100) and valueHealth > 1 then
-			frame.hp.pct:SetText(format("%.1f %s",d,"%"))
-		else
-			frame.hp.pct:SetText("")
-		end
+	if(d < 100) and valueHealth > 1 then
+		frame.hp.pct:SetText(format("%.1f %s",d,"%"))
+	else
+		frame.hp.pct:SetText("")
+	end
 
-		if(d <= 35 and d >= 25) then
-			frame.hp.pct:SetTextColor(253/255, 238/255, 80/255)
-		elseif(d < 25 and d >= 20) then
-			frame.hp.pct:SetTextColor(250/255, 130/255, 0/255)
-		elseif(d < 20) then
-			frame.hp.pct:SetTextColor(200/255, 20/255, 40/255)
-		else
-			frame.hp.pct:SetTextColor(1,1,1)
-		end	
+	if cfg.TotemIcon then
+		TotemIcon(frame)
+	end
 end
 local function UpdateAuraAnchors(frame)
 	for i = 1, 5 do
@@ -396,31 +418,9 @@ local function UpdateObjects(frame)
 	frame.icons:Width(20 + C["HPWidth"])
 	frame.icons:Height(25)
 	frame.icons:SetFrameLevel(frame.hp:GetFrameLevel()+2)
-	frame:RegisterEvent("UNIT_AURA")
 	frame:HookScript("OnEvent", OnAura)
 	
 	HideObjects(frame)
-	
-	if cfg.TotemIcon then 
-		if totems[frame.oldname:GetText()] then		
-			if not frame.totem then
-				frame.icon:SetTexCoord(.08, .92, .08, .92)
-				frame.totem = true
-			end
-			if frame.name ~= name then
-				frame.icon:Show()
-				frame.Ticon:Show()
-				frame.icon:SetTexture(totems[frame.oldname:GetText()])
-			end
-		else
-			if frame.totem then
-				frame.icon:Hide()
-				frame.Ticon:Hide()
-				frame.icon:SetTexture()
-				frame.totem = nil
-			end
-		end
-	end
 end
 
 local function UpdateCastbar(frame)
@@ -461,6 +461,10 @@ local function OnHide(frame)
 	frame.cb:Hide()
 	frame.unit = nil
 	frame.guid = nil
+	frame.icon:Hide()
+	frame.Ticon:Hide()
+	frame.icon:SetTexture(nil)
+	--print("OnHide", GetTime())
 	if frame.icons then
 		for _, icon in ipairs(frame.icons) do
 			icon:Hide()
@@ -479,7 +483,7 @@ local function SkinObjects(frame, nameFrame)
 	frame.healthOriginal = hp
 	
 	overlay:SetTexture(DB.Statusbar)
-	overlay:SetVertexColor(0.25, 0.25, 0.25)
+	overlay:SetVertexColor(0.25, 0.25, 0.25, 0)
 	frame.highlight = overlay
 
 	hp:SetStatusBarTexture(DB.Statusbar)
@@ -503,9 +507,8 @@ local function SkinObjects(frame, nameFrame)
 	end
 	
 	hp.pct = hp:CreateFontString(nil, "OVERLAY")	
-	hp.pct:SetFont(DB.Font, C["Fontsize"], "THINOUTLINE")
+	hp.pct:SetFont(DB.Font, C["Fontsize"]-1, "THINOUTLINE")
 	hp.pct:SetPoint("CENTER", hp, "CENTER", 0, 0)
-	hp:HookScript("OnShow", UpdateObjects)
 	
 	local offset = UIParent:GetScale() / cb:GetEffectiveScale()
 	cb:CreateShadow()
@@ -538,12 +541,12 @@ local function SkinObjects(frame, nameFrame)
 	frame.level = level
 
 	--Highlight
-	overlay:SetTexture(1,1,1,0.15)
+	overlay:SetTexture(1,1,1,0.01)
 	overlay:SetAllPoints(hp)
 	frame.overlay = overlay
 	-- totem icon
 	local icon = frame:CreateTexture(nil, "BACKGROUND")
-	icon:SetPoint("CENTER", frame, 0, 38)
+	icon:Point("BOTTOMRIGHT", hp, "BOTTOMLEFT", -5, 0)
 	icon:SetSize(cfg.TotemSize, cfg.TotemSize)
 	icon:Hide()
 	frame.icon = icon
@@ -574,7 +577,9 @@ local function SkinObjects(frame, nameFrame)
 
 	UpdateObjects(hp)
 	UpdateCastbar(cb)
+	frame:RegisterEvent("UNIT_AURA")
 	frame:HookScript("OnHide", OnHide)
+	hp:HookScript("OnShow", UpdateObjects)
 	frames[frame] = true
 end
 local function CheckBlacklist(frame, ...)
@@ -658,7 +663,10 @@ function N:UpdateNP()
 	ForEachPlate(CheckUnit_Guid)
 end
 function N:OnInitialize()
-	C = C["NameplateDB"]
+		if IsAddOnLoaded("TidyPlates") or IsAddOnLoaded("Aloft") or IsAddOnLoaded("dNamePlates") or IsAddOnLoaded("caelNamePlates") then
+		return
+	end
+	C = SunUIConfig.db.profile.NameplateDB
 	if C["enable"] ~= true then return end
 	N:RegisterEvent("PLAYER_LOGIN", SetCV)
 	N:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", On_COMBAT_LOG_EVENT_UNFILTERED)

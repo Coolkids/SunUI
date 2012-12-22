@@ -196,6 +196,8 @@ ns.watchers ={
 				{ spellID = 44572, unitId = "target", caster = "player", filter = "DEBUFF" },
 				-- 炎爆
 				{ spellID = 11366, unitId = "target", caster = "player", filter = "DEBUFF" },
+				-- 秘法风暴
+				{ spellID = 114923, unitId = "target", caster = "player", filter = "DEBUFF" },
 		},
 		{
 			name = "目标的目标上方",
@@ -228,7 +230,8 @@ ns.watchers ={
 				{ spellID = 31661, unitId = "player", caster = "player", filter = "DEBUFF" },
 				-- 烈焰風暴
 				{ spellID = 2120, unitId = "player", caster = "player", filter = "DEBUFF" },
-				
+				--能量符文
+				{ spellID = 116014, unitId = "player", caster = "player", filter = "BUFF" }, 
 		},
 		{
 			name = "玩家技能CD",

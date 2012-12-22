@@ -1,5 +1,6 @@
 local S, C, L, DB = unpack(select(2, ...))
-if IsAddOnLoaded('Parrot') or IsAddOnLoaded('MikScrollingBattleText') or IsAddOnLoaded('xCT') then return end
+local XCT = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("xCT", "AceEvent-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local config = {
     -- --------------------------------------------------------------------------------------
     -- Blizzard Damage Options
@@ -8,7 +9,7 @@ local config = {
         ["blizzheadnumbers"]    = true, -- (You need to restart WoW to see changes!)
         
         -- "Everything else" font size (heals/interrupts and the like)
-        ["fontsize"]        = 14,
+        ["fontsize"]        = DB.FontSize,
         ["font"]            = DB.Font,  -- "Fonts\\ARIALN.ttf" is default WoW font.
         
         
@@ -704,52 +705,41 @@ local numf = #framenames                      -- Number of Frames
 
 --[[  Extra Frames  ]]
     -- Add window for separate damage and healing windows
-    if ct.damageout or ct.healingout then
-        numf = numf + 1     -- 4
-        framenames[numf] = "done"
-    end
+if ct.damageout or ct.healingout then
+	numf = numf + 1     -- 4
+	framenames[numf] = "done"
+end
 
-    -- Add window for loot events
-    if ct.lootwindow then
-        numf = numf + 1     -- 5
-        framenames[numf] = "loot"
-    end
+-- Add window for loot events
+if ct.lootwindow then
+	numf = numf + 1     -- 5
+	framenames[numf] = "loot"
+end
 
-    -- Add window for crit events
-    if ct.critwindow then
-        numf = numf + 1     -- 6
-        framenames[numf] = "crit"
-    end
+-- Add window for crit events
+if ct.critwindow then
+	numf = numf + 1     -- 6
+	framenames[numf] = "crit"
+end
 
-    -- Add a window for power gains
-    if ct.powergainswindow then
-        numf = numf + 1     -- 7
-        framenames[numf] = "pwr"
-    end
+-- Add a window for power gains
+if ct.powergainswindow then
+	numf = numf + 1     -- 7
+	framenames[numf] = "pwr"
+end
 
-    -- Add a window for procs
-    if ct.procwindow then
-        numf = numf + 1     -- 8
-        framenames[numf] = "proc"
-    end
+-- Add a window for procs
+if ct.procwindow then
+	numf = numf + 1     -- 8
+	framenames[numf] = "proc"
+end
+
+-- Add a window for a class's combo points
+if ct.combowindow then
+	numf = numf + 1     -- 9
+	framenames[numf] = "class"
+end
     
-    -- Add a window for a class's combo points
-    if ct.combowindow then
-        numf = numf + 1     -- 9
-        framenames[numf] = "class"
-    end
-    
---[[  Create Your Own Frame
-  Example:
-    if ct.custom_frame_enable then
-        numf = numf + 1     -- 9
-        framenames[numf] = "Custom_Name_Prefix"
-    end
-    
-  -- Send a message to your custom frame
-  xCTCustom_Name_Prefix:AddMessage("Message...", 1, 1, 1)
-]]
-
 --[[  Overload Blizzard's GetSpellTexture so that I can get "Text" instead of an Image.  ]]
 local GetSpellTextureFormatted = function(spellID, iconSize)
     local msg = ""
@@ -960,57 +950,12 @@ local function ChatMsgMoney_Handler(msg)
     end
 end
 
---[[ local function ChatMsgLoot_Handler(msg)
-    local pM,iQ,iI,iN,iA = select(3, string.find(msg, parseloot))  -- Pre-Message, ItemColor, ItemID, ItemName, ItemAmount
-    local qq,_,_,tt,_,_,_,ic = select(3, GetItemInfo(iI))          -- Item Quality, See "GetAuctionItemClasses()", Item Icon Texture Location
-
-    local item       = { }
-        item.name    = iN
-        item.id      = iI
-        item.amount  = tonumber(iA) or 1
-        item.quality = qq
-        item.type    = tt
-        item.icon    = ic
-        item.crafted = (pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
-        item.self    = (pM == LOOT_ITEM_PUSHED_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
-
-    if (ct.lootitems and item.self and item.quality >= ct.itemsquality) or (item.type == "Quest" and ct.questitems and item.self) or (item.crafted and ct.crafteditems) then
-        if item.crafted and ct.crafteditems == false then return end
-        if item.type == "Quest" and ct.questitems == false then return end
-        
-        local r,g,b=GetItemQualityColor(item.quality)
-        local s=item.type..": ["..item.name.."] "
-        if ct.colorblind then
-            s = item.type.." (".. _G["ITEM_QUALITY"..item.quality.."_DESC"] .."): ["..item.name.."] "
-        end
-        
-        -- Add the Texture
-        if not ct.loothideicons then
-            s=s.."\124T"..item.icon..":"..ct.looticonsize..":"..ct.looticonsize..":0:0:64:64:5:59:5:59\124t"
-        end
-    
-        -- Amount Looted
-        s=s.." x "..item.amount
-    
-        -- Items purchased seem to get to your bags faster than looted items
-        -- TODO: find a fix
-    
-        -- Total items in bag
-        if ct.itemstotal then
-            s=s.."   ("..(GetItemCount(item.id)).. ")"  -- buggy AS HELL :\
-        end
-    
-        -- Add the message
-        (xCTloot or xCTgen):AddMessage(s, r, g, b)
-    end
-end ]]
-
 -- Partial Resist Styler (Format String)
 local part = "-%s (%s %s)"
 local r, g, b
 
 -- Handlers for Combat Text and other incoming events.  Outgoing events are handled further down.
-local function OnEvent(self, event, subevent, ...)
+local function OnEvent(event, subevent, ...)
     if event == "COMBAT_TEXT_UPDATE" then
         local arg2, arg3 = select(1, ...)
         if SHOW_COMBAT_TEXT == "0" then
@@ -1463,36 +1408,6 @@ for i = 1, numf do
     ct.frames[i] = f
 end
 
--- register events
-local xCT = CreateFrame("Frame")
-xCT:RegisterEvent("COMBAT_TEXT_UPDATE")
-xCT:RegisterEvent("UNIT_HEALTH")
-xCT:RegisterEvent("UNIT_MANA")
-xCT:RegisterEvent("PLAYER_REGEN_DISABLED")
-xCT:RegisterEvent("PLAYER_REGEN_ENABLED")
-xCT:RegisterEvent("UNIT_COMBO_POINTS")
-xCT:RegisterEvent("UNIT_ENTERED_VEHICLE")
-xCT:RegisterEvent("UNIT_EXITING_VEHICLE")
-xCT:RegisterEvent("PLAYER_ENTERING_WORLD")
-xCT:RegisterEvent("PLAYER_TARGET_CHANGED")
-
--- Register DK Events
-if ct.dkrunes and select(2, UnitClass("player")) == "DEATHKNIGHT" then
-    xCT:RegisterEvent("RUNE_POWER_UPDATE")
-end
-
--- Register Loot Events
-if ct.lootitems or ct.questitems or ct.crafteditems then
-    xCT:RegisterEvent("CHAT_MSG_LOOT") 
-end
-
--- Register Money Events
-if ct.lootmoney then 
-    xCT:RegisterEvent("CHAT_MSG_MONEY")
-end
-
-xCT:SetScript("OnEvent",OnEvent)
-
 -- Blizzard Damage/Healing Head Anchors
 if not ct.blizzheadnumbers then
     -- Move the options up
@@ -1536,19 +1451,6 @@ if not ct.blizzheadnumbers then
   --SetCVar("CombatDamage", 0)
   --SetCVar("CombatHealing", 0)
 end
-
-local fram = CreateFrame("Frame")
-fram:RegisterEvent("PLAYER_ENTERING_WORLD")
-fram:SetScript("OnEvent", function(self)
-	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-	-- Turn off Blizzard CT
-	if CombatText then
-		CombatText:UnregisterAllEvents()
-		CombatText:SetScript("OnLoad", nil)
-		CombatText:SetScript("OnEvent", nil)
-		CombatText:SetScript("OnUpdate", nil)
-	end
-end)
 
 -- Direction does NOT work with xCT+ at all
 InterfaceOptionsCombatTextPanelFCTDropDown:Hide()
@@ -2381,4 +2283,38 @@ function ct:UpdateComboPoints()
     ct.classcomboupdated = false
     xCTclass:AddMessage(" ", 1, .82, 0)
   end
+end
+
+function XCT:OnInitialize()
+	if IsAddOnLoaded("Parrot") or IsAddOnLoaded("MikScrollingBattleText") or IsAddOnLoaded("xCT") then return end
+	self:RegisterEvent("COMBAT_TEXT_UPDATE", OnEvent)
+	self:RegisterEvent("UNIT_HEALTH", OnEvent)
+	self:RegisterEvent("UNIT_MANA", OnEvent)
+	self:RegisterEvent("PLAYER_REGEN_DISABLED", OnEvent)
+	self:RegisterEvent("PLAYER_REGEN_ENABLED", OnEvent)
+	self:RegisterEvent("UNIT_COMBO_POINTS", OnEvent)
+	self:RegisterEvent("UNIT_ENTERED_VEHICLE", OnEvent)
+	self:RegisterEvent("UNIT_EXITING_VEHICLE", OnEvent)
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", OnEvent)
+	self:RegisterEvent("PLAYER_TARGET_CHANGED", OnEvent)
+	if CombatText then
+		CombatText:UnregisterAllEvents()
+		CombatText:SetScript("OnLoad", nil)
+		CombatText:SetScript("OnEvent", nil)
+		CombatText:SetScript("OnUpdate", nil)
+	end
+	-- Register DK Events
+	if ct.dkrunes and DB.MyClass == "DEATHKNIGHT" then
+		self:RegisterEvent("RUNE_POWER_UPDATE", OnEvent)
+	end
+
+	-- Register Loot Events
+	if ct.lootitems or ct.questitems or ct.crafteditems then
+		self:RegisterEvent("CHAT_MSG_LOOT", OnEvent)
+	end
+
+	-- Register Money Events
+	if ct.lootmoney then 
+		self:RegisterEvent("CHAT_MSG_MONEY", OnEvent)
+	end
 end

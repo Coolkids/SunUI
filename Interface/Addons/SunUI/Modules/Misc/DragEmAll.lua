@@ -65,6 +65,7 @@ local frames = {
   --5.0fix
 	["PVEFrame"] = false,
 	["LFGDungeonReadyDialog"] = false,
+	["LFGDungeonReadyStatus"] = false,
 }
 
 -- Frames provided by load on demand addons, hooked when the addon is loaded.

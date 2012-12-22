@@ -1,7 +1,4 @@
 ﻿local S, C, L, DB = unpack(select(2, ...))
- if (IsAddOnLoaded("Dominos") or IsAddOnLoaded("Bartender4") or IsAddOnLoaded("Macaroon")) then
-	return 
-end	
 --if true then return end
 local AB = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ActionStyle", "AceEvent-3.0", "AceHook-3.0")
 
@@ -277,10 +274,12 @@ function AB:UpdateOverlayGlow(button)
 	end
 end
 function AB:OnInitialize()
+	if (IsAddOnLoaded("Dominos") or IsAddOnLoaded("Bartender4") or IsAddOnLoaded("Macaroon")) then
+		return 
+	end
 	self:SecureHook("ActionButton_UpdateHotkeys", "UpdateHotkey")
 end
 function AB:OnEnable()
-	
 	self:SecureHook("ActionButton_ShowOverlayGlow", "UpdateOverlayGlow")
 	
 	self:SecureHook("ActionButton_Update", "Style")
