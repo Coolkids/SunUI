@@ -1,26 +1,14 @@
 local S, C, L, DB = unpack(select(2, ...))
 local _
-if IsAddOnLoaded("Mapster") or IsAddOnLoaded("Carbonite") then
-	return
-end
+
 local map_scale = 0.9								-- Mini World Map scale
 local isize = 20									-- group icons size
 local WM = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("WorldMap", "AceEvent-3.0", "AceHook-3.0")
 
-local mpos = {"CENTER",UIParent,"CENTER",0,0}
 local player, cursor
 local EJbuttonWidth, EJbuttonHeight = 30, 30
 local EJbuttonImageWidth, EJbuttonImageHeigth = 21.6, 21.6
 local ejbuttonscale = 1
-
-for i = 1, 4 do 
-   _G["WorldMapParty"..i]:SetWidth(24) 
-   _G["WorldMapParty"..i]:SetHeight(24) 
-end 
-for i = 1, 40 do 
-   _G["WorldMapRaid"..i]:SetWidth(24) 
-   _G["WorldMapRaid"..i]:SetHeight(24) 
-end
 
 function WM:ResizeEJBossButton()
 	if WORLDMAP_SETTINGS.size == WORLDMAP_WINDOWED_SIZE then
@@ -63,13 +51,21 @@ function WM:PLAYER_ENTERING_WORLD()
 	BlackoutWorld.Hide = function() end
 	WORLDMAP_RATIO_MINI = map_scale
 	WORLDMAP_WINDOWED_SIZE = map_scale 
-	WORLDMAP_SETTINGS.size = map_scale 
+	WORLDMAP_SETTINGS.size = map_scale
 	WorldMapBlobFrame.Show = function() end
 	WorldMapBlobFrame.Hide = function() end
 	WorldMapQuestPOI_OnLeave = function()
 		WorldMapTooltip:Hide()
 	end
 	WorldMap_ToggleSizeDown()
+	for i = 1, 4 do 
+		_G["WorldMapParty"..i]:SetWidth(24) 
+		_G["WorldMapParty"..i]:SetHeight(24) 
+		end 
+		for i = 1, 40 do 
+		_G["WorldMapRaid"..i]:SetWidth(24) 
+		_G["WorldMapRaid"..i]:SetHeight(24) 
+	end
 	if FeedbackUIMapTip then 
 		FeedbackUIMapTip:Hide()
 		FeedbackUIMapTip.Show = function() end
@@ -104,6 +100,19 @@ function WM:WORLD_MAP_UPDATE()
 		WorldMapLevelDownButton:SetFrameStrata("MEDIUM")
 		WorldMapLevelDownButton:SetFrameLevel(100)
 		WorldMapLevelDownButton:SetParent("WorldMapFrame")
+	end
+	if IsInRaid() then
+		local count = 0;
+		for i=1, MAX_RAID_MEMBERS do
+			local unit = "raid"..i
+			local partyX, partyY = GetPlayerMapPosition(unit)
+			if not ( (partyX == 0 and partyY == 0) or UnitIsUnit(unit, "player") ) then
+				count = count + 1
+			end
+		end
+		for i=count+1, MAX_RAID_MEMBERS do
+			_G["WorldMapRaid"..i]:Hide()
+		end
 	end
 end
 
@@ -298,11 +307,6 @@ local function UpdateCoords(self, elapsed)
 	if self.elapsed <= 0 then
 		self.elapsed = 0.1
 		OnUpdate(player, cursor)
-		--if GetUnitSpeed("player") ~= 0 and WORLDMAP_SETTINGS.size ~= WORLDMAP_WINDOWED_SIZE then
-			--WorldMapFrame:SetAlpha(.5)
-		--else
-			--WorldMapFrame:SetAlpha(1)
-		--end
 	end
 end
 
@@ -330,7 +334,10 @@ function WM:OnUpdate(self, elapsed)
 end
 
 function WM:FixSkin()
-	--WorldMapFrame:SetFrameStrata("HIGH") --Block
+	if not InCombatLockdown() and WorldMapFrame:GetFrameStrata() == "MEDIUM" then
+		--print(WorldMapFrame:GetFrameStrata())
+		WorldMapFrame:SetFrameStrata("HIGH") --Block
+	end
 	WorldMapFrame:StripTextures()
 	if WORLDMAP_SETTINGS.size == WORLDMAP_FULLMAP_SIZE then
 		self:LargeSkin()
@@ -360,6 +367,9 @@ function WM:FixSkin()
 end
 
 function WM:OnInitialize()
+	if IsAddOnLoaded("Mapster") or IsAddOnLoaded("Carbonite") then
+		return
+	end
 	self:SkinWorldMap()
 	WorldMapFrame:HookScript("OnShow", function() WM:FixSkin() end)
 	WorldMapFrame:HookScript("OnUpdate", function(self, elapsed) WM:OnUpdate(self, elapsed) end)
@@ -373,22 +383,3 @@ function WM:OnInitialize()
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 end 
-
-local frame = CreateFrame("Frame")
-frame:RegisterEvent("WORLD_MAP_UPDATE")
-frame:SetScript("OnEvent", function()
-	--print("Fix Raid")
-	if IsInRaid() then
-		local count = 0;
-		for i=1, MAX_RAID_MEMBERS do
-			local unit = "raid"..i
-			local partyX, partyY = GetPlayerMapPosition(unit)
-			if not ( (partyX == 0 and partyY == 0) or UnitIsUnit(unit, "player") ) then
-				count = count + 1
-			end
-		end
-		for i=count+1, MAX_RAID_MEMBERS do
-			_G["WorldMapRaid"..i]:Hide()
-		end
-	end
-end)

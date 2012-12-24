@@ -183,6 +183,25 @@ local function TotemIcon(frame)
 		end
 	end
 end
+local function Color(frame)
+	local r, g, b = frame.hp:GetStatusBarColor()
+	local texture = frame.hp:GetStatusBarTexture()
+	frame.toptexture = texture
+	local newr, newg, newb
+	if g + b == 0 then
+		newr, newg, newb = 0.7, 0.2, 0.1
+	elseif r + b == 0 then
+		newr, newg, newb = 0.2, 0.6, 0.1
+	elseif r + g == 0 then
+		newr, newg, newb = 0.31, 0.45, 0.63
+	elseif 2 - (r + g) < 0.05 and b == 0 then
+		newr, newg, newb = 0.71, 0.71, 0.35
+	else
+		newr, newg, newb = r, g, b
+	end
+	frame.r, frame.g, frame.b = newr, newg, newb
+	S.CreateTop(texture, newr, newg, newb)
+end
 local function UpdateThreat(frame,elapsed)
 	if(frame.threat:IsShown()) then
 		local _, val = frame.threat:GetVertexColor()
@@ -199,9 +218,9 @@ local function UpdateThreat(frame,elapsed)
 		frame.name:SetTextColor(1, 1, 1)
 	end
 	--print(frame.r, frame.g, frame.b)
-	local r,g,b = frame.hp:GetStatusBarColor()
+	local r, g, b = frame.hp:GetStatusBarColor()
 	if r + b + b < 2 then 
-		S.CreateTop(frame.toptexture, frame.r, frame.g, frame.b)
+		Color(frame)
 	end
     local minHealth, maxHealth = frame.healthOriginal:GetMinMaxValues()
     local valueHealth = frame.healthOriginal:GetValue()
@@ -371,23 +390,7 @@ end
 
 local function UpdateObjects(frame)
 	local frame = frame:GetParent()
-	local r, g, b = frame.hp:GetStatusBarColor()
-	local texture = frame.hp:GetStatusBarTexture()
-	frame.toptexture = texture
-	local newr, newg, newb
-	if g + b == 0 then
-		newr, newg, newb = 0.7, 0.2, 0.1
-	elseif r + b == 0 then
-		newr, newg, newb = 0.2, 0.6, 0.1
-	elseif r + g == 0 then
-		newr, newg, newb = 0.31, 0.45, 0.63
-	elseif 2 - (r + g) < 0.05 and b == 0 then
-		newr, newg, newb = 0.71, 0.71, 0.35
-	else
-		newr, newg, newb = r, g, b
-	end
-	frame.r, frame.g, frame.b = newr, newg, newb
-	S.CreateTop(texture, newr, newg, newb)
+	Color(frame)
 	frame.hp:ClearAllPoints()
 	frame.hp:SetSize(C["HPWidth"], C["HPHeight"])	
 	frame.hp:SetPoint('CENTER', frame, 0, 10)
@@ -639,10 +642,11 @@ local function HookFrames(...)
 	end
 end
 
-local function On_COMBAT_LOG_EVENT_UNFILTERED(times, temp, event, ...)
+function N:COMBAT_LOG_EVENT_UNFILTERED(times, temp, event, ...)
 	if event == "SPELL_AURA_REMOVED" then
 		local _, sourceGUID, _, _, _, destGUID, _, _, _, spellID = ...
 		if sourceGUID == UnitGUID("player") then
+			--print(spellID)
 			ForEachPlate(MatchGUID, destGUID, spellID)
 		end
 	end
@@ -669,8 +673,8 @@ function N:OnInitialize()
 	C = SunUIConfig.db.profile.NameplateDB
 	if C["enable"] ~= true then return end
 	N:RegisterEvent("PLAYER_LOGIN", SetCV)
-	N:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", On_COMBAT_LOG_EVENT_UNFILTERED)
-	N:ScheduleRepeatingTimer("UpdateNP", 0.1)
+	N:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	N:ScheduleRepeatingTimer("UpdateNP", 0.2)
 	if C["Combat"] then
 		N:RegisterEvent("PLAYER_REGEN_DISABLED", function()
 			SetCVar("nameplateShowEnemies", 1)

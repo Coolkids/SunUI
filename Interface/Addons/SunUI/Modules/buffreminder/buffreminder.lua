@@ -34,6 +34,16 @@ local ReminderBuffs = {
 			["combat"] = true,
 			["instance"] = true,
 		},		
+		["spell"] = { --armors group
+			["spells"] = {
+				[1459] = true, -- 奥术光辉
+				[109773] = true, --意图
+				[77747] = true,--萨满
+				[61316] = true,--法师
+			},
+			["combat"] = true,
+			["instance"] = true,
+		},	
 	},
 	WARLOCK = {
 	},
@@ -350,13 +360,19 @@ local function OnEvent(self, event, arg1, arg2)
 end
 
 local i = 0
+local prv
 function Module:OnInitialize()
 	if not C["ReminderDB"].ShowClassBuff then return end
 	for groupName, _ in pairs(tab) do
 		i = i + 1
 		local frame = CreateFrame("Frame", "ReminderFrame"..i, UIParent)
 		frame:SetSize(C["ReminderDB"].ClassBuffSize,C["ReminderDB"].ClassBuffSize)
-		MoveHandle.Class = S.MakeMoveHandle(frame, L["缺少药剂buff提示"], "Class")
+		if i == 1 then
+			MoveHandle.Class = S.MakeMoveHandle(frame, L["缺少药剂buff提示"], "Class")
+			prv = frame
+		else
+			frame:Point("LEFT", prv, "RIGHT", 3, 0)
+		end
 		frame:SetFrameLevel(1)
 		frame.id = groupName
 		frame.icon = frame:CreateTexture(nil, "OVERLAY")

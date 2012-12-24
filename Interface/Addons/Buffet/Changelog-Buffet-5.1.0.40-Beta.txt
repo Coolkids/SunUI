@@ -1,0 +1,15 @@
+tag 5.1.0.40-Beta
+358f435aeb12d1da00a9038f26a3aa4e747bbeb7
+tekkub :bear:  <tekkub@gmail.com>
+2012-12-23 21:07:09 -0700
+
+Weekly build
+
+
+--------------------
+
+tekkub :bear: :
+	- Weekly build 5.1.0.40-Beta
+	- Update changelog for 5.1.0.40-Beta
+	- Updating TOC to 50100
+	- Panda pots

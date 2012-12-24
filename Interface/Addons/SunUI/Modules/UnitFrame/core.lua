@@ -5,7 +5,7 @@ local S, C, L, DB = unpack(select(2, ...))
 local UF = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("UnitFrame")
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local P,U
-
+local space = 6
 oUF.colors.power['MANA'] = {.3,.45,.65}
 oUF.colors.power['RAGE'] = {.7,.3,.3}
 oUF.colors.power['FOCUS'] = {.7,.45,.25}
@@ -729,16 +729,16 @@ local function gen_classpower(f)
 	end
 	local bars = CreateFrame("Frame", nil, f)
 	bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
-	bars:SetSize((f.width-2*(count-1))/count, f.height/5)
+	bars:SetSize((f.width-space*(count-1))/count, f.height/5)
 	for i = 1, count do
 		bars[i] =CreateFrame("StatusBar", nil, bars)
 		bars[i]:SetStatusBarTexture(DB.Statusbar2)
 		bars[i]:GetStatusBarTexture():SetHorizTile(false)
-		bars[i]:SetSize((f.width-2*(count-1))/count, f.height/5)
+		bars[i]:SetSize((f.width-space*(count-1))/count, f.height/5)
 		if (i == 1) then
 			bars[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
 		else
-			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 2, 0)
+			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", space, 0)
 		end
 		if class == "WARLOCK" then  
 			bars[i]:SetStatusBarColor(0.5, 0.32, 0.55)
@@ -763,15 +763,19 @@ local function warlockpower(f)
 	for i = 1, 4 do
 		bars[i] = CreateFrame("StatusBar", nil, f)
 		bars[i]:SetHeight(f.height/3)
-		bars[i]:SetStatusBarTexture(DB.Statusbar2)
+		bars[i]:SetStatusBarTexture(DB.Statusbar)
 		S.CreateBack(bars[i])
 		bars[i]:CreateShadow()
+		local s = bars[i]:GetStatusBarTexture()
+		bars[i].SetStatusBarColor = function(t, r, g, b)
+			S.CreateTop(s, r, g, b)
+		end
 		if i == 1 then
 			bars[i]:SetPoint("LEFT", bars)
-			bars[i]:SetWidth((f.width/4))
+			bars[i]:SetWidth((f.width-space*(4-1))/4)
 		else
-			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 2, 0)
-			bars[i]:SetWidth((f.width/4)-2)
+			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", space, 0)
+			bars[i]:SetWidth((f.width-space*(4-1))/4)
 		end
 	end
 	f.WarlockSpecBars = bars
@@ -785,14 +789,15 @@ local function addHarmony(f)
 	chibar:SetSize((f.width-8)/5, f.height/4)
 	for i=1,5 do
 		chibar[i] = CreateFrame("StatusBar",nil,chibar)
-		chibar[i]:SetSize((f.width-8)/5, f.height/4)
-		chibar[i]:SetStatusBarTexture(DB.Statusbar2)
-		chibar[i]:SetStatusBarColor(0.0, 1.00 , 0.59)
+		chibar[i]:SetSize((f.width-4*space)/5, f.height/4)
+		chibar[i]:SetStatusBarTexture(DB.Statusbar)
+		local s = chibar[i]:GetStatusBarTexture()
+		S.CreateTop(s, 0.0, 1.00 , 0.59)
 		chibar[i]:CreateShadow()
 		if i==1 then
 			chibar[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
 		else
-			chibar[i]:SetPoint("LEFT", chibar[i-1], "RIGHT", 2, 0)
+			chibar[i]:SetPoint("LEFT", chibar[i-1], "RIGHT", space, 0)
 		end
 		chibar[i]:Hide()
 	end
@@ -806,12 +811,12 @@ local function addHarmony(f)
 			if chimax == 4 then
 				chibar[5]:Hide()
 				for i = 1,4 do
-					chibar[i]:SetWidth((f.width-6)/4)
+					chibar[i]:SetWidth((f.width-3*space)/4)
 				end
 			elseif chimax == 5 then
 				chibar[5]:Show()
 				for i = 1,5 do
-					chibar[i]:SetWidth((f.width-8)/5)
+					chibar[i]:SetWidth((f.width-4*space)/5)
 				end
 			end
 		end
@@ -837,14 +842,15 @@ local function genShadowOrbs(f)
 	
 	for i = 1,maxShadowOrbs do
 		ShadowOrbs[i] = CreateFrame("StatusBar", nil, f)
-		ShadowOrbs[i]:SetSize((f.width-2*(maxShadowOrbs-1))/maxShadowOrbs, f.height/4)
-		ShadowOrbs[i]:SetStatusBarTexture(DB.Statusbar2)
-		ShadowOrbs[i]:SetStatusBarColor(.86,.22,1)
+		ShadowOrbs[i]:SetSize((f.width-space*(maxShadowOrbs-1))/maxShadowOrbs, f.height/4)
+		ShadowOrbs[i]:SetStatusBarTexture(DB.Statusbar)
+		local s = ShadowOrbs[i]:GetStatusBarTexture()
+		S.CreateTop(s, .86,.22,1)
 		ShadowOrbs[i]:CreateShadow()
 		if (i == 1) then
 			ShadowOrbs[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
 		else
-			ShadowOrbs[i]:SetPoint("LEFT", ShadowOrbs[i-1], "RIGHT", 2, 0)
+			ShadowOrbs[i]:SetPoint("LEFT", ShadowOrbs[i-1], "RIGHT", space, 0)
 		end
 	end
 	ShadowOrbs:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -868,26 +874,22 @@ local function genMage(f)
 	local bars = CreateFrame("Frame", nil, f)
 	bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
 	bars:SetSize((f.width-8)/5, f.height/4)
-	
 	for i = 1,6 do
 		bars[i] = CreateFrame("StatusBar", nil, f)
-		bars[i]:SetSize((f.width-2*(6-1))/6, f.height/4)
-		bars[i]:SetStatusBarTexture(DB.Statusbar2)
-		bars[i]:SetStatusBarColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
+		bars[i]:SetSize((f.width-space*(6-1))/6, f.height/4)
+		bars[i]:SetStatusBarTexture(DB.Statusbar)
+		local s = bars[i]:GetStatusBarTexture()
+		S.CreateTop(s, 0.41, 0.8, 0.94)
 		bars[i]:CreateShadow()
 		bars[i]:Hide()
 		if (i == 1) then
 			bars[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
 		else
-			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 2, 0)
+			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", space, 0)
 		end
 	end
-	bars:RegisterEvent("PLAYER_ENTERING_WORLD")
 	bars:RegisterEvent("UNIT_AURA")
-	bars:RegisterEvent("PLAYER_REGEN_DISABLED")
-	bars:RegisterEvent("PLAYER_REGEN_ENABLED")
-	
-	bars:SetScript("OnEvent",function(self, unit)
+	bars:SetScript("OnEvent",function(self, event, unit)
 		if unit ~= "player" then return end
 		local num = select(4, UnitDebuff("player", GetSpellInfo(36032)))
 		if num == nil then num = 0 end
@@ -906,18 +908,20 @@ local function gen_EclipseBar(f)
 	local eb = CreateFrame('Frame', nil, f)
 	eb:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 0, S.Scale(2))
 	eb:SetSize(f.width, 6)
-	eb:CreateShadow("Background")
+	eb:CreateShadow()
 	local lb = CreateFrame('StatusBar', nil, eb)
 	lb:SetPoint('LEFT', eb, 'LEFT')
 	lb:SetSize(f.width, 6)
-	lb:SetStatusBarTexture(DB.Statusbar2)
-	lb:SetStatusBarColor(0.27, 0.47, 0.74)
+	lb:SetStatusBarTexture(DB.Statusbar)
+	local s = lb:GetStatusBarTexture()
+	S.CreateTop(s, 0.27, 0.47, 0.74)
 	eb.LunarBar = lb
 	local sb = CreateFrame('StatusBar', nil, eb)
 	sb:SetPoint('LEFT', lb:GetStatusBarTexture(), 'RIGHT', 0, 0)
 	sb:SetSize(f.width, 6)
-	sb:SetStatusBarTexture(DB.Statusbar2)
-	sb:SetStatusBarColor(0.9, 0.6, 0.3)
+	sb:SetStatusBarTexture(DB.Statusbar)
+	local s2 = sb:GetStatusBarTexture()
+	S.CreateTop(s2, 0.9, 0.6, 0.3)
 	eb.SolarBar = sb
   	local h = CreateFrame("Frame", nil, eb)
 	h:SetAllPoints(eb)
@@ -938,33 +942,31 @@ end
 local function gen_cp(f)
 	if class ~= "ROGUE" and class ~= "DRUID" then return end
 	local colors = {
-		[1]	= {0.9, 0.9, 0},
-		[2]	= {0.9, 0.9, 0},
-		[3]	= {0.9, 0.9, 0},
-		[4]	= {0.9, 0.9, 0},
-		[5]	= {1, 0.2, 0.2},}
+		[1] = {["r"] = 0.9, ["g"] = 0.9, ["b"] = 0},
+		[2] = {["r"] = 0.9, ["g"] = 0.9, ["b"] = 0},
+		[3] = {["r"] = 0.9, ["g"] = 0.9, ["b"] = 0},
+		[4] = {["r"] = 0.9, ["g"] = 0.9, ["b"] = 0},
+		[5] = {["r"] = 1, ["g"] = 0.2, ["b"] = 0.2},}
 	local bars = CreateFrame("Frame", nil, f)
 	bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
 	bars:SetFrameLevel(f:GetFrameLevel()+1)
 	bars:SetSize((f.width-8)/5, f.height/4)
 	for i = 1, 5 do
 		bars[i] =CreateFrame("StatusBar", nil, bars)
-		bars[i]:SetStatusBarTexture(DB.Statusbar2)
-		bars[i]:GetStatusBarTexture():SetHorizTile(false)
-		bars[i]:SetSize((f.width-12)/5, f.height/8)
+		bars[i]:SetStatusBarTexture(DB.Statusbar)
+		bars[i]:CreateShadow()
+		local s = bars[i]:GetStatusBarTexture()
+		bars[i]:SetSize((f.width-space*4)/5, f.height/4)
 		if (i == 1) then
 			bars[i]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
 		else
-			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 3, 0)
+			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", space, 0)
 		end
-		bars[i]:SetStatusBarColor(unpack(colors[i]))
-		bars[i].bg = CreateFrame("Frame", nil, bars[i])
-		bars[i].bg:SetAllPoints()
-		bars[i].bg:CreateShadow("Background")
+		S.CreateTop(s, colors[i].r, colors[i].g, colors[i].b)
 		i=i-1
 	end
 	bars[1]:SetScript("OnShow", function()
-		f.Auras:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 0, -13)
+		f.Auras:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 0, -10)
 	end)
 	bars[1]:SetScript("OnHide", function()
 		f.Auras:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 0, -18)
@@ -1074,7 +1076,7 @@ local function gen_arenatracker(f)
 	f.AuraTracker = at
 end
   --gen current target indicator
-gen_targeticon = function(f)
+local function gen_targeticon(f)
     local h = CreateFrame("Frame", nil, f)
     h:SetAllPoints(f.Health)
     h:SetFrameLevel(10)
@@ -1210,23 +1212,23 @@ end
   -- alt power bar
 local function gen_alt_powerbar(f)
 	local apb = CreateFrame("StatusBar", nil, f)
-	apb:Size(f.width, f.height/3)
+	apb:Size(f.width, f.height/6)
 	apb:SetStatusBarTexture(DB.Statusbar)
 	apb:GetStatusBarTexture():SetHorizTile(false)
 	apb:SetStatusBarColor(1, 0, 0)
-	apb:SetPoint("TOP", f.Power, "BOTTOM", 0, -f.height/6)
+	apb:Point("TOP", f.Power, "BOTTOM", 0, -6)
 	apb:CreateShadow()
 	S.CreateBack(apb)
-	
+	--apb:Show()
+	--apb.Hide = function() end
 	f.AltPowerBar = apb
-	local r, g, b
-	local max
 	apb.text = S.MakeFontString(apb, 10)
 	apb.text:SetPoint("CENTER")
+	--apb.text:SetText("1/1")
 	apb:SetScript("OnValueChanged", function(_, value)
 		local _, max = apb:GetMinMaxValues()
 		local texture = apb:GetStatusBarTexture()
-		r, g, b = oUF.ColorGradient((max-value), max, unpack(oUF.colors.smooth))
+		local r, g, b = oUF.ColorGradient((max-value), max, unpack(oUF.colors.smooth))
 		S.CreateTop(texture, r, g, b)
 		apb.text:SetText(value.."/"..max)
 	end)

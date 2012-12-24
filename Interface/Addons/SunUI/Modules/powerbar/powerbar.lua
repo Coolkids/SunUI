@@ -2,7 +2,7 @@
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SunUIPowerBar", "AceTimer-3.0", "AceEvent-3.0")
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local powercolor = {}
-local space = 4
+local space = 6
 local Holder = CreateFrame("Statusbar", nil, UIParent)
 local mainframe = {}
 local threeframe = {}
@@ -236,7 +236,6 @@ function Module:CreateCombatPoint()
 	CombatPointBar:SetSize(C["Width"], C["Height"])
 	CombatPointBar:SetPoint("CENTER", Holder)
 	tinsert(mainframe, CombatPointBar)
-	CombatPointBar:SetPoint("CENTER", CombatPointBar)
 	for i = 1, 5 do
 		CombatPointBar[i] =CreateFrame("StatusBar", nil, CombatPointBar)
 		CombatPointBar[i]:SetStatusBarTexture(DB.Statusbar)
@@ -620,17 +619,19 @@ function Module:HealthPowerBar()
 	bars:SetStatusBarTexture(DB.Statusbar)
 	bars:SetMinMaxValues(0, UnitHealthMax("player"))
 	bars:SetValue(UnitHealth("player"))
-	S.CreateBD(bars, 0)
 	bars:SetStatusBarColor(0.1, 0.8, 0.1, 0)
-	S.CreateBack(bars)
+	if DB.MyClass ~= "WARLOCK" then
+		S.CreateBack(bars)
+		S.CreateBD(bars, 0)
+	end
 	tinsert(mainframe, bars)
 	local spar =  bars:CreateTexture(nil, "OVERLAY")
 	spar:SetTexture("Interface\\Addons\\SunUI\\Media\\Arrow")
 	spar:SetVertexColor(1, 0, 0, 1) 
 	spar:SetSize(16, 16)
-	spar:SetPoint("TOP", bars:GetStatusBarTexture(), "RIGHT", 0, -4)
-	local healthtext = S.MakeFontString(bars, select(2, GameFontNormalSmall:GetFont()))
-	healthtext:SetPoint("TOP", spar, "BOTTOM", 0, 5)
+	spar:SetPoint("TOP", bars:GetStatusBarTexture(), "BOTTOMRIGHT", 0, -4)
+	local healthtext = S.MakeFontString(bars)
+	healthtext:SetPoint("TOP", spar, "BOTTOM", 0, 7)
 	healthtext:SetTextColor(1, 0.22, 0.52)
 	
 	bars.SetValue_ = bars.SetValue
@@ -646,8 +647,8 @@ function Module:HealthPowerBar()
 	powerspar:SetTexture("Interface\\Addons\\SunUI\\Media\\ArrowT")
 	powerspar:SetVertexColor(.3,.45,.65, 1) 
 	powerspar:SetSize(16, 16)
-	powerspar:SetPoint("BOTTOM", power:GetStatusBarTexture(), "RIGHT", 0, 4)
-	local powertext = S.MakeFontString(bars, select(2, GameFontNormalSmall:GetFont()))
+	powerspar:SetPoint("BOTTOM", power:GetStatusBarTexture(), "TOPRIGHT", 0, 4)
+	local powertext = S.MakeFontString(bars)
 	powertext:SetPoint("BOTTOM", powerspar, "TOP", 0, -5)
 	tinsert(mainframe, power)
 	power.SetValue_ = power.SetValue
@@ -715,22 +716,22 @@ function Module:UpdateSize()
 		end
 	end
 end
-local function FadeIn()
+function Module:PLAYER_REGEN_DISABLED()
 	Holder:Show()
 	UIFrameFadeIn(Holder, 1, Holder:GetAlpha(), 1)
 end
-local function FadeOut()
+function Module:PLAYER_REGEN_ENABLED()
 	S.FadeOutFrameDamage(Holder, 1)
 end
 function Module:UpdateFade()
 	if C["Fade"] then
-		Module:RegisterEvent("PLAYER_REGEN_ENABLED", FadeOut)
-		Module:RegisterEvent("PLAYER_REGEN_DISABLED", FadeIn)
-		FadeOut()
+		Module:RegisterEvent("PLAYER_REGEN_ENABLED")
+		Module:RegisterEvent("PLAYER_REGEN_DISABLED")
+		Module:PLAYER_REGEN_ENABLED()
 	else
 		Module:UnregisterEvent("PLAYER_REGEN_ENABLED")
 		Module:UnregisterEvent("PLAYER_REGEN_DISABLED")
-		FadeIn()
+		Module:PLAYER_REGEN_DISABLED()
 	end
 end
 function Module:OnEnable()
@@ -749,9 +750,9 @@ function Module:OnEnable()
 	if C["Fade"] then
 		Module:RegisterEvent("PLAYER_ENTERING_WORLD", function()
 			Module:UnregisterEvent("PLAYER_ENTERING_WORLD")
-			FadeOut()
+			Module:PLAYER_REGEN_ENABLED()
 		end)
-		Module:RegisterEvent("PLAYER_REGEN_ENABLED", FadeOut)
-		Module:RegisterEvent("PLAYER_REGEN_DISABLED", FadeIn)
+		Module:RegisterEvent("PLAYER_REGEN_ENABLED")
+		Module:RegisterEvent("PLAYER_REGEN_DISABLED")
 	end
 end
