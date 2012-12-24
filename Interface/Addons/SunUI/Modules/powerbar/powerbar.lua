@@ -2,7 +2,7 @@
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SunUIPowerBar", "AceTimer-3.0", "AceEvent-3.0")
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local powercolor = {}
-local space = 6
+local space = (DB.MyClass == "DEATHKNIGHT") and 2 or 6
 local Holder = CreateFrame("Statusbar", nil, UIParent)
 local mainframe = {}
 local threeframe = {}
