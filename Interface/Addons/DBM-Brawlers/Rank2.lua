@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("BrawlRank2", "DBM-Brawlers")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 8323 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8364 $"):sub(12, -3))
 --mod:SetCreatureID(60491)
 mod:SetModelID(46712)
 mod:SetZone()
@@ -38,7 +38,7 @@ function mod:SPELL_CAST_START(args)
 		warnStormCloud:Show()
 		--CD seems to be 32 seconds usually but sometimes only 16? no timer for now
 		if brawlersMod:PlayerFighting() then
-			specWarnStormCloud:Show()
+			specWarnStormCloud:Show(args.sourceName)
 		end
 	end
 end

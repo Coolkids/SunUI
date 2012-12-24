@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("BrawlRank5", "DBM-Brawlers")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 8335 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8364 $"):sub(12, -3))
 --mod:SetCreatureID(60491)
 mod:SetModelID(6923)
 mod:SetZone()
@@ -23,7 +23,8 @@ local specWarnTorrent		= mod:NewSpecialWarningInterrupt(124935)
 
 local timerPolymorphCD		= mod:NewCDTimer(35, 133362)--Small sample size, may need tweaking.
 local timerDarkZoneCD		= mod:NewNextTimer(29, 133346)
-local timerTorrentCD		= mod:NewCDTimer(18, 124935)--Small sample size, may need tweaking.
+local timerRainDanceCD		= mod:NewCDTimer(18, 124860)--18-25 sec variation
+local timerTorrentCD		= mod:NewCDTimer(18, 124935)--18-22 sec variation
 
 mod:RemoveOption("HealthFrame")
 mod:RemoveOption("SpeedKillTimer")
@@ -44,8 +45,9 @@ function mod:SPELL_CAST_START(args)
 		if brawlersMod:PlayerFighting() then
 			specWarnDarkZone:Show()
 		end
-	elseif args:IsSpellID(124935) then
+	elseif args:IsSpellID(124860) then
 		warnRainDance:Show()
+		timerRainDanceCD:Start()
 		if brawlersMod:PlayerFighting() then
 			specWarnRainDance:Show()
 		end
@@ -53,7 +55,7 @@ function mod:SPELL_CAST_START(args)
 		warnTorrent:Show()
 		timerTorrentCD:Start()
 		if brawlersMod:PlayerFighting() then
-			specWarnTorrent:Show()
+			specWarnTorrent:Show(args.sourceName)
 		end
 	end
 end

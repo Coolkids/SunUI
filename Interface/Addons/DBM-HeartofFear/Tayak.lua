@@ -82,6 +82,7 @@ local function checkUnseenEmote()
 		warnUnseenStrike:Show()
 		specWarnUnseenStrike:Show()
 		unseencount = unseencount + 1
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wxdjzb.mp3")
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\gather.mp3") --快集合
 		timerUnseenStrike:Start(4.2)
 		timerUnseenStrikeCD:Start(61, unseencount + 1)
@@ -234,6 +235,7 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, _, _, _, target)
 		specWarnUnseenStrike:Show(target)
 		timerUnseenStrike:Start()
 		timerUnseenStrikeCD:Start(61, unseencount + 1)
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wxdjzb.mp3")
 		if target == UnitName("player") then
 			yellUnseenStrike:Yell()
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\targetyou.mp3") --目標是你

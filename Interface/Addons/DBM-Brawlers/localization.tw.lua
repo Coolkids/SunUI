@@ -7,7 +7,7 @@ local L
 L= DBM:GetModLocalization("Brawlers")
 
 L:SetGeneralLocalization({
-	name = "鬥陣俱樂部 "
+	name = "基本設置"
 })
 
 L:SetWarningLocalization({

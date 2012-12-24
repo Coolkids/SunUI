@@ -1,10 +1,10 @@
 local mod	= DBM:NewMod("Brawlers", "DBM-Brawlers")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 8353 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8377 $"):sub(12, -3))
 --mod:SetCreatureID(60491)
 --mod:SetModelID(41448)
-mod:SetZone()
+mod:SetZone(DBM_DISABLE_ZONE_DETECTION)
 
 mod:RegisterEvents(
 	"PLAYER_REGEN_ENABLED",
@@ -15,14 +15,12 @@ mod:RegisterEvents(
 
 local specWarnYourTurn			= mod:NewSpecialWarning("specWarnYourTurn")
 
---need to add a custom beserk to the only boss that isn't 2 minutes. 68252 (Proboskus). Need a good berserk log that has combat regen or chat yell time.
 local berserkTimer				= mod:NewBerserkTimer(120)--all fights have a 2 min enrage to 134545. some fights have an earlier berserk though.
 
 mod:AddBoolOption("SpectatorMode", true)
 mod:RemoveOption("HealthFrame")
 mod:RemoveOption("SpeedKillTimer")
 
-local matchActive = false
 local playerIsFighting = false
 local currentFighter = nil
 local currentRank = 0--Used to stop bars for the right sub mod based on dynamic rank detection from pulls
@@ -70,8 +68,11 @@ function mod:CHAT_MSG_MONSTER_YELL(msg, npc, _, _, target)
 			playerIsFighting = true
 		end
 		self:SendSync("MatchBegin")
---[[	elseif matchActive and (msg:find(L.Victory1) or msg:find(L.Victory2) or msg:find(L.Victory3) or msg:find(L.Victory4) or msg:find(L.Victory5) or msg:find(L.Victory6) or msg:find(L.Lost1) or msg:find(L.Lost2) or msg:find(L.Lost3) or msg:find(L.Lost4) or msg:find(L.Lost5) or msg:find(L.Lost6) or msg:find(L.Lost7) or msg:find(L.Lost8) or msg:find(L.Lost9)) then
-		self:SendSync("MatchEnd")--]]
+	end
+	--Only boss with a custom berserk timer. His is 1 minute, but starts at different yell than 2 min berserk, so it's not actually 60 sec shorter but more like 50-55 sec shorter
+	if msg == L.Proboskus or msg:find(L.Proboskus) then
+		berserkTimer:Cancel()
+		berserkTimer:Start(60)
 	end
 end
 
@@ -110,15 +111,21 @@ end
 function mod:OnSync(msg)
 	if msg == "MatchBegin" then
 		self:Stop()--Sometimes bizmo doesn't yell when a match ends too early, if a new match begins we stop on begin before starting new stuff
-		matchActive = true
 		berserkTimer:Start()
 	elseif msg == "MatchEnd" then
 		currentFighter = nil
-		matchActive = false
 		self:Stop()
 		local mod2 = DBM:GetModByName("BrawlRank" .. currentRank)
 		if mod2 then
 			mod2:Stop()--Stop all timers and warnings
+		end
+		if currentRank == 0 then--We walked in on an in progress match and didn't capture what rank it is, so lets make sure when match ends we stop ALL mods
+			for i = 1, 8 do
+				local mod2 = DBM:GetModByName("BrawlRank" .. i)
+				if mod2 then
+					mod2:Stop()--Stop all timers and warnings
+				end
+			end
 		end
 	end
 end

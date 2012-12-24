@@ -44,7 +44,7 @@
 --  Globals/Default Options  --
 -------------------------------
 DBM = {
-	Revision = tonumber(("$Revision: 8355 $"):sub(12, -3)),
+	Revision = tonumber(("$Revision: 8390 $"):sub(12, -3)),
 	DisplayVersion = "5.1 語音增強版", -- the string that is shown as version
 	ReleaseRevision = 8290 -- the revision of the latest stable version that is available
 }

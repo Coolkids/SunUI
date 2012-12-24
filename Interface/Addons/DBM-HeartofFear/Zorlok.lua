@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8196 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8376 $"):sub(12, -3))
 mod:SetCreatureID(62980)--63554 (Special invisible Vizier that casts the direction based spellid versions of attenuation)
 mod:SetModelID(42807)
 mod:SetZone()
@@ -17,7 +17,8 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_START",
 	"SPELL_CAST_SUCCESS",
 	"RAID_BOSS_EMOTE",
-	"UNIT_SPELLCAST_SUCCEEDED"
+	"UNIT_SPELLCAST_SUCCEEDED",
+	"UNIT_DIED"
 )
 
 --[[WoL Reg expression
@@ -43,16 +44,15 @@ local specwarnAttenuationR	= mod:NewSpecialWarning("specwarnAttenuationR")
 
 local specwarnDR			= mod:NewSpecialWarning("specwarnDR")
 
---Timers aren't worth a crap, at all, this is a timerless fight and will probably stay that way unless blizz redesigns it.
+--Timers aren't worth a crap, at all, but added anyways. if people complain about how inaccurate they are tell them to go to below thread or get bent.
 --http://us.battle.net/wow/en/forum/topic/7004456927 for more info on lack of timers.
---local timerExhaleCD			= mod:NewCDTimer(41, 122761)
 local timerExhale				= mod:NewTargetTimer(6, 122761)
---local timerForceCD			= mod:NewCDTimer(48, 122713)--Phase 1, every 41 seconds since exhale keeps resetting it, phase 2, 48 seconds or as wildly high as 76 seconds if exhale resets it late in it's natural CD
+local timerForceCD				= mod:NewCDTimer(35, 122713)--35-50 second variation
 local timerForceCast			= mod:NewCastTimer(4, 122713)
 local timerForce				= mod:NewBuffActiveTimer(12.5, 122713)
---local timerAttenuationCD		= mod:NewCDTimer(34, 127834)--34-41 second variations, when not triggered off exhale. It's ALWAYS 11 seconds after exhale.
+local timerAttenuationCD		= mod:NewCDTimer(32.5, 127834)--32.5-41 second variations, when not triggered off exhale. It's ALWAYS 11 seconds after exhale.
 local timerAttenuation			= mod:NewBuffActiveTimer(14, 127834)
---local timerConvertCD			= mod:NewCDTimer(41, 122740)--totally don't know this CD, but it's probably 41 like other specials in phase 1.
+local timerConvertCD			= mod:NewCDTimer(40, 122740)--40-50 second variations
 
 local berserkTimer				= mod:NewBerserkTimer(660)
 
@@ -62,7 +62,7 @@ mod:AddBoolOption("ArrowOnAttenuation", true)
 local MCTargets = {}
 local MCIcon = 8
 local platform = 0
-
+local EchoAlive = false--Will be used for the very accurate phase 2 timers when an echo is left up on purpose. when convert is disabled the other 2 abilities trigger failsafes that make them predictable. it's the ONLY time phase 2 timers are possible. otherwise they are too variable to be useful
 local tqcount = 0
 local qpcount = 0
 
@@ -87,6 +87,7 @@ mod:AddDropdownOption("optDRT", {"noDRT", "DRT1", "DRT2", "DRT3", "DRT4", "DRT5"
 
 local function showMCWarning()
 	warnConvert:Show(table.concat(MCTargets, "<, >"))
+	timerConvertCD:Start()
 	table.wipe(MCTargets)
 	MCIcon = 8
 end
@@ -104,6 +105,7 @@ function mod:OnCombatStart(delay)
 	platform = 0
 	qpcount = 0
 	ptwo = false
+	EchoAlive = false
 	table.wipe(MCTargets)
 	if self:IsDifficulty("heroic10", "heroic25") then
 		berserkTimer:Start(-delay)
@@ -153,8 +155,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self:AntiSpam(2, 2) then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\findmc.mp3") --注意心控
 		end
-	--"<112.7 21:19:19> [CLEU] SPELL_CAST_START#false#0xF150F60400001A34#Imperial Vizier Zor'lok#68168#0#0x0000000000000000#nil#-2147483648#-2147483648#127834#Attenuation#0", -- [30640] --First ID is universal spell cast start spellid
-	--"<114.3 21:19:21> [CLEU] SPELL_AURA_APPLIED#false#0xF130F8420000203A#Imperial Vizier Zor'lok#2632#0#0xF130F8420000203A#Imperial Vizier Zor'lok#2632#0#122474#Attenuation#0#BUFF", -- [30914] --Second ID is direction (one of two buffs he gets, he also gets a buff from cast ID)
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
@@ -176,18 +176,12 @@ function mod:SPELL_AURA_REMOVED(args)
 end
 
 function mod:SPELL_CAST_START(args)
-	if args:IsSpellID(127834) then
---		warnAttenuation:Show()
---		specwarnAttenuation:Show()
-		timerAttenuation:Start()
---		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ybzb.mp3") --音波準備
-	elseif args:IsSpellID(122713) then
-		warnForceandVerve:Show()
+	if args:IsSpellID(122713) then
+		timerForce:Start()
 		specwarnForce:Show()
 		if mod:IsHealer() then
 			sndWOP:Schedule(2, "Interface\\AddOns\\DBM-Core\\extrasounds\\healall.mp3") --注意群療
 		end
-		timerForce:Start()		
 		if self.Options.optarrowRTI == "arrow1" then
 			ArrowRTI(1)
 		elseif self.Options.optarrowRTI == "arrow2" then
@@ -206,29 +200,52 @@ function mod:SPELL_CAST_START(args)
 	elseif args:IsSpellID(122761) and self:AntiSpam(2, 1) then
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_tqzb.mp3") --吐氣準備
 		specwarnExhaleB:Show(tqcount)
---[[	elseif args:IsSpellID(123791) and recentPlatformChange then--No one is in melee range of boss, he's aoeing. (i.e., he's arrived at new platform)
-		recentPlatformChange = false--we want to ignore when this happens as a result of players doing fight wrong. Only interested in platform changes.--]]
 	elseif args:IsSpellID(122474, 122496, 123721, 122513) then
 		if self.Options.ArrowOnAttenuation then
-			DBM.Arrow:ShowStatic(90, 9)
+			DBM.Arrow:ShowStatic(90, 12)
 		end
 		specwarnAttenuationL:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zzyb.mp3") --左轉音波
+		timerAttenuation:Start()
+		if platform < 4 then
+			timerAttenuationCD:Start()
+		else
+			if EchoAlive then--if echo isn't active don't do any timers
+				if args:GetSrcCreatureID() == 65173 then--Echo
+					timerAttenuationCD:Start(28, args.sourceGUID)--Because both echo and boss can use it in final phase and we want 2 bars
+				else--Boss
+					timerAttenuationCD:Start(54, args.sourceGUID)
+				end
+			end
+		end
 	elseif args:IsSpellID(122479, 122497, 123722, 122514) then
 		if self.Options.ArrowOnAttenuation then
-			DBM.Arrow:ShowStatic(270, 9)
+			DBM.Arrow:ShowStatic(270, 12)
 		end
 		specwarnAttenuationR:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_yzyb.mp3") --右轉音波
+		timerAttenuation:Start()
+		if platform < 4 then
+			timerAttenuationCD:Start()
+		else
+			if EchoAlive then--if echo isn't active don't do any timers
+				if args:GetSrcCreatureID() == 65173 then--Echo
+					timerAttenuationCD:Start(28, args.sourceGUID)--Because both echo and boss can use it in final phase and we want 2 bars
+				else--Boss
+					timerAttenuationCD:Start(54, args.sourceGUID)
+				end
+			end
+		end
 	end
 end
-
 
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(124018) then
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ptwo.mp3") --P2
 		ptwo = true
 		qpcount = 0
+		platform = 4--He moved to middle, it's phase 2, although platform "4" is better then adding an extra variable.
+		timerConvertCD:Cancel()
 	end
 end
 
@@ -239,11 +256,52 @@ function mod:RAID_BOSS_EMOTE(msg)
 		if platform < 4 then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\justrun.mp3") --快跑
 		end
+		timerForceCD:Cancel()
+		timerAttenuationCD:Cancel()
+		if platform == 1 then
+			timerForceCD:Start(24)
+		elseif platform == 2 then
+			timerAttenuationCD:Start(23)
+		elseif platform == 3 then
+			timerConvertCD:Start(22.5)
+		end
 	end
 end
 
+--"<55.0 21:38:55> [CLEU] UNIT_DIED#true#0x0000000000000000#nil#-2147483648#-2147483648#0xF130FE9600003072#Echo of Force and Verve#68168#0", -- [10971]
 function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 	if spellId == 122933 and self:AntiSpam(2, 1) then--Clear Throat (4 seconds before force and verve)
+		if self:LatencyCheck() then
+			self:SendSync("ForceandVerve")
+		end
+	elseif (spellId == 130297 or spellId == 127541) and not EchoAlive then--Echo of Zor'lok
+		EchoAlive = true
+		if platform == 2 then--Boss flew off from first platform to 2nd, and this means the echo that spawned is an Echo of Force and Verve
+--			timerForceCD:Start()
+		elseif platform == 3 then--Boss flew to 3rd platform and left an Echo of Attenuation behind on 2nd.
+--			timerAttenuationCD:Start()
+		end
+	end
+end
+
+function mod:UNIT_DIED(args)
+	local cid = self:GetCIDFromGUID(args.destGUID)
+	if cid == 68168 then--Echo of Force and Verve
+		EchoAlive = false
+		timerForceCD:Cancel()
+	elseif cid == 65173 then--Echo of Attenuation
+		EchoAlive = false
+		if platform < 4 then
+			timerAttenuationCD:Cancel()
+		else--No echo left up in final phase, cancel al timers because they are going to go back to clusterfuck random (as in may weave convert in but may not, and delay other abilities by as much as 30-50 seconds)
+			timerAttenuationCD:Cancel()
+			timerForceCD:Cancel()
+		end
+	end
+end
+
+function mod:OnSync(msg)
+	if msg == "ForceandVerve" then
 		warnForceandVerve:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_dyq.mp3") --快進定音區
 		timerForceCast:Start()
@@ -251,6 +309,13 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		if (((self.Options.optDR == "DR1" and qpcount == 1) or (self.Options.optDR == "DR2" and qpcount == 2) or (self.Options.optDR == "DR3" and qpcount == 3) or (self.Options.optDR == "DR4" and qpcount == 4) or (self.Options.optDR == "DR5" and qpcount == 5)) and not ptwo) or (((self.Options.optDRT == "DRT1" and qpcount == 1) or (self.Options.optDRT == "DRT2" and qpcount == 2) or (self.Options.optDRT == "DRT3" and qpcount == 3) or (self.Options.optDRT == "DRT4" and qpcount == 4) or (self.Options.optDRT == "DRT5" and qpcount == 5)) and ptwo) then
 			sndWOP:Schedule(3, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zyjs.mp3") --注意減傷
 			specwarnDR:Schedule(3)
+		end
+		if platform < 4 then
+			timerForceCD:Start()
+		else
+			if EchoAlive then
+				timerForceCD:Start(54)
+			end
 		end
 	end
 end
