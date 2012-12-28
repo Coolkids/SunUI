@@ -3,10 +3,11 @@ local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndWOPD	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8083 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8416 $"):sub(12, -3))
 mod:SetCreatureID(60009)--60781 Soul Fragment
 mod:SetModelID(41192)
 mod:SetZone()
+mod:SetUsedIcons(8, 7, 6)
 
 mod:RegisterCombat("combat")
 
@@ -54,26 +55,26 @@ local warnReversalLightningFists	= mod:NewTargetAnnounce(118302, 2)--this spell 
 local warnNullBarrior				= mod:NewSpellAnnounce(115817, 2)
 
 --Nature/Fist
-local specWarnLightningLash			= mod:NewSpecialWarningStack(131788, mod:IsTank(), 3)
+local specWarnLightningLash			= mod:NewSpecialWarningStack(131788, mod:IsTank(), 2)
 local specWarnLightningLashOther	= mod:NewSpecialWarningTarget(131788, mod:IsTank())
 local specWarnEpicenter				= mod:NewSpecialWarning("specWarnEpicenter")
 
 --Fire/Spear
-local specWarnFlamingSpear			= mod:NewSpecialWarningStack(116942, mod:IsTank(), 3)
+local specWarnFlamingSpear			= mod:NewSpecialWarningStack(116942, mod:IsTank(), 2)
 local specWarnFlamingSpearOther		= mod:NewSpecialWarningTarget(116942, mod:IsTank())
 local specWarnWildSpark				= mod:NewSpecialWarningYou(116784)
 local specWarnWildfire				= mod:NewSpecialWarningMove(116793)
 local specWarnDrawFlame				= mod:NewSpecialWarning("specWarnDrawFlame")
 
 --Arcane/Staff
-local specWarnArcaneShock			= mod:NewSpecialWarningStack(131790, mod:IsTank(), 3)
+local specWarnArcaneShock			= mod:NewSpecialWarningStack(131790, mod:IsTank(), 2)
 local specWarnArcaneShockOther		= mod:NewSpecialWarningTarget(131790, mod:IsTank())
 local specWarnArcaneResonance		= mod:NewSpecialWarningYou(116417)
 local yellArcaneResonance			= mod:NewYell(116417)
 local specWarnArcaneVelocity		= mod:NewSpecialWarning("specWarnArcaneVelocity")
 
 --Shadow/Shield (Heroic Only)
-local specWarnShadowBurn			= mod:NewSpecialWarningStack(131792, mod:IsTank(), 3)
+local specWarnShadowBurn			= mod:NewSpecialWarningStack(131792, mod:IsTank(), 2)
 local specWarnShadowBurnOther		= mod:NewSpecialWarningTarget(131792, mod:IsTank())
 local specWarnSiphoningShield		= mod:NewSpecialWarning("specWarnSiphoningShield")
 
@@ -97,9 +98,9 @@ local timerDrawFlameCD				= mod:NewNextCountTimer(30, 116711)--30 seconds after 
 --Arcane/Staff
 local timerArcaneShock				= mod:NewTargetTimer(20, 131790, nil, mod:IsTank())
 local timerArcaneShockCD			= mod:NewCDTimer(9, 131790, nil, mod:IsTank())--not comfirmed
-local timerArcaneResonanceCD		= mod:NewCDTimer(15, 116417)--CD is also duration, it's just cast back to back to back.
+local timerArcaneResonanceCD		= mod:NewCDTimer(15.5, 116417)
 local timerArcaneVelocityCD			= mod:NewCDCountTimer(18, 116364)--18 seconds after last ended.
-local timerArcaneVelocity			= mod:NewCastTimer(8, 116364)
+local timerArcaneVelocity			= mod:NewBuffActiveTimer(8, 116364)
 
 --Shadow/Shield (Heroic Only)
 local timerShadowBurn				= mod:NewTargetTimer(20, 131792, nil, mod:IsTank())
@@ -115,9 +116,12 @@ local timerNullBarriorCD			= mod:NewCDTimer(55, 115817)
 
 --local soundEpicenter				= mod:NewSound(116018)
 
+mod:AddBoolOption("SetIconOnWS", true)
+mod:AddBoolOption("SetIconOnAR", true)
 mod:AddBoolOption("RangeFrame", mod:IsRanged())
 
 local phase = 0
+local arIcon = 8
 local wildfireCount = 0
 local sparkCount = 0
 local fragmentCount = 5
@@ -153,6 +157,7 @@ end
 
 function mod:OnCombatStart(delay)
 	phase = 0
+	arIcon = 8
 	wildfireCount = 0
 	sparkCount = 0
 	specialCount = 0
@@ -216,6 +221,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		sparkCount = sparkCount + 1
 		warnWildSpark:Show(sparkCount, args.destName)
 		timerWildSpark:Start(args.destName)
+		if self.Options.SetIconOnWS then
+			self:SetIcon(args.destName, 8, 5)
+		end
 		if args:IsPlayer() then
 			specWarnWildSpark:Show()
 			yellWildSpark:Yell()
@@ -234,15 +242,18 @@ function mod:SPELL_AURA_APPLIED(args)
 		sparkCount = 0
 		specialCount = specialCount + 1
 		warnDrawFlame:Show(specialCount)
+		timerDrawFlame:Start()
 		specWarnDrawFlame:Show(specialCount)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qyhy.mp3") --牽引火焰
 	elseif args:IsSpellID(116821) then
 		wildfireCount = 1
 		warnWildfire()
 	elseif args:IsSpellID(116417) then
-		-- seems that affects 2 players in 25man lfr. so use multiple target warning.
 		arcaneResonanceTargets[#arcaneResonanceTargets + 1] = args.destName
-		timerArcaneResonanceCD:Start()
+		if self.Options.SetIconOnAR then
+			self:SetIcon(args.destName, arIcon)
+			arIcon = arIcon - 1
+		end
 		self:Unschedule(warnArcaneResonanceTargets)
 		self:Schedule(0.3, warnArcaneResonanceTargets)
 		if args:IsPlayer() then
@@ -280,10 +291,10 @@ function mod:SPELL_AURA_APPLIED_DOSE(args)
 		warnLightningLash:Show(args.destName, args.amount or 1)
 		timerLightningLash:Start(args.destName)
 		timerLightningLashCD:Start()
-		if args:IsPlayer() and (args.amount or 1) >= 3 then
+		if args:IsPlayer() and (args.amount or 1) >= 2 then
 			specWarnLightningLash:Show(args.amount)
 		else
-			if (args.amount or 1) >= 2 and not UnitDebuff("player", GetSpellInfo(131788)) and not UnitIsDeadOrGhost("player") then
+			if (args.amount or 1) >= 2 and not UnitIsDeadOrGhost("player") or not UnitDebuff("player", GetSpellInfo(131788)) then
 				specWarnLightningLashOther:Show(args.destName)
 			end
 		end
@@ -291,10 +302,10 @@ function mod:SPELL_AURA_APPLIED_DOSE(args)
 		warnFlamingSpear:Show(args.destName, args.amount or 1)
 		timerFlamingSpear:Start(args.destName)
 		timerFlamingSpearCD:Start()
-		if args:IsPlayer() and (args.amount or 1) >= 3 then
+		if args:IsPlayer() and (args.amount or 1) >= 2 then
 			specWarnFlamingSpear:Show(args.amount)
 		else
-			if (args.amount or 1) >= 2 and not UnitDebuff("player", GetSpellInfo(116942)) and not UnitIsDeadOrGhost("player") then
+			if (args.amount or 1) >= 2 and not UnitIsDeadOrGhost("player") or not UnitDebuff("player", GetSpellInfo(116942)) then
 				specWarnFlamingSpearOther:Show(args.destName)
 			end
 		end
@@ -302,10 +313,10 @@ function mod:SPELL_AURA_APPLIED_DOSE(args)
 		warnArcaneShock:Show(args.destName, args.amount or 1)
 		timerArcaneShock:Start(args.destName)
 		timerArcaneShockCD:Start()
-		if args:IsPlayer() and (args.amount or 1) >= 3 then
+		if args:IsPlayer() and (args.amount or 1) >= 2 then
 			specWarnArcaneShock:Show(args.amount)
 		else
-			if (args.amount or 1) >= 2 and not UnitDebuff("player", GetSpellInfo(131790)) and not UnitIsDeadOrGhost("player") then
+			if (args.amount or 1) >= 2 and not UnitIsDeadOrGhost("player") or not UnitDebuff("player", GetSpellInfo(131790)) then
 				specWarnArcaneShockOther:Show(args.destName)
 			end
 		end
@@ -313,10 +324,10 @@ function mod:SPELL_AURA_APPLIED_DOSE(args)
 		warnShadowBurn:Show(args.destName, args.amount or 1)
 		timerShadowBurn:Start(args.destName)
 		timerShadowBurnCD:Start()
-		if args:IsPlayer() and (args.amount or 1) >= 3 then
+		if args:IsPlayer() and (args.amount or 1) >= 2 then
 			specWarnShadowBurn:Show(args.amount)
 		else
-			if (args.amount or 1) >= 2 and not UnitDebuff("player", GetSpellInfo(131792)) and not UnitIsDeadOrGhost("player") then
+			if (args.amount or 1) >= 2 and not UnitIsDeadOrGhost("player") or not UnitDebuff("player", GetSpellInfo(131792)) then
 				specWarnShadowBurnOther:Show(args.destName)
 			end
 		end
@@ -352,10 +363,10 @@ function mod:SPELL_AURA_REMOVED(args)
 		end
 	elseif args:IsSpellID(116711) then
 		timerDrawFlameCD:Start(nil, specialCount + 1)
-	elseif args:IsSpellID(116364) then
-		timerArcaneVelocity:Cancel()
-		timerArcaneVelocityCD:Start(nil, specialCount + 1)
 	elseif args:IsSpellID(116417) then
+		if self.Options.SetIconOnAR then
+			self:SetIcon(args.destName, 0)
+		end
 		if args:IsPlayer() then
 			AVPlayer = false
 			if AVend then
@@ -366,6 +377,9 @@ function mod:SPELL_AURA_REMOVED(args)
 		if arcaneResonanceMarkers[args.destName] then
 			arcaneResonanceMarkers[args.destName] = free(arcaneResonanceMarkers[args.destName])
 		end
+	elseif args:IsSpellID(116364) then
+		timerArcaneVelocity:Cancel()
+		timerArcaneVelocityCD:Start(nil, specialCount + 1)
 	end
 end
 
@@ -406,6 +420,9 @@ function mod:SPELL_CAST_SUCCESS(args)
 		else
 			timerNullBarriorCD:Start()
 		end
+	elseif args:IsSpellID(116417) then
+		arIcon = 8
+		timerArcaneResonanceCD:Start()
 	end
 end
 

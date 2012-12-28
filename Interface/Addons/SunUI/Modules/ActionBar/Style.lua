@@ -1,7 +1,7 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
+﻿local S, L, DB, _, C = unpack(select(2, ...))
 --if true then return end
 local AB = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ActionStyle", "AceEvent-3.0", "AceHook-3.0")
-
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 function AB:GetScreenQuadrant(frame)
 	local x, y = frame:GetCenter()
 	local screenWidth = GetScreenWidth()
@@ -115,7 +115,7 @@ function AB:Style(button)
 		Count:ClearAllPoints()
 		Count:SetJustifyH("RIGHT")
 		Count:SetPoint("BOTTOMRIGHT", 3, 0)
-		Count:SetFont(DB.Font, C["ActionBarDB"]["FontSize"], "OUTLINE")
+		Count:SetFont(DB.Font, C["FontSize"], "OUTLINE")
 	end
 
 	if FloatingBG then
@@ -123,7 +123,7 @@ function AB:Style(button)
 	end
 
 	if Btname then
-		if C["ActionBarDB"]["HideMacroName"] then
+		if C["HideMacroName"] then
 			Btname:SetDrawLayer("HIGHLIGHT")
 			Btname:Width(50)
 		end
@@ -132,8 +132,8 @@ function AB:Style(button)
 	if not button.shadow then
 		if not totem then
 			if not flyout then
-				--button:SetWidth(C["ActionBarDB"]["ButtonSize"])
-				--button:SetHeight(C["ActionBarDB"]["ButtonSize"])
+				--button:SetWidth(C["ButtonSize"])
+				--button:SetHeight(C["ButtonSize"])
 			end
 
 			button:CreateShadow("Background")
@@ -148,11 +148,11 @@ function AB:Style(button)
 	if HotKey then
 		HotKey:ClearAllPoints()
 		HotKey:SetPoint("TOPRIGHT", 0, 0)
-		HotKey:SetFont(DB.Font, C["ActionBarDB"]["FontSize"], "OUTLINE")
+		HotKey:SetFont(DB.Font, C["FontSize"], "OUTLINE")
 		HotKey:SetShadowColor(0, 0, 0, 0.3)
 		HotKey.ClearAllPoints = function() end
 		HotKey.SetPoint = function() end
-		if C["ActionBarDB"]["HideHotKey"] then
+		if C["HideHotKey"] then
 			HotKey:SetText("")
 			HotKey:Hide()
 			HotKey.Show = function() end
@@ -277,6 +277,7 @@ function AB:OnInitialize()
 	if (IsAddOnLoaded("Dominos") or IsAddOnLoaded("Bartender4") or IsAddOnLoaded("Macaroon")) then
 		return 
 	end
+	C = SunUIConfig.db.profile.ActionBarDB
 	self:SecureHook("ActionButton_UpdateHotkeys", "UpdateHotkey")
 end
 function AB:OnEnable()

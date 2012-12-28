@@ -1,4 +1,4 @@
-local S, C, L, DB, _ = unpack(select(2, ...))
+local S, L, DB, _, C = unpack(select(2, ...))
 if(Skinner and Skinner.initialized) then Skinner.initialized.TradeFrame = true; end;
 
 TBT_SPELL_TABLE = {

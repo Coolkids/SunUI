@@ -1,6 +1,5 @@
 ﻿-- Engines
-local S, C, L, DB = unpack(select(2, ...))
-local _
+local S, L, DB, _, C = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("MiniMap", "AceTimer-3.0")
 
 local function SkinMiniMap()

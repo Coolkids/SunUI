@@ -1,6 +1,6 @@
-local S, C, L, DB = unpack(select(2, ...))
-local _
+local S, L, DB, _, C = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Announce", "AceEvent-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local baoming = {
 	--战士
 	[871] = true,	-- 盾墙
@@ -74,7 +74,7 @@ local mislead = {
 	[34477] = true,	-- 误导
 	[57934] = true,	-- 偷天
 }
-local function CombatLog(self, event, ...)
+function Module:COMBAT_LOG_EVENT_UNFILTERED(null, null, ...)
 	local arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 = ...
 	--if arg5 == UnitName("player") then print(arg2, GetSpellLink(arg12)) end
 	--打断
@@ -146,10 +146,14 @@ local function CombatLog(self, event, ...)
 		end
 	end
 end
+function Module:UpdateSet()
+	C = SunUIConfig.db.profile.AnnounceDB
+	if C["Open"] then
+		Module:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	else
+		Module:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	end
+end	
 function Module:OnInitialize()
-	C = C["AnnounceDB"]
-end	
-function Module:OnEnable()
-	if C["Open"] ~= true then return end
-	Module:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", CombatLog)
-end	
+	Module:UpdateSet()
+end

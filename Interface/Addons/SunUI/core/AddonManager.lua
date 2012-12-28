@@ -1,4 +1,4 @@
-﻿local S, C, L, DB, _ = unpack(select(2, ...))
+﻿local S, L, DB, _, C = unpack(select(2, ...))
 local font = { DB.Font, 12*S.Scale(1), "THINOUTLINE" }
 local barTex = DB.Statusbar
 local blankTex = DB.Solid

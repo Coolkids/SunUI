@@ -1,6 +1,5 @@
 if not IsAddOnLoaded("NugRunning") then return end
-local S, C, L, DB = unpack(select(2, ...))
-local _
+local S, L, DB, _, C = unpack(select(2, ...))
 --(\d+)(\s*,.+name\s*=\s*)\"[^"]+\"Ìæ»»\1\2GetSpellInfo\(\1\)
 NugRunningConfig.nameFont = { font = DB.Font, size = 12, alpha = 0.5 }
 NugRunningConfig.timeFont = { font = "interface\\addons\\SunUI\\Media\\font.ttf", size = 12, alpha = 1 }

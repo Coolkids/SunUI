@@ -1,17 +1,20 @@
-local S, C, L, DB = unpack(select(2, ...))
+local S, L, DB, _, C = unpack(select(2, ...))
 local _
 ----------------------------------------------------------------------------------------
 --	Based on tekKompare(by Tekkub)
 ----------------------------------------------------------------------------------------
-local orig1, orig2 = {}, {}
-local GameTooltip = GameTooltip
-
+local orig1, orig2, GameTooltip = {}, {}, GameTooltip
 local linktypes = {item = true, enchant = true, spell = true, quest = true, unit = true, talent = true, achievement = true, glyph = true, instancelock = true, currency = true}
 
 local function OnHyperlinkEnter(frame, link, ...)
 	local linktype = link:match("^([^:]+)")
-	if linktype and linktypes[linktype] then
-		GameTooltip:SetOwner(frame, "ANCHOR_TOPLEFT", -3, 0)
+	if linktype and linktype == "battlepet" then
+		GameTooltip:SetOwner(frame, "ANCHOR_TOPRIGHT", -3, 0)
+		GameTooltip:Show()
+		local _, speciesID, level, breedQuality, maxHealth, power, speed = strsplit(":", link)
+		BattlePetToolTip_Show(tonumber(speciesID), tonumber(level), tonumber(breedQuality), tonumber(maxHealth), tonumber(power), tonumber(speed))
+	elseif linktype and linktypes[linktype] then
+		GameTooltip:SetOwner(frame, "ANCHOR_TOPRIGHT", -3, 0)
 		GameTooltip:SetHyperlink(link)
 		GameTooltip:Show()
 	end
@@ -19,19 +22,22 @@ local function OnHyperlinkEnter(frame, link, ...)
 	if orig1[frame] then return orig1[frame](frame, link, ...) end
 end
 
-local function OnHyperlinkLeave(frame, ...)
-	GameTooltip:Hide()
-	if orig2[frame] then return orig2[frame](frame, ...) end
+local function OnHyperlinkLeave(frame, link, ...)
+	local linktype = link:match("^([^:]+)")
+	if linktype and linktype == "battlepet" then
+		BattlePetTooltip:Hide()
+	elseif linktype and linktypes[linktype] then
+		GameTooltip:Hide()
+	end
+
+	if orig1[frame] then return orig1[frame](frame, link, ...) end
 end
 
-local _G = getfenv(0)
 for i = 1, NUM_CHAT_WINDOWS do
-	if i ~= 2 then
-		local frame = _G["ChatFrame"..i]
-		orig1[frame] = frame:GetScript("OnHyperlinkEnter")
-		frame:SetScript("OnHyperlinkEnter", OnHyperlinkEnter)
+	local frame = _G["ChatFrame"..i]
+	orig1[frame] = frame:GetScript("OnHyperlinkEnter")
+	frame:SetScript("OnHyperlinkEnter", OnHyperlinkEnter)
 
-		orig2[frame] = frame:GetScript("OnHyperlinkLeave")
-		frame:SetScript("OnHyperlinkLeave", OnHyperlinkLeave)
-	end
+	orig2[frame] = frame:GetScript("OnHyperlinkLeave")
+	frame:SetScript("OnHyperlinkLeave", OnHyperlinkLeave)
 end

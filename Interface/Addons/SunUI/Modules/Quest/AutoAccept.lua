@@ -1,5 +1,6 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
+﻿local S, L, DB, _, C = unpack(select(2, ...))
 local AAQ = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("AutoAccept", "AceEvent-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local isRepeatableAuto = false --是否开启可重复交接任务自动交接（比如一包食材换徽记）
 
 completed_quests = {}
@@ -123,14 +124,24 @@ end
 
 QuestInfoDescriptionText.SetAlphaGradient=function() return false end
 
-function AAQ:OnInitialize()
-	if C["MiniDB"]["AutoQuest"] then
+function AAQ:UpdateSet()
+	if C["AutoQuest"] then
 		AAQ:RegisterEvent("GOSSIP_SHOW", On_GOSSIP_SHOW)
 		AAQ:RegisterEvent("QUEST_COMPLETE", On_QUEST_COMPLETE)
 		AAQ:RegisterEvent("QUEST_DETAIL", On_QUEST_DETAIL)
 		AAQ:RegisterEvent("QUEST_GREETING", On_QUEST_GREETING)
 		AAQ:RegisterEvent("QUEST_LOG_UPDATE", On_QUEST_LOG_UPDATE)
 		AAQ:RegisterEvent("QUEST_PROGRESS", On_QUEST_PROGRESS)
-		--self:RegisterEvent('QUEST_FINISHED')
+	else
+		self:UnregisterEvent("GOSSIP_SHOW")
+		self:UnregisterEvent("QUEST_COMPLETE")
+		self:UnregisterEvent("QUEST_DETAIL")
+		self:UnregisterEvent("QUEST_GREETING")
+		self:UnregisterEvent("QUEST_LOG_UPDATE")
+		self:UnregisterEvent("QUEST_PROGRESS")
 	end
+end
+function AAQ:OnInitialize()
+	C = SunUIConfig.db.profile.MiniDB
+	self:UpdateSet()
 end

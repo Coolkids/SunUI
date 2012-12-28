@@ -1,8 +1,8 @@
 ﻿-- Engines
-local S, C, L, DB = unpack(select(2, ...))
+local S, L, DB, _, C = unpack(select(2, ...))
 local Module =LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("RaidBuffReminder", "AceEvent-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local _G = _G
-local _
 local BuffFrame, IsInParty = {}, false
 local Melee = false
 local RaidBuffList = {
@@ -78,7 +78,7 @@ local function OnEvent_ACTIVE_TALENT_GROUP_CHANGED(event, ...)
 	end
 end
 local function OnEvent_UNIT_AURA(event, unit, ...)
-	if C["ReminderDB"].ShowOnlyInParty and not IsInParty then 
+	if C.ShowOnlyInParty and not IsInParty then 
 		for key, value in pairs(BuffFrame) do value:SetAlpha(0) end
 		return
 	end
@@ -158,7 +158,7 @@ local function OnEvent_UNIT_AURA(event, unit, ...)
 	end
 end
 local function OnEvent_PLAYER_ENTERING_WORLD(event, ...)
-	if C["ReminderDB"].ShowOnlyInParty and not IsInParty then 
+	if C.ShowOnlyInParty and not IsInParty then 
 		for key, value in pairs(BuffFrame) do value:SetAlpha(0) end
 		return
 	end
@@ -240,7 +240,7 @@ end
 local function BuildBuffFrame()
 	for i = 1, 6 do
 		local Temp = CreateFrame("Frame", nil, Minimap)
-		--Temp:SetSize(C["ReminderDB"].RaidBuffSize, C["ReminderDB"].RaidBuffSize)
+		--Temp:SetSize(C.RaidBuffSize, C.RaidBuffSize)
 		Temp:SetSize((120-(6-1)*2)/6, (120-(6-1)*2)/6)
 		Temp:SetFrameStrata("LOW")
 		Temp:CreateBorder()
@@ -249,13 +249,13 @@ local function BuildBuffFrame()
 		Temp.Icon:SetPoint("TOPLEFT", Temp, "TOPLEFT", 1, -1)
 		Temp.Icon:SetPoint("BOTTOMRIGHT", Temp, "BOTTOMRIGHT", -1, 1)
 		
-		if C["ReminderDB"].RaidBuffDirection == 1 then
+		if C.RaidBuffDirection == 1 then
 			if i == 1 then
 				MoveHandle.Reminder = S.MakeMoveHandle(Temp, L["药水"], "Reminder")
 			else
 				Temp:SetPoint("LEFT", BuffFrame[i-1], "RIGHT", 2, 0)
 			end
-		elseif C["ReminderDB"].RaidBuffDirection == 2 then
+		elseif C.RaidBuffDirection == 2 then
 			if i == 1 then
 				MoveHandle.Reminder = S.MakeMoveHandle(Temp, L["药水"], "Reminder")
 			else
@@ -268,7 +268,8 @@ local function BuildBuffFrame()
 end
 
 function Module:OnEnable()
-	if not C["ReminderDB"].ShowRaidBuff then return end
+	C = SunUIConfig.db.profile.ReminderDB
+	if not C.ShowRaidBuff then return end
 	OnEvent_GROUP_ROSTER_UPDATE()
 	OnEvent_ACTIVE_TALENT_GROUP_CHANGED()
 	BuildBuffFrame()

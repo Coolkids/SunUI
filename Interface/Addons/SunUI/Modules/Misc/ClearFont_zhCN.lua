@@ -1,8 +1,9 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
-local _
+﻿local S, L, DB, _, C = unpack(select(2, ...))
+local C
 if not (GetLocale() == "zhCN") then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ClearFont_zhCN", "AceEvent-3.0")
-
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
+local CF_SCALE
 -- 指出在哪里寻找字体
 local CLEAR_FONT_BASE = "Fonts\\"
 
@@ -362,6 +363,6 @@ local function ApplySystemFonts(event, addon)
 
 end
 function Module:OnInitialize()
-	CF_SCALE = C["MiniDB"]["FontScale"]*S.Scale(1)
+	CF_SCALE = SunUIConfig.db.profile.MiniDB.FontScale*S.Scale(1)
 	Module:RegisterEvent("ADDON_LOADED", ApplySystemFonts);
 end

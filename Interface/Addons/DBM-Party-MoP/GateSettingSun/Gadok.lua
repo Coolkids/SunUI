@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7575 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7834 $"):sub(12, -3))
 mod:SetCreatureID(56589)
 mod:SetModelID(43275)
 mod:SetZone()
@@ -57,10 +57,10 @@ function mod:SPELL_CAST_SUCCESS(args)
 end
 
 function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
-	if spellId == 115458 and destGUID == UnitGUID("player") and self:AntiSpam(3, 1) then
+	if spellId == 115458 and destGUID == UnitGUID("player") and self:AntiSpam() then
 		specWarnAcidBomb:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
-	elseif spellId == 116297 and destGUID == UnitGUID("player") and self:AntiSpam(3, 2) then
+	elseif spellId == 116297 and destGUID == UnitGUID("player") and self:AntiSpam() then
 		specWarnStafingRunAoe:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
 	end

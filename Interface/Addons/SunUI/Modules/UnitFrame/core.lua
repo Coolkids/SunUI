@@ -1,7 +1,7 @@
 ﻿local addon, ns = ...
 local oUF = ns.oUF or oUF 
 local cast = ns.cast
-local S, C, L, DB = unpack(select(2, ...))
+local S, L, DB, _, C = unpack(select(2, ...))
 local UF = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("UnitFrame")
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local P,U
@@ -368,13 +368,8 @@ local function gen_castbar(f)
 	h:SetAllPoints()
 	h:CreateShadow()
 	S.CreateBack(h)
-	
 	--spark
-	local sp =  s:CreateTexture(nil, "OVERLAY")
-	sp:SetVertexColor(0, 0, 0, 1)
-	sp:SetTexture("Interface\\AddOns\\SunUI\\media\\mark")
-	sp:SetPoint("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT", -10, 0)
-	sp:SetPoint("BOTTOMRIGHT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 10, 0)
+	local sp
     --spell text
     local txt = gen_fontstring(s, DB.Font, (U["FontSize"]+1)*S.Scale(1), "THINOUTLINE")
    
@@ -394,7 +389,17 @@ local function gen_castbar(f)
     i:Point("BOTTOMRIGHT", s, "BOTTOMLEFT", -6, 0)
     i:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	S.CreateShadow(s, i)
-    
+	
+	if f.mystyle ~= "pet" then
+		s.SetStatusBarColor = function(t, r, g, b)
+			S.CreateTop(s:GetStatusBarTexture(), r, g, b)
+		end
+		sp =  s:CreateTexture(nil, "OVERLAY")
+		sp:SetVertexColor(0, 0, 0, 1)
+		sp:SetTexture("Interface\\AddOns\\SunUI\\media\\mark")
+		sp:SetPoint("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT", -10, 0)
+		sp:SetPoint("BOTTOMRIGHT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 10, 0)
+	end
     if f.mystyle == "focus" and not U["focusCBuserplaced"] then
 		s:Size(U["FocusCastBarWidth"],U["FocusCastBarHeight"])
 		MoveHandle.Castbarfouce = S.MakeMoveHandle(s, L["焦点施法条"], "FocusCastbar")
@@ -405,7 +410,14 @@ local function gen_castbar(f)
 		s:SetScale(f:GetScale())
 		i:SetSize(f.height,f.height)
 		i:SetPoint("TOPRIGHT", f.Health, "TOPLEFT", -5, 0)
-		s:SetFrameLevel(3)
+		s:SetStatusBarColor(0, 0, 0, 0)
+		s.SetStatusBarColor = function() end
+		sp = s:CreateTexture(nil, "OVERLAY")
+		sp:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
+		sp:SetBlendMode("ADD")
+		sp:SetAlpha(.8)
+		sp:SetPoint("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT", -10, 10)
+		sp:SetPoint("BOTTOMRIGHT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -10)
 		txt:Hide() t:Hide() h:Hide()
     elseif f.mystyle == "arena" then
 		s:Size(f.width-(f.height/1.4+4),f.height/1.4)
@@ -663,8 +675,8 @@ local function createDebuffs(f)
 		d:SetPoint("TOPLEFT", f, "TOPRIGHT", d.spacing, -2)
 		d.initialAnchor = "TOPLEFT"
     elseif f.mystyle=="pet" then
-		d:SetPoint("TOPRIGHT", f, "TOPLEFT", -d.spacing, -2)
-		d["growth-x"] = "LEFT"
+		d:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, d.spacing)
+		d["growth-x"] = "RIGHT"
     elseif f.mystyle=="arena" then
 		d.showDebuffType = false
 		d.initialAnchor = "TOPLEFT"

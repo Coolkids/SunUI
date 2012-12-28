@@ -1,7 +1,7 @@
 -- *****************************************************
 -- ** BubbleBobble by hankthetank
 -- *****************************************************
-local S, C, L, DB = unpack(select(2, ...))
+local S, L, DB, _, C = unpack(select(2, ...))
 local _
 local settings = {
 	bg = {

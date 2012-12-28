@@ -1,5 +1,6 @@
-local S, C, L, DB = unpack(select(2, ...))
+local S, L, DB, _, C = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SunUI fixPX", "AceEvent-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 --  自动设置聊天框体和UI缩放
 local function SetChatFrame()
 	ChatFrame1:ClearAllPoints()
@@ -158,7 +159,7 @@ end
 function Module:OnInitialize()
 	Module:RegisterEvent("PLAYER_ENTERING_WORLD", Fix1px)
 
-	local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/C["MiniDB"]["uiScale"]
+	local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/SunUIConfig.db.profile.MiniDB.uiScale
 
 	local function sceenscale(x)
 		return (mult*math.floor(x/mult+.5)) 

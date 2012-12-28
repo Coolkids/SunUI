@@ -1,6 +1,6 @@
 local n = select(2, ...)
 local l = n.locale
-local S, C, L, DB = unpack(SunUI)
+local S, L, DB, _ = unpack(SunUI)
 -- window settings
 n.windowsettings = {
 	pos = {"BOTTOMRIGHT", -8, 25},

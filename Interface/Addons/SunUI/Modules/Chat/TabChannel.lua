@@ -1,5 +1,4 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
-local _
+﻿local S, L, DB, _, C = unpack(select(2, ...))
 --按TAB切換頻道.如果是在密語頻道則循環前面密過的人名,SHIFT+TAB反序切换频道
 function ChatEdit_CustomTabPressed(self)
    if (self:GetAttribute("chatType") == "SAY") then

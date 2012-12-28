@@ -1,14 +1,13 @@
 ﻿local addon, engine = ...
-engine[1] = {} -- T, functions, constants, variables
-engine[2] = {} -- C, config
-engine[3] = {} -- L, localization
-engine[4] = {} -- G, globals (Optionnal)
+engine[1] = {} -- S, functions, constants, variables
+engine[2] = {} -- L, localization
+engine[3] = {} -- DB
 
 SunUI = engine
 local SunUI = LibStub("AceAddon-3.0"):NewAddon("SunUI")
-local S, C, L, DB = unpack(select(2, ...))
+local S, L, DB, _, C = unpack(select(2, ...))
 local _G =_G
-local _
+MoveHandle = {}
 --全局设置
 local Media = "Interface\\Addons\\SunUI\\media\\"
 DB.dummy = function() return end

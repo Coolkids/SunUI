@@ -1,10 +1,9 @@
-﻿-- Engines
-local S, C, L, DB = unpack(select(2, ...))
+-- Engines
+local S, L, DB, _, C = unpack(select(2, ...))
 local Buff = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Buff", "AceHook-3.0")
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local holder = CreateFrame("Frame", "BuffFrameHolder", UIParent)
 local debuffholder = CreateFrame("Frame", "DeBuffFrameHolder", UIParent)
-local _
 local font = "Interface\\Addons\\SunUI\\Media\\font.ttf"
 -- making frame to hold all buff frame elements
 local function PositionTempEnchant()
@@ -22,7 +21,7 @@ local function CreateBuffStyle(buff, t)
 	local count 	= _G[bn.."Count"]
 	buff:SetSize(C["IconSize"],C["IconSize"])
 	icon:SetTexCoord(.08, .92, .08, .92)
-	
+
 	if icon and not buff.shadow then
 		local h = CreateFrame("Frame" , nil, buff)
 		h:SetAllPoints(buff)
@@ -38,7 +37,7 @@ local function CreateBuffStyle(buff, t)
 		buff:CreateShadow()
 		buff:StyleButton(true)
 	end
-	
+
 	if border then 
 		if t == "enchant" then border:SetAlpha(0) buff.border:SetBackdropBorderColor(0.7,0,1) end
 	end
@@ -107,11 +106,10 @@ function Buff:OverrideDebuffAnchors(buttonName, i)
 	local PreRow = _G[buttonName..(i-C["IconPerRow"])]
 	buff:ClearAllPoints()
 	if not buff.styled then CreateBuffStyle(buff) end
-	
+
 	if i == 1 then
 		buff:SetPoint("CENTER", debuffholder)
 	else
-		buff:SetPoint("RIGHT", _G[buttonName..(i-1)], "LEFT", -8, 0)
 		if C["DebuffDirection"] == 1 then
 			if i%C["IconPerRow"] == 1 then
 				buff:SetPoint("TOP", PreRow, "BOTTOM", 0, -23)
@@ -150,20 +148,17 @@ local function OverrideTempEnchantAnchors()
 		end
 	end
 end
-	
+
 local function initialize()
-	--position buff & temp enchant frames
 	PositionTempEnchant()
 	BuffFrame:SetParent(BuffFrameHolder)
 	BuffFrame:ClearAllPoints()
 	BuffFrame:SetAllPoints(BuffFrameHolder)
-	--stylize temp enchant frames
 	for i=1, NUM_TEMP_ENCHANT_FRAMES do
 		local buff = _G["TempEnchant"..i]
 		if not buff.styled then CreateBuffStyle(buff, "enchant") end
 	end
 	OverrideTempEnchantAnchors()
-	--getting rid of consolidate buff frame
 	if ConsolidatedBuffs then
 		ConsolidatedBuffs:UnregisterAllEvents()
 		ConsolidatedBuffs:HookScript("OnShow", function(s)
@@ -206,6 +201,74 @@ function Buff:UpdateSet()
 	end
 	holder:SetSize(C["IconSize"],C["IconSize"])
 	debuffholder:SetSize(C["IconSize"],C["IconSize"])
+end
+function Buff:UpdateBuffDirection()
+	local previousBuff
+	local numBuffs = 0;
+	for i=1, BUFF_ACTUAL_DISPLAY do
+		local buff = _G["BuffButton"..i]
+		numBuffs = numBuffs + 1
+		index = numBuffs
+		buff:ClearAllPoints()
+		if ((index > 1) and (mod(index, C["IconPerRow"]) == 1)) then
+			buff:SetPoint("TOP", aboveBuff, "BOTTOM", 0, -23)
+			aboveBuff = buff; 
+		elseif ( index == 1 ) then
+			local  mh, _, _, oh = GetWeaponEnchantInfo()
+			if (mh and oh) and not UnitHasVehicleUI("player") then
+				if C["BuffDirection"] == 1 then
+					buff:SetPoint("RIGHT", TempEnchant2, "LEFT", -8, 0)
+				end
+				if C["BuffDirection"] == 2 then
+					TempEnchant2:ClearAllPoints()
+					TempEnchant2:SetPoint("LEFT", TempEnchant1, "RIGHT", 8, 0)
+					buff:SetPoint("LEFT", TempEnchant2, "RIGHT", 8, 0)
+				end
+				aboveBuff = TempEnchant2
+			elseif ((mh and not oh) or (oh and not mh)) and not UnitHasVehicleUI("player") then
+				if C["BuffDirection"] == 1 then
+					buff:SetPoint("RIGHT", TempEnchant1, "LEFT", -8, 0)
+				end
+				if C["BuffDirection"] == 2 then
+					buff:SetPoint("LEFT", TempEnchant1, "RIGHT", 8, 0)
+				end
+				aboveBuff = TempEnchant1
+			else
+				buff:SetPoint("CENTER", BuffFrame, "CENTER", 0, 0)
+				aboveBuff = buff
+			end
+		else
+			if C["BuffDirection"] == 1 then
+				buff:SetPoint("RIGHT", previousBuff, "LEFT", -8, 0)
+			end
+			if C["BuffDirection"] == 2 then
+				buff:SetPoint("LEFT", previousBuff, "RIGHT", 8, 0)
+			end
+		end
+		previousBuff = buff
+	end
+end
+function Buff:UpdateDebuffDirection()
+	for i=1, DEBUFF_ACTUAL_DISPLAY do
+		if i == 1 then
+			buff:SetPoint("CENTER", debuffholder)
+		else
+			if C["DebuffDirection"] == 1 then
+				if i%C["IconPerRow"] == 1 then
+					buff:SetPoint("TOP", PreRow, "BOTTOM", 0, -23)
+				else
+					buff:SetPoint("RIGHT", Pre, "LEFT", -8, 0)
+				end
+			end
+			if C["DebuffDirection"] == 2 then
+				if i%C["IconPerRow"] == 1 then
+					buff:SetPoint("TOP", PreRow, "BOTTOM", 0, -23)
+				else
+					buff:SetPoint("LEFT", Pre, "RIGHT", 8, 0)
+				end
+			end
+		end
+	end
 end
 function Buff:OnInitialize()
 	C = SunUIConfig.db.profile.BuffDB

@@ -1,7 +1,7 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
+local S, L, DB, _, C = unpack(select(2, ...))
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local _G =_G
-local _
+
 local filename, fontHeight, _ = GameFontNormal:GetFont()
 -- just for creating text
 function S.MakeFontString(parent, size, fontStyle)
@@ -231,10 +231,10 @@ end
 
 function S.CreateShadow(p, f, t) 
 	if f.sw then return end
-	
+
 	local borderr, borderg, borderb, bordera = 0, 0, 0, 1
 	local backdropr, backdropg, backdropb, backdropa =  .05, .05, .05, .9
-	
+
 	if t == "Background" then
 		backdropa = 0.6
 	elseif t == "UnitFrame" then 
@@ -242,14 +242,14 @@ function S.CreateShadow(p, f, t)
 	else
 		backdropa = 0
 	end
-	
+
 	local border = CreateFrame("Frame", nil, p)
 	border:SetFrameLevel(1)
 	border:SetPoint("TOPLEFT", f, -S.mult, S.mult)
 	border:SetPoint("BOTTOMRIGHT", f, S.mult, -S.mult)
 	border:CreateBorder()
 	f.border = border
-	
+
 	local shadow = CreateFrame("Frame", nil, border)
 	shadow:SetFrameLevel(0)
 	shadow:Point("TOPLEFT", -3, 3)
@@ -310,9 +310,9 @@ function S.CreateBack(f, orientation, a)
 	gradient:SetPoint("BOTTOMRIGHT")
 	gradient:SetTexture(DB.Statusbar)
 	if orientation then
-		gradient:SetGradientAlpha("HORIZONTAL",  0, 0, 0, a or 0.5, .35, .35, .35, a or .45)
+		gradient:SetGradientAlpha("HORIZONTAL",  0, 0, 0, a or 0.4, .35, .35, .35, a or .45)
 	else
-		gradient:SetGradientAlpha("VERTICAL",  0, 0, 0, a or 0.5, .35, .35, .35, a or .45)
+		gradient:SetGradientAlpha("VERTICAL",  0, 0, 0, a or 0.4, .35, .35, .35, a or .45)
 	end
 end
 function S.CreateTop(f, r, g, b, orientation, a)
@@ -333,9 +333,10 @@ end
 function S.CreateMark(f, w)
 	local spark =  f:CreateTexture(nil, "OVERLAY", 1)
 	spark:SetTexture("Interface\\Buttons\\WHITE8x8")
-	spark:Size(1, w or f:GetHeight())
 	spark:SetVertexColor(0, 0, 0)
-	spark:SetPoint("LEFT", f:GetStatusBarTexture(), "RIGHT", 0, 0)
+	spark:Width(1)
+	spark:Point("TOPLEFT", f:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+	spark:Point("BOTTOMLEFT", f:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
 end
 local players = {
 	["Cooikid"] = true,

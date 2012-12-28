@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7617 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8292 $"):sub(12, -3))
 mod:SetCreatureID(59789)
 mod:SetModelID(27705)
 mod:SetZone()
@@ -28,9 +28,9 @@ local specWarnWind				= mod:NewSpecialWarningMove(115291)  --voice
 
 
 local timerEvictSoul			= mod:NewTargetTimer(6, 115297)
-local timerEvictSoulCD			= mod:NewCDTimer(40, 115297)
-local timerRaiseCrusadeCD		= mod:NewNextTimer(60, 115139)
-local timerSummonSpiritsCD		= mod:NewNextTimer(60, 115147)
+local timerEvictSoulCD			= mod:NewNextTimer(41, 115297)
+local timerRaiseCrusadeCD		= mod:NewNextTimer(60, 115139)--Both of these are 40 second cds in challenge modes
+local timerSummonSpiritsCD		= mod:NewNextTimer(60, 115147)--Although correction is only needed in one spot
 
 function mod:OnCombatStart(delay)
 	timerRaiseCrusadeCD:Start(6-delay)
@@ -64,12 +64,16 @@ function mod:SPELL_CAST_SUCCESS(args)
 		warnSummonSpirits:Show()
 		specWarnEmpoweredSpirit:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\killspirit.mp3") --靈魂快打
-		timerRaiseCrusadeCD:Start(20)--Because they are both 60 second near precise timers, we alternate the timers to reduce needing to have both up at once.
+		timerRaiseCrusadeCD:Start(20)--Raise crusaders always 20 seconds after spirits in all modes
 		sndWOP:Schedule(19, "Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3") --準備小怪
 	elseif args:IsSpellID(115139) then--Raise Fallen Crusade
 		warnRaiseCrusade:Show()
 		specWarnFallenCrusader:Show()
-		timerSummonSpiritsCD:Start(40)
+		if self:IsDifficulty("challenge5") then
+			timerSummonSpiritsCD:Start(20)
+		else
+			timerSummonSpiritsCD:Start(40)
+		end
 	end
 end
 

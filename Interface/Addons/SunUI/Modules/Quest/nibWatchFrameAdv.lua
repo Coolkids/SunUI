@@ -1,8 +1,8 @@
 -- Author: Nibelheim
 -- Notes: Adjust Position, Colors and Auto-hide the Quest Watch Frame
 -- Version: 1.2
-local S, C, L, DB = unpack(select(2, ...))
-local _
+local S, L, DB, _, C = unpack(select(2, ...))
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local nWFA = CreateFrame("Frame")
 local EventsRegistered
 local _G = _G
@@ -259,3 +259,46 @@ hooksecurefunc("WatchFrameItem_UpdateCooldown", function(self)
 		self.skinned = true
 	end
 end)
+
+local quickquest = CreateFrame("CheckButton", nil, WatchFrameCollapseExpandButton)
+quickquest:ClearAllPoints()
+quickquest:SetSize(22,22)
+quickquest:SetPoint("TOPRIGHT", WatchFrame, "TOPLEFT", -5, 0)
+quickquest:SetScript("OnClick", function(self)
+	if SunUIConfig.db.profile.MiniDB.AutoQuest then 
+		SunUIConfig.db.profile.MiniDB.AutoQuest = false
+	else
+		SunUIConfig.db.profile.MiniDB.AutoQuest = true
+	end
+	local AAQ = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("AutoAccept")
+	AAQ:UpdateSet()
+	self:SetChecked(SunUIConfig.db.profile.MiniDB.AutoQuest)
+end)
+quickquest:SetScript("OnEnter", function(self)
+ 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+	GameTooltip:AddLine(L["自动交接任务"])
+	GameTooltip:Show()
+end)
+quickquest:SetScript("OnEvent", function(self)
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+	self:SetChecked(SunUIConfig.db.profile.MiniDB.AutoQuest)
+	-- if WatchFrameCollapseExpandButton:IsShown() then
+		-- self:Show()
+	-- end
+end)
+quickquest:SetScript("OnLeave", function() GameTooltip:Hide() end)
+quickquest:SetNormalTexture("Interface\\Buttons\\UI-CheckBox-Up")
+quickquest:SetPushedTexture("Interface\\Buttons\\UI-CheckBox-Down")
+quickquest:SetHighlightTexture("Interface\\Buttons\\UI-CheckBox-Highlight")
+quickquest:SetDisabledCheckedTexture("Interface\\Buttons\\UI-CheckBox-Check-Disabled")
+quickquest:SetCheckedTexture("Interface\\Buttons\\UI-CheckBox-Check")
+quickquest:RegisterEvent("PLAYER_ENTERING_WORLD")
+S.ReskinCheck(quickquest)
+-- WatchFrameCollapseExpandButton:HookScript("OnShow", function()
+	-- print("Show")
+	-- quickquest:Show()
+-- end)
+-- WatchFrameCollapseExpandButton:HookScript("OnHide", function()
+	-- print("Hide")
+	-- quickquest:Hide()
+-- end)

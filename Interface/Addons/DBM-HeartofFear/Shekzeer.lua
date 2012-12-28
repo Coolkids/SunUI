@@ -37,7 +37,7 @@ local warnVisions				= mod:NewTargetAnnounce(124862, 4)--Visions of Demise
 local warnPhase3				= mod:NewPhaseAnnounce(3)
 local warnCalamity				= mod:NewSpellAnnounce(124845, 3, nil, mod:IsHealer())
 local warnConsumingTerror		= mod:NewSpellAnnounce(124849, 4, nil, not mod:IsTank())
-local warnHeartofFear			= mod:NewTargetAnnounce(125638, 4)
+local warnHeartOfFear			= mod:NewTargetAnnounce(125638, 4)
 
 local specwarnSonicDischarge	= mod:NewSpecialWarningSpell(123504, nil, nil, nil, true)
 local specWarnEyes				= mod:NewSpecialWarningStack(123707, mod:IsTank(), 4)

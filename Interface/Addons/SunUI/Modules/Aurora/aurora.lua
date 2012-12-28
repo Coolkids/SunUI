@@ -1,5 +1,6 @@
-local S, C, L, DB = unpack(select(2, ...))
+local S, L, DB, _, C = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Aurora", "AceEvent-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local merchatcolor = false
 local alpha = .5
 local class = DB.MyClass
@@ -6729,7 +6730,8 @@ local function SkinTooltip()
 end
 
 function Module:OnInitialize()
-	if not C["MiniDB"]["Aurora"] and IsAddOnLoaded("Aurora") then return end
+	C = SunUIConfig.db.profile.MiniDB
+	if not C["Aurora"] and IsAddOnLoaded("Aurora") then return end
 	Module:RegisterEvent("ADDON_LOADED", SkinBlz)
 	Module:RegisterEvent("PLAYER_ENTERING_WORLD", SkinTooltip)
 end

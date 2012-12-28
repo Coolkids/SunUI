@@ -1,17 +1,15 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
+﻿local S, L, DB, _, C = unpack(select(2, ...))
 
 local sceenheight = string.match(GetCVar("gxResolution"), "%d+x(%d+)")
-local scale = max(0.64, min(1.15, GetCVar('uiScale') or UIParent:GetScale() or 768/sceenheight))
-local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/scale
-
-local function sceenscale(x)
-	return (mult*math.floor(x/mult+.5)) 
-end
-S.Scale = function(x) return sceenscale(x) end
-S.mult = mult
-
 local HiddenFrame = CreateFrame("Frame")
 HiddenFrame:Hide()
+
+S.mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/(max(0.64, min(1.15, GetCVar('uiScale') or UIParent:GetScale() or 768/sceenheight)))
+local function sceenscale(x)
+	return (S.mult*math.floor(x/(S.mult)+.5)) 
+end
+S.Scale = function(x) return sceenscale(x) end
+
 local function Kill(object)
 	if object.UnregisterAllEvents then
 		object:UnregisterAllEvents()

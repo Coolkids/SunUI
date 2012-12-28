@@ -1,7 +1,6 @@
-﻿-- Engines
-local S, C, L, DB = unpack(select(2, ...))
-local _
+local S, L, DB, _, C = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ExpBar", "AceEvent-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local ExpBar = nil
 local es, hs
 local exptitle1 , exptitle2, exptext1, exptext2 = "", "", "", ""
@@ -38,24 +37,24 @@ function Module:BuildExpBar()
 	local h = CreateFrame("StatusBar", nil, ExpBar)
 	h:SetFrameLevel(1)
 	h:SetAllPoints()
-	if C["ActionBarDB"]["ExpbarFadeOut"] then
+	if C["ExpbarFadeOut"] then
 		ExpBar:SetAlpha(0)
 	end
-	if not C["ActionBarDB"]["ExpbarUp"] then
-		ExpBar:SetSize(C["ActionBarDB"]["ExpbarWidth"], C["ActionBarDB"]["ExpbarHeight"])
+	if not C["ExpbarUp"] then
+		ExpBar:SetSize(C["ExpbarWidth"], C["ExpbarHeight"])
 		S.CreateBack(h)
 		S.CreateMark(ExpBar)
 	else
-		ExpBar:SetSize(C["ActionBarDB"]["ExpbarHeight"], C["ActionBarDB"]["ExpbarWidth"])
+		ExpBar:SetSize(C["ExpbarHeight"], C["ExpbarWidth"])
 		ExpBar:SetOrientation("VERTICAL")
 		ExpBar.Rest:SetOrientation("VERTICAL")
 		S.CreateBack(h, true) 
 	end
 	MoveHandle.ExpBar = S.MakeMoveHandle(ExpBar, L["经验条"], "expbar")
-	
+
 	ExpBar:SetScript("OnEnter", function(self)
 		if InCombatLockdown() then return end
-		if C["ActionBarDB"]["ExpbarFadeOut"] then
+		if C["ExpbarFadeOut"] then
 			UIFrameFadeIn(self, 1, self:GetAlpha(), 1)
 		end
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
@@ -72,7 +71,7 @@ function Module:BuildExpBar()
 	end)
 	ExpBar:SetScript("OnLeave",function(self)
 		if InCombatLockdown() then return end
-		if C["ActionBarDB"]["ExpbarFadeOut"] then
+		if C["ExpbarFadeOut"] then
 			UIFrameFadeOut(self, 1, self:GetAlpha(), 0)
 		end
 		GameTooltip:Hide()
@@ -97,7 +96,7 @@ function Module:OnEvent()
 		ExpBar.Rest:SetValue(0)
 		if name then
 			ExpBar:SetStatusBarColor(unpack(FactionInfo[standingID][1]))
-			if not C["ActionBarDB"]["ExpbarUp"] then
+			if not C["ExpbarUp"] then
 				S.CreateTop(es, FactionInfo[standingID][1][1], FactionInfo[standingID][1][2], FactionInfo[standingID][1][3])
 			else
 				S.CreateTop(es, FactionInfo[standingID][1][1], FactionInfo[standingID][1][2], FactionInfo[standingID][1][3], true)
@@ -120,7 +119,7 @@ function Module:OnEvent()
 	else
 		ExpBar:SetStatusBarColor(0.4, 0.1, 0.6, 1)
 		ExpBar.Rest:SetStatusBarColor(0.0, 0.4, 0.8, 1)
-		if not C["ActionBarDB"]["ExpbarUp"] then
+		if not C["ExpbarUp"] then
 			S.CreateTop(es, 0.4, 0.1, 0.6)
 			S.CreateTop(hs, 0.0, 0.4, 0.8)
 		else
@@ -150,14 +149,27 @@ function Module:OnEvent()
 			exptext2 = ""
 		end
 	end
-	
 end
-
-function Module:OnEnable()
+function Module:UpdateSize()
+	if not C["ExpbarUp"] then
+		ExpBar:SetSize(C["ExpbarWidth"], C["ExpbarHeight"])
+		ExpBar:SetOrientation("HORIZONTAL")
+		ExpBar.Rest:SetOrientation("HORIZONTAL")
+	else
+		ExpBar:SetSize(C["ExpbarHeight"], C["ExpbarWidth"])
+		ExpBar:SetOrientation("VERTICAL")
+		ExpBar.Rest:SetOrientation("VERTICAL")
+	end
+end
+function Module:UpdateFade()
+	if C["ExpbarFadeOut"] then
+		UIFrameFadeOut(ExpBar, 1, ExpBar:GetAlpha(), 0)
+	else
+		UIFrameFadeIn(ExpBar, 1, ExpBar:GetAlpha(), 1)
+	end
+end
+function Module:OnInitialize()
+	C = SunUIConfig.db.profile.ActionBarDB
 	Module:BuildExpBar()
 	Module:Register()
 end
-
-
-
-

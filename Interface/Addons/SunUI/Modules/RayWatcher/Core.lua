@@ -1,7 +1,7 @@
 local RayUIWatcher = LibStub("AceAddon-3.0"):NewAddon("RayWatcher", "AceEvent-3.0")
-local S, C, L, DB = unpack(select(2, ...))
+local S, L, DB, _, C = unpack(select(2, ...))
 local _, ns = ...
-local _, myclass = UnitClass("player")
+local myclass = DB.MyClass
 local colors = RAID_CLASS_COLORS
 ns.modules = {}
 local testing = false

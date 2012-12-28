@@ -1,10 +1,7 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
- if IsAddOnLoaded("TipTac") or IsAddOnLoaded("FreebTip") or IsAddOnLoaded("bTooltip") or IsAddOnLoaded("PhoenixTooltip") or IsAddOnLoaded("Icetip") then
-	return
-end
+﻿local S, L, DB, _, C = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Tooltips", "AceEvent-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local _G = _G
-local _
 local reactionlist  = {
 	[1] = FACTION_STANDING_LABEL1,
 	[2] = FACTION_STANDING_LABEL2,
@@ -38,22 +35,12 @@ local tooltips = {
 	DropDownList1MenuBackdrop, 
 	DropDownList2MenuBackdrop, 
 }
-local types = {}
-if DB.zone == "zhCN" then 
-	types = {
-	rare = " |cffFF44FF稀有|r ",
+types = {
+	rare = " |cffFF44FFR|r ",
 	elite = " |cffFFFF00+|r ",
-	worldboss = " |cffFF1919首领|r ",
-	rareelite = " |cff9933FA稀有|r |cffFFFF00+|r ",
-	}
-else
-	types = {
-	rare = " |cffFF44FF稀有|r ",
-	elite = " |cffFFFF00+|r ",
-	worldboss = " |cffFF1919首領|r ",
-	rareelite = " |cff9933FA稀有|r |cffFFFF00+|r ",
-	}
-end
+	worldboss = " |cffFF1919B|r ",
+	rareelite = " |cff9933FAR|r |cffFFFF00+|r ",
+}
 local tooptexture = GameTooltipStatusBar:GetStatusBarTexture()
 
 function GameTooltip_UnitColor(unit)
@@ -206,7 +193,7 @@ local function On_PLAYER_ENTERING_WORLD()
 			end
 		end)
 	end
-	
+
 	GameTooltipStatusBar.bg = CreateFrame("Frame", nil, GameTooltipStatusBar)
 	GameTooltipStatusBar.bg:Point("TOPLEFT", GameTooltipStatusBar, "TOPLEFT", -1, 1)
 	GameTooltipStatusBar.bg:Point("BOTTOMRIGHT", GameTooltipStatusBar, "BOTTOMRIGHT", 1, -1)
@@ -280,10 +267,10 @@ local function On_ANCHOR_CURSOR(self, ...)
    end
 end
 function Module:OnInitialize()
-	C=C["TooltipDB"]
-end
-
-function Module:OnEnable()
+	 if IsAddOnLoaded("TipTac") or IsAddOnLoaded("FreebTip") or IsAddOnLoaded("bTooltip") or IsAddOnLoaded("PhoenixTooltip") or IsAddOnLoaded("Icetip") then
+		return
+	end
+	C=SunUIConfig.db.profile.TooltipDB
 	GameTooltip:HookScript("OnTooltipSetUnit", On_OnTooltipSetUnit)
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", On_SetDefaultAnchor)
 	GameTooltip:HookScript("OnUpdate", On_ANCHOR_CURSOR)

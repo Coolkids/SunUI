@@ -1,6 +1,6 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
-local _
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Settings")
+﻿local S, L, DB, _, C = unpack(select(2, ...))
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Settings", "AceEvent-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local _G = _G
 --if true then return end
 
@@ -106,60 +106,66 @@ helmcb:SetChecked(ShowingHelm())
 cloakcb:SetChecked(ShowingCloak())
 S.ReskinCheck(helmcb)
 S.ReskinCheck(cloakcb)
+
+local function aotuClick()
+	for i = 1, STATICPOPUP_NUMDIALOGS do
+		local frame = _G["StaticPopup"..i]
+		if (frame.which == "CONFIRM_LOOT_ROLL" or frame.which == "LOOT_BIND" or frame.which == "LOOT_BIND_CONFIRM") and frame:IsVisible() then 
+			StaticPopup_OnClick(frame, 1) 
+		end
+	end
+end
+function Module:RESURRECT_REQUEST()
+	if not UnitAffectingCombat("player") then
+		local delay = GetCorpseRecoveryDelay()
+		if delay == 0 then
+			AcceptResurrect()
+			DoEmote('thanks')
+		else
+			local b = CreateFrame("Button")
+			local formattedText = b:GetText(b:SetFormattedText("%d |4second:seconds", delay))
+			AddMessage(string.format(AREA_SPIRIT_HEAL,formattedText))
+		end
+	end
+end
+function Module:CHAT_MSG_WHISPER(event,arg1,arg2)
+	if (not UnitExists("party1") or UnitIsGroupLeader("player")) and arg1:lower():match(C["INVITE_WORD"]) then
+		InviteUnit(arg2)
+	end
+end
+function Module:UpdateSet()
+	if C["Disenchat"] then
+		self:RegisterEvent("CONFIRM_DISENCHANT_ROLL", aotuClick)
+		self:RegisterEvent("CONFIRM_LOOT_ROLL", aotuClick)
+		self:RegisterEvent("LOOT_BIND_CONFIRM", aotuClick)
+	else
+		self:UnregisterEvent("CONFIRM_DISENCHANT_ROLL")
+		self:UnregisterEvent("CONFIRM_LOOT_ROLL")
+		self:UnregisterEvent("LOOT_BIND_CONFIRM")
+	end
+	if C["Resurrect"] then
+		self:RegisterEvent("RESURRECT_REQUEST")
+	else
+		self:UnregisterEvent("RESURRECT_REQUEST")
+	end
+	if C["Autoinvite"] then
+		self:RegisterEvent("CHAT_MSG_WHISPER")
+	else
+		self:UnregisterEvent("CHAT_MSG_WHISPER")
+	end
+end
 function Module:OnInitialize()
-	--分解不必再点确定
-	if C["MiniDB"]["Disenchat"] then
-		local aotuClick = CreateFrame("Frame")
-		aotuClick:RegisterEvent("CONFIRM_DISENCHANT_ROLL")
-		aotuClick:RegisterEvent("CONFIRM_LOOT_ROLL")
-		aotuClick:RegisterEvent("LOOT_BIND_CONFIRM")      
-		aotuClick:SetScript("OnEvent", function(self, event, ...)
-			for i = 1, STATICPOPUP_NUMDIALOGS do
-				local frame = _G["StaticPopup"..i]
-				if (frame.which == "CONFIRM_LOOT_ROLL" or frame.which == "LOOT_BIND" or frame.which == "LOOT_BIND_CONFIRM") and frame:IsVisible() then 
-					StaticPopup_OnClick(frame, 1) 
-				end
-			end
-		end)
-	end
-	if C["MiniDB"]["Resurrect"] then
-		local function ResurrectEvent()
-				if not UnitAffectingCombat("player") then
-					local delay = GetCorpseRecoveryDelay()
-					if delay == 0 then
-						AcceptResurrect()
-						DoEmote('thanks')
-					else
-						local b = CreateFrame("Button")
-						local formattedText = b:GetText(b:SetFormattedText("%d |4second:seconds", delay))
-						AddMessage("还有"..formattedText.."才能起来。")
-					end
-				end
-			end
-		local Resurrect = CreateFrame("Frame")
-		Resurrect:RegisterEvent("RESURRECT_REQUEST")
-		Resurrect:SetScript("OnEvent", ResurrectEvent)
-	end
+	C = SunUIConfig.db.profile.MiniDB
+	self:UpdateSet()
 
-	---------------- > Autoinvite by whisper
-	if C["MiniDB"]["Autoinvite"] then
-		local f = CreateFrame("frame")
-		f:RegisterEvent("CHAT_MSG_WHISPER")
-		f:SetScript("OnEvent", function(self,event,arg1,arg2)
-			if (not UnitExists("party1") or UnitIsGroupLeader("player")) and arg1:lower():match(C["MiniDB"]["INVITE_WORD"]) then
-				InviteUnit(arg2)
-			end
-		end)
-	end
-
-	if C["MiniDB"]["HideRaidWarn"] then
+	if C["HideRaidWarn"] then
 		_G["RaidWarningFrame"]:ClearAllPoints()
 		_G["RaidWarningFrame"]:UnregisterAllEvents()
 		RaidWarningFrame.Show = function() end
 		RaidWarningFrame.SetPoint = function() end
 		_G["RaidWarningFrame"]:Kill()
 	end
-	if not C["UnitFrameDB"]["showparty"] then
+	if not SunUIConfig.db.profile.UnitFrameDB.showparty then
 		for i = 1, MAX_PARTY_MEMBERS do
 			local PartyMemberFrame = _G["PartyMemberFrame"..i]
 			PartyMemberFrame:UnregisterAllEvents()

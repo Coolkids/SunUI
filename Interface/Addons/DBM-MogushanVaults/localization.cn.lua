@@ -62,7 +62,10 @@ L:SetOptionLocalization({
 	specWarnDrawFlame 	= "特殊警告：$spell:116711",
 	specWarnArcaneVelocity 	= "特殊警告：$spell:116364",
 	specWarnEpicenter 	= "特殊警告：$spell:116018",
-	specWarnSiphoningShield = "特殊警告：$spell:117203"
+	specWarnSiphoningShield = "特殊警告：$spell:117203",
+	RangeFrame	= "距离监视（8码）：应对奥术阶段",
+	SetIconOnWS	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(116784),
+	SetIconOnAR	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(116417)
 })
 
 L:SetMiscLocalization({

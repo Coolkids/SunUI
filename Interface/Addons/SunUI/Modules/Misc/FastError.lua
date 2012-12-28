@@ -1,11 +1,6 @@
-local S, C, L, DB = unpack(select(2, ...))
-local _
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("FastError")
-
-function Module:OnInitialize()
-	C = C["MiniDB"]
-	if C["FastError"] ~= true then return end
-
+local S, L, DB, _, C = unpack(select(2, ...))
+local FE = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("FastError", "AceEvent-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 
 ---- SETTING HERE ---- ---- ---- ---- ----
 local nfont = DB.Font -- This is the font`s of all errors
@@ -19,11 +14,6 @@ local holdtime = 0.1 -- hold time (seconds)
 local fadeintime = 0.08 -- fadein time (seconds)
 local fadeouttime = 0.16 -- fade out time (seconds)
 -------------------------------------------
-
-local Error = CreateFrame("Frame")
-	UIErrorsFrame:UnregisterEvent("UI_ERROR_MESSAGE")
-	
---/Errors` Frame/--
 local FirstErrorFrame = CreateFrame ("Frame",nil,UIParent)
 	FirstErrorFrame:SetScript("OnUpdate", FadingFrame_OnUpdate)
 	FirstErrorFrame.fadeInTime = fadeintime
@@ -56,7 +46,7 @@ local TextTwo = SecondErrorFrame:CreateFontString(nil, "OVERLAY")
 --/Alert Switch
 local state = 0
 FirstErrorFrame:SetScript("OnHide",function() state = 0 end)
-local allertIt = function(_,_,error)
+function FE:UI_ERROR_MESSAGE(_, error)
 	if state == 0 then 
 		TextOne:SetText(error)
 		FadingFrame_Show(FirstErrorFrame)
@@ -67,6 +57,16 @@ local allertIt = function(_,_,error)
 		state = 0
 	 end
 end
-Error:RegisterEvent("UI_ERROR_MESSAGE")
-Error:SetScript("OnEvent",allertIt)
+function FE:UpdateSet()
+	if C["FastError"] then
+		UIErrorsFrame:UnregisterEvent("UI_ERROR_MESSAGE")
+		self:RegisterEvent("UI_ERROR_MESSAGE")
+	else
+		UIErrorsFrame:RegisterEvent("UI_ERROR_MESSAGE")
+		self:UnregisterEvent("UI_ERROR_MESSAGE")
+	end
+end
+function FE:OnInitialize()
+	C = SunUIConfig.db.profile.MiniDB
+	self:UpdateSet()
 end

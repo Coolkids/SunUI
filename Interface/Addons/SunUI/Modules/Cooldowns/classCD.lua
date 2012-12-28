@@ -1,13 +1,10 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
-local _
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ClassCD")
-
-if IsAddOnLoaded("ExtarCD") then return end
-
+﻿local S, L, DB, _, C = unpack(select(2, ...))
+local CCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ClassCD", "AceEvent-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 ----------------------------------------------------------------------------------------
 --	职业被动技能,饰品,附魔内置CD
 --  Modify by Ljxx.net at 2011.10.15
---  Modify by Coolkid at 2012.9.10
+--  Modify by Coolkid at 2012.12.27
 ----------------------------------------------------------------------------------------
 local show = {
 	raid = true,
@@ -39,7 +36,7 @@ local class_spells = {
 		cd = 30,
 		duration = 10,
 	}, -- Nature's Guardian
-	
+
 	-- mage
 	[87023] = {
 		desc = "",
@@ -49,7 +46,7 @@ local class_spells = {
 		cd = 120,
 		duration = 6,
 	}, -- Cauterize
-	
+
 	-- rogue
 	[45182] = {
 		desc = "",
@@ -59,7 +56,7 @@ local class_spells = {
 		cd = 90,
 		duration = 3,
 	}, -- Cheated Death
-	
+
 	-- priest
 	[114214] = {
 		desc = "",
@@ -68,7 +65,7 @@ local class_spells = {
 		talent = 12,
 		cd = 90,
 	}, -- Angelic Bulwark
-	
+
 	-- dk
 	[116888] = {
 		desc = "",
@@ -78,7 +75,7 @@ local class_spells = {
 		cd = 180,
 		duration = 3,
 	}, -- Purgatory	
-	
+
 -- spec
 	-- type = "spec" 
 	-- spec = {the numbers of the spec(from 1 to 3(4 for druid))}
@@ -90,7 +87,7 @@ local class_spells = {
 		spec = {2, 3},
 		cd = 6,
 	}, -- Leader of the Pack
-	
+
 	-- hunter
 	[56453] = {
 		desc = "",
@@ -99,7 +96,7 @@ local class_spells = {
 		spec = {3},
 		cd = 10,
 	}, -- Lock and Load
-	
+
 	-- priest
 	[47755] = {
 		desc = "",
@@ -108,7 +105,7 @@ local class_spells = {
 		spec = {1},
 		cd = 12,
 	}, -- Rapture
-	
+
 	--dk
 	[96171] = {
 		desc = "",
@@ -118,7 +115,7 @@ local class_spells = {
 		cd = 45,
 		duration = 8,
 	}, -- Will of the Necropolis	
-	
+
 	--warlock
 	[104317] = {
 		desc = "",
@@ -134,13 +131,13 @@ local class_spells = {
 		spec = {3},
 		cd = 8,
 	}, --
-	
 
-	
+
+
 -- item
 	-- type = "item" 
 	-- item = {the item id}
-	
+
 	-- MOP 5.0
 	-- 509 496 483 Raid
 	[126646] = {
@@ -178,7 +175,7 @@ local class_spells = {
 		cd = 105,
 		duration = 20,
 	}, -- H
-	
+
 	-- 502 489 476 Raid
 	[126554] = {
 		desc = "",
@@ -215,7 +212,7 @@ local class_spells = {
 		cd = 45,
 		duration = 20,
 	}, -- H
-	
+
 	-- pvp 483 458
 	[126707] = {
 		desc = "",
@@ -238,7 +235,7 @@ local class_spells = {
 		cd = 50,
 		duration = 20,
 	}, -- STR
-	
+
 	-- Darkmoon Card 476
 	[128985] = {
 		desc = "",
@@ -268,7 +265,7 @@ local class_spells = {
 		cd = 45,
 		duration = 20,
 	}, -- Relic of Chi Ji
-	
+
 	-- 470 
 	[127923] = {
 		desc = "",
@@ -291,7 +288,7 @@ local class_spells = {
 		cd = 45,
 		duration = 10,
 	}, -- Thousand-Year Pickled Egg
-	
+
 	-- 463 Heroic
 	[126489] = {
 		desc = "",
@@ -349,7 +346,7 @@ local class_spells = {
 		cd = 85,
 		duration = 25,
 	}, -- Searing Words
-	
+
 	-- 450 and others
 	[60234] = {
 		desc = "",
@@ -372,7 +369,7 @@ local class_spells = {
 		cd = 55,
 		duration = 15,
 	}, -- Zen Alchemist Stone(Strength)
-	
+
 	--old data. if you need these, release the comment.
 	-- Cataclysm 4.3
 	-- Ti'tahk, the Steps of Time
@@ -583,7 +580,7 @@ local class_spells = {
 		item = {77981},
 		cd = 25
 	}, -- LFR
-	
+
 	-- Bone-Link Fetish
 	[109754] = {
 		desc = "",
@@ -662,7 +659,7 @@ local class_spells = {
 		cd = 50,
 		duration = 20,
 	},
-	
+
 	[102439] = {
 		desc = "",
 		type = "item",
@@ -684,7 +681,7 @@ local class_spells = {
 		cd = 50,
 		duration = 20,
 	},
-	
+
 	-- 378 others
 	[102659] = {
 		desc = "",
@@ -707,7 +704,7 @@ local class_spells = {
 		cd = 50,
 		duration = 20,
 	},
-	
+
 	[109993] = {
 		desc = "",
 		type = "item",
@@ -729,7 +726,7 @@ local class_spells = {
 		cd = 50,
 		duration = 20,
 	},
-	
+
 	-- Cataclysm Raid T12 378 - 397
 	-- Matrix Restabilizer H
 	[97139] = {
@@ -813,7 +810,7 @@ local class_spells = {
 		cd = 60,
 		duration = 15,
 	}, -- The Hungerer
-	
+
 	-- S10 PVP
 	[99721] = {
 		desc = "",
@@ -857,7 +854,7 @@ local class_spells = {
 		cd = 50,
 		duration = 20,
 	},
-	
+
 	-- Festival Trinket 365
 	[101289] = {
 		desc = "",
@@ -880,7 +877,7 @@ local class_spells = {
 		cd = 50,
 		duration = 10,
 	}, -- Coren's Chilled Chromium Coaster
-	
+
 	-- Mount Hyjal 365
 	[100322] = {
 		desc = "",
@@ -889,7 +886,7 @@ local class_spells = {
 		cd = 45,
 		duration = 20,
 	}, -- Dwyer's Caber
-	
+
 	-- Darkmoon Cards
 	[89091] = {
 		desc = "",
@@ -981,7 +978,7 @@ local class_spells = {
 		cd = 100,
 		duration = 20,
 	}, -- Bell of Enraging Resonance
-	
+
 	-- Cataclysm Raid 359
 	[92108] = {
 		desc = "",
@@ -1046,7 +1043,7 @@ local class_spells = {
 		cd = 100,
 		duration = 20,
 	}, -- Bell of Enraging Resonance
-	
+
 	-- Cataclysm Dungeon 346
 	[90992] = {
 		desc = "",
@@ -1308,8 +1305,8 @@ local class_spells = {
 	-- type = "itemset"
 	-- items = {all items of this set(including all difficulties)}
 	-- piece = the minimum pieces of the item set to get the bonus
-	
-	
+
+
 	[102545] = {
 		type = "itemset",
 		class = "DRUID",
@@ -1317,7 +1314,7 @@ local class_spells = {
 		piece = 4,
 		cd = 30,
 	}, -- Feral PVP 4P
-	
+
 	[105919] = {
 		type = "itemset",
 		class = "HUNTER",
@@ -1405,7 +1402,7 @@ local class_spells = {
 		cd = 35,
 		duration = 10
 	}, -- Black Magic
-	
+
 	-- MOP
 	[125488] = {
 		desc = "",
@@ -1457,7 +1454,7 @@ local sformat = string.format
 local floor = math.floor
 local timer = 0
 local bars = {}
-
+local ClassCDAnchor = CreateFrame("Frame", "ClassCDAnchor", UIParent)
 local FormatTime = function(time)
 	if time >= 60 then
 		return sformat("%.2d:%.2d", floor(time / 60), time % 60)
@@ -1466,33 +1463,27 @@ local FormatTime = function(time)
 	end
 end
 
-local CreateFS = function(frame, fsize, fstyle)
-	local fstring = frame:CreateFontString(nil, "OVERLAY")
-	fstring:SetFont(DB.Font, C["ClassFontSize"], "OUTLINE")
-	return fstring
-end
-
-local UpdatePositions = function()
+function CCD:UpdatePositions()
 	for i = 1, #bars do
 		bars[i]:ClearAllPoints()
 		if not C["ClassCDIcon"] then
 			if i == 1 then
-				bars[i]:Point("TOPLEFT", ClassCDAnchor, "TOPLEFT", 0, 0)
+				bars[i]:SetPoint("CENTER", ClassCDAnchor)
 			else
 				if C["ClassCDDirection"] == 2 then
-					bars[i]:Point("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, C["ClassCDHeight"]*2)
+					bars[i]:SetPoint("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, C["ClassCDHeight"]*2)
 				else
-					bars[i]:Point("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -C["ClassCDHeight"]*2)
+					bars[i]:SetPoint("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -C["ClassCDHeight"]*2)
 				end
 			end
 		else
 			if i == 1 then
-				bars[i]:Point("LEFT", ClassCDAnchor, "LEFT", 0, 0)
+				bars[i]:SetPoint("CENTER", ClassCDAnchor)
 			else
 				if C["ClassCDIconDirection"] == 1 then
-					bars[i]:Point("LEFT", bars[i-1], "RIGHT", 5, 0)
+					bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 5, 0)
 				else
-					bars[i]:Point("RIGHT", bars[i-1], "LEFT", -5, 0)
+					bars[i]:SetPoint("RIGHT", bars[i-1], "LEFT", -5, 0)
 				end
 			end
 		end
@@ -1504,7 +1495,7 @@ local StopTimer = function(bar)
 	bar:SetScript("OnUpdate", nil)
 	bar:Hide()
 	tremove(bars, bar.id)
-	UpdatePositions()
+	CCD:UpdatePositions()
 end
 
 local BarUpdate = function(self, elapsed)
@@ -1535,24 +1526,28 @@ end
 local OnMouseDown = function(self, button)
 	if not C["ClassCDIcon"] then 
 		if button == "LeftButton" then
-			if GetRealNumRaidMembers() > 0 then
-				SendChatMessage(sformat("冷卻計時".." %s: %s", self.left:GetText(), self.right:GetText()), "RAID")
-			elseif GetRealNumPartyMembers() > 0 and not UnitInRaid("player") then
-				SendChatMessage(sformat("冷卻計時".." %s: %s", self.left:GetText(), self.right:GetText()), "PARTY")
+			if IsInRaid() then
+				SendChatMessage(sformat(COOLDOWN_REMAINING.." %s: %s", self.left:GetText(), self.right:GetText()), "RAID")
+			elseif IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
+				SendChatMessage(sformat(COOLDOWN_REMAINING.." %s: %s", self.left:GetText(), self.right:GetText()), "INSTANCE_CHAT")
+			elseif IsInGroup() then
+				SendChatMessage(sformat(COOLDOWN_REMAINING.." %s: %s", self.left:GetText(), self.right:GetText()), "PARTY")
 			else
-				SendChatMessage(sformat("冷卻計時".." %s: %s", self.left:GetText(), self.right:GetText()), "SAY")
+				SendChatMessage(sformat(COOLDOWN_REMAINING.." %s: %s", self.left:GetText(), self.right:GetText()), "SAY")
 			end
 		elseif button == "RightButton" then
 			StopTimer(self)
 		end
 	else
 		if button == "LeftButton" then
-			if GetRealNumRaidMembers() > 0 then
-				SendChatMessage(sformat("SunUI冷卻計時".." %s: %s", GetSpellInfo(self.spell), self.right), "RAID")
-			elseif GetRealNumPartyMembers() > 0 and not UnitInRaid("player") then
-				SendChatMessage(sformat("SunUI冷卻計時".." %s: %s", GetSpellInfo(self.spell), self.right), "PARTY")
+			if IsInRaid() then
+				SendChatMessage(sformat("SunUI"..COOLDOWN_REMAINING.." %s: %s", GetSpellInfo(self.spell), self.right), "RAID")
+			elseif IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
+				SendChatMessage(sformat("SunUI"..COOLDOWN_REMAINING.." %s: %s", GetSpellInfo(self.spell), self.right), "INSTANCE_CHAT")
+			elseif IsInGroup() then
+				SendChatMessage(sformat("SunUI"..COOLDOWN_REMAINING.." %s: %s", GetSpellInfo(self.spell), self.right), "PARTY")
 			else
-				SendChatMessage(sformat("冷卻計時".." %s: %s", GetSpellInfo(self.spell), self.right), "SAY")
+				SendChatMessage(sformat("SunUI"..COOLDOWN_REMAINING.." %s: %s", GetSpellInfo(self.spell), self.right), "SAY")
 			end
 		elseif button == "RightButton" then
 			StopTimer(self)
@@ -1564,20 +1559,19 @@ local CreateBar = function()
 	if not C["ClassCDIcon"] then
 		local bar = CreateFrame("Statusbar", nil, UIParent)
 		bar:SetFrameStrata("LOW")
-		bar:Size(C["ClassCDWidth"], C["ClassCDHeight"])
+		bar:SetSize(C["ClassCDWidth"], C["ClassCDHeight"])
 		bar:SetStatusBarTexture(DB.Statusbar)
 		bar:SetMinMaxValues(0, 100)
-		
-		--bar:SetReverseFill(true)
+
 		S.CreateBack(bar)
 		S.CreateMark(bar)
-		
-		bar.left = CreateFS(bar)
+
+		bar.left = S.MakeFontString(bar, C["ClassFontSize"])
 		bar.left:Point("LEFT", 2, C["ClassCDHeight"])
 		bar.left:SetJustifyH("LEFT")
 		bar.left:Size(C["ClassCDWidth"], C["ClassCDHeight"])
 
-		bar.right = CreateFS(bar)
+		bar.right = S.MakeFontString(bar, C["ClassFontSize"])
 		bar.right:Point("RIGHT", 1, C["ClassCDHeight"])
 		bar.right:SetJustifyH("RIGHT")
 
@@ -1631,59 +1625,72 @@ local StartTimer = function(name, spellId, cd)
 		bar.cooldown:SetReverse(false)
 		CooldownFrame_SetTimer(bar.cooldown, GetTime(), cd, 1)
 	end
-	
+
 	bar:EnableMouse(true)
 	bar:SetScript("OnUpdate", BarUpdate)
 	bar:SetScript("OnEnter", OnEnter)
 	bar:SetScript("OnLeave", OnLeave)
 	bar:SetScript("OnMouseDown", OnMouseDown)
 	tinsert(bars, bar)
-	UpdatePositions()
+	CCD:UpdatePositions()
 end
-
-local OnEvent = function(self, event, ...)
-	if event == "COMBAT_LOG_EVENT_UNFILTERED" then
-		--local _, _, eventType, _, _, sourceName, sourceFlags = ...
-		local _, eventType, _, _, sourceName, sourceFlags = ...
-		if band(sourceFlags, filter) == 0 or sourceName ~= DB.PlayerName then return end
-		local spellId = select(12, ...)
-		--print(spellId)
-		if class_spells[spellId] and EVENT[eventType] then
-			StartTimer(sourceName, spellId, class_spells[spellId].cd)
-		end
-	end
-	if event == "ZONE_CHANGED_NEW_AREA" then
-		if select(2, IsInInstance()) == "arena" then
-			for k, v in pairs(bars) do
-				StopTimer(v)
-			end
-		end
+function CCD:COMBAT_LOG_EVENT_UNFILTERED(null, ...)
+	local _, eventType, _, _, sourceName, sourceFlags = ...
+	if band(sourceFlags, filter) == 0 or sourceName ~= DB.PlayerName then return end
+	local spellId = select(12, ...)
+	if class_spells[spellId] and EVENT[eventType] then
+		StartTimer(sourceName, spellId, class_spells[spellId].cd)
 	end
 end
 
-function Module:OnInitialize()
-	C = C["MiniDB"]
-	
+function CCD:ZONE_CHANGED_NEW_AREA()
+	if select(2, IsInInstance()) == "arena" then
+		for k, v in pairs(bars) do
+			StopTimer(v)
+		end
+	end
 end
-function Module:OnEnable()
-	if C["ClassCDOpen"] ~= true then return end
-	local ClassCDAnchor = CreateFrame("Frame", "ClassCDAnchor", UIParent)
+function CCD:UpdateSize()
 	if not C["ClassCDIcon"] then 
 		ClassCDAnchor:SetSize(C["ClassCDWidth"], C["ClassCDHeight"])
 	else
 		ClassCDAnchor:SetSize(C["ClassCDIconSize"], C["ClassCDIconSize"])
 	end
-	
-	MoveHandle.ClassCD = S.MakeMoveHandle(ClassCDAnchor, L["内置CD监视"], "ClassCD")
-	local addon = CreateFrame("Frame")
-	addon:SetScript("OnEvent", OnEvent)
-	addon:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-	addon:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-
-	SlashCmdList.ClassCD = function(msg)
-		StartTimer(UnitName("player"), 47755, 12)
-		StartTimer(UnitName("player"), 31616, 30)
-		StartTimer(UnitName("player"), 45182, 90)
+	for i = 1, #bars do
+		if C["ClassCDIcon"] then
+			bars[i]:SetSize(C["ClassCDIconSize"], C["ClassCDIconSize"])
+		else
+			bars[i]:SetSize(C["ClassCDWidth"], C["ClassCDHeight"])
+		end
 	end
-	SLASH_ClassCD1 = "/classcd"
 end
+function CCD:UpdateSet()
+	if C["ClassCDOpen"] then
+		CCD:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+		CCD:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+	else
+		CCD:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+		CCD:UnregisterEvent("ZONE_CHANGED_NEW_AREA")
+		for k, v in pairs(bars) do
+			StopTimer(v)
+		end
+	end
+end
+function CCD:OnInitialize()
+	if IsAddOnLoaded("ExtarCD") then return end
+	C = SunUIConfig.db.profile.MiniDB
+	if not C["ClassCDIcon"] then 
+		ClassCDAnchor:SetSize(C["ClassCDWidth"], C["ClassCDHeight"])
+	else
+		ClassCDAnchor:SetSize(C["ClassCDIconSize"], C["ClassCDIconSize"])
+	end
+	self:UpdateSet()
+	MoveHandle.ClassCD = S.MakeMoveHandle(ClassCDAnchor, L["内置CD监视"], "ClassCD")
+end
+
+SlashCmdList.ClassCD = function(msg)
+	StartTimer(UnitName("player"), 47755, 12)
+	StartTimer(UnitName("player"), 31616, 30)
+	StartTimer(UnitName("player"), 45182, 90)
+end
+SLASH_ClassCD1 = "/classcd"

@@ -1,9 +1,9 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
+﻿local S, L, DB, _, C = unpack(select(2, ...))
 if IsAddOnLoaded("Prat-3.0") or IsAddOnLoaded("Chatter") then
 	return
 end
-local _
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Chat", "AceEvent-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local _G = _G
 local fontsize = 10                          --other variables
 local tscol = "64C2F5"						-- Timestamp coloring
@@ -11,15 +11,6 @@ local newAddMsg = {}
 for i = 1, 18 do
 	CHAT_FONT_HEIGHTS[i] = i+6
 end
-local LinkHover = {}; LinkHover.show = {	-- enable (true) or disable (false) LinkHover functionality for different things in chat
-	["achievement"] = true,
-	["enchant"]     = true,
-	["glyph"]       = true,
-	["item"]        = true,
-	["quest"]       = true,
-	["spell"]       = true,
-	["talent"]      = true,
-	["unit"]        = true,}
 
 -- 打开输入框回到上次对话
 ChatTypeInfo.SAY.sticky = 0
@@ -171,31 +162,6 @@ end
 hooksecurefunc("ChatFrame_OpenChat",eb_mouseon)
 hooksecurefunc("ChatEdit_SendText",eb_mouseoff)
 
----------------- > Show tooltips when hovering a link in chat (credits to Adys for his LinkHover)
-function LinkHover.OnHyperlinkEnter(_this, linkData, link)
-	local t = linkData:match("^(.-):")
-	if LinkHover.show[t] and IsAltKeyDown() then
-		ShowUIPanel(GameTooltip)
-		GameTooltip:SetOwner(UIParent, "ANCHOR_CURSOR")
-		GameTooltip:SetHyperlink(link)
-		GameTooltip:Show()
-	end
-end
-function LinkHover.OnHyperlinkLeave(_this, linkData, link)
-	local t = linkData:match("^(.-):")
-	if LinkHover.show[t] then
-		HideUIPanel(GameTooltip)
-	end
-end
-local function LinkHoverOnLoad()
-	for i = 1, NUM_CHAT_WINDOWS do
-		local f = _G["ChatFrame"..i]
-		f:SetScript("OnHyperlinkEnter", LinkHover.OnHyperlinkEnter)
-		f:SetScript("OnHyperlinkLeave", LinkHover.OnHyperlinkLeave)
-	end
-end
-LinkHoverOnLoad()
-
 ----------------------------------------------------------------------------------------
 --	Copy Chat
 ----------------------------------------------------------------------------------------
@@ -297,21 +263,21 @@ for i = 1, 10 do
 end
 
 function Module:OnEnable()
-	---------------- > afk/dnd msg filter
-	if C["MiniDB"]["DNDFilter"] then  
+	C = SunUIConfig.db.profile.MiniDB
+	if C["DNDFilter"] then  
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL_JOIN", function(msg) return true end)
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL_LEAVE", function(msg) return true end)
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_AFK", function(msg) return true end)
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_DND", function(msg) return true end)
 	end
-	if C["MiniDB"]["TimeStamps"] then 
+	if C["TimeStamps"] then 
 		if GetCVar("showTimestamps") == "none" then  
 			SetCVar("showTimestamps", [[%H:%M:%S]])
 		end
 	else
 		SetCVar("showTimestamps", "none")
 	end
-	if C["MiniDB"]["ChatBackground"] then 
+	if C["ChatBackground"] then 
 		for i = 1, NUM_CHAT_WINDOWS do
 			local cf = _G['ChatFrame'..i]
 			if cf then

@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8234 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8421 $"):sub(12, -3))
 mod:SetCreatureID(60051, 60043, 59915, 60047)--Cobalt: 60051, Jade: 60043, Jasper: 59915, Amethyst: 60047
 mod:SetModelID(41892)
 mod:SetZone()
@@ -231,6 +231,25 @@ local function 	ChecknextOverload()
 	end
 end
 
+function mod:ThreeBossStart(delay)
+	for i = 1, 5 do
+		local id = self:GetUnitCreatureId("boss"..i)
+		if id == 60051 then -- cobalt
+			if self:IsDifficulty("lfr25") then
+				timerCobaltMineCD:Start(10.5-delay-1)
+			else
+				timerCobaltMineCD:Start(-delay-1)
+			end
+		elseif id == 60043 then -- jade
+			timerJadeShardsCD:Start(-delay-1)
+		elseif id == 59915 then -- jasper
+			timerJasperChainsCD:Start(-delay-1)
+		elseif id == 60047 then -- amethyst
+			timerAmethystPoolCD:Start(-delay-1)
+		end
+	end
+end
+
 function mod:OnCombatStart(delay)
 	activePetrification = nil
 --	scansDone = 0
@@ -246,22 +265,7 @@ function mod:OnCombatStart(delay)
 		expectedBosses = 4--Only fight all 4 at once on 25man (excluding LFR)
 	else
 		expectedBosses = 3--Else you get a random set of 3/4
-		for i = 1, 4 do
-			local id = self:GetUnitCreatureId("boss" .. i)
-			if id == 60051 then -- cobalt
-				if self:IsDifficulty("lfr25") then
-					timerCobaltMineCD:Start(10.5-delay)
-				else
-					timerCobaltMineCD:Start(-delay)
-				end
-			elseif id == 60043 then -- jade
-				timerJadeShardsCD:Start(-delay)
-			elseif id == 59915 then -- jasper
-				timerJasperChainsCD:Start(-delay)
-			elseif id == 60047 then -- amethyst
-				timerAmethystPoolCD:Start(-delay)
-			end
-		end
+		self:ScheduleMethod(1, "ThreeBossStart", delay)
 	end
 	SDSTAT = L.SDNOT
 	RPN, GPN, BPN, PPN = 0, 0, 0, 0

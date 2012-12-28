@@ -25,7 +25,7 @@ L= DBM:GetModLocalization(742)
 
 L:SetOptionLocalization ({
 	SoundWOP 	= "voice warning: important skills",
-	SoundJK 	= "voice warning: $spell:123011 advance warning",
+	WarnJK 	= "voice warning: $spell:123011 advance warning",
 	HudMAP 		= "HudMAP:$spell:122770 (only 10N/10H Mode) ",
 	optDS 		= "shadow of terror, how many stacks start warning",
 	six 		= "6",

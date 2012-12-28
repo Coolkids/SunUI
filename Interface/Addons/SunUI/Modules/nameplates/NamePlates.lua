@@ -1,6 +1,4 @@
-local S, C, L, DB = unpack(select(2, ...))
-local _
-
+local S, L, DB, _, C = unpack(select(2, ...))
 local N = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("NamePlates", "AceEvent-3.0", "AceTimer-3.0")
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local   cfg={
@@ -491,8 +489,11 @@ local function SkinObjects(frame, nameFrame)
 
 	hp:SetStatusBarTexture(DB.Statusbar)
 	frame.hp = hp
-	hp:CreateShadow()
-	hp.shadow:Hide()
+	if not hp.shadow then
+		hp:CreateShadow()
+		hp.shadow:Hide()
+		S.CreateMark(hp)
+	end
 	hp.border:SetFrameLevel(0)
 	hp.hpGlow = hp.border
 	
@@ -643,8 +644,10 @@ local function HookFrames(...)
 end
 
 function N:COMBAT_LOG_EVENT_UNFILTERED(times, temp, event, ...)
+	
 	if event == "SPELL_AURA_REMOVED" then
 		local _, sourceGUID, _, _, _, destGUID, _, _, _, spellID = ...
+		--print(sourceGUID,UnitGUID("player"))
 		if sourceGUID == UnitGUID("player") then
 			--print(spellID)
 			ForEachPlate(MatchGUID, destGUID, spellID)

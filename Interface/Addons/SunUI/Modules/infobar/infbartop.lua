@@ -1,13 +1,10 @@
-﻿
--- Engines
-local S, C, L, DB = unpack(select(2, ...))
-local _
-local Core = LibStub("AceAddon-3.0"):GetAddon("SunUI")
-local Module = Core:NewModule("InfoPanelTop", "AceTimer-3.0")
+﻿local S, L, DB, _, C = unpack(select(2, ...))
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("InfoPanelTop", "AceTimer-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local InfoBarStatusColor = {{1, 0, 0}, {1, 1, 0}, {0, 0.4, 1}}
 local bandwidthString = "%.2f Mbps"
 local percentageString = "%.2f%%"
-local wm
+local wm = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
 local damageframe = {
 	"alDamageMeterFrame",
 	"SkadaBarWindowSkada",
@@ -15,7 +12,7 @@ local damageframe = {
 }
 --团队工具
 local function RaidTools()
-	if C["MiniDB"]["MiniMapPanels"] ~= true then return end
+	if C["MiniMapPanels"] ~= true then return end
 	wm = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
 	wm:SetParent(UIParent) 
 	wm:SetFrameLevel(3)
@@ -401,7 +398,8 @@ local function BuildGold()
 end
 	
 function Module:OnInitialize()
-	if C["InfoPanelDB"]["OpenTop"] == true then
+	C = SunUIConfig.db.profile.InfoPanelDB
+	if C["OpenTop"] == true then
 		local top = CreateFrame("Frame", "TopInfoPanel", UIParent)
 		top:SetHeight(20)
 		top:SetFrameStrata("BACKGROUND")
@@ -504,7 +502,7 @@ function Module:OnInitialize()
 		end)
 	end
 	
-	if C["InfoPanelDB"]["OpenBottom"] == true then
+	if C["OpenBottom"] == true then
 		local bottom = CreateFrame("Frame", "BottomInfoPanel", UIParent)
 		bottom:SetHeight(20)
 		bottom:SetFrameLevel(0)
@@ -516,7 +514,7 @@ function Module:OnInitialize()
 end
 function Module:OnEnable()
 	RaidTools()
-	if C["InfoPanelDB"]["OpenTop"] == true then
+	if C["OpenTop"] == true then
 		BuildSystem()
 		BuildMemory()
 		BuildGold()

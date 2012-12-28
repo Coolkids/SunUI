@@ -1,5 +1,6 @@
 local mod	= DBM:NewMod("BrawlRank1", "DBM-Brawlers")
 local L		= mod:GetLocalizedStrings()
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
 mod:SetRevision(("$Revision: 8371 $"):sub(12, -3))
 --mod:SetCreatureID(60491)
@@ -42,6 +43,7 @@ function mod:SPELL_CAST_START(args)
 		timerChompCD:Start()--And timers (first one is after 6 seconds)
 		if brawlersMod:PlayerFighting() then--Only give special warnings if you're in arena though.
 			specWarnChomp:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")
 		end
 	elseif args:IsSpellID(133286) then
 		warnHeatedPokers:Show()
@@ -57,6 +59,7 @@ function mod:SPELL_CAST_START(args)
 		timerFireLineCD:Start()--First one is 9-10 seconds after combat start
 		if brawlersMod:PlayerFighting() then
 			specWarnFireLine:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")
 		end
 	end
 end
@@ -77,6 +80,7 @@ function mod:UNIT_SPELLCAST_CHANNEL_START(uId, _, _, _, spellId)
 		timerLumberingChargeCD:Start()
 		if brawlersMod:PlayerFighting() then
 			specWarnLumberingCharge:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")
 		end
 	end
 end

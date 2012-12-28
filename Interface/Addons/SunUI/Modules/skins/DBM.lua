@@ -1,6 +1,6 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
-local _
+﻿local S, L, DB, _, C = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SkinDBM", "AceEvent-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local function SkinDBMBar(self)
 	for bar in self:GetBarIterator() do
 		if not bar.injected then
@@ -252,6 +252,7 @@ local function SkinInfoFrame()
 	S.SetBD(DBMInfoFrame)
 end
 function Module:OnEnable()
+	C = SunUIConfig.db.profile
 	if not C["SkinDB"]["EnableDBMSkin"] then return end
 	if not IsAddOnLoaded("DBM-Core") then return end
 	hooksecurefunc(DBT, "CreateBar", SkinDBMBar)

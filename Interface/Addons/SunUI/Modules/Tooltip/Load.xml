@@ -14,4 +14,5 @@
 	<Script file="CheckItemTransmogrify.lua"/>
 	<Script file="InstanceLockCompare.lua"/>
 	<Script file="MultiItemRef.lua"/>
+	<Script file="SlotItemLevel.lua"/>
 </Ui>

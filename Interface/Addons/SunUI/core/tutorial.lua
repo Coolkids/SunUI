@@ -1,4 +1,4 @@
-local S, C, L, DB = unpack(select(2, ...))
+local S, L, DB, _, C = unpack(select(2, ...))
 local Version = 20120323
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Tutorial")
 local function BuildFrame()

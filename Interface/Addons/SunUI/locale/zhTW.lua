@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
+﻿local S, L, DB, _, C = unpack(select(2, ...))
 
 if GetLocale() ~= "zhTW" then  return end
 -- 控制台
@@ -489,7 +489,6 @@ L_EXTRA_ZONEACHID = {
 	["冬握湖"]							= {X =    0, A =    0, H =    0},
 }
 L_MISC_UI_OUTDATED = "SunUI 版本已過期，請至 https://github.com/Coolkids/SunUI 下載最新版"
-
 
 --11.14
 L["版本号:"] = "版本號:"

@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
+﻿local S, L, DB, _, C = unpack(select(2, ...))
 
 ----------------------------------------------------------------------------------------
 --	Tells you who cast a buff or debuff in its tooltip(prButler by Renstrom)

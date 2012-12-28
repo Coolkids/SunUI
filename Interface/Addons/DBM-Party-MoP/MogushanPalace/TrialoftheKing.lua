@@ -93,9 +93,6 @@ function mod:SPELL_CAST_START(args)
 		timerWhirlingDervishCD:Start()
 	elseif args:IsSpellID(123654) then
 		specWarnLightningBolt:Show(args.sourceName)
-		if args.sourceGUID == UnitGUID("target") then
-			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3")--打斷施法
-		end
 	end
 end
 

@@ -1,4 +1,4 @@
-local S, C, L, DB, _ = unpack(select(2, ...))
+local S, L, DB, _, C = unpack(select(2, ...))
 DB.IcicleCds = {
 	[59752] = 120,				--Every Man for Himself
 	[42292] = 120,				--PvP Trinket

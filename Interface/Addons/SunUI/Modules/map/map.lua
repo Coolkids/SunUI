@@ -1,6 +1,4 @@
-local S, C, L, DB = unpack(select(2, ...))
-local _
-
+local S, L, DB, _, C = unpack(select(2, ...))
 local map_scale = 0.9								-- Mini World Map scale
 local isize = 20									-- group icons size
 local WM = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("WorldMap", "AceEvent-3.0", "AceHook-3.0")

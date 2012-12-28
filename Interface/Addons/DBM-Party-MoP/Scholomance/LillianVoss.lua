@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7617 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 7834 $"):sub(12, -3))
 mod:SetCreatureID(58722)--58722 is Body, 58791 is soul. Body is engaged first
 mod:SetModelID(40256)
 mod:SetZone()

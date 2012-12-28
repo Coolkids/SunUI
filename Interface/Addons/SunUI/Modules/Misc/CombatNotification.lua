@@ -1,10 +1,10 @@
-local S, C, L, DB = unpack(select(2, ...))
-local _
+local S, L, DB, _, C = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("CombatNotification", "AceEvent-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local wgtimenoti = true
 local combatnoti = true
 function Module:OnInitialize()
-	C = C["MiniDB"]
+	C = SunUIConfig.db.profile.MiniDB
 end
 function Module:OnEnable()
 	if not C["Combat"] then return end

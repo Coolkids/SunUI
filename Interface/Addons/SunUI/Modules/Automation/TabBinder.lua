@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
+﻿local S, L, DB, _, C = unpack(select(2, ...))
 
 ----------------------------------------------------------------------------------------
 --	Auto change Tab key to only target enemy players(RE/TabBinder by Veev/AcidWeb)

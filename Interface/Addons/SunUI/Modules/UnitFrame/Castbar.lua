@@ -1,5 +1,5 @@
 local addon, ns = ...
-local S, C, L, DB, _ = unpack(select(2, ...))
+local S, L, DB, _, C = unpack(select(2, ...))
 if IsAddOnLoaded("Stuf") or IsAddOnLoaded("PitBull4") or IsAddOnLoaded("ShadowedUnitFrames") then
 	return
 end
@@ -122,8 +122,6 @@ cast.PostCastStart = function(self, unit, name, rank, text)
 	else
 		self:SetStatusBarColor(.3, .45, .65, 1)
 	end
-	local r,g,b = self:GetStatusBarColor()
-	S.CreateTop(self.bd, r, g, b)
 end
 
 cast.PostCastStop = function(self, unit, name, rank, castid)

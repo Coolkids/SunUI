@@ -193,8 +193,9 @@ L:SetOptionLocalization({
 
 L:SetMiscLocalization({
 	Helpme				= "救我 ~~~",
-	Reinforcements		= "Wind Lord Mel'jarak calls for reinforcements!"
+	Reinforcements		= "风领主梅尔加拉克调遣援兵了！"
 })
+
 ------------
 -- Amber-Shaper Un'sok --
 ------------

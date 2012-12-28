@@ -266,7 +266,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 end
 
 function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
-	if spellId == 123120 and destGUID == UnitGUID("player") and self:AntiSpam(3) then
+	if spellId == 123120 and destGUID == UnitGUID("player") and self:AntiSpam(3, 1) then
 		specwarnPheromoneTrail:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3") --快躲開
 	end
@@ -275,10 +275,12 @@ mod.SPELL_MISSED = mod.SPELL_DAMAGE
 
 function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, _, _, _, target)
 	if msg:find("spell:122774") then
-		Crushcount = Crushcount + 1
-		warnCrush:Show()
-		specwarnCrushH:Show(Crushcount)
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_nyjd.mp3") --碾壓
+		if self:AntiSpam(3, 2) then
+			Crushcount = Crushcount + 1
+			warnCrush:Show()
+			specwarnCrushH:Show(Crushcount)
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_nyjd.mp3") --碾壓
+		end
 		timerCrush:Start()
 		if msg:find(L.UnderHim) and target == UnitName("player") then
 			specwarnUnder:Show()--it's a bit of a too little too late warning, but hopefully it'll help people in LFR understand it's not place to be and less likely to repeat it, eventually thining out LFR failure rate to this.

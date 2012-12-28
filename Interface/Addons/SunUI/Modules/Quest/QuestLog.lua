@@ -1,4 +1,4 @@
-local T, C, L, _ = unpack(select(2, ...))
+local S, L, DB, _, C = unpack(select(2, ...))
 
 ----------------------------------------------------------------------------------------
 --	Quest level(yQuestLevel by Yleaf)

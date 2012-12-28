@@ -1,7 +1,8 @@
 ﻿local mod	= DBM:NewMod(742, "DBM-TerraceofEndlessSpring", nil, 320)
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
-local sndJK		= mod:NewSound(nil, "SoundJK", true)
+local sndJK		= mod:NewSound(nil, "SoundWOP", true)
+local sndHX		= mod:NewSound(nil, "SoundWOP", true)
 
 mod:SetRevision(("$Revision: 8199 $"):sub(12, -3))
 mod:SetCreatureID(62442)--62919 Unstable Sha, 62969 Embodied Terror
@@ -54,6 +55,7 @@ local timerSummonUnstableShaCD			= mod:NewCDTimer(18, "ej6320", nil, nil,nil, "I
 local timerSummonEmbodiedTerrorCD		= mod:NewCDTimer(41, "ej6316", nil, nil, nil, "Interface\\Icons\\achievement_raid_terraceofendlessspring04")
 local timerTerrorizeCD					= mod:NewNextTimer(14, 123012)--Besides being cast 14 seconds after they spawn, i don't know if they recast it if they live too long, their health was too undertuned to find out.
 local timerSunBreathCD					= mod:NewCDTimer(29, 122855)
+local timerBathedinLight				= mod:NewBuffFadesTimer(6, 122858, nil, mod:IsHealer())
 --local timerLightOfDayCD					= mod:NewCDTimer(30.5, "ej6551", nil, mod:IsHealer(), nil, 123716)--Don't have timing for this yet, heroic logs i was sent always wiped VERY early in light phase.
 
 local berserkTimer						= mod:NewBerserkTimer(490)--a little over 8 min, basically 3rd dark phase is auto berserk.
@@ -62,6 +64,8 @@ local terrorName = EJ_GetSectionInfo(6316)
 local targetScansDone = 0
 
 mod:AddBoolOption("HudMAP", true, "sound")
+mod:AddBoolOption("WarnJK", mod:IsHealer(), "sound")
+
 local DBMHudMap = DBMHudMap
 local free = DBMHudMap.free
 local function register(e)	
@@ -145,7 +149,10 @@ end
 function mod:OnCombatStart(delay)
 	timerShadowBreathCD:Start(8.5-delay)
 	if not mod:IsDps() then
-		sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")--準備火息
+		sndHX:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")--準備火息
+		sndHX:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndHX:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndHX:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	end
 	timerNightmaresCD:Start(13.5-delay)
 	timerDayCD:Start(-delay)
@@ -182,11 +189,13 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif args:IsSpellID(123012) then
 		warnTerrorize:Show(args.destName)
-		specWarnTerrorize:Show(args.destName)
 		if mod:IsHealer() then
+			specWarnTerrorize:Show(args.destName)
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\dispelnow.mp3")--快驅散
+		end
+		if self.Options.WarnJK then
 			if GetTime() - daytime < 96 then
-				sndJKNext[args.sourceGUID] = mod:NewSound(nil, "SoundJK", true)
+				sndJKNext[args.sourceGUID] = mod:NewSound(nil, "SoundWOP", true)
 				sndJKNext[args.sourceGUID]:Schedule(18, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qszb.mp3")--驅散準備
 				sndJKNext[args.sourceGUID]:Schedule(19, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 				sndJKNext[args.sourceGUID]:Schedule(20, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
@@ -197,6 +206,8 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnSunbeam:Show()
 		end
+	elseif args:IsSpellID(122858) and args:IsPlayer() then
+		timerBathedinLight:Start()
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
@@ -222,11 +233,20 @@ function mod:SPELL_CAST_SUCCESS(args)
 			timerShadowBreathCD:Start()
 		end
 		if not mod:IsDps() then
-			sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
+			sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
+			sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 			if self:IsDifficulty("heroic10", "heroic25") then
-				sndWOP:Schedule(23, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
+				sndHX:Schedule(21, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
+				sndHX:Schedule(22.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+				sndHX:Schedule(23.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+				sndHX:Schedule(24.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 			else
-				sndWOP:Schedule(26, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
+				sndHX:Schedule(24, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
+				sndHX:Schedule(25.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+				sndHX:Schedule(26.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+				sndHX:Schedule(27.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 			end
 		end
 	elseif args:IsSpellID(124176, 123630) then
@@ -242,7 +262,7 @@ function mod:RAID_BOSS_EMOTE(msg)
 		warnSummonEmbodiedTerror:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kjjx.mp3")--恐懼具現
 		terrorN = terrorN + 1
-		if mod:IsHealer() then
+		if self.Options.WarnJK then
 			sndJK:Schedule(10, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qszb.mp3")--驅散準備
 			sndJK:Schedule(11, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 			sndJK:Schedule(12, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
@@ -256,12 +276,17 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 	if spellId == 122770 and self:AntiSpam(2, 1) then--Nightmares (Night Phase)
 		targetScansDone = 0
 		self:TargetScanner()
-		timerNightmaresCD:Start()
+		if timerDayCD:GetTime() < 106 then
+			timerNightmaresCD:Start()
+		end
 	elseif spellId == 123252 and self:AntiSpam(2, 2) then--Dread Shadows Cancel (Sun Phase)
 		daytime = GetTime()
 		timerShadowBreathCD:Cancel()
 		if not mod:IsDps() then
-			sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
+			sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
+			sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		end
 		timerSunbeamCD:Cancel()
 		timerNightmaresCD:Cancel()
@@ -289,21 +314,26 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		timerSunBreathCD:Cancel()
 --		timerLightOfDayCD:Cancel()
 		warnNight:Show()
-		sndJK:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qszb.mp3")
-		sndJK:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-		sndJK:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-		sndJK:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-		for i,j in pairs(sndJKNext) do
-			sndJKNext[i]:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qszb.mp3")
-			sndJKNext[i]:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-			sndJKNext[i]:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-			sndJKNext[i]:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		if self.Options.WarnJK then
+			sndJK:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qszb.mp3")
+			sndJK:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndJK:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndJK:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			for i,j in pairs(sndJKNext) do
+				sndJKNext[i]:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qszb.mp3")
+				sndJKNext[i]:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+				sndJKNext[i]:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+				sndJKNext[i]:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			end
+			table.wipe(sndJKNext)
 		end
-		table.wipe(sndJKNext)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\phasechange.mp3")
 		timerShadowBreathCD:Start(10)
 		if not mod:IsDps() then
-			sndWOP:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
+			sndHX:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")--準備火息
+			sndHX:Schedule(7.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndHX:Schedule(8.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndHX:Schedule(9.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		end
 		timerNightmaresCD:Start(16)
 		timerDayCD:Start()
@@ -335,17 +365,19 @@ function mod:UNIT_DIED(args)
 	local cid = self:GetCIDFromGUID(args.destGUID)
 	if cid == 62969 then
 		terrorN = terrorN - 1
-		if terrorN == 0 then
-			sndJK:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qszb.mp3")
-			sndJK:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-			sndJK:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-			sndJK:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-		end
-		if sndJKNext[args.destGUID] then
-			sndJKNext[args.destGUID]:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qszb.mp3")
-			sndJKNext[args.destGUID]:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-			sndJKNext[args.destGUID]:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-			sndJKNext[args.destGUID]:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		if self.Options.WarnJK then
+			if terrorN == 0 then
+				sndJK:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qszb.mp3")
+				sndJK:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+				sndJK:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+				sndJK:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			end
+			if sndJKNext[args.destGUID] then
+				sndJKNext[args.destGUID]:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qszb.mp3")
+				sndJKNext[args.destGUID]:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+				sndJKNext[args.destGUID]:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+				sndJKNext[args.destGUID]:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			end
 		end
 	end
 end

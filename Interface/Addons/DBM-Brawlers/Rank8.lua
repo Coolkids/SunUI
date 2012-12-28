@@ -1,7 +1,8 @@
 local mod	= DBM:NewMod("BrawlRank8", "DBM-Brawlers")
 local L		= mod:GetLocalizedStrings()
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8369 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8381 $"):sub(12, -3))
 --mod:SetCreatureID(60491)
 mod:SetModelID(46265)
 mod:SetZone()
@@ -24,7 +25,7 @@ local specWarnBlueCrush			= mod:NewSpecialWarningInterrupt(133262)
 local specWarnDestructolaser	= mod:NewSpecialWarningMove(133250)
 local specWarnStaticCharge		= mod:NewSpecialWarningInterrupt(135621)
 
-local timerEvilGlareCD			= mod:NewNextTimer(6, 133208)
+--local timerEvilGlareCD			= mod:NewNextTimer(6, 133208)--This sometimes comes early, most of time it is 6 second next timer though.
 local timerPowerCrystalCD		= mod:NewCDTimer(13, 133398)--13-17 second variation
 local timerBlueCrushCD			= mod:NewNextTimer(30, 133262)
 local timerDestructolaserCD		= mod:NewNextTimer(30, 133250)
@@ -49,12 +50,14 @@ function mod:SPELL_CAST_START(args)
 		warnBlueCrush:Show()
 		timerBlueCrushCD:Start()
 		if brawlersMod:PlayerFighting() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3")
 			specWarnBlueCrush:Show(args.sourceName)
 		end
 	elseif args:IsSpellID(135621) then
 		warnStaticCharge:Show()
 --		timerStaticChargeCD:Start()
 		if brawlersMod:PlayerFighting() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3")
 			specWarnStaticCharge:Show(args.sourceName)
 		end
 	end
@@ -64,15 +67,17 @@ function mod:SPELL_CAST_SUCCESS(args)
 	if not brawlersMod.Options.SpectatorMode and not brawlersMod:PlayerFighting() then return end--Spectator mode is disabled, do nothing.
 	if args:IsSpellID(133208) then
 		warnEvilGlare:Show()
-		timerEvilGlareCD:Start()
+--		timerEvilGlareCD:Start()
 		if brawlersMod:PlayerFighting() then
 			specWarnEvilGlare:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")
 		end
 	elseif args:IsSpellID(133250) then
 		warnDestructolaser:Show()
 		timerDestructolaserCD:Start()
 		if brawlersMod:PlayerFighting() then
 			specWarnDestructolaser:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")
 		end
 	end
 end

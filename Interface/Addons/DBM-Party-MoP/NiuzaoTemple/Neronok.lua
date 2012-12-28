@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7464 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8294 $"):sub(12, -3))
 mod:SetCreatureID(62205)
 mod:SetModelID(43151)
 mod:SetZone()
@@ -23,7 +23,7 @@ local specWarnResin			= mod:NewSpecialWarningYou(121447)
 local specWarnCausticPitch	= mod:NewSpecialWarningMove(121443)
 local specWarnFly			= mod:NewSpecialWarning("specWarnFly")
 
-local timerResinCD			= mod:NewCDTimer(14, 121447)
+local timerResinCD			= mod:NewCDTimer(20, 121447)--20-25 sec variation
 
 local windsActive = false
 
@@ -55,7 +55,7 @@ end
 function mod:SPELL_INTERRUPT(args)
 	if (type(args.extraSpellId) == "number" and args.extraSpellId == 121282) and self:AntiSpam() then
 		windsActive = false
-		timerResinCD:Start(10)--10-14sec after?
+		timerResinCD:Start(10)
 	end
 end
 

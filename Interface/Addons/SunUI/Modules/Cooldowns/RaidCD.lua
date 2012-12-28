@@ -1,11 +1,10 @@
-﻿----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
 --	Raid cooldowns(alRaidCD by Allez)
 --  Modify by Ljxx.net at 2011.10.7
 ----------------------------------------------------------------------------------------
-local S, C, L, DB = unpack(select(2, ...))
-local _
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("RaidCD")
-
+local S, L, DB, _, C = unpack(select(2, ...))
+local RCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("RaidCD", "AceEvent-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local show = {
 	raid = true,
 	party = true,
@@ -46,6 +45,7 @@ local sformat = string.format
 local floor = math.floor
 local timer = 0
 local bars = {}
+local RaidCDAnchor = CreateFrame("Frame", "RaidCDAnchor", UIParent)
 
 local FormatTime = function(time)
 	if time >= 60 then
@@ -55,22 +55,16 @@ local FormatTime = function(time)
 	end
 end
 
-local CreateFS = function(frame, fsize, fstyle)
-	local fstring = frame:CreateFontString(nil, "OVERLAY")
-	fstring:SetFont(DB.Font, C["MiniDB"]["RaidCDFontSize"], "OUTLINE")
-	return fstring
-end
-
-local UpdatePositions = function()
+function RCD:UpdatePositions()
 	for i = 1, #bars do
 		bars[i]:ClearAllPoints()
 		if i == 1 then
-			bars[i]:SetPoint("TOPLEFT", RaidCDAnchor, "TOPLEFT")
+			bars[i]:SetPoint("CENTER", ClassCDAnchor)
 		else
-			if C["MiniDB"].RaidCDDirection == 2 then
-				bars[i]:Point("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, C["MiniDB"].RaidCDHeight*2+5)
+			if C["RaidCDDirection"] == 2 then
+				bars[i]:SetPoint("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, C["RaidCDHeight"]*2+5)
 			else
-				bars[i]:Point("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -C["MiniDB"].RaidCDHeight*2+5)
+				bars[i]:SetPoint("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -C["RaidCDHeight"]*2+5)
 			end
 		end
 		bars[i].id = i
@@ -81,7 +75,7 @@ local StopTimer = function(bar)
 	bar:SetScript("OnUpdate", nil)
 	bar:Hide()
 	tremove(bars, bar.id)
-	UpdatePositions()
+	RCD:UpdatePositions()
 end
 
 local BarUpdate = function(self, elapsed)
@@ -109,12 +103,14 @@ end
 
 local OnMouseDown = function(self, button)
 	if button == "LeftButton" then
-		if GetNumGroupMembers() > 0 then
-			SendChatMessage(self.left:GetText().."-"..GetSpellLink(self.spellId)..":"..self.right:GetText(), "RAID")
-		elseif GetNumSubgroupMembers() > 0 and not UnitInRaid("player") then
-			SendChatMessage(self.left:GetText().."-"..GetSpellLink(self.spellId)..":"..self.right:GetText(), "PARTY")
+		if IsInRaid() then
+			SendChatMessage("SunUI"..COOLDOWN_REMAINING..self.left:GetText().."-"..GetSpellLink(self.spellId)..":"..self.right:GetText(), "RAID")
+		elseif IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
+				SendChatMessage("SunUI"..COOLDOWN_REMAINING..self.left:GetText().."-"..GetSpellLink(self.spellId)..":"..self.right:GetText(), "INSTANCE_CHAT")
+		elseif IsInGroup() then
+				SendChatMessage("SunUI"..COOLDOWN_REMAINING..self.left:GetText().."-"..GetSpellLink(self.spellId)..":"..self.right:GetText(), "PARTY")		
 		else
-			SendChatMessage(self.left:GetText().."-"..GetSpellLink(self.spellId)..":"..self.right:GetText(), "SAY")
+			SendChatMessage("SunUI"..COOLDOWN_REMAINING..self.left:GetText().."-"..GetSpellLink(self.spellId)..":"..self.right:GetText(), "SAY")
 		end
 	elseif button == "RightButton" then
 		StopTimer(self)
@@ -124,31 +120,26 @@ end
 local CreateBar = function()
 	local bar = CreateFrame("Statusbar", nil, UIParent)
 	bar:SetFrameStrata("LOW")
-	bar:Size(C["MiniDB"].RaidCDWidth, C["MiniDB"].RaidCDHeight)
+	bar:SetSize(C["RaidCDWidth"], C["RaidCDHeight"])
 	bar:SetStatusBarTexture(DB.Statusbar)
 	bar:SetMinMaxValues(0, 100)
 
-	--bar:SetReverseFill(true)
 	S.CreateBack(bar)
 	S.CreateMark(bar)
-	bar.left = CreateFS(bar)
-	bar.left:SetPoint("LEFT", 2, C["MiniDB"].RaidCDHeight)
+	bar.left = S.MakeFontString(bar, C["RaidCDFontSize"])
+	bar.left:SetPoint("LEFT", 2, C["RaidCDHeight"])
 	bar.left:SetJustifyH("LEFT")
-	bar.left:Size(C["MiniDB"].RaidCDWidth*2/3, C["MiniDB"].RaidCDHeight)
+	bar.left:Size(C["RaidCDWidth"]*2/3, C["RaidCDHeight"])
 
-	bar.right = CreateFS(bar)
-	bar.right:Point("RIGHT", 1, C["MiniDB"].RaidCDHeight)
+	bar.right = S.MakeFontString(bar, C["RaidCDFontSize"])
+	bar.right:Point("RIGHT", 1, C["RaidCDHeight"])
 	bar.right:SetJustifyH("RIGHT")
 
 	bar.icon = CreateFrame("Button", nil, bar)
-	bar.icon:Width(C["MiniDB"].RaidCDHeight*2)
-	bar.icon:Height(C["MiniDB"].RaidCDHeight*2)
+	bar.icon:Width(C["RaidCDHeight"]*2)
+	bar.icon:Height(C["RaidCDHeight"]*2)
 	bar.icon:Point("BOTTOMRIGHT", bar, "BOTTOMLEFT", -5, 0)
 	bar.icon:CreateShadow()
-	bar.icon.backdrop = CreateFrame("Frame", nil, bar.icon)
-	bar.icon.backdrop:Point("TOPLEFT", -2, 2)
-	bar.icon.backdrop:Point("BOTTOMRIGHT", 2, -2)
-	bar.icon.backdrop:SetFrameStrata("BACKGROUND")
 	bar:CreateShadow()
 
 	return bar
@@ -186,56 +177,70 @@ local StartTimer = function(name, spellId)
 	bar:SetScript("OnLeave", OnLeave)
 	bar:SetScript("OnMouseDown", OnMouseDown)
 	tinsert(bars, bar)
-	UpdatePositions()
+	RCD:UpdatePositions()
 end
 
-local OnEvent = function(self, event, ...)
-	if event == "COMBAT_LOG_EVENT_UNFILTERED" then
-		local _, eventType, _, _, sourceName, sourceFlags = ...
-
-		if band(sourceFlags, filter) == 0 then return end
-		local spellId = select(12, ...)
-		if raid_spells[spellId] and show[select(2, IsInInstance())] then
-			if eventType == "SPELL_RESURRECT" and not spellId == 61999 then
-				if spellId == 95750 then spellId = 6203 end
-				StartTimer(sourceName, spellId)
-			elseif eventType == "SPELL_AURA_APPLIED" then
-				if spellId == 20707 and select(2, UnitClass(sourceName)) == 'WARLOCK' then
-					StartTimer(sourceName, spellId)
-				end
-				if spellId == 87023 and select(2, UnitClass(sourceName)) == 'MAGE' then
-					StartTimer(sourceName, spellId)
-				end
-				if spellId == 105763 and select(2, UnitClass(sourceName)) == 'SHAMAN' then
-					StartTimer(sourceName, 16190)
-				end				
-			elseif eventType == "SPELL_CAST_SUCCESS" then
+function RCD:COMBAT_LOG_EVENT_UNFILTERED(null, ...)
+	local _, eventType, _, _, sourceName, sourceFlags = ...
+	if band(sourceFlags, filter) == 0 then return end
+	local spellId = select(12, ...)
+	if raid_spells[spellId] and show[select(2, IsInInstance())] then
+		if eventType == "SPELL_RESURRECT" and not spellId == 61999 then
+			if spellId == 95750 then spellId = 6203 end
+			StartTimer(sourceName, spellId)
+		elseif eventType == "SPELL_AURA_APPLIED" then
+			if spellId == 20707 and select(2, UnitClass(sourceName)) == 'WARLOCK' then
 				StartTimer(sourceName, spellId)
 			end
-			if eventType == "SPELL_RESURRECT" and spellId == 20484 then StartTimer(sourceName, spellId) end
+			if spellId == 87023 and select(2, UnitClass(sourceName)) == 'MAGE' then
+				StartTimer(sourceName, spellId)
+			end
+			if spellId == 105763 and select(2, UnitClass(sourceName)) == 'SHAMAN' then
+				StartTimer(sourceName, 16190)
+			end				
+		elseif eventType == "SPELL_CAST_SUCCESS" then
+			StartTimer(sourceName, spellId)
 		end
-	elseif event == "ZONE_CHANGED_NEW_AREA" and select(2, IsInInstance()) == "arena" then
+		if eventType == "SPELL_RESURRECT" and spellId == 20484 then StartTimer(sourceName, spellId) end
+	end
+end
+function RCD:ZONE_CHANGED_NEW_AREA()
+	if select(2, IsInInstance()) == "arena" then
 		for k, v in pairs(bars) do
 			StopTimer(v)
 		end
 	end
 end
-function Module:OnEnable()
-	if C["MiniDB"].RaidCD ~= true then return end
-	local RaidCDAnchor = CreateFrame("Frame", "RaidCDAnchor", UIParent)
-	RaidCDAnchor:SetSize(C["MiniDB"].RaidCDWidth, C["MiniDB"].RaidCDHeight)
-	local addon = CreateFrame("Frame")
-	addon:SetScript("OnEvent", OnEvent)
-	addon:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-	addon:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-	MoveHandle.RaidCD = S.MakeMoveHandle(RaidCDAnchor, "RaidCD", "RaidCD")
-	SlashCmdList.RaidCD = function(msg)
-		StartTimer(UnitName("player"), 20484)	-- Rebirth
-		StartTimer(UnitName("player"), 20707)	-- Soulstone
-		StartTimer(UnitName("player"), 6346)	-- Fear Ward
-		StartTimer(UnitName("player"), 29166)	-- Innervate
-		StartTimer(UnitName("player"), 32182)	-- Heroism
-		StartTimer(UnitName("player"), 2825)	-- Bloodlust
+function RCD:UpdateSize()
+	RaidCDAnchor:SetSize(C["RaidCDWidth"], C["RaidCDHeight"])
+	for i = 1, #bars do
+		bars[i]:SetSize(C["RaidCDWidth"], C["RaidCDHeight"])
 	end
-	SLASH_RaidCD1 = "/raidcd"
 end
+function RCD:UpdateSet()
+	if C["RaidCD"] then
+		RCD:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+		RCD:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+	else
+		RCD:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+		RCD:UnregisterEvent("ZONE_CHANGED_NEW_AREA")
+		for k, v in pairs(bars) do
+			StopTimer(v)
+		end
+	end
+end
+function RCD:OnInitialize()
+	C = SunUIConfig.db.profile.MiniDB
+	RaidCDAnchor:SetSize(C["RaidCDWidth"], C["RaidCDHeight"])
+	RCD:UpdateSet()
+	MoveHandle.RaidCD = S.MakeMoveHandle(RaidCDAnchor, "RaidCD", "RaidCD")
+end
+SlashCmdList.RaidCD = function(msg)
+	StartTimer(UnitName("player"), 20484)	-- Rebirth
+	StartTimer(UnitName("player"), 20707)	-- Soulstone
+	StartTimer(UnitName("player"), 6346)	-- Fear Ward
+	StartTimer(UnitName("player"), 29166)	-- Innervate
+	StartTimer(UnitName("player"), 32182)	-- Heroism
+	StartTimer(UnitName("player"), 2825)	-- Bloodlust
+end
+SLASH_RaidCD1 = "/raidcd"

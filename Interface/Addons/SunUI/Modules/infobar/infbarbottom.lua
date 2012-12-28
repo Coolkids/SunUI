@@ -1,8 +1,6 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
-local _
-local Core = LibStub("AceAddon-3.0"):GetAddon("SunUI")
-local Module = Core:NewModule("InfoPanelBottom")
-
+﻿local S, L, DB, _, C = unpack(select(2, ...))
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("InfoPanelBottom")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local function BuildClock()
 	local Clock = CreateFrame("Frame", "InfoPanelBottom1", BottomInfoPanel)
 	Clock.Text = S.MakeFontString(Clock)
@@ -64,7 +62,7 @@ local function BuildClock()
 end
 
 local function BuildFriend()
-	if C["InfoPanelDB"]["Friend"] ~= true then return end
+	if C["Friend"] ~= true then return end
 	StaticPopupDialogs.SET_BN_BROADCAST = {
 		text = BN_BROADCAST_TOOLTIP,
 		button1 = ACCEPT,
@@ -345,7 +343,7 @@ local function BuildFriend()
 end
 
 local function BuildGuild()
-	if C["InfoPanelDB"]["Guild"] ~= true then return end
+	if C["Guild"] ~= true then return end
 	-- localized references for global functions (about 50% faster)
 	local join 			= string.join
 	local format		= string.format
@@ -1177,8 +1175,11 @@ local function DungeonHelper()
 	Stat:RegisterEvent("LFG_COMPLETION_REWARD")
 	Stat:RegisterEvent("PARTY_MEMBERS_CHANGED")
 end
+function Module:OnInitialize()
+	C = SunUIConfig.db.profile.InfoPanelDB
+end
 function Module:OnEnable()
-	if C["InfoPanelDB"]["OpenBottom"] == true then
+	if C["OpenBottom"] == true then
 		BuildClock()
 		BuildFriend()
 		BuildGuild()

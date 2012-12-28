@@ -1,5 +1,5 @@
 local ADDON_NAME, ns = ...
-local S, _, _, DB = unpack(SunUI)
+local S, _, DB = unpack(SunUI)
 local _G = _G
 local L = ns.Locale
 ns._Objects = {}

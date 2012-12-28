@@ -1,5 +1,4 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
-local _
+﻿local S, L, DB, _, C = unpack(select(2, ...))
 local CB = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("CB", "AceTimer-3.0")
 function CB:OnEnable()
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig", "AceConsole-3.0")

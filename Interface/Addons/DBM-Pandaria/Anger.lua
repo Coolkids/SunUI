@@ -2,10 +2,10 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7887 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8424 $"):sub(12, -3))
 mod:SetCreatureID(60491)
 mod:SetModelID(41448)
-mod:SetZone(809)--Kun-Lai Summit (zoneid not yet known)
+mod:SetZone(809)--Kun-Lai Summit
 mod:SetUsedIcons(8, 7, 6, 5, 4, 3, 2, 1)
 
 -- TODO: This is field boss, if you die while combat, you can go tomb and revive as you wish.
@@ -14,7 +14,7 @@ mod:SetUsedIcons(8, 7, 6, 5, 4, 3, 2, 1)
 -- Also, you can enter combat while boss fights (not 100% health). 
 -- On this situration, block OnCombatStart() function will be better (+ do not record kill time)
 mod:RegisterCombat("combat")
-mod:SetWipeTime(180)
+mod:SetWipeTime(120)
 
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START",
@@ -83,7 +83,7 @@ do
 			self:SetIcon(v, mcIcon)
 			mcIcon = mcIcon - 1
 		end
-		self:Schedule(10, clearMCTargets)--delay 10 sec. (mc sperad takes 2~3 sec, and dead players do not get the SPELL_AURA_REMOVED event)
+		self:Schedule(10, clearMCTargets)--delay 10 sec. (mc spread takes 2~3 sec, and dead players do not get the SPELL_AURA_REMOVED event)
 	end
 end
 

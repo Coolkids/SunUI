@@ -39,7 +39,7 @@ L= DBM:GetModLocalization(742)
 
 L:SetOptionLocalization({
 	SoundWOP					= "语音警告：重要技能",
-	SoundJK						= "语音警告：$spell:123011的预先警告",
+	WarnJK						= "语音警告：$spell:123011的预先警告",
 	HudMAP						= "高级定位监视(HUD)：$spell:122770的位置(仅10人)",
 	optDS						= "\"恐怖阴影\"叠加几层时，开始报警",
 	six							= "6层",

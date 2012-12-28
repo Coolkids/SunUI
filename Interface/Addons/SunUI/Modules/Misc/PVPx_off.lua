@@ -1,8 +1,7 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
-local _
+﻿local S, L, DB, _, C = unpack(select(2, ...))
 
 -- Config
-local fsize = 16 -- 字體大小
+local fsize = DB.FontSize 
 local _G = _G
 local UIParent = UIParent
 local function dummy() end

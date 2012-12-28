@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7621 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8293 $"):sub(12, -3))
 mod:SetCreatureID(59150)
 mod:SetModelID(40597)
 
@@ -37,17 +37,17 @@ local specWarnBook				= mod:NewSpecialWarningMove(113620)
 
 local timerPyroblastCD			= mod:NewCDTimer(6, 113690, nil, false)
 --local timerQuickenedMindCD	= mod:NewCDTimer(30, 113682)--Needs more data. I see both 30 sec and 1 min cds, so I just need larger sample size.
-local timerFireballVolleyCD		= mod:NewNextTimer(30, 113691)
-local timerBookBurnerCD			= mod:NewNextTimer(30, 113364)
+--local timerFireballVolleyCD		= mod:NewCDTimer(30, 113691)--Seems very random, maybe affected by school lockout so kicking pyroblast prevents this?
+local timerBookBurnerCD			= mod:NewCDTimer(15.5, 113364)
 local timerDragonsBreath		= mod:NewBuffActiveTimer(10, 113641)
-local timerDragonsBreathCD		= mod:NewNextTimer(45.5, 113641)
+local timerDragonsBreathCD		= mod:NewNextTimer(50, 113641)
 
 local quickcast = false
 
 function mod:OnCombatStart(delay)
 	timerPyroblastCD:Start(5-delay)
 --	timerQuickenedMindCD:Start(9-delay)
-	timerFireballVolleyCD:Start(15.5-delay)
+--	timerFireballVolleyCD:Start(15.5-delay)
 	timerBookBurnerCD:Start(20.5-delay)
 	timerDragonsBreathCD:Start(30-delay)
 end
@@ -66,7 +66,7 @@ function mod:SPELL_CAST_START(args)
 		if (not quickcast) then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3")--打斷施法
 		end
-		timerFireballVolleyCD:Start()
+--		timerFireballVolleyCD:Start()
 	elseif args:IsSpellID(113364) then
 		warnBookBurner:Show()
 		timerBookBurnerCD:Start()

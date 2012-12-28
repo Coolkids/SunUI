@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
+﻿local S, L, DB, _, C = unpack(select(2, ...))
 local Skin = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SkinOther", "AceEvent-3.0")
 local function SkinOther()
 	Skin:UnregisterEvent("PLAYER_ENTERING_WORLD")

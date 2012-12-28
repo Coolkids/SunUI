@@ -2,14 +2,13 @@
 Copyright (c) 2009-2012, Hendrik "Nevcairiel" Leppkes < h.leppkes@gmail.com >
 All rights reserved.
 ]]
-local S, C, L, DB = unpack(select(2, ...))
+local S, L, DB, _, C = unpack(select(2, ...))
 local _G =_G
-local _
 if IsAddOnLoaded("Mapster") or IsAddOnLoaded("Carbonite") then
 	return
 end
 local Mapster = LibStub("AceAddon-3.0"):GetAddon("SunUI")
-
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local MODNAME = "FogClear"
 local FogClear = Mapster:NewModule(MODNAME, "AceHook-3.0", "AceEvent-3.0")
 
@@ -1393,7 +1392,8 @@ end
 local worldMapCache = {}
 local battleMapCache = {}
 function FogClear:OnEnable()
-	if C["MiniDB"]["FogClear"] == false then errata = nil return end 
+	C = SunUIConfig.db.profile.MiniDB
+	if C["FogClear"] == false then errata = nil return end 
 	self:RawHook("GetNumMapOverlays", true)
 	self:SecureHook("WorldMapFrame_Update", "UpdateWorldMapOverlays")
 

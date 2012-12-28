@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7772 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8294 $"):sub(12, -3))
 mod:SetCreatureID(61485)
 mod:SetModelID(43120)
 mod:SetZone()
@@ -22,7 +22,7 @@ local warnBulwark			= mod:NewSpellAnnounce(119476, 3)
 local specWarnTempest		= mod:NewSpecialWarningSpell(119875, mod:IsHealer())
 local specWarnBulwark		= mod:NewSpecialWarningSpell(119476, nil, nil, nil, true)
 
-local timerBladeRushCD		= mod:NewCDTimer(12, 124283)
+local timerBladeRushCD		= mod:NewCDTimer(12, 124283)--12-20sec variation
 local timerTempestCD		= mod:NewCDTimer(43, 119875)--Tempest has a higher cast priority than blade rush, if it's do, it'll delay blade rush.
 
 mod:AddBoolOption("HealthFrame", true)

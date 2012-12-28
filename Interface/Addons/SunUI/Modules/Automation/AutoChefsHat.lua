@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
+﻿local S, L, DB, _, C = unpack(select(2, ...))
 
 ----------------------------------------------------------------------------------------
 --	Auto equip Chef's Hat(module from Inomena by p3lim)

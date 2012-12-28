@@ -1,5 +1,4 @@
-local S, C, L, DB = unpack(select(2, ...))
-local _
+local S, L, DB, _, C = unpack(select(2, ...))
 -------------------------------------------------------------------------------
 -- By Lockslap (US, Bleeding Hollow)
 -- <Borderline Amazing>, http://ba-guild.com

@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
+﻿local S, L, DB, _, C = unpack(select(2, ...))
 local _
 --[[ local MINCOLOR = 0.5;
 local COLORINC = 0.2;

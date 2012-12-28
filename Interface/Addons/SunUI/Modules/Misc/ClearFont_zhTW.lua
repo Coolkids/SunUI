@@ -1,8 +1,9 @@
-local S, C, L, DB = unpack(select(2, ...))
-local _
+local S, L, DB, _, C = unpack(select(2, ...))
+local C
 if not (GetLocale() == "zhTW") then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ClearFont_zhTW", "AceEvent-3.0")
-
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
+local CF_SCALE
 -- 指出在哪里尋找字體
 local CLEAR_FONT_BASE = "Fonts\\";
 -- 金幣、堆疊、按鍵綁定等字體
@@ -366,6 +367,6 @@ local function ApplySystemFonts(event, addon)
 	if (CanSetFont(FocusFontSmall)) then				FocusFontSmall:SetFont(CLEAR_FONT, 15 * CF_SCALE); end		-- 預設值：16
 end
 function Module:OnInitialize()
-	CF_SCALE = C["MiniDB"]["FontScale"]*S.Scale(1)
+	CF_SCALE = SunUIConfig.db.profile.MiniDB.FontScale*S.Scale(1)
 	Module:RegisterEvent("ADDON_LOADED", ApplySystemFonts);
 end

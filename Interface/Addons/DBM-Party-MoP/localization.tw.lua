@@ -160,7 +160,7 @@ L:SetOptionLocalization({
 L= DBM:GetModLocalization(675)
 
 L:SetMiscLocalization({
-	StaffingRun		= "打擊者卡多克準備開始轟炸攻擊!"
+	StaffingRun		= "打擊者卡多克準備開始低空掃射!"
 })
 
 L:SetOptionLocalization({
@@ -200,9 +200,9 @@ L:SetMiscLocalization({
 L= DBM:GetModLocalization(708)
 
 L:SetMiscLocalization({
-	Pull		= "你們這些傢伙一點用都沒有!即使是你進貢給我的警衛，都無法讓這些弱小的生物遠離我的王宮。",
+	Pull		= "你們這些沒用的東西!就連你們獻上的守衛，都擋不住這些低等的生物。",
 	Kuai		= "葛薩恩部族會讓你們這些想要權力的傢伙知道為什麼我們才是王身邊真正的勇士!",
-	Ming		= "哈薩科部族會讓所有人看看為什麼我們才是真正的魔古!",
+	Ming		= "哈薩科會讓所有人看看為什麼我們才是真正的魔古!",
 	Haiyan		= "卡傑許部族會展示出強者才有資格替王效勞的原因!",
 	Defeat		= "是誰讓外來者進入我們的殿堂?只有哈薩科或卡傑許部族會做出這種背叛的行為!"
 })

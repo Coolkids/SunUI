@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
+local S, L, DB, _, C = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SunUIPowerBar", "AceTimer-3.0", "AceEvent-3.0")
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local powercolor = {}
@@ -25,15 +25,18 @@ for power, color in next, PowerBarColor do
 		end
 	end
 end
+local ShadowOrbs
+local eb
+local MageBars
 function Module:CreateShadowOrbs()
 	if DB.MyClass ~= "PRIEST" then return end
-	local ShadowOrbs = CreateFrame("Frame", nil, Holder)
+	ShadowOrbs = CreateFrame("Frame", nil, Holder)
 	ShadowOrbs:SetSize(C["Width"], C["Height"])
 	ShadowOrbs:SetScale(C["Scale"])
 	ShadowOrbs:SetPoint("CENTER", Holder)
 	tinsert(mainframe, ShadowOrbs)
 	local maxShadowOrbs = UnitPowerMax('player', SPELL_POWER_SHADOW_ORBS)
-	
+
 	for i = 1,maxShadowOrbs do
 		ShadowOrbs[i] = CreateFrame("StatusBar", nil, ShadowOrbs)
 		tinsert(threeframe, ShadowOrbs[i])
@@ -52,8 +55,6 @@ function Module:CreateShadowOrbs()
 	end
 	ShadowOrbs:RegisterEvent("UNIT_POWER")
 	ShadowOrbs:RegisterEvent("UNIT_DISPLAYPOWER")
-	ShadowOrbs:RegisterEvent("PLAYER_REGEN_ENABLED")
-	ShadowOrbs:RegisterEvent("PLAYER_REGEN_DISABLED")
 	ShadowOrbs:SetScript("OnEvent",function(self, event, unit)
 		local numShadowOrbs = UnitPower('player', SPELL_POWER_SHADOW_ORBS)
 		if unit == "player" then
@@ -321,14 +322,13 @@ function Module:CreateEclipse()
 	h:SetAllPoints(eb)
 	local ebInd = S.MakeFontString(h, 10*S.Scale(1), "THINOUTLINE")
 	ebInd:SetPoint('CENTER', h, 'CENTER', 0, 0)
-		
+
 	eb:RegisterEvent("ECLIPSE_DIRECTION_CHANGE")
 	eb:RegisterEvent("PLAYER_TALENT_UPDATE")
 	eb:RegisterEvent("UNIT_POWER")
 	eb:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
 	eb:RegisterEvent("PLAYER_ENTERING_WORLD")
 	eb:RegisterEvent("PLAYER_REGEN_DISABLED")
-	eb:RegisterEvent("PLAYER_REGEN_ENABLED")
 	eb:SetScript("OnEvent", function(self, event, unit, powerType)
 		if event == "ECLIPSE_DIRECTION_CHANGE" or event == "PLAYER_ENTERING_WORLD" then
 			local dir = GetEclipseDirection()
@@ -348,19 +348,13 @@ function Module:CreateEclipse()
 
 			if(showBar) then
 				eb:Show()
-				if eb:GetAlpha() < 1 then
-					UIFrameFadeIn(eb, 1, eb:GetAlpha(), 1)
-				end
 			else
 				eb:Hide()
-				if eb:GetAlpha() > 1 then
-					UIFrameFadeOut(eb, 1, eb:GetAlpha(), 0)
-				end
 			end
 		end
 		if event == "UNIT_POWER" then
 			if(unit ~= "player" or (event == 'UNIT_POWER' and powerType ~= 'ECLIPSE')) then return end
-	
+
 			local power = UnitPower('player', SPELL_POWER_ECLIPSE)
 			local maxPower = UnitPowerMax('player', SPELL_POWER_ECLIPSE)
 
@@ -510,7 +504,7 @@ function Module:FuckWarlock()
 				end
 			end
 		end
-		
+
 		if (event == "UNIT_POWER" or event == "UNIT_DISPLAYPOWER") and UnitAffectingCombat("player") then
 			if(unit ~= "player" or (powerType ~= "BURNING_EMBERS" and powerType ~= "SOUL_SHARDS" and powerType ~= "DEMONIC_FURY")) then return end
 			local wsb = self
@@ -551,29 +545,29 @@ function Module:FuckWarlock()
 end
 function Module:Mage()
 	if DB.MyClass ~= "MAGE" then return end
-	local bars = CreateFrame("Frame", nil, Holder)
-	bars:SetSize(C["Width"], C["Height"])
-	bars:SetPoint("CENTER", Holder)
-	tinsert(mainframe, bars)
+	MageBars = CreateFrame("Frame", nil, Holder)
+	MageBars:SetSize(C["Width"], C["Height"])
+	MageBars:SetPoint("CENTER", Holder)
+	tinsert(mainframe, MageBars)
 	for i = 1,6 do
-		bars[i] = CreateFrame("StatusBar", nil, bars)
-		bars[i]:SetSize((C["Width"]-space*(6-1))/6, C["Height"])
-		bars[i]:SetStatusBarTexture(DB.Statusbar)
-		tinsert(sixframe, bars[i])
-		local s = bars[i]:GetStatusBarTexture()
+		MageBars[i] = CreateFrame("StatusBar", nil, MageBars)
+		MageBars[i]:SetSize((C["Width"]-space*(6-1))/6, C["Height"])
+		MageBars[i]:SetStatusBarTexture(DB.Statusbar)
+		tinsert(sixframe, MageBars[i])
+		local s = MageBars[i]:GetStatusBarTexture()
 		S.CreateTop(s, DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
-		bars[i]:CreateShadow()
-		bars[i]:Hide()
+		MageBars[i]:CreateShadow()
+		MageBars[i]:Hide()
 		if (i == 1) then
-			bars[i]:SetPoint("LEFT", bars)
+			MageBars[i]:SetPoint("LEFT", MageBars)
 		else
-			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", space, 0)
+			MageBars[i]:SetPoint("LEFT", MageBars[i-1], "RIGHT", space, 0)
 		end
 	end
-	bars:RegisterEvent("PLAYER_ENTERING_WORLD")
-	bars:RegisterEvent("UNIT_AURA")
-	
-	bars:SetScript("OnEvent",function(self,event,unit)
+
+	MageBars:RegisterEvent("UNIT_AURA")
+
+	MageBars:SetScript("OnEvent",function(self,event,unit)
 		local num = select(4, UnitDebuff("player", GetSpellInfo(36032)))
 		if num == nil then num = 0 end
 		if unit ~= "player" then return end
@@ -629,14 +623,14 @@ function Module:HealthPowerBar()
 	spar:SetTexture("Interface\\Addons\\SunUI\\Media\\Arrow")
 	spar:SetVertexColor(1, 0, 0, 1) 
 	spar:SetSize(16, 16)
-	spar:SetPoint("TOP", bars:GetStatusBarTexture(), "BOTTOMRIGHT", 0, -4)
+	spar:SetPoint("TOP", bars:GetStatusBarTexture(), "BOTTOMRIGHT", 0, -2)
 	local healthtext = S.MakeFontString(bars)
 	healthtext:SetPoint("TOP", spar, "BOTTOM", 0, 7)
 	healthtext:SetTextColor(1, 0.22, 0.52)
-	
+
 	bars.SetValue_ = bars.SetValue
 	bars.SetValue = Smooth
-	
+
 	local power = CreateFrame("Statusbar", nil, bars)
 	power:SetSize(C["Width"], C["Height"])
 	power:SetStatusBarTexture(DB.Statusbar)
@@ -647,13 +641,13 @@ function Module:HealthPowerBar()
 	powerspar:SetTexture("Interface\\Addons\\SunUI\\Media\\ArrowT")
 	powerspar:SetVertexColor(.3,.45,.65, 1) 
 	powerspar:SetSize(16, 16)
-	powerspar:SetPoint("BOTTOM", power:GetStatusBarTexture(), "TOPRIGHT", 0, 4)
+	powerspar:SetPoint("BOTTOM", power:GetStatusBarTexture(), "TOPRIGHT", 0, 2)
 	local powertext = S.MakeFontString(bars)
 	powertext:SetPoint("BOTTOM", powerspar, "TOP", 0, -5)
 	tinsert(mainframe, power)
 	power.SetValue_ = power.SetValue
 	power.SetValue = Smooth
-	
+
 	bars:SetScript("OnUpdate", function(self, elapsed)
 		self.elapsed = (self.elapsed or 0) + elapsed
 		if self.elapsed < .2 then
@@ -734,6 +728,38 @@ function Module:UpdateFade()
 		Module:PLAYER_REGEN_DISABLED()
 	end
 end
+function Module:ACTIVE_TALENT_GROUP_CHANGED()
+	local spec = GetSpecialization()
+	local talent = (DB.MyClass == "PRIEST") and 3 or (DB.MyClass == "DRUID") and 1 or (DB.MyClass == "MAGE") and 1
+	if DB.MyClass == "PRIEST" and spec ~= 3 then
+		for i = 1,3 do
+			ShadowOrbs[i]:Hide()
+		end
+		ShadowOrbs:UnregisterAllEvents()
+	elseif DB.MyClass == "PRIEST" and spec == 3 then
+		ShadowOrbs:RegisterEvent("UNIT_POWER")
+		ShadowOrbs:RegisterEvent("UNIT_DISPLAYPOWER")
+	end
+	if DB.MyClass == "DRUID" and spec ~= 1 then
+		eb:Hide()
+		eb:UnregisterAllEvents()
+	elseif DB.MyClass == "DRUID" and spec == 1 then
+		eb:RegisterEvent("ECLIPSE_DIRECTION_CHANGE")
+		eb:RegisterEvent("PLAYER_TALENT_UPDATE")
+		eb:RegisterEvent("UNIT_POWER")
+		eb:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
+		eb:RegisterEvent("PLAYER_ENTERING_WORLD")
+		eb:RegisterEvent("PLAYER_REGEN_DISABLED")
+	end
+	if DB.MyClass == "MAGE" and spec ~= 1 then
+		for i = 1,6 do
+			MageBars[i]:Hide()
+		end
+		MageBars:UnregisterEvent("UNIT_AURA")
+	elseif DB.MyClass == "MAGE"  and spec == 1 then
+		MageBars:RegisterEvent("UNIT_AURA")
+	end
+end
 function Module:OnEnable()
 	C = SunUIConfig.db.profile.PowerBarDB
 	if not C["Open"] then Holder = nil return end
@@ -747,6 +773,7 @@ function Module:OnEnable()
 	Module:FuckWarlock()
 	Module:Mage()
 	Module:HealthPowerBar()
+	Module:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 	if C["Fade"] then
 		Module:RegisterEvent("PLAYER_ENTERING_WORLD", function()
 			Module:UnregisterEvent("PLAYER_ENTERING_WORLD")

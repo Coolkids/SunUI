@@ -1,8 +1,8 @@
 ﻿-- Engines
-local S, C, L, DB = unpack(select(2, ...))
+local S, L, DB, _, C = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ClassReminder", "AceEvent-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local _G = _G
-local _
 local ReminderBuffs = {
 	PRIEST = {
 		["Shields"] = { --inner fire/will group
@@ -362,11 +362,12 @@ end
 local i = 0
 local prv
 function Module:OnInitialize()
-	if not C["ReminderDB"].ShowClassBuff then return end
+	C = SunUIConfig.db.profile.ReminderDB
+	if not C["ShowClassBuff"] then return end
 	for groupName, _ in pairs(tab) do
 		i = i + 1
 		local frame = CreateFrame("Frame", "ReminderFrame"..i, UIParent)
-		frame:SetSize(C["ReminderDB"].ClassBuffSize,C["ReminderDB"].ClassBuffSize)
+		frame:SetSize(C["ClassBuffSize"],C["ClassBuffSize"])
 		if i == 1 then
 			MoveHandle.Class = S.MakeMoveHandle(frame, L["缺少药剂buff提示"], "Class")
 			prv = frame

@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
+﻿local S, L, DB, _, C = unpack(select(2, ...))
 local _
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI then return end

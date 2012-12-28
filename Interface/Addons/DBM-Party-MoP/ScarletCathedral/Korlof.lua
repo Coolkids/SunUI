@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7881 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8292 $"):sub(12, -3))
 mod:SetCreatureID(59223)
 mod:SetModelID(41154)
 
@@ -26,7 +26,7 @@ local specWarnScorchedEarth	= mod:NewSpecialWarningMove(114460)
 local specWarnFirestormKick	= mod:NewSpecialWarningMove(113766)  --voice
 local specWarnBlazingFists	= mod:NewSpecialWarningMove(114807, mod:IsTank()) -- Everything is dangerous in challenge mode, entry level heriocs will also be dangerous when they aren't overtuning your gear with an ilvl buff.if its avoidable, you should avoid it, in good practice, to create good habit for challenge modes.
 
-local timerFlyingKickCD		= mod:NewNextTimer(25, 113764)
+local timerFlyingKickCD		= mod:NewCDTimer(25, 113764)--25-30 second variation
 local timerFirestormKick	= mod:NewBuffActiveTimer(6, 113764)
 local timerBlazingFistsCD	= mod:NewNextTimer(30, 114807)
 

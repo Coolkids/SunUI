@@ -1,7 +1,6 @@
-local S, C, L, DB = unpack(select(2, ...))
+local S, L, DB, _, C = unpack(select(2, ...))
 local alpha = .5
 local _G = _G
-local _
 --[[ local classcolours = {
 	["HUNTER"] = { r = 0.58, g = 0.86, b = 0.49 },
 	["WARLOCK"] = { r = 0.6, g = 0.47, b = 0.85 },

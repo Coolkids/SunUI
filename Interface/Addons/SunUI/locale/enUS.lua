@@ -1,4 +1,4 @@
-﻿local S, C, L, DB = unpack(select(2, ...))
+﻿local S, L, DB, _, C = unpack(select(2, ...))
 
 if (GetLocale() == "zhTW" or GetLocale() == "zhCN") then  return end
 -- 控制台
