@@ -14,7 +14,7 @@ button1:CreateShadow("Background")
 button1:Hide()
 
 local button2 = CreateFrame("Button", nil, UIParent)
-button2:SetPoint("LEFT", button1, "RIGHT", 3, 0)
+button2:SetPoint("LEFT", button1, "RIGHT", 5, 0)
 button2:SetNormalTexture(GetSpellTexture(spellid))
 button2:GetNormalTexture():SetTexCoord(0.1, 0.9, 0.1, 0.9)
 button2.cooldown = CreateFrame("Cooldown", nil, button2)
@@ -74,7 +74,14 @@ function ROP:UpdateSet()
 	end
 end
 function ROP:PLAYER_TALENT_UPDATE()
-	if IsSpellKnown(spellid) then
+	local study
+	local name, iconTexture, tier, column, selected, available = GetTalentInfo(17,false,GetActiveSpecGroup(false,false))
+	if selected and name == select(1, GetSpellInfo(spellid)) then
+		study = true
+	else
+		study =false
+	end
+	if study then
 		self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	else
 		self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
