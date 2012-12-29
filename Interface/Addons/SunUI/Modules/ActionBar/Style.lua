@@ -53,8 +53,8 @@ function AB:UpdateHotkey(button, actionButtonType)
 	text = string.gsub(text, KEY_INSERT, "Ins")
 	text = string.gsub(text, KEY_HOME, "Hm")
 	text = string.gsub(text, KEY_DELETE, "Del")
-	text = string.gsub(text, KEY_MOUSEWHEELUP, "MU")
-	text = string.gsub(text, KEY_MOUSEWHEELDOWN, "MD")
+	text = string.gsub(text, KEY_MOUSEWHEELUP, "M+")
+	text = string.gsub(text, KEY_MOUSEWHEELDOWN, "M-")
 	text = string.gsub(text, '(數字鍵盤)', 'N')
 	
 	if hotkey:GetText() == _G["RANGE_INDICATOR"] then
@@ -180,6 +180,8 @@ function AB:StylePet()
 		local button  = _G[name]
 		local icon  = _G[name.."Icon"]
 		local normal  = _G[name.."NormalTexture2"]
+		local autocast = _G[name.."AutoCastable"]
+		autocast:SetAlpha(0)
 		self:Style(button)
 	end
 end
@@ -267,10 +269,10 @@ function AB:UpdateOverlayGlow(button)
 		button.overlay:ClearAllPoints()
 		button.overlay:SetAllPoints(button.shadow)
 		button.overlay.ants:ClearAllPoints()
-		button.overlay.ants:SetPoint("TOPLEFT", button.shadow, "TOPLEFT", -2, 2)
-		button.overlay.ants:SetPoint("BOTTOMRIGHT", button.shadow, "BOTTOMRIGHT", 2, -2)
-		button.overlay.outerGlow:SetPoint("TOPLEFT", button.shadow, "TOPLEFT", -2, 2)
-		button.overlay.outerGlow:SetPoint("BOTTOMRIGHT", button.shadow, "BOTTOMRIGHT", 2, -2)
+		button.overlay.ants:SetPoint("TOPLEFT", button.shadow, "TOPLEFT")
+		button.overlay.ants:SetPoint("BOTTOMRIGHT", button.shadow, "BOTTOMRIGHT")
+		button.overlay.outerGlow:SetPoint("TOPLEFT", button.shadow, "TOPLEFT")
+		button.overlay.outerGlow:SetPoint("BOTTOMRIGHT", button.shadow, "BOTTOMRIGHT")
 	end
 end
 function AB:OnInitialize()

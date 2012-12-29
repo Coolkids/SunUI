@@ -59,7 +59,7 @@ function RCD:UpdatePositions()
 	for i = 1, #bars do
 		bars[i]:ClearAllPoints()
 		if i == 1 then
-			bars[i]:SetPoint("CENTER", ClassCDAnchor)
+			bars[i]:SetPoint("CENTER", RaidCDAnchor)
 		else
 			if C["RaidCDDirection"] == 2 then
 				bars[i]:SetPoint("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, C["RaidCDHeight"]*2+5)

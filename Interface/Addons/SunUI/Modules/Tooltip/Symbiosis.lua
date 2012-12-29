@@ -48,9 +48,10 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 			elseif DB.MyClass ~= "DRUID" and (uclass == "DRUID" and ulevel >= 87) then
 				spellID = symbiosis.gain[DB.MyClass][spec]
 			end
-			local name = GetSpellInfo(spellID)
+			local name, _, icon = GetSpellInfo(spellID)
+			icon = icon and "|T"..icon..":12:12:0:0:64:64:5:59:5:59|t " or ""
 			if name then
-				GameTooltip:AddLine(select(1, GetSpellInfo(110309))..": |cffffffff"..name.."|r")
+				GameTooltip:AddLine(select(1, GetSpellInfo(110309))..": "..icon.."|cffffffff"..name)
 			end
 		end
 	end

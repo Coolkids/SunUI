@@ -675,8 +675,10 @@ local function createDebuffs(f)
 		d:SetPoint("TOPLEFT", f, "TOPRIGHT", d.spacing, -2)
 		d.initialAnchor = "TOPLEFT"
     elseif f.mystyle=="pet" then
+		d.initialAnchor = "BOTTOMLEFT"
 		d:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, d.spacing)
 		d["growth-x"] = "RIGHT"
+		d["growth-y"] = "UP"
     elseif f.mystyle=="arena" then
 		d.showDebuffType = false
 		d.initialAnchor = "TOPLEFT"

@@ -32,11 +32,15 @@ local function GatherTalents(mouseover)
 	if mouseover == 1 then
 		local currentSpecID = GetInspectSpecialization("mouseover")
 		local currentSpecName = currentSpecID and select(2, GetSpecializationInfoByID(currentSpecID)) or L_TOOLTIP_LOADING
-		current.tree = currentSpecName
+		local _, currentSpecName, _, icon = GetSpecializationInfoByID(currentSpecID)
+        icon = icon and "|T"..icon..":12:12:0:0:64:64:5:59:5:59|t " or ""
+		current.tree = currentSpecName and icon..currentSpecName or "n/a"
 	else
 		local currentSpec = GetSpecialization()
 		local currentSpecName = currentSpec and select(2, GetSpecializationInfo(currentSpec)) or L_TOOLTIP_NO_TALENT
-		current.tree = currentSpecName
+		local _, currentSpecName, _, icon = GetSpecializationInfo(currentSpec)
+        icon = icon and "|T"..icon..":12:12:0:0:64:64:5:59:5:59|t " or ""
+		current.tree = currentSpecName and icon..currentSpecName or "n/a"
 	end
 
 	-- Set the tips line output, for inspect, only update if the tip is still showing a unit!

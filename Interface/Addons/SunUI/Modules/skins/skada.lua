@@ -21,7 +21,8 @@ end
 		end
 	end
 end
-local function LoadSkin()
+function  Module:PLAYER_ENTERING_WORLD()
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	if not IsAddOnLoaded("Skada") then return end
 	local Skada = Skada
 	local barSpacing = S.Scale(1)
@@ -79,5 +80,5 @@ local function LoadSkin()
 end
 
 function Module:OnEnable()
-	LoadSkin()
+	Module:RegisterEvent("PLAYER_ENTERING_WORLD")
 end

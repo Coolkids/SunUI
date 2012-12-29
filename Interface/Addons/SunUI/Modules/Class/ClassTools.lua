@@ -104,7 +104,7 @@ Frame.Cooldown:SetReverse(true)
 Frame.Icon = Frame:CreateTexture(nil, "ARTWORK") 
 Frame.Icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 Frame.Icon:SetAllPoints(Frame)
-local function SetFrameTexture()
+function CT:ACTIVE_TALENT_GROUP_CHANGED()
 	local spec = GetSpecialization()
 	local texture
 	--print(#datebase[DB.MyClass])
@@ -144,8 +144,7 @@ function CT:UpdateSet()
 	if C["Enable"] then
 		Frame:SetSize(C["Size"], C["Size"])
 		Frame:SetScale(C["Scale"])
-		SetFrameTexture()
-		CT:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", SetFrameTexture)
+		CT:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 	else
 		Frame:Hide()
 		CT:UnregisterAllEvents()

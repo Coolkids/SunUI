@@ -12,7 +12,7 @@ local check = function(self, event, prefix, message, channel, sender)
 			self:UnregisterEvent("CHAT_MSG_ADDON")
 		end
 	else
-		if not IsInGroup(LE_PARTY_CATEGORY_HOME) and IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
+		if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
 			SendAddonMessage("SunUIVersion", version, "INSTANCE_CHAT")
 		elseif IsInRaid() then
 			SendAddonMessage("SunUIVersion", version, "RAID")

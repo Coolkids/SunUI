@@ -201,6 +201,8 @@ local UploadDBM = function()
 		0.78,
 		1,
 	}
+	DBM_SavedOptions["ShowWarningsInChat"] = false
+	DBM_SavedOptions["HideBossEmoteFrame"] = true
 end
 SlashCmdList["SetDBM"] = function()
 	StaticPopupDialogs["CFG_RELOAD"] = {

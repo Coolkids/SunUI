@@ -1,6 +1,6 @@
 ﻿local S, L, DB, _, C = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("InfoPanelTop", "AceTimer-3.0")
-local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
+local SunUIDB = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local InfoBarStatusColor = {{1, 0, 0}, {1, 1, 0}, {0, 0.4, 1}}
 local bandwidthString = "%.2f Mbps"
 local percentageString = "%.2f%%"
@@ -398,7 +398,7 @@ local function BuildGold()
 end
 	
 function Module:OnInitialize()
-	C = SunUIConfig.db.profile.InfoPanelDB
+	C = SunUIDB.db.profile.InfoPanelDB
 	if C["OpenTop"] == true then
 		local top = CreateFrame("Frame", "TopInfoPanel", UIParent)
 		top:SetHeight(20)

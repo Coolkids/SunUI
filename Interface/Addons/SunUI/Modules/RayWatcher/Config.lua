@@ -179,7 +179,10 @@ ns.watchers ={
 			direction = "RIGHT",
 			setpoint ={unpack(targetdebuff1)},
 			size = 28,
-			
+				-- 寒冰箭
+				{ spellID = 116 ,unitId = "target", caster = "player", filter = "DEBUFF" },
+				-- 冰霜炸弹
+				{ spellID = 112948 ,unitId = "target", caster = "player", filter = "DEBUFF" },
 				-- 点燃
 				{ spellID = 12654 ,unitId = "target", caster = "player", filter = "DEBUFF" },
 				-- 临界炽焰
@@ -1138,6 +1141,8 @@ ns.watchers ={
 				{ spellID = 125174, unitId = "player", caster = "player", filter = "BUFF" }, 
 				--符咒 
 				{ spellID = 116267, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--寒冰血脉
+				{ spellID = 12472, unitId = "player", caster = "player", filter = "BUFF" }, 
 		},
 		{
 			name = "玩家饰品附魔触发buff",

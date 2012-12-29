@@ -127,6 +127,25 @@ local function On_OnTooltipSetUnit(self)
 					break
 				end
 			end
+			for i=2, GameTooltip:NumLines() do
+				if _G["GameTooltipTextLeft"..i]:GetText() and (_G["GameTooltipTextLeft" .. i]:GetText():find(FACTION_ALLIANCE) or  _G["GameTooltipTextLeft" .. i]:GetText():find(FACTION_HORDE)) then
+					_G["GameTooltipTextLeft"..i]:SetText(nil)
+					break
+				end
+			end
+			if UnitFactionGroup(unit) and UnitFactionGroup(unit) ~= "Neutral" then
+				GameTooltipTextLeft1:SetText("|TInterface\\Addons\\SunUI\\media\\UI-PVP-"..select(1, UnitFactionGroup(unit))..".blp:16:16:0:0:64:64:5:40:0:35|t"..GameTooltipTextLeft1:GetText())
+			end
+		elseif ( UnitIsWildBattlePet(unit) or UnitIsBattlePetCompanion(unit) ) then
+			local petLevel = UnitBattlePetLevel(unit)
+			local petType = _G["BATTLE_PET_DAMAGE_NAME_"..UnitBattlePetType(unit)]
+			for i=2, GameTooltip:NumLines() do
+				local text = _G["GameTooltipTextLeft" .. i]:GetText()
+				if text:find(LEVEL) then
+					_G["GameTooltipTextLeft" .. i]:SetText(petLevel .. unitClassification .. petType)
+					break
+				end
+			end
 		else
 			for i=2, GameTooltip:NumLines() do
 				if _G["GameTooltipTextLeft" .. i]:GetText():find(LEVEL) or _G["GameTooltipTextLeft" .. i]:GetText():find(creatureType) then
@@ -153,7 +172,7 @@ local function On_OnTooltipSetUnit(self)
 		end
 		if UnitIsPVP(unit) then
 			for i = 2, GameTooltip:NumLines() do
-				if _G["GameTooltipTextLeft"..i]:GetText():find(PVP) then
+				if _G["GameTooltipTextLeft"..i]:GetText() and _G["GameTooltipTextLeft"..i]:GetText():find(PVP) then
 					_G["GameTooltipTextLeft"..i]:SetText(nil)
 					break
 				end
@@ -162,7 +181,7 @@ local function On_OnTooltipSetUnit(self)
 		if UnitExists(unit.."target") then
 			local r, g, b = GameTooltip_UnitColor(unit.."target")
 			if UnitName(unit.."target") == UnitName("player") then
-				text = hex(1, 0, 0)..">>你<<|r"
+				text = hex(1, 0, 0)..">>"..YOU.."<<|r"
 			else
 				text = hex(r, g, b)..UnitName(unit.."target").."|r"
 			end
