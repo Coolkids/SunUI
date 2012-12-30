@@ -12,7 +12,7 @@ local damageframe = {
 }
 --团队工具
 local function RaidTools()
-	if C["MiniMapPanels"] ~= true then return end
+	if SunUIDB.db.profile.MiniDB.MiniMapPanels ~= true then return end
 	wm = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
 	wm:SetParent(UIParent) 
 	wm:SetFrameLevel(3)
