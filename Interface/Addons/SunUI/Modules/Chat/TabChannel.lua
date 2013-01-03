@@ -1,81 +1,80 @@
 ﻿local S, L, DB, _, C = unpack(select(2, ...))
---按TAB切換頻道.如果是在密語頻道則循環前面密過的人名,SHIFT+TAB反序切换频道
-function ChatEdit_CustomTabPressed(self)
-   if (self:GetAttribute("chatType") == "SAY") then
-      if Ash_Tabcus then
-         self:SetAttribute("chatType", "CHANNEL");
-         self.text = "/"..Ash_Tabcus.." "..self.text
-         ChatEdit_UpdateHeader(self);
-      elseif IsInGroup() then
-         self:SetAttribute("chatType", "PARTY");
-         ChatEdit_UpdateHeader(self);
-      elseif IsInRaid() then
-         self:SetAttribute("chatType", "RAID");
-         ChatEdit_UpdateHeader(self);
-      elseif (GetNumBattlefieldScores()>0) then
-         self:SetAttribute("chatType", "INSTANCE");
-         ChatEdit_UpdateHeader(self);
-	  elseif not IsInGroup(LE_PARTY_CATEGORY_HOME) and IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
-		 self:SetAttribute("chatType", "INSTANCE");
-         ChatEdit_UpdateHeader(self);
-      elseif IsInGuild() then
-         self:SetAttribute("chatType", "GUILD");
-         ChatEdit_UpdateHeader(self);
-      else
-         return;
-      end
-   elseif (self:GetAttribute("chatType") == "PARTY") then
-      if IsInRaid() then
-         self:SetAttribute("chatType", "RAID");
-         ChatEdit_UpdateHeader(self);
-      elseif (GetNumBattlefieldScores()>0) then
-         self:SetAttribute("chatType", "INSTANCE");
-         ChatEdit_UpdateHeader(self);
-      else
-         self:SetAttribute("chatType", "SAY");
-         ChatEdit_UpdateHeader(self);
-      end         
-   elseif (self:GetAttribute("chatType") == "RAID") then
-      if (GetNumBattlefieldScores()>0) then
-         self:SetAttribute("chatType", "INSTANCE");
-         ChatEdit_UpdateHeader(self);
-      elseif (IsInGuild()) then
-         self:SetAttribute("chatType", "GUILD");
-         ChatEdit_UpdateHeader(self);
-      else
-         self:SetAttribute("chatType", "SAY");
-         ChatEdit_UpdateHeader(self);
-      end
-   elseif (self:GetAttribute("chatType") == "INSTANCE_CHAT") then
-      if IsInGuild() then
-         self:SetAttribute("chatType", "GUILD");
-         ChatEdit_UpdateHeader(self);
-      else
-         self:SetAttribute("chatType", "SAY");
-         ChatEdit_UpdateHeader(self);
-      end
-   elseif (self:GetAttribute("chatType") == "GUILD") then
-      self:SetAttribute("chatType", "SAY");
-      ChatEdit_UpdateHeader(self);
-   elseif (self:GetAttribute("chatType") == "CHANNEL") then
-      if not IsInGroup(LE_PARTY_CATEGORY_HOME) and IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
-		 self:SetAttribute("chatType", "INSTANCE");
-         ChatEdit_UpdateHeader(self);
-	  elseif IsInGroup() then
-         self:SetAttribute("chatType", "PARTY");
-         ChatEdit_UpdateHeader(self);
-      elseif IsInRaid() then
-         self:SetAttribute("chatType", "RAID");
-         ChatEdit_UpdateHeader(self);
-      elseif (GetNumBattlefieldScores()>0) then
-         self:SetAttribute("chatType", "INSTANCE");
-         ChatEdit_UpdateHeader(self);
-      elseif (IsInGuild()) then
-         self:SetAttribute("chatType", "GUILD");
-         ChatEdit_UpdateHeader(self);
-      else
-         self:SetAttribute("chatType", "SAY");
-         ChatEdit_UpdateHeader(self);
-      end
-   end
-end 
+local CH = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("Chat")
+
+local cycles = {
+	{
+        chatType = "SAY",   --SAY
+        use = function(self, editbox) return 1 end,
+	},
+--[[     {
+        chatType = "YELL",  --大喊
+        use = function(self, editbox) return 1 end,
+    }, ]]
+    {
+        chatType = "PARTY",  --小队
+        use = function(self, editbox) return IsInGroup() end,
+    },
+    {
+        chatType = "RAID",  --团队
+        use = function(self, editbox) return IsInRaid() end,
+    },
+    {
+        chatType = "INSTANCE_CHAT",  --副本
+        use = function(self, editbox) return select(2, IsInInstance()) == 'pvp' end,
+    },
+    {
+        chatType = "GUILD",   --工会
+        use = function(self, editbox) return IsInGuild() end,
+    },
+	{
+        chatType = "WHISPER",   --密语
+        use = function(self, editbox) return false end,
+    },
+--[[     {
+        chatType = "CHANNEL",
+        use = function(self, editbox, currChatType)
+            if currChatType~="CHANNEL" then
+                currNum = IsShiftKeyDown() and 21 or 0
+            else
+                currNum = editbox:GetAttribute("channelTarget");
+            end
+            local h, r, step = currNum+1, 20, 1
+            if IsShiftKeyDown() then h, r, step = currNum-1, 1, -1 end
+            for i=h,r,step do
+                local channelNum, channelName = GetChannelName(i);
+                if channelNum > 0 and not channelName:find("本地防务 %-") and not channelName:find("本地防務 %-") and not channelName:find("LFGForwarder") and not channelName:find("TCForwarder") then
+                    editbox:SetAttribute("channelTarget", i);
+                    return true;
+                end
+            end
+        end,
+    }, ]]
+    {
+        chatType = "SAY",
+        use = function(self, editbox) return 1 end,
+    },
+}
+
+function CH:ChatEdit_CustomTabPressed(self)
+	if strsub(tostring(self:GetText()), 1, 1) == "/" then return end
+    local currChatType = self:GetAttribute("chatType")
+	--print(currChatType)
+    for i, curr in ipairs(cycles) do
+        if curr.chatType== currChatType then
+            local h, r, step = i+1, #cycles, 1
+            if IsShiftKeyDown() then h, r, step = i-1, 1, -1 end
+            if currChatType=="CHANNEL" then h = i end --频道仍然要测试一下
+            for j=h, r, step do
+                if cycles[j]:use(self, currChatType) then
+                    self:SetAttribute("chatType", cycles[j].chatType);
+                    ChatEdit_UpdateHeader(self);
+                    return;
+                end
+            end
+        end
+    end
+end
+
+function CH:OnInitialize()
+	self:RawHook("ChatEdit_CustomTabPressed", true)
+end

@@ -6,6 +6,8 @@ local DEFAULT_WIDTH = 800
 local DEFAULT_HEIGHT = 500
 local AC = LibStub("AceConfig-3.0")
 local ACD = LibStub("AceConfigDialog-3.0")
+local SM = LibStub("LibSharedMedia-3.0", true)
+local statusbars = SM:List("statusbar")
 local aglin = false
 local equipment = {}
 function SunUIConfig:LoadDefaults()
@@ -1028,13 +1030,14 @@ function SunUIConfig.GenerateOptionsInternal()
 			MiniDB = {
 				order = 12,
 				type = "group",
-				name = "Mini",
+				name = GENERAL,
 				get = function(info) return db.MiniDB[ info[#info] ] end,
 				set = function(info, value) db.MiniDB[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
 				args = {
 					group1 = {
 					type = "group", order = 1,
-					name = L["小东西设置"],
+					name = GENERAL,
+					guiInline = true,
 						args = {
 							AutoSell = {
 								type = "toggle",
@@ -1188,6 +1191,30 @@ function SunUIConfig.GenerateOptionsInternal()
 								type = "toggle",
 								name = L["显示未探索地区"],
 								order = 23,
+							},
+							uistyle = {
+								type = "select",
+								name = UIOPTIONS_MENU.." Style",
+								order = 24,
+								values = {
+									["plane"] = "win8",
+									["stereo"] = "Gradient",
+								},
+							},
+							uitexture = {
+								type = "select",
+								name = TEXTURES_SUBHEADER,
+								order = 24,
+								itemControl = "DDI-Statusbar",
+								values = statusbars,
+								get = function(info) 
+									for i, v in next, statusbars do
+										if v == db.MiniDB.uitexture then return i end
+									end
+								end,
+								set = function(info, val) db.MiniDB.uitexture = statusbars[val]; 
+									db.MiniDB.uitexturePath = SM:Fetch("statusbar",statusbars[val]); 
+								end,
 							},
 						}
 					},

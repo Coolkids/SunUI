@@ -20,8 +20,6 @@ bar:SetStatusBarTexture(DB.Statusbar)
 bar:SetMinMaxValues(0, timeing)
 bar:SetValue(0)
 bar:CreateShadow()
-S.CreateMark(bar)
-S.CreateBack(bar)
 bar.bg = bar:GetStatusBarTexture()
 bar.right = S.MakeFontString(bar, 12)
 bar.right:SetPoint("RIGHT", 1, 6)
@@ -69,6 +67,8 @@ function PT:UpdateTime()
 	end
 end
 function PT:OnEnable()
+	S.CreateMark(bar)
+	S.CreateBack(bar)
 	C = SunUIConfig.db.profile
 	bar:SetSize(C["UnitFrameDB"]["PetWidth"]*C["UnitFrameDB"]["PetScale"], 6)
 	MoveHandle.ShadowPet = S.MakeMoveHandle(bar, "暗影魔计时条", "ShadowPet")

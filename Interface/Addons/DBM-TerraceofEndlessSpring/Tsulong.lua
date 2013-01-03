@@ -149,6 +149,10 @@ end
 function mod:OnCombatStart(delay)
 	timerShadowBreathCD:Start(8.5-delay)
 	if not mod:IsDps() then
+		sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
+		sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		sndHX:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")--準備火息
 		sndHX:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 		sndHX:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")

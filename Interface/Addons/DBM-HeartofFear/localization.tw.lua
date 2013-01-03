@@ -221,6 +221,7 @@ L:SetTimerLocalization({
 
 L:SetOptionLocalization({
 	SoundWOP					= "語音警告：重要技能",
+	SoundADD					= "語音警告：為被軟泥追逐播放蜂鳴音",
 	warnReshapeLife				= DBM_CORE_AUTO_ANNOUNCE_OPTIONS.target:format(122784, GetSpellInfo(122784)),
 	warnReshapeLifeTutor		= "警告：突變傀儡的能力說明",
 	warnAmberExplosion			= "警告：$spell:122398的釋放及來源",
@@ -253,6 +254,7 @@ L= DBM:GetModLocalization(743)
 
 L:SetWarningLocalization({
 	warnAmberTrap		= "琥珀陷阱：%d/5",
+	specWarnTT			= "戰慄圖騰 <第%d輪> <%d秒>"
 })
 
 L:SetOptionLocalization({
@@ -261,10 +263,19 @@ L:SetOptionLocalization({
 	InfoYB				= "資訊框：音波能量監視(團隊中必須有人做焦點)",
 	SoundWOP			= "語音警告：重要技能",
 	SoundYB				= "語音警告：為音波爆炸倒數",
-	HudMAP				= "高級定位監視(HUD)：$spell:124863的位置",
+	HudMAP				= "高級定位監視(HUD)：自己的$spell:124863",
+	HudMAPOther			= "高級定位監視(HUD)：其他人的$spell:124863",
 	HudMAP2				= "高級定位監視(HUD)：$spell:124821的位置",
 	RangeFrame			= "距離監視(5碼)：$spell:123735",
-	StickyResinIcons	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(124097)
+	StickyResinIcons	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(124097),
+	specWarnTT			= "特別警告：準備開顫慄圖騰",
+	SendPos				= "主控：分配$spell:124863跑位(需要隊長)",
+	AcceptPos			= "被控：接收並顯示$spell:124863跑位(需要隊長開啟主控)",
+	optDR				= "顫慄圖騰鏈(123311231223-loop)",
+	DR1					= "薩滿A",
+	DR2					= "薩滿B",
+	DR3					= "薩滿C",
+	noDR				= "沒我事"
 })
 
 L:SetMiscLocalization({

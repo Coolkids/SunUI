@@ -1143,6 +1143,12 @@ ns.watchers ={
 				{ spellID = 116267, unitId = "player", caster = "player", filter = "BUFF" }, 
 				--寒冰血脉
 				{ spellID = 12472, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--气定神闲
+				{ spellID = 12043, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--塑能师之能
+				{ spellID = 116257, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--时光倒转
+				{ spellID = 110909, unitId = "player", caster = "player", filter = "BUFF" }, 
 		},
 		{
 			name = "玩家饰品附魔触发buff",

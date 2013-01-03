@@ -2,6 +2,7 @@
 	<Include file="Libs\load.xml"/>
 	<Script file = "core\Init.lua"/>
 	<Include file="locale\load.xml"/>
+	<Script file = "Media\sharedmedia.lua"/>
 	<Include file="config\Load_Config.xml"/>
 	<Script file = "core\uiscale.lua"/>
 	<Include file="core\load.xml"/>

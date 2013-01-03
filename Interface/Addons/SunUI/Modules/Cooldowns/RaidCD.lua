@@ -121,7 +121,7 @@ local CreateBar = function()
 	local bar = CreateFrame("Statusbar", nil, UIParent)
 	bar:SetFrameStrata("LOW")
 	bar:SetSize(C["RaidCDWidth"], C["RaidCDHeight"])
-	bar:SetStatusBarTexture(DB.Statusbar)
+	bar:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
 	bar:SetMinMaxValues(0, 100)
 
 	S.CreateBack(bar)

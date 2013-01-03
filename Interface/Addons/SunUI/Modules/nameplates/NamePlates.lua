@@ -1,6 +1,7 @@
 local S, L, DB, _, C = unpack(select(2, ...))
 local N = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("NamePlates", "AceEvent-3.0", "AceTimer-3.0")
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
+local LSM = LibStub("LibSharedMedia-3.0", true)
 local   cfg={
 	TotemIcon = true, 				-- Toggle totem icons
 	TotemSize = 20,				-- Totem icon size
@@ -183,24 +184,30 @@ local function TotemIcon(frame)
 end
 local function Color(frame)
 	local r, g, b = frame.hp:GetStatusBarColor()
-	local texture = frame.hp:GetStatusBarTexture()
-	frame.toptexture = texture
-	local newr, newg, newb
-	if g + b == 0 then
-		newr, newg, newb = 0.7, 0.2, 0.1
+	frame.isTapped = false
+	--print(r, g, b)
+	if r + b + b > 2 then   -- Tapped
+		r, g, b = 0.6, 0.6, 0.6
+		--print(123)
+		frame.isTapped = true
+	elseif g + b == 0 then
+		r, g, b = 0.7, 0.2, 0.1
 	elseif r + b == 0 then
-		newr, newg, newb = 0.2, 0.6, 0.1
+		r, g, b = 0.2, 0.6, 0.1
 	elseif r + g == 0 then
-		newr, newg, newb = 0.31, 0.45, 0.63
+		r, g, b = 0.31, 0.45, 0.63
 	elseif 2 - (r + g) < 0.05 and b == 0 then
-		newr, newg, newb = 0.71, 0.71, 0.35
+		r, g, b = 0.71, 0.71, 0.35
 	else
-		newr, newg, newb = r, g, b
 	end
-	frame.r, frame.g, frame.b = newr, newg, newb
-	S.CreateTop(texture, newr, newg, newb)
+	--frame.r, frame.g, frame.b = r, g, b
+	--S.CreateTop(texture, r, g, b)
+	frame.hp:SetStatusBarColor(r, g, b)
 end
-local function UpdateThreat(frame,elapsed)
+
+local function UpdateThreat(frame, elapsed)
+	if frame.isTapped then return end
+	--print(frame.hp:GetStatusBarColor())
 	if(frame.threat:IsShown()) then
 		local _, val = frame.threat:GetVertexColor()
 		frame.hp.shadow:Show()
@@ -216,12 +223,10 @@ local function UpdateThreat(frame,elapsed)
 		frame.name:SetTextColor(1, 1, 1)
 	end
 	--print(frame.r, frame.g, frame.b)
-	local r, g, b = frame.hp:GetStatusBarColor()
-	if r + b + b < 2 then 
-		Color(frame)
-	end
-    local minHealth, maxHealth = frame.healthOriginal:GetMinMaxValues()
-    local valueHealth = frame.healthOriginal:GetValue()
+	
+	
+    local minHealth, maxHealth = frame.hp:GetMinMaxValues()
+    local valueHealth = frame.hp:GetValue()
 	local d =(valueHealth/maxHealth)*100
 
 	if(d < 100) and valueHealth > 1 then
@@ -466,6 +471,8 @@ local function OnHide(frame)
 	frame.Ticon:Hide()
 	frame.icon:SetTexture(nil)
 	--print("OnHide", GetTime())
+	frame.isFriendly = nil
+	frame.isTapped = nil
 	if frame.icons then
 		for _, icon in ipairs(frame.icons) do
 			icon:Hide()
@@ -481,13 +488,14 @@ local function SkinObjects(frame, nameFrame)
 	local oldname = nameFrame:GetRegions()
 	local _, cbborder, cbshield, cbicon = cb:GetRegions()
 	
-	frame.healthOriginal = hp
-	
 	overlay:SetTexture(DB.Statusbar)
 	overlay:SetVertexColor(0.25, 0.25, 0.25, 0)
 	frame.highlight = overlay
-
-	hp:SetStatusBarTexture(DB.Statusbar)
+	if not S.IsCoolkid() then
+		hp:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
+	else
+		hp:SetStatusBarTexture("Interface\\AddOns\\SunUI\\media\\statusbars\\statusbar8")
+	end
 	frame.hp = hp
 	if not hp.shadow then
 		hp:CreateShadow()
@@ -529,7 +537,11 @@ local function SkinObjects(frame, nameFrame)
 	cb:HookScript('OnShow', UpdateCastbar)
 	cb:HookScript('OnSizeChanged', OnSizeChanged)
 	cb:HookScript('OnValueChanged', OnValueChanged)	
-	cb:SetStatusBarTexture(DB.Statusbar)
+	if not S.IsCoolkid() and SunUIConfig.db.profile.MiniDB.uistyle == "plane" then
+		cb:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
+	else
+		cb:SetStatusBarTexture("Interface\\AddOns\\SunUI\\media\\statusbars\\statusbar8")
+	end
 	frame.cb = cb
 
 	local name = hp:CreateFontString(nil, 'OVERLAY')
@@ -588,7 +600,7 @@ local function SkinObjects(frame, nameFrame)
 end
 local function CheckBlacklist(frame, ...)
 	if PlateBlacklist[frame.oldname:GetText()] then
-		frame:SetScript("OnUpdate", function() end)
+		frame:SetScript("OnUpdate", nil)
 		frame.hp:Hide()
 		frame.cb:Hide()
 		frame.overlay:Hide()
@@ -660,15 +672,23 @@ local function SetCV()
 	SetCVar("bloatnameplates",0.0)
 	SetCVar("ShowClassColorInNameplate",1)
 end
-function N:UpdateNP()
-	if(WorldFrame:GetNumChildren() ~= numChildren) then
+local Frame = CreateFrame("Frame", nil, UIParent)
+Frame:SetScript("OnUpdate", function(self, elapsed)
+	if WorldFrame:GetNumChildren() ~= numChildren then
 		numChildren = WorldFrame:GetNumChildren()
 		HookFrames(WorldFrame:GetChildren())
 	end
-	ForEachPlate(UpdateThreat, self.elapsed)
+
+	if self.elapsed and self.elapsed > 0.2 then
+		ForEachPlate(UpdateThreat, self.elapsed)
+		self.elapsed = 0
+	else
+		self.elapsed = (self.elapsed or 0) + elapsed
+	end
+	ForEachPlate(Color)
 	ForEachPlate(CheckBlacklist)
 	ForEachPlate(CheckUnit_Guid)
-end
+end)
 function N:OnInitialize()
 		if IsAddOnLoaded("TidyPlates") or IsAddOnLoaded("Aloft") or IsAddOnLoaded("dNamePlates") or IsAddOnLoaded("caelNamePlates") then
 		return
@@ -677,7 +697,6 @@ function N:OnInitialize()
 	if C["enable"] ~= true then return end
 	N:RegisterEvent("PLAYER_LOGIN", SetCV)
 	N:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-	N:ScheduleRepeatingTimer("UpdateNP", 0.2)
 	if C["Combat"] then
 		N:RegisterEvent("PLAYER_REGEN_DISABLED", function()
 			SetCVar("nameplateShowEnemies", 1)

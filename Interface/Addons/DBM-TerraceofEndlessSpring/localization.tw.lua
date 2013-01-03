@@ -57,20 +57,22 @@ L:SetMiscLocalization{
 L= DBM:GetModLocalization(729)
 
 L:SetWarningLocalization({
-	warnHideOver			= "%s 已結束",
+	warnHideOver			= "%s 結束",
+	warnHideProgress		= "擊中：%s，傷害：%s，時間：%s"
 })
 
 L:SetTimerLocalization({
-	timerSpecialCD			= "下一次特殊技能"
+	timerSpecialCD			= "下一次特殊技能(%d)"
 })
 
 L:SetOptionLocalization({
 	warnHideOver			= "警告：當$spell:123244結束時",
+	warnHideProgress		= "當$spell:123244結束後顯示統計",
 	timerSpecialCD			= "計時器：下一次特殊技能",
 	SoundWOP				= "語音警告：重要技能",
 	SetIconOnGuardfix		= "為$journal:6224設置團隊標記",
 	RangeFrame				= "距離監視(3碼)：$spell:123121(與坦克距離)",
-	GWHealthFrame			= "剩餘生命:$spell:123461"
+	GWHealthFrame			= "生命監視：移除$spell:123461還需要的傷害"
 })
 
 L:SetMiscLocalization{
@@ -97,12 +99,13 @@ L:SetOptionLocalization({
 	SoundDD				= "語音警告：$spell:131996",
 	SoundWOP			= "語音警告：重要技能",
 	RangeFrame			= "距離監視（2碼）：$spell:119519",
-	pscount				= "語音警告：為恐怖噴散計數",
+	pscount				= "語音警告：為恐怖噴散報數",
 	HudMAP				= "高級定位監視(HUD)：$spell:120519",
 	InfoFrame			= "資訊框：$spell:120629",
 	timerSpecialCD		= "計時器：下一次P2特殊技能",
 	specWarnyinmo		= "特殊警告：$spell:120455",
 	specWarnfuxian		= "特殊警告：$spell:120458",
 	specWarnweisuo		= "特殊警告：$spell:120629",
-	ShaAssist			= "啟用恐怖噴散方向指示圖"
+	ShaAssist			= "特殊功能：啟用恐怖噴散方向指示圖",
+	ShaStarMode			= "治療/DPS的恐怖噴散指示使用星辰跑位模式(硬吃一擊以減少跑位)"
 })

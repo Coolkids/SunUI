@@ -139,6 +139,9 @@ G["MiniDB"] = {
 	["FastError"] = true,
 	["ChatBackground"] = false,
 	["UIscale"] = true,
+	["uistyle"] = "stereo",
+	["uitexture"] = "SunUI StatusBar6",
+	["uitexturePath"] = "Interface\\AddOns\\SunUI\\media\\statusbars\\statusbar6",
 	["AutoUIscale"] = false,
 	["Combat"] = false, 
 	["FogClear"] = true,
@@ -207,8 +210,8 @@ G["MoveHandleDB"] = {
 	["TargetCastbar"] = {"TOP", "UIParent", "TOP",0, -170},
 	["FocusCastbar"] = {"TOP", "oUF_SunUIFocus", "BOTTOM", 0, -20},
 	--内置CD 团队CD
-	["ClassCD"] = {"LEFT", "UIParent", "LEFT", 30, 240},
-	["RaidCD"] =  {"LEFT", "UIParent", "LEFT", 30, 0},
+	["ClassCD"] = {"BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -327, 148},
+	["RaidCD"] =  {"RIGHT", "UIParent", "RIGHT", -4, -210},
 	--冷却图标闪闪的
 	["CooldownFlash"] = {"CENTER", "UIParent", "CENTER", 0, 172},
 	--鼠标提示

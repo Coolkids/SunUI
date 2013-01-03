@@ -1,8 +1,9 @@
 ﻿local mod	= DBM:NewMod(737, "DBM-HeartofFear", nil, 330)
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
+local sndADD	= mod:NewSound(nil, "SoundADD", true)
 
-mod:SetRevision(("$Revision: 8264 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8456 $"):sub(12, -3))
 mod:SetCreatureID(62511)
 mod:SetModelID(43126)
 mod:SetZone()
@@ -20,6 +21,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_MISSED",
 	"SWING_DAMAGE",
 	"SWING_MISSED",
+	"UNIT_SPELLCAST_STOP",
 	"UNIT_POWER"
 )
 
@@ -77,7 +79,7 @@ local specwarnOOYou				= mod:NewSpecialWarning("specwarnOOYou")
 local specwarnOOYouD				= mod:NewSpecialWarning("specwarnOOYouD")
 
 --Boss
-local timerReshapeLifeCD		= mod:NewNextTimer(50, 122784)--50 second cd in phase 1-2, 15 second in phase 3. if no construct is up, cd is ignored and boss casts it anyways to make sure 1 is always up.
+local timerReshapeLifeCD		= mod:NewNextCountTimer(50, 122784)--50 second cd in phase 1-2, 15 second in phase 3. if no construct is up, cd is ignored and boss casts it anyways to make sure 1 is always up.
 local timerAmberScalpelCD		= mod:NewCDTimer(40, 121994)--40 seconds after last one ENDED
 local timerAmberScalpel			= mod:NewBuffActiveTimer(10, 121994)
 local timerParasiticGrowthCD	= mod:NewCDTimer(35, 121949, nil, mod:IsHealer())--35-50 variation (most of the time 50, rare pulls he decides to use 35 sec cd instead)
@@ -90,6 +92,7 @@ local timerStruggleForControl	= mod:NewTargetTimer(5, 122395, nil, false)
 local timerMassiveStompCD		= mod:NewCDTimer(18, 122408, nil, mod:IsHealer() or mod:IsMelee())--18-25 seconds variation
 local timerFlingCD				= mod:NewCDTimer(25, 122413, nil, mod:IsTank())--25-40sec variation.
 local timerAmberExplosionAMCD	= mod:NewTimer(46, "timerAmberExplosionAMCD", 122402)--Special timer just for amber monstrosity. easier to cancel, easier to tell apart. His bar is the MOST important and needs to be seperate from any other bar option.
+local timerAmberExplosion		= mod:NewCastTimer(2.5, 122402)
 
 local berserkTimer				= mod:NewBerserkTimer(600)
 
@@ -208,7 +211,7 @@ function mod:OnCombatStart(delay)
 	table.wipe(warnedoo)
 	playerIsConstruct = false
 	timerAmberScalpelCD:Start(9-delay)
-	timerReshapeLifeCD:Start(20-delay)
+	timerReshapeLifeCD:Start(20-delay, 1)
 	timerParasiticGrowthCD:Start(23.5-delay)
 	if not self:IsDifficulty("lfr25") then
 		berserkTimer:Start(-delay)
@@ -336,9 +339,9 @@ function mod:SPELL_AURA_APPLIED(args)
 			end
 		end
 		if Phase < 3 then
-			timerReshapeLifeCD:Start()
+			timerReshapeLifeCD:Start(nil, constructCount+1)
 		else
-			timerReshapeLifeCD:Start(15)--More often in phase 3
+			timerReshapeLifeCD:Start(15, constructCount+1)--More often in phase 3
 		end
 	elseif args:IsSpellID(125502) then
 		warnAmberGlob:Show(args.destName)
@@ -432,6 +435,7 @@ function mod:SPELL_CAST_START(args)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jgbz.mp3") --巨怪爆炸
 		warnAmberExplosionSoon:Cancel()
 		warnAmberExplosionSoon:Schedule(41)
+		timerAmberExplosion:Start()
 		timerAmberExplosionAMCD:Start(46, args.spellName)
 		sndWOP:Schedule(39, "Interface\\AddOns\\DBM-Core\\extrasounds\\countseven.mp3")
 		sndWOP:Schedule(40, "Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
@@ -522,6 +526,12 @@ function mod:UNIT_POWER(uId)
 	end
 end
 
+function mod:UNIT_SPELLCAST_STOP(uId, _, _, _, spellId)
+	if spellId == 122402 then--SPELL_INTERRUPT not always fires, so use UNIT_SPELLCAST_STOP
+		timerAmberExplosion:Cancel()
+	end
+end
+
 function mod:OnSync(msg, str)
 	if not guidTableBuilt then
 		buildGuidTable()
@@ -542,7 +552,7 @@ end
 function mod:SWING_DAMAGE(sourceGUID, _, _, _, destGUID)
 	local cid = self:GetCIDFromGUID(sourceGUID)
 	if cid == 62691 and destGUID == UnitGUID("player") and not warnedoo[sourceGUID] and not playerIsConstruct then
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\didi.mp3")
+		sndADD:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\didi.mp3")
 		specwarnOOYou:Show()
 		warnedoo[sourceGUID] = true
 	end

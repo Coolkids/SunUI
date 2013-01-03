@@ -1,7 +1,6 @@
 local S, L, DB, _, C = unpack(select(2, ...))
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local _G =_G
-
 local filename, fontHeight, _ = GameFontNormal:GetFont()
 -- just for creating text
 function S.MakeFontString(parent, size, fontStyle)
@@ -305,21 +304,31 @@ function S.FadeOutFrameDamage(p, t, show)  --隐藏
 end
 
 function S.CreateBack(f, orientation, a)
+	local uistyle = SunUIConfig.db.profile.MiniDB.uistyle
 	local gradient = f:CreateTexture(nil, "BACKGROUND", -1)
 	gradient:SetPoint("TOPLEFT")
 	gradient:SetPoint("BOTTOMRIGHT")
 	gradient:SetTexture(DB.Statusbar)
-	if orientation then
-		gradient:SetGradientAlpha("HORIZONTAL",  0, 0, 0, a or 0.4, .35, .35, .35, a or .45)
+	if uistyle == "plane" then
+		gradient:SetVertexColor(0, 0, 0, 0.5)
 	else
-		gradient:SetGradientAlpha("VERTICAL",  0, 0, 0, a or 0.4, .35, .35, .35, a or .45)
+		if orientation then
+			gradient:SetGradientAlpha("HORIZONTAL",  0, 0, 0, a or 0.4, .35, .35, .35, a or .45)
+		else
+			gradient:SetGradientAlpha("VERTICAL",  0, 0, 0, a or 0.4, .35, .35, .35, a or .45)
+		end
 	end
 end
 function S.CreateTop(f, r, g, b, orientation, a)
-	if orientation then
-		f:SetGradientAlpha("HORIZONTAL", r, g, b, a or 1, r/2, g/2, b/2, a or 1)
+	local uistyle = SunUIConfig.db.profile.MiniDB.uistyle
+	if uistyle == "plane" then
+		f:SetVertexColor(r, g, b, a)
 	else
-		f:SetGradientAlpha("VERTICAL", r, g, b, a or 1, r/2, g/2, b/2, a or 1)
+		if orientation then
+			f:SetGradientAlpha("HORIZONTAL", r, g, b, a or 1, r/2, g/2, b/2, a or 1)
+		else
+			f:SetGradientAlpha("VERTICAL", r, g, b, a or 1, r/2, g/2, b/2, a or 1)
+		end
 	end
 end
 function S.CreateSpark(f, w, h)

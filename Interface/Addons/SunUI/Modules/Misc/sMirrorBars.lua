@@ -1,5 +1,5 @@
 local S, L, DB, _, C = unpack(select(2, ...))
-local _
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local MB = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("MirrorBars", "AceEvent-3.0")
 local settings = { 
    width = 252, 
@@ -106,7 +106,7 @@ do
 
 		frame:SetSize(settings.width, settings.height) 
 
-		frame:SetStatusBarTexture(settings.texture) 
+		frame:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
 
 		S.CreateTop(frame:GetStatusBarTexture(), r, g, b)
 		S.CreateMark(frame)

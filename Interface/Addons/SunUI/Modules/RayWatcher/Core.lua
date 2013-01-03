@@ -113,7 +113,7 @@ function watcherPrototype:CreateButton(mode)
 		end
 		button.statusbar:SetWidth(self.barwidth - 6)
 		button.statusbar:SetHeight(6)
-		button.statusbar:SetStatusBarTexture(DB.Statusbar)
+		button.statusbar:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
 		S.CreateTop(button.statusbar:GetStatusBarTexture(), colors[myclass].r, colors[myclass].g, colors[myclass].b)
 		if ( self.iconside == "RIGHT" ) then
 			button.statusbar:SetPoint("BOTTOMRIGHT", button, "BOTTOMLEFT", -5, 2)
@@ -368,7 +368,7 @@ function watcherPrototype:ApplyStyle()
 				shadow:CreateShadow("Background")
 				button.statusbar:SetWidth(self.barwidth - 6)
 				button.statusbar:SetHeight(5)
-				button.statusbar:SetStatusBarTexture([[Interface\AddOns\RayWatcher\media\statusbar.tga]])
+				button.statusbar:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
 				button.statusbar:SetStatusBarColor(colors[myclass].r, colors[myclass].g, colors[myclass].b, 1)
 				if ( self.iconside == "RIGHT" ) then
 					button.statusbar:SetPoint("BOTTOMRIGHT", button, "BOTTOMLEFT", -5, 2)

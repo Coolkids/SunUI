@@ -60,21 +60,24 @@ L:SetMiscLocalization{
 L= DBM:GetModLocalization(729)
 
 L:SetWarningLocalization({
-	warnHideOver			= "%s 已结束"
+	warnHideOver			= "%s 结束",
+	warnHideProgress		= "命中：%s，伤害：%s，时间：%s"
 })
 
 L:SetTimerLocalization({
-	timerSpecialCD			= "下一次特殊技能"
+	timerSpecialCD			= "下一次特殊技能(%d)"
 })
 
 L:SetOptionLocalization({
 	warnHideOver			= "警告：当$spell:123244结束时",
+	warnHideProgress		= "警报：$spell:123244阶段的战斗统计",
 	timerSpecialCD			= "计时器：下一次特殊技能",
 	SoundWOP				= "语音警告：重要技能",
 	SetIconOnGuardfix		= "为$journal:6224设置团队标记",
-	RangeFrame				= "距离监视(3码)：$spell:123121(与坦克距离)",
-	GWHealthFrame			= "剩余生命:$spell:123461"
+	RangeFrame				= "距离监视（3码）：应对$spell:123121（隐藏阶段时显示所有人，其余时仅显示坦克位置）",
+	GWHealthFrame			= "生命值监视：移除$spell:123461还需要的伤害"
 })
+
 
 L:SetMiscLocalization{
 	Victory	= "我……啊……噢！我……？眼睛……好……模糊。"--wtb alternate and less crappy victory event.
@@ -100,11 +103,13 @@ L:SetOptionLocalization({
 	SoundDD				= "语音警告：$spell:131996",
 	SoundWOP			= "语音警告：重要技能",
 	RangeFrame			= "距离监视（2码）：应对$spell:119519",
+	pscount				= "语音警告：为恐怖喷散报数",
 	HudMAP				= "高级定位监视(HUD)：$spell:120519",
 	InfoFrame			= "信息框：$spell:120629",
 	timerSpecialCD		= "计时器：下一次P2特殊技能",
 	specWarnyinmo		= "特殊警告：$spell:120455",
 	specWarnfuxian		= "特殊警告：$spell:120458",
 	specWarnweisuo		= "特殊警告：$spell:120629",
-	ShaAssist			= "启用恐怖喷散方向指示图"
+	ShaAssist			= "特殊功能：启用恐怖喷散方向指示图",
+	ShaStarMode			= "治疗/DPS的恐怖喷散指示使用星辰跑位模式(硬吃一击以减少跑位)"
 })

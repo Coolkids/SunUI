@@ -248,18 +248,26 @@ function ns:Numberize(val)
 end
 
 function ns:Getdifficulty()
-	local _, instanceType, difficulty, _, maxPlayers, playerDifficulty, isDynamicInstance = GetInstanceInfo()
-	--print(instanceType, difficulty, maxPlayers, playerDifficulty, isDynamicInstance)
-	if IsPartyLFG() and IsInLFGDungeon() and difficulty == 7 then
-		return "lfr25"
-	elseif difficulty == 1 then
-		return instanceType == "raid" and "normal10" or "normal5"
+	local difficulty = GetInstanceDifficulty()
+	
+	if difficulty == 1 then
+		return "unknown"
 	elseif difficulty == 2 then
-		return instanceType == "raid" and "normal25" or "heroic5"
+		return "heroic5"
 	elseif difficulty == 3 then
-		return "heroic10"
+		return "heroic5"
 	elseif difficulty == 4 then
+		return "normal10"
+	elseif difficulty == 5 then
+		return "normal25"
+	elseif difficulty == 6 then
+		return "heroic10"
+	elseif difficulty == 7 then
 		return "heroic25"
+	elseif difficulty == 8 then
+		return "lfr25"
+	elseif difficulty == 9 then
+		return "heroic5"
 	else
 		return "unknown"
 	end
@@ -778,7 +786,7 @@ local function unitFrameStyleSetup(button)
     button.MasterLooterIcon = masterlooter
 
 	local roleicon = help:CreateTexture(nil, 'OVERLAY')
-	roleicon:SetSize(ns.db.leadersize + 4, ns.db.leadersize + 4)
+	roleicon:SetSize(ns.db.leadersize + 2, ns.db.leadersize + 2)
 	roleicon:SetPoint('RIGHT', button, 'LEFT', ns.db.leadersize, 0)
 	button.RoleIcon = roleicon
 
@@ -1120,19 +1128,15 @@ function ns:UpdateRoleIcon(self)
 		self.RoleIcon:Show()
 		return
 	else
+		self.RoleIcon:SetTexture("Interface\\Addons\\SunUI_Freebgrid\\media\\lfd_role")
 		local role = UnitGroupRolesAssigned(unit)
-		if role ~= 'NONE' then
-			if role == 'TANK' then
-				self.RoleIcon:SetTexture([[Interface\AddOns\SunUI_Freebgrid\media\tank.tga]])
-			elseif role == 'HEALER' then
-				self.RoleIcon:SetTexture([[Interface\AddOns\SunUI_Freebgrid\media\healer.tga]])
-			elseif role == 'DAMAGER' then
-				self.RoleIcon:SetTexture([[Interface\AddOns\SunUI_Freebgrid\media\dps.tga]])
-			end
-			self.RoleIcon:SetTexCoord(0, 1, 0, 1)
+		if(role == 'TANK' or role == 'HEALER' or role == 'DAMAGER') then
+			self.RoleIcon:SetTexCoord(GetTexCoordsForRoleSmallCircle(role))
 			self.RoleIcon:Show()
-			return
+		else
+			self.RoleIcon:Hide()
 		end
+		return
 	end
 	self.RoleIcon:Hide()
 end

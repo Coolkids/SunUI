@@ -20,7 +20,9 @@ mod:RegisterEventsInCombat(
 	"SPELL_DAMAGE",
 	"SPELL_MISSED",
 	"CHAT_MSG_MONSTER_YELL",
-	"UNIT_SPELLCAST_SUCCEEDED"
+	"UNIT_SPELLCAST_SUCCEEDED",
+	"UNIT_SPELLCAST_STOP",
+	"UNIT_SPELLCAST_CHANNEL_STOP"
 )
 --Phase order is controlled by players. it is only pre determined order in LFR and LFR only.
 --Heroic a player can do ANY phase first. It even says this in encounter journal.
@@ -350,6 +352,10 @@ function mod:SPELL_AURA_REMOVED(args)
 		timerReversalLightningFists:Cancel()
 	elseif args:IsSpellID(116018) then
 		timerEpicenter:Cancel()--Epicenter can be removed by Lightning Fists (tank can steal). So added remove stuff.
+		sndWOPD:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndWOPD:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOPD:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOPD:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	elseif args:IsSpellID(116784) then
 		timerWildSpark:Cancel(args.destName)
 		if args:IsPlayer() then
@@ -524,3 +530,14 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		sndWOPD:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	end
 end
+
+function mod:UNIT_SPELLCAST_STOP(uId, _, _, _, spellId)
+	if spellId == 116018 then
+		timerEpicenter:Cancel()
+		sndWOPD:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndWOPD:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOPD:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOPD:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+	end
+end
+mod.UNIT_SPELLCAST_CHANNEL_STOP = mod.UNIT_SPELLCAST_STOP

@@ -66,7 +66,7 @@ function ReforgeLite:GetConversion()
     end
   elseif class == "MONK" then
     if spec == 2 then
-      result.s2h = 1
+      result.s2h = 0.5
       result.s2e = 0.5
       result.e2h = 1
     end
@@ -155,7 +155,7 @@ function ReforgeLite:UpdateMethodStats (method)
   local conv = self:GetConversion()
   method.stats[self.STATS.HIT] = method.stats[self.STATS.HIT]
     + math.floor((method.stats[self.STATS.SPIRIT] - oldspi) * conv.s2h + 0.5)
-    + math.floor((method.stats[self.STATS.EXP] - oldexp) * conv.e2h + 0.5)
+--    + math.floor((method.stats[self.STATS.EXP] - oldexp) * conv.e2h + 0.5)
   method.stats[self.STATS.EXP] = method.stats[self.STATS.EXP]
     + math.floor((method.stats[self.STATS.SPIRIT] - oldspi) * conv.s2e + 0.5)
 end
@@ -502,7 +502,7 @@ local function FormatValue (value, prefix)
 end
 
 StaticPopupDialogs["REFORGELITE_COMPUTEERROR"] = {
-  preferredIndex = 3,
+  preferredIndex = STATICPOPUP_NUMDIALOGS,
   text = L["ReforgeLite failed to compute your optimal reforge. Try increasing the speed by moving the speed slider.\nError message: %s"],
   button1 = OKAY,
   button2 = nil,

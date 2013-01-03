@@ -6724,7 +6724,7 @@ local function SkinTooltip()
 	sb:ClearAllPoints()
 	sb:Point("BOTTOMLEFT", GameTooltip, "TOPLEFT", 1, 3)
 	sb:Point("BOTTOMRIGHT", GameTooltip, "TOPRIGHT", -1, 3)
-	sb:SetStatusBarTexture(DB.Statusbar)
+	sb:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
 	S.CreateBD(FriendsTooltip)
 	S.CreateMark(sb)
 end

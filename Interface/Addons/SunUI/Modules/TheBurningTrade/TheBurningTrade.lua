@@ -1,6 +1,6 @@
 local S, L, DB, _, C = unpack(select(2, ...))
 if(Skinner and Skinner.initialized) then Skinner.initialized.TradeFrame = true; end;
-
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("TheBurningTrade", "AceEvent-3.0", "AceHook-3.0")
 TBT_SPELL_TABLE = {
 	water = {
 		{ level=80, sid=42955, iid=43523, name="", item="", rank="" },
@@ -260,7 +260,8 @@ function TBT_debug(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)
 	DEFAULT_CHAT_FRAME:AddMessage(msg);
 end
 
-
-local frame = CreateFrame("Frame");
-frame:SetScript("OnEvent", TBTFrame_OnEvent);
-TBTFrame_OnLoad(frame);
+function Module:OnInitialize()
+	local frame = CreateFrame("Frame");
+	frame:SetScript("OnEvent", TBTFrame_OnEvent);
+	TBTFrame_OnLoad(frame);
+end

@@ -86,6 +86,7 @@ ReforgeLite.capPresets = {
     name = L["Spell hit cap"],
     getter = function ()
       return ReforgeLite:RatingPerPoint (ReforgeLite.STATS.SPELLHIT) * (ReforgeLite:GetNeededSpellHit () - ReforgeLite:GetSpellHitBonus ())
+        + math.floor(GetCombatRating(CR_EXPERTISE) * ReforgeLite:GetConversion().e2h)
     end
   },
   {

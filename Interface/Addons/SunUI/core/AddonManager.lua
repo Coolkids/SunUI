@@ -3,7 +3,7 @@ local font = { DB.Font, 12*S.Scale(1), "THINOUTLINE" }
 local barTex = DB.Statusbar
 local blankTex = DB.Solid
 local glowTex = DB.GlowTex
-
+local AM = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("AddonManager", "AceEvent-3.0", "AceHook-3.0")
 ------------------------------------------------------
 -- INITIAL FRAME CREATION ----------------------------
 ------------------------------------------------------
@@ -544,7 +544,7 @@ end
 
 local gmbAddOns = CreateFrame("Button", "GameMenuButtonAddOns", GameMenuFrame, "GameMenuButtonTemplate")
 gmbAddOns:SetSize(GameMenuButtonHelp:GetWidth(), GameMenuButtonHelp:GetHeight())
-S.Reskin(gmbAddOns)
+
 gmbAddOns:SetText(L["插件管理"])
 gmbAddOns:SetPoint(GameMenuButtonHelp:GetPoint())
 GameMenuButtonHelp:SetPoint("TOP", gmbAddOns, "BOTTOM", 0, -1)
@@ -555,4 +555,7 @@ gmbAddOns:SetScript("OnClick", function()
 end)
 gmbAddOns:RegisterEvent("ADDON_LOADED")
 gmbAddOns:RegisterEvent("PLAYER_ENTERING_WORLD")
--- end
+
+function AM:OnInitialize()
+	S.Reskin(gmbAddOns)
+end

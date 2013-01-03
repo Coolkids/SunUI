@@ -74,7 +74,7 @@ local mislead = {
 	[34477] = true,	-- 误导
 	[57934] = true,	-- 偷天
 }
-function Module:COMBAT_LOG_EVENT_UNFILTERED(null, null, ...)
+function Module:COMBAT_LOG_EVENT_UNFILTERED(_, _, ...)
 	local arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 = ...
 	--if arg5 == UnitName("player") then print(arg2, GetSpellLink(arg12)) end
 	--打断

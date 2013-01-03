@@ -240,7 +240,9 @@ lb:SetPoint("TOPRIGHT", addon, "TOPRIGHT", -30, -5)
 lb:SetFrameStrata("TOOLTIP")
 lb:RegisterForClicks("RightButtonUp", "LeftButtonUp")
 lb:SetScript("OnClick", OnLinkClick)
-S.ReskinArrow(lb, "down")
+function L:OnInitialize()
+	S.ReskinArrow(lb, "down")
+end
 UIDropDownMenu_Initialize(LDD, LDD_Initialize, "MENU")
 MasterLooterFrame:SetFrameStrata("FULLSCREEN")
 

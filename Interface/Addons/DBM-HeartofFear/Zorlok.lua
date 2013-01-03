@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8419 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8440 $"):sub(12, -3))
 mod:SetCreatureID(62980)--63554 (Special invisible Vizier that casts the direction based spellid versions of attenuation)
 mod:SetModelID(42807)
 mod:SetZone()
@@ -252,9 +252,11 @@ end
 function mod:RAID_BOSS_EMOTE(msg)
 	if msg == L.Platform or msg:find(L.Platform) then
 		platform = platform + 1
-		specwarnPlatform:Show()
-		if platform < 4 then
-			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\justrun.mp3") --快跑
+		if platform > 1 then
+			specwarnPlatform:Show()
+			if platform < 4 then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\justrun.mp3") --快跑
+			end
 		end
 		timerForceCD:Cancel()
 		timerAttenuationCD:Cancel()
@@ -276,9 +278,9 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		end
 	elseif (spellId == 130297 or spellId == 127541) and not EchoAlive then--Echo of Zor'lok
 		EchoAlive = true
-		if platform == 2 then--Boss flew off from first platform to 2nd, and this means the echo that spawned is an Echo of Force and Verve
+		if platform == 1 then--Boss flew off from first platform to 2nd, and this means the echo that spawned is an Echo of Force and Verve
 --			timerForceCD:Start()
-		elseif platform == 3 then--Boss flew to 3rd platform and left an Echo of Attenuation behind on 2nd.
+		elseif platform == 2 then--Boss flew to 3rd platform and left an Echo of Attenuation behind on 2nd.
 --			timerAttenuationCD:Start()
 		end
 	end

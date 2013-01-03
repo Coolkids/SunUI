@@ -19,7 +19,7 @@ local createBorder = function(self, point)
 			bc = CreateFrame("Frame", nil, self)
 		end
 		bc:SetBackdrop({
-			edgeFile = "Interface\\ChatFrame\\ChatFrameBackground",   --, 
+			edgeFile = "Interface\\ChatFrame\\ChatFrameBackground",
 			edgeSize = S.mult+0.2, 
 		})
 		bc:SetAllPoints(self)

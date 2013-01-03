@@ -1,10 +1,12 @@
 ﻿if IsAddOnLoaded("ShaOfFearAssist") then return end
 
-ShaOfFearAssistEnabled = true
+DBM.ShaOfFearAssistEnabled = true
+DBM.ShaAssistStarModeChosed = nil
 -----------------------------------------------------------------------
 -- Locals
 --
 -- upvalues
+local _G = _G
 local min = math.min
 local pi = math.pi
 local cos = math.cos
@@ -65,8 +67,7 @@ local mapData = { 702.083984375,468.75 }
 
 local platformPieSprayOrder = {
 	[61046] = {5, 6, 8, 1, 7, 8, 2, 3, 1, 2, 4, 5, 3, 4, 6, 7}, -- Jinlun Kun (Right) other line + 3
-	--[61046] = {3, 4, 6, 7, 5, 6, 8, 1, 7, 8, 2, 3, 1, 2, 4, 5}, -- Jinlun Kun (Right)
-	[61038] = {7, 3, 3, 7, 6, 2, 2, 7, 5, 1, 1, 5, 4, 8, 8, 4}, -- Yang Goushi (Left)
+	[61038] = {7, 3, 3, 7, 6, 2, 2, 6, 5, 1, 1, 5, 4, 8, 8, 4}, -- Yang Goushi (Left)
 	[61042] = {7, 2, 3, 4, 1, 4, 5, 6, 3, 6, 7, 8, 5, 8, 1, 2}, -- Cheng Kang (Back) -- looked correct
 	["test"] = {5, 1, 4, 5, 3, 4, 6, 7, 5, 6, 8, 1, 7, 8, 2, 3}, -- TEST
 }
@@ -75,6 +76,20 @@ local platformSuggestedSafeZone = {
 	[61046] = {4, 4, 4, 4, 4, 4, 4, 4, 8, 8, 8, 8, 8, 8, 8, 8}, -- Jinlun Kun (Right)  -- old
 	[61038] = {4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3}, -- Yang Goushi (Left)  -- old
 	[61042] = {8, 8, 8, 8, 8, 8, 8, 8, 4, 4, 4, 4, 4, 4, 4, 4}, -- Cheng Kang (Back)   -- looked correct
+	["test"] = {2, 2, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4}  -- TEST
+}
+
+local platformSuggestedSafeZoneStarModeHealther = {
+	[61046] = {7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8}, -- Jinlun Kun
+	[61038] = {8, 8, 8, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7}, -- Yang Goushi
+	[61042] = {5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4}, -- Cheng Kang
+	["test"] = {2, 2, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4}  -- TEST
+}
+
+local platformSuggestedSafeZoneStarModeDps = {
+	[61046] = {4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5}, -- Jinlun Kun
+	[61038] = {4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3}, -- Yang Goushi
+	[61042] = {8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7}, -- Cheng Kang
 	["test"] = {2, 2, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4}  -- TEST
 }
 
@@ -776,7 +791,7 @@ local function detectInstanceChange()
 end
 
 local function CLEU(...)
-	if not ShaOfFearAssistEnabled then return end
+	if not DBM.ShaOfFearAssistEnabled then return end
 	local timestamp, etype, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, player, destFlags, destRaidFlags, spellId, spellName, spellSchool, missType,  amountMissed = ...
 	if etype == "SPELL_AURA_APPLIED" and spellId == 118977 then               --Fearless
 		if UnitIsUnit("player", player) then
@@ -803,20 +818,14 @@ local function CLEU(...)
 		if not platform then return end
 		dreadSprayCounter = dreadSprayCounter + 1
 		--addon:getc(("%s %d"):format("dreadSprayCounter", dreadSprayCounter)) -- XXX DEBUG
-		if platform == 61046 then-- Jinlun Kun
-			suggestedSafePie = platformSuggestedSafeZone[platform][dreadSprayCounter]
-			sprayedPieVerySoon = platformPieSprayOrder[platform][dreadSprayCounter]
-			if platformPieSprayOrder[platform][dreadSprayCounter+1] then
-				sprayedPieSoon = platformPieSprayOrder[platform][dreadSprayCounter+1]
+		if platform == 61046 or platform == 61038 or platform == 61042 then
+			if DBM.ShaAssistStarModeChosed == "Dps" then
+				suggestedSafePie = platformSuggestedSafeZoneStarModeDps[platform][dreadSprayCounter]
+			elseif DBM.ShaAssistStarModeChosed == "Healther" then
+				suggestedSafePie = platformSuggestedSafeZoneStarModeHealther[platform][dreadSprayCounter]
+			else
+				suggestedSafePie = platformSuggestedSafeZone[platform][dreadSprayCounter]
 			end
-		elseif platform == 61038 then-- Yang Goushi
-			suggestedSafePie = platformSuggestedSafeZone[platform][dreadSprayCounter]
-			sprayedPieVerySoon = platformPieSprayOrder[platform][dreadSprayCounter]
-			if platformPieSprayOrder[platform][dreadSprayCounter+1] then
-				sprayedPieSoon = platformPieSprayOrder[platform][dreadSprayCounter+1]
-			end
-		elseif platform == 61042 then-- Cheng Kang
-			suggestedSafePie = platformSuggestedSafeZone[platform][dreadSprayCounter]
 			sprayedPieVerySoon = platformPieSprayOrder[platform][dreadSprayCounter]
 			if platformPieSprayOrder[platform][dreadSprayCounter+1] then
 				sprayedPieSoon = platformPieSprayOrder[platform][dreadSprayCounter+1]
@@ -844,14 +853,14 @@ local function CLEU(...)
 		-- another thing that a better platform detection could solve
 		if shootCounter == 3 or shootCounter == 5 or shootCounter == 7 then
 			dreadSprayCounter = 0
-			if platform == 61046 then-- Jinlun Kun
-				suggestedSafePie = platformSuggestedSafeZone[platform][1]
-				sprayedPieVerySoon, sprayedPieSoon = platformPieSprayOrder[platform][1], platformPieSprayOrder[platform][2]
-			elseif platform == 61038 then-- Yang Goushi
-				suggestedSafePie = platformSuggestedSafeZone[platform][1]
-				sprayedPieVerySoon, sprayedPieSoon = platformPieSprayOrder[platform][1], platformPieSprayOrder[platform][2]
-			elseif platform == 61042 then-- Cheng Kang
-				suggestedSafePie = platformSuggestedSafeZone[platform][1]
+			if platform == 61046 or platform == 61038 or platform == 61042 then
+				if DBM.ShaAssistStarModeChosed == "Dps" then
+					suggestedSafePie = platformSuggestedSafeZoneStarModeDps[platform][1]
+				elseif DBM.ShaAssistStarModeChosed == "Healther" then
+					suggestedSafePie = platformSuggestedSafeZoneStarModeHealther[platform][1]
+				else
+					suggestedSafePie = platformSuggestedSafeZone[platform][1]
+				end
 				sprayedPieVerySoon, sprayedPieSoon = platformPieSprayOrder[platform][1], platformPieSprayOrder[platform][2]
 			end
 		end

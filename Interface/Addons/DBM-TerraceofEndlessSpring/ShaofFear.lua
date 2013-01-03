@@ -76,10 +76,14 @@ local kjzznow = 0
 
 local playkbpsound = false
 
+DBM.ShaOfFearAssistEnabled = true
+DBM.ShaAssistStarModeChosed = nil
+
 mod:AddBoolOption("InfoFrame")
 mod:AddBoolOption("pscount", true, "sound")
 mod:AddBoolOption("HudMAP", true, "sound")
 mod:AddBoolOption("ShaAssist", true, "sound")
+mod:AddBoolOption("ShaStarMode", false, "sound")
 
 local DBMHudMap = DBMHudMap
 local free = DBMHudMap.free
@@ -171,9 +175,20 @@ function mod:SPELL_AURA_APPLIED(args)
 		end)
 	elseif args:IsSpellID(129147) then
 		if self.Options.ShaAssist then
-			ShaOfFearAssistEnabled = true
+			DBM.ShaOfFearAssistEnabled = true
 		else
-			ShaOfFearAssistEnabled = false
+			DBM.ShaOfFearAssistEnabled = false
+		end
+		if self.Options.ShaStarMode then
+			if mod:IsDps() then
+				DBM.ShaAssistStarModeChosed = "Dps"
+			elseif mod:IsHealer() then
+				DBM.ShaAssistStarModeChosed = "Healther"
+			else
+				DBM.ShaAssistStarModeChosed = nil
+			end
+		else
+			DBM.ShaAssistStarModeChosed = nil
 		end
 		ominousCackleTargets[#ominousCackleTargets + 1] = args.destName
 		if args:IsPlayer() then

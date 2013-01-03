@@ -335,6 +335,7 @@ end
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(122224, 61721) and args.sourceName == UnitName("player") then
 		warnImpalingSpear:Cancel()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\didi.mp3")
 		sndDS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countten.mp3")
 		sndDS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countnine.mp3")
 		sndDS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counteight.mp3")	

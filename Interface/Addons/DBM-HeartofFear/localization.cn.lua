@@ -222,6 +222,7 @@ L:SetTimerLocalization({
 
 L:SetOptionLocalization({
 	SoundWOP			= "语音警告：重要技能",
+	SoundADD					= "语音警告：为被软泥追逐播放蜂鸣音",
 	warnReshapeLife				= DBM_CORE_AUTO_ANNOUNCE_OPTIONS.target:format(122784, GetSpellInfo(122784)),
 	warnReshapeLifeTutor		= "当变为变异构造体时显示技能及其作用",
 	warnAmberExplosion			= "警报：$spell:122398正在施放，并警报来源",
@@ -254,6 +255,7 @@ L= DBM:GetModLocalization(743)
 
 L:SetWarningLocalization({
 	warnAmberTrap		= "琥珀陷阱：%d/5",
+	specWarnTT			= "战栗图腾 <第%d轮> <%d秒>"
 })
 
 L:SetOptionLocalization({
@@ -262,10 +264,19 @@ L:SetOptionLocalization({
 	InfoYB				= "信息框：音波能量监视(团队中必须有人做焦点)",
 	SoundWOP			= "语音警告：重要技能",
 	SoundYB				= "语音警告：為音波爆炸倒数",
-	HudMAP				= "高级定位监视(HUD)：$spell:124863的位置",
+	HudMAP				= "高级定位监视(HUD)：自己的$spell:124863",
+	HudMAPOther			= "高级定位监视(HUD)：其他人的$spell:124863",
 	HudMAP2				= "高级定位监视(HUD)：$spell:124821的位置",
 	RangeFrame			= "距离监视（5码）：$spell:123735",
-	StickyResinIcons	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(124097)
+	StickyResinIcons	= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(124097),
+	specWarnTT			= "特别警告：准备开战栗图腾",
+	SendPos				= "主控：分配$spell:124863跑位(需要队长)",
+	AcceptPos			= "被控：接收并显示$spell:124863跑位(需要队长开主控)",
+	optDR				= "战栗图腾链(123311231223-loop)",
+	DR1					= "萨满A",
+	DR2					= "萨满B",
+	DR3					= "萨满C",
+	noDR				= "没我事"
 })
 
 L:SetMiscLocalization({

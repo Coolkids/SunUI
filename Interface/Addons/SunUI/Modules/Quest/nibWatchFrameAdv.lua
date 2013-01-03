@@ -217,6 +217,7 @@ end
 local function EventHandler(self, event)
 	if event == "PLAYER_LOGIN" then
 		nWFA.PLAYER_LOGIN()
+		S.Reskin(WatchFrameCollapseExpandButton)
 	elseif event == "PLAYER_ENTERING_WORLD" then
 		nWFA.PLAYER_ENTERING_WORLD()
 	end
@@ -225,7 +226,7 @@ nWFA:RegisterEvent("PLAYER_LOGIN")
 nWFA:RegisterEvent("PLAYER_ENTERING_WORLD")
 nWFA:SetScript("OnEvent", EventHandler)
 
-S.Reskin(WatchFrameCollapseExpandButton)
+
 local downtex = WatchFrameCollapseExpandButton:CreateTexture(nil, "ARTWORK")
 downtex:SetSize(8, 8)
 downtex:SetPoint("CENTER", 1, 0)

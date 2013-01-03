@@ -403,7 +403,8 @@ ns.auras_instances_debuffs = {
 		},
       
 		[897] = { --Heart of Fear 恐惧之心 
-         
+			--小怪
+			[125907] = 11,	--哭号浩劫
 			-- Imperial Vizier Zor'lok
 			[122760] = 11, -- Exhale, The person targeted for Exhale. 
 			[123812] = 12, -- Pheromones of Zeal, the gas in the middle of the room.

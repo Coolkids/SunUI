@@ -32,7 +32,7 @@
                   to its internal function again.
 ]]
 
-local WoW5 = select(4, GetBuildInfo()) == 50001
+local WoW5 = select(4, GetBuildInfo()) >= 50001
 local parent, ns = ...
 local oUF = ns.oUF
 

@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8424 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8441 $"):sub(12, -3))
 mod:SetCreatureID(60491)
 mod:SetModelID(41448)
 mod:SetZone(809)--Kun-Lai Summit
@@ -32,7 +32,7 @@ local specWarnGrowingAnger		= mod:NewSpecialWarningYou(119622)
 local specWarnBitterThoughts	= mod:NewSpecialWarningMove(119610)
 
 local timerGrowingAngerCD		= mod:NewCDTimer(32, 119622)--Min 32.6~ Max 67.8
-local timerUnleashedWrathCD		= mod:NewCDTimer(77, 119488)--Based on rage, but timing is consistent enough to use a CD bar, might require some perfecting later, similar to xariona's special, if rage doesn't reset after wipes, etc.
+local timerUnleashedWrathCD		= mod:NewCDTimer(53, 119488)--Based on rage, but timing is consistent enough to use a CD bar, might require some perfecting later, similar to xariona's special, if rage doesn't reset after wipes, etc.
 local timerUnleashedWrath		= mod:NewBuffActiveTimer(24, 119488, nil, mod:IsTank() or mod:IsHealer())
 
 --local berserkTimer				= mod:NewBerserkTimer(900)--he did not seems to berserk. my combat lasts 20 min, not berserks at all.

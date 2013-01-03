@@ -391,3 +391,113 @@ function NugRunningNameplates:UpdateNPTimers(np, nrunTimers)
     end
 end
 end
+
+local helpers = NugRunning.helpers
+local Spell, ModSpell = helpers.Spell, helpers.ModSpell
+local Cooldown, ModCooldown = helpers.Cooldown, helpers.ModCooldown
+local Activation, ModActivation = helpers.Activation, helpers.ModActivation
+local EventTimer = helpers.EventTimer
+local Talent = helpers.Talent
+local Glyph = helpers.Glyph
+local GetCP = helpers.GetCP
+local _,class = UnitClass("player")
+local colors = NugRunningConfig.colors
+
+if class == "WARLOCK" then
+-- ModSpell(348, { color = colors.WOO }) -- modifying Immolate color
+-- Spell(348, nil) -- remove immolate
+end
+
+if class == "PRIEST" then
+	-- BUFFS
+	Spell( 139 ,{ name = GetSpellInfo(139), shinerefresh = true, color = colors.LGREEN, duration = 12, textfunc = function(timer) return timer.dstName end })
+	Spell( 17 ,{ name = GetSpellInfo(17), shinerefresh = true, duration = 15, color = colors.LRED, textfunc = function(timer) return timer.dstName end })  --, textfunc = function(timer) return timer.absorb end
+	Spell( 41635 ,{ name = GetSpellInfo(41635), shinerefresh = true, duration = 30, color = colors.RED, textfunc = function(timer) return timer.dstName end })
+	Spell( 47788 ,{ name = GetSpellInfo(47788), shine = true, duration = 10, color = colors.LBLUE, short = "Guardian" })
+	Spell( 33206 ,{ name = GetSpellInfo(33206),shine = true, duration = 8, color = colors.LBLUE })
+	Spell( 586 ,{ name = GetSpellInfo(586),duration = 10 })
+	Spell( 89485 ,{ name = GetSpellInfo(89485), shine = true, color = colors.LBLUE, timeless = true, duration = 0.1 })
+	--Spell( 15407 , nil)
+	Spell( 589 ,{ name = GetSpellInfo(589),duration = 18, overlay = {0,1.5, 0.2}, ghost = true, showpower = true, nameplates = true, priority = 9, color = colors.PURPLE, refreshed =true, short = "SW:Pain", textfunc = function(timer) return timer.dstName end })
+
+	EventTimer({ event = "SPELL_SUMMON", spellID = 123040, name = GetSpellInfo(123040), duration = 15, priority = -10, color = colors.BLACK })
+	EventTimer({ event = "SPELL_SUMMON", spellID = 34433, name = GetSpellInfo(34433), duration = 12, priority = -10, color = colors.BLACK })
+
+	Spell( 34914 ,{ name = GetSpellInfo(34914), overlay = {0, 1.5, 0.2}, recast_mark = 2.8, ghost = true, showpower = true, nameplates = true,  priority = 10, duration = 15, color = colors.RED, short = "VampTouch", hasted = true, textfunc = function(timer) return timer.dstName end })
+	Spell( 2944 ,{ name = GetSpellInfo(2944),duration = 6, priority = 8, nameplates = true, showpower = true, color = colors.WOO, short = "Plague", textfunc = function(timer) return timer.dstName end })
+	Spell( 47585 ,{ name = GetSpellInfo(47585),duration = 6, color = colors.PURPLE })
+	Spell( 59889,{ name = GetSpellInfo(59889), duration = 6 })
+	-- DEBUFFS
+	Spell( 109964 ,{ name = GetSpellInfo(109964), duration = 15, color = colors.PURPLE2 })
+	Spell( 114908 ,{ name = GetSpellInfo(114908), duration = 15, color = colors.PURPLE2 }) --shield effect
+
+	Spell( 87160 ,{ name = GetSpellInfo(87160), duration = 10, color = colors.LRED })
+	Spell( 87160 ,{ name = GetSpellInfo(87160), duration = 10, color = colors.LRED })
+	Spell( 114255,{ name = GetSpellInfo(114255), duration = 20, color = colors.LRED })
+	Spell( 112833,{ name = GetSpellInfo(112833), duration = 6, color = colors.CURSE })
+	Spell( 123266,{ name = GetSpellInfo(123266), duration = 10, color = colors.BLACK }) -- discipline
+	Spell( 123267,{ name = GetSpellInfo(123267), duration = 10, color = colors.BLACK }) -- holy
+	Spell( 124430,{ name = GetSpellInfo(124430), duration = 12, color = colors.BLACK }) -- shadow
+
+
+	Spell( 9484 ,{ name = GetSpellInfo(9484),duration = 50, pvpduration = 8, short = "Shackle" })
+	Spell( 15487 ,{ name = GetSpellInfo(15487),duration = 5, color = colors.PINK })
+
+	Spell( 113792 ,{ name = GetSpellInfo(113792),duration = 30, pvpduration = 8 })
+	Spell( 8122 ,{ name = GetSpellInfo(8122),duration = 8, multiTarget = true })
+
+	--Rapture
+	EventTimer({ event = "SPELL_ENERGIZE", spellID = 47755, name = GetSpellInfo(47755), color = colors.BLACK, duration = 12 })
+	--π‚»¶
+	EventTimer({ event = "SPELL_CAST_START", spellID = 88685, name = GetSpellInfo(88685), duration = 31 })
+	Spell( 88684 ,{ name = GetSpellInfo(88684), duration = 6})
+
+	Cooldown( 8092, { name = GetSpellInfo(8092), recast_mark = 1.5, color = colors.CURSE, resetable = true, ghost = true })
+	Cooldown( 32379, { name = GetSpellInfo(32379), short = "SW:Death",  color = colors.PURPLE, resetable = true  })
+
+	EventTimer({ event = "SPELL_CAST_SUCCESS", spellID = 62618, name = GetSpellInfo(62618), duration = 10, color = colors.GOLD })
+	Spell( 88625 ,{ name = GetSpellInfo(88625), color = colors.LRED, short = "HW: Chastise", duration = 3 })
+
+	Cooldown( 47540 ,{ name = GetSpellInfo(47540), color = colors.CURSE })
+	Cooldown( 14914 ,{ name = "", recast_mark = 3, overlay = {0,3}, color = colors.PINK })
+	Spell( 81661 ,{ name = GetSpellInfo(81661),duration = 15, color = colors.ORANGE, stackcolor = {
+		[1] = {0.7,0,0},
+		[2] = {1,0.6,0.2},
+		[3] = {1,1,0.4},
+		[4] = {0.8,1,0.5},
+		[5] = {0.7,1,0.2},
+	} })
+end
+
+if class == "ROGUE" then
+    
+end
+
+if class == "WARRIOR" then
+    
+end
+
+if class == "MAGE" then
+    EventTimer({ event = "SPELL_SUMMON", spellID = 84714, name = GetSpellInfo(84714), duration = 10, color = colors.BLACK })
+	EventTimer({ event = "SPELL_SUMMON", spellID = 58833, name = GetSpellInfo(55342), duration = 30, color = colors.BLACK })
+end
+
+if class == "DRUID" then
+    
+end
+
+if class == "DEATHKNIGHT" then
+    
+end
+
+if class == "HUNTER" then
+    
+end
+
+if class == "SHAMAN" then
+    
+end
+
+if class == "PALADIN" then
+    
+end

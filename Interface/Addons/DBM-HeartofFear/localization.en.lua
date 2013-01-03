@@ -179,6 +179,7 @@ L= DBM:GetModLocalization(743)
 
 L:SetWarningLocalization({
 	warnAmberTrap		= "Amber Trap progress: (%d/5)",
+	specWarnTT			= "Thriller Totem <%d> <%d.s>"
 })
 
 L:SetOptionLocalization({

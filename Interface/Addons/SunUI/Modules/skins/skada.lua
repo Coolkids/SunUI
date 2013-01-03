@@ -1,5 +1,6 @@
 local S, L, DB, _, C = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SkinSkada", "AceEvent-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local function StripOptions(options)
 	options.baroptions.args.barspacing = nil
 	options.titleoptions.args.texture = nil
@@ -13,8 +14,10 @@ end
 	for _,window in ipairs(self:GetWindows()) do
 		for i,v in pairs(window.bargroup:GetBars()) do
 			if not v.BarStyled then
-				v.texture.SetVertexColor = function(t, r, g, b) 
-					S.CreateTop(v.texture, r, g, b)
+				if SunUIConfig.db.profile.MiniDB.uistyle ~= "plane" then
+					v.texture.SetVertexColor = function(t, r, g, b) 
+						S.CreateTop(v.texture, r, g, b)
+					end
 				end
 				v.BarStyled = true
 			end

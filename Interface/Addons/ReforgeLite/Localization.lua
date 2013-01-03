@@ -840,7 +840,7 @@ elseif gameLocale == "zhCN" then
   L["Tanking model"] = "坦克模式"
   L["Target level"] = "目标等级"
   L["Titan's Grip"] = "泰坦之握"
---   L["to"] = ""
+  L["to"] = "直至" -- Needs review
   L["Total"] = "总计"
   L["Weight after cap"] = "超过上限后权重"
 

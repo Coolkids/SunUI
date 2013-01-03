@@ -2,7 +2,9 @@ local eventcount = 0
 local a = CreateFrame("Frame") 
 a:RegisterAllEvents() 
 a:SetScript("OnEvent", function(self, event, ...) 
-	--print(event)
+	--if strfind(event, "QUEST") then
+		--print(event)
+	--end
 	eventcount = eventcount + 1 
 	if (InCombatLockdown() and eventcount > 200000) or (not InCombatLockdown() and eventcount > 10000) or event == "PLAYER_ENTERING_WORLD" or event == "PLAYER_REGEN_ENABLED" then
 		collectgarbage("collect")

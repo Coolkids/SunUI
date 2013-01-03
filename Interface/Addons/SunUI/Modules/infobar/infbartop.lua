@@ -185,7 +185,6 @@ function Module:Update()
 end
 
 Module:ScheduleRepeatingTimer("Update", 10)
-Module:ScheduleTimer("Update", 10)
 
 local function formatMemory(n)
 	if n > 1024 then

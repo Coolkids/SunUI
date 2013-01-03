@@ -2,7 +2,7 @@
 if IsAddOnLoaded("Prat-3.0") or IsAddOnLoaded("Chatter") then
 	return
 end
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Chat", "AceEvent-3.0")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Chat", "AceEvent-3.0", "AceHook-3.0")
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local _G = _G
 local fontsize = 10                          --other variables
@@ -43,9 +43,6 @@ _G.CHAT_FLAG_AFK = "|cffFF0000".."[AFK]".."|r "
 _G.CHAT_FLAG_DND = "|cffE7E716".."[DND]".."|r "
 _G.CHAT_FLAG_GM = "|cff4154F5".."[GM]".."|r "
  
-_G.ERR_FRIEND_ONLINE_SS = "|Hplayer:%s|h[%s]|h ".." |cff298F00 Online|r".."!"
-_G.ERR_FRIEND_OFFLINE_S = "%s ".."|cffff0000 Offline|r".."!"
-
 -------------- > Custom timestamps color
 
 ChatFrame2ButtonFrameBottomButton:RegisterEvent("PLAYER_LOGIN")
@@ -131,10 +128,7 @@ local function ApplyChatStyle(self)
 		end 
 	end
 end
--- calls
-for i = 1, NUM_CHAT_WINDOWS do
-    ApplyChatStyle(_G["ChatFrame"..i])
-end
+
 -- temporary chats
 hooksecurefunc("FCF_OpenTemporaryWindow", ApplyChatStyle)
 FloatingChatFrame_OnMouseScroll = function(self, dir)
@@ -263,6 +257,9 @@ for i = 1, 10 do
 end
 
 function Module:OnEnable()
+	for i = 1, NUM_CHAT_WINDOWS do
+		ApplyChatStyle(_G["ChatFrame"..i])
+	end
 	C = SunUIConfig.db.profile.MiniDB
 	if C["DNDFilter"] then  
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL_JOIN", function(msg) return true end)

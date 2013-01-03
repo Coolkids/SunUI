@@ -6,11 +6,7 @@
 
 
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	
 	<Include file="ACE3\load.xml"/>
-	
-	
-	<Script file="LibCooldown.lua"/>
 </Ui>
 
 <!--	<Script file="Load.lua"/>  -->

@@ -1,4 +1,4 @@
--- ReforgeLite v1.21 by d07.RiV (Iroared)
+-- ReforgeLite v1.23 by d07.RiV (Iroared)
 -- All rights reserved
 
 local function DeepCopy (t, cache)
@@ -177,7 +177,7 @@ end
 -----------------------------------------------------------------
 
 StaticPopupDialogs["REFORGE_LITE_SAVE_PRESET"] = {
-  preferredIndex = 3,
+  preferredIndex = STATICPOPUP_NUMDIALOGS,
   text = L["Enter the preset name"],
   button1 = ACCEPT,
   button2 = CANCEL,
@@ -229,7 +229,7 @@ StaticPopupDialogs["REFORGE_LITE_SAVE_PRESET"] = {
 }
 
 StaticPopupDialogs["REFORGE_LITE_SAVE_METHOD_PRESET"] = {
-  preferredIndex = 3,
+  preferredIndex = STATICPOPUP_NUMDIALOGS,
   text = L["Enter the preset name"],
   button1 = ACCEPT,
   button2 = CANCEL,
@@ -348,7 +348,22 @@ ReforgeLite.itemStats = {
   },
   RatingStat (2, "ITEM_MOD_DODGE_RATING_SHORT", "Dodge", CR_DODGE),
   RatingStat (3, "ITEM_MOD_PARRY_RATING_SHORT", "Parry", CR_PARRY),
-  RatingStat (4, "ITEM_MOD_HIT_RATING_SHORT", "Hit", CR_HIT_SPELL, CR_HIT_RANGED),
+  {
+    name = "ITEM_MOD_HIT_RATING_SHORT",
+    tip = L["Hit"],
+    long = L["HitLong"],
+    getter = function()
+      local result = GetCombatRating(class == "HUNTER" and CR_HIT_RANGED or CR_HIT_SPELL)
+      local e2h = ReforgeLite:GetConversion().e2h
+      if e2h > 0 then
+        result = result + math.floor(GetCombatRating(CR_EXPERTISE) * e2h)
+      end
+      return result
+    end,
+    mgetter = function (method, orig)
+      return (orig and method.orig_stats and method.orig_stats[4]) or method.stats[4]
+    end
+  },
   RatingStat (5, "ITEM_MOD_CRIT_RATING_SHORT", "Crit", CR_CRIT_SPELL, CR_CRIT_RANGED),
   RatingStat (6, "ITEM_MOD_HASTE_RATING_SHORT", "Haste", CR_HASTE_SPELL, CR_HASTE_RANGED),
   RatingStat (7, "ITEM_MOD_EXPERTISE_RATING_SHORT", "Exp", CR_EXPERTISE),
@@ -357,23 +372,6 @@ ReforgeLite.itemStats = {
 ReforgeLite.STATS = {
   SPIRIT = 1, DODGE = 2, PARRY = 3, HIT = 4, CRIT = 5, HASTE = 6, EXP = 7, MASTERY = 8, SPELLHIT = 9, BLOCK = 10, CRITBLOCK = 11
 }
-ReforgeLite.tankingStats = DeepCopy (ReforgeLite.itemStats)
-ReforgeLite.tankingStats[ReforgeLite.STATS.DODGE].long = L["Dodge chance"]
-ReforgeLite.tankingStats[ReforgeLite.STATS.DODGE].percent = true
-ReforgeLite.tankingStats[ReforgeLite.STATS.DODGE].mgetter = function (method)
-  return method.stats.dodge
-end
-ReforgeLite.tankingStats[ReforgeLite.STATS.DODGE].getter = function ()
-  return GetDodgeChance ()
-end
-ReforgeLite.tankingStats[ReforgeLite.STATS.PARRY].long = L["Parry chance"]
-ReforgeLite.tankingStats[ReforgeLite.STATS.PARRY].percent = true
-ReforgeLite.tankingStats[ReforgeLite.STATS.PARRY].mgetter = function (method)
-  return method.stats.parry
-end
-ReforgeLite.tankingStats[ReforgeLite.STATS.PARRY].getter = function ()
-  return GetParryChance ()
-end
 
 ReforgeLite.REFORGE_TABLE_BASE = 112
 ReforgeLite.reforgeTable = {
@@ -457,7 +455,7 @@ function ReforgeLite:ParsePawnString (pawn)
 end
 
 StaticPopupDialogs["REFORGE_LITE_PARSE_PAWN"] = {
-  preferredIndex = 3,
+  preferredIndex = STATICPOPUP_NUMDIALOGS,
   text = L["Enter pawn string"],
   button1 = ACCEPT,
   button2 = CANCEL,
@@ -1038,20 +1036,8 @@ function ReforgeLite:FillSettings ()
 end
 function ReforgeLite:GetCurrentScore ()
   local score = 0
-  local unhit = 100 + 0.8 * max (0, self.pdb.targetLevel)
-  if self.pdb.tankingModel then
-    local dodge = GetDodgeChance ()
-    local parry = GetParryChance ()
-    score = dodge * self.pdb.weights[self.STATS.DODGE] + parry * self.pdb.weights[self.STATS.PARRY]
-    for i = 1, #self.itemStats do
-      if i ~= self.STATS.DODGE and i ~= self.STATS.PARRY then
-        score = score + self:GetStatScore (i, self.itemStats[i].getter ())
-      end
-    end
-  else
-    for i = 1, #self.itemStats do
-      score = score + self:GetStatScore (i, self.itemStats[i].getter ())
-    end
+  for i = 1, #self.itemStats do
+    score = score + self:GetStatScore (i, self.itemStats[i].getter ())
   end
   return score
 end
@@ -1112,35 +1098,6 @@ function ReforgeLite:UpdateMethodCategory ()
     self.methodCategory:AddFrame (self.methodReset)
     self:SetAnchor (self.methodReset, "BOTTOMLEFT", self.methodShow, "BOTTOMRIGHT", 8, 0)
 
-    self.methodTank = CreateFrame ("Frame", nil, self.content)
-    self.methodCategory:AddFrame (self.methodTank)
-    self.methodTank:SetPoint ("TOPLEFT", self.methodStats, "TOPRIGHT", 10, 0)
-    self.methodTank:SetPoint ("BOTTOMLEFT", self.methodStats, "BOTTOMRIGHT", 10, 0)
-    self.methodTank:SetPoint ("RIGHT", self.content, "RIGHT", -2, 0)
-    
-    for i = 1, 10 do
-      self.methodTank[i] = self.methodTank:CreateFontString (nil, "ARTWORK", "GameFontNormal")
-      if i == 1 then
-        self.methodTank[i]:SetPoint ("TOPLEFT", self.methodTank, "TOPLEFT", 0, 0)
-      else
-        self.methodTank[i]:SetPoint ("TOPLEFT", self.methodTank[i - 1], "BOTTOMLEFT", 0, -3)
-      end
-      self.methodTank[i]:SetPoint ("RIGHT", self.methodTank, "RIGHT", 0, 0)
-      self.methodTank[i]:SetJustifyH ("LEFT")
-      self.methodTank[i]:Hide ()
-    end
-    self.methodTank.ClearLines = function (m)
-      for i = 1, 10 do
-        m[i]:Hide ()
-      end
-      m.counter = 0
-    end
-    self.methodTank.PrintLine = function (m, text, ...)
-      m.counter = m.counter + 1
-      m[m.counter]:Show ()
-      m[m.counter]:SetText (string.format (text, ...))
-    end
-
     self.methodPresetsButton = GUI:CreateImageButton (self.content, 24, 24, "Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Up",
       "Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Down", "Interface\\Buttons\\UI-Common-MouseHilight", function ()
       if next(self.pdb.customMethodPresets) then
@@ -1196,18 +1153,6 @@ function ReforgeLite:RefreshMethodStats (relax)
   end
   if self.pdb.method then
     if self.methodStats then
-      if self.pdb.tankingModel then
-        self.methodTank:Show2 ()
-        self.methodTank:ClearLines ()
-        local ctc = missChance
-        self.methodTank:PrintLine ("%s: %.2f%%", L["Dodge chance"], self.pdb.method.stats.dodge or 0)
-        ctc = ctc + (self.pdb.method.stats.dodge or 0)
-        self.methodTank:PrintLine ("%s: %.2f%%", L["Parry chance"], self.pdb.method.stats.parry or 0)
-        ctc = ctc + (self.pdb.method.stats.parry or 0)
-        self.methodTank:PrintLine ("%s: %.2f%%", L["Total"], ctc)
-      else
-        self.methodTank:Hide2 ()
-      end
       local stats = self.itemStats
 
       self.methodStats.score:SetText (math.floor (score + 0.5))

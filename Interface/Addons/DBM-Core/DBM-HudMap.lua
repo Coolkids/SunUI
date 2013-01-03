@@ -337,6 +337,7 @@ function mod:OnEnable()
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	self:RegisterEvent("LFG_PROPOSAL_SHOW", 	"Readysound")
 	self:RegisterEvent("READY_CHECK", 	"Readysound")
+	self:RegisterEvent("ADDON_LOADED")
 	updateFrame:SetScript("OnUpdate", onUpdate)
 	self.canvas:SetAlpha(db.alpha)
 	self:UpdateCanvasPosition()
@@ -393,6 +394,11 @@ function mod:COMBAT_LOG_EVENT_UNFILTERED(ev, timestamp, event, hideCaster, sourc
 	end
 end
 
+function mod:ADDON_LOADED(ev, name)
+	if name == "Blizzard_GlyphUI" or name == "Blizzard_TalentUI" then
+		TalentFrame_LoadUI()
+	end
+end
 -----------------------------------
 --- Points
 -----------------------------------
