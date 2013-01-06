@@ -18,6 +18,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_SUCCESS",
 	"SPELL_CAST_START",
 	"CHAT_MSG_MONSTER_YELL",
+	"RAID_BOSS_EMOTE",
 	"SPELL_DAMAGE",
 	"SPELL_MISSED",
 	"UNIT_SPELLCAST_SUCCEEDED"
@@ -26,6 +27,7 @@ mod:RegisterEventsInCombat(
 local warnScreech				= mod:NewSpellAnnounce(123735, 3, nil, false)--Not useful.
 local warnCryOfTerror			= mod:NewTargetAnnounce(123788, 3, nil, mod:IsRanged())
 local warnEyes					= mod:NewStackAnnounce(123707, 2, nil, mod:IsTank())
+local warnDissonanceField		= mod:NewCountAnnounce(123255, 3)
 local warnSonicDischarge		= mod:NewSoonAnnounce(123504, 4)--Iffy reliability but better then nothing i suppose.
 local warnRetreat				= mod:NewSpellAnnounce(125098, 4)
 local warnAmberTrap				= mod:NewAnnounce("warnAmberTrap", 2, 125826)
@@ -46,7 +48,7 @@ local specwarnCryOfTerror		= mod:NewSpecialWarningYou(123788)
 local specWarnRetreat			= mod:NewSpecialWarningSpell(125098)
 local specwarnAmberTrap			= mod:NewSpecialWarningSpell(125826, false)
 local specwarnStickyResin		= mod:NewSpecialWarningYou(124097)
-local yellStickyResin			= mod:NewYell(124097)
+local yellStickyResin			= mod:NewYell(124097, nil, false)
 local specwarnFixate			= mod:NewSpecialWarningYou(125390, false)--Could be spammy, make optional, will use info frame to display this more constructively
 local specWarnDispatch			= mod:NewSpecialWarningInterrupt(124077, mod:IsMelee())
 local specWarnAdvance			= mod:NewSpecialWarningSpell(125304)
@@ -61,9 +63,10 @@ local specWarnTT				= mod:NewSpecialWarning("specWarnTT")
 
 local timerScreechCD			= mod:NewNextTimer(7, 123735, nil, mod:IsRanged())
 local timerCryOfTerror			= mod:NewTargetTimer(20, 123788, nil, mod:IsHealer())
-local timerCryOfTerrorCD		= mod:NewCDTimer(25, 123788)
+local timerCryOfTerrorCD		= mod:NewCDTimer(25, 123788, nil, mod:IsRanged())
 local timerEyes					= mod:NewTargetTimer(30, 123707, nil, mod:IsTank())
 local timerEyesCD				= mod:NewNextTimer(11, 123707, nil, mod:IsTank())
+local timerDissonanceFieldCD	= mod:NewNextCountTimer(66, 123255)
 local timerPhase1				= mod:NewNextTimer(156.4, 125304)--156.4 til ENGAGE fires and boss is out, 157.4 until "advance" fires though. But 156.4 is more accurate timer
 local timerPhase2				= mod:NewNextTimer(151, 125098)--152 until trigger, but probalby 150 or 151 til adds are targetable.
 local timerCalamityCD			= mod:NewCDTimer(6, 124845, nil, mod:IsHealer())
@@ -101,6 +104,7 @@ local warnhp = 11
 local ybhp = {}
 local sh = {}
 
+local fieldCount = 0
 local swcount = 0
 local hjplayer = 0
 local sendhjpos = ""
@@ -154,9 +158,12 @@ local QJMarkers = {}
 function mod:OnCombatStart(delay)
 	phase3Started = false
 	resinIcon = 2
+	fieldCount = 0
 	timerScreechCD:Start(-delay)
 	timerEyesCD:Start(-delay)
+	timerDissonanceFieldCD:Start(22-delay, 1)
 	timerPhase2:Start(-delay)
+	berserkTimer:Start(-delay)
 	table.wipe(warnedLowHP)
 	table.wipe(warnedLowHP5)
 	table.wipe(warnedLowHP4)
@@ -177,9 +184,6 @@ function mod:OnCombatStart(delay)
 	DeadEg = nil
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Show(5)
-	end
-	if not self:IsDifficulty("lfr25") then
-		berserkTimer:Start(-delay)
 	end
 	self:RegisterShortTermEvents(
 		"UNIT_HEALTH_FREQUENT_UNFILTERED"
@@ -389,12 +393,20 @@ function mod:SPELL_CAST_SUCCESS(args)
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		timerPhase2:Cancel()
 		timerConsumingTerrorCD:Cancel()
+		timerCryOfTerrorCD:Cancel()
+		timerDissonanceFieldCD:Cancel()
 		timerScreechCD:Cancel()
 		warnPhase3:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\pthree.mp3")--p3
 		timerVisionsCD:Start(4)
 		timerCalamityCD:Start(9)
 		timerConsumingTerrorCD:Start(11)
+	elseif args:IsSpellID(123255) and self:AntiSpam(2, 4) then
+		fieldCount = fieldCount + 1
+		warnDissonanceField:Show(fieldCount)
+		if fieldCount < 2 then
+			timerDissonanceFieldCD:Start(nil, fieldCount+1)
+		end
 	end
 end
 
@@ -427,7 +439,9 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		timerPhase2:Cancel()
+		timerCryOfTerrorCD:Cancel()
 		timerConsumingTerrorCD:Cancel()
+		timerDissonanceFieldCD:Cancel()
 		timerScreechCD:Cancel()
 		warnPhase3:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\pthree.mp3")--p3
@@ -462,6 +476,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 			DBM.RangeCheck:Hide()
 		end
 	elseif spellId == 125304 and self:AntiSpam(2, 1) then
+		fieldCount = 0
 		timerPhase1:Cancel()--If you kill everything it should end early.
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_nwzb.mp3")
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
@@ -471,6 +486,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		warnAdvance:Show()
 		specWarnAdvance:Show()
+		timerDissonanceFieldCD:Start(22, 1)--Assumed same as pull, may very well be wrong Needs to be verified with transcriptor tomorrow
 		timerPhase2:Start()--Assumed same as pull
 		ptwo = false
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\phasechange.mp3")--階段轉換
@@ -571,7 +587,6 @@ function mod:OnSync(msg, guid, hp)
 				DeadEg = register(DBMHudMap:AddEdge(1, 1, 1, 1, 5, "player", nil, nil, nil, RunPos[hp][1],RunPos[hp][2]))
 			end
 		end
-		print("接收分配: <"..guid.."> - "..hp.."區")
 	end
 end
 
@@ -590,3 +605,9 @@ function mod:SPELL_DAMAGE(sourceGUID, _, _, _, _, _, _, _, spellId)
 	end
 end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE
+
+function mod:RAID_BOSS_EMOTE(msg)
+	if msg:find("spell:126121") then
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_yyfh.mp3") --音域腐化
+	end
+end

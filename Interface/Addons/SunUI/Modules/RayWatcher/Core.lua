@@ -1,4 +1,5 @@
 local RayUIWatcher = LibStub("AceAddon-3.0"):NewAddon("RayWatcher", "AceEvent-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local S, L, DB, _, C = unpack(select(2, ...))
 local _, ns = ...
 local myclass = DB.MyClass

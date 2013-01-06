@@ -99,7 +99,8 @@ L:SetOptionLocalization({
 })
 
 L:SetMiscLocalization({
-	UnderHim	= "under him"
+	UnderHim	= "under him",
+	Ptwostart	= "armor plating begins to crack"
 })
 
 ----------------------

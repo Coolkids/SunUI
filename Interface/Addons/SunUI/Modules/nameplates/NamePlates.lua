@@ -182,11 +182,14 @@ local function TotemIcon(frame)
 		end
 	end
 end
+--0.96 0.55 0.73 --圣骑士
+--0.53333216905594 0.53333216905594 0.99999779462814
 local function Color(frame)
 	local r, g, b = frame.hp:GetStatusBarColor()
 	frame.isTapped = false
 	--print(r, g, b)
-	if r + b + b > 2 then   -- Tapped
+	if r > 0.52 and r < 0.55 and r == g and b > 0.98 then   -- Tapped
+		--print(r, g, b)
 		r, g, b = 0.6, 0.6, 0.6
 		--print(123)
 		frame.isTapped = true
@@ -257,8 +260,8 @@ end
 local function CreateAuraIcon(parent)
 	local button = CreateFrame("Frame",nil,parent)
 	button:SetScript("OnHide", function(self) UpdateAuraAnchors(self:GetParent()) end)
-	button:Width(20)
-	button:Height(20)
+	button:Width(C["IconSize"])
+	button:Height(C["IconSize"])
 
 	button.shadow = CreateFrame("Frame", nil, button)
 	button.shadow:SetFrameLevel(0)
@@ -372,7 +375,7 @@ local function OnAura(frame, unit)
 	if not frame.icons or not frame.unit or not C["Showdebuff"] then return end  --
 	local i = 1
 	for index = 1,40 do
-		if i > C["HPWidth"] / 20 then return end
+		if i > C["HPWidth"] / C["IconSize"] then return end
 		local match
 		local name,_,_,_,_,duration,_,caster,_,_,spellid = UnitAura(frame.unit,index,"HARMFUL")
 		
@@ -383,7 +386,7 @@ local function OnAura(frame, unit)
 			if not frame.icons[i] then frame.icons[i] = CreateAuraIcon(frame) end
 			local icon = frame.icons[i]
 			if i == 1 then icon:Point("RIGHT",frame.icons,"RIGHT") end
-			if i ~= 1 and i <= C["HPWidth"] / 20 then icon:Point("RIGHT", frame.icons[i-1], "LEFT", -2, 0) end
+			if i ~= 1 and i <= C["HPWidth"] / C["IconSize"] then icon:Point("RIGHT", frame.icons[i-1], "LEFT", -2, 0) end
 			i = i + 1
 			UpdateAuraIcon(icon, frame.unit, index, "HARMFUL")
 		end
@@ -420,9 +423,9 @@ local function UpdateObjects(frame)
 	
 	if frame.icons then return end
 	frame.icons = CreateFrame("Frame",nil,frame)
-	frame.icons:Point("BOTTOMRIGHT",frame.hp,"TOPRIGHT", 0, FONTSIZE)
-	frame.icons:Width(20 + C["HPWidth"])
-	frame.icons:Height(25)
+	frame.icons:Point("BOTTOMRIGHT",frame.hp,"TOPRIGHT", 0, 4)
+	frame.icons:Width(C["IconSize"] + C["HPWidth"])
+	frame.icons:Height(C["IconSize"])
 	frame.icons:SetFrameLevel(frame.hp:GetFrameLevel()+2)
 	frame:HookScript("OnEvent", OnAura)
 	
@@ -537,7 +540,7 @@ local function SkinObjects(frame, nameFrame)
 	cb:HookScript('OnShow', UpdateCastbar)
 	cb:HookScript('OnSizeChanged', OnSizeChanged)
 	cb:HookScript('OnValueChanged', OnValueChanged)	
-	if not S.IsCoolkid() and SunUIConfig.db.profile.MiniDB.uistyle == "plane" then
+	if not S.IsCoolkid() then
 		cb:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
 	else
 		cb:SetStatusBarTexture("Interface\\AddOns\\SunUI\\media\\statusbars\\statusbar8")
@@ -672,29 +675,30 @@ local function SetCV()
 	SetCVar("bloatnameplates",0.0)
 	SetCVar("ShowClassColorInNameplate",1)
 end
-local Frame = CreateFrame("Frame", nil, UIParent)
-Frame:SetScript("OnUpdate", function(self, elapsed)
-	if WorldFrame:GetNumChildren() ~= numChildren then
-		numChildren = WorldFrame:GetNumChildren()
-		HookFrames(WorldFrame:GetChildren())
-	end
 
-	if self.elapsed and self.elapsed > 0.2 then
-		ForEachPlate(UpdateThreat, self.elapsed)
-		self.elapsed = 0
-	else
-		self.elapsed = (self.elapsed or 0) + elapsed
-	end
-	ForEachPlate(Color)
-	ForEachPlate(CheckBlacklist)
-	ForEachPlate(CheckUnit_Guid)
-end)
 function N:OnInitialize()
 		if IsAddOnLoaded("TidyPlates") or IsAddOnLoaded("Aloft") or IsAddOnLoaded("dNamePlates") or IsAddOnLoaded("caelNamePlates") then
-		return
-	end
+			return
+		end
 	C = SunUIConfig.db.profile.NameplateDB
 	if C["enable"] ~= true then return end
+	local Frame = CreateFrame("Frame", nil, UIParent)
+	Frame:SetScript("OnUpdate", function(self, elapsed)
+		if WorldFrame:GetNumChildren() ~= numChildren then
+			numChildren = WorldFrame:GetNumChildren()
+			HookFrames(WorldFrame:GetChildren())
+		end
+
+		if self.elapsed and self.elapsed > 0.2 then
+			ForEachPlate(UpdateThreat, self.elapsed)
+			self.elapsed = 0
+		else
+			self.elapsed = (self.elapsed or 0) + elapsed
+		end
+		ForEachPlate(Color)
+		ForEachPlate(CheckBlacklist)
+		ForEachPlate(CheckUnit_Guid)
+	end)
 	N:RegisterEvent("PLAYER_LOGIN", SetCV)
 	N:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	if C["Combat"] then

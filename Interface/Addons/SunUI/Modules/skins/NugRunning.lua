@@ -417,7 +417,6 @@ if class == "PRIEST" then
 	Spell( 33206 ,{ name = GetSpellInfo(33206),shine = true, duration = 8, color = colors.LBLUE })
 	Spell( 586 ,{ name = GetSpellInfo(586),duration = 10 })
 	Spell( 89485 ,{ name = GetSpellInfo(89485), shine = true, color = colors.LBLUE, timeless = true, duration = 0.1 })
-	--Spell( 15407 , nil)
 	Spell( 589 ,{ name = GetSpellInfo(589),duration = 18, overlay = {0,1.5, 0.2}, ghost = true, showpower = true, nameplates = true, priority = 9, color = colors.PURPLE, refreshed =true, short = "SW:Pain", textfunc = function(timer) return timer.dstName end })
 
 	EventTimer({ event = "SPELL_SUMMON", spellID = 123040, name = GetSpellInfo(123040), duration = 15, priority = -10, color = colors.BLACK })

@@ -16,6 +16,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_REMOVED",
 	"SPELL_CAST_START",
 	"CHAT_MSG_TARGETICONS",
+	"UNIT_DIED",
 	"UNIT_SPELLCAST_SUCCEEDED"
 )
 
@@ -32,6 +33,7 @@ local specWarnGetAway					= mod:NewSpecialWarningSpell(123461, nil, nil, nil, tr
 local specWarnSpray						= mod:NewSpecialWarningStack(123121, mod:IsTank(), 6)
 local specWarnSprayNT					= mod:NewSpecialWarningMove(123121)
 local specWarnSprayOther				= mod:NewSpecialWarningTarget(123121, mod:IsTank())
+local specWarnJSA						= mod:NewSpecialWarning("SpecWarnJSA")
 
 local timerSpecialCD					= mod:NewTimer(50, "timerSpecialCD", 123250)--Variable, 49.5-55 seconds
 local timerSpray						= mod:NewTargetTimer(10, 123121, nil, mod:IsTank() or mod:IsHealer())
@@ -41,6 +43,8 @@ local timerScaryFogCD					= mod:NewNextTimer(10, 123705)
 local berserkTimer						= mod:NewBerserkTimer(600)
 
 mod:AddBoolOption("RangeFrame", true)
+mod:AddBoolOption("HudMAP", false, "sound")
+mod:AddBoolOption("InfoFrame", true, "sound")
 mod:AddBoolOption("HealthFrame", true)
 mod:AddBoolOption("GWHealthFrame", true)
 mod:AddBoolOption("SetIconOnGuardfix", false)
@@ -56,12 +60,37 @@ local hideDebug = 0
 local damageDebug = 0
 local timeDebug = 0
 local hideTime = 0
+
+local Crushcount = 0
+
 local iconsSet = {[1] = false, [2] = false, [3] = false, [4] = false, [5] = false, [6] = false, [7] = false, [8] = false}
+
+local DBMHudMap = DBMHudMap
+local free = DBMHudMap.free
+local function register(e)	
+	DBMHudMap:RegisterEncounterMarker(e)
+	return e
+end
+
+local MWMarkers = {}
+
 
 local function resetguardstate()
 	table.wipe(guards)
 	iconsSet = {[1] = false, [2] = false, [3] = false, [4] = false, [5] = false, [6] = false, [7] = false, [8] = false}
 end
+
+for i = 1, 5 do
+	mod:AddBoolOption("unseenjs"..i, false, "sound")
+end
+
+local function MyJS()
+	if (mod.Options.unseenjs1 and Crushcount == 1) or (mod.Options.unseenjs2 and Crushcount == 2) or (mod.Options.unseenjs3 and Crushcount == 3) or (mod.Options.unseenjs4 and Crushcount == 4) or (mod.Options.unseenjs5 and Crushcount == 5) then
+		return true
+	end
+	return false
+end
+
 
 local function getAvailableIcons()
 	for i = 8, 1, -1 do
@@ -132,6 +161,18 @@ do
 	end
 end
 
+local function checkdebuffend(destname)
+    if UnitDebuff(destname, GetSpellInfo(123705)) then
+        mod:Schedule(0.5, function()
+			checkdebuffend(destname)
+		end)
+	else
+		if MWMarkers[destname] then
+			MWMarkers[destname] = free(MWMarkers[destname])
+		end
+	end
+end
+
 function mod:OnCombatStart(delay)
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Show(3, bossTank)
@@ -143,6 +184,7 @@ function mod:OnCombatStart(delay)
 	resetguardstate()
 	getAwayHP = 0
 	specialsCast = 0
+	Crushcount = 0
 	hideActive = false
 	lastProtect = 0
 	specialRemaining = 0
@@ -152,12 +194,22 @@ function mod:OnCombatStart(delay)
 	else
 		berserkTimer:Start(-delay)
 	end
+	if self.Options.InfoFrame then
+		DBM.InfoFrame:SetHeader(GetSpellInfo(123712))
+		DBM.InfoFrame:Show(1, "bossdebuffstacks", 123712)
+	end
 end
 
 function mod:OnCombatEnd()
 	self:UnregisterShortTermEvents()
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
+	end
+	if self.Options.InfoFrame then
+		DBM.InfoFrame:Hide()
+	end
+	if self.Options.HudMAP then
+		DBMHudMap:FreeEncounterMarkers()
 	end
 end
 
@@ -203,6 +255,11 @@ function mod:SPELL_AURA_APPLIED(args)
 		else
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_slkd.mp3") --首領快打
 		end
+		Crushcount = Crushcount + 1
+		if MyJS() then
+			specWarnJSA:Schedule(1)
+			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zyjs.mp3") --注意減傷
+		end
 	elseif args:IsSpellID(123121) then
 		if not mod:IsTank() and args:IsPlayer() and (not hideActive) and self:AntiSpam(2, 1) then
 			specWarnSprayNT:Show()
@@ -224,8 +281,15 @@ function mod:SPELL_AURA_APPLIED(args)
 		if not hideActive and self:UnitIsTank(args.destName) then--filter out all the splash sprays that go out during hide.
 			timerSpray:Start(args.destName)
 		end
-	elseif args:IsSpellID(123705) and self:AntiSpam() then
-		timerScaryFogCD:Start()
+	elseif args:IsSpellID(123705) then
+		if self:AntiSpam(2, 2) then
+			timerScaryFogCD:Start()
+		end
+		if self.Options.HudMAP then
+			if (args.amount or 1) < 5 then return end
+			MWMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("timer", args.destName, 5, nil, 1, 1, 1, 0.5):RegisterForAlerts())
+			checkdebuffend(args.destName)
+		end
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
@@ -301,7 +365,7 @@ function mod:SPELL_CAST_START(args)
 		hideActive = true
 		warnHide:Show(specialsCast)
 		specWarnHide:Show()
-		timerSpecialCD:Start(specialsCast+1)
+		timerSpecialCD:Start(nil, specialsCast+1)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_yszb.mp3") --隱身準備
 		sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\scattersoon.mp3")--注意分散
 		self:RegisterShortTermEvents(
@@ -353,5 +417,11 @@ function mod:INSTANCE_ENCOUNTER_ENGAGE_UNIT(event)
 	sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ysjs.mp3") --隱身結束
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Show(3, bossTank)--Go back to showing only tanks
+	end
+end
+
+function mod:UNIT_DIED(args)
+	if MWMarkers[args.destName] then
+		MWMarkers[args.destName] = free(MWMarkers[args.destName])
 	end
 end

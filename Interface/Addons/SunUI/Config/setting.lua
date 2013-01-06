@@ -46,9 +46,10 @@ G["NameplateDB"] = {
 	["HPWidth"] = 110,
 	["enable"] = true,
 	["Showdebuff"] = true,
-	["HPHeight"] = 6,
+	["IconSize"] = 20,
+	["HPHeight"] = 8,
 	["CastBarIconSize"] = 15,
-	["Fontsize"] = 12,
+	["Fontsize"] = 11,
 	["CastBarHeight"] = 6,
 	["Combat"] = true,
 	["NotCombat"] = false,
@@ -210,8 +211,8 @@ G["MoveHandleDB"] = {
 	["TargetCastbar"] = {"TOP", "UIParent", "TOP",0, -170},
 	["FocusCastbar"] = {"TOP", "oUF_SunUIFocus", "BOTTOM", 0, -20},
 	--内置CD 团队CD
-	["ClassCD"] = {"BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -327, 148},
-	["RaidCD"] =  {"RIGHT", "UIParent", "RIGHT", -4, -210},
+	["ClassCD"] = {"LEFT", "UIParent", "LEFT", 30, 240},
+	["RaidCD"] =  {"LEFT", "UIParent", "LEFT", 30, 0},
 	--冷却图标闪闪的
 	["CooldownFlash"] = {"CENTER", "UIParent", "CENTER", 0, 172},
 	--鼠标提示

@@ -55,6 +55,7 @@ local ptwo = false
 local OAtime = 1
 local warnedOA = false
 local castOA = false
+local prewarnedPhase2 = false
 
 mod:AddBoolOption("RangeFrame", mod:IsRanged())--For Wind Step
 mod:AddBoolOption("UnseenStrikeArrow", false)
@@ -129,10 +130,12 @@ function mod:OnCombatStart(delay)
 	warnedOA = false
 	castOA = false
 	unseencount = 0
+	prewarnedPhase2 = false
 	table.wipe(UnseenStrikeMarkers)
 end
 
 function mod:OnCombatEnd()
+	self:UnregisterShortTermEvents()
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
 	end
@@ -293,5 +296,28 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		specWarnStormUnleashed:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ptwo.mp3") --P2
 		ptwo = true
+		self:RegisterShortTermEvents(
+			"UNIT_HEALTH"
+		)
+	end
+end
+
+function mod:UNIT_HEALTH(uId)
+	if self:GetUnitCreatureId(uId) == 62543 then
+		local h = UnitHealth(uId) / UnitHealthMax(uId) * 100
+		if h > 10 and h < 12 and not prewarnedPhase2 then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\checkhp.mp3") --注意血量
+			prewarnedPhase2 = true
+			self:SendSync("preptwo")
+		end
+	end
+end
+
+function mod:OnSync(msg)
+	if msg == "preptwo" then
+		if not prewarnedPhase2 then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\checkhp.mp3")
+			prewarnedPhase2 = true
+		end
 	end
 end

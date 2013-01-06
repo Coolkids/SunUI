@@ -21,3 +21,17 @@ L= DBM:GetModLocalization(725)
 L:SetOptionLocalization({
 	SoundWOP			= "語音警告：重要技能"
 })
+
+--------------
+-- Oondasta --
+--------------
+L= DBM:GetModLocalization(826)
+
+L:SetOptionLocalization({
+	RangeFrame			= "為$spell:137511顯示距離框架"
+})
+
+---------------------------
+-- Nalak, The Storm Lord --
+---------------------------
+L= DBM:GetModLocalization(814)

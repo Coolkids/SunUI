@@ -28,7 +28,7 @@ local media = {
 local frames = {}
 
 -- [[ Functions ]]
-
+--print(RAID_CLASS_COLORS["PALADIN"].r, RAID_CLASS_COLORS["PALADIN"].g, RAID_CLASS_COLORS["PALADIN"].b)
 local _, class = UnitClass("player")
 local r, g, b
 if CUSTOM_CLASS_COLORS then

@@ -6,10 +6,14 @@ local L
 L= DBM:GetModLocalization(683)
 
 L:SetWarningLocalization({
+	warnGroupOrder		= "Rotate In: Group %s",
+	specWarnYourGroup	= "Your Group - Rotate In!",
 	specWarnDDL 	= ">> Next You Interrupt!<<"
 })
 
 L:SetOptionLocalization({
+	warnGroupOrder		= "Announce group rotation for $spell:118191\n(Currently only supports 25 man 5,2,2,2, etc... strat)",
+	specWarnYourGroup	= "Show special warning when it's your group's turn for $spell:118191\n(25 man only)",
 	RangeFrame			= "Show range frame (8) for $spell:111850\n(Shows everyone if you have debuff, only players with debuff if not)",
 	SetIconOnPrison		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(117436),
 	HudMAP 				= "HudMAP: $spell:111850",
@@ -47,6 +51,7 @@ L= DBM:GetModLocalization(729)
 
 L:SetWarningLocalization({
 	warnHideOver			= "%s has ended",
+	SpecWarnJSA				= ">>Damage reduction skill!<<",
 	warnHideProgress		= "Hits: %s. Damage: %s. Time: %s"
 })
 
@@ -77,11 +82,18 @@ L= DBM:GetModLocalization(709)
 L:SetWarningLocalization({
 	specWarnyinmo		= "Submerge >%d<",
 	specWarnweisuo		= "Huddle in Terror >%d<",
+	specWarningpreHud	= "Huddle in Terror SOON!",
 	specWarnfuxian		= ">%d< Sons",
+	MoveWarningLeft		= "¡û ¡û Left",
+	MoveWarningRight	= "Right ¡ú ¡ú",
+	MoveWarningBack		= "¡ú ¡ú Back ¡û ¡û"
 })
 
 L:SetTimerLocalization({
-	timerSpecialCD			= "Next Special"
+	timerSpecialCD			= "Next Special",
+	timerSpoHudCD			= "Next Spo / Hud",
+	timerSpoStrCD			= "Next Spo / Str",
+	timerHudStrCD			= "Next Hud / Str"
 })
 
 L:SetOptionLocalization ({

@@ -80,7 +80,7 @@ local specwarnOOYouD				= mod:NewSpecialWarning("specwarnOOYouD")
 
 --Boss
 local timerReshapeLifeCD		= mod:NewNextCountTimer(50, 122784)--50 second cd in phase 1-2, 15 second in phase 3. if no construct is up, cd is ignored and boss casts it anyways to make sure 1 is always up.
-local timerAmberScalpelCD		= mod:NewCDTimer(40, 121994)--40 seconds after last one ENDED
+local timerAmberScalpelCD		= mod:NewNextTimer(40, 121994)--40 seconds after last one ENDED
 local timerAmberScalpel			= mod:NewBuffActiveTimer(10, 121994)
 local timerParasiticGrowthCD	= mod:NewCDTimer(35, 121949, nil, mod:IsHealer())--35-50 variation (most of the time 50, rare pulls he decides to use 35 sec cd instead)
 local timerParasiticGrowth		= mod:NewTargetTimer(30, 121949, nil, mod:IsHealer())
@@ -502,14 +502,14 @@ function mod:UNIT_POWER(uId)
 	if uId ~= "player" then return end
 	local playerWill = UnitPower(uId, ALTERNATE_POWER_INDEX)
 	if playerWill > willNumber then willNumber = playerWill end--Will power has gone up since last warning so reset that warning.
-	if playerWill == 75 and willNumber > 75 then
-		willNumber = 75
+	if playerWill == 80 and willNumber > 80 then
+		willNumber = 80
 		warnWillPower:Show(willNumber)
-	elseif playerWill == 50 and willNumber > 50 then
+	elseif playerWill == 50 and willNumber > 50 then--Works
 		willNumber = 50
 		warnWillPower:Show(willNumber)
-	elseif playerWill == 25 and willNumber > 25 then
-		willNumber = 25
+	elseif playerWill == 30 and willNumber > 30 then
+		willNumber = 30
 		warnWillPower:Show(willNumber)
 	elseif playerWill >= 22 and warnedWill then
 		warnedWill = false
@@ -517,11 +517,11 @@ function mod:UNIT_POWER(uId)
 		warnedWill = true
 		specwarnWillPower:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_yzgd.mp3") --意志過低
-	elseif playerWill == 10 and willNumber > 10 then
+	elseif playerWill == 10 and willNumber > 10 then--Works
 		willNumber = 10
 		warnWillPower:Show(willNumber)
-	elseif playerWill == 5 and willNumber > 5 then
-		willNumber = 5
+	elseif playerWill == 4 and willNumber > 4 then
+		willNumber = 4
 		warnWillPower:Show(willNumber)
 	end
 end

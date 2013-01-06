@@ -619,6 +619,11 @@ function SunUIConfig.GenerateOptionsInternal()
 									name = L["启用debuff显示"],
 									order = 9,
 								},
+								IconSize = {
+									type = "range", order = 10,
+									name = L["图标大小"], desc = L["图标大小"],disabled = function(info) return not db.NameplateDB.Showdebuff end,
+									min = 10, max = 60, step = 1,
+								},
 							}
 						},
 				}

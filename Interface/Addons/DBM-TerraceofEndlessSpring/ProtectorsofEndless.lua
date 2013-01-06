@@ -41,6 +41,8 @@ local warnLightningStorm			= mod:NewSpellAnnounce(118077, 4)--Phase 2+ ability.
 local warnTouchofSha				= mod:NewTargetAnnounce(117519, 3, nil, mod:IsHealer())--Phase 1+ ability. He stops casting it when everyone in raid has it then ceases. If someone dies and is brezed, he casts it on them again.
 local warnDefiledGround				= mod:NewSpellAnnounce(117986, 3, nil, mod:IsMelee())--Phase 2+ ability.
 local warnExpelCorruption			= mod:NewSpellAnnounce(117975, 4)--Phase 3 ability.
+--Heroic
+local warnGroupOrder				= mod:NewAnnounce("warnGroupOrder", 1, 118191)--25 man for now, unless someone codes a 10 man version of it into code then it can be both.
 
 --Elder Asani
 local specWarnCleansingWaters		= mod:NewSpecialWarningTarget(117309, mod:IsTank())--It's being cast on the boss, move the boss
@@ -55,13 +57,15 @@ local specWarnLightningStorm		= mod:NewSpecialWarningSpell(118077, nil, nil, nil
 local specWarnDefiledGround			= mod:NewSpecialWarningMove(117986)
 local specWarnExpelCorruption		= mod:NewSpecialWarningSpell(117975, nil, nil, nil, true)--Entire raid needs to move.
 --Minions of Fear
-local specWarnCorruptedEssence		= mod:NewSpecialWarningStack(118191, true, 7)--Amount may need adjusting depending on what becomes an accepted strategy
+local specWarnYourGroup				= mod:NewSpecialWarning("specWarnYourGroup")
+local specWarnYourEnd				= mod:NewSpecialWarning("specWarnYourEnd")
+local specWarnCorruptedEssence		= mod:NewSpecialWarningStack(118191, true, 9)--You cannot get more than 9, if you get 9 you need to GTFO or you do big damage to raid
 
 local specWarnwarterDD				= mod:NewSpecialWarningInterrupt(118312)
 local specWarnDDL				= mod:NewSpecialWarning("specWarnDDL")
 
 --Elder Asani
-local timerCleansingWatersCD		= mod:NewNextTimer(32.5, 117309)
+local timerCleansingWatersCD		= mod:NewCDTimer(32.5, 117309)
 local timerCorruptingWatersCD		= mod:NewNextTimer(42, 117227)
 --Elder Regail
 local timerLightningPrisonCD		= mod:NewCDTimer(25, 111850)
@@ -88,6 +92,9 @@ local prisonDebuff = GetSpellInfo(79339)
 local prisonCount = 0
 local watercount = 0
 
+local corruptedCount = 0
+local myGroup = nil
+
 mod:AddBoolOption("HudMAP", true, "sound")
 
 mod:AddBoolOption("optDDall", true, "sound")
@@ -95,6 +102,8 @@ mod:AddBoolOption("optDDall", true, "sound")
 mod:AddBoolOption("optDD4", false, "sound")
 
 mod:AddDropdownOption("optDD", {"nodd", "DD1", "DD2", "DD3", "DD4"}, "nodd", "sound")
+
+mod:AddDropdownOption("optMob", {"Mob1", "Mob2", "Mob3", "Mob4", "Mob5"}, "Mob5", "sound")
 local DBMHudMap = DBMHudMap
 local free = DBMHudMap.free
 local function register(e)	
@@ -160,6 +169,7 @@ function mod:OnCombatStart(delay)
 	totalTouchOfSha = 0
 	prisonCount = 0
 	scansDone = 0
+	corruptedCount = 0
 	watercount = 0
 	table.wipe(prisonTargets)
 	table.wipe(LightningPrisonCastMarkers)
@@ -171,7 +181,18 @@ function mod:OnCombatStart(delay)
 	else
 		timerTouchOfShaCD:Start(15-delay)
 	end
-	berserkTimer:Start(-delay)
+	if not self:IsDifficulty("lfr25") then--lfr not berserks or more than 8m 10sec.
+		berserkTimer:Start(-delay)
+	end
+	myGroup = mod.Options.optMob == "Mob1" and 1 or mod.Options.optMob == "Mob2" and 2 or mod.Options.optMob == "Mob3" and 3 or mod.Options.optMob == "Mob4" and 4 or mod.Options.optMob == "Mob5" and 5
+	if self:IsDifficulty("heroic25") then
+		warnGroupOrder:Show(1)
+		if myGroup == 1 then
+			DBM.Flash:Show(1, 0, 0)
+			specWarnYourGroup:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3") --準備小怪
+		end
+	end
 end
 
 function mod:OnCombatEnd()
@@ -255,7 +276,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif args:IsSpellID(118191) then
 		if args:IsPlayer() then
-			if (args.amount or 1) >= 7 then
+			if (args.amount or 1) >= 9 then
 				specWarnCorruptedEssence:Show(args.amount)
 				if args.amount % 2 == 0 then
 					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zyfh.mp3") --注意腐化
@@ -355,7 +376,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 		timerDefiledGroundCD:Start()
 		for i = 1, 3 do
 			if UnitName("boss"..i) == args.sourceName then
-				if UnitName("boss"..i.."target") == UnitName("player") then
+				if UnitDetailedThreatSituation("player", "boss"..i) then
 					specWarnDefiledGround:Show()
 					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
 				end
@@ -376,6 +397,69 @@ function mod:SPELL_CAST_SUCCESS(args)
 		elseif args:GetSrcCreatureID() == 60583 then--Protector Kaolan
 			timerTouchOfShaCD:Cancel()
 			timerDefiledGroundCD:Cancel()
+		end
+	elseif args:IsSpellID(118191) then--Corrupted Essence
+		myGroup = mod.Options.optMob == "Mob1" and 1 or mod.Options.optMob == "Mob2" and 2 or mod.Options.optMob == "Mob3" and 3 or mod.Options.optMob == "Mob4" and 4 or mod.Options.optMob == "Mob5" and 5
+		corruptedCount = corruptedCount + 1
+		if self:IsDifficulty("heroic25") then
+			--25 man 5 2 2 2, 1 2 2 2, 1 2 2 2, 1 2 2 2, 1 1 1 1 strat.
+			if corruptedCount == 5 or corruptedCount == 12 or corruptedCount == 19 or corruptedCount == 26 or corruptedCount == 33 then
+				warnGroupOrder:Show(2)
+				if myGroup == 2 then
+					DBM.Flash:Show(1, 0, 0)
+					specWarnYourGroup:Show()
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3") --準備小怪
+				end
+				if myGroup == 1 then
+					specWarnYourEnd:Show()
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runin.mp3") --快回人群
+				end
+			elseif corruptedCount == 7 or corruptedCount == 14 or corruptedCount == 21 or corruptedCount == 28 or corruptedCount == 34 then
+				warnGroupOrder:Show(3)
+				if myGroup == 3 then
+					DBM.Flash:Show(1, 0, 0)
+					specWarnYourGroup:Show()
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3")
+				end
+				if myGroup == 2 then
+					specWarnYourEnd:Show()
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runin.mp3")
+				end
+			elseif corruptedCount == 9 or corruptedCount == 16 or corruptedCount == 23 or corruptedCount == 30 or corruptedCount == 35 then
+				warnGroupOrder:Show(4)
+				if myGroup == 4 then
+					DBM.Flash:Show(1, 0, 0)
+					specWarnYourGroup:Show()
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3")
+				end
+				if myGroup == 3 then
+					specWarnYourEnd:Show()
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runin.mp3")
+				end
+			elseif corruptedCount == 11 or corruptedCount == 18 or corruptedCount == 25 or corruptedCount == 32 then
+				warnGroupOrder:Show(1)
+				if myGroup == 1 then
+					DBM.Flash:Show(1, 0, 0)
+					specWarnYourGroup:Show()
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3")
+				end
+				if myGroup == 4 then
+					specWarnYourEnd:Show()
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runin.mp3")
+				end
+			elseif corruptedCount == 36 then--Groups 1-4 are all at 9 stacks, boss not dead yet (low dps?) you send healer group in so you don't wipe.
+				warnGroupOrder:Show(5)
+				if myGroup == 5 then
+					DBM.Flash:Show(1, 0, 0)
+					specWarnYourGroup:Show()
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3")
+				end
+				if myGroup == 4 then
+					specWarnYourEnd:Show()
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runin.mp3")
+				end
+			end
+		--TODO, give 10 man some kind of rotation helper. Blue? I do not raid 10 man and cannot test this
 		end
 	end
 end

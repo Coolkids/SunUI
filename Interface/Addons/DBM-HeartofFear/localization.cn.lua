@@ -147,7 +147,8 @@ L:SetOptionLocalization({
 
 L:SetMiscLocalization({
 	UnderHim	= "下面",
-	Heroicrush	= "他的对手"
+	Heroicrush	= "他的对手",
+	Ptwostart	= "巨型盔甲开始碎裂了"
 })
 ----------------------
 -- Wind Lord Mel'jarak --
