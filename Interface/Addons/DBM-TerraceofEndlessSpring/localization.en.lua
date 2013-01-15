@@ -8,7 +8,9 @@ L= DBM:GetModLocalization(683)
 L:SetWarningLocalization({
 	warnGroupOrder		= "Rotate In: Group %s",
 	specWarnYourGroup	= "Your Group - Rotate In!",
-	specWarnDDL 	= ">> Next You Interrupt!<<"
+	specWarnYourEnd		= "Your Group - Back!",
+	specWarnDDL 	= "Next You Interrupt!",
+	SpecWarnJSA		= "%s Health >>damage reduction<<"
 })
 
 L:SetOptionLocalization({

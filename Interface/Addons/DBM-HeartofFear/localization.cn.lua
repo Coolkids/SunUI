@@ -117,23 +117,7 @@ L:SetOptionLocalization({
 	SoundFS				= "坦克倒计时：$spell:122735",
 	SpecWarnJSA			= "特殊警告：注意开减伤",
 	specWarnFLM			= "特殊警告：准备接手信息素",
-	endflm				= "最后一个信息素传递者勾选以形成循环提示",
-	flmxs				= "信息素传递提示+(例如:此处选10下边选3即选為13)",
-	x0					= "0+",
-	x10					= "10+",
-	x20					= "20+",
-	flm0				= "0",
-	flm1				= "1",
-	flm2				= "2",
-	flm3				= "3",
-	flm4				= "4",
-	flm5				= "5",
-	flm6				= "6",
-	flm7				= "7",
-	flm8				= "8",
-	flm9				= "9",
-	flm10				= "10",
-	flmcd				= "信息素传递提示",
+	optFLM				= "信息素传递提示:输入上一个信息素传递者的名字",
 	unseenjs1			= "减伤提示：重碾1",
 	unseenjs2			= "减伤提示：重碾2",
 	unseenjs3			= "减伤提示：重碾3",
@@ -256,6 +240,8 @@ L= DBM:GetModLocalization(743)
 
 L:SetWarningLocalization({
 	warnAmberTrap		= "琥珀陷阱：%d/5",
+	warnDr				= "%s：%s (%d秒)",
+	specWarnjs			= ">>减伤：%s<<",
 	specWarnTT			= "战栗图腾 <第%d轮> <%d秒>"
 })
 
@@ -277,7 +263,26 @@ L:SetOptionLocalization({
 	DR1					= "萨满A",
 	DR2					= "萨满B",
 	DR3					= "萨满C",
-	noDR				= "没我事"
+	noDR				= "没我事",
+	warnDr				= "警告：减伤提示",
+	specWarnjs			= "特别警告：减伤提示",
+	optjs				= "<黑手之乡>@眾星之子 公会专用减伤提示模块",
+	optjs2				= "<黑手之乡>@眾星之子 公会专用减伤提示模块(B)",
+	non					= "老子谁的减伤都不看",
+	non2				= "老子谁的减伤都不看",
+	shaman1				= "苦逼萨满A",
+	shaman2				= "苦逼萨满B",
+	pal1				= "大影帝骑士A",
+	pal2				= "大影帝骑士B",
+	pal3				= "大影帝骑士C",
+	dk					= "死骑士",
+	warrior1			= "大天堂高阶信仰战A",
+	warrior2			= "大天堂高阶信仰战B",
+	druid				= "毫无存在感的乳德",
+	priest1				= "牧师A",
+	priest2				= "牧师B",
+	priest3				= "牧师C",
+	priest4				= "黑牧",
 })
 
 L:SetMiscLocalization({

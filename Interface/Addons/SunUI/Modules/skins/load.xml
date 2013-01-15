@@ -12,4 +12,5 @@
 	<Script file='Examiner.lua' />
 	<Script file='BagSync.lua' />
 	<Script file='LossOfControl.lua' />
+	<Script file='SStaticPopup.lua' />
 </Ui>

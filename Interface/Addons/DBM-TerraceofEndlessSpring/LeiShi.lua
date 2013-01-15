@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8456 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8537 $"):sub(12, -3))
 mod:SetCreatureID(62983)--62995 Animated Protector
 mod:SetModelID(42811)
 
@@ -16,8 +16,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_REMOVED",
 	"SPELL_CAST_START",
 	"CHAT_MSG_TARGETICONS",
-	"UNIT_DIED",
-	"UNIT_SPELLCAST_SUCCEEDED"
+	"UNIT_HEALTH"--UNIT_HEALTH_FREQUENT maybe not needed. It's too high cpu usage.
 )
 
 local warnProtect						= mod:NewSpellAnnounce(123250, 2)
@@ -56,6 +55,7 @@ local lastProtect = 0
 local specialRemaining = 0
 local guards = {}
 local guardActivated = 0
+local lostHealth = 0
 local hideDebug = 0
 local damageDebug = 0
 local timeDebug = 0
@@ -73,7 +73,6 @@ local function register(e)
 end
 
 local MWMarkers = {}
-
 
 local function resetguardstate()
 	table.wipe(guards)
@@ -161,16 +160,12 @@ do
 	end
 end
 
-local function checkdebuffend(destname)
-    if UnitDebuff(destname, GetSpellInfo(123705)) then
-        mod:Schedule(0.5, function()
-			checkdebuffend(destname)
-		end)
-	else
-		if MWMarkers[destname] then
-			MWMarkers[destname] = free(MWMarkers[destname])
-		end
-	end
+function mod:ScaryFogRepeat()
+	timerScaryFogCD:Cancel()
+	self:UnscheduleMethod("ScaryFogRepeat")
+	local interval = 10 * (1/(1+(lostHealth*0.8)))--Seems that Scray Fog interval reduced by her casting speed.
+	timerScaryFogCD:Start(interval)
+	self:ScheduleMethod(interval, "ScaryFogRepeat")
 end
 
 function mod:OnCombatStart(delay)
@@ -188,6 +183,7 @@ function mod:OnCombatStart(delay)
 	hideActive = false
 	lastProtect = 0
 	specialRemaining = 0
+	lostHealth = 0
 	timerSpecialCD:Start(32.5-delay, 1)--Variable, 32.5-37 (or aborted if 80% protect happens first)
 	if self:IsDifficulty("heroic10", "heroic25") then
 		berserkTimer:Start(420-delay)
@@ -283,12 +279,13 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif args:IsSpellID(123705) then
 		if self:AntiSpam(2, 2) then
-			timerScaryFogCD:Start()
+			self:ScaryFogRepeat()		
 		end
 		if self.Options.HudMAP then
 			if (args.amount or 1) < 5 then return end
-			MWMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("timer", args.destName, 5, nil, 1, 1, 1, 0.5):RegisterForAlerts())
-			checkdebuffend(args.destName)
+			if not MWMarkers[args.destName] then
+				MWMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("timer", args.destName, 5, nil, 1, 1, 1, 0.5):RegisterForAlerts())
+			end
 		end
 	end
 end
@@ -296,15 +293,17 @@ mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(123250) then
-		local protectElapsed = GetTime() - lastProtect
-		local specialCD = specialRemaining - protectElapsed
-		if specialCD < 5 then
-			timerSpecialCD:Start(5, specialsCast+1)
-		else
-			timerSpecialCD:Start(specialCD, specialsCast+1)
-		end
 		if self.Options.SetIconOnGuardfix then
 			guardActivated = 0
+		end
+		if timerSpecialCD:GetTime(specialsCast+1) == 0 then -- failsafe. (i.e : 79.8% hide -> protect... bar remains)
+			local protectElapsed = GetTime() - lastProtect
+			local specialCD = specialRemaining - protectElapsed
+			if specialCD < 5 then 
+				timerSpecialCD:Start(5, specialsCast+1)
+			else
+				timerSpecialCD:Start(specialCD, specialsCast+1)
+			end
 		end
 	elseif args:IsSpellID(123121) then
 		timerSpray:Cancel(args.destName)
@@ -312,6 +311,10 @@ function mod:SPELL_AURA_REMOVED(args)
 		timerGetAway:Cancel()
 		if self.Options.GWHealthFrame then
 			hideDamagedHealthBar()
+		end
+	elseif args:IsSpellID(123705) then
+		if MWMarkers[args.destName] then
+			MWMarkers[args.destName] = free(MWMarkers[args.destName])
 		end
 	end
 end
@@ -363,6 +366,8 @@ function mod:SPELL_CAST_START(args)
 		hideTime = GetTime()
 		specialsCast = specialsCast + 1
 		hideActive = true
+		timerScaryFogCD:Cancel()
+		self:UnscheduleMethod("ScaryFogRepeat")
 		warnHide:Show(specialsCast)
 		specWarnHide:Show()
 		timerSpecialCD:Start(nil, specialsCast+1)
@@ -377,6 +382,8 @@ function mod:SPELL_CAST_START(args)
 		if self.Options.RangeFrame then
 			DBM.RangeCheck:Show(3)--Show everyone during hide
 		end
+	elseif args:IsSpellID(123705) then
+		self:ScaryFogRepeat()
 	end
 end
 
@@ -385,6 +392,12 @@ function mod:CHAT_MSG_TARGETICONS(msg)
 	local icon = tonumber(string.sub(string.match(msg, "RaidTargetingIcon_%d"), -1))
 	if icon then
 		iconsSet[icon] = true
+	end
+end
+
+function mod:UNIT_HEALTH(uId)
+	if uId == "boss1" then
+		lostHealth = 1 - (UnitHealth(uId) / UnitHealthMax(uId))
 	end
 end
 
@@ -415,6 +428,9 @@ function mod:INSTANCE_ENCOUNTER_ENGAGE_UNIT(event)
 	warnHideProgress:Cancel()
 	warnHideProgress:Show(hideDebug, damageDebug, tostring(format("%.1f", timeDebug)))--Show right away instead of waiting out the schedule
 	sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ysjs.mp3") --隱身結束
+	if self:IsDifficulty("heroic10", "heroic25") then
+		self:ScaryFogRepeat()
+	end
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Show(3, bossTank)--Go back to showing only tanks
 	end

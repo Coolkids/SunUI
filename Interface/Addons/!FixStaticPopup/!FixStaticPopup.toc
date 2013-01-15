@@ -1,0 +1,6 @@
+## Interface: 50100
+## Title: FixStaticPopup
+## Notes: 尝试解决StaticPopup taint问题
+## Version: beta 1.0
+
+StaticPopup.xml

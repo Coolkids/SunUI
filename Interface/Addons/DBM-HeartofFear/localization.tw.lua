@@ -114,23 +114,7 @@ L:SetOptionLocalization({
 	SoundFS				= "坦克倒計時：$spell:122735",
 	SpecWarnJSA			= "特別警告：注意開減傷",
 	specWarnFLM			= "特別警告：準備接手弗洛蒙",
-	endflm				= "最後的費洛蒙傳遞者勾選以形成循環提示",
-	flmxs				= "費洛蒙傳遞提示+(例如:此處選10下邊選3即選為13)",
-	x0					= "0+",
-	x10					= "10+",
-	x20					= "20+",
-	flm0				= "0",
-	flm1				= "1",
-	flm2				= "2",
-	flm3				= "3",
-	flm4				= "4",
-	flm5				= "5",
-	flm6				= "6",
-	flm7				= "7",
-	flm8				= "8",
-	flm9				= "9",
-	flm10				= "10",
-	flmcd				= "費洛蒙傳遞提示",
+	optFLM				= "信息素傳遞提示:輸入上一個信息素傳遞者的名字",
 	unseenjs1			= "減傷提示：碾碎1",
 	unseenjs2			= "減傷提示：碾碎2",
 	unseenjs3			= "減傷提示：碾碎3",
@@ -254,6 +238,8 @@ L= DBM:GetModLocalization(743)
 
 L:SetWarningLocalization({
 	warnAmberTrap		= "琥珀陷阱：%d/5",
+	warnDr				= "%s：%s (%d秒)",
+	specWarnjs			= ">>減傷：%s<<",
 	specWarnTT			= "戰慄圖騰 <第%d輪> <%d秒>"
 })
 
@@ -275,7 +261,26 @@ L:SetOptionLocalization({
 	DR1					= "薩滿A",
 	DR2					= "薩滿B",
 	DR3					= "薩滿C",
-	noDR				= "沒我事"
+	noDR				= "沒我事",
+	warnDr				= "警告：減傷提示",
+	specWarnjs			= "特別警告：減傷提示",
+	optjs				= "<黑手之鄉>@眾星之子 公會專用減傷提示模塊",
+	optjs2				= "<黑手之鄉>@眾星之子 公會專用減傷提示模塊(怎麼這麼多)",
+	non					= "老子誰的減傷都不看",
+	non2				= "老子誰的減傷都不看",
+	shaman1				= "苦逼薩滿A",
+	shaman2				= "苦逼薩滿B",
+	pal1				= "大影帝騎士A",
+	pal2				= "大影帝騎士B",
+	pal3				= "大影帝騎士C",
+	dk					= "死騎士",
+	warrior1			= "大天堂高階信仰戰A",
+	warrior2			= "大天堂高階信仰戰B",
+	druid				= "毫無存在感的乳德",
+	priest1				= "牧師A",
+	priest2				= "牧師B",
+	priest3				= "牧師C",
+	priest4				= "黑牧",
 })
 
 L:SetMiscLocalization({

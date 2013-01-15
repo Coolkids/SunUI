@@ -367,7 +367,7 @@ function mod:SPELL_CAST_START(args)
 		if not ptwo then
 			timerRainOfBladesCD:Start()
 		else
-			timerRainOfBladesCD:Start(49)
+			timerRainOfBladesCD:Start(48)
 		end
 		if mod:IsHealer() then
 			if not ptwo then
@@ -383,9 +383,9 @@ function mod:SPELL_CAST_START(args)
 				sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 				sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\healall.mp3") --注意群療
-				sndWOP:Schedule(46, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-				sndWOP:Schedule(47, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-				sndWOP:Schedule(48, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+				sndWOP:Schedule(45, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+				sndWOP:Schedule(46, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+				sndWOP:Schedule(47, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 			end
 		else
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\aesoon.mp3")
@@ -463,7 +463,17 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		timerKorthikStrikeCD:Start()
 	elseif spellId == 131813 and self:AntiSpam(2, 3) then
 		if not ptwo then
+			timerRainOfBladesCD:Cancel()
+			timerRainOfBladesCD:Start(20)
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ptwo.mp3")--P2
+			if mod:IsHealer() then
+				sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+				sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+				sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+				sndWOP:Schedule(17, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+				sndWOP:Schedule(18, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+				sndWOP:Schedule(19, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			end
 		end
 		ptwo = true
 	end

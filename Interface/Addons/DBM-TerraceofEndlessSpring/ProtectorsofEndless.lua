@@ -63,6 +63,7 @@ local specWarnCorruptedEssence		= mod:NewSpecialWarningStack(118191, true, 9)--Y
 
 local specWarnwarterDD				= mod:NewSpecialWarningInterrupt(118312)
 local specWarnDDL				= mod:NewSpecialWarning("specWarnDDL")
+local specWarnJSA						= mod:NewSpecialWarning("SpecWarnJSA")
 
 --Elder Asani
 local timerCleansingWatersCD		= mod:NewCDTimer(32.5, 117309)
@@ -94,16 +95,41 @@ local watercount = 0
 
 local corruptedCount = 0
 local myGroup = nil
+local mobsetgroup = {}
+local warnmob = {}
+local warnmobone = {}
+local warnmobtwo = {}
+local warnmobthree = {}
+local warnmobfour = {}
+local warnmobfive = {}
+local outgroup = false
+local olddata = 0
+
+local senddr = {}
+local warneddr = {}
 
 mod:AddBoolOption("HudMAP", true, "sound")
 
-mod:AddBoolOption("optDDall", true, "sound")
+for i = 9, 1, -1 do
+	mod:AddBoolOption("warndr"..i, false, "sound")
+end
 
 mod:AddBoolOption("optDD4", false, "sound")
 
 mod:AddDropdownOption("optDD", {"nodd", "DD1", "DD2", "DD3", "DD4"}, "nodd", "sound")
 
-mod:AddDropdownOption("optMob", {"Mob1", "Mob2", "Mob3", "Mob4", "Mob5"}, "Mob5", "sound")
+mod:AddDropdownOption("optMob", {"Mob1", "Mob2", "Mob3", "Mob4", "Mob5", "noMob"}, "noMob", "sound")
+
+mod:AddEditBoxOption("optMobSet", 300, "52220,12220,12220,12220,11119", "sound")
+
+local function MyDR(msg)
+	if (msg == "dr90" and mod.Options.warndr9) or (msg == "dr80" and mod.Options.warndr8) or (msg == "dr70" and mod.Options.warndr7) or (msg == "dr60" and mod.Options.warndr6) or (msg == "dr50" and mod.Options.warndr5) or (msg == "dr40" and mod.Options.warndr4) or (msg == "dr30" and mod.Options.warndr3) or (msg == "dr20" and mod.Options.warndr2) or (msg == "dr10" and mod.Options.warndr1) then
+		local healthshow = string.sub(msg, 3, 4)
+		specWarnJSA:Show(healthshow)
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zyjs.mp3") --注意減傷
+	end
+end
+
 local DBMHudMap = DBMHudMap
 local free = DBMHudMap.free
 local function register(e)	
@@ -134,6 +160,59 @@ local function warnPrisonTargets()
 	timerLightningPrisonCD:Start()
 	table.wipe(prisonTargets)
 	prisonIcon = 1
+end
+
+local function SetmobTactics()
+	table.wipe(mobsetgroup)
+	table.wipe(warnmob)
+	table.wipe(warnmobone)
+	table.wipe(warnmobtwo)
+	table.wipe(warnmobthree)
+	table.wipe(warnmobfour)
+	table.wipe(warnmobfive)
+	myGroup = mod.Options.optMob == "Mob1" and 1 or mod.Options.optMob == "Mob2" and 2 or mod.Options.optMob == "Mob3" and 3 or mod.Options.optMob == "Mob4" and 4 or mod.Options.optMob == "Mob5" and 5
+	local tacticsvalue = mod.Options.optMobSet
+	tacticsvalue = string.gsub(tacticsvalue, "%s", "")
+	tacticsvalue = string.gsub(tacticsvalue, "，", ",")
+	local modecheck = string.find(tacticsvalue, "%p")
+	for k in string.gmatch(tacticsvalue, "%d") do
+		table.insert(mobsetgroup, k)
+	end
+	warnmob[1] = tonumber(mobsetgroup[1])
+	olddata = warnmob[1]
+	for i = 2, #mobsetgroup do
+		olddata = olddata + mobsetgroup[i]
+		if tonumber(mobsetgroup[i]) == 0 then 
+			warnmob[i] = 0
+		else
+			warnmob[i] = olddata
+		end
+	end
+	for i = 1, #warnmob do
+		if modecheck == 5 then
+			if i%4== 1 then
+				table.insert(warnmobone, warnmob[i]-mobsetgroup[i])
+			elseif i%4== 2 then
+				table.insert(warnmobtwo, warnmob[i]-mobsetgroup[i])
+			elseif i%4== 3 then
+				table.insert(warnmobthree, warnmob[i]-mobsetgroup[i])
+			elseif i%4== 0 then
+				table.insert(warnmobfour, warnmob[i]-mobsetgroup[i])
+			end
+		elseif modecheck == 6 then
+			if i%5== 1 then
+				table.insert(warnmobone, warnmob[i]-mobsetgroup[i])
+			elseif i%5== 2 then
+				table.insert(warnmobtwo, warnmob[i]-mobsetgroup[i])
+			elseif i%5== 3 then
+				table.insert(warnmobthree, warnmob[i]-mobsetgroup[i])
+			elseif i%5== 4 then
+				table.insert(warnmobfour, warnmob[i]-mobsetgroup[i])
+			elseif i%5== 0 then
+				table.insert(warnmobfive, warnmob[i]-mobsetgroup[i])
+			end
+		end
+	end
 end
 
 function mod:WatersTarget()
@@ -171,6 +250,9 @@ function mod:OnCombatStart(delay)
 	scansDone = 0
 	corruptedCount = 0
 	watercount = 0
+	outgroup = false
+	table.wipe(senddr)
+	table.wipe(warneddr)
 	table.wipe(prisonTargets)
 	table.wipe(LightningPrisonCastMarkers)
 	table.wipe(LightningPrisonMarkers)
@@ -185,17 +267,21 @@ function mod:OnCombatStart(delay)
 		berserkTimer:Start(-delay)
 	end
 	myGroup = mod.Options.optMob == "Mob1" and 1 or mod.Options.optMob == "Mob2" and 2 or mod.Options.optMob == "Mob3" and 3 or mod.Options.optMob == "Mob4" and 4 or mod.Options.optMob == "Mob5" and 5
-	if self:IsDifficulty("heroic25") then
-		warnGroupOrder:Show(1)
-		if myGroup == 1 then
-			DBM.Flash:Show(1, 0, 0)
-			specWarnYourGroup:Show()
-			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3") --準備小怪
-		end
+	if self:IsDifficulty("heroic10", "heroic25") then
+		self:Schedule(15, function()
+			warnGroupOrder:Show(1)
+			if myGroup == 1 then
+				outgroup = true
+				DBM.Flash:Show(1, 0, 0)
+				specWarnYourGroup:Show()
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3") --準備小怪
+			end
+		end)
 	end
 end
 
 function mod:OnCombatEnd()
+	self:UnregisterShortTermEvents()
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
 	end
@@ -218,13 +304,19 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif args:IsSpellID(111850) then--111850 is targeting debuff (NOT dispelable one)
 		prisonTargets[#prisonTargets + 1] = args.destName
 		prisonCount = prisonCount + 1
-		if args:IsPlayer() and self:AntiSpam(2, 1) then
+		if args:IsPlayer() then
 			specWarnLightningPrison:Show()
 			yellLightningPrison:Yell()
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runout.mp3") --跑開人群
 			sndWOP:Schedule(0.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 			sndWOP:Schedule(2.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		else
+			if self:AntiSpam(2, 1) then
+				sndSDQ:Schedule(0.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+				sndSDQ:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+				sndSDQ:Schedule(2.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			end
 		end
 		if self.Options.HudMAP then
 			if args:IsPlayer() then
@@ -278,9 +370,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			if (args.amount or 1) >= 9 then
 				specWarnCorruptedEssence:Show(args.amount)
-				if args.amount % 2 == 0 then
-					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zyfh.mp3") --注意腐化
-				end
 			end
 		end
 	end
@@ -345,26 +434,22 @@ function mod:SPELL_CAST_START(args)
 	elseif args:IsSpellID(118312) then --水箭
 		watercount = watercount + 1
 		if self.Options.optDD4 then
-			if (args.sourceGUID == UnitGUID("target") and self.Options.optDDall) or (not self.Options.optDDall) then
-				if ((mod.Options.optDD == "DD1") and (watercount % 4 == 1)) or ((mod.Options.optDD == "DD2") and (watercount % 4 == 2)) or ((mod.Options.optDD == "DD3") and (watercount % 4 == 3)) or ((mod.Options.optDD == "DD4") and (watercount % 4 == 0)) then
-					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3") --快打斷
-					specWarnwarterDD:Show(args.sourceName)
-				end	
-				if ((mod.Options.optDD == "DD1") and (watercount % 4 == 0)) or ((mod.Options.optDD == "DD2") and (watercount % 4 == 1)) or ((mod.Options.optDD == "DD3") and (watercount % 4 == 2)) or ((mod.Options.optDD == "DD4") and (watercount % 4 == 3)) then
-					sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ddzb.mp3") --打斷準備
-					specWarnDDL:Schedule(1)
-				end
+			if ((mod.Options.optDD == "DD1") and (watercount % 4 == 1)) or ((mod.Options.optDD == "DD2") and (watercount % 4 == 2)) or ((mod.Options.optDD == "DD3") and (watercount % 4 == 3)) or ((mod.Options.optDD == "DD4") and (watercount % 4 == 0)) then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3") --快打斷
+				specWarnwarterDD:Show(args.sourceName)
+			end	
+			if ((mod.Options.optDD == "DD1") and (watercount % 4 == 0)) or ((mod.Options.optDD == "DD2") and (watercount % 4 == 1)) or ((mod.Options.optDD == "DD3") and (watercount % 4 == 2)) or ((mod.Options.optDD == "DD4") and (watercount % 4 == 3)) then
+				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ddzb.mp3") --打斷準備
+				specWarnDDL:Schedule(1)
 			end
 		else
-			if (args.sourceGUID == UnitGUID("target") and self.Options.optDDall) or (not self.Options.optDDall) then
-				if ((mod.Options.optDD == "DD1") and (watercount % 3 == 1)) or ((mod.Options.optDD == "DD2") and (watercount % 3 == 2)) or ((mod.Options.optDD == "DD3") and (watercount % 3 == 0)) then
-					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3") --快打斷
-					specWarnwarterDD:Show(args.sourceName)
-				end	
-				if ((mod.Options.optDD == "DD1") and (watercount % 3 == 0)) or ((mod.Options.optDD == "DD2") and (watercount % 3 == 1)) or ((mod.Options.optDD == "DD3") and (watercount % 3 == 2)) then
-					sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ddzb.mp3") --打斷準備
-					specWarnDDL:Schedule(1)
-				end
+			if ((mod.Options.optDD == "DD1") and (watercount % 3 == 1)) or ((mod.Options.optDD == "DD2") and (watercount % 3 == 2)) or ((mod.Options.optDD == "DD3") and (watercount % 3 == 0)) then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3") --快打斷
+				specWarnwarterDD:Show(args.sourceName)
+			end	
+			if ((mod.Options.optDD == "DD1") and (watercount % 3 == 0)) or ((mod.Options.optDD == "DD2") and (watercount % 3 == 1)) or ((mod.Options.optDD == "DD3") and (watercount % 3 == 2)) then
+				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ddzb.mp3") --打斷準備
+				specWarnDDL:Schedule(1)
 			end
 		end
 	end
@@ -384,6 +469,18 @@ function mod:SPELL_CAST_SUCCESS(args)
 		end
 	elseif args:IsSpellID(117052) and phase < 3 then--Phase changes
 		phase = phase + 1
+		if phase == 2 then
+			warnPhase2:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ptwo.mp3") -- P2
+		elseif phase == 3 then
+			warnPhase3:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\pthree.mp3") -- P3
+			table.wipe(senddr)
+			table.wipe(warneddr)
+			self:RegisterShortTermEvents(
+				"UNIT_HEALTH"
+			)
+		end
 		--We cancel timers for whatever boss just died (ie boss that cast the buff, not the ones getting it)
 		if args:GetSrcCreatureID() == 60585 then--Elder Regail
 			timerLightningPrisonCD:Cancel()
@@ -399,67 +496,91 @@ function mod:SPELL_CAST_SUCCESS(args)
 			timerDefiledGroundCD:Cancel()
 		end
 	elseif args:IsSpellID(118191) then--Corrupted Essence
-		myGroup = mod.Options.optMob == "Mob1" and 1 or mod.Options.optMob == "Mob2" and 2 or mod.Options.optMob == "Mob3" and 3 or mod.Options.optMob == "Mob4" and 4 or mod.Options.optMob == "Mob5" and 5
-		corruptedCount = corruptedCount + 1
-		if self:IsDifficulty("heroic25") then
-			--25 man 5 2 2 2, 1 2 2 2, 1 2 2 2, 1 2 2 2, 1 1 1 1 strat.
-			if corruptedCount == 5 or corruptedCount == 12 or corruptedCount == 19 or corruptedCount == 26 or corruptedCount == 33 then
-				warnGroupOrder:Show(2)
-				if myGroup == 2 then
-					DBM.Flash:Show(1, 0, 0)
-					specWarnYourGroup:Show()
-					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3") --準備小怪
-				end
-				if myGroup == 1 then
-					specWarnYourEnd:Show()
-					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runin.mp3") --快回人群
-				end
-			elseif corruptedCount == 7 or corruptedCount == 14 or corruptedCount == 21 or corruptedCount == 28 or corruptedCount == 34 then
-				warnGroupOrder:Show(3)
-				if myGroup == 3 then
-					DBM.Flash:Show(1, 0, 0)
-					specWarnYourGroup:Show()
-					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3")
-				end
-				if myGroup == 2 then
-					specWarnYourEnd:Show()
-					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runin.mp3")
-				end
-			elseif corruptedCount == 9 or corruptedCount == 16 or corruptedCount == 23 or corruptedCount == 30 or corruptedCount == 35 then
-				warnGroupOrder:Show(4)
-				if myGroup == 4 then
-					DBM.Flash:Show(1, 0, 0)
-					specWarnYourGroup:Show()
-					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3")
-				end
-				if myGroup == 3 then
-					specWarnYourEnd:Show()
-					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runin.mp3")
-				end
-			elseif corruptedCount == 11 or corruptedCount == 18 or corruptedCount == 25 or corruptedCount == 32 then
-				warnGroupOrder:Show(1)
-				if myGroup == 1 then
-					DBM.Flash:Show(1, 0, 0)
-					specWarnYourGroup:Show()
-					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3")
-				end
-				if myGroup == 4 then
-					specWarnYourEnd:Show()
-					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runin.mp3")
-				end
-			elseif corruptedCount == 36 then--Groups 1-4 are all at 9 stacks, boss not dead yet (low dps?) you send healer group in so you don't wipe.
-				warnGroupOrder:Show(5)
-				if myGroup == 5 then
-					DBM.Flash:Show(1, 0, 0)
-					specWarnYourGroup:Show()
-					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3")
-				end
-				if myGroup == 4 then
-					specWarnYourEnd:Show()
-					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runin.mp3")
+		SetmobTactics()
+		corruptedCount = corruptedCount + 1		
+		if self:IsDifficulty("heroic10", "heroic25") then
+			for i = 1, #warnmobone do
+				if corruptedCount == warnmobone[i] then
+					warnGroupOrder:Show(1)
+					if myGroup == 1 then
+						outgroup = true
+						DBM.Flash:Show(1, 0, 0)
+						specWarnYourGroup:Show()
+						sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3")
+					end
+					if myGroup ~= 1 and outgroup then
+						outgroup = false
+						specWarnYourEnd:Show()
+						sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runin.mp3")
+					end
 				end
 			end
-		--TODO, give 10 man some kind of rotation helper. Blue? I do not raid 10 man and cannot test this
+			for i = 1, #warnmobtwo do
+				if corruptedCount == warnmobtwo[i] then				
+					warnGroupOrder:Show(2)
+					if myGroup == 2 then
+						outgroup = true
+						DBM.Flash:Show(1, 0, 0)
+						specWarnYourGroup:Show()
+						sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3") --準備小怪
+					end
+					if myGroup ~= 2 and outgroup then
+						outgroup = false
+						specWarnYourEnd:Show()
+						sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runin.mp3") --快回人群
+					end
+				end
+			end
+			for i = 1, #warnmobthree do
+				if corruptedCount == warnmobthree[i] then				
+					warnGroupOrder:Show(3)
+					if myGroup == 3 then
+						outgroup = true
+						DBM.Flash:Show(1, 0, 0)
+						specWarnYourGroup:Show()
+						sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3")
+					end
+					if myGroup ~= 3 and outgroup then
+						outgroup = false
+						specWarnYourEnd:Show()
+						sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runin.mp3")
+					end
+				end
+			end
+			for i = 1, #warnmobfour do
+				if corruptedCount == warnmobfour[i] then				
+					warnGroupOrder:Show(4)
+					if myGroup == 4 then
+						outgroup = true
+						DBM.Flash:Show(1, 0, 0)
+						specWarnYourGroup:Show()
+						sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3")
+					end
+					if myGroup ~= 4 and outgroup then
+						outgroup = false
+						specWarnYourEnd:Show()
+						sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runin.mp3")
+					end
+				end
+			end
+			if #warnmobfive > 0 then
+				for i = 1, #warnmobfive do
+					if corruptedCount == warnmobfive[i] then						
+						warnGroupOrder:Show(5)
+						if myGroup == 5 then
+							outgroup = true
+							DBM.Flash:Show(1, 0, 0)
+							specWarnYourGroup:Show()
+							sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3")
+						end
+						if myGroup ~= 5 and outgroup then
+							outgroup = false
+							specWarnYourEnd:Show()
+							sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runin.mp3")
+						end
+					end
+				end
+			end
 		end
 	end
 end
@@ -474,3 +595,44 @@ function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
 	end
 end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE
+
+function mod:UNIT_HEALTH(uId)
+	if self:GetUnitCreatureId(uId) == 60586 then
+		local h = UnitHealth(uId) / UnitHealthMax(uId) * 100
+		if h > 85 and h < 90 and not senddr["dr90"] then
+			self:SendSync("dr90")
+			senddr["dr90"] = true
+		elseif h > 75 and h < 80 and not senddr["dr80"] then
+			self:SendSync("dr80")
+			senddr["dr80"] = true
+		elseif h > 65 and h < 70 and not senddr["dr70"] then
+			self:SendSync("dr70")
+			senddr["dr70"] = true
+		elseif h > 55 and h < 60 and not senddr["dr60"] then
+			self:SendSync("dr60")
+			senddr["dr60"] = true
+		elseif h > 45 and h < 50 and not senddr["dr50"] then
+			self:SendSync("dr50")
+			senddr["dr50"] = true
+		elseif h > 35 and h < 40 and not senddr["dr40"] then
+			self:SendSync("dr40")
+			senddr["dr40"] = true
+		elseif h > 25 and h < 30 and not senddr["dr30"] then
+			self:SendSync("dr30")
+			senddr["dr30"] = true
+		elseif h > 15 and h < 20 and not senddr["dr20"] then
+			self:SendSync("dr20")
+			senddr["dr20"] = true
+		elseif h > 5 and h < 10 and not senddr["dr10"] then
+			self:SendSync("dr10")
+			senddr["dr10"] = true
+		end
+	end
+end
+
+function mod:OnSync(msg)
+	if msg and not warneddr[msg] then
+		MyDR(msg)
+		warneddr[msg] = true
+	end
+end

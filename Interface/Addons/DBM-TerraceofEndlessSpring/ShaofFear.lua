@@ -401,15 +401,15 @@ function mod:SPELL_AURA_APPLIED(args)
 			self:SetIcon(args.destName, wsIcon)
 			wsIcon = wsIcon - 1
 		end
+		huddleInTerrorTargets[#huddleInTerrorTargets + 1] = args.destName
+		self:Unschedule(warnHuddleInTerrorTargets)
+		self:Schedule(0.5, warnHuddleInTerrorTargets)
 		if self:AntiSpam(2, 6) then
 			kongjuCount = kongjuCount + 1
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wsks.mp3")
 			sndWOP:Schedule(45, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wszb.mp3")
 			specWarnweisuo:Show(kongjuCount)
 			timerweisuo:Start(50, kongjuCount + 1)
-			huddleInTerrorTargets[#huddleInTerrorTargets + 1] = args.destName
-			self:Unschedule(warnHuddleInTerrorTargets)
-			self:Schedule(0.5, warnHuddleInTerrorTargets)
 			specskill = specskill + 1
 			huddle = 1
 			if huddle == 1 and spout == 1 and strike == 0 then
@@ -610,21 +610,33 @@ function mod:SPELL_CAST_SUCCESS(args)
 		if MobID == 61046 then
 			if (DBM.ShaAssistStarModeChosed == "Dps" and kbpscount == 1) or (DBM.ShaAssistStarModeChosed == "Healther" and kbpscount == 6) then
 				MoveWarningLeft:Show() --左
+				if not self.Options.pscount then
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\moveleft.mp3")
+				end
 			end
 		end	
 		if MobID == 61042 then
 			if (DBM.ShaAssistStarModeChosed == "Dps" and kbpscount == 1) or (DBM.ShaAssistStarModeChosed == "Healther" and kbpscount == 7) then
 				MoveWarningRight:Show()  --右
+				if not self.Options.pscount then
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\moveright.mp3")
+				end
 			end
 		end	
 		if MobID == 61038 then
 			if (DBM.ShaAssistStarModeChosed == "Dps" and kbpscount == 4) or (DBM.ShaAssistStarModeChosed == "Healther" and kbpscount == 4) then
 				MoveWarningRight:Show()  --右
+				if not self.Options.pscount then
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\moveright.mp3")
+				end
 			end
 		end
 		if kbpscount == 16 then
 			if DBM.ShaAssistStarModeChosed == "Dps" or DBM.ShaAssistStarModeChosed == "Healther" then
 				MoveWarningBack:Show()
+				if not self.Options.pscount then
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\end.mp3")
+				end
 			end
 		end
 	end

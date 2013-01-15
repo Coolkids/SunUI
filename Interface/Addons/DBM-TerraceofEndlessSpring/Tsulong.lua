@@ -26,13 +26,13 @@ local warnNight							= mod:NewSpellAnnounce("ej6310", 2, 108558)
 local warnSunbeam						= mod:NewSpellAnnounce(122789, 3)
 local warnShadowBreath					= mod:NewSpellAnnounce(122752, 3)
 local warnNightmares					= mod:NewTargetAnnounce(122770, 4)--Target scanning will only work on 1 target on 25 man (only is 1 target on 10 man so they luck out)
-local warnDarkOfNight					= mod:NewSpellAnnounce("ej6550", 4, 130013)--Heroic
+local warnDarkOfNight					= mod:NewCountAnnounce("ej6550", 4, 130013)--Heroic
 local warnDay							= mod:NewSpellAnnounce("ej6315", 2, 122789)
 local warnSummonUnstableSha				= mod:NewSpellAnnounce("ej6320", 3, "Interface\\Icons\\achievement_raid_terraceofendlessspring04")
 local warnSummonEmbodiedTerror			= mod:NewSpellAnnounce("ej6316", 4, "Interface\\Icons\\achievement_raid_terraceofendlessspring04")
 local warnTerrorize						= mod:NewTargetAnnounce(123012, 4, nil, mod:IsHealer())
 local warnSunBreath						= mod:NewSpellAnnounce(122855, 3)
-local warnLightOfDay					= mod:NewSpellAnnounce("ej6551", 4, 123716, mod:IsHealer())--Heroic
+local warnLightOfDay					= mod:NewCountAnnounce("ej6551", 4, 123716, mod:IsHealer())--Heroic
 
 local specWarnShadowBreath				= mod:NewSpecialWarningSpell(122752, mod:IsTank() or mod:IsHealer())
 local specWarnSunBreath					= mod:NewSpecialWarningSpell(122855, mod:IsHealer())
@@ -56,7 +56,7 @@ local timerSummonEmbodiedTerrorCD		= mod:NewCDTimer(41, "ej6316", nil, nil, nil,
 local timerTerrorizeCD					= mod:NewNextTimer(14, 123012)--Besides being cast 14 seconds after they spawn, i don't know if they recast it if they live too long, their health was too undertuned to find out.
 local timerSunBreathCD					= mod:NewCDTimer(29, 122855)
 local timerBathedinLight				= mod:NewBuffFadesTimer(6, 122858, nil, mod:IsHealer())
---local timerLightOfDayCD					= mod:NewCDTimer(30.5, "ej6551", nil, mod:IsHealer(), nil, 123716)--Don't have timing for this yet, heroic logs i was sent always wiped VERY early in light phase.
+local timerLightOfDayCD					= mod:NewCDTimer(10, "ej6551", nil, mod:IsHealer(), nil, 123716)--Don't have timing for this yet, heroic logs i was sent always wiped VERY early in light phase.
 
 local berserkTimer						= mod:NewBerserkTimer(490)--a little over 8 min, basically 3rd dark phase is auto berserk.
 
@@ -80,6 +80,7 @@ mod:AddDropdownOption("optDS", {"six", "nine", "twelve", "fifteen", "none"}, "si
 local DSn = 0
 local terrorN = 0
 local daytime = 0
+local lodcount = 0
 
 local function isTank(unit)
 	-- 1. check blizzard tanks first
@@ -95,6 +96,43 @@ local function isTank(unit)
 		return true
 	end
 	return false
+end
+
+function mod:LightOfDayRepeat()
+	lodcount = lodcount + 1
+	warnLightOfDay:Show(lodcount)
+	specWarnLightOfDay:Show()
+	if mod:IsHealer() then
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ghcx.mp3")--光華出現
+		if lodcount == 1 then
+			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		elseif lodcount == 2 then
+			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		elseif lodcount == 3 then
+			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		elseif lodcount == 4 then
+			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		elseif lodcount == 5 then
+			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+		elseif lodcount == 6 then
+			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
+		elseif lodcount == 7 then
+			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countseven.mp3")
+		elseif lodcount == 8 then
+			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\counteight.mp3")
+		elseif lodcount == 9 then
+			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countnine.mp3")
+		elseif lodcount == 10 then
+			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countten.mp3")
+		end
+	end
+	if self:IsDifficulty("heroic10") then
+		timerLightOfDayCD:Start(25)
+		self:ScheduleMethod(25, "LightOfDayRepeat")
+	else
+		timerLightOfDayCD:Start(10)
+		self:ScheduleMethod(10, "LightOfDayRepeat")
+	end
 end
 
 function mod:ShadowsTarget(targetname)
@@ -172,6 +210,7 @@ function mod:OnCombatStart(delay)
 	end
 	terrorN = 0
 	daytime = 0
+	lodcount = 0
 	table.wipe(NightmaresMarkers)
 	table.wipe(sndJKNext)
 end
@@ -185,6 +224,7 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(122768) and args:IsPlayer() then
 		DSn = self.Options.optDS == "six" and 6 or self.Options.optDS == "nine" and 9 or self.Options.optDS == "twelve" and 12 or self.Options.optDS == "fifteen" and 15 or self.Options.optDS == "none" and 99
+		DSn = tonumber(DSn)
 		if (args.amount or 1) >= DSn then
 			if args.amount % 3 == 0 then
 				specWarnDreadShadows:Show(args.amount)
@@ -285,6 +325,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		end
 	elseif spellId == 123252 and self:AntiSpam(2, 2) then--Dread Shadows Cancel (Sun Phase)
 		daytime = GetTime()
+		lodcount = 0
 		timerShadowBreathCD:Cancel()
 		if not mod:IsDps() then
 			sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
@@ -316,7 +357,11 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		timerSummonUnstableShaCD:Cancel()
 		timerSummonEmbodiedTerrorCD:Cancel()
 		timerSunBreathCD:Cancel()
---		timerLightOfDayCD:Cancel()
+		timerLightOfDayCD:Cancel()
+		lodcount = 0
+		if self:IsDifficulty("heroic10", "heroic25") then
+			self:UnscheduleMethod("LightOfDayRepeat")
+		end
 		warnNight:Show()
 		if self.Options.WarnJK then
 			sndJK:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_qszb.mp3")
@@ -349,19 +394,21 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 --			timerDarkOfNightCD:Start(10-delay)--Not enough information yet, no logs of this phase starting anywhere but combat start, and those timers differ. This might have first cast IMMEDIATELY on phase start like day does
 		end
 	elseif spellId == 123813 and self:AntiSpam(2, 3) then--The Dark of Night (Night Phase)
-		warnDarkOfNight:Show()
+		lodcount = lodcount + 1
+		warnDarkOfNight:Show(lodcount)
 		specWarnDarkOfNight:Show()
 		timerDarkOfNightCD:Start()
 		if mod:IsDps() then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_aykd.mp3")--暗影快打
 		end
 	elseif spellId == 123816 and self:AntiSpam(2, 3) then--The Light of Day (Day Phase)
-		warnLightOfDay:Show()
-		specWarnLightOfDay:Show()
-		if mod:IsHealer() then
-			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ghcx.mp3")--光華出現
+		if self:IsDifficulty("heroic10") then
+			timerLightOfDayCD:Start(25)
+			self:ScheduleMethod(25, "LightOfDayRepeat")
+		else
+			timerLightOfDayCD:Start(10)
+			self:ScheduleMethod(10, "LightOfDayRepeat")
 		end
---		timerLightOfDayCD:Start()
 	end
 end
 

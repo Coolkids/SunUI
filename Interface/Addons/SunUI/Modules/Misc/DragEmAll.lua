@@ -56,6 +56,7 @@ local frames = {
  -- [" WorldMapDetailFrame"] = true,
   --["TicketStatusFrame"] = false,
 	["StaticPopup1"] = false,
+	["SStaticPopup1"] = false,
   --["GhostFrame"] = false,
 	["EncounterJournal"] = false, -- only in 4.2
 	["RaidParentFrame"] = false,

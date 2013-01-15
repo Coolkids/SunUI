@@ -120,29 +120,15 @@ oUF.Tags.Methods['sunui:hp']  = function(u) -- THIS IS FUCKING MADNESS!!!
 	if UnitIsDead(u) or UnitIsGhost(u) or not UnitIsConnected(u) then
 		return oUF.Tags.Methods['sunui:DDG'](u)
 	else
-		local per = oUF.Tags.Methods['perhp'](u).."%" or 0
-		local def =oUF.Tags.Methods['missinghp'](u) or 0
-		local min, max = UnitHealth(u), UnitHealthMax(u)
-		if min~=max and min/max < 0.5 then
-			return "|cffe15f8b"..SVal(min).." - "..per.."|r"
+		local per = oUF.Tags.Methods['perhp'](u)
+		if per < 50 then
+			return "|cffe15f8b"..SVal(oUF.Tags.Methods['curhp'](u)).."|r"
 		else
-			return SVal(min).." - "..per 
+			return SVal(oUF.Tags.Methods['curhp'](u))
 		end
 	end
 end
 oUF.Tags.Events['sunui:hp'] = 'UNIT_HEALTH UNIT_CONNECTION'
-
-oUF.Tags.Methods['sunui:hpraid']  = function(u) 
-	local min, max = UnitHealth(u), UnitHealthMax(u)
-	local per = oUF.Tags.Methods['perhp'](u)
-	local def = oUF.Tags.Methods['missinghp'](u)
-	if UnitIsDead(u) or UnitIsGhost(u) or not UnitIsConnected(u) then
-		return oUF.Tags.Methods['sunui:DDG'](u)
-	elseif min~=max and per < 50 then
-		return "|cffe15f8b - "..SVal(def).."|r"
-	end
-end
-oUF.Tags.Events['sunui:hpraid'] = 'UNIT_HEALTH UNIT_CONNECTION'
 
 -- power value tags
 oUF.Tags.Methods['sunui:pp'] = function(u)
@@ -150,7 +136,7 @@ oUF.Tags.Methods['sunui:pp'] = function(u)
 	local per = oUF.Tags.Methods['perpp'](u).."%" or 0
 	if str then
 		if str == "MANA" then 
-			return hex(pcolors.power[str] or {250/255,  75/255,  60/255})..SVal(UnitPower(u)).." - "..per
+			return hex(pcolors.power[str] or {250/255,  75/255,  60/255})..per
 		else
 			return hex(pcolors.power[str] or {250/255,  75/255,  60/255})..SVal(UnitPower(u))
 		end

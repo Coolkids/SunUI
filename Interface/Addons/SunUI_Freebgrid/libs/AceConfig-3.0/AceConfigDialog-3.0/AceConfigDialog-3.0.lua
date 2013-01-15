@@ -570,10 +570,10 @@ local function GetFuncName(option)
 	end
 end
 local function confirmPopup(appName, rootframe, basepath, info, message, func, ...)
-	if not StaticPopupDialogs["ACECONFIGDIALOG30_CONFIRM_DIALOG"] then
-		StaticPopupDialogs["ACECONFIGDIALOG30_CONFIRM_DIALOG"] = {}
+	if not SStaticPopupDialogs["ACECONFIGDIALOG30_CONFIRM_DIALOG"] then
+		SStaticPopupDialogs["ACECONFIGDIALOG30_CONFIRM_DIALOG"] = {}
 	end
-	local t = StaticPopupDialogs["ACECONFIGDIALOG30_CONFIRM_DIALOG"]
+	local t = SStaticPopupDialogs["ACECONFIGDIALOG30_CONFIRM_DIALOG"]
 	for k in pairs(t) do
 		t[k] = nil
 	end
@@ -604,7 +604,7 @@ local function confirmPopup(appName, rootframe, basepath, info, message, func, .
 	t.whileDead = 1
 	t.hideOnEscape = 1
 
-	dialog = StaticPopup_Show("ACECONFIGDIALOG30_CONFIRM_DIALOG")
+	dialog = SStaticPopup_Show("ACECONFIGDIALOG30_CONFIRM_DIALOG")
 	if dialog then
 		oldstrata = dialog:GetFrameStrata()
 		dialog:SetFrameStrata("TOOLTIP")

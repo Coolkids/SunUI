@@ -14,6 +14,7 @@ local filter = {
 		[6948] = true, -- hearthstone
 	},
 	["spell"] = {
+		[125439] = true,
 	},
 }
 function CF:SetUpdate()

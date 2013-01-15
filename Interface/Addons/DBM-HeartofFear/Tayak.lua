@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8257 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8463 $"):sub(12, -3))
 mod:SetCreatureID(62543)
 mod:SetModelID(43141)
 mod:SetZone()
@@ -254,7 +254,7 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, _, _, _, target)
 		sndWOP:Schedule(3.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		sndWOP:Schedule(55, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wxdjzb.mp3") --無形打擊準備
 		if self.Options.UnseenStrikeArrow then
-			DBM.Arrow:ShowRunTo(target, 5, 5)
+			DBM.Arrow:ShowRunTo(target, 3, 3, 5)
 		end
 		self:Schedule(5, function()
 			emoteFired = false
@@ -305,7 +305,7 @@ end
 function mod:UNIT_HEALTH(uId)
 	if self:GetUnitCreatureId(uId) == 62543 then
 		local h = UnitHealth(uId) / UnitHealthMax(uId) * 100
-		if h > 10 and h < 12 and not prewarnedPhase2 then
+		if h > 10 and h < 13 and not prewarnedPhase2 then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\checkhp.mp3") --注意血量
 			prewarnedPhase2 = true
 			self:SendSync("preptwo")

@@ -305,6 +305,7 @@ function Module:CreateEclipse()
 	lb:SetPoint('LEFT', eb, 'LEFT')
 	lb:SetSize(C["Width"], C["Height"])
 	tinsert(mainframe, lb)
+	S.SmoothBar(lb)
 	lb:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
 	local s = lb:GetStatusBarTexture()
 	S.CreateTop(s, 0.27, 0.47, 0.74)
@@ -312,6 +313,7 @@ function Module:CreateEclipse()
 	eb.LunarBar = lb
 	local sb = CreateFrame('StatusBar', nil, eb)
 	sb:SetPoint('LEFT', lb:GetStatusBarTexture(), 'RIGHT', 0, 0)
+	sb:SetPoint('TOPRIGHT', eb, 'TOPRIGHT', 0, 0)
 	sb:SetSize(C["Width"], C["Height"])
 	sb:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
 	local s = sb:GetStatusBarTexture()
@@ -364,8 +366,10 @@ function Module:CreateEclipse()
 			end
 
 			if(self.SolarBar) then
-				self.SolarBar:SetMinMaxValues(-maxPower, maxPower)
-				self.SolarBar:SetValue(power * -1)
+				self.SolarBar:SetPoint('LEFT', lb:GetStatusBarTexture(), 'RIGHT', 0, 0)
+				self.SolarBar:SetPoint('TOPRIGHT', eb, 'TOPRIGHT', 0, 0)
+				--self.SolarBar:SetMinMaxValues(-maxPower, maxPower)
+				--self.SolarBar:SetValue(power * -1)
 			end
 		end
 		if event == "PLAYER_ENTERING_WORLD" then 
@@ -378,8 +382,8 @@ function Module:CreateEclipse()
 			end
 
 			if(self.SolarBar) then
-				self.SolarBar:SetMinMaxValues(-maxPower, maxPower)
-				self.SolarBar:SetValue(power * -1)
+				self.SolarBar:SetPoint('LEFT', lb:GetStatusBarTexture(), 'RIGHT', 0, 0)
+				self.SolarBar:SetPoint('TOPRIGHT', eb, 'TOPRIGHT', 0, 0)
 			end
 		end
 	end)
@@ -414,6 +418,7 @@ function Module:FuckWarlock()
 		S.CreateBack(bars[i])
 		bars[i]:CreateShadow()
 		if i == 1 then
+			S.CreateMark(bars[i])
 			bars[i]:SetPoint("LEFT", bars)
 		else
 			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", space, 0)
@@ -580,30 +585,6 @@ function Module:Mage()
 		end
 	end)
 end
-local function Smooth(self, value)
-	if value == self:GetValue() then
-        self.smoothing = nil
-    else
-        self.smoothing = value
-    end
-end
-local function UpdateHealthSmooth(self)
-	if self.smoothing == nil then return end
-	local val = self.smoothing
-	local limit = 30/GetFramerate()
-    local cur = self:GetValue()
-    local new = cur + min((val-cur)/3, max(val-cur, limit))
-
-    if new ~= new then
-        new = val
-    end
-
-    self:SetValue_(new)
-    if cur == val or abs(new - val) < 2 then
-        self:SetValue_(val)
-        self.smoothing = nil
-    end
-end
 
 function Module:HealthPowerBar()
 	if not C["HealthPower"] then return end
@@ -628,8 +609,7 @@ function Module:HealthPowerBar()
 	healthtext:SetPoint("TOP", spar, "BOTTOM", 0, 7)
 	healthtext:SetTextColor(1, 0.22, 0.52)
 
-	bars.SetValue_ = bars.SetValue
-	bars.SetValue = Smooth
+
 
 	local power = CreateFrame("Statusbar", nil, bars)
 	power:SetSize(C["Width"], C["Height"])
@@ -645,9 +625,8 @@ function Module:HealthPowerBar()
 	local powertext = S.MakeFontString(bars)
 	powertext:SetPoint("BOTTOM", powerspar, "TOP", 0, -5)
 	tinsert(mainframe, power)
-	power.SetValue_ = power.SetValue
-	power.SetValue = Smooth
-
+	S.SmoothBar(bars)
+	S.SmoothBar(power)
 	bars:SetScript("OnUpdate", function(self, elapsed)
 		self.elapsed = (self.elapsed or 0) + elapsed
 		if self.elapsed < .2 then
@@ -657,8 +636,6 @@ function Module:HealthPowerBar()
 			power:SetValue(powernum)
 			healthtext:SetText(S.ShortValue(healthnum))
 			powertext:SetText(S.ShortValue(powernum))
-			UpdateHealthSmooth(bars)
-			UpdateHealthSmooth(power)
 		return end
 		self.elapsed = 0
 	end)

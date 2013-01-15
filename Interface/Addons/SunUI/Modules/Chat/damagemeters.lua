@@ -18,13 +18,14 @@ local firstLines = {
 	"^Skada:(.*)來自(.*)，(.*) - (.*):$",					-- Skada zhTW, might change in new Skada version
 	"^Skada: (.*) for (.*), (.*) - (.*):$",					-- Better Skada support player details
 	"^(.*) Done for (.*)$"	,								-- TinyDPS
-	"^Numeration: (.*) for (.*)$"                        -- Numeration
+	"^Numeration: (.*) for (.*)$",                        -- Numeration	
+	"alDamageMeter : (.*)$",								-- alDamageMeter
 }
 local nextLines = {
 	"^(%d+). (.*)$",										-- Recount and Skada
 	"^ (%d+). (.*)$", 										-- Skada, Numeration
 	"^.*%%%)$", 											-- Skada player details
-	"^(.+) %d+%.%d+%u",
+	"^[+-]%d+.%d",											-- Numeration deathlog details
 	"^(%d+). (.*):(.*)(%d+)(.*)(%d+)%%(.*)%((%d+)%)$",		-- TinyDPS
 }
 
@@ -37,9 +38,12 @@ local events = {
 	"CHAT_MSG_PARTY_LEADER",
 	"CHAT_MSG_RAID",
 	"CHAT_MSG_RAID_LEADER",
+	"CHAT_MSG_INSTANCE_CHAT",
+	"CHAT_MSG_INSTANCE_CHAT_LEADER",
 	"CHAT_MSG_SAY",
 	"CHAT_MSG_WHISPER",
-	"CHAT_MSG_YELL",
+	"CHAT_MSG_WHISPER_INFORM",
+	"CHAT_MSG_YELL"
 }
 
 local function FilterLine(event, source, message, ...)

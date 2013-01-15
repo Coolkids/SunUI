@@ -61,7 +61,7 @@ function SunUIConfig:Load()
 end
 
 function SunUIConfig:OnProfileChanged(event, database, newProfileKey)
-	StaticPopup_Show("CFG_RELOAD")
+	SStaticPopup_Show("CFG_RELOAD")
 end
 
 function SunUIConfig:SetupOptions()
@@ -86,7 +86,7 @@ function SunUIConfig.GenerateOptions()
 end
 
 function SunUIConfig.GenerateOptionsInternal()
-	StaticPopupDialogs["CFG_RELOAD"] = {
+	SStaticPopupDialogs["CFG_RELOAD"] = {
 		text = L["改变参数需重载应用设置"],
 		button1 = ACCEPT,
 		button2 = CANCEL,
@@ -144,7 +144,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				type = "group",
 				name = L["动作条"],
 				get = function(info) return db.ActionBarDB[ info[#info] ] end,
-				set = function(info, value) db.ActionBarDB[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+				set = function(info, value) db.ActionBarDB[ info[#info] ] = value; SStaticPopup_Show("CFG_RELOAD") end,
 				args = {
 					group1 = {
 					type = "group", order = 1,
@@ -471,7 +471,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				type = "group",
 				name = L["增益效果"],
 				get = function(info) return db.BuffDB[ info[#info] ] end,
-				set = function(info, value) db.BuffDB[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+				set = function(info, value) db.BuffDB[ info[#info] ] = value; SStaticPopup_Show("CFG_RELOAD") end,
 				args = {
 					IconSize = {
 						type = "input",
@@ -539,7 +539,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				type = "group",
 				name = L["姓名板"],
 				get = function(info) return db.NameplateDB[ info[#info] ] end,
-				set = function(info, value) db.NameplateDB[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+				set = function(info, value) db.NameplateDB[ info[#info] ] = value; SStaticPopup_Show("CFG_RELOAD") end,
 				args = {
 						group1 = {
 						type = "group", order = 1,
@@ -662,7 +662,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				type = "group",
 				name = L["缺失提醒"],
 				get = function(info) return db.ReminderDB[ info[#info] ] end,
-				set = function(info, value) db.ReminderDB[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+				set = function(info, value) db.ReminderDB[ info[#info] ] = value; SStaticPopup_Show("CFG_RELOAD") end,
 				args = {
 					ShowRaidBuff = {
 						type = "toggle", order = 1,
@@ -714,7 +714,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				type = "group",
 				name = L["界面皮肤"],
 				get = function(info) return db.SkinDB[ info[#info] ] end,
-				set = function(info, value) db.SkinDB[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+				set = function(info, value) db.SkinDB[ info[#info] ] = value; SStaticPopup_Show("CFG_RELOAD") end,
 				args = {	
 					EnableDBMSkin = {
 					type = "toggle",
@@ -728,7 +728,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				type = "group",
 				name = L["头像框体"],
 				get = function(info) return db.UnitFrameDB[ info[#info] ] end,
-				set = function(info, value) db.UnitFrameDB[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+				set = function(info, value) db.UnitFrameDB[ info[#info] ] = value; SStaticPopup_Show("CFG_RELOAD") end,
 				args = {
 					group1 = {
 					type = "group", order = 1,
@@ -1037,7 +1037,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				type = "group",
 				name = GENERAL,
 				get = function(info) return db.MiniDB[ info[#info] ] end,
-				set = function(info, value) db.MiniDB[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+				set = function(info, value) db.MiniDB[ info[#info] ] = value; SStaticPopup_Show("CFG_RELOAD") end,
 				args = {
 					group1 = {
 					type = "group", order = 1,
@@ -1421,7 +1421,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				type = "group",
 				name = L["信息面板"],
 				get = function(info) return db.InfoPanelDB[ info[#info] ] end,
-				set = function(info, value) db.InfoPanelDB[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+				set = function(info, value) db.InfoPanelDB[ info[#info] ] = value; SStaticPopup_Show("CFG_RELOAD") end,
 				args = {
 					OpenTop = {
 					type = "toggle",
@@ -1450,7 +1450,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				type = "group",
 				name = L["职业能量条"],
 				get = function(info) return db.PowerBarDB[ info[#info] ] end,
-				set = function(info, value) db.PowerBarDB[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+				set = function(info, value) db.PowerBarDB[ info[#info] ] = value; SStaticPopup_Show("CFG_RELOAD") end,
 				args = {
 					group1 = {
 						type = "group", order = 1,
@@ -1721,7 +1721,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				type = "group",
 				name = L["自动换装"],
 				get = function(info) return db.EquipmentDB[ info[#info] ] end,
-				set = function(info, value) db.EquipmentDB[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+				set = function(info, value) db.EquipmentDB[ info[#info] ] = value; SStaticPopup_Show("CFG_RELOAD") end,
 				args = {
 					group1 = {
 						type = "group", order = 1, guiInline = true,
@@ -1783,7 +1783,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				type = "group",
 				name = "Class Tools",
 				get = function(info) return db.ClassToolsDB[ info[#info] ] end,
-				set = function(info, value) db.ClassToolsDB[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+				set = function(info, value) db.ClassToolsDB[ info[#info] ] = value; SStaticPopup_Show("CFG_RELOAD") end,
 				args = {
 					group1 = {
 						type = "group", order = 1, guiInline = true,

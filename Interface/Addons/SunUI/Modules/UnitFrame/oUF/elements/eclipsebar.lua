@@ -64,8 +64,8 @@ local UNIT_POWER = function(self, event, unit, powerType)
 	end
 
 	if(eb.SolarBar) then
-		eb.SolarBar:SetMinMaxValues(-maxPower, maxPower)
-		eb.SolarBar:SetValue(power * -1)
+		self.SolarBar:SetPoint('LEFT', eb.LunarBar:GetStatusBarTexture(), 'RIGHT', 0, 0)
+		self.SolarBar:SetPoint('TOPRIGHT', eb, 'TOPRIGHT', 0, 0)
 	end
 
 	if(eb.PostUpdatePower) then

@@ -50,7 +50,7 @@ function RayWatcherConfig:Load()
 end
 
 function RayWatcherConfig:OnProfileChanged(event, database, newProfileKey)
-	StaticPopup_Show("CFG_RELOAD")
+	SStaticPopup_Show("CFG_RELOAD")
 end
 
 function RayWatcherConfig:SetupOptions()
@@ -140,7 +140,7 @@ function RayWatcherConfig.GenerateOptionsInternal()
 		db.RayWatcher.casterinput = ns.modules[current][filter][id].caster
 	end
 
-	StaticPopupDialogs["CFG_RELOAD"] = {
+	SStaticPopupDialogs["CFG_RELOAD"] = {
 		text = L["改变参数需重载应用设置"],
 		button1 = ACCEPT,
 		button2 = CANCEL,
@@ -173,7 +173,7 @@ function RayWatcherConfig.GenerateOptionsInternal()
 				type = "group",
 				name = L["选项"],
 				get = function(info) UpdateGroup() return (db.RayWatcher[ info[#info] ] or next(groupname)) end,
-				set = function(info, value) db.RayWatcher[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+				set = function(info, value) db.RayWatcher[ info[#info] ] = value; SStaticPopup_Show("CFG_RELOAD") end,
 				args = {
 					GroupSelect = {
 						order = 1,

@@ -40,7 +40,7 @@
 
 
 
-local revision =("$Revision: 8457 $"):sub(12, -3)
+local revision =("$Revision: 8539 $"):sub(12, -3)
 local FrameTitle = "DBM_GUI_Option_"	-- all GUI frames get automatically a name FrameTitle..ID
 
 local PanelPrototype = {}
@@ -1295,7 +1295,7 @@ local function CreateOptionsMenu()
 			if DBM.RangeCheck:IsShown() then
 				DBM.RangeCheck:Hide()
 			else
-				DBM.RangeCheck:Show()
+				DBM.RangeCheck:Show(nil, nil, true)
 			end
 		end)
 
@@ -1305,7 +1305,7 @@ local function CreateOptionsMenu()
 			if DBMRangeCheckRadar and DBMRangeCheckRadar:IsShown() then
 				DBMRangeCheckRadar:Hide()
 			else
-				DBM.RangeCheck:Show()
+				DBM.RangeCheck:Show(nil, nil, true)
 				DBMRangeCheckRadar:Show()
 			end
 		end)
@@ -1425,7 +1425,7 @@ local function CreateOptionsMenu()
 		local raidwarnoptions = RaidWarningPanel:CreateArea(L.RaidWarning_Header, nil, 200, true)
 
 		local ShowWarningsInChat 	= raidwarnoptions:CreateCheckButton(L.ShowWarningsInChat, true, nil, "ShowWarningsInChat")
-		local ShowFakedRaidWarnings 	= raidwarnoptions:CreateCheckButton(L.ShowFakedRaidWarnings,  true, nil, "ShowFakedRaidWarnings")
+		local ShowFakedRaidWarnings = raidwarnoptions:CreateCheckButton(L.ShowFakedRaidWarnings,  true, nil, "ShowFakedRaidWarnings")
 		local WarningIconLeft		= raidwarnoptions:CreateCheckButton(L.WarningIconLeft,  true, nil, "WarningIconLeft")
 		local WarningIconRight 		= raidwarnoptions:CreateCheckButton(L.WarningIconRight,  true, nil, "WarningIconRight")
 
@@ -1434,7 +1434,7 @@ local function CreateOptionsMenu()
 			{	text	= L.NoSound,	value	= "" },
 			{	text	= "Default",	value 	= "Sound\\interface\\RaidWarning.wav", 		sound=true },
 			{	text	= "Classic",	value 	= "Sound\\Doodad\\BellTollNightElf.wav", 	sound=true },
-			{	text	= "Ding",	value 	= "Sound\\interface\\AlarmClockWarning3.wav", 	sound=true }
+			{	text	= "Ding",		value 	= "Sound\\interface\\AlarmClockWarning3.wav", 	sound=true }
 		}
 		if GetSharedMedia3() then
 			for k,v in next, GetSharedMedia3():HashTable("sound") do
@@ -1453,6 +1453,7 @@ local function CreateOptionsMenu()
 		local countSounds = {
 			{	text	= "中文倒計時",	value 	= "Mosh"},
 			{	text	= "英文倒計時", value 	= "Corsica"},
+			{	text	= "None",value 	= "None"},
 		}
 		local CountSoundDropDown = raidwarnoptions:CreateDropdown(L.CountdownVoice, countSounds,
 		DBM.Options.CountdownVoice, function(value)
@@ -1977,11 +1978,13 @@ local function CreateOptionsMenu()
 
 	do
 		local spamPanel = DBM_GUI_Frame:CreateNewPanel(L.Panel_SpamFilter, "option")
-		local spamOutArea = spamPanel:CreateArea(L.Area_SpamFilter_Outgoing, nil, 120, true)
+		local spamOutArea = spamPanel:CreateArea(L.Area_SpamFilter_Outgoing, nil, 150, true)
 		spamOutArea:CreateCheckButton(L.SpamBlockNoShowAnnounce, true, nil, "DontShowBossAnnounces")
 		spamOutArea:CreateCheckButton(L.SpamBlockNoSendAnnounce, true, nil, "DontSendBossAnnounces")
 		spamOutArea:CreateCheckButton(L.SpamBlockNoSendWhisper, true, nil, "DontSendBossWhispers")
 		spamOutArea:CreateCheckButton(L.SpamBlockNoSetIcon, true, nil, "DontSetIcons")
+		spamOutArea:CreateCheckButton(L.SpamBlockNoRangeFrame, true, nil, "DontShowRangeFrame")
+		spamOutArea:CreateCheckButton(L.SpamBlockNoInfoFrame, true, nil, "DontShowInfoFrame")
 
 		local spamArea = spamPanel:CreateArea(L.Area_SpamFilter, nil, 135, true)
 		spamArea:CreateCheckButton(L.HideBossEmoteFrame, true, nil, "HideBossEmoteFrame")
@@ -2319,6 +2322,23 @@ do
 --						button.value = v
 --						button.text = mod.localization.options[v]
 --					end)
+				elseif mod.editboxes and mod.editboxes[v] then
+					lastButton = button
+					button = catpanel:CreateEditBox(mod.localization.options[v], mod.Options[v], mod.editboxes[v])
+					button:SetMaxLetters(50)
+					if addSpacer then
+						button:SetPoint("TOPLEFT", lastButton, "BOTTOMLEFT", 30, -6)
+						addSpacer = false
+					else
+						button:SetPoint("TOPLEFT", lastButton, "BOTTOMLEFT", 30, -20)
+					end
+					catpanel:AutoSetDimensionDD()
+					button:SetScript("OnShow",  function(self)
+						self:SetText(mod.Options[v])
+					end)
+					button:SetScript("OnTextChanged", function(self)
+						mod.Options[v] = self:GetText()
+					end)
 				end
 			end
 --			catpanel:AutoSetDimension()

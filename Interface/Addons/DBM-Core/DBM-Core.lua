@@ -44,7 +44,7 @@
 --  Globals/Default Options  --
 -------------------------------
 DBM = {
-	Revision = tonumber(("$Revision: 8500 $"):sub(12, -3)),
+	Revision = tonumber(("$Revision: 8540 $"):sub(12, -3)),
 	DisplayVersion = "5.1 語音增強版", -- the string that is shown as version
 	ReleaseRevision = 8421 -- the revision of the latest stable version that is available
 }
@@ -140,6 +140,8 @@ DBM.DefaultOptions = {
 	DontSendBossAnnounces = false,
 	DontSendBossWhispers = false,
 	DontSetIcons = false,
+	DontShowRangeFrame = false,
+	DontShowInfoFrame = false,
 	LatencyThreshold = 250,
 	BigBrotherAnnounceToRaid = false,
 	SettingsMessageShown = false,
@@ -929,9 +931,9 @@ SlashCmdList["DBMRANGE"] = function(msg)
 	else
 		local r = tonumber(msg)
 		if r and (r == 10 or r == 11 or r == 15 or r == 28 or r == 3 or r == 4 or r == 5 or r == 6 or r == 8 or r == 12 or r == 20) then
-			DBM.RangeCheck:Show(r)
+			DBM.RangeCheck:Show(r, nil, true)
 		else
-			DBM.RangeCheck:Show(10)
+			DBM.RangeCheck:Show(10, nil, true)
 		end
 	end
 end
@@ -4060,6 +4062,7 @@ do
 			timer = timer < 2 and self.timer or timer
 			count = count or self.count or 5
 			if timer <= count then count = floor(timer) end
+			if DBM.Options.CountdownVoice == "None" then return end
 			if DBM.Options.CountdownVoice == "Mosh" then
 				for i = count, 1, -1 do
 					if i <= 5 then
@@ -4134,6 +4137,7 @@ do
 		if not self.option or self.mod.Options[self.option] then
 			timer = timer or self.timer or 10
 			timer = timer <= 5 and self.timer or timer
+			if DBM.Options.CountdownVoice == "None" then return end
 			if DBM.Options.CountdownVoice == "Mosh" and timer == 5 then--Don't have 6-10 for him yet.
 				for i = 1, timer do
 					self.sound5:Schedule(i, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\"..i..".mp3")
@@ -4953,6 +4957,18 @@ function bossModPrototype:AddDropdownOption(name, options, default, cat, func)
 	self:SetOptionCategory(name, cat)
 	self.dropdowns = self.dropdowns or {}
 	self.dropdowns[name] = options
+	if func then
+		self.optionFuncs = self.optionFuncs or {}
+		self.optionFuncs[name] = func
+	end
+end
+
+function bossModPrototype:AddEditBoxOption(name, options, default, cat, func)
+	cat = cat or "misc"
+	self.Options[name] = default
+	self:SetOptionCategory(name, cat)
+	self.editboxes = self.editboxes or {}
+	self.editboxes[name] = options
 	if func then
 		self.optionFuncs = self.optionFuncs or {}
 		self.optionFuncs[name] = func

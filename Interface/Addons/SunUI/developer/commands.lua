@@ -157,7 +157,24 @@ end
 SLASH_VehicleSeatIndicatorLOCK1 = "/vs"
 SlashCmdList["VehicleSeatIndicatorLOCK"] = VSLOCK
 
-StaticPopupDialogs["CLEARSET"] = {
+SStaticPopupDialogs["TESTUI"] = {
+	text = "测试弹窗系统",
+	button1 = ACCEPT,
+	button2 = CANCEL,
+	OnAccept = function() 
+		print("测试弹窗系统")
+	end,
+	timeout = 0,
+	whileDead = 1,
+}
+SlashCmdList["TESTUI"] = function()
+	if not UnitAffectingCombat("player") then
+		SStaticPopup_Show("TESTUI")
+	end
+end
+SLASH_TESTUI1 = "/testui"
+
+SStaticPopupDialogs["CLEARSET"] = {
 	text = "确定清空所有设置么",
 	button1 = ACCEPT,
 	button2 = CANCEL,
@@ -172,7 +189,7 @@ StaticPopupDialogs["CLEARSET"] = {
 }
 SlashCmdList["CLEARSUNUI"] = function()
 	if not UnitAffectingCombat("player") then
-		StaticPopup_Show("CLEARSET")
+		SStaticPopup_Show("CLEARSET")
 	end
 end
 SLASH_CLEARSUNUI1 = "/clearset"
@@ -206,7 +223,7 @@ local GroupDisband = function()
 	end
 	LeaveParty()
 end
-StaticPopupDialogs["DISBAND_RAID"] = {
+SStaticPopupDialogs["DISBAND_RAID"] = {
 	text = "Do you really want to disband this group?",
 	button1 = YES,
 	button2 = NO,
@@ -214,7 +231,7 @@ StaticPopupDialogs["DISBAND_RAID"] = {
 	timeout = 0,
 	whileDead = 1,}
 SlashCmdList["GROUPDISBAND"] = function()
-	StaticPopup_Show("DISBAND_RAID")
+	SStaticPopup_Show("DISBAND_RAID")
 end
 SLASH_GROUPDISBAND1 = '/rd'
 -- convert group from raid to party

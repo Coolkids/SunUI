@@ -3,7 +3,7 @@ local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndWOPD	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8416 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8540 $"):sub(12, -3))
 mod:SetCreatureID(60009)--60781 Soul Fragment
 mod:SetModelID(41192)
 mod:SetZone()
@@ -402,7 +402,7 @@ function mod:SPELL_CAST_START(args)
 		sndWOPD:Schedule(8.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 		sndWOPD:Schedule(9.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		timerEpicenterCD:Start(nil, specialCount + 1)
-	elseif args:IsSpellID(116157) then
+	elseif args:IsSpellID(116157, 116295) then
 		warnLightningFists:Show()
 		timerLightningFistsCD:Start()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zydb.mp3") --注意電波

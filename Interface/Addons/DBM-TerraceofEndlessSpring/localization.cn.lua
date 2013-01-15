@@ -13,7 +13,8 @@ L:SetWarningLocalization({
 	warnGroupOrder		= "小怪处理 - %s组",
 	specWarnYourGroup	= "快去打小怪! 到你了!",
 	specWarnYourEnd		= ">>小怪结束<<",
-	specWarnDDL 	= ">> 下一次 到你断 <<"
+	specWarnDDL 	= ">> 下一次 到你断 <<",
+	SpecWarnJSA		= "%s﹪ >>注意减伤<<"
 })
 
 L:SetOptionLocalization({
@@ -27,7 +28,6 @@ L:SetOptionLocalization({
 	SoundSDQ			= "语音警告：$spell:117436的驱散",
 	SoundWOP			= "语音警告：重要技能",
 	optDD4				= "使用四人打断链(不选则前3人循环)",
-	optDDall			= "只有在你的目标是水王时才提示打断链(不选则总是提示)",
 	specWarnDDL 		= "特殊警告：下一次到你打断",
 	optDD				= "水王打断链",
 	nodd				= "我不打断",
@@ -35,12 +35,24 @@ L:SetOptionLocalization({
 	DD2					= "打断2",
 	DD3					= "打断3",
 	DD4					= "打断4",
-	optMob				= "小怪处理提醒(25人模式 5222, 1222, 1222, 1222, 1111)",
+	optMob				= "选择您的小怪处理组编号",
 	Mob1				= "小怪处理组1",
 	Mob2				= "小怪处理组2",
 	Mob3				= "小怪处理组3",
 	Mob4				= "小怪处理组4",
-	Mob5				= "替补组(处理组全部9层)"
+	Mob5				= "小怪处理组5",
+	noMob				= "不提示",
+	optMobSet			= "小怪处理策略(支持4或5组循环,若跳组请用数字0填充)",
+	warndr9				= "减伤提示：三阶段水王90%血",
+	warndr8				= "减伤提示：三阶段水王80%血",
+	warndr7				= "减伤提示：三阶段水王70%血",
+	warndr6				= "减伤提示：三阶段水王60%血",
+	warndr5				= "减伤提示：三阶段水王50%血",
+	warndr4				= "减伤提示：三阶段水王40%血",
+	warndr3				= "减伤提示：三阶段水王30%血",
+	warndr2				= "减伤提示：三阶段水王20%血",
+	warndr1				= "减伤提示：三阶段水王10%血",
+	SpecWarnJSA			= "特别警告：注意开减伤"
 })
 
 

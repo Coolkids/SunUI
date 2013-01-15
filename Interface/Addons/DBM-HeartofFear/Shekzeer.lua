@@ -3,7 +3,7 @@ local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndYB		= mod:NewSound(nil, "SoundYB", true)
 
-mod:SetRevision(("$Revision: 8319 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8537 $"):sub(12, -3))
 mod:SetCreatureID(62837)--62847 Dissonance Field, 63591 Kor'thik Reaver, 63589 Set'thik Windblade
 mod:SetModelID(42730)
 mod:SetZone()
@@ -28,6 +28,7 @@ local warnScreech				= mod:NewSpellAnnounce(123735, 3, nil, false)--Not useful.
 local warnCryOfTerror			= mod:NewTargetAnnounce(123788, 3, nil, mod:IsRanged())
 local warnEyes					= mod:NewStackAnnounce(123707, 2, nil, mod:IsTank())
 local warnDissonanceField		= mod:NewCountAnnounce(123255, 3)
+local warnDr					= mod:NewAnnounce("warnDr", 1, 118191)
 local warnSonicDischarge		= mod:NewSoonAnnounce(123504, 4)--Iffy reliability but better then nothing i suppose.
 local warnRetreat				= mod:NewSpellAnnounce(125098, 4)
 local warnAmberTrap				= mod:NewAnnounce("warnAmberTrap", 2, 125826)
@@ -58,20 +59,21 @@ local yellVisions				= mod:NewYell(124862, nil, false)
 local specWarnConsumingTerror	= mod:NewSpecialWarningSpell(124849, not mod:IsTank())
 local specWarnHeartOfFear		= mod:NewSpecialWarningYou(125638)
 local yellHeartOfFear			= mod:NewYell(125638)
-
+local specWarnjs				= mod:NewSpecialWarning("specWarnjs")
 local specWarnTT				= mod:NewSpecialWarning("specWarnTT")
 
-local timerScreechCD			= mod:NewNextTimer(7, 123735, nil, mod:IsRanged())
+local timerScreechCD			= mod:NewNextTimer(7, 123735, nil, false)
 local timerCryOfTerror			= mod:NewTargetTimer(20, 123788, nil, mod:IsHealer())
 local timerCryOfTerrorCD		= mod:NewCDTimer(25, 123788, nil, mod:IsRanged())
 local timerEyes					= mod:NewTargetTimer(30, 123707, nil, mod:IsTank())
 local timerEyesCD				= mod:NewNextTimer(11, 123707, nil, mod:IsTank())
-local timerDissonanceFieldCD	= mod:NewNextCountTimer(66, 123255)
+local timerDissonanceFieldCD	= mod:NewNextCountTimer(65, 123255)
 local timerPhase1				= mod:NewNextTimer(156.4, 125304)--156.4 til ENGAGE fires and boss is out, 157.4 until "advance" fires though. But 156.4 is more accurate timer
 local timerPhase2				= mod:NewNextTimer(151, 125098)--152 until trigger, but probalby 150 or 151 til adds are targetable.
 local timerCalamityCD			= mod:NewCDTimer(6, 124845, nil, mod:IsHealer())
 local timerVisionsCD			= mod:NewCDTimer(19.5, 124862)
 local timerConsumingTerrorCD	= mod:NewCDTimer(32, 124849, nil, not mod:IsTank())
+local timerCorruptedDissonance	= mod:NewNextTimer(20, 126122)--10 seconds after first and 20 seconds after
 local timerHeartOfFear			= mod:NewBuffFadesTimer(6, 125638)
 
 local berserkTimer				= mod:NewBerserkTimer(900)
@@ -109,6 +111,114 @@ local swcount = 0
 local hjplayer = 0
 local sendhjpos = ""
 
+local function MyDR()  --公會P3減傷提示
+	mod:Schedule(10, function()
+		warnDr:Show("薩滿A","靈魂連接",10)
+		if mod.Options.optjs == "shaman1" then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\didi.mp3")
+			specWarnjs:Show("靈魂連接")
+		end
+	end)
+	mod:Schedule(20, function()
+		warnDr:Show("薩滿A","寧靜圖騰",20)
+		if mod.Options.optjs == "shaman1" then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\didi.mp3")
+			specWarnjs:Show("寧靜圖騰")
+		end
+	end)
+	mod:Schedule(30, function()
+		warnDr:Show("騎士A","虔誠光環",30)
+		if mod.Options.optjs == "pal1" then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\didi.mp3")
+			specWarnjs:Show("虔誠光環")
+		end
+	end)
+	mod:Schedule(40, function()
+		warnDr:Show("補牧A","罩子",40)
+		if mod.Options.optjs2 == "priest1" then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\didi.mp3")
+			specWarnjs:Show("罩子")
+		end
+	end)
+	mod:Schedule(50, function()
+		warnDr:Show("騎士B","虔誠光環",50)
+		if mod.Options.optjs == "pal2" then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\didi.mp3")
+			specWarnjs:Show("虔誠光環")
+		end
+	end)
+	mod:Schedule(60, function()
+		warnDr:Show("補牧B","罩子",60)
+		if mod.Options.optjs2 == "priest2" then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\didi.mp3")
+			specWarnjs:Show("罩子")
+		end
+	end)
+	mod:Schedule(70, function()
+		warnDr:Show("騎士C","虔誠光環",70)
+		if mod.Options.optjs == "pal3" then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\didi.mp3")
+			specWarnjs:Show("虔誠光環")
+		end
+	end)
+	mod:Schedule(80, function()
+		warnDr:Show("戰士A","吼血",80)
+		if mod.Options.optjs == "warrior1" then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\didi.mp3")
+			specWarnjs:Show("吼血")
+		end
+	end)
+	mod:Schedule(90, function()
+		warnDr:Show("暗牧","吸血鬼",90)
+		if mod.Options.optjs2 == "priest4" then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\didi.mp3")
+			specWarnjs:Show("吸血鬼")
+		end
+	end)
+	mod:Schedule(100, function()
+		warnDr:Show("死騎","罩子",100)
+		if mod.Options.optjs == "dk" then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\didi.mp3")
+			specWarnjs:Show("罩子")
+		end
+	end)
+	mod:Schedule(110, function()
+		warnDr:Show("牧師C","罩子",110)
+		if mod.Options.optjs2 == "priest3" then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\didi.mp3")
+			specWarnjs:Show("罩子")
+		end
+	end)
+	mod:Schedule(120, function()
+		warnDr:Show("薩滿B","寧靜圖騰",120)
+		if mod.Options.optjs == "shaman2" then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\didi.mp3")
+			specWarnjs:Show("寧靜圖騰")
+		end
+	end)
+	mod:Schedule(130, function()
+		warnDr:Show("薩滿B","靈魂連接",130)
+		if mod.Options.optjs == "shaman2" then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\didi.mp3")
+			specWarnjs:Show("靈魂連接")
+		end
+	end)
+	mod:Schedule(140, function()
+		warnDr:Show("小德","寧靜",140)
+		if mod.Options.optjs == "druid" then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\didi.mp3")
+			specWarnjs:Show("寧靜")
+		end
+	end)
+	mod:Schedule(150, function()
+		warnDr:Show("戰士B","吼血",150)
+		if mod.Options.optjs == "warrior2" then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\didi.mp3")
+			specWarnjs:Show("吼血")
+		end
+	end)
+end
+
 --[[
 1:1 5 6 9
 2:2 7 10 11
@@ -144,6 +254,10 @@ mod:AddBoolOption("HudMAP2", false, "sound")
 mod:AddBoolOption("SendPos", true, "sound")
 mod:AddBoolOption("AcceptPos", true, "sound")
 mod:AddDropdownOption("optDR", {"noDR", "DR1", "DR2", "DR3"}, "noDR", "sound")
+if GetGuildInfo("player") == "黑手之鄉" then
+	mod:AddDropdownOption("optjs", {"non", "shaman1", "shaman2", "pal1", "pal2", "pal3", "dk", "warrior1", "warrior2", "druid"}, "non", "sound")
+	mod:AddDropdownOption("optjs2", {"non2", "priest1", "priest2", "priest3", "priest4"}, "non2", "sound")
+end
 
 local DBMHudMap = DBMHudMap
 local free = DBMHudMap.free
@@ -161,7 +275,7 @@ function mod:OnCombatStart(delay)
 	fieldCount = 0
 	timerScreechCD:Start(-delay)
 	timerEyesCD:Start(-delay)
-	timerDissonanceFieldCD:Start(22-delay, 1)
+	timerDissonanceFieldCD:Start(20.5-delay, 1)
 	timerPhase2:Start(-delay)
 	berserkTimer:Start(-delay)
 	table.wipe(warnedLowHP)
@@ -172,6 +286,7 @@ function mod:OnCombatStart(delay)
 	table.wipe(warnedLowHP1)
 	table.wipe(ybhp)
 	table.wipe(visonsTargets)
+	table.wipe(resinTargets)
 	table.wipe(DeadMarkers)
 	table.wipe(QJMarkers)
 	ptwo = false
@@ -320,7 +435,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			timerDQ:Start()
 		end
 	elseif args:IsSpellID(124077) then
-		if args.sourceGUID == UnitGUID("target") then--Only show warning for your own target.
+		if args.sourceGUID == UnitGUID("target") or args.sourceGUID == UnitGUID("focus") then--Only show warning for your own target.
 			specWarnDispatch:Show(args.sourceName)
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3")--快打斷
 		end
@@ -401,11 +516,23 @@ function mod:SPELL_CAST_SUCCESS(args)
 		timerVisionsCD:Start(4)
 		timerCalamityCD:Start(9)
 		timerConsumingTerrorCD:Start(11)
+		if GetGuildInfo("player") == "黑手之鄉" then
+			if self:IsDifficulty("heroic25") then
+				MyDR()
+			end
+		end
 	elseif args:IsSpellID(123255) and self:AntiSpam(2, 4) then
 		fieldCount = fieldCount + 1
 		warnDissonanceField:Show(fieldCount)
 		if fieldCount < 2 then
 			timerDissonanceFieldCD:Start(nil, fieldCount+1)
+		end
+		if self:IsDifficulty("heroic10", "heroic25") then
+			if fieldCount == 1 then
+				timerCorruptedDissonance:Start(10)
+			else
+				timerCorruptedDissonance:Start()
+			end
 		end
 	end
 end
@@ -448,6 +575,11 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		timerVisionsCD:Start(7)
 		timerCalamityCD:Start(12)
 		timerConsumingTerrorCD:Start(14)
+		if GetGuildInfo("player") == "黑手之鄉" then
+			if self:IsDifficulty("heroic25") then
+				MyDR()
+			end
+		end
 	end
 end
 
@@ -457,6 +589,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		table.wipe(resinTargets)
 		timerScreechCD:Cancel()
 		timerCryOfTerrorCD:Cancel()
+		timerDissonanceFieldCD:Cancel()
 		timerEyesCD:Cancel()
 		warnRetreat:Show()
 		specWarnRetreat:Show()
@@ -486,7 +619,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		warnAdvance:Show()
 		specWarnAdvance:Show()
-		timerDissonanceFieldCD:Start(22, 1)--Assumed same as pull, may very well be wrong Needs to be verified with transcriptor tomorrow
+		timerDissonanceFieldCD:Start(20, 1)
 		timerPhase2:Start()--Assumed same as pull
 		ptwo = false
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\phasechange.mp3")--階段轉換

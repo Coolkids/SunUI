@@ -689,6 +689,7 @@ end
 --  Methods  --
 ---------------
 function infoFrame:Show(maxLines, event, threshold, ...)
+	if DBM.Options.DontShowInfoFrame and (event or 0) ~= "test" then return end
 	maxLines = maxLines or 5
 
 	infoFrameThreshold = threshold

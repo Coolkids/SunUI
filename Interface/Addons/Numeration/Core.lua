@@ -144,7 +144,7 @@ end
 function ldb:OnClick(button)
 	if button == "LeftButton" then
 		if IsShiftKeyDown() then
-			StaticPopup_Show("RESET_DATA")
+			SStaticPopup_Show("RESET_DATA")
 		else
 			addon:ToggleVisibility()
 		end
@@ -437,7 +437,7 @@ function addon:ZONE_CHANGED_NEW_AREA(force)
 					if s.silent_reset then
 						addon:Reset()
 					else
-						StaticPopup_Show("RESET_DATA")
+						SStaticPopup_Show("RESET_DATA")
 					end
 				end
 			end

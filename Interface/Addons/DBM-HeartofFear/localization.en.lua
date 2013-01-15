@@ -180,6 +180,8 @@ L= DBM:GetModLocalization(743)
 
 L:SetWarningLocalization({
 	warnAmberTrap		= "Amber Trap progress: (%d/5)",
+	warnDr				= "%s£º%s (%d/s)",
+	specWarnjs			= ">>DR:%s<<",
 	specWarnTT			= "Thriller Totem <%d> <%d.s>"
 })
 

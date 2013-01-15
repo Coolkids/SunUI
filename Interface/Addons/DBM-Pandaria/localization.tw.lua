@@ -28,10 +28,11 @@ L:SetOptionLocalization({
 L= DBM:GetModLocalization(826)
 
 L:SetOptionLocalization({
-	RangeFrame			= "為$spell:137511顯示距離框架"
+	RangeFrame			= "距離監視：$spell:137511"
 })
 
 ---------------------------
 -- Nalak, The Storm Lord --
 ---------------------------
 L= DBM:GetModLocalization(814)
+

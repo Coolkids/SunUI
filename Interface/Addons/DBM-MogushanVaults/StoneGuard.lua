@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8421 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8538 $"):sub(12, -3))
 mod:SetCreatureID(60051, 60043, 59915, 60047)--Cobalt: 60051, Jade: 60043, Jasper: 59915, Amethyst: 60047
 mod:SetModelID(41892)
 mod:SetZone()
@@ -44,9 +44,9 @@ local yellAmethystPool				= mod:NewYell(130774, nil, false)
 local specWarnPowerDown				= mod:NewSpecialWarningSpell(116529, not mod:IsTank())
 local specWarnMySD					= mod:NewSpecialWarning("specWarnMySD")
 
-local timerCobaltMineCD				= mod:NewNextTimer(8.5, 129424)--12-15second variations
 local timerPetrification			= mod:NewNextTimer(76, 125091)
-local timerJadeShardsCD				= mod:NewNextTimer(20.5, 116223, nil, false)--Always 20.5 seconds
+local timerCobaltMineCD				= mod:NewNextTimer(8.5, 129424)
+local timerJadeShardsCD				= mod:NewCDTimer(9, 116223, nil, false)--9~12
 local timerJasperChainsCD			= mod:NewCDTimer(12, 130395)--11-13
 local timerAmethystPoolCD			= mod:NewCDTimer(6, 130774, nil, false)
 
@@ -312,7 +312,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		if args:IsPlayer() then
 			playerHasChains = true
-			yellJasperChains:Yell()
+			if not self:IsDifficulty("lfr25") then
+				yellJasperChains:Yell()
+			end
 			local uId = getBossuId(Jasper)
 			if uId and (UnitPower(uId) <= 80) and (activePetrification == "Jasper") then--Make sure his energy isn't already high, otherwise breaking chains when jasper will only be active for a few seconds is bad
 				specWarnBreakJasperChains:Show()

@@ -35,7 +35,7 @@ local isDispeller = select(2, UnitClass("player")) == "MAGE"
 local warnChargedShadows		= mod:NewTargetAnnounce(117685, 2)
 local warnUndyingShadows		= mod:NewSpellAnnounce(117506, 3)--Target scanning?
 local warnFixate				= mod:NewTargetAnnounce(118303, 4)--Maybe spammy late fight, if zian is first boss you get? (adds are immortal, could be many up)
-local warnShieldOfDarknessSoon	= mod:NewAnnounce("DarknessSoon", 3, 117697, nil, nil, true)
+local warnShieldOfDarknessSoon	= mod:NewAnnounce("DarknessSoon", 4, 117697, nil, nil, true)
 local warnShieldOfDarkness		= mod:NewTargetAnnounce(117697, 4)
 --Meng
 local warnCrazyThought			= mod:NewCastAnnounce(117833, 2, nil, nil, false)--Just doesn't seem all that important right now.
@@ -94,7 +94,7 @@ local timerFlankingOrdersCD		= mod:NewCDTimer(40, 117910)--Every 40 seconds on n
 local timerImperviousShieldCD	= mod:NewCDTimer(42, 117961)
 --Subetai
 local timerVolleyCD				= mod:NewNextTimer(41, 118094)
-local timerRainOfArrowsCD		= mod:NewNextTimer(41, 118122)
+local timerRainOfArrowsCD		= mod:NewNextTimer(50.5, 118122)
 local timerPillageCD			= mod:NewNextTimer(41, 118047)
 local timerSleightOfHandCD		= mod:NewCDTimer(42, 118162)
 local timerSleightOfHand		= mod:NewBuffActiveTimer(11, 118162)--2+9 (cast+duration)
@@ -186,14 +186,27 @@ function mod:OnCombatStart(delay)
 	sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zwjh.mp3") --戰王激活
 	sndWOP:Schedule(21, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_bczb.mp3")
 	if self:IsDifficulty("heroic10", "heroic25") then
-		timerImperviousShieldCD:Start(40.7)
-		warnImperviousShieldSoon:Schedule(35.7)
-		sndDSA:Schedule(37.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zwhd.mp3") -- 戰王護盾準備
-		self:Schedule(37.5, function()
-			if UnitName("target") == Qiang then
-				specWarnDSoon:Show()
-			end
-		end)
+		if self:IsDifficulty("heroic10") then
+			timerImperviousShieldCD:Start(60.7)
+			warnImperviousShieldSoon:Schedule(55.7)
+			sndDSA:Schedule(57.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zwhd.mp3") -- 戰王護盾準備
+			self:Schedule(57.5, function()
+				if UnitName("target") == Qiang then
+					specWarnDSoon:Show()
+				end
+			end)
+		else
+			timerImperviousShieldCD:Start(40.7)
+			warnImperviousShieldSoon:Schedule(35.7)
+			sndDSA:Schedule(37.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zwhd.mp3") -- 戰王護盾準備
+			self:Schedule(37.5, function()
+				if UnitName("target") == Qiang then
+					specWarnDSoon:Show()
+				end
+			end)
+		end
+
+
 	end
 end
 
@@ -463,7 +476,11 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		timerVolleyCD:Start()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zyjy.mp3") --注意箭雨
 	elseif spellId == 118121 and self:AntiSpam(2, 2) then--Rain of Arrows
-		timerRainOfArrowsCD:Start()
+		if self:IsDifficulty("heroic10", "heroic25") then
+			timerRainOfArrowsCD:Start(41)
+		else
+			timerRainOfArrowsCD:Start()
+		end
 --	"<63.5 21:23:16> [UNIT_SPELLCAST_SUCCEEDED] Qiang the Merciless [[boss1:Inactive Visual::0:118205]]", -- [14066]
 --	"<63.5 21:23:16> [UNIT_SPELLCAST_SUCCEEDED] Qiang the Merciless [[boss1:Cancel Activation::0:118219]]", -- [14068]
 	elseif spellId == 118205 and self:AntiSpam(2, 3) then--Inactive Visual
