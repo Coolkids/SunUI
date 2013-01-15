@@ -121,7 +121,7 @@ oUF.Tags.Methods['sunui:hp']  = function(u) -- THIS IS FUCKING MADNESS!!!
 		return oUF.Tags.Methods['sunui:DDG'](u)
 	else
 		local per = oUF.Tags.Methods['perhp'](u)
-		if per < 50 then
+		if per < 25 then
 			return "|cffe15f8b"..SVal(oUF.Tags.Methods['curhp'](u)).."|r"
 		else
 			return SVal(oUF.Tags.Methods['curhp'](u))
@@ -159,7 +159,7 @@ oUF.Tags.Events['sunui:name'] = 'UNIT_NAME_UPDATE UNIT_CONNECTION'
 
 oUF.Tags.Methods['sunui:longname'] = function(u, r)
 	local name = UnitName(r or u)
-	return utf8sub(name, 20, true)
+	return utf8sub(name, 18, true)
 end
 oUF.Tags.Events['sunui:longname'] = 'UNIT_NAME_UPDATE UNIT_CONNECTION'
 

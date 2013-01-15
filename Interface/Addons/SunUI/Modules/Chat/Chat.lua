@@ -58,8 +58,6 @@ ChatFrame2ButtonFrameBottomButton:SetScript("OnEvent", function(f)
 end)
 
 ---------------- > 渐隐透明度
-CHAT_FRAME_TAB_NORMAL_NOMOUSE_ALPHA = 0
-CHAT_FRAME_TAB_SELECTED_NOMOUSE_ALPHA = 0
 ChatFrameMenuButton:Kill()
 FriendsMicroButton:Kill()
 

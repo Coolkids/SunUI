@@ -12,7 +12,7 @@ local cycles = {
     }, ]]
     {
         chatType = "PARTY",  --小队
-        use = function(self, editbox) return IsInGroup() end,
+        use = function(self, editbox) return IsInGroup(LE_PARTY_CATEGORY_HOME) end,
     },
     {
         chatType = "RAID",  --团队
@@ -20,7 +20,7 @@ local cycles = {
     },
     {
         chatType = "INSTANCE_CHAT",  --副本
-        use = function(self, editbox) return select(2, IsInInstance()) == 'pvp' end,
+        use = function(self, editbox) return select(2, IsInInstance()) == 'pvp' or (not IsInGroup(LE_PARTY_CATEGORY_HOME) or not IsInRaid(LE_PARTY_CATEGORY_HOME)) and IsInGroup(LE_PARTY_CATEGORY_INSTANCE) end,
     },
     {
         chatType = "GUILD",   --工会
