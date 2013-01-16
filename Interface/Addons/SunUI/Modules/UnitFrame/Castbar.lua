@@ -34,7 +34,7 @@ cast.setBarTicks = function(castBar, ticknum)
 				ticks[k] = castBar:CreateTexture(nil, 'OVERLAY')
 				ticks[k]:SetTexture(DB.Statusbar)
 				ticks[k]:SetVertexColor(0.8, 0.6, 0.6)
-				ticks[k]:Width(4)
+				ticks[k]:Width(2)
 				ticks[k]:Height(castBar:GetHeight())
 				S.CreateTop(ticks[k], 0.8, 0.6, 0.6)
 			end
@@ -52,7 +52,7 @@ end
 
 cast.OnCastbarUpdate = function(self, elapsed)
 --if not self.Lag then self.Lag = "" end  ------------------------------------AND THIS SDALKSJD:LKJASLDKJA:LSKDJ:LKASJD:
-if GetNetStats() == 0 then return end -- test
+	if GetNetStats() == 0 then return end -- test
 	local currentTime = GetTime()
 	if self.casting or self.channeling then
 		local parent = self:GetParent()
@@ -89,6 +89,7 @@ end
 
 cast.OnCastSent = function(self, event, unit, spell, rank)
 	if self.unit ~= unit or not self.Castbar.SafeZone then return end
+	--print(1)
 	self.Castbar.SafeZone.sendTime = GetTime()
 end
 
@@ -100,15 +101,26 @@ cast.PostCastStart = function(self, unit, name, rank, text)
 		self.SafeZone:Hide()
 		self.Lag:Hide()
 	elseif unit == 'player' then
+		--print(GetNetStats())
 		if GetNetStats() == 0 then return end -- test
 		local sf = self.SafeZone 
 		if not sf then return end -- fix for swapped vehicles' cast bars when channeling
 		if not sf.sendTime then sf.sendTime = GetTime() end
+		--print(sf.sendTime)
 		sf.timeDiff = GetTime() - sf.sendTime
+		--print(sf.timeDiff, self.max)
 		sf.timeDiff = sf.timeDiff > self.max and self.max or sf.timeDiff
+		--print(sf.timeDiff)
 		
-		sf:Width(self:GetWidth() * sf.timeDiff / self.max)
-		sf:Show()
+		--print(self:GetWidth() * sf.timeDiff / self.max == self:GetWidth())
+		if self:GetWidth() * sf.timeDiff / self.max == self:GetWidth() then
+			sf.timeDiff = 0
+			sf:Width(1)
+		else
+			sf:Width(self:GetWidth() * sf.timeDiff / self.max)
+			sf:Show()
+		end
+		
 		if not UnitInVehicle("player") then sf:Show() else sf:Hide() end
 		if self.casting then
 			cast.setBarTicks(self, 0)

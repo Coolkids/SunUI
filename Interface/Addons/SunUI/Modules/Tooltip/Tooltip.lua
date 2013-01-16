@@ -93,7 +93,27 @@ local truncate = function(value)
 		return string.format('%.0f', value)
 	end
 end
-
+local function LevelColor(target)
+	local player = UnitLevel("player")
+	local temp, color = 0, {}
+	if target > 0 then
+		temp = target - player
+	end
+	if target < 0 then
+		color = {["r"] = 1, ["g"] = 0.1, ["b"] = 0.1}
+	elseif temp >= 5 then
+		color = {["r"] = 1, ["g"] = 1, ["b"] = 0}
+	elseif temp < 5 and temp >= 3 then
+		color = {["r"] = 1, ["g"] = 0.5, ["b"] = 0.25}
+	elseif temp < 3 and temp > -3 then
+		color = {["r"] = 1, ["g"] = 1, ["b"] = 0}
+	elseif temp <= -3 and temp > -9 then
+		color = {["r"] = 0.25, ["g"] = 0.75, ["b"] = 0.25}
+	elseif temp <= -9 then
+		color = {["r"] = 0.5, ["g"] = 0.5, ["b"] = 0.5}	
+	end
+	return color
+end
 local function On_OnTooltipSetUnit(self)
 	local unit = select(2, self:GetUnit())
 	if unit then
@@ -101,7 +121,8 @@ local function On_OnTooltipSetUnit(self)
 		local creatureType = UnitCreatureType(unit) or ""
 		local unitName = UnitName(unit)
 		local unitLevel = UnitLevel(unit)
-		local diffColor = unitLevel > 0 and GetQuestDifficultyColor(unitLevel) or QuestDifficultyColors["impossible"]
+		local diffColor = LevelColor(unitLevel)
+		--local diffColor = unitLevel > 0 and GetQuestDifficultyColor(UnitLevel(unit)) or QuestDifficultyColors["impossible"]
 		--print(diffColor.r, diffColor.g, diffColor.b, unitLevel)
 		if unitLevel < 0 then unitLevel = '??' end
 		if UnitIsPlayer(unit) then

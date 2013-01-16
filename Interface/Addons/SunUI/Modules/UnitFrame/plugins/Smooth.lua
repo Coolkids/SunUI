@@ -4,12 +4,16 @@ assert(oUF, "<name> was unable to locate oUF install.")
 
 local smoothing = {}
 local function Smooth(self, value)
-	if value ~= self:GetValue() then
-		smoothing[self] = value
-	else
+	local _, maxv = self:GetMinMaxValues()
+	if value == self:GetValue() or (self.prevMax and self.prevMax ~= maxv) then
+		-- finished smoothing/max health updated
 		smoothing[self] = nil
 		self:SetValue_(value)
+	else
+		smoothing[self] = value
 	end
+
+	self.prevMax = maxv
 end
 
 local function SmoothBar(self, bar)

@@ -80,11 +80,11 @@ G["UnitFrameDB"] = {
 	["EnableVengeanceBar"] = true,
 	["EnableThreat"] = true,
 	["PetHeight"] = 20,
-	["TargetCastBarHeight"] = 20,
+	["TargetCastBarHeight"] = 15,
 	["EnableBarFader"] = false,
 	["BossWidth"] = 140,
 	["BossScale"] = 1,
-	["TargetCastBarWidth"] = 300,
+	["TargetCastBarWidth"] = 150,
 	["showparty"] = false,
 	["targetCBuserplaced"] = false,
 	["TargetAura"] = 1,
@@ -202,13 +202,13 @@ G["MoveHandleDB"] = {
 	["Class"] = {"CENTER", "UIParent", "CENTER", -150, 150},
 	--施法条
 	["PlayerCastbar"] = {"BOTTOM", "UIParent", "BOTTOM",0, 110},
-	["TargetCastbar"] = {"TOP", "UIParent", "TOP",0, -170},
+	["TargetCastbar"] = {"CENTER", "UIParent", "CENTER",0, -170},
 	["FocusCastbar"] = {"TOP", "oUF_SunUIFocus", "BOTTOM", 0, -20},
 	--内置CD 团队CD
 	["ClassCD"] = {"LEFT", "UIParent", "LEFT", 30, 240},
 	["RaidCD"] =  {"LEFT", "UIParent", "LEFT", 30, 0},
 	--冷却图标闪闪的
-	["CooldownFlash"] = {"CENTER", "UIParent", "CENTER", 0, 172},
+	["CooldownFlash"] = {"TOP", "UIParent", "TOP", 0, -95},
 	--鼠标提示
 	["Tooltip"] = {"BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -50, 160},
 	--仇恨监视

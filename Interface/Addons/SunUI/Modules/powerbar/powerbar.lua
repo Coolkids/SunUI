@@ -296,7 +296,7 @@ function Module:CreateEclipse()
 	local SPELL_POWER_ECLIPSE = SPELL_POWER_ECLIPSE
 	local MOONKIN_FORM = MOONKIN_FORM
 	local showBar = false
-	local eb = CreateFrame('Frame', nil, Holder)
+	eb = CreateFrame('Frame', nil, Holder)
 	eb:SetSize(C["Width"], C["Height"])
 	eb:SetPoint("CENTER", Holder)
 	eb:CreateShadow()

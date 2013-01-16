@@ -2,7 +2,7 @@ local eventcount = 0
 local a = CreateFrame("Frame") 
 a:RegisterAllEvents() 
 a:SetScript("OnEvent", function(self, event, ...) 
-	--if strfind(event, "QUEST") then
+	--if strfind(event, "CAST") then
 		--print(event)
 	--end
 	eventcount = eventcount + 1 

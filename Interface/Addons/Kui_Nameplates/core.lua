@@ -32,7 +32,7 @@ local defaults = {
 			fadespeed   = .5, -- fade animation speed modifier
 			fademouse   = false, -- fade in plates on mouse-over
 			fadeall     = false, -- fade all plates by default
-			fadedalpha  = .3, -- the alpha value to fade plates out to
+			fadedalpha  = .6, -- the alpha value to fade plates out to
 		},
 		tank = {
 			enabled    = false, -- recolour a plate's bar and glow colour when you have threat
