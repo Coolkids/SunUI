@@ -1,0 +1,16 @@
+## Interface: 50100
+## Author: Kesava
+## Title: |cff9900ffKui|r Nameplates
+## Notes: Prettier, lightweight, configurable nameplates.
+## SavedVariables: KuiNameplatesGDB
+
+lib\embeds.xml
+
+core.lua
+config.lua
+layout.lua
+
+castbar.lua
+castwarnings.lua
+
+custom.lua
