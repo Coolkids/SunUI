@@ -18,7 +18,7 @@ end)
 
 ---------------- > SetupUI
 SetCVar("screenshotQuality", 7)
-if GetCVar("scriptProfile") == "1" then SetCVar("scriptProfile", 0) end
+--if GetCVar("scriptProfile") == "1" then SetCVar("scriptProfile", 0) end
 
 ---------------- > ALT+RightClick to buy a stack
 hooksecurefunc("MerchantItemButton_OnModifiedClick", function(self, button)
@@ -168,6 +168,7 @@ function Module:OnInitialize()
 	if not SunUIConfig.db.profile.UnitFrameDB.showparty then
 		for i = 1, MAX_PARTY_MEMBERS do
 			local PartyMemberFrame = _G["PartyMemberFrame"..i]
+			PartyMemberFrame:ClearAllPoints()
 			PartyMemberFrame:UnregisterAllEvents()
 			PartyMemberFrame.Show = function() end
 			PartyMemberFrame.SetPoint = function() end

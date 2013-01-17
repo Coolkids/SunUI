@@ -57,6 +57,7 @@ local frames = {
   --["TicketStatusFrame"] = false,
 	["StaticPopup1"] = false,
 	["SStaticPopup1"] = false,
+	["RaidBrowserFrame"] = false,
   --["GhostFrame"] = false,
 	["EncounterJournal"] = false, -- only in 4.2
 	["RaidParentFrame"] = false,

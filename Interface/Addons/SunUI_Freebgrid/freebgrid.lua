@@ -332,12 +332,17 @@ function ns:UpdateBlizzardRaidFrame()
 	
 	if GetDisplayedAllyFrames() == "raid" then	
 		if ns.db.hideblzraid then
-			CompactRaidFrameManager:Kill()
-			CompactRaidFrameContainer:Kill()	
+				local frame = CompactRaidFrameManager
+				frame:UnregisterAllEvents()
+				frame.Show = function() end
+				frame:Hide()
+				frame = CompactRaidFrameContainer
+				frame:UnregisterAllEvents()
+				frame.Show = function() end
+				frame:Hide()
 		else
-			if not _G["CompactRaidFrameManager"]:IsEventRegistered("PARTY_MEMBERS_CHANGED") then		
-				_G["CompactRaidFrameManager"]:RegisterEvent("RAID_ROSTER_UPDATE")
-				_G["CompactRaidFrameManager"]:RegisterEvent("PARTY_MEMBERS_CHANGED")
+			if not _G["CompactRaidFrameManager"]:IsEventRegistered("GROUP_ROSTER_UPDATE") then		
+				_G["CompactRaidFrameManager"]:RegisterEvent("GROUP_ROSTER_UPDATE")
 				_G["CompactRaidFrameManager"]:RegisterEvent("UNIT_PET")
 			end
 			CompactRaidFrameManager_SetSetting("IsShown", true)
@@ -1331,16 +1336,23 @@ end
 function ns:UpdateHealthBarLayout(self)   --样式
 	local healthBar = self.HealthBar
 	local power = self.PowerBar
-    
+    local h = self.help4
     healthBar:SetOrientation(ns.db.orientation)
 	healthBar:SetStatusBarTexture(ns.db.texturePath)
 	if ns.db.mode then
 		
 		healthBar:SetStatusBarColor(0,0,0,0)
-		S.CreateBack(healthBar)
+		S.CreateBack(healthBar, nil, 0.3)
 		healthBar.bg:SetTexture(ns.db.texturePath)
-		healthBar.bd:SetAlpha(0.8)
-		S.CreateTop(healthBar.bg, DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b) --职业颜色背景
+		healthBar.bd:SetAlpha(1)
+		local spark =  h:CreateTexture(nil, "OVERLAY", 1)
+		spark:SetTexture("Interface\\Buttons\\WHITE8x8")
+		spark:SetVertexColor(0, 0, 0, 1)
+		spark:Width(1)
+		spark:Point("TOPLEFT", healthBar:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+		spark:Point("BOTTOMLEFT", healthBar:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
+		--S.CreateMark(healthBar)
+		--S.CreateTop(healthBar.bg, DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b) --职业颜色背景
 		--S.CreateTop(healthBar.bg, 228/255, 38/255, 141/255)  --紫色背景
 	else
 		healthBar.bg:SetTexture(ns.db.texturePath)
@@ -1386,7 +1398,7 @@ function ns:UpdateHealthColor(self)
 		end
 		if ns.db.mode then
 			healthBar:SetStatusBarColor(0,0,0,0)
-			S.CreateTop(healthBar.bg, DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
+			--S.CreateTop(healthBar.bg, DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
 		end
 		if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
 			if ns.db.definecolors then
@@ -1514,7 +1526,9 @@ function ns:UpdateHealPredictionBarLayout(self)
 		self.myHealPredictionBar:SetPoint("TOPLEFT", healthBar:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
 		self.myHealPredictionBar:SetPoint("BOTTOMLEFT", healthBar:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
 		self.myHealPredictionBar:SetWidth(ns.db.width)
-	end	
+		S.CreateMark(self.myHealPredictionBar)
+	end
+	
 	self.myHealPredictionBar:Hide()
 
 	self.otherHealPredictionBar = CreateFrame('StatusBar', nil, healthBar)
@@ -1529,6 +1543,7 @@ function ns:UpdateHealPredictionBarLayout(self)
 		self.otherHealPredictionBar:SetPoint("TOPLEFT", self.myHealPredictionBar:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
 		self.otherHealPredictionBar:SetPoint("BOTTOMLEFT", self.myHealPredictionBar:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
 		self.otherHealPredictionBar:SetWidth(ns.db.width)
+		S.CreateMark(self.otherHealPredictionBar)
 	end
 	self.otherHealPredictionBar:Hide() 
 	
