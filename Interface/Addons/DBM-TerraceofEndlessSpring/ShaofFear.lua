@@ -263,7 +263,9 @@ function mod:SPELL_AURA_APPLIED(args)
 			onPlatform = true
 			specWarnOminousCackleYou:Show()
 			timerBreathOfFearCD:Cancel()
-			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\telesoon.mp3")--準備傳送
+			if self:AntiSpam(2, 4) then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\telesoon.mp3")--準備傳送
+			end
 		elseif (not mod:IsDps()) and (not onPlatform) and self:AntiSpam(2, 4) then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\changemt.mp3")--換坦嘲諷
 		end

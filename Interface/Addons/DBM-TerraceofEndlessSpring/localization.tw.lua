@@ -23,8 +23,10 @@ L:SetOptionLocalization({
 	SetIconOnPrison		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(117436),
 	SoundDW				= "語音警告：$spell:117283的驅散",
 	SoundSDQ			= "語音警告：$spell:117436的驅散",
+	SoundWater			= "語音警告：$spell:117309時提示拉開BOSS(坦克)",
 	SoundWOP			= "語音警告：重要技能",
 	optDD4				= "使用四人打斷鏈(不選則前3人循環)",
+	opthelpDD			= "語音警告：當$spell:118077出現時提示你幫忙打斷第一次$spell:118312",
 	specWarnDDL 		= "特殊警告：下一次到你打斷",
 	optDD				= "水王打斷鏈",
 	nodd				= "我不打斷",
@@ -49,7 +51,8 @@ L:SetOptionLocalization({
 	warndr3				= "減傷提示：三階段水王30%血",
 	warndr2				= "減傷提示：三階段水王20%血",
 	warndr1				= "減傷提示：三階段水王10%血",
-	SpecWarnJSA			= "特別警告：注意開減傷"
+	SpecWarnJSA			= "特別警告：注意開減傷",
+	helpdispset			= "輸入一個重點關注的團員,當其被點名閃電牢籠時會提示你幫忙驅散"
 })
 
 

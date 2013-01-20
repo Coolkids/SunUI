@@ -272,3 +272,34 @@ L:SetOptionLocalization({
 	ShowGilneasEstimatedPoints = "显示战斗结束时双方资源统计",
 	ShowGilneasBasesToWin = "显示获胜需要占领的资源点"
 })
+
+
+-------------------------
+--  Silvershard Mines  --
+-------------------------
+L = DBM:GetModLocalization("SilvershardMines")
+
+L:SetGeneralLocalization({
+	name = "银屑矿坑"
+})
+
+L:SetMiscLocalization({
+	Capture = "已占据"
+})
+
+L:SetTimerLocalization({
+	TimerCart	= "矿车重置"
+})
+
+L:SetOptionLocalization({
+	TimerCart	= "计时器：矿车重置"
+})
+
+-------------------------
+--  Temple of Kotmogu  --
+-------------------------
+L = DBM:GetModLocalization("Kotmogu")
+
+L:SetGeneralLocalization({
+	name = "寇魔古寺"
+})

@@ -50,7 +50,7 @@ local specWarnRetreat			= mod:NewSpecialWarningSpell(125098)
 local specwarnAmberTrap			= mod:NewSpecialWarningSpell(125826, false)
 local specwarnStickyResin		= mod:NewSpecialWarningYou(124097)
 local yellStickyResin			= mod:NewYell(124097, nil, false)
-local specwarnFixate			= mod:NewSpecialWarningYou(125390, false)--Could be spammy, make optional, will use info frame to display this more constructively
+local specwarnFixate			= mod:NewSpecialWarningYou(125390)
 local specWarnDispatch			= mod:NewSpecialWarningInterrupt(124077, mod:IsMelee())
 local specWarnAdvance			= mod:NewSpecialWarningSpell(125304)
 local specwarnVisions			= mod:NewSpecialWarningYou(124862)
@@ -69,6 +69,7 @@ local timerEyes					= mod:NewTargetTimer(30, 123707, nil, mod:IsTank())
 local timerEyesCD				= mod:NewNextTimer(11, 123707, nil, mod:IsTank())
 local timerDissonanceFieldCD	= mod:NewNextCountTimer(65, 123255)
 local timerPhase1				= mod:NewNextTimer(156.4, 125304)--156.4 til ENGAGE fires and boss is out, 157.4 until "advance" fires though. But 156.4 is more accurate timer
+local timerDispatchCD			= mod:NewCDTimer(12, 124077)--Every 12-15 seconds on 25 man. on 10 man i've heard it's every 20ish?
 local timerPhase2				= mod:NewNextTimer(151, 125098)--152 until trigger, but probalby 150 or 151 til adds are targetable.
 local timerCalamityCD			= mod:NewCDTimer(6, 124845, nil, mod:IsHealer())
 local timerVisionsCD			= mod:NewCDTimer(19.5, 124862)
@@ -438,6 +439,11 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args.sourceGUID == UnitGUID("target") or args.sourceGUID == UnitGUID("focus") then--Only show warning for your own target.
 			specWarnDispatch:Show(args.sourceName)
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3")--快打斷
+		end
+		if self:IsDifficulty("normal25", "heroic25", "lfr25") then
+			timerDispatchCD:Start()--25 is about 12-15 variation
+		else
+			timerDispatchCD:Start(21)--Longer Cd on 10 man (21-24 variation)
 		end
 	elseif args:IsSpellID(123845) then
 		warnHeartOfFear:Show(args.destName)

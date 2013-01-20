@@ -1,6 +1,7 @@
-if select(4, GetBuildInfo()) < 50200 then return end--Don't load on live
+﻿if select(4, GetBuildInfo()) < 50200 then return end--Don't load on live
 local mod	= DBM:NewMod(826, "DBM-Pandaria", nil, 322)
 local L		= mod:GetLocalizedStrings()
+local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
 mod:SetRevision(("$Revision: 8525 $"):sub(12, -3))
 mod:SetCreatureID(69161)--Not yet available in PTR, CID not known
@@ -25,6 +26,7 @@ local warnFrillBlast			= mod:NewSpellAnnounce(137505, 4, mod:IsTank() or mod:IsH
 
 local specWarnCrush				= mod:NewSpecialWarningTarget(137504, mod:IsTank())--This should not go over 1 stack so don't need stack warning just a "taunt the boss" warning
 local specWarnFrillBlast		= mod:NewSpecialWarningSpell(137505, mod:IsTank())
+local specWarnPiercingRoar		= mod:NewSpecialWarningSpell(137457)
 
 local timerCrush				= mod:NewTargetTimer(60, 137504, nil, mod:IsTank() or mod:IsHealer())
 local timerCrushCD				= mod:NewCDTimer(32, 137504)
@@ -82,25 +84,36 @@ function mod:OnCombatEnd()
 end
 
 function mod:SPELL_CAST_START(args)
-	if args:IsSpellID(137457) then
+	if args:IsSpellID(137457) then --咆哮
 		warnPiercingRoar:Show()
 		timerPiercingRoarCD:Start()
-	elseif args:IsSpellID(137457) then
+		if mod:IsManaUser() and mod:IsRanged() then
+			DBM.Flash:Show(1, 0, 0)
+			specWarnPiercingRoar:Show()
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\stopcast.mp3") --停止施法
+		end
+	elseif args:IsSpellID(137505) then --衝擊
 		warnFrillBlast:Show()
 		specWarnFrillBlast:Show()
 		timerFrillBlastCD:Start()
+		if mod:IsTank() then
+			DBM.Flash:Show(1, 0, 0)
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop2_cjkd.mp3") --衝擊快躲(待錄)
+		else
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop2_cjzb.mp3") --衝擊準備(待錄)
+		end
 	end
 end
 
 function mod:SPELL_CAST_SUCCESS(args)
-	if args:IsSpellID(137511) then
+	if args:IsSpellID(137511) then  --眼棱
 		warnSpiritfireBeam:Show(args.destName)
 		timerSpiritfireBeamCD:Start()
 	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(137504) then
+	if args:IsSpellID(137504) then --破甲
 		if numberTanks == 0 then--We DCed and need to check again
 			findTanks()
 		end
@@ -109,6 +122,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerCrushCD:Start()
 		if not UnitDebuff("player", GetSpellInfo(137504)) and not UnitIsDeadOrGhost("player") then--We don't have debuff so we should taunt from other tank now. Likely this is a 3 or more tank scenario
 			specWarnCrush:Show(args.destName)
+			if mod:IsTank() then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\changemt.mp3") --換坦嘲諷
+			end
 		elseif numberTanks == 2 then--Only 2 tanks, you will always taunt at 1 stack, but drop that stack before it refreshes. You alternate and both just maintain 1 stack entire fight
 			specWarnCrush:Show(args.destName)
 		end

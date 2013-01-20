@@ -267,3 +267,33 @@ L:SetOptionLocalization({
 	ShowGilneasEstimatedPoints	= "顯示戰鬥結束時雙方資源預計值",
 	ShowGilneasBasesToWin		= "顯示勝利需要的基地數量"
 })
+
+-------------------------
+--  Silvershard Mines  --
+-------------------------
+L = DBM:GetModLocalization("SilvershardMines")
+
+L:SetGeneralLocalization({
+	name = "碎銀礦坑"
+})
+
+L:SetMiscLocalization({
+	Capture = "已佔據"
+})
+
+L:SetTimerLocalization({
+	TimerCart	= "礦車重置"
+})
+
+L:SetOptionLocalization({
+	TimerCart	= "顯示礦車重置計時器"
+})
+
+-------------------------
+--  Temple of Kotmogu  --
+-------------------------
+L = DBM:GetModLocalization("Kotmogu")
+
+L:SetGeneralLocalization({
+	name = "科特魔古神廟"
+})

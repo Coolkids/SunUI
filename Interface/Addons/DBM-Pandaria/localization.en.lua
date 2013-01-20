@@ -27,6 +27,7 @@ L:SetOptionLocalization({
 L= DBM:GetModLocalization(826)
 
 L:SetOptionLocalization({
+	SoundWOP 			= "voice warning: important skills",
 	RangeFrame			= "Show range frame for $spell:137511"
 })
 

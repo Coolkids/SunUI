@@ -27,7 +27,9 @@ L:SetOptionLocalization({
 	SoundDW				= "语音警告：$spell:117283的驱散",
 	SoundSDQ			= "语音警告：$spell:117436的驱散",
 	SoundWOP			= "语音警告：重要技能",
+	SoundWater			= "语音警告：$spell:117309时提示拉开BOSS(坦克)",
 	optDD4				= "使用四人打断链(不选则前3人循环)",
+	opthelpDD			= "语音警告：$spell:118077出现时提示您帮忙打断第一次$spell:118312",
 	specWarnDDL 		= "特殊警告：下一次到你打断",
 	optDD				= "水王打断链",
 	nodd				= "我不打断",
@@ -52,7 +54,8 @@ L:SetOptionLocalization({
 	warndr3				= "减伤提示：三阶段水王30%血",
 	warndr2				= "减伤提示：三阶段水王20%血",
 	warndr1				= "减伤提示：三阶段水王10%血",
-	SpecWarnJSA			= "特别警告：注意开减伤"
+	SpecWarnJSA			= "特别警告：注意开减伤",
+	helpdispset			= "输入一个重点关注的团员,当其被点名闪电牢笼时会提示你帮忙驱散"
 })
 
 

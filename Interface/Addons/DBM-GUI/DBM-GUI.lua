@@ -42,6 +42,7 @@
 
 local revision =("$Revision: 8539 $"):sub(12, -3)
 local FrameTitle = "DBM_GUI_Option_"	-- all GUI frames get automatically a name FrameTitle..ID
+local fixeditframe = false
 
 local PanelPrototype = {}
 DBM_GUI = {}
@@ -2289,6 +2290,7 @@ do
 					catpanel:AutoSetDimension()
 				elseif type(mod.Options[v]) == "boolean" then
 					lastButton = button
+					fixeditframe = false
 					button = catpanel:CreateCheckButton(mod.localization.options[v], true)
 					if addSpacer then
 						button:SetPoint("TOPLEFT", lastButton, "BOTTOMLEFT", 0, -6)
@@ -2326,11 +2328,21 @@ do
 					lastButton = button
 					button = catpanel:CreateEditBox(mod.localization.options[v], mod.Options[v], mod.editboxes[v])
 					button:SetMaxLetters(50)
-					if addSpacer then
-						button:SetPoint("TOPLEFT", lastButton, "BOTTOMLEFT", 30, -6)
-						addSpacer = false
+					if not fixeditframe then
+						if addSpacer then
+							button:SetPoint("TOPLEFT", lastButton, "BOTTOMLEFT", 30, -6)
+							addSpacer = false
+						else
+							button:SetPoint("TOPLEFT", lastButton, "BOTTOMLEFT", 30, -20)
+						end
+						fixeditframe = true
 					else
-						button:SetPoint("TOPLEFT", lastButton, "BOTTOMLEFT", 30, -20)
+						if addSpacer then
+							button:SetPoint("TOPLEFT", lastButton, "BOTTOMLEFT", 0, -6)
+							addSpacer = false
+						else
+							button:SetPoint("TOPLEFT", lastButton, "BOTTOMLEFT", 0, -20)
+						end
 					end
 					catpanel:AutoSetDimensionDD()
 					button:SetScript("OnShow",  function(self)

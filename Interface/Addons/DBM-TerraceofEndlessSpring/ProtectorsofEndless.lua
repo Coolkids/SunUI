@@ -50,6 +50,7 @@ local specWarnCleansingWatersDispel	= mod:NewSpecialWarningDispel(117309, isDisp
 local specWarnCorruptingWaters		= mod:NewSpecialWarningSwitch("ej5821", mod:IsDps())
 --Elder Regail
 local specWarnLightningPrison		= mod:NewSpecialWarningYou(111850)--Debuff you gain before you are hit with it.
+local specWarnLightningPrisonOther	= mod:NewSpecialWarningTarget(111850)
 local yellLightningPrison			= mod:NewYell(111850)
 local specWarnLPmove				= mod:NewSpecialWarningMove(111850)
 local specWarnLightningStorm		= mod:NewSpecialWarningSpell(118077, nil, nil, nil, true)--Since it's multiple targets, will just use spell instead of dispel warning.
@@ -104,15 +105,22 @@ local warnmobfour = {}
 local warnmobfive = {}
 local outgroup = false
 local olddata = 0
+local helpdisp = false
+
+local helpstop = false
 
 local senddr = {}
 local warneddr = {}
 
 mod:AddBoolOption("HudMAP", true, "sound")
 
+mod:AddBoolOption("SoundWater", mod:IsTank(), "sound")
+
 for i = 9, 1, -1 do
 	mod:AddBoolOption("warndr"..i, false, "sound")
 end
+
+mod:AddBoolOption("opthelpDD", false, "sound")
 
 mod:AddBoolOption("optDD4", false, "sound")
 
@@ -121,6 +129,8 @@ mod:AddDropdownOption("optDD", {"nodd", "DD1", "DD2", "DD3", "DD4"}, "nodd", "so
 mod:AddDropdownOption("optMob", {"Mob1", "Mob2", "Mob3", "Mob4", "Mob5", "noMob"}, "noMob", "sound")
 
 mod:AddEditBoxOption("optMobSet", 300, "52220,12220,12220,12220,11119", "sound")
+
+mod:AddEditBoxOption("helpdispset", 150, "", "sound")
 
 local function MyDR(msg)
 	if (msg == "dr90" and mod.Options.warndr9) or (msg == "dr80" and mod.Options.warndr8) or (msg == "dr70" and mod.Options.warndr7) or (msg == "dr60" and mod.Options.warndr6) or (msg == "dr50" and mod.Options.warndr5) or (msg == "dr40" and mod.Options.warndr4) or (msg == "dr30" and mod.Options.warndr3) or (msg == "dr20" and mod.Options.warndr2) or (msg == "dr10" and mod.Options.warndr1) then
@@ -154,6 +164,19 @@ local function warnPrisonTargets()
 			DBM.RangeCheck:Show(8, nil)
 		else--You do not have debuff, only show players who do
 			DBM.RangeCheck:Show(8, DebuffFilter)
+			if helpdisp then
+				local helpername = mod.Options.helpdispset
+				specWarnLightningPrisonOther:Show(helpername)
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\helpdispel.mp3")
+				sndWOP:Schedule(0.2, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+				sndWOP:Schedule(1.2, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+				sndWOP:Schedule(2.2, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+				helpdisp = false
+			else
+				sndSDQ:Schedule(0.2, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+				sndSDQ:Schedule(1.2, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+				sndSDQ:Schedule(2.2, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			end
 		end
 	end
 	warnLightningPrison:Show(table.concat(prisonTargets, "<, >"))
@@ -227,7 +250,7 @@ function mod:WatersTarget()
 			warnCleansingWaters:Show(targetname)
 			for i = 1, 3 do
 				if UnitName("boss"..i) == targetname then
-					if UnitName("boss"..i.."target") == UnitName("player") then--You are targeting the target of this spell.
+					if UnitDetailedThreatSituation("player", "boss"..i) and (self.Options.SoundWater) then--You are targeting the target of this spell.
 						specWarnCleansingWaters:Show(targetname)
 						sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\bossout.mp3") --拉開boss
 					else
@@ -251,6 +274,8 @@ function mod:OnCombatStart(delay)
 	corruptedCount = 0
 	watercount = 0
 	outgroup = false
+	helpdisp = false
+	helpstop = false
 	table.wipe(senddr)
 	table.wipe(warneddr)
 	table.wipe(prisonTargets)
@@ -302,6 +327,9 @@ function mod:SPELL_AURA_APPLIED(args)
 			end
 		end
 	elseif args:IsSpellID(111850) then--111850 is targeting debuff (NOT dispelable one)
+		if args.destName == mod.Options.helpdispset then		
+			helpdisp = true
+		end
 		prisonTargets[#prisonTargets + 1] = args.destName
 		prisonCount = prisonCount + 1
 		if args:IsPlayer() then
@@ -311,12 +339,6 @@ function mod:SPELL_AURA_APPLIED(args)
 			sndWOP:Schedule(0.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 			sndWOP:Schedule(2.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-		else
-			if self:AntiSpam(2, 1) then
-				sndSDQ:Schedule(0.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-				sndSDQ:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-				sndSDQ:Schedule(2.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-			end
 		end
 		if self.Options.HudMAP then
 			if args:IsPlayer() then
@@ -370,6 +392,10 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			if (args.amount or 1) >= 9 then
 				specWarnCorruptedEssence:Show(args.amount)
+				self:Schedule(1, function() DBM.Flash:Show(1, 0, 0) end)
+				self:Schedule(1.5, function() DBM.Flash:Show(0, 0, 1) end)
+				self:Schedule(2, function() DBM.Flash:Show(1, 0, 0) end)
+				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\mobenough.mp3") --能量已滿 遠離小怪
 			end
 		end
 	end
@@ -426,6 +452,7 @@ function mod:SPELL_CAST_START(args)
 		sndWOP:Schedule(4.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 		sndWOP:Schedule(7.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 		sndWOP:Schedule(10, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		helpstop = true
 		if phase == 3 then
 			timerLightningStormCD:Start(32)
 		else
@@ -444,13 +471,18 @@ function mod:SPELL_CAST_START(args)
 			end
 		else
 			if ((mod.Options.optDD == "DD1") and (watercount % 3 == 1)) or ((mod.Options.optDD == "DD2") and (watercount % 3 == 2)) or ((mod.Options.optDD == "DD3") and (watercount % 3 == 0)) then
-				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3") --快打斷
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3")
 				specWarnwarterDD:Show(args.sourceName)
 			end	
 			if ((mod.Options.optDD == "DD1") and (watercount % 3 == 0)) or ((mod.Options.optDD == "DD2") and (watercount % 3 == 1)) or ((mod.Options.optDD == "DD3") and (watercount % 3 == 2)) then
-				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ddzb.mp3") --打斷準備
+				sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ddzb.mp3")
 				specWarnDDL:Schedule(1)
 			end
+		end
+		if helpstop and self.Options.opthelpDD then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\helpkick.mp3")
+			specWarnwarterDD:Show(args.sourceName)
+			helpstop = false
 		end
 	end
 end

@@ -31,4 +31,6 @@
 	<Script file ="sMirrorBars.lua"/>
 	<Script file ="TradeTab.lua"/>
 	<Script file ="warn.lua"/>
+	
+	<Script file ="talenttaint.lua"/>
 </Ui>

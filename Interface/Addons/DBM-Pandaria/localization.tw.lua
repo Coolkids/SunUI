@@ -28,6 +28,7 @@ L:SetOptionLocalization({
 L= DBM:GetModLocalization(826)
 
 L:SetOptionLocalization({
+	SoundWOP			= "語音警告：重要技能",
 	RangeFrame			= "距離監視：$spell:137511"
 })
 

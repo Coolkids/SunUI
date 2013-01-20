@@ -4,7 +4,7 @@ local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndJR	= mod:NewSound(nil, "SoundJR", true)
 local sndDS	= mod:NewSound(nil, "SoundDS", true)
 
-mod:SetRevision(("$Revision: 8192 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8556 $"):sub(12, -3))
 mod:SetCreatureID(62397)
 mod:SetModelID(42645)
 mod:SetZone()
@@ -43,7 +43,7 @@ local warnImpalingSpear					= mod:NewPreWarnAnnounce(122224, 20, 3)--Pre warn yo
 local warnAmberPrison					= mod:NewTargetAnnounce(121881, 3)
 local warnCorrosiveResin				= mod:NewTargetAnnounce(122064, 3)
 local warnMending						= mod:NewCastAnnounce(122193, 4)
-local warnQuickening					= mod:NewCastAnnounce(122149, 4)
+local warnQuickening					= mod:NewCountAnnounce(122149, 4)--for Mass Dispel
 local warnKorthikStrike					= mod:NewTargetAnnounce(123963, 3)
 local warnWindBomb						= mod:NewTargetAnnounce(131830, 4)
 
@@ -58,7 +58,7 @@ local specWarnCorrosiveResin			= mod:NewSpecialWarningRun(122064)
 local yellCorrosiveResin				= mod:NewYell(122064, nil, false)
 local specWarnCorrosiveResinPool		= mod:NewSpecialWarningMove(122125)
 local specWarnMending					= mod:NewSpecialWarningInterrupt(122193)--Whoever is doing this or feels responsible should turn it on.
-local specWarnQuickening				= mod:NewSpecialWarningSpell(122149, false)--^^
+local specWarnQuickening				= mod:NewSpecialWarningTarget(122149, false)--^^
 local specWarnQuickeningX				= mod:NewSpecialWarning("specWarnQuickeningX")
 local specWarnBH						= mod:NewSpecialWarning("specWarnBH")
 local specWarnKorthikStrike				= mod:NewSpecialWarningYou(123963)
@@ -73,12 +73,12 @@ local timerRainOfBladesCD				= mod:NewNextTimer(61.5, 122406)--60 CD, but Cd sta
 local timerRecklessness					= mod:NewBuffActiveTimer(30, 125873)
 local timerReinforcementsCD				= mod:NewNextCountTimer(50, "ej6554")--EJ says it's 45 seconds after adds die but it's actually 50 in logs. EJ is not updated for current tuning.
 local timerImpalingSpear				= mod:NewTargetTimer(50, 122224)--Filtered to only show your own target, may change to a popup option later that lets you pick whether you show ALL of them or your own (all will be spammy)
-local timerAmberPrisonCD				= mod:NewNextTimer(36, 121876)--each add has their own CD. This is on by default since it concerns everyone.
-local timerCorrosiveResinCD				= mod:NewNextTimer(36, 122064)--^^
+local timerAmberPrisonCD				= mod:NewCDTimer(36, 121876, nil, false)--Reduce bar spam like Zarthik / each add has their own CD. This is on by default since it concerns everyone.
+local timerCorrosiveResinCD				= mod:NewCDTimer(36, 122064, nil, false)--^^
 local timerResidue						= mod:NewBuffFadesTimer(120, 122055)
-local timerMendingCD					= mod:NewNextTimer(36, 122193, nil, false)--To reduce bar spam, only those dealing with this should turn CD bar on, off by default
-local timerQuickeningCD					= mod:NewNextTimer(36, 122149, nil, false)--^^
-local timerKorthikStrikeCD				= mod:NewCDTimer(32, 123963)--^^
+local timerMendingCD					= mod:NewNextTimer(37, 122193, nil, false)--To reduce bar spam, only those dealing with this should turn CD bar on, off by default / 37~37.5 sec
+local timerQuickeningCD					= mod:NewNextTimer(37.3, 122149, nil, false)--^^37.3~37.6sec.
+local timerKorthikStrikeCD				= mod:NewCDTimer(50, 123963)--^^
 local timerWindBombCD					= mod:NewCDTimer(6, 131830)--^^
 
 local berserkTimer						= mod:NewBerserkTimer(480)
@@ -92,6 +92,8 @@ mod:AddBoolOption("InfoFrame", not mod:IsDps(), "sound")
 local apnear = 20
 local addsCount = 0
 local amberPrisonIcon = 2
+local zarthikCount = 0
+local firstStriked = false
 local strikeTarget = GetSpellInfo(123963)
 local strikeWarned = false
 local amberPrisonTargets = {}
@@ -101,6 +103,7 @@ local qscount = 0
 local cfcount = 0
 
 local windBombTargets = {}
+local zarthikGUIDS = {}
 local guids = {}
 local guidTableBuilt = false--Entirely for DCs, so we don't need to reset between pulls cause it doesn't effect building table on combat start and after a DC then it will be reset to false always
 local function buildGuidTable()
@@ -148,13 +151,16 @@ function mod:OnCombatStart(delay)
 	qscount = 0
 	cfcount = 0
 	amberPrisonIcon = 2
+	zarthikCount = 0
+	firstStriked = false
 	strikeWarned = false
 	ptwo = false
 	table.wipe(amberPrisonTargets)
 	table.wipe(windBombTargets)
+	table.wipe(zarthikGUIDS)
 	timerWhirlingBladeCD:Start(35.5-delay)
+	timerKorthikStrikeCD:Start(18-delay)
 	timerRainOfBladesCD:Start(60-delay)
-	timerKorthikStrikeCD:Start(19-delay)
 	if not self:IsDifficulty("lfr25") then
 		berserkTimer:Start(-delay)
 	end
@@ -277,17 +283,15 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerRecklessness:Start()
 		timerReinforcementsCD:Start(50, addsCount)--We count them cause some groups may elect to kill a 2nd group of adds and start a second bar to form before first ends.
 	elseif args:IsSpellID(122149) then
-		if self:AntiSpam(2, 6) then
-			qscount = qscount + 1
-			if ((mod.Options.optQS == "QS1") and (qscount % 3 == 1)) or ((mod.Options.optQS == "QS2") and (qscount % 3 == 2)) or ((mod.Options.optQS == "QS3") and (qscount % 3 == 0)) or (mod.Options.optQS == "allQS") then
-				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\dispelnow.mp3") --快驅散
-				specWarnQuickeningX:Show(args.spellName)
-			end
-		end
 		if args:GetDestCreatureID() == 62397 then
 			if mod.Options.InfoFrame then
 				DBM.InfoFrame:SetHeader(GetSpellInfo(122149))
 				DBM.InfoFrame:Show(1, "other", args.amount or 1, args.destName)
+			end
+			qscount = qscount + 1
+			if ((mod.Options.optQS == "QS1") and (qscount % 3 == 1)) or ((mod.Options.optQS == "QS2") and (qscount % 3 == 2)) or ((mod.Options.optQS == "QS3") and (qscount % 3 == 0)) or (mod.Options.optQS == "allQS") then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\dispelnow.mp3") --快驅散
+				specWarnQuickeningX:Show(args.spellName)
 			end
 		end
 	end
@@ -396,15 +400,19 @@ function mod:SPELL_CAST_START(args)
 		timerCorrosiveResinCD:Start(36, args.sourceGUID)
 	elseif args:IsSpellID(122193) then
 		warnMending:Show()
-		timerMendingCD:Start(36, args.sourceGUID)
+		timerMendingCD:Start(nil, args.sourceGUID)
 		if args.sourceGUID == UnitGUID("target") or args.sourceGUID == UnitGUID("focus") then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3")--快打斷
 			specWarnMending:Show(args.sourceName)
 		end
 	elseif args:IsSpellID(122149) then
-		warnQuickening:Show()
-		specWarnQuickening:Show(args.sourceName)
-		timerQuickeningCD:Start(36, args.sourceGUID)
+		if not zarthikGUIDS[args.sourceGUID] then
+			zarthikCount = zarthikCount + 1
+			zarthikGUIDS[args.sourceGUID] = zarthikCount
+		end
+		warnQuickening:Show(zarthikGUIDS[args.sourceGUID] or 0)--maybe better to warn when spell applied?
+		specWarnQuickening:Show("("..(zarthikGUIDS[args.sourceGUID] or 0)..") - "..args.sourceName)
+		timerQuickeningCD:Start(nil, args.sourceGUID)
 	end
 end
 
@@ -446,8 +454,13 @@ function mod:UNIT_DIED(args)
 	elseif cid == 62408 then--Zar'thik Battle-Mender
 		timerMendingCD:Cancel(args.destGUID)
 		timerQuickeningCD:Cancel(args.destGUID)
+		zarthikCount = 0
+		table.wipe(zarthikGUIDS)
 	elseif cid == 62402 then--The Kor'thik
 		timerKorthikStrikeCD:Cancel()--No need for GUID cancelation, this ability seems to be off a timed trigger and they all do it together, unlike other mob sets.
+		if self:IsDifficulty("heroic10", "heroic25") then
+			timerKorthikStrikeCD:Start(79)
+		end
 	end
 end
 
@@ -460,7 +473,12 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 --	"<175.6> [CLEU] SPELL_CAST_START#false#0xF130F3C200000FC8#Kor'thik Elite Blademaster#2632#0#0x0000000000000000#nil#-2147483648#-2147483648#122409#Kor'thik Strike#1", -- [10535]
 --	"<175.6> [CLEU] SPELL_CAST_START#false#0xF130F3C200000FC7#Kor'thik Elite Blademaster#2632#8#0x0000000000000000#nil#-2147483648#-2147483648#122409#Kor'thik Strike#1", -- [10536]
 	elseif spellId == 123963 and self:AntiSpam(2, 2) then--Kor'thik Strike Trigger, only triggered once, then all non CCed Kor'thik cast the strike about 2 sec later
-		timerKorthikStrikeCD:Start()
+		if firstStriked then--first Strike 32~33 sec cd. after 2nd strike 50~51 sec cd.
+			timerKorthikStrikeCD:Start()
+		else
+			firstStriked = true
+			timerKorthikStrikeCD:Start(32)
+		end
 	elseif spellId == 131813 and self:AntiSpam(2, 3) then
 		if not ptwo then
 			timerRainOfBladesCD:Cancel()
