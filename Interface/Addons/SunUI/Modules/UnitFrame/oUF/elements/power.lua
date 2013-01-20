@@ -200,7 +200,7 @@ local Enable = function(self, unit)
 		power.__owner = self
 		power.ForceUpdate = ForceUpdate
 
-		if(power.frequentUpdates and (unit == 'player' or unit == 'pet')) then
+		if(power.frequentUpdates and (unit == 'player' or unit == 'boss' or unit == 'target')) then
 			self:RegisterEvent('UNIT_POWER_FREQUENT', Path)
 		else
 			self:RegisterEvent('UNIT_POWER', Path)

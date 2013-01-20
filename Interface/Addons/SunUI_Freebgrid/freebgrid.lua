@@ -1526,7 +1526,7 @@ function ns:UpdateHealPredictionBarLayout(self)
 		self.myHealPredictionBar:SetPoint("TOPLEFT", healthBar:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
 		self.myHealPredictionBar:SetPoint("BOTTOMLEFT", healthBar:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
 		self.myHealPredictionBar:SetWidth(ns.db.width)
-		S.CreateMark(self.myHealPredictionBar)
+		--S.CreateMark(self.myHealPredictionBar)
 	end
 	
 	self.myHealPredictionBar:Hide()
@@ -1543,7 +1543,7 @@ function ns:UpdateHealPredictionBarLayout(self)
 		self.otherHealPredictionBar:SetPoint("TOPLEFT", self.myHealPredictionBar:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
 		self.otherHealPredictionBar:SetPoint("BOTTOMLEFT", self.myHealPredictionBar:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
 		self.otherHealPredictionBar:SetWidth(ns.db.width)
-		S.CreateMark(self.otherHealPredictionBar)
+		--S.CreateMark(self.otherHealPredictionBar)
 	end
 	self.otherHealPredictionBar:Hide() 
 	
@@ -1615,18 +1615,18 @@ function ns:UpdatePowerBar(self)
 	if ns.db.powerbar and (not ns.db.onlymana or (ptype == 'MANA' and ns.db.onlymana)) then 
 			power:Show()
 		if(ns.db.porientation == "VERTICAL")then
-			power:SetWidth(ns.db.width * ns.db.powerbarsize)
-			power:SetHeight(ns.db.height)
-			health:SetWidth((0.98 - ns.db.powerbarsize) * ns.db.width)
-			health:SetHeight(ns.db.height)
+			power:Width(ns.db.width * ns.db.powerbarsize)
+			power:Height(ns.db.height)
+			health:Width((0.98 - ns.db.powerbarsize) * ns.db.width)
+			health:Height(ns.db.height)
 		else
-			power:SetWidth(ns.db.width)
-			power:SetHeight(ns.db.height * ns.db.powerbarsize-2)
-			health:SetWidth(ns.db.width)
+			power:Width(ns.db.width)
+			power:Height(ns.db.height * ns.db.powerbarsize-2)
+			health:Width(ns.db.width)
 			if ns.db.mode then
-				health:SetHeight((0.98 - ns.db.powerbarsize) * ns.db.height)
+				health:Height((0.98 - ns.db.powerbarsize) * ns.db.height)
 			else
-				health:SetHeight((0.98 - ns.db.powerbarsize) * ns.db.height+1)
+				health:Height((1 - ns.db.powerbarsize) * ns.db.height)
 			end
 		end
 
@@ -1655,8 +1655,8 @@ function ns:UpdatePowerBar(self)
 		end	
 	else
 		power:Hide()
-		health:SetHeight(ns.db.height-3)
-        health:SetWidth(ns.db.width)
+		health:Height(ns.db.height-2)
+        health:Width(ns.db.width)
 	end
 end
 
@@ -1968,6 +1968,19 @@ function ns:UpdateIndicatorTimer(self, elapsed)
 			if tbl[k].count then
 				local timeLeft = tbl[k].ex - GetTime()
 				text = tostring(tbl[k].count)
+				if (DB.MyClass == "DRUID" and k == "BR") then
+					if text == "1" then text = "|cffFF00004|r"
+					elseif text == "2" then text = "|cffFF99002|r"
+					elseif text == "3" then text = "|cffA7FD0A3|r"
+					end
+				elseif (DB.MyClass == "PALADIN" and k == "BR") then
+					if text == "1" then text = "|cffFFCC003|r" end
+				elseif (DB.MyClass == "WARLOCK" and k == "BR") then
+					if text == "1" then text = "|cffFFCC005|r" end
+				elseif (DB.MyClass == "SHAMAN" and k == "BR") then
+					local earthCount = {'i','h','g','f','p','q','Z','Z','Y'}
+					if text then text=tonumber(text) text = '|cffFFCF7F'..earthCount[text]..'|r' end 
+				end
 				if timeLeft <= 5 then
 					text = ns:hex(1, 0, 0)..text.."|r"
 				end
@@ -2053,7 +2066,10 @@ function ns:UpdateIndicators(self)
 									self.Indicators[k].expires = expires	
 								end
 							elseif not v.lack then
-								text = text..ns:hex(r, g, b)..i.."|r"
+								if (DB.MyClass == "WARLOCK") then
+									if i == "1" then text = ns:hex(r, g, b).."5|r" end
+								end
+								--text = text..ns:hex(r, g, b)..i.."|r"
 							end
 						end
 					end

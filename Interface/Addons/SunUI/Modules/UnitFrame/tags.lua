@@ -138,7 +138,7 @@ oUF.Tags.Methods['sunui:pp'] = function(u)
 		if str == "MANA" then 
 			return hex(pcolors.power[str] or {250/255,  75/255,  60/255})..per
 		else
-			return hex(pcolors.power[str] or {250/255,  75/255,  60/255})..SVal(UnitPower(u))
+			return hex(pcolors.power[str] or {250/255,  75/255,  60/255})..SVal(oUF.Tags.Methods['curpp'](u))
 		end
 	end
 end

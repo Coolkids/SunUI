@@ -1850,7 +1850,7 @@ function SunUIConfig.GenerateOptionsInternal()
 						args = {
 							ROPEnable = {
 								type = "toggle",
-								name = "Enable SpiritShell Watch",
+								name = "Enable RuneOfPower Watch",
 								order = 1,
 								set = function(info, value) 
 									db.ClassToolsDB.ROPEnable = value 

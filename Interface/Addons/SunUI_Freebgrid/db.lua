@@ -384,7 +384,7 @@ local Indicators_class_default = {
 				isbuff	= true,
 			},
 		},
-	["RC"] = {},
+		["RC"] = {},
         ["BR"] = {},
         ["Cen"] = {
 			["1"] = {

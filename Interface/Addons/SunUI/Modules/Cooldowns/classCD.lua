@@ -1562,7 +1562,7 @@ local CreateBar = function()
 		bar:SetSize(C["ClassCDWidth"], C["ClassCDHeight"])
 		bar:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
 		bar:SetMinMaxValues(0, 100)
-
+		--S.SmoothBar(bar)
 		S.CreateBack(bar)
 		S.CreateMark(bar)
 

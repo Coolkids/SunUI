@@ -3,52 +3,66 @@ if DB.MyClass ~= "MAGE" then return end
 local ROP = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("RuneOfPower", "AceEvent-3.0")
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local spellid = 116011
-local index = 1
-local button1 = CreateFrame("Button", nil, UIParent)
-button1:SetNormalTexture(GetSpellTexture(spellid))
-button1:GetNormalTexture():SetTexCoord(0.1, 0.9, 0.1, 0.9)
-button1.cooldown = CreateFrame("Cooldown", nil, button1)
-button1.cooldown:SetAllPoints()
-button1.cooldown:SetReverse(true)
-button1:CreateShadow("Background")
-button1:Hide()
+local index, num = 1, 0
+local Holder = CreateFrame("Frame", nil, UIParent)
+local buttons = {}
 
-local button2 = CreateFrame("Button", nil, UIParent)
-button2:SetPoint("LEFT", button1, "RIGHT", 5, 0)
-button2:SetNormalTexture(GetSpellTexture(spellid))
-button2:GetNormalTexture():SetTexCoord(0.1, 0.9, 0.1, 0.9)
-button2.cooldown = CreateFrame("Cooldown", nil, button2)
-button2.cooldown:SetAllPoints()
-button2.cooldown:SetReverse(true)
-button2:CreateShadow("Background")
-button2:Hide()
 
-local function StopTimer(button)
+function ROP:StopTimer(button)
+	--print("Stop")
+	button:SetScript("OnUpdate", nil)
+	tremove(buttons, button.id)
 	button:Hide()
+	button = nil
+	self:UpdatePoint()
 end
-
 local function BarUpdate(self, elapsed)
 	local curTime = GetTime()
 	if self.endtime < curTime then
-		StopTimer(self)
+		ROP:StopTimer(self)
 		return
 	end
 end
+function ROP:UpdatePoint()
+	if #buttons > 2 then 
+		self:StopTimer(buttons[1])
+	end
+	for i = 1, #buttons do
+		buttons[i]:ClearAllPoints()
+		if i == 1 then
+			buttons[i]:SetPoint("CENTER", Holder)
+		else
+			buttons[i]:SetPoint("LEFT", buttons[i-1], "RIGHT", 5, 0)
+		end
+		buttons[i].id = i
+	end
+end
+
+local OnMouseDown = function(self, button)
+	if button == "RightButton" then
+		ROP:StopTimer(self)
+	end
+end
+local function CreateButton()
+	local button = CreateFrame("Button", nil, UIParent)
+	button:SetSize(C["ROPSize"], C["ROPSize"])
+	button:SetNormalTexture(GetSpellTexture(spellid))
+	button:GetNormalTexture():SetTexCoord(0.1, 0.9, 0.1, 0.9)
+	button.cooldown = CreateFrame("Cooldown", nil, button)
+	button.cooldown:SetAllPoints()
+	button.cooldown:SetReverse(true)
+	button:CreateShadow()
+	return button
+end
 
 local function StartTime()
-	if index == 1 then
-		button1.endtime = GetTime() + 60
-		button1:Show()
-		CooldownFrame_SetTimer(button1.cooldown, GetTime(), 60, 1)
-		button1:SetScript("OnUpdate", BarUpdate)
-		index = index +1
-	else
-		button2.endtime = GetTime() + 60
-		button2:Show()
-		CooldownFrame_SetTimer(button2.cooldown, GetTime(), 60, 1)
-		button2:SetScript("OnUpdate", BarUpdate)
-		index = 1
-	end
+	local button = CreateButton()
+	button.endtime = GetTime() + 60
+	CooldownFrame_SetTimer(button.cooldown, GetTime(), 60, 1)
+	button:SetScript("OnUpdate", BarUpdate)
+	button:SetScript("OnMouseDown", OnMouseDown)
+	tinsert(buttons, button)
+	ROP:UpdatePoint()
 end
 
 function ROP:COMBAT_LOG_EVENT_UNFILTERED(times, temp, event, ...)
@@ -59,12 +73,13 @@ function ROP:COMBAT_LOG_EVENT_UNFILTERED(times, temp, event, ...)
 	end
 end
 function ROP:UpdateSize()
-	button1:SetSize(C["ROPSize"], C["ROPSize"])
-	button2:SetSize(C["ROPSize"], C["ROPSize"])
+	Holder:SetSize(C["ROPSize"], C["ROPSize"])
+	for i = 1, #buttons do
+		buttons[i]:SetSize(C["ROPSize"], C["ROPSize"])
+	end
 end
 function ROP:UpdateSet()
 	if C["ROPEnable"] then
-		self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 		self:RegisterEvent("PLAYER_TALENT_UPDATE")
 	else
 		button1:Hide()
@@ -91,5 +106,5 @@ function ROP:OnInitialize()
 	C = SunUIConfig.db.profile.ClassToolsDB
 	self:UpdateSize()
 	self:UpdateSet()
-	MoveHandle.ROP = S.MakeMoveHandle(button1, select(1, GetSpellInfo(spellid)), "RuneOfPower")
+	MoveHandle.ROP = S.MakeMoveHandle(Holder, select(1, GetSpellInfo(spellid)), "RuneOfPower")
 end

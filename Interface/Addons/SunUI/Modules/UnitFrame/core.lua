@@ -268,7 +268,7 @@ local function gen_hpstrings(f, unit)
     end
     f:Tag(f.taginfo, '[sunui:info]')
 	f.tagpp.frequentUpdates = 0.3 -- test it!!1
- 
+	
 	if U["TagFadeIn"] then
 		local list = {f.tagname,f.taghp,f.tagpp,f.taginfo}
 		local Event = CreateFrame("Frame")
@@ -347,7 +347,7 @@ local function gen_castbar(f)
     s:Size(f.width-(f.height/1.5+4),f.height/1.5)
     s:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
     s:SetStatusBarColor(.3, .45, .65,1)
-    s:SetFrameLevel(9)
+    s:SetFrameLevel(11)
     --color
     s.CastingColor = {.3, .45, .65}
     s.CompleteColor = {0.12, 0.86, 0.15}
@@ -394,7 +394,6 @@ local function gen_castbar(f)
     if f.mystyle == "focus" and not U["focusCBuserplaced"] then
 		s:Size(U["FocusCastBarWidth"],U["FocusCastBarHeight"])
 		MoveHandle.Castbarfouce = S.MakeMoveHandle(s, L["焦点施法条"], "FocusCastbar")
-		i:SetPoint("RIGHT", s, "LEFT", 0, 0)
 		--sp:SetHeight(s:GetHeight()*2.5)
     elseif f.mystyle == "pet" or f.mystyle == "boss" then
 		s:SetAllPoints(f.Health)
@@ -450,6 +449,7 @@ local function gen_castbar(f)
 		i:Size(s:GetHeight(),s:GetHeight())
 	else
 		s:SetPoint("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
+		i:SetPoint("RIGHT", s, "LEFT", -3, 0)
     end
 	local sbg =  s:GetStatusBarTexture()
 	s.bd = sbg
@@ -466,6 +466,30 @@ local function gen_castbar(f)
     f.Castbar.Time = t
     f.Castbar.Icon = i
     f.Castbar.Spark = sp
+	if ((f.mystyle == "target" and U["targetCBuserplaced"]) or (f.mystyle == "player" and U["playerCBuserplaced"])) then
+		s:HookScript("OnShow", function()
+			if f.mystyle == "player" then
+				f.tagpp:Hide()
+				f.taghp:Hide()
+			elseif f.mystyle == "target" then
+				f.taghp:Hide()
+				f.tagpp:Hide()
+				f.taginfo:Hide()
+				f.tagname:Hide()
+			end
+		end)
+		s:HookScript("OnHide", function()
+			if f.mystyle == "player" then
+				f.tagpp:Show()
+				f.taghp:Show()
+			elseif f.mystyle == "target" then
+				f.taghp:Show()
+				f.tagpp:Show()
+				f.taginfo:Show()
+				f.tagname:Show()
+			end
+		end)
+	end
 end
 
 local function FormatTime(s)
@@ -1214,6 +1238,7 @@ local function gen_alt_powerbar(f)
 	apb:SetStatusBarColor(1, 1, 0)
 	apb:Point("TOP", headframe, "BOTTOM", 0, -4)
 	apb:CreateShadow()
+	S.CreateMark(apb)
 	S.CreateBack(apb)
 	S.SmoothBar(apb)
 	f.AltPowerBar = apb
