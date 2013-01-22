@@ -56,7 +56,7 @@ function Module:BuildExpBar()
 	ExpBar:SetScript("OnEnter", function(self)
 		if InCombatLockdown() then return end
 		if C["ExpbarFadeOut"] then
-			UIFrameFadeIn(self, 1, self:GetAlpha(), 1)
+			UIFrameFadeIn(self, 0.5, self:GetAlpha(), 1)
 		end
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 		GameTooltip:ClearLines()
@@ -73,7 +73,7 @@ function Module:BuildExpBar()
 	ExpBar:SetScript("OnLeave",function(self)
 		if InCombatLockdown() then return end
 		if C["ExpbarFadeOut"] then
-			UIFrameFadeOut(self, 1, self:GetAlpha(), 0)
+			UIFrameFadeOut(self, 0.5, self:GetAlpha(), 0)
 		end
 		GameTooltip:Hide()
 	end)

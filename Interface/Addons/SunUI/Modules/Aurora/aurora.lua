@@ -200,7 +200,7 @@ local function SkinBlz(event, addon)
 		S.SetBD(PVPBannerFrame)
 		S.SetBD(RaidParentFrame)
 
-		local FrameBDs = {"StaticPopup1", "StaticPopup2", "GameMenuFrame", "InterfaceOptionsFrame", "VideoOptionsFrame", "AudioOptionsFrame", "LFGDungeonReadyStatus", "ChatConfigFrame", "StackSplitFrame", "AddFriendFrame", "FriendsFriendsFrame", "ColorPickerFrame", "ReadyCheckFrame", "LFDRoleCheckPopup", "LFGDungeonReadyDialog", "RolePollPopup", "GuildInviteFrame", "ChannelFrameDaughterFrame", "LFGInvitePopup"}
+		local FrameBDs = {"StaticPopup1", "StaticPopup2", "StaticPopup3", "StaticPopup4", "GameMenuFrame", "InterfaceOptionsFrame", "VideoOptionsFrame", "AudioOptionsFrame", "LFGDungeonReadyStatus", "ChatConfigFrame", "StackSplitFrame", "AddFriendFrame", "FriendsFriendsFrame", "ColorPickerFrame", "ReadyCheckFrame", "LFDRoleCheckPopup", "LFGDungeonReadyDialog", "RolePollPopup", "GuildInviteFrame", "ChannelFrameDaughterFrame", "LFGInvitePopup"}
 		for i = 1, #FrameBDs do
 			FrameBD = _G[FrameBDs[i]]
 			S.CreateBD(FrameBD)
@@ -1820,7 +1820,7 @@ local function SkinBlz(event, addon)
 
 		-- StaticPopup
 
-		for i = 1, 2 do
+		for i = 1, 4 do
 			local bu = _G["StaticPopup"..i.."ItemFrame"]
 			_G["StaticPopup"..i.."ItemFrameNameFrame"]:Hide()
 			_G["StaticPopup"..i.."ItemFrameIconTexture"]:SetTexCoord(.08, .92, .08, .92)
@@ -3318,7 +3318,7 @@ local function SkinBlz(event, addon)
 
 		-- [[ Buttons ]]
 
-		for i = 1, 2 do
+		for i = 1, 4 do
 			for j = 1, 3 do
 				S.Reskin(_G["StaticPopup"..i.."Button"..j])
 			end

@@ -653,7 +653,7 @@ local function unitFrameStyleSetup(button)
     local Border = CreateFrame("Frame", nil, button)
     Border:SetPoint("TOPLEFT", button, "TOPLEFT")
     Border:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT")
-    Border:SetFrameLevel(button.BG:GetFrameLevel() - 1)
+    Border:SetFrameLevel(4)
 	S.CreateBD(Border, 0)
 	button.Border = Border
 
@@ -666,7 +666,9 @@ local function unitFrameStyleSetup(button)
     Health.bg:SetAllPoints(Health.bd)
 	button.HealthBar = Health
 	button.HealthBar.bd = Health.bd
-	
+	if ns.db.mode then
+		S.CreateBack(Health, nil, 0.3)
+	end
 	local help = CreateFrame("Frame", nil, button)
 	help:SetParent(button)
 	help:SetAllPoints(Health)
@@ -1340,17 +1342,9 @@ function ns:UpdateHealthBarLayout(self)   --样式
     healthBar:SetOrientation(ns.db.orientation)
 	healthBar:SetStatusBarTexture(ns.db.texturePath)
 	if ns.db.mode then
-		
 		healthBar:SetStatusBarColor(0,0,0,0)
-		S.CreateBack(healthBar, nil, 0.3)
 		healthBar.bg:SetTexture(ns.db.texturePath)
 		healthBar.bd:SetAlpha(1)
-		local spark =  h:CreateTexture(nil, "OVERLAY", 1)
-		spark:SetTexture("Interface\\Buttons\\WHITE8x8")
-		spark:SetVertexColor(0, 0, 0, 1)
-		spark:Width(1)
-		spark:Point("TOPLEFT", healthBar:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
-		spark:Point("BOTTOMLEFT", healthBar:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
 		--S.CreateMark(healthBar)
 		--S.CreateTop(healthBar.bg, DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b) --职业颜色背景
 		--S.CreateTop(healthBar.bg, 228/255, 38/255, 141/255)  --紫色背景
@@ -1398,7 +1392,7 @@ function ns:UpdateHealthColor(self)
 		end
 		if ns.db.mode then
 			healthBar:SetStatusBarColor(0,0,0,0)
-			--S.CreateTop(healthBar.bg, DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
+			S.CreateTop(healthBar.bg, DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
 		end
 		if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
 			if ns.db.definecolors then
@@ -1615,18 +1609,18 @@ function ns:UpdatePowerBar(self)
 	if ns.db.powerbar and (not ns.db.onlymana or (ptype == 'MANA' and ns.db.onlymana)) then 
 			power:Show()
 		if(ns.db.porientation == "VERTICAL")then
-			power:Width(ns.db.width * ns.db.powerbarsize)
-			power:Height(ns.db.height)
-			health:Width((0.98 - ns.db.powerbarsize) * ns.db.width)
-			health:Height(ns.db.height)
+			power:SetWidth(ns.db.width * ns.db.powerbarsize)
+			power:SetHeight(ns.db.height)
+			health:SetWidth((0.98 - ns.db.powerbarsize) * ns.db.width)
+			health:SetHeight(ns.db.height)
 		else
-			power:Width(ns.db.width)
-			power:Height(ns.db.height * ns.db.powerbarsize-2)
-			health:Width(ns.db.width)
+			power:SetWidth(ns.db.width)
+			power:SetHeight(ns.db.height * ns.db.powerbarsize-2)
+			health:SetWidth(ns.db.width)
 			if ns.db.mode then
-				health:Height((0.98 - ns.db.powerbarsize) * ns.db.height)
+				health:SetHeight((0.98 - ns.db.powerbarsize) * ns.db.height)
 			else
-				health:Height((1 - ns.db.powerbarsize) * ns.db.height)
+				health:SetHeight((1 - ns.db.powerbarsize) * ns.db.height)
 			end
 		end
 
@@ -1655,8 +1649,8 @@ function ns:UpdatePowerBar(self)
 		end	
 	else
 		power:Hide()
-		health:Height(ns.db.height-2)
-        health:Width(ns.db.width)
+		health:SetHeight(ns.db.height-2)
+        health:SetWidth(ns.db.width)
 	end
 end
 
@@ -1979,7 +1973,10 @@ function ns:UpdateIndicatorTimer(self, elapsed)
 					if text == "1" then text = "|cffFFCC005|r" end
 				elseif (DB.MyClass == "SHAMAN" and k == "BR") then
 					local earthCount = {'i','h','g','f','p','q','Z','Z','Y'}
-					if text then text=tonumber(text) text = '|cffFFCF7F'..earthCount[text]..'|r' end 
+					if text then text=tonumber(text) text = '|cffFFCF7F'..earthCount[text]..'|r' end
+				elseif (DB.MyClass == "PRIEST" and k == "BR") then
+					local pomCount = {[1] = 'i',[2] = 'h',[3] = 'g',[4] = 'f',[5] = 'Z',[6] = 'Y',}
+					if text then text=tonumber(text) text = "|cff66FFFF"..pomCount[text].."|r" end 
 				end
 				if timeLeft <= 5 then
 					text = ns:hex(1, 0, 0)..text.."|r"

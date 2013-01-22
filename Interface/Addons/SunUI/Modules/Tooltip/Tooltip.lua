@@ -144,7 +144,7 @@ local function On_OnTooltipSetUnit(self)
 			end
 			for i=2, GameTooltip:NumLines() do
 				if _G["GameTooltipTextLeft" .. i]:GetText():find(PLAYER) then
-					_G["GameTooltipTextLeft" .. i]:SetText(string.format(hex(diffColor.r, diffColor.g, diffColor.b).."%s|r ", unitLevel) .. unitRace .. " ".. unitClass)
+					_G["GameTooltipTextLeft" .. i]:SetText(string.format(hex(diffColor.r, diffColor.g, diffColor.b).."%s|r ", unitLevel) .. unitRace .. " "..hex(unpack({GameTooltip_UnitColor(unit)}))..unitClass.."|r")
 					break
 				end
 			end
