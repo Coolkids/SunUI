@@ -122,9 +122,9 @@ oUF.Tags.Methods['sunui:hp']  = function(u) -- THIS IS FUCKING MADNESS!!!
 	else
 		local per = oUF.Tags.Methods['perhp'](u)
 		if per < 25 then
-			return "|cffe15f8b"..SVal(oUF.Tags.Methods['curhp'](u)).."|r"
+			return "|cffe15f8b"..SVal(oUF.Tags.Methods['curhp'](u)).."|r".."-"..oUF.Tags.Methods['perhp'](u).."%"
 		else
-			return SVal(oUF.Tags.Methods['curhp'](u))
+			return SVal(oUF.Tags.Methods['curhp'](u)).."-"..oUF.Tags.Methods['perhp'](u).."%"
 		end
 	end
 end

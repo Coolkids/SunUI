@@ -228,7 +228,7 @@ local function gen_hpstrings(f, unit)
 	
 	if f.mystyle == "player" then
 		f.tagpp:SetPoint("TOPLEFT", f.Health, "BOTTOMLEFT", 0, -8)
-		f.taghp:SetPoint("LEFT", f.tagpp, "RIGHT", 3, 0)
+		f.taghp:SetPoint("LEFT", f.Health, "LEFT", 3, 0)
 		f.taginfo:Hide()
 		f.tagname:Hide()
 	elseif f.mystyle == "target" or f.mystyle == "arena" or f.mystyle == "boss" or f.mystyle == "party" then
@@ -257,7 +257,7 @@ local function gen_hpstrings(f, unit)
 		f:Tag(f.tagname, '[sunui:color][sunui:longname]')
 	end
 	if f.mystyle == "target" or f.mystyle == "player" or f.mystyle == "party" or f.mystyle == "arena" then
-		f:Tag(f.taghp, '[sunui:hp]'.."-"..'[perhp]'.."%")
+		f:Tag(f.taghp, '[sunui:hp]')
 	else
 		f:Tag(f.taghp, '[perhp]'.."%")
 	end
