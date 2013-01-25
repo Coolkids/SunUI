@@ -61,9 +61,34 @@ L:SetOptionLocalization({
 ------------
 L= DBM:GetModLocalization(742)
 
+L:SetWarningLocalization({
+	SpecWarnJSA				= ">>> 第%d波小怪  注意減傷 <<<"
+})
+
 L:SetOptionLocalization({
 	SoundWOP					= "語音警告：重要技能",
+	SoundGH						= "語音警告：$journal:6551刷新及計數",
+	SoundHX						= "語音警告：為$spell:122752倒數",
+	SoundMY						= "語音警告：為$spell:122770倒數(若開啟此項,建議關閉暗影之息倒數)",
 	WarnJK						= "語音警告：$spell:123011的預先警告",
+	SpecWarnJSA					= "特別警告：注意開減傷",
+	unseenjs1					= "減傷提示：$journal:6320 1",
+	unseenjs2					= "減傷提示：$journal:6320 2",
+	unseenjs3					= "減傷提示：$journal:6320 3",
+	unseenjs4					= "減傷提示：$journal:6320 4",
+	unseenjs5					= "減傷提示：$journal:6320 5",
+	unseenjs6					= "減傷提示：$journal:6320 6",
+	lod1						= "吃球額外提示：$journal:6551 1",
+	lod2						= "吃球額外提示：$journal:6551 2",
+	lod3						= "吃球額外提示：$journal:6551 3",
+	lod4						= "吃球額外提示：$journal:6551 4",
+	lod5						= "吃球額外提示：$journal:6551 5",
+	lod6						= "吃球額外提示：$journal:6551 6",
+	lod7						= "吃球額外提示：$journal:6551 7",
+	lod8						= "吃球額外提示：$journal:6551 8",
+	lod9						= "吃球額外提示：$journal:6551 9",
+	lod10						= "吃球額外提示：$journal:6551 10",
+	lod11						= "吃球額外提示：$journal:6551 11",
 	HudMAP						= "高級定位監視(HUD)：$spell:122770的位置(僅10人)",
 	optDS						= "\"恐怖陰影\"疊加幾層時，開始報警",
 	six							= "6層",
@@ -71,6 +96,11 @@ L:SetOptionLocalization({
 	twelve						= "12層",
 	fifteen						= "15層",
 	none						= "不報警",
+	optTS						= "神牧天使警告",
+	TS1							= "第一次火息",
+	TS2							= "第二次火息",
+	TS3							= "第三次火息",
+	noms						= "不提示",
 })
 
 L:SetMiscLocalization{

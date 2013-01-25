@@ -98,77 +98,34 @@ function S.ShortValue(v)
 		return v
 	end
 end
-local roles = {
-	["PALADIN"] = {
-		[1] = "Caster",
-		[2] = "Tank",
-		[3] = "Melee",
-	},
-	["PRIEST"] = {
-		[1] = "Caster",
-		[2] = "Caster",
-		[3] = "Caster",
-	},
-	["WARLOCK"] = {
-		[1] = "Caster",
-		[2] = "Caster",
-		[3] = "Caster",
-	},
-	["WARRIOR"] = {
-		[1] = "Melee",
-		[2] = "Melee",
-		[3] = "Tank",	
-	},
-	["HUNTER"] = {
-		[1] = "Melee",
-		[2] = "Melee",
-		[3] = "Melee",
-	},
-	["SHAMAN"] = {
-		[1] = "Caster",
-		[2] = "Melee",
-		[3] = "Caster",	
-	},
-	["ROGUE"] = {
-		[1] = "Melee",
-		[2] = "Melee",
-		[3] = "Melee",
-	},
-	["MAGE"] = {
-		[1] = "Caster",
-		[2] = "Caster",
-		[3] = "Caster",
-	},
-	["DEATHKNIGHT"] = {
-		[1] = "Tank",
-		[2] = "Melee",
-		[3] = "Melee",	
-	},
-	["DRUID"] = {
-		[1] = "Caster",
-		[2] = "Melee",
-		[3] = "Tank",	
-		[4] = "Caster"
-	},
-	["MONK"] = {
-		[1] = "Tank",
-		[2] = "Caster",
-		[3] = "Melee",	
-	},
-}
-RoleUpdater = CreateFrame("Frame")
 local function CheckRole(self, event, unit)
 	local tree = GetSpecialization()
-	DB.Role = roles[DB.MyClass][tree]
-end	
+	local role = tree and select(6, GetSpecializationInfo(tree))
+
+	if role == "TANK" then
+		DB.Role = "Tank"
+	elseif role == "HEALER" then
+		DB.Role = "Healer"
+	elseif role == "DAMAGER" then
+		local playerint = select(2, UnitStat("player", 4))
+		local playeragi = select(2, UnitStat("player", 2))
+		local base, posBuff, negBuff = UnitAttackPower("player")
+		local playerap = base + posBuff + negBuff
+
+		if (playerap > playerint) or (playeragi > playerint) then
+			DB.Role = "Melee"
+		else
+			DB.Role = "Caster"
+		end
+	end
+end
+local RoleUpdater = CreateFrame("Frame")
 RoleUpdater:RegisterEvent("PLAYER_ENTERING_WORLD")
 RoleUpdater:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 RoleUpdater:RegisterEvent("PLAYER_TALENT_UPDATE")
-RoleUpdater:RegisterEvent("CHARACTER_POINTS_CHANGED")
 RoleUpdater:RegisterEvent("UNIT_INVENTORY_CHANGED")
 RoleUpdater:RegisterEvent("UPDATE_BONUS_ACTIONBAR")
 RoleUpdater:SetScript("OnEvent", CheckRole)
-CheckRole()
 
 function S.MakeMoveHandle(Frame, Text, key)
 	local MoveHandle = CreateFrame("Frame", nil, UIParent)
@@ -303,7 +260,7 @@ function S.FadeOutFrameDamage(p, t, show)  --隐藏
 	end 
 end
 
-function S.CreateBack(f, orientation, a)
+function S.CreateBack(f, orientation, a, b)
 	local uistyle = SunUIConfig.db.profile.MiniDB.uistyle
 	local gradient = f:CreateTexture(nil, "BACKGROUND", -1)
 	gradient:SetPoint("TOPLEFT")
@@ -313,9 +270,9 @@ function S.CreateBack(f, orientation, a)
 		gradient:SetVertexColor(0, 0, 0, 0.5)
 	else
 		if orientation then
-			gradient:SetGradientAlpha("HORIZONTAL",  0, 0, 0, a or 0.4, .35, .35, .35, a or .45)
+			gradient:SetGradientAlpha("HORIZONTAL",  0, 0, 0, a or 0.35, .35, .35, .35, b or .45)
 		else
-			gradient:SetGradientAlpha("VERTICAL",  0, 0, 0, a or 0.4, .35, .35, .35, a or .45)
+			gradient:SetGradientAlpha("VERTICAL",  0, 0, 0, a or 0.35, .35, .35, .35, b or .45)
 		end
 	end
 end
@@ -339,13 +296,19 @@ function S.CreateSpark(f, w, h)
 	spark:SetPoint("TOPLEFT", f:GetStatusBarTexture(), "TOPRIGHT", -w, h)
 	spark:SetPoint("BOTTOMRIGHT", f:GetStatusBarTexture(), "BOTTOMRIGHT", w, -h)
 end
-function S.CreateMark(f, w)
+function S.CreateMark(f, orientation)
 	local spark =  f:CreateTexture(nil, "OVERLAY", 1)
 	spark:SetTexture("Interface\\Buttons\\WHITE8x8")
 	spark:SetVertexColor(0, 0, 0)
-	spark:Width(1)
-	spark:Point("TOPLEFT", f:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
-	spark:Point("BOTTOMLEFT", f:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
+	if not orientation then
+		spark:Width(1)
+		spark:Point("TOPLEFT", f:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+		spark:Point("BOTTOMLEFT", f:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
+	else
+		spark:Height(1)
+		spark:Point("TOPLEFT", f:GetStatusBarTexture(), "TOPLEFT", 0, 0)
+		spark:Point("TOPRIGHT", f:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+	end
 end
 local smoothing = {}
 local function Smooth(self, value)

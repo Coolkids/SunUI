@@ -44,7 +44,7 @@
 --  Globals/Default Options  --
 -------------------------------
 DBM = {
-	Revision = tonumber(("$Revision: 8570 $"):sub(12, -3)),
+	Revision = tonumber(("$Revision: 8590 $"):sub(12, -3)),
 	DisplayVersion = "5.1 語音增強版", -- the string that is shown as version
 	ReleaseRevision = 8421 -- the revision of the latest stable version that is available
 }
@@ -1086,7 +1086,7 @@ end
 ------------------
 do
 	local ignore, cancel
-	SStaticPopupDialogs["DBM_CONFIRM_IGNORE"] = {
+	StaticPopupDialogs["DBM_CONFIRM_IGNORE"] = {
 		preferredIndex = STATICPOPUP_NUMDIALOGS,
 		text = DBM_PIZZA_CONFIRM_IGNORE,
 		button1 = YES,
@@ -1109,7 +1109,7 @@ do
 		elseif arg1 == "ignore" then
 			cancel = link:match("DBM:ignore:(.+):[^%s:]+$")
 			ignore = link:match(":([^:]+)$")
-			SStaticPopup_Show("DBM_CONFIRM_IGNORE", ignore)
+			StaticPopup_Show("DBM_CONFIRM_IGNORE", ignore)
 		elseif arg1 == "update" then
 			DBM:ShowUpdateReminder(arg2, arg3) -- displayVersion, revision
 		elseif arg1 == "showRaidIdResults" then
@@ -1480,7 +1480,7 @@ end
 --------------
 do
 	local function showOldVerWarning()
-		SStaticPopupDialogs["DBM_OLD_VERSION"] = {
+		StaticPopupDialogs["DBM_OLD_VERSION"] = {
 			preferredIndex = STATICPOPUP_NUMDIALOGS,
 			text = DBM_CORE_ERROR_DBMV3_LOADED,
 			button1 = DBM_CORE_OK,
@@ -1492,7 +1492,7 @@ do
 			exclusive = 1,
 			whileDead = 1
 		}
-		SStaticPopup_Show("DBM_OLD_VERSION")
+		StaticPopup_Show("DBM_OLD_VERSION")
 	end
 
 	local function setCombatInitialized()
@@ -1991,7 +1991,7 @@ do
 	do
 		local accessList
 
-		SStaticPopupDialogs["DBM_INSTANCE_ID_PERMISSION"] = {
+		StaticPopupDialogs["DBM_INSTANCE_ID_PERMISSION"] = {
 			preferredIndex = STATICPOPUP_NUMDIALOGS,
 			text = DBM_REQ_INSTANCE_ID_PERMISSION,
 			button1 = YES,
@@ -2018,7 +2018,7 @@ do
 			accessList = accessList or {}
 			if not accessList[sender] then
 				-- ask for permission
-				SStaticPopup_Show("DBM_INSTANCE_ID_PERMISSION", sender, sender, sender)
+				StaticPopup_Show("DBM_INSTANCE_ID_PERMISSION", sender, sender, sender)
 				return
 			end
 			-- okay, send data

@@ -186,27 +186,14 @@ function mod:OnCombatStart(delay)
 	sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zwjh.mp3") --戰王激活
 	sndWOP:Schedule(21, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_bczb.mp3")
 	if self:IsDifficulty("heroic10", "heroic25") then
-		if self:IsDifficulty("heroic10") then
-			timerImperviousShieldCD:Start(60.7)
-			warnImperviousShieldSoon:Schedule(55.7)
-			sndDSA:Schedule(57.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zwhd.mp3") -- 戰王護盾準備
-			self:Schedule(57.5, function()
-				if UnitName("target") == Qiang then
-					specWarnDSoon:Show()
-				end
-			end)
-		else
-			timerImperviousShieldCD:Start(40.7)
-			warnImperviousShieldSoon:Schedule(35.7)
-			sndDSA:Schedule(37.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zwhd.mp3") -- 戰王護盾準備
-			self:Schedule(37.5, function()
-				if UnitName("target") == Qiang then
-					specWarnDSoon:Show()
-				end
-			end)
-		end
-
-
+		timerImperviousShieldCD:Start(40.7)
+		warnImperviousShieldSoon:Schedule(35.7)
+		sndDSA:Schedule(37.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zwhd.mp3") -- 戰王護盾準備
+		self:Schedule(37.5, function()
+			if UnitName("target") == Qiang then
+				specWarnDSoon:Show()
+			end
+		end)
 	end
 end
 

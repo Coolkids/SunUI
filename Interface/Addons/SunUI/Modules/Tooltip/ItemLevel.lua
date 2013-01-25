@@ -1,86 +1,36 @@
 ﻿local S, L, DB, _, C = unpack(select(2, ...))
---[[ local MINCOLOR = 0.5;
-local COLORINC = 0.2;
-local INCMOD = 0.5;
-local MinIL = 284;
-local MaxIL = 509;
-
-local slotName = {
-	"HeadSlot","NeckSlot","ShoulderSlot","BackSlot","ChestSlot","WristSlot",
-	"HandsSlot","WaistSlot","LegsSlot","FeetSlot","Finger0Slot","Finger1Slot",
-	"Trinket0Slot","Trinket1Slot","MainHandSlot","SecondaryHandSlot"
-}
-
-local function GetAiL(unit)
-	i = 0;
-	total = 0;
-	itn = 0;
-	
-	if (unit ~= nil) then
-		for i in ipairs(slotName) do
-			slot = GetInventoryItemID(unit, GetInventorySlotInfo(slotName[i]));
-			
-			if (slot ~= nil) then
-				sName, sLink, iRarity, iLevel, iMinLevel, sType, sSubType, iStackCount = GetItemInfo(slot);
-				
-				if (iLevel ~= nil) then
-					if (iLevel > 0) then
-						itn = itn + 1;
-						total = total + iLevel;
-					end
-				end
-			end
-		end
-	end
-	
-	if (total < 1 or itn < 1) then
-		return 0;
-	end
-	
-	return floor(total / itn);
-end
-
-local function GetAiLColor(ail)
-	local r, gb;
-	
-	if (ail < MinIL) then
-		r = (ail / MinIL);
-		gb = r;
-	else
-		r = MINCOLOR + ((ail / MaxIL) * INCMOD);
-		gb = 1.0 - ((ail / MaxIL) * INCMOD);
-	end
-	
-	if (r < MINCOLOR) then
-		r = MINCOLOR;
-		gb = r;
-	end
-	
-	return r, gb;
-end
-GameTooltip:HookScript("OnTooltipSetUnit", function(self, ...)
-		local ail, r, gb;
-		local name, unit = GameTooltip:GetUnit();
-		if (unit and CanInspect(unit)) then
-			local isInspectOpen = (InspectFrame and InspectFrame:IsShown()) or (Examiner and Examiner:IsShown());
-			if ((unit) and (CanInspect(unit)) and (not isInspectOpen)) then
-				NotifyInspect(unit);
-				ail = GetAiL(unit);
-				r, gb = GetAiLColor(ail);
-				ClearInspectPlayer(unit);
-				GameTooltip:AddLine(STAT_AVERAGE_ITEM_LEVEL..":"..format(S.ToHex(r, gb, gb)..ail.."|r"));
-				GameTooltip:Show();
-			end
-		end
-	end) ]]
-	-- decimal places of the equipped average item level. to assign '2' will show it like '123.45'
 local DECIMAL_PLACES = 1
 
 -- additional strings. if you don't like it just assign 'nil'. but do not delete these variables themselves.
 local UPDATED = CANNOT_COOPERATE_LABEL -- '*'
 local WAITING = CONTINUED -- '...'
 local PENDING = CONTINUED .. CONTINUED -- '......'
-
+local upgradeTable = {
+	[0]		=  0,
+	[1]		=  8, -- 1/1
+	[373]	=  4, -- 1/2
+	[374]	=  8, -- 2/2
+	[375]	=  4, -- 1/3
+	[376]	=  4, -- 2/3
+	[377]	=  4, -- 3/3
+	[379]	=  4, -- 1/2
+	[380]	=  4, -- 2/2
+	[445]	=  0, -- 0/2
+	[446]	=  4, -- 1/2
+	[447]	=  8, -- 2/2
+	[451]	=  0, -- 0/1
+	[452]	=  8, -- 1/1
+	[453]	=  0, -- 0/2
+	[454]	=  4, -- 1/2
+	[455]	=  8, -- 2/2
+	[456]	=  0, -- 0/1
+	[457]	=  8, -- 1/1
+	[458]	=  0, -- 0/4
+	[459]	=  4, -- 1/4
+	[460]	=  8, -- 2/4
+	[461]	= 12, -- 3/4
+	[462]	= 16, -- 4/4
+};
 -- output prefix. has to have unique strings to update the tooltip correctly
 local PREFIX = STAT_FORMAT:format(STAT_AVERAGE_ITEM_LEVEL) .. '|Heqppditmlvl|h |h' .. HIGHLIGHT_FONT_COLOR_CODE
 
@@ -171,19 +121,30 @@ do
 
 		local hasItem = GetInventoryItemTexture(unit, slot) and true
 		local _, level, equipLoc
-
+		
 		local link = hasItem and GetInventoryItemLink(unit, slot)
 		if ( link ) then
 			repeat
 				_, _, _, level, _, _, _, _, equipLoc = GetItemInfo(link)
+				------------------------------------------------------------
+				----------------该死的物品升级-----------------------------
+				------------------------------------------------------------
+				if level and level >= 458 then
+					local upgradeId = tonumber(strmatch(link, "item:%d+:%d+:%d+:%d+:%d+:%d+:%-?%d+:%-?%d+:%d+:%d+:(%d+)"));
+					if (upgradeId and upgradeTable[upgradeId]) then
+						level = level + upgradeTable[upgradeId];
+					end
+				end
+				------------------------------------------------------------
+				---------------------------结束-----------------------------
+				------------------------------------------------------------
 			until level and equipLoc
-
 			total = total + level
 		end
-
+		local _, class = UnitClass(unit);
 		-- two-handed weapon and Titan's Grip
 		if ( slot == INVSLOT_MAINHAND ) then
-			twoHanded = equipLoc == 'INVTYPE_2HWEAPON' and 1 or not hasItem and 0
+			twoHanded = equipLoc == 'INVTYPE_2HWEAPON' and 1 or class == "HUNTER" and 1 or not hasItem and 0
 		elseif ( slot == INVSLOT_OFFHAND ) then
 			twoHanded = twoHanded == 1 and not hasItem or twoHanded == 0 and equipLoc == 'INVTYPE_2HWEAPON'
 		end

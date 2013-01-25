@@ -64,16 +64,46 @@ L:SetOptionLocalization({
 ------------
 L= DBM:GetModLocalization(742)
 
+L:SetWarningLocalization({
+	SpecWarnJSA				= ">>> 第%d波小怪 注意减伤 <<<"
+})
+
 L:SetOptionLocalization({
 	SoundWOP					= "语音警告：重要技能",
+	SoundGH						= "语音警告：$journal:6551刷新及计数",
+	SoundHX						= "语音警告：为$spell:122752倒数",
+	SoundMY						= "语音警告：为$spell:122770倒数(若开启此项建议关闭暗影之息倒数)",
 	WarnJK						= "语音警告：$spell:123011的预先警告",
+	SpecWarnJSA					= "特别警告：注意开减伤",
+	unseenjs1					= "减伤提示：$journal:6320 1",
+	unseenjs2					= "减伤提示：$journal:6320 2",
+	unseenjs3					= "减伤提示：$journal:6320 3",
+	unseenjs4					= "减伤提示：$journal:6320 4",
+	unseenjs5					= "减伤提示：$journal:6320 5",
+	unseenjs6					= "减伤提示：$journal:6320 6",
+	lod1						= "吃球额外提示：$journal:6551 1",
+	lod2						= "吃球额外提示：$journal:6551 2",
+	lod3						= "吃球额外提示：$journal:6551 3",
+	lod4						= "吃球额外提示：$journal:6551 4",
+	lod5						= "吃球额外提示：$journal:6551 5",
+	lod6						= "吃球额外提示：$journal:6551 6",
+	lod7						= "吃球额外提示：$journal:6551 7",
+	lod8						= "吃球额外提示：$journal:6551 8",
+	lod9						= "吃球额外提示：$journal:6551 9",
+	lod10						= "吃球额外提示：$journal:6551 10",
+	lod11						= "吃球额外提示：$journal:6551 11",
 	HudMAP						= "高级定位监视(HUD)：$spell:122770的位置(仅10人)",
-	optDS						= "\"恐怖阴影\"叠加几层时，开始报警",
-	six							= "6层",
-	nine						= "9层",
-	twelve						= "12层",
-	fifteen						= "15层",
+	optDS						= "\"恐惧之影\"叠加几层时开始报警",
+	six							= "6",
+	nine						= "9",
+	twelve						= "12",
+	fifteen						= "15",
 	none						= "不报警",
+	optTS						= "神牧天使警告",
+	TS1							= "第一次火息",
+	TS2							= "第二次火息",
+	TS3							= "第三次火息",
+	noms						= "不提示",
 })
 
 L:SetMiscLocalization{

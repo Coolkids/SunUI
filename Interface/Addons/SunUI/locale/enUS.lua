@@ -591,3 +591,13 @@ L["星期四"] = "Thursday"
 L["星期五"] = "Friday"
 L["星期六"] = "Saturday"
 L["经验条"] = "Expbar"
+
+--2013.1.25
+L["姓名板增强"] = "Just Powerup NamePlate"
+L["开启"] = "Enable"
+L["界面风格"] = "UI Style"
+L["职业助手"] = "Class Tools"
+L["缩放"] = "Scale"
+L["开启燃火监视"] = "Enable IgniteWatch"
+L["开启精神护罩监视"] = "Enable SpiritShell Watch"
+L["开启力之符文监视"] = "Enable RuneOfPower Watch"

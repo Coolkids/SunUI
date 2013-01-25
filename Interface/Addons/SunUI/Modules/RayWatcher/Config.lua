@@ -1303,6 +1303,8 @@ ns.watchers ={
 				{ spellID =  126588, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 玉魂
 				{ spellID =  104993, unitId = "player", caster = "all", filter = "BUFF" },
+				-- 玉魂
+				{ spellID =  136082, unitId = "player", caster = "player", filter = "BUFF" },
 		},
 	},
 }

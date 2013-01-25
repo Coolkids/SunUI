@@ -252,7 +252,7 @@ function cb:UNIT_SPELLCAST_DELAYED(frame, unit, channel)
 		newProgress	= GetTime() - (startTime/1000)
 	end
 
-	castbar.delay = (castbar.delay or 0) + castbar.progress - newProgress
+	castbar.delay = (castbar.delay or 0) + (castbar.progress or 0) - newProgress
 	castbar.progress = newProgress
 end
 

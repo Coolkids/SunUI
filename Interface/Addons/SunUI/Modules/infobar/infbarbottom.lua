@@ -1093,7 +1093,7 @@ local function BuildSpecswitch()
 		GameTooltip:AddLine(TALENTS_BUTTON,0,.6,1)
 		GameTooltip:AddLine(" ")
 		if GetNumSpecGroups() == 1 then
-			GameTooltip:AddLine("|cff00FF00* |r" .. (GetSpecialization() and select(2,GetSpecializationInfo(majorTree1)) or infoL["none"])..": ",1,1,1)
+			GameTooltip:AddLine("|cff00FF00* |r" .. (GetSpecialization() and select(2,GetSpecializationInfo(majorTree1)) or NONE..TALENT)..": ",1,1,1)
 			for i = 1, #spec1 do
 				GameTooltip:AddDoubleLine(" ", spec1[i],1,1,1,1,1,1)
 			end

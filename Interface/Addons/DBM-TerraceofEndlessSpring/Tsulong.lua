@@ -2,7 +2,9 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndJK		= mod:NewSound(nil, "SoundWOP", true)
-local sndHX		= mod:NewSound(nil, "SoundWOP", true)
+local sndGH		= mod:NewSound(nil, "SoundGH", mod:IsHealer())
+local sndHX		= mod:NewSound(nil, "SoundHX", mod:IsTank() or mod:IsHealer())
+local sndMY		= mod:NewSound(nil, "SoundMY", false)
 
 mod:SetRevision(("$Revision: 8199 $"):sub(12, -3))
 mod:SetCreatureID(62442)--62919 Unstable Sha, 62969 Embodied Terror
@@ -44,6 +46,7 @@ local yellNightmares					= mod:NewYell(122770)
 local specWarnDarkOfNight				= mod:NewSpecialWarningSwitch("ej6550", mod:IsDps())
 local specWarnTerrorize					= mod:NewSpecialWarningDispel(123012, mod:IsHealer())
 local specWarnLightOfDay				= mod:NewSpecialWarningSpell("ej6551", mod:IsHealer())
+local specWarnJSA						= mod:NewSpecialWarning("SpecWarnJSA")
 
 local timerNightCD						= mod:NewNextTimer(121, "ej6310", nil, nil, nil, 130013)
 local timerSunbeamCD					= mod:NewCDTimer(41, 122789)
@@ -76,11 +79,38 @@ local NightmaresMarkers = {}
 
 local sndJKNext = {}
 
-mod:AddDropdownOption("optDS", {"six", "nine", "twelve", "fifteen", "none"}, "six", "sound")
 local DSn = 0
 local terrorN = 0
 local daytime = 0
 local lodcount = 0
+local mobcount = 0
+local hxcount = 0
+
+for i = 1, 6 do
+	mod:AddBoolOption("unseenjs"..i, false, "sound")
+end
+
+for i = 1, 11 do
+	mod:AddBoolOption("lod"..i, false, "sound")
+end
+
+mod:AddDropdownOption("optDS", {"six", "nine", "twelve", "fifteen", "none"}, "six", "sound")
+
+mod:AddDropdownOption("optTS", {"TS1", "TS2", "TS3", "noms"}, "noms", "sound")
+
+local function MyJS()
+	if (mod.Options.unseenjs1 and mobcount == 1) or (mod.Options.unseenjs2 and mobcount == 2) or (mod.Options.unseenjs3 and mobcount == 3) or (mod.Options.unseenjs4 and mobcount == 4) or (mod.Options.unseenjs5 and mobcount == 5) or (mod.Options.unseenjs6 and mobcount == 6) then
+		return true
+	end
+	return false
+end
+
+local function MyTS()
+	if (mod.Options.optTS == "TS1" and hxcount == 1) or (mod.Options.optTS == "TS2" and hxcount == 2) or (mod.Options.optTS == "TS3" and hxcount == 3) then
+		return true
+	end
+	return false
+end
 
 local function isTank(unit)
 	-- 1. check blizzard tanks first
@@ -102,28 +132,61 @@ function mod:LightOfDayRepeat()
 	lodcount = lodcount + 1
 	warnLightOfDay:Show(lodcount)
 	specWarnLightOfDay:Show()
-	if mod:IsHealer() then
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ghcx.mp3")--光華出現
-		if lodcount == 1 then
-			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-		elseif lodcount == 2 then
-			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-		elseif lodcount == 3 then
-			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-		elseif lodcount == 4 then
-			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
-		elseif lodcount == 5 then
-			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
-		elseif lodcount == 6 then
-			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
-		elseif lodcount == 7 then
-			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countseven.mp3")
-		elseif lodcount == 8 then
-			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\counteight.mp3")
-		elseif lodcount == 9 then
-			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countnine.mp3")
-		elseif lodcount == 10 then
-			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countten.mp3")
+	sndGH:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ghcx.mp3")--光華出現
+	if lodcount == 1 then
+		sndGH:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		if self.Options.lod1 then
+			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\uu.mp3") --~
+		end
+	elseif lodcount == 2 then
+		sndGH:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		if self.Options.lod2 then
+			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\uu.mp3")
+		end
+	elseif lodcount == 3 then
+		sndGH:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		if self.Options.lod3 then
+			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\uu.mp3")
+		end
+	elseif lodcount == 4 then
+		sndGH:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		if self.Options.lod4 then
+			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\uu.mp3")
+		end
+	elseif lodcount == 5 then
+		sndGH:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+		if self.Options.lod5 then
+			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\uu.mp3")
+		end
+	elseif lodcount == 6 then
+		sndGH:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
+		if self.Options.lod6 then
+			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\uu.mp3")
+		end
+	elseif lodcount == 7 then
+		sndGH:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countseven.mp3")
+		if self.Options.lod7 then
+			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\uu.mp3")
+		end
+	elseif lodcount == 8 then
+		sndGH:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\counteight.mp3")
+		if self.Options.lod8 then
+			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\uu.mp3")
+		end
+	elseif lodcount == 9 then
+		sndGH:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countnine.mp3")
+		if self.Options.lod9 then
+			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\uu.mp3")
+		end
+	elseif lodcount == 10 then
+		sndGH:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countten.mp3")
+		if self.Options.lod10 then
+			sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\uu.mp3")
+		end
+	elseif lodcount == 11 then
+		sndGH:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\counteleven.mp3")
+		if self.Options.lod11 then
+			sndWOP:Schedule(2, "Interface\\AddOns\\DBM-Core\\extrasounds\\uu.mp3")
 		end
 	end
 	if self:IsDifficulty("heroic10") then
@@ -156,8 +219,6 @@ function mod:ShadowsTarget(targetname)
 			if inRange and inRange < 10 then
 				specWarnNightmaresNear:Show(targetname)
 				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
-			elseif not self:IsDifficulty("normal10", "heroic10") then
-				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\firecircle.mp3")--注意火圈
 			end
 		end
 	end
@@ -186,18 +247,34 @@ end
 
 function mod:OnCombatStart(delay)
 	timerShadowBreathCD:Start(8.5-delay)
-	if not mod:IsDps() then
-		sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
-		sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-		sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-		sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-		sndHX:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")--準備火息
-		sndHX:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-		sndHX:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-		sndHX:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-	end
+	sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
+	sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+	sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+	sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+	sndHX:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")--準備火息
+	sndHX:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+	sndHX:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+	sndHX:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	timerNightmaresCD:Start(13.5-delay)
+	sndMY:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countseven.mp3")
+	sndMY:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
+	sndMY:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+	sndMY:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+	sndMY:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+	sndMY:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+	sndMY:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+	sndMY:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\countseven.mp3")
+	sndMY:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
+	sndMY:Schedule(9, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+	sndMY:Schedule(10, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+	sndMY:Schedule(11, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+	sndMY:Schedule(12, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+	sndMY:Schedule(13, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	timerDayCD:Start(-delay)
+	sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_btzb.mp3")
+	sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+	sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+	sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	sndWOP:Schedule(116.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_btzb.mp3")--白天準備
 	sndWOP:Schedule(118, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 	sndWOP:Schedule(119, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
@@ -211,6 +288,8 @@ function mod:OnCombatStart(delay)
 	terrorN = 0
 	daytime = 0
 	lodcount = 0
+	mobcount = 0
+	hxcount = 0
 	table.wipe(NightmaresMarkers)
 	table.wipe(sndJKNext)
 end
@@ -264,6 +343,10 @@ function mod:SPELL_CAST_START(args)
 		if not mod:IsDps() then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
 		end
+		hxcount = hxcount + 1
+		if MyTS() then
+			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kgts.mp3") --快給天使
+		end
 	end
 end
 
@@ -276,22 +359,20 @@ function mod:SPELL_CAST_SUCCESS(args)
 		else
 			timerShadowBreathCD:Start()
 		end
-		if not mod:IsDps() then
-			sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
-			sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-			sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-			sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-			if self:IsDifficulty("heroic10", "heroic25") then
-				sndHX:Schedule(21, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
-				sndHX:Schedule(22.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-				sndHX:Schedule(23.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-				sndHX:Schedule(24.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-			else
-				sndHX:Schedule(24, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
-				sndHX:Schedule(25.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-				sndHX:Schedule(26.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-				sndHX:Schedule(27.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-			end
+		sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
+		sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		if self:IsDifficulty("heroic10", "heroic25") then
+			sndHX:Schedule(21, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
+			sndHX:Schedule(22.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndHX:Schedule(23.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndHX:Schedule(24.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		else
+			sndHX:Schedule(24, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
+			sndHX:Schedule(25.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndHX:Schedule(26.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndHX:Schedule(27.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		end
 	elseif args:IsSpellID(124176, 123630) then
 		DBM:EndCombat(self)
@@ -318,23 +399,40 @@ end
 
 function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 	if spellId == 122770 and self:AntiSpam(2, 1) then--Nightmares (Night Phase)
-		targetScansDone = 0
+		if self:IsDifficulty("normal25", "heroic25", "lfr25") then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\firecircle.mp3")--注意火圈
+		end
+		targetScansDone = 0		
 		self:TargetScanner()
 		if timerDayCD:GetTime() < 106 then
 			timerNightmaresCD:Start()
+			sndMY:Schedule(9, "Interface\\AddOns\\DBM-Core\\extrasounds\\countseven.mp3")
+			sndMY:Schedule(10, "Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
+			sndMY:Schedule(11, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+			sndMY:Schedule(12, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+			sndMY:Schedule(13, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndMY:Schedule(14, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndMY:Schedule(15, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		end
 	elseif spellId == 123252 and self:AntiSpam(2, 2) then--Dread Shadows Cancel (Sun Phase)
 		daytime = GetTime()
 		lodcount = 0
+		mobcount = 0
+		hxcount = 0
 		timerShadowBreathCD:Cancel()
-		if not mod:IsDps() then
-			sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
-			sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-			sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-			sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-		end
+		sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")
+		sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndHX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		timerSunbeamCD:Cancel()
 		timerNightmaresCD:Cancel()
+		sndMY:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countseven.mp3")
+		sndMY:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
+		sndMY:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+		sndMY:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndMY:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndMY:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndMY:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		timerDarkOfNightCD:Cancel()
 		warnDay:Show()
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
@@ -353,12 +451,19 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 			sndWOP:Schedule(4, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kdbwds.mp3")--快打不穩定煞
 		end
 		timerSummonUnstableShaCD:Start()
+		mobcount = mobcount + 1
+		if MyJS() then
+			specWarnJSA:Schedule(6, mobcount)
+			sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zyjs.mp3") --注意減傷
+		end
 	elseif spellId == 122767 and self:AntiSpam(2, 2) then--Dread Shadows (Night Phase)
 		timerSummonUnstableShaCD:Cancel()
 		timerSummonEmbodiedTerrorCD:Cancel()
 		timerSunBreathCD:Cancel()
 		timerLightOfDayCD:Cancel()
 		lodcount = 0
+		mobcount = 0
+		hxcount = 0
 		if self:IsDifficulty("heroic10", "heroic25") then
 			self:UnscheduleMethod("LightOfDayRepeat")
 		end
@@ -378,13 +483,18 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		end
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\phasechange.mp3")
 		timerShadowBreathCD:Start(10)
-		if not mod:IsDps() then
-			sndHX:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")--準備火息
-			sndHX:Schedule(7.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-			sndHX:Schedule(8.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-			sndHX:Schedule(9.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-		end
+		sndHX:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbhx.mp3")--準備火息
+		sndHX:Schedule(7.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndHX:Schedule(8.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndHX:Schedule(9.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		timerNightmaresCD:Start(16)
+		sndMY:Schedule(9.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countseven.mp3")
+		sndMY:Schedule(10.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
+		sndMY:Schedule(11.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+		sndMY:Schedule(12.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndMY:Schedule(13.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndMY:Schedule(14.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndMY:Schedule(15.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		timerDayCD:Start()
 		sndWOP:Schedule(116.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_btzb.mp3")
 		sndWOP:Schedule(118, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")

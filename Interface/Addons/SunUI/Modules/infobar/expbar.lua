@@ -49,7 +49,8 @@ function Module:BuildExpBar()
 		ExpBar:SetSize(C["ExpbarHeight"], C["ExpbarWidth"])
 		ExpBar:SetOrientation("VERTICAL")
 		ExpBar.Rest:SetOrientation("VERTICAL")
-		S.CreateBack(h, true) 
+		S.CreateBack(h, true)
+		S.CreateMark(ExpBar, true)
 	end
 	MoveHandle.ExpBar = S.MakeMoveHandle(ExpBar, L["经验条"], "expbar")
 

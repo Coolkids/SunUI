@@ -39,7 +39,7 @@ types = {
 	rare = " |cffFF44FFR|r ",
 	elite = " |cffFFFF00+|r ",
 	worldboss = " |cffFF1919B|r ",
-	rareelite = " |cff9933FAR|r |cffFFFF00+|r ",
+	rareelite = " |cff9933FAR|r|cffFFFF00+|r ",
 }
 local tooptexture = GameTooltipStatusBar:GetStatusBarTexture()
 

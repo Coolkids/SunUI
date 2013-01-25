@@ -548,13 +548,13 @@ function SunUIConfig.GenerateOptionsInternal()
 							Header = {
 								order = 1,
 								type = "header",
-								name = "Just Powerup NamePlate",
+								name = L["姓名板增强"],
 								width = "full",		
 							},
 							enable = {
 								type = "toggle",
-								name = VIDEO_OPTIONS_ENABLED,
-								order = 1,
+								name = L["开启"],
+								order = 2,
 								},
 							}
 						},
@@ -1142,8 +1142,7 @@ function SunUIConfig.GenerateOptionsInternal()
 							},
 							TimeStamps = {
 								type = "toggle",
-								name = "TimeStamps",
-								desc = L["聊天时间戳"],
+								name = L["聊天时间戳"],
 								order = 19,
 							},
 							ChatBackground = {
@@ -1170,7 +1169,7 @@ function SunUIConfig.GenerateOptionsInternal()
 							},
 							uistyle = {
 								type = "select",
-								name = UIOPTIONS_MENU.." Style",
+								name = L["界面风格"],
 								order = 24,
 								values = {
 									["plane"] = "win8",
@@ -1752,7 +1751,7 @@ function SunUIConfig.GenerateOptionsInternal()
 			ClassToolsDB = {
 				order = 19,
 				type = "group",
-				name = "Class Tools",
+				name = L["职业助手"],
 				get = function(info) return db.ClassToolsDB[ info[#info] ] end,
 				set = function(info, value) db.ClassToolsDB[ info[#info] ] = value; SStaticPopup_Show("CFG_RELOAD") end,
 				args = {
@@ -1762,7 +1761,7 @@ function SunUIConfig.GenerateOptionsInternal()
 						args = {
 							Enable = {
 								type = "toggle",
-								name = "Enable ClassTools",
+								name = L["开启"]..L["职业助手"],
 								order = 1,
 								set = function(info, value) 
 									db.ClassToolsDB.Enable = value 
@@ -1772,7 +1771,7 @@ function SunUIConfig.GenerateOptionsInternal()
 							},
 							Size = {
 								type = "range", order = 2, disabled = function(info) return not db.ClassToolsDB.Enable end,
-								name = "Size",
+								name = L["图标大小"],
 								min = 20, max = 100, step = 1,
 								set = function(info, value) 
 									db.ClassToolsDB.Size = value 
@@ -1782,7 +1781,7 @@ function SunUIConfig.GenerateOptionsInternal()
 							},
 							Scale = {
 								type = "range", order = 3, disabled = function(info) return not db.ClassToolsDB.Enable end,
-								name = "Scale",
+								name = L["缩放"],
 								min = 0.1, max = 2, step = 0.1,
 								set = function(info, value) 
 									db.ClassToolsDB.Scale = value 
@@ -1798,7 +1797,7 @@ function SunUIConfig.GenerateOptionsInternal()
 						args = {
 							EnableIgniteWatch = {
 								type = "toggle",
-								name = "Enable IgniteWatch",
+								name = L["开启燃火监视"],
 								order = 1,
 								set = function(info, value) 
 									db.ClassToolsDB.EnableIgniteWatch = value 
@@ -1808,7 +1807,7 @@ function SunUIConfig.GenerateOptionsInternal()
 							},
 							IgniteWatchSize = {
 								type = "range", order = 2, disabled = function(info) return not db.ClassToolsDB.EnableIgniteWatch end,
-								name = "Size",
+								name = L["图标大小"],
 								min = 20, max = 100, step = 1,
 								set = function(info, value) 
 									db.ClassToolsDB.IgniteWatchSize = value 
@@ -1824,7 +1823,7 @@ function SunUIConfig.GenerateOptionsInternal()
 						args = {
 							EnableSpiritShellWatch = {
 								type = "toggle",
-								name = "Enable SpiritShell Watch",
+								name = L["开启精神护罩监视"],
 								order = 1,
 								set = function(info, value) 
 									db.ClassToolsDB.EnableSpiritShellWatch = value 
@@ -1834,7 +1833,7 @@ function SunUIConfig.GenerateOptionsInternal()
 							},
 							SpiritShellWatchSize = {
 								type = "range", order = 2, disabled = function(info) return not db.ClassToolsDB.EnableSpiritShellWatch end,
-								name = "Size",
+								name = L["图标大小"],
 								min = 20, max = 100, step = 1,
 								set = function(info, value) 
 									db.ClassToolsDB.SpiritShellWatchSize = value 
@@ -1850,7 +1849,7 @@ function SunUIConfig.GenerateOptionsInternal()
 						args = {
 							ROPEnable = {
 								type = "toggle",
-								name = "Enable RuneOfPower Watch",
+								name = L["开启力之符文监视"],
 								order = 1,
 								set = function(info, value) 
 									db.ClassToolsDB.ROPEnable = value 
@@ -1860,7 +1859,7 @@ function SunUIConfig.GenerateOptionsInternal()
 							},
 							ROPSize = {
 								type = "range", order = 2, disabled = function(info) return not db.ClassToolsDB.ROPEnable end,
-								name = "Size",
+								name = L["图标大小"],
 								min = 20, max = 100, step = 1,
 								set = function(info, value) 
 									db.ClassToolsDB.ROPSize = value 

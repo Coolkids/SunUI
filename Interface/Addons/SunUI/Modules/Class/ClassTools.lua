@@ -107,6 +107,7 @@ Frame.Icon:SetAllPoints(Frame)
 function CT:ACTIVE_TALENT_GROUP_CHANGED()
 	local spec = GetSpecialization()
 	local texture
+	if not spec then return end
 	--print(#datebase[DB.MyClass])
 	if #datebase[DB.MyClass] == 0 then 
 		CT:UnregisterAllEvents()
@@ -156,11 +157,9 @@ function CT:UpdateSet()
 end
 function CT:UNIT_HEALTH(event, unit)
 	if unit ~= "target" then return end
-	if ( UnitCanAttack("player", "target") and not UnitIsDead("target") and ( UnitHealth("target")/UnitHealthMax("target") < Frame.per and UnitLevel("player") > Frame.level ) and not UnitIsDead("player") ) then		
-		if not Frame:IsShown() then
-			Frame:Show()
-		end
-	else
+	if ( UnitCanAttack("player", "target") and not UnitIsDead("target") and ( UnitHealth("target")/UnitHealthMax("target") < Frame.per and UnitLevel("player") > Frame.level ) and not UnitIsDead("player") ) and not Frame:IsShown() then
+		Frame:Show()
+	elseif Frame:IsShown() then
 		Frame:Hide()
 	end
 end

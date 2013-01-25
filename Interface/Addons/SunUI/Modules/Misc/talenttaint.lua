@@ -238,7 +238,7 @@ function T:ADDON_LOADED(event, addon)
             tab:SetScript("PreClick", function()
                 for index = 1, STATICPOPUP_NUMDIALOGS, 1 do
                     local frame = _G["StaticPopup"..index]
-                    if frame:IsShown() and not issecurevariable(frame, "which") and not self.BlizzardStaticPopupDialogs[frame.which] then
+                    if frame:IsShown() and not issecurevariable(frame, "which") and not BlizzardStaticPopupDialogs[frame.which] then
                         local info = StaticPopupDialogs[frame.which]
                         if info and info.OnCancel and issecurevariable(info, "OnCancel") then
                             info.OnCancel()

@@ -133,7 +133,7 @@ function S.Reskin(f, noGlow)
 	if f.RightSeparator then f.RightSeparator:Hide() end
 
 	S.CreateBD(f, .0)
-	S.CreateBack(f)
+	S.CreateBack(f, nil, 0.3, 0.35)
 	--S.CreateGradient(f)
 
 	if not noGlow then
@@ -392,16 +392,17 @@ function S.ReskinCheck(f)
 	ch:SetDesaturated(true)
 	ch:SetVertexColor(r, g, b)
 end
+local function colourRadio(f)
+	f.bd:SetBackdropBorderColor(r, g, b)
+end
 
+local function clearRadio(f)
+	f.bd:SetBackdropBorderColor(0, 0, 0)
+end
 function S.ReskinRadio(f)
 	f:SetNormalTexture("")
 	f:SetHighlightTexture(media.backdrop)
 	f:SetCheckedTexture(media.backdrop)
-
-	local hl = f:GetHighlightTexture()
-	hl:Point("TOPLEFT", 4, -4)
-	hl:Point("BOTTOMRIGHT", -4, 4)
-	hl:SetVertexColor(r, g, b, .3)
 
 	local ch = f:GetCheckedTexture()
 	ch:Point("TOPLEFT", 4, -4)
@@ -413,12 +414,16 @@ function S.ReskinRadio(f)
 	bd:Point("BOTTOMRIGHT", -3, 3)
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	S.CreateBD(bd, 0)
-
+	f.bd = bd
+	
 	local tex = f:CreateTexture(nil, "BACKGROUND")
 	tex:Point("TOPLEFT", 4, -4)
 	tex:Point("BOTTOMRIGHT", -4, 4)
 	tex:SetTexture(media.backdrop)
 	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+	
+	f:HookScript("OnEnter", colourRadio)
+	f:HookScript("OnLeave", clearRadio)
 end
 
 function S.ReskinSlider(f)

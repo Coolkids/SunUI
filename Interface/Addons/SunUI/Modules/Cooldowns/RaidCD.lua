@@ -37,6 +37,13 @@ local raid_spells = {
 	[105763] =180,  --NS 2T13
 	[6940] = 120, --QS 牺牲之手
 	[47788] = 180, --MS 天使
+	[108280] = 180,
+		 -- Monk
+	[115176] = 180,
+	[116849] = 120,
+	[115310] = 180,
+	     -- Warrior
+	[114203] = 180,
 }
 
 local filter = COMBATLOG_OBJECT_AFFILIATION_RAID + COMBATLOG_OBJECT_AFFILIATION_PARTY + COMBATLOG_OBJECT_AFFILIATION_MINE

@@ -548,7 +548,7 @@ function SStaticPopup_EditBoxOnEscapePressed(self)
 	end
 end
 
-function SStaticPopup_EditBoxOnEscapePressed(self, userInput)
+function SStaticPopup_EditBoxOnTextChanged(self, userInput)
 	if ( not self.autoCompleteParams or not AutoCompleteEditBox_OnTextChanged(self, userInput) ) then
 		local EditBoxOnTextChanged = SStaticPopupDialogs[self:GetParent().which].EditBoxOnTextChanged;
 		if ( EditBoxOnTextChanged ) then

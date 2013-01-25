@@ -744,7 +744,10 @@ local function SkinBlz(event, addon)
 		RaidFinderFrameBottomInsetBg:Hide()
 		RaidFinderFrameBtnCornerRight:Hide()
 		RaidFinderFrameButtonBottomBorder:Hide()
-
+		RaidFinderQueueFrameScrollFrameScrollBackground:Hide()
+		RaidFinderQueueFrameScrollFrameScrollBackgroundTopLeft:Hide()
+		RaidFinderQueueFrameScrollFrameScrollBackgroundBottomRight:Hide()
+		
 		for i = 1, LFD_MAX_REWARDS do
 			local button = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i]
 				
@@ -768,14 +771,17 @@ local function SkinBlz(event, addon)
 				S.CreateBD(button.bg2, 0)		
 			end
 		end
-
-
+		
+		S.ReskinScroll(RaidFinderQueueFrameScrollFrameScrollBar)
 		-- Scenario finder
 
 		ScenarioFinderFrameInset:DisableDrawLayer("BORDER")
 		ScenarioFinderFrame.TopTileStreaks:Hide()
 		ScenarioFinderFrameBtnCornerRight:Hide()
 		ScenarioFinderFrameButtonBottomBorder:Hide()
+		ScenarioQueueFrameRandomScrollFrameScrollBackground:Hide()
+		ScenarioQueueFrameRandomScrollFrameScrollBackgroundTopLeft:Hide()
+		ScenarioQueueFrameRandomScrollFrameScrollBackgroundBottomRight:Hide()
 		ScenarioQueueFrame.Bg:Hide()
 		ScenarioFinderFrameInset:GetRegions():Hide()
 		ScenarioQueueFrameRandomScrollFrame:SetWidth(304)
@@ -809,12 +815,12 @@ local function SkinBlz(event, addon)
 		end)
 		S.Reskin(ScenarioQueueFrameFindGroupButton)
 		S.ReskinDropDown(ScenarioQueueFrameTypeDropDown)
-		
+		S.ReskinScroll(ScenarioQueueFrameRandomScrollFrameScrollBar)
 		-- Raid frame (social frame)
 
 		S.Reskin(RaidFrameRaidBrowserButton)
 		S.ReskinCheck(RaidFrameAllAssistCheckButton)
-
+	
 		-- Looking for raid
 
 		LFRBrowseFrameRoleInset:DisableDrawLayer("BORDER")
@@ -2217,7 +2223,35 @@ local function SkinBlz(event, addon)
 
 			S.CreateGradient(bu)
 		end
+		local function colourTab(f)
+			f.text:SetTextColor(1, 1, 1)
+			f:SetBackdropBorderColor(r, g, b)
+		end
 
+		local function clearTab(f)
+			f.text:SetTextColor(1, .82, 0)
+			f:SetBackdropBorderColor(0, 0, 0)
+		end
+
+		local function styleTab(bu)
+			bu.selected:SetTexture(r, g, b, .2)
+			bu.selected:SetDrawLayer("BACKGROUND")
+			bu.text:SetFont(DB.Font, 14)
+			S.Reskin(bu, true)
+			bu:SetScript("OnEnter", colourTab)
+			bu:SetScript("OnLeave", clearTab)
+		end
+
+		for i = 1, 6 do
+			styleTab(_G["HelpFrameButton"..i])
+		end
+		styleTab(HelpFrameButton16)
+
+		HelpFrameAccountSecurityOpenTicket.text:SetFont(DB.Font, 14)
+		HelpFrameOpenTicketHelpOpenTicket.text:SetFont(DB.Font, 14)
+		HelpFrameOpenTicketHelpTopIssues.text:SetFont(DB.Font, 14)
+		HelpFrameOpenTicketHelpItemRestoration.text:SetFont(DB.Font, 14)
+		
 		HelpFrameCharacterStuckHearthstone:Size(56, 56)
 		S.CreateBG(HelpFrameCharacterStuckHearthstone)
 		HelpFrameCharacterStuckHearthstoneIconTexture:SetTexCoord(.08, .92, .08, .92)
@@ -2791,7 +2825,6 @@ local function SkinBlz(event, addon)
 		S.CreateBG(BonusRollFrame.PromptFrame.Icon)
 
 		BonusRollFrame.PromptFrame.Timer.Bar:SetTexture(media.backdrop)
-		BonusRollFrame.PromptFrame.Timer.Bar:SetGradient("VERTICAL", 1, 1, 0, .7, .7, 0)
 
 		S.CreateBD(BonusRollFrame)
 		S.CreateBDFrame(BonusRollFrame.PromptFrame.Timer, .25)
@@ -2946,6 +2979,18 @@ local function SkinBlz(event, addon)
 		ChatConfigCombatSettingsFiltersCopyFilterButton:Point("RIGHT", ChatConfigCombatSettingsFiltersAddFilterButton, "LEFT", -1, 0)
 		ChatConfigMoveFilterUpButton:Point("TOPLEFT", ChatConfigCombatSettingsFilters, "BOTTOMLEFT", 3, 0)
 		ChatConfigMoveFilterDownButton:Point("LEFT", ChatConfigMoveFilterUpButton, "RIGHT", 1, 0)
+		-- Level up display
+
+		LevelUpDisplaySide:HookScript("OnShow", function(self)
+			for i = 1, #self.unlockList do
+				local f = _G["LevelUpDisplaySideUnlockFrame"..i]
+
+				if not f.restyled then
+					f.icon:SetTexCoord(.08, .92, .08, .92)
+					S.CreateBG(f.icon)
+				end
+			end
+		end)
 		-- [[ Hide regions ]]
 
 		local bglayers = {"SpellBookFrame", "LFDParentFrame", "LFDParentFrameInset", "WhoFrameColumnHeader1", "WhoFrameColumnHeader2", "WhoFrameColumnHeader3", "WhoFrameColumnHeader4", "RaidInfoInstanceLabel", "RaidInfoIDLabel", "CharacterFrameInsetRight", "PVPTeamManagementFrame", "PVPTeamManagementFrameHeader1", "PVPTeamManagementFrameHeader2", "PVPTeamManagementFrameHeader3", "PVPTeamManagementFrameHeader4", "PVPBannerFrame", "PVPBannerFrameInset", "LFRQueueFrame", "LFRBrowseFrame", "HelpFrameMainInset", "CharacterModelFrame", "HelpFrame", "HelpFrameLeftInset", "EquipmentFlyoutFrameButtons", "VideoOptionsFrameCategoryFrame", "InterfaceOptionsFrameCategories", "InterfaceOptionsFrameAddOns", "RaidParentFrame"}
@@ -2970,14 +3015,12 @@ local function SkinBlz(event, addon)
 			end
 		end
 		for i = 1, 6 do
-			_G["HelpFrameButton"..i.."Selected"]:SetAlpha(0)
 			for j = 1, 3 do
 				select(i, _G["FriendsTabHeaderTab"..j]:GetRegions()):Hide()
 				select(i, _G["FriendsTabHeaderTab"..j]:GetRegions()).Show = function() end
 			end
 			select(i, ScrollOfResurrectionFrameNoteFrame:GetRegions()):Hide()
 		end
-		HelpFrameButton16Selected:SetAlpha(0)
 		PVPHonorFrameBGTex:Hide()
 		OpenStationeryBackgroundLeft:Hide()
 		OpenStationeryBackgroundRight:Hide()
@@ -3323,10 +3366,10 @@ local function SkinBlz(event, addon)
 				S.Reskin(_G["StaticPopup"..i.."Button"..j])
 			end
 		end
-		
-		local buttons = {"VideoOptionsFrameOkay", "VideoOptionsFrameCancel", "VideoOptionsFrameDefaults", "VideoOptionsFrameApply", "AudioOptionsFrameOkay", "AudioOptionsFrameCancel", "AudioOptionsFrameDefaults", "InterfaceOptionsFrameDefaults", "InterfaceOptionsFrameOkay", "InterfaceOptionsFrameCancel", "ChatConfigFrameOkayButton", "ChatConfigFrameDefaultButton", "DressUpFrameCancelButton", "DressUpFrameResetButton", "WhoFrameWhoButton", "WhoFrameAddFriendButton", "WhoFrameGroupInviteButton", "SendMailMailButton", "SendMailCancelButton", "OpenMailReplyButton", "OpenMailDeleteButton", "OpenMailCancelButton", "OpenMailReportSpamButton", "ChannelFrameNewButton", "RaidFrameRaidInfoButton", "RaidFrameConvertToRaidButton", "GearManagerDialogPopupOkay", "GearManagerDialogPopupCancel", "StackSplitOkayButton", "StackSplitCancelButton", "GameMenuButtonHelp", "GameMenuButtonOptions", "GameMenuButtonUIOptions", "GameMenuButtonKeybindings", "GameMenuButtonMacros", "GameMenuButtonLogout", "GameMenuButtonQuit", "GameMenuButtonContinue", "GameMenuButtonMacOptions", "FriendsFrameAddFriendButton", "FriendsFrameSendMessageButton", "LFDQueueFrameFindGroupButton", "LFRQueueFrameFindGroupButton", "LFRQueueFrameAcceptCommentButton", "PVPFrameLeftButton", "PVPFrameRightButton", "AddFriendEntryFrameAcceptButton", "AddFriendEntryFrameCancelButton", "FriendsFriendsSendRequestButton", "FriendsFriendsCloseButton", "ColorPickerOkayButton", "ColorPickerCancelButton", "FriendsFrameIgnorePlayerButton", "FriendsFrameUnsquelchButton", "LFGDungeonReadyDialogEnterDungeonButton", "LFGDungeonReadyDialogLeaveQueueButton", "LFRBrowseFrameSendMessageButton", "LFRBrowseFrameInviteButton", "LFRBrowseFrameRefreshButton", "LFDRoleCheckPopupAcceptButton", "LFDRoleCheckPopupDeclineButton", "GuildInviteFrameJoinButton", "GuildInviteFrameDeclineButton", "FriendsFramePendingButton1AcceptButton", "FriendsFramePendingButton1DeclineButton", "RaidInfoExtendButton", "RaidInfoCancelButton", "PaperDollEquipmentManagerPaneEquipSet", "PaperDollEquipmentManagerPaneSaveSet", "PVPBannerFrameAcceptButton", "PVPColorPickerButton1", "PVPColorPickerButton2", "PVPColorPickerButton3", "HelpFrameButton1", "HelpFrameButton2", "HelpFrameButton3", "HelpFrameButton4", "HelpFrameButton5", "HelpFrameButton16", "HelpFrameButton6", "HelpFrameAccountSecurityOpenTicket", "HelpFrameCharacterStuckStuck", "HelpFrameOpenTicketHelpTopIssues", "HelpFrameOpenTicketHelpOpenTicket", "ReadyCheckFrameYesButton", "ReadyCheckFrameNoButton", "RolePollPopupAcceptButton", "HelpFrameTicketSubmit", "HelpFrameTicketCancel", "HelpFrameKnowledgebaseSearchButton", "GhostFrame", "HelpFrameGM_ResponseNeedMoreHelp", "HelpFrameGM_ResponseCancel", "GMChatOpenLog", "HelpFrameKnowledgebaseNavBarHomeButton", "AddFriendInfoFrameContinueButton", "LFDQueueFramePartyBackfillBackfillButton", "LFDQueueFramePartyBackfillNoBackfillButton", "ChannelFrameDaughterFrameOkayButton", "ChannelFrameDaughterFrameCancelButton", "WarGameStartButton", "PendingListInfoFrameContinueButton", "LFDQueueFrameNoLFDWhileLFRLeaveQueueButton", "InterfaceOptionsHelpPanelResetTutorials", "RaidFinderFrameFindRaidButton", "RaidFinderQueueFrameIneligibleFrameLeaveQueueButton", "SideDressUpModelResetButton", "LFGInvitePopupAcceptButton", "LFGInvitePopupDeclineButton", "RaidFinderQueueFramePartyBackfillBackfillButton", "RaidFinderQueueFramePartyBackfillNoBackfillButton", "ScrollOfResurrectionSelectionFrameAcceptButton", "ScrollOfResurrectionSelectionFrameCancelButton", "ScrollOfResurrectionFrameAcceptButton", "ScrollOfResurrectionFrameCancelButton", "HelpFrameReportBugSubmit", "HelpFrameSubmitSuggestionSubmit", "ReportPlayerNameDialogReportButton", "ReportPlayerNameDialogCancelButton", "ReportCheatingDialogReportButton", "ReportCheatingDialogCancelButton", "HelpFrameOpenTicketHelpItemRestoration"}
+		local buttons = {"VideoOptionsFrameOkay", "VideoOptionsFrameCancel", "VideoOptionsFrameDefaults", "VideoOptionsFrameApply", "AudioOptionsFrameOkay", "AudioOptionsFrameCancel", "AudioOptionsFrameDefaults", "InterfaceOptionsFrameDefaults", "InterfaceOptionsFrameOkay", "InterfaceOptionsFrameCancel", "ChatConfigFrameOkayButton", "ChatConfigFrameDefaultButton", "DressUpFrameCancelButton", "DressUpFrameResetButton", "WhoFrameWhoButton", "WhoFrameAddFriendButton", "WhoFrameGroupInviteButton", "SendMailMailButton", "SendMailCancelButton", "OpenMailReplyButton", "OpenMailDeleteButton", "OpenMailCancelButton", "OpenMailReportSpamButton", "ChannelFrameNewButton", "RaidFrameRaidInfoButton", "RaidFrameConvertToRaidButton", "GearManagerDialogPopupOkay", "GearManagerDialogPopupCancel", "StackSplitOkayButton", "StackSplitCancelButton", "GameMenuButtonHelp", "GameMenuButtonOptions", "GameMenuButtonUIOptions", "GameMenuButtonKeybindings", "GameMenuButtonMacros", "GameMenuButtonLogout", "GameMenuButtonQuit", "GameMenuButtonContinue", "GameMenuButtonMacOptions", "LFDQueueFrameFindGroupButton", "LFRQueueFrameFindGroupButton", "LFRQueueFrameAcceptCommentButton", "PVPFrameLeftButton", "PVPFrameRightButton", "AddFriendEntryFrameAcceptButton", "AddFriendEntryFrameCancelButton", "FriendsFriendsSendRequestButton", "FriendsFriendsCloseButton", "ColorPickerOkayButton", "ColorPickerCancelButton", "LFGDungeonReadyDialogEnterDungeonButton", "LFGDungeonReadyDialogLeaveQueueButton", "LFRBrowseFrameSendMessageButton", "LFRBrowseFrameInviteButton", "LFRBrowseFrameRefreshButton", "LFDRoleCheckPopupAcceptButton", "LFDRoleCheckPopupDeclineButton", "GuildInviteFrameJoinButton", "GuildInviteFrameDeclineButton", "FriendsFramePendingButton1AcceptButton", "FriendsFramePendingButton1DeclineButton", "RaidInfoExtendButton", "RaidInfoCancelButton", "PaperDollEquipmentManagerPaneEquipSet", "PaperDollEquipmentManagerPaneSaveSet", "PVPBannerFrameAcceptButton", "PVPColorPickerButton1", "PVPColorPickerButton2", "PVPColorPickerButton3", "HelpFrameAccountSecurityOpenTicket", "HelpFrameCharacterStuckStuck", "HelpFrameOpenTicketHelpTopIssues", "HelpFrameOpenTicketHelpOpenTicket", "ReadyCheckFrameYesButton", "ReadyCheckFrameNoButton", "RolePollPopupAcceptButton", "HelpFrameTicketSubmit", "HelpFrameTicketCancel", "HelpFrameKnowledgebaseSearchButton", "GhostFrame", "HelpFrameGM_ResponseNeedMoreHelp", "HelpFrameGM_ResponseCancel", "GMChatOpenLog", "HelpFrameKnowledgebaseNavBarHomeButton", "AddFriendInfoFrameContinueButton", "LFDQueueFramePartyBackfillBackfillButton", "LFDQueueFramePartyBackfillNoBackfillButton", "ChannelFrameDaughterFrameOkayButton", "ChannelFrameDaughterFrameCancelButton", "WarGameStartButton", "PendingListInfoFrameContinueButton", "LFDQueueFrameNoLFDWhileLFRLeaveQueueButton", "InterfaceOptionsHelpPanelResetTutorials", "RaidFinderFrameFindRaidButton", "RaidFinderQueueFrameIneligibleFrameLeaveQueueButton", "SideDressUpModelResetButton", "LFGInvitePopupAcceptButton", "LFGInvitePopupDeclineButton", "RaidFinderQueueFramePartyBackfillBackfillButton", "RaidFinderQueueFramePartyBackfillNoBackfillButton", "ScrollOfResurrectionSelectionFrameAcceptButton", "ScrollOfResurrectionSelectionFrameCancelButton", "ScrollOfResurrectionFrameAcceptButton", "ScrollOfResurrectionFrameCancelButton", "HelpFrameReportBugSubmit", "HelpFrameSubmitSuggestionSubmit", "ReportPlayerNameDialogReportButton", "ReportPlayerNameDialogCancelButton", "ReportCheatingDialogReportButton", "ReportCheatingDialogCancelButton", "HelpFrameOpenTicketHelpItemRestoration"}
+
 		for i = 1, #buttons do
-		local reskinbutton = _G[buttons[i]]
+			local reskinbutton = _G[buttons[i]]
 			if reskinbutton then
 				S.Reskin(reskinbutton)
 			else
@@ -3874,6 +3917,11 @@ local function SkinBlz(event, addon)
 		hooksecurefunc("AchievementFrameSummary_UpdateAchievements", function()
 			for i = 1, ACHIEVEMENTUI_MAX_SUMMARY_ACHIEVEMENTS do
 				local bu = _G["AchievementFrameSummaryAchievement"..i]
+				if bu.accountWide then
+					bu.label:SetTextColor(0, .6, 1)
+				else
+					bu.label:SetTextColor(.9, .9, .9)
+				end
 				if not bu.reskinned then
 					bu:DisableDrawLayer("BORDER")
 
@@ -4137,9 +4185,15 @@ local function SkinBlz(event, addon)
 					hl:SetVertexColor(r, g, b, .2)
 					hl.SetAlpha = function() end
 					hl:ClearAllPoints()
-					hl:SetPoint("TOPLEFT", 0, -1)
-					hl:SetPoint("BOTTOMRIGHT", -1, 6)
-
+					hl:Point("TOPLEFT", 0, -1)
+					hl:Point("BOTTOMRIGHT", -1, 6)
+					
+					bu.Selection:ClearAllPoints()
+					bu.Selection:Point("TOPLEFT", 0, -1)
+					bu.Selection:Point("BOTTOMRIGHT", -1, 6)
+					bu.Selection:SetTexture(media.backdrop)
+					bu.Selection:SetVertexColor(r, g, b, .1)
+					
 					bu.reskinned = true
 				end
 				if bu:IsShown() and bu.itemLink then
@@ -5439,6 +5493,59 @@ local function SkinBlz(event, addon)
 		end
 
 		S.ReskinPortraitFrame(InspectFrame, true)
+	elseif addon == "Blizzard_ItemAlterationUI" then
+		S.SetBD(TransmogrifyFrame)
+		TransmogrifyArtFrame:DisableDrawLayer("BACKGROUND")
+		TransmogrifyArtFrame:DisableDrawLayer("BORDER")
+		TransmogrifyArtFramePortraitFrame:Hide()
+		TransmogrifyArtFramePortrait:Hide()
+		TransmogrifyArtFrameTopBorder:Hide()
+		TransmogrifyArtFrameTopRightCorner:Hide()
+		TransmogrifyModelFrameMarbleBg:Hide()
+		select(2, TransmogrifyModelFrame:GetRegions()):Hide()
+		TransmogrifyModelFrameLines:Hide()
+		TransmogrifyFrameButtonFrame:GetRegions():Hide()
+		TransmogrifyFrameButtonFrameButtonBorder:Hide()
+		TransmogrifyFrameButtonFrameButtonBottomBorder:Hide()
+		TransmogrifyFrameButtonFrameMoneyLeft:Hide()
+		TransmogrifyFrameButtonFrameMoneyRight:Hide()
+		TransmogrifyFrameButtonFrameMoneyMiddle:Hide()
+
+		local slots = {"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Back", "MainHand", "SecondaryHand"}
+
+		for i = 1, #slots do
+			local slot = _G["TransmogrifyFrame"..slots[i].."Slot"]
+			if slot then
+				local ic = _G["TransmogrifyFrame"..slots[i].."SlotIconTexture"]
+				_G["TransmogrifyFrame"..slots[i].."SlotBorder"]:Hide()
+				_G["TransmogrifyFrame"..slots[i].."SlotGrabber"]:Hide()
+
+				ic:SetTexCoord(.08, .92, .08, .92)
+				S.CreateBD(slot, 0)
+			end
+		end
+
+		TransmogrifyConfirmationPopup:SetScale(UIParent:GetScale())
+
+		S.CreateBD(TransmogrifyConfirmationPopup)
+		S.CreateSD(TransmogrifyConfirmationPopup)
+		S.Reskin(TransmogrifyConfirmationPopup.Button1)
+		S.Reskin(TransmogrifyConfirmationPopup.Button2)
+
+		for i = 1, 2 do
+			local f = TransmogrifyConfirmationPopup["ItemFrame"..i]
+
+			f:SetNormalTexture("")
+			f:SetPushedTexture("")
+
+			f.icon:SetTexCoord(.08, .92, .08, .92)
+			S.CreateBG(f)
+
+			select(8, f:GetRegions()):Hide()
+		end
+
+		S.Reskin(TransmogrifyApplyButton)
+		S.ReskinClose(TransmogrifyArtFrameCloseButton)
 	elseif addon == "Blizzard_ItemSocketingUI" then
 		ItemSocketingFrame:DisableDrawLayer("BORDER")
 		ItemSocketingFrame:DisableDrawLayer("ARTWORK")
@@ -5646,7 +5753,9 @@ local function SkinBlz(event, addon)
 		MacroFrameSelectedMacroButtonIcon:SetTexCoord(.08, .92, .08, .92)
 
 		MacroPopupFrame:Point("TOPLEFT", MacroFrame, "TOPRIGHT", 1, 0)
-
+		
+		MacroNewButton:ClearAllPoints()
+		MacroNewButton:Point("RIGHT", MacroExitButton, "LEFT", -1, 0)
 		for i = 1, MAX_ACCOUNT_MACROS do
 			local bu = _G["MacroButton"..i]
 			local ic = _G["MacroButton"..i.."Icon"]
@@ -6536,33 +6645,37 @@ local function SkinBlz(event, addon)
 
 		ClassTrainerFrameSkillStepButtonIcon:SetTexCoord(.08, .92, .08, .92)
 
-		for i = 1, CLASS_TRAINER_SKILLS_DISPLAYED do
-			local bu = _G["ClassTrainerScrollFrameButton"..i]
+		hooksecurefunc("ClassTrainerFrame_Update", function()
+			for _, bu in next, ClassTrainerFrame.scrollFrame.buttons do
+				if not bu.styled then
+					local bg = CreateFrame("Frame", nil, bu)
+					bg:SetPoint("TOPLEFT", 42, -6)
+					bg:SetPoint("BOTTOMRIGHT", 0, 6)
+					bg:SetFrameLevel(bu:GetFrameLevel()-1)
+					S.CreateBD(bg, .25)
 
-			local bg = CreateFrame("Frame", nil, bu)
-			bg:Point("TOPLEFT", 42, -6)
-			bg:Point("BOTTOMRIGHT", 0, 6)
-			bg:SetFrameLevel(bu:GetFrameLevel()-1)
-			S.CreateBD(bg, .25)
+					bu.name:SetParent(bg)
+					bu.name:SetPoint("TOPLEFT", bu.icon, "TOPRIGHT", 6, -2)
+					bu.subText:SetParent(bg)
+					bu.money:SetParent(bg)
+					bu.money:SetPoint("TOPRIGHT", bu, "TOPRIGHT", 5, -8)
+					bu:SetNormalTexture("")
+					bu:SetHighlightTexture("")
+					bu.disabledBG:Hide()
+					bu.disabledBG.Show = function() end
 
-			bu.name:SetParent(bg)
-			bu.name:Point("TOPLEFT", bu.icon, "TOPRIGHT", 6, -2)
-			bu.subText:SetParent(bg)
-			bu.money:SetParent(bg)
-			bu.money:Point("TOPRIGHT", bu, "TOPRIGHT", 5, -8)
-			bu:SetNormalTexture("")
-			bu:SetHighlightTexture("")
-			bu.disabledBG:Hide()
-			bu.disabledBG.Show = function() end
+					bu.selectedTex:SetPoint("TOPLEFT", 43, -6)
+					bu.selectedTex:SetPoint("BOTTOMRIGHT", -1, 7)
+					bu.selectedTex:SetTexture(media.backdrop)
+					bu.selectedTex:SetVertexColor(r, g, b, .2)
 
-			bu.selectedTex:Point("TOPLEFT", 43, -6)
-			bu.selectedTex:Point("BOTTOMRIGHT", -1, 7)
-			bu.selectedTex:SetTexture(media.backdrop)
-			bu.selectedTex:SetVertexColor(r, g, b, .2)
+					bu.icon:SetTexCoord(.08, .92, .08, .92)
+					S.CreateBG(bu.icon)
 
-			bu.icon:SetTexCoord(.08, .92, .08, .92)
-			S.CreateBG(bu.icon)
-		end
+					bu.styled = true
+				end
+			end
+		end)
 
 		ClassTrainerStatusBarLeft:Hide()
 		ClassTrainerStatusBarMiddle:Hide()
