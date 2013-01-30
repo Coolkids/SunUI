@@ -2065,6 +2065,8 @@ function ns:UpdateIndicators(self)
 							elseif not v.lack then
 								if (DB.MyClass == "WARLOCK") then
 									if i == "1" then text = ns:hex(r, g, b).."5|r" end
+								else
+									text = text..ns:hex(r, g, b)..i.."|r"
 								end
 								--text = text..ns:hex(r, g, b)..i.."|r"
 							end

@@ -1,4 +1,5 @@
-﻿local knowFish = false
+﻿local F = LibStub("AceAddon-3.0"):NewAddon("sFish"):NewModule("Module", "AceEvent-3.0", "AceHook-3.0")
+local knowFish = false
 local spell = GetSpellInfo(131474)
 local isPole = false
 local holder = CreateFrame("Frame", nil, UIParent);
@@ -117,8 +118,9 @@ local useinventory = {};
 local lureinventory = {};
 local function UpdateLureInventory()
 	local rawskill = GetCurrentSkill();
-	useinventory = {};
-	lureinventory = {};
+	wipe(useinventory)
+	wipe(lureinventory)
+	--lureinventory = {};
 	for _,lure in ipairs(fishlure) do
 		local id = lure.id;
 		local count = GetItemCount(id);
@@ -130,7 +132,7 @@ local function UpdateLureInventory()
 					tinsert(useinventory, lure);
 				end
 			end
-			lure.n = GetItemInfo(id);
+			--lure.n = GetItemInfo(id);
 		end
 	end
  end
@@ -208,22 +210,49 @@ local function OnMouseDown(...)
 			OverrideClick()
 	end
 end
-btn:RegisterEvent("PLAYER_ENTERING_WORLD")
-btn:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
-btn:SetScript("OnEvent", function(self, event)
-	if event == "PLAYER_ENTERING_WORLD" then
-		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-		if(IsSpellKnown(131474)) then
-			knowFish = true
-			WorldFrame:HookScript("OnMouseDown", OnMouseDown)
-		end
-		isPole = IsFishPole()
-		UpdateLureInventory()
+
+function F:HookWorldFrame()
+	if not self:IsHooked(WorldFrame, "OnMouseDown") then
+		--print("Hook")
+		self:HookScript(WorldFrame, "OnMouseDown", OnMouseDown)
 	end
-	if event == "PLAYER_EQUIPMENT_CHANGED" then
-		isPole = IsFishPole()
+end
+function F:PLAYER_ENTERING_WORLD()
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+	if(IsSpellKnown(131474)) then
+		knowFish = true
+	end
+	isPole = IsFishPole()
+	if isPole and knowFish then
+		UpdateLureInventory()
+		self:HookWorldFrame()
+	end
+end
+
+function F:PLAYER_EQUIPMENT_CHANGED()
+	isPole = IsFishPole()
+	if(IsSpellKnown(131474)) then
+		knowFish = true
 	end
 	if not InCombatLockdown() and knowFish and isPole then
+		self:HookWorldFrame()
 		UpdateLureInventory()
+		self:RegisterEvent("BAG_UPDATE")
+	else
+		--print("UnHook")
+		ClearOverrideBindings(btn)
+		if self:IsHooked(WorldFrame, "OnMouseDown") then
+			self:Unhook(WorldFrame, "OnMouseDown")
+		end
+		self:UnregisterEvent("BAG_UPDATE")
 	end
-end)
+end
+
+function F:BAG_UPDATE()
+	UpdateLureInventory()
+end
+
+function F:OnEnable()
+	F:RegisterEvent("PLAYER_ENTERING_WORLD")
+	F:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
+end

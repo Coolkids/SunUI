@@ -3,6 +3,6 @@
 	<Include file="oUF_Plugins\load.xml"/>
 	<Script file="Castbar.lua"/>
 	<Script file="tags.lua"/>
-	<Script file="core.lua"/>
+	<Script file="unitframe.lua"/>
 	<Include file="plugins\load.xml"/>
 </Ui>

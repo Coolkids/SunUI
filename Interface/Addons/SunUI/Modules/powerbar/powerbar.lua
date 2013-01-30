@@ -586,6 +586,108 @@ function Module:Mage()
 	end)
 end
 
+function Module:Shaman()
+	if DB.MyClass ~= "SHAMAN" then return end
+	local bars = {}
+	local total = 0
+	local delay = 0.01
+
+	-- In the order, fire, earth, water, air
+	local colors = {
+		[1] = {0.752,0.172,0.02},
+		[2] = {0.741,0.580,0.04},
+		[3] = {0,0.443,0.631},
+		[4] = {0.6,1,0.945},
+	}
+	for i = 1, 4 do
+		bars[i] = CreateFrame("StatusBar", nil, Holder)
+		bars[i]:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
+		bars[i]:SetSize((C["Width"]-space*(4-1))/4, C["Height"])
+		bars[i]:GetStatusBarTexture():SetHorizTile(false)
+
+		bars[i]:CreateShadow()
+		S.CreateBack(bars[i])
+		S.CreateMark(bars[i])
+		bars[i]:SetMinMaxValues(0, 1)
+		tinsert(fourframe, bars[i])
+		if (i == 1) then
+			bars[i]:SetPoint("LEFT", Holder)
+		else
+			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", space, 0)
+		end
+	end
+	
+	local function UpdateSlot(self, slot)
+		if not slot or slot < 1 or slot > 4 then return end
+
+		local totem = bars
+
+		haveTotem, name, startTime, duration, totemIcon = GetTotemInfo(slot)
+
+		--totem[slot]:SetStatusBarColor(unpack(colors[slot]))
+		S.CreateTop(totem[slot]:GetStatusBarTexture(), unpack(colors[slot]))
+		totem[slot]:SetValue(0)
+
+		-- Multipliers
+		-- if (totem[slot].bg.multiplier) then
+			-- local mu = totem[slot].bg.multiplier
+			-- local r, g, b = totem[slot]:GetStatusBarColor()
+			-- r, g, b = r*mu, g*mu, b*mu
+			-- totem[slot].bg:SetVertexColor(r, g, b) 
+		-- end
+
+		totem[slot].ID = slot
+
+		-- If we have a totem then set his value 
+		if(haveTotem) then
+
+			if totem[slot].Name then
+				totem[slot].Name:SetText(Abbrev(name))
+			end
+			if(duration >= 0) then	
+				if duration == 0 then
+					totem[slot]:SetValue(0)
+				else
+					totem[slot]:SetValue(1 - ((GetTime() - startTime) / duration))	
+				end
+
+				-- Status bar update
+				totem[slot]:SetScript("OnUpdate",function(self,elapsed)
+						total = total + elapsed
+						if total >= delay then
+							total = 0
+							haveTotem, name, startTime, duration, totemIcon = GetTotemInfo(self.ID)
+							if duration == 0 then
+								self:SetValue(0)
+							else
+								self:SetValue(1 - ((GetTime() - startTime) / duration))
+							end
+						end
+					end)
+			else
+				-- There's no need to update because it doesn't have any duration
+				totem[slot]:SetScript("OnUpdate",nil)
+				totem[slot]:SetValue(0)
+			end 
+		else
+			-- No totem = no time 
+			if totem[slot].Name then
+				totem[slot].Name:SetText(" ")
+			end
+			totem[slot]:SetValue(0)
+		end
+
+	end
+	local Event = CreateFrame("Frame", nil, Holder)
+	Event:RegisterEvent("PLAYER_TOTEM_UPDATE")
+	Event:RegisterEvent("PLAYER_ENTERING_WORLD")
+	Event:SetScript("OnEvent",function(self,event,unit)
+		for i = 1, 4 do 
+			UpdateSlot(bars, i)
+		end
+	end)
+end
+
 function Module:HealthPowerBar()
 	if not C["HealthPower"] then return end
 	local bars = CreateFrame("Statusbar", nil, Holder)
@@ -595,7 +697,7 @@ function Module:HealthPowerBar()
 	bars:SetMinMaxValues(0, UnitHealthMax("player"))
 	bars:SetValue(UnitHealth("player"))
 	bars:SetStatusBarColor(0.1, 0.8, 0.1, 0)
-	if DB.MyClass ~= "WARLOCK" then
+	if DB.MyClass ~= "WARLOCK" and DB.MyClass ~= "SHAMAN" then
 		S.CreateBack(bars)
 		S.CreateBD(bars, 0)
 	end
@@ -749,6 +851,7 @@ function Module:OnEnable()
 	Module:CreateEclipse()
 	Module:FuckWarlock()
 	Module:Mage()
+	Module:Shaman()
 	Module:HealthPowerBar()
 	Module:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 	if C["Fade"] then

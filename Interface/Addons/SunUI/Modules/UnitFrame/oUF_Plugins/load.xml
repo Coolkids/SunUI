@@ -8,6 +8,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="oUF_BarFader.lua"/>
 	<Script file="oUF_SpellRange.lua"/>
+	<Script file="oUF_TotemBar.lua"/>
 	<Script file="oUF_WarlockSpecBars.lua"/>
 </Ui>
 

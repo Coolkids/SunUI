@@ -6759,20 +6759,6 @@ local function SkinBlz(event, addon)
 			_G["VoidStorageStorageButton"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
 		end
 
-		hooksecurefunc("VoidStorage_ItemsFilteredUpdate", function()
-			local button, isFiltered, _
-			for i = 1, 80 do
-				_, _, _, _, isFiltered = GetVoidItemInfo(i)
-				button = _G["VoidStorageStorageButton"..i]
-
-				if isFiltered then
-					button.glow:SetAlpha(0)
-				else
-					button.glow:SetAlpha(1)
-				end
-			end
-		end)
-
 		S.Reskin(VoidStoragePurchaseButton)
 		S.Reskin(VoidStorageHelpBoxButton)
 		S.Reskin(VoidStorageTransferButton)

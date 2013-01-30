@@ -1459,7 +1459,7 @@ local function updateOverlayTextures(frame, frameName, textureCache, scale, alph
 		end
 		return
 	end
-
+	if mapFileName == "STVDiamondMineBG" then return end
 	local pathPrefix = "Interface\\WorldMap\\"..mapFileName.."\\"
 	--print(mapFileName)
 	if strmatch(mapFileName, "%_terrain(.+)") then mapFileName = mapFileName:gsub("%_terrain(.+)","") end

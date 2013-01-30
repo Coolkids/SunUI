@@ -157,10 +157,14 @@ function CT:UpdateSet()
 end
 function CT:UNIT_HEALTH(event, unit)
 	if unit ~= "target" then return end
-	if ( UnitCanAttack("player", "target") and not UnitIsDead("target") and ( UnitHealth("target")/UnitHealthMax("target") < Frame.per and UnitLevel("player") > Frame.level ) and not UnitIsDead("player") ) and not Frame:IsShown() then
-		Frame:Show()
-	elseif Frame:IsShown() then
-		Frame:Hide()
+	if ( UnitCanAttack("player", "target") and not UnitIsDead("target") and ( UnitHealth("target")/UnitHealthMax("target") < Frame.per and UnitLevel("player") > Frame.level ) and not UnitIsDead("player") ) then
+		if not Frame:IsShown() then
+			Frame:Show()
+		end
+	else
+		if Frame:IsShown() then
+			Frame:Hide()
+		end
 	end
 end
 function CT:SPELL_UPDATE_COOLDOWN()

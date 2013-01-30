@@ -5,13 +5,13 @@ local S, L, DB, _, C = unpack(select(2, ...))
 local UF = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("UnitFrame")
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local P,U
-local space = (DB.MyClass == "DEATHKNIGHT") and 2 or 6
+local class = DB.MyClass
+local space = (class == "DEATHKNIGHT") and 2 or 6
 oUF.colors.power['MANA'] = {.3,.45,.65}
 oUF.colors.power['RAGE'] = {.7,.3,.3}
 oUF.colors.power['FOCUS'] = {.7,.45,.25}
 --oUF.colors.power['ENERGY'] = {.65,.65,.35}
 oUF.colors.power['RUNIC_POWER'] = {.45,.45,.75}
-local class = DB.MyClass
 local headframe
 -----------------------------
 -- FUNCTIONS
@@ -751,7 +751,31 @@ local function createDebuffs(f)
 	d.PostUpdateIcon = PostUpdateIcon
 	f.Debuffs = d
 end
+--SHAMAN图腾
+local function gen_totembar(f)
+	if  class ~= "SHAMAN" then return end
+	local bars = {}
+	bars.Destroy = false
+	for i = 1, 4 do
+		bars[i] = CreateFrame("StatusBar", nil, f)
+		bars[i]:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
+		bars[i]:SetWidth((f.width-space*(4-1))/4)
+		bars[i]:SetHeight(f.height/4)
+		bars[i]:GetStatusBarTexture():SetHorizTile(false)
 
+		bars[i]:CreateShadow()
+		S.CreateBack(bars[i])
+		S.CreateMark(bars[i])
+		bars[i]:SetMinMaxValues(0, 1)
+	end
+	bars[2]:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
+	bars[1]:SetPoint("LEFT", bars[2], "RIGHT", space, 0)
+	bars[3]:SetPoint("LEFT", bars[1], "RIGHT", space, 0)
+	bars[4]:SetPoint("LEFT", bars[3], "RIGHT", space, 0)
+	
+	f.TotemBar = bars
+end
+----圣能
 local function gen_classpower(f)  
 	if  class ~= "PALADIN" and class ~= "DEATHKNIGHT" then return end
 	-- Runes, Shards, HolyPower
@@ -821,7 +845,7 @@ local function addHarmony(f)
 	if class ~= "MONK" then return end
 	local chibar = CreateFrame("Frame",nil,f)
 	chibar:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
-	chibar:SetSize((f.width-8)/5, f.height/4)
+	chibar:SetSize((f.width-4*space)/5, f.height/4)
 	for i=1,5 do
 		chibar[i] = CreateFrame("StatusBar",nil,chibar)
 		chibar[i]:SetSize((f.width-4*space)/5, f.height/4)
@@ -1340,6 +1364,7 @@ local function CreatePlayerStyle(self, unit)
 		genShadowOrbs(self)
 		genMage(self)
 		warlockpower(self)
+		gen_totembar(self)
 	end
 	gen_swing_timer(self)
     self:Size(self.width,self.height)

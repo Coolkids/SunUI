@@ -34,7 +34,7 @@ local function SkinDBMBar(self)
 			end
 
 			if not tbar.styled then
-				tbar:SetStatusBarTexture(DB.Statusbar)
+				tbar:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
 				S.CreateTop(tbar:GetStatusBarTexture(), DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
 				tbar.SetStatusBarTexture = function() end
 				tbar.SetStatusBarColor = function() 
