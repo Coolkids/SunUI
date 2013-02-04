@@ -466,27 +466,34 @@ local function gen_castbar(f)
     f.Castbar.Time = t
     f.Castbar.Icon = i
     f.Castbar.Spark = sp
-	if ((f.mystyle == "target" and U["targetCBuserplaced"]) or (f.mystyle == "player" and U["playerCBuserplaced"])) then
+	if (f.mystyle == "target" and U["targetCBuserplaced"]) then
 		s:HookScript("OnShow", function()
-			if f.mystyle == "player" then
-				f.tagpp:Hide()
-				f.taghp:Hide()
-			elseif f.mystyle == "target" then
-				f.taghp:Hide()
+			if f.mystyle == "target" then
 				f.tagpp:Hide()
 				f.taginfo:Hide()
 				f.tagname:Hide()
 			end
 		end)
 		s:HookScript("OnHide", function()
-			if f.mystyle == "player" then
-				f.tagpp:Show()
-				f.taghp:Show()
-			elseif f.mystyle == "target" then
-				f.taghp:Show()
+			if f.mystyle == "target" then
 				f.tagpp:Show()
 				f.taginfo:Show()
 				f.tagname:Show()
+			end
+		end)
+	end
+	
+	if (f.mystyle == "player" and U["playerCBuserplaced"]) then
+		s:HookScript("OnShow", function()
+			if f.mystyle == "player" then
+				f.tagpp:Hide()
+				f.taghp:Hide()
+			end
+		end)
+		s:HookScript("OnHide", function()
+			if f.mystyle == "player" then
+				f.tagpp:Show()
+				f.taghp:Show()
 			end
 		end)
 	end
