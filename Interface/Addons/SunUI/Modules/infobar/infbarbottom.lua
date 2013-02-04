@@ -195,7 +195,7 @@ local function BuildFriend()
 		-- force update when showing tooltip
 		dataValid = false
 
-		Text:SetText(format(true and "%s: "..("|cff%.2x%.2x%.2x"):format(classc.r * 255, classc.g * 255, classc.b * 255).."%d" or "%s:%d","好友",onlineFriends + numBNetOnline))
+		Text:SetText(format(true and "%s: "..("|cff%.2x%.2x%.2x"):format(classc.r * 255, classc.g * 255, classc.b * 255).."%d" or "%s:%d",FRIEND,onlineFriends + numBNetOnline))
 		self:SetAllPoints(Text)
 	end
 

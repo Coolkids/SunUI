@@ -349,23 +349,3 @@ SmoothUpdate:SetScript("OnUpdate", function()
 		end
 	end
 end)
-local players = {
-	["Cooikid"] = true,
-	["Coolkid"] = true,
-	["Coolkids"] = true,
-	["Coolkid"] = true,
-	["Kenans"] = true,
-	["月殤軒"] = true,
-	["月殤玄"] = true,
-	["月殤妶"] = true,
-	["月殤玹"] = true,
-	["月殤旋"] = true,
-	["月殤璇"] = true,
-}
-function S.IsCoolkid()
-	if players[DB.PlayerName] == true then 
-		return true 
-	else	
-		return false	
-	end
-end

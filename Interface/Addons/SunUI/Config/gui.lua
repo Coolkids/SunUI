@@ -814,7 +814,7 @@ function SunUIConfig.GenerateOptionsInternal()
 						Alpha3D = {
 							type = "range", order = 11,
 							name = L["头像透明度"],
-							min = 0, max = 1, step = 0.1,
+							min = 0, max = 1, step = 0.01,
 							get = function() return db.UnitFrameDB.Alpha3D end,
 							set = function(_, value) db.UnitFrameDB.Alpha3D = value end,
 						},

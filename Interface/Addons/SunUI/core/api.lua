@@ -4,7 +4,7 @@ local sceenheight = string.match(GetCVar("gxResolution"), "%d+x(%d+)")
 local HiddenFrame = CreateFrame("Frame")
 HiddenFrame:Hide()
 
-S.mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/(max(0.64, min(1.15, GetCVar('uiScale') or UIParent:GetScale() or 768/sceenheight)))
+S.mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/(max(0.64, min(1.15, GetCVar('uiScale') or UIParent:GetScale() or (S.IsCoolkid() and 0.9 or 768/sceenheight))))
 local function sceenscale(x)
 	return (S.mult*math.floor(x/(S.mult)+.5)) 
 end
@@ -213,7 +213,6 @@ while object do
 		addapi(object)
 		handled[object:GetObjectType()] = true
 	end
-
 	object = EnumerateFrames(object)
 end
 

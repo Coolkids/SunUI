@@ -152,13 +152,19 @@ local memTbl = {}
 local IsAddOnLoaded = _G.IsAddOnLoaded
 local GetAddOnMemoryUsage = _G.GetAddOnMemoryUsage
 local GetAddOnInfo = _G.GetAddOnInfo
+local function mySort(x,y)
+	return x.mem > y.mem
+end
 local function MemUseCalc()
+	wipe(memTbl)
 	UpdateAddOnMemoryUsage()
 	local total = 0
 	for i = 1, GetNumAddOns() do
 		if IsAddOnLoaded(i) then
 			local memused = GetAddOnMemoryUsage(i)
 			total = total + memused
+			local addon, name = GetAddOnInfo(i)
+			tinsert(memTbl, {addon = name or addon, mem = GetAddOnMemoryUsage(i)})
 		end
 	end
 	gtotal = total
@@ -167,6 +173,7 @@ local function MemUseCalc()
 	else
 		MemUse = format("%.1f "..L_KB, total)
 	end
+	table.sort(memTbl, mySort)
 end
 function Module:Update()
 	local current = format("%.1f", _G.collectgarbage("count") / 1024)
@@ -198,21 +205,6 @@ local function OnTooltipShow(self)
 	GameTooltip:AddLine("MEMORY", .6,.8,1)
 	GameTooltip:AddLine(" ")
 	local grandtotal = collectgarbage("count")
-	local function mySort(x,y)
-		return x.mem > y.mem
-	end
-	if not self.timer or self.timer + 5 < time() then
-		self.timer = time()
-		wipe(memTbl)
-		UpdateAddOnMemoryUsage()
-		for i = 1, GetNumAddOns() do
-			if IsAddOnLoaded(i) then
-				local addon, name = GetAddOnInfo(i)
-				tinsert(memTbl, {addon = name or addon, mem = GetAddOnMemoryUsage(i)})
-			end
-		end
-		table.sort(memTbl, mySort)
-	end
 	local txt = "|cffFFD700%d|r|cffffffff.|r %s"
 	for k, v in pairs(memTbl) do
 		local color = v.mem <= 102.4 and {0,1} -- 0 - 100
@@ -231,7 +223,7 @@ local function OnTooltipShow(self)
 				or {1,0.1}
 	GameTooltip:AddLine(" ")
 	GameTooltip:AddDoubleLine(L["非暴雪插件总计"], formatMemory(gtotal), .6,.8,1, color[1], color[2], 0)
-	GameTooltip:AddDoubleLine(L["一共占用"], formatMemory(grandtotal), .6,.8,1, 0, 1, 0)
+	GameTooltip:AddDoubleLine(L["一共占用"], formatMemory(grandtotal), .6,.8,1, 1, 0.75, 0)
 	GameTooltip:AddLine(L["回收内存"], 1, 1, 1)
 end
 

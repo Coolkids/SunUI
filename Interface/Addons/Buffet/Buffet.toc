@@ -1,5 +1,5 @@
 ## Interface: 50100
-## X-Curse-Packaged-Version: 5.1.0.40-Beta
+## X-Curse-Packaged-Version: 5.1.0.41-Beta
 ## X-Curse-Project-Name: Buffet
 ## X-Curse-Project-ID: buffet
 ## X-Curse-Repository-ID: wow/buffet/mainline
@@ -7,7 +7,7 @@
 ## Title: Buffet
 ## Notes: Food/water macro generator
 ## Author: Tekkub Stoutwrithe
-## Version: 5.1.0.40
+## Version: 5.1.0.41
 ## X-Website: http://www.tekkub.net/
 ## X-Email: tekkub-wow@googlegroups.com
 ## X-Icon: Interface\Icons\INV_Misc_Food_DimSum

@@ -127,12 +127,16 @@ local function On_OnTooltipSetUnit(self)
 		if unitLevel < 0 then unitLevel = '??' end
 		if UnitIsPlayer(unit) then
 			local unitRace = UnitRace(unit)
-			local unitClass = UnitClass(unit)
+			local unitClass, class = UnitClass(unit)
 			local guild, rank, tmp2 = GetGuildInfo(unit)
 			local playerGuild = GetGuildInfo("player")
 			GameTooltipStatusBar:SetStatusBarColor(unpack({GameTooltip_UnitColor(unit)}))
 			local r, g, b = unpack({GameTooltip_UnitColor(unit)})
 			S.CreateTop(tooptexture, r, g, b)
+			local a1, a2, a3, a4 = unpack(CLASS_ICON_TCOORDS[class])
+			local a1, a2, a3, a4 = a1*62.5, a2*62.5, a3*62.5, a4*62.5
+			local classtr = "|TInterface\\TargetingFrame\\UI-Classes-Circles:"..DB.FontSize..":"..DB.FontSize..":0:0:64:64:"..a1..":"..a2..":"..a3..":"..a4.."|t"
+			--print(classtr)
 			if guild then
 				if guild:len()> 30 then guild = guild:sub(1, 30).."..." end
 				GameTooltipTextLeft2:SetFormattedText("<%s>"..hex(1, 1, 1).." %s|r", guild, rank.."  ("..tmp2..")")
@@ -144,7 +148,7 @@ local function On_OnTooltipSetUnit(self)
 			end
 			for i=2, GameTooltip:NumLines() do
 				if _G["GameTooltipTextLeft" .. i]:GetText():find(PLAYER) then
-					_G["GameTooltipTextLeft" .. i]:SetText(string.format(hex(diffColor.r, diffColor.g, diffColor.b).."%s|r ", unitLevel) .. unitRace .. " "..hex(unpack({GameTooltip_UnitColor(unit)}))..unitClass.."|r")
+					_G["GameTooltipTextLeft" .. i]:SetText(string.format(hex(diffColor.r, diffColor.g, diffColor.b).."%s|r ", unitLevel) .. unitRace .. " "..classtr..hex(unpack({GameTooltip_UnitColor(unit)}))..unitClass.."|r")
 					break
 				end
 			end
@@ -258,12 +262,12 @@ local function On_PLAYER_ENTERING_WORLD()
 					r = FACTION_BAR_COLORS[reaction].r;
 					g = FACTION_BAR_COLORS[reaction].g;
 					b = FACTION_BAR_COLORS[reaction].b;
-					GameTooltipStatusBar:SetStatusBarColor(r, g, b)
+					--GameTooltipStatusBar:SetStatusBarColor(r, g, b)
 					S.CreateTop(tooptexture, r, g, b)
 				end
 			end
 			if UnitIsPlayer(unit) then
-				GameTooltipStatusBar:SetStatusBarColor(unpack({GameTooltip_UnitColor(unit)}))
+				--GameTooltipStatusBar:SetStatusBarColor(unpack({GameTooltip_UnitColor(unit)}))
 				local r, g, b = unpack({GameTooltip_UnitColor(unit)})
 				S.CreateTop(tooptexture, r, g, b)
 			end

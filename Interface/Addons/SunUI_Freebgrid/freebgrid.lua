@@ -248,28 +248,21 @@ function ns:Numberize(val)
 end
 
 function ns:Getdifficulty()
-	local difficulty = GetInstanceDifficulty()
+	local _, instanceType, difficulty, _, maxPlayers, _, dynamic  = GetInstanceInfo()
+	if (instanceType=='pvp') or (instanceType=='arena') then return "unknow" end
 	
-	if difficulty == 1 then
-		return "unknown"
-	elseif difficulty == 2 then
+	if instanceType == 'party' then
 		return "heroic5"
-	elseif difficulty == 3 then
-		return "heroic5"
-	elseif difficulty == 4 then
-		return "normal10"
-	elseif difficulty == 5 then
-		return "normal25"
-	elseif difficulty == 6 then
-		return "heroic10"
-	elseif difficulty == 7 then
-		return "heroic25"
-	elseif difficulty == 8 then
-		return "lfr25"
-	elseif difficulty == 9 then
-		return "heroic5"
+	elseif instanceType == 'raid' and dynamic then
+		if difficulty >= 7 then
+			return "lfr25"
+		elseif difficulty >= 5 then
+			return "heroic"..maxPlayers
+		else
+			return "normal"..maxPlayers
+		end
 	else
-		return "unknown"
+		return "normal"..maxPlayers
 	end
 end
 

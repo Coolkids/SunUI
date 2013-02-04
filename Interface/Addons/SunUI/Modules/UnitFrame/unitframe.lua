@@ -1316,16 +1316,16 @@ local function genStyle(self)
 	self.Health.frequentUpdates = true
 	if U["ReverseHPbars"] then 
 		if U["ClassColor"] then 
-			self.colors.smooth = {DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b}
-			self.Health.colorSmooth = true
+			self.Health.colorClass = true
+			self.Health.colorReaction = true
 		else
 			self.colors.health = {0.15, 0.15, 0.15}
 			self.Health.colorHealth = true 
 		end
 	else 
 		if U["ClassColor"] then 
-			self.colors.smooth = {DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b,DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b}
-			self.Health.colorHealth = false
+			self.Health.colorClass = true
+			self.Health.colorReaction = true
 		else
 			self.colors.health = {228/255, 38/255, 141/255}
 			self.Health.colorHealth = true 
@@ -1376,10 +1376,6 @@ local function CreateTargetStyle(self, unit)
     self.height = U["Height"]
     self.mystyle = "target"
     genStyle(self)
-	if U["ClassColor"] then
-		self.Health.colorClass = true
-		self.Health.colorReaction = true
-	end
     self.Health.Smooth = true
     self.Power.frequentUpdates = true
     self.Power.Smooth = true
@@ -1415,10 +1411,6 @@ local function CreateToTStyle(self, unit)
     self.height = U["PetHeight"]
     self.mystyle = "tot"
     genStyle(self)
-    if U["ClassColor"] then
-		self.Health.colorClass = true
-		self.Health.colorReaction = true
-	end
 	self.Health.Smooth = true
 	self.Power.Smooth = true
     self.Power.colorPower = true
@@ -1463,10 +1455,6 @@ local function CreateFocusStyle(self, unit)
 	end
     self.mystyle = "focus"
     genStyle(self)
-	if U["ClassColor"] then
-		self.Health.colorClass = true
-		self.Health.colorReaction = true
-	end
 	self.Health.Smooth = true
 	self.Power.Smooth = true
     self.Power.frequentUpdates = true
@@ -1505,10 +1493,6 @@ local function CreatePartyStyle(self)
     self.height = U["BossHeight"]
     self.mystyle = "party"
     genStyle(self)
-	if U["ClassColor"] then
-		self.Health.colorClass = true
-		self.Health.colorReaction = true
-	end
     self.Health.Smooth = true
 	self.Power.Smooth = true
     self.Power.frequentUpdates = true
@@ -1570,10 +1554,6 @@ local function CreateBossStyle(self, unit)
     self.height = U["BossHeight"]
     self.mystyle = "boss"
     genStyle(self)
-	if U["ClassColor"] then
-		self.Health.colorClass = true
-		self.Health.colorReaction = true
-	end
 	self.Health.Smooth = true
 	self.Power.Smooth = true
     self.Power.frequentUpdates = true
