@@ -48,13 +48,13 @@ local function RaidTools()
 
 	local wmmenuFrame = CreateFrame("Frame", "wmRightClickMenu", UIParent, "UIDropDownMenuTemplate") 
 	local wmmenuList = { 
-	{text = L["就位确认"], 
+	{text = READY_CHECK, 
 	func = function() DoReadyCheck() end}, 
-	{text = L["角色检查"], 
+	{text = ROLE_POLL, 
 	func = function() InitiateRolePoll() end}, 
-	{text = L["转化为团队"], 
+	{text = CONVERT_TO_RAID, 
 	func = function() ConvertToRaid() end}, 
-	{text = L["转化为小队"], 
+	{text = CONVERT_TO_PARTY, 
 	func = function() ConvertToParty() end}, 
 	} 
 

@@ -134,7 +134,7 @@ local function On_OnTooltipSetUnit(self)
 			local r, g, b = unpack({GameTooltip_UnitColor(unit)})
 			S.CreateTop(tooptexture, r, g, b)
 			local a1, a2, a3, a4 = unpack(CLASS_ICON_TCOORDS[class])
-			local a1, a2, a3, a4 = a1*62.5, a2*62.5, a3*62.5, a4*62.5
+			local a1, a2, a3, a4 = a1*62.5 or 0, a2*62.5 or 0, a3*62.5 or 0, a4*62.5 or 0
 			local classtr = "|TInterface\\TargetingFrame\\UI-Classes-Circles:"..DB.FontSize..":"..DB.FontSize..":0:0:64:64:"..a1..":"..a2..":"..a3..":"..a4.."|t"
 			--print(classtr)
 			if guild then

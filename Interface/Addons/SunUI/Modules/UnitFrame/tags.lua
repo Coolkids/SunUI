@@ -96,7 +96,7 @@ oUF.Tags.Methods['sunui:info'] = function(u)
 	local color = GetQuestDifficultyColor(level)
 	if level <= 0 then
 		level = "??" 
-		color.r, color.g, color.b = 1, 0, 0
+		color.r, color.g, color.b = 1, 0.1, 0.1
 	end
 	if typ=="rareelite" then
 		return hex(color)..level..'r+'

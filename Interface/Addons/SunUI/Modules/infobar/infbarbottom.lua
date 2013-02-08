@@ -11,10 +11,22 @@ local function BuildClock()
 	Clock.Text:SetShadowOffset(S.mult, -S.mult)
 	Clock.Text:SetShadowColor(0, 0, 0, 0.4)
 	Clock:SetAllPoints(Clock.Text)
+	local week
+	if (GetLocale() == "zhTW" or GetLocale() == "zhCN") then
+		week = {"星期天","星期一","星期二","星期三","星期四","星期五","星期六"}
+	else
+		week = {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"}
+	end
+	
 	Clock:SetScript("OnEnter", function(self)
+		local w,m,d,y = CalendarGetDate()
 		GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
 		GameTooltip:ClearLines()
-		GameTooltip:AddLine(date"%A, %B %d", 0.40, 0.78, 1)
+		if (GetLocale() == "zhTW" or GetLocale() == "zhCN") then
+			GameTooltip:AddLine(format("%s-%s-%s %s", y, m, d, week[w]), 0.40, 0.78, 1)
+		else
+			GameTooltip:AddLine(format("%s-%s-%s %s", m, d, y, week[w]), 0.40, 0.78, 1)
+		end
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddDoubleLine(TIMEMANAGER_TOOLTIP_LOCALTIME, GameTime_GetLocalTime(true), 0.75, 0.9, 1, 1, 1, 1)
 		GameTooltip:AddDoubleLine(TIMEMANAGER_TOOLTIP_REALMTIME, GameTime_GetGameTime(true), 0.75, 0.9, 1, 1, 1, 1)
@@ -453,7 +465,7 @@ local function BuildGuild()
 			
 			Text:SetFormattedText(displayString, online)
 		else
-			Text:SetText(L["没有工会"])
+			Text:SetText(COMBAT_TEXT_NONE..ACHIEVEMENTS_GUILD_TAB)
 		end
 	end
 		
@@ -604,16 +616,16 @@ end
 
 local function BuildDurability()
 	local Slots = {
-		[1] = {1, L["头部"], 1000},
-		[2] = {3, L["肩部"], 1000},
-		[3] = {5, L["胸部"], 1000},
-		[4] = {6, L["腰部"], 1000},
-		[5] = {9, L["手腕"], 1000}, 
-		[6] = {10, L["手"], 1000},
-		[7] = {7, L["腿部"], 1000},
-		[8] = {8, L["脚"], 1000},
-		[9] = {16, L["主手"], 1000},
-		[10] = {17, L["副手"], 1000}, 
+		[1] = {1, INVTYPE_HEAD, 1000}, --头
+		[2] = {3, INVTYPE_SHOULDER, 1000}, --L["肩部"]
+		[3] = {5, INVTYPE_ROBE, 1000}, --L["胸部"]
+		[4] = {6, INVTYPE_WAIST, 1000}, --L["腰部"]
+		[5] = {9, INVTYPE_WRIST, 1000},  --L["手腕"]
+		[6] = {10, INVTYPE_HAND, 1000}, --L["手"]
+		[7] = {7, INVTYPE_LEGS, 1000}, --L["腿部"]
+		[8] = {8, INVTYPE_FEET, 1000}, --L["脚"]
+		[9] = {16, INVTYPE_WEAPONMAINHAND, 1000}, --L["主手"]
+		[10] = {17, INVTYPE_SHIELD, 1000},  --L["副手"]
 	}
 	local Stat = CreateFrame("Frame", "InfoPanelBottom4", BottomInfoPanel)
 	local Text = S.MakeFontString(Stat)
@@ -623,11 +635,14 @@ local function BuildDurability()
 	Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
 	Stat:SetAllPoints(Text)
 	Stat:SetScript("OnEvent", function(self)
+			local total, num = 0, 0
 			for i = 1, 10 do
 				if GetInventoryItemLink("player", Slots[i][1]) ~= nil then
 					local durability, max = GetInventoryItemDurability(Slots[i][1])
 					if durability then 
 						Slots[i][3] = durability/max
+						total = Slots[i][3] + total
+						num = num + 1
 					end
 				end
 			end
@@ -636,19 +651,22 @@ local function BuildDurability()
 			if value < 40 then
 				Text:SetText("|cffff0000"..L["警告"].."|r "..Slots[1][2]..L["耐久过低"])
 			else
-				Text:SetText("  ")
+				local green = total/num/1
+				--print(green)
+				local red = 1-green
+				Text:SetText(S.ToHex(1.0, 0.82, 0)..DURABILITY.."|r: "..S.ToHex(red, green, 0)..floor(total/num*100).."|r%")
 			end
 	end)
 	Stat:SetScript("OnEnter", function(self)
 		if not InCombatLockdown() then
 			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT", 0, 0)
 			GameTooltip:ClearLines()
-			GameTooltip:AddLine(L["耐久度"], 0.4, 0.78, 1)
+			GameTooltip:AddLine(DURABILITY, 0.4, 0.78, 1)
 			GameTooltip:AddLine(" ")
 			for i = 1, 10 do
 				if Slots[i][3] ~= 1000 then
-					green = Slots[i][3]/1
-					red = 1-green
+					local green = Slots[i][3]/1
+					local red = 1-green
 					GameTooltip:AddDoubleLine(Slots[i][2], format("%d %%", floor(Slots[i][3]*100)), 1 , 1 , 1, red, green, 0)
 				end
 			end

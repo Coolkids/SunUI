@@ -3,7 +3,8 @@
 local sceenheight = string.match(GetCVar("gxResolution"), "%d+x(%d+)")
 local HiddenFrame = CreateFrame("Frame")
 HiddenFrame:Hide()
-
+DB.Shadow = {}
+DB.Border = {}
 S.mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/(max(0.64, min(1.15, GetCVar('uiScale') or UIParent:GetScale() or (S.IsCoolkid() and 0.9 or 768/sceenheight))))
 local function sceenscale(x)
 	return (S.mult*math.floor(x/(S.mult)+.5)) 
@@ -61,6 +62,7 @@ local function CreateBorder(f, r, g, b, a)
 		insets = { left = -S.mult, right = -S.mult, top = -S.mult, bottom = -S.mult }
 	})
 	f:SetBackdropBorderColor(r or 0, g or 0, b or 0, a or 1)
+	tinsert(DB.Border, f)
 end
 local function SetOutside(obj, anchor, xOffset, yOffset)
 	xOffset = xOffset or 2
@@ -125,6 +127,8 @@ local function CreateShadow(f, t, offset, thickness, texture)
 	shadow:SetBackdropColor( backdropr, backdropg, backdropb, backdropa )
 	shadow:SetBackdropBorderColor( borderr, borderg, borderb, bordera )
 	f.shadow = shadow
+	
+	tinsert(DB.Shadow, f)
 end
 
 local function StyleButton(button, setallpoints)
