@@ -240,7 +240,7 @@ function watcherPrototype:CheckAura(num)
 						if self.mode == "BAR" then
 							self.button[num]:SetScript("OnUpdate", BarUpdate)
 						else
-							self.button[num]:SetScript("OnUpdate", Flash)
+							self.button[num]:SetScript("OnUpdate", nil)
 						end
 						num = num + 1
 					end
@@ -264,7 +264,7 @@ function watcherPrototype:CheckAura(num)
 						if self.mode == "BAR" then
 							self.button[num]:SetScript("OnUpdate", BarUpdate)
 						else
-							self.button[num]:SetScript("OnUpdate", Flash)
+							self.button[num]:SetScript("OnUpdate", nil)
 						end
 						num = num + 1
 					end

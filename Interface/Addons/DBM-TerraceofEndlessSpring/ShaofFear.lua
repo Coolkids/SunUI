@@ -20,7 +20,9 @@ mod:RegisterEventsInCombat(
 	"UNIT_SPELLCAST_SUCCEEDED",
 	"UNIT_DIED",
 	"SPELL_DAMAGE",
-	"SPELL_MISSED"
+	"SPELL_MISSED",
+	"SWING_DAMAGE",
+	"SWING_MISSED"
 )
 
 local warnThrash						= mod:NewSpellAnnounce(131996, 4, nil, mod:IsTank() or mod:IsHealer())
@@ -48,21 +50,21 @@ local specWarnDreadSpray				= mod:NewSpecialWarningSpell(120047, nil, nil, nil, 
 local specWarnDeathBlossom				= mod:NewSpecialWarningSpell(119888, nil, nil, nil, true)--Cast, warns the entire raid.
 local specWarnShot						= mod:NewSpecialWarningStack(119086, true, 2)
 local specWarnshuipoYou					= mod:NewSpecialWarningMove(120519)
-local specWarnzhuanyiguangYou			= mod:NewSpecialWarningYou(120268)
-local specWarnshuipo				= mod:NewSpecialWarningSpell(120519, nil, nil, nil, true)
-local specWarnyinmo				= mod:NewSpecialWarning("specWarnyinmo")
-local specWarnfuxian				= mod:NewSpecialWarning("specWarnfuxian")
-local specWarnweisuo				= mod:NewSpecialWarning("specWarnweisuo")
-local MoveWarningBack				= mod:NewSpecialWarning("MoveWarningBack")
-local MoveWarningLeft				= mod:NewSpecialWarning("MoveWarningLeft")
-local MoveWarningRight				= mod:NewSpecialWarning("MoveWarningRight")
-local specWarningpreHud				= mod:NewSpecialWarning("specWarningpreHud")
+local specWarnzyg						= mod:NewSpecialWarning("specWarnzyg")
+local specWarnshuipo					= mod:NewSpecialWarningSpell(120519, nil, nil, nil, true)
+local specWarnyinmo						= mod:NewSpecialWarning("specWarnyinmo")
+local specWarnfuxian					= mod:NewSpecialWarning("specWarnfuxian")
+local specWarnweisuo					= mod:NewSpecialWarning("specWarnweisuo")
+local MoveWarningBack					= mod:NewSpecialWarning("MoveWarningBack")
+local MoveWarningLeft					= mod:NewSpecialWarning("MoveWarningLeft")
+local MoveWarningRight					= mod:NewSpecialWarning("MoveWarningRight")
+local specWarningpreHud					= mod:NewSpecialWarning("specWarningpreHud")
 local specWarnshuipomove				= mod:NewSpecialWarningMove(120521)
-local specWarnzhanli				= mod:NewSpecialWarningYou(120669)
-local specWarnzhanliOther			= mod:NewSpecialWarningTarget(120669, mod:IsTank() or mod:IsHealer())
+local specWarnzhanli					= mod:NewSpecialWarningYou(120669)
+local specWarnzhanliOther				= mod:NewSpecialWarningTarget(120669, mod:IsTank() or mod:IsHealer())
 local specWarnDreadThrash				= mod:NewSpecialWarningSpell(132007, mod:IsTank())
 
-local timerThrashCD					= mod:NewCDTimer(9, 131996, nil, mod:IsTank() or mod:IsHealer())--Every 9-12 seconds.
+local timerThrashCD						= mod:NewCDTimer(9, 131996, nil, mod:IsTank() or mod:IsHealer())--Every 9-12 seconds.
 local timerHThrashCD					= mod:NewCDTimer(9, 131996, nil, mod:IsTank() or mod:IsHealer())
 local timerNakedAndAfraid				= mod:NewTargetTimer(25, 120669)-- EJ says that debuff duration 25 sec.
 local timerBreathOfFearCD				= mod:NewNextTimer(33.3, 119414)--Based off bosses energy, he casts at 100 energy, and gains about 3 energy per second, so every 33-34 seconds is a breath.
@@ -76,12 +78,12 @@ local timerImplacableStrikeCD			= mod:NewCDTimer(10, 120672)
 local timerSpoHudCD						= mod:NewTimer(10, "timerSpoHudCD", 64044)--Waterspout or Huddle in Terror next
 local timerSpoStrCD						= mod:NewTimer(10, "timerSpoStrCD", 1953)--Waterspout or Implacable Strike next
 local timerHudStrCD						= mod:NewTimer(10, "timerHudStrCD", 64044)-- Huddle in Terror or Implacable Strike next
-local timerweisuo					= mod:NewNextCountTimer(50,120629)
-local timeryinmo					= mod:NewNextCountTimer(50,120458)
-local yellshuipo				= mod:NewYell(120519)
+local timerweisuo						= mod:NewNextCountTimer(50,120629)
+local timeryinmo						= mod:NewNextCountTimer(50,120458)
+local yellshuipo						= mod:NewYell(120519)
 local timerFearless						= mod:NewBuffFadesTimer(30, 118977)
 local timerDeathBlossom					= mod:NewBuffActiveTimer(5, 119888)
-local timerNakedAndAfraidCD			= mod:NewCDTimer(30, 120669)-- unconfirmed.
+local timerNakedAndAfraidCD				= mod:NewCDTimer(30, 120669)-- unconfirmed.
 
 local berserkTimer						= mod:NewBerserkTimer(900)
 
@@ -93,32 +95,51 @@ local phase = 1
 local ThrashCount = 0
 local kongjuCount = 0
 local yinmoCount = 0
+local warnedBreath = false
 
 local kbpscount = 0
 local kjzz = 0
 local kjzznow = 0
+local infowjzz = 0
 
 local huddle = 0
 local spout = 0
 local strike = 0
+local wjcount = 0
 
-local specskill = 0
+local swingcount = 0
+
 local wsIcon = 7
 
 local prewarnedPhase2 = false
+local lastyongshi = nil
 
 local fearless = GetSpellInfo(118977)
+local wallLight = GetSpellInfo(117964)
 
 local playkbpsound = false
 
 DBM.ShaOfFearAssistEnabled = true
 DBM.ShaAssistStarModeChosed = nil
 
-mod:AddBoolOption("InfoFrame")
+mod:AddBoolOption("InfoFrame", true, "sound")
+mod:AddBoolOption("InfoFrameTankMode", mod:IsTank(), "sound")
 mod:AddBoolOption("SetIconOnWS", true)
 mod:AddBoolOption("pscount", true, "sound")
 mod:AddBoolOption("ShaAssist", true, "sound")
 mod:AddBoolOption("ShaStarMode", false, "sound")
+local sndWOPWSCOUNT = mod:NewSound(nil, "SoundWSCOUNT", not mod:IsTank())
+
+for i = 1, 4 do
+	mod:AddBoolOption("unseenjs"..i, false, "sound")
+end
+
+local function MyJS()
+	if (mod.Options.unseenjs1 and kongjuCount % 4 == 1) or (mod.Options.unseenjs2 and kongjuCount % 4 == 2) or (mod.Options.unseenjs3 and kongjuCount % 4 == 3) or (mod.Options.unseenjs4 and kongjuCount % 4 == 0) then
+		return true
+	end
+	return false
+end
 
 local DBMHudMap = DBMHudMap
 local free = DBMHudMap.free
@@ -145,10 +166,48 @@ local function warnHuddleInTerrorTargets()
 	table.wipe(huddleInTerrorTargets)
 end
 
-local function leavePlatform()
+local function spectimestart()
+	if huddle == 1 and spout == 1 and strike == 0 then
+		sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ylxjzb.mp3")
+		timerImplacableStrikeCD:Start()
+	end
+	if huddle == 1 and spout == 0 and strike == 1 then
+		timerWaterspoutCD:Start()
+	end
+	if huddle == 1 and spout == 0 and strike == 0 then
+		sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\specialsoon.mp3")
+		timerSpoStrCD:Start()
+	end
+	if huddle == 0 and spout == 1 and strike == 0 then
+		timerHuddleInTerrorCD:Start()
+		specWarningpreHud:Schedule(8)
+		sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wszb.mp3")
+		if not mod:IsTank() then
+			sndWOP:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\holdit.mp3")
+		end
+	end
+	if huddle == 0 and spout == 0 and strike == 1 then
+		timerHuddleInTerrorCD:Start()
+		specWarningpreHud:Schedule(8)
+		sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wszb.mp3")
+		if not mod:IsTank() then
+			sndWOP:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\holdit.mp3")
+		end
+	end
+end
+
+function mod:LeavePlatform()
 	if onPlatform then
 		onPlatform = false
+		playkbpsound = false
 		MobID = nil
+		if DBM.BossHealth:IsShown() then
+			DBM.BossHealth:RemoveBoss(61038)
+			DBM.BossHealth:RemoveBoss(61042)
+			DBM.BossHealth:RemoveBoss(61046)
+		end
+		table.wipe(platformGUIDs)
+		if phase == 2 then return end
 		--Breath of fear timer recovery
 		local fearlessApplied = UnitBuff("player", fearless)
 		local shaPower = UnitPower("boss1") --Get Boss Power
@@ -157,7 +216,8 @@ local function leavePlatform()
 			timerBreathOfFearCD:Start(33.3-shaPower)
 			if shaPower < 23.3 then
 				mod:Schedule(23.3 - shaPower, function()
-					if not onPlatform then
+					if not warnedBreath then
+						warnedBreath = true
 						sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_tenkj.mp3") --10秒後恐懼之息
 						DBM.Flash:Show(1, 0, 0)
 						sndWOP:Schedule(5.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
@@ -169,6 +229,15 @@ local function leavePlatform()
 				end)
 			end
 		end
+	end
+end
+
+function mod:CheckPlatformLeaved()--Check you are leaved platform by Wall of Light buff. Failsafe for some siturations./
+	if UnitBuff("player", wallLight) then
+		self:UnscheduleMethod("CheckPlatformLeaved")
+		self:LeavePlatform()
+	else
+		self:ScheduleMethod(3, "CheckPlatformLeaved")
 	end
 end
 
@@ -188,8 +257,10 @@ function mod:OnCombatStart(delay)
 	huddle = 0
 	spout = 0
 	strike = 0
-	specskill = 0
 	wsIcon = 7
+	wjcount = 0
+	swingcount = 0
+	warnedBreath = false
 	prewarnedPhase2 = false
 	table.wipe(waterspoutTargets)
 	table.wipe(huddleInTerrorTargets)
@@ -199,6 +270,7 @@ function mod:OnCombatStart(delay)
 	onPlatform = false
 	playkbpsound = false
 	MobID = nil
+	lastyongshi = nil
 	berserkTimer:Start(-delay)
 	self:Schedule(23.3, function()
 		if not onPlatform then
@@ -217,7 +289,7 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd()
-	if self.Options.InfoFrame then
+	if self.Options.InfoFrame or self.Options.InfoFrameTankMode then
 		DBM.InfoFrame:Hide()
 	end
 end
@@ -225,13 +297,15 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(119414) and self:AntiSpam(5, 1) then--using this with antispam is still better then registering SPELL_CAST_SUCCESS for a single event when we don't have to. Less cpu cause mod won't have to check every SPELL_CAST_SUCCESS event.
 		warnBreathOfFear:Show()
+		warnedBreath = false
 		if not onPlatform then--not in middle, not your problem
 			specWarnBreathOfFear:Show()
 			timerBreathOfFearCD:Start()
 		end
 		warnBreathOfFearSoon:Schedule(23.3)
 		self:Schedule(23.3, function()
-			if not onPlatform then
+			if (not onPlatform) and (phase == 1) and (not warnedBreath) then
+				warnedBreath = true
 				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_tenkj.mp3") --10秒後恐懼之息
 				DBM.Flash:Show(1, 0, 0)
 				sndWOP:Schedule(5.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
@@ -253,11 +327,12 @@ function mod:SPELL_AURA_APPLIED(args)
 			elseif mod:IsHealer() then
 				DBM.ShaAssistStarModeChosed = "Healther"
 			else
-				DBM.ShaAssistStarModeChosed = nil
+				DBM.ShaAssistStarModeChosed = "Tank"
 			end
 		else
 			DBM.ShaAssistStarModeChosed = nil
 		end
+		self:UnscheduleMethod("CheckPlatformLeaved")
 		ominousCackleTargets[#ominousCackleTargets + 1] = args.destName
 		if args:IsPlayer() then
 			onPlatform = true
@@ -276,6 +351,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_llj.mp3")--六連擊
 		end
 		ThrashCount = 0
+		swingcount = -1
 		timerThrashCD:Start()
 		warnDreadThrash:Show()
 		specWarnDreadThrash:Show()
@@ -300,10 +376,11 @@ function mod:SPELL_AURA_APPLIED(args)
 		sndWOP:Schedule(3.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 		sndWOP:Schedule(4.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	elseif args:IsSpellID(118977) and args:IsPlayer() then--Fearless, you're leaving platform
-		playkbpsound = false
 		timerFearless:Start()
-		leavePlatform()
+		self:UnscheduleMethod("CheckPlatformLeaved")
+		self:LeavePlatform()
 	elseif args:IsSpellID(131996) and not onPlatform then
+		swingcount = -1
 		warnThrash:Show()
 		specWarnThrash:Show()
 		if not mod:IsDps() then
@@ -314,7 +391,6 @@ function mod:SPELL_AURA_APPLIED(args)
 				if ThrashCount == 3 then
 					timerThrashCD:Cancel()
 					timerHThrashCD:Start()
-					sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_tjzb.mp3")
 				end
 			end
 		end
@@ -326,50 +402,29 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif args:IsSpellID(120519) then --水魄
 		waterspoutTargets[#waterspoutTargets + 1] = args.destName
 		if args:IsPlayer() then
-			DBM.Flash:Show(1, 0, 0)
 			specWarnshuipoYou:Show()
 			yellshuipo:Yell()
-			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runout.mp3")
+			if not UnitBuff("player", GetSpellInfo(120268)) then
+				DBM.Flash:Show(1, 0, 0)
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runout.mp3")
+			end
 		end
 		self:Unschedule(warnWaterspoutTargets)
 		self:Schedule(0.3, warnWaterspoutTargets)
-		specskill = specskill + 1
 		spout = 1
-		if huddle == 1 and spout == 1 and strike == 0 then
-			timerImplacableStrikeCD:Start()
-		end
-		if huddle == 1 and spout == 0 and strike == 1 then
-			timerWaterspoutCD:Start()
-		end
-		if huddle == 0 and spout == 1 and strike == 1 then
-			timerHuddleInTerrorCD:Start()
-		end	
-		if huddle == 1 and spout == 0 and strike == 0 then
-			timerSpoStrCD:Start()
-		end
-		if huddle == 0 and spout == 1 and strike == 0 then
---			timerHudStrCD:Start()
-			timerHuddleInTerrorCD:Start()
-			specWarningpreHud:Schedule(8)
-			if not mod:IsTank() then
-				sndWOP:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\holdit.mp3")
-			end
-		end
-		if huddle == 0 and spout == 0 and strike == 1 then
---			timerSpoHudCD:Start()
-			timerHuddleInTerrorCD:Start()
-			specWarningpreHud:Schedule(8)
-			if not mod:IsTank() then
-				sndWOP:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\holdit.mp3")
-			end
+		if self:AntiSpam(5, 6) then
+			spectimestart()
 		end
 	elseif args:IsSpellID(120268) then
 		warnChampionOfTheLight:Show(args.destName)
 		if args:IsPlayer() then
 			DBM.Flash:Show(1, 0, 0)
-			specWarnzhuanyiguangYou:Show()
+			if lastyongshi then
+				specWarnzyg:Show(lastyongshi)
+			end
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zyg.mp3") --轉移光
 		end
+		lastyongshi = args.destName
 	elseif args:IsSpellID(120669) then--赤裸
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_clzb.mp3")
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
@@ -406,73 +461,26 @@ function mod:SPELL_AURA_APPLIED(args)
 		huddleInTerrorTargets[#huddleInTerrorTargets + 1] = args.destName
 		self:Unschedule(warnHuddleInTerrorTargets)
 		self:Schedule(0.5, warnHuddleInTerrorTargets)
-		if self:AntiSpam(2, 6) then
+		if self:AntiSpam(5, 6) then
 			kongjuCount = kongjuCount + 1
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wsks.mp3")
-			sndWOP:Schedule(45, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_wszb.mp3")
 			specWarnweisuo:Show(kongjuCount)
 			timerweisuo:Start(50, kongjuCount + 1)
-			specskill = specskill + 1
 			huddle = 1
-			if huddle == 1 and spout == 1 and strike == 0 then
-				timerImplacableStrikeCD:Start()
+			spectimestart()
+			if kongjuCount % 4 == 1 then
+				sndWOPWSCOUNT:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			elseif kongjuCount % 4 == 2 then
+				sndWOPWSCOUNT:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			elseif kongjuCount % 4 == 3 then
+				sndWOPWSCOUNT:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			elseif kongjuCount % 4 == 0 then
+				sndWOPWSCOUNT:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
 			end
-			if huddle == 1 and spout == 0 and strike == 1 then
-				timerWaterspoutCD:Start()
-			end
-			if huddle == 0 and spout == 1 and strike == 1 then
-				timerHuddleInTerrorCD:Start()
-			end	
-			if huddle == 1 and spout == 0 and strike == 0 then
-				timerSpoStrCD:Start()
-			end
-			if huddle == 0 and spout == 1 and strike == 0 then
-	--			timerHudStrCD:Start()
-				timerHuddleInTerrorCD:Start()
-				specWarningpreHud:Schedule(8)
-				if not mod:IsTank() then
-					sndWOP:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\holdit.mp3")
-				end
-			end
-			if huddle == 0 and spout == 0 and strike == 1 then
-	--			timerSpoHudCD:Start()
-				timerHuddleInTerrorCD:Start()
-				specWarningpreHud:Schedule(8)
-				if not mod:IsTank() then
-					sndWOP:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\holdit.mp3")
-				end
+			if MyJS() then
+				sndWOP:Schedule(2, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zyjs.mp3") --注意減傷
 			end
 		end
-	elseif args:IsSpellID(129378) then --消逝之光P2
-		self:UnregisterShortTermEvents()
-		phase = 2
-		onPlatform = false
-		timerSpecialCD:Start()
-		timerThrashCD:Cancel()
-		timerDreadSpray:Cancel()
-		timerDreadSprayCD:Cancel()
-		warnBreathOfFearSoon:Cancel()
-		timerOminousCackleCD:Cancel()
-		timerBreathOfFearCD:Cancel()
-		berserkTimer:Cancel()
-		berserkTimer:Start()
-		timeryinmo:Start(16)
-		if mod.Options.InfoFrame then
-			DBM.InfoFrame:SetHeader(GetSpellInfo(120629))
-			DBM.InfoFrame:Show(10, "playerbaddebuff", 120629)
-		end
-		if DBM.BossHealth:IsShown() then
-			DBM.BossHealth:RemoveBoss(61038)
-			DBM.BossHealth:RemoveBoss(61042)
-			DBM.BossHealth:RemoveBoss(61046)
-		end
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\phasechange.mp3") --階段轉換
-		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_tenkj.mp3")
-		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
-		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
-		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
@@ -484,6 +492,7 @@ function mod:SPELL_AURA_REMOVED(args)
 	elseif args:IsSpellID(129147) then
 		if args:IsPlayer() then
 			playkbpsound = true
+			onPlatform = true
 		end
 	elseif args:IsSpellID(118977) and args:IsPlayer() then
 		timerFearless:Cancel()
@@ -502,7 +511,7 @@ function mod:SPELL_CAST_START(args)
 		else
 			timerOminousCackleCD:Start()
 		end
-	elseif args:IsSpellID(119862) and onPlatform and not platformGUIDs[args.sourceGUID] then--Best way to track engaging one of the side adds, they cast this instantly.
+	elseif args:IsSpellID(119862) and playkbpsound and not platformGUIDs[args.sourceGUID] then--Best way to track engaging one of the side adds, they cast this instantly.
 		platformGUIDs[args.sourceGUID] = true
 		MobID = self:GetCIDFromGUID(args.sourceGUID)
 		timerDreadSprayCD:Start(10.5, args.sourceGUID)--We can accurately start perfectly accurate spray cd bar off their first shoot cast.
@@ -512,6 +521,7 @@ function mod:SPELL_CAST_START(args)
 	elseif args:IsSpellID(119888) and MobID and MobID == args:GetSrcCreatureID() then
 		specWarnDeathBlossom:Show()
 		DBM.Flash:Show(1, 0, 0)
+		self:ScheduleMethod(40, "CheckPlatformLeaved")
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_jykd.mp3") --劍雨快躲
 	elseif args:IsSpellID(120519) then
 		specWarnshuipo:Show()
@@ -520,14 +530,15 @@ function mod:SPELL_CAST_START(args)
 		yinmoCount = yinmoCount + 1
 		warnSubmerge:Show(yinmoCount)
 		specWarnyinmo:Show(yinmoCount)
+		timerSpecialCD:Start(12)
+		sndWOP:Schedule(9, "Interface\\AddOns\\DBM-Core\\extrasounds\\specialsoon.mp3") --準備特別技能
 		timeryinmo:Start(51.5, yinmoCount + 1)
 		huddle = 0
 		spout = 0
 		strike = 0
 		wsIcon = 7
-		specskill = 0
 		DBM.Flash:Show(1, 1, 0)
-		sndWOP:Schedule(45, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ymzb.mp3")
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ymzb.mp3")
 	elseif args:IsSpellID(120458) then --浮現
 		if yinmoCount == 1 then
 			timerNakedAndAfraidCD:Start(14)
@@ -549,44 +560,26 @@ function mod:SPELL_CAST_START(args)
 			end
 		end
 		kjzznow = math.modf(yinmoCount/2) + 1
-		specWarnfuxian:Show(kjzznow)
+		wjcount = wjcount + 1
+		specWarnfuxian:Show(kjzznow, wjcount)
+		infowjzz = wjcount
+		if (kjzznow == 1) or (wjcount == 2) then
+			wjcount = 0
+		end
 		kjzz = kjzz + kjzznow
 		if mod.Options.InfoFrame then
-			DBM.InfoFrame:SetHeader(GetSpellInfo(120629).."  ["..EJ_GetSectionInfo(6107)..": "..kjzz.."]")
+			DBM.InfoFrame:SetHeader(EJ_GetSectionInfo(6107).."["..kjzznow.."-"..infowjzz.."]: "..kjzz)
 		end
 	elseif args:IsSpellID(120672) then
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\shockwave.mp3") --震懾波
 		warnImplacableStrike:Show()
 		specWarnImplacableStrike:Show()
-		specskill = specskill + 1
 		strike = 1
-		if huddle == 1 and spout == 1 and strike == 0 then
-			timerImplacableStrikeCD:Start()
-		end
-		if huddle == 1 and spout == 0 and strike == 1 then
-			timerWaterspoutCD:Start()
-		end
-		if huddle == 0 and spout == 1 and strike == 1 then
-			timerHuddleInTerrorCD:Start()
-		end	
-		if huddle == 1 and spout == 0 and strike == 0 then
-			timerSpoStrCD:Start()
-		end
-		if huddle == 0 and spout == 1 and strike == 0 then
---			timerHudStrCD:Start()
-			timerHuddleInTerrorCD:Start()
-			specWarningpreHud:Schedule(8)
-			if not mod:IsTank() then
-				sndWOP:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\holdit.mp3")
-			end
-		end
-		if huddle == 0 and spout == 0 and strike == 1 then
---			timerSpoHudCD:Start()
-			timerHuddleInTerrorCD:Start()
-			specWarningpreHud:Schedule(8)
-			if not mod:IsTank() then
-				sndWOP:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\holdit.mp3")
-			end
+		spectimestart()
+	elseif args:IsSpellID(120394) and self:AntiSpam(5, 1) then
+		if UnitBuff("player", GetSpellInfo(120268)) then
+			DBM.Flash:Show(1, 0, 0)
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\stilldanger.mp3")
 		end
 	end
 end
@@ -653,6 +646,36 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kdkjzz.mp3") --快打恐懼之子
 			end
 		end
+	elseif spellId == 114936 and self:AntiSpam(5, 6) then
+		self:UnregisterShortTermEvents()
+		self:UnscheduleMethod("CheckPlatformLeaved")
+		phase = 2
+		onPlatform = false
+		timerThrashCD:Cancel()
+		timerDreadSpray:Cancel()
+		timerDreadSprayCD:Cancel()
+		warnBreathOfFearSoon:Cancel()
+		timerOminousCackleCD:Cancel()
+		timerBreathOfFearCD:Cancel()
+		berserkTimer:Cancel()
+		berserkTimer:Start()
+		timeryinmo:Start(16)
+		if mod.Options.InfoFrame and (not mod.Options.InfoFrameTankMode) then
+			DBM.InfoFrame:SetHeader(EJ_GetSectionInfo(6107))
+			DBM.InfoFrame:Show(10, "playerbaddebuff", 120629)
+		end
+		if DBM.BossHealth:IsShown() then
+			DBM.BossHealth:RemoveBoss(61038)
+			DBM.BossHealth:RemoveBoss(61042)
+			DBM.BossHealth:RemoveBoss(61046)
+		end
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\phasechange.mp3") --階段轉換
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_tenkj.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	end
 end
 
@@ -663,7 +686,8 @@ function mod:UNIT_DIED(args)
 			platformGUIDs[args.destGUID] = nil
 			timerDreadSpray:Cancel(args.destGUID)
 			timerDreadSprayCD:Cancel(args.destGUID)
-			self:Schedule(10, leavePlatform)
+			self:UnscheduleMethod("CheckPlatformLeaved")
+			self:ScheduleMethod(7, "CheckPlatformLeaved")
 			if DBM.BossHealth:IsShown() then
 				DBM.BossHealth:RemoveBoss(cid)
 			end
@@ -671,7 +695,7 @@ function mod:UNIT_DIED(args)
 	elseif cid == 61003 then
 		kjzz = kjzz - 1
 		if mod.Options.InfoFrame then
-			DBM.InfoFrame:SetHeader(GetSpellInfo(120629).."  ["..EJ_GetSectionInfo(6107)..": "..kjzz.."]")
+			DBM.InfoFrame:SetHeader(EJ_GetSectionInfo(6107).."["..kjzznow.."-"..infowjzz.."]: "..kjzz)
 		end
 	end
 end
@@ -707,3 +731,33 @@ function mod:OnSync(msg)
 		end
 	end
 end
+
+function mod:SWING_DAMAGE(sourceGUID)
+	local cid = self:GetCIDFromGUID(sourceGUID)
+	if cid == 60999 and self:AntiSpam(1, 11) then
+		swingcount = swingcount + 1
+		if mod.Options.InfoFrameTankMode then
+			if phase == 1 then
+				DBM.InfoFrame:SetHeader(GetSpellInfo(135088))
+			end
+			if phase == 2 then
+				if swingcount == 0 then
+					if ThrashCount == 0 then
+						DBM.InfoFrame:Show(1, "other", "", GetSpellInfo(7389)..": "..L.liulian)
+					else
+						DBM.InfoFrame:Show(1, "other", L.sanlian..": "..ThrashCount, GetSpellInfo(7389)..": "..L.sanlian)
+					end
+				else
+					DBM.InfoFrame:Show(1, "other", L.sanlian..": "..ThrashCount, GetSpellInfo(7389)..": "..swingcount)
+				end
+			else
+				if swingcount == 0 then
+					DBM.InfoFrame:Show(1, "other", "", GetSpellInfo(7389)..": "..L.sanlian)
+				else
+					DBM.InfoFrame:Show(1, "other", "", GetSpellInfo(7389)..": "..swingcount)
+				end
+			end
+		end
+	end
+end
+mod.SWING_MISSED = mod.SWING_DAMAGE

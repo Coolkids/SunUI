@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8292 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8602 $"):sub(12, -3))
 mod:SetCreatureID(59789)
 mod:SetModelID(27705)
 mod:SetZone()
@@ -28,7 +28,7 @@ local specWarnWind				= mod:NewSpecialWarningMove(115291)  --voice
 
 
 local timerEvictSoul			= mod:NewTargetTimer(6, 115297)
-local timerEvictSoulCD			= mod:NewNextTimer(41, 115297)
+local timerEvictSoulCD			= mod:NewCDTimer(41, 115297)
 local timerRaiseCrusadeCD		= mod:NewNextTimer(60, 115139)--Both of these are 40 second cds in challenge modes
 local timerSummonSpiritsCD		= mod:NewNextTimer(60, 115147)--Although correction is only needed in one spot
 

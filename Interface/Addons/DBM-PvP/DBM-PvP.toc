@@ -17,7 +17,7 @@
 ## X-DBM-Mod-Name-zhTW: 競技場/戰場
 ## X-DBM-Mod-Name-zhCN: PvP
 ## X-DBM-Mod-Sort: 75
-## X-DBM-Mod-LoadZoneID: 461,443,401,540,482
+## X-DBM-Mod-LoadZoneID: 461,443,401,540,482,856,860
 localization.en.lua
 localization.tw.lua
 localization.cn.lua

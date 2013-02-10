@@ -73,23 +73,30 @@ local platformPieSprayOrder = {
 }
 
 local platformSuggestedSafeZone = {
-	[61046] = {4, 4, 4, 4, 4, 4, 4, 4, 8, 8, 8, 8, 8, 8, 8, 8}, -- Jinlun Kun (Right)  -- old
-	[61038] = {4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3}, -- Yang Goushi (Left)  -- old
-	[61042] = {8, 8, 8, 8, 8, 8, 8, 8, 4, 4, 4, 4, 4, 4, 4, 4}, -- Cheng Kang (Back)   -- looked correct
+	[61046] = {4, 4, 4, 4, 4, 4, 4, 4, 8, 8, 8, 8, 8, 8, 8, 4}, -- Jinlun Kun (Right)  -- old
+	[61038] = {4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4}, -- Yang Goushi (Left)  -- old
+	[61042] = {8, 8, 8, 8, 8, 8, 8, 8, 4, 4, 4, 4, 4, 4, 4, 8}, -- Cheng Kang (Back)   -- looked correct
 	["test"] = {2, 2, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4}  -- TEST
 }
 
 local platformSuggestedSafeZoneStarModeHealther = {
-	[61046] = {7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8}, -- Jinlun Kun
-	[61038] = {8, 8, 8, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7}, -- Yang Goushi
-	[61042] = {5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4}, -- Cheng Kang
+	[61046] = {7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 7}, -- Jinlun Kun
+	[61038] = {8, 8, 8, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8}, -- Yang Goushi
+	[61042] = {5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 5}, -- Cheng Kang
 	["test"] = {2, 2, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4}  -- TEST
 }
 
 local platformSuggestedSafeZoneStarModeDps = {
-	[61046] = {4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5}, -- Jinlun Kun
-	[61038] = {4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3}, -- Yang Goushi
-	[61042] = {8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7}, -- Cheng Kang
+	[61046] = {4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4}, -- Jinlun Kun
+	[61038] = {4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4}, -- Yang Goushi
+	[61042] = {8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8}, -- Cheng Kang
+	["test"] = {2, 2, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4}  -- TEST
+}
+
+local platformSuggestedSafeZoneStarModeTank = {
+	[61046] = {4, 4, 3, 3, 2, 1, 1, 8, 8, 7, 7, 6, 6, 5, 5, 4}, -- Jinlun Kun
+	[61038] = {8, 8, 8, 8, 7, 7, 7, 7, 6, 6, 6, 6, 5, 5, 5, 8}, -- Yang Goushi
+	[61042] = {8, 8, 7, 7, 6, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 8}, -- Cheng Kang
 	["test"] = {2, 2, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4}  -- TEST
 }
 
@@ -185,6 +192,8 @@ local display = nil
 
 local unlock = "Interface\\AddOns\\DBM-TerraceofEndlessSpring\\Textures\\icons\\lock"
 local lock = "Interface\\AddOns\\DBM-TerraceofEndlessSpring\\Textures\\icons\\un_lock"
+local fixedmode = "Interface\\RAIDFRAME\\ReadyCheck-NotReady"
+local spinningmode = "Interface\\RAIDFRAME\\ReadyCheck-Ready"
 
 local window = nil
 
@@ -251,6 +260,11 @@ local function updateLockButton()
 	window.lock:SetNormalTexture(addon.db.profile.lock and unlock or lock)
 end
 
+local function updateModeButton()
+	if not window then return end
+	window.mode:SetNormalTexture(addon.db.profile.style == "fixed" and fixedmode or spinningmode)
+end
+
 local function toggleLock()
 	if addon.db.profile.lock then
 		unlockDisplay()
@@ -259,6 +273,16 @@ local function toggleLock()
 	end
 	addon.db.profile.lock = not addon.db.profile.lock
 	updateLockButton()
+end
+
+local function toggleMode()
+	if addon.db.profile.style == "spinning" then
+		addon.db.profile.style = "fixed"
+	else
+		addon.db.profile.style = "spinning"
+	end
+	addon:setPlatformOrientation()
+	updateModeButton()
 end
 
 local function onControlEnter(self)
@@ -303,6 +327,16 @@ local function ensureDisplay()
 	lock:SetScript("OnLeave", onControlLeave)
 	lock:SetScript("OnClick", toggleLock)
 	display.lock = lock
+	
+	local mode = CreateFrame("Button", nil, display)
+	mode:SetPoint("BOTTOM", display, "TOP", 0, -8)
+	mode:SetHeight(15)
+	mode:SetWidth(15)
+	mode.tooltipHeader = "旋轉"
+	mode:SetScript("OnEnter", onControlEnter)
+	mode:SetScript("OnLeave", onControlLeave)
+	mode:SetScript("OnClick", toggleMode)
+	display.mode = mode
 
 	local header = display:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	header:SetText("恐怖噴散")
@@ -404,6 +438,7 @@ local function ensureDisplay()
 	end
 
 	updateLockButton()
+	updateModeButton()
 	if addon.db.profile.lock then
 		locked = nil
 		lockDisplay()
@@ -823,6 +858,8 @@ local function CLEU(...)
 				suggestedSafePie = platformSuggestedSafeZoneStarModeDps[platform][dreadSprayCounter]
 			elseif DBM.ShaAssistStarModeChosed == "Healther" then
 				suggestedSafePie = platformSuggestedSafeZoneStarModeHealther[platform][dreadSprayCounter]
+			elseif DBM.ShaAssistStarModeChosed == "Tank" then
+				suggestedSafePie = platformSuggestedSafeZoneStarModeTank[platform][dreadSprayCounter]
 			else
 				suggestedSafePie = platformSuggestedSafeZone[platform][dreadSprayCounter]
 			end
@@ -858,6 +895,8 @@ local function CLEU(...)
 					suggestedSafePie = platformSuggestedSafeZoneStarModeDps[platform][1]
 				elseif DBM.ShaAssistStarModeChosed == "Healther" then
 					suggestedSafePie = platformSuggestedSafeZoneStarModeHealther[platform][1]
+				elseif DBM.ShaAssistStarModeChosed == "Tank" then
+					suggestedSafePie = platformSuggestedSafeZoneStarModeTank[platform][1]
 				else
 					suggestedSafePie = platformSuggestedSafeZone[platform][1]
 				end

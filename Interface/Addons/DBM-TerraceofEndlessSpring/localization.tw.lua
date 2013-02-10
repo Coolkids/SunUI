@@ -153,7 +153,8 @@ L= DBM:GetModLocalization(709)
 
 L:SetWarningLocalization({
 	specWarnyinmo		= "隱沒 > %d <",
-	specWarnfuxian		= "浮現! 新出現>%d<個畏懼之子",
+	specWarnfuxian		= "浮現! 畏懼之子 %d - %d",
+	specWarnzyg			= "光之勇士 (>%s< → 你)",
 	specWarnweisuo		= "恐懼畏縮 > %d <",
 	specWarningpreHud	= "恐懼畏縮 即將來臨",
 	MoveWarningLeft		= "← ← 向左一格",
@@ -171,22 +172,34 @@ L:SetTimerLocalization({
 L:SetOptionLocalization({
 	SoundDD				= "語音警告：$spell:131996",
 	SoundWOP			= "語音警告：重要技能",
+	InfoFrameTankMode	= "資訊框顯示首領攻擊計數器取代$spell:120629",
 	RangeFrame			= "距離監視（2碼）：$spell:119519",
 	pscount				= "語音警告：為恐怖噴散報數",
 	HudMAP				= "高級定位監視(HUD)：$spell:120519",
-	InfoFrame			= "資訊框：$spell:120629",
+	InfoFrame			= "資訊框：$spell:120629和$journal:6107數量",
 	timerSpecialCD		= "計時器：下一次P2特殊技能",
 	specWarnyinmo		= "特殊警告：$spell:120455",
 	specWarnfuxian		= "特殊警告：$spell:120458",
 	specWarnweisuo		= "特殊警告：$spell:120629",
+	specWarnzyg			= "特殊警告：$spell:120268",
 	specWarningpreHud	= "特殊警告：即將$spell:120629",
 	MoveWarningLeft		= "特殊警告：向左一格",
 	MoveWarningRight	= "特殊警告：向右一格",
 	MoveWarningBack		= "特殊警告：回原位",
-	ShaAssist			= "特殊功能：啟用恐怖噴散方向指示圖",
-	ShaStarMode			= "治療/DPS的恐怖噴散指示使用星辰跑位模式(硬吃一擊以減少跑位)",
+	ShaAssist			= "特殊功能：啟用恐怖噴散方向指示圖(輸入/sha可進行細節調整)",
+	ShaStarMode			= "恐怖噴散指示使用星辰跑位模式(硬吃一擊以減少跑位)",
 	timerSpoHudCD		= "計時器：下一次$spell:120629或$spell:120519",
 	timerSpoStrCD		= "計時器：下一次$spell:120519或$spell:120672",
 	timerHudStrCD		= "計時器：下一次$spell:120629或$spell:120672",
+	SoundWSCOUNT		= "語音警告：為$spell:120629播放1~4循環的計數語音",
+	unseenjs1			= "減傷提示：$spell:120629 1/4",
+	unseenjs2			= "減傷提示：$spell:120629 2/4",
+	unseenjs3			= "減傷提示：$spell:120629 3/4",
+	unseenjs4			= "減傷提示：$spell:120629 4/4",
 	SetIconOnWS			= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(120629)
+})
+
+L:SetMiscLocalization({
+	sanlian				= "三連",
+	liulian				= "六連"
 })

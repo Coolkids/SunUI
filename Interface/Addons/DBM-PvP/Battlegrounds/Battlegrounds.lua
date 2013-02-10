@@ -22,12 +22,8 @@ mod:RegisterEvents(
 )
 
 local inviteTimer = mod:NewTimer(60, "TimerInvite", "Interface\\Icons\\Spell_Holy_WeaponMastery", nil, false)
-local frameShow = RaidBossEmoteFrame.Show
 
 function mod:ZONE_CHANGED_NEW_AREA()
-	if self.Options.HideBossEmoteFrame then
-		RaidBossEmoteFrame.Show = frameShow
-	end
 	if select(2, IsInInstance()) == "pvp" then
 		-- hardcoded version sync as DBM only syncs if you join a raid and you technically don't join a new raid if you enter a battleground while you are already in a raid group
 		SendAddonMessage("H", "", "INSTANCE_CHAT")
@@ -35,8 +31,11 @@ function mod:ZONE_CHANGED_NEW_AREA()
 		inviteTimer:Stop()
 		SetMapToCurrentZone() -- for GetMapLandmarkInfo()
 		if self.Options.HideBossEmoteFrame then
-			RaidBossEmoteFrame:Hide()
-			RaidBossEmoteFrame.Show = RaidBossEmoteFrame.Hide
+			DBM:ToggleRaidBossEmoteFrame(1, true)
+		end
+	else
+		if self.Options.HideBossEmoteFrame then
+			DBM:ToggleRaidBossEmoteFrame(0, true)
 		end
 	end
 	for i, v in ipairs(DBM:GetModByName("AlteracValley").timers) do v:Stop() end
@@ -46,6 +45,8 @@ function mod:ZONE_CHANGED_NEW_AREA()
 	for i, v in ipairs(DBM:GetModByName("IsleofConquest").timers) do v:Stop() end
 	for i, v in ipairs(DBM:GetModByName("Gilneas").timers) do v:Stop() end
 	for i, v in ipairs(DBM:GetModByName("TwinPeaks").timers) do v:Stop() end
+	for i, v in ipairs(DBM:GetModByName("SilvershardMines").timers) do v:Stop() end
+	for i, v in ipairs(DBM:GetModByName("Kotmogu").timers) do v:Stop() end
 	DBM:GetModByName("AlteracValley"):Unschedule()
 	DBM:GetModByName("EyeoftheStorm"):Unschedule()
 	DBM:GetModByName("WarsongGulch"):Unschedule()
@@ -53,6 +54,8 @@ function mod:ZONE_CHANGED_NEW_AREA()
 	DBM:GetModByName("IsleofConquest"):Unschedule()
 	DBM:GetModByName("Gilneas"):Unschedule()
 	DBM:GetModByName("TwinPeaks"):Unschedule()
+	DBM:GetModByName("SilvershardMines"):Unschedule()
+	DBM:GetModByName("Kotmogu"):Unschedule()
 end
 mod.PLAYER_ENTERING_WORLD = mod.ZONE_CHANGED_NEW_AREA
 mod.OnInitialize = mod.ZONE_CHANGED_NEW_AREA

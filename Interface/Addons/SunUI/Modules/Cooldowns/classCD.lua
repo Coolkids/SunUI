@@ -1466,14 +1466,15 @@ end
 function CCD:UpdatePositions()
 	for i = 1, #bars do
 		bars[i]:ClearAllPoints()
+		bars[i].id = i
 		if not C["ClassCDIcon"] then
 			if i == 1 then
 				bars[i]:SetPoint("CENTER", ClassCDAnchor)
 			else
 				if C["ClassCDDirection"] == 2 then
-					bars[i]:SetPoint("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, C["ClassCDHeight"]*2)
+					bars[i]:Point("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, C["ClassCDHeight"]*2-3)
 				else
-					bars[i]:SetPoint("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -C["ClassCDHeight"]*2)
+					bars[i]:Point("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -C["ClassCDHeight"]*2+3)
 				end
 			end
 		else
@@ -1487,7 +1488,6 @@ function CCD:UpdatePositions()
 				end
 			end
 		end
-		bars[i].id = i
 	end
 end
 
@@ -1678,7 +1678,7 @@ function CCD:UpdateSet()
 end
 function CCD:OnInitialize()
 	if IsAddOnLoaded("ExtarCD") then return end
-	C = SunUIConfig.db.profile.MiniDB
+	C = SunUIConfig.db.profile.ClassCDDB
 	if not C["ClassCDIcon"] then 
 		ClassCDAnchor:SetSize(C["ClassCDWidth"], C["ClassCDHeight"])
 	else

@@ -165,16 +165,6 @@ function Module:OnInitialize()
 		RaidWarningFrame.SetPoint = function() end
 		_G["RaidWarningFrame"]:Kill()
 	end
-	if not SunUIConfig.db.profile.UnitFrameDB.showparty then
-		for i = 1, MAX_PARTY_MEMBERS do
-			local PartyMemberFrame = _G["PartyMemberFrame"..i]
-			PartyMemberFrame:ClearAllPoints()
-			PartyMemberFrame:UnregisterAllEvents()
-			PartyMemberFrame.Show = function() end
-			PartyMemberFrame.SetPoint = function() end
-			PartyMemberFrame:Kill()
-		end
-	end
 end
 function Module:OnEnable()
 	_G["TimeManagerClockButton"]:Hide()

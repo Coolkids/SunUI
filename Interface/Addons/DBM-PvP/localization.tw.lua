@@ -112,7 +112,7 @@ L:SetMiscLocalization({
 	WinBarText 			= "%s勝利",
 	FlagReset 			= "旗幟已重置!",
 	FlagTaken 			= "(.+)已經奪走了旗幟!",
-	FlagCaptured			= "(.+)已奪得旗幟!",
+	FlagCaptured		= "(.+)已奪得旗幟!",
 	FlagDropped			= "旗幟已經掉落!"
 })
 
@@ -139,11 +139,14 @@ L:SetMiscLocalization({
 	BgStart60 			= "戰鬥將在1分鐘內開始。",
 	BgStart30 			= "戰鬥將在30秒鐘內開始。做好準備!",
 	Alliance 			= "聯盟",
-	Horde 				= "部落",	
+	Horde 				= "部落",
 	InfoErrorText			= "當你離開戰鬥後，旗幟框架將會回復。",
 	ExprFlagPickUp			= "(.+)的旗幟被(.+)拔掉了!",
+	ExprFlagPickUp2			= "(.+)的旗幟被(.+)拔起了!",
 	ExprFlagCaptured		= "(.+)佔據了(.+)的旗幟!",
-	ExprFlagReturn			= "(.+)的旗幟被(.+)還到了它的基地",
+	ExprFlagCaptured2		= "(.+)奪取了(.+)的旗幟!",
+	ExprFlagReturn			= "(.+)的旗幟被(.+)還到了它的基地!",
+	ExprFlagReturn2			= "(.+)的旗幟被(.+)歸還到它的基地了!",
 	FlagAlliance			= "聯盟旗幟: ",
 	FlagHorde			= "部落旗幟: ",
 	FlagBase			= "基地"
@@ -217,9 +220,12 @@ L:SetMiscLocalization({
 	Alliance 			= "聯盟",
 	Horde 				= "部落",
 	InfoErrorText			= "當你離開戰鬥後，旗幟框架將會回復。",
-	ExprFlagPickUp			= "(.+)的旗幟被(.+)拔\230?\142?\137?\232?\181?\183?了!", -- 掉 \230\142\137 起 \232\181\183
+	ExprFlagPickUp			= "(.+)的旗幟被(.+)拔掉了!",
+	ExprFlagPickUp2			= "(.+)的旗幟被(.+)拔起了!",
 	ExprFlagCaptured		= "(.+)佔據了(.+)的旗幟!",
-	ExprFlagReturn			= "(.+)的旗幟被(.+)還到了它的基地",
+	ExprFlagCaptured2		= "(.+)奪取了(.+)的旗幟!",
+	ExprFlagReturn			= "(.+)的旗幟被(.+)還到了它的基地!",
+	ExprFlagReturn2			= "(.+)的旗幟被(.+)歸還到它的基地了!",
 	FlagAlliance			= "聯盟旗幟: ",
 	FlagHorde			= "部落旗幟: ",
 	FlagBase			= "基地",
@@ -268,25 +274,25 @@ L:SetOptionLocalization({
 	ShowGilneasBasesToWin		= "顯示勝利需要的基地數量"
 })
 
--------------------------
+------------------------
 --  Silvershard Mines  --
 -------------------------
 L = DBM:GetModLocalization("SilvershardMines")
 
 L:SetGeneralLocalization({
-	name = "碎銀礦坑"
-})
-
-L:SetMiscLocalization({
-	Capture = "已佔據"
+	name	    = "碎銀礦坑"
 })
 
 L:SetTimerLocalization({
-	TimerCart	= "礦車重置"
+	TimerCart	= "礦坑推車重生"
 })
 
 L:SetOptionLocalization({
-	TimerCart	= "顯示礦車重置計時器"
+	TimerCart	= "顯示礦坑推車重生計時器"
+})
+
+L:SetMiscLocalization({
+	Capture 	= "奪走了"
 })
 
 -------------------------
@@ -295,5 +301,21 @@ L:SetOptionLocalization({
 L = DBM:GetModLocalization("Kotmogu")
 
 L:SetGeneralLocalization({
-	name = "科特魔古神廟"
+	name		 = "科特魔古神廟"
+})
+
+L:SetOptionLocalization({
+	TimerWin					= "顯示勝利計時器",
+	ShowKotmoguEstimatedPoints	= "顯示戰鬥結束時雙方資源預計值",
+	ShowKotmoguOrbsToWin		= "顯示需要多少異能球才能贏"
+})
+
+L:SetMiscLocalization({
+	OrbTaken 	= "(%S+)奪走了(%S+)異能球!",
+	OrbReturn 	= "The (%S+)異能球已回到初始位置!",
+	ScoreExpr	= "(%d+)/1600",
+	Alliance	= "聯盟",
+	Horde		= "部落",
+	WinBarText	= "預計%s勝利",
+	OrbsToWin	= "獲勝異能球數量: %d"
 })

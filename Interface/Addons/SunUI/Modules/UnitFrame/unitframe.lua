@@ -1723,13 +1723,15 @@ function UF:OnInitialize()
 		]]
 		if U["showparty"] then
 			self:SetActiveStyle("SunUIParty") 
-			local party = self:SpawnHeader(nil,nil,"custom [@raid6,noexists,group:raid] hide; show",
+			local party = self:SpawnHeader(nil,nil,'custom [group:party,nogroup:raid][@raid6,noexists,group:raid] show;hide',
 				'oUF-initialConfigFunction', init:format(w,h,s,ph,ph),
 				'showParty',true,
 				'template','oUF_SunUIPartyPet',
 				'yOffset', -40)
 			party:SetScale(U["BossScale"])
 			MoveHandle.SunUIPartyFrame = S.MakeMove(party, "SunUI_PartyFrame", "PartyFrame", U["BossScale"])
+		--else
+			--oUF:DisableBlizzard'party'
 		end
 	  
 		local gap = 66

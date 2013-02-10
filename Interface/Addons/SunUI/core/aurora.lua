@@ -561,6 +561,7 @@ end
 
 function AA:PLAYER_ENTERING_WORLD()
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+	if UnitAffectingCombat("player") then return end
 	local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/UIParent:GetEffectiveScale()
 	local function sceenscale(x)
 		return (mult*math.floor(x/mult+.5)) 

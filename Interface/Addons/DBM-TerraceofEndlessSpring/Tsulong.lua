@@ -331,6 +331,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif args:IsSpellID(122858) and args:IsPlayer() then
 		timerBathedinLight:Start()
+
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED

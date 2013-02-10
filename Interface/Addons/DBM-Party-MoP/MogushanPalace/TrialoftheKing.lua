@@ -2,13 +2,13 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7901 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8602 $"):sub(12, -3))
 mod:SetCreatureID(61442, 61444, 61445)--61442 (Kuai the Brute), 61453 (Mu'Shiba, Kuai's Add), 61444 (Ming the Cunning), 61445 (Haiyan the Unstoppable)
 mod:SetModelID(42060)	-- 42059=Ming the Cunning | 42058=Kuai the Brute | 42060=Haiyan the Unstoppable
 mod:SetZone()
 
 --http://www.wowpedia.org/Clan_Leaders_of_the_Mogu
-mod:RegisterCombat("yell", L.Kuai, L.Ming, L.Haiyan)--Pull boss off first group to aggro, whichever it may be.
+mod:RegisterCombat("yell", L.Pull, L.Kuai, L.Ming, L.Haiyan) -- Common pull not fires if you've wiped. Other trigger is backup.
 mod:RegisterKill("yell", L.Defeat)--Defeat off first line said after all are defeated.
 mod:SetWipeTime(30)--Based on data, phase transitions are 10-16 seconds, 20 should be enough, but can raise if needed.
 

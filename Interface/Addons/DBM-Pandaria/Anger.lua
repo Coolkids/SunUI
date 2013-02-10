@@ -45,6 +45,7 @@ local warnMCTargets = {}
 local mcTargetIcons = {}
 local mcIcon = 8
 local bitterThought = GetSpellInfo(119601)
+local playerMCed = false
 
 mod:AddBoolOption("HudMAP", true, "sound")
 local DBMHudMap = DBMHudMap
@@ -112,6 +113,7 @@ local function showMC()
 end
 
 function mod:OnCombatStart(delay)
+	playerMCed = false
 	table.wipe(warnpreMCTargets)
 	table.wipe(warnMCTargets)
 	table.wipe(MCMarkers)
@@ -176,12 +178,18 @@ function mod:SPELL_AURA_APPLIED(args)
 		if MCMarkers[args.destName] then
 			MCMarkers[args.destName] = free(MCMarkers[args.destName])
 		end
+		if args:IsPlayer() then
+			playerMCed = true
+		end
 	end
 end
 
 function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(119626) and self.Options.SetIconOnMC then--Remove them after the MCs break.
 		removeIcon(args.destName)
+		if args:IsPlayer() then
+			playerMCed = false
+		end
 	elseif args:IsSpellID(119488) then
 		timerUnleashedWrathCD:Start()
 	end
@@ -189,7 +197,7 @@ end
 
 function mod:UNIT_AURA(uId)
 	if uId ~= "player" then return end
-	if UnitDebuff("player", bitterThought) and self:AntiSpam(2) then
+	if UnitDebuff("player", bitterThought) and self:AntiSpam(2) and not playerMCed then
 		specWarnBitterThoughts:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")--快躲開
 	end

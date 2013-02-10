@@ -185,8 +185,13 @@ do
 	local function updateflagcarrier(self, event, arg1)
 		if not self.Options.ShowFlagCarrier then return end
 		if self.FlagCarrierFrame1 and self.FlagCarrierFrame2 then
-			if string.match(arg1, L.ExprFlagPickUp) then
-				local sArg1, sArg2 =  string.match(arg1, L.ExprFlagPickUp)
+			if string.match(arg1, L.ExprFlagPickUp) or string.match(arg1, L.ExprFlagPickUp2) then
+				local sArg1, sArg2
+				if string.match(arg1, L.ExprFlagPickUp) then
+					sArg1, sArg2 =  string.match(arg1, L.ExprFlagPickUp)
+				else
+					sArg1, sArg2 =  string.match(arg1, L.ExprFlagPickUp2)
+				end
 				local mSide, mNick, nickLong
 				if( GetLocale() == "deDE") then
 					mSide = sArg2
@@ -243,12 +248,14 @@ do
 					vulnerableTimer:Start(180)
 				end
 				
-			elseif string.match(arg1, L.ExprFlagReturn) then
+			elseif string.match(arg1, L.ExprFlagReturn) or string.match(arg1, L.ExprFlagReturn2) then
 				local _, mSide
 				if( GetLocale() == "ruRU") then
 					_, _, _, mSide =  string.find(arg1, L.ExprFlagReturn)
-				else
+				elseif string.match(arg1, L.ExprFlagReturn) then
 					_, _, mSide =  string.find(arg1, L.ExprFlagReturn)
+				else
+					_, _, mSide =  string.find(arg1, L.ExprFlagReturn2)
 				end
 				
 				if mSide == L.Alliance then
@@ -261,7 +268,7 @@ do
 				end
 			end
 		end
-		if string.match(arg1, L.ExprFlagCaptured) then
+		if string.match(arg1, L.ExprFlagCaptured) or string.match(arg1, L.ExprFlagCaptured2) then
 			flagTimer:Start()
 			vulnerableTimer:Cancel()
 			if self.FlagCarrierFrame1 and self.FlagCarrierFrame2 then

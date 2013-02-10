@@ -29,6 +29,10 @@ L:SetOptionLocalization({
 ------------
 L= DBM:GetModLocalization(742)
 
+L:SetWarningLocalization({
+	SpecWarnJSA				= "%d Mobs >>damage reduction<<"
+})
+
 L:SetOptionLocalization ({
 	SoundWOP 	= "voice warning: important skills",
 	WarnJK 	= "voice warning: $spell:123011 advance warning",
@@ -83,9 +87,10 @@ L= DBM:GetModLocalization(709)
 
 L:SetWarningLocalization({
 	specWarnyinmo		= "Submerge >%d<",
+	specWarnzyg			= "Light (From >%s<)",
 	specWarnweisuo		= "Huddle in Terror >%d<",
 	specWarningpreHud	= "Huddle in Terror SOON!",
-	specWarnfuxian		= ">%d< Sons",
+	specWarnfuxian		= "Sons %d - %d",
 	MoveWarningLeft		= "¡û ¡û Left",
 	MoveWarningRight	= "Right ¡ú ¡ú",
 	MoveWarningBack		= "¡ú ¡ú Back ¡û ¡û"
@@ -102,4 +107,9 @@ L:SetOptionLocalization ({
 	RangeFrame			= "Show range frame (2) for $spell:119519",
 	SoundDD = "voice warning: $spell:131996",
 	SoundWOP = "voice warning: important skills"
+})
+
+L:SetMiscLocalization({
+	sanlian				= "Thrash",
+	liulian				= "DreadThrash"
 })

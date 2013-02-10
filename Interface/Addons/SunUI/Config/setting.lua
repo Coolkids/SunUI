@@ -143,6 +143,10 @@ G["MiniDB"] = {
 	["Aurora"] = true, 
 	["uiScale"] = 0.9,
 	["FontScale"] = 1,	
+	
+	
+}
+G["ClassCDDB"] = {
 	["ClassCDOpen"] = true,
 	["ClassFontSize"] = 12,
 	["ClassCDIcon"] = false,
@@ -151,12 +155,18 @@ G["MiniDB"] = {
 	["ClassCDHeight"] = 8,
 	["ClassCDWidth"] = 100,
 	["ClassCDDirection"] = 1,
+}
+G["RaidCDDB"] = {	
 	["RaidCD"] = true,
 	["RaidCDFontSize"] = 12,
 	["RaidCDWidth"] = 100,
 	["RaidCDHeight"] = 8,
-	["RaidCDDirection"] = 1,	
-}
+	["RaidCDDirection"] = 1,
+	["RowNum"] = 10,
+	["MaxNumber"] = 30,
+	["RowDirection"] = "right",
+}	
+	
 G["InfoPanelDB"] = {
 	["OpenTop"] = true,
 	["OpenBottom"] = true,

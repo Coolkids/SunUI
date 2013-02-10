@@ -26,6 +26,8 @@ function SunUIConfig:LoadDefaults()
 			SkinDB = G["SkinDB"],
 			UnitFrameDB = G["UnitFrameDB"],
 			MiniDB = G["MiniDB"],
+			ClassCDDB = G["ClassCDDB"],
+			RaidCDDB = G["RaidCDDB"],
 			InfoPanelDB = G["InfoPanelDB"],
 			MoveHandleDB = G["MoveHandleDB"],
 			PowerBarDB = G["PowerBarDB"],
@@ -1084,12 +1086,6 @@ function SunUIConfig.GenerateOptionsInternal()
 								get = function() return tostring(db.MiniDB.INVITE_WORD) end,
 								set = function(_, value) db.MiniDB.INVITE_WORD = tostring(value) end,
 							},
-							HideRaid = {
-								type = "toggle",
-								name = "Hide Blz RAID Frame",
-								desc = L["隐藏暴雪团队框架"],
-								order = 12,
-							},
 							HideRaidWarn = {
 								type = "toggle",
 								name = L["隐藏团队警告"],
@@ -1097,7 +1093,7 @@ function SunUIConfig.GenerateOptionsInternal()
 							},
 							Disenchat = {
 								type = "toggle",
-								name = "Quick Disenchat",
+								name = L["快速分解"],
 								desc = L["快速分解"],
 								order = 14,
 								get = function(info) return db.MiniDB[ info[#info] ] end,
@@ -1108,7 +1104,7 @@ function SunUIConfig.GenerateOptionsInternal()
 							},
 							Resurrect = {
 								type = "toggle",
-								name = "Auto AcceptResurrect",
+								name = L["自动接受复活"],
 								desc = L["自动接受复活"],
 								order = 15,
 								get = function(info) return db.MiniDB[ info[#info] ] end,
@@ -1119,7 +1115,7 @@ function SunUIConfig.GenerateOptionsInternal()
 							},
 							IPhoneLock = {
 								type = "toggle",
-								name = "SlideLock",
+								name = L["AFK锁屏"],
 								desc = L["AFK锁屏"],
 								order = 16,
 								get = function(info) return db.MiniDB[ info[#info] ] end,
@@ -1130,13 +1126,13 @@ function SunUIConfig.GenerateOptionsInternal()
 							},
 							AutoQuest = {
 								type = "toggle",
-								name = "AutoQuest",
+								name = L["自动交接任务"],
 								desc = L["自动交接任务"],
 								order = 17,
 							},
 							DNDFilter = {
 								type = "toggle",
-								name = "DNDFilter",
+								name = L["过滤DND/AFK自动回复消息"],
 								desc = L["过滤DND/AFK自动回复消息"],
 								order = 18,
 							},
@@ -1218,176 +1214,219 @@ function SunUIConfig.GenerateOptionsInternal()
 							},
 						}
 					},
-					group3 = {
-					type = "group", order = 3,
-					name = L["内置CD"],
-						args = {
-							ClassCDOpen = {
-								type = "toggle",
-								name = L["启动内置CD"],
-								order = 1,
-								get = function() return db.MiniDB.ClassCDOpen end,
-								set = function(_, value) 
-									db.MiniDB.ClassCDOpen = value
-									local CCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("ClassCD")
-									CCD:UpdateSet()
-								end,
-							},
-							group = {
-								type = "group", order = 2,
-								name = " ",guiInline = true,
-								disabled = function(info) return not db.MiniDB.ClassCDOpen end,
-								args = {
-									ClassCDIcon = {
-										type = "toggle",
-										name = L["启用图标模式"],
-										order = 1,
-									},
-									ClassCDIconSize = {
-										type = "input",
-										name = L["图标大小"],
-										desc = L["图标大小"], disabled = function(info) return not db.MiniDB.ClassCDIcon end,
-										order = 2,
-										get = function() return tostring(db.MiniDB.ClassCDIconSize) end,
-										set = function(_, value) 
-											db.MiniDB.ClassCDIconSize = tonumber(value) 
-											local CCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("ClassCD")
-											CCD:UpdateSize()
-										end,
-									},
-									ClassCDIconDirection = {
-										type = "select",
-										name = L["BUFF增长方向"],
-										desc = L["BUFF增长方向"],
-										order = 3, disabled =function(info) return not db.MiniDB.ClassCDIcon end,
-										values = {[1] = L["从左向右"], [2] = L["从右向左"]},
-										get = function() return db.MiniDB.ClassCDIconDirection end,
-										set = function(_, value) 
-											db.MiniDB.ClassCDIconDirection = value
-											local CCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("ClassCD")
-											CCD:UpdatePositions()
-										end,
-									},
-									ClassFontSize = {
-										type = "range", order = 4,
-										name = L["内置CD字体大小"], desc = L["内置CD字体大小"], disabled = function(info) return db.MiniDB.ClassCDIcon end,
-										min = 4, max = 28, step = 1,
-										--get = function() return db.MiniDB.ClassFontSize end,
-										--set = function(_, value) db.MiniDB.ClassFontSize = value end,
-									},
-									ClassCDWidth = {
-										type = "input",
-										name = L["框体宽度"],
-										desc = L["框体宽度"], disabled = function(info) return db.MiniDB.ClassCDIcon end,
-										order = 5,
-										get = function() return tostring(db.MiniDB.ClassCDWidth) end,
-										set = function(_, value) 
-											db.MiniDB.ClassCDWidth = tonumber(value) 
-											local CCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("ClassCD")
-											CCD:UpdateSize()
-										end,
-									},
-									ClassCDHeight = {
-										type = "input",
-										name = L["框体高度"],
-										desc = L["框体高度"],
-										order = 6, disabled =  function(info) return db.MiniDB.ClassCDIcon end,
-										get = function() return tostring(db.MiniDB.ClassCDHeight) end,
-										set = function(_, value) 
-											db.MiniDB.ClassCDHeight = tonumber(value)
-											local CCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("ClassCD")
-											CCD:UpdateSize()
-										end,
-									},
-									ClassCDDirection = {
-										type = "select",
-										name = L["计时条增长方向"],
-										desc = L["计时条增长方向"],
-										order = 7, disabled = function(info) return db.MiniDB.ClassCDIcon end,
-										values = {[1] = L["向下"], [2] = L["向上"]},
-										get = function() return db.MiniDB.ClassCDDirection end,
-										set = function(_, value) 
-											db.MiniDB.ClassCDDirection = value 
-											local CCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("ClassCD")
-											CCD:UpdatePositions()
-										end,
-									},
-								}		
-							},
-						}
+				}
+			},
+			ClassCDDB = {
+				order = 13,
+				type = "group",
+				name = L["内置CD"],
+				get = function(info) return db.ClassCDDB[ info[#info] ] end,
+				set = function(info, value) db.ClassCDDB[ info[#info] ] = value; SStaticPopup_Show("CFG_RELOAD") end,
+				args = {
+					ClassCDOpen = {
+						type = "toggle",
+						name = L["启动内置CD"],
+						order = 1,
+						get = function() return db.ClassCDDB.ClassCDOpen end,
+						set = function(_, value) 
+							db.ClassCDDB.ClassCDOpen = value
+							local CCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("ClassCD")
+							CCD:UpdateSet()
+						end,
 					},
-					group4 = {
-					type = "group", order = 4,
-					name = "RaidCD",
+					group = {
+						type = "group", order = 2,
+						name = " ",guiInline = true,
+						disabled = function(info) return not db.ClassCDDB.ClassCDOpen end,
 						args = {
-							RaidCD = {
+							ClassCDIcon = {
 								type = "toggle",
-								name = L["打开团队技能CD监视"],
+								name = L["启用图标模式"],
 								order = 1,
-								get = function() return db.MiniDB.RaidCD end,
+							},
+							ClassCDIconSize = {
+								type = "input",
+								name = L["图标大小"],
+								desc = L["图标大小"], disabled = function(info) return not db.ClassCDDB.ClassCDIcon end,
+								order = 2,
+								get = function() return tostring(db.ClassCDDB.ClassCDIconSize) end,
 								set = function(_, value) 
-									db.MiniDB.RaidCD = value 
-									local RCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("RaidCD")
-									RCD:UpdateSet()
+									db.ClassCDDB.ClassCDIconSize = tonumber(value) 
+									local CCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("ClassCD")
+									CCD:UpdateSize()
 								end,
 							},
-							group = {
-								type = "group", order = 2,
-								name = " ",guiInline = true,
-								disabled = function(info) return not db.MiniDB.RaidCD end,
-								args = {
-									RaidCDFontSize = {
-										type = "range", order = 1,
-										name = L["字体大小"], desc = L["字体大小"],
-										min = 4, max = 28, step = 1,
-										get = function() return db.MiniDB.RaidCDFontSize end,
-										set = function(_, value) db.MiniDB.RaidCDFontSize = value end,
-									},
-									RaidCDWidth = {
-										type = "input",
-										name = L["框体宽度"],
-										desc = L["框体宽度"],
-										order = 2,
-										get = function() return tostring(db.MiniDB.RaidCDWidth) end,
-										set = function(_, value) 
-											db.MiniDB.RaidCDWidth = tonumber(value) 
-											local RCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("RaidCD")
-											RCD:UpdateSize()
-										end,
-									},
-									RaidCDHeight = {
-										type = "input",
-										name = L["框体高度"],
-										desc = L["框体高度"],
-										order = 3,
-										get = function() return tostring(db.MiniDB.RaidCDHeight) end,
-										set = function(_, value) 
-											db.MiniDB.RaidCDHeight = tonumber(value) 
-											local RCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("RaidCD")
-											RCD:UpdateSize()
-										end,
-									},
-									RaidCDDirection = {
-										type = "select",
-										name = L["计时条增长方向"],
-										desc = L["计时条增长方向"],
-										order = 4,
-										values = {[1] = L["向下"], [2] = L["向上"]},
-										get = function() return db.MiniDB.RaidCDDirection end,
-										set = function(_, value) 
-											db.MiniDB.RaidCDDirection = value
-											local RCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("RaidCD")
-											RCD:UpdatePositions()
-										end,
-									},
-								}		
+							ClassCDIconDirection = {
+								type = "select",
+								name = L["BUFF增长方向"],
+								desc = L["BUFF增长方向"],
+								order = 3, disabled =function(info) return not db.ClassCDDB.ClassCDIcon end,
+								values = {[1] = L["从左向右"], [2] = L["从右向左"]},
+								get = function() return db.ClassCDDB.ClassCDIconDirection end,
+								set = function(_, value) 
+									db.ClassCDDB.ClassCDIconDirection = value
+									local CCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("ClassCD")
+									CCD:UpdatePositions()
+								end,
 							},
-						}
+							ClassFontSize = {
+								type = "range", order = 4,
+								name = L["内置CD字体大小"], desc = L["内置CD字体大小"], disabled = function(info) return db.ClassCDDB.ClassCDIcon end,
+								min = 4, max = 28, step = 1,
+								--get = function() return db.MiniDB.ClassFontSize end,
+								--set = function(_, value) db.MiniDB.ClassFontSize = value end,
+							},
+							ClassCDWidth = {
+								type = "input",
+								name = L["框体宽度"],
+								desc = L["框体宽度"], disabled = function(info) return db.ClassCDDB.ClassCDIcon end,
+								order = 5,
+								get = function() return tostring(db.ClassCDDB.ClassCDWidth) end,
+								set = function(_, value) 
+									db.ClassCDDB.ClassCDWidth = tonumber(value) 
+									local CCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("ClassCD")
+									CCD:UpdateSize()
+								end,
+							},
+							ClassCDHeight = {
+								type = "input",
+								name = L["框体高度"],
+								desc = L["框体高度"],
+								order = 6, disabled =  function(info) return db.ClassCDDB.ClassCDIcon end,
+								get = function() return tostring(db.ClassCDDB.ClassCDHeight) end,
+								set = function(_, value) 
+									db.ClassCDDB.ClassCDHeight = tonumber(value)
+									local CCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("ClassCD")
+									CCD:UpdateSize()
+								end,
+							},
+							ClassCDDirection = {
+								type = "select",
+								name = L["计时条增长方向"],
+								desc = L["计时条增长方向"],
+								order = 7, disabled = function(info) return db.ClassCDDB.ClassCDIcon end,
+								values = {[1] = L["向下"], [2] = L["向上"]},
+								get = function() return db.ClassCDDB.ClassCDDirection end,
+								set = function(_, value) 
+									db.ClassCDDB.ClassCDDirection = value 
+									local CCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("ClassCD")
+									CCD:UpdatePositions()
+								end,
+							},
+						}		
+					},
+				}
+			},
+			RaidCDDB = {
+				order = 14,
+				type = "group",
+				name = L["团队技能冷却监视"],
+				get = function(info) return db.RaidCDDB[ info[#info] ] end,
+				set = function(info, value) db.RaidCDDB[ info[#info] ] = value; SStaticPopup_Show("CFG_RELOAD") end,
+				args = {
+					RaidCD = {
+						type = "toggle",
+						name = L["打开团队技能CD监视"],
+						order = 1,
+						get = function() return db.RaidCDDB.RaidCD end,
+						set = function(_, value) 
+							db.RaidCDDB.RaidCD = value 
+							local RCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("RaidCD")
+							RCD:UpdateSet()
+						end,
+					},
+					group = {
+						type = "group", order = 2,
+						name = " ",guiInline = true,
+						disabled = function(info) return not db.RaidCDDB.RaidCD end,
+						args = {
+							RaidCDFontSize = {
+								type = "range", order = 1,
+								name = L["字体大小"], desc = L["字体大小"],
+								min = 4, max = 28, step = 1,
+								get = function() return db.RaidCDDB.RaidCDFontSize end,
+								set = function(_, value) db.RaidCDDB.RaidCDFontSize = value end,
+							},
+							RaidCDWidth = {
+								type = "input",
+								name = L["框体宽度"],
+								desc = L["框体宽度"],
+								order = 2,
+								get = function() return tostring(db.RaidCDDB.RaidCDWidth) end,
+								set = function(_, value) 
+									db.RaidCDDB.RaidCDWidth = tonumber(value) 
+									local RCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("RaidCD")
+									RCD:UpdateSize()
+								end,
+							},
+							RaidCDHeight = {
+								type = "input",
+								name = L["框体高度"],
+								desc = L["框体高度"],
+								order = 3,
+								get = function() return tostring(db.RaidCDDB.RaidCDHeight) end,
+								set = function(_, value) 
+									db.RaidCDDB.RaidCDHeight = tonumber(value) 
+									local RCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("RaidCD")
+									RCD:UpdateSize()
+								end,
+							},
+							RaidCDDirection = {
+								type = "select",
+								name = L["计时条增长方向"],
+								desc = L["计时条增长方向"],
+								order = 4,
+								values = {[1] = L["向下"], [2] = L["向上"]},
+								get = function() return db.RaidCDDB.RaidCDDirection end,
+								set = function(_, value) 
+									db.RaidCDDB.RaidCDDirection = value
+									local RCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("RaidCD")
+									RCD:UpdatePositions()
+								end,
+							},
+							RowNum = {
+								type = "input",
+								name = L["换行数目"],
+								desc = L["换行数目"],
+								order = 5,
+								get = function() return tostring(db.RaidCDDB.RowNum) end,
+								set = function(_, value) 
+									db.RaidCDDB.RowNum = tonumber(value) 
+									local RCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("RaidCD")
+									RCD:UpdatePositions()
+								end,
+							},
+							RowDirection = {
+								type = "select",
+								name = L["换行方向"],
+								desc = L["换行方向"],
+								order = 6,
+								values = {["left"] = L["向左"], ["right"] = L["向右"]},
+								get = function() return db.RaidCDDB.RowDirection end,
+								set = function(_, value) 
+									db.RaidCDDB.RowDirection = value
+									local RCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("RaidCD")
+									RCD:UpdatePositions()
+								end,
+							},
+							MaxNumber = {
+								type = "input",
+								name = L["上限"],
+								desc = L["上限"],
+								order = 7,
+								get = function() return tostring(db.RaidCDDB.MaxNumber) end,
+								set = function(_, value) 
+									db.RaidCDDB.MaxNumber = tonumber(value) 
+									local RCD = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("RaidCD")
+									RCD:UpdatePositions()
+								end,
+							},
+						}		
 					},
 				}
 			},
 			InfoPanelDB = {
-				order = 13,
+				order = 15,
 				type = "group",
 				name = L["信息面板"],
 				get = function(info) return db.InfoPanelDB[ info[#info] ] end,
@@ -1416,7 +1455,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				}
 			},	
 			PowerBarDB = {
-				order = 14,
+				order = 16,
 				type = "group",
 				name = L["职业能量条"],
 				get = function(info) return db.PowerBarDB[ info[#info] ] end,
@@ -1485,7 +1524,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				},
 			},
 			WarnDB = {
-				order = 15,
+				order = 17,
 				type = "group",
 				name = L["警告提示"],
 				get = function(info) return db.WarnDB[ info[#info] ] end,
@@ -1547,7 +1586,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				},
 			},
 			AnnounceDB = {
-				order = 16,
+				order = 18,
 				type = "group",
 				name = L["施法通告"],
 				get = function(info) return db.AnnounceDB[ info[#info] ] end,
@@ -1619,7 +1658,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				},
 			},
 			BagDB = {
-				order = 17,
+				order = 19,
 				type = "group",
 				name = "背包设置",
 				get = function(info) return db.BagDB[ info[#info] ] end,
@@ -1687,7 +1726,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				},
 			},
 			EquipmentDB = {
-				order = 18,
+				order = 20,
 				type = "group",
 				name = L["自动换装"],
 				get = function(info) return db.EquipmentDB[ info[#info] ] end,
@@ -1749,7 +1788,7 @@ function SunUIConfig.GenerateOptionsInternal()
 				},
 			},
 			ClassToolsDB = {
-				order = 19,
+				order = 21,
 				type = "group",
 				name = L["职业助手"],
 				get = function(info) return db.ClassToolsDB[ info[#info] ] end,

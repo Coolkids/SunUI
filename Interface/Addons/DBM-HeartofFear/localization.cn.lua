@@ -130,7 +130,7 @@ L:SetOptionLocalization({
 })
 
 L:SetMiscLocalization({
-	UnderHim	= "下面",
+	UnderHim	= "在它下方",
 	Heroicrush	= "他的对手",
 	Ptwostart	= "巨型盔甲开始碎裂了"
 })

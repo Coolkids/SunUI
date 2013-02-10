@@ -20,7 +20,7 @@ local DurationWidget = function()
 
 	S.CreateBack(ALFG.durationBar)
 	S.CreateTop(ALFG.durationBar:GetStatusBarTexture(), 1,.7, 0)
-	S.CreateMark(ALFG.durationBar, 4)
+	S.CreateMark(ALFG.durationBar)
 	
 	ALFG.durationTime:SetFontObject(GameFontNormalLarge)
 	ALFG.durationTime:SetText("")

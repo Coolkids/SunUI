@@ -61,28 +61,46 @@ local FormatTime = function(time)
 		return sformat("%.2d", time)
 	end
 end
-
-function RCD:UpdatePositions()
-	for i = 1, #bars do
-		bars[i]:ClearAllPoints()
-		if i == 1 then
-			bars[i]:SetPoint("CENTER", RaidCDAnchor)
-		else
-			if C["RaidCDDirection"] == 2 then
-				bars[i]:SetPoint("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, C["RaidCDHeight"]*2+5)
-			else
-				bars[i]:SetPoint("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -C["RaidCDHeight"]*2+5)
-			end
-		end
-		bars[i].id = i
-	end
-end
-
 local StopTimer = function(bar)
 	bar:SetScript("OnUpdate", nil)
 	bar:Hide()
 	tremove(bars, bar.id)
 	RCD:UpdatePositions()
+end
+function RCD:UpdatePositions()
+	local i = 1
+	for k,v in pairs(bars) do
+		v:ClearAllPoints()
+		v.id = i
+		if i == 1 then
+			v:SetPoint("CENTER", RaidCDAnchor)
+			--bars[i]:SetPoint("CENTER")
+		else
+			if C["RaidCDDirection"] == 2 then
+				v:Point("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, C["RaidCDHeight"]*2-3)
+			else
+				v:Point("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -C["RaidCDHeight"]*2+3)
+			end
+			if i > C["RowNum"] and i <= C["MaxNumber"] then
+				if C["RowDirection"] == "left" then
+					if i%C["RowNum"] == 1 then
+						v:ClearAllPoints()
+						v:Point("RIGHT", bars[(floor(i/C["RowNum"])-1)*C["RowNum"]+1], "LEFT", -C["RaidCDHeight"]*2-12, 0)
+					end
+				elseif C["RowDirection"] == "right" then
+					if i%C["RowNum"] == 1 then
+						--print("换行", bars[i].id, floor(i/C["MaxNumber"]))
+						v:ClearAllPoints()
+						v:Point("LEFT", bars[(floor(i/C["RowNum"])-1)*C["RowNum"]+1], "RIGHT", C["RaidCDHeight"]*2+12, 0)
+					end
+				end
+			end
+			if i > C["MaxNumber"] then
+				StopTimer(v)
+			end
+		end
+		i = i + 1
+	end
 end
 
 local BarUpdate = function(self, elapsed)
@@ -153,11 +171,11 @@ local CreateBar = function()
 end
 
 local StartTimer = function(name, spellId)
-	for i = 1, #bars do
-		if bars[i].spell == GetSpellInfo(spellId) and bars[i].name == name then
-			return
-		end
-	end
+	-- for i = 1, #bars do
+		-- if bars[i].spell == GetSpellInfo(spellId) and bars[i].name == name then
+			-- return
+		-- end
+	-- end
 	local bar = CreateBar()
 	local spell, rank, icon = GetSpellInfo(spellId)
 	bar.endTime = GetTime() + raid_spells[spellId]
@@ -170,7 +188,12 @@ local StartTimer = function(name, spellId)
 	bar.spellId = spellId
 	bar.name = name
 	bar:Show()
-	local color = RAID_CLASS_COLORS[select(2, UnitClass(name))]
+	local color
+	if CUSTOM_CLASS_COLORS then
+		color = CUSTOM_CLASS_COLORS[select(2, UnitClass(name))]
+	else
+		color = RAID_CLASS_COLORS[select(2, UnitClass(name))]
+	end
 	if color then
 		bar:SetStatusBarColor(color.r, color.g, color.b)
 		local s = bar:GetStatusBarTexture()
@@ -237,17 +260,19 @@ function RCD:UpdateSet()
 	end
 end
 function RCD:OnInitialize()
-	C = SunUIConfig.db.profile.MiniDB
+	C = SunUIConfig.db.profile.RaidCDDB
 	RaidCDAnchor:SetSize(C["RaidCDWidth"], C["RaidCDHeight"])
 	RCD:UpdateSet()
 	MoveHandle.RaidCD = S.MakeMoveHandle(RaidCDAnchor, "RaidCD", "RaidCD")
 end
 SlashCmdList.RaidCD = function(msg)
-	StartTimer(UnitName("player"), 20484)	-- Rebirth
-	StartTimer(UnitName("player"), 20707)	-- Soulstone
-	StartTimer(UnitName("player"), 6346)	-- Fear Ward
-	StartTimer(UnitName("player"), 29166)	-- Innervate
-	StartTimer(UnitName("player"), 32182)	-- Heroism
-	StartTimer(UnitName("player"), 2825)	-- Bloodlust
+	for i = 1, 6 do
+		StartTimer(UnitName("player"), 20484)	-- Rebirth
+		StartTimer(UnitName("player"), 20707)	-- Soulstone
+		StartTimer(UnitName("player"), 6346)	-- Fear Ward
+		StartTimer(UnitName("player"), 29166)	-- Innervate
+		StartTimer(UnitName("player"), 32182)	-- Heroism
+		StartTimer(UnitName("player"), 2825)	-- Bloodlust
+	end
 end
 SLASH_RaidCD1 = "/raidcd"

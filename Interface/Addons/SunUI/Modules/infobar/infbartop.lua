@@ -138,6 +138,10 @@ local Stat = CreateFrame("Frame", "InfoPanel1", TopInfoPanel)
 		GameTooltip:Show()
 	end)
 	Stat:SetScript("OnLeave", function() GameTooltip:Hide() end)
+	Stat:SetScript("OnMouseDown", function(self, button) 
+		ToggleFrame(GameMenuFrame)
+	end)
+	
 	Stat:SetScript("OnUpdate", Update) 
 end
 -- BuildMemory

@@ -97,7 +97,12 @@ L:SetWarningLocalization({
 -----------------------
 L= DBM:GetModLocalization(673)
 
+L:SetWarningLocalization({
+	warnStaticField	= "%s"
+})
+
 L:SetOptionLocalization({
+	warnStaticField	= DBM_CORE_AUTO_ANNOUNCE_OPTIONS.spell:format(106923),
 	SoundWOP			= "语音警告：重要技能"
 })
 
@@ -405,7 +410,7 @@ L= DBM:GetModLocalization(671)
 
 L:SetOptionLocalization({
 	SoundWOP			= "语音警告：重要技能",
-	KickArrow	= "当$spell:114021靠近你时显示DBM箭头",
+	KickArrow	= "DBM箭头：$spell:114487接近你时",
 })
 
 -----------------------

@@ -36,20 +36,30 @@ local function BuildClock()
 			GameTooltip:AddDoubleLine(format(localizedName, ""), isActive and WINTERGRASP_IN_PROGRESS or startTime==0 and "N/A" or S.FormatTime(startTime), 0.75, 0.9, 1, 1, 1, 1)
 		end
 		local oneraid = false
-			for i = 1, GetNumSavedInstances() do
-				local name, _, reset, difficulty, locked, extended, _, isRaid, maxPlayers = GetSavedInstanceInfo(i)
-				if isRaid and (locked or extended) then
-					local tr, tg, tb, diff
-					if not oneraid then
-						GameTooltip:AddLine(" ")
-						GameTooltip:AddLine(RAID_INFO, 0.75, 0.9, 1)
-						oneraid = true
-					end
-					if extended then tr, tg, tb = 0.3, 1, 0.3 else tr, tg, tb = 1, 1, 1 end
-					if difficulty == 3 or difficulty == 4 then diff = "H" else diff = "N" end
-					GameTooltip:AddDoubleLine(format("%s |cffaaaaaa(%s%s)", name, maxPlayers, diff), S.FormatTime(reset), 1, 1, 1, tr, tg, tb)
+		for i = 1, GetNumSavedInstances() do
+			local name, _, reset, difficulty, locked, extended, _, isRaid, maxPlayers = GetSavedInstanceInfo(i)
+			if isRaid and (locked or extended) then
+				local tr, tg, tb, diff
+				if not oneraid then
+					GameTooltip:AddLine(" ")
+					GameTooltip:AddLine(RAID_INFO, 0.75, 0.9, 1)
+					oneraid = true
 				end
-			end	
+				if extended then tr, tg, tb = 0.3, 1, 0.3 else tr, tg, tb = 1, 1, 1 end
+				if difficulty == 3 or difficulty == 4 then diff = "H" else diff = "N" end
+				GameTooltip:AddDoubleLine(format("%s |cffaaaaaa(%s%s)", name, maxPlayers, diff), S.FormatTime(reset), 1, 1, 1, tr, tg, tb)
+			end
+		end
+		--怒之煞
+		if UnitLevel("player") > 89 then
+			GameTooltip:AddLine(" ")
+			local isCD = IsQuestFlaggedCompleted(32099)
+			if isCD then
+				GameTooltip:AddLine("本周|cff228B22已经击杀|r怒之傻", 0.75, 0.9, 1)
+			else
+				GameTooltip:AddLine("本周还|cffFF0000没有击杀|r怒之傻", 0.75, 0.9, 1)
+			end
+		end
 		GameTooltip:Show()
 	end)
 	Clock:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
@@ -277,9 +287,7 @@ local function BuildFriend()
 			local totalonline = online + BNonline
 			local totalfriends = total + BNtotal
 			if online > 0 or BNonline > 0 then
-				GameTooltip:SetOwner(self, "ANCHOR_NONE")
-				GameTooltip:ClearAllPoints()
-				GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
+				GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
 				GameTooltip:ClearLines()
 				GameTooltip:AddDoubleLine(FRIENDS_LIST, format("%s: %s/%s", GUILD_ONLINE_LABEL, totalonline, totalfriends), tthead.r, tthead.g, tthead.b, tthead.r, tthead.g, tthead.b)
 				if online > 0 then
@@ -546,7 +554,7 @@ local function BuildGuild()
 		local guildName, guildRank = GetGuildInfo('player')
 		local guildLevel = GetGuildLevel()
 
-		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
+		GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
 		
 		GameTooltip:ClearLines()
 		GameTooltip:AddDoubleLine(format(guildInfoString, guildName, guildLevel), format(guildInfoString2, online, total),tthead.r,tthead.g,tthead.b,tthead.r,tthead.g,tthead.b)
@@ -659,7 +667,7 @@ local function BuildDurability()
 	end)
 	Stat:SetScript("OnEnter", function(self)
 		if not InCombatLockdown() then
-			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT", 0, 0)
+			GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
 			GameTooltip:ClearLines()
 			GameTooltip:AddLine(DURABILITY, 0.4, 0.78, 1)
 			GameTooltip:AddLine(" ")
@@ -720,7 +728,7 @@ local function BuildStat2()
 	end
 
 	local function ShowTooltip(self)
-		GameTooltip:SetOwner(self, "ANCHOR_TOP")
+		GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
 		GameTooltip:ClearLines()
 
 		local inInstance, instanceType = IsInInstance()
@@ -855,7 +863,7 @@ local function BuildStat1()
 	local haste, hasteBonus
 
 	local function ShowTooltip(self)
-		GameTooltip:SetOwner(self, "ANCHOR_TOP")
+		GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(STATS_LABEL)
 
@@ -1111,7 +1119,7 @@ local function BuildSpecswitch()
 				table.insert(spec2,name)
 			end
 		end
-		GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 6)
+		GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(TALENTS_BUTTON,0,.6,1)
 		GameTooltip:AddLine(" ")
@@ -1183,7 +1191,7 @@ local function DungeonHelper()
 		end
 		if text == "" then text = "N/A" end
 		
-		GameTooltip:SetOwner(self, "ANCHOR_TOP")
+		GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(str, 0,.6,1)
 		GameTooltip:AddLine(" ")

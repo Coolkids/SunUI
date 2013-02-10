@@ -3,6 +3,7 @@
 ## Notes: 双击钓鱼
 ## Version: beta 1.0
 ## Author: Coolkid
+## SavedVariablesPerCharacter: nioTillerDBC
 
 libs\LibStub.lua
 libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
@@ -10,3 +11,4 @@ libs\AceHook-3.0\AceHook-3.0.xml
 libs\AceEvent-3.0\AceEvent-3.0.xml
 
 fish.lua
+nioTiller.lua
