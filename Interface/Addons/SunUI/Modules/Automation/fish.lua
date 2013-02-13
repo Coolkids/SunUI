@@ -230,6 +230,7 @@ function F:PLAYER_ENTERING_WORLD()
 end
 
 function F:PLAYER_EQUIPMENT_CHANGED()
+	if InCombatLockdown() then return end
 	isPole = IsFishPole()
 	if(IsSpellKnown(131474)) then
 		knowFish = true
@@ -253,6 +254,7 @@ function F:BAG_UPDATE()
 end
 
 function F:OnEnable()
+	if InCombatLockdown() then return end
 	F:RegisterEvent("PLAYER_ENTERING_WORLD")
 	F:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
 end
