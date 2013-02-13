@@ -226,14 +226,14 @@ end
 
 function Postal.ProfileFunc(dropdownbutton, arg1, arg2, checked)
 	if arg1 == "NewProfile" then
-		SStaticPopup_Show("POSTAL_NEW_PROFILE")
+		StaticPopup_Show("POSTAL_NEW_PROFILE")
 	else
 		Postal.db[arg1](Postal.db, arg2)
 	end
 	CloseDropDownMenus()
 end
 
-SStaticPopupDialogs["POSTAL_NEW_PROFILE"] = {
+StaticPopupDialogs["POSTAL_NEW_PROFILE"] = {
 	text = L["New Profile Name:"],
 	button1 = ACCEPT,
 	button2 = CANCEL,

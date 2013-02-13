@@ -41,10 +41,10 @@ local menuTable = {
 			{text = OFFICER, arg1 = "OFFICER", func = reportFunction, notCheckable = 1},
 			{text = TARGET, func = function() reportFunction(self, "WHISPER", UnitName("target")) end, notCheckable = 1},
 			{text = WHISPER, func = function()
-				SStaticPopupDialogs.REPORT_DIALOG.OnAccept = function(self)
+				StaticPopupDialogs.REPORT_DIALOG.OnAccept = function(self)
 					reportFunction(self, "WHISPER", _G[self:GetName().."EditBox"]:GetText())
 				end
-				SStaticPopup_Show("REPORT_DIALOG")
+				StaticPopup_Show("REPORT_DIALOG")
 			end, notCheckable = 1},
 			{text = CHANNEL, notCheckable = 1, keepShownOnClick = true, hasArrow = true, menuList = {}}
 		},
@@ -58,7 +58,7 @@ local menuTable = {
 		},
 	},
 	{text = "", notCheckable = true, notClickable = true},
-	{text = RESET, func = function() SStaticPopup_Show("RESET_DATA") end, notCheckable = true},
+	{text = RESET, func = function() StaticPopup_Show("RESET_DATA") end, notCheckable = true},
 }
 
 local updateReportChannels = function()
@@ -296,7 +296,7 @@ function window:GetLine(id)
 	lines[id] = f
 	f:EnableMouse(true)
 	f.detailAction = noop
-	--S.SmoothBar(f)
+	S.SmoothBar(f)
 	f:SetScript("OnMouseDown", clickFunction)
 	f:SetScript("OnEnter", onEnter)
 	f:SetScript("OnLeave", onLeave)
@@ -349,7 +349,7 @@ function window:GetLine(id)
 	return f
 end
 
-SStaticPopupDialogs.RESET_DATA = {
+StaticPopupDialogs.RESET_DATA = {
 	text = "Numeration: "..l.reset_data,
 	button1 = ACCEPT,
 	button2 = CANCEL,
@@ -360,7 +360,7 @@ SStaticPopupDialogs.RESET_DATA = {
 	preferredIndex = 5,
 }
 
-SStaticPopupDialogs.REPORT_DIALOG = {
+StaticPopupDialogs.REPORT_DIALOG = {
 	text = "Numeration: "..l.whisp_target,
 	button1 = WHISPER,
 	timeout = 0,

@@ -245,7 +245,7 @@ local useChatType, useChannel
 function addon:Report(lines, chatType, channel)
 	useChatType, useChannel = chatType, channel
 	if chatType == "WHISPER" then
-		whispname = StaticPopup1EditBox:GetText()
+		whispname = channel
 		if whispname == nil or whispname == "" then
 		-- if not useChannel or not UnitIsPlayer(useChannel) then
 			print(l.bad_whisp)

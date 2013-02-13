@@ -7,7 +7,7 @@ local _G = getfenv(0)
 local selectedID
 local selectedIDmoney
 
-SStaticPopupDialogs["POSTAL_DELETE_MAIL"] = {
+StaticPopupDialogs["POSTAL_DELETE_MAIL"] = {
 	text = DELETE_MAIL_CONFIRMATION,
 	button1 = ACCEPT,
 	button2 = CANCEL,
@@ -21,7 +21,7 @@ SStaticPopupDialogs["POSTAL_DELETE_MAIL"] = {
 	hideOnEscape = 1
 }
 
-SStaticPopupDialogs["POSTAL_DELETE_MONEY"] = {
+StaticPopupDialogs["POSTAL_DELETE_MONEY"] = {
 	text = DELETE_MONEY_CONFIRMATION,
 	button1 = ACCEPT,
 	button2 = CANCEL,
@@ -50,10 +50,10 @@ function Postal_DoNotWant.Click(self, button, down)
 	end
 	if InboxItemCanDelete(selectedID) then
 		if firstAttachName then
-			SStaticPopup_Show("POSTAL_DELETE_MAIL", firstAttachName)
+			StaticPopup_Show("POSTAL_DELETE_MAIL", firstAttachName)
 			return
 		elseif money and money > 0 then
-			SStaticPopup_Show("POSTAL_DELETE_MONEY")
+			StaticPopup_Show("POSTAL_DELETE_MONEY")
 			return
 		else
 			DeleteInboxItem(selectedID)
