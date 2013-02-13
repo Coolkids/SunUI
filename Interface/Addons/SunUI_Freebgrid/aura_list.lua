@@ -465,7 +465,7 @@ ns.auras_instances_debuffs = {
 
 			--Tsulong
 			[122768] = 21, -- Dread Shadows, Stacking raid damage debuff (ragnaros superheated style) 
-			[122789] = 24, -- Sunbeam, standing in the sunbeam, used to clear dread shadows.
+			--[122789] = 24, -- Sunbeam, standing in the sunbeam, used to clear dread shadows.
 			[122858] = 28, -- Bathed in Light, 500% increased healing done debuff.
 			[122752] = 23, -- Shadow Breath, increased shadow breath damage debuff.
 			[123011] = 26, -- Terrorize: 10%, Magical dot dealing % health.

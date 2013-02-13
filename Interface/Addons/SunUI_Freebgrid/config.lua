@@ -662,7 +662,7 @@ ns.options.args.misc = {
 			set = function(info,val) ns.db.hideblzraid = val; ns:UpdateBlizzardRaidFrame() end,
         },
 		hideblzparty = {
-            name = L.miscoptshideparty,
+            name = L.miscoptshideparty.."(作废)",
             type = "toggle",
             order = 2,
 			set = function(info,val) ns.db.hideblzparty = val; ns:UpdateBlizzardPartyFrameDisplayStatus(); end,

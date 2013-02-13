@@ -4,7 +4,7 @@ function Module:OnEnable()
 	local colectorbutton = CreateFrame("Button", nil, UIParent)
 	colectorbutton:Size(15)
 	colectorbutton:Point("TOPLEFT", ChatFrame1, "TOPRIGHT", 5, 0)
-	UIFrameFadeIn(colectorbutton, 5, 1, 0.2)
+	UIFrameFadeIn(colectorbutton, 1, 1, 0.2)
 	local colector = CreateFrame("Frame", "ColectorButton", UIParent)
 	colector:Width(45)
 	colector:Height(85)
@@ -24,7 +24,7 @@ function Module:OnEnable()
 			self:SetScript("OnUpdate", function(self, elasped)
 				Timer = Timer + elasped
 				if Timer > 6 then
-					UIFrameFadeOut(colector, 2, colector:GetAlpha(), 0)
+					UIFrameFadeOut(colector, 0.5, colector:GetAlpha(), 0)
 				end
 				if Timer > 8 then
 					colector:Hide()
@@ -35,7 +35,7 @@ function Module:OnEnable()
 		end
 	end)
 	colectorbutton:SetScript("OnEnter",  function(self)
-			UIFrameFadeIn(self, 1, self:GetAlpha(), 1)
+			UIFrameFadeIn(self, 0.5, self:GetAlpha(), 1)
 			GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
 			GameTooltip:AddLine("按钮集合")
 			GameTooltip:Show()  

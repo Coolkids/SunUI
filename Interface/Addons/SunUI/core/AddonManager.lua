@@ -535,7 +535,7 @@ function stAddonManager:LoadWindow()
 	stAddonManager.Loaded = true
 end
 
-SLASH_STADDONMANAGER1, SLASH_STADDONMANAGER2, SLASH_STADDONMANAGER3 = "/staddonmanager", "/stam", "/staddon"
+SLASH_STADDONMANAGER1, SLASH_STADDONMANAGER2, SLASH_STADDONMANAGER3 = "/staddonmanager", "/stam", "/addon"
 SlashCmdList["STADDONMANAGER"] = function() stAddonManager:LoadWindow() end
 
 local function CheckForAddon(event, addon, addonName)
@@ -543,19 +543,19 @@ local function CheckForAddon(event, addon, addonName)
 end
 
 local gmbAddOns = CreateFrame("Button", "GameMenuButtonAddOns", GameMenuFrame, "GameMenuButtonTemplate")
-gmbAddOns:SetSize(GameMenuButtonHelp:GetWidth(), GameMenuButtonHelp:GetHeight())
-
-gmbAddOns:SetText(L["插件管理"])
-gmbAddOns:SetPoint(GameMenuButtonHelp:GetPoint())
-GameMenuButtonHelp:SetPoint("TOP", gmbAddOns, "BOTTOM", 0, -1)
-GameMenuFrame:SetHeight(GameMenuFrame:GetHeight()+GameMenuButtonMacros:GetHeight());
-gmbAddOns:SetScript("OnClick", function()
-	HideUIPanel(GameMenuFrame);
-	stAddonManager:LoadWindow()
-end)
 gmbAddOns:RegisterEvent("ADDON_LOADED")
 gmbAddOns:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 function AM:OnInitialize()
+	gmbAddOns:SetSize(_G["GameMenuButtonHelp"]:GetWidth(), _G["GameMenuButtonHelp"]:GetHeight())
+
+	gmbAddOns:SetText(L["插件管理"])
+	gmbAddOns:SetPoint(_G["GameMenuButtonHelp"]:GetPoint())
+	_G["GameMenuButtonHelp"]:SetPoint("TOP", gmbAddOns, "BOTTOM", 0, -1)
+	_G["GameMenuFrame"]:SetHeight(_G["GameMenuFrame"]:GetHeight()+_G["GameMenuButtonMacros"]:GetHeight());
+	gmbAddOns:SetScript("OnClick", function()
+		HideUIPanel(_G["GameMenuFrame"]);
+		stAddonManager:LoadWindow()
+	end)
 	S.Reskin(gmbAddOns)
 end

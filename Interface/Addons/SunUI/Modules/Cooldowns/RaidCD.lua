@@ -171,11 +171,11 @@ local CreateBar = function()
 end
 
 local StartTimer = function(name, spellId)
-	-- for i = 1, #bars do
-		-- if bars[i].spell == GetSpellInfo(spellId) and bars[i].name == name then
-			-- return
-		-- end
-	-- end
+	for k, v in pairs(bars) do
+		if v.spell == GetSpellInfo(spellId) and v.name == name then
+			return
+		end
+	end
 	local bar = CreateBar()
 	local spell, rank, icon = GetSpellInfo(spellId)
 	bar.endTime = GetTime() + raid_spells[spellId]

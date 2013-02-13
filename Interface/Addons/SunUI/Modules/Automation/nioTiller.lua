@@ -1,5 +1,5 @@
 ﻿local nioTillersFrame = CreateFrame("Frame")
-local nioTillers = LibStub("AceAddon-3.0"):NewAddon("nioTillers", "AceHook-3.0")
+local nioTillers = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("nioTillers", "AceHook-3.0")
 local seedIDs = {
 	79102, --绿色卷心菜
 	80590, --胡萝卜
@@ -35,6 +35,7 @@ local config = {
 	BorderColor = {0.14,0.43,0.65,1},
 }
 local default_options = {
+	Position = {pos = "CENTER", position = "CENTER", xoff = 0, yoff = 0,},
 	Orientation = 1,
 	ShowOnlyOwned = true,
 	Shown = true,
@@ -173,21 +174,22 @@ end
 --make buttons
 function nioTillers:MakeButtons()
 	self.btn = {}
-	
 	local holder = CreateFrame("Button", "nioTillersMainButton", UIParent)
 	holder = StyleButton(holder, config.Mainbutton.size, config.Mainbutton.fontsize)
 	holder:SetMovable(true)
-	holder:SetPoint("CENTER", UIParent, config.Position.position, config.Position.xoff, config.Position.yoff) 
+	holder:SetPoint(nioTillerDBC.Position.pos, UIParent, nioTillerDBC.Position.position, nioTillerDBC.Position.xoff, nioTillerDBC.Position.yoff) 
 	holder:EnableMouse(true)
 	holder:RegisterForClicks("AnyUp");
 	holder:SetScript("OnMouseDown", function(self, button)
 		if IsAltKeyDown() and button == "RightButton" then 
 			self:StartMoving() 
 			self:SetUserPlaced(true)
-			end
+		end
 	end)
 	holder:SetScript("OnMouseUp", function(self, button)
 		if button == "RightButton" then self:StopMovingOrSizing() end
+		local AnchorF, _, AnchorT, X, Y = self:GetPoint()
+		nioTillerDBC.Position.pos, nioTillerDBC.Position.position, nioTillerDBC.Position.xoff, nioTillerDBC.Position.yoff =  AnchorF,AnchorT, X, Y
 	end)
 	holder:SetScript("OnEnter", OnEnterMain)
 	holder:SetScript("OnLeave", OnLeave)
@@ -377,7 +379,10 @@ local function nioTillersEvents(self, event)
 		nioTillersFrame:UnregisterEvent("UNIT_SPELLCAST_SENT")
 		nioTillersFrame:UnregisterEvent("UI_ERROR_MESSAGE")
 	elseif event == "ADDON_LOADED" then
+		--if not nioTillerDBC then nioTillerDBC = {} end
+		--if nioTillerDBC == {} then nioTillerDBC = default_options end
 		nioTillerDBC = nioTillerDBC or default_options	
+		if nioTillerDBC["Position"] == nil then nioTillerDBC = default_options end
 		nioTillers:MakeButtons()
 		nioTillersFrame:UnregisterEvent("ADDON_LOADED")
 	elseif event == "PLAYER_ENTERING_WORLD" then
@@ -386,8 +391,13 @@ local function nioTillersEvents(self, event)
 		nioTillersFrame:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	end
 end
-nioTillersFrame:RegisterEvent("ADDON_LOADED")
-nioTillersFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
-nioTillersFrame:RegisterEvent("ZONE_CHANGED")
-nioTillersFrame:SetScript("OnEvent", nioTillersEvents)
-nioTillers:CreateSAButtons()
+function nioTillers:OnInitialize()
+	nioTillersFrame:RegisterEvent("ADDON_LOADED")
+	nioTillersFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+	nioTillersFrame:RegisterEvent("ZONE_CHANGED")
+end
+
+function nioTillers:OnEnable()
+	nioTillersFrame:SetScript("OnEvent", nioTillersEvents)
+	nioTillers:CreateSAButtons()
+end

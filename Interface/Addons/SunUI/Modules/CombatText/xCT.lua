@@ -1796,7 +1796,7 @@ local function EndTestMode()
 end
 
 --[[  Pop-Up Dialog  ]]
-SStaticPopupDialogs["XCT_LOCK"] = {
+StaticPopupDialogs["XCT_LOCK"] = {
     text         = "To save |cffFF0000x|rCT window positions you need to reload your UI.\n Click "..ACCEPT.." to reload UI.\nClick "..CANCEL.." to do it later.",
     button1      = ACCEPT,
     button2      = CANCEL,
@@ -1830,7 +1830,7 @@ SlashCmdList["XCT"] = function(input)
         if ct.locked then
             pr("already locked.")
         else
-            SStaticPopup_Show("XCT_LOCK")
+            StaticPopup_Show("XCT_LOCK")
         end
         
     elseif args[1] == "test" then

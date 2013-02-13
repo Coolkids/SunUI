@@ -831,6 +831,10 @@ function Module:OnInitialize()
 		return 
 	end
 	C = SunUIConfig.db.profile.ActionBarDB
+	Module:RegisterEvent("CVAR_UPDATE", ShowGrid)
+	Module:RegisterEvent("LOSS_OF_CONTROL_ADDED", HideLossCD)
+	Module:RegisterEvent("LOSS_OF_CONTROL_UPDATE", HideLossCD)
+	
 	Module:blizzHider()
 	Module:CreateBar1()
 	Module:CreateBar2()
@@ -843,7 +847,4 @@ function Module:OnInitialize()
 	Module:CreateStanceBar()
 	Module:CreateExitVehicle()
 	if S.IsCoolkid() then  ShowGrid(nil, "ALWAYS_SHOW_MULTIBARS_TEXT", nil) end
-	Module:RegisterEvent("CVAR_UPDATE", ShowGrid)
-	Module:RegisterEvent("LOSS_OF_CONTROL_ADDED", HideLossCD)
-	Module:RegisterEvent("LOSS_OF_CONTROL_UPDATE", HideLossCD)
 end

@@ -1,4 +1,4 @@
-﻿local F = LibStub("AceAddon-3.0"):NewAddon("sFish"):NewModule("Module", "AceEvent-3.0", "AceHook-3.0")
+﻿local F = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("sFish", "AceEvent-3.0", "AceHook-3.0")
 local knowFish = false
 local spell = GetSpellInfo(131474)
 local isPole = false

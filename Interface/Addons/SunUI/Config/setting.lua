@@ -193,9 +193,9 @@ G["MoveHandleDB"] = {
 	--头像
 	["PlayerFrame"] = {"BOTTOM", "UIParent", "BOTTOM", -175, 172},
 	["TargetFrame"] = {"BOTTOM", "UIParent", "BOTTOM",  175,  172},
-	["PetFrame"] = {"TOPRIGHT", "oUF_SunUIPlayer", "TOPLEFT", -5, 0},
+	["PetFrame"] = {"TOPRIGHT", "SunUF_Player", "TOPLEFT", -5, 0},
 	["ToTFrame"] = {"BOTTOM", "UIParent", "BOTTOM", 0, 172},
-	["FocusTFrame"] = {"TOP", "oUF_SunUIFocus", "BOTTOM", 0, -30},
+	["FocusTFrame"] = {"TOP", "SunUF_Focus", "BOTTOM", 0, -30},
 	["BossFrame"] = {"RIGHT", "UIParent", "RIGHT", -50, -60},
 	["FocusFrame"] = {"RIGHT", "UIParent", "RIGHT", -57, -138},
 	["PartyFrame"] = {"LEFT", "UIParent", "LEFT", 10, 0},
@@ -213,7 +213,7 @@ G["MoveHandleDB"] = {
 	--施法条
 	["PlayerCastbar"] = {"BOTTOM", "UIParent", "BOTTOM",0, 110},
 	["TargetCastbar"] = {"CENTER", "UIParent", "CENTER",0, -170},
-	["FocusCastbar"] = {"TOP", "oUF_SunUIFocus", "BOTTOM", 0, -20},
+	["FocusCastbar"] = {"TOP", "SunUF_Focus", "BOTTOM", 0, -20},
 	--内置CD 团队CD
 	["ClassCD"] = {"LEFT", "UIParent", "LEFT", 30, 240},
 	["RaidCD"] =  {"LEFT", "UIParent", "LEFT", 30, 0},

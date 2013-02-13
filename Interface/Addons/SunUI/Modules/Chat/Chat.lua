@@ -189,7 +189,7 @@ local function CreatCopyFrame()
 	local scrollArea = CreateFrame("ScrollFrame", "CopyScroll", frame, "UIPanelScrollFrameTemplate")
 	scrollArea:Point("TOPLEFT", frame, "TOPLEFT", 8, -30)
 	scrollArea:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -30, 8)
-
+	S.ReskinScroll(CopyScrollScrollBar)
 	editBox = CreateFrame("EditBox", "CopyBox", frame)
 	editBox:SetMultiLine(true)
 	editBox:SetMaxLetters(99999)

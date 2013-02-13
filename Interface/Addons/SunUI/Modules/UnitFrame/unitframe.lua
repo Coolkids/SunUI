@@ -16,7 +16,7 @@ local headframe
 -----------------------------
 -- FUNCTIONS
 -----------------------------
-local dropdown = CreateFrame('Frame', 'oUF_SunUIDropDown', UIParent, 'UIDropDownMenuTemplate')
+local dropdown = CreateFrame('Frame', 'SunUIUF_DropDown', UIParent, 'UIDropDownMenuTemplate')
 
 local function gen_fontstring(f, name, size, outline)
 	local fs = f:CreateFontString(nil, "OVERLAY", 3)
@@ -667,8 +667,12 @@ local function createBuffs(f)
 		b.num = 4
 		b:SetWidth((b.size+b.spacing)*4)
     elseif f.mystyle=='party' then
-		b:SetPoint("TOPLEFT", f.Power, "BOTTOMLEFT", 0, -b.spacing)
-		b.size = 16
+		b["growth-x"] = "RIGHT"
+		b['growth-y'] = 'UP'
+		b.initialAnchor = "BOTTOMLEFT"
+		b.showBuffType = true
+		b:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, b.spacing)
+		b.size = 14
 		b.num = 8
 	elseif f.mystyle=="player" and U["PlayerBuff"]==2 then
 		b['growth-x'] = 'RIGHT'
@@ -1669,42 +1673,42 @@ function UF:OnInitialize()
 	  
 	oUF:Factory(function(self)
 		self:SetActiveStyle("SunUIPlayer")
-		local player = self:Spawn("player", "oUF_SunUIPlayer")
+		local player = self:Spawn("player", "SunUF_Player")
 		player:SetPoint("CENTER", "UIParent", "CENTER", -225, -208)
 		player:SetScale(U["Scale"])
-		MoveHandle.SunUIPlayerFrame = S.MakeMove(player, "SunUI_PlayerFrame", "PlayerFrame", U["Scale"])
+		MoveHandle.SunUIPlayerFrame = S.MakeMove(player, "PlayerFrame", "PlayerFrame", U["Scale"])
 	  
 		self:SetActiveStyle("SunUITarget")
-		local target = self:Spawn("target", "oUF_SunUITarget")
+		local target = self:Spawn("target", "SunUF_Target")
 		target:SetScale(U["Scale"])
-		MoveHandle.SunUITargetFrame = S.MakeMove(target, "SunUI_TargetFrame", "TargetFrame", U["Scale"])
+		MoveHandle.SunUITargetFrame = S.MakeMove(target, "TargetFrame", "TargetFrame", U["Scale"])
 	  
 		if U["showtot"] then
 			self:SetActiveStyle("SunUIToT")
-			local tot = self:Spawn("targettarget", "oUF_SunUIToT")
+			local tot = self:Spawn("targettarget", "SunUF_ToT")
 			tot:SetScale(U["PetScale"])
-			MoveHandle.SunUIToTFrame = S.MakeMove(tot, "SunUI_ToTFrame", "ToTFrame", U["PetScale"])
+			MoveHandle.SunUIToTFrame = S.MakeMove(tot, "ToTFrame", "ToTFrame", U["PetScale"])
 		end
 	  
 		if U["showfocus"] then
 			self:SetActiveStyle("SunUIFocus")
-			local focus = self:Spawn("focus", "oUF_SunUIFocus")
+			local focus = self:Spawn("focus", "SunUF_Focus")
 			focus:SetScale(U["PetScale"])
-			MoveHandle.SunUIFocusFrame = S.MakeMove(focus, "SunUI_FocusFrame", "FocusFrame", U["PetScale"])
+			MoveHandle.SunUIFocusFrame = S.MakeMove(focus, "FocusFrame", "FocusFrame", U["PetScale"])
 		
 			self:SetActiveStyle("SunUIFocusTarget")
-			local focust = self:Spawn("focustarget", "oUF_SunUIFocusTarget")
+			local focust = self:Spawn("focustarget", "SunUF_FocusTarget")
 			focust:SetScale(U["PetScale"])
-			MoveHandle.SunUIFocusTFrame = S.MakeMove(focust, "SunUI_FocusTargetFrame", "FocusTFrame", U["PetScale"])
+			MoveHandle.SunUIFocusTFrame = S.MakeMove(focust, "FocusTargetFrame", "FocusTFrame", U["PetScale"])
 		else
 			oUF:DisableBlizzard'focus'
 		end
 	  
 		if U["showpet"] then
 			self:SetActiveStyle("SunUIPet")
-			local pet = self:Spawn("pet", "oUF_SunUIPet")
+			local pet = self:Spawn("pet", "SunUF_Pet")
 			pet:SetScale(U["PetScale"])
-			MoveHandle.SunUIPetFrame = S.MakeMove(pet, "SunUI_PetFrame", "PetFrame", U["PetScale"])
+			MoveHandle.SunUIPetFrame = S.MakeMove(pet, "PetFrame", "PetFrame", U["PetScale"])
 		end
 	  
 		local w = U["BossWidth"]
@@ -1726,12 +1730,12 @@ function UF:OnInitialize()
 			local party = self:SpawnHeader(nil,nil,'custom [group:party,nogroup:raid][@raid6,noexists,group:raid] show;hide',
 				'oUF-initialConfigFunction', init:format(w,h,s,ph,ph),
 				'showParty',true,
-				'template','oUF_SunUIPartyPet',
-				'yOffset', -40)
+				'template','SunUF_PartyPet',
+				'yOffset', -50)
 			party:SetScale(U["BossScale"])
-			MoveHandle.SunUIPartyFrame = S.MakeMove(party, "SunUI_PartyFrame", "PartyFrame", U["BossScale"])
-		--else
-			--oUF:DisableBlizzard'party'
+			MoveHandle.SunUIPartyFrame = S.MakeMove(party, "PartyFrame", "PartyFrame", U["BossScale"])
+		else
+			oUF:DisableBlizzard'party'
 		end
 	  
 		local gap = 66
@@ -1741,17 +1745,17 @@ function UF:OnInitialize()
 			local arena = {}
 			local arenatarget = {}
 			for i = 1, 5 do
-				arena[i] = self:Spawn("arena"..i, "oUF_SunUIArena"..i)
+				arena[i] = self:Spawn("arena"..i, "SunUF_Arena"..i)
 				arena[i]:SetScale(U["BossScale"])
 				if i == 1 then
-					MoveHandle.SunUIArenaFrame = S.MakeMove(arena[i], "SunUIArena"..i, "ArenaFrame", U["BossScale"])
+					MoveHandle.SunUIArenaFrame = S.MakeMove(arena[i], "Arena"..i, "ArenaFrame", U["BossScale"])
 				else
 					arena[i]:SetPoint("BOTTOMRIGHT", arena[i-1], "BOTTOMRIGHT", 0, gap)
 				end
 			end
 			self:SetActiveStyle("SunUIArenaTarget")
 			for i = 1, 5 do
-				arenatarget[i] = self:Spawn("arena"..i.."target", "oUF_Arena"..i.."target")
+				arenatarget[i] = self:Spawn("arena"..i.."target", "SunUF_Arena"..i.."target")
 				arenatarget[i]:SetPoint("TOPRIGHT",arena[i], "TOPLEFT", -4, 0)
 				arenatarget[i]:SetScale(U["BossScale"])
 			end
@@ -1762,10 +1766,10 @@ function UF:OnInitialize()
 			self:SetActiveStyle("SunUIBoss")
 			local boss = {}
 			for i = 1, MAX_BOSS_FRAMES do
-				boss[i] = self:Spawn("boss"..i, "oUF_Boss"..i)
+				boss[i] = self:Spawn("boss"..i, "SunUF_Boss"..i)
 				boss[i]:SetScale(U["BossScale"])
 				if i == 1 then
-					MoveHandle.SunUIBossFrame = S.MakeMove(boss[i], "SunUIBoss"..i, "BossFrame", U["BossScale"])
+					MoveHandle.SunUIBossFrame = S.MakeMove(boss[i], "Boss"..i, "BossFrame", U["BossScale"])
 				else
 					boss[i]:SetPoint("BOTTOMRIGHT", boss[i-1], "BOTTOMRIGHT", 0, gap)
 				end

@@ -13,6 +13,7 @@ local function SkinOther()
 		S.Reskin(BaudErrorFrameCloseButton)
 		S.Reskin(BaudErrorFrameClearButton)
 		S.SetBD(BaudErrorFrame)
+		S.ReskinScroll(BaudErrorFrameDetailScrollFrameScrollBar)
 	end
 	
 	if BuyEmAllFrame then

@@ -325,14 +325,16 @@ function ns:UpdateBlizzardRaidFrame()
 	
 	if GetDisplayedAllyFrames() == "raid" then	
 		if ns.db.hideblzraid then
-				local frame = CompactRaidFrameManager
+				--[[ local frame = CompactRaidFrameManager
 				frame:UnregisterAllEvents()
 				frame.Show = function() end
 				frame:Hide()
 				frame = CompactRaidFrameContainer
 				frame:UnregisterAllEvents()
 				frame.Show = function() end
-				frame:Hide()
+				frame:Hide() ]]
+			CompactRaidFrameContainer:Kill()
+			CompactRaidFrameManager:Kill()
 		else
 			if not _G["CompactRaidFrameManager"]:IsEventRegistered("GROUP_ROSTER_UPDATE") then		
 				_G["CompactRaidFrameManager"]:RegisterEvent("GROUP_ROSTER_UPDATE")
@@ -345,14 +347,32 @@ end
 
 local RegisterStateDriver = RegisterStateDriver
 function ns:UpdateBlizzardPartyFrameDisplayStatus()
-	ns:UpdateBlizzardCompactRaidFrameManager()
-	for i = 1, 4 do	
+	-- ns:UpdateBlizzardCompactRaidFrameManager()
+	--[[ for i = 1, 4 do	
 		local frame = _G["PartyMemberFrame"..i]
 		if ns.db.hideblzparty then			
+			frame:UnregisterAllEvents()
 			frame:Kill()
-			frame:SetScript("OnEvent", nil)
-			frame:SetScript("OnUpdate", nil)
-			RegisterStateDriver(frame, "visibility", "hide")
+
+			local health = frame.healthbar
+			if(health) then
+				health:UnregisterAllEvents()
+			end
+
+			local power = frame.manabar
+			if(power) then
+				power:UnregisterAllEvents()
+			end
+
+			local spell = frame.spellbar
+			if(spell) then
+				spell:UnregisterAllEvents()
+			end
+
+			local altpowerbar = frame.powerBarAlt
+			if(altpowerbar) then
+				altpowerbar:UnregisterAllEvents()
+			end
 		else
 			frame:SetAlpha(1)
 			frame:SetScale(1)
@@ -382,13 +402,12 @@ function ns:UpdateBlizzardPartyFrameDisplayStatus()
 			frame:SetScript("OnUpdate", PartyMemberFrame_OnUpdate)
 			RegisterStateDriver(frame, "visibility", "[nogroup] hide; [group:raid] hide; [@party"..i..",exists] show; hide")
 		end
-	end
+	end ]]
 end
 
 function ns:UpdateBlizzardCompactRaidFrameManager()
-
-	if not GetDisplayedAllyFrames() or (GetDisplayedAllyFrames() == "party" and ns.db.hideblzparty) or (GetDisplayedAllyFrames() == "raid" and ns.db.hideblzraid) then
-
+	 --(GetDisplayedAllyFrames() == "party" and ns.db.hideblzparty) 
+	--[[ if not GetDisplayedAllyFrames() or (GetDisplayedAllyFrames() == "raid" and ns.db.hideblzraid) or GetDisplayedAllyFrames() == "party" then
 		if CompactRaidFrameManager:IsShown() then
 			CompactRaidFrameManager:UnregisterAllEvents()
 			CompactRaidFrameManager:Hide()
@@ -410,7 +429,7 @@ function ns:UpdateBlizzardCompactRaidFrameManager()
 			CompactRaidFrameManager:Show()
 		end
 		CompactRaidFrameManager_UpdateOptionsFlowContainer(CompactRaidFrameManager)
-	end
+	end ]]
 end
 
 local utf8sub = function(str, start, numChars) 
