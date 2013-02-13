@@ -1659,7 +1659,11 @@ function UF:OnInitialize()
 	end
 	U = SunUIConfig.db.profile.UnitFrameDB
 	P = SunUIConfig.db.profile.PowerBarDB
-
+	local SunUF_Parent = CreateFrame("Frame", "SunUF_Parent", UIParent, "SecureHandlerStateTemplate");
+	SunUF_Parent:SetSize(1, 1)
+	SunUF_Parent:SetPoint("RIGHT", UIParent, "LEFT", -1000, 0)
+	RegisterStateDriver(SunUF_Parent, "visibility", "[petbattle] hide;show")
+	
 	oUF:RegisterStyle("SunUIPlayer", CreatePlayerStyle)
 	oUF:RegisterStyle("SunUITarget", CreateTargetStyle)
 	oUF:RegisterStyle("SunUIToT", CreateToTStyle)
@@ -1674,18 +1678,20 @@ function UF:OnInitialize()
 	oUF:Factory(function(self)
 		self:SetActiveStyle("SunUIPlayer")
 		local player = self:Spawn("player", "SunUF_Player")
-		player:SetPoint("CENTER", "UIParent", "CENTER", -225, -208)
+		player:SetParent(SunUF_Parent)
 		player:SetScale(U["Scale"])
 		MoveHandle.SunUIPlayerFrame = S.MakeMove(player, "PlayerFrame", "PlayerFrame", U["Scale"])
 	  
 		self:SetActiveStyle("SunUITarget")
 		local target = self:Spawn("target", "SunUF_Target")
+		target:SetParent(SunUF_Parent)
 		target:SetScale(U["Scale"])
 		MoveHandle.SunUITargetFrame = S.MakeMove(target, "TargetFrame", "TargetFrame", U["Scale"])
 	  
 		if U["showtot"] then
 			self:SetActiveStyle("SunUIToT")
 			local tot = self:Spawn("targettarget", "SunUF_ToT")
+			tot:SetParent(SunUF_Parent)
 			tot:SetScale(U["PetScale"])
 			MoveHandle.SunUIToTFrame = S.MakeMove(tot, "ToTFrame", "ToTFrame", U["PetScale"])
 		end
@@ -1693,6 +1699,7 @@ function UF:OnInitialize()
 		if U["showfocus"] then
 			self:SetActiveStyle("SunUIFocus")
 			local focus = self:Spawn("focus", "SunUF_Focus")
+			focus:SetParent(SunUF_Parent)
 			focus:SetScale(U["PetScale"])
 			MoveHandle.SunUIFocusFrame = S.MakeMove(focus, "FocusFrame", "FocusFrame", U["PetScale"])
 		
@@ -1707,6 +1714,7 @@ function UF:OnInitialize()
 		if U["showpet"] then
 			self:SetActiveStyle("SunUIPet")
 			local pet = self:Spawn("pet", "SunUF_Pet")
+			pet:SetParent(SunUF_Parent)
 			pet:SetScale(U["PetScale"])
 			MoveHandle.SunUIPetFrame = S.MakeMove(pet, "PetFrame", "PetFrame", U["PetScale"])
 		end
@@ -1732,6 +1740,7 @@ function UF:OnInitialize()
 				'showParty',true,
 				'template','SunUF_PartyPet',
 				'yOffset', -50)
+			party:SetParent(SunUF_Parent)
 			party:SetScale(U["BossScale"])
 			MoveHandle.SunUIPartyFrame = S.MakeMove(party, "PartyFrame", "PartyFrame", U["BossScale"])
 		else
@@ -1746,6 +1755,7 @@ function UF:OnInitialize()
 			local arenatarget = {}
 			for i = 1, 5 do
 				arena[i] = self:Spawn("arena"..i, "SunUF_Arena"..i)
+				arena[i]:SetParent(SunUF_Parent)
 				arena[i]:SetScale(U["BossScale"])
 				if i == 1 then
 					MoveHandle.SunUIArenaFrame = S.MakeMove(arena[i], "Arena"..i, "ArenaFrame", U["BossScale"])
@@ -1756,6 +1766,7 @@ function UF:OnInitialize()
 			self:SetActiveStyle("SunUIArenaTarget")
 			for i = 1, 5 do
 				arenatarget[i] = self:Spawn("arena"..i.."target", "SunUF_Arena"..i.."target")
+				arenatarget[i]:SetParent(SunUF_Parent)
 				arenatarget[i]:SetPoint("TOPRIGHT",arena[i], "TOPLEFT", -4, 0)
 				arenatarget[i]:SetScale(U["BossScale"])
 			end
@@ -1767,6 +1778,7 @@ function UF:OnInitialize()
 			local boss = {}
 			for i = 1, MAX_BOSS_FRAMES do
 				boss[i] = self:Spawn("boss"..i, "SunUF_Boss"..i)
+				boss[i]:SetParent(SunUF_Parent)
 				boss[i]:SetScale(U["BossScale"])
 				if i == 1 then
 					MoveHandle.SunUIBossFrame = S.MakeMove(boss[i], "Boss"..i, "BossFrame", U["BossScale"])

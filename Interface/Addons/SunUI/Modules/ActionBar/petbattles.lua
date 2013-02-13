@@ -21,8 +21,6 @@ local allunit = {
 	frame.ActiveAlly, frame.ActiveEnemy, frame.Ally2, frame.Ally3, frame.Enemy2, frame.Enemy3
 }
 local frames = {
-	"oUF_SunUIPlayer",
-	"oUF_SunUITarget",
 	"alDamageMeterFrame",
 	"SkadaBarWindowSkada",
 	"NumerationFrame",
