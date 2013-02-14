@@ -73,6 +73,11 @@ UIDropDownMenu_Initialize(dropdown, init, 'MENU')
 local function PostUpdateHealth(s, u, min, max)
 	s.bd:SetPoint("TOPRIGHT", s)
 	s.bd:SetPoint("BOTTOMLEFT", s:GetStatusBarTexture(), "BOTTOMRIGHT")
+	if not U["ReverseHPbars"] then
+		local min, max = s:GetMinMaxValues()
+		local value = s:GetValue()
+		if value <= min+1 or value >= max-1 then s.mark:Hide() else s.mark:Show() end
+	end
 end
 
 local function PortraitPostUpdate(self, unit) 
@@ -136,11 +141,12 @@ local function  gen_hpbar(f)
 		s.SetStatusBarColor = function(t, r, g, b)
 			S.CreateTop(bg.b, r, g, b)
 		end
-		local spark =  h:CreateTexture(nil, "OVERLAY")
-		spark:SetVertexColor(0, 0, 0, 1)
-		spark:SetTexture("Interface\\AddOns\\SunUI\\media\\mark")
-		spark:SetPoint("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT", -10, 0)
-		spark:SetPoint("BOTTOMRIGHT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 10, 0)
+		s.mark =  h:CreateTexture(nil, "OVERLAY", 1)
+		s.mark:SetVertexColor(0, 0, 0, 1)
+		s.mark:SetTexture("Interface\\Buttons\\WHITE8x8")
+		s.mark:Width(1)
+		s.mark:SetPoint("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+		s.mark:SetPoint("BOTTOMLEFT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
 		bg:SetAlpha(0.65)
 	else
 		s:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
@@ -203,6 +209,26 @@ local function  gen_hpbar(f)
 	
 	f.Health = s
 	f.Health.bd = bg
+	
+	if not U["ReverseHPbars"] then f.Health.mark = s.mark end
+	h.shadow = headframe.shadow
+	if U["ShowThreatWarn"] then
+		h:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE")
+		h:SetScript("OnEvent", function(self, event, unit)
+			if(unit ~= f.mystyle) then return end
+			local u = unit or f.mystyle
+			
+			local status = UnitThreatSituation(u)
+			--print(u, status)
+			if(status and status > 0) then
+				local r, g, b = GetThreatStatusColor(status)
+				--print(r,g,b)
+				self.shadow:SetBackdropBorderColor(r, g, b)
+			else
+				self.shadow:SetBackdropBorderColor(0, 0, 0)
+			end
+		end)
+	end
 end
 
 local function gen_portrait(f)
@@ -321,7 +347,12 @@ local function gen_ppbar(f)
 		s:Hide()
     end
 	if not U["ReverseHPbars"] then 
-		S.CreateMark(s)
+		s.mark =  s:CreateTexture(nil, "OVERLAY", 1)
+		s.mark:SetVertexColor(0, 0, 0, 1)
+		s.mark:SetTexture("Interface\\Buttons\\WHITE8x8")
+		s.mark:Width(1)
+		s.mark:SetPoint("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+		s.mark:SetPoint("BOTTOMLEFT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
 	else
 		local bg = CreateFrame("Frame", nil, s)
 		bg:SetFrameLevel(s:GetFrameLevel()-1)
@@ -336,6 +367,11 @@ local function gen_ppbar(f)
 	f.Power.PostUpdate = function() 
 		local r,g,b = s:GetStatusBarColor()
 		S.CreateTop(sbg, r, g, b)
+		if not U["ReverseHPbars"] then
+			local min, max = s:GetMinMaxValues()
+			local value = s:GetValue()
+			if value <= min+1 or value >= max-1 then s.mark:Hide() else s.mark:Show() end
+		end
 	end
 end
 

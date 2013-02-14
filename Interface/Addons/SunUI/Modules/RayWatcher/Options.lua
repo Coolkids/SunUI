@@ -140,14 +140,14 @@ function RayWatcherConfig.GenerateOptionsInternal()
 		db.RayWatcher.casterinput = ns.modules[current][filter][id].caster
 	end
 
-	SStaticPopupDialogs["CFG_RELOAD"] = {
+	--[[ StaticPopupDialogs["CFG_RELOAD"] = {
 		text = L["改变参数需重载应用设置"],
 		button1 = ACCEPT,
 		button2 = CANCEL,
 		OnAccept = function() ReloadUI() end,
 		timeout = 0,
 		whileDead = 1,
-	}
+	} ]]
 	
 	RayWatcherConfig.Options = {
 		type = "group",

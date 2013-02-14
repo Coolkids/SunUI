@@ -347,7 +347,7 @@ end
 
 local RegisterStateDriver = RegisterStateDriver
 function ns:UpdateBlizzardPartyFrameDisplayStatus()
-	-- ns:UpdateBlizzardCompactRaidFrameManager()
+	ns:UpdateBlizzardCompactRaidFrameManager()
 	--[[ for i = 1, 4 do	
 		local frame = _G["PartyMemberFrame"..i]
 		if ns.db.hideblzparty then			
@@ -407,13 +407,14 @@ end
 
 function ns:UpdateBlizzardCompactRaidFrameManager()
 	 --(GetDisplayedAllyFrames() == "party" and ns.db.hideblzparty) 
-	--[[ if not GetDisplayedAllyFrames() or (GetDisplayedAllyFrames() == "raid" and ns.db.hideblzraid) or GetDisplayedAllyFrames() == "party" then
+	if not GetDisplayedAllyFrames() or (GetDisplayedAllyFrames() == "raid" and ns.db.hideblzraid) then
 		if CompactRaidFrameManager:IsShown() then
 			CompactRaidFrameManager:UnregisterAllEvents()
-			CompactRaidFrameManager:Hide()
+			--CompactRaidFrameManager:Hide()
+			CompactRaidFrameManager:Kill()
 		end
-	else
-		if not CompactRaidFrameManager:IsEventRegistered("PARTY_MEMBERS_CHANGED") then
+	end
+		--[[ if not CompactRaidFrameManager:IsEventRegistered("PARTY_MEMBERS_CHANGED") then
 			CompactRaidFrameManager:RegisterEvent("DISPLAY_SIZE_CHANGED")
 			CompactRaidFrameManager:RegisterEvent("UI_SCALE_CHANGED")
 			CompactRaidFrameManager:RegisterEvent("RAID_ROSTER_UPDATE")
@@ -2421,7 +2422,7 @@ local OnEvent = function(self, event, ...)
 		self:RegisterEvent("PLAYER_REGEN_ENABLED")
 		self:RegisterEvent("RAID_ROSTER_UPDATE")
 		hooksecurefunc("CompactRaidFrameManager_UpdateShown", ns.UpdateBlizzardRaidFrame)
-
+		ns:UpdateBlizzardRaidFrame()
 		ns:InitDB()
 		Anchors()	
 		ns:CreateRaidFrame()

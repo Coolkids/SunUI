@@ -851,6 +851,11 @@ function SunUIConfig.GenerateOptionsInternal()
 							name = L["头像文字渐隐"],
 							desc = L["非战斗非指向时隐藏"],
 						}, 
+						ShowThreatWarn  = {
+							type = "toggle", order = 18,
+							name = AGGRO_WARNING_DISPLAY,
+						}, 
+						
 					}
 					},
 					group2 = {
