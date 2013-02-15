@@ -1164,11 +1164,11 @@ local function DungeonHelper()
 	Text:SetText("")
 	Stat:SetAllPoints(Text)
 	
-	--for i = 1, GetNumRandomDungeons() do
-		--local id, name = GetLFGRandomDungeonInfo(i)
-		--print(id .. ": " .. name)
-		--462 -- 随机MOP5H
-	--end
+	-- for i = 1, GetNumRandomDungeons() do
+		-- local id, name = GetLFGRandomDungeonInfo(i)
+		-- print(id .. ": " .. name.. "index:"..i)
+	-- end
+	--id=462, i=9 -- 随机MOP5H
 	local str = BATTLEGROUND_HOLIDAY   --"戰鬥的號角";
 	local tank = "|TInterface\\Addons\\SunUI_Freebgrid\\media\\lfd_role.tga:"..DB.FontSize..":"..DB.FontSize..":0:0:64:64:0:17:22:41|t"
 	local healer = "|TInterface\\Addons\\SunUI_Freebgrid\\media\\lfd_role.tga:"..DB.FontSize..":"..DB.FontSize..":0:0:64:64:21:39:0:19|t"
@@ -1178,7 +1178,7 @@ local function DungeonHelper()
 	local function ShowGameToolTip(self)
 		local text = ""
 		local _, forTank, forHealer, forDamage, _, _, _ = GetLFGRoleShortageRewards(id, 1)
-		local id, name = GetLFGRandomDungeonInfo(8)
+		local id, name = GetLFGRandomDungeonInfo(9)
 		--print(name)
 		if forTank then 
 			text = text..tank

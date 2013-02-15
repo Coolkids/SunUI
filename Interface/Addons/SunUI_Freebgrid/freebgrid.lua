@@ -1989,7 +1989,7 @@ function ns:UpdateIndicatorTimer(self, elapsed)
 					if text then text=tonumber(text) text = '|cffFFCF7F'..earthCount[text]..'|r' end
 				elseif (DB.MyClass == "PRIEST" and k == "BR") then
 					local pomCount = {[1] = 'i',[2] = 'h',[3] = 'g',[4] = 'f',[5] = 'Z',[6] = 'Y',}
-					if text then text=tonumber(text) text = "|cff66FFFF"..pomCount[text].."|r" end 
+					if text then text=tonumber(text) text = "|cffFFCC00"..pomCount[text].."|r" end 
 				end
 				if timeLeft <= 5 then
 					text = ns:hex(1, 0, 0)..text.."|r"

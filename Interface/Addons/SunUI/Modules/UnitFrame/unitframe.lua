@@ -70,16 +70,6 @@ end
 
 UIDropDownMenu_Initialize(dropdown, init, 'MENU')
 
-local function PostUpdateHealth(s, u, min, max)
-	s.bd:SetPoint("TOPRIGHT", s)
-	s.bd:SetPoint("BOTTOMLEFT", s:GetStatusBarTexture(), "BOTTOMRIGHT")
-	if not U["ReverseHPbars"] then
-		local min, max = s:GetMinMaxValues()
-		local value = s:GetValue()
-		if value <= min+1 or value >= max-1 then s.mark:Hide() else s.mark:Show() end
-	end
-end
-
 local function PortraitPostUpdate(self, unit) 
 	if self:GetModel() and self:GetModel().find and self:GetModel():find("worgenmale") then
 		self:SetCamera(1)
@@ -88,20 +78,6 @@ local function PortraitPostUpdate(self, unit)
 	self:SetCamDistanceScale(1)
 end
   
-local function updateThreat(self, event, unit)
-    if(unit ~= self.unit) then return end
-    local threat = self.Threat
-    unit = unit or self.unit
-    local status = UnitThreatSituation(unit)
-    if(status and status > 1) then
-      local r, g, b = GetThreatStatusColor(status)
-      threat:SetBackdropBorderColor(r, g, b, 1)
-    else
-      threat:SetBackdropBorderColor(0, 0, 0, 0)
-    end
-    threat:Show()
-end
-  	
 local function  gen_hpbar(f)
 	local s = CreateFrame("StatusBar", nil, f) 
 	local h = CreateFrame("Frame", nil, f)
@@ -128,12 +104,12 @@ local function  gen_hpbar(f)
 	headframe:SetFrameLevel(3)
 	headframe:CreateShadow()
 	
-	local mark =  h:CreateTexture(nil, "OVERLAY", 1)
-	mark:SetTexture("Interface\\Buttons\\WHITE8x8")
-	mark:SetVertexColor(0, 0, 0)
-	mark:Height(1)
-	mark:SetWidth(f.width)
-	mark:SetPoint("BOTTOM", s)
+	local line =  h:CreateTexture(nil, "OVERLAY", 1)
+	line:SetTexture("Interface\\Buttons\\WHITE8x8")
+	line:SetVertexColor(0, 0, 0)
+	line:Height(1)
+	line:SetWidth(f.width)
+	line:SetPoint("BOTTOM", s)
 	if not U["ReverseHPbars"] then
 		s:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
 		s:SetStatusBarColor(0,0,0,0)
@@ -162,8 +138,7 @@ local function  gen_hpbar(f)
 		end
 	end
 	fixStatusbar(s)
-    s.PostUpdate = PostUpdateHealth
-
+    
 	if f.mystyle == "player" then
 		local ri = h:CreateTexture(nil, 'OVERLAY')
 		ri:SetSize(16, 16)
@@ -183,17 +158,17 @@ local function  gen_hpbar(f)
 	end
 	local mhpb = CreateFrame("StatusBar", nil, f)
 	mhpb:SetFrameLevel(bg:GetFrameLevel()+1)
-	mhpb:SetPoint("LEFT", s:GetStatusBarTexture(), "RIGHT")
+	mhpb:SetPoint("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT")
+	mhpb:SetPoint("BOTTOMLEFT", s:GetStatusBarTexture(), "BOTTOMRIGHT")
 	mhpb:SetWidth(s:GetWidth())
-	mhpb:SetHeight(s:GetHeight())
 	mhpb:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
 	S.CreateMark(mhpb)
 	S.CreateTop(mhpb:GetStatusBarTexture(), 0, 1, 0.5)
 	local ohpb = CreateFrame("StatusBar", nil, f)
 	ohpb:SetFrameLevel(bg:GetFrameLevel()+1)
-	ohpb:SetPoint("LEFT", mhpb:GetStatusBarTexture(), "RIGHT", 0, 0)
+	ohpb:SetPoint("TOPLEFT", mhpb:GetStatusBarTexture(), "TOPRIGHT")
+	ohpb:SetPoint("BOTTOMLEFT", mhpb:GetStatusBarTexture(), "BOTTOMRIGHT")
 	ohpb:SetWidth(mhpb:GetWidth())
-	ohpb:SetHeight(s:GetHeight())
 	ohpb:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
 	S.CreateMark(ohpb)
 	S.CreateTop(ohpb:GetStatusBarTexture(), 0, 1, 0)
@@ -209,7 +184,7 @@ local function  gen_hpbar(f)
 	
 	f.Health = s
 	f.Health.bd = bg
-	
+	f.Health.line = line
 	if not U["ReverseHPbars"] then f.Health.mark = s.mark end
 	h.shadow = headframe.shadow
 	if U["ShowThreatWarn"] then
@@ -228,6 +203,43 @@ local function  gen_hpbar(f)
 				self.shadow:SetBackdropBorderColor(0, 0, 0)
 			end
 		end)
+	end
+	if not U["ReverseHPbars"] then
+		local isSetHeight = false
+		h.time = 0
+		h:SetScript("OnUpdate", function(self, t)
+			self.time = self.time + t
+			if self.time < 0.1 then return end
+			local min, max = f.Health:GetMinMaxValues()
+			local value = f.Health:GetValue()
+			if value == min or value == max then f.Health.mark:Hide() else  f.Health.mark:Show() end
+			min, max = f.Power:GetMinMaxValues()
+			value = f.Power:GetValue()
+			if value == min or value == max then
+				f.Power.mark:Hide()
+			else
+				f.Power.mark:Show()
+			end
+			if value == 0 then
+				if not isSetHeight then
+					f.Health.line:Hide()
+					f.Health:SetHeight(f.height+4)
+					isSetHeight = true
+				end
+			else
+				if isSetHeight then
+					f.Health.line:Show()
+					f.Health:SetHeight(f.height)
+					isSetHeight = false
+				end
+			end
+			--print(self.time)
+			self.time = 0
+		end)
+	end
+	f.Health.PostUpdate = function()
+		f.Health.bd:SetPoint("TOPRIGHT", f.Health)
+		f.Health.bd:SetPoint("BOTTOMLEFT", f.Health:GetStatusBarTexture(), "BOTTOMRIGHT")
 	end
 end
 
@@ -341,7 +353,7 @@ local function gen_ppbar(f)
     s:SetHeight(4)
 	s:SetFrameLevel(4)
     s:SetWidth(f.width)
-    s:Point("TOPLEFT",f,"BOTTOMLEFT")
+    s:SetPoint("TOPLEFT",f,"BOTTOMLEFT")
 	s:SetAlpha(0.9)
     if f.mystyle == "partypet" or f.mystyle == "arenatarget" then
 		s:Hide()
@@ -367,11 +379,6 @@ local function gen_ppbar(f)
 	f.Power.PostUpdate = function() 
 		local r,g,b = s:GetStatusBarColor()
 		S.CreateTop(sbg, r, g, b)
-		if not U["ReverseHPbars"] then
-			local min, max = s:GetMinMaxValues()
-			local value = s:GetValue()
-			if value <= min+1 or value >= max-1 then s.mark:Hide() else s.mark:Show() end
-		end
 	end
 end
 
@@ -380,7 +387,7 @@ end
 
 local function gen_castbar(f)
     local s = CreateFrame("StatusBar", "oUF_SunUICastbar"..f.mystyle, f)
-    s:Size(f.width-(f.height/1.5+4),f.height/1.5)
+    s:SetSize(f.width-(f.height/1.5+4),f.height/1.5)
     s:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
     s:SetStatusBarColor(.3, .45, .65,1)
     s:SetFrameLevel(11)
@@ -411,8 +418,8 @@ local function gen_castbar(f)
     txt:SetPoint("RIGHT", t, "LEFT", -5, 0)
     --icon
     local i = s:CreateTexture(nil, "ARTWORK")
-    --i:Size(s:GetHeight()+4,s:GetHeight()+4)
-	i:Size(s:GetHeight(),s:GetHeight())
+    --i:SetSize(s:GetHeight()+4,s:GetHeight()+4)
+	i:SetSize(s:GetHeight(),s:GetHeight())
     i:Point("BOTTOMRIGHT", s, "BOTTOMLEFT", -6, 0)
     i:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	S.CreateShadow(s, i)
@@ -428,7 +435,7 @@ local function gen_castbar(f)
 		sp:SetPoint("BOTTOMRIGHT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 10, 0)
 	end
     if f.mystyle == "focus" and not U["focusCBuserplaced"] then
-		s:Size(U["FocusCastBarWidth"],U["FocusCastBarHeight"])
+		s:SetSize(U["FocusCastBarWidth"],U["FocusCastBarHeight"])
 		MoveHandle.Castbarfouce = S.MakeMoveHandle(s, L["焦点施法条"], "FocusCastbar")
 		--sp:SetHeight(s:GetHeight()*2.5)
     elseif f.mystyle == "pet" or f.mystyle == "boss" then
@@ -450,10 +457,10 @@ local function gen_castbar(f)
 		sp:SetPoint("BOTTOMRIGHT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -10)
 		txt:Hide() t:Hide() h:Hide()
     elseif f.mystyle == "arena" then
-		s:Size(f.width-(f.height/1.4+4),f.height/1.4)
+		s:SetSize(f.width-(f.height/1.4+4),f.height/1.4)
 		s:Point("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
 		i:Point("RIGHT", s, "LEFT", -4, 0)
-		i:Size(s:GetHeight(),s:GetHeight())
+		i:SetSize(s:GetHeight(),s:GetHeight())
     elseif f.mystyle == "player" then
 		if not U["playerCBuserplaced"] then
 			s:SetSize(U["PlayerCastBarWidth"],U["PlayerCastBarHeight"])
@@ -480,9 +487,9 @@ local function gen_castbar(f)
 		--f:RegisterEvent("UNIT_SPELLCAST_START", cast.OnCastSent)
 		f:RegisterEvent("UNIT_SPELLCAST_SENT", cast.OnCastSent)
 	elseif f.mystyle == "target" and not U["targetCBuserplaced"] then
-		s:Size(U["TargetCastBarWidth"],U["TargetCastBarHeight"])
+		s:SetSize(U["TargetCastBarWidth"],U["TargetCastBarHeight"])
 		MoveHandle.Castbartarget = S.MakeMoveHandle(s, L["目标施法条"], "TargetCastbar")
-		i:Size(s:GetHeight(),s:GetHeight())
+		i:SetSize(s:GetHeight(),s:GetHeight())
 	else
 		s:SetPoint("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
 		i:SetPoint("RIGHT", s, "LEFT", -3, 0)
@@ -1090,7 +1097,7 @@ local function gen_InfoIcons(f)
     --combat icon
     if f.mystyle == 'player' then
 		f.Combat = h:CreateTexture(nil, 'OVERLAY')
-		f.Combat:Size(20,20)
+		f.Combat:SetSize(20,20)
 		f.Combat:SetPoint('TOPRIGHT', 3, 9)
 		f.Combat:SetTexture("Interface\\AddOns\\SunUI\\media\\UnitFrame\\combat")
 		f.Combat:SetVertexColor(0.6, 0, 0)
@@ -1099,23 +1106,23 @@ local function gen_InfoIcons(f)
     --Leader icon
     li = h:CreateTexture(nil, "OVERLAY")
     li:SetPoint("TOPLEFT", f, 0, 6)
-    li:Size(12,12)
+    li:SetSize(12,12)
     f.Leader = li
     --Assist icon
     ai = h:CreateTexture(nil, "OVERLAY")
     ai:SetPoint("TOPLEFT", f, 0, 6)
-    ai:Size(12,12)
+    ai:SetSize(12,12)
     f.Assistant = ai
     --ML icon
     local ml = h:CreateTexture(nil, 'OVERLAY')
-    ml:Size(12,12)
+    ml:SetSize(12,12)
     ml:SetPoint('LEFT', f.Leader, 'RIGHT')
     f.MasterLooter = ml
 	f.MasterLooter:SetTexture("Interface\\AddOns\\SunUI\\media\\UnitFrame\\looter")
 	f.MasterLooter:SetVertexColor(0.8, 0.8, 0.8)
 	 --PVP icon
     local pvp = h:CreateTexture(nil, 'OVERLAY')
-    pvp:Size(25)
+    pvp:SetSize(25, 25)
     pvp:SetPoint("CENTER", f, "TOPRIGHT", 3, -3)
     f.PvP = pvp
 	 --QuestIcon icon
@@ -1136,7 +1143,7 @@ local function gen_RaidMark(f)
     h:SetAlpha(1)
     local ri = h:CreateTexture(nil,'OVERLAY',h)
     ri:SetPoint("CENTER", f, "CENTER", 0, 0)
-    ri:Size(S.Scale(20), S.Scale(20))
+    ri:SetSize(S.Scale(20), S.Scale(20))
 	if f.mystyle == "tot" then
 		ri:SetPoint("LEFT", f, "LEFT", 3, 0)
 	elseif f.mystyle == "player" then
@@ -1174,7 +1181,7 @@ local function UpdateAuraTracker(self, elapsed)
 end
 local function gen_arenatracker(f)
     t = CreateFrame("Frame", nil, f)
-    t:Size(21,21)
+    t:SetSize(21,21)
 	t:SetPoint("BOTTOMRIGHT", f, "TOPRIGHT", 0, 3)
     t:SetFrameLevel(30)
     t:SetAlpha(1)
@@ -1414,7 +1421,7 @@ local function CreatePlayerStyle(self, unit)
 		gen_totembar(self)
 	end
 	gen_swing_timer(self)
-    self:Size(self.width,self.height)
+    self:SetSize(self.width,self.height)
 end  
   
   --the target style
@@ -1448,7 +1455,7 @@ local function CreateTargetStyle(self, unit)
 	if not P["Open"] then 
 		gen_cp(self)
 	end
-	self:Size(self.width,self.height)
+	self:SetSize(self.width,self.height)
 	if U["TargetAura"] == 3 then self.Auras.onlyShowPlayer = true end
 end  
   
@@ -1467,7 +1474,7 @@ local function CreateToTStyle(self, unit)
 	       insideAlpha = 1,
            outsideAlpha = U["RangeAlpha"]}
 	end
-	self:Size(self.width,self.height)
+	self:SetSize(self.width,self.height)
 end 
   
  --the pet style
@@ -1488,7 +1495,7 @@ local function CreatePetStyle(self, unit)
 	end
     createDebuffs(self)
 	gen_alt_powerbar(self)
-	self:Size(self.width,self.height)
+	self:SetSize(self.width,self.height)
 end  
 
   --the focus style
@@ -1517,7 +1524,7 @@ local function CreateFocusStyle(self, unit)
            outsideAlpha = U["RangeAlpha"]}
 	end
 	self.Debuffs.onlyShowPlayer = U["FocusDebuff"]
-	self:Size(self.width,self.height)
+	self:SetSize(self.width,self.height)
 end
   
   --partypet style
@@ -1581,7 +1588,7 @@ local function CreateArenaStyle(self, unit)
 	end
     gen_arenatracker(self)
     gen_targeticon(self)
-	self:Size(self.width,self.height)
+	self:SetSize(self.width,self.height)
 end
 
   --mini arena targets
@@ -1592,7 +1599,7 @@ local function CreateArenaTargetStyle(self, unit)
     genStyle(self)
     self.Health.Smooth = true
 	self.Power.Smooth = true
-	self:Size(self.width,self.height)
+	self:SetSize(self.width,self.height)
 end  
   
   --boss frames
@@ -1613,7 +1620,7 @@ local function CreateBossStyle(self, unit)
 		gen_castbar(self)
 	end
 	gen_alt_powerbar(self)
-	self:Size(self.width,self.height)
+	self:SetSize(self.width,self.height)
 end 
 
 function UF:fixArena()
