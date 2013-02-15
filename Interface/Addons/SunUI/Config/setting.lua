@@ -113,7 +113,7 @@ G["UnitFrameDB"] = {
 	["RangeAlpha"] = 0.6,
 	["FocusDebuff"] = false,
 	["TagFadeIn"] = true,
-	["ShowThreatWarn"] = false,
+	["ShowThreatWarn"] = true,
 }
 G["MiniDB"] = {
 	["AutoRepair"] = false,

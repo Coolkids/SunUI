@@ -191,16 +191,23 @@ local function  gen_hpbar(f)
 		h:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE")
 		h:SetScript("OnEvent", function(self, event, unit)
 			if(unit ~= f.mystyle) then return end
-			local u = unit or f.mystyle
 			
-			local status = UnitThreatSituation(u)
-			--print(u, status)
-			if(status and status > 0) then
-				local r, g, b = GetThreatStatusColor(status)
-				--print(r,g,b)
-				self.shadow:SetBackdropBorderColor(r, g, b)
-			else
-				self.shadow:SetBackdropBorderColor(0, 0, 0)
+			local party = GetNumGroupMembers()
+			local raid = GetNumGroupMembers()
+			local pet = select(1, HasPetUI())
+		
+			if party > 0 or raid > 0 or pet == 1 then
+				local u = unit or f.mystyle
+			
+				local status = UnitThreatSituation(u)
+				--print(u, status)
+				if(status and status > 0) then
+					local r, g, b = GetThreatStatusColor(status)
+					--print(r,g,b)
+					self.shadow:SetBackdropBorderColor(r, g, b)
+				else
+					self.shadow:SetBackdropBorderColor(0, 0, 0)
+				end
 			end
 		end)
 	end
