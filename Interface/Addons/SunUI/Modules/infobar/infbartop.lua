@@ -17,8 +17,8 @@ local function RaidTools()
 	wm:SetParent(UIParent) 
 	wm:SetFrameLevel(3)
 	wm:ClearAllPoints() 
-	wm:SetPoint("TOP", -90, -5)
-	wm:SetSize(50, 8)
+	wm:SetPoint("TOP", 0, -5)
+	wm:SetSize(150, 8)
 	wm:Hide()
 	wm:SetAlpha(0)
 	wm:SetScript("OnEnter", function(self)
@@ -419,7 +419,7 @@ function Module:OnInitialize()
 		InfoPanelPos:Hide()
 		MoveHandle.InfoPanel = S.MakeMoveHandle(InfoPanelPos, L["信息面板"], "InfoPanel")
 		
-		local maphide = CreateFrame("Button", nil, UIParent)
+		--[[ local maphide = CreateFrame("Button", nil, UIParent)
 		maphide:SetHeight(8)
 		maphide:SetWidth(100)
 		maphide:SetFrameStrata("BACKGROUND")
@@ -480,17 +480,13 @@ function Module:OnInitialize()
 			GameTooltip:Hide()
 		end)
 		S.Reskin(mapdamage)
-		
+	 ]]	
 		top:SetScript("OnEnter", function()
-			UIFrameFadeIn(mapdamage, 0.5, mapdamage:GetAlpha(), 1)
-			UIFrameFadeIn(maphide, 0.5, maphide:GetAlpha(), 1)
 			if wm:IsShown() then
 				UIFrameFadeIn(wm, 0.5, wm:GetAlpha(), 1)
 			end
 		end)
 		top:SetScript("OnLeave", function() 
-			UIFrameFadeOut(mapdamage, 0.5, mapdamage:GetAlpha(), 0)
-			UIFrameFadeOut(maphide, 0.5, maphide:GetAlpha(), 0)
 			if wm:IsShown() then
 				UIFrameFadeOut(wm, 0.5, wm:GetAlpha(), 0)
 			end

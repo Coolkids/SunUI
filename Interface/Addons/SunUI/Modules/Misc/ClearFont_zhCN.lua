@@ -1,7 +1,7 @@
 ﻿local S, L, DB, _, C = unpack(select(2, ...))
 local C
 if not (GetLocale() == "zhCN") then return end
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ClearFont_zhCN", "AceEvent-3.0")
+local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ClearFont_zhCN", "AceEvent-3.0", "AceHook-3.0")
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local CF_SCALE
 -- 指出在哪里寻找字体
@@ -357,12 +357,15 @@ local function ApplySystemFonts(event, addon)
 -- -----------------------------------------------------------------------------
 -- 焦點框架字體（待確認，New in CTM/4.0+）
 -- -----------------------------------------------------------------------------
-
 	if (CanSetFont(FocusFontSmall)) then				FocusFontSmall:SetFont(CLEAR_FONT, 15 * CF_SCALE); end		-- 預設值：16
-
-
+end
+function Module:WorldStateAlwaysUpFrame_Update()   
+   for i = 1, NUM_ALWAYS_UP_UI_FRAMES do   
+      _G["AlwaysUpFrame"..i.."Text"]:SetFont(DB.Font, DB.FontSize, "THINOUTLINE")
+   end
 end
 function Module:OnInitialize()
 	CF_SCALE = SunUIConfig.db.profile.MiniDB.FontScale*S.Scale(1)
-	Module:RegisterEvent("ADDON_LOADED", ApplySystemFonts);
+	self:RegisterEvent("ADDON_LOADED", ApplySystemFonts);
+	self:SecureHook("WorldStateAlwaysUpFrame_Update", "WorldStateAlwaysUpFrame_Update")
 end

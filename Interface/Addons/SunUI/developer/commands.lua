@@ -74,7 +74,7 @@ SLASH_CLCE1 = "/clc"
 
 -- simple spec and equipment switching
 SlashCmdList["SPEC"] = function() 
-	if GetActiveTalentGroup()==1 then SetActiveTalentGroup(2) elseif GetActiveTalentGroup()==2 then SetActiveTalentGroup(1) end
+	if GetActiveSpecGroup()==1 then SetActiveSpecGroup(2) elseif GetActiveSpecGroup()==2 then SetActiveSpecGroup(1) end
 end
 SLASH_SPEC1 = "/ss"
 
@@ -237,9 +237,9 @@ end
 SLASH_GROUPDISBAND1 = '/rd'
 -- convert group from raid to party
 SlashCmdList["RAIDTOPARTY"] = function()
-	if GetNumGroupMembers()==0 then
+	if not IsInRaid() then
 		print("You are not in a raid.")
-	elseif GetNumGroupMembers() <= MEMBERS_PER_RAID_GROUP then
+	elseif GetNumGroupMembers() <= MEMBERS_PER_RAID_GROUP and IsInRaid() then
 		ConvertToParty()
 		print("Converting raid into a party complete.")
 	else
@@ -249,9 +249,9 @@ end
 SLASH_RAIDTOPARTY1 = '/rtp'
 -- convert group from party to raid
 SlashCmdList["PARTYTORAID"] = function()
-	if GetNumGroupMembers() > 0 then
+	if IsInRaid() then
 		print("You are in a raid.")
-	elseif GetNumSubgroupMembers() > 0 then
+	elseif GetNumSubgroupMembers() > 0 and not IsInRaid() then
 		ConvertToRaid()
 		print("Converting party into a raid complete.")
 	else

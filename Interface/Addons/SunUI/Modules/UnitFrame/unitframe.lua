@@ -187,7 +187,7 @@ local function  gen_hpbar(f)
 	f.Health.line = line
 	if not U["ReverseHPbars"] then f.Health.mark = s.mark end
 	h.shadow = headframe.shadow
-	if U["ShowThreatWarn"] then
+	if U["ShowThreatWarn"] and (f.mystyle == "player" or f.mystyle == "pet" or f.mystyle == "party")then
 		h:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE")
 		h:SetScript("OnEvent", function(self, event, unit)
 			if(unit ~= f.mystyle) then return end
@@ -208,6 +208,8 @@ local function  gen_hpbar(f)
 				else
 					self.shadow:SetBackdropBorderColor(0, 0, 0)
 				end
+			else
+				self.shadow:SetBackdropBorderColor(0, 0, 0)
 			end
 		end)
 	end

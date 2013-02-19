@@ -659,10 +659,8 @@ local function BuildDurability()
 			if value < 40 then
 				Text:SetText("|cffff0000"..L["警告"].."|r "..Slots[1][2]..L["耐久过低"])
 			else
-				local green = total/num/1
-				--print(green)
-				local red = 1-green
-				Text:SetText(S.ToHex(1.0, 0.82, 0)..DURABILITY.."|r: "..S.ToHex(red, green, 0)..floor(total/num*100).."|r%")
+				local r, g, b = S.ColorGradient(value/100, 1, 0.2, 0.2, 1, 1, 0, 0.2, 1, 0.2)
+				Text:SetText(S.ToHex(1.0, 0.82, 0)..DURABILITY.."|r: "..S.ToHex(r, g, b)..floor(total/num*100).."|r%")
 			end
 	end)
 	Stat:SetScript("OnEnter", function(self)
@@ -673,9 +671,8 @@ local function BuildDurability()
 			GameTooltip:AddLine(" ")
 			for i = 1, 10 do
 				if Slots[i][3] ~= 1000 then
-					local green = Slots[i][3]/1
-					local red = 1-green
-					GameTooltip:AddDoubleLine(Slots[i][2], format("%d %%", floor(Slots[i][3]*100)), 1 , 1 , 1, red, green, 0)
+					local r, g, b = S.ColorGradient(Slots[i][3], 1, 0.2, 0.2, 1, 1, 0, 0.2, 1, 0.2)
+					GameTooltip:AddDoubleLine(Slots[i][2], format("%d %%", floor(Slots[i][3]*100)), 1 , 1 , 1, r, g, b)
 				end
 			end
 			GameTooltip:Show()
