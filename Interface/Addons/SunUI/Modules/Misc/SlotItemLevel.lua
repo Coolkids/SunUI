@@ -4,7 +4,7 @@ local SIL = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SlotItemLevel",
 ----------------------------------------------------------------------------------------
 --	Item level on slot buttons in Character/InspectFrame(by Tukz)
 ----------------------------------------------------------------------------------------
-local time = 3
+
 local slots = {
 	"HeadSlot", "NeckSlot", "ShoulderSlot", "BackSlot", "ChestSlot", "ShirtSlot", "TabardSlot",
 	"WristSlot", "MainHandSlot", "SecondaryHandSlot", "HandsSlot", "WaistSlot",
@@ -70,14 +70,6 @@ local function UpdateButtonsText(frame)
 	end
 end
 
-function SIL:PLAYER_LOGIN()
-	CreateButtonsText("Character")
-	UpdateButtonsText("Character")
-	self:UnregisterEvent("PLAYER_LOGIN")
-end
-function SIL:PLAYER_EQUIPMENT_CHANGED()
-	UpdateButtonsText("Character")
-end
 function SIL:PLAYER_TARGET_CHANGED()
 	UpdateButtonsText("Inspect")
 end
@@ -94,16 +86,7 @@ function SIL:ADDON_LOADED(event, addon)
 		self:UnregisterEvent("ADDON_LOADED")
 	end
 end
-function SIL:OnUpdate()
-	if InspectFrame and InspectFrame:IsShown() then
-		UpdateButtonsText("Inspect")
-	else
-		UpdateButtonsText("Character")
-	end
-end
+
 function SIL:OnInitialize()
 	self:RegisterEvent("ADDON_LOADED")
-	self:RegisterEvent("PLAYER_LOGIN")
-	self:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
-	self:ScheduleRepeatingTimer("OnUpdate", 3)
 end

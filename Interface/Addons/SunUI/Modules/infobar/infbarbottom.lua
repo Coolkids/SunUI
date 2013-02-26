@@ -635,6 +635,7 @@ local function BuildDurability()
 		[9] = {16, INVTYPE_WEAPONMAINHAND, 1000}, --L["主手"]
 		[10] = {17, INVTYPE_SHIELD, 1000},  --L["副手"]
 	}
+	local nowSlots = {}
 	local Stat = CreateFrame("Frame", "InfoPanelBottom4", BottomInfoPanel)
 	local Text = S.MakeFontString(Stat)
 	Text:SetPoint("LEFT", InfoPanelBottom3 or InfoPanelBottom2 or InfoPanelBottom1, "RIGHT", 3, 0)
@@ -643,24 +644,28 @@ local function BuildDurability()
 	Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
 	Stat:SetAllPoints(Text)
 	Stat:SetScript("OnEvent", function(self)
+			wipe(nowSlots)
 			local total, num = 0, 0
 			for i = 1, 10 do
 				if GetInventoryItemLink("player", Slots[i][1]) ~= nil then
 					local durability, max = GetInventoryItemDurability(Slots[i][1])
-					if durability then 
-						Slots[i][3] = durability/max
-						total = Slots[i][3] + total
+					if durability then
+						local per = durability/max
+						table.insert(nowSlots, {i, Slots[i][2], per})
+						total = per + total
 						num = num + 1
 					end
 				end
 			end
-			table.sort(Slots, function(a, b) return a[3] < b[3] end)
-			local value = floor(Slots[1][3]*100)
-			if value < 40 then
-				Text:SetText("|cffff0000"..L["警告"].."|r "..Slots[1][2]..L["耐久过低"])
-			else
+			table.sort(nowSlots, function(a, b) return a[3] < b[3] end)
+			local value = num ~= 0 and floor(nowSlots[1][3]*100) or nil
+			if value and value < 40 then
+				Text:SetText("|cffff0000"..L["警告"].."|r "..nowSlots[1][2]..L["耐久过低"])
+			elseif value then
 				local r, g, b = S.ColorGradient(value/100, 1, 0.2, 0.2, 1, 1, 0, 0.2, 1, 0.2)
 				Text:SetText(S.ToHex(1.0, 0.82, 0)..DURABILITY.."|r: "..S.ToHex(r, g, b)..floor(total/num*100).."|r%")
+			else
+				Text:SetText(S.ToHex(1.0, 0.82, 0)..DURABILITY..": "..NONE.."|r")
 			end
 	end)
 	Stat:SetScript("OnEnter", function(self)
@@ -669,11 +674,9 @@ local function BuildDurability()
 			GameTooltip:ClearLines()
 			GameTooltip:AddLine(DURABILITY, 0.4, 0.78, 1)
 			GameTooltip:AddLine(" ")
-			for i = 1, 10 do
-				if Slots[i][3] ~= 1000 then
-					local r, g, b = S.ColorGradient(Slots[i][3], 1, 0.2, 0.2, 1, 1, 0, 0.2, 1, 0.2)
-					GameTooltip:AddDoubleLine(Slots[i][2], format("%d %%", floor(Slots[i][3]*100)), 1 , 1 , 1, r, g, b)
-				end
+			for k,v in pairs(nowSlots) do
+				local r, g, b = S.ColorGradient(v[3], 1, 0.2, 0.2, 1, 1, 0, 0.2, 1, 0.2)
+				GameTooltip:AddDoubleLine(v[2], format("%d %%", floor(v[3]*100)), 1 , 1 , 1, r, g, b)
 			end
 			GameTooltip:Show()
 		end

@@ -1443,7 +1443,7 @@ local function SkinBlz(event, addon)
 
 				button.icon:SetTexCoord(.08, .92, .08, .92)
 
-				button.reskinned = true
+				button.styled = true
 			end
 
 			if merchatcolor then
@@ -1739,6 +1739,14 @@ local function SkinBlz(event, addon)
 		hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, _, _, _, x, y)
 			QuestNPCModel:Point("TOPLEFT", parentFrame, "TOPRIGHT", x+6, y)
 		end)
+		
+		hooksecurefunc(QuestProgressRequiredMoneyText, "SetTextColor", function(self, r, g, b)
+			if r == 0 then
+				self:SetTextColor(.8, .8, .8)
+			elseif r == .2 then
+				self:SetTextColor(1, 1, 1)
+			end
+		end)
 
 		local questButtons = {"QuestLogFrameAbandonButton", "QuestLogFramePushQuestButton", "QuestLogFrameTrackButton", "QuestLogFrameCancelButton", "QuestFrameAcceptButton", "QuestFrameDeclineButton", "QuestFrameCompleteQuestButton", "QuestFrameCompleteButton", "QuestFrameGoodbyeButton", "QuestFrameGreetingGoodbyeButton", "QuestLogFrameCompleteButton"}
 		for i = 1, #questButtons do
@@ -1832,6 +1840,7 @@ local function SkinBlz(event, addon)
 			_G["StaticPopup"..i.."ItemFrameIconTexture"]:SetTexCoord(.08, .92, .08, .92)
 
 			bu:SetNormalTexture("")
+			bu:SetPushedTexture("")
 			S.CreateBG(bu)
 		end
 		
@@ -2088,30 +2097,27 @@ local function SkinBlz(event, addon)
 		local function onUpdate(self)
 			self.bg:SetAlpha(self:GetAlpha())
 		end
-		hooksecurefunc("LootWonAlertFrame_ShowAlert", function()
-			for i = 1, #LOOT_WON_ALERT_FRAMES do
-				local frame = LOOT_WON_ALERT_FRAMES[i]
-				if not frame.bg then
-					frame.bg = CreateFrame("Frame", nil, UIParent)
-					frame.bg:Point("TOPLEFT", frame, 10, -10)
-					frame.bg:Point("BOTTOMRIGHT", frame, -10, 10)
-					frame.bg:SetFrameStrata("DIALOG")
-					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
-					frame.bg:SetShown(frame:IsShown())
-					S.CreateBD(frame.bg)
+		hooksecurefunc("LootWonAlertFrame_SetUp", function(frame)
+			if not frame.bg then
+				frame.bg = CreateFrame("Frame", nil, UIParent)
+				frame.bg:Point("TOPLEFT", frame, 10, -10)
+				frame.bg:Point("BOTTOMRIGHT", frame, -10, 10)
+				frame.bg:SetFrameStrata("DIALOG")
+				frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+				frame.bg:SetShown(frame:IsShown())
+				S.CreateBD(frame.bg)
 
-					frame:HookScript("OnShow", showHideBg)
-					frame:HookScript("OnHide", showHideBg)
-					frame:HookScript("OnUpdate", onUpdate)
-					
-					frame.Background:Hide()
-					frame.IconBorder:Hide()
-					frame.glow:SetTexture("")
-					frame.shine:SetTexture("")
+				frame:HookScript("OnShow", showHideBg)
+				frame:HookScript("OnHide", showHideBg)
+				frame:HookScript("OnUpdate", onUpdate)
+				
+				frame.Background:Hide()
+				frame.IconBorder:Hide()
+				frame.glow:SetTexture("")
+				frame.shine:SetTexture("")
 
-					frame.Icon:SetTexCoord(.08, .92, .08, .92)
-					S.CreateBG(frame.Icon)
-				end
+				frame.Icon:SetTexCoord(.08, .92, .08, .92)
+				S.CreateBG(frame.Icon)
 			end
 		end)
 		
@@ -2991,6 +2997,15 @@ local function SkinBlz(event, addon)
 				end
 			end
 		end)
+		
+		-- Pet battle queue popup
+
+		S.CreateBD(PetBattleQueueReadyFrame)
+		S.CreateSD(PetBattleQueueReadyFrame)
+		S.CreateBG(PetBattleQueueReadyFrame.Art)
+		S.Reskin(PetBattleQueueReadyFrame.AcceptButton)
+		S.Reskin(PetBattleQueueReadyFrame.DeclineButton)
+		
 		-- [[ Hide regions ]]
 
 		local bglayers = {"SpellBookFrame", "LFDParentFrame", "LFDParentFrameInset", "WhoFrameColumnHeader1", "WhoFrameColumnHeader2", "WhoFrameColumnHeader3", "WhoFrameColumnHeader4", "RaidInfoInstanceLabel", "RaidInfoIDLabel", "CharacterFrameInsetRight", "PVPTeamManagementFrame", "PVPTeamManagementFrameHeader1", "PVPTeamManagementFrameHeader2", "PVPTeamManagementFrameHeader3", "PVPTeamManagementFrameHeader4", "PVPBannerFrame", "PVPBannerFrameInset", "LFRQueueFrame", "LFRBrowseFrame", "HelpFrameMainInset", "CharacterModelFrame", "HelpFrame", "HelpFrameLeftInset", "EquipmentFlyoutFrameButtons", "VideoOptionsFrameCategoryFrame", "InterfaceOptionsFrameCategories", "InterfaceOptionsFrameAddOns", "RaidParentFrame"}
@@ -6374,6 +6389,8 @@ local function SkinBlz(event, addon)
 		TimeManagerAlarmAMPMDropDown:SetWidth(90)
 
 		S.ReskinPortraitFrame(TimeManagerFrame, true)
+		select(9, TimeManagerFrame:GetChildren()):Hide()
+		
 		S.CreateBD(StopwatchFrame)
 		S.ReskinDropDown(TimeManagerAlarmHourDropDown)
 		S.ReskinDropDown(TimeManagerAlarmMinuteDropDown)
@@ -6767,69 +6784,8 @@ local function SkinBlz(event, addon)
 	end
 end
 
-local function SkinTooltip()
-	Module:UnregisterEvent("PLAYER_ENTERING_WORLD")
-	local tooltips = {
-		"GameTooltip",
-		"ItemRefTooltip",
-		"ShoppingTooltip1",
-		"ShoppingTooltip2",
-		"ShoppingTooltip3",
-		"WorldMapTooltip",
-		"ChatMenu",
-		"EmoteMenu",
-		"LanguageMenu",
-		"VoiceMacroMenu",
-	}
-
-	local backdrop = {
-		bgFile = media.backdrop,
-		edgeFile = media.backdrop,
-		edgeSize = S.mult,
-	}
-
-	-- so other stuff which tries to look like GameTooltip doesn't mess up
-	local getBackdrop = function()
-		return backdrop
-	end
-
-	local getBackdropColor = function()
-		return 0, 0, 0, .6
-	end
-
-	local getBackdropBorderColor = function()
-		return 0, 0, 0
-	end
-
-	for i = 1, #tooltips do
-		local t = _G[tooltips[i]]
-		t:SetBackdrop(nil)
-		local bg = CreateFrame("Frame", nil, t)
-		bg:SetPoint("TOPLEFT")
-		bg:SetPoint("BOTTOMRIGHT")
-		bg:SetFrameLevel(t:GetFrameLevel()-1)
-		bg:SetBackdrop(backdrop)
-		bg:SetBackdropColor(0, 0, 0, .6)
-		bg:SetBackdropBorderColor(0, 0, 0)
-
-		t.GetBackdrop = getBackdrop
-		t.GetBackdropColor = getBackdropColor
-		t.GetBackdropBorderColor = getBackdropBorderColor
-	end
-
-	local sb = _G["GameTooltipStatusBar"]
-	sb:Height(6)
-	sb:ClearAllPoints()
-	sb:Point("BOTTOMLEFT", GameTooltip, "TOPLEFT", 1, 3)
-	sb:Point("BOTTOMRIGHT", GameTooltip, "TOPRIGHT", -1, 3)
-	sb:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
-	S.CreateBD(FriendsTooltip)
-	S.CreateMark(sb)
-end
-
 function Module:OnInitialize()
 	C = SunUIConfig.db.profile.MiniDB
 	if not C["Aurora"] and IsAddOnLoaded("Aurora") then return end
 	Module:RegisterEvent("ADDON_LOADED", SkinBlz)
-	Module:RegisterEvent("PLAYER_ENTERING_WORLD", SkinTooltip)
 end

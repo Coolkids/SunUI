@@ -32,4 +32,5 @@
 	<Script file ="warn.lua"/>
 	
 	<Script file ="talenttaint.lua"/>
+	<Script file="SlotItemLevel.lua"/>
 </Ui>

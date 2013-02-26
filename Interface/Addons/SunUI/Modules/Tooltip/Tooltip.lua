@@ -182,9 +182,9 @@ local function On_OnTooltipSetUnit(self)
 		if (not UnitIsPlayer(unit)) then 
 			local reaction = UnitReaction(unit, "player");
 			if ( reaction ) then
-				r = FACTION_BAR_COLORS[reaction].r
-				g = FACTION_BAR_COLORS[reaction].g
-				b = FACTION_BAR_COLORS[reaction].b
+				local r = FACTION_BAR_COLORS[reaction].r
+				local g = FACTION_BAR_COLORS[reaction].g
+				local b = FACTION_BAR_COLORS[reaction].b
 				for i=2, GameTooltip:NumLines() do
 					if _G["GameTooltipTextLeft" .. i]:GetText():find(LEVEL) or _G["GameTooltipTextLeft" .. i]:GetText():find(creatureType) then
 						_G["GameTooltipTextLeft" .. i]:SetText(string.format(hex(diffColor.r, diffColor.g, diffColor.b).."%s|r", unitLevel) .. unitClassification .. creatureType .. hex(r, g, b) .."  (".. reactionlist[reaction] .. ")|r")
@@ -310,13 +310,73 @@ local function On_ANCHOR_CURSOR(self, ...)
 	  self:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", x / effScale +5, y / effScale + 20)
    end
 end
+
+local function SkinTooltip()
+	local tooltips = {
+		"GameTooltip",
+		"ItemRefTooltip",
+		"ShoppingTooltip1",
+		"ShoppingTooltip2",
+		"ShoppingTooltip3",
+		"WorldMapTooltip",
+		"ChatMenu",
+		"EmoteMenu",
+		"LanguageMenu",
+		"VoiceMacroMenu",
+	}
+
+	local backdrop = {
+		bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
+		edgeFile = "Interface\\ChatFrame\\ChatFrameBackground",
+		edgeSize = S.mult,
+	}
+
+	-- so other stuff which tries to look like GameTooltip doesn't mess up
+	local getBackdrop = function()
+		return backdrop
+	end
+
+	local getBackdropColor = function()
+		return 0, 0, 0, .6
+	end
+
+	local getBackdropBorderColor = function()
+		return 0, 0, 0
+	end
+
+	for i = 1, #tooltips do
+		local t = _G[tooltips[i]]
+		t:SetBackdrop(nil)
+		local bg = CreateFrame("Frame", nil, t)
+		bg:SetPoint("TOPLEFT")
+		bg:SetPoint("BOTTOMRIGHT")
+		bg:SetFrameLevel(t:GetFrameLevel()-1)
+		bg:SetBackdrop(backdrop)
+		bg:SetBackdropColor(0, 0, 0, .6)
+		bg:SetBackdropBorderColor(0, 0, 0)
+		t.bg = bg
+		t.GetBackdrop = getBackdrop
+		t.GetBackdropColor = getBackdropColor
+		t.GetBackdropBorderColor = getBackdropBorderColor
+	end
+
+	local sb = _G["GameTooltipStatusBar"]
+	sb:Height(6)
+	sb:ClearAllPoints()
+	sb:Point("BOTTOMLEFT", GameTooltip, "TOPLEFT", 1, 3)
+	sb:Point("BOTTOMRIGHT", GameTooltip, "TOPRIGHT", -1, 3)
+	sb:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
+	S.CreateBD(FriendsTooltip)
+	S.CreateMark(sb)
+end
+
 function Module:OnInitialize()
 	 if IsAddOnLoaded("TipTac") or IsAddOnLoaded("FreebTip") or IsAddOnLoaded("bTooltip") or IsAddOnLoaded("PhoenixTooltip") or IsAddOnLoaded("Icetip") then
 		return
 	end
 	C=SunUIConfig.db.profile.TooltipDB
+	SkinTooltip()
 	GameTooltip:HookScript("OnTooltipSetUnit", On_OnTooltipSetUnit)
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", On_SetDefaultAnchor)
 	GameTooltip:HookScript("OnUpdate", On_ANCHOR_CURSOR)
-	Module:RegisterEvent("PLAYER_ENTERING_WORLD", On_PLAYER_ENTERING_WORLD)
 end
