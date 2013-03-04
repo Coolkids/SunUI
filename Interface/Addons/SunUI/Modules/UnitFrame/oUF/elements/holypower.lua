@@ -52,13 +52,13 @@ local Update = function(self, event, unit, powerType)
 			hp[4]:Hide()
 			hp[5]:Hide()
 			for i = 1,3 do
-				hp[i]:SetWidth((hp:GetWidth()-space*(3-1))/3)
+				hp[i]:SetWidth((hp:GetWidth()-hp.space*(3-1))/3)
 			end
 		elseif maxnum == 5 then
 			hp[4]:Show()
 			hp[5]:Show()
 			for i = 1,5 do
-				hp[i]:SetWidth((hp:GetWidth()-space*(5-1))/5)
+				hp[i]:SetWidth((hp:GetWidth()-hp.space*(5-1))/5)
 			end
 		end
 	end
