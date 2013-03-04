@@ -1,5 +1,6 @@
-if not IsAddOnLoaded("NugRunning") then return end
 local S, L, DB, _, C = unpack(select(2, ...))
+if not IsAddOnLoaded("NugRunning") then return end
+local NR = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("NugRunningSkin", "AceEvent-3.0")
 --(\d+)(\s*,.+name\s*=\s*)\"[^"]+\"Ìæ»»\1\2GetSpellInfo\(\1\)
 NugRunningConfig.nameFont = { font = DB.Font, size = 12, alpha = 0.5 }
 NugRunningConfig.timeFont = { font = "interface\\addons\\SunUI\\Media\\font.ttf", size = 12, alpha = 1 }
@@ -294,7 +295,7 @@ end
 local backdrop = {
         bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
         tile = true, tileSize = 0,
-        insets = {left = -1, right = -1, top = -1, bottom = -1},
+        insets = {left = -S.mult, right = -S.mult, top = -S.mult, bottom = -S.mult},
     }
 
 function NugRunningNameplates:CreateNameplateTimer(frame)
@@ -405,7 +406,7 @@ local colors = NugRunningConfig.colors
 
 if class == "WARLOCK" then
 -- ModSpell(348, { color = colors.WOO }) -- modifying Immolate color
--- Spell(348, nil) -- remove immolate
+-- Spell(348, {}) -- remove immolate
 end
 
 if class == "PRIEST" then
@@ -421,7 +422,6 @@ if class == "PRIEST" then
 
 	EventTimer({ event = "SPELL_SUMMON", spellID = 123040, name = GetSpellInfo(123040), duration = 15, priority = -10, color = colors.BLACK })
 	EventTimer({ event = "SPELL_SUMMON", spellID = 34433, name = GetSpellInfo(34433), duration = 12, priority = -10, color = colors.BLACK })
-
 	Spell( 34914 ,{ name = GetSpellInfo(34914), overlay = {0, 1.5, 0.2}, recast_mark = 2.8, ghost = true, showpower = true, nameplates = true,  priority = 10, duration = 15, color = colors.RED, short = "VampTouch", hasted = true, textfunc = function(timer) return timer.dstName end })
 	Spell( 2944 ,{ name = GetSpellInfo(2944),duration = 6, priority = 8, nameplates = true, showpower = true, color = colors.WOO, short = "Plague", textfunc = function(timer) return timer.dstName end })
 	Spell( 47585 ,{ name = GetSpellInfo(47585),duration = 6, color = colors.PURPLE })

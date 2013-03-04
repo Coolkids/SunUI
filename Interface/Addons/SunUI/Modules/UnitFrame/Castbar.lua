@@ -9,6 +9,8 @@ local channelingTicks = {
 	-- warlock
 	--[GetSpellInfo(689)] = 3, -- "Drain Life"
 	--[GetSpellInfo(5740)] = 4, -- "Rain of Fire"
+	[GetSpellInfo(103103)] = 4, --"‘÷ƒ—÷ÆŒ’"
+	[GetSpellInfo(1120)] = 6, --"¡ÈªÍŒ¸»°"
 	-- druid
 	[GetSpellInfo(44203)] = 4, -- "Tranquility"
 	[GetSpellInfo(16914)] = 10, -- "Hurricane"
@@ -31,12 +33,12 @@ cast.setBarTicks = function(castBar, ticknum)
 		local delta = castBar:GetWidth() / ticknum
 		for k = 1, ticknum do
 			if not ticks[k] then
-				ticks[k] = castBar:CreateTexture(nil, 'OVERLAY')
-				ticks[k]:SetTexture(DB.Statusbar)
+				ticks[k] = castBar:CreateTexture(nil, 'OVERLAY', 2)
+				ticks[k]:SetTexture("Interface\\Buttons\\WHITE8x8")
 				ticks[k]:SetVertexColor(0.8, 0.6, 0.6)
-				ticks[k]:Width(2)
+				ticks[k]:Width(3)
 				ticks[k]:Height(castBar:GetHeight())
-				S.CreateTop(ticks[k], 0.8, 0.6, 0.6)
+				--S.CreateTop(ticks[k], 0.8, 0.6, 0.6)
 			end
 			ticks[k]:ClearAllPoints()
 			ticks[k]:Point("CENTER", castBar, "LEFT", delta * k, 0 )
