@@ -2,7 +2,7 @@ local S, L, DB, _, C = unpack(select(2, ...))
 local alpha = .5
 local _G = _G
 local AA = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("AuroraAPI", "AceEvent-3.0", "AceHook-3.0")
-
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 --[[ local classcolours = {
 	["HUNTER"] = { r = 0.58, g = 0.86, b = 0.49 },
 	["WARLOCK"] = { r = 0.6, g = 0.47, b = 0.85 },
@@ -135,8 +135,7 @@ function S.Reskin(f, noGlow)
 	if f.RightSeparator then f.RightSeparator:Hide() end
 
 	S.CreateBD(f, .0)
-	S.CreateBack(f, nil, 0.3, 0.35)
-	--S.CreateGradient(f)
+	S.CreateBack2(f, false, 0, 0, 0, 0.3, 0.35, 0.35, 0.35, 0.35)
 
 	if not noGlow then
 		f.glow = CreateFrame("Frame", nil, f)

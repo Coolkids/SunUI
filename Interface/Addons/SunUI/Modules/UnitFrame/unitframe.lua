@@ -113,7 +113,7 @@ local function  gen_hpbar(f)
 	if not U["ReverseHPbars"] then
 		s:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
 		s:SetStatusBarColor(0,0,0,0)
-		S.CreateBack(headframe)
+		S.CreateBack(s)
 		s.SetStatusBarColor = function(t, r, g, b)
 			S.CreateTop(bg.b, r, g, b)
 		end
@@ -374,6 +374,7 @@ local function gen_ppbar(f)
 		s.mark:Width(1)
 		s.mark:SetPoint("TOPLEFT", s:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
 		s.mark:SetPoint("BOTTOMLEFT", s:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
+		S.CreateBack(s)
 	else
 		local bg = CreateFrame("Frame", nil, s)
 		bg:SetFrameLevel(s:GetFrameLevel()-1)

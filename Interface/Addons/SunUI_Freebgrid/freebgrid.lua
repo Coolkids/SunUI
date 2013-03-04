@@ -680,7 +680,7 @@ local function unitFrameStyleSetup(button)
 	button.HealthBar = Health
 	button.HealthBar.bd = Health.bd
 	if ns.db.mode then
-		S.CreateBack(Health, nil, 0.3)
+		S.CreateBack(Health)
 	end
 	local help = CreateFrame("Frame", nil, button)
 	help:SetParent(button)
