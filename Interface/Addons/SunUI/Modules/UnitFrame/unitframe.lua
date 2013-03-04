@@ -846,11 +846,11 @@ local function gen_classpower(f)
 	if class == "DEATHKNIGHT" then 
 		count = 6
 	elseif class == "PALADIN" then
-		count = UnitPowerMax('player', SPELL_POWER_HOLY_POWER)
+		count = 5
 	end
 	local bars = CreateFrame("Frame", nil, f)
 	bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
-	bars:SetSize((f.width-space*(count-1))/count, f.height/5)
+	bars:SetSize((f.width, f.height/5)
 	for i = 1, count do
 		bars[i] =CreateFrame("StatusBar", nil, bars)
 		bars[i]:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
@@ -861,9 +861,7 @@ local function gen_classpower(f)
 		else
 			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", space, 0)
 		end
-		if class == "WARLOCK" then  
-			bars[i]:SetStatusBarColor(0.5, 0.32, 0.55)
-		elseif class == "PALADIN" then
+		if class == "PALADIN" then
 			bars[i]:SetStatusBarColor(0.9, 0.9, 0)
 		end
 		bars[i]:CreateShadow()
