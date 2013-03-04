@@ -850,7 +850,7 @@ local function gen_classpower(f)
 	end
 	local bars = CreateFrame("Frame", nil, f)
 	bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
-	bars:SetSize((f.width, f.height/5)
+	bars:SetSize(f.width, f.height/5)
 	for i = 1, count do
 		bars[i] =CreateFrame("StatusBar", nil, bars)
 		bars[i]:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
