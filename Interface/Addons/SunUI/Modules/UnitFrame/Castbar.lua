@@ -1,4 +1,4 @@
-local addon, ns = ...
+ï»¿local addon, ns = ...
 local S, L, DB, _, C = unpack(select(2, ...))
 if IsAddOnLoaded("Stuf") or IsAddOnLoaded("PitBull4") or IsAddOnLoaded("ShadowedUnitFrames") then
 	return
@@ -7,19 +7,19 @@ local cast = CreateFrame("Frame")
   -- special thanks to Allez for coming up with this solution
 local channelingTicks = {
 	-- warlock
-	--[GetSpellInfo(689)] = 3, -- "Drain Life"
-	--[GetSpellInfo(5740)] = 4, -- "Rain of Fire"
-	[GetSpellInfo(103103)] = 4, --"ÔÖÄÑÖ®ÎÕ"
-	[GetSpellInfo(1120)] = 6, --"Áé»êÎüÈ¡"
+	[GetSpellInfo(689)] = 6, -- "å¸å–ç”Ÿå‘½"
+	[GetSpellInfo(5740)] = 6, -- "ç«é›¨"
+	[GetSpellInfo(103103)] = 4, --"ç¾éš¾ä¹‹æ¡"
+	[GetSpellInfo(1120)] = 6, --"çµé­‚å¸å–"
 	-- druid
 	[GetSpellInfo(44203)] = 4, -- "Tranquility"
 	[GetSpellInfo(16914)] = 10, -- "Hurricane"
-	[GetSpellInfo(106996)] = 10, -- "ĞÇ½ç·ç±©"
+	[GetSpellInfo(106996)] = 10, -- "æ˜Ÿç•Œé£æš´"
 	-- priest
 	[GetSpellInfo(15407)] = 3, -- "Mind Flay"
 	[GetSpellInfo(48045)] = 5, -- "Mind Sear"
 	[GetSpellInfo(47540)] = 2, -- "Penance"
-	[GetSpellInfo(64901)] = 4, --Ï£ÍûÀñËÌ
+	[GetSpellInfo(64901)] = 4, --å¸Œæœ›ç¤¼é¢‚
 	--[GetSpellInfo(131474)] = 8, --test
 	-- mage
 	[GetSpellInfo(5143)] = 5, -- "Arcane Missiles"

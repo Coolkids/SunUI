@@ -870,7 +870,6 @@ local function gen_classpower(f)
 		f.Runes = bars
 	elseif class == "PALADIN" then
 		f.HolyPower = bars
-		f.HolyPower.space = space
 	end
 end
 --术士这该死的职业

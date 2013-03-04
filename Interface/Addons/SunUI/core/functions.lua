@@ -260,21 +260,22 @@ function S.FadeOutFrameDamage(p, t, show)  --隐藏
 	end 
 end
 
-function S.CreateBack(f, orientation, a, b)
+function S.CreateBack(f, orientation, a, b, r, g, b, r2, g2, b2)
 	local uistyle = SunUIConfig.db.profile.MiniDB.uistyle
 	local gradient = f:CreateTexture(nil, "BACKGROUND", -1)
 	gradient:SetPoint("TOPLEFT")
 	gradient:SetPoint("BOTTOMRIGHT")
-	gradient:SetTexture(DB.Statusbar)
+	gradient:SetTexture("Interface\\Buttons\\WHITE8x8")
 	if uistyle == "plane" then
-		gradient:SetVertexColor(0, 0, 0, 0.5)
+		gradient:SetVertexColor(r or 0, g or 0, b or 0, 0.5)
 	else
 		if orientation then
-			gradient:SetGradientAlpha("HORIZONTAL",  0, 0, 0, a or 0.35, .35, .35, .35, b or .45)
+			gradient:SetGradientAlpha("HORIZONTAL",  r or 0, g or 0, b or 0, a or 0.35, r2 or .3, g2 or .3, b2 or .3, b or .45)
 		else
-			gradient:SetGradientAlpha("VERTICAL",  0, 0, 0, a or 0.35, .35, .35, .35, b or .45)
+			gradient:SetGradientAlpha("VERTICAL",  r or 0, g or 0, b or 0, a or 0.35, r2 or .3, g2 or .3, b2 or .3, b or .45)
 		end
 	end
+	f.gradient = gradient
 end
 function S.CreateTop(f, r, g, b, orientation, a)
 	local uistyle = SunUIConfig.db.profile.MiniDB.uistyle
@@ -282,9 +283,9 @@ function S.CreateTop(f, r, g, b, orientation, a)
 		f:SetVertexColor(r, g, b, a)
 	else
 		if orientation then
-			f:SetGradientAlpha("HORIZONTAL", r, g, b, a or 1, r/2, g/2, b/2, a or 1)
+			f:SetGradientAlpha("HORIZONTAL", r, g, b, a or 1, r/3, g/3, b/3, a or 1)
 		else
-			f:SetGradientAlpha("VERTICAL", r, g, b, a or 1, r/2, g/2, b/2, a or 1)
+			f:SetGradientAlpha("VERTICAL", r, g, b, a or 1, r/3, g/3, b/3, a or 1)
 		end
 	end
 end
