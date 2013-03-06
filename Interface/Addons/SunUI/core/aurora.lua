@@ -3,19 +3,6 @@ local alpha = .5
 local _G = _G
 local AA = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("AuroraAPI", "AceEvent-3.0", "AceHook-3.0")
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
---[[ local classcolours = {
-	["HUNTER"] = { r = 0.58, g = 0.86, b = 0.49 },
-	["WARLOCK"] = { r = 0.6, g = 0.47, b = 0.85 },
-	["PALADIN"] = { r = 1, g = 0.22, b = 0.52 },
-	["PRIEST"] = { r = 0.8, g = 0.87, b = .9 },
-	["MAGE"] = { r = 0, g = 0.76, b = 1 },
-	["MONK"] = {r = 0.0, g = 1.00 , b = 0.59},
-	["ROGUE"] = { r = 1, g = 0.91, b = 0.2 },
-	["DRUID"] = { r = 1, g = 0.49, b = 0.04 },
-	["SHAMAN"] = { r = 0, g = 0.6, b = 0.6 };
-	["WARRIOR"] = { r = 0.9, g = 0.65, b = 0.45 },
-	["DEATHKNIGHT"] = { r = 0.77, g = 0.12 , b = 0.23 },
-} ]]
 
 local media = {
 	["arrowUp"] = "Interface\\AddOns\\SunUI\\media\\arrow-up-active",
@@ -25,12 +12,15 @@ local media = {
 	["backdrop"] = "Interface\\ChatFrame\\ChatFrameBackground",
 	["checked"] = "Interface\\AddOns\\SunUI\\media\\CheckButtonHilight",
 	["glow"] = "Interface\\AddOns\\SunUI\\media\\glowTex",
-	["gloss"] = "Interface\\AddOns\\SunUI\\media\\gloss",
 }
+
+local gradOr, startR, startG, startB, startAlpha, endR, endG, endB, endAlpha = "VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35
 local frames, fsd = {}, {}
+
 -- [[ Functions ]]
---print(RAID_CLASS_COLORS["PALADIN"].r, RAID_CLASS_COLORS["PALADIN"].g, RAID_CLASS_COLORS["PALADIN"].b)
-local _, class = UnitClass("player")
+
+local class = DB.MyClass
+
 local r, g, b
 if CUSTOM_CLASS_COLORS then
 	r, g, b = CUSTOM_CLASS_COLORS[class].r, CUSTOM_CLASS_COLORS[class].g, CUSTOM_CLASS_COLORS[class].b
@@ -38,7 +28,9 @@ else
 	r, g, b = RAID_CLASS_COLORS[class].r, RAID_CLASS_COLORS[class].g, RAID_CLASS_COLORS[class].b
 end
 local mult = S.mult
-function S.CreateBD(f, a)
+S.dummy = function() end
+
+S.CreateBD = function(f, a)
 	f:SetBackdrop({
 		bgFile = media.backdrop,
 		edgeFile = media.backdrop,
@@ -49,7 +41,7 @@ function S.CreateBD(f, a)
 	tinsert(frames, f)
 end
 
-function S.CreateBG(frame)
+S.CreateBG = function(frame)
 	local f = frame
 	if frame:GetObjectType() == "Texture" then f = frame:GetParent() end
 
@@ -62,7 +54,7 @@ function S.CreateBG(frame)
 	return bg
 end
 
-function S.CreateSD(parent, size, r, g, b, alpha, offset)
+S.CreateSD = function(parent, size, r, g, b, alpha, offset)
 	if parent.sd then return end
 	local sd = CreateFrame("Frame", nil, parent)
 	sd.size = size or 5
@@ -78,15 +70,17 @@ function S.CreateSD(parent, size, r, g, b, alpha, offset)
 	tinsert(fsd, sd)
 end
 
-function  S.CreateGradient(f)
+S.CreateGradient = function(f)
 	local tex = f:CreateTexture(nil, "BORDER")
-	tex:SetPoint("TOPLEFT")
-	tex:SetPoint("BOTTOMRIGHT")
+	tex:Point("TOPLEFT", 1, -1)
+	tex:Point("BOTTOMRIGHT", -1, 1)
 	tex:SetTexture(media.backdrop)
-	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+	tex:SetGradientAlpha(gradOr, startR, startG, startB, startAlpha, endR, endG, endB, endAlpha)
+
+	return tex
 end
 
-function S.CreatePulse(frame)
+S.CreatePulse = function(frame)
 	local speed = .05
 	local mult = 1
 	local alpha = 1
@@ -122,12 +116,12 @@ local function StopGlow(f)
 	f.glow:SetAlpha(0)
 end
 
-function S.Reskin(f, noGlow)
+S.Reskin = function(f, noGlow)
 	f:SetNormalTexture("")
 	f:SetHighlightTexture("")
 	f:SetPushedTexture("")
 	f:SetDisabledTexture("")
-	
+
 	if f.Left then f.Left:SetAlpha(0) end
 	if f.Middle then f.Middle:SetAlpha(0) end
 	if f.Right then f.Right:SetAlpha(0) end
@@ -135,6 +129,7 @@ function S.Reskin(f, noGlow)
 	if f.RightSeparator then f.RightSeparator:Hide() end
 
 	S.CreateBD(f, .0)
+
 	S.CreateBack2(f, false, 0, 0, 0, 0.3, 0.35, 0.35, 0.35, 0.35)
 
 	if not noGlow then
@@ -153,8 +148,7 @@ function S.Reskin(f, noGlow)
 	end
 end
 
-function S.CreateTab(f)
-	if f.ct then return end
+S.ReskinTab = function(f)
 	f:DisableDrawLayer("BACKGROUND")
 
 	local bg = CreateFrame("Frame", nil, f)
@@ -168,10 +162,19 @@ function S.CreateTab(f)
 	hl:Point("TOPLEFT", 9, -4)
 	hl:Point("BOTTOMRIGHT", -9, 1)
 	hl:SetVertexColor(r, g, b, .25)
-	f.ct = true
 end
 
-function S.ReskinScroll(f)
+local function colourScroll(f)
+	if f:IsEnabled() then
+		f.tex:SetVertexColor(r, g, b)
+	end
+end
+
+local function clearScroll(f)
+	f.tex:SetVertexColor(1, 1, 1)
+end
+
+S.ReskinScroll = function(f)
 	local frame = f:GetName()
 
 	if _G[frame.."Track"] then _G[frame.."Track"]:Hide() end
@@ -182,7 +185,7 @@ function S.ReskinScroll(f)
 
 	local bu = _G[frame.."ThumbTexture"]
 	bu:SetAlpha(0)
-	bu:Width(17)
+	bu:SetWidth(17)
 
 	bu.bg = CreateFrame("Frame", nil, f)
 	bu.bg:Point("TOPLEFT", bu, 0, -2)
@@ -190,19 +193,19 @@ function S.ReskinScroll(f)
 	S.CreateBD(bu.bg, 0)
 
 	local tex = f:CreateTexture(nil, "BACKGROUND")
-	tex:SetPoint("TOPLEFT", bu.bg)
-	tex:SetPoint("BOTTOMRIGHT", bu.bg)
+	tex:Point("TOPLEFT", bu.bg, 1, -1)
+	tex:Point("BOTTOMRIGHT", bu.bg, -1, 1)
 	tex:SetTexture(media.backdrop)
-	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+	tex:SetGradientAlpha(gradOr, startR, startG, startB, startAlpha, endR, endG, endB, endAlpha)
 
 	local up = _G[frame.."ScrollUpButton"]
 	local down = _G[frame.."ScrollDownButton"]
 
-	up:Width(17)
-	down:Width(17)
+	up:SetWidth(17)
+	down:SetWidth(17)
 
-	S.Reskin(up)
-	S.Reskin(down)
+	S.Reskin(up, true)
+	S.Reskin(down, true)
 
 	up:SetDisabledTexture(media.backdrop)
 	local dis1 = up:GetDisabledTexture()
@@ -216,15 +219,22 @@ function S.ReskinScroll(f)
 
 	local uptex = up:CreateTexture(nil, "ARTWORK")
 	uptex:SetTexture(media.arrowUp)
-	uptex:Size(8, 8)
+	uptex:SetSize(8, 8)
 	uptex:SetPoint("CENTER")
 	uptex:SetVertexColor(1, 1, 1)
+	up.tex = uptex
 
 	local downtex = down:CreateTexture(nil, "ARTWORK")
 	downtex:SetTexture(media.arrowDown)
 	downtex:SetSize(8, 8)
 	downtex:SetPoint("CENTER")
 	downtex:SetVertexColor(1, 1, 1)
+	down.tex = downtex
+
+	up:HookScript("OnEnter", colourScroll)
+	up:HookScript("OnLeave", clearScroll)
+	down:HookScript("OnEnter", colourScroll)
+	down:HookScript("OnLeave", clearScroll)
 end
 
 local function colourArrow(f)
@@ -236,23 +246,11 @@ end
 local function clearArrow(f)
 	f.downtex:SetVertexColor(1, 1, 1)
 end
-function S.ReskinFrame(f)
-	if f.reskin == true then return end
-	f.glow = CreateFrame("Frame", nil, f)
-	f.glow:SetBackdrop({
-		edgeFile = DB.GlowTex,
-		edgeSize = S.Scale(5),
-	})
-	f.glow:Point("TOPLEFT", -6, 6)
-	f.glow:Point("BOTTOMRIGHT", 6, -6)
-	f.glow:SetBackdropBorderColor(r, g, b)
-	f.glow:SetAlpha(0)
 
-	f:HookScript("OnEnter", StartGlow)
- 	f:HookScript("OnLeave", StopGlow)
-	f.reskin = true
-end
-function S.ReskinDropDown(f)
+S.colourArrow = colourArrow
+S.clearArrow = clearArrow
+
+S.ReskinDropDown = function(f)
 	local frame = f:GetName()
 
 	local left = _G[frame.."Left"]
@@ -265,9 +263,9 @@ function S.ReskinDropDown(f)
 
 	local down = _G[frame.."Button"]
 
-	down:Size(20, 20)
+	down:SetSize(20, 20)
 	down:ClearAllPoints()
-	down:Point("RIGHT", -18, 2)
+	down:SetPoint("RIGHT", -18, 2)
 
 	S.Reskin(down, true)
 
@@ -279,7 +277,7 @@ function S.ReskinDropDown(f)
 
 	local downtex = down:CreateTexture(nil, "ARTWORK")
 	downtex:SetTexture(media.arrowDown)
-	downtex:Size(8, 8)
+	downtex:SetSize(8, 8)
 	downtex:SetPoint("CENTER")
 	downtex:SetVertexColor(1, 1, 1)
 	down.downtex = downtex
@@ -297,18 +295,22 @@ function S.ReskinDropDown(f)
 end
 
 local function colourClose(f)
-	f.text:SetTextColor(1, .1, .1)
+	for _, pixel in pairs(f.pixels) do
+		pixel:SetVertexColor(r, g, b)
+	end
 end
 
 local function clearClose(f)
-	f.text:SetTextColor(1, 1, 1)
+	for _, pixel in pairs(f.pixels) do
+		pixel:SetVertexColor(1, 1, 1)
+	end
 end
 
-function S.ReskinClose(f, a1, p, a2, x, y)
-	f:Size(17, 17)
+S.ReskinClose = function(f, a1, p, a2, x, y)
+	f:SetSize(17, 17)
 
 	if not a1 then
-		f:SetPoint("TOPRIGHT", -4, -4)
+		f:Point("TOPRIGHT", -4, -4)
 	else
 		f:ClearAllPoints()
 		f:SetPoint(a1, p, a2, x, y)
@@ -323,17 +325,27 @@ function S.ReskinClose(f, a1, p, a2, x, y)
 
 	S.CreateGradient(f)
 
-	local text = f:CreateFontString(nil, "OVERLAY")
-	text:SetFont(DB.Font, 14, "THINOUTLINE")
-	text:SetPoint("CENTER", 1, 1)
-	text:SetText("x")
-	f.text = text
+	f.pixels = {}
+
+	for i = 1, 9 do
+		local tex = f:CreateTexture()
+		tex:SetTexture(1, 1, 1)
+		tex:Size(1, 1)
+		tex:SetPoint("BOTTOMLEFT", 3+i, 3+i)
+	end
+
+	for i = 1, 9 do
+		local tex = f:CreateTexture()
+		tex:SetTexture(1, 1, 1)
+		tex:Size(1, 1)
+		tex:SetPoint("TOPLEFT", 3+i, -3-i)
+	end
 
 	f:HookScript("OnEnter", colourClose)
  	f:HookScript("OnLeave", clearClose)
 end
 
-function S.ReskinInput(f, height, width)
+S.ReskinInput = function(f, height, width)
 	local frame = f:GetName()
 	_G[frame.."Left"]:Hide()
 	if _G[frame.."Middle"] then _G[frame.."Middle"]:Hide() end
@@ -352,8 +364,8 @@ function S.ReskinInput(f, height, width)
 	if width then f:SetWidth(width) end
 end
 
-function S.ReskinArrow(f, direction)
-	f:Size(18, 18)
+S.ReskinArrow = function(f, direction)
+	f:SetSize(18, 18)
 	S.Reskin(f)
 
 	f:SetDisabledTexture(media.backdrop)
@@ -362,13 +374,13 @@ function S.ReskinArrow(f, direction)
 	dis:SetDrawLayer("OVERLAY")
 
 	local tex = f:CreateTexture(nil, "ARTWORK")
-	tex:Size(8, 8)
+	tex:SetSize(8, 8)
 	tex:SetPoint("CENTER")
 
-	tex:SetTexture("Interface\\AddOns\\SunUI\\media\\arrow-"..direction.."-active")
+	tex:SetTexture("Interface\\AddOns\\Aurora\\media\\arrow-"..direction.."-active")
 end
 
-function S.ReskinCheck(f)
+S.ReskinCheck = function(f)
 	f:SetNormalTexture("")
 	f:SetPushedTexture("")
 	f:SetHighlightTexture(media.backdrop)
@@ -387,12 +399,13 @@ function S.ReskinCheck(f)
 	tex:Point("TOPLEFT", 5, -5)
 	tex:Point("BOTTOMRIGHT", -5, 5)
 	tex:SetTexture(media.backdrop)
-	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+	tex:SetGradientAlpha(gradOr, startR, startG, startB, startAlpha, endR, endG, endB, endAlpha)
 
 	local ch = f:GetCheckedTexture()
 	ch:SetDesaturated(true)
 	ch:SetVertexColor(r, g, b)
 end
+
 local function colourRadio(f)
 	f.bd:SetBackdropBorderColor(r, g, b)
 end
@@ -400,7 +413,8 @@ end
 local function clearRadio(f)
 	f.bd:SetBackdropBorderColor(0, 0, 0)
 end
-function S.ReskinRadio(f)
+
+S.ReskinRadio = function(f)
 	f:SetNormalTexture("")
 	f:SetHighlightTexture("")
 	f:SetCheckedTexture(media.backdrop)
@@ -411,25 +425,25 @@ function S.ReskinRadio(f)
 	ch:SetVertexColor(r, g, b, .6)
 
 	local bd = CreateFrame("Frame", nil, f)
-	bd:SetPoint("TOPLEFT", 3, -3)
-	bd:SetPoint("BOTTOMRIGHT", -3, 3)
+	bd:Point("TOPLEFT", 3, -3)
+	bd:Point("BOTTOMRIGHT", -3, 3)
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	S.CreateBD(bd, 0)
 	f.bd = bd
-	
+
 	local tex = f:CreateTexture(nil, "BACKGROUND")
 	tex:Point("TOPLEFT", 4, -4)
 	tex:Point("BOTTOMRIGHT", -4, 4)
 	tex:SetTexture(media.backdrop)
-	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
-	
+	tex:SetGradientAlpha(gradOr, startR, startG, startB, startAlpha, endR, endG, endB, endAlpha)
+
 	f:HookScript("OnEnter", colourRadio)
 	f:HookScript("OnLeave", clearRadio)
 end
 
-function S.ReskinSlider(f)
+S.ReskinSlider = function(f)
 	f:SetBackdrop(nil)
-	f.SetBackdrop = function() end
+	f.SetBackdrop = S.dummy
 
 	local bd = CreateFrame("Frame", nil, f)
 	bd:Point("TOPLEFT", 14, -2)
@@ -445,10 +459,26 @@ function S.ReskinSlider(f)
 	slider:SetBlendMode("ADD")
 end
 
-function S.ReskinExpandOrCollapse(f)
-	f:Size(13, 13)
+local function colourExpandOrCollapse(f)
+	if f:IsEnabled() then
+		f.plus:SetVertexColor(r, g, b)
+		f.minus:SetVertexColor(r, g, b)
+	end
+end
+
+local function clearExpandOrCollapse(f)
+	f.plus:SetVertexColor(1, 1, 1)
+	f.minus:SetVertexColor(1, 1, 1)
+end
+
+S.colourExpandOrCollapse = colourExpandOrCollapse
+S.clearExpandOrCollapse = clearExpandOrCollapse
+
+S.ReskinExpandOrCollapse = function(f)
+	f:SetSize(13, 13)
+
 	S.Reskin(f, true)
-	f.SetNormalTexture = function() end
+	f.SetNormalTexture = S.dummy
 
 	f.minus = f:CreateTexture(nil, "OVERLAY")
 	f.minus:Size(7, 1)
@@ -461,26 +491,26 @@ function S.ReskinExpandOrCollapse(f)
 	f.plus:SetPoint("CENTER")
 	f.plus:SetTexture(media.backdrop)
 	f.plus:SetVertexColor(1, 1, 1)
+
+	f:HookScript("OnEnter", colourExpandOrCollapse)
+	f:HookScript("OnLeave", clearExpandOrCollapse)
 end
 
-function S.SetBD(f, x, y, x2, y2)
-	if f.sbd then return end
+S.SetBD = function(f, x, y, x2, y2)
 	local bg = CreateFrame("Frame", nil, f)
-	local frameLevel = f:GetFrameLevel() > 1 and f:GetFrameLevel() or 1
 	if not x then
 		bg:SetPoint("TOPLEFT")
 		bg:SetPoint("BOTTOMRIGHT")
 	else
-		bg:Point("TOPLEFT", x, y)
-		bg:Point("BOTTOMRIGHT", x2, y2)
+		bg:SetPoint("TOPLEFT", x, y)
+		bg:SetPoint("BOTTOMRIGHT", x2, y2)
 	end
-	bg:SetFrameLevel(frameLevel)
+	bg:SetFrameLevel(0)
 	S.CreateBD(bg)
-	S.CreateSD(bg, 4+mult, 0, 0, 0, 1, 0)
-	f.sbd = true
+	S.CreateSD(bg)
 end
 
-function S.ReskinPortraitFrame(f, isButtonFrame)
+S.ReskinPortraitFrame = function(f, isButtonFrame)
 	local name = f:GetName()
 
 	_G[name.."Bg"]:Hide()
@@ -511,7 +541,7 @@ function S.ReskinPortraitFrame(f, isButtonFrame)
 	S.ReskinClose(_G[name.."CloseButton"])
 end
 
-function S.CreateBDFrame(f, a)
+S.CreateBDFrame = function(f, a)
 	local frame
 	if f:GetObjectType() == "Texture" then
 		frame = f:GetParent()
@@ -531,18 +561,7 @@ function S.CreateBDFrame(f, a)
 	return bg
 end
 
-function S.CreateBackdropTexture(f)
-	local tex = f:CreateTexture(nil, "BACKGROUND")
-    tex:SetDrawLayer("BACKGROUND", 1)
-	tex:SetInside(f, 1, 1)
-	tex:SetTexture(media.gloss)
-	--tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
-	tex:SetVertexColor(0.1, 0.1, 0.1)
-	tex:SetAlpha(0.8)
-	f.backdropTexture = tex
-end
-
-function S.ReskinColourSwatch(f)
+S.ReskinColourSwatch = function(f)
 	local name = f:GetName()
 
 	local bg = _G[name.."SwatchBg"]
@@ -550,13 +569,14 @@ function S.ReskinColourSwatch(f)
 	f:SetNormalTexture(media.backdrop)
 	local nt = f:GetNormalTexture()
 
-	nt:Point("TOPLEFT", 3, -3)
-	nt:Point("BOTTOMRIGHT", -3, 3)
+	nt:SetPoint("TOPLEFT", 3, -3)
+	nt:SetPoint("BOTTOMRIGHT", -3, 3)
 
 	bg:SetTexture(0, 0, 0)
 	bg:Point("TOPLEFT", 2, -2)
 	bg:Point("BOTTOMRIGHT", -2, 2)
 end
+
 
 function AA:PLAYER_ENTERING_WORLD()
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")

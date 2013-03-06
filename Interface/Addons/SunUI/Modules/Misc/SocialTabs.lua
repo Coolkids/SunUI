@@ -78,9 +78,10 @@ end
 
 local function STHookFrame(fname)
 	local frame = _G[fname]
+	if frame == nil then return end
 	local prevtab
 	local frametabs = {}
-
+	
 	-- PvE tab
 	frametabs["PVEFrame"] = CreateFrame("CheckButton", "LFDSideTab", frame, "SpellBookSkillLineTabTemplate")
 	SkinTab(frametabs["PVEFrame"], "Interface\\Icons\\INV_Helmet_08")

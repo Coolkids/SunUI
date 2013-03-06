@@ -330,6 +330,18 @@ function S.CreateMark(f, orientation)
 		spark:Point("TOPRIGHT", f:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
 	end
 end
+
+function S.CreateBackdropTexture(f)
+	local tex = f:CreateTexture(nil, "BACKGROUND")
+    tex:SetDrawLayer("BACKGROUND", 1)
+	tex:SetInside(f, 1, 1)
+	tex:SetTexture("Interface\\AddOns\\SunUI\\media\\gloss")
+	--tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+	tex:SetVertexColor(0.1, 0.1, 0.1)
+	tex:SetAlpha(0.8)
+	f.backdropTexture = tex
+end
+
 local smoothing = {}
 local function Smooth(self, value)
 	local _, maxv = self:GetMinMaxValues()

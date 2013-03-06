@@ -1459,7 +1459,6 @@ local function updateOverlayTextures(frame, frameName, textureCache, scale, alph
 		end
 		return
 	end
-	if mapFileName == "STVDiamondMineBG" then return end
 	local pathPrefix = "Interface\\WorldMap\\"..mapFileName.."\\"
 	--print(mapFileName)
 	if strmatch(mapFileName, "%_terrain(.+)") then mapFileName = mapFileName:gsub("%_terrain(.+)","") end
@@ -1468,14 +1467,16 @@ local function updateOverlayTextures(frame, frameName, textureCache, scale, alph
 
 	local numOverlays = self.hooks.GetNumMapOverlays()
 	local pathLen = strlen(pathPrefix) + 1
-
 	for i=1, numOverlays do
 		local texName, texWidth, texHeight, offsetX, offsetY = GetMapOverlayInfo(i)
 		texName = strsub(texName, pathLen)
 		local texID = texWidth + texHeight * 2^10 + offsetX * 2^20 + offsetY * 2^30
 		if texID ~= 0 and texID ~= 131200 and texName ~= "" and strlower(texName) ~= "pixelfix" then
 			discoveredOverlays[texName] = texID
-			overlayMap[texName] = texID
+			for k,v in pairs(overlayMap) do
+				if k == texName then v = texID end
+				--overlayMap[texName] = texID
+			end
 		end
 	end
 

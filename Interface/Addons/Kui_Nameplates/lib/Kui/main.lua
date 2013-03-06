@@ -1,4 +1,4 @@
-local MAJOR, MINOR = 'Kui-1.0', 2
+local MAJOR, MINOR = 'Kui-1.0', 3
 local kui = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not kui then
@@ -11,7 +11,6 @@ local media = "Interface\\AddOns\\Kui_Media\\"
 kui.m = {
 	t = {
 		-- borders
-		square	= media .. 't\\simpleSquare',
 		shadow	= media .. 't\\shadowBorder',
 		rounded	= media .. 't\\solidRoundedBorder',
 	

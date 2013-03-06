@@ -69,6 +69,7 @@ local frames = {
 	["LFGDungeonReadyDialog"] = false,
 	["LFGDungeonReadyStatus"] = false,
 	["RolePollPopup"] = false,
+	--5.2
 }
 
 -- Frames provided by load on demand addons, hooked when the addon is loaded.
@@ -100,6 +101,8 @@ local lodFrames = {
   Blizzard_ItemAlterationUI = { ["TransmogrifyFrame"] = false },
   Blizzard_EncounterJournal = { ["EncounterJournal"] = false }, -- as of 4.3
   Blizzard_PetJournal = { ["PetJournalParent"] = false }, -- as of 5.0
+  --5.2
+  Blizzard_PVPUI = {["PVPUIFrame"] = false},
 }
 
 local parentFrame = {}

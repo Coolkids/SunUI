@@ -29,4 +29,7 @@
 	<Include file ="Misc\load.xml"/>
 	<!-- 兼容性检查 -->
 	<Include file ="Compatibility\load.xml"/>
+	
+	<!--测试新的功能-->
+	<Include file ="test\load.xml"/>
 </Ui>
