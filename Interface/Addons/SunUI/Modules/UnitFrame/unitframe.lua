@@ -132,7 +132,7 @@ local function  gen_hpbar(f)
 		s:SetAlpha(1)
 		bg:SetAlpha(1)
 		if U["ClassColor"] then 
-			S.CreateTop(bg.b, 0.15, 0.15, 0.15)
+			S.CreateTop(bg.b, 0.3, 0.3, 0.3)
 		else
 			S.CreateTop(bg.b, 0.6, 0.6, 0.6)
 		end
@@ -226,8 +226,10 @@ local function  gen_hpbar(f)
 			value = f.Power:GetValue()
 			if value == min or value == max then
 				f.Power.mark:Hide()
+				f.Power.gradient:Hide()
 			else
 				f.Power.mark:Show()
+				f.Power.gradient:Show()
 			end
 			if value == 0 then
 				if not isSetHeight then

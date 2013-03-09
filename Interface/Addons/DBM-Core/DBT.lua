@@ -595,11 +595,13 @@ function barPrototype:Update(elapsed)
 	local obj = self.owner
 	self.timer = self.timer - elapsed
 	if obj.options.DynamicColor and not self.color then
-		local r = obj.options.StartColorR  + (obj.options.EndColorR - obj.options.StartColorR) * (1 - self.timer/self.totalTime)
-		local g = obj.options.StartColorG  + (obj.options.EndColorG - obj.options.StartColorG) * (1 - self.timer/self.totalTime)
-		local b = obj.options.StartColorB  + (obj.options.EndColorB - obj.options.StartColorB) * (1 - self.timer/self.totalTime)
-		bar:SetStatusBarColor(r, g, b)
-		spark:SetVertexColor(r, g, b)
+		if self.totalTime ~= 0 then
+			local r = obj.options.StartColorR  + (obj.options.EndColorR - obj.options.StartColorR) * (1 - self.timer/self.totalTime)
+			local g = obj.options.StartColorG  + (obj.options.EndColorG - obj.options.StartColorG) * (1 - self.timer/self.totalTime)
+			local b = obj.options.StartColorB  + (obj.options.EndColorB - obj.options.StartColorB) * (1 - self.timer/self.totalTime)
+			bar:SetStatusBarColor(r, g, b)
+			spark:SetVertexColor(r, g, b)
+		end
 	end
 	if self.timer <= 0 then
 		return self:Cancel()

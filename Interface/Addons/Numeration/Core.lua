@@ -144,7 +144,7 @@ end
 function ldb:OnClick(button)
 	if button == "LeftButton" then
 		if IsShiftKeyDown() then
-			SStaticPopup_Show("RESET_DATA")
+			StaticPopup_Show("RESET_DATA")
 		else
 			addon:ToggleVisibility()
 		end
@@ -245,7 +245,7 @@ local useChatType, useChannel
 function addon:Report(lines, chatType, channel)
 	useChatType, useChannel = chatType, channel
 	if chatType == "WHISPER" then
-		whispname = channel
+		whispname = StaticPopup1EditBox:GetText()
 		if whispname == nil or whispname == "" then
 		-- if not useChannel or not UnitIsPlayer(useChannel) then
 			print(l.bad_whisp)
@@ -429,8 +429,8 @@ function addon:ZONE_CHANGED_NEW_AREA(force)
 	if force == true or zoneType ~= self.zoneType then
 		self.zoneType = zoneType
 
-		if not NumerationCharOptions.onlyinstance or difficulty ~= 1 then
-			if difficulty ~= 1 then
+		if not NumerationCharOptions.onlyinstance or difficulty ~= 0 then
+			if difficulty ~= 0 then
 				local curZone = GetRealZoneText()
 				if curZone ~= NumerationCharDB.zone then
 					NumerationCharDB.zone = curZone

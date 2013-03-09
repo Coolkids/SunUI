@@ -44,9 +44,9 @@
 --  Globals/Default Options  --
 -------------------------------
 DBM = {
-	Revision = tonumber(("$Revision: 8650 $"):sub(12, -3)),
-	DisplayVersion = "5.1 語音增強版", -- the string that is shown as version
-	ReleaseRevision = 8421 -- the revision of the latest stable version that is available
+	Revision = tonumber(("$Revision: 8840 $"):sub(12, -3)),
+	DisplayVersion = "5.2 語音增強版", -- the string that is shown as version
+	ReleaseRevision = 8828 -- the revision of the latest stable version that is available
 }
 
 -- Legacy crap; that stupid "Version" field was never a good idea.
@@ -71,9 +71,9 @@ DBM.DefaultOptions = {
 	RaidWarningSound = "Sound\\Doodad\\BellTollNightElf.wav",
 	SpecialWarningSound = "Sound\\Spells\\PVPFlagTaken.wav",
 	SpecialWarningSound2 = "Sound\\Spells\\PVPFlagTaken.wav",
+	SpecialWarningSound3 = "Sound\\Spells\\PVPFlagTaken.wav",
 	ModelSoundValue = "Short",
 	CountdownVoice = "Mosh",
-	CountdownPullTimer = true,
 	RaidWarningPosition = {
 		Point = "TOP",
 		X = 0,
@@ -94,7 +94,6 @@ DBM.DefaultOptions = {
 	StatusEnabled = true,
 	WhisperStats = false,
 	HideBossEmoteFrame = false,
-	SpamBlockRaidWarning = true,
 	SpamBlockBossWhispers = false,
 	ShowMinimapButton = false,
 	BlockVersionUpdateNotice = false,
@@ -137,23 +136,25 @@ DBM.DefaultOptions = {
 	ArrowPoint = "TOP",
 	-- global boss mod settings (overrides mod-specific settings for some options)
 	DontShowBossAnnounces = false,
-	DontSendBossAnnounces = false,
 	DontSendBossWhispers = false,
 	DontSetIcons = false,
 	DontShowRangeFrame = false,
 	DontShowInfoFrame = false,
+	DontShowPT = false,
+	DontShowPTCountdownText = false,
+	DontPlayPTCountdown = false,
 	LatencyThreshold = 250,
 	BigBrotherAnnounceToRaid = false,
 	SettingsMessageShown = false,
 	AlwaysShowSpeedKillTimer = true,
 	DisableCinematics = false,
 	DisableCinematicsOutside = false,
-	DisableUIFrameFlash = false,
 	EnableReadyCheckSound = true,
 --	HelpMessageShown = false,
 	MoviesSeen = {},
 	MovieFilters = {},
-	LastRevision = 0
+	LastRevision = 0,
+	FilterSayAndYell = false
 }
 
 DBM.Bars = DBT:New()
@@ -190,6 +191,7 @@ local _, class = UnitClass("player")
 local LastZoneText = ""
 local LastZoneMapID = -1
 local queuedBattlefield = {}
+local combatDelay = false
 
 local enableIcons = true -- set to false when a raid leader or a promoted player has a newer version of DBM
 
@@ -756,6 +758,9 @@ do
 	end)
 
 	function schedule(t, f, mod, ...)
+		if type(f) ~= "function" then
+			error("usage: schedule(time, func, [mod, args...])", 2)
+		end
 		local v
 		if numChachedTables > 0 and select("#", ...) <= 4 then -- a cached table is available and all arguments fit into an array with four slots
 			v = popCachedTable()
@@ -777,6 +782,9 @@ do
 end
 
 function DBM:Schedule(t, f, ...)
+	if type(f) ~= "function" then
+		error("usage: DBM:Schedule(time, func, [args...])", 2)
+	end
 	return schedule(t, f, nil, ...)
 end
 
@@ -836,40 +844,41 @@ SlashCmdList["DEADLYBOSSMODS"] = function(msg)
 		time = min * 60 + sec
 		DBM:CreatePizzaTimer(time, text, true)
 	elseif cmd:sub(0,5) == "break" then
-		if DBM:GetRaidRank() == 0 then
+		if DBM:GetRaidRank() == 0 or IsInGroup(LE_PARTY_CATEGORY_INSTANCE) or IsEncounterInProgress() then--No break timers if not assistant or if it's LFR (because break timers in LFR are just not cute)
 			DBM:AddMsg(DBM_ERROR_NO_PERMISSION)
 			return
 		end
 		local timer = tonumber(cmd:sub(6)) or 5
 		local timer = timer * 60
-		local channel = (IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT") or (IsInRaid() and "RAID_WARNING") or "PARTY"
+		local channel = (IsInRaid() and "RAID_WARNING") or "PARTY"
 		DBM:CreatePizzaTimer(timer, DBM_CORE_TIMER_BREAK, true)
 		DBM:Unschedule(SendChatMessage)
-		SendChatMessage(DBM_CORE_BREAK_START:format(timer/60), channel)
-		if timer/60 > 5 then DBM:Schedule(timer - 5*60, SendChatMessage, DBM_CORE_BREAK_MIN:format(5), channel) end
-		if timer/60 > 2 then DBM:Schedule(timer - 2*60, SendChatMessage, DBM_CORE_BREAK_MIN:format(2), channel) end
-		if timer/60 > 1 then DBM:Schedule(timer - 1*60, SendChatMessage, DBM_CORE_BREAK_MIN:format(1), channel) end
-		if timer > 30 then DBM:Schedule(timer - 30, SendChatMessage, DBM_CORE_BREAK_SEC:format(30), channel) end
-		DBM:Schedule(timer, SendChatMessage, DBM_CORE_ANNOUNCE_BREAK_OVER, channel)
+		if IsInGroup() then
+			SendChatMessage(DBM_CORE_BREAK_START:format(timer/60), channel)
+			if timer/60 > 5 then DBM:Schedule(timer - 5*60, SendChatMessage, DBM_CORE_BREAK_MIN:format(5), channel) end
+			if timer/60 > 2 then DBM:Schedule(timer - 2*60, SendChatMessage, DBM_CORE_BREAK_MIN:format(2), channel) end
+			if timer/60 > 1 then DBM:Schedule(timer - 1*60, SendChatMessage, DBM_CORE_BREAK_MIN:format(1), channel) end
+			DBM:Schedule(timer, SendChatMessage, DBM_CORE_ANNOUNCE_BREAK_OVER, channel)
+		end
 	elseif cmd:sub(1, 4) == "pull" then
-		if IsEncounterInProgress() then return end
-		if DBM:GetRaidRank() == 0 then
+		if DBM:GetRaidRank() == 0 or IsEncounterInProgress() then
 			return DBM:AddMsg(DBM_ERROR_NO_PERMISSION)
 		end
 		local timer = tonumber(cmd:sub(5)) or 10
 		local channel = (IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT") or (IsInRaid() and "RAID_WARNING") or "PARTY"
-		DBM:CreatePizzaTimer(timer, DBM_CORE_TIMER_PULL, true)
 		DBM:Unschedule(SendChatMessage)
-		SendChatMessage(DBM_CORE_ANNOUNCE_PULL:format(timer), channel)
-		for i = 1, 5 do
-			if timer > i then
-				DBM:Schedule(timer - i, SendChatMessage, DBM_CORE_ANNOUNCE_PULL:format(i), channel)
+		if IsInGroup() and timer > 1 then
+			SendChatMessage(DBM_CORE_ANNOUNCE_PULL:format(timer), channel)--Still give everyone first raid warning (but only that one)
+			for i = 1, 5 do
+				if timer > i then
+					DBM:Schedule(timer - i, SendChatMessage, ("*** %s ***"):format(DBM_CORE_ANNOUNCE_PULL:format(i)), channel)--Filter the raid warning based countdown though. These are mainly for those who have no boss mod (bigwigs or DBM). Boss mod users don't need a raid warning countdown, they have a local one
+				end
 			end
+			DBM:Schedule(timer, SendChatMessage, ("*** %s ***"):format(DBM_CORE_ANNOUNCE_PULL_NOW), channel)--^
 		end
-		DBM:Schedule(timer, SendChatMessage, DBM_CORE_ANNOUNCE_PULL_NOW, channel)
 		sendSync("PT", timer)
 	elseif cmd:sub(1, 5) == "cpull" then
-		if DBM:GetRaidRank() == 0 then
+		if DBM:GetRaidRank() == 0 or IsEncounterInProgress() then
 			return DBM:AddMsg(DBM_ERROR_NO_PERMISSION)
 		end
 		sendSync("CPT")
@@ -932,7 +941,7 @@ SlashCmdList["DBMRANGE"] = function(msg)
 		DBM.RangeCheck:Hide()
 	else
 		local r = tonumber(msg)
-		if r and (r == 10 or r == 11 or r == 15 or r == 28 or r == 3 or r == 4 or r == 5 or r == 6 or r == 8 or r == 12 or r == 20) then
+		if r and ((r == 10 or r == 11 or r == 15 or r == 28) or (DBM.MapSizes[GetMapInfo()] and r < 31)) then
 			DBM.RangeCheck:Show(r, nil, true)
 		else
 			DBM.RangeCheck:Show(10, nil, true)
@@ -1266,12 +1275,11 @@ do
 end
 
 
----------------------------
---  Raid/Party Handling  --
----------------------------
+-------------------------------------------------
+--  Raid/Party Handling and Unit ID Utilities  --
+-------------------------------------------------
 do
 	local inRaid = false
-	local playerRank = 0
 
 	local function updateAllRoster()
 		if IsInRaid() then
@@ -1368,39 +1376,88 @@ do
 	function DBM:IsInRaid()
 		return inRaid
 	end
+end
+	
+do
+	-- yes, we still do avoid memory allocations during fights; so we don't use a closure around a counter here
+	-- this seems to be the easiest way to write an iterator that returns the unit id *string* as first argument without a memory allocation
+	local function raidIterator(groupMembers, uId)
+		local a, b = uId:byte(-2, -1)
+		local i = (a >= 0x30 and a <= 0x39 and (a - 0x30) * 10 or 0) + b - 0x30
+		if i < groupMembers then
+			return "raid" .. i + 1, i + 1
+		end
+	end
 
+	local function partyIterator(groupMembers, uId)
+		if not uId then
+			return "player", 0
+		elseif uId == "player" then
+			if groupMembers > 0 then
+				return "party1", 1
+			end
+		else
+			local i = uId:byte(-1) - 0x30
+			if i < groupMembers then
+				return "party" .. i + 1, i + 1
+			end
+		end
+	end
+
+	-- returns the unit ids of all raid or party members, including the player's own id
+	-- limitations: will break if there are ever raids with more than 99 players or partys with more than 10
 	function DBM:GetGroupMembers()
-		return math.max(GetNumGroupMembers(), GetNumSubgroupMembers())
-	end
-
-	function DBM:GetRaidRank(name)
-		name = name or UnitName("player")
-		return (raid[name] and raid[name].rank) or 0
-	end
-
-	function DBM:GetRaidSubgroup(name)
-		name = name or UnitName("player")
-		return (raid[name] and raid[name].subgroup) or 0
-	end
-
-	function DBM:GetRaidClass(name)
-		name = name or UnitName("player")
-		return (raid[name] and raid[name].class) or "UNKNOWN"
-	end
-
-	function DBM:GetRaidUnitId(name)
-		name = name or UnitName("player")
-		return (raid[name] and raid[name].id) or "none"
-	end
-
-	function DBM:GetUnitFullName(uId)
-		uId = uId or "player"
-		local name, realm = UnitName(uId)
-		if realm then name = name.."-"..realm end
-		return name
+		if IsInRaid() then
+			return raidIterator, GetNumGroupMembers(), "raid0"
+		else
+			return partyIterator, GetNumSubgroupMembers(), nil
+		end
 	end
 end
 
+function DBM:GetNumGroupMembers()
+	return math.max(GetNumGroupMembers(), GetNumSubgroupMembers())
+end
+
+function DBM:GetRaidRank(name)
+	name = name or UnitName("player")
+	return (raid[name] and raid[name].rank) or 0
+end
+
+function DBM:GetRaidSubgroup(name)
+	name = name or UnitName("player")
+	return (raid[name] and raid[name].subgroup) or 0
+end
+
+function DBM:GetRaidClass(name)
+	name = name or UnitName("player")
+	return (raid[name] and raid[name].class) or "UNKNOWN"
+end
+
+function DBM:GetRaidUnitId(name)
+	name = name or UnitName("player")
+	return (raid[name] and raid[name].id) or "none"
+end
+
+function DBM:GetUnitFullName(uId)
+	uId = uId or "player"
+	local name, realm = UnitName(uId)
+	if realm then name = name.."-"..realm end
+	return name
+end
+
+function DBM:GetBossUnitId(name)
+	for i = 1, 4 do
+		if UnitName("boss" .. i) == name then
+			return "boss" .. i
+		end
+	end
+	for uId in DBM:GetGroupMembers() do
+		if UnitName(uId .. "target") == name and not UnitIsPlayer(uId .. "target") then
+			return uId .. "target"
+		end			
+	end
+end
 
 ---------------
 --  Options  --
@@ -1567,6 +1624,7 @@ do
 				"GROUP_ROSTER_UPDATE",
 				"CHAT_MSG_ADDON",
 				"PLAYER_REGEN_DISABLED",
+				"PLAYER_REGEN_ENABLED",
 				"INSTANCE_ENCOUNTER_ENGAGE_UNIT",
 				"UNIT_DIED",
 				"UNIT_DESTROYED",
@@ -1617,9 +1675,6 @@ do
 				end
 			end)
 		end
-		if DBM.Options.DisableUIFrameFlash then
-			UIFrameFlash = function() end--Yes, this is very bad, tainting a broken blizzard function to avoid it tainting other shit.
-		end
 	end
 end
 
@@ -1633,6 +1688,13 @@ end
 
 function DBM:LFG_PROPOSAL_SUCCEEDED()
 	DBM.Bars:CancelBar(DBM_LFG_INVITE)
+end
+
+function DBM:PLAYER_REGEN_ENABLED()
+	if combatDelay then
+		combatDelay = false
+		collectgarbage("collect")
+	end
 end
 
 function DBM:UPDATE_BATTLEFIELD_STATUS()
@@ -1667,7 +1729,7 @@ function DBM:UPDATE_MOUSEOVER_UNIT()
 					break
 				end
 			end
-		elseif (cId == 62346 or cId == 60491 or cId == 69161) and not IsAddOnLoaded("DBM-Pandaria") then--Mists of Pandaria World Bosses: Anger, Salyis
+		elseif (cId == 62346 or cId == 60491 or cId == 69161 or cId == 69099) and not IsAddOnLoaded("DBM-Pandaria") then--Mists of Pandaria World Bosses: Anger, Salyis
 			for i, v in ipairs(DBM.AddOns) do
 				if v.modId == "DBM-Pandaria" then
 					DBM:LoadMod(v)
@@ -1704,7 +1766,7 @@ function DBM:PLAYER_TARGET_CHANGED()
 					break
 				end
 			end
-		elseif (cId == 62346 or cId == 60491 or cId == 69161) and not IsAddOnLoaded("DBM-Pandaria") then
+		elseif (cId == 62346 or cId == 60491 or cId == 69161 or cId == 69099) and not IsAddOnLoaded("DBM-Pandaria") then
 			for i, v in ipairs(DBM.AddOns) do
 				if v.modId == "DBM-Pandaria" then
 					DBM:LoadMod(v)
@@ -1829,7 +1891,12 @@ function DBM:LoadMod(mod)
 		if DBM_GUI then
 			DBM_GUI:UpdateModList()
 		end
-		collectgarbage("collect")
+		local _, instanceType, difficulty, _, maxPlayers = GetInstanceInfo()
+		if InCombatLockdown() and difficulty == 1 or difficulty == 2 then--In combat in a 5 man. the garbage collect on 5 man party mods is too big to do in combat and causes "script ran too long"
+			combatDelay = true
+		else
+			collectgarbage("collect")
+		end
 		return true
 	end
 end
@@ -1864,7 +1931,6 @@ end
 do
 	local syncHandlers = {}
 	local whisperSyncHandlers = {}
-	local pullnow = false
 
 	-- DBM uses the following prefixes since 4.1 as pre-4.1 sync code is going to be incompatible anways, so this is the perfect opportunity to throw away the old and long names
 	-- M = Mod
@@ -1907,48 +1973,71 @@ do
 	end
 	
 	syncHandlers["CPT"] = function(sender)
-		if not DBM.Options.CountdownPullTimer or select(2, IsInInstance()) == "pvp" or DBM:GetRaidRank(sender) == 0 or not pullnow then
+		if select(2, IsInInstance()) == "pvp" or DBM:GetRaidRank(sender) == 0 or IsEncounterInProgress() then
 			return
 		end
-		DBM.Bars:CancelBar(DBM_CORE_TIMER_PULL)
-		local channel = (IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT") or (IsInRaid() and "RAID_WARNING") or "PARTY"
-		for i = 1, 5 do
-			DBM:Unschedule(SendChatMessage, DBM_CORE_ANNOUNCE_PULL:format(i), channel)
+		if not DBM.Options.DontShowPT and DBM.Bars:GetBar(DBM_CORE_TIMER_PULL) then
+			DBM.Bars:CancelBar(DBM_CORE_TIMER_PULL) 
 		end
-		DBM:Unschedule(SendChatMessage, DBM_CORE_ANNOUNCE_PULL_NOW, channel)
-		DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\5.mp3", "Master")
-		DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\4.mp3", "Master")
-		DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\3.mp3", "Master")
-		DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\2.mp3", "Master")
-		DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\1.mp3", "Master")
-		DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\extrasounds\\com_go.mp3", "Master")
+		if not DBM.Options.DontPlayPTCountdown then
+			DBM:Unschedule(SendChatMessage)
+			DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\5.mp3", "Master")
+			DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\4.mp3", "Master")
+			DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\3.mp3", "Master")
+			DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\2.mp3", "Master")
+			DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\1.mp3", "Master")
+			DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\extrasounds\\com_go.mp3", "Master")
+		end
+		if not DBM.Options.DontShowPTCountdownText then
+			TimerTracker_OnEvent(TimerTracker, "PLAYER_ENTERING_WORLD")--easiest way to nil out timers on TimerTracker frame. This frame just has no actual star/stop functions :\
+		end
 		DBM:AddMsg("<"..sender..">"..DBM_CORE_ANNOUNCE_PULL_CANCEL)
-		pullnow = false
 	end
 	
 	local dummyMod -- dummy mod for the pull sound effect
 	syncHandlers["PT"] = function(sender, timer)
-		if not DBM.Options.CountdownPullTimer or select(2, IsInInstance()) == "pvp" or DBM:GetRaidRank(sender) == 0 then
+		if select(2, IsInInstance()) == "pvp" or DBM:GetRaidRank(sender) == 0 or IsEncounterInProgress() then
 			return
 		end
 		timer = tonumber(timer or 0)
-		if timer < 2 or timer > 60 then
+		if timer > 60 then
 			return
 		end
-		pullnow = true
 		if not dummyMod then
 			dummyMod = DBM:NewMod("PullTimerCountdownDummy")
 			dummyMod.countdown = dummyMod:NewCountdown(0, 0)
 		end
---		dummyMod.countdown:Start(timer)
-		PlaySoundFile("Interface\\AddOns\\DBM-Core\\Sounds\\win.ogg", "Master")
-		if timer > 5 then DBM:Schedule(timer-5.5, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\5.mp3", "Master") end
-		if timer > 5 then DBM:Schedule(timer-4.5, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\4.mp3", "Master") end
-		if timer > 3 then DBM:Schedule(timer-3.5, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\3.mp3", "Master") end
-		if timer > 3 then DBM:Schedule(timer-2.5, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\2.mp3", "Master") end
-		if timer > 3 then DBM:Schedule(timer-1.5, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\1.mp3", "Master") end
-		if timer > 3 then DBM:Schedule(timer-0.5, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\extrasounds\\com_go.mp3", "Master") end
-		DBM:Schedule(timer, function() pullnow = false end)
+		--Cancel any existing pull timers before creating new ones, we don't want double countdowns or mismatching blizz countdown text (cause you can't call another one if one is inp rogress)
+		if not DBM.Options.DontShowPT and DBM.Bars:GetBar(DBM_CORE_TIMER_PULL) then
+			DBM.Bars:CancelBar(DBM_CORE_TIMER_PULL) 
+		end
+		if not DBM.Options.DontPlayPTCountdown then
+			DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\5.mp3", "Master")
+			DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\4.mp3", "Master")
+			DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\3.mp3", "Master")
+			DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\2.mp3", "Master")
+			DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\1.mp3", "Master")
+			DBM:Unschedule(PlaySoundFile, "Interface\\AddOns\\DBM-Core\\extrasounds\\com_go.mp3", "Master")
+		end
+		if not DBM.Options.DontShowPTCountdownText then
+			TimerTracker_OnEvent(TimerTracker, "PLAYER_ENTERING_WORLD")--easiest way to nil out timers on TimerTracker frame. This frame just has no actual star/stop functions :\
+		end
+		if timer == 0 then return DBM:AddMsg("<"..sender..">"..DBM_CORE_ANNOUNCE_PULL_CANCEL) end--"/dbm pull 0" will strictly be used to cancel the pull timer (which is w hy we let above part of code run but not below)
+		if not DBM.Options.DontShowPT then
+			DBM.Bars:CreateBar(timer, DBM_CORE_TIMER_PULL, "Interface\\Icons\\Spell_Holy_BorrowedTime")
+		end
+		if not DBM.Options.DontPlayPTCountdown then
+			PlaySoundFile("Interface\\AddOns\\DBM-Core\\Sounds\\win.ogg", "Master")
+			if timer > 5 then DBM:Schedule(timer-5, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\5.mp3", "Master") end
+			if timer > 5 then DBM:Schedule(timer-4, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\4.mp3", "Master") end
+			if timer > 3 then DBM:Schedule(timer-3, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\3.mp3", "Master") end
+			if timer > 3 then DBM:Schedule(timer-2, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\2.mp3", "Master") end
+			if timer > 3 then DBM:Schedule(timer-1, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\Sounds\\Mosh\\1.mp3", "Master") end
+			if timer > 1 then DBM:Schedule(timer, PlaySoundFile, "Interface\\AddOns\\DBM-Core\\extrasounds\\com_go.mp3", "Master") end
+		end
+		if not DBM.Options.DontShowPTCountdownText then
+			TimerTracker_OnEvent(TimerTracker, "START_TIMER", 2, timer, timer)--Hopefully this doesn't taint. Initial tests show positive even though it is an intrusive way of calling a blizzard timer. It's too bad the max value doesn't seem to actually work
+		end
 	end
 
 	-- TODO: is there a good reason that version information is broadcasted and not unicasted?
@@ -2710,7 +2799,8 @@ function DBM:EndCombat(mod, wipe)
 		if not wipe then
 			mod.lastKillTime = GetTime()
 			if mod.inCombatOnlyEvents then
-				mod:UnregisterInCombatEvents()
+				--mod:UnregisterInCombatEvents()
+				DBM:Schedule(3, mod.UnregisterInCombatEvents, mod) -- Delay unregister events to make sure icon clear functions get to run their course. We want to catch some SPELL_AURA_REMOVED events that fire after boss death and get those icons cleared
 				mod.inCombatOnlyEventsRegistered = nil
 			end
 		end
@@ -3242,7 +3332,11 @@ do
 		if not msg and self then -- compatibility mode!
 			return filterRaidWarning(nil, nil, self, event)
 		end
-		return DBM.Options.SpamBlockRaidWarning and type(msg) == "string" and (not not msg:match("^%s*%*%*%*")), ...
+		return type(msg) == "string" and (not not msg:match("^%s*%*%*%*")), ...
+	end
+
+	local function filterSayYell(self, event, ...)
+		return DBM.Options.FilterSayAndYell and #inCombat > 0, ...
 	end
 
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER_INFORM", filterOutgoing)
@@ -3252,13 +3346,15 @@ do
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID_WARNING", filterRaidWarning)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY", filterRaidWarning)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY_LEADER", filterRaidWarning)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", filterSayYell)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", filterSayYell)
 end
 
 
 do
 	local old = RaidWarningFrame:GetScript("OnEvent")
 	RaidWarningFrame:SetScript("OnEvent", function(self, event, msg, ...)
-		if DBM.Options.SpamBlockRaidWarning and msg:find("%*%*%* .* %*%*%*") then
+		if msg:find("%*%*%* .* %*%*%*") then
 			return
 		end
 		return old(self, event, msg, ...)
@@ -3317,6 +3413,7 @@ do
 	local testTimer
 	local testSpecialWarning1
 	local testSpecialWarning2
+	local testSpecialWarning3
 	function DBM:DemoMode()
 		if not testMod then
 			testMod = DBM:NewMod("TestMod")
@@ -3326,6 +3423,7 @@ do
 			testTimer = testMod:NewTimer(20, "%s")
 			testSpecialWarning1 = testMod:NewSpecialWarning("%s")
 			testSpecialWarning2 = testMod:NewSpecialWarning("%s", nil, nil, nil, true)
+			testSpecialWarning3 = testMod:NewSpecialWarning("%s", nil, nil, nil, 3)
 		end
 		testTimer:Start(20, "Pew Pew Pew...")
 		testTimer:UpdateIcon("Interface\\Icons\\Spell_Nature_Starfall", "Pew Pew Pew...")
@@ -3340,6 +3438,7 @@ do
 		testWarning3:Cancel()
 		testSpecialWarning1:Cancel()
 		testSpecialWarning2:Cancel()
+		testSpecialWarning3:Cancel()
 		testWarning1:Show("Test-mode started...")
 		testWarning1:Schedule(62, "Test-mode finished!")
 		testWarning3:Schedule(50, "Boom in 10 sec!")
@@ -3347,7 +3446,8 @@ do
 		testWarning2:Schedule(38, "Evil Spell in 5 sec!")
 		testWarning2:Schedule(43, "Evil Spell!")
 		testWarning1:Schedule(10, "Test bar expired!")
-		testSpecialWarning1:Schedule(43, "Evil Spell!")
+		testSpecialWarning1:Schedule(20, "Pew Pew Laser Owl")
+		testSpecialWarning3:Schedule(43, "Evil Spell!")
 		testSpecialWarning2:Schedule(60, "Boom!")
 	end
 end
@@ -3608,13 +3708,7 @@ function bossModPrototype:GetCIDFromGUID(guid)
 end
 
 local bossTargetuIds = {
-	[1] = "target",
-	[2] = "focus",
-	[3] = "boss1",
-	[4] = "boss2",
-	[5] = "boss3",
-	[6] = "boss4",
-	[7] = "boss5"
+	"target", "focus", "boss1", "boss2", "boss3", "boss4", "boss5"
 }
 
 function bossModPrototype:GetBossTarget(cid)
@@ -3885,11 +3979,6 @@ do
 	-- TODO: this function is an abomination, it needs to be rewritten. Also: check if these work-arounds are still necessary
 	function announcePrototype:Show(...) -- todo: reduce amount of unneeded strings
 		if not self.option or self.mod.Options[self.option] then
-			if self.mod.Options.Announce and not DBM.Options.DontSendBossAnnounces and (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) then
-				local message = pformat(self.text, ...)
-				message = message:gsub("|3%-%d%((.-)%)", "%1") -- for |3-id(text) encoding in russian localization
-				SendChatMessage(("*** %s ***"):format(message), IsInRaid() and "RAID_WARNING" or "PARTY")
-			end
 			if DBM.Options.DontShowBossAnnounces then return end	-- don't show the announces if the spam filter option is set
 			local colorCode = ("|cff%.2x%.2x%.2x"):format(self.color.r * 255, self.color.g * 255, self.color.b * 255)
 			local text = ("%s%s%s|r%s"):format(
@@ -4362,10 +4451,11 @@ do
 			frame:SetAlpha(1)
 			frame.timer = 5
 			if self.sound then
+				if self.runSound == true then self.runSound = 2 end--Hack to make old mods using "true" to be 2 instead so compatability isn't broken.
 				if DBM.Options.UseMasterVolume then
-					PlaySoundFile(self.runSound and DBM.Options.SpecialWarningSound2 or DBM.Options.SpecialWarningSound, "Master")
+					PlaySoundFile(self.runSound == 2 and DBM.Options.SpecialWarningSound2 or self.runSound == 3 and DBM.Options.SpecialWarningSound3 or DBM.Options.SpecialWarningSound, "Master")
 				else
-					PlaySoundFile(self.runSound and DBM.Options.SpecialWarningSound2 or DBM.Options.SpecialWarningSound)
+					PlaySoundFile(self.runSound == 2 and DBM.Options.SpecialWarningSound2 or self.runSound == 3 and DBM.Options.SpecialWarningSound3 or DBM.Options.SpecialWarningSound)
 				end
 			end
 		end

@@ -4,7 +4,7 @@ local L = DBM_GUI_Translations
 
 L.MainFrame = "Deadly Boss Mods"
 
-L.TranslationBy 			= "Nitram, Tandanu & Tennberg"
+L.TranslationBy 			= "Translated by: Nitram, Tandanu & Tennberg"
 
 L.OTabBosses	= "Bosses"
 L.OTabOptions	= "Options"
@@ -30,7 +30,6 @@ L.Button_OK 				= 'OK'
 L.Button_Cancel 			= 'Cancel'
 L.Button_LoadMod 			= 'Load AddOn'
 L.Mod_Enabled				= "Enable boss mod"
-L.Mod_EnableAnnounce		= "Announce to raid (Leader required)"
 L.Reset 					= "Reset"
 
 L.Enable  					= "Enable"
@@ -100,6 +99,7 @@ L.RaidWarnSound				= "Play sound on raid warning"
 L.CountdownVoice			= "Set voice for countdown and countout sounds"
 L.SpecialWarnSound			= "Set sound for special warnings affecting you or your specific role"
 L.SpecialWarnSound2			= "Set sound for special warnings affecting everyone"
+L.SpecialWarnSound3			= "Set sound for VERY important special warnings (devastating to you or raid)"
 
 -- Tab: Generalwarnings
 L.Tab_GeneralMessages 		= "General Messages"
@@ -162,19 +162,23 @@ L.BarWidth					= "Bar width: %d"
 L.Panel_SpamFilter				= "Global and Spam Filters"
 L.Area_SpamFilter				= "Spam Filter Options"
 L.HideBossEmoteFrame			= "Hide raid boss emote frame"
-L.SpamBlockRaidWarning			= "Filter announces from other boss mods" 
 L.SpamBlockBossWhispers			= "Filter <DBM> warning whispers while fighting"
 L.BlockVersionUpdateNotice		= "Disable update notification popup"
 L.ShowBigBrotherOnCombatStart	= "Perform Big Brother buff check on combat start"
 L.BigBrotherAnnounceToRaid		= "Announce Big Brother results to raid"
+L.SpamBlockSayYell				= "Hide chat bubbles announces from the chat frame"
 
 L.Area_SpamFilter_Outgoing		= "Global Filter Options"
 L.SpamBlockNoShowAnnounce		= "Do not show announces or play warning sounds"
-L.SpamBlockNoSendAnnounce		= "Do not send announces to raid chat"
 L.SpamBlockNoSendWhisper		= "Do not send whispers to other players"
 L.SpamBlockNoSetIcon			= "Do not set icons on targets"
 L.SpamBlockNoRangeFrame			= "Do not show range frame"
 L.SpamBlockNoInfoFrame			= "Do not show info frame"
+
+L.Area_PullTimer				= "Pull Timer Filter Options"
+L.DontShowPT					= "Do not show Pull Timer bar"
+L.DontShowPTCountdownText		= "Do not show Pull Timer countdown text"
+L.DontPlayPTCountdown			= "Do not play Pull Timer countdown audio"
 
 -- Misc
 L.FontHeight	= 16

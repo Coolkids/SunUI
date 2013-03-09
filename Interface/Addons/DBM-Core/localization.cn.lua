@@ -1,6 +1,6 @@
 ﻿-- Simplified Chinese by Diablohu(diablohudream@gmail.com) & yleaf(yaroot@gmail.com)
 -- merge traslation by bigfoot team  - yleaf 9-10-2010
--- Last update: 11/22/2012
+-- Last update: 2/25/2013
 
 if GetLocale() ~= "zhCN" then return end
 
@@ -32,7 +32,7 @@ DBM_CORE_OK							= "确定"
 
 DBM_CORE_GENERIC_WARNING_BERSERK	= "%s%s后狂暴"
 DBM_CORE_GENERIC_TIMER_BERSERK		= "狂暴"
-DBM_CORE_OPTION_TIMER_BERSERK		= "狂暴倒计时"
+DBM_CORE_OPTION_TIMER_BERSERK		= "计时条：$spell:26662"
 DBM_CORE_OPTION_HEALTH_FRAME		= "首领生命值窗口"
 
 DBM_CORE_OPTION_CATEGORY_TIMERS		= "计时条"
@@ -89,8 +89,8 @@ DBM_CORE_RANGECHECK_OPTION_SPEED	= "更新频率（重载界面后生效）"
 DBM_CORE_RANGECHECK_OPTION_SLOW		= "慢（适用于低端CPU）"
 DBM_CORE_RANGECHECK_OPTION_AVERAGE	= "中"
 DBM_CORE_RANGECHECK_OPTION_FAST		= "快（几乎实时）"
-DBM_CORE_RANGERADAR_HEADER		= "距离雷达（%d码）"
-DBM_CORE_RANGERADAR_IN_RANGE_TEXT	= "%d名玩家在距离内"
+DBM_CORE_RANGERADAR_HEADER			= "距离雷达（%d码）"
+DBM_CORE_RANGERADAR_IN_RANGE_TEXT	= "%d人在监视距离内"
 
 DBM_CORE_INFOFRAME_LOCK				= "锁定框体"
 DBM_CORE_INFOFRAME_HIDE				= "隐藏"
@@ -120,6 +120,10 @@ DBM_CORE_ALLIANCE					= "联盟"
 DBM_CORE_HORDE						= "部落"
 
 DBM_CORE_UNKNOWN					= "未知"
+DBM_CORE_LEFT						= "左"
+DBM_CORE_RIGHT						= "右"
+DBM_CORE_BACK						= "后"
+DBM_CORE_FRONT						= "前"
 
 DBM_CORE_BREAK_START				= "开始休息 - %s分钟！"
 DBM_CORE_BREAK_MIN					= "%s分钟后休息结束！"

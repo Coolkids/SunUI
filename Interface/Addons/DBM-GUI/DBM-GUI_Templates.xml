@@ -687,10 +687,10 @@
 					self:CreateButtons( _G[self:GetName().."DBMOptions"] )
 					self:UpdateMenuFrame( _G[self:GetName().."BossMods"] )
 				end
-				if math.random(1,2) == 0 then	-- who is first? hmm lets do it random :)
-					_G[self:GetName().."Authors"]:SetText("DBMv4 by Nitram@EU-Azshara and Tandanu@EU-Aegwynn - visit www.deadlybossmods.com")
+				if math.random(1,2) == 1 then	-- who is first? hmm lets do it random :)
+					_G[self:GetName().."Authors"]:SetText("DBM-MoP 新語音由聲優 芷小芸 &lt;黑手之城&gt; ＠世界之樹 (TW-World Tree) 錄製")
 				else
-					_G[self:GetName().."Authors"]:SetText("DBM-MoP語音增強模塊由 紫嬰之心&lt;黑手之鄉&gt;＠眾星之子(TW-Quel'dorei)製作維護")
+					_G[self:GetName().."Authors"]:SetText("DBM-MoP 語音增強模塊由 紫嬰 &lt;黑手之城&gt; ＠世界之樹 (TW-World Tree) 製作")
 				end
 			</OnShow>
 			<OnDragStart>

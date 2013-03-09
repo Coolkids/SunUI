@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 7848 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8777 $"):sub(12, -3))
 mod:SetCreatureID(62346)--Salyis not dies. Only Galleon attackable and dies.
 mod:SetModelID(42439)	--Galleon=42439, Salyis=42468 / main boss is Galleon
 mod:SetZone(807)--Valley of the Four winds
@@ -14,11 +14,12 @@ mod:RegisterEventsInCombat(
 	"RAID_BOSS_EMOTE"
 )
 
-local warnCannonBarrage			= mod:NewSpellAnnounce(121600, 4)
-local warnStomp					= mod:NewSpellAnnounce(121787, 3)
+local warnCannonBarrage			= mod:NewSpellAnnounce(121600, 3)
+local warnStomp					= mod:NewCastAnnounce(121787, 3)
 local warnWarmonger				= mod:NewSpellAnnounce("ej6200", 2, 121747)
 
 local specWarnCannonBarrage		= mod:NewSpecialWarningSpell(121600, mod:IsTank())
+local specWarnStomp				= mod:NewSpecialWarningSpell(121787, nil, nil, nil, 2)
 local specWarnWarmonger			= mod:NewSpecialWarningSwitch("ej6200", not mod:IsHealer())
 
 local timerCannonBarrageCD		= mod:NewNextTimer(60, 121600)
@@ -45,6 +46,7 @@ function mod:RAID_BOSS_EMOTE(msg)
 		end
 	elseif msg:find("spell:121787") then
 		warnStomp:Show()
+		specWarnStomp:Show()
 		warnWarmonger:Schedule(10)
 		specWarnWarmonger:Schedule(10)
 		sndWOP:Schedule(10, "Interface\\AddOns\\DBM-Core\\extrasounds\\mobsoon.mp3") --準備小怪

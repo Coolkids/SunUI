@@ -1,4 +1,4 @@
-## Interface: 50100
+## Interface: 50200
 ## X-Curse-Packaged-Version: 5.1.0.41-Beta
 ## X-Curse-Project-Name: Buffet
 ## X-Curse-Project-ID: buffet

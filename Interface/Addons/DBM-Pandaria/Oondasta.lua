@@ -3,10 +3,10 @@ local mod	= DBM:NewMod(826, "DBM-Pandaria", nil, 322)
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8525 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8773 $"):sub(12, -3))
 mod:SetCreatureID(69161)--Not yet available in PTR, CID not known
 --mod:SetModelID(41448)
-mod:SetZone(929)--No map ID for area yet. Lightning Isle
+mod:SetZone(929)--Isle of Giants
 
 mod:RegisterCombat("combat")
 mod:SetWipeTime(120)
@@ -41,14 +41,16 @@ local numberTanks = 0
 local function isTank(unit)
 	-- 1. check blizzard tanks first
 	-- 2. check blizzard roles second
-	-- 3. check boss1's highest threat target
+	-- 3. check boss's current target
 	if GetPartyAssignment("MAINTANK", unit, 1) then
 		return true
 	end
 	if UnitGroupRolesAssigned(unit) == "TANK" then
 		return true
 	end
-	if UnitExists("boss1target") and UnitDetailedThreatSituation(unit, "boss1") then
+	--Since this is checked on pull, it will fail if someone other than tank facepulls it (or rathor think that dps is a tank
+	local targetname, uId = mod:GetBossTarget(69161)
+	if targetname and UnitIsUnit(unit, uId) then
 		return true
 	end
 	return false
@@ -84,7 +86,7 @@ function mod:OnCombatEnd()
 end
 
 function mod:SPELL_CAST_START(args)
-	if args:IsSpellID(137457) then --咆哮
+	if args:IsSpellID(137457) then
 		warnPiercingRoar:Show()
 		timerPiercingRoarCD:Start()
 		if mod:IsManaUser() and mod:IsRanged() then
@@ -92,28 +94,23 @@ function mod:SPELL_CAST_START(args)
 			specWarnPiercingRoar:Show()
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\stopcast.mp3") --停止施法
 		end
-	elseif args:IsSpellID(137505) then --衝擊
+	elseif args:IsSpellID(137505) then --fix spellid
 		warnFrillBlast:Show()
 		specWarnFrillBlast:Show()
 		timerFrillBlastCD:Start()
-		if mod:IsTank() then
-			DBM.Flash:Show(1, 0, 0)
-			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop2_cjkd.mp3") --衝擊快躲(待錄)
-		else
-			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop2_cjzb.mp3") --衝擊準備(待錄)
-		end
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\watchwave.mp3") --衝擊波
 	end
 end
 
 function mod:SPELL_CAST_SUCCESS(args)
-	if args:IsSpellID(137511) then  --眼棱
+	if args:IsSpellID(137511) then
 		warnSpiritfireBeam:Show(args.destName)
 		timerSpiritfireBeamCD:Start()
 	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(137504) then --破甲
+	if args:IsSpellID(137504) then
 		if numberTanks == 0 then--We DCed and need to check again
 			findTanks()
 		end

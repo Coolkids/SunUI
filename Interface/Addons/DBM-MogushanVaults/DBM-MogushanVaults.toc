@@ -1,4 +1,4 @@
-﻿## Interface: 50100
+﻿## Interface: 50200
 ## X-Min-Interface: 50001
 ## Title:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Mogu'shan Vaults|r
 ## Title-zhTW:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0魔古山寶庫  (MV)|r
@@ -13,7 +13,7 @@
 ## X-DBM-Mod-Name: Mogu'shan Vaults
 ## X-DBM-Mod-Name-zhTW: 魔古山寶庫  (MV)
 ## X-DBM-Mod-Name-zhCN: 魔古山宝库
-## X-DBM-Mod-Sort: 1
+## X-DBM-Mod-Sort: 4
 ## X-DBM-Mod-LoadZoneID: 896
 localization.en.lua
 localization.tw.lua

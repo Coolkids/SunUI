@@ -29,6 +29,9 @@ if GetLocale() == "ruRU" then
 		m = "м",
 		s = "с",
 		-- BossIDs
+		twin = "Наложницы-близнецы",
+		mega = "Мегера",
+		elder = "Совет Старейшин",
 		prot = "Стражи Бесконечности",
 		stone = "Каменные стражи",
 		kings = "Призрачные короли",
@@ -72,6 +75,9 @@ elseif GetLocale() == "zhTW" then
 		m = "m",
 		s = "s",
 		-- BossIDs
+		twin = "Twin Consorts",
+		mega = "Megaera",
+		elder = "Council of Elders",
 		prot = "豐泉守衛者",
 		stone = "石衛士",
 		kings = "帝王之魂",
@@ -115,6 +121,9 @@ elseif GetLocale() == "zhCN" then
 		m = "m",
 		s = "s",
 		-- BossIDs
+		twin = "Twin Consorts",
+		mega = "Megaera",
+		elder = "Council of Elders",
 		prot = "无尽守护者",
 		stone = "石头守卫",
 		kings = "先王之魂",
@@ -158,6 +167,9 @@ else
 		m = "m",
 		s = "s",
 		-- BossIDs
+		twin = "Twin Consorts",
+		mega = "Megaera",
+		elder = "Council of Elders",
 		prot = "Protectors of the Endless",
 		stone = "Stone Guard",
 		kings = "The Spirit Kings",

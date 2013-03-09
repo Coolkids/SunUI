@@ -295,15 +295,11 @@ S.ReskinDropDown = function(f)
 end
 
 local function colourClose(f)
-	for _, pixel in pairs(f.pixels) do
-		pixel:SetVertexColor(r, g, b)
-	end
+	f.text:SetTextColor(1, 0.2, 0.2)
 end
 
 local function clearClose(f)
-	for _, pixel in pairs(f.pixels) do
-		pixel:SetVertexColor(1, 1, 1)
-	end
+	f.text:SetTextColor(r, g, b)
 end
 
 S.ReskinClose = function(f, a1, p, a2, x, y)
@@ -324,22 +320,13 @@ S.ReskinClose = function(f, a1, p, a2, x, y)
 	S.CreateBD(f, 0)
 
 	S.CreateGradient(f)
-
-	f.pixels = {}
-
-	for i = 1, 9 do
-		local tex = f:CreateTexture()
-		tex:SetTexture(1, 1, 1)
-		tex:Size(1, 1)
-		tex:SetPoint("BOTTOMLEFT", 3+i, 3+i)
-	end
-
-	for i = 1, 9 do
-		local tex = f:CreateTexture()
-		tex:SetTexture(1, 1, 1)
-		tex:Size(1, 1)
-		tex:SetPoint("TOPLEFT", 3+i, -3-i)
-	end
+	
+	local text = f:CreateFontString(nil, "OVERLAY")
+	text:SetFont(DB.Font, DB.FontSize, "THINOUTLINE")
+	text:SetPoint("CENTER", 1, 1)
+	text:SetText("x")
+	f.text = text
+	
 
 	f:HookScript("OnEnter", colourClose)
  	f:HookScript("OnLeave", clearClose)
@@ -377,7 +364,7 @@ S.ReskinArrow = function(f, direction)
 	tex:SetSize(8, 8)
 	tex:SetPoint("CENTER")
 
-	tex:SetTexture("Interface\\AddOns\\Aurora\\media\\arrow-"..direction.."-active")
+	tex:SetTexture("Interface\\AddOns\\SunUI\\media\\arrow-"..direction.."-active")
 end
 
 S.ReskinCheck = function(f)

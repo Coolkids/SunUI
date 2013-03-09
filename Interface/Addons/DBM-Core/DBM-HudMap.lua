@@ -1380,11 +1380,14 @@ do
 		local e = px - dx
 		local f = py - dy
 		local distance = math_sqrt((e*e)+(f*f)) + offset
-		local scaleFactor = 1 - (db.maxSize / distance)
-		if distance > db.maxSize then
-			dx = dx + (scaleFactor * e)
-			dy = dy + (scaleFactor * f)
-			clipped = true
+		local scaleFactor
+		if distance ~= 0 then
+			scaleFactor = 1 - (db.maxSize / distance)
+			if distance > db.maxSize then
+				dx = dx + (scaleFactor * e)
+				dy = dy + (scaleFactor * f)
+				clipped = true
+			end
 		end
 		return dx, dy
 	end

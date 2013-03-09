@@ -52,6 +52,7 @@ local specWarnShot						= mod:NewSpecialWarningStack(119086, true, 2)
 local specWarnshuipoYou					= mod:NewSpecialWarningMove(120519)
 local specWarnzyg						= mod:NewSpecialWarning("specWarnzyg")
 local specWarnshuipo					= mod:NewSpecialWarningSpell(120519, nil, nil, nil, true)
+local specWarnWaterspoutNear			= mod:NewSpecialWarningClose(120519)
 local specWarnyinmo						= mod:NewSpecialWarning("specWarnyinmo")
 local specWarnfuxian					= mod:NewSpecialWarning("specWarnfuxian")
 local specWarnweisuo					= mod:NewSpecialWarning("specWarnweisuo")
@@ -401,13 +402,26 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif args:IsSpellID(120519) then --水魄
 		waterspoutTargets[#waterspoutTargets + 1] = args.destName
-		if args:IsPlayer() then
+		if args:IsPlayer() and self:AntiSpam(5, 20) then
 			specWarnshuipoYou:Show()
 			yellshuipo:Yell()
 			if not UnitBuff("player", GetSpellInfo(120268)) then
 				DBM.Flash:Show(1, 0, 0)
 				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runout.mp3")
 			end
+		else
+ 			local uId = DBM:GetRaidUnitId(args.destName)
+ 			if uId then
+				local inRange = CheckInteractDistance(uId, 3)
+				if inRange then
+					self:Schedule(0.3, function()
+						if self:AntiSpam(5, 20) then
+							specWarnWaterspoutNear:Show(args.destName)
+							sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\keepmove.mp3")
+						end
+					end)
+ 				end
+ 			end
 		end
 		self:Unschedule(warnWaterspoutTargets)
 		self:Schedule(0.3, warnWaterspoutTargets)

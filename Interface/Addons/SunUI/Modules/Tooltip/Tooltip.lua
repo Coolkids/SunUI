@@ -224,7 +224,7 @@ local function On_OnTooltipSetUnit(self)
 		end
 	end
 end
-local function On_PLAYER_ENTERING_WORLD()
+function Module:PLAYER_ENTERING_WORLD()
 	Module:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	for _, v in pairs(tooltips) do
 		v:SetScale(scale)
@@ -376,6 +376,8 @@ function Module:OnInitialize()
 	end
 	C=SunUIConfig.db.profile.TooltipDB
 	SkinTooltip()
+	self:RegisterEvent("PLAYER_ENTERING_WORLD")
+	tooptexture = GameTooltipStatusBar:GetStatusBarTexture()
 	GameTooltip:HookScript("OnTooltipSetUnit", On_OnTooltipSetUnit)
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", On_SetDefaultAnchor)
 	GameTooltip:HookScript("OnUpdate", On_ANCHOR_CURSOR)

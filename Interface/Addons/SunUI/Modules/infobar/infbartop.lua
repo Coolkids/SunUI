@@ -106,7 +106,7 @@ local Stat = CreateFrame("Frame", "InfoPanel1", TopInfoPanel)
 			else
 				fpscolor = "|cffD80909"
 			end
-			Text:SetText(fpscolor..fps.."|r".."fps  "..colorlatency(latencyHome).."|r/"..colorlatency(latencyWorld).."|r".."ms")
+			Text:SetText(fpscolor..fps.."|r".."FPS  "..colorlatency(latencyHome).."|r/"..colorlatency(latencyWorld).."|r".."ms")
 			int = 0.8
 		end
 	end
@@ -126,7 +126,7 @@ local Stat = CreateFrame("Frame", "InfoPanel1", TopInfoPanel)
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine("System", 0.4, 0.78, 1)
 		GameTooltip:AddLine(" ")
-		GameTooltip:AddDoubleLine("FPS", fps, 0.75, 0.9, 1)
+		GameTooltip:AddDoubleLine(FRAMERATE_LABEL, fps, 0.75, 0.9, 1)
 		GameTooltip:AddDoubleLine(L["本地延迟"], latencyHome.."ms", 0.75, 0.9, 1, r1, g1, b1)
 		GameTooltip:AddDoubleLine(L["世界延迟"], latencyWorld.."ms", 0.75, 0.9, 1, r2, g2, b2)
 		if bandwidth ~= 0 then

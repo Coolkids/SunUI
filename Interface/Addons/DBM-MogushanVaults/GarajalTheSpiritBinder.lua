@@ -91,7 +91,7 @@ mod:AddDropdownOption("optindex", {"noidex", "index1", "index2", "index3", "inde
 
 mod:AddDropdownOption("countTT", {"countnone", "count3", "count4"}, "countnone", "sound")
 
-if GetGuildInfo("player") == "黑手之鄉" then
+if string.find(GetGuildInfo("player"), "黑手") then
 	mod:AddDropdownOption("optjs", {"non", "paltank", "monktank", "druid", "priest", "palheal", "warrior1", "warrior2", "paldps1", "paldps2"}, "non", "sound")
 end
 

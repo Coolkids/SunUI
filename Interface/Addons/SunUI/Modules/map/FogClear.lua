@@ -17,7 +17,6 @@ local mod, floor, ceil = math.fmod, math.floor, math.ceil
 local strlower, format = string.lower, string.format
 local wipe, tinsert, pairs = table.wipe, table.insert, pairs
 
-
 local errata = {
 	-- Eastern Kingdoms
 	["Arathi"] = {
@@ -1280,6 +1279,24 @@ local errata = {
 		["DojaniRiver"] = 3759433918,
 		["AnglersOutpost"] = 220688746761,
 	},
+	["Krasarang_terrain1"] = {
+		["ZHUSBASTION"] = 641937714,
+		["FALLSONGRIVER"] = 82907112662,
+		["DOJANIRIVER"] = 3759433918,
+		["RUINSOFDOJAN"] = 47710600396,
+		["THEDEEPWILD"] = 63767474364,
+		["NAYELILAGOON"] = 400865607926,
+		["UNGAINGOO"] = 535069632770,
+		["KRASARANGCOVE"] = 21136446759,
+		["RUINSOFKORJA"] = 94620757203,
+		["LOSTDYNASTY"] = 29608926425,
+		["THESOUTHERNISLES"] = 286689404179,
+		["ANGLERSOUTPOST"] = 215320042843,
+		["THEFORBIDDENJUNGLE"] = 84825911553,
+		["REDWINGREFUGE"] = 67978405076,
+		["TEMPLEOFTHEREDCRANE"] = 231169330395,
+		["CRADLEOFCHIJI"] = 403911731472,
+	},
 	["ValleyoftheFourWinds"] = {
 		["KuzenVillage"] = 79692087495,
 		["CliffsofDispair"] = 434017411582,
@@ -1303,6 +1320,7 @@ local errata = {
 	["TheHiddenPass"] = {
 		["TheHiddenSteps"] = 512607059234,
 		["TheBlackMarket"] = 188294346207,
+		["TheHiddenCliffs"] = 454258982,
 	},
 	["KunLaiSummit"] = {
 		["Mogujia"] = 441792545021,
@@ -1360,14 +1378,10 @@ local errata = {
 		["KYPARIVOR"] = 508754245,
 		["ZANVESS"] = 413560761634,
 	},
+	["IsleoftheThunderKing"] = {
+	},
 	['*'] = {},
 }
-
--- errata.Hyjal_terrain1 = errata.Hyjal
--- errata.Uldum_terrain1 = errata.Uldum
--- errata.Gilneas_terrain1 = errata.Gilneas
--- errata.Gilneas_terrain2 = errata.Gilneas
--- errata.Krasarang_terrain1 = errata.Krasarang
 
 local db
 local defaults = {
@@ -1464,19 +1478,21 @@ local function updateOverlayTextures(frame, frameName, textureCache, scale, alph
 	if strmatch(mapFileName, "%_terrain(.+)") then mapFileName = mapFileName:gsub("%_terrain(.+)","") end
 	--print(mapFileName)
 	local overlayMap = self.overlays[mapFileName]
-
+	--if overlayMap == nil then return end
 	local numOverlays = self.hooks.GetNumMapOverlays()
 	local pathLen = strlen(pathPrefix) + 1
+	
 	for i=1, numOverlays do
 		local texName, texWidth, texHeight, offsetX, offsetY = GetMapOverlayInfo(i)
 		texName = strsub(texName, pathLen)
 		local texID = texWidth + texHeight * 2^10 + offsetX * 2^20 + offsetY * 2^30
+		--print("['"..texName.."'] = "..texID)
 		if texID ~= 0 and texID ~= 131200 and texName ~= "" and strlower(texName) ~= "pixelfix" then
 			discoveredOverlays[texName] = texID
-			for k,v in pairs(overlayMap) do
-				if k == texName then v = texID end
-				--overlayMap[texName] = texID
-			end
+			--for k,v in pairs(overlayMap) do
+				--if k == texName then v = texID end
+			overlayMap[texName] = texID
+			--end
 		end
 	end
 

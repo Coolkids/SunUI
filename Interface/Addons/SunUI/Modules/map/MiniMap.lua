@@ -140,7 +140,7 @@ local function RightClickMenu()
 		{text = QUESTLOG_BUTTON, func = function() ToggleFrame(QuestLogFrame) end},
 		{text = SOCIAL_BUTTON, func = function() ToggleFriendsFrame(1) end},
 		{text = GUILD, func = function() ToggleGuildFrame(1) end},
-		{text = PLAYER_V_PLAYER, func = function() ToggleFrame(PVPFrame) end},
+		{text = PLAYER_V_PLAYER, func = function() TogglePVPUI() end},
 		{text = LFG_TITLE, func = function() ToggleFrame(PVEFrame) end},
 		{text = HELP_BUTTON, func = function() ToggleHelpFrame() end},
 		{text = SLASH_CALENDAR2:gsub("/(.*)","%1"), func = function() if(not CalendarFrame) then LoadAddOn("Blizzard_Calendar") end Calendar_Toggle() end},

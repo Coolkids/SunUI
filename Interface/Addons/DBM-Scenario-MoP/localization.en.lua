@@ -24,3 +24,28 @@ L= DBM:GetModLocalization("ArenaAnnihilation")
 L:SetGeneralLocalization{
 	name = "Arena Of Annihilation"
 }
+
+--------------
+-- Landfall --
+--------------
+
+L = DBM:GetModLocalization("Landfall")
+
+local landfall
+if UnitFactionGroup("player") == "Alliance" then
+	landfall = "Lion's Landing"
+else
+	landfall = "Domination Point"
+end
+
+L:SetGeneralLocalization({
+	name = landfall
+})
+
+L:SetWarningLocalization({
+	WarnAchFiveAlive	= "Achievement \"Number Five Is Alive\" failed"
+})
+
+L:SetOptionLocalization({
+	WarnAchFiveAlive	= "Show warning if achievement \"Number Five Is Alive\" failed."
+})

@@ -6,7 +6,7 @@ local class = DB.MyClass
 local media = DB.media
 local AuroraConfig = DB.AuroraConfig
 local r, g, b = DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b
-
+local gradOr, startR, startG, startB, startAlpha, endR, endG, endB, endAlpha = unpack(AuroraConfig.gradientAlpha)
 function Module:ADDON_LOADED(event, addon)
 	for module, moduleFunc in pairs(DB.AuroraModules) do
 		if type(moduleFunc) == "function" then
@@ -655,6 +655,9 @@ function Module:ADDON_LOADED(event, addon)
 
 			button.enableButton:GetCheckedTexture():SetDesaturated(true)
 		end)
+		
+		S.Reskin(LFDQueueFrameRandomScrollFrameChildFrame.bonusRepFrame.ChooseButton)
+		S.Reskin(ScenarioQueueFrameRandomScrollFrameChildFrame.bonusRepFrame.ChooseButton)
 
 		-- Raid Finder
 
@@ -2089,7 +2092,7 @@ function Module:ADDON_LOADED(event, addon)
 		local function styleTab(bu)
 			bu.selected:SetTexture(r, g, b, .2)
 			bu.selected:SetDrawLayer("BACKGROUND")
-			bu.text:SetFont(media.font, 14)
+			bu.text:SetFont(DB.Font, 14)
 			S.Reskin(bu, true)
 			bu:SetScript("OnEnter", colourTab)
 			bu:SetScript("OnLeave", clearTab)
@@ -2100,10 +2103,10 @@ function Module:ADDON_LOADED(event, addon)
 		end
 		styleTab(HelpFrameButton16)
 
-		HelpFrameAccountSecurityOpenTicket.text:SetFont(media.font, 14)
-		HelpFrameOpenTicketHelpOpenTicket.text:SetFont(media.font, 14)
-		HelpFrameOpenTicketHelpTopIssues.text:SetFont(media.font, 14)
-		HelpFrameOpenTicketHelpItemRestoration.text:SetFont(media.font, 14)
+		HelpFrameAccountSecurityOpenTicket.text:SetFont(DB.Font, 14)
+		HelpFrameOpenTicketHelpOpenTicket.text:SetFont(DB.Font, 14)
+		HelpFrameOpenTicketHelpTopIssues.text:SetFont(DB.Font, 14)
+		HelpFrameOpenTicketHelpItemRestoration.text:SetFont(DB.Font, 14)
 
 		HelpFrameCharacterStuckHearthstone:Size(56, 56)
 		S.CreateBG(HelpFrameCharacterStuckHearthstone)
@@ -3178,7 +3181,7 @@ function Module:ADDON_LOADED(event, addon)
 		function PaperDollFrame_SetLevel()
 			local primaryTalentTree = GetSpecialization()
 			local classDisplayName, class = UnitClass("player")
-			local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or classcolours[class]
+			local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
 			local classColorString = format("ff%.2x%.2x%.2x", classColor.r * 255, classColor.g * 255, classColor.b * 255)
 			local specName
 

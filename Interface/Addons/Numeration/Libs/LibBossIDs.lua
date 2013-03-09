@@ -6,6 +6,26 @@ local BossIDs = {
 	-------------------------------------------------------------------------------
 	-- Pandaria Raid
 	-------------------------------------------------------------------------------
+	-- Throne of Thunder
+	[69465] = true,		-- Jin'rokh the Breaker
+	[68476] = true,		-- Horridon
+	[69078] = l.elder,	-- Sul the Sandcrawler
+	[69131] = l.elder,	-- Frost King Malakk
+	[69132] = l.elder,	-- High Priestess Mar'li
+	[69134] = l.elder,	-- Kazra'jin
+	[67977] = true,		-- Tortos
+	[70212] = l.mega,	-- Flaming Head
+	[70235] = l.mega,	-- Frozen Head
+	[70247] = l.mega,	-- Venomous Head
+	[69712] = true,		-- Ji-Kun
+	[68036] = true,		-- Durumu the Forgotten
+	[69017] = true,		-- Primordius
+	[69427] = true,		-- Dark Animus
+	[68078] = true,		-- Iron Qon
+	[68904] = l.twin,	-- Suen
+	[68905] = l.twin,	-- Lu'lin	
+	[68397] = true,		-- Lei Shen
+	-- [00000] = true,		-- Ra-den
 	-- Terrace of Endless Spring
 	[60583] = l.prot,	-- Protector Kaolan
 	[60585] = l.prot,	-- Elder Regail

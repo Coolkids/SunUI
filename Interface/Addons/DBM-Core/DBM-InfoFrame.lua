@@ -257,8 +257,10 @@ end
 local function updateEnemyPower()
 	table.wipe(lines)
 	for i = 1, 5 do
-		if UnitPower("boss"..i, pIndex)/UnitPowerMax("boss"..i, pIndex)*100 >= infoFrameThreshold then
-			lines[UnitName("boss"..i)] = UnitPower("boss"..i, pIndex)
+		if UnitPowerMax("boss"..i, pIndex) > 0 then
+			if UnitPower("boss"..i, pIndex)/UnitPowerMax("boss"..i, pIndex)*100 >= infoFrameThreshold then
+				lines[UnitName("boss"..i)] = UnitPower("boss"..i, pIndex)
+			end
 		end
 	end
 	if extraPIndex then
@@ -549,6 +551,15 @@ end
 local function updateOther()
 	table.wipe(lines)
 	lines[pIndex]= infoFrameThreshold
+	if extraPIndex then
+		lines[extraPIndex]= iconModifier
+	end
+	if lowestSecond then
+		lines[lowestSecond]= lowestFirst
+	end
+	if lowestF then
+		lines[lowestF]= lowestT
+	end
 	updateLines()
 end
 
@@ -698,6 +709,9 @@ function infoFrame:Show(maxLines, event, threshold, ...)
 	iconModifier = select(2, ...)
 	extraPIndex = select(3, ...)
 	lowestFirst = select(4, ...)
+	lowestSecond = select(5, ...)
+	lowestT = select(6, ...)
+	lowestF = select(7, ...)
 	currentEvent = event
 	frame = frame or createFrame()
 

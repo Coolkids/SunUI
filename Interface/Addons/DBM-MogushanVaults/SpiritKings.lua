@@ -359,11 +359,11 @@ function mod:SPELL_CAST_START(args)
 	elseif args:IsSpellID(117833) then
 		ctdd = ctdd + 1
 		warnCrazyThought:Show()
+		if zianActive then return end
 		if (((mod.Options.optDD == "DD1") and (ctdd % 4 == 1)) or ((mod.Options.optDD == "DD2") and (ctdd % 4 == 2)) or ((mod.Options.optDD == "DD3") and (ctdd % 4 == 3)) or ((mod.Options.optDD == "DD4") and (ctdd % 4 == 0))) and (not Warned) then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3") --快打斷
 			specWarnCrazyThought:Show(args.sourceName)
-		end
-		
+		end		
 		if (((mod.Options.optDD == "DD1") and (ctdd % 4 == 0)) or ((mod.Options.optDD == "DD2") and (ctdd % 4 == 1)) or ((mod.Options.optDD == "DD3") and (ctdd % 4 == 2)) or ((mod.Options.optDD == "DD4") and (ctdd % 4 == 3))) and (not Warned) then
 			specWarnDDL:Schedule(1)
 			sndWOP:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_ddzb.mp3") --打斷準備

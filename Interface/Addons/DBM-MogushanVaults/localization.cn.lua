@@ -121,7 +121,7 @@ L:SetOptionLocalization({
 	SpecWarnjs			= "特殊警告：减伤链",
 	SetIconOnVoodoo		= DBM_CORE_AUTO_ICONS_OPTION_TEXT:format(122151),
 	InfoFrame			= "资讯框：$spell:116161的玩家 (标注\"治疗\"需团员选择角色类型)",
-	optjs				= "<黑手之乡>@眾星之子 公会专用减伤提示模块",
+	optjs				= "<黑手之城>@世界之树 公会专用减伤提示模块",
 	non					= "老子谁的减伤都不看",
 	druid				= "乳德的减伤",
 	priest				= "戒律的减伤",

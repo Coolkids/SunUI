@@ -37,3 +37,6 @@ L:SetOptionLocalization({
 ---------------------------
 L= DBM:GetModLocalization(814)
 
+L:SetOptionLocalization({
+	RangeFrame			= "距離監視(10碼)：$spell:136340"
+})

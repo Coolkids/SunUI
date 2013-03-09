@@ -296,6 +296,20 @@ function S.CreateBack2(f, orientation, r, g, b, a, r2, g2, b2, a2)
 	f.gradient = gradient
 end
 
+function S.CreateBackTexture(f, orientation, a, b, r, g, b)
+	local uistyle = SunUIConfig.db.profile.MiniDB.uistyle
+	f:SetTexture("Interface\\Buttons\\WHITE8x8")
+	if uistyle == "plane" then
+		f:SetVertexColor(r or 0, g or 0, b or 0, 0.4)
+	else
+		if orientation then
+			f:SetGradientAlpha("HORIZONTAL",  0.5, 0.5, 0.5, a or 0.5, 0, 0, 0, b or 0)
+		else
+			f:SetGradientAlpha("VERTICAL",  0.5, 0.5, 0.5, a or 0.5, 0, 0, 0, b or 0)
+		end
+	end
+end
+
 function S.CreateTop(f, r, g, b, orientation, a)
 	local uistyle = SunUIConfig.db.profile.MiniDB.uistyle
 	if uistyle == "plane" then

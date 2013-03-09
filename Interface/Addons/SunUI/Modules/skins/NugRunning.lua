@@ -24,13 +24,13 @@ ConstructTimerBar = function(width, height)
     f.prototype = "TimerBar"
 
     f:SetWidth(width-height)
-    f:SetHeight(height)
+    f:SetHeight(height+4)
     
     
     local ic = CreateFrame("Frame",nil,f)
     ic:SetPoint("BOTTOMRIGHT",f,"BOTTOMLEFT", -10, 0)
-    ic:SetWidth(height)
-    ic:SetHeight(height)
+    ic:SetWidth(height+2)
+    ic:SetHeight(height+2)
 	ic:CreateShadow()
 	
     local ict = ic:CreateTexture(nil,"ARTWORK",0)
@@ -105,8 +105,8 @@ ConstructTimerBar = function(width, height)
     local at = ic:CreateTexture(nil,"OVERLAY")
     at:SetTexture([[Interface\SpellActivationOverlay\IconAlert]])
     at:SetTexCoord(0.00781250,0.50781250,0.27734375,0.52734375)
-    at:SetWidth(height*1.6)
-    at:SetHeight(height*1.6)
+    at:SetWidth(height*1.8)
+    at:SetHeight(height*1.8)
     at:SetPoint("CENTER",f.icon,"CENTER",0,0)
     at:SetAlpha(0)
     
@@ -122,7 +122,7 @@ ConstructTimerBar = function(width, height)
     sa2:SetOrder(2)
     
     f.shine = sag
-    
+    f.shine.tex = at
     
     local aag = f:CreateAnimationGroup()
     local aa1 = aag:CreateAnimation("Scale")
