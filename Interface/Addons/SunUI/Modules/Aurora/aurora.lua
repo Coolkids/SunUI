@@ -637,27 +637,15 @@ function Module:ADDON_LOADED(event, addon)
 			button.enableButton:GetCheckedTexture():SetDesaturated(true)
 		end)
 
-		for i = 1, NUM_LFR_CHOICE_BUTTONS do
-			local bu = _G["LFRQueueFrameSpecificListButton"..i].enableButton
-			S.ReskinCheck(bu)
-			bu.SetNormalTexture = S.dummy
-			bu.SetPushedTexture = S.dummy
-
-			S.ReskinExpandOrCollapse(_G["LFRQueueFrameSpecificListButton"..i].expandOrCollapseButton)
-		end
-
-		hooksecurefunc("LFRQueueFrameSpecificListButton_SetDungeon", function(button, dungeonID)
-			if LFGCollapseList[dungeonID] then
-				button.expandOrCollapseButton.plus:Show()
-			else
-				button.expandOrCollapseButton.plus:Hide()
-			end
-
-			button.enableButton:GetCheckedTexture():SetDesaturated(true)
-		end)
+		local bonusValor = LFDQueueFrameRandomScrollFrameChildFrameBonusValor
+		bonusValor.Border:Hide()
+		bonusValor.Icon:SetTexCoord(.08, .92, .08, .92)
+		bonusValor.Icon:Point("CENTER", bonusValor.Border, -3, 0)
+		bonusValor.Icon:Size(24, 24)
+		bonusValor.BonusText:Point("LEFT", bonusValor.Border, "RIGHT", -5, -1)
+		S.CreateBG(bonusValor.Icon)
 		
 		S.Reskin(LFDQueueFrameRandomScrollFrameChildFrame.bonusRepFrame.ChooseButton)
-		S.Reskin(ScenarioQueueFrameRandomScrollFrameChildFrame.bonusRepFrame.ChooseButton)
 
 		-- Raid Finder
 
@@ -736,8 +724,17 @@ function Module:ADDON_LOADED(event, addon)
 				end
 			end
 		end)
-
+		
+		local bonusValor = ScenarioQueueFrameRandomScrollFrameChildFrameBonusValor
+		bonusValor.Border:Hide()
+		bonusValor.Icon:SetTexCoord(.08, .92, .08, .92)
+		bonusValor.Icon:Point("CENTER", bonusValor.Border, -3, 0)
+		bonusValor.Icon:SetSize(24, 24)
+		bonusValor.BonusText:Point("LEFT", bonusValor.Border, "RIGHT", -5, -1)
+		S.CreateBG(bonusValor.Icon)
+				
 		S.Reskin(ScenarioQueueFrameFindGroupButton)
+		S.Reskin(ScenarioQueueFrameRandomScrollFrameChildFrame.bonusRepFrame.ChooseButton)
 		S.ReskinDropDown(ScenarioQueueFrameTypeDropDown)
 		S.ReskinScroll(ScenarioQueueFrameRandomScrollFrameScrollBar)
 
@@ -769,7 +766,22 @@ function Module:ADDON_LOADED(event, addon)
 			S.CreateSD(tab, 5, 0, 0, 0, 1, 1)
 			select(2, tab:GetRegions()):SetTexCoord(.08, .92, .08, .92)
 		end
-
+		for i = 1, NUM_LFR_CHOICE_BUTTONS do
+			local bu = _G["LFRQueueFrameSpecificListButton"..i].enableButton
+			S.ReskinCheck(bu)
+			bu.SetNormalTexture = S.dummy
+			bu.SetPushedTexture = S.dummy
+			S.ReskinExpandOrCollapse(_G["LFRQueueFrameSpecificListButton"..i].expandOrCollapseButton)
+		end
+		hooksecurefunc("LFRQueueFrameSpecificListButton_SetDungeon", function(button, dungeonID)
+			if LFGCollapseList[dungeonID] then
+				button.expandOrCollapseButton.plus:Show()
+			else
+				button.expandOrCollapseButton.plus:Hide()
+			end
+			button.enableButton:GetCheckedTexture():SetDesaturated(true)
+		 end)
+		
 		-- Spellbook frame
 
 		for i = 1, SPELLS_PER_PAGE do
@@ -972,9 +984,9 @@ function Module:ADDON_LOADED(event, addon)
 		for i = 1, BUYBACK_ITEMS_PER_PAGE do
 			local button = _G["MerchantItem"..i]
 			local bu = _G["MerchantItem"..i.."ItemButton"]
-			local ic = _G["MerchantItem"..i.."ItemButtonIconTexture"]
 			local mo = _G["MerchantItem"..i.."MoneyFrame"]
-
+			local ic = bu.icon
+			bu:SetHighlightTexture("")
 			_G["MerchantItem"..i.."SlotTexture"]:Hide()
 			_G["MerchantItem"..i.."NameFrame"]:Hide()
 			_G["MerchantItem"..i.."Name"]:Height(20)
@@ -1890,16 +1902,18 @@ function Module:ADDON_LOADED(event, addon)
 		DungeonCompletionAlertFrame1.glow.Show = S.dummy
 
 		hooksecurefunc("DungeonCompletionAlertFrame_ShowAlert", function()
-			for i = 1, 3 do
-				local bu = _G["DungeonCompletionAlertFrame1Reward"..i]
-				if bu and not bu.reskinned then
-					_G["DungeonCompletionAlertFrame1Reward"..i.."Border"]:Hide()
-
+			local bu = DungeonCompletionAlertFrame1Reward1
+			local index = 1
+			while bu do
+				if not bu.styled then
+					_G["DungeonCompletionAlertFrame1Reward"..index.."Border"]:Hide()
 					bu.texture:SetTexCoord(.08, .92, .08, .92)
 					S.CreateBG(bu.texture)
 
-					bu.rekinned = true
+					bu.styled = true
 				end
+				index = index + 1
+				bu = _G["DungeonCompletionAlertFrame1Reward"..index]
 			end
 		end)
 
@@ -1955,9 +1969,9 @@ function Module:ADDON_LOADED(event, addon)
 					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 					S.CreateBD(frame.bg)
 
-					--frame:HookScript("OnEnter", fixBg)
-					--frame:HookScript("OnShow", fixBg)
-					--frame.animIn:HookScript("OnFinished", fixBg)
+					frame:HookScript("OnEnter", fixBg)
+					frame:HookScript("OnShow", fixBg)
+					frame.animIn:HookScript("OnFinished", fixBg)
 
 					S.CreateBG(ScenarioAlertFrame1DungeonTexture)
 					ScenarioAlertFrame1DungeonTexture:SetDrawLayer("OVERLAY")
@@ -1974,7 +1988,22 @@ function Module:ADDON_LOADED(event, addon)
 				ScenarioAlertFrame1DungeonTexture:SetTexCoord(.08, .92, .08, .92)
 			end
 		end)
-
+	
+		hooksecurefunc("ScenarioAlertFrame_ShowAlert", function()
+			local bu = ScenarioAlertFrame1Reward1
+			local index = 1
+			
+			while bu do
+				if not bu.styled then
+					_G["ScenarioAlertFrame1Reward"..index.."Border"]:Hide()
+					bu.texture:SetTexCoord(.08, .92, .08, .92)
+					S.CreateBG(bu.texture)
+					bu.styled = true
+				end
+				index = index + 1
+				bu = _G["ScenarioAlertFrame1Reward"..index]
+			end
+		end)
 		-- Loot won alert
 
 		-- I still don't know why I can't parent bg to frame

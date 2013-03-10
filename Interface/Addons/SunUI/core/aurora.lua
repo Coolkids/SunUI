@@ -564,6 +564,22 @@ S.ReskinColourSwatch = function(f)
 	bg:Point("BOTTOMRIGHT", -2, 2)
 end
 
+function S.ReskinFrame(f)
+	if f.reskin == true then return end
+	f.glow = CreateFrame("Frame", nil, f)
+	f.glow:SetBackdrop({
+		edgeFile = DB.GlowTex,
+		edgeSize = S.Scale(5),
+	})
+	f.glow:Point("TOPLEFT", -6, 6)
+	f.glow:Point("BOTTOMRIGHT", 6, -6)
+	f.glow:SetBackdropBorderColor(r, g, b)
+	f.glow:SetAlpha(0)
+
+	f:HookScript("OnEnter", StartGlow)
+ 	f:HookScript("OnLeave", StopGlow)
+	f.reskin = true
+end
 
 function AA:PLAYER_ENTERING_WORLD()
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")

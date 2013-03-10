@@ -26,7 +26,7 @@ DB.AuroraModules["Blizzard_ChallengesUI"] = function()
 			local bu = ChallengesFrame["button"..i]
 			S.CreateBD(bu, .25)
 			bu:SetHighlightTexture("")
-			bu.selectedTex:SetTexture(C.media.backdrop)
+			bu.selectedTex:SetTexture(DB.media.backdrop)
 			bu.selectedTex:SetAlpha(.2)
 			bu.selectedTex:Point("TOPLEFT", 1, -1)
 			bu.selectedTex:Point("BOTTOMRIGHT", -1, 1)
