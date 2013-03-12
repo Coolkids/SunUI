@@ -6,9 +6,9 @@ local EnableSound = false
 
 function BaudErrorFrame_OnLoad(self)
 	self:RegisterEvent("VARIABLES_LOADED")
-	self:RegisterEvent("ADDON_ACTION_BLOCKED")
-	self:RegisterEvent("MACRO_ACTION_BLOCKED")
-	self:RegisterEvent("ADDON_ACTION_FORBIDDEN")
+	--self:RegisterEvent("ADDON_ACTION_BLOCKED")
+	--self:RegisterEvent("MACRO_ACTION_BLOCKED")
+	--self:RegisterEvent("ADDON_ACTION_FORBIDDEN")
 	UIParent:UnregisterEvent("ADDON_ACTION_FORBIDDEN")
 	self:RegisterEvent("MACRO_ACTION_FORBIDDEN")
 	UIParent:UnregisterEvent("MACRO_ACTION_FORBIDDEN")
