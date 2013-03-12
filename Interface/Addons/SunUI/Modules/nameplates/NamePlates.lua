@@ -252,7 +252,9 @@ local function OnHide(frame)
 			icon:Hide()
 		end
 	end
+	frame.overlay:Hide()
 	frame:SetScript("OnUpdate", nil)
+	frame:UnregisterEvent("UNIT_AURA")
 end
 local function SkinObjects(frame, nameFrame)
 	local hp, cb = frame:GetChildren()
@@ -352,7 +354,7 @@ function N:OnInitialize()
 	if C["Combat"] then
 		N:RegisterEvent("PLAYER_REGEN_DISABLED", function()
 			SetCVar("nameplateShowEnemies", 1)
-		end)	
+		end)
 	end
 	if C["NotCombat"] then
 		N:RegisterEvent("PLAYER_REGEN_ENABLED", function()

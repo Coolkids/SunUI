@@ -469,12 +469,7 @@ function Module:FuckWarlock()
 				end
 
 				if spec == SPEC_WARLOCK_DESTRUCTION then
-					local maxembers = 3
-
-					for i = 1, GetNumGlyphSockets() do
-						local glyphID = select(4, GetGlyphSocketInfo(i))
-						if glyphID == SPEC_WARLOCK_DESTRUCTION_GLYPH_EMBERS then maxembers = 4 end
-					end
+					local maxembers = 4
 
 					for i = 1, maxembers do
 						if i ~= maxembers then
@@ -487,14 +482,8 @@ function Module:FuckWarlock()
 						S.CreateTop(s, Colors[SPEC_WARLOCK_DESTRUCTION][1], Colors[SPEC_WARLOCK_DESTRUCTION][2], Colors[SPEC_WARLOCK_DESTRUCTION][3])
 					end
 
-					if maxembers == 3 then wsb[4]:Hide() else wsb[4]:Show() end
 				elseif spec == SPEC_WARLOCK_AFFLICTION then
-					local maxshards = 3
-
-					for i = 1, GetNumGlyphSockets() do
-						local glyphID = select(4, GetGlyphSocketInfo(i))
-						if glyphID == SPEC_WARLOCK_AFFLICTION_GLYPH_SHARDS then maxshards = 4 end
-					end
+					local maxshards = 4
 
 					for i = 1, maxshards do
 						if i ~= maxshards then
@@ -507,7 +496,6 @@ function Module:FuckWarlock()
 						S.CreateTop(s, Colors[SPEC_WARLOCK_AFFLICTION][1], Colors[SPEC_WARLOCK_AFFLICTION][2], Colors[SPEC_WARLOCK_AFFLICTION][3])
 					end
 
-					if maxshards == 3 then wsb[4]:Hide() else wsb[4]:Show() end
 				elseif spec == SPEC_WARLOCK_DEMONOLOGY then
 					wsb[2]:Hide()
 					wsb[3]:Hide()

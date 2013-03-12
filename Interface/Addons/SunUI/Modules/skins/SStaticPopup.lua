@@ -39,4 +39,15 @@ local function Skin()
 end
 function Module:OnEnable()
 	Skin()
+	--[[ local test = CreateFrame("StatusBar", nil, UIParent)
+	test:SetSize(200, 30)
+	test:SetPoint("CENTER")
+	test:SetStatusBarTexture(DB.Statusbar)
+	test:SetStatusBarColor(0.3, 0.3, 0.3)
+	test:SetMinMaxValues(0, 100)
+	test:SetValue(50)
+	local b = test:CreateTexture(nil, "ARTWORK")
+	b:SetTexture("Interface\\Addons\\SunUI\\Media\\bg1")
+	b:SetAllPoints(test)
+	b:SetVertexColor(1, 1, 1, 0.1) ]]
 end

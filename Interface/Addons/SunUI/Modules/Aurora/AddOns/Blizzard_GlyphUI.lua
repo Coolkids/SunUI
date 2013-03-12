@@ -81,7 +81,7 @@ DB.AuroraModules["Blizzard_GlyphUI"] = function()
 		local check = select(2, bu:GetRegions())
 		check:Point("TOPLEFT", 39, -3)
 		check:Point("BOTTOMRIGHT", -1, 3)
-		check:SetTexture(C.media.backdrop)
+		check:SetTexture(DB.media.backdrop)
 		check:SetVertexColor(r, g, b, .2)
 
 		S.CreateBG(ic)
