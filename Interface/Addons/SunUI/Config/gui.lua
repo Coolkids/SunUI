@@ -547,16 +547,10 @@ function SunUIConfig.GenerateOptionsInternal()
 						type = "group", order = 1,
 						name = " ",guiInline = true,
 						args = {
-							Header = {
-								order = 1,
-								type = "header",
-								name = L["姓名板增强"],
-								width = "full",		
-							},
 							enable = {
 								type = "toggle",
-								name = L["开启"],
-								order = 2,
+								name = L["启用姓名板"],
+								order = 1,
 								},
 							}
 						},
@@ -564,18 +558,53 @@ function SunUIConfig.GenerateOptionsInternal()
 						type = "group", order = 2,
 						name = " ",guiInline = true,disabled = function(info) return not db.NameplateDB.enable end,
 							args = {
-								Header = {
+								Fontsize = {
+									type = "input",
+									name = L["姓名板字体大小"] ,
+									desc = L["姓名板字体大小"] ,
+									order = 1,
+									get = function() return tostring(db.NameplateDB.Fontsize) end,
+									set = function(_, value) db.NameplateDB.Fontsize = tonumber(value) end,
+								},
+								HPHeight = {
+									type = "input",
+									name = L["姓名板血条高度"],
+									desc = L["姓名板血条高度"] ,
 									order = 2,
-									type = "execute",
-									name = "Kui_Nameplates"..CHAT_CONFIGURATION,
-									func = function()
-										if IsAddOnLoaded("Kui_Nameplates") then
-											SlashCmdList.KUINAMEPLATES()
-											ACD:Close("SunUIConfig")
-										else
-											print("Does not support other Nameplates")
-										end
-									end,	
+									get = function() return tostring(db.NameplateDB.HPHeight) end,
+									set = function(_, value) db.NameplateDB.HPHeight = tonumber(value) end,
+								},
+								HPWidth = {
+									type = "input",
+									name = L["姓名板血条宽度"],
+									desc = L["姓名板血条宽度"],
+									order = 3,
+									get = function() return tostring(db.NameplateDB.HPWidth) end,
+									set = function(_, value) db.NameplateDB.HPWidth = tonumber(value) end,
+								},
+								CastBarIconSize = {
+									type = "input",
+									name = L["姓名板施法条图标大小"],
+									desc = L["姓名板施法条图标大小"],
+									order = 4,
+									get = function() return tostring(db.NameplateDB.CastBarIconSize) end,
+									set = function(_, value) db.NameplateDB.CastBarIconSize = tonumber(value) end,
+								},
+								CastBarHeight = {
+									type = "input",
+									name = L["姓名板施法条高度"],
+									desc = L["姓名板施法条高度"],
+									order = 5,
+									get = function() return tostring(db.NameplateDB.CastBarHeight) end,
+									set = function(_, value) db.NameplateDB.CastBarHeight = tonumber(value) end,
+								},
+								CastBarWidth = {
+									type = "input",
+									name = L["姓名板施法条宽度"],
+									desc = L["姓名板施法条宽度"],
+									order = 6,
+									get = function() return tostring(db.NameplateDB.CastBarWidth) end,
+									set = function(_, value) db.NameplateDB.CastBarWidth = tonumber(value) end,
 								},
 								Combat = {
 									type = "toggle",
@@ -598,7 +627,7 @@ function SunUIConfig.GenerateOptionsInternal()
 									min = 10, max = 60, step = 1,
 								},
 							}
-						},
+						},	
 				}
 			},
 			TooltipDB = {

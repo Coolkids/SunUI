@@ -2,7 +2,7 @@
 local FBF = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Compatibility", "AceEvent-3.0", "AceHook-3.0")
 local AddonNotSupported = {}
 local BlackList = {"bigfoot", "duowan", "163ui", "大脚", "大腳", "魔盒"}
-local oldList = {"fixstaticpopup", "sfishing", "xct", "shaofangercd", "fishingace", "niotiller", "fishingbuddy"}
+local oldList = {"fixstaticpopup", "sfishing", "shaofangercd", "fishingace", "niotiller", "fishingbuddy","kui_nameplates"}
 
 function FBF:TableIsEmpty(t)
 	--print(type(t))

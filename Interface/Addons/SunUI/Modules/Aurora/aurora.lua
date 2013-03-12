@@ -7,6 +7,8 @@ local media = DB.media
 local AuroraConfig = DB.AuroraConfig
 local r, g, b = DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b
 local gradOr, startR, startG, startB, startAlpha, endR, endG, endB, endAlpha = unpack(AuroraConfig.gradientAlpha)
+local classcolours = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
+
 function Module:ADDON_LOADED(event, addon)
 	for module, moduleFunc in pairs(DB.AuroraModules) do
 		if type(moduleFunc) == "function" then
