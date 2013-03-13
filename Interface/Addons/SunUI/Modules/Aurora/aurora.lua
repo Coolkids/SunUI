@@ -597,6 +597,9 @@ function Module:ADDON_LOADED(event, addon)
 		LFDQueueFrameRandomScrollFrameScrollBackgroundTopLeft:Hide()
 		LFDQueueFrameRandomScrollFrameScrollBackgroundBottomRight:Hide()
 
+		-- this fixes right border of second reward being cut off
+		LFDQueueFrameRandomScrollFrame:Width(LFDQueueFrameRandomScrollFrame:GetWidth()+1)
+		
 		hooksecurefunc("LFDQueueFrameRandom_UpdateFrame", function()
 			for i = 1, LFD_MAX_REWARDS do
 				local button = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i]

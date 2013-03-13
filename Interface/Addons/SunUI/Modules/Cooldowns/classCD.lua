@@ -137,7 +137,88 @@ local class_spells = {
 -- item
 	-- type = "item" 
 	-- item = {the item id}
-
+	-- MOP 5.2
+	-- TH(Thunderforged)/ H/ TN/ N/ LFR Raid
+	[138756] = {
+		desc = "",
+		type = "item",
+		item = {96369,95997,94512,95625},
+		cd = 22,
+		duration = 20,
+	}, -- Renataki's Soul Charm
+	[138786] = {
+		desc = "",
+		type = "item",
+		item = {96785,96413,96041,94513,95669},
+		cd = 22,
+		duration = 20,
+	}, -- Wushoolay's Final Choice
+	[140380] = {
+		desc = "",
+		type = "item",
+		item = {96828,96456,96084,94520,95712},
+		cd = 17,
+	}, -- Inscribed Bag of Hydra-Spawn
+	
+	[138759] = {
+		desc = "",
+		type = "item",
+		item = {96470,96098,94515,95726},
+		cd = 22,
+		duration = 20,
+	}, -- Fabled Feather of Ji-Kun
+	[138973] = {
+		desc = "",
+		type = "item",
+		item = {96471,96099,94527,95727},
+		cd = 30,
+	}, -- Ji-Kun's Rising Winds
+	
+	[139120] = {
+		desc = "",
+		type = "item",
+		item = {96546,96174,94532,95802},
+		cd = 22,
+		duration = 10,
+	}, -- Rune of Re-Origination
+	[139117] = {
+		desc = "",
+		type = "item",
+		item = {96546,96174,94532,95802},
+		cd = 22,
+		duration = 10,
+	}, -- Rune of Re-Origination
+	[139121] = {
+		desc = "",
+		type = "item",
+		item = {96546,96174,94532,95802},
+		cd = 22,
+		duration = 10,
+	}, -- Rune of Re-Origination
+	
+	--  522 Valor Point
+	[138703] = {
+		desc = "",
+		type = "item",
+		item = {94510},
+		cd = 45,
+		duration = 10,
+	}, -- Volatile Talisman of the Shado-Pan Assault
+	[138702] = {
+		desc = "",
+		type = "item",
+		item = {94508},
+		cd = 75,
+		duration = 15,
+	}, -- Brutal Talisman of the Shado-Pan Assault
+	[138699] = {
+		desc = "",
+		type = "item",
+		item = {94511},
+		cd = 105,
+		duration = 20,
+	}, -- Vicious Talisman of the Shado-Pan Assault			
+		
 	-- MOP 5.0
 	-- 509 496 483 Raid
 	[126646] = {

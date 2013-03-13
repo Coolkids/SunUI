@@ -89,6 +89,66 @@ ns.auras_debuffs = {
 
 ns.auras_instances_debuffs = {
 	first = {
+		[930] = { --5.2雷霆王座
+			[138349] = 3,	-- Static Wound (Tank stacks)
+			[137371] = 3,	-- Thundering Throw (Tank stun)
+			[138732] = 3,	-- Ionization (Heroic - Dispel)
+			[137422] = 3,	-- Focused Lightning (Fixated - Kiting)
+			[138006] = 3,	-- Electrified Waters (Pool)
+			-- Horridon
+			[136767] = 3,	-- Triple Puncture (Tank stacks)
+			[136708] = 4,	-- Stone Gaze (Stun - Dispel)
+			[136654] = 3,	-- Rending Charge (DoT)
+			[136719] = 3,	-- Blazing Sunlight (Dispel)
+			[136587] = 3,	-- Venom Bolt Volley (Dispel)
+			[136710] = 3,	-- Deadly Plague (Dispel)
+			[136512] = 3,	-- Hex of Confusion (Dispel)
+			-- Council of Elders
+			[136903] = 3,	-- Frigid Assault (Tank stacks)
+			[136922] = 3,	-- Frostbite (DoT)
+			[136992] = 3,	-- Biting Cold (DoT)
+			[136857] = 3,	-- Entrapped (Dispel)
+			[137359] = 3,	-- Marked Soul (Fixated - Kiting)
+			[137641] = 3,	-- Soul Fragment (Heroic)
+			-- Tortos
+			[136753] = 3,	-- Slashing Talons (Tank DoT)
+			[137633] = 3,	-- Crystal Shell (Heroic)
+			-- Megaera
+			[137731] = 3,	-- Ignite Flesh (Tank stacks)
+			[139843] = 3,	-- Arctic Freeze (Tank stacks)
+			[139840] = 3,	-- Rot Armor (Tank stacks)
+			[134391] = 3,	-- Cinder (DoT - Dispell)
+			[139857] = 3,	-- Torrent of Ice (Fixated - Kiting)
+			[140179] = 3,	-- Suppression (Heroic - Dispell)
+			-- Ji-Kun
+			[140092] = 3,	-- Infected Talons (Tank DoT)
+			[134256] = 3,	-- Slimed (DoT)
+			-- Durumu the Forgotten
+			[133768] = 4,	-- Arterial Cut (Tank DoT)
+			[133767] = 3,	-- Serious Wound (Tank stacks)
+			[133798] = 3,	-- Life Drain (Stun)
+			[133597] = 3,	-- Dark Parasite (Heroic - Dispel)
+			-- Primordius
+			[136050] = 3,	-- Malformed Blood (Tank stacks)
+			[136228] = 3,	-- Volatile Pathogen (DoT)
+			-- Dark Animus
+			[138569] = 3,	-- Explosive Slam (Tank stacks)
+			[138659] = 3,	-- Touch of the Animus (DoT)
+			-- Iron Qon
+			[134691] = 3,	-- Impale (Tank stacks)
+			[134628] = 3,	-- Unleashed Flame (Damage staks)
+			[136192] = 3,	-- Lightning Storm (Stun)
+			-- Twin Consorts
+			[137408] = 3,	-- Fan of Flames (Tank stacks)
+			[136722] = 3,	-- Slumber Spores (Dispel)
+			[137341] = 3,	-- Beast of Nightmares (Fixate)
+			[137360] = 3,	-- Corrupted Healing (Healer stacks)
+			-- Lei Shen
+			[135000] = 3,	-- Decapitate (Tank only)
+			[136478] = 3,	-- Fusion Slash (Tank only)
+			[136914] = 3,	-- Electrical Shock (Tank staks)
+			[135695] = 3,	-- Static Shock (Damage Split)
+		},
 		[781] = {--"祖阿曼(5人)"
 			[43150] = 8, -- 利爪之怒
 			[43648] = 8, -- 电能风暴

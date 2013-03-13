@@ -1099,7 +1099,7 @@ local function BuildSpecswitch()
 
 
 	Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
-	Stat:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+	Stat:RegisterEvent("PLAYER_TALENT_UPDATE")
 	Stat:SetScript("OnEvent", OnEvent)
 	Stat:SetScript("OnEnter", function(self)
 		local c = GetActiveSpecGroup(false,false)
