@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8601 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8881 $"):sub(12, -3))
 mod:SetCreatureID(62983)--62995 Animated Protector
 mod:SetModelID(42811)
 
@@ -28,8 +28,8 @@ local warnGetAway						= mod:NewCountAnnounce(123461, 3)
 local warnSpray							= mod:NewStackAnnounce(123121, 3, nil, mod:IsTank() or mod:IsHealer())
 
 local specWarnAnimatedProtector			= mod:NewSpecialWarningSwitch("ej6224", not mod:IsHealer())
-local specWarnHide						= mod:NewSpecialWarningSpell(123244, nil, nil, nil, true)
-local specWarnGetAway					= mod:NewSpecialWarningSpell(123461, nil, nil, nil, true)
+local specWarnHide						= mod:NewSpecialWarningSpell(123244, nil, nil, nil, 2)
+local specWarnGetAway					= mod:NewSpecialWarningSpell(123461, nil, nil, nil, 2)
 local specWarnSpray						= mod:NewSpecialWarningStack(123121, mod:IsTank(), 6)
 local specWarnSprayNT					= mod:NewSpecialWarningMove(123121)
 local specWarnSprayOther				= mod:NewSpecialWarningTarget(123121, mod:IsTank())
@@ -187,7 +187,7 @@ function mod:OnCombatStart(delay)
 	specialRemaining = 0
 	lostHealth = 0
 	prevlostHealth = 0
-	timerSpecialCD:Start(32.5-delay, 1)--Variable, 32.5-37 (or aborted if 80% protect happens first)
+	timerSpecialCD:Start(30.5-delay, 1)--Variable, 30.5-37 (or aborted if 80% protect happens first)
 	if self:IsDifficulty("heroic10", "heroic25") then
 		if self.Options.InfoFrame then
 			DBM.InfoFrame:SetHeader(GetSpellInfo(123712))
@@ -324,7 +324,7 @@ end
 
 mod:RegisterOnUpdateHandler(function(self)
 	if self.Options.SetIconOnGuardfix and guardActivated > 0 and DBM:GetRaidRank() > 0 then
-		for i = 1, DBM:GetGroupMembers() do
+		for i = 1, DBM:GetNumGroupMembers() do
 			local uId = "raid"..i.."target"
 			local guid = UnitGUID(uId)
 			if guards[guid] then

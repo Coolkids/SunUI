@@ -3,7 +3,7 @@ local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndADD	= mod:NewSound(nil, "SoundADD", true)
 
-mod:SetRevision(("$Revision: 8456 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8860 $"):sub(12, -3))
 mod:SetCreatureID(62511)
 mod:SetModelID(43126)
 mod:SetZone()
@@ -33,7 +33,7 @@ mod:RegisterEventsInCombat(
 local warnReshapeLifeTutor		= mod:NewAnnounce("warnReshapeLifeTutor", 1, 122784)--Another LFR focused warning really.
 local warnReshapeLife			= mod:NewAnnounce("warnReshapeLife", 4, 122784)
 local warnWillPower				= mod:NewAnnounce("warnWillPower", 3, 63050)
-local warnAmberScalpel			= mod:NewTargetAnnounce(121994, 3)
+local warnAmberScalpel			= mod:NewSpellAnnounce(121994, 3)
 local warnParasiticGrowth		= mod:NewTargetAnnounce(121949, 4, nil, mod:IsHealer())
 local warnAmberGlob				= mod:NewTargetAnnounce(125502, 4)--Heroic drycode, might need some tweaks
 --Construct
@@ -51,7 +51,7 @@ local warnFling					= mod:NewSpellAnnounce(122413, 3, nil, mod:IsTank())--think 
 local warnInterruptsAvailable	= mod:NewAnnounce("warnInterruptsAvailable", 1, 122398)
 
 --Boss
-local specwarnAmberScalpel			= mod:NewSpecialWarningYou(121994)
+local specwarnAmberScalpel			= mod:NewSpecialWarningSpell(121994, nil, nil, nil, 2)
 local yellAmberScalpel				= mod:NewYell(121994)
 local specwarnAmberScalpelNear		= mod:NewSpecialWarningClose(121994)
 local specwarnReshape				= mod:NewSpecialWarningYou(122784)
@@ -129,7 +129,7 @@ local warnedoo = {}
 
 local function buildGuidTable()
 	table.wipe(guids)
-	for i = 1, DBM:GetGroupMembers() do
+	for i = 1, DBM:GetNumGroupMembers() do
 		guids[UnitGUID("raid"..i) or "none"] = GetRaidRosterInfo(i)
 	end
 end
@@ -466,8 +466,10 @@ function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(122348) then
 		warnLivingAmber:Show()
 	elseif args:IsSpellID(121994) then
-		scansDone = 0
-		self:ScheduleMethod(0.2, "ScalpelTarget")
+		warnAmberScalpel:Show()
+		specwarnAmberScalpel:Show()
+--		scansDone = 0
+--		self:ScheduleMethod(0.2, "ScalpelTarget")
 	elseif args:IsSpellID(122532) then
 		Puddles = Puddles + 1
 		warnBurningAmber:Show(Puddles)

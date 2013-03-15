@@ -1,5 +1,6 @@
 ﻿local S, L, DB, _, C = unpack(select(2, ...))
 local CH = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("StatReport")
+if DB.zone ~= "zhTW" and DB.zone ~= "zhCN" then return end
 -- Author: YYSS
 -- modify by ljxx.net at 20110729
 local L = {}

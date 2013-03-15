@@ -199,7 +199,7 @@ L:SetOptionLocalization({
 L:SetMiscLocalization({
 	BossSpellInfo 	= "進化技能分析表",
 	AE1				= "持續性AE",
-	AE2				= "週期性AE (15s)",
+	AE2				= "靠近分擔AE (15s)",
 	tar5			= "分散5碼 (3s)",
 	tar1			= "病原體點名 (30s)",
 	speed			= "速度提升50%",
@@ -222,7 +222,7 @@ L:SetOptionLocalization({
 })
 
 L:SetMiscLocalization({
-	Pull	= "The orb explodes!"
+	Pull	= "寶珠爆炸了!"
 })
 
 --------------
@@ -273,7 +273,9 @@ L:SetOptionLocalization({
 	SoundWOP		= "語音警告：重要技能",
 	HudMAP			= "高級定位監視(HUD)：$spell:135695",
 	HudMAP2			= "高級定位監視(HUD)：$spell:136295",
-	RangeFrame		= "距離監視"--For two different spells
+	RangeFrame		= "距離監視",--For two different spells
+	StaticShockArrow	= "DBM箭頭：$spell:135695",
+	OverchargeArrow		= "DBM箭頭：$spell:136295"
 })
 
 ------------

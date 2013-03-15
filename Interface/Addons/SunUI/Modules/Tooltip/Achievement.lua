@@ -36,7 +36,7 @@ local function hookSetHyperlink(tooltip, refString)
 	if completed then
 		if year < 10 then year = "0" .. year end
 
-		tooltip:AddLine(L_TOOLTIP_ACH_COMPLETE .. month .. "/" .. day .. "/" .. year, 0, 1, 0)
+		tooltip:AddLine(L["你的状态:完成"] .. month .. "/" .. day .. "/" .. year, 0, 1, 0)
 
 		if earnedBy then
 			tooltip:AddLine(format(ACHIEVEMENT_EARNED_BY, earnedBy))
@@ -47,9 +47,9 @@ local function hookSetHyperlink(tooltip, refString)
 			end
 		end
 	elseif numCriteria == 0 then
-		tooltip:AddLine(L_TOOLTIP_ACH_INCOMPLETE)
+		tooltip:AddLine(L["你的状态:未完成"])
 	else
-		tooltip:AddLine(L_TOOLTIP_ACH_STATUS)
+		tooltip:AddLine(L["你的状态"])
 		for i = 1, numCriteria, 2 do
 			for a = 0, 1 do
 				output[a].text = nil

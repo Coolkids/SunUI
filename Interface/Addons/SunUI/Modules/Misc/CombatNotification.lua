@@ -118,7 +118,7 @@ function Module:OnEnable()
 	elseif (GetLocale()=="zhTW") then
 		L.INFO_WOWTIME_TIP4 = "進入戰鬥狀態"
 		L.INFO_WOWTIME_TIP5 = "離開戰鬥狀態"
-	elseif (GetLocale()=="enUS") then
+	else
 		L.INFO_WOWTIME_TIP4 = "ENTERING COMBAT"
 		L.INFO_WOWTIME_TIP5 = "LEAVING COMBAT"
 	end
@@ -154,7 +154,7 @@ function Module:OnEnable()
 				L.INFO_WOWTIME_TIP1 = localizedName.. "即將在1分鐘內開始"
 				L.INFO_WOWTIME_TIP2 = localizedName.. "即將在5分鐘內開始"
 				L.INFO_WOWTIME_TIP3 = localizedName.. "即將在15分鐘內開始"
-			elseif (GetLocale()=="enUS") then
+			else
 				L.INFO_WOWTIME_TIP1 = localizedName.. "will start within 1 minute"
 				L.INFO_WOWTIME_TIP2 = localizedName.. "will start within 5 minute"
 				L.INFO_WOWTIME_TIP3 = localizedName.. "will start within 15 minute"

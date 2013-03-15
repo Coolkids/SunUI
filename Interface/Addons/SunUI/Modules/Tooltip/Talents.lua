@@ -1,5 +1,4 @@
 ﻿local S, L, DB, _, C = unpack(select(2, ...))
-local _
 ----------------------------------------------------------------------------------------
 --	Target Talents(TipTacTalents by Aezay)
 ----------------------------------------------------------------------------------------
@@ -31,13 +30,13 @@ ttt:Hide()
 local function GatherTalents(mouseover)
 	if mouseover == 1 then
 		local currentSpecID = GetInspectSpecialization("mouseover")
-		local currentSpecName = currentSpecID and select(2, GetSpecializationInfoByID(currentSpecID)) or L_TOOLTIP_LOADING
+		local currentSpecName = currentSpecID and select(2, GetSpecializationInfoByID(currentSpecID)) or UNKNOWN
 		local _, currentSpecName, _, icon = GetSpecializationInfoByID(currentSpecID)
         icon = icon and "|T"..icon..":12:12:0:0:64:64:5:59:5:59|t " or ""
 		current.tree = currentSpecName and icon..currentSpecName or "n/a"
 	else
 		local currentSpec = GetSpecialization()
-		local currentSpecName = currentSpec and select(2, GetSpecializationInfo(currentSpec)) or L_TOOLTIP_NO_TALENT
+		local currentSpecName = currentSpec and select(2, GetSpecializationInfo(currentSpec)) or NONE..TALENTS
 		local _, currentSpecName, _, icon = GetSpecializationInfo(currentSpec)
         icon = icon and "|T"..icon..":12:12:0:0:64:64:5:59:5:59|t " or ""
 		current.tree = currentSpecName and icon..currentSpecName or "n/a"
@@ -146,10 +145,10 @@ gtt:HookScript("OnTooltipSetUnit", function(self, ...)
 			ttt.nextUpdate = (lastInspectTime > INSPECT_FREQ) and INSPECT_DELAY or (INSPECT_FREQ - lastInspectTime + INSPECT_DELAY)
 			ttt:Show()
 			if not cacheLoaded then
-				self:AddLine(TALENTS_PREFIX..L_TOOLTIP_LOADING)
+				self:AddLine(TALENTS_PREFIX..UNKNOWN)
 			end
 		elseif isInspectOpen then
-			self:AddLine(TALENTS_PREFIX..L_TOOLTIP_INSPECT_OPEN)
+			self:AddLine(TALENTS_PREFIX..UNKNOWN)
 		end
 	end
 end)

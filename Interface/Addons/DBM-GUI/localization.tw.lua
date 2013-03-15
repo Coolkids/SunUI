@@ -31,7 +31,6 @@ L.Button_OK 				= '確定'
 L.Button_Cancel 			= '取消'
 L.Button_LoadMod 			= '載入模組'
 L.Mod_Enabled				= "啟用首領模組"
-L.Mod_EnableAnnounce		= "團隊廣播 (需要隊長)"
 L.Reset 					= "重置"
 
 L.Enable  					= "啟用"
@@ -59,6 +58,8 @@ L.DisableCinematics			= "禁用遊戲中副本裡的過場動畫"
 L.DisableCinematicsOutside	= "禁用遊戲中副本以外的過場動畫"
 L.EnableReadyCheckSound		= "允許關閉音效後播放團隊確認音"
 L.SKT_Enabled				= "永遠顯示快速擊殺計時器 (覆蓋首領特定的選項)"
+L.AutologBosses				= "自動開啟戰鬥記錄"
+L.AdvancedAutologBosses			= "自動開啟戰鬥記錄(使用Transcriptor插件)"
 L.Latency_Text				= "設定最高延遲同步門檻:%d"
 
 L.ModelOptions				= "3D模型預覽選項"

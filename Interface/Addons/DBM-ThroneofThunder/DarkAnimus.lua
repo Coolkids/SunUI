@@ -1,15 +1,14 @@
-if select(4, GetBuildInfo()) < 50200 then return end--Don't load on live
 local mod	= DBM:NewMod(824, "DBM-ThroneofThunder", nil, 362)
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8847 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8862 $"):sub(12, -3))
 mod:SetCreatureID(69427)
 mod:SetModelID(47527)
 
 mod:RegisterCombat("emote", L.Pull)
 
-mod:RegisterEvents(
+mod:RegisterEventsInCombat(
 	"SPELL_CAST_START",
 	"SPELL_AURA_APPLIED",
 	"SPELL_AURA_APPLIED_DOSE",
@@ -133,10 +132,9 @@ function mod:SPELL_CAST_START(args)
 		specWarnInterruptingJolt:Show()
 		if mod:IsManaUser() and mod:IsRanged() then
 			DBM.Flash:Show(1, 0, 0)
-			specWarnPiercingRoar:Show()
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\stopcast.mp3") --停止施法
 		else
-			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\aesoon.mp3")
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_dfzj.mp3") --斷法震擊
 		end
 	end
 end

@@ -1,12 +1,10 @@
-if select(4, GetBuildInfo()) < 50200 then return end--Don't load on live
 local mod	= DBM:NewMod(820, "DBM-ThroneofThunder", nil, 362)
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8848 $"):sub(12, -3))
-mod:SetCreatureID(69017)--69070 Viscous Horror, 69069 good ooze, 70579 bad ooze
+mod:SetRevision(("$Revision: 8884 $"):sub(12, -3))
+mod:SetCreatureID(69017)--69070 Viscous Horror, 69069 good ooze, 70579 bad ooze (patched out of game, :\)
 mod:SetModelID(47009)
-mod:SetUsedIcons(8, 7, 6, 5, 4, 3, 2, 1)
 
 mod:RegisterCombat("combat")
 
@@ -16,10 +14,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED",
 	"SPELL_AURA_APPLIED_DOSE",
 	"SPELL_AURA_REMOVED",
-	"UNIT_SPELLCAST_SUCCEEDED",
-	"CHAT_MSG_TARGETICONS",
-	"UNIT_TARGET",
-	"UPDATE_MOUSEOVER_UNIT"
+	"UNIT_SPELLCAST_SUCCEEDED"
 )
 
 local warnMalformedBlood			= mod:NewStackAnnounce(136050, 2, nil, mod:IsTank() or mod:IsHealer())--No cd bars for this because it's HIGHLY variable (lowest priority spell so varies wildly depending on bosses 3 buffs)
@@ -54,7 +49,6 @@ local berserkTimer					= mod:NewBerserkTimer(480)
 local bossspellinfo = {}
 
 mod:AddBoolOption("RangeFrame", true)--Right now, EVERYTHING targets melee. If blizz listens to feedback, it may change to just ranged.
-mod:AddBoolOption("SetIconOnBadOoze", true)
 mod:AddBoolOption("InfoFrame", true, "sound")
 
 local function showspellinfo()
@@ -99,8 +93,6 @@ end
 local metabolicBoost = false
 local acidSpinesActive = false--Spread of 5 yards
 local postulesActive = false
-local oozeGUIDS = {}
-local oozeIcon = 8
 
 function mod:BigOoze()
 	specWarnViscousHorror:Show()
@@ -109,7 +101,6 @@ function mod:BigOoze()
 end
 
 function mod:OnCombatStart(delay)
-	table.wipe(oozeGUIDS)
 	metabolicBoost = false
 	acidSpinesActive = false
 	postulesActive = false
@@ -121,7 +112,6 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd()
-	table.wipe(oozeGUIDS)--Table may get large, so lets wipe it on kill/wipe too to clear memory
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
 	end
@@ -159,7 +149,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerBlackBlood:Start(args.destName)
 	elseif args:IsSpellID(136215) then
 		warnGasBladder:Show(args.destName)
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_sltb.mp3")--首領突變
 		showspellinfo()
 	elseif args:IsSpellID(136246) then
 		postulesActive = true
@@ -167,12 +156,11 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerPustuleEruptionCD:Start()--not affected by metabolicBoost?
 		if self.Options.RangeFrame and not acidSpinesActive then--Check if acidSpinesActive is active, if they are, we should already have range 5 up
 			DBM.RangeCheck:Show(2)
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\scattersoon.mp3")--注意分散
 		end
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_sltb.mp3")
 		showspellinfo()
 	elseif args:IsSpellID(136225) then
 		warnPathogenGlands:Show(args.destName)
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_sltb.mp3")
 		showspellinfo()	
 	elseif args:IsSpellID(136228) then
 		warnVolatilePathogen:Show(args.destName)
@@ -186,19 +174,18 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif args:IsSpellID(136245) then
 		metabolicBoost = true
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_sljs.mp3")--加速
 		warnMetabolicBoost:Show(args.destName)
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_sltb.mp3")
-		showspellinfo()
+		showspellinfo()		
 	elseif args:IsSpellID(136210) then
 		warnVentralSacs:Show(args.destName)
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_sltb.mp3")
 		showspellinfo()
 	elseif args:IsSpellID(136218) then
 		acidSpinesActive = true
 		if self.Options.RangeFrame then
 			DBM.RangeCheck:Show(5)
 		end
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_sltb.mp3")
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\scattersoon.mp3")--注意分散
 		showspellinfo()
 	elseif args:IsSpellID(140546) and args:IsPlayer() then
 		DBM.Flash:Show(0, 1, 0)
@@ -249,53 +236,5 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		timerPustuleEruptionCD:Start()
 	elseif spellId == 136050 and self:AntiSpam(2, 2) then--Malformed Blood
 		
-	end
-end
-
---This function will have issues with people running old version of mod spamming icon 3.
-function mod:CHAT_MSG_TARGETICONS(msg)
-	--TARGET_ICON_SET = "|Hplayer:%s|h[%s]|h sets |TInterface\\TargetingFrame\\UI-RaidTargetingIcon_%d:0|t on %s.";
-	local icon = tonumber(string.sub(string.match(msg, "RaidTargetingIcon_%d"), -1))
-	if icon then
-		oozeIcon = icon - 1--Try to sync up to what others oozeIcon are at to do our best job to keep all mods on same page
-	end
-end
-
-function mod:TrySetTarget()
-	for i = 1, DBM:GetNumGroupMembers() do
-		local guid = UnitGUID("raid"..i.."target")
-		local cid = self:GetCIDFromGUID(guid)
-		if cid == 70579 and not oozeGUIDS[guid] then
-			SetRaidTarget("raid"..i.."target", oozeIcon)
-			oozeGUIDS[guid] = true
-			self:SendSync("iconSet", guid)
-			oozeIcon = oozeIcon - 1
-			if oozeIcon == 0 then oozeIcon = 8 end
-		end
-	end
-end
-
-function mod:UNIT_TARGET()
-	local cid = self:GetCIDFromGUID(UnitGUID("target"))
-	if DBM:GetRaidRank() >= 1 and self.Options.SetIconOnBadOoze and (cid == 70579 or cid == 69069) then--Because not everyone has assist, lets just fire a check of all raid targets if EITHER ooze ID is up and targeted to see if someone else is targeting the bad one
-		self:TrySetTarget()
-	end
-end
-
-function mod:UPDATE_MOUSEOVER_UNIT()
-	local guid = UnitGUID("mouseover")
-	local cid = self:GetCIDFromGUID(guid)
-	if DBM:GetRaidRank() >= 1 and self.Options.SetIconOnBadOoze and cid == 70579 and not oozeGUIDS[guid] then--Because not everyone has assist, lets just fire a check of all raid targets if EITHER ooze ID is up and targeted to see if someone else is targeting the bad one
-		SetRaidTarget("mouseover", oozeIcon)
-		oozeGUIDS[guid] = true
-		self:SendSync("iconSet", guid)
-		oozeIcon = oozeIcon - 1
-		if oozeIcon == 0 then oozeIcon = 8 end
-	end
-end
-
-function mod:OnSync(msg, guid)
-	if msg == "iconSet" and guid then
-		oozeGUIDS[guid] = true--Again, try to avoid setting icons on mobs others already set icons on by adding it to our ignore list through sync
 	end
 end

@@ -1,9 +1,9 @@
-if select(4, GetBuildInfo()) < 50200 then return end--Don't load on live
 local mod	= DBM:NewMod(828, "DBM-ThroneofThunder", nil, 362)
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
+local sndWOPWS	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8839 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8862 $"):sub(12, -3))
 mod:SetCreatureID(69712)
 mod:SetModelID(46675)
 
@@ -40,6 +40,7 @@ local timerFlockCD	 		= mod:NewTimer(30, "timerFlockCD", 15746)
 local timerTalonRakeCD		= mod:NewCDTimer(20, 134366, mod:IsTank() or mod:IsHealer())--20-30 second variation
 local timerTalonRake		= mod:NewTargetTimer(60, 134366, mod:IsTank() or mod:IsHealer())
 local timerDowndraftCD		= mod:NewCDTimer(97, 134370)
+local timerFeedYoung		= mod:NewCDTimer(30, 137528)
 
 mod:AddBoolOption("RangeFrame", mod:IsRanged())
 
@@ -53,6 +54,11 @@ function mod:OnCombatStart(delay)
 	flockCount = 0
 	timerQuillsCD:Start(42.5-delay)
 	timerDowndraftCD:Start(91-delay)
+	sndWOP:Schedule(85, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_xjzb.mp3")
+	sndWOP:Schedule(87, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")	
+	sndWOP:Schedule(88, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+	sndWOP:Schedule(89, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+	sndWOP:Schedule(90, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Show(8)
 	end
@@ -84,7 +90,17 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif args:IsSpellID(137528) then
 		warnFeedYoung:Show()
 		specWarnFeedYoung:Show()
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_wsyc.mp3") --餵食
+		timerFeedYoung:Start()
+		wstime = GetTime()
+		sndWOPWS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_zbws.mp3")
+		sndWOPWS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOPWS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOPWS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		sndWOPWS:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_wsyc.mp3") --餵食
+		sndWOPWS:Schedule(26, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_zbws.mp3")
+		sndWOPWS:Schedule(27.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOPWS:Schedule(28.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOPWS:Schedule(29.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
@@ -108,16 +124,35 @@ function mod:SPELL_CAST_START(args)
 	elseif args:IsSpellID(134370) then
 		warnDowndraft:Show()
 		specWarnDowndraft:Show()
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_xjql.mp3") --下降氣流
-		sndWOP:Schedule(5.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
-		sndWOP:Schedule(6.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")	
-		sndWOP:Schedule(7.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-		sndWOP:Schedule(8.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-		sndWOP:Schedule(9.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_xjzb.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")	
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		if GetTime() - wstime > 25 then
+			sndWOPWS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOPWS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOPWS:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		end
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_xjql.mp3") --下降氣流		
 		if self:IsDifficulty("heroic10", "heroic25") then
 			timerDowndraftCD:Start(93)
+			sndWOP:Schedule(87, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_xjzb.mp3") --下降氣流準備
+			sndWOP:Schedule(87.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
+			sndWOP:Schedule(88.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+			sndWOP:Schedule(89.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+			sndWOP:Schedule(90.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Schedule(91.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Schedule(92.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		else
 			timerDowndraftCD:Start()--Todo, confirm they didn't just change normal to 90 as well. in my normal logs this had a 110 second cd on normal
+			sndWOP:Schedule(92, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_xjzb.mp3")
+			sndWOP:Schedule(93, "Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
+			sndWOP:Schedule(94, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+			sndWOP:Schedule(95, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")	
+			sndWOP:Schedule(96, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Schedule(97, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Schedule(98, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		end
 	elseif args:IsSpellID(134380) and self:AntiSpam(2, 1) then--Maybe adjust anti spam a bit or find a different way to go about this. It is important information though.
 		warnLayEgg:Show()
@@ -148,7 +183,15 @@ function mod:CHAT_MSG_MONSTER_EMOTE(msg, _, _, _, target)
 		timerFlockCD:Cancel()--So we don't get two timers on the double nests on 25 man
 		warnFlock:Schedule(0.5, messageText, flockName, flockCount)
 		--TODO, once verifying nest orders are same on live, and that 25H isn't new 25N numbers, add what next nest is.
-		if self:IsDifficulty("normal10", "heroic10") then--TODO, see if heroic 10 is still 40 seconds in between for some reason (also, see if LFR is same pattern)
+		if self:IsDifficulty("normal10") then
+			if flockC == 1 or flockC == 2 or flockC == 6 or flockC == 7 or flockC == 8 or flockC == 12 or flockC == 13 or flockC == 14 or flockC == 18 or flockC == 19 or flockC == 20 or flockC == 24 or flockC == 25 or flockC == 26 or flockC == 30 or flockC == 31 or flockC == 32 then--Lower is next
+				timerFlockCD:Show(40, flockCount+1, L.Lower)
+			elseif flockC == 3 or flockC == 4 or flockC == 5 or flockC == 9 or flockC == 10 or flockC == 11 or flockC == 15 or flockC == 16 or flockC == 17 or flockC == 21 or flockC == 22 or flockC == 23 or flockC == 27 or flockC == 28 or flockC == 29 or flockC == 33 or flockC == 34 or flockC == 35 then--Upper is next
+				timerFlockCD:Show(40, flockCount+1, L.Upper)
+			else--Logic Failsafe, if we don't know what next one is we just say unknown and at least start a timer
+				timerFlockCD:Show(40, flockCount+1, DBM_CORE_UNKNOWN)
+			end
+		elseif self:IsDifficulty("heroic10") then--TODO, see if heroic 10 is still 40 seconds in between for some reason (also, see if LFR is same pattern)
 			if flockC == 1 or flockC == 2 or flockC == 6 or flockC == 7 or flockC == 8 or flockC == 12 or flockC == 13 or flockC == 14 or flockC == 18 or flockC == 19 or flockC == 20 or flockC == 24 or flockC == 25 or flockC == 26 or flockC == 30 or flockC == 31 or flockC == 32 then--Lower is next
 				timerFlockCD:Show(30, flockCount+1, L.Lower)
 			elseif flockC == 3 or flockC == 4 or flockC == 5 or flockC == 9 or flockC == 10 or flockC == 11 or flockC == 15 or flockC == 16 or flockC == 17 or flockC == 21 or flockC == 22 or flockC == 23 or flockC == 27 or flockC == 28 or flockC == 29 or flockC == 33 or flockC == 34 or flockC == 35 then--Upper is next

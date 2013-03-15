@@ -1,5 +1,6 @@
 ﻿local S, L, DB, _, C = unpack(select(2, ...))
 local CB = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("CB", "AceTimer-3.0")
+if DB.zone ~= "zhTW" and DB.zone ~= "zhCN" then return end
 function CB:OnEnable()
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig", "AceConsole-3.0")
 local AceConfigDialog = LibStub and LibStub("AceConfigDialog-3.0", true)

@@ -255,9 +255,11 @@ mod:AddBoolOption("HudMAP2", false, "sound")
 mod:AddBoolOption("SendPos", true, "sound")
 mod:AddBoolOption("AcceptPos", true, "sound")
 mod:AddDropdownOption("optDR", {"noDR", "DR1", "DR2", "DR3"}, "noDR", "sound")
-if string.find(GetGuildInfo("player"), "黑手") then
-	mod:AddDropdownOption("optjs", {"non", "shaman1", "shaman2", "pal1", "pal2", "pal3", "dk", "warrior1", "warrior2", "druid"}, "non", "sound")
-	mod:AddDropdownOption("optjs2", {"non2", "priest1", "priest2", "priest3", "priest4"}, "non2", "sound")
+if GetGuildInfo("player") then
+	if string.find(GetGuildInfo("player"), "黑手") then
+		mod:AddDropdownOption("optjs", {"non", "shaman1", "shaman2", "pal1", "pal2", "pal3", "dk", "warrior1", "warrior2", "druid"}, "non", "sound")
+		mod:AddDropdownOption("optjs2", {"non2", "priest1", "priest2", "priest3", "priest4"}, "non2", "sound")
+	end
 end
 
 local DBMHudMap = DBMHudMap
@@ -522,8 +524,8 @@ function mod:SPELL_CAST_SUCCESS(args)
 		timerVisionsCD:Start(4)
 		timerCalamityCD:Start(9)
 		timerConsumingTerrorCD:Start(11)
-		if string.find(GetGuildInfo("player"), "黑手") then
-			if self:IsDifficulty("heroic25") then
+		if GetGuildInfo("player") then
+			if string.find(GetGuildInfo("player"), "黑手") and self:IsDifficulty("heroic25") then
 				MyDR()
 			end
 		end
@@ -581,8 +583,8 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		timerVisionsCD:Start(7)
 		timerCalamityCD:Start(12)
 		timerConsumingTerrorCD:Start(14)
-		if string.find(GetGuildInfo("player"), "黑手") then
-			if self:IsDifficulty("heroic25") then
+		if GetGuildInfo("player") then
+			if string.find(GetGuildInfo("player"), "黑手") and self:IsDifficulty("heroic25") then
 				MyDR()
 			end
 		end

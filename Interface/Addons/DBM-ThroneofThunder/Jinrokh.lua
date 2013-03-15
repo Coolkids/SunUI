@@ -1,10 +1,9 @@
-if select(4, GetBuildInfo()) < 50200 then return end--Don't load on live
 local mod	= DBM:NewMod(827, "DBM-ThroneofThunder", nil, 362)
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndIon	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8831 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8906 $"):sub(12, -3))
 mod:SetCreatureID(69465)
 mod:SetModelID(47552)
 
@@ -43,10 +42,10 @@ local specWarnJSA					= mod:NewSpecialWarning("SpecWarnJSA")
 
 local timerFocusedLightningCD		= mod:NewCDTimer(10, 137399)--10-18 second variation, tends to lean toward 11-12 except when delayed by other casts such as throw or storm. Pull one also seems to variate highly
 local timerStaticBurstCD			= mod:NewCDTimer(19, 137162, mod:IsTank())
-local timerThrowCD					= mod:NewNextTimer(33, 137175)--90-93 variable (but always 33 seconds after storm, the only variation is between first and second one really)
-local timerStormCD					= mod:NewNextTimer(60, 137313)--90-93 variable (but ALWAYS 60 seconds after throw, so we use throw as trigger point)
-local timerStorm					= mod:NewCastTimer(15, 137313)
-local timerIonizationCD				= mod:NewCDTimer(60, 138732)
+local timerThrowCD					= mod:NewCDTimer(26, 137175)--90-93 variable (26-30 seconds after storm. verified in well over 50 logs)
+local timerStorm					= mod:NewBuffActiveTimer(17, 137313)--2 second cast, 15 second duration
+local timerStormCD					= mod:NewCDTimer(60.5, 137313)--90-93 variable (60.5~67 seconds after throw)
+local timerIonizationCD				= mod:NewNextTimer(60, 138732)
 
 local stormcount = 0
 --local soundFocusedLightning			= mod:NewSound(137422)

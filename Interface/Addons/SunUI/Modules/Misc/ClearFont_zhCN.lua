@@ -1,5 +1,4 @@
 ﻿local S, L, DB, _, C = unpack(select(2, ...))
-local C
 if not (GetLocale() == "zhCN") then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ClearFont_zhCN", "AceEvent-3.0", "AceHook-3.0")
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
@@ -8,9 +7,9 @@ local CF_SCALE
 local CLEAR_FONT_BASE = "Fonts\\"
 
 -- 金币、堆叠、按键绑定等字体
-local CLEAR_FONT_NUMBER = CLEAR_FONT_BASE.."FRIZQT__.TTF"
+local CLEAR_FONT_NUMBER = CLEAR_FONT_BASE.."ARHei.TTF"
 -- 生命条、经验条上的字体
-local CLEAR_FONT_EXP = CLEAR_FONT_BASE.."ARIALN.TTF"
+local CLEAR_FONT_EXP = CLEAR_FONT_BASE.."ARHei.TTF"
 -- 任务说明和书信、石碑的正文字体
 local CLEAR_FONT_QUEST = CLEAR_FONT_BASE.."ARKai_T.TTF"
 -- 战斗伤害数值提示

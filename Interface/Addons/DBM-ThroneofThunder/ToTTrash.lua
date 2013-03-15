@@ -2,7 +2,7 @@ local mod	= DBM:NewMod("ToTTrash", "DBM-ThroneofThunder")
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8804 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8903 $"):sub(12, -3))
 --mod:SetModelID(39378)
 mod:SetZone()
 
@@ -12,14 +12,18 @@ mod:RegisterEvents(
 	"UNIT_DIED"
 )
 
-local warnStormEnergy		= mod:NewTargetAnnounce(139322, 4)
-local warnSpiritFire		= mod:NewTargetAnnounce(139895, 3)--This is morchok entryway trash that throws rocks at random poeple.
-local warnStormCloud		= mod:NewTargetAnnounce(139900, 4)
+local warnStormEnergy			= mod:NewTargetAnnounce(139322, 4)
+local warnSpiritFire			= mod:NewTargetAnnounce(139895, 3)--This is morchok entryway trash that throws rocks at random poeple.
+local warnStormCloud			= mod:NewTargetAnnounce(139900, 4)
+local warnConductiveShield		= mod:NewTargetAnnounce(140296, 4)
 
-local specWarnStormEnergy	= mod:NewSpecialWarningYou(139322)
-local specWarnStormCloud	= mod:NewSpecialWarningYou(139900)
+local specWarnStormEnergy		= mod:NewSpecialWarningYou(139322)
+local specWarnStormCloud		= mod:NewSpecialWarningYou(139900)
+local specWarnSonicScreech		= mod:NewSpecialWarningInterrupt(136751)
+local specWarnConductiveShield	= mod:NewSpecialWarningTarget(140296)
 
-local timerSpiritfireCD		= mod:NewCDTimer(12, 139895)
+local timerSpiritfireCD			= mod:NewCDTimer(12, 139895)
+local timerConductiveShieldCD	= mod:NewNextSourceTimer(20, 140296)
 
 mod:RemoveOption("HealthFrame")
 mod:RemoveOption("SpeedKillTimer")
@@ -66,13 +70,15 @@ function mod:SPELL_CAST_START(args)
 		self:ScheduleMethod(0.2, "SpiritFireTarget", args.sourceGUID)--Untested scan timing (don't even know if scanning works
 		timerSpiritfireCD:Start()
 		if self.Options.RangeFrame and not DBM.RangeCheck:IsShown() then
-			DBM.RangeCheck:Show(10)
+			DBM.RangeCheck:Show(3)
 		end
+	elseif args:IsSpellID(136751) and (args.sourceGUID == UnitGUID("target") or args.sourceGUID == UnitGUID("focus")) then
+		specWarnSonicScreech:Show(args.sourceName)
 	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(139322) then
+	if args:IsSpellID(139322) then--Or 139559, not sure which
 		stormEnergyTargets[#stormEnergyTargets + 1] = args.destName
 		if args:IsPlayer() then
 			DBM.Flash:Show(1, 0, 0)
@@ -85,7 +91,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			DBM.RangeCheck:Show(10)
 		end
 		self:Unschedule(warnStormEnergyTargets)
-		self:Schedule(0.3, warnStormEnergyTargets)
+		self:Schedule(0.5, warnStormEnergyTargets)
 	elseif args:IsSpellID(139900) then
 		stormCloudTargets[#stormCloudTargets + 1] = args.destName
 		if args:IsPlayer() then
@@ -99,7 +105,11 @@ function mod:SPELL_AURA_APPLIED(args)
 			DBM.RangeCheck:Show(10)
 		end
 		self:Unschedule(warnStormCloudTargets)
-		self:Schedule(0.3, warnStormCloudTargets)
+		self:Schedule(0.5, warnStormCloudTargets)
+	elseif args:IsSpellID(140296) then
+		warnConductiveShield:Show(args.destName)
+		specWarnConductiveShield:Show(args.destName)
+		timerConductiveShieldCD:Start(20, args.destName, args.sourceGUID)
 	end
 end
 
@@ -127,5 +137,7 @@ function mod:UNIT_DIED(args)
 		if self.Options.HudMAP then
 			DBMHudMap:FreeEncounterMarkers()
 		end
+	elseif cid == 69834 or cid == 69821 then
+		timerConductiveShieldCD:Cancel(args.destName, args.destGUID)
 	end
 end

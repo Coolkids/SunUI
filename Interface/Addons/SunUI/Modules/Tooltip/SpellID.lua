@@ -5,9 +5,9 @@ local _
 ----------------------------------------------------------------------------------------
 local function addLine(self, id, isItem)
 	if isItem then
-		self:AddLine("|cffffffff"..L_TOOLTIP_ITEM_ID.." "..id)
+		self:AddLine("|cffffffff"..L["物品ID"].." "..id)
 	else
-		self:AddLine("|cff70C0F5"..L_TOOLTIP_SPELL_ID.." "..id)
+		self:AddLine("|cff70C0F5"..L["法术ID"].." "..id)
 	end
 	self:Show()
 end

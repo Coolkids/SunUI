@@ -1,4 +1,5 @@
 ﻿local S, L, DB, _, C = unpack(select(2, ...))
+if DB.zone ~= "zhTW" and DB.zone ~= "zhCN" then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ambutton", "AceTimer-3.0")
 function Module:OnEnable()
 	local button = CreateFrame("Button", "ButtonA",  ColectorButton)

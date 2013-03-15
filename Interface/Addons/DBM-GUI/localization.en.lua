@@ -57,6 +57,8 @@ L.DisableCinematics			= "Disable in-game cinematics in instances"
 L.DisableCinematicsOutside	= "Disable in-game cinematics outside instances"
 L.EnableReadyCheckSound			= "Always Play Ready Check Sound"
 L.SKT_Enabled				= "Always show speed kill timer (Overrides boss-specific option)"
+L.AutologBosses				= "Automatically record boss encounters using blizzard combat log"
+L.AdvancedAutologBosses		= "Automatically record boss encounters with Transcriptor"
 L.Latency_Text				= "Set max latency sync threshold: %d"
 
 L.ModelOptions				= "3D Model Viewer Options"

@@ -1,11 +1,10 @@
-if select(4, GetBuildInfo()) < 50200 then return end--Don't load on live
 local mod	= DBM:NewMod(819, "DBM-ThroneofThunder", nil, 362)
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndDB		= mod:NewSound(nil, "SoundDB", false)
 local sndOrb	= mod:NewSound(nil, "SoundOrb", mod:IsTank())
 
-mod:SetRevision(("$Revision: 8840 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8904 $"):sub(12, -3))
 mod:SetCreatureID(68476)
 mod:SetModelID(47325)
 
@@ -34,6 +33,9 @@ local warnDoubleSwipe			= mod:NewSpellAnnounce(136741, 3)
 local warnAdds					= mod:NewAnnounce("warnAdds", 2, 43712)--Some random troll icon
 local warnDino					= mod:NewSpellAnnounce("ej7086", 3, 137237)
 local warnMending				= mod:NewSpellAnnounce(136797, 4)
+local warnVenomBolt				= mod:NewSpellAnnounce(136587, 3, nil, false)
+local warnChainLightning		= mod:NewSpellAnnounce(136480, 3, nil, false)
+local warnFireball				= mod:NewSpellAnnounce(136465, 3, nil, false)
 local warnBestialCry			= mod:NewStackAnnounce(136817, 3)
 local warnRampage				= mod:NewTargetAnnounce(136821, 4, nil, mod:IsTank() or mod:IsHealer())
 local warnDireCall				= mod:NewSpellAnnounce(137458, 3)
@@ -47,6 +49,10 @@ local specWarnPunctureOther		= mod:NewSpecialWarningTarget(136767, mod:IsTank())
 local specWarnSandTrap			= mod:NewSpecialWarningMove(136723)
 local specWarnDino				= mod:NewSpecialWarningSwitch("ej7086", not mod:IsHealer())
 local specWarnMending			= mod:NewSpecialWarningInterrupt(136797)--High priority interrupt. All dps needs warning because boss heals 1% per second it's not interrupted.
+local specWarnVenomBolt			= mod:NewSpecialWarningInterrupt(136587)--Can be on for all since it only triggers off target/focus
+local specWarnChainLightning	= mod:NewSpecialWarningInterrupt(136480)--Can be on for all since it only triggers off target/focus
+local specWarnFireball			= mod:NewSpecialWarningInterrupt(136465)--Can be on for all since it only triggers off target/focus
+local specWarnLivingPoison		= mod:NewSpecialWarningMove(136646)
 local specWarnFrozenBolt		= mod:NewSpecialWarningMove(136573)--Debuff used by Frozen Orbs
 local specWarnPoison			= mod:NewSpecialWarningMove(136646)
 local specWarnLightningNova		= mod:NewSpecialWarningMove(136490)--Mainly for LFR or normal. On heroic you're going to die.
@@ -58,8 +64,6 @@ local specWarnOrb				= mod:NewSpecialWarning("specWarnOrb")
 local specWarnSunDebuff			= mod:NewSpecialWarningSpell(136719, mod:IsHealer())
 local specWarnWitchDebuff		= mod:NewSpecialWarningSpell(136512, mod:IsHealer())
 local specWarnLightTT			= mod:NewSpecialWarningSpell(136487)
-local specWarnDWind				= mod:NewSpecialWarningInterrupt(136587)
-local specWarnLightB			= mod:NewSpecialWarningInterrupt(136480)
 
 local timerDoor					= mod:NewTimer(113.5, "timerDoor", 2457)--They seem to be timed off last door start, not last door end. They MAY come earlier if you kill off all first doors adds though not sure yet. If they do, we'll just start new timer anyways
 local timerAdds					= mod:NewTimer(18.91, "timerAdds", 43712)
@@ -72,7 +76,7 @@ local timerPuncture				= mod:NewTargetTimer(90, 136767, nil, mod:IsTank() or mod
 local timerPunctureCD			= mod:NewCDTimer(11, 136767, nil, mod:IsTank() or mod:IsHealer())
 local timerJalakCD				= mod:NewNextTimer(10, "ej7087", nil, nil, nil, 2457)--Maybe it's time for a better worded spawn timer than "Next mobname". Maybe NewSpawnTimer with "mobname activates" or something.
 local timerBestialCryCD			= mod:NewNextCountTimer(10, 136817)
-local timerDireCallCD			= mod:NewCDTimer(55, 137458)--Heroic
+local timerDireCallCD			= mod:NewCDTimer(62, 137458)--Heroic (every 62-70 seconds)
 
 local berserkTimer				= mod:NewBerserkTimer(720)
 
@@ -133,14 +137,21 @@ function mod:SPELL_CAST_START(args)
 		timerDireCallCD:Start()--CD is reset when he breaks a door though.
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\aesoon.mp3") --準備AE
 	elseif args:IsSpellID(136587) then
-		if args.sourceGUID == UnitGUID("target") or args.sourceGUID == UnitGUID("focus") or mod:IsDps() then
-			specWarnDWind:Show(args.sourceName)
+		warnVenomBolt:Show()
+		if args.sourceGUID == UnitGUID("target") or args.sourceGUID == UnitGUID("focus") then
+			specWarnVenomBolt:Show(args.sourceName)
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3")--快打斷
 		end
 	elseif args:IsSpellID(136480) then
+		warnChainLightning:Show()
 		if args.sourceGUID == UnitGUID("target") or args.sourceGUID == UnitGUID("focus") then
-			specWarnLightB:Show(args.sourceName)
+			specWarnChainLightning:Show(args.sourceName)
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\kickcast.mp3")--快打斷
+		end
+	elseif args:IsSpellID(136465) then
+		warnFireball:Show()
+		if args.sourceGUID == UnitGUID("target") or args.sourceGUID == UnitGUID("focus") then
+			specWarnFireball:Show(args.sourceName)
 		end
 	end
 end
@@ -186,7 +197,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ptwo.mp3") --2階段準備	
 	elseif args:IsSpellID(136817) then
 		warnBestialCry:Show(args.destName, args.amount or 1)
-		timerBestialCryCD:Start(5, (args.amount or 1)+1)
+		timerBestialCryCD:Start(10, (args.amount or 1)+1)
 	elseif args:IsSpellID(136821) then
 		warnRampage:Show(args.destName)
 		specWarnRampage:Show(args.destName)
@@ -230,11 +241,11 @@ function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
 	if spellId == 136723 and destGUID == UnitGUID("player") and self:AntiSpam(3, 1) then
 		specWarnSandTrap:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3") --快躲開
+	elseif spellId == 136646 and destGUID == UnitGUID("player") and self:AntiSpam(3, 3) then
+		specWarnLivingPoison:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3") --快躲開
 	elseif spellId == 136573 and destGUID == UnitGUID("player") and self:AntiSpam(3, 2) then
 		specWarnFrozenBolt:Show()
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3") --快躲開
-	elseif spellId == 136646 and destGUID == UnitGUID("player") and self:AntiSpam(3, 3) then
-		specWarnPoison:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3") --快躲開
 	elseif spellId == 136490 and destGUID == UnitGUID("player") and self:AntiSpam(3, 4) then
 		specWarnLightningNova:Show()

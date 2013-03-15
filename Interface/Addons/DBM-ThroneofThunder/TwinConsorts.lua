@@ -1,9 +1,9 @@
-if select(4, GetBuildInfo()) < 50200 then return end--Don't load on live
 local mod	= DBM:NewMod(829, "DBM-ThroneofThunder", nil, 362)
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
+local sndWOPCX	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8816 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8866 $"):sub(12, -3))
 mod:SetCreatureID(68905, 68904)--Lu'lin 68905, Suen 68904
 mod:SetModelID(46975)--Lu'lin, 46974 Suen
 
@@ -13,11 +13,13 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_START",
 	"SPELL_AURA_APPLIED",
 	"SPELL_AURA_APPLIED_DOSE",
+	"SPELL_DAMAGE",
 	"SPELL_AURA_REMOVED",
 	"SPELL_CAST_SUCCESS",
 	"SPELL_PERIODIC_DAMAGE",
 	"SPELL_PERIODIC_MISSED",
 	"SPELL_SUMMON",
+	"CHAT_MSG_MONSTER_YELL",
 	"UNIT_DIED",
 	"UNIT_SPELLCAST_SUCCEEDED"
 )
@@ -32,10 +34,10 @@ local warnDay							= mod:NewSpellAnnounce("ej7645", 2, 122789)
 local warnLightOfDay					= mod:NewSpellAnnounce(137403, 2, nil, false)--Spammy, but leave it as an option at least
 local warnFanOfFlames					= mod:NewStackAnnounce(137408, 2, nil, mod:IsTank() or mod:IsHealer())
 local warnFlamesOfPassion				= mod:NewSpellAnnounce(137414, 3)--Todo, check target scanning
-local warnIceCommet						= mod:NewSpellAnnounce(137419, 2)
+local warnIceComet						= mod:NewSpellAnnounce(137419, 2)
 local warnNuclearInferno				= mod:NewCastAnnounce(137491, 4)--Heroic
 --Dusk
-local warnTidalForce					= mod:NewCastAnnounce(137531, 2)
+local warnTidalForce					= mod:NewCastAnnounce(137531, 3)
 
 --Darkness
 local specWarnCosmicBarrage				= mod:NewSpecialWarningSpell(136752, false, nil, nil, 2)
@@ -44,11 +46,15 @@ local specWarnBeastOfNightmares			= mod:NewSpecialWarningSpell(137375, mod:IsTan
 --Light
 local specWarnFanOfFlames				= mod:NewSpecialWarningStack(137408, mod:IsTank(), 2)
 local specWarnFanOfFlamesOther			= mod:NewSpecialWarningTarget(137408, mod:IsTank())
-local specWarnIceCommet					= mod:NewSpecialWarningSpell(137419, false)
+local specWarnIceComet					= mod:NewSpecialWarningSpell(137419, false)
 local specWarnFire						= mod:NewSpecialWarningMove(137417)
 local specWarnNuclearInferno			= mod:NewSpecialWarningSpell(137491, nil, nil, nil, 2)--Heroic
 --Dusk
 local specWarnTidalForce				= mod:NewSpecialWarningSpell(137531, nil, nil, nil, 2)--Maybe switch to a stop dps warning, or a switch to Suen?
+
+local specWarnTT1						= mod:NewSpecialWarningSpell(138300)
+local specWarnTT2						= mod:NewSpecialWarningSpell(138855)
+local specWarnTT3						= mod:NewSpecialWarningSpell(138306)
 
 
 --Darkness
@@ -63,10 +69,15 @@ local timerLightOfDayCD					= mod:NewCDTimer(6, 137403, nil, false)--Trackable i
 local timerFanOfFlamesCD				= mod:NewNextTimer(12, 137408, nil, mod:IsTank() or mod:IsHealer())
 local timerFanOfFlames					= mod:NewTargetTimer(30, 137408, nil, mod:IsTank())
 local timerFlamesOfPassionCD			= mod:NewCDTimer(30, 137414)
-local timerIceCommetCD					= mod:NewCDTimer(25, 137419)--Every 25-35 seconds on normal. On heroic it's every 15 seconds almost precisely (i suspect heroic gets them more often to ensure RNG doesn't wipe you to Nuclear Inferno)
+local timerIceCometCD					= mod:NewCDTimer(19, 137419)--Every 19-25 seconds on normal. On heroic it's every 15 seconds almost precisely (i suspect heroic gets them more often to ensure RNG doesn't wipe you to Nuclear Inferno)
 local timerNuclearInfernoCD				= mod:NewCDTimer(55.5, 137491)
 --Dusk
 local timerTidalForceCD					= mod:NewCDTimer(74, 137531)
+
+local timerTT1CD						= mod:NewCDTimer(90, 138254)
+local timerTT2CD						= mod:NewCDTimer(90, 123904)
+local timerTT3CD						= mod:NewCDTimer(90, 138267)
+local timerTT4CD						= mod:NewCDTimer(86, 138189)
 
 local berserkTimer						= mod:NewBerserkTimer(600)
 
@@ -104,37 +115,15 @@ end
 
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(137491) then
-		warnNuclearInferno:Show()
-		specWarnNuclearInferno:Show()
-		timerNuclearInfernoCD:Start()
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_hzly.mp3") --核子煉獄
+		self:SendSync("Inferno")
 	elseif args:IsSpellID(137531) then
-		warnTidalForce:Show()
-		specWarnTidalForce:Show()
-		timerTidalForceCD:Start()
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_cxzl.mp3") --潮汐之力
+		self:SendSync("TidalForce")
 	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(136752) then
-		warnCosmicBarrage:Show()
-		specWarnCosmicBarrage:Show()
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\scattersoon.mp3")--注意分散
-		sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
-		sndWOP:Schedule(2.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-		sndWOP:Schedule(3.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-		sndWOP:Schedule(4.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-		if self.Options.HudMAP2 then
-			for i = 1, DBM:GetGroupMembers() do
-				if not UnitIsDeadOrGhost("raid"..i) then
-					CBMarkers[UnitName("raid"..i)] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("timer", UnitName("raid"..i), 8, 5, 1, 1, 1, 0.7):RegisterForAlerts():Rotate(360, 5.2):Appear())
-				end
-			end
-		end
-		if timerDayCD:GetTime() < 165 then
-			timerCosmicBarrageCD:Start()
-		end
+		self:SendSync("CosmicBarrage")
 	elseif args:IsSpellID(137404) then
 		warnTearsOfSun:Show()
 		specWarnTearsOfSun:Show()
@@ -203,7 +192,19 @@ function mod:SPELL_AURA_APPLIED(args)
 			lightmaker["3"] = register(DBMHudMap:AddEdge(1, 1, 1, 1, nil, nil, nil,687,371,709,377))
 			lightmaker["4"] = register(DBMHudMap:AddEdge(1, 1, 1, 1, nil, nil, nil,709,377,732,383))
 			lightmaker["5"] = register(DBMHudMap:AddEdge(1, 1, 1, 1, nil, nil, nil,732,383,713,401))
-		end
+		end		
+	elseif args:IsSpellID(138300) and self:AntiSpam(40, 10) then
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_xntt.mp3")--玄牛圖騰
+		specWarnTT1:Show()
+		timerTT1CD:Start()
+	elseif args:IsSpellID(138855) and self:AntiSpam(40, 11) then
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_bhtt.mp3")--白虎圖騰
+		specWarnTT2:Show()
+		timerTT2CD:Start()
+	elseif args:IsSpellID(138306) and self:AntiSpam(40, 12) then
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_yjtt.mp3")--玉蛟圖騰
+		specWarnTT3:Show()
+		timerTT3CD:Start()
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
@@ -243,28 +244,19 @@ end
 
 function mod:SPELL_SUMMON(args)
 	if args:IsSpellID(137419) then
-		warnIceCommet:Show()
-		specWarnIceCommet:Show()
+		warnIceComet:Show()
+		specWarnIceComet:Show()
 		if self:IsDifficulty("heroic10", "heroic25") then
-			timerIceCommetCD:Start(15)
+			timerIceCometCD:Start(15)
 		else
-			timerIceCommetCD:Start()
+			timerIceCometCD:Start()
 		end
 	end
 end
 
---If this turns out unreliable, we can switch to yell, which is why I want it localized for now, in case it IS needed
---If we do switch to yell, we'll still want to delay it by 6 seconds since timers don't actually cancel until port in (ie she may cast another fan of flames for example
---"<333.5 18:37:56> [CHAT_MSG_MONSTER_YELL] CHAT_MSG_MONSTER_YELL#Lu'lin! Lend me your strength!#Suen#####0#0##0#247#nil#0#false#false", -- [71265]
---"<339.3 18:38:02> [INSTANCE_ENCOUNTER_ENGAGE_UNIT] Fake Args:#1#1#Suen#0xF1310D2800005863#worldboss#410952978#nil#1#Unknown#0xF1310D2900005864#worldboss#310232488
-function mod:INSTANCE_ENCOUNTER_ENGAGE_UNIT(event)
-	if UnitExists("boss2") and tonumber(UnitGUID("boss2"):sub(6, 10), 16) == 68905 then--Make sure we don't trigger it off another engage such as wipe engage event
-		self:UnregisterShortTermEvents()
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_hhjd.mp3")--黃昏階段
-		timerFanOfFlamesCD:Cancel()
-		timerIceCommetCD:Start(11)--This seems to reset, despite what last CD was (this can be a bad thing if it was do any second)
-		timerTidalForceCD:Start(20)
-		timerCosmicBarrageCD:Start(48)
+function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
+	if spellId == 138318 and self:AntiSpam(40, 13) then
+		timerTT4CD:Start()
 	end
 end
 
@@ -288,10 +280,6 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		timerFanOfFlamesCD:Cancel()
 		timerFlamesOfPassionCD:Cancel()
 		warnNight:Show()
-		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\phasechange.mp3")--階段轉換
 		sndWOP:Schedule(180, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_btzb.mp3")--白天準備
 		sndWOP:Schedule(181, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 		sndWOP:Schedule(182, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
@@ -301,31 +289,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		timerTearsOfTheSunCD:Start(23)
 		timerBeastOfNightmaresCD:Start()
 	elseif spellId == 137187 and self:AntiSpam(2, 2) then--Lu'lin Ports away (Day Phase)
-		timerCosmicBarrageCD:Cancel()
-		timerTearsOfTheSunCD:Cancel()
-		timerBeastOfNightmaresCD:Cancel()
-		warnDay:Show()
-		timerDuskCD:Start()
-		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\phasechange.mp3")--階段轉換
-		sndWOP:Schedule(175, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_hyzb.mp3")--黑夜準備
-		sndWOP:Schedule(176, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-		sndWOP:Schedule(177, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-		sndWOP:Schedule(178, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-		timerLightOfDayCD:Start()
-		timerFanOfFlamesCD:Start()
-		timerFlamesOfPassionCD:Start(12.5)
-		if self:IsDifficulty("heroic10", "heroic25") then
-			timerIceCommetCD:Start(15)
-			timerNuclearInfernoCD:Start(52)
-		else
-			timerIceCommetCD:Start()
-		end
-		self:RegisterShortTermEvents(
-			"INSTANCE_ENCOUNTER_ENGAGE_UNIT"
-		)
+		self:SendSync("Phase2")
 	elseif spellId == 138823 and self:AntiSpam(2, 3) then
 		warnLightOfDay:Show()
 		timerLightOfDayCD:Start()
@@ -339,3 +303,88 @@ function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
 	end
 end
 mod.SPELL_PERIODIC_MISSED = mod.SPELL_PERIODIC_DAMAGE
+
+function mod:CHAT_MSG_MONSTER_YELL(msg)
+	if msg == L.DuskPhase or msg:find(L.DuskPhase) then
+		self:SendSync("Phase3")
+	end
+end
+
+function mod:OnSync(msg, guid)
+	if msg == "Phase2" then
+		timerCosmicBarrageCD:Cancel()
+		timerTearsOfTheSunCD:Cancel()
+		timerBeastOfNightmaresCD:Cancel()
+		warnDay:Show()
+		timerDuskCD:Start()
+		timerLightOfDayCD:Start()
+		timerFanOfFlamesCD:Start()
+		timerFlamesOfPassionCD:Start(12.5)
+		if self:IsDifficulty("heroic10", "heroic25") then
+			timerIceCometCD:Start(15)
+			timerNuclearInfernoCD:Start(52)
+		else
+			timerIceCometCD:Start()
+		end
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_btzb.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_bzjd.mp3")--白晝開始
+	elseif msg == "Phase3" then
+		sndWOP:Schedule(2, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_hhzb.mp3")--黃昏準備
+		sndWOP:Schedule(3, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Schedule(4, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		self:Schedule(6, function()
+			self:UnregisterShortTermEvents()
+			timerFanOfFlamesCD:Cancel()
+			timerIceCometCD:Start(11)--This seems to reset, despite what last CD was (this can be a bad thing if it was do any second)
+			timerTidalForceCD:Start(20)
+			timerCosmicBarrageCD:Start(48)
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_hhjd.mp3") --黃昏開始
+			self:Schedule(14, function()
+				if UnitAura("player", GetSpellInfo(138264)) then
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_kkbh.mp3")--快開白虎
+				else
+					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_cxzb.mp3") --潮汐準備
+				end
+				sndWOPCX:Schedule(1, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+				sndWOPCX:Schedule(2, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+				sndWOPCX:Schedule(3, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+				sndWOPCX:Schedule(4, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+				sndWOPCX:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			end)
+		end)
+	elseif msg == "TidalForce" then
+		warnTidalForce:Show()
+		specWarnTidalForce:Show()
+		timerTidalForceCD:Start()
+		sndWOPCX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+		sndWOPCX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndWOPCX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOPCX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOPCX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_cxzl.mp3") --潮汐之力
+	elseif msg == "CosmicBarrage" then
+		warnCosmicBarrage:Show()
+		specWarnCosmicBarrage:Show()
+		if timerDayCD:GetTime() < 165 then
+			timerCosmicBarrageCD:Start()
+		end
+		if mod:IsRanged() then
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\scattersoon.mp3")--注意分散
+		else
+			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_xzzb.mp3")--星宙准备
+		end
+		sndWOP:Schedule(1.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndWOP:Schedule(2.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Schedule(3.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Schedule(4.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+	elseif msg == "Inferno" then
+		warnNuclearInferno:Show()
+		specWarnNuclearInferno:Show()
+		timerNuclearInfernoCD:Start()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_hzly.mp3") --核子煉獄
+	end
+end

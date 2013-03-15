@@ -2,7 +2,7 @@
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8777 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8854 $"):sub(12, -3))
 mod:SetCreatureID(62346)--Salyis not dies. Only Galleon attackable and dies.
 mod:SetModelID(42439)	--Galleon=42439, Salyis=42468 / main boss is Galleon
 mod:SetZone(807)--Valley of the Four winds
@@ -15,7 +15,7 @@ mod:RegisterEventsInCombat(
 )
 
 local warnCannonBarrage			= mod:NewSpellAnnounce(121600, 3)
-local warnStomp					= mod:NewCastAnnounce(121787, 3)
+local warnStomp					= mod:NewCastAnnounce(121787, 3, 3)
 local warnWarmonger				= mod:NewSpellAnnounce("ej6200", 2, 121747)
 
 local specWarnCannonBarrage		= mod:NewSpecialWarningSpell(121600, mod:IsTank())

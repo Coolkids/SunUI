@@ -1,6 +1,5 @@
 local S, L, DB, _, C = unpack(select(2, ...))
-local C
-if not (GetLocale() == "zhTW") then return end
+if (GetLocale() == "zhCN") then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ClearFont_zhTW", "AceEvent-3.0", "AceHook-3.0")
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local CF_SCALE
@@ -20,6 +19,16 @@ local CLEAR_FONT = CLEAR_FONT_BASE .. "bLEI00D.TTF";
 local CLEAR_FONT_ITEM = CLEAR_FONT_BASE .. "bHEI00M.TTF";
 -- ÁÄÌì×Öów
 local CLEAR_FONT_CHAT = CLEAR_FONT_BASE .. "bHEI01B.TTF";
+
+if GetLocale() ~= "zhTW" then
+	CLEAR_FONT_NUMBER = DB.Font
+	CLEAR_FONT_EXP = DB.Font
+	CLEAR_FONT_QUEST = DB.Font
+	CLEAR_FONT_DAMAGE = DB.Font
+	CLEAR_FONT = DB.Font
+	CLEAR_FONT_ITEM = DB.Font
+	CLEAR_FONT_CHAT = DB.Font
+end
 local CF_SCALE = 1
 local function CanSetFont(object) 
    return (type(object)=="table" 

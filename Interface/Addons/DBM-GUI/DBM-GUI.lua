@@ -40,7 +40,7 @@
 
 
 
-local revision =("$Revision: 8789 $"):sub(12, -3)
+local revision =("$Revision: 8868 $"):sub(12, -3)
 local FrameTitle = "DBM_GUI_Option_"	-- all GUI frames get automatically a name FrameTitle..ID
 local fixeditframe = false
 
@@ -1270,8 +1270,8 @@ local function CreateOptionsMenu()
 		----------------------------------------------
 		--             General Options              --
 		----------------------------------------------
-		local generaloptions = DBM_GUI_Frame:CreateArea(L.General, nil, 290, true)
-	
+		local generaloptions = DBM_GUI_Frame:CreateArea(L.General, nil, 340, true)
+
 		local enabledbm = generaloptions:CreateCheckButton(L.EnableDBM, true)
 		enabledbm:SetScript("OnShow",  function() enabledbm:SetChecked(DBM:IsEnabled()) end)
 		enabledbm:SetScript("OnClick", function() if DBM:IsEnabled() then DBM:Disable() else DBM:Enable() end end)
@@ -1289,9 +1289,13 @@ local function CreateOptionsMenu()
 		local DisableCinematicsOutside	= generaloptions:CreateCheckButton(L.DisableCinematicsOutside, true, nil, "DisableCinematicsOutside")
 		local EnableReadyCheckSound		= generaloptions:CreateCheckButton(L.EnableReadyCheckSound, true, nil, "EnableReadyCheckSound")
 		generaloptions:CreateCheckButton(L.SKT_Enabled, true, nil, "AlwaysShowSpeedKillTimer")
+		generaloptions:CreateCheckButton(L.AutologBosses, true, nil, "AutologBosses")
+		if Transcriptor then
+			generaloptions:CreateCheckButton(L.AdvancedAutologBosses, true, nil, "AdvancedAutologBosses")
+		end
 
 		local bmrange  = generaloptions:CreateButton(L.Button_RangeFrame)
-		bmrange:SetPoint('TOPLEFT', MiniMapIcon, "BOTTOMLEFT", 0, -120)
+		bmrange:SetPoint('TOPLEFT', MiniMapIcon, "BOTTOMLEFT", 0, -170)
 		bmrange:SetScript("OnClick", function(self)
 			if DBM.RangeCheck:IsShown() then
 				DBM.RangeCheck:Hide()
@@ -1814,7 +1818,7 @@ local function CreateOptionsMenu()
 		movemebutton:SetHighlightFontObject(GameFontNormalSmall)
 		movemebutton:SetScript("OnClick", function() DBM:MoveSpecialWarning() end)
 
-		local fontSizeSlider = specArea:CreateSlider(L.SpecWarn_FontSize, 8, 40, 1)
+		local fontSizeSlider = specArea:CreateSlider(L.SpecWarn_FontSize, 16, 100, 1)
 		fontSizeSlider:SetPoint("TOPLEFT", specArea.frame, "TOPLEFT", 20, -75)
 		do
 			local firstshow = true

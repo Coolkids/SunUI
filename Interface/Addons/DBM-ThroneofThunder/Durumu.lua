@@ -1,9 +1,8 @@
-if select(4, GetBuildInfo()) < 50200 then return end--Don't load on live
 local mod	= DBM:NewMod(818, "DBM-ThroneofThunder", nil, 362)
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8842 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8886 $"):sub(12, -3))
 mod:SetCreatureID(68036)--Crimson Fog 69050, 
 mod:SetModelID(47189)
 mod:SetUsedIcons(7, 6, 1)
@@ -63,8 +62,8 @@ local timerForceOfWillCD			= mod:NewCDTimer(20, 136413)--Actually has a 20 secon
 local timerLightSpectrumCD			= mod:NewCDTimer(60, "ej6891")--Don't know when 2nd one is cast.
 local timerDarkParasite				= mod:NewTargetTimer(30, 133597, mod:IsHealer())--Only healer/dispeler needs to know this.
 local timerDarkPlague				= mod:NewTargetTimer(30, 133598)--EVERYONE needs to know this, if dispeler messed up and dispelled parasite too early you're going to get a new add every 3 seconds for remaining duration of this bar.
-local timerDisintegrationBeam		= mod:NewBuffActiveTimer(60, "ej6882")
-local timerDisintegrationBeamCD		= mod:NewNextTimer(131, "ej6882")
+local timerDisintegrationBeam		= mod:NewBuffActiveTimer(65, "ej6882")
+local timerDisintegrationBeamCD		= mod:NewNextTimer(127, "ej6882")
 local timerObliterateCD				= mod:NewNextTimer(80, 137747)--Heroic
 
 --mod:AddBoolOption("ArrowOnBeam", true)
@@ -91,9 +90,9 @@ local function BeamEnded()
 --[[	if mod.Options.ArrowOnBeam then
 		DBM.Arrow:Hide()
 	end--]]
-	timerForceOfWillCD:Start(19)
-	timerLingeringGazeCD:Start(25)
-	timerLightSpectrumCD:Start(37)
+	timerForceOfWillCD:Start(14)
+	timerLingeringGazeCD:Start(21)
+	timerLightSpectrumCD:Start(32)
 	timerDisintegrationBeamCD:Start()
 	mod:Schedule(121, function()
 		DBM.Flash:Show(1, 0, 0)
@@ -106,7 +105,7 @@ local function BeamEnded()
 	end)
 end
 
-mod:AddBoolOption("HudMAP", true, "sound")
+--mod:AddBoolOption("HudMAP", true, "sound")
 
 local DBMHudMap = DBMHudMap
 local free = DBMHudMap.free
@@ -133,7 +132,7 @@ function mod:OnCombatStart(delay)
 		sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")	
 		sndWOP:Schedule(7, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
 		sndWOP:Schedule(8, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-		sndWOP:Schedule(9, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")	
+		sndWOP:Schedule(9, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	end)
 end
 
@@ -243,7 +242,7 @@ end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE
 
 function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
-	if spellId == 140502 and destGUID == UnitGUID("player") and self:AntiSpam(3, 1) then
+	if spellId == 134755 and destGUID == UnitGUID("player") and self:AntiSpam(3, 2) then
 		specWarnEyeSore:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3") --快躲開
 	end
@@ -262,6 +261,9 @@ function mod:CHAT_MSG_MONSTER_EMOTE(msg, npc, _, _, target)
 			DBM.Flash:Show(1, 0, 0)
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3")
 		else
+			if not self:IsDifficulty("lfr25") then
+				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_xxjf.mp3") --小心擊飛
+			end
 			local uId = DBM:GetRaidUnitId(target)
 			if uId then
 				local x, y = GetPlayerMapPosition(uId)
@@ -272,9 +274,6 @@ function mod:CHAT_MSG_MONSTER_EMOTE(msg, npc, _, _, target)
 				local inRange = DBM.RangeCheck:GetDistance("player", x, y)
 				if inRange and inRange < 13 then--Guessed range.
 					specWarnForceOfWillNear:Show(target)
-					if not self:IsDifficulty("lfr25") then
-						sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_xxjf.mp3") --小心擊飛
-					end
 				end
 			end
 		end
@@ -347,7 +346,12 @@ function mod:CHAT_MSG_MONSTER_EMOTE(msg, npc, _, _, target)
 		warnDisintegrationBeam:Show()
 		specWarnDisintegrationBeam:Show()
 		timerDisintegrationBeam:Start()
-		self:Schedule(60, BeamEnded)--Best to start next phase bars when this one ends, so artifically create a "phase end" trigger
+		sndWOP:Schedule(61, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
+		sndWOP:Schedule(62, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")	
+		sndWOP:Schedule(63, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndWOP:Schedule(64, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndWOP:Schedule(65, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+		self:Schedule(65, BeamEnded)--Best to start next phase bars when this one ends, so artifically create a "phase end" trigger
 	end
 end
 
@@ -448,18 +452,12 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, spellName, _, _, spellId)
 		timerDisintegrationBeam:Start()
 		specWarnDisintegrationBeamL:Schedule(20)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_zzgs.mp3") --左轉光束
-		sndWOP:Schedule(20, "Interface\\AddOns\\DBM-Core\\extrasounds\\moveleft.mp3")
-		sndWOP:Schedule(55, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
-		sndWOP:Schedule(56, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")	
-		sndWOP:Schedule(57, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-		sndWOP:Schedule(58, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-		sndWOP:Schedule(59, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		lightmaker["1"] = register(DBMHudMap:AddEdge(0, 1, 0, 1, 15, "player", nil, nil, nil, 770, 470))
 		lightmaker["2"] = register(DBMHudMap:PlaceRangeMarker("highlight", 770, 470, 2, 15, 0, 1, 0, 0.4))
 		if self.Options.ArrowOnBeam then
 			DBM.Arrow:ShowStatic(90)
 		end
-		self:Schedule(60, BeamEnded)--Best to start next phase bars when this one ends, so artifically create a "phase end" trigger--]]
+		self:Schedule(65, BeamEnded)--Best to start next phase bars when this one ends, so artifically create a "phase end" trigger--]]
 		print("DBM Debug: Clockwise beam spellid re-enabled by blizzard.")
 	elseif spellId == 133775 and self:AntiSpam(2, 2) then--Disintegration Beam (counter-clockwise)
 --[[		timerLingeringGazeCD:Cancel()
@@ -468,18 +466,12 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, spellName, _, _, spellId)
 		timerDisintegrationBeam:Start()
 		specWarnDisintegrationBeamR:Schedule(20)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_yzgs.mp3") --右轉光束
-		sndWOP:Schedule(20, "Interface\\AddOns\\DBM-Core\\extrasounds\\moveright.mp3")
-		sndWOP:Schedule(55, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
-		sndWOP:Schedule(56, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")	
-		sndWOP:Schedule(57, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-		sndWOP:Schedule(58, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-		sndWOP:Schedule(59, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		lightmaker["3"] = register(DBMHudMap:AddEdge(0, 1, 0, 1, 15, "player", nil, nil, nil, 696, 470))
 		lightmaker["4"] = register(DBMHudMap:PlaceRangeMarker("highlight", 696, 470, 2, 15, 0, 1, 0, 0.4))
 		if self.Options.ArrowOnBeam then
 			DBM.Arrow:ShowStatic(270)
 		end
-		self:Schedule(60, BeamEnded)--Best to start next phase bars when this one ends, so artifically create a "phase end" trigger--]]
+		self:Schedule(65, BeamEnded)--Best to start next phase bars when this one ends, so artifically create a "phase end" trigger--]]
 		print("DBM Debug: Counter-Clockwise beam spellid re-enabled by blizzard.")
 	end
 end

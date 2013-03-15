@@ -61,6 +61,8 @@ L.DisableCinematics			= "在副本时自动跳过游戏内过场动画"
 L.DisableCinematicsOutside	= "在副本外时自动跳过游戏内过场动画"
 L.EnableReadyCheckSound		= "允许关闭音效后播放团队确认音"
 L.SKT_Enabled				= "永远显示最速击杀计时条（无论该首领的相关设置如何）"
+L.AutologBosses				= "自动开启战斗记录"
+L.AdvancedAutologBosses			= "自动开启战斗记录(使用Transcriptor插件)"
 L.Latency_Text				= "设定启用同步功能的最高延迟阀值：%d"
 
 L.ModelOptions				= "3D模型选项"

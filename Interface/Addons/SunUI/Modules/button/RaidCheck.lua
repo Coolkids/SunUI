@@ -1,4 +1,5 @@
 local S, L, DB, _, C = unpack(select(2, ...))
+if DB.zone ~= "zhTW" and DB.zone ~= "zhCN" then return end
 local RC = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule('RaidCheck');
 
 local join = string.join
@@ -52,11 +53,11 @@ if (GetLocale() == "zhCN") then
 	L.RaidCheckMsgNoFlask = "%s人无合剂效果"
 	L.RaidCheckMsgHasFlask = "%s人已有合剂效果"
 
-	L.RaidCheckTipLeftButtonOnLeftInfo = "检查团队成员到位情况"
-	L.RaidCheckTipRightButtonOnLeftInfo = "发起团队就位确认"
-	L.RaidCheckTipLeftButtonOnRightInfo = "检查团队BUFF"
-	L.RaidCheckTipRightButtonOnRightInfo = "检查合剂效果"
-	L.RAIDCHECK_RAIDTOOL = "打开团队工具面板"
+	L.RaidCheckTipLeftButtonOnLeftInfo = "到位情况"
+	L.RaidCheckTipRightButtonOnLeftInfo = "就位确认"
+	L.RaidCheckTipLeftButtonOnRightInfo = "检查BUFF"
+	L.RaidCheckTipRightButtonOnRightInfo = "检查合剂"
+	L.RAIDCHECK_RAIDTOOL = "团队工具"
 
 	L.MouseLeftButton = "鼠标左键"
 	L.MouseRightButton = "鼠标右键"
@@ -80,31 +81,66 @@ elseif (GetLocale() == "zhTW") then
 	L.RaidCheckFlaskData = {
 			"藥劑",
 		}
-	L.RaidCheckMsgFlask = "精煉檢查"
-	L.RaidCheckMsgAllNoFlask = "所有人均無精煉效果"
-	L.RaidCheckMsgAllHasFlask = "所有人均已有精煉效果"
-	L.RaidCheckMsgNoFlask = "%s人無精煉效果"
-	L.RaidCheckMsgHasFlask = "%s人已有精煉效果"
+	L.RaidCheckMsgFlask = "合劑檢查"
+	L.RaidCheckMsgAllNoFlask = "所有人均無藥劑效果"
+	L.RaidCheckMsgAllHasFlask = "所有人均已有藥劑效果"
+	L.RaidCheckMsgNoFlask = "%s人無藥劑效果"
+	L.RaidCheckMsgHasFlask = "%s人已有藥劑效果"
 
-	L.RaidCheckTipLeftButtonOnLeftInfo = "檢查團隊成員到位情況"
-	L.RaidCheckTipRightButtonOnLeftInfo = "發起團隊就位確認"
-	L.RaidCheckTipLeftButtonOnRightInfo = "檢查團隊BUFF"
-	L.RaidCheckTipRightButtonOnRightInfo = "檢查精煉效果"
-	L.RAIDCHECK_RAIDTOOL = "打開團隊工具面板"
+	L.RaidCheckTipLeftButtonOnLeftInfo = "到位情況"
+	L.RaidCheckTipRightButtonOnLeftInfo = "就位確認"
+	L.RaidCheckTipLeftButtonOnRightInfo = "檢查BUFF"
+	L.RaidCheckTipRightButtonOnRightInfo = "檢查藥劑"
+	L.RAIDCHECK_RAIDTOOL = "團隊工具"
 
 	L.MouseLeftButton = "鼠標左鍵"
 	L.MouseRightButton = "鼠標右鍵"
 	L.MouseClick = "鼠標點擊"
-	L.BottomPanelRaidCheck = "SunUI團隊檢查工具"
-	L.GameSetting = "打開SunUI設置界面"
+	L.BottomPanelRaidCheck = "EUI團隊檢查工具"
+	L.GameSetting = "打開EUI設置界面"
+else
+	L.RaidCheckMsgOUTRAID = "you are not a team"
+	L.RaidCheckMsgFullBuff = "SunUI Buff check: conventional Buff complete!"
+	L.RaidCheckMsgNoBuff = "SunUI Buff check: the lack of the following"
+
+	L.RaidCheckMsgPosition = "place check"
+	L.RaidCheckMsgAllInPlace = "% s of people all in place"
+	L.RaidCheckMsgInPlace = "% s people has been put in place"
+	L.RaidCheckMsgDead = "% s human death."
+	L.RaidCheckMsgOffline = "% s people off"
+	L.RaidCheckMsgUnVisible = "% s person too far."
+	L.RaidCheckMsgETC = "and so on."
+
+	L.RaidCheckFlaskData = {
+	"Mixture",
+	}
+	L.RaidCheckMsgFlask = "Mixture inspection"
+	L.RaidCheckMsgAllNoFlask  = "all no mixture effect. "
+	L.RaidCheckMsgAllHasFlask = "all existing mixture effect"
+	L.RaidCheckMsgNoFlask = "% s mixture effect"
+	L.RaidCheckMsgHasFlask = "% s already has a mixture effect"
+
+	L.RaidCheckTipLeftButtonOnLeftInfo = "check team members in place"
+	L.RaidCheckTipRightButtonOnLeftInfo = "initiated by the team in place to confirm"
+	L.RaidCheckTipLeftButtonOnRightInfo = "check team BUFF"
+	L.RaidCheckTipRightButtonOnRightInfo = "check the mixture effect "
+	L.RAIDCHECK_RAIDTOOL = "Open team the tools panel"
+
+	L.MouseLeftButton = "left mouse button."
+	L.MouseRightButton = "Right"
+	L.MouseClick = "mouse clicks"
+	L.BottomPanelRaidCheck = "SunUI team checking tool"
+	L.GameSetting = "open SunUI set interface"
 end
 
 L.RaidCheckBuffMS = GetSpellInfo(21562)
 L.RaidCheckBuffFS = GetSpellInfo(1459)
+L.RaidCheckBuffFS2 = GetSpellInfo(61316)
 L.RaidCheckBuffQS1 = GetSpellInfo(20217)
 L.RaidCheckBuffQS2 = GetSpellInfo(19740)
 L.RaidCheckBuffXD = GetSpellInfo(1126)
 L.RaidCheckBuffFOOD = GetSpellInfo(87564)
+L.RaidCheckBuffMONK = GetSpellInfo(115921)
 
 -------------------------------------------------------------------------------------------------------------------
 --	团队Buff检查
@@ -115,6 +151,7 @@ function RC:CheckRaidBuff()
 		qs = 0,
 		xd = false,
 		fs = false,
+		monk = false,
 	}
 
 	local NoMSBuffName = {}
@@ -122,6 +159,7 @@ function RC:CheckRaidBuff()
 	local NoQS1BuffName = {}
 	local NoQS2BuffName = {}
 	local NoXDBuffName = {}
+	local NoMONKBuffName = {}
 	local NoFOODBuffName = {}
 
 	local inInstance, instanceType = IsInInstance()
@@ -136,6 +174,7 @@ function RC:CheckRaidBuff()
 			if class == 'PALADIN' then HasClass.qs = HasClass.qs + 1 end
 			if class == 'MAGE' then HasClass.fs = true end
 			if class == 'DRUID' then HasClass.xd = true end
+			if class == 'MONK' then HasClass.monk = true end
 		end
 	end
 	
@@ -147,6 +186,7 @@ function RC:CheckRaidBuff()
 		local HasBuffQS2 = false
 		local HasBuffXD = false
 		local HasBuffFOOD = false
+		local HasBuffMONK = false
 		if subgroup then
 			local unit = "raid"..i
 			local j = 1
@@ -158,6 +198,7 @@ function RC:CheckRaidBuff()
 				if find(BuffTEXT, L.RaidCheckBuffQS2) then HasBuffQS2 = true end --力量
 				if find(BuffTEXT, L.RaidCheckBuffXD) then HasBuffXD = true end
 				if find(BuffTEXT, L.RaidCheckBuffFOOD) then HasBuffFOOD = true end
+				if find(BuffTEXT, L.RaidCheckBuffMONK) then HasBuffMONK = true end
 				j = j + 1
 			end
 			
@@ -179,16 +220,17 @@ function RC:CheckRaidBuff()
 			if HasBuffFOOD == false then table.insert(NoFOODBuffName, name) end
 		end
 	end
-	if next(NoMSBuffName) == nil and next(NoFSBuffName) == nil and next(NoQS1BuffName) == nil and next(NoQS2BuffName) == nil and next(NoXDBuffName) == nil and next(NoFOODBuffName) == nil then
-		SendChatMessage(L.RaidCheckMsgFullBuff, "RAID")
+	if next(NoMONKBuffName) == nil and next(NoMSBuffName) == nil and next(NoFSBuffName) == nil and next(NoQS1BuffName) == nil and next(NoQS2BuffName) == nil and next(NoXDBuffName) == nil and next(NoFOODBuffName) == nil then
+		SendChatMessage(L.RaidCheckMsgFullBuff, IsPartyLFG() and "INSTANCE_CHAT" or "RAID")
 	else
-		SendChatMessage(L.RaidCheckMsgNoBuff, "RAID")
-		if next(NoMSBuffName) then SendChatMessage(L.RaidCheckBuffMS.. ": ".. table.concat(NoMSBuffName, ","), "RAID") end
-		if next(NoFSBuffName) then SendChatMessage(L.RaidCheckBuffFS.. ": ".. table.concat(NoFSBuffName, ","), "RAID") end
-		if next(NoQS1BuffName) then SendChatMessage(L.RaidCheckBuffQS1.. ": ".. table.concat(NoQS1BuffName, ","), "RAID") end
-		if next(NoQS2BuffName) then SendChatMessage(L.RaidCheckBuffQS2.. ": ".. table.concat(NoQS2BuffName, ","), "RAID") end
-		if next(NoXDBuffName) then SendChatMessage(L.RaidCheckBuffXD.. ": ".. table.concat(NoXDBuffName, ","), "RAID") end
-		if next(NoFOODBuffName) then SendChatMessage(L.RaidCheckBuffFOOD.. ": ".. table.concat(NoFOODBuffName, ","), "RAID") end
+		SendChatMessage(L.RaidCheckMsgNoBuff, IsPartyLFG() and "INSTANCE_CHAT" or "RAID")
+		if next(NoMSBuffName) then SendChatMessage(L.RaidCheckBuffMS.. ": ".. table.concat(NoMSBuffName, ","), IsPartyLFG() and "INSTANCE_CHAT" or "RAID") end
+		if next(NoFSBuffName) then SendChatMessage(L.RaidCheckBuffFS.. ": ".. table.concat(NoFSBuffName, ","), IsPartyLFG() and "INSTANCE_CHAT" or "RAID") end
+		if next(NoQS1BuffName) then SendChatMessage(L.RaidCheckBuffQS1.. ": ".. table.concat(NoQS1BuffName, ","), IsPartyLFG() and "INSTANCE_CHAT" or "RAID") end
+		if next(NoQS2BuffName) then SendChatMessage(L.RaidCheckBuffQS2.. ": ".. table.concat(NoQS2BuffName, ","), IsPartyLFG() and "INSTANCE_CHAT" or "RAID") end
+		if next(NoXDBuffName) then SendChatMessage(L.RaidCheckBuffXD.. ": ".. table.concat(NoXDBuffName, ","), IsPartyLFG() and "INSTANCE_CHAT" or "RAID") end
+		if next(NoFOODBuffName) then SendChatMessage(L.RaidCheckBuffFOOD.. ": ".. table.concat(NoFOODBuffName, ","),  IsPartyLFG() and "INSTANCE_CHAT" or "RAID") end
+		if next(NoMONKBuffName) then SendChatMessage(L.RaidCheckBuffFOOD.. ": ".. table.concat(NoMONKBuffName, ","), IsPartyLFG() and "INSTANCE_CHAT" or "RAID") end
 	end
 end
 

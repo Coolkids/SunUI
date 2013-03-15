@@ -322,174 +322,14 @@ L["打开任务物品按钮"] = "任務物品按鈕"
 L["打开自动补购"] = "打開自動補購"
 L["打开坦克护盾监视"] = "坦克護盾監視"
 L["打开团队技能CD监视"] = "團隊技能CD監視"
---519
-L["传送符文"] = "傳送符文"
-L["传送门符文"] = "傳送門符文"
-L["魔粉"] = "魔粉"
-L["速效药膏"] = "速效毒藥"
-L["致命药膏"] = "致命毒藥"
-L["减速药膏"] = "致殘毒藥"
-L["麻痹药膏"] = "麻痺毒藥"
-L["致伤药膏"]= "致傷毒藥"
-
---new
--- Talent spec
-L_PLANNER_DEATHKNIGHT_1 = "血魄"
-L_PLANNER_DEATHKNIGHT_2 = "冰霜"
-L_PLANNER_DEATHKNIGHT_3 = "穢邪"
-L_PLANNER_DRUID_1 = "平衡"
-L_PLANNER_DRUID_2 = "野性戰鬥"
-L_PLANNER_DRUID_3 = "Guardian"	--need review
-L_PLANNER_DRUID_4 = "恢復"
-L_PLANNER_HUNTER_1 = "野獸控制"
-L_PLANNER_HUNTER_2 = "射擊"
-L_PLANNER_HUNTER_3 = "生存"
-L_PLANNER_MAGE_1 = "秘法"
-L_PLANNER_MAGE_2 = "火焰"
-L_PLANNER_MAGE_3 = "冰霜"
-L_PLANNER_MONK_1 = "Brewmaster"	--need review
-L_PLANNER_MONK_2 = "Mistweaver"	--need review
-L_PLANNER_MONK_3 = "Windwalker"	--need review
-L_PLANNER_PALADIN_1 = "神聖"
-L_PLANNER_PALADIN_2 = "防護"
-L_PLANNER_PALADIN_3 = "懲戒"
-L_PLANNER_PRIEST_1 = "戒律"
-L_PLANNER_PRIEST_2 = "神聖"
-L_PLANNER_PRIEST_3 = "暗影"
-L_PLANNER_ROGUE_1 = "刺殺"
-L_PLANNER_ROGUE_2 = "戰鬥"
-L_PLANNER_ROGUE_3 = "敏銳"
-L_PLANNER_SHAMAN_1 = "元素"
-L_PLANNER_SHAMAN_2 = "增強"
-L_PLANNER_SHAMAN_3 = "恢復"
-L_PLANNER_WARLOCK_1 = "痛苦"
-L_PLANNER_WARLOCK_2 = "惡魔"
-L_PLANNER_WARLOCK_3 = "毀滅"
-L_PLANNER_WARRIOR_1 = "武器"
-L_PLANNER_WARRIOR_2 = "狂怒"
-L_PLANNER_WARRIOR_3 = "防護"
-
--- LitePanels AFK module
-L_PANELS_AFK = "你處于暫離狀態!"
-L_PANELS_AFK_RCLICK = "右鍵點擊隱藏."
-L_PANELS_AFK_LCLICK = "左鍵點擊脫離暫離狀態." 
--- Tooltip
-L_TOOLTIP_NO_TALENT = "沒有天賦"
-L_TOOLTIP_LOADING = "讀取中..."
-L_TOOLTIP_ACH_STATUS = "你的狀態:"
-L_TOOLTIP_ACH_COMPLETE = "你的狀態: 完成 "
-L_TOOLTIP_ACH_INCOMPLETE = "你的狀態: 未完成"
-L_TOOLTIP_SPELL_ID = "法術ID:"
-L_TOOLTIP_ITEM_ID = "物品ID:"
-L_TOOLTIP_WHO_TARGET = "以其為目標的"
-L_TOOLTIP_ITEM_COUNT = "物品數量:"
-L_TOOLTIP_INSPECT_OPEN = "Inspect Frame is open" -- Needs review
---Loot
-L_LOOT_CANNOT = "不能拾取"
+L["你的状态"] = "你的狀態:"
+L["你的状态:完成"] = "你的狀態: 完成 "
+L["你的状态:未完成"] = "你的狀態: 未完成"
+L["法术ID"] = "法術ID:" 
+L["物品ID"] = "物品ID:" 
 --map
-L_EXTRA_EXPLORED = "探索: " -- Needs review
-L_ZONE_WINTERGRASP = "冬握湖"
-L_ZONE_TOLBARAD = "托巴拉德"
-L_ZONE_TOLBARADPEN = "托巴拉德半島"
-L_ZONE_ARATHIBASIN = "阿拉希盆地"
-L_ZONE_GILNEAS = "吉爾尼斯之戰"
-L_EXTRA_ZONEACHID = {
-	-- http://www.wowhead.com/achievement=*
-	-- e(X)plore achievement id, (Q)uest achievement id
-	["東部王國"]							= {X =   42, A =    0, H =    0},
-	["卡林多"]							= {X =   43, A =    0, H =    0},
-	["外域"]							= {X =   44, A =    0, H =    0},
-	["北裂境"]							= {X =   45, A =    0, H =    0},
-	["Pandaria"]						= {X = 6974, A =    0, H =    0}, -- Needs review
-	["世界地圖"]							= {X =  nil, A =    0, H =    0},
-	-- Eastern Kingdoms
-	["阿拉希高地"]						= {X =  761, A = 4896, H = 4896},
-	["荒蕪之地"]							= {X =  765, A = 4900, H = 4900},
-	["詛咒之地"]							= {X =  766, A = 4909, H = 4909},
-	["燃燒平原"]							= {X =  775, A = 4901, H = 4901},
-	["逆風小徑"]							= {X =  777, A =    0, H =    0},
-	["丹莫洛"]							= {X =  627, A =    0, H =    0},
-	["暮色森林"]							= {X =  778, A = 4903, H =    0},
-	["東瘟疫之地"]						= {X =  771, A = 4892, H = 4892},
-	["艾爾文森林"]						= {X =  776, A =    0, H =    0},
-	["永歌森林"]							= {X =  859, A =    0, H =    0},
-	["鬼魂之地"]							= {X =  858, A =    0, H = 4908},
-	["希爾斯布萊德丘陵"]					= {X =  772, A =    0, H = 4895},
-	["洛克莫丹"]							= {X =  779, A = 4899, H =    0},
-	["北荊棘谷"]							= {X =  781, A = 4906, H = 4906},
-	["赤脊山"]							= {X =  780, A = 4902, H =    0},
-	["灼熱峽谷"]							= {X =  774, A = 4910, H = 4910},
-	["銀松森林"]							= {X =  769, A =    0, H = 4894},
-	["悲傷沼澤"]							= {X =  782, A = 4904, H = 4904},
-	["荊棘谷海角"]						= {X = 4995, A = 4905, H = 4905},
-	["辛特蘭"]							= {X =  773, A = 4897, H = 4897},
-	["提里斯法林地"]						= {X =  768, A =    0, H =    0},
-	["西瘟疫之地"]						= {X =  770, A = 4893, H = 4893},
-	["西部荒野"]							= {X =  802, A = 4903, H =    0},
-	["濕地"]							= {X =  841, A = 4899, H =    0},
-	-- Kalimdor
-	["梣谷"]							= {X =  845, A = 4925, H = 4976},
-	["艾薩拉"]							= {X =  852, A =    0, H = 4927},
-	["藍謎島"]							= {X =  860, A =    0, H =    0},
-	["血謎島"]							= {X =  861, A = 4926, H = 4926},
-	["黑海岸"]							= {X =  844, A = 4928, H = 4928},
-	["淒涼之地"]							= {X =  848, A = 4930, H = 4930},
-	["杜洛塔"]							= {X =  728, A =    0, H =    0},
-	["塵泥沼澤"]							= {X =  850, A = 4929, H = 4978},
-	["費伍德森林"]						= {X =  853, A = 4931, H = 4931},
-	["菲拉斯"]							= {X =  849, A = 4932, H = 4979},
-	["月光林地"]							= {X =  855, A =    0, H =    0},
-	["莫高雷"]							= {X =  736, A =    0, H =    0},
-	["北貧瘠之地"]						= {X =  750, A =    0, H = 4933},
-	["希利蘇斯"]							= {X =  856, A = 4934, H = 4934},
-	["南貧瘠之地"]						= {X = 4996, A = 4937, H = 4981},
-	["石爪山脈"]							= {X =  847, A = 4936, H = 4980},
-	["塔納利斯"]							= {X =  851, A = 4935, H = 4935},
-	["泰達希爾"]							= {X =  842, A =    0, H =    0},
-	["千針石林"]							= {X =  846, A = 4938, H = 4938},
-	["安戈洛環形山"]						= {X =  854, A = 4939, H = 4939},
-	["冬泉谷"]							= {X =  857, A = 4940, H = 4940},
-	-- Outland
-	["劍刃山脈"]							= {X =  865, A = 1193, H = 1193},
-	["地獄火半島"]						= {X =  862, A = 1189, H = 1271},
-	["納葛蘭"]							= {X =  866, A = 1192, H = 1273},
-	["虛空風暴"]							= {X =  843, A = 1194, H = 1194},
-	["影月谷"]							= {X =  864, A = 1195, H = 1195},
-	["泰洛卡森林"]						= {X =  867, A = 1191, H = 1272},
-	["贊格沼澤"]							= {X =  863, A = 1190, H = 1190},
-	-- Northrend
-	["北風凍原"]							= {X = 1264, A =   33, H = 1358},
-	["水晶之歌森林"]						= {X = 1457, A =    0, H =    0},
-	["龍骨荒野"]							= {X = 1265, A =   35, H = 1356},
-	["灰白之丘"]							= {X = 1266, A =   37, H = 1357},
-	["凜風峽灣"]							= {X = 1263, A =   34, H = 1356},
-	["寒冰皇冠"]							= {X = 1270, A =   40, H =   40},
-	["休拉薩盆地"]						= {X = 1268, A =   39, H =   39},
-	["風暴群山"]							= {X = 1269, A =   38, H =   38},
-	["祖爾德拉克"]						= {X = 1267, A =   36, H =   36},
-	-- Cataclysm
-	["地深之源"]							= {X = 4864, A = 4871, H = 4871},
-	["海加爾山"]							= {X = 4863, A = 4870, H = 4870},
-	["暮光高地"]							= {X = 4866, A = 4873, H = 5501},
-	["奧丹姆"]							= {X = 4865, A = 4872, H = 4872},
-	["瓦許伊爾"]							= {X = 4825, A = 4869, H = 4982},
-	["托巴拉德"]							= {X =    0, A = 4874, H = 4874},
-	["托巴拉德半島"]						= {X =    0, A = 4874, H = 4874},
-	-- Pandaria
-	["The Jade Forest"]					= {X = 6351, A = 6300, H = 6534}, -- Needs review
-	["Valley of the Four Winds"]		= {X = 6969, A = 6301, H = 6301}, -- Needs review
-	--["Krasarang Wilds"]					= {X = 6975, A = 6535, H = 6536}, -- Needs review
-	["Kun-Lai Summit"]					= {X = 6976, A = 6537, H = 6538}, -- Needs review
-	["Townlong Steppes"]				= {X = 6977, A = 6539, H = 6539}, -- Needs review
-	["Dread Wastes"]					= {X = 6978, A = 6540, H = 6540}, -- Needs review
-	["Vale of Eternal Blossoms"]		= {X = 6979, A =    0, H =    0}, -- Needs review
-	-- Boolean Explores
-	["奎爾達納斯之島"]					= {X =  868, A =    0, H =    0},
-	["安其拉: 沒落的王朝"]				= {X =    0, A =    0, H =    0},
-	["冬握湖"]							= {X =    0, A =    0, H =    0},
-}
-L_MISC_UI_OUTDATED = "SunUI 版本已過期，請至 https://github.com/Coolkids/SunUI 下載最新版"
-
+L["探索"] = "探索: "
+L["过期"] = "SunUI 版本已過期，請至 https://github.com/Coolkids/SunUI 下載最新版"
 --11.14
 L["版本号:"] = "版本號:"
 L["按键绑定"] = "按鍵綁定"
@@ -627,3 +467,35 @@ L["向左"] = "向左排列"
 L["向右"] = "向右排列"
 L["换行数目"] = "換行數目"
 L["换行方向"] = "換行方向"
+--20130314
+L["背包设置"] = "背包設置"
+L["不兼容"] = "|cffff0000(不兼容的插件)|r"
+L["已包含的"] = "|cfff3ec2a(SunUI已包含的插件,請您刪除相應的文件夾)|r"
+L["兼容性检查"] = "兼容性檢查"
+L["禁用他们"] = "禁用他們"
+L["不要禁用"] = "不要禁用|cffff0000(慎選)|r"
+L["兼容性检查信息"] = "如果您看到此对话框表明您所使用的插件中包含一些不兼容的插件.\n这些插件会影响到您的正常使用.请您关闭并删除这些插件."
+L["安装完毕"] = "安装完毕"
+L["完毕信息"] ="现在已经安装完毕.\n\n请点击结束重载界面完成最后安装.\n\nEnjoy!"
+L["安装DBM设置"] = "3. 安装DBM设置"
+L["安装DBM设置信息"] = "如果你没有安装DBM这一步将不会生效,请确定您安装了DBM\n\n即将安装DBM设置.\n\n当然您也可以输入/dbm进行设置."
+L["聊天框设置"] = "2. 聊天框设置"
+L["聊天框设置信息"] = "将按照插件默认设置配置聊天框,详细微调请鼠标右点聊天标签"
+L["核心数据"] = "1. 载入SunUI核心数据"
+L["核心数据信息"] = "这一步将载入SunUI默认参数,请不要跳过\n\n更多详细设置在SunUI控制台内\n\n打开控制台方法:1.Esc>SunUI 2.输入命令/sunui 3.聊天框右侧上部渐隐按钮集合内点击S按钮(非中文语言系客户端没有此功能)"
+L["教程6名字"] = "6. 结束"
+L["教程6信息"] = "教程结束.更多详细设置请见/sunui 如果遇到灵异问题或者使用Bug 请到http://bbs.ngacn.cc/read.php?tid=4743077&_fp=1&_ff=200 回复记得带上BUG截图 亲~~"
+L["教程5名字"] = "5. 命令"
+L["教程5信息"] = "一些常用命令 \n/sunui 控制台 全局解锁什么的 ps:绝大部分设置需要重载生效 \n/align 在屏幕上显示网格,方便安排布局\n/hb 绑定动作条快捷键\n/rl 重载UI\n/wf 解锁任务追踪框体\n/vs 载具移动\n/pdb 插件全商业技能\n/rw2 buff监控设置\n/autoset 自动设置UI缩放\n/setdbm 重新设置DBM\n/setsunui重新打开安装向导"
+L["教程4名字"] = "4. 您应该知道的东西"
+L["教程4信息"] = "SunUI 95%的设置都是可以通过图形界面来完成的, 大多数的设置在/sunui中 少部分的设置在ESC>界面中.\n经验条在动作条下面..鼠标指向显示"
+L["教程3名字"] = "3. 特性"
+L["教程3信息"] = "SunUI是重新设计过的暴雪用户界面.具有大量人性化设计.您可以在各个细节中体验到"
+L["教程2名字"] = "2.单位框架"
+L["教程2信息"] = "SunUI的头像部分使用mono的oUF_Mono为模版进行改进而来.增加了更多额外的设置.自由度很高,你可以使用/sunui ->头像设置 进行更多的个性化设置. \n而团队框架则没有选用oUF部分,而是使用了暴雪内建团队框架的改良版,它比oUF的团队框架有更低的内存与CPU占用.更适合老爷机器."
+L["教程1名字"] = "1. 概述"
+L["教程1信息"] = "欢迎使用SunUI\n SunUI是一个类Tukui但是又不是Tukui的整合插件.它界面整洁清晰,功能齐全,整体看起来华丽而不臃肿.内存CPU占用小即使是老爷机也能跑.适用于宽频界面."
+L["欢迎"] = "欢迎"
+L["欢迎信息"] = "欢迎您使用SunUI \n\n\n\n几个小步骤将引导你安装SunUI. \n\n\n为了达到最佳的使用效果,请不要随意跳过这个安装程序\n\n\n\n\n如果需要再次安装 请输入命令/sunui"
+L["教程"] = "教程"
+L["安装SunUI"] = "安装SunUI"

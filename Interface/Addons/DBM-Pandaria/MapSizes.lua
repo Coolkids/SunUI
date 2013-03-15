@@ -11,6 +11,5 @@ DBM:RegisterMapSize("IsleOfGiants",
 )
 
 DBM:RegisterMapSize("IsleoftheThunderKing",
-	1, 480.0,320.0,
-	2, 362.0,241.3330078125
+	0, 4135.2816551249, 2756.2332535822
 )

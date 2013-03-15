@@ -1,9 +1,8 @@
-if select(4, GetBuildInfo()) < 50200 then return end--Don't load on live
 local mod	= DBM:NewMod(817, "DBM-ThroneofThunder", nil, 362)
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8847 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8889 $"):sub(12, -3))
 mod:SetCreatureID(68078, 68079, 68080, 68081)--Ro'shak 68079, Quet'zal 68080, Dam'ren 68081, Iron Qon 68078
 mod:SetMainBossID(68078)
 mod:SetModelID(46627) -- Iron Qon, 46628 Ro'shak, 46629 Quet'zal, 46630 Dam'ren
@@ -26,17 +25,17 @@ local warnImpale						= mod:NewStackAnnounce(134691, 2, nil, mod:IsTank() or mod
 local warnThrowSpear					= mod:NewSpellAnnounce(134926, 3)--TODO, TEST target scanning here. It's probably touchy as shannox SPELL_SUMMON target scanning so will probably use same code
 local warnMoltenOverload				= mod:NewSpellAnnounce(137221, 4)
 local warnWindStorm						= mod:NewSpellAnnounce(136577, 4)
-local warnPunch							= mod:NewSpellAnnounce(136147, 3)
 local warnLightningStorm				= mod:NewTargetAnnounce(136192, 3)
 local warnDeadZone						= mod:NewAnnounce("warnDeadZone", 3, 137229)
-local warnFreeze						= mod:NewTargetAnnounce(135145, 3)
+local warnFreeze						= mod:NewTargetAnnounce(135145, 3, nil, false)--Spammy, more of a duh type warning I think
+local warnRisingAnger					= mod:NewStackAnnounce(136323, 2, nil, false)
+local warnFistSmash						= mod:NewSpellAnnounce(136146, 3)
 local warnWhirlingWinds					= mod:NewSpellAnnounce(139167, 3)--Heroic Phase 1
 local warnFrostSpike					= mod:NewSpellAnnounce(139180, 3)--Heroic Phase 2
 
 local specWarnImpale					= mod:NewSpecialWarningStack(134691, mod:IsTank(), 3)
 local specWarnImpaleOther				= mod:NewSpecialWarningTarget(134691, mod:IsTank())
 local specWarnThrowSpear				= mod:NewSpecialWarningSpell(134926, nil, nil, nil, 2)
-local specWarnPunch						= mod:NewSpecialWarningSpell(136147, nil, nil, nil, true)
 local specWarnBurningCinders			= mod:NewSpecialWarningMove(137668)
 local specWarnMoltenOverload			= mod:NewSpecialWarningSpell(137221, nil, nil, nil, 2)
 local specWarnWindStorm					= mod:NewSpecialWarningSpell(136577, nil, nil, nil, 2)
@@ -46,6 +45,7 @@ local yellLightningStorm				= mod:NewYell(136192)
 local specWarnFreeze					= mod:NewSpecialWarningYou(135145)--Maybe not useful? may toss this warning but keep only yell to help OTHER players keep away from it. Not sure person it's cast on can do anything about it in 1 second
 local yellFreeze						= mod:NewYell(135145)
 local specWarnFrozenBlood				= mod:NewSpecialWarningMove(136520)
+local specWarnFistSmash					= mod:NewSpecialWarningSpell(136146, nil, nil, nil, 2)
 
 local timerImpale						= mod:NewTargetTimer(40, 134691, mod:IsTank() or mod:IsHealer())
 local timerImpaleCD						= mod:NewCDTimer(20, 134691, mod:IsTank() or mod:IsHealer())
@@ -54,12 +54,13 @@ local timerUnleashedFlameCD				= mod:NewCDTimer(6, 134611)
 local timerScorched						= mod:NewBuffFadesTimer(30, 134647)
 local timerMoltenOverload				= mod:NewBuffActiveTimer(10, 137221)
 local timerLightningStormCD				= mod:NewCDTimer(20, 136192)
-local timerWindStormCD					= mod:NewCDTimer(70, 136577)
-local timerFreezeCD						= mod:NewCDTimer(20, 135145)
+local timerWindStormCD					= mod:NewNextTimer(70, 136577)
+local timerFreezeCD						= mod:NewCDTimer(7, 135145, nil, false)
 local timerDeadZoneCD					= mod:NewCDTimer(15, 137229)
+local timerRisingAngerCD				= mod:NewNextTimer(15, 136323, nil, false)
+local timerFistSmashCD					= mod:NewNextTimer(20, 136146)
 local timerWhirlingWindsCD				= mod:NewCDTimer(30, 139167)--Heroic Phase 1
 local timerFrostSpikeCD					= mod:NewCDTimer(12, 139180)--Heroic Phase 2
-local timerPunchCD					= mod:NewCDTimer(20, 136147)
 
 local berserkTimer						= mod:NewBerserkTimer(720)
 
@@ -84,7 +85,7 @@ local function checkArcing()
 		end
 	end
 	if arcingDebuffs == 0 then
-		self:Unschedule(checkArcing)
+		mod:Unschedule(checkArcing)
 		if mod.Options.RangeFrame then
 			DBM.RangeCheck:Hide()
 		end
@@ -92,7 +93,7 @@ local function checkArcing()
 			DBM.InfoFrame:Hide()
 		end
 	else
-		self:Schedule(5, checkArcing)
+		mod:Schedule(5, checkArcing)
 	end
 end
 
@@ -215,6 +216,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		else
 			timerFreezeCD:Start()
 		end
+	elseif args:IsSpellID(136323) then
+		warnRisingAnger:Show(args.destName, args.amount or 1)
+		timerRisingAngerCD:Start()
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
@@ -289,20 +293,11 @@ function mod:SPELL_CAST_SUCCESS(args)
 end
 
 function mod:SPELL_SUMMON(args)
-	if args:IsSpellID(134926) then
-		if phase == 4 then
-			warnPunch:Show()
-			specWarnPunch:Show()
-			timerPunchCD:Start()
-			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\aesoon.mp3") --準備AE
-		else
-			scansDone = 0
-			self:TargetScanner()
-			warnThrowSpear:Show()
-			specWarnThrowSpear:Show()
-			timerThrowSpearCD:Start()
-			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\spear.mp3") --投擲長矛
-		end
+	if args:IsSpellID(134926) and phase < 4 then
+		warnThrowSpear:Show()
+		specWarnThrowSpear:Show()
+		timerThrowSpearCD:Start()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\spear.mp3") --投擲長矛
 	end
 end
 
@@ -330,7 +325,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		timerUnleashedFlameCD:Start()
 	elseif spellId == 50630 and self:AntiSpam(2, 6) then--Eject All Passengers (heroic phase change trigger)
 		local cid = self:GetCIDFromGUID(UnitGUID(uId))
-		timerThrowSpearCD:Start(39)--TODO: Verify this is consistent
+		timerThrowSpearCD:Start()
 		if cid == 68079 then--Ro'shak
 			if self.Options.RangeFrame then
 				DBM.RangeCheck:Show(10, nil, nil, 1)--Switch range frame back to 1. Range is assumed 10, no spell info
@@ -360,6 +355,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 			timerLightningStormCD:Cancel()
 			timerWindStormCD:Cancel()
 			timerFrostSpikeCD:Cancel()
+			timerDeadZoneCD:Start(8.5)
 			if self:IsDifficulty("heroic10", "heroic25") then--On heroic, the fire guy returns and attacks clumps again
 				if self.Options.RangeFrame then--So on heroic we need to restore the grouping range frame
 					if self:IsDifficulty("heroic25") then
@@ -372,6 +368,9 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 			checkArcing()
 		elseif cid == 68081 then--Dam'ren
 			timerDeadZoneCD:Cancel()
+			timerFreezeCD:Cancel()
+			timerRisingAngerCD:Start(15)
+			timerFistSmashCD:Start(25)
 			phase = 4
 			if self:IsDifficulty("heroic10", "heroic25") then
 				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ptwo.mp3") --2階段
@@ -386,10 +385,18 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 	--"<168.1 19:53:31> [UNIT_SPELLCAST_SUCCEEDED] Quet'zal [[boss3:Rushing Winds::0:137656]]", -- [13876]
 	--"<170.1 19:29:36> [CLEU] SPELL_MISSED#true##nil#2632#0#0x010000000003A244#Oxey#1300#8#136577#Wind Storm#8#MISS#nil", -- [11314]
 	elseif spellId == 137656 and self:AntiSpam(2, 1) then--Rushing Winds (Wind Storm pre trigger)
-		warnWindStorm:Show()
-		specWarnWindStorm:Show()
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\wwsoon.mp3") --準備旋風
+		warnWindStorm:Cancel()
+		specWarnWindStorm:Cancel()
+		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\wwsoon.mp3") 
+		warnWindStorm:Schedule(70)
+		specWarnWindStorm:Schedule(70)
+		sndWOP:Schedule(70, "Interface\\AddOns\\DBM-Core\\extrasounds\\wwsoon.mp3") --準備旋風
 		timerWindStormCD:Start()
+	elseif spellId == 136146 and self:AntiSpam(2, 5) then
+		warnFistSmash:Show()
+		specWarnFistSmash:Show()
+		timerFistSmashCD:Start()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\aesoon.mp3")
 	end
 end
 
@@ -408,6 +415,7 @@ function mod:UNIT_DIED(args)
 		timerUnleashedFlameCD:Cancel()
 		timerMoltenOverload:Cancel()
 		timerLightningStormCD:Start(17)
+		timerThrowSpearCD:Start()
 		warnWindStorm:Schedule(49.5)
 		specWarnWindStorm:Schedule(49.5)
 		sndWOP:Schedule(49.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\wwsoon.mp3")
@@ -420,11 +428,16 @@ function mod:UNIT_DIED(args)
 		specWarnWindStorm:Cancel()
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\wwsoon.mp3")
 		timerWindStormCD:Cancel()
+		timerDeadZoneCD:Start(6)
+		timerThrowSpearCD:Start()
 		checkArcing()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_bsxt.mp3") --冰霜形態
 	elseif cid == 68081 then--Dam'ren
 		self:UnregisterShortTermEvents()
 		timerDeadZoneCD:Cancel()
+		timerFreezeCD:Cancel()
+		timerRisingAngerCD:Start()
+		timerFistSmashCD:Start(22.5)
 		phase = 4
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ptwo.mp3") --2階段
 	end
@@ -432,10 +445,10 @@ end
 
 function mod:UNIT_POWER(uId)
 	if self:IsDifficulty("lfr25") then return end
-	if (self:GetUnitCreatureId(uId) == 68079) and UnitPower(uId) > 40 and not Warned then
+	if (self:GetUnitCreatureId(uId) == 68079) and UnitPower(uId) > 50 and not Warned then
 		Warned = true
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_nlgg.mp3") --能量過高
-	elseif (self:GetUnitCreatureId(uId) == 68079) and UnitPower(uId) < 40 and Warned then
+	elseif (self:GetUnitCreatureId(uId) == 68079) and UnitPower(uId) < 20 and Warned then
 		Warned = false
 	end
 end

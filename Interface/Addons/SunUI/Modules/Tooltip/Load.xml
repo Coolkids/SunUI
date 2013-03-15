@@ -8,7 +8,6 @@
 	<Script file="ItemIcons.lua"/>
 	<Script file="ItemLevel.lua"/>
 	<Script file="SpellID.lua"/>
-	<Script file="ItemCount.lua"/>
 	<Script file="UnitRole.lua"/>
 	<Script file="Symbiosis.lua"/>
 	<Script file="CheckItemTransmogrify.lua"/>

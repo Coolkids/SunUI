@@ -418,7 +418,9 @@ local function UpdateObjects(frame)
 	frame.hp:SetSize(C["HPWidth"], C["HPHeight"])	
 	frame.hp:SetPoint('CENTER', frame)
 	frame.hp:GetStatusBarTexture():SetHorizTile(true)
-	frame.name:SetText(frame.oldname:GetText())
+	local name = frame.oldname:GetText()
+	if name:len()> 18 then name = name:sub(1, 18).."..." end
+	frame.name:SetText(name)
 	frame.hp:SetMinMaxValues(frame.healthOriginal:GetMinMaxValues())
 	frame.highlight:ClearAllPoints()
 	frame.highlight:SetAllPoints(frame.hp)
@@ -430,12 +432,12 @@ local function UpdateObjects(frame)
 	frame.level:Hide()
 	if frame.boss:IsShown() then
 		frame.level:SetText("B")
-		frame.name:SetText('|cffDC3C2D'..frame.level:GetText()..'|r '..frame.oldname:GetText())
+		frame.name:SetText('|cffDC3C2D'..frame.level:GetText()..'|r '..name)
 	elseif not elite and level == mylevel then
-		frame.name:SetText(frame.oldname:GetText())
+		frame.name:SetText(name)
 	elseif level then
 		frame.level:SetText(level..(elite and "+" or ""))
-		frame.name:SetText(format('|cff%02x%02x%02x', lvlr*255, lvlg*255, lvlb*255)..frame.level:GetText()..'|r '..frame.oldname:GetText())
+		frame.name:SetText(format('|cff%02x%02x%02x', lvlr*255, lvlg*255, lvlb*255)..frame.level:GetText()..'|r '..name)
 	end
 	
 	if frame.icons then return end
@@ -543,7 +545,7 @@ local function SkinObjects(frame, nameFrame)
 	help:SetAllPoints(newhp)
 	help:SetFrameLevel(newhp:GetFrameLevel()+1)
 	newhp.pct = help:CreateFontString(nil, "OVERLAY")	
-	newhp.pct:SetFont(DB.Font, C["Fontsize"]-1, "THINOUTLINE")
+	newhp.pct:SetFont(DB.Font, C["Fontsize"], "THINOUTLINE")
 	newhp.pct:SetPoint('BOTTOMRIGHT', newhp, 'TOPRIGHT', 0, -4)
 	
 	local offset = UIParent:GetScale() / cb:GetEffectiveScale()

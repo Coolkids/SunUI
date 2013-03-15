@@ -91,8 +91,10 @@ mod:AddDropdownOption("optindex", {"noidex", "index1", "index2", "index3", "inde
 
 mod:AddDropdownOption("countTT", {"countnone", "count3", "count4"}, "countnone", "sound")
 
-if string.find(GetGuildInfo("player"), "黑手") then
-	mod:AddDropdownOption("optjs", {"non", "paltank", "monktank", "druid", "priest", "palheal", "warrior1", "warrior2", "paldps1", "paldps2"}, "non", "sound")
+if GetGuildInfo("player") then
+	if string.find(GetGuildInfo("player"), "黑手") then
+		mod:AddDropdownOption("optjs", {"non", "paltank", "monktank", "druid", "priest", "palheal", "warrior1", "warrior2", "paldps1", "paldps2"}, "non", "sound")
+	end
 end
 
 local guids = {}
@@ -100,7 +102,7 @@ local voodooDollWarned = false
 local guidTableBuilt = false--Entirely for DCs, so we don't need to reset between pulls cause it doesn't effect building table on combat start and after a DC then it will be reset to false always
 local function buildGuidTable()
 	table.wipe(guids)
-	for i = 1, DBM:GetGroupMembers() do
+	for i = 1, DBM:GetNumGroupMembers() do
 		guids[UnitGUID("raid"..i) or "none"] = GetRaidRosterInfo(i)
 	end
 end
@@ -130,7 +132,7 @@ local function removeIcon(target)
 end
 
 local function getraidindex()
-	for i = 1, DBM:GetGroupMembers() do
+	for i = 1, DBM:GetNumGroupMembers() do
 		if UnitName("raid"..i) == UnitName("player") then
 			myraidindex = i
 			break

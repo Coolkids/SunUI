@@ -1,9 +1,8 @@
-if select(4, GetBuildInfo()) < 50200 then return end--Don't load on live
 local mod	= DBM:NewMod(821, "DBM-ThroneofThunder", nil, 362)
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8825 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8862 $"):sub(12, -3))
 mod:SetCreatureID(68065, 70212, 70235, 70247)--flaming 70212. Frozen 70235, Venomous 70247
 mod:SetModelID(47414)--Hydra Fire Head, 47415 Frost Head, 47416 Poison Head
 
@@ -24,13 +23,13 @@ mod:RegisterEventsInCombat(
 	"UNIT_DIED"
 )
 
-local warnRampage				= mod:NewSpellAnnounce(139458, 3)
+local warnRampage				= mod:NewCountAnnounce(139458, 3)
 local warnArcticFreeze			= mod:NewStackAnnounce(139843, 3, nil, mod:IsTank() or mod:IsHealer())
 local warnIgniteFlesh			= mod:NewStackAnnounce(137731, 3, nil, mod:IsTank() or mod:IsHealer())
 local warnRotArmor				= mod:NewStackAnnounce(139840, 3, nil, mod:IsTank() or mod:IsHealer())
 local warnArcaneDiffusion		= mod:NewStackAnnounce(139993, 3, nil, mod:IsTank() or mod:IsHealer())--Heroic
 local warnCinders				= mod:NewTargetAnnounce(139822, 4)
-local warnTorrentofIce			= mod:NewTargetAnnounce(139889, 4)--Cannot get target, no debuff. Maybe they get an emote? i was tank so I don't know. can't target scan because back heads aren't targetable
+local warnTorrentofIce			= mod:NewTargetAnnounce(139889, 4)
 local warnNetherTear			= mod:NewSpellAnnounce(140138, 3)--Heroic
 
 local specWarnRampage			= mod:NewSpecialWarningSpell(139458, nil, nil, nil, 2)
@@ -101,6 +100,7 @@ local fireBehind = 0
 local venomBehind = 0
 local iceBehind = 0
 local arcaneBehind = 0
+local rampageCast = 0
 local activeHeadGUIDS = {}
 local guids = {}
 local guidTableBuilt = false--Entirely for DCs, so we don't need to reset between pulls cause it doesn't effect building table on combat start and after a DC then it will be reset to false always
@@ -158,25 +158,13 @@ local function showheadinfo()
 	end
 end
 
-local function chooseattack()
-	if not combat then return end
-	if iceInFront == 1 then
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_lskd.mp3") --藍色
-	elseif fireInFront == 1 then
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_hskd.mp3") --紅色
-	elseif venomInFront == 1 then
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_lvkd.mp3") --綠色
-	elseif arcaneInFront == 1 then
-		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_zskd.mp3") --紫色
-	end
-end
-
 function mod:OnCombatStart(delay)
 	buildGuidTable()
 	guidTableBuilt = true
 	table.wipe(activeHeadGUIDS)
 	table.wipe(FireMarkers)
 	table.wipe(IceMarkers)
+	rampageCast = 0
 	fireInFront = 0
 	venomInFront = 0
 	iceInFront = 0
@@ -313,7 +301,8 @@ mod.SPELL_MISSED = mod.SPELL_DAMAGE
 
 function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, _, _, _, target)
 	if msg:find("spell:139458") then
-		warnRampage:Show()
+		rampageCast = rampageCast + 1
+		warnRampage:Show(rampageCast)
 		timerArcticFreezeCD:Cancel()
 		timerIgniteFleshCD:Cancel()
 		timerRotArmorCD:Cancel()
@@ -410,19 +399,15 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		if cid == 70235 then--Frozen
 			iceInFront = iceInFront - 1
 			iceBehind = iceBehind + 2
-			chooseattack()
 		elseif cid == 70212 then--Flaming
 			fireInFront = fireInFront - 1
 			fireBehind = fireBehind + 2
-			chooseattack()
 		elseif cid == 70247 then--Venomous
 			venomInFront = venomInFront - 1
 			venomBehind = venomBehind + 2
-			chooseattack()
 		elseif cid == 70248 then--Arcane
 			arcaneInFront = arcaneInFront - 1
 			arcaneBehind = arcaneBehind + 2
-			chooseattack()
 		end
 		showheadinfo()
 	end

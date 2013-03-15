@@ -10,6 +10,7 @@ local SM = LibStub("LibSharedMedia-3.0", true)
 local statusbars = SM:List("statusbar")
 local aglin = false
 local equipment = {}
+local version = tostring(GetAddOnMetadata("SunUI", "Version"))
 function SunUIConfig:LoadDefaults()
 	local equipmenttotal = GetNumEquipmentSets()
 	for i = 1, equipmenttotal do
@@ -104,7 +105,7 @@ function SunUIConfig.GenerateOptionsInternal()
 			Header = {
 				order = 1,
 				type = "header",
-				name = L["版本号:"]..GetAddOnMetadata("SunUI", "Version"),
+				name = L["版本号:"]..version:sub(1, 4).."-"..version:sub(5, 6).."-"..version:sub(7, 8),
 				width = "full",		
 			},
 			Unlock = {
@@ -1700,7 +1701,7 @@ function SunUIConfig.GenerateOptionsInternal()
 			BagDB = {
 				order = 19,
 				type = "group",
-				name = "背包设置",
+				name = L["背包设置"],
 				get = function(info) return db.BagDB[ info[#info] ] end,
 				set = function(info, value) db.BagDB[ info[#info] ] = value; end,
 				args = {
