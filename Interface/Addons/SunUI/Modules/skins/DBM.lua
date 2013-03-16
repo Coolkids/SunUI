@@ -239,6 +239,7 @@ local function SkinGUI(event, addon)
 	end
 end
 local function SkinRangeCheck()
+	if DBMRangeCheck.sunuistyle then return end
 	S.SetBD(DBMRangeCheck)
 	DBMRangeCheck:StripTextures()
 	if DBMRangeCheckRadar then
@@ -248,10 +249,13 @@ local function SkinRangeCheck()
 		DBMRangeCheckRadar.text:SetFont(DB.Font, 13*S.Scale(1), "THINOUTLINE")
 		DBMRangeCheckRadar.text:Point("BOTTOMLEFT", DBMRangeCheckRadar, "TOPLEFT", 0, 5)
 	end
+	DBMRangeCheck.sunuistyle = true
 end
 local function SkinInfoFrame()
+	if DBMInfoFrame.sunuistyle then return end
 	DBMInfoFrame:StripTextures()
 	S.SetBD(DBMInfoFrame)
+	DBMInfoFrame.sunuistyle = true
 end
 function Module:OnEnable()
 	C = SunUIConfig.db.profile

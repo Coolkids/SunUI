@@ -42,6 +42,7 @@ S.CreateBD = function(f, a)
 end
 
 S.CreateBG = function(frame)
+	if frame.setbg then return end
 	local f = frame
 	if frame:GetObjectType() == "Texture" then f = frame:GetParent() end
 
@@ -50,7 +51,7 @@ S.CreateBG = function(frame)
 	bg:Point("BOTTOMRIGHT", frame, 1, -1)
 	bg:SetTexture(media.backdrop)
 	bg:SetVertexColor(0, 0, 0)
-
+	frame.setbg = true
 	return bg
 end
 
@@ -484,6 +485,7 @@ S.ReskinExpandOrCollapse = function(f)
 end
 
 S.SetBD = function(f, x, y, x2, y2)
+	if f.setbd then return end
 	local bg = CreateFrame("Frame", nil, f)
 	if not x then
 		bg:SetPoint("TOPLEFT")
@@ -495,6 +497,7 @@ S.SetBD = function(f, x, y, x2, y2)
 	bg:SetFrameLevel(0)
 	S.CreateBD(bg)
 	S.CreateSD(bg)
+	f.setbd = true
 end
 
 S.ReskinPortraitFrame = function(f, isButtonFrame)

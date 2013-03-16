@@ -47,7 +47,27 @@ mod:AddBoolOption("RangeFrame", mod:IsRanged())
 local flockC = 0
 local flockCount = 0
 local lastFlock = 0
+local wstime = 0
 local flockName = EJ_GetSectionInfo(7348)
+
+for i = 1, 26 do
+	mod:AddBoolOption("add"..i, false, "sound")
+end
+
+local function MyAddDown(flockwave)
+	if (flockwave == 2 and mod.Options.add2) or (flockwave == 3 and mod.Options.add3) or (flockwave == 4 and mod.Options.add5) or (flockwave == 5 and mod.Options.add7) or (flockwave == 7 and mod.Options.add10) or (flockwave == 8 and mod.Options.add12) or (flockwave == 9 and mod.Options.add14) or (flockwave == 10 and mod.Options.add16) or (flockwave == 11 and mod.Options.add18) or (flockwave == 12 and mod.Options.add20) or (flockwave == 13 and mod.Options.add22) or (flockwave == 14 and mod.Options.add24) or (flockwave == 15 and mod.Options.add26) then
+		return true
+	end
+	return false
+end
+
+local function MyAddUp(flockwave)
+	if (flockwave == 4 and mod.Options.add4) or (flockwave == 5 and mod.Options.add6) or (flockwave == 6 and mod.Options.add8) or (flockwave == 7 and mod.Options.add9) or (flockwave == 8 and mod.Options.add11) or (flockwave == 9 and mod.Options.add13) or (flockwave == 10 and mod.Options.add15) or (flockwave == 11 and mod.Options.add17) or (flockwave == 12 and mod.Options.add19) or (flockwave == 13 and mod.Options.add21) or (flockwave == 14 and mod.Options.add23) or (flockwave == 15 and mod.Options.add19) then
+		return true
+	end
+	return false
+end
+
 
 function mod:OnCombatStart(delay)
 	flockC = 0
@@ -173,6 +193,40 @@ function mod:CHAT_MSG_MONSTER_EMOTE(msg, _, _, _, target)
 	if msg:find(L.eggsHatchL) or msg:find(L.eggsHatchU) then
 		if self:AntiSpam(5, 2) then
 			flockCount = flockCount + 1
+			if MyAddDown(flockCount+1) then
+				if self:IsDifficulty("normal10") then
+					self:Schedule(34, function()
+						DBM.Flash:Show(1, 0, 0)
+					end)
+					specWarnFlock:Schedule(34, L.Lower, flockName, flockCount+1)
+					sndWOP:Schedule(34, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_xfxg.mp3")
+					sndWOP:Schedule(40, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_ddfh.mp3")
+				else
+					self:Schedule(24, function()
+						DBM.Flash:Show(1, 0, 0)
+					end)
+					specWarnFlock:Schedule(24, L.Lower, flockName, flockCount+1)
+					sndWOP:Schedule(24, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_xfxg.mp3")
+					sndWOP:Schedule(30, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_ddfh.mp3")
+				end
+			end
+			if MyAddUp(flockCount+1) then
+				if self:IsDifficulty("normal10") then
+					self:Schedule(34, function()
+						DBM.Flash:Show(1, 0, 0)
+					end)
+					specWarnFlock:Schedule(34, L.Upper, flockName, flockCount+1)
+					sndWOP:Schedule(34, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_sfxg.mp3")
+					sndWOP:Schedule(40, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_ddfh.mp3")
+				else
+					self:Schedule(24, function()
+						DBM.Flash:Show(1, 0, 0)
+					end)
+					specWarnFlock:Schedule(24, L.Upper, flockName, flockCount+1)
+					sndWOP:Schedule(24, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_sfxg.mp3")
+					sndWOP:Schedule(30, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_ddfh.mp3")
+				end
+			end
 		end
 		flockC = flockC + 1
 		local messageText = msg:find(L.eggsHatchL) and L.Lower or L.Upper

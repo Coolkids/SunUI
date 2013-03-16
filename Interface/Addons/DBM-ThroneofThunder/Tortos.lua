@@ -3,7 +3,7 @@ local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndAE		= mod:NewSound(nil, "SoundAE", true)
 
-mod:SetRevision(("$Revision: 8897 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8912 $"):sub(12, -3))
 mod:SetCreatureID(67977)
 mod:SetModelID(46559)
 
@@ -29,7 +29,7 @@ local specWarnCallofTortos			= mod:NewSpecialWarningSpell(136294)
 local specWarnQuakeStomp			= mod:NewSpecialWarningSpell(134920, nil, nil, nil, 2)
 local specWarnRockfall				= mod:NewSpecialWarningSpell(134476, false, nil, nil, 2)
 local specWarnStoneBreath			= mod:NewSpecialWarningInterrupt(133939)
-local specWarnCrystalShell			= mod:NewSpecialWarning("specWarnCrystalShell", not mod:IsTank())--Tanks need it too, but they don't just blindly grab it any time it's gone like dps do, they must be at full health whent hey do or it REALLY messes up bats, so a tank needs to often ignore this warning until timing is right
+local specWarnCrystalShell			= mod:NewSpecialWarning("specWarnCrystalShell", false)
 
 local timerBiteCD					= mod:NewCDTimer(8, 135251, nil, mod:IsTank())
 local timerRockfallCD				= mod:NewCDTimer(10, 134476)
@@ -62,6 +62,7 @@ end
 local stompActive = false
 local firstRockfall = false--First rockfall after a stomp
 local shellsRemaining = 0
+local lastConcussion = 0
 local kickedShells = {}
 
 local function clearStomp()
@@ -78,6 +79,7 @@ function mod:OnCombatStart(delay)
 	stompActive = false
 	firstRockfall = false--First rockfall after a stomp
 	shellsRemaining = 0
+	lastConcussion = 0
 	stompcount = 0
 	table.wipe(kickedShells)
 	timerRockfallCD:Start(15-delay)
@@ -184,7 +186,9 @@ end
 
 function mod:UNIT_AURA(uId)
 	if uId ~= "boss1" then return end
-	if UnitDebuff(uId, shellConcussion) then
+	local _, _, _, _, _, duration, expires = UnitDebuff(uId, shellConcussion)
+	if lastConcussion ~= expires then
+		lastConcussion = expires
 		timerShellConcussion:Start()
 		if self:AntiSpam(3, 2) then
 			warnShellConcussion:Show(UnitName(uId))

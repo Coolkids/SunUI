@@ -17,10 +17,9 @@ local RaidBuffList = {
 		-- 耐力
 		21562, -- 真言术：韧
 		  469, -- 命令怒吼
-		 6307, -- 血契
+		109773,		--意图
 		90364, -- 其拉虫群坚韧
 		72590, -- 坚韧
-		109773,		--意图
 	},
 	[3] = {
 		-- 精通
@@ -90,8 +89,7 @@ local function OnEvent_UNIT_AURA(event, unit, ...)
 			BuffFrame[i].Icon:SetTexture(select(3, GetSpellInfo(RaidBuffList[i][1])))
 			for key, value in pairs(RaidBuffList[i]) do
 				local name = GetSpellInfo(value)
-				if name == nil then return end
-				if UnitAura("player", name) then
+				if name and UnitAura("player", name) then 
 					BuffFrame[i].Icon:SetTexture(select(3, GetSpellInfo(value)))
 					BuffFrame[i]:SetAlpha(0.2)
 					break
@@ -105,8 +103,7 @@ local function OnEvent_UNIT_AURA(event, unit, ...)
 			BuffFrame[5].Icon:SetTexture(select(3, GetSpellInfo(RaidBuffList[6][1])))
 			for key, value in pairs(RaidBuffList[6]) do
 				local name = GetSpellInfo(value)
-				if name == nil then return end
-				if UnitAura("player", name) then
+				if name and UnitAura("player", name) then 
 					BuffFrame[5].Icon:SetTexture(select(3, GetSpellInfo(value)))
 					BuffFrame[5]:SetAlpha(0.2)
 					break
@@ -119,8 +116,7 @@ local function OnEvent_UNIT_AURA(event, unit, ...)
 			BuffFrame[5].Icon:SetTexture(select(3, GetSpellInfo(RaidBuffList[5][1])))
 			for key, value in pairs(RaidBuffList[5]) do
 				local name = GetSpellInfo(value)
-				if name == nil then return end
-				if UnitAura("player", name) then
+				if name and UnitAura("player", name) then 
 					BuffFrame[5].Icon:SetTexture(select(3, GetSpellInfo(value)))
 					BuffFrame[5]:SetAlpha(0.2)
 					break
@@ -134,8 +130,7 @@ local function OnEvent_UNIT_AURA(event, unit, ...)
 			BuffFrame[6].Icon:SetTexture(select(3, GetSpellInfo(RaidBuffList[8][1])))
 			for key, value in pairs(RaidBuffList[8]) do
 				local name = GetSpellInfo(value)
-				if name == nil then return end
-				if UnitAura("player", name) then
+				if name and UnitAura("player", name) then 
 					BuffFrame[6].Icon:SetTexture(select(3, GetSpellInfo(value)))
 					BuffFrame[6]:SetAlpha(0.2)
 					break
@@ -148,8 +143,7 @@ local function OnEvent_UNIT_AURA(event, unit, ...)
 			BuffFrame[6].Icon:SetTexture(select(3, GetSpellInfo(RaidBuffList[7][1])))
 			for key, value in pairs(RaidBuffList[7]) do
 				local name = GetSpellInfo(value)
-				if name == nil then return end
-				if UnitAura("player", name) then
+				if name and UnitAura("player", name) then 
 					BuffFrame[6].Icon:SetTexture(select(3, GetSpellInfo(value)))
 					BuffFrame[6]:SetAlpha(0.2)
 					break
@@ -170,8 +164,7 @@ local function OnEvent_PLAYER_ENTERING_WORLD(event, ...)
 			BuffFrame[i].Icon:SetTexture(select(3, GetSpellInfo(RaidBuffList[i][1])))
 			for key, value in pairs(RaidBuffList[i]) do
 				local name = GetSpellInfo(value)
-				if name == nil then return end
-				if UnitAura("player", name) then
+				if name and UnitAura("player", name) then 
 					BuffFrame[i].Icon:SetTexture(select(3, GetSpellInfo(value)))
 					BuffFrame[i]:SetAlpha(0.2)
 					break
@@ -185,8 +178,7 @@ local function OnEvent_PLAYER_ENTERING_WORLD(event, ...)
 			BuffFrame[5].Icon:SetTexture(select(3, GetSpellInfo(RaidBuffList[6][1])))
 			for key, value in pairs(RaidBuffList[6]) do
 				local name = GetSpellInfo(value)
-				if name == nil then return end
-				if UnitAura("player", name) then
+				if name and UnitAura("player", name) then 
 					BuffFrame[5].Icon:SetTexture(select(3, GetSpellInfo(value)))
 					BuffFrame[5]:SetAlpha(0.2)
 					break
@@ -199,8 +191,7 @@ local function OnEvent_PLAYER_ENTERING_WORLD(event, ...)
 			BuffFrame[5].Icon:SetTexture(select(3, GetSpellInfo(RaidBuffList[5][1])))
 			for key, value in pairs(RaidBuffList[5]) do
 				local name = GetSpellInfo(value)
-				if name == nil then return end
-				if UnitAura("player", name) then
+				if name and UnitAura("player", name) then 
 					BuffFrame[5].Icon:SetTexture(select(3, GetSpellInfo(value)))
 					BuffFrame[5]:SetAlpha(0.2)
 					break
@@ -214,8 +205,7 @@ local function OnEvent_PLAYER_ENTERING_WORLD(event, ...)
 			BuffFrame[6].Icon:SetTexture(select(3, GetSpellInfo(RaidBuffList[8][1])))
 			for key, value in pairs(RaidBuffList[8]) do
 				local name = GetSpellInfo(value)
-				if name == nil then return end
-				if UnitAura("player", name) then
+				if name and UnitAura("player", name) then 
 					BuffFrame[6].Icon:SetTexture(select(3, GetSpellInfo(value)))
 					BuffFrame[6]:SetAlpha(0.2)
 					break
@@ -228,8 +218,7 @@ local function OnEvent_PLAYER_ENTERING_WORLD(event, ...)
 			BuffFrame[6].Icon:SetTexture(select(3, GetSpellInfo(RaidBuffList[7][1])))
 			for key, value in pairs(RaidBuffList[7]) do
 				local name = GetSpellInfo(value)
-				if name == nil then return end
-				if UnitAura("player", name) then
+				if name and UnitAura("player", name) then 
 					BuffFrame[6].Icon:SetTexture(select(3, GetSpellInfo(value)))
 					BuffFrame[6]:SetAlpha(0.2)
 					break
@@ -274,6 +263,7 @@ function Module:OnEnable()
 	OnEvent_GROUP_ROSTER_UPDATE()
 	OnEvent_ACTIVE_TALENT_GROUP_CHANGED()
 	BuildBuffFrame()
+	OnEvent_UNIT_AURA(nil, "player")
 	Module:RegisterEvent("PLAYER_ENTERING_WORLD", OnEvent_PLAYER_ENTERING_WORLD)
 	Module:RegisterEvent("UNIT_AURA", OnEvent_UNIT_AURA)
 	Module:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", OnEvent_ACTIVE_TALENT_GROUP_CHANGED)

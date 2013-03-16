@@ -3,7 +3,7 @@ local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndIon	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8906 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8908 $"):sub(12, -3))
 mod:SetCreatureID(69465)
 mod:SetModelID(47552)
 
@@ -11,6 +11,7 @@ mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START",
+	"SPELL_CAST_SUCCESS",
 	"SPELL_AURA_APPLIED",
 	"SPELL_AURA_REMOVED",
 	"SPELL_DAMAGE",
@@ -128,6 +129,11 @@ function mod:OnCombatStart(delay)
 	inoizame = false
 	if self:IsDifficulty("heroic10", "heroic25") then
 		timerIonizationCD:Start(60-delay)
+		sndIonCD:Schedule(55, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_dlzb.mp3")
+		sndIonCD:Schedule(56.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+		sndIonCD:Schedule(57.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+		sndIonCD:Schedule(58.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+		sndIonCD:Schedule(59.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 	end
 	stormcount = 0
 	berserkTimer:Start(-delay)
@@ -184,20 +190,27 @@ function mod:SPELL_CAST_START(args)
 		
 		if self:IsDifficulty("heroic10", "heroic25") then
 			timerIonizationCD:Start(61.5)
+			sndIonCD:Schedule(56.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_dlzb.mp3")
+			sndIonCD:Schedule(58, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")
+			sndIonCD:Schedule(59, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndIonCD:Schedule(60, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndIonCD:Schedule(61, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		end
 	elseif args:IsSpellID(138732) then
 		warnIonization:Show()
 		specWarnIonization:Show()
-		if not mod:IsTank() then
-			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_dlzh.mp3") --電離子化
-		end
+	end
+end
+
+function mod:SPELL_CAST_SUCCESS(args)
+	if args:IsSpellID(137162) then
+		timerStaticBurstCD:Start()
 	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(137162) then
 		warnStaticBurst:Show(args.destName)
-		timerStaticBurstCD:Start()
 		if args:IsPlayer() then
 			specWarnStaticBurst:Show()
 		else
@@ -206,7 +219,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if mod:IsTank() then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\changemt.mp3") --換坦嘲諷
 		end
-	elseif args:IsSpellID(138732) and args:IsPlayer() then
+	elseif args:IsSpellID(138732) and args:IsPlayer() then		
 		if self.Options.RangeFrame then
 			if self:IsDifficulty("heroic25") then
 				DBM.RangeCheck:Show(4)
@@ -215,8 +228,17 @@ function mod:SPELL_AURA_APPLIED(args)
 			end
 		end
 		inoizame = true
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_dlzh.mp3") --電離子化
+		self:Schedule(16, function()
+			if UnitDebuff("player", GetSpellInfo(138732)) then
+				DBM.Flash:Show(1, 0, 0)
+				self:Schedule(0.5, function() DBM.Flash:Show(0, 0, 1) end)
+				self:Schedule(1, function() DBM.Flash:Show(1, 0, 0) end)
+			end
+		 end)
 		sndIon:Schedule(16, "Interface\\AddOns\\DBM-Core\\extrasounds\\runout.mp3")	--離開人群
-		sndIon:Schedule(17.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countseven.mp3")
+		sndIon:Schedule(16.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\runout.mp3")
+		sndIon:Schedule(17, "Interface\\AddOns\\DBM-Core\\extrasounds\\runout.mp3")
 		sndIon:Schedule(18.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countsix.mp3")
 		sndIon:Schedule(19.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
 		sndIon:Schedule(20.5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")

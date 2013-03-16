@@ -158,6 +158,12 @@ L:SetOptionLocalization({
 	add18			= "第十一波$journal:7348(下)",
 	add19			= "第十二波$journal:7348(上)",
 	add20			= "第十二波$journal:7348(下)",
+	add21			= "第十三波$journal:7348(上)",
+	add22			= "第十三波$journal:7348(下)",
+	add23			= "第十四波$journal:7348(上)",
+	add24			= "第十四波$journal:7348(下)",
+	add25			= "第十五波$journal:7348(上)",
+	add26			= "第十五波$journal:7348(下)",
 	RangeFrame		= "Show range frame (8) for $spell:138923"
 })
 

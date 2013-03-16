@@ -259,6 +259,7 @@ function Module:PLAYER_ENTERING_WORLD()
 			if (not UnitIsPlayer(unit)) then 
 				local reaction = UnitReaction(unit, "player");
 				if ( reaction ) then
+					local r, g, b
 					r = FACTION_BAR_COLORS[reaction].r;
 					g = FACTION_BAR_COLORS[reaction].g;
 					b = FACTION_BAR_COLORS[reaction].b;
@@ -303,12 +304,30 @@ local function On_SetDefaultAnchor(tooltip, parent)
 end
 local function On_ANCHOR_CURSOR(self, ...)
 	if self:GetAnchorType() == "ANCHOR_CURSOR" then
-	  local x, y = GetCursorPosition()
-	  local effScale = self:GetEffectiveScale()
-	  local width = self:GetWidth() or 0
-	  self:ClearAllPoints()
-	  self:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", x / effScale +5, y / effScale + 20)
-   end
+		local x, y = GetCursorPosition()
+		local effScale = self:GetEffectiveScale()
+		local width = self:GetWidth() or 0
+		self:ClearAllPoints()
+		self:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", x / effScale +5, y / effScale + 20)
+	end
+	--颜色
+	--[[ local unit = select(2, self:GetUnit())
+	if unit then
+		if (not UnitIsPlayer(unit)) then 
+			local reaction = UnitReaction(unit, "player");
+			if ( reaction ) then
+				local r, g, b
+				local r = FACTION_BAR_COLORS[reaction].r
+				local g = FACTION_BAR_COLORS[reaction].g
+				local b = FACTION_BAR_COLORS[reaction].b
+				self.bg:SetBackdropColor(r/3, g/3, b/3, .6)
+			end
+		else
+			self.bg:SetBackdropColor(0, 0, 0, .6)
+		end
+	else
+		self.bg:SetBackdropColor(0, 0, 0, .6)
+	end ]]
 end
 
 local function SkinTooltip()
@@ -371,7 +390,7 @@ local function SkinTooltip()
 end
 
 function Module:OnInitialize()
-	 if IsAddOnLoaded("TipTac") or IsAddOnLoaded("FreebTip") or IsAddOnLoaded("bTooltip") or IsAddOnLoaded("PhoenixTooltip") or IsAddOnLoaded("Icetip") then
+	if IsAddOnLoaded("TipTac") or IsAddOnLoaded("FreebTip") or IsAddOnLoaded("bTooltip") or IsAddOnLoaded("PhoenixTooltip") or IsAddOnLoaded("Icetip") then
 		return
 	end
 	C=SunUIConfig.db.profile.TooltipDB
