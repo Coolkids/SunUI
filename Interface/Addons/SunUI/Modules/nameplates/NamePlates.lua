@@ -162,7 +162,8 @@ local totems = {
 	--["訓練假人"]  = GetSpellTexture(2894),
 }
 local function TotemIcon(frame)
-	if totems[frame.oldname:GetText()] then		
+	local totname = frame.oldname:GetText()
+	if totems[totname] then		
 		if not frame.totem then
 			frame.icon:SetTexCoord(.08, .92, .08, .92)
 			frame.totem = true
@@ -171,7 +172,7 @@ local function TotemIcon(frame)
 			--print("Show", GetTime())
 			frame.icon:Show()
 			frame.Ticon:Show()
-			frame.icon:SetTexture(totems[frame.oldname:GetText()])
+			frame.icon:SetTexture(totems[totname])
 		end
 	else
 		if frame.totem then
@@ -186,13 +187,11 @@ end
 --0.53333216905594 0.53333216905594 0.99999779462814
 local function Color(frame)
 	local r, g, b = frame.healthOriginal:GetStatusBarColor()
-	frame.isTapped = false
 	--print(r, g, b)
 	if r > 0.52 and r < 0.55 and r == g and b > 0.98 then   -- Tapped
 		--print(r, g, b)
 		r, g, b = 0.6, 0.6, 0.6
 		--print(123)
-		frame.isTapped = true
 	elseif g + b == 0 then
 		r, g, b = 0.7, 0.2, 0.1
 	elseif r + b == 0 then
@@ -209,7 +208,6 @@ local function Color(frame)
 end
 
 local function UpdateThreat(frame, elapsed)
-	if frame.isTapped then return end
 	
 	if(frame.threat:IsShown()) then
 		local r, g, b = frame.threat:GetVertexColor()
@@ -245,6 +243,7 @@ local function ShowHealth(frame)
 	local minHealth, maxHealth = frame.healthOriginal:GetMinMaxValues()
     local valueHealth = frame.healthOriginal:GetValue()
 	local d =(valueHealth/maxHealth)*100
+	frame.hp:SetMinMaxValues(minHealth, maxHealth)
 	frame.hp:SetValue(valueHealth)
 	frame.hp.pct:SetText(format("%.0f %s",d,"%"))
 
@@ -493,8 +492,6 @@ local function OnHide(frame)
 	frame.Ticon:Hide()
 	frame.icon:SetTexture(nil)
 	--print("OnHide", GetTime())
-	frame.isFriendly = nil
-	frame.isTapped = nil
 	if frame.icons then
 		for _, icon in ipairs(frame.icons) do
 			icon:Hide()

@@ -990,16 +990,16 @@ local function genShadowOrbs(f)
 		end
 	end)
 end
---奥法的6个东西
+--奥法的4个东西
 local function genMage(f)
 	if class ~= "MAGE" then return end
 	
 	local bars = CreateFrame("Frame", nil, f)
 	bars:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 3)
-	bars:SetSize((f.width-8)/5, f.height/4)
-	for i = 1,6 do
+	bars:SetSize(f.width, f.height/4)
+	for i = 1,4 do
 		bars[i] = CreateFrame("StatusBar", nil, f)
-		bars[i]:SetSize((f.width-space*(6-1))/6, f.height/4)
+		bars[i]:SetSize((f.width-space*(4-1))/4, f.height/4)
 		bars[i]:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
 		local s = bars[i]:GetStatusBarTexture()
 		S.CreateTop(s, 0.41, 0.8, 0.94)
@@ -1016,7 +1016,7 @@ local function genMage(f)
 		if unit ~= "player" then return end
 		local num = select(4, UnitDebuff("player", GetSpellInfo(36032)))
 		if num == nil then num = 0 end
-		for i = 1,6 do
+		for i = 1,4 do
 			if i <= num then
 				bars[i]:Show()
 			else

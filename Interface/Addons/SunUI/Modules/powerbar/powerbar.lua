@@ -555,11 +555,11 @@ function Module:Mage()
 	MageBars:SetSize(C["Width"], C["Height"])
 	MageBars:SetPoint("CENTER", Holder)
 	tinsert(mainframe, MageBars)
-	for i = 1,6 do
+	for i = 1,4 do
 		MageBars[i] = CreateFrame("StatusBar", nil, MageBars)
-		MageBars[i]:SetSize((C["Width"]-space*(6-1))/6, C["Height"])
+		MageBars[i]:SetSize((C["Width"]-space*(4-1))/4, C["Height"])
 		MageBars[i]:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
-		tinsert(sixframe, MageBars[i])
+		tinsert(fourframe, MageBars[i])
 		local s = MageBars[i]:GetStatusBarTexture()
 		S.CreateTop(s, DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
 		MageBars[i]:CreateShadow()
@@ -576,7 +576,7 @@ function Module:Mage()
 	MageBars:SetScript("OnEvent",function(self,event,unit)
 		if unit ~= "player" then return end
 		local num = select(4, UnitDebuff("player", GetSpellInfo(36032))) or 0
-		for i = 1,6 do
+		for i = 1,4 do
 			if i <= num then
 				self[i]:Show()
 			else

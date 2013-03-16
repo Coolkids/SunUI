@@ -11,11 +11,15 @@ local function BuildClock()
 	Clock.Text:SetShadowOffset(S.mult, -S.mult)
 	Clock.Text:SetShadowColor(0, 0, 0, 0.4)
 	Clock:SetAllPoints(Clock.Text)
-	local week
+	local week,killmsg, nokillmsg
 	if (GetLocale() == "zhTW" or GetLocale() == "zhCN") then
 		week = {"星期天","星期一","星期二","星期三","星期四","星期五","星期六"}
+		killmsg = "本周|cff228B22已经击杀|r怒之傻"
+		nokillmsg = "本周还|cffFF0000没有击杀|r怒之傻"
 	else
 		week = {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"}
+		killmsg = "You|cff228B22killed|r SOA in this week"
+		nokillmsg = "You |cffFF0000no kill|r SOA in this week"
 	end
 	
 	Clock:SetScript("OnEnter", function(self)
@@ -51,13 +55,14 @@ local function BuildClock()
 			end
 		end
 		--怒之煞
+		
 		if UnitLevel("player") > 89 then
 			GameTooltip:AddLine(" ")
 			local isCD = IsQuestFlaggedCompleted(32099)
 			if isCD then
-				GameTooltip:AddLine("本周|cff228B22已经击杀|r怒之傻", 0.75, 0.9, 1)
+				GameTooltip:AddLine(killmsg, 0.75, 0.9, 1)
 			else
-				GameTooltip:AddLine("本周还|cffFF0000没有击杀|r怒之傻", 0.75, 0.9, 1)
+				GameTooltip:AddLine(nokillmsg, 0.75, 0.9, 1)
 			end
 		end
 		GameTooltip:Show()
