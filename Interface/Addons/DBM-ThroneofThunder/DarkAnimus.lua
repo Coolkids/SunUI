@@ -1,8 +1,9 @@
 local mod	= DBM:NewMod(824, "DBM-ThroneofThunder", nil, 362)
 local L		= mod:GetLocalizedStrings()
+--BH ADD
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8862 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8954 $"):sub(12, -3))
 mod:SetCreatureID(69427)
 mod:SetModelID(47527)
 
@@ -42,46 +43,22 @@ local specWarnInterruptingJolt		= mod:NewSpecialWarningCast(138763, nil, nil, ni
 local timerMatterSwap				= mod:NewTargetTimer(12, 138609)--If not dispelled, it ends after 12 seconds regardless
 local timerExplosiveSlam			= mod:NewTargetTimer(25, 138569, nil, mod:IsTank() or mod:IsHealer())
 --Boss
+--Dark Animus will now use its abilities at more consistent intervals. (March 19 hotfix)
+--As such, all of these timers need re-verification and updating.
 local timerSiphonAnimaCD			= mod:NewNextTimer(30, 138644)
 local timerAnimaRingCD				= mod:NewCDTimer(22, 136954)
 local timerEmpowerGolemCD			= mod:NewCDTimer(16, 138780)--TODO, this wasn't cast as often on normal. Find out if they actually have different CDs or if it was buffed since normal was tested.
 
---local soundCrimsonWake				= mod:NewSound(138480)
-
-mod:AddBoolOption("RangeFrame")
+----BH DELETE local soundCrimsonWake				= mod:NewSound(138480)
 
 local scansDone = 0
 local crimsonWake = GetSpellInfo(138485)--Debuff ID I believe, not cast one. Same spell name though
-local guids = {}
-local guidTableBuilt = false--Entirely for DCs, so we don't need to reset between pulls cause it doesn't effect building table on combat start and after a DC then it will be reset to false always
-local function buildGuidTable()
-	table.wipe(guids)
-	for uId, i in DBM:GetGroupMembers() do
-		guids[UnitGUID(uId) or "none"] = GetRaidRosterInfo(i)
-	end
-end
-
-local function isTank(unit)
-	-- 1. check blizzard tanks first
-	-- 2. check blizzard roles second
-	-- 3. check boss1's highest threat target
-	if GetPartyAssignment("MAINTANK", unit, 1) then
-		return true
-	end
-	if UnitGroupRolesAssigned(unit) == "TANK" then
-		return true
-	end
-	if UnitExists("boss1target") and UnitDetailedThreatSituation(unit, "boss1") then
-		return true
-	end
-	return false
-end
 
 function mod:TargetScanner(Force)
 	scansDone = scansDone + 1
 	local targetname, uId = self:GetBossTarget(69427)
 	if UnitExists(targetname) then
-		if isTank(uId) and not Force then--This will USUALLY target tank but sometimes it does target a DPS like a mage on pull so we still do a tank check to be certain
+		if self:IsTanking(uId, "boss1") and not Force then--This will USUALLY target tank but sometimes it does target a DPS like a mage on pull so we still do a tank check to be certain
 			if scansDone < 12 then
 				self:ScheduleMethod(0.02, "TargetScanner")
 			else
@@ -104,22 +81,14 @@ function mod:TargetScanner(Force)
 end
 
 function mod:OnCombatStart(delay)
-	buildGuidTable()
 	scansDone = 0
-	guidTableBuilt = true
 	self:RegisterShortTermEvents(
 		"INSTANCE_ENCOUNTER_ENGAGE_UNIT"--We register here to prevent detecting first heads on pull before variables reset from first engage fire. We'll catch them on delayed engages fired couple seconds later
 	)
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Show(8)
-	end
 end
 
 function mod:OnCombatEnd()
 	self:UnregisterShortTermEvents()
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
 end
 
 function mod:SPELL_CAST_START(args)
@@ -142,7 +111,7 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(138569) then
 		local uId = DBM:GetRaidUnitId(args.destName)
-		if isTank(uId) then--Only want sprays that are on tanks, not bads standing on tanks.
+		if self:IsTanking(uId, "boss1") then--Only want sprays that are on tanks, not bads standing on tanks.
 			warnExplosiveSlam:Show(args.destName, args.amount or 1)
 			timerExplosiveSlam:Start(args.destName)
 			if args:IsPlayer() then
@@ -190,11 +159,7 @@ function mod:SPELL_DAMAGE(sourceGUID, _, _, _, destGUID, _, _, _, spellId, spell
 --"<84.3 22:50:19> [CLEU] SPELL_DAMAGE#false#0x040000000587A80F#Crones#1300#0#0x04000000060845B3#Rvst#1300#0#138618#Matter Swap#64#52388#-1#64#nil#nil#162209#nil#nil#nil#nil", -- [9604]
 	elseif spellId == 138618 then
 		if sourceGUID == destGUID then return end--Filter first event then grab both targets from second event, as seen from log example above
-		if not guidTableBuilt then
-			buildGuidTable()
-			guidTableBuilt = true
-		end
-		warnMatterSwapped:Show(spellName, guids[sourceGUID], guids[destGUID])
+		warnMatterSwapped:Show(spellName, DBM:GetFullPlayerNameByGUID(sourceGUID), DBM:GetFullPlayerNameByGUID(destGUID))
 	end
 end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE
@@ -208,7 +173,7 @@ function mod:RAID_BOSS_WHISPER(msg, npc)
 			specWarnCrimsonWakeYou:Show()
 		end
 		yellCrimsonWake:Yell()
---		soundCrimsonWake:Play()
+----BH DELETE	soundCrimsonWake:Play()
 		DBM.Flash:Show(1, 0, 0)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\justrun.mp3")  --快跑
 		self:SendSync("WakeTarget", UnitGUID("player"))
@@ -227,12 +192,8 @@ function mod:INSTANCE_ENCOUNTER_ENGAGE_UNIT()
 end
 
 function mod:OnSync(msg, guid)
-	if not guidTableBuilt then
-		buildGuidTable()
-		guidTableBuilt = true
-	end
-	if msg == "WakeTarget" and guids[guid] then
-		warnCrimsonWake:Show(guids[guid])
+	if msg == "WakeTarget" and guid then
+		warnCrimsonWake:Show(DBM:GetFullPlayerNameByGUID(guid))
 	end
 end
 

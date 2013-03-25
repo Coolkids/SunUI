@@ -115,11 +115,11 @@ DBM_CORE_BOSSHEALTH_HIDE_FRAME		= "關閉血量框架"
 DBM_CORE_ALLIANCE				= "聯盟"
 DBM_CORE_HORDE					= "部落"
 
-DBM_CORE_UNKNOWN				= "未知"
-DBM_CORE_LEFT					= "左"
-DBM_CORE_RIGHT					= "右"
-DBM_CORE_BACK					= "後"
-DBM_CORE_FRONT					= "前"
+DBM_CORE_UNKNOWN					= "未知"
+DBM_CORE_LEFT						= "左"
+DBM_CORE_RIGHT						= "右"
+DBM_CORE_BACK						= "後"
+DBM_CORE_FRONT						= "前"
 
 DBM_CORE_BREAK_START				= "現在開始休息-你有%s分鐘!"
 DBM_CORE_BREAK_MIN					= "%s分鐘後休息時間結束!"
@@ -132,20 +132,20 @@ DBM_CORE_ANNOUNCE_PULL				= "%d秒後拉怪"
 DBM_CORE_ANNOUNCE_PULL_NOW			= "拉怪囉!"
 DBM_CORE_ANNOUNCE_PULL_CANCEL		= "取消了戰鬥準備倒計時"
 
-DBM_CORE_ACHIEVEMENT_TIMER_SPEED_KILL 		= "快速擊殺"
+DBM_CORE_ACHIEVEMENT_TIMER_SPEED_KILL 		= "成就：最速勝利"
 
 -- Auto-generated Timer Localizations
 DBM_CORE_AUTO_TIMER_TEXTS = {
-	target					= "%s:%%s",
+	target					= "%s:>%%s<",
 	cast					= "%s",
 	active					= "%s結束",
 	fades					= "%s消散",
 	cd						= "%s冷卻",
 	cdcount					= "%s冷卻 (%%d)",
-	cdsource				= "%s冷卻: %%s",
+	cdsource				= "%s冷卻: >%%s<",
 	next 					= "下一次%s",
 	nextcount 				= "下一次%s (%%d)",
-	nextsource				= "下一次%s: %%s",
+	nextsource				= "下一次%s: >%%s<",
 	achievement 			= "%s"
 }
 
@@ -165,8 +165,8 @@ DBM_CORE_AUTO_TIMER_OPTIONS = {
 
 -- Auto-generated Warning Localizations
 DBM_CORE_AUTO_ANNOUNCE_TEXTS = {
-	target					= "%s：>%%s<",
-	targetcount				= "%s (%%d)：>%%s<",
+	target					= "%s:>%%s<",
+	targetcount				= "%s (%%d):>%%s<",
 	spell					= "%s",
 	adds					= "%s 剩餘：%%d",
 	cast					= "正在施放 %s: %.1f 秒",
@@ -210,16 +210,16 @@ DBM_CORE_AUTO_SPEC_WARN_OPTIONS = {
 
 DBM_CORE_AUTO_SPEC_WARN_TEXTS = {
 	spell					= "%s!",
-	dispel					= "%%s中了%s - 快驅散",
-	interrupt				= "%s - 快打斷!",
-	you					= "你中了%s",
-	target					= "%%s中了%s",
-	close					= "你附近的%%s中了%s",
-	move					= "%s - 快離開",
-	run						= "%s - 快跑開",
+	dispel					= ">%%s<中了%s - 快驅散",
+	interrupt				= "%s - 快打斷>%%s< !",
+	you						= "你中了%s",
+	target					= ">%%s<中了%s",
+	close					= "你附近的>%%s<中了%s",
+	move					= "%s - 快移動",
+	run						= "%s - 快躲開",
 	cast					= "%s - 停止施法",
 	stack					= "%s(%%d)",
-	switch					= "%s - 轉換目標"
+	switch					= ">%s< - 轉換目標!"
 }
 
 

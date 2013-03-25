@@ -565,9 +565,24 @@ end
 
 local function updateTime()
 	showtime = showtime + 0.5
-	infot = ("%d:%0.2d"):format(showtime/60, math.fmod(showtime, 60))
-	table.wipe(lines)
-	lines[infot]= infoFrameThreshold
+	if pIndex then		
+		infot = ("%ds"):format(pIndex - showtime)
+		table.wipe(lines)
+		local actbossid = nil
+		for i = 1, 5 do
+			if UnitName("boss"..i) == iconModifier then
+				actbossid = "boss"..i
+				break
+			end
+		end
+		if actbossid then
+			lines[infot]= ("%d%%"):format(25 - (infoFrameThreshold - UnitHealth(actbossid) / UnitHealthMax(actbossid) * 100))
+		end
+	else
+		infot = ("%d:%0.2d"):format(showtime/60, math.fmod(showtime, 60))
+		table.wipe(lines)
+		lines[infot]= infoFrameThreshold
+	end
 	updateLines()
 end
 

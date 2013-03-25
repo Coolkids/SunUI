@@ -2,7 +2,7 @@ local mod	= DBM:NewMod(820, "DBM-ThroneofThunder", nil, 362)
 local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8884 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8913 $"):sub(12, -3))
 mod:SetCreatureID(69017)--69070 Viscous Horror, 69069 good ooze, 70579 bad ooze (patched out of game, :\)
 mod:SetModelID(47009)
 
@@ -36,6 +36,7 @@ local specWarnPustuleEruption		= mod:NewSpecialWarningSpell(136247, false, nil, 
 local specWarnVolatilePathogen		= mod:NewSpecialWarningYou(136228)
 local specWarnViscousHorror			= mod:NewSpecialWarningSwitch("ej6969", mod:IsTank())
 
+local timerFullyMutated				= mod:NewBuffFadesTimer(120, 140546)
 local timerMalformedBlood			= mod:NewTargetTimer(60, 136050, nil, mod:IsTank() or mod:IsHealer())
 local timerPrimordialStrikeCD		= mod:NewCDTimer(24, 136037)
 local timerCausticGasCD				= mod:NewCDTimer(14, 136216)
@@ -189,6 +190,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		showspellinfo()
 	elseif args:IsSpellID(140546) and args:IsPlayer() then
 		DBM.Flash:Show(0, 1, 0)
+		timerFullyMutated:Start()
 		specWarnFullyMutated:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_tbwc.mp3")--完美突變
 	end

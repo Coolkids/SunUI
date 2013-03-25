@@ -368,7 +368,7 @@ end
 function T:UIFrameFlash(frame, fadeInTime, fadeOutTime, flashDuration, showWhenDone, flashInHoldTime, flashOutHoldTime, syncId)
 	if ( frame ) then
 		if not issecurevariable(frame, "syncId") or not issecurevariable(frame, "fadeInTime") or not issecurevariable(frame, "flashTimer") then
-			if GetLocale() ~= "zhCN" or GetLocale() ~= "zhTW" then
+			if GetLocale() ~= "zhCN" and GetLocale() ~= "zhTW" then
 				print("AddOn calls UIFrameFlash, you may not be able to switch talent.")
 			else
 				print("SunUI提示您:你的插件調用了UIFrameFlash，導致你可能無法切換天賦，請修改對應代碼。")

@@ -30,7 +30,7 @@ local timerWarmongerCD			= mod:NewNextTimer(10, "ej6200", nil, nil, nil, 121747)
 function mod:OnCombatStart(delay)
 	timerCannonBarrageCD:Start(24-delay)
 	if mod:IsTank() then
-		sndWOP:Schedule(22, "Interface\\AddOns\\DBM-Core\\extrasounds\\bombsoon.mp3") --炸彈
+		sndWOP:Schedule(22, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbpj.mp3")
 	end
 	timerStompCD:Start(50-delay)
 	sndWOP:Schedule(48,"Interface\\AddOns\\DBM-Core\\extrasounds\\stompsoon.mp3") --準備踐踏
@@ -42,7 +42,7 @@ function mod:RAID_BOSS_EMOTE(msg)
 		specWarnCannonBarrage:Show()
 		timerCannonBarrageCD:Start()
 		if mod:IsTank() then
-			sndWOP:Schedule(58, "Interface\\AddOns\\DBM-Core\\extrasounds\\bombsoon.mp3")
+			sndWOP:Schedule(58, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_zbpj.mp3")
 		end
 	elseif msg:find("spell:121787") then
 		warnStomp:Show()

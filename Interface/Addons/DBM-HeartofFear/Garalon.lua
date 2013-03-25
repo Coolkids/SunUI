@@ -232,9 +232,6 @@ function mod:SPELL_CAST_SUCCESS(args)
 		timerMendLegCD:Start()
 		if brokenLegs == 4 then--all his legs were broken when heal was cast, which means dps was on body.
 			specwarnLeg:Show()--Warn to switch to respawned leg.
-			if mod:IsDps() then
-				sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_mop_kdtb.mp3") --快打腿部
-			end
 		end
 	end
 end

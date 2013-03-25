@@ -170,6 +170,7 @@ L.BlockVersionUpdateNotice		= "禁用彈出的更新通知"
 L.ShowBigBrotherOnCombatStart	= "戰鬥開始時顯示BigBrother(檢查團隊 增益/精煉UI)"
 L.BigBrotherAnnounceToRaid		= "通告BigBrother的結果給團隊"
 L.SpamBlockSayYell				= "從聊天頻道隱藏聊天泡泡提示"
+L.StripServerName				= "警告和計時器中不顯示服務器名"
 
 L.Area_SpamFilter_Outgoing		= "整體過濾選項"
 L.SpamBlockNoShowAnnounce		= "不顯示提示或播放警告音效"

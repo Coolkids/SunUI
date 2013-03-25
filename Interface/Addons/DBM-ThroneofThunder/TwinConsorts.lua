@@ -3,7 +3,7 @@ local L		= mod:GetLocalizedStrings()
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 local sndWOPCX	= mod:NewSound(nil, "SoundWOP", true)
 
-mod:SetRevision(("$Revision: 8866 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 8952 $"):sub(12, -3))
 mod:SetCreatureID(68905, 68904)--Lu'lin 68905, Suen 68904
 mod:SetModelID(46975)--Lu'lin, 46974 Suen
 
@@ -24,19 +24,28 @@ mod:RegisterEventsInCombat(
 	"UNIT_SPELLCAST_SUCCEEDED"
 )
 
+local Lulin = EJ_GetSectionInfo(7629)
+local Suen = EJ_GetSectionInfo(7642)
+
+mod:SetBossHealthInfo(
+	68905, Lulin,
+	68904, Suen
+)
+
 --Darkness
-local warnNight							= mod:NewSpellAnnounce("ej7641", 2, 108558)
+local warnNight							= mod:NewAnnounce("warnNight", 1, 108558)
 local warnCosmicBarrage					= mod:NewSpellAnnounce(136752, 2)
 local warnTearsOfSun					= mod:NewSpellAnnounce(137404, 3)
 local warnBeastOfNightmares				= mod:NewTargetAnnounce(137375, 3, nil, mod:IsTank() or mod:IsHealer())
 --Light
-local warnDay							= mod:NewSpellAnnounce("ej7645", 2, 122789)
+local warnDay							= mod:NewAnnounce("warnDay", 1, 122789)
 local warnLightOfDay					= mod:NewSpellAnnounce(137403, 2, nil, false)--Spammy, but leave it as an option at least
 local warnFanOfFlames					= mod:NewStackAnnounce(137408, 2, nil, mod:IsTank() or mod:IsHealer())
 local warnFlamesOfPassion				= mod:NewSpellAnnounce(137414, 3)--Todo, check target scanning
 local warnIceComet						= mod:NewSpellAnnounce(137419, 2)
 local warnNuclearInferno				= mod:NewCastAnnounce(137491, 4)--Heroic
 --Dusk
+local warnDusk							= mod:NewAnnounce("warnDusk", 1, "Interface\\Icons\\achievement_zone_easternplaguelands")--"achievement_zone_easternplaguelands" (best Dusk icon i could find)
 local warnTidalForce					= mod:NewCastAnnounce(137531, 3)
 
 --Darkness
@@ -46,8 +55,8 @@ local specWarnBeastOfNightmares			= mod:NewSpecialWarningSpell(137375, mod:IsTan
 --Light
 local specWarnFanOfFlames				= mod:NewSpecialWarningStack(137408, mod:IsTank(), 2)
 local specWarnFanOfFlamesOther			= mod:NewSpecialWarningTarget(137408, mod:IsTank())
+local specWarnFlamesofPassionMove		= mod:NewSpecialWarningMove(137417)
 local specWarnIceComet					= mod:NewSpecialWarningSpell(137419, false)
-local specWarnFire						= mod:NewSpecialWarningMove(137417)
 local specWarnNuclearInferno			= mod:NewSpecialWarningSpell(137491, nil, nil, nil, 2)--Heroic
 --Dusk
 local specWarnTidalForce				= mod:NewSpecialWarningSpell(137531, nil, nil, nil, 2)--Maybe switch to a stop dps warning, or a switch to Suen?
@@ -59,12 +68,12 @@ local specWarnTT3						= mod:NewSpecialWarningSpell(138306)
 
 --Darkness
 --Light of Day (137403) has a HIGHLY variable cd variation, every 6-14 seconds. Not to mention it requires using SPELL_DAMAGE and SPELL_MISSED. for now i'm excluding it on purpose
-local timerDayCD						= mod:NewNextTimer(184, "ej7645", nil, nil, nil, 122789)--Probably just need localizing, no short text version. 
+local timerDayCD						= mod:NewTimer(183, "timerDayCD", 122789) -- timer is 183 or 190 (confirmed in 10 man. variable)
 local timerCosmicBarrageCD				= mod:NewCDTimer(23, 136752)
 local timerTearsOfTheSunCD				= mod:NewCDTimer(40, 137404)
 local timerBeastOfNightmaresCD			= mod:NewCDTimer(50, 137375)
 --Light
-local timerDuskCD						= mod:NewNextTimer(179, "ej7633", nil, nil, nil, 130013)
+local timerDuskCD						= mod:NewTimer(360, "timerDuskCD", "Interface\\Icons\\achievement_zone_easternplaguelands")--it seems always 360s after combat entered. (day timer is variables, so not reliable to day phase)
 local timerLightOfDayCD					= mod:NewCDTimer(6, 137403, nil, false)--Trackable in day phase using UNIT event since boss1 can be used in this phase. Might be useful for heroic to not run behind in shadows too early preparing for a special
 local timerFanOfFlamesCD				= mod:NewNextTimer(12, 137408, nil, mod:IsTank() or mod:IsHealer())
 local timerFanOfFlames					= mod:NewTargetTimer(30, 137408, nil, mod:IsTank())
@@ -72,6 +81,7 @@ local timerFlamesOfPassionCD			= mod:NewCDTimer(30, 137414)
 local timerIceCometCD					= mod:NewCDTimer(19, 137419)--Every 19-25 seconds on normal. On heroic it's every 15 seconds almost precisely (i suspect heroic gets them more often to ensure RNG doesn't wipe you to Nuclear Inferno)
 local timerNuclearInfernoCD				= mod:NewCDTimer(55.5, 137491)
 --Dusk
+local timerTidalForce					= mod:NewBuffActiveTimer(18 ,137531)
 local timerTidalForceCD					= mod:NewCDTimer(74, 137531)
 
 local timerTT1CD						= mod:NewCDTimer(90, 138254)
@@ -82,6 +92,7 @@ local timerTT4CD						= mod:NewCDTimer(86, 138189)
 local berserkTimer						= mod:NewBerserkTimer(600)
 
 mod:AddBoolOption("RangeFrame")--For various abilities that target even melee. UPDATE, cosmic barrage (worst of the 3 abilities) no longer target melee. However, light of day and tears of teh sun still do. melee want to split into 2-3 groups (depending on how many) but no longer have to stupidly spread about all crazy and out of range of boss during cosmic barrage to avoid dying. On that note, MAYBE change this to ranged default instead of all.
+local phase3Started = false
 
 mod:AddBoolOption("HudMAP", true, "sound")
 mod:AddBoolOption("HudMAP2", true, "sound")
@@ -96,6 +107,7 @@ local lightmaker = {}
 local CBMarkers = {}
 
 function mod:OnCombatStart(delay)
+	phase3Started = false
 	table.wipe(lightmaker)
 	table.wipe(CBMarkers)
 	berserkTimer:Start(-delay)
@@ -161,6 +173,9 @@ function mod:SPELL_AURA_APPLIED(args)
 				end
 			end
 		end
+	elseif args:IsSpellID(137417) and args:IsPlayer() and self:AntiSpam(3, 4) then
+		specWarnFlamesofPassionMove:Show()
+		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3") --快躲開
 	elseif args:IsSpellID(138264) and args:IsPlayer() then  --白虎
 		if self.Options.HudMAP then
 			lightmaker["1"] = register(DBMHudMap:AddEdge(1, 1, 1, 1, nil, nil, nil,705,352,731,381))
@@ -254,9 +269,24 @@ function mod:SPELL_SUMMON(args)
 	end
 end
 
-function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
+function mod:SPELL_DAMAGE(_, _, _, _, _, _, _, _, spellId)
 	if spellId == 138318 and self:AntiSpam(40, 13) then
 		timerTT4CD:Start()
+	end
+end
+
+
+--"<333.5 18:37:56> [CHAT_MSG_MONSTER_YELL] CHAT_MSG_MONSTER_YELL#Lu'lin! Lend me your strength!#Suen#####0#0##0#247#nil#0#false#false", -- [71265]
+--"<339.3 18:38:02> [INSTANCE_ENCOUNTER_ENGAGE_UNIT] Fake Args:#1#1#Suen#0xF1310D2800005863#worldboss#410952978#nil#1#Unknown#0xF1310D2900005864#worldboss#310232488
+function mod:CHAT_MSG_MONSTER_YELL(msg) -- Switch to yell. INSTANCE_ENCOUNTER_ENGAGE_UNIT fires too late. also yell ranage covers all rooms. Not need sync.
+	if (msg == L.DuskPhase or msg:find(L.DuskPhase)) then
+		self:SendSync("Phase3Yell")
+	end
+end
+
+function mod:INSTANCE_ENCOUNTER_ENGAGE_UNIT(event) -- still remains backup trigger for phase3.
+	if UnitExists("boss2") and tonumber(UnitGUID("boss2"):sub(6, 10), 16) == 68905 then--Make sure we don't trigger it off another engage such as wipe engage event
+		self:SendSync("Phase3")
 	end
 end
 
@@ -268,6 +298,9 @@ function mod:UNIT_DIED(args)
 		timerLightOfDayCD:Start()
 		timerFanOfFlamesCD:Start(19)
 		--She also does Flames of passion, but this is done 3 seconds after Lu'lin dies, is a 3 second timer worth it?
+		if self.Options.RangeFrame then
+			DBM.RangeCheck:Hide()
+		end
 	elseif cid == 68904 then--Suen
 		timerFlamesOfPassionCD:Cancel()
 --		timerBeastOfNightmaresCD:Start()--My group kills Lu'lin first. Need log of Suen being killed first to get first beast timer value
@@ -285,6 +318,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		sndWOP:Schedule(182, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 		sndWOP:Schedule(183, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		timerDayCD:Start()
+		timerDuskCD:Start()
 		timerCosmicBarrageCD:Start(17)
 		timerTearsOfTheSunCD:Start(23)
 		timerBeastOfNightmaresCD:Start()
@@ -298,25 +332,18 @@ end
 
 function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
 	if spellId == 137417 and destGUID == UnitGUID("player") and self:AntiSpam(2, 4) then
-		specWarnFire:Show()
+		specWarnFlamesofPassionMove:Show()
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\runaway.mp3") --快躲開
 	end
 end
 mod.SPELL_PERIODIC_MISSED = mod.SPELL_PERIODIC_DAMAGE
 
-function mod:CHAT_MSG_MONSTER_YELL(msg)
-	if msg == L.DuskPhase or msg:find(L.DuskPhase) then
-		self:SendSync("Phase3")
-	end
-end
-
-function mod:OnSync(msg, guid)
+function mod:OnSync(msg)
 	if msg == "Phase2" then
 		timerCosmicBarrageCD:Cancel()
 		timerTearsOfTheSunCD:Cancel()
 		timerBeastOfNightmaresCD:Cancel()
 		warnDay:Show()
-		timerDuskCD:Start()
 		timerLightOfDayCD:Start()
 		timerFanOfFlamesCD:Start()
 		timerFlamesOfPassionCD:Start(12.5)
@@ -331,19 +358,22 @@ function mod:OnSync(msg, guid)
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_bzjd.mp3")--白晝開始
-	elseif msg == "Phase3" then
-		sndWOP:Schedule(2, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_hhzb.mp3")--黃昏準備
-		sndWOP:Schedule(3, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
-		sndWOP:Schedule(4, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
-		sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
-		self:Schedule(6, function()
-			self:UnregisterShortTermEvents()
-			timerFanOfFlamesCD:Cancel()
-			timerIceCometCD:Start(11)--This seems to reset, despite what last CD was (this can be a bad thing if it was do any second)
-			timerTidalForceCD:Start(20)
-			timerCosmicBarrageCD:Start(48)
-			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_hhjd.mp3") --黃昏開始
-			self:Schedule(14, function()
+		self:RegisterShortTermEvents(
+			"INSTANCE_ENCOUNTER_ENGAGE_UNIT"
+		)
+	elseif msg == "Phase3Yell" then -- Split from phase3 sync to prevent who running older version not to show bad timers.
+		if not phase3Started then
+			phase3Started = true
+			warnDusk:Show()
+			timerIceCometCD:Start(17)--This seems to reset, despite what last CD was (this can be a bad thing if it was do any second)
+			timerTidalForceCD:Start(26)
+			timerCosmicBarrageCD:Start(54)		
+			sndWOP:Schedule(2, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_hhzb.mp3")--黃昏準備
+			sndWOP:Schedule(3, "Interface\\AddOns\\DBM-Core\\extrasounds\\countthree.mp3")
+			sndWOP:Schedule(4, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
+			sndWOP:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
+			sndWOP:Schedule(6, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_hhjd.mp3") --黃昏開始
+			self:Schedule(20, function()
 				if UnitAura("player", GetSpellInfo(138264)) then
 					sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_kkbh.mp3")--快開白虎
 				else
@@ -355,10 +385,21 @@ function mod:OnSync(msg, guid)
 				sndWOPCX:Schedule(4, "Interface\\AddOns\\DBM-Core\\extrasounds\\counttwo.mp3")
 				sndWOPCX:Schedule(5, "Interface\\AddOns\\DBM-Core\\extrasounds\\countone.mp3")
 			end)
-		end)
+		end
+	elseif msg == "Phase3" then
+		self:UnregisterShortTermEvents()
+		timerFanOfFlamesCD:Cancel()--DO NOT CANCEL THIS ON YELL		
+	--[[if not phase3Started then
+			warnDusk:Show()
+			phase3Started = true
+			timerIceCometCD:Start(11)--This seems to reset, despite what last CD was (this can be a bad thing if it was do any second)
+			timerTidalForceCD:Start(20)
+			timerCosmicBarrageCD:Start(48)
+		end]]
 	elseif msg == "TidalForce" then
 		warnTidalForce:Show()
 		specWarnTidalForce:Show()
+		timerTidalForce:Start()
 		timerTidalForceCD:Start()
 		sndWOPCX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfive.mp3")
 		sndWOPCX:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\countfour.mp3")

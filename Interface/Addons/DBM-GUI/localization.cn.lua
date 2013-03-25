@@ -173,6 +173,7 @@ L.BlockVersionUpdateNotice		= "禁用升级提示"
 L.ShowBigBrotherOnCombatStart	= "战斗开始时使用Big Brother检测增益情况"
 L.BigBrotherAnnounceToRaid		= "报告Big Brother的检测结果给团队"
 L.SpamBlockSayYell				= "隐藏聊天窗口中的使用聊天泡泡的警报信息"
+L.StripServerName				= "警告和计时器中不显示服务器名"
 
 L.Area_SpamFilter_Outgoing		= "全局过滤设置"
 L.SpamBlockNoShowAnnounce		= "不显示警报或播放警报音效"

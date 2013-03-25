@@ -1,5 +1,6 @@
 local mod	= DBM:NewMod(832, "DBM-ThroneofThunder", nil, 362)
 local L		= mod:GetLocalizedStrings()
+-- BH ADD
 local sndWOP	= mod:NewSound(nil, "SoundWOP", true)
 
 mod:SetRevision(("$Revision: 8900 $"):sub(12, -3))
@@ -16,7 +17,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_REMOVED",
 	"SPELL_CAST_SUCCESS",
 	"SPELL_DAMAGE",
-	"SPELL_MISSED",
+	"SPELL_MISSED",	
 	"SPELL_PERIODIC_DAMAGE",
 	"SPELL_PERIODIC_MISSED",
 	"CHAT_MSG_RAID_BOSS_EMOTE",
@@ -50,9 +51,8 @@ local specWarnBouncingBolt				= mod:NewSpecialWarningSpell(136361, false)
 --Phase 1
 local specWarnDecapitate				= mod:NewSpecialWarningRun(134912, mod:IsTank())
 local specWarnDecapitateOther			= mod:NewSpecialWarningTarget(134912, mod:IsTank())
-
+-- BH ADD
 local specWarnDiffusionChain			= mod:NewSpecialWarningTarget(135991)
-
 local specWarnThunderstruck				= mod:NewSpecialWarningSpell(135095, nil, nil, nil, 2)
 local specWarnCrashingThunder			= mod:NewSpecialWarningMove(135150)
 --Phase 2
@@ -80,22 +80,27 @@ local timerSummonBallLightningCD		= mod:NewNextTimer(45.5, 136543)--Seems exact 
 local timerViolentGaleWindsCD			= mod:NewNextTimer(30.5, 136869)
 
 mod:AddBoolOption("RangeFrame")
-mod:AddBoolOption("OverchargeArrow", false)--On by default because the overcharge target is always pinned and unable to run away. You must always run to them, so everyone will want this arrow on
+mod:AddBoolOption("OverchargeArrow")--On by default because the overcharge target is always pinned and unable to run away. You must always run to them, so everyone will want this arrow on
 mod:AddBoolOption("StaticShockArrow", false)--Off by default as most static shock stack points are pre defined and not based on running to player, but rathor running to a raid flare on ground
 mod:AddBoolOption("SetIconOnOvercharge", true)
 mod:AddBoolOption("SetIconOnStaticShock", true)
-
+--BH ADD
 mod:AddBoolOption("HudMAP", true, "sound")
 mod:AddBoolOption("HudMAP2", true, "sound")
-
+local stormcount = 0
+local lightp2count = 0
+local lightp3count = 0
+local StaticShockMarkers = {}
+local OverchargedMarkers = {}
+local canceledshock = {}
+local checkmsg = ""
 local DBMHudMap = DBMHudMap
 local free = DBMHudMap.free
 local function register(e)	
 	DBMHudMap:RegisterEncounterMarker(e)
 	return e
 end
-local StaticShockMarkers = {}
-local OverchargedMarkers = {}
+--BH ADD END
 
 local phase = 1
 local intermissionActive = false--Not in use yet, but will be. This will be used (once we have CD bars for regular phases mapped out) to prevent those cd bars from starting during intermissions and messing up the custom intermission bars
@@ -112,6 +117,7 @@ local function warnStaticShockTargets()
 	warnStaticShock:Show(table.concat(staticshockTargets, "<, >"))
 	table.wipe(staticshockTargets)
 	staticIcon = 8
+	stormcount = stormcount + 1
 end
 
 local function warnOverchargeTargets()
@@ -123,8 +129,14 @@ end
 function mod:OnCombatStart(delay)
 	table.wipe(staticshockTargets)
 	table.wipe(overchargeTarget)
+	--BH ADD
+	stormcount = 0
+	lightp3count = 0
+	lightp2count = 0
 	table.wipe(StaticShockMarkers)
 	table.wipe(OverchargedMarkers)
+	table.wipe(canceledshock)
+	--BH ADD END
 	phase = 1
 	staticIcon = 8
 	overchargeIcon = 1
@@ -143,6 +155,9 @@ function mod:OnCombatEnd()
 	end
 	if self.Options.OverchargeArrow or self.Options.StaticShockArrow then
 		DBM.Arrow:Hide()
+	end
+	if self.Options.HudMAP or self.Options.HudMAP2 then
+		DBMHudMap:FreeEncounterMarkers()
 	end
 end
 
@@ -226,6 +241,7 @@ function mod:SPELL_AURA_APPLIED(args)
 					x, y = GetPlayerMapPosition(uId)
 				end
 				local inRange = DBM.RangeCheck:GetDistance("player", x, y)
+				--BH MODIFY
 				if inRange and inRange < 50 then
 					specWarnStaticShockNear:Show(args.destName)
 					if self.Options.StaticShockArrow then
@@ -243,10 +259,11 @@ function mod:SPELL_AURA_APPLIED(args)
 					end
 					if self.Options.HudMAP then
 						StaticShockMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("timer", args.destName, 8, 8, 1, 1, 1, 0.8):Appear():RegisterForAlerts():Rotate(360, 8.5):SetAlertColor(0, 0, 1, 0.5))
-						StaticShockMarkers[args.destName] = register(DBMHudMap:AddEdge(0, 0, 1, 1, 8, "player", args.destName))
+						StaticShockMarkers[args.destName.."Edge"] = register(DBMHudMap:AddEdge(0, 0, 1, 1, 8, "player", args.destName))
 					end
 				end
-			end			
+				--BH MODIFY END
+			end
 		end
 		self:Unschedule(warnStaticShockTargets)
 		self:Schedule(0.3, warnStaticShockTargets)
@@ -278,6 +295,7 @@ function mod:SPELL_AURA_APPLIED(args)
 					x, y = GetPlayerMapPosition(uId)
 				end
 				local inRange = DBM.RangeCheck:GetDistance("player", x, y)
+				--BH MODIFY
 				if inRange and inRange < 50 then
 					specWarnOverchargedNear:Show(args.destName)
 					if self:AntiSpam(3, 6) then
@@ -289,13 +307,13 @@ function mod:SPELL_AURA_APPLIED(args)
 					end
 					if self.Options.HudMAP2 then
 						OverchargedMarkers[args.destName] = register(DBMHudMap:PlaceRangeMarkerOnPartyMember("timer", args.destName, 5, 6, 1, 1, 1, 0.8):Appear():RegisterForAlerts():Rotate(360, 6.5):SetAlertColor(0, 0, 1, 0.5))
-						OverchargedMarkers[args.destName] = register(DBMHudMap:AddEdge(0, 0, 1, 1, 6, "player", args.destName))
+						OverchargedMarkers[args.destName.."Edge"] = register(DBMHudMap:AddEdge(0, 0, 1, 1, 6, "player", args.destName))
 					end
 					if self.Options.OverchargeArrow then
 						DBM.Arrow:ShowRunTo(args.destName, 3, 3, 6)
 					end
-					print(inRange.."碼外出現超載")
 				end
+				--BH MODIFY END
 			end
 		end
 		self:Unschedule(warnOverchargeTargets)
@@ -306,9 +324,11 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.RangeFrame and self:IsRanged() then--Shouldn't target melee during a normal pillar, only during intermission when all melee are with ranged and out of melee range of boss
 			DBM.RangeCheck:Show(8)--Assume 8 since spell tooltip has no info
 		end
+		-- BH ADD
 		if self:IsRanged() then
 			sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\scattersoon.mp3")--注意分散
 		end
+		-- BH ADD END
 	elseif args:IsSpellID(135682) and args:GetDestCreatureID() == 68397 then--South (Overcharge)
 	
 	elseif args:IsSpellID(135683) and args:GetDestCreatureID() == 68397 then--West (Bouncing Bolt)
@@ -341,9 +361,11 @@ function mod:SPELL_CAST_SUCCESS(args)
 		warnSummonBallLightning:Show()
 		specWarnSummonBallLightning:Show()
 		if phase < 3 then
+			lightp2count = lightp2count + 1
 			timerSummonBallLightningCD:Start()
 			sndWOP:Schedule(40, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_wmdq.mp3") --5秒後電球
 		else
+			lightp3count = lightp3count + 1
 			timerSummonBallLightningCD:Start(30)
 			sndWOP:Schedule(25, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_wmdq.mp3") --5秒後電球
 		end
@@ -369,12 +391,14 @@ function mod:SPELL_AURA_REMOVED(args)
 	elseif args:IsSpellID(135683) and args:GetDestCreatureID() == 68397 then--West (Bouncing Bolt)
 		timerBouncingBoltCD:Cancel()
 	--Conduit deactivations
+	--BH MODIFY
 	elseif args:IsSpellID(135695) then
 		if self.Options.SetIconOnStaticShock then
 			self:SetIcon(args.destName, 0)
 		end
 		if StaticShockMarkers[args.destName] then
 			StaticShockMarkers[args.destName] = free(StaticShockMarkers[args.destName])
+			StaticShockMarkers[args.destName.."Edge"] = free(StaticShockMarkers[args.destName.."Edge"])
 		end
 	elseif args:IsSpellID(136295) then
 		if self.Options.SetIconOnOvercharge then
@@ -382,7 +406,9 @@ function mod:SPELL_AURA_REMOVED(args)
 		end
 		if OverchargedMarkers[args.destName] then
 			OverchargedMarkers[args.destName] = free(OverchargedMarkers[args.destName])
+			OverchargedMarkers[args.destName.."Edge"] = free(OverchargedMarkers[args.destName.."Edge"])
 		end
+	--BH MODIFY END
 	end
 end
 
@@ -426,6 +452,7 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, _, _, _, target)
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\ptwo.mp3")
 		sndWOP:Cancel("Interface\\AddOns\\DBM-Core\\extrasounds\\pthree.mp3")
 		if phase == 2 then--Start Phase 2 timers
+			lightp2count = 0
 			timerSummonBallLightningCD:Start(15)
 			sndWOP:Schedule(10, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_wmdq.mp3") --5秒後電球
 			timerLightningWhipCD:Start(30)
@@ -434,6 +461,7 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, _, _, _, target)
 				DBM.RangeCheck:Show(6)--Needed for phase 2 AND phase 3
 			end
 		elseif phase == 3 then--Start Phase 3 timers
+			lightp3count = 0
 			timerViolentGaleWindsCD:Start(20)
 			sndWOP:Schedule(17, "Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_qfzb.mp3") --強風準備
 			timerLightningWhipCD:Start(21.5)
@@ -443,6 +471,7 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, _, _, _, target)
 		end
 	end
 end
+
 
 local function LoopIntermission()
 	if not southDestroyed then
@@ -456,6 +485,8 @@ local function LoopIntermission()
 		timerStaticShockCD:Start(16)
 	end
 	if not westDestroyed then
+--BH DELETE	warnBouncingBolt:Schedule(19)
+--BH DELETE	specWarnBouncingBolt:Schedule(19)
 		timerBouncingBoltCD:Start(19)
 	end
 end
@@ -503,6 +534,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 	if spellId == 137146 and self:AntiSpam(2, 2) then--Supercharge Conduits (comes earlier than other events so we use this one)
 		sndWOP:Play("Interface\\AddOns\\DBM-Core\\extrasounds\\ex_tt_cjcn.mp3") --超級充能		
 		intermissionActive = true
+		stormcount = 0
 		timerThunderstruckCD:Cancel()
 		timerDecapitateCD:Cancel()
 		timerFussionSlashCD:Cancel()
@@ -526,6 +558,8 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 			timerOverchargeCD:Start(6)
 		end
 		if not westDestroyed then
+--BH DELETE		warnBouncingBolt:Schedule(18)
+--BH DELETE		specWarnBouncingBolt:Schedule(18)
 			timerBouncingBoltCD:Start(18)
 		end
 		if not northDestroyed then

@@ -131,20 +131,20 @@ DBM_CORE_ANNOUNCE_PULL				= "Pull in %d sec"
 DBM_CORE_ANNOUNCE_PULL_NOW			= "Pull now!"
 DBM_CORE_ANNOUNCE_PULL_CANCEL		= "Cancel Pull Countdown!"
 
-DBM_CORE_ACHIEVEMENT_TIMER_SPEED_KILL = "Fastest Victory"
+DBM_CORE_ACHIEVEMENT_TIMER_SPEED_KILL = "Achievement"
 
 -- Auto-generated Timer Localizations
 DBM_CORE_AUTO_TIMER_TEXTS = {
-	target		= "%s: %%s",
+	target		= "%s: >%%s<",
 	cast		= "%s",
 	active		= "%s ends",--Buff/Debuff/event on boss
 	fades		= "%s fades",--Buff/Debuff on players
 	cd			= "%s CD",
 	cdcount		= "%s CD (%%d)",
-	cdsource	= "%s CD: %%s",
+	cdsource	= "%s CD: >%%s<",
 	next		= "Next %s",
 	nextcount	= "Next %s (%%d)",
-	nextsource	= "Next %s: %%s",
+	nextsource	= "Next %s: >%%s<",
 	achievement	= "%s"
 }
 
@@ -209,16 +209,16 @@ DBM_CORE_AUTO_SPEC_WARN_OPTIONS = {
 
 DBM_CORE_AUTO_SPEC_WARN_TEXTS = {
 	spell = "%s!",
-	dispel = "%s on %%s - dispel now",
-	interrupt = "%s - interrupt %%s!",
+	dispel = "%s on >%%s< - dispel now",
+	interrupt = "%s - interrupt >%%s<!",
 	you = "%s on you",
-	target = "%s on %%s",
-	close = "%s on %%s near you",
+	target = "%s on >%%s<",
+	close = "%s on >%%s< near you",
 	move = "%s - move away",
 	run = "%s - run away",
 	cast = "%s - stop casting",
 	stack = "%s (%%d)",
-	switch = "%s - switch targets"
+	switch = ">%s< - switch targets"
 }
 
 

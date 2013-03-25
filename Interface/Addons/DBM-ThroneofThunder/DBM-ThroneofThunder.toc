@@ -12,7 +12,6 @@
 ## X-DBM-Mod-Category: MOP
 ## X-DBM-Mod-Has-Heroic-Mode: 1
 ## X-DBM-Mod-Name: Throne of Thunder
-
 ## X-DBM-Mod-Name-zhCN: 雷电王座
 ## X-DBM-Mod-Name-zhTW: 雷霆王座  (ToT)
 ## X-DBM-Mod-Sort: 1
