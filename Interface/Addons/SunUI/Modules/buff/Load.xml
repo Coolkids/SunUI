@@ -1,0 +1,8 @@
+﻿<!-- -->
+
+
+
+
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file = "Buffs.lua"/>
+</Ui>

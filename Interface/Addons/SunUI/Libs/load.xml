@@ -1,0 +1,12 @@
+﻿
+
+
+
+
+
+
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Include file="ACE3\load.xml"/>
+</Ui>
+
+<!--	<Script file="Load.lua"/>  -->

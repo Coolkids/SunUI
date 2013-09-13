@@ -1,0 +1,36 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file ="Settings.lua"/>
+	<Script file ="Achievement.lua"/>
+	<Script file ="Align.lua"/>
+	<Script file ="AlreadyKnown.lua"/>
+	<Script file ="AutoRepair.lua"/>
+	<Script file ="AutoSell.lua"/>
+	<Script file ="CharsCurrency.lua"/>
+	<Script file ="ClassColors.lua"/>
+	<Script file ="ClearFont_zhCN.lua"/>	
+	<Script file ="ClearFont_zhTW.lua"/>
+	<Script file ="FriendColor.lua"/>
+	<Script file ="DragEmAll.lua"/>
+	<Script file ="Focuser.lua"/>
+	<Script file = "OCES.lua"/>
+	<Script file = "smallthings.lua"/>
+	<Script file = "SocialTabs.lua"/>
+	<Script file ="SR.lua"/>
+	
+	<Script file= "AutoLFG.lua"/>
+	<Script file = "BiggerTradeSkillUI.lua"/>
+	<Script file = "CloseUp.lua"/>
+	<Script file = "CombatNotification.lua"/>
+	<Script file ="Durability.lua"/>
+	<Script file ="FastError.lua"/>
+	<Script file= "memory.lua"/>
+	<Script file ="Molinari.lua"/>
+	<Script file ="Pd.lua"/>
+	<Script file ="tekKompare.lua"/>
+	<Script file ="sMirrorBars.lua"/>
+	<Script file ="TradeTab.lua"/>
+	<Script file ="warn.lua"/>
+	
+	<Script file ="talenttaint.lua"/>
+	<Script file="SlotItemLevel.lua"/>
+</Ui>

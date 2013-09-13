@@ -1,0 +1,6 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file = "infbartop.lua"/>
+	<Script file = "infbarbottom.lua"/>
+	<Script file = "afklock.lua"/>
+	<Script file = "expbar.lua"/>
+</Ui>

@@ -1,0 +1,12 @@
+﻿<!-- -->
+
+
+
+
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file = "api.lua"/>
+	<Script file = "functions.lua"/>
+	<Script file = "aurora.lua"/>
+	<Script file = "CheckVersion.lua"/>
+	<Script file = "tutorial.lua"/>
+</Ui>

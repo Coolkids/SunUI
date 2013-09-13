@@ -1,0 +1,6 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="list.lua"/>
+	<Include file = "AddOns\load.xml"/>
+	<Include file = "FrameXML\load.xml"/>
+	<Script file="aurora.lua"/>
+</Ui>

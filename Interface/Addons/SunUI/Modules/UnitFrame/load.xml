@@ -1,0 +1,8 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Include file="oUF\oUF.xml"/>
+	<Include file="oUF_Plugins\load.xml"/>
+	<Script file="Castbar.lua"/>
+	<Script file="tags.lua"/>
+	<Script file="unitframe.lua"/>
+	<Include file="plugins\load.xml"/>
+</Ui>
