@@ -365,18 +365,6 @@ function T:FCF_StopAlertFlash(chatFrame)
 	FCFTab_UpdateAlpha(chatFrame, false)
 end
 
-function T:UIFrameFlash(frame, fadeInTime, fadeOutTime, flashDuration, showWhenDone, flashInHoldTime, flashOutHoldTime, syncId)
-	if ( frame ) then
-		if not issecurevariable(frame, "syncId") or not issecurevariable(frame, "fadeInTime") or not issecurevariable(frame, "flashTimer") then
-			if GetLocale() ~= "zhCN" and GetLocale() ~= "zhTW" then
-				print("AddOn calls UIFrameFlash, you may not be able to switch talent.")
-			else
-				print("SunUI提示您:你的插件調用了UIFrameFlash，導致你可能無法切換天賦，請修改對應代碼。")
-			end
-		end
-	end
-end
-
 function T:PlayerTalentFrame_Toggle()
 	if ( not PlayerTalentFrame:IsShown() ) then
 		ShowUIPanel(PlayerTalentFrame)
@@ -413,6 +401,5 @@ end
 function T:OnInitialize()
 	self:RegisterEvent("ADDON_LOADED")
 	self:RawHook("FCF_StartAlertFlash", true)
-	self:SecureHook("UIFrameFlash")
 	self:SecureHook("FCF_StopAlertFlash")
 end
