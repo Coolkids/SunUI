@@ -1,7 +1,7 @@
 local S, L, DB, _, C = unpack(select(2, ...))
 if DB.zone ~= "zhTW" and DB.zone ~= "zhCN" then return end
 local RC = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule('RaidCheck');
-
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local join = string.join
 local find = string.find
 local format = string.format
@@ -373,7 +373,7 @@ function RC:OnEnable()
 	RaidCheckFrameLeft:Size(15)
 	RaidCheckFrameLeft:Point("TOPRIGHT",  ColectorButton, "TOPRIGHT", -5, -5)
 	RaidCheckFrameLeft.text = RaidCheckFrameLeft:CreateFontString(nil, 'OVERLAY')
-	RaidCheckFrameLeft.text:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")
+	RaidCheckFrameLeft.text:SetFont(DB.Font, 10*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
 	RaidCheckFrameLeft.text:Point("CENTER", RaidCheckFrameLeft, "CENTER", 2, 0)
 	RaidCheckFrameLeft.text:SetText("R1")
 	RaidCheckFrameLeft.text:SetTextColor(23/255, 132/255, 209/255)
@@ -394,7 +394,7 @@ function RC:OnEnable()
 	RaidCheckFrameRight:Size(15)
 	RaidCheckFrameRight:Point("TOP", RaidCheckFrameLeft, "BOTTOM", 0, -5)
 	RaidCheckFrameRight.text = RaidCheckFrameRight:CreateFontString(nil, 'OVERLAY')
-	RaidCheckFrameRight.text:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")
+	RaidCheckFrameRight.text:SetFont(DB.Font, 10*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
 	RaidCheckFrameRight.text:Point("CENTER", RaidCheckFrameRight, "CENTER", 2, 0)
 	RaidCheckFrameRight.text:SetText("R2")
 	RaidCheckFrameRight.text:SetTextColor(23/255, 132/255, 209/255)

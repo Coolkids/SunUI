@@ -40,7 +40,6 @@ S.CreateBD = function(f, a)
 	})
 	f:SetBackdropColor(0, 0, 0, a or alpha)
 	f:SetBackdropBorderColor(0, 0, 0)
-	tinsert(frames, f)
 end
 
 S.CreateBG = function(frame)
@@ -70,7 +69,6 @@ S.CreateSD = function(parent, size, r, g, b, alpha, offset)
 	sd.border:SetBackdropBorderColor(r or 0, g or 0, b or 0)
 	sd:SetAlpha(alpha or 1)
 	parent.sd = sd
-	tinsert(fsd, sd)
 end
 
 S.CreateGradient = function(f)
@@ -586,72 +584,3 @@ function S.ReskinFrame(f)
 	f.reskin = true
 end
 
-function AA:PLAYER_ENTERING_WORLD()
-	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-	if UnitAffectingCombat("player") then return end
-	local mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/UIParent:GetEffectiveScale()
-	local function sceenscale(x)
-		return (mult*math.floor(x/mult+.5)) 
-	end
-	--print(mult)
-	for k,v in pairs(frames) do
-		local r, g, b, a = v:GetBackdropColor() 
-		local br, bg, bb, ba = v:GetBackdropBorderColor() 
-		v:SetBackdrop({
-			bgFile = media.backdrop,
-			edgeFile = media.backdrop,
-			edgeSize = mult,
-		})
-		v:SetBackdropColor(r, g, b, a)
-		v:SetBackdropBorderColor(br, bg, bb, ba)
-	end
-	for k,v in pairs(fsd) do
-		local parent = v:GetParent()
-		v:SetPoint("TOPLEFT", parent, sceenscale(-v.size - 1 - v.offset), sceenscale(v.size + 1 + v.offset))
-		v:SetPoint("BOTTOMRIGHT", parent, sceenscale(v.size + 1 + v.offset), sceenscale(-v.size - 1 - v.offset))
-	end
-	
-	for k,v in pairs(DB.Border) do
-		local br, bg, bb, ba = v:GetBackdropBorderColor() 
-		v:SetBackdrop({
-			edgeFile = DB.Solid, 
-			edgeSize = mult,
-			insets = { left = -mult, right = -mult, top = -mult, bottom = -mult }
-		})
-		v:SetBackdropBorderColor(br, bg, bb, ba)
-	end
-	
-	for k,v in pairs(DB.Shadow) do
-		local backdropr, backdropg, backdropb, backdropa = v.shadow:GetBackdropColor() 
-		local borderr, borderg, borderb, bordera = v.shadow:GetBackdropBorderColor()
-		v.border:SetPoint("TOPLEFT", -sceenscale(1), sceenscale(1))
-		v.border:SetPoint("TOPRIGHT", sceenscale(1), sceenscale(1))
-		v.border:SetPoint("BOTTOMRIGHT", sceenscale(1), -sceenscale(1))
-		v.border:SetPoint("BOTTOMLEFT", -sceenscale(1), -sceenscale(1))
-		
-		v.shadow:SetPoint("TOPLEFT", -sceenscale(3), sceenscale(3))
-		v.shadow:SetPoint("TOPRIGHT", sceenscale(3), sceenscale(3))
-		v.shadow:SetPoint("BOTTOMRIGHT", sceenscale(3), -sceenscale(3))
-		v.shadow:SetPoint("BOTTOMLEFT", -sceenscale(3), -sceenscale(3))
-		v.shadow:SetBackdrop( { 
-			edgeFile = DB.GlowTex,
-			bgFile =DB.Solid,
-			edgeSize = sceenscale(4),
-			insets = {left = sceenscale(4), right = sceenscale(4), top = sceenscale(4), bottom = sceenscale(4)},
-		})
-		v.shadow:SetBackdropColor( backdropr, backdropg, backdropb, backdropa )
-		v.shadow:SetBackdropBorderColor( borderr, borderg, borderb, bordera )
-	end
-	collectgarbage("collect")
-end
-
-function AA:UI_SCALE_CHANGED()
-	self:PLAYER_ENTERING_WORLD()
-end
-
-function AA:OnInitialize()
-	self:RegisterEvent("PLAYER_ENTERING_WORLD")
-	--VideoOptionsFrameOkay:HookScript("OnClick", AA.PLAYER_ENTERING_WORLD)
-	--VideoOptionsFrameApply:HookScript("OnClick", AA.PLAYER_ENTERING_WORLD)
-	self:RegisterEvent("UI_SCALE_CHANGED")
-end

@@ -1,6 +1,7 @@
 ﻿local S, L, DB, _, C = unpack(select(2, ...))
 if DB.zone ~= "zhTW" and DB.zone ~= "zhCN" then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Cbutton", "AceTimer-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 function Module:OnEnable()
 	local colectorbutton = CreateFrame("Button", nil, UIParent)
 	colectorbutton:Size(15)
@@ -13,7 +14,7 @@ function Module:OnEnable()
 	colector:Hide()
 
 	colectorbutton.text = colectorbutton:CreateFontString(nil, 'OVERLAY')
-	colectorbutton.text:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")
+	colectorbutton.text:SetFont(DB.Font, 10*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
 	colectorbutton.text:SetText("B")
 	colectorbutton.text:SetPoint("CENTER", 3, 0)
 	colectorbutton.text:SetTextColor(23/255, 132/255, 209/255)

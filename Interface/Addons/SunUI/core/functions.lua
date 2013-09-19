@@ -2,6 +2,7 @@ local S, L, DB, _, C = unpack(select(2, ...))
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local _G =_G
 local filename, fontHeight, _ = GameFontNormal:GetFont()
+
 -- just for creating text
 function S.MakeFontString(parent, size, fontStyle)
 	local fs = parent:CreateFontString(nil, "OVERLAY")

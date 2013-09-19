@@ -383,7 +383,7 @@ function Module:WorldStateAlwaysUpFrame_Update()
    end
 end
 function Module:OnInitialize()
-	CF_SCALE = SunUIConfig.db.profile.MiniDB.FontScale*S.Scale(1)
+	CF_SCALE = SunUIConfig.db.profile.MiniDB.FontScale
 	self:RegisterEvent("ADDON_LOADED", ApplySystemFonts);
 	self:SecureHook("WorldStateAlwaysUpFrame_Update", "WorldStateAlwaysUpFrame_Update")
 end

@@ -19,9 +19,10 @@ DB.AuroraModules["Blizzard_DebugTools"] = function()
 		bg:SetPoint("BOTTOMRIGHT")
 		bg:SetFrameLevel(FrameStackTooltip:GetFrameLevel()-1)
 		S.CreateBD(bg, .6)
-
+	
 		S.ReskinClose(ScriptErrorsFrameClose)
 		S.ReskinScroll(ScriptErrorsFrameScrollFrameScrollBar)
+
 		S.Reskin(select(4, ScriptErrorsFrame:GetChildren()))
 		S.Reskin(select(5, ScriptErrorsFrame:GetChildren()))
 		S.Reskin(select(6, ScriptErrorsFrame:GetChildren()))

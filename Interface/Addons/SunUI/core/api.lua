@@ -5,7 +5,7 @@ local HiddenFrame = CreateFrame("Frame")
 HiddenFrame:Hide()
 DB.Shadow = {}
 DB.Border = {}
-S.mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/(max(0.64, min(1.15, GetCVar('uiScale') or UIParent:GetScale() or (S.IsCoolkid() and 0.9 or 768/sceenheight))))
+S.mult = 1
 local function sceenscale(x)
 	return (S.mult*math.floor(x/(S.mult)+.5)) 
 end
@@ -95,10 +95,14 @@ local function CreateShadow(f, t, offset, thickness, texture)
 	local borderr, borderg, borderb, bordera = 0, 0, 0, 1
 	local backdropr, backdropg, backdropb, backdropa =  .05, .05, .05, .9
 	local frameLevel = f:GetFrameLevel() > 1 and f:GetFrameLevel() or 1
-	if t == "Background" then
-		backdropa = 0.6
-	elseif t == "UnitFrame" then 
-		backdropa = 0.3
+	if type(t) == "string" then
+		if t == "Background" then
+			backdropa = 0.6
+		elseif t == "UnitFrame" then 
+			backdropa = 0.3
+		end
+	elseif type(t) == "number" then
+		backdropa = t
 	else
 		backdropa = 0
 	end

@@ -1,5 +1,6 @@
 ﻿local S, L, DB, _, C = unpack(select(2, ...))
 local CH = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("StatReport")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 if DB.zone ~= "zhTW" and DB.zone ~= "zhCN" then return end
 -- Author: YYSS
 -- modify by ljxx.net at 20110729
@@ -361,7 +362,7 @@ if GetLocale() ~= 'zhCN' or GetLocale() ~= 'zhTW' then
 			statreport:Size(15)
 			statreport:Point("TOPLEFT", ColectorButton, "TOPLEFT", 5, -45)
 			statreport.text = statreport:CreateFontString(nil, 'OVERLAY')
-			statreport.text:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")
+			statreport.text:SetFont(DB.Font, 10*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
 			statreport.text:Point("CENTER", statreport, "CENTER", 2, 0)
 			statreport.text:SetText("ST")
 			statreport.text:SetTextColor(23/255, 132/255, 209/255)

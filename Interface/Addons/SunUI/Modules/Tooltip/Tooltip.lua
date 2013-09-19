@@ -14,7 +14,6 @@ local reactionlist  = {
 }
 local gcol = {.35, 1, .6}										-- Guild Color
 local pgcol = {1, .12, .8} 									-- Player's Guild Color
-local scale = 1												-- Tooltip scale
 
 local backdrop = {
 	bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
@@ -227,7 +226,7 @@ end
 function Module:PLAYER_ENTERING_WORLD()
 	Module:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	for _, v in pairs(tooltips) do
-		v:SetScale(scale)
+		v:SetScale(C["ScaleSize"])
 		v:SetScript("OnShow", function(self)
 			if InCombatLockdown() and C["HideInCombat"] then self:Hide() end
 			if v.NumLines then
@@ -276,7 +275,7 @@ function Module:PLAYER_ENTERING_WORLD()
 			if not self.text then
 				self.text = self:CreateFontString(nil, "OVERLAY")
 				self.text:SetPoint("CENTER")
-				self.text:SetFont(DB.Font, 10, "THINOUTLINE")
+				self.text:SetFont(DB.Font, 10*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
 				-- self.text:SetShadowOffset(R.mult, -R.mult)
 			end
 			self.text:Show()

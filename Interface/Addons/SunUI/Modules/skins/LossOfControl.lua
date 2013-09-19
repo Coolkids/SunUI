@@ -7,9 +7,9 @@ local function LoadSkin()
     LossOfControlFrame.Icon:SetTexCoord(.08, .92, .08, .92)
 	LossOfControlFrame:StripTextures()
     hooksecurefunc("LossOfControlFrame_SetUpDisplay", function(self, ...)   
-        self.AbilityName:SetFont(DB.Font, 20, "OUTLINE")
-        self.TimeLeft.NumberText:SetFont(DB.Font, 20, "OUTLINE")
-        self.TimeLeft.SecondsText:SetFont(DB.Font, 20, "OUTLINE")
+        self.AbilityName:SetFont(DB.Font, 20*SunUIConfig.db.profile.MiniDB.FontScale, "OUTLINE")
+        self.TimeLeft.NumberText:SetFont(DB.Font, 20*SunUIConfig.db.profile.MiniDB.FontScale, "OUTLINE")
+        self.TimeLeft.SecondsText:SetFont(DB.Font, 20*SunUIConfig.db.profile.MiniDB.FontScale, "OUTLINE")
     end)
 
     --Test

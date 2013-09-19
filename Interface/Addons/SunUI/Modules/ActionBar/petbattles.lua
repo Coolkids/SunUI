@@ -4,6 +4,7 @@ local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUICo
 local btnsize = 48
 local unitsize = 36
 local testmode = false
+local MAX_PET_LEVEL = 25
 local media = {
 	["backdrop"] = "Interface\\ChatFrame\\ChatFrameBackground", -- default backdrop
 	["checked"] = "Interface\\AddOns\\SunUI\\Media\\CheckButtonHilight", -- replace default checked texture
@@ -28,66 +29,82 @@ local frames = {
 }
 if testmode then frame:Show() end
 local bar = CreateFrame("Frame", "SunUIPetBattleActionBar", UIParent, "SecureHandlerStateTemplate")
-local function SkinTooltips()
-	for _, f in pairs(tooltips) do
-		f:DisableDrawLayer("BACKGROUND")
-		local bg = CreateFrame("Frame", nil, f)
-		bg:SetAllPoints()
-		bg:SetFrameLevel(0)
-		S.CreateBD(bg)
-		if f.Delimiter1 then
-			f.Delimiter1:SetTexture(nil)
-		end
-		if f.Delimiter2 then
-			f.Delimiter2:SetTexture(nil)
-		end
-		if f.HealthBorder then
-			f.HealthBorder:SetTexture(nil)
-			if not f.hbd then
-				f.hbd = CreateFrame("Frame", nil, f)
-				f.hbd:Point("TOPLEFT", f.HealthBorder, "TOPLEFT", 0, 0)
-				f.hbd:Point("BOTTOMRIGHT", f.HealthBorder, "BOTTOMRIGHT", 0, -1)
-				f.hbd:SetFrameLevel(0)
-				S.CreateBD(f.hbd)
-			end
-		end
-		if f.HealthBG then
-			f.HealthBG:SetTexture(nil)
-		end
-		if f.XPBorder then
-			f.XPBorder:SetTexture(nil)
-			if not f.xpbd then
-				f.xpbd = CreateFrame("Frame", nil, f)
-				f.xpbd:Point("TOPLEFT", f.XPBorder, "TOPLEFT", 0, 0)
-				f.xpbd:Point("BOTTOMRIGHT", f.XPBorder, "BOTTOMRIGHT", 0, -1)
-				f.xpbd:SetFrameLevel(0)
-				S.CreateBD(f.xpbd)
-			end
-		end
-		if f.XPBG then
-			f.XPBG:SetTexture(nil)
-		end
-		if f.ActualHealthBar then
-			f.ActualHealthBar:SetTexture(DB.Statusbar)
-			local r,g,b = f.ActualHealthBar:GetVertexColor()
-			S.CreateTop(f.ActualHealthBar, r, g, b)
-		end
-		if f.XPBar then
-			f.XPBar:SetTexture(DB.Statusbar)
-			local r,g,b = f.XPBar:GetVertexColor()
-			S.CreateTop(f.XPBar, r, g, b)
-		end
-		f.BorderTop:SetTexture(nil)
-		f.BorderTopLeft:SetTexture(nil)
-		f.BorderTopRight:SetTexture(nil)
-		f.BorderLeft:SetTexture(nil)
-		f.BorderRight:SetTexture(nil)
-		f.BorderBottom:SetTexture(nil)
-		f.BorderBottomRight:SetTexture(nil)
-		f.BorderBottomLeft:SetTexture(nil)
+local function SkinPetTooltip(tt)
+	tt.Background:SetTexture(nil)
+	if tt.Delimiter1 then
+		tt.Delimiter1:SetTexture(nil)
+		tt.Delimiter2:SetTexture(nil)
+	elseif tt.Delimiter then
+		tt.Delimiter:SetTexture(nil)
 	end
-	S.ReskinClose(FloatingBattlePetTooltip.CloseButton)
-	table.insert(UISpecialFrames, "FloatingBattlePetTooltip")
+	if tt.HealthBorder then
+		tt.HealthBorder:SetTexture(nil)
+		if not tt.hbd then
+			tt.hbd = CreateFrame("Frame", nil, tt)
+			tt.hbd:Point("TOPLEFT", tt.HealthBorder, "TOPLEFT", 0, 0)
+			tt.hbd:Point("BOTTOMRIGHT", tt.HealthBorder, "BOTTOMRIGHT", 0, -1)
+			tt.hbd:SetFrameLevel(0)
+			S.CreateBD(tt.hbd)
+		end
+	end
+	if tt.HealthBG then
+		tt.HealthBG:SetTexture(nil)
+	end
+	if tt.XPBorder then
+		tt.XPBorder:SetTexture(nil)
+	end
+	if tt.XPBG then
+		tt.XPBG:SetTexture(nil)
+	end
+	if tt.ActualHealthBar then
+		tt.ActualHealthBar:SetTexture(DB.Statusbar)
+	end
+	if tt.XPBar then
+		tt.XPBar:SetTexture(DB.Statusbar)
+		if not tt.xpbd then
+			tt.xpbd = CreateFrame("Frame", nil, tt)
+			tt.xpbd:Point("TOPLEFT", tt.XPBorder, "TOPLEFT", 0, 0)
+			tt.xpbd:Point("BOTTOMRIGHT", tt.XPBorder, "BOTTOMRIGHT", 0, 0)
+			tt.xpbd:SetFrameLevel(0)
+			S.CreateBD(tt.xpbd)
+		end
+	end
+	
+	if tt.Icon then
+		tt.Icon:SetTexCoord(.08, .92, .08, .92)
+		if not tt.iconbd then
+			tt.iconbd = CreateFrame("Frame", nil, tt)
+			tt.iconbd:Point("TOPLEFT", tt.Icon, "TOPLEFT", -1, 1)
+			tt.iconbd:Point("BOTTOMRIGHT", tt.Icon, "BOTTOMRIGHT", 1, -1)
+			S.CreateBD(tt.iconbd)
+		end
+	end
+	if tt.Border then
+		tt.Border:Kill()
+	end
+	tt.BorderTop:SetTexture(nil)
+	tt.BorderTopLeft:SetTexture(nil)
+	tt.BorderTopRight:SetTexture(nil)
+	tt.BorderLeft:SetTexture(nil)
+	tt.BorderRight:SetTexture(nil)
+	tt.BorderBottom:SetTexture(nil)
+	tt.BorderBottomRight:SetTexture(nil)
+	tt.BorderBottomLeft:SetTexture(nil)
+	
+	tt:SetBackdrop(nil)
+	local border = CreateFrame("Frame", nil, tt)
+	border:Point("TOPLEFT", -1, 1)
+	border:Point("TOPRIGHT", 1, 1)
+	border:Point("BOTTOMRIGHT", 1, -1)
+	border:Point("BOTTOMLEFT", -1, -1)
+	border:SetFrameLevel(0)
+	border:SetBackdrop( { 
+		bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
+		edgeFile = "Interface\\ChatFrame\\ChatFrameBackground",
+		edgeSize = S.mult,
+	})
+	border:SetBackdropColor(0, 0, 0, 0.6)
+	border:SetBackdropBorderColor(.05, .05, .05, .9)
 end
 
 local function SkinPetBattleFrame()
@@ -282,14 +299,6 @@ local function stylePetBattleButton(bu)
 	bu.reskinned = true
 end
 
-local function HookTexture()
-	frame:HookScript("OnShow", function()
-		for index, unit in pairs(allunit) do
-			local r, g, b = unit.ActualHealthBar:GetVertexColor()
-			S.CreateTop(unit.ActualHealthBar, r, g, b)
-		end
-	end)
-end
 local function ActionBar()
 	bar:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 50)
 	bar:SetSize(6 * (btnsize+1), btnsize)
@@ -357,7 +366,6 @@ end
 
 function PB:PetBattleAuraHolder_Update(self)
 	if not self.petOwner or not self.petIndex then return end
-
 	local nextFrame = 1
 	for i = 1, C_PetBattles.GetNumAuras(self.petOwner, self.petIndex) do
 		local _, _, turnsRemaining, isBuff = C_PetBattles.GetAuraInfo(self.petOwner, self.petIndex, i)
@@ -369,6 +377,7 @@ function PB:PetBattleAuraHolder_Update(self)
 			if not frame.reskinned then
 				frame.Icon:SetTexCoord(.08, .92, .08, .92)
 				frame.bg = S.CreateBG(frame.Icon)
+				frame.reskinned = true
 			end
 
 			frame.Duration:SetFont(DB.Font, 14, "OUTLINEMONOCHROME")
@@ -476,6 +485,16 @@ function PB:PET_BATTLE_CLOSE()
 	end
 end
 
+function PB:PetBattleUnitTooltip_UpdateForUnit(self, petOwner, petIndex)
+	local level = C_PetBattles.GetLevel(petOwner, petIndex);
+	if ( petOwner == LE_BATTLE_PET_ALLY and level < MAX_PET_LEVEL ) then
+		self.xpbd:Show();
+	else
+		self.xpbd:Hide();
+	end
+end
+
+
 function PB:OnInitialize()
 	self:SecureHook("PetBattleAbilityButton_UpdateHotKey", "PetBattleAbilityButton_UpdateHotKey")
 	self:SecureHook("PetBattleFrame_UpdatePassButtonAndTimer", "PetBattleFrame_UpdatePassButtonAndTimer")
@@ -485,10 +504,16 @@ function PB:OnInitialize()
 	self:SecureHook("PetBattleUnitFrame_UpdateDisplay", "PetBattleUnitFrame_UpdateDisplay")
 	self:SecureHook("PetBattleUnitFrame_UpdateHealthInstant", "PetBattleUnitFrame_UpdateHealthInstant")
 	self:SecureHook("PetBattleFrame_UpdateActionBarLayout", "PetBattleFrame_UpdateActionBarLayout")
+	self:SecureHook("PetBattleUnitTooltip_UpdateForUnit", "PetBattleUnitTooltip_UpdateForUnit")
 	self:RegisterEvent("PET_BATTLE_OPENING_START", PET_BATTLE_OPENING_START)
 	self:RegisterEvent("PET_BATTLE_CLOSE", PET_BATTLE_CLOSE)
 	SkinPetBattleFrame()
 	ActionBar()
-	SkinTooltips()
-	--HookTexture()
+	SkinPetTooltip(PetBattlePrimaryAbilityTooltip)
+	SkinPetTooltip(PetBattlePrimaryUnitTooltip)
+	SkinPetTooltip(BattlePetTooltip)
+	SkinPetTooltip(FloatingBattlePetTooltip)
+	SkinPetTooltip(FloatingPetBattleAbilityTooltip)
+	table.insert(UISpecialFrames, "FloatingBattlePetTooltip")
+	
 end

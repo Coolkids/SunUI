@@ -310,11 +310,11 @@ local function CreateAuraIcon(parent)
 	button.text = button:CreateFontString(nil, 'OVERLAY')
 	button.text:Point("CENTER", 1, 1)
 	button.text:SetJustifyH('CENTER')
-	button.text:SetFont(DB.Font, 10, "OUTLINE")
+	button.text:SetFont(DB.Font, 10*SunUIConfig.db.profile.MiniDB.FontScale, "OUTLINE")
 	button.text:SetShadowColor(0, 0, 0, 0)
 
 	button.count = button:CreateFontString(nil,"OVERLAY")
-	button.count:SetFont(DB.Font, 9, "OUTLINE")
+	button.count:SetFont(DB.Font, 9*SunUIConfig.db.profile.MiniDB.FontScale, "OUTLINE")
 	button.count:SetShadowColor(0, 0, 0, 0.4)
 	button.count:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 2, 0)
 	return button
@@ -569,7 +569,7 @@ local function SkinObjects(frame, nameFrame)
 
 	local name = help:CreateFontString(nil, 'OVERLAY', 2)
 	name:SetPoint('BOTTOMLEFT', newhp, 'TOPLEFT', 0, -4)
-	name:SetFont(DB.Font, C["Fontsize"]*S.Scale(1), "THINOUTLINE")
+	name:SetFont(DB.Font, C["Fontsize"], "THINOUTLINE")
 	frame.oldname = oldname
 	frame.name = name
 	

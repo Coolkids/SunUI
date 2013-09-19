@@ -2,7 +2,7 @@ local S, L, DB, _, C = unpack(select(2, ...))
 local map_scale = 0.9								-- Mini World Map scale
 local isize = 20									-- group icons size
 local WM = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("WorldMap", "AceEvent-3.0", "AceHook-3.0")
-
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local player, cursor
 local EJbuttonWidth, EJbuttonHeight = 30, 30
 local EJbuttonImageWidth, EJbuttonImageHeigth = 21.6, 21.6
@@ -30,11 +30,11 @@ end
 function WM:CreateCoordString()
 	if player or cursor then return end
 	player = WorldMapButton:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-	player:SetFont(DB.Font,14)
+	player:SetFont(DB.Font,14*SunUIConfig.db.profile.MiniDB.FontScale)
 	player:SetPoint("BOTTOMLEFT", WorldMapButton, "BOTTOM", -120, -22)
 	player:SetJustifyH("LEFT")
 	cursor = WorldMapButton:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-	cursor:SetFont(DB.Font,14)
+	cursor:SetFont(DB.Font,14*SunUIConfig.db.profile.MiniDB.FontScale)
 	cursor:SetPoint("BOTTOMLEFT", WorldMapButton, "BOTTOM", 50, -22)
 	cursor:SetJustifyH("LEFT")
 end

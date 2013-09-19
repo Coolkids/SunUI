@@ -117,7 +117,7 @@ local function ApplyChatStyle(self)
     end
 	_G[cf.."TabText"]:SetTextColor(0.40, 0.78, 1) -- 1,.7,.2
 	_G[cf.."TabText"].SetTextColor = function() end
-	_G[cf.."TabText"]:SetFont(DB.Font,12,"THINOUTLINE")
+	_G[cf.."TabText"]:SetFont(DB.Font,12*SunUIConfig.db.profile.MiniDB.FontScale,"THINOUTLINE")
 	_G[cf.."TabText"]:SetShadowOffset(1.75, -1.75)
     if cf ~= "ChatFrame2" then
 		local am = _G[cf].AddMessage 

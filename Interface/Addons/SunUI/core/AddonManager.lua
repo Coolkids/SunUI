@@ -1,5 +1,5 @@
 ﻿local S, L, DB, _, C = unpack(select(2, ...))
-local font = { DB.Font, 12*S.Scale(1), "THINOUTLINE" }
+local font = { DB.Font, DB.FontSize-2, "THINOUTLINE" }
 local barTex = DB.Statusbar
 local blankTex = DB.Solid
 local glowTex = DB.GlowTex
@@ -547,11 +547,11 @@ gmbAddOns:RegisterEvent("ADDON_LOADED")
 gmbAddOns:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 function AM:OnInitialize()
-	gmbAddOns:SetSize(_G["GameMenuButtonHelp"]:GetWidth(), _G["GameMenuButtonHelp"]:GetHeight())
+	gmbAddOns:SetSize(_G["GameMenuButtonOptions"]:GetWidth(), _G["GameMenuButtonOptions"]:GetHeight())
 
 	gmbAddOns:SetText(L["插件管理"])
-	gmbAddOns:SetPoint(_G["GameMenuButtonHelp"]:GetPoint())
-	_G["GameMenuButtonHelp"]:SetPoint("TOP", gmbAddOns, "BOTTOM", 0, -1)
+	gmbAddOns:SetPoint(_G["GameMenuButtonOptions"]:GetPoint())
+	_G["GameMenuButtonOptions"]:SetPoint("TOP", gmbAddOns, "BOTTOM", 0, -1)
 	_G["GameMenuFrame"]:SetHeight(_G["GameMenuFrame"]:GetHeight()+_G["GameMenuButtonMacros"]:GetHeight());
 	gmbAddOns:SetScript("OnClick", function()
 		HideUIPanel(_G["GameMenuFrame"]);

@@ -32,7 +32,7 @@ local function SkinIt(bar)
 		if region:GetObjectType() == "Texture" then 
 			region:SetTexture(nil) 
 		elseif region:GetObjectType() == "FontString" then 
-			region:SetFont(DB.Font, 12, "THINOUTLINE") 
+			region:SetFont(DB.Font, 12*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE") 
 			region:SetShadowColor(0,0,0,0) 
 		end 
 	end 
@@ -92,7 +92,7 @@ do
 		
 
 		local text = frame:CreateFontString(nil, 'OVERLAY') 
-		text:SetFont(GameFontNormalSmall:GetFont(), 14, "THINOUTLINE") 
+		text:SetFont(GameFontNormalSmall:GetFont(), 14*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE") 
 		text:SetShadowOffset(1, -1) 
 		text:SetShadowColor(0, 0, 0, 1) 
 

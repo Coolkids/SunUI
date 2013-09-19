@@ -648,10 +648,10 @@ function SunUIConfig.GenerateOptionsInternal()
 						name = L["进入战斗自动隐藏"],
 						order = 2,
 					},
-					FontSize = {
+					ScaleSize = {
 						type = "range", order = 3,
-						name = L["字体大小"], desc = L["字体大小"],
-						min = 2, max = 22, step = 1,
+						name = "缩放大小", desc ="缩放大小",
+						min = 0.1, max = 2, step = 0.1,
 					},
 					HideTitles = {
 						type = "toggle",
@@ -742,7 +742,9 @@ function SunUIConfig.GenerateOptionsInternal()
 							name = L["头像字体大小"],
 							min = 2, max = 28, step = 1,
 							get = function() return db.UnitFrameDB.FontSize end,
-							set = function(_, value) db.UnitFrameDB.FontSize = value end,
+							set = function(_, value)
+								db.UnitFrameDB.FontSize = value 
+							end,
 						},
 						Width = {
 							type = "input",
@@ -1560,6 +1562,29 @@ function SunUIConfig.GenerateOptionsInternal()
 									Module:UpdateHealthBar()
 								end,
 							},
+							HealthPowerPer = {
+								type = "toggle",
+								name = "生命值用百分比替代",
+								order = 6,
+								get = function() return db.PowerBarDB.HealthPowerPer end,
+								set = function(_, value)
+									db.PowerBarDB.HealthPowerPer = value
+									local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIPowerBar")
+									Module:UpdateHealthBar()
+								end,
+							},
+							
+							ManaPowerPer = {
+								type = "toggle",
+								name = "魔法值用百分比替代",
+								order = 7,
+								get = function() return db.PowerBarDB.ManaPowerPer end,
+								set = function(_, value)
+									db.PowerBarDB.ManaPowerPer = value
+									local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIPowerBar")
+									Module:UpdateHealthBar()
+								end,
+							},
 						}
 					},
 				},
@@ -1989,9 +2014,9 @@ end
 function SunUIConfig:OnEnable()
 	local Button = CreateFrame("Button", "SunUIGameMenuButton", GameMenuFrame, "GameMenuButtonTemplate")
 		S.Reskin(Button)
-		Button:SetSize(_G["GameMenuButtonHelp"]:GetWidth(), _G["GameMenuButtonHelp"]:GetHeight())
+		Button:SetSize(_G["GameMenuButtonOptions"]:GetWidth(), _G["GameMenuButtonOptions"]:GetHeight())
 		Button:SetText("|cffDDA0DDSun|r|cff44CCFFUI|r")
-		Button:SetPoint(_G["GameMenuButtonHelp"]:GetPoint())
+		Button:SetPoint(_G["GameMenuButtonOptions"]:GetPoint())
 		Button:SetScript("OnClick", function()
 			if not UnitAffectingCombat("player") then
 				HideUIPanel(_G["GameMenuFrame"])
@@ -2001,7 +2026,7 @@ function SunUIConfig:OnEnable()
 				print(L["战斗中无法打开控制台"])
 			end
 		end)
-	_G["GameMenuButtonHelp"]:SetPoint("TOP", Button, "BOTTOM", 0, -1)
+	_G["GameMenuButtonOptions"]:SetPoint("TOP", Button, "BOTTOM", 0, -1)
 	_G["GameMenuFrame"]:SetHeight(_G["GameMenuFrame"]:GetHeight()+Button:GetHeight())	
 	SunUIConfig:RegisterChatCommand("sunui", "ShowConfig")
 end

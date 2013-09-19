@@ -39,7 +39,7 @@ function Module:OnEnable()
 		
 	local flowingtext = flowingframe:CreateFontString(nil,"OVERLAY")
 		flowingtext:SetPoint("Left")
-		flowingtext:SetFont(DB.Font,30*S.Scale(1),"OUTLINE")
+		flowingtext:SetFont(DB.Font,30*SunUIConfig.db.profile.MiniDB.FontScale,"OUTLINE")
 		flowingtext:SetShadowOffset(0,0)
 		flowingtext:SetJustifyH("LEFT")
 		

@@ -707,7 +707,7 @@ function Module:HealthPowerBar()
 	spar:SetSize(16, 16)
 	spar:SetPoint("TOP", healthbar:GetStatusBarTexture(), "BOTTOMRIGHT", 0, -2)
 	
-	healthbar.healthtext = S.MakeFontString(healthbar)
+	healthbar.healthtext = S.MakeFontString(healthbar, 12*SunUIConfig.db.profile.MiniDB.FontScale)
 	healthbar.healthtext:SetPoint("TOP", spar, "BOTTOM", 0, 7)
 	healthbar.healthtext:SetTextColor(1, 0.22, 0.52)
 
@@ -723,7 +723,7 @@ function Module:HealthPowerBar()
 	powerspar:SetSize(16, 16)
 	powerspar:SetPoint("BOTTOM", healthbar.power:GetStatusBarTexture(), "TOPRIGHT", 0, 2)
 	
-	healthbar.powertext = S.MakeFontString(healthbar)
+	healthbar.powertext = S.MakeFontString(healthbar, 12*SunUIConfig.db.profile.MiniDB.FontScale)
 	healthbar.powertext:SetPoint("BOTTOM", powerspar, "TOP", 0, -5)
 	tinsert(mainframe, healthbar.power)
 	S.SmoothBar(healthbar)
@@ -758,10 +758,21 @@ function Module:UpdateHealthBar()
 			if self.elapsed < .2 then
 				local healthnum = UnitHealth("player")
 				local powernum = UnitPower("player")
+				local maxnum = 0
 				self:SetValue(healthnum)
 				self.power:SetValue(powernum)
-				self.healthtext:SetText(S.ShortValue(healthnum))
-				self.powertext:SetText(S.ShortValue(powernum))
+				if C["HealthPowerPer"] then
+					maxnum = UnitHealthMax("player")
+					self.healthtext:SetText(format("%.1f ", healthnum/maxnum*100).."%")
+				else
+					self.healthtext:SetText(S.ShortValue(healthnum))
+				end
+				if C["ManaPowerPer"] then
+					maxnum = UnitPowerMax("player")
+					self.powertext:SetText(format("%.1f ", powernum/maxnum*100).."%")
+				else
+					self.powertext:SetText(S.ShortValue(powernum))
+				end
 			return end
 			self.elapsed = 0
 		end)

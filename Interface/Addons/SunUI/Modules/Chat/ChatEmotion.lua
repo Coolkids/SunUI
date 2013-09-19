@@ -1,6 +1,6 @@
 -- Engines
 local S, L, DB, _, C = unpack(select(2, ...))
- 
+ local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 if DB.zone ~= "zhTW" and DB.zone ~= "zhCN" then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("chatemotion", "AceTimer-3.0")
 local IconSize = S.Scale(23)					 -- 表情IconSize
@@ -242,7 +242,7 @@ local button = CreateFrame("Button", "ButtonE", ColectorButton)
 		button:Point("TOPLEFT", ColectorButton, "TOPLEFT", 5, -5)
 		button:Size(15)
 		button.text = button:CreateFontString(nil, 'OVERLAY')
-		button.text:SetFont(DB.Font, 10*S.Scale(1), "THINOUTLINE")
+		button.text:SetFont(DB.Font, 10*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
 		button.text:SetText("E")
 		button.text:SetPoint("CENTER", 3, 0)
 		button.text:SetTextColor(23/255, 132/255, 209/255)

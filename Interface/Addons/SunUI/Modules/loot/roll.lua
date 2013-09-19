@@ -80,7 +80,7 @@ local function CreateRollButton(parent, ntex, ptex, htex, rolltype, tiptext, ...
 	f:SetScript("OnClick", ClickRoll)
 	f:SetMotionScriptsWhileDisabled(true)
 	local txt = f:CreateFontString(nil, nil)
-	txt:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
+	txt:SetFont(DB.Font, 11*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
 	txt:SetPoint("CENTER", 0, rolltype == 2 and 1 or rolltype == 0 and -1.2 or 0)
 	txt:SetShadowOffset(1,  -1)
 	return f, txt
@@ -147,12 +147,12 @@ local function CreateRollFrame()
 
 	local bind = frame:CreateFontString()
 	bind:SetPoint("LEFT", de or greed, "RIGHT", S.Scale(3), S.Scale(1))
-	bind:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
+	bind:SetFont(DB.Font, 11*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
 	bind:SetShadowOffset(1,  -1)
 	frame.fsbind = bind
 
 	local loot = frame:CreateFontString(nil, "ARTWORK")
-	loot:SetFont(DB.Font, 12*S.Scale(1), "OUTLINE")
+	loot:SetFont(DB.Font, 12*SunUIConfig.db.profile.MiniDB.FontScale, "OUTLINE")
 	loot:SetShadowOffset(1, -1)
 	loot:Point("LEFT", bind, "RIGHT", 0, 0)
 	loot:Point("RIGHT", frame, "RIGHT", -5, 0)

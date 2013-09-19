@@ -62,7 +62,7 @@ local function SkinDBMBar(self)
 			if not name.styled then
 				name:ClearAllPoints()
 				name:SetPoint("LEFT", frame, 5, icon1:GetHeight()/2)
-				name:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
+				name:SetFont(DB.Font, 11*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
 				name:SetShadowOffset(0, 0)
 				name:SetJustifyH("LEFT")
 				name.SetFont = function() end
@@ -72,7 +72,7 @@ local function SkinDBMBar(self)
 			if not timer.styled then
 				timer:ClearAllPoints()
 				timer:SetPoint("RIGHT", frame, -5, icon1:GetHeight()/2)					
-				timer:SetFont(DB.Font, 11*S.Scale(1), "THINOUTLINE")
+				timer:SetFont(DB.Font, 11*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
 				timer:SetShadowOffset(0,0)
 				timer:SetJustifyH("RIGHT")
 				timer.SetFont = function() end
@@ -88,7 +88,7 @@ local SkinBossTitle=function()
 	if not anchor.styled then
 		local header={anchor:GetRegions()}
 			if header[1]:IsObjectType("FontString") then
-				header[1]:SetFont(DB.Font, 12*S.Scale(1), "THINOUTLINE")
+				header[1]:SetFont(DB.Font, 12*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
 				header[1]:SetTextColor(1,1,1,1)
 				header[1]:SetShadowColor(0, 0, 0, 0)
 				anchor.styled=true	
@@ -152,7 +152,7 @@ local function SkinBoss()
 		if not name.styled then
 			name:ClearAllPoints()
 			name:SetPoint("LEFT", bar, "LEFT", 4, 6)
-			name:SetFont(DB.Font,  12*S.Scale(1), "THINOUTLINE")
+			name:SetFont(DB.Font,  12*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
 			name:SetJustifyH("LEFT")
 			name:SetShadowColor(0, 0, 0, 0)
 			name.styled=true
@@ -161,7 +161,7 @@ local function SkinBoss()
 		if not timer.styled then
 			timer:ClearAllPoints()
 			timer:SetPoint("RIGHT", bar, "RIGHT", -4, 6)
-			timer:SetFont(DB.Font, 12*S.Scale(1), "THINOUTLINE")
+			timer:SetFont(DB.Font, 12*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
 			timer:SetJustifyH("RIGHT")
 			timer:SetShadowColor(0, 0, 0, 0)
 			timer.styled=true
@@ -246,7 +246,7 @@ local function SkinRangeCheck()
 		DBMRangeCheckRadar:SetSize(110, 110)
 		DBMRangeCheckRadar:SetBackdropBorderColor(65/255, 74/255, 79/255)
 		S.SetBD(DBMRangeCheckRadar)
-		DBMRangeCheckRadar.text:SetFont(DB.Font, 13*S.Scale(1), "THINOUTLINE")
+		DBMRangeCheckRadar.text:SetFont(DB.Font, 13*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
 		DBMRangeCheckRadar.text:Point("BOTTOMLEFT", DBMRangeCheckRadar, "TOPLEFT", 0, 5)
 	end
 	DBMRangeCheck.sunuistyle = true

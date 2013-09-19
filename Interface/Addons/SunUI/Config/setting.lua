@@ -5,8 +5,8 @@ local S, L, G, _ = unpack(select(2, ...))
 -----------------------------------------
 
 G["ActionBarDB"] = {
-	["FontSize"] = 14,
-	["MFontSize"] = 12,
+	["FontSize"] = 12,
+	["MFontSize"] = 10,
 	["PetBarSacle"] = 1,
 	["ButtonSpacing"] = 4,
 	["CooldownFlashSize"] = 48,
@@ -55,7 +55,7 @@ G["NameplateDB"] = {
 	["IconSize"] = 20,
 }
 G["TooltipDB"] = {
-	["FontSize"] = 12,
+	["ScaleSize"] = 1,
 	["HideInCombat"] = false,
 	["Cursor"] = true,
 	["HideTitles"] = true,
@@ -148,7 +148,7 @@ G["MiniDB"] = {
 	["Combat"] = false, 
 	["FogClear"] = true,
 	["Aurora"] = true, 
-	["uiScale"] = 0.9,
+	["uiScale"] = 1,
 	["FontScale"] = 1,	
 	
 	
@@ -259,6 +259,8 @@ G["PowerBarDB"] = {
 	["Scale"] = 1,
 	["Fade"] = true,
 	["HealthPower"] = true,
+	["HealthPowerPer"] = true,
+	["ManaPowerPer"] = true,
 }
 G["WarnDB"] = {
 	["Open"] = true,
