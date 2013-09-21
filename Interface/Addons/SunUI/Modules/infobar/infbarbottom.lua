@@ -22,6 +22,10 @@ local function BuildClock()
 		nokillOondasta = "本周还|cffFF0000没有击杀|r乌达斯塔" 
 		killNalak = "本周|cff228B22已经击杀|r暴风领主纳拉克" 
 		nokillNalak = "本周还|cffFF0000没有击杀|r暴风领主纳拉克" 
+		killsishen="本周|cff228B22已经击杀|r四大天神" 
+		nokillsishen="本周还|cffFF0000没有击杀|r四大天神" 
+		killordos="本周|cff228B22已经击杀|r斡耳朵斯" 
+		nokillordos="本周还|cffFF0000没有击杀|r斡耳朵斯" 
 	else
 		week = {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"}
 		killsoa = "本周|cff228B22已经击杀|r怒之煞" 
@@ -32,6 +36,10 @@ local function BuildClock()
 		nokillOondasta = "本周还|cffFF0000没有击杀|r乌达斯塔" 
 		killNalak = "本周|cff228B22已经击杀|r暴风领主纳拉克" 
 		nokillNalak = "本周还|cffFF0000没有击杀|r暴风领主纳拉克" 
+		killsishen="本周|cff228B22已经击杀|r四大天神" 
+		nokillsishen="本周还|cffFF0000没有击杀|r四大天神" 
+		killordos="本周|cff228B22已经击杀|r斡耳朵斯" 
+		nokillordos="本周还|cffFF0000没有击杀|r斡耳朵斯" 
 	end
 	
 	Clock:SetScript("OnEnter", function(self)
@@ -100,7 +108,23 @@ local function BuildClock()
 		  else 
 			 GameTooltip:AddLine(nokillNalak, 0.75, 0.9, 1) 
 		  end 
-	   end 
+	   end
+	   if UnitLevel("player") > 89 then 
+			local isCD = IsQuestFlaggedCompleted(33117) 
+			if isCD then 
+				GameTooltip:AddLine(killsishen, 0.75, 0.9, 1) 
+			else 
+				GameTooltip:AddLine(nokillsishen, 0.75, 0.9, 1) 
+			end 
+		end 
+		if UnitLevel("player") > 89 then 
+			local isCD = IsQuestFlaggedCompleted(33118) 
+			if isCD then 
+				GameTooltip:AddLine(killordos, 0.75, 0.9, 1) 
+			else 
+				GameTooltip:AddLine(nokillordos, 0.75, 0.9, 1) 
+			end 
+		end 
 		GameTooltip:Show()
 	end)
 	Clock:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
