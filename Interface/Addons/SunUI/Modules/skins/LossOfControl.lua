@@ -1,5 +1,5 @@
 local S, L, DB, _, C = unpack(select(2, ...))
-
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local function LoadSkin()
     local IconBackdrop = CreateFrame("Frame", nil, LossOfControlFrame)
     IconBackdrop:CreateShadow("Background")

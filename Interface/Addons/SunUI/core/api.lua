@@ -7,7 +7,7 @@ DB.Shadow = {}
 DB.Border = {}
 S.mult = 1
 local function sceenscale(x)
-	return (S.mult*math.floor(x/(S.mult)+.5)) 
+	return (S.mult*x) 
 end
 S.Scale = function(x) return sceenscale(x) end
 

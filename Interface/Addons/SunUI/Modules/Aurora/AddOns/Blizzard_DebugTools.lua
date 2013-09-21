@@ -22,8 +22,10 @@ DB.AuroraModules["Blizzard_DebugTools"] = function()
 	
 		S.ReskinClose(ScriptErrorsFrameClose)
 		S.ReskinScroll(ScriptErrorsFrameScrollFrameScrollBar)
-
-		S.Reskin(select(4, ScriptErrorsFrame:GetChildren()))
-		S.Reskin(select(5, ScriptErrorsFrame:GetChildren()))
-		S.Reskin(select(6, ScriptErrorsFrame:GetChildren()))
+		for i = 1, ScriptErrorsFrame:GetNumChildren() do
+			local child = select(i, ScriptErrorsFrame:GetChildren())
+			if child:GetObjectType() == "Button" and not child:GetName() then
+				S.Reskin(child)
+			end
+		end
 end

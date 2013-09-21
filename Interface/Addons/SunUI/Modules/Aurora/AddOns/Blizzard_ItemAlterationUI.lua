@@ -34,8 +34,6 @@ DB.AuroraModules["Blizzard_ItemAlterationUI"] = function()
 		end
 	end
 
-	TransmogrifyConfirmationPopup:SetScale(UIParent:GetScale())
-
 	S.CreateBD(TransmogrifyConfirmationPopup)
 	S.CreateSD(TransmogrifyConfirmationPopup)
 	S.Reskin(TransmogrifyConfirmationPopup.Button1)

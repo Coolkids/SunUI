@@ -1,6 +1,6 @@
 ﻿local S, L, DB, _, C = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("RollFrame")
-
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 ----------------------------------------------------------------------------------------
 --	Based on teksLoot(by Tekkub)
 ----------------------------------------------------------------------------------------
@@ -94,7 +94,7 @@ local function CreateRollFrame()
 	frame:Hide()
 
 	local button = CreateFrame("Button", nil, frame)
-	button:SetPoint("LEFT", -26, 9)
+	button:SetPoint("BOTTOMRIGHT", frame, "BOTTOMLEFT", -5, 0)
 	button:Size(22)
 	button:CreateShadow()
 	button:SetScript("OnEnter", SetItemTip)
@@ -113,23 +113,15 @@ local function CreateRollFrame()
 	status:Size(240, 8)
 	status:Point("BOTTOMLEFT", frame, "BOTTOMLEFT")
 	status:SetScript("OnUpdate", StatusUpdate)
-	status:SetFrameLevel(status:GetFrameLevel() - 1)
+	status:SetFrameLevel(frame:GetFrameLevel() - 1)
 	status:SetStatusBarTexture(DB.Statusbar)
 	status:SetStatusBarColor(0.8, 0.8, 0.8, 0.9)
 	
 	status.parent = frame
 	frame.status = status
 	frame.status.bg = status:GetStatusBarTexture()
-	
-	local s = CreateFrame("StatusBar", nil, frame)
-	s:SetFrameLevel(frame:GetFrameLevel()+1)
-	s:SetAllPoints()
-	local spark =  s:CreateTexture(nil, "OVERLAY")
-	spark:SetVertexColor(0, 0, 0, 1)
-	spark:SetTexture("Interface\\AddOns\\SunUI\\media\\mark")
-	spark:SetPoint("TOPLEFT", status:GetStatusBarTexture(), "TOPRIGHT", -10, 0)
-	spark:SetPoint("BOTTOMRIGHT", status:GetStatusBarTexture(), "BOTTOMRIGHT", 10, 0)
-	status.spark = spark
+
+	status.spark = S.CreateMark(status)
 	S.CreateBack(status)
 	
 			
@@ -257,7 +249,7 @@ LootRollAnchor:SetScript("OnEvent", function(frame, event, addon)
 			f.fsloot:SetText(GetItemInfo(32837))
 			f.status:SetMinMaxValues(0, 100)
 			f.status:SetValue(70)
-			f.status:SetStatusBarColor(ITEM_QUALITY_COLORS[5].r, ITEM_QUALITY_COLORS[5].g, ITEM_QUALITY_COLORS[5].b)
+			S.CreateTop(f.status.bg, ITEM_QUALITY_COLORS[5].r, ITEM_QUALITY_COLORS[5].g, ITEM_QUALITY_COLORS[5].b)
 			f:Show()
 		end
 		SLASH_LFrames1 = "/rolltest"

@@ -1,5 +1,4 @@
 local S, L, DB, _, C = unpack(select(2, ...))
-
 --  自动设置聊天框体和UI缩放
 local function SetChatFrame()
 	ChatFrame1:ClearAllPoints()

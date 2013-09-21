@@ -344,6 +344,7 @@ function S.CreateMark(f, orientation)
 		spark:Point("TOPLEFT", f:GetStatusBarTexture(), "TOPLEFT", 0, 0)
 		spark:Point("TOPRIGHT", f:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
 	end
+	return spark
 end
 
 function S.CreateBackdropTexture(f)
