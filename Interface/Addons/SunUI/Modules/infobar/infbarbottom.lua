@@ -44,7 +44,7 @@ local function BuildClock()
 	
 	Clock:SetScript("OnEnter", function(self)
 		local w,m,d,y = CalendarGetDate()
-		GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
+		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
 		GameTooltip:ClearLines()
 		if (GetLocale() == "zhTW" or GetLocale() == "zhCN") then
 			GameTooltip:AddLine(format("%s-%s-%s %s", y, m, d, week[w]), 0.40, 0.78, 1)
@@ -352,7 +352,7 @@ local function BuildFriend()
 			local totalonline = online + BNonline
 			local totalfriends = total + BNtotal
 			if online > 0 or BNonline > 0 then
-				GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
+				GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
 				GameTooltip:ClearLines()
 				GameTooltip:AddDoubleLine(FRIENDS_LIST, format("%s: %s/%s", GUILD_ONLINE_LABEL, totalonline, totalfriends), tthead.r, tthead.g, tthead.b, tthead.r, tthead.g, tthead.b)
 				if online > 0 then
@@ -619,7 +619,7 @@ local function BuildGuild()
 		local guildName, guildRank = GetGuildInfo('player')
 		local guildLevel = GetGuildLevel()
 
-		GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
+		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
 		
 		GameTooltip:ClearLines()
 		GameTooltip:AddDoubleLine(format(guildInfoString, guildName, guildLevel), format(guildInfoString2, online, total),tthead.r,tthead.g,tthead.b,tthead.r,tthead.g,tthead.b)
@@ -735,7 +735,7 @@ local function BuildDurability()
 	end)
 	Stat:SetScript("OnEnter", function(self)
 		if not InCombatLockdown() then
-			GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
+			GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
 			GameTooltip:ClearLines()
 			GameTooltip:AddLine(DURABILITY, 0.4, 0.78, 1)
 			GameTooltip:AddLine(" ")
@@ -793,7 +793,7 @@ local function BuildStat2()
 	end
 
 	local function ShowTooltip(self)
-		GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
+		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
 		GameTooltip:ClearLines()
 
 		local inInstance, instanceType = IsInInstance()
@@ -928,7 +928,7 @@ local function BuildStat1()
 	local haste, hasteBonus
 
 	local function ShowTooltip(self)
-		GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
+		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(STATS_LABEL)
 
@@ -1184,7 +1184,7 @@ local function BuildSpecswitch()
 				table.insert(spec2,name)
 			end
 		end
-		GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
+		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(TALENTS_BUTTON,0,.6,1)
 		GameTooltip:AddLine(" ")
@@ -1256,7 +1256,7 @@ local function DungeonHelper()
 		end
 		if text == "" then text = "N/A" end
 		
-		GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
+		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(str, 0,.6,1)
 		GameTooltip:AddLine(" ")

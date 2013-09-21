@@ -565,7 +565,11 @@ function SunUIConfig.GenerateOptionsInternal()
 									desc = L["姓名板字体大小"] ,
 									order = 1,
 									get = function() return tostring(db.NameplateDB.Fontsize) end,
-									set = function(_, value) db.NameplateDB.Fontsize = tonumber(value) end,
+									set = function(_, value) 
+										db.NameplateDB.Fontsize = tonumber(value) 
+										local N = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("NamePlates")
+										N:UpdateSet()
+									end,
 								},
 								HPHeight = {
 									type = "input",
@@ -573,7 +577,11 @@ function SunUIConfig.GenerateOptionsInternal()
 									desc = L["姓名板血条高度"] ,
 									order = 2,
 									get = function() return tostring(db.NameplateDB.HPHeight) end,
-									set = function(_, value) db.NameplateDB.HPHeight = tonumber(value) end,
+									set = function(_, value) 
+										db.NameplateDB.HPHeight = tonumber(value) 
+										local N = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("NamePlates")
+										N:UpdateSet()
+									end,
 								},
 								HPWidth = {
 									type = "input",
@@ -581,7 +589,11 @@ function SunUIConfig.GenerateOptionsInternal()
 									desc = L["姓名板血条宽度"],
 									order = 3,
 									get = function() return tostring(db.NameplateDB.HPWidth) end,
-									set = function(_, value) db.NameplateDB.HPWidth = tonumber(value) end,
+									set = function(_, value) 
+										db.NameplateDB.HPWidth = tonumber(value) 
+										local N = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("NamePlates")
+										N:UpdateSet()
+									end,
 								},
 								CastBarIconSize = {
 									type = "input",
@@ -589,7 +601,11 @@ function SunUIConfig.GenerateOptionsInternal()
 									desc = L["姓名板施法条图标大小"],
 									order = 4,
 									get = function() return tostring(db.NameplateDB.CastBarIconSize) end,
-									set = function(_, value) db.NameplateDB.CastBarIconSize = tonumber(value) end,
+									set = function(_, value) 
+										db.NameplateDB.CastBarIconSize = tonumber(value) 
+										local N = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("NamePlates")
+										N:UpdateSet()
+									end,
 								},
 								CastBarHeight = {
 									type = "input",
@@ -597,35 +613,67 @@ function SunUIConfig.GenerateOptionsInternal()
 									desc = L["姓名板施法条高度"],
 									order = 5,
 									get = function() return tostring(db.NameplateDB.CastBarHeight) end,
-									set = function(_, value) db.NameplateDB.CastBarHeight = tonumber(value) end,
+									set = function(_, value) 
+										db.NameplateDB.CastBarHeight = tonumber(value) 
+										local N = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("NamePlates")
+										N:UpdateSet()
+									end,
 								},
-								CastBarWidth = {
-									type = "input",
-									name = L["姓名板施法条宽度"],
-									desc = L["姓名板施法条宽度"],
-									order = 6,
-									get = function() return tostring(db.NameplateDB.CastBarWidth) end,
-									set = function(_, value) db.NameplateDB.CastBarWidth = tonumber(value) end,
-								},
+								-- CastBarWidth = {
+									-- type = "input",
+									-- name = L["姓名板施法条宽度"],
+									-- desc = L["姓名板施法条宽度"],
+									-- order = 6,
+									-- get = function() return tostring(db.NameplateDB.CastBarWidth) end,
+									-- set = function(_, value) 
+										-- db.NameplateDB.CastBarWidth = tonumber(value) 
+										-- local N = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("NamePlates")
+										-- N:UpdateSet()
+									-- end,
+								-- },
 								Combat = {
 									type = "toggle",
 									name = L["启用战斗显示"],
 									order = 7,
+									get = function() return db.NameplateDB.Combat end,
+									set = function(_, value) 
+										db.NameplateDB.Combat = value 
+										local N = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("NamePlates")
+										N:UpdateSet2()
+									end,
 								},
 								NotCombat = {
 									type = "toggle",
 									name = L["启用脱离战斗隐藏"],
 									order = 8,
+									get = function() return db.NameplateDB.NotCombat end,
+									set = function(_, value) 
+										db.NameplateDB.NotCombat = value 
+										local N = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("NamePlates")
+										N:UpdateSet2()
+									end,
 								},
 								Showdebuff = {
 									type = "toggle",
 									name = L["启用debuff显示"],
 									order = 9,
+									get = function() return db.NameplateDB.Showdebuff end,
+									set = function(_, value) 
+										db.NameplateDB.Showdebuff = value 
+										local N = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("NamePlates")
+										N:UpdateSet()
+									end,
 								},
 								IconSize = {
 									type = "range", order = 10,
 									name = L["图标大小"], desc = L["图标大小"],disabled = function(info) return not db.NameplateDB.Showdebuff end,
 									min = 10, max = 60, step = 1,
+									get = function() return db.NameplateDB.IconSize end,
+									set = function(_, value) 
+										db.NameplateDB.IconSize = value 
+										local N = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("NamePlates")
+										N:UpdateSet()
+									end,
 								},
 							}
 						},	

@@ -619,6 +619,7 @@ local function SkinObjects(frame, nameFrame)
 	frame:RegisterEvent("UNIT_AURA")
 	frame:HookScript("OnHide", OnHide)
 	newhp:HookScript("OnShow", UpdateObjects)
+	
 	frames[frame] = true
 end
 local function CheckBlacklist(frame, ...)
@@ -670,7 +671,7 @@ local select = select
 local function HookFrames(...)
 	for index = 1, select('#', ...) do
 		local frame = select(index, ...)
-	
+		
 		if not frames[frame] and (frame:GetName() and not frame.isSkinned and frame:GetName():find("NamePlate%d")) then
 			SkinObjects(frame:GetChildren())
 			frame.isSkinned = true
@@ -695,7 +696,32 @@ local function SetCV()
 	SetCVar("bloatnameplates",0.0)
 	SetCVar("ShowClassColorInNameplate",1)
 end
+function N:UpdateSet()
+	for k,v in pairs(frames) do
+		k.hp:SetSize(C["HPWidth"], C["HPHeight"])
+		k.cb.border:SetSize(C["HPWidth"], C["CastBarHeight"])
+		k.hp.pct:SetFont(DB.Font, C["Fontsize"], "THINOUTLINE")
+		k.cb.icon:SetSize(C["CastBarIconSize"], C["CastBarIconSize"])
+		k.name:SetFont(DB.Font, C["Fontsize"], "THINOUTLINE")
+	end
+end
+function N:UpdateSet2()
+	if C["Combat"] then
+		N:RegisterEvent("PLAYER_REGEN_DISABLED", function()
+			SetCVar("nameplateShowEnemies", 1)
+		end)
+	else
+		N:UnregisterEvent("PLAYER_REGEN_DISABLED")
+	end
+	if C["NotCombat"] then
+		N:RegisterEvent("PLAYER_REGEN_ENABLED", function()
+			SetCVar("nameplateShowEnemies", 0)
+		end)
+	else
+		N:UnregisterEvent("PLAYER_REGEN_ENABLED")
+	end
 
+end
 function N:OnInitialize()
 		if IsAddOnLoaded("TidyPlates") or IsAddOnLoaded("Aloft") or IsAddOnLoaded("dNamePlates") or IsAddOnLoaded("caelNamePlates") then
 			return

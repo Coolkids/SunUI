@@ -90,11 +90,30 @@ local function ApplyChatStyle(self)
 	_G[cf.."EditBoxLanguage"]:SetSize(_G[cf.."EditBox"]:GetHeight(),_G[cf.."EditBox"]:GetHeight())
 	_G[cf.."EditBoxLanguage"]:StripTextures()
 	S.CreateBD(_G[cf.."EditBoxLanguage"], 0.6)
+	hooksecurefunc("ChatEdit_UpdateHeader", function()
+		local type = _G[cf..'EditBox']:GetAttribute("chatType")
+		if ( type == "CHANNEL" ) then
+			local id = _G[cf..'EditBox']:GetAttribute("channelTarget")
+			if id == 0 then
+				_G[cf..'EditBox']:SetBackdropBorderColor(0, 0, 0)
+			else
+				_G[cf..'EditBox']:SetBackdropBorderColor(ChatTypeInfo[type..id].r,ChatTypeInfo[type..id].g,ChatTypeInfo[type..id].b)
+			end
+		else
+			_G[cf..'EditBox']:SetBackdropBorderColor(ChatTypeInfo[type].r,ChatTypeInfo[type].g,ChatTypeInfo[type].b)
+		end
+    end)
 	_G[cf.."Tab"]:HookScript("OnClick", function() _G[cf.."EditBox"]:Hide() end)
     tex[6]:SetAlpha(0) tex[7]:SetAlpha(0) tex[8]:SetAlpha(0) tex[9]:SetAlpha(0) tex[10]:SetAlpha(0) tex[11]:SetAlpha(0)
     local bb = _G[cf.."ButtonFrameBottomButton"]
 	local flash = _G[cf.."ButtonFrameBottomButtonFlash"]
 	S.ReskinArrow(bb, "down")
+	if _G[cf] == _G["ChatFrame2"] then
+		_G["CombatLogQuickButtonFrame_Custom"]:StripTextures()
+		local cb = _G["CombatLogQuickButtonFrame_CustomAdditionalFilterButton"]
+		cb:SetSize(16, 16)
+		S.ReskinArrow(cb, "down")
+	end
 	bb:SetParent(_G[cf])
 	bb:SetHeight(16)
 	bb:SetWidth(16)
@@ -125,10 +144,11 @@ local function ApplyChatStyle(self)
 			return am(frame, text:gsub('|h%[(%d+)%. .-%]|h', '|h%[%1%]|h'), ...)
 		end 
 	end
+	self.skinApplied = true
 end
 
 -- temporary chats
-hooksecurefunc("FCF_OpenTemporaryWindow", ApplyChatStyle)
+
 FloatingChatFrame_OnMouseScroll = function(self, dir)
     if(dir > 0) then
         if(IsShiftKeyDown()) then
@@ -252,12 +272,25 @@ end
 for i = 1, 10 do
 	local tab = _G[format("%s%d%s", "ChatFrame", i, "Tab")]
 	tab:SetScript("OnDoubleClick", Copy)
+	tab:HookScript("OnEnter", function(self) 
+		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+		GameTooltip:AddLine("双击聊天标签")
+		GameTooltip:AddLine("来复制聊天信息")
+		GameTooltip:Show()  
+	end)
+	tab:HookScript("OnLeave", function() 
+		GameTooltip:Hide()
+	end)
 end
-
-function Module:OnEnable()
+function Module:PLAYER_ENTERING_WORLD()
 	for i = 1, NUM_CHAT_WINDOWS do
 		ApplyChatStyle(_G["ChatFrame"..i])
 	end
+	hooksecurefunc("FCF_OpenTemporaryWindow", ApplyChatStyle)
+end
+function Module:OnEnable()
+	Module:RegisterEvent("PLAYER_ENTERING_WORLD")
+	
 	C = SunUIConfig.db.profile.MiniDB
 	if C["DNDFilter"] then  
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL_JOIN", function(msg) return true end)

@@ -42,11 +42,11 @@ G["ActionBarDB"] = {
 	["PetBarFade"] = false,
 }
 G["NameplateDB"] = {
-	["CastBarWidth"] = 125,
-	["HPWidth"] = 125,
+	["CastBarWidth"] = 100,
+	["HPWidth"] = 100,
 	["enable"] = true,
 	["Showdebuff"] = true,
-	["HPHeight"] = 10,
+	["HPHeight"] = 8,
 	["CastBarIconSize"] = 15,
 	["Fontsize"] = 10,
 	["CastBarHeight"] = 6,
