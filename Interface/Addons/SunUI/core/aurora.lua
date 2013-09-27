@@ -584,3 +584,37 @@ function S.ReskinFrame(f)
 	f.reskin = true
 end
 
+S.ColourQuality = function(button, id)
+	local quality, texture, _
+	local quest = _G[button:GetName().."IconQuestTexture"]
+
+	if id then
+		quality, _, _, _, _, _, _, texture = select(3, GetItemInfo(id))
+	end
+
+	local glow = button.AuroraGlow
+	if not glow then
+		glow = button:CreateTexture(nil, "BACKGROUND")
+		glow:SetPoint("TOPLEFT", -1, 1)
+		glow:SetPoint("BOTTOMRIGHT", 1, -1)
+		glow:SetTexture(media.backdrop)
+
+		button.AuroraGlow = glow
+	end
+
+	if texture then
+		local r, g, b
+
+		if quest and quest:IsShown() then
+			r, g, b = 1, 0, 0
+		else
+			r, g, b = GetItemQualityColor(quality)
+			if r == 1 and g == 1 then r, g, b = 0, 0, 0 end
+		end
+
+		glow:SetVertexColor(r, g, b)
+		glow:Show()
+	else
+		glow:Hide()
+	end
+end

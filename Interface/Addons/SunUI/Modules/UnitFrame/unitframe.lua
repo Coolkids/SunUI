@@ -1108,7 +1108,7 @@ local function gen_InfoIcons(f)
     if f.mystyle == 'player' then
 		f.Combat = h:CreateTexture(nil, 'OVERLAY')
 		f.Combat:SetSize(20,20)
-		f.Combat:SetPoint('TOPRIGHT', 3, 9)
+		f.Combat:SetPoint('TOPRIGHT', -2, 9)
 		f.Combat:SetTexture("Interface\\AddOns\\SunUI\\media\\UnitFrame\\combat")
 		f.Combat:SetVertexColor(0.6, 0, 0)
     end

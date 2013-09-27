@@ -52,7 +52,7 @@ G["NameplateDB"] = {
 	["CastBarHeight"] = 6,
 	["Combat"] = true,
 	["NotCombat"] = false,
-	["IconSize"] = 20,
+	["IconSize"] = 15,
 }
 G["TooltipDB"] = {
 	["ScaleSize"] = 1,

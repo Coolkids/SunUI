@@ -112,7 +112,7 @@ do
 				----------------该死的物品升级-----------------------------
 				------------------------------------------------------------
 				if level and level >= 458 then
-					local upgradeId = tonumber(strmatch(link, "item:%d+:%d+:%d+:%d+:%d+:%d+:%-?%d+:%-?%d+:%d+:%d+:(%d+)"));
+					local upgradeId = link:match(":(%d+)\124h%[")
 					if (upgradeId and upgradeTable[upgradeId]) then
 						level = level + upgradeTable[upgradeId];
 					end

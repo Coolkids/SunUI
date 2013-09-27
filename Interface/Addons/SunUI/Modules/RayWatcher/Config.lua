@@ -1155,156 +1155,190 @@ ns.watchers ={
 			direction = "RIGHT",
 			setpoint = {unpack(enbuff)},
 			size = 24,
-				--电容器
-				{ spellID = 96890, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--死灵法师极核
-				{ spellID = 97131, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--神經突觸彈簧
-				{ spellID = 96230, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--炎魔印記
-				{ spellID = 97007, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--織炎精華
-				{ spellID = 97008, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--遠古石化種子
-				{ spellID = 97009, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--吞噬
-				{ spellID = 96911, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--火山毀滅
-				{ spellID = 89091, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--能量洪流
-				{ spellID = 74241, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--災厄魔力
-				{ spellID = 92318, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--崩土流石
-				{ spellID = 74245, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--燧鎖的發射器
-				{ spellID = 99621, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--矩阵加速
-				{ spellID = 96977, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--矩阵暴击
-				{ spellID = 96978, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--矩阵精通
-				{ spellID = 96979, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--贼4T12加速(火上的未來)
-				{ spellID = 99186, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--贼4T12暴击(熾熱破壞)
-				{ spellID = 99187, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--贼4T12精通(火焰大師)
-				{ spellID = 96978, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--H無縛之怒  觸發buff名字:作戰狀態 X
-				{ spellID =109719, unitId = "player", caster = "player", filter = "BUFF" },  
-				--H淨縛之意志  觸發buff名字:鬥心 X
-				{ spellID =109795, unitId = "player", caster = "player", filter = "BUFF" },  
-				--H無命之心 觸發buff名字:開闊思維 X
-				{ spellID =109813, unitId = "player", caster = "player", filter = "BUFF" },  
-				--H壞滅之眼  觸發buff名字:泰坦之力 X
-				{ spellID =77997, unitId = "player", caster = "player", filter = "BUFF" },  
-				--H不朽的決心  觸發buff名字:超自然閃避 X
-				{ spellID =109782, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--H七徵聖印   觸發buff名字:速度
-				{ spellID =109804, unitId = "player", caster = "player", filter = "BUFF" },  
-				--H靈魂轉移者漩渦  觸發buff名字:戰術大師 
-				{ spellID =109776, unitId = "player", caster = "player", filter = "BUFF" },  
-				--H腐敗心靈徽記  觸發buff名字:速度 
-				{ spellID =109789, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--H末代之龍的誕生塑像   觸發buff名字:找尋弱點
-				{ spellID =109744, unitId = "player", caster = "player", filter = "BUFF" },  
-				--H擒星羅盤   觸發buff名字:速度
-				{ spellID =109711, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--H基洛提瑞克符印  觸發buff名字:輕靈
-				{ spellID =109715, unitId = "player", caster = "player", filter = "BUFF" },  
-				--H瓶裝願望   觸發buff名字:究極之力
-				{ spellID =109792, unitId = "player", caster = "player", filter = "BUFF" },  
-				--H聖光倒影   觸發buff名字:究極之力
-				{ spellID =109792, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--H腐爛頭顱  觸發buff名字:泰坦之力
-				{ spellID =109747, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--H深淵之火  觸發buff名字:難以捉摸
-				{ spellID =109779, unitId = "player", caster = "player", filter = "BUFF" },   
-				--無縛之怒  觸發buff名字:作戰狀態 X
-				{ spellID =107960, unitId = "player", caster = "player", filter = "BUFF" },  
-				--淨縛之意志  觸發buff名字:鬥心 X
-				{ spellID =107970, unitId = "player", caster = "player", filter = "BUFF" },  
-				--無命之心  觸發buff名字:開闊思維 X
-				{ spellID =107962, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--壞滅之眼  觸發buff名字:泰坦之力 X
-				{ spellID =107967, unitId = "player", caster = "player", filter = "BUFF" },  
-				--不朽的決心  觸發buff名字:超自然閃避 X
-				{ spellID =107968, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--基洛提瑞克符印 觸發buff名字:輕靈
-				{ spellID =107947, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--瓶裝願望  觸發buff名字:究極之力
-				{ spellID =107948, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--聖光倒影  觸發buff名字:究極之力
-				{ spellID =107948, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--腐爛頭顱  觸發buff名字:泰坦之力
-				{ spellID =107949, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--深淵之火  觸發buff名字:難以捉摸
-				{ spellID =107951, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--擒星羅盤  觸發buff名字:速度
-				{ spellID =107982, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--腐敗心靈徽記  觸發buff名字:速度 
-				{ spellID =107982, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--七徵聖印   觸發buff名字:速度
-				{ spellID =107982, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--末代之龍的誕生塑像  觸發buff名字:找尋弱點
-				{ spellID =107988, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--靈魂轉移者漩渦  觸發buff名字:戰術大師
-				{ spellID =107986, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--時間之箭  觸發buff名字:時間之箭
-				{ spellID =102659, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--惡魔領主之賜  觸發buff名字:邪惡之禮 
-				{ spellID =102662, unitId = "player", caster = "player", filter = "BUFF" },  
-				--惡魔領主之賜  觸發buff名字:邪惡之禮 
-				{ spellID =109908, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--L七徵聖印  觸發buff名字:速度
-				{ spellID =109802, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--L腐敗心靈徽記  觸發buff名字:速度
-				{ spellID =109802, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--L擒星羅盤  觸發buff名字:速度
-				{ spellID =109802, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--L無縛之怒 X 觸發buff名字:作戰狀態
-				{ spellID =109717, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--L淨縛之意志  X  觸發buff名字:鬥心
-				{ spellID =109793, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--L無命之心 X  觸發buff名字:開闊思維
-				{ spellID =109811, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--L壞滅之眼  X   觸發buff名字:泰坦之力
-				{ spellID =109748, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--L不朽的決心  X 觸發buff名字:超自然閃避
-				{ spellID =109780, unitId = "player", caster = "player", filter = "BUFF" }, 
-				-- 暗月卡片:海啸
-				{ spellID = 89182, unitId = "player", caster = "player", filter = "BUFF" },
-				--偷取时间
-				{ spellID = 105785, unitId = "player", caster = "player", filter = "BUFF" },
-				--橙色匕首
-				{ spellID = 109941, unitId = "player", caster = "player", filter = "BUFF" },
-				--风歌(暴击)
-				{ spellID = 104509, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--风歌(精通)
-				{ spellID = 104510, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--风歌(急速)
-				{ spellID = 104423, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--风中的书页
-				{ spellID = 126483, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--千年腌蛋
-				{ spellID = 127915, unitId = "player", caster = "player", filter = "BUFF" }, 
-				--空的水果桶
-				{ spellID = 126266, unitId = "player", caster = "player", filter = "BUFF" }, 
-				-- 敏捷(炼金石)
-				{ spellID =  60233, unitId = "player", caster = "player", filter = "BUFF" }, 
-				-- 宇宙之光
-				{ spellID =  126577, unitId = "player", caster = "player", filter = "BUFF" }, 
-				-- MoP暗月卡 治疗
-				{ spellID =  128987, unitId = "player", caster = "player", filter = "BUFF" }, 
-				-- MoP暗月卡 法系DPS
-				{ spellID =  128985, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 秦太的强化印记
-				{ spellID =  126588, unitId = "player", caster = "player", filter = "BUFF" },
-				-- 玉魂
-				{ spellID =  104993, unitId = "player", caster = "all", filter = "BUFF" },
-				-- 玉魂
-				{ spellID =  136082, unitId = "player", caster = "player", filter = "BUFF" },
+			--电容器
+			{ spellID = 96890, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--死灵法师极核
+			{ spellID = 97131, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--神經突觸彈簧
+			{ spellID = 96230, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--炎魔印記
+			{ spellID = 97007, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--織炎精華
+			{ spellID = 97008, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--遠古石化種子
+			{ spellID = 97009, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--吞噬
+			{ spellID = 96911, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--火山毀滅
+			{ spellID = 89091, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--能量洪流
+			{ spellID = 74241, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--災厄魔力
+			{ spellID = 92318, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--崩土流石
+			{ spellID = 74245, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--燧鎖的發射器
+			{ spellID = 99621, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--矩阵加速
+			{ spellID = 96977, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--矩阵暴击
+			{ spellID = 96978, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--矩阵精通
+			{ spellID = 96979, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--贼4T12加速(火上的未來)
+			{ spellID = 99186, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--贼4T12暴击(熾熱破壞)
+			{ spellID = 99187, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--贼4T12精通(火焰大師)
+			{ spellID = 96978, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--H無縛之怒  觸發buff名字:作戰狀態 X
+			{ spellID =109719, unitId = "player", caster = "player", filter = "BUFF" },  
+			--H淨縛之意志  觸發buff名字:鬥心 X
+			{ spellID =109795, unitId = "player", caster = "player", filter = "BUFF" },  
+			--H無命之心 觸發buff名字:開闊思維 X
+			{ spellID =109813, unitId = "player", caster = "player", filter = "BUFF" },  
+			--H壞滅之眼  觸發buff名字:泰坦之力 X
+			{ spellID =77997, unitId = "player", caster = "player", filter = "BUFF" },  
+			--H不朽的決心  觸發buff名字:超自然閃避 X
+			{ spellID =109782, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--H七徵聖印   觸發buff名字:速度
+			{ spellID =109804, unitId = "player", caster = "player", filter = "BUFF" },  
+			--H靈魂轉移者漩渦  觸發buff名字:戰術大師 
+			{ spellID =109776, unitId = "player", caster = "player", filter = "BUFF" },  
+			--H腐敗心靈徽記  觸發buff名字:速度 
+			{ spellID =109789, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--H末代之龍的誕生塑像   觸發buff名字:找尋弱點
+			{ spellID =109744, unitId = "player", caster = "player", filter = "BUFF" },  
+			--H擒星羅盤   觸發buff名字:速度
+			{ spellID =109711, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--H基洛提瑞克符印  觸發buff名字:輕靈
+			{ spellID =109715, unitId = "player", caster = "player", filter = "BUFF" },  
+			--H瓶裝願望   觸發buff名字:究極之力
+			{ spellID =109792, unitId = "player", caster = "player", filter = "BUFF" },  
+			--H聖光倒影   觸發buff名字:究極之力
+			{ spellID =109792, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--H腐爛頭顱  觸發buff名字:泰坦之力
+			{ spellID =109747, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--H深淵之火  觸發buff名字:難以捉摸
+			{ spellID =109779, unitId = "player", caster = "player", filter = "BUFF" },   
+			--無縛之怒  觸發buff名字:作戰狀態 X
+			{ spellID =107960, unitId = "player", caster = "player", filter = "BUFF" },  
+			--淨縛之意志  觸發buff名字:鬥心 X
+			{ spellID =107970, unitId = "player", caster = "player", filter = "BUFF" },  
+			--無命之心  觸發buff名字:開闊思維 X
+			{ spellID =107962, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--壞滅之眼  觸發buff名字:泰坦之力 X
+			{ spellID =107967, unitId = "player", caster = "player", filter = "BUFF" },  
+			--不朽的決心  觸發buff名字:超自然閃避 X
+			{ spellID =107968, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--基洛提瑞克符印 觸發buff名字:輕靈
+			{ spellID =107947, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--瓶裝願望  觸發buff名字:究極之力
+			{ spellID =107948, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--聖光倒影  觸發buff名字:究極之力
+			{ spellID =107948, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--腐爛頭顱  觸發buff名字:泰坦之力
+			{ spellID =107949, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--深淵之火  觸發buff名字:難以捉摸
+			{ spellID =107951, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--擒星羅盤  觸發buff名字:速度
+			{ spellID =107982, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--腐敗心靈徽記  觸發buff名字:速度 
+			{ spellID =107982, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--七徵聖印   觸發buff名字:速度
+			{ spellID =107982, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--末代之龍的誕生塑像  觸發buff名字:找尋弱點
+			{ spellID =107988, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--靈魂轉移者漩渦  觸發buff名字:戰術大師
+			{ spellID =107986, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--時間之箭  觸發buff名字:時間之箭
+			{ spellID =102659, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--惡魔領主之賜  觸發buff名字:邪惡之禮 
+			{ spellID =102662, unitId = "player", caster = "player", filter = "BUFF" },  
+			--惡魔領主之賜  觸發buff名字:邪惡之禮 
+			{ spellID =109908, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--L七徵聖印  觸發buff名字:速度
+			{ spellID =109802, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--L腐敗心靈徽記  觸發buff名字:速度
+			{ spellID =109802, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--L擒星羅盤  觸發buff名字:速度
+			{ spellID =109802, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--L無縛之怒 X 觸發buff名字:作戰狀態
+			{ spellID =109717, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--L淨縛之意志  X  觸發buff名字:鬥心
+			{ spellID =109793, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--L無命之心 X  觸發buff名字:開闊思維
+			{ spellID =109811, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--L壞滅之眼  X   觸發buff名字:泰坦之力
+			{ spellID =109748, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--L不朽的決心  X 觸發buff名字:超自然閃避
+			{ spellID =109780, unitId = "player", caster = "player", filter = "BUFF" }, 
+			-- 暗月卡片:海啸
+			{ spellID = 89182, unitId = "player", caster = "player", filter = "BUFF" },
+			--偷取时间
+			{ spellID = 105785, unitId = "player", caster = "player", filter = "BUFF" },
+			--橙色匕首
+			{ spellID = 109941, unitId = "player", caster = "player", filter = "BUFF" },
+			--风歌(暴击)
+			{ spellID = 104509, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--风歌(精通)
+			{ spellID = 104510, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--风歌(急速)
+			{ spellID = 104423, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--风中的书页
+			{ spellID = 126483, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--千年腌蛋
+			{ spellID = 127915, unitId = "player", caster = "player", filter = "BUFF" }, 
+			--空的水果桶
+			{ spellID = 126266, unitId = "player", caster = "player", filter = "BUFF" }, 
+			-- 敏捷(炼金石)
+			{ spellID =  60233, unitId = "player", caster = "player", filter = "BUFF" }, 
+			-- 宇宙之光
+			{ spellID =  126577, unitId = "player", caster = "player", filter = "BUFF" }, 
+			-- MoP暗月卡 治疗
+			{ spellID =  128987, unitId = "player", caster = "player", filter = "BUFF" }, 
+			-- MoP暗月卡 法系DPS
+			{ spellID =  128985, unitId = "player", caster = "player", filter = "BUFF" },
+			-- 秦太的强化印记
+			{ spellID =  126588, unitId = "player", caster = "player", filter = "BUFF" },
+			-- 玉魂
+			{ spellID =  104993, unitId = "player", caster = "all", filter = "BUFF" },
+			-- 玉魂
+			{ spellID =  136082, unitId = "player", caster = "player", filter = "BUFF" },
+			-- Rook's Unlucky Talisman (減傷, 使用)
+			{ spellID = 146343, unitId = "player", caster = "player", filter = "BUFF" },
+			-- Resolve of Niuzao (躲閃, 使用)
+			{ spellID = 146344, unitId = "player", caster = "player", filter = "BUFF" },
+			-- Assurance of Consequence (敏捷, 觸發)
+			{ spellID = 146308, unitId = "player", caster = "player", filter = "BUFF" },
+			-- Haromm's Talisman (敏捷, 觸發)
+			{ spellID = 148903, unitId = "player", caster = "player", filter = "BUFF" },
+			  -- Sigil of Rampage (敏捷, 觸發)
+			{ spellID = 148896, unitId = "player", caster = "player", filter = "BUFF" },
+			  -- Ticking Ebon Detonator (敏捷, 觸發)
+			{ spellID = 146310, unitId = "player", caster = "player", filter = "BUFF" },
+			  -- Discipline of Xuen (暴擊, 觸發)
+			{ spellID = 146312, unitId = "player", caster = "player", filter = "BUFF" },
+			-- Assurance of Consequence (力量, 觸發)
+			{ spellID = 146245, unitId = "player", caster = "player", filter = "BUFF" },
+			-- Thok's Tail Tip (力量, 觸發)
+			{ spellID = 146250, unitId = "player", caster = "player", filter = "BUFF" },
+			-- Skeer's Bloodsoaked Talisman (力量, 觸發)
+			{ spellID = 146285, unitId = "player", caster = "player", filter = "BUFF" },
+			-- Fusion-Fire Core (力量, 觸發)
+			{ spellID = 148899, unitId = "player", caster = "player", filter = "BUFF" },
+			-- Alacrity of Xuen (急速, 觸發)
+			{ spellID = 146296, unitId = "player", caster = "player", filter = "BUFF" },
+			-- Purified Bindings of Immerseus (智力, 觸發)
+			{ spellID = 146046, unitId = "player", caster = "player", filter = "BUFF" },
+			-- Kardris' Toxic Totem (智力, 觸發)
+			{ spellID = 148906, unitId = "player", caster = "player", filter = "BUFF" },
+			-- Frenzied Crystal of Rage (智力, 觸發)
+			{ spellID = 148897, unitId = "player", caster = "player", filter = "BUFF" },
+			-- Black Blood of Y'Shaarj (智力, 觸發)
+			{ spellID = 146184, unitId = "player", caster = "player", filter = "BUFF" },
+			-- Yu'lon's Bite (暴擊, 觸發)
+			{ spellID = 146218, unitId = "player", caster = "player", filter = "BUFF" },
 		},
 	},
 }

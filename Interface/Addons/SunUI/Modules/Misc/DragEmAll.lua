@@ -103,6 +103,9 @@ local lodFrames = {
   Blizzard_PetJournal = { ["PetJournalParent"] = false }, -- as of 5.0
   --5.2
   Blizzard_PVPUI = {["PVPUIFrame"] = false},
+  --5.3
+  --Blizzard_StoreUI = {["StoreFrame"] = false},
+  
 }
 
 local parentFrame = {}

@@ -152,7 +152,7 @@ local function On_OnTooltipSetUnit(self)
 				end
 			end
 			for i=2, GameTooltip:NumLines() do
-				if _G["GameTooltipTextLeft"..i]:GetText() and (_G["GameTooltipTextLeft" .. i]:GetText():find(FACTION_ALLIANCE) or  _G["GameTooltipTextLeft" .. i]:GetText():find(FACTION_HORDE)) then
+				if _G["GameTooltipTextLeft"..i]:GetText() and (_G["GameTooltipTextLeft" .. i]:GetText()==FACTION_ALLIANCE or  _G["GameTooltipTextLeft" .. i]:GetText()==FACTION_HORDE) then
 					_G["GameTooltipTextLeft"..i]:SetText(nil)
 					break
 				end

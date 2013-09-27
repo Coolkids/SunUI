@@ -78,7 +78,7 @@ local function ApplyChatStyle(self)
     
     _G[cf..'EditBox']:SetAltArrowKeyMode(false)
     _G[cf..'EditBox']:ClearAllPoints()
-    _G[cf..'EditBox']:SetPoint('BOTTOMLEFT', ChatFrame1, 'TOPLEFT', -4, 21)
+    _G[cf..'EditBox']:SetPoint('BOTTOMLEFT', ChatFrame1, 'TOPLEFT', 0, 21)
     _G[cf..'EditBox']:SetPoint('TOPRIGHT', _G.ChatFrame1, 'TOPRIGHT', 6, 45)
 	S.CreateBD(_G[cf..'EditBox'])
     _G[cf..'EditBox']:HookScript("OnEditFocusGained", function(self) self:Show() end)
