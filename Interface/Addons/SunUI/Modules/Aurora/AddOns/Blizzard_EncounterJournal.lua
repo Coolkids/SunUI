@@ -50,11 +50,11 @@ DB.AuroraModules["Blizzard_EncounterJournal"] = function()
 		S.CreateBD(EncounterJournalSearchResults, .75)
 
 		EncounterJournalEncounterFrameInfoBossTab:ClearAllPoints()
-		EncounterJournalEncounterFrameInfoBossTab:Point("TOPRIGHT", EncounterJournalEncounterFrame, "TOPRIGHT", 75, 20)
+		EncounterJournalEncounterFrameInfoBossTab:SetPoint("TOPRIGHT", EncounterJournalEncounterFrame, "TOPRIGHT", 75, 20)
 		EncounterJournalEncounterFrameInfoLootTab:ClearAllPoints()
-		EncounterJournalEncounterFrameInfoLootTab:Point("TOP", EncounterJournalEncounterFrameInfoBossTab, "BOTTOM", 0, -4)
+		EncounterJournalEncounterFrameInfoLootTab:SetPoint("TOP", EncounterJournalEncounterFrameInfoBossTab, "BOTTOM", 0, -4)
 		EncounterJournalEncounterFrameInfoModelTab:ClearAllPoints()
-		EncounterJournalEncounterFrameInfoModelTab:Point("TOP", EncounterJournalEncounterFrameInfoLootTab, "BOTTOM", 0, -4)
+		EncounterJournalEncounterFrameInfoModelTab:SetPoint("TOP", EncounterJournalEncounterFrameInfoLootTab, "BOTTOM", 0, -4)
 
 		local tabs = {EncounterJournalEncounterFrameInfoBossTab, EncounterJournalEncounterFrameInfoLootTab, EncounterJournalEncounterFrameInfoModelTab}
 		for _, tab in pairs(tabs) do
@@ -81,8 +81,8 @@ DB.AuroraModules["Blizzard_EncounterJournal"] = function()
 
 		do
 			local bg = CreateFrame("Frame", nil, EncounterJournalInstanceSelectScrollFrameScrollChildInstanceButton1)
-			bg:Point("TOPLEFT", 4, -4)
-			bg:Point("BOTTOMRIGHT", -5, 3)
+			bg:SetPoint("TOPLEFT", 4, -4)
+			bg:SetPoint("BOTTOMRIGHT", -5, 3)
 			S.CreateBD(bg, 0)
 		end
 
@@ -98,8 +98,8 @@ DB.AuroraModules["Blizzard_EncounterJournal"] = function()
 				bu:SetPushedTexture("")
 
 				local bg = CreateFrame("Frame", nil, bu)
-				bg:Point("TOPLEFT", 4, -4)
-				bg:Point("BOTTOMRIGHT", -5, 3)
+				bg:SetPoint("TOPLEFT", 4, -4)
+				bg:SetPoint("BOTTOMRIGHT", -5, 3)
 				S.CreateBD(bg, 0)
 
 				index = index + 1
@@ -177,8 +177,8 @@ DB.AuroraModules["Blizzard_EncounterJournal"] = function()
 					_G[name.."HeaderButtonHighlightRight"]:Hide()
 
 					header.button.bg = header.button:CreateTexture(nil, "BACKGROUND")
-					header.button.bg:Point("TOPLEFT", header.button.abilityIcon, -1, 1)
-					header.button.bg:Point("BOTTOMRIGHT", header.button.abilityIcon, 1, -1)
+					header.button.bg:SetPoint("TOPLEFT", header.button.abilityIcon, -1, 1)
+					header.button.bg:SetPoint("BOTTOMRIGHT", header.button.abilityIcon, 1, -1)
 					header.button.bg:SetTexture(DB.media.backdrop)
 					header.button.bg:SetVertexColor(0, 0, 0)
 				end
@@ -207,20 +207,20 @@ DB.AuroraModules["Blizzard_EncounterJournal"] = function()
 			item.bossTexture:SetAlpha(0)
 			item.bosslessTexture:SetAlpha(0)
 
-			item.icon:Point("TOPLEFT", 1, -1)
+			item.icon:SetPoint("TOPLEFT", 1, -1)
 			item.icon:SetTexCoord(.08, .92, .08, .92)
 			item.icon:SetDrawLayer("OVERLAY")
 			S.CreateBG(item.icon)
 
 			local bg = CreateFrame("Frame", nil, item)
 			bg:SetPoint("TOPLEFT")
-			bg:Point("BOTTOMRIGHT", 0, 1)
+			bg:SetPoint("BOTTOMRIGHT", 0, 1)
 			bg:SetFrameStrata("BACKGROUND")
 			S.CreateBD(bg, 0)
 
 			local tex = item:CreateTexture(nil, "BACKGROUND")
 			tex:SetPoint("TOPLEFT")
-			tex:Point("BOTTOMRIGHT", -1, 2)
+			tex:SetPoint("BOTTOMRIGHT", -1, 2)
 			tex:SetTexture(DB.media.backdrop)
 			tex:SetVertexColor(0, 0, 0, .25)
 		end

@@ -42,20 +42,20 @@ DB.AuroraModules["Blizzard_GuildBankUI"] = function()
 		S.ReskinTab(tab)
 
 		if i ~= 1 then
-			tab:Point("LEFT", _G["GuildBankFrameTab"..i-1], "RIGHT", -15, 0)
+			tab:SetPoint("LEFT", _G["GuildBankFrameTab"..i-1], "RIGHT", -15, 0)
 		end
 	end
 
 	local bd = CreateFrame("Frame", nil, GuildBankPopupFrame)
 	bd:SetPoint("TOPLEFT")
-	bd:Point("BOTTOMRIGHT", -28, 26)
+	bd:SetPoint("BOTTOMRIGHT", -28, 26)
 	bd:SetFrameLevel(GuildBankPopupFrame:GetFrameLevel()-1)
 	S.CreateBD(bd)
 	S.CreateBD(GuildBankPopupEditBox, .25)
 
-	GuildBankPopupFrame:Point("TOPLEFT", GuildBankFrame, "TOPRIGHT", 2, -30)
+	GuildBankPopupFrame:SetPoint("TOPLEFT", GuildBankFrame, "TOPRIGHT", 2, -30)
 
-	GuildBankFrameWithdrawButton:Point("RIGHT", GuildBankFrameDepositButton, "LEFT", -1, 0)
+	GuildBankFrameWithdrawButton:SetPoint("RIGHT", GuildBankFrameDepositButton, "LEFT", -1, 0)
 
 	for i = 1, NUM_GUILDBANK_COLUMNS do
 		_G["GuildBankColumn"..i]:GetRegions():Hide()
@@ -104,7 +104,7 @@ DB.AuroraModules["Blizzard_GuildBankUI"] = function()
 		S.CreateSD(bu, 5, 0, 0, 0, 1, 1)
 
 		local a1, p, a2, x, y = bu:GetPoint()
-		bu:Point(a1, p, a2, x + 11, y)
+		bu:SetPoint(a1, p, a2, x + 11, y)
 
 		ic:SetTexCoord(.08, .92, .08, .92)
 		tb:GetRegions():Hide()

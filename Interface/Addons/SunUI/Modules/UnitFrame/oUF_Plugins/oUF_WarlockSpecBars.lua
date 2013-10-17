@@ -160,16 +160,16 @@ local function Enable(self)
 		self:RegisterEvent("PLAYER_TALENT_UPDATE", Visibility)
 
 		for i = 1, 4 do
-			local Point = wsb[i]
-			if not Point:GetStatusBarTexture() then
-				Point:SetStatusBarTexture([=[Interface\TargetingFrame\UI-StatusBar]=])
+			local SetPoint = wsb[i]
+			if not SetPoint:GetStatusBarTexture() then
+				SetPoint:SetStatusBarTexture([=[Interface\TargetingFrame\UI-StatusBar]=])
 			end
 
-			Point:SetFrameLevel(wsb:GetFrameLevel() + 1)
-			Point:GetStatusBarTexture():SetHorizTile(false)
+			SetPoint:SetFrameLevel(wsb:GetFrameLevel() + 1)
+			SetPoint:GetStatusBarTexture():SetHorizTile(false)
 
-			if Point.bg then
-				Point.bg:SetAllPoints()
+			if SetPoint.bg then
+				SetPoint.bg:SetAllPoints()
 			end
 		end
 

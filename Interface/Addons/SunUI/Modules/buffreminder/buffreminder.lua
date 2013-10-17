@@ -372,7 +372,7 @@ function Module:OnInitialize()
 			MoveHandle.Class = S.MakeMoveHandle(frame, L["缺少药剂buff提示"], "Class")
 			prv = frame
 		else
-			frame:Point("LEFT", prv, "RIGHT", 3, 0)
+			frame:SetPoint("LEFT", prv, "RIGHT", 3, 0)
 		end
 		frame:SetFrameLevel(1)
 		frame.id = groupName

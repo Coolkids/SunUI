@@ -66,8 +66,8 @@ DB.AuroraModules["Blizzard_GlyphUI"] = function()
 		local ic = _G["GlyphFrameScrollFrameButton"..i.."Icon"]
 
 		local bg = CreateFrame("Frame", nil, bu)
-		bg:Point("TOPLEFT", 38, -2)
-		bg:Point("BOTTOMRIGHT", 0, 2)
+		bg:SetPoint("TOPLEFT", 38, -2)
+		bg:SetPoint("BOTTOMRIGHT", 0, 2)
 		bg:SetFrameLevel(bu:GetFrameLevel()-1)
 		S.CreateBD(bg, .25)
 
@@ -78,8 +78,8 @@ DB.AuroraModules["Blizzard_GlyphUI"] = function()
 		select(4, bu:GetRegions()):SetAlpha(0)
 
 		local check = select(2, bu:GetRegions())
-		check:Point("TOPLEFT", 39, -3)
-		check:Point("BOTTOMRIGHT", -1, 3)
+		check:SetPoint("TOPLEFT", 39, -3)
+		check:SetPoint("BOTTOMRIGHT", -1, 3)
 		check:SetTexture(DB.media.backdrop)
 		check:SetVertexColor(r, g, b, .2)
 

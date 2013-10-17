@@ -73,8 +73,8 @@ local function SetOutside(obj, anchor, xOffset, yOffset)
 		obj:ClearAllPoints()
 	end
 
-	obj:Point("TOPLEFT", anchor, "TOPLEFT", -xOffset, yOffset)
-	obj:Point("BOTTOMRIGHT", anchor, "BOTTOMRIGHT", xOffset, -yOffset)
+	obj:SetPoint("TOPLEFT", anchor, "TOPLEFT", -xOffset, yOffset)
+	obj:SetPoint("BOTTOMRIGHT", anchor, "BOTTOMRIGHT", xOffset, -yOffset)
 end
 
 local function SetInside(obj, anchor, xOffset, yOffset)
@@ -86,8 +86,8 @@ local function SetInside(obj, anchor, xOffset, yOffset)
 		obj:ClearAllPoints()
 	end
 
-	obj:Point("TOPLEFT", anchor, "TOPLEFT", xOffset, -yOffset)
-	obj:Point("BOTTOMRIGHT", anchor, "BOTTOMRIGHT", -xOffset, yOffset)
+	obj:SetPoint("TOPLEFT", anchor, "TOPLEFT", xOffset, -yOffset)
+	obj:SetPoint("BOTTOMRIGHT", anchor, "BOTTOMRIGHT", -xOffset, yOffset)
 end
 local function CreateShadow(f, t, offset, thickness, texture)
 	if f.shadow then return end
@@ -109,19 +109,19 @@ local function CreateShadow(f, t, offset, thickness, texture)
 	
 	local border = CreateFrame("Frame", nil, f)
 	border:SetFrameLevel(frameLevel)
-	border:Point("TOPLEFT", -1, 1)
-	border:Point("TOPRIGHT", 1, 1)
-	border:Point("BOTTOMRIGHT", 1, -1)
-	border:Point("BOTTOMLEFT", -1, -1)
+	border:SetPoint("TOPLEFT", -1, 1)
+	border:SetPoint("TOPRIGHT", 1, 1)
+	border:SetPoint("BOTTOMRIGHT", 1, -1)
+	border:SetPoint("BOTTOMLEFT", -1, -1)
 	border:CreateBorder()
 	f.border = border
 	
 	local shadow = CreateFrame("Frame", nil, border)
 	shadow:SetFrameLevel(frameLevel - 1)
-	shadow:Point("TOPLEFT", -3, 3)
-	shadow:Point("TOPRIGHT", 3, 3)
-	shadow:Point("BOTTOMRIGHT", 3, -3)
-	shadow:Point("BOTTOMLEFT", -3, -3)
+	shadow:SetPoint("TOPLEFT", -3, 3)
+	shadow:SetPoint("TOPRIGHT", 3, 3)
+	shadow:SetPoint("BOTTOMRIGHT", 3, -3)
+	shadow:SetPoint("BOTTOMLEFT", -3, -3)
 	shadow:SetBackdrop( { 
 		edgeFile = DB.GlowTex,
 		bgFile =DB.Solid,
@@ -142,8 +142,8 @@ local function StyleButton(button, setallpoints)
 		if setallpoints then
 			hover:SetAllPoints()
 		else
-			hover:Point('TOPLEFT', 2, -2)
-			hover:Point('BOTTOMRIGHT', -2, 2)
+			hover:SetPoint('TOPLEFT', 2, -2)
+			hover:SetPoint('BOTTOMRIGHT', -2, 2)
 		end
 		button.hover = hover
 		button:SetHighlightTexture(hover)
@@ -155,8 +155,8 @@ local function StyleButton(button, setallpoints)
 		if setallpoints then
 			pushed:SetAllPoints()
 		else
-			pushed:Point('TOPLEFT', 2, -2)
-			pushed:Point('BOTTOMRIGHT', -2, 2)
+			pushed:SetPoint('TOPLEFT', 2, -2)
+			pushed:SetPoint('BOTTOMRIGHT', -2, 2)
 		end
 		button.pushed = pushed
 		button:SetPushedTexture(pushed)
@@ -168,8 +168,8 @@ local function StyleButton(button, setallpoints)
 		if setallpoints then
 			checked:SetAllPoints()
 		else
-			checked:Point('TOPLEFT', 2, -2)
-			checked:Point('BOTTOMRIGHT', -2, 2)
+			checked:SetPoint('TOPLEFT', 2, -2)
+			checked:SetPoint('BOTTOMRIGHT', -2, 2)
 		end
 		button.checked = checked
 		button:SetCheckedTexture(checked)
@@ -181,8 +181,8 @@ local function StyleButton(button, setallpoints)
 		if setallpoints then
 			cooldown:SetAllPoints()
 		else
-			cooldown:Point('TOPLEFT', 2, -2)
-			cooldown:Point('BOTTOMRIGHT', -2, 2)
+			cooldown:SetPoint('TOPLEFT', 2, -2)
+			cooldown:SetPoint('BOTTOMRIGHT', -2, 2)
 		end
 	end
 end

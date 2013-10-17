@@ -17,14 +17,14 @@ local function SkinDBMBar(self)
 				icon1:ClearAllPoints()
 				icon1:SetSize(16, 16)
 				icon1:SetTexCoord(0.08, 0.92, 0.08, 0.92)
-				icon1:Point("BOTTOMRIGHT", frame, "BOTTOMLEFT", -8, -1)
+				icon1:SetPoint("BOTTOMRIGHT", frame, "BOTTOMLEFT", -8, -1)
 			end
 
 			if icon2 then
 				icon2:ClearAllPoints()
 				icon2:SetSize(16, 16)
 				icon2:SetTexCoord(0.08, 0.92, 0.08, 0.92)
-				icon2:Point("BOTTOMLEFT", frame, "BOTTOMRIGHT", 8, -1)
+				icon2:SetPoint("BOTTOMLEFT", frame, "BOTTOMRIGHT", 8, -1)
 			end
 
 			if not frame.styled then
@@ -40,8 +40,8 @@ local function SkinDBMBar(self)
 				tbar.SetStatusBarColor = function() 
 					S.CreateTop(tbar:GetStatusBarTexture(), DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
 				end
-				tbar:Point("TOPLEFT", frame, "TOPLEFT", -1, 1)
-				tbar:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 1, -1)
+				tbar:SetPoint("TOPLEFT", frame, "TOPLEFT", -1, 1)
+				tbar:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 1, -1)
 				tbar:CreateShadow()
 				S.CreateBack(tbar)
 				S.CreateMark(tbar)
@@ -111,16 +111,16 @@ local function SkinBoss()
 			local	_, anch, _ ,_, _ = bar:GetPoint()
 			bar:ClearAllPoints()
 			if DBM_SavedOptions.HealthFrameGrowUp then
-				bar:Point("BOTTOM", anch, "TOP" , 0 , 15)
+				bar:SetPoint("BOTTOM", anch, "TOP" , 0 , 15)
 			else
-				bar:Point("TOP", anch, "BOTTOM" , 0, -15)
+				bar:SetPoint("TOP", anch, "BOTTOM" , 0, -15)
 			end
 		else
 			bar:ClearAllPoints()
 			if DBM_SavedOptions.HealthFrameGrowUp then
-				bar:Point("TOPLEFT", prev, "TOPLEFT", 0, 10+10)
+				bar:SetPoint("TOPLEFT", prev, "TOPLEFT", 0, 10+10)
 			else
-				bar:Point("TOPLEFT", prev, "TOPLEFT", 0, -(10+10))
+				bar:SetPoint("TOPLEFT", prev, "TOPLEFT", 0, -(10+10))
 			end
 		end
 
@@ -129,8 +129,8 @@ local function SkinBoss()
 			background:StripTextures()
 			progress:StripTextures()
 			local h = CreateFrame("Frame", nil, bar)
-			h:Point("TOPLEFT", bar, "TOPLEFT", 1, -1)
-			h:Point("BOTTOMRIGHT", bar, "BOTTOMRIGHT", -1, 1)
+			h:SetPoint("TOPLEFT", bar, "TOPLEFT", 1, -1)
+			h:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", -1, 1)
 			h:CreateShadow()
 			S.CreateBack(h)
 			S.CreateMark(progress, 8)
@@ -145,8 +145,8 @@ local function SkinBoss()
 			progress.styled=true
 		end				
 		progress:ClearAllPoints()
-		progress:Point("TOPLEFT", bar, "TOPLEFT", 1, -1)
-		progress:Point("BOTTOMRIGHT", bar, "BOTTOMRIGHT", -1, 1)
+		progress:SetPoint("TOPLEFT", bar, "TOPLEFT", 1, -1)
+		progress:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", -1, 1)
 			
 
 		if not name.styled then
@@ -247,7 +247,7 @@ local function SkinRangeCheck()
 		DBMRangeCheckRadar:SetBackdropBorderColor(65/255, 74/255, 79/255)
 		S.SetBD(DBMRangeCheckRadar)
 		DBMRangeCheckRadar.text:SetFont(DB.Font, 13*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
-		DBMRangeCheckRadar.text:Point("BOTTOMLEFT", DBMRangeCheckRadar, "TOPLEFT", 0, 5)
+		DBMRangeCheckRadar.text:SetPoint("BOTTOMLEFT", DBMRangeCheckRadar, "TOPLEFT", 0, 5)
 	end
 	DBMRangeCheck.sunuistyle = true
 end

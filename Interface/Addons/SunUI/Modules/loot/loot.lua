@@ -171,8 +171,8 @@ local createSlot = function(id)
 	frame.icon = icon
     
 	local overlay = CreateFrame("Frame", nil, iconFrame)  
-	overlay:Point("TOPLEFT",iconFrame,"TOPLEFT",-1,1)
-	overlay:Point("BOTTOMRIGHT",iconFrame,"BOTTOMRIGHT",1,-1)
+	overlay:SetPoint("TOPLEFT",iconFrame,"TOPLEFT",-1,1)
+	overlay:SetPoint("BOTTOMRIGHT",iconFrame,"BOTTOMRIGHT",1,-1)
 	overlay:CreateBorder()
 	frame.overlay = overlay
 	

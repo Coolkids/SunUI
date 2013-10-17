@@ -31,7 +31,7 @@ DB.AuroraModules["Blizzard_Calendar"] = function()
 		local hl = bu:GetHighlightTexture()
 		hl:SetVertexColor(r, g, b, .2)
 		hl.SetAlpha = S.dummy
-		hl:Point("TOPLEFT", -1, 1)
+		hl:SetPoint("TOPLEFT", -1, 1)
 		hl:SetPoint("BOTTOMRIGHT")
 	end
 
@@ -118,8 +118,8 @@ DB.AuroraModules["Blizzard_Calendar"] = function()
 	end
 
 	local bd = CreateFrame("Frame", nil, CalendarFilterFrame)
-	bd:Point("TOPLEFT", 40, 0)
-	bd:Point("BOTTOMRIGHT", -19, 0)
+	bd:SetPoint("TOPLEFT", 40, 0)
+	bd:SetPoint("BOTTOMRIGHT", -19, 0)
 	bd:SetFrameLevel(CalendarFilterFrame:GetFrameLevel()-1)
 	S.CreateBD(bd, 0)
 
@@ -152,19 +152,19 @@ DB.AuroraModules["Blizzard_Calendar"] = function()
 		for _, tooltip in pairs(tooltips) do
 			tooltip:SetBackdrop(nil)
 			local bg = CreateFrame("Frame", nil, tooltip)
-			bg:Point("TOPLEFT", 2, -2)
-			bg:Point("BOTTOMRIGHT", -1, 2)
+			bg:SetPoint("TOPLEFT", 2, -2)
+			bg:SetPoint("BOTTOMRIGHT", -1, 2)
 			bg:SetFrameLevel(tooltip:GetFrameLevel()-1)
 			S.CreateBD(bg)
 		end
 	end
 
-	CalendarViewEventFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
-	CalendarViewHolidayFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
-	CalendarViewRaidFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
-	CalendarCreateEventFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
-	CalendarCreateEventInviteButton:Point("TOPLEFT", CalendarCreateEventInviteEdit, "TOPRIGHT", 1, 1)
-	CalendarClassButton1:Point("TOPLEFT", CalendarClassButtonContainer, "TOPLEFT", 5, 0)
+	CalendarViewEventFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
+	CalendarViewHolidayFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
+	CalendarViewRaidFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
+	CalendarCreateEventFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
+	CalendarCreateEventInviteButton:SetPoint("TOPLEFT", CalendarCreateEventInviteEdit, "TOPRIGHT", 1, 1)
+	CalendarClassButton1:SetPoint("TOPLEFT", CalendarClassButtonContainer, "TOPLEFT", 5, 0)
 
 	CalendarCreateEventHourDropDown:SetWidth(80)
 	CalendarCreateEventMinuteDropDown:SetWidth(80)
@@ -172,15 +172,15 @@ DB.AuroraModules["Blizzard_Calendar"] = function()
 
 	local line = CalendarMassInviteFrame:CreateTexture(nil, "BACKGROUND")
 	line:SetSize(240, 1)
-	line:Point("TOP", CalendarMassInviteFrame, "TOP", 0, -150)
+	line:SetPoint("TOP", CalendarMassInviteFrame, "TOP", 0, -150)
 	line:SetTexture(DB.media.backdrop)
 	line:SetVertexColor(0, 0, 0)
 
 	CalendarMassInviteFrame:ClearAllPoints()
-	CalendarMassInviteFrame:Point("BOTTOMLEFT", CalendarCreateEventCreateButton, "TOPRIGHT", 10, 0)
+	CalendarMassInviteFrame:SetPoint("BOTTOMLEFT", CalendarCreateEventCreateButton, "TOPRIGHT", 10, 0)
 
 	CalendarTexturePickerFrame:ClearAllPoints()
-	CalendarTexturePickerFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", 311, -24)
+	CalendarTexturePickerFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", 311, -24)
 
 	local cbuttons = {"CalendarViewEventAcceptButton", "CalendarViewEventTentativeButton", "CalendarViewEventDeclineButton", "CalendarViewEventRemoveButton", "CalendarCreateEventMassInviteButton", "CalendarCreateEventCreateButton", "CalendarCreateEventInviteButton", "CalendarEventPickerCloseButton", "CalendarCreateEventRaidInviteButton", "CalendarTexturePickerAcceptButton", "CalendarTexturePickerCancelButton", "CalendarFilterButton", "CalendarMassInviteGuildAcceptButton"}
 	for i = 1, #cbuttons do

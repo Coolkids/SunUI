@@ -5,7 +5,7 @@ local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUICo
 function Module:OnEnable()
 	local colectorbutton = CreateFrame("Button", nil, UIParent)
 	colectorbutton:Size(15)
-	colectorbutton:Point("TOPLEFT", ChatFrame1, "TOPRIGHT", 5, 0)
+	colectorbutton:SetPoint("TOPLEFT", ChatFrame1, "TOPRIGHT", 5, 0)
 	UIFrameFadeIn(colectorbutton, 1, 1, 0.2)
 	local colector = CreateFrame("Frame", "ColectorButton", UIParent)
 	colector:Width(45)

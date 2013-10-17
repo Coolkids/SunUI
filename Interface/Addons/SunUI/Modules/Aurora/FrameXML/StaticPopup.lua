@@ -33,8 +33,8 @@ tinsert(DB.AuroraModules["SunUI"], function()
 		bu:SetPushedTexture("")
 		S.CreateBG(bu)
 
-		silver:Point("LEFT", gold, "RIGHT", 1, 0)
-		copper:Point("LEFT", silver, "RIGHT", 1, 0)
+		silver:SetPoint("LEFT", gold, "RIGHT", 1, 0)
+		copper:SetPoint("LEFT", silver, "RIGHT", 1, 0)
 
 		S.CreateBD(frame)
 		S.CreateSD(frame)

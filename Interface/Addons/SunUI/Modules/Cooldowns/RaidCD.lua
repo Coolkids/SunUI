@@ -77,21 +77,21 @@ function RCD:UpdatePositions()
 			--bars[i]:SetPoint("CENTER")
 		else
 			if C["RaidCDDirection"] == 2 then
-				v:Point("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, C["RaidCDHeight"]*2-3)
+				v:SetPoint("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, C["RaidCDHeight"]*2-3)
 			else
-				v:Point("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -C["RaidCDHeight"]*2+3)
+				v:SetPoint("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -C["RaidCDHeight"]*2+3)
 			end
 			if i > C["RowNum"] and i <= C["MaxNumber"] then
 				if C["RowDirection"] == "left" then
 					if i%C["RowNum"] == 1 then
 						v:ClearAllPoints()
-						v:Point("RIGHT", bars[(floor(i/C["RowNum"])-1)*C["RowNum"]+1], "LEFT", -C["RaidCDHeight"]*2-12, 0)
+						v:SetPoint("RIGHT", bars[(floor(i/C["RowNum"])-1)*C["RowNum"]+1], "LEFT", -C["RaidCDHeight"]*2-12, 0)
 					end
 				elseif C["RowDirection"] == "right" then
 					if i%C["RowNum"] == 1 then
 						--print("换行", bars[i].id, floor(i/C["MaxNumber"]))
 						v:ClearAllPoints()
-						v:Point("LEFT", bars[(floor(i/C["RowNum"])-1)*C["RowNum"]+1], "RIGHT", C["RaidCDHeight"]*2+12, 0)
+						v:SetPoint("LEFT", bars[(floor(i/C["RowNum"])-1)*C["RowNum"]+1], "RIGHT", C["RaidCDHeight"]*2+12, 0)
 					end
 				end
 			end
@@ -157,13 +157,13 @@ local CreateBar = function()
 	bar.left:Size(C["RaidCDWidth"]*2/3, C["RaidCDHeight"])
 
 	bar.right = S.MakeFontString(bar, C["RaidCDFontSize"])
-	bar.right:Point("RIGHT", 1, C["RaidCDHeight"])
+	bar.right:SetPoint("RIGHT", 1, C["RaidCDHeight"])
 	bar.right:SetJustifyH("RIGHT")
 
 	bar.icon = CreateFrame("Button", nil, bar)
 	bar.icon:Width(C["RaidCDHeight"]*2)
 	bar.icon:Height(C["RaidCDHeight"]*2)
-	bar.icon:Point("BOTTOMRIGHT", bar, "BOTTOMLEFT", -5, 0)
+	bar.icon:SetPoint("BOTTOMRIGHT", bar, "BOTTOMLEFT", -5, 0)
 	bar.icon:CreateShadow()
 	bar:CreateShadow()
 

@@ -392,7 +392,7 @@ function B:Layout(isBank)
 						_G[f.Bags[bagID][slotID]:GetName().."NewItemTexture"]:Hide()
 					end
 					f.Bags[bagID][slotID].count:ClearAllPoints()
-					f.Bags[bagID][slotID].count:Point("BOTTOMRIGHT", 0, 2)
+					f.Bags[bagID][slotID].count:SetPoint("BOTTOMRIGHT", 0, 2)
 					f.Bags[bagID][slotID].count:SetFont(DB.Font, DB.FontSize, "OUTLINE")
 					f.Bags[bagID][slotID].questIcon = _G[f.Bags[bagID][slotID]:GetName().."IconQuestTexture"]
 					f.Bags[bagID][slotID].questIcon:SetTexture(TEXTURE_ITEM_QUEST_BANG)
@@ -414,14 +414,14 @@ function B:Layout(isBank)
 				end
 				if lastButton then
 					if (f.totalSlots - 1) % numContainerColumns == 0 then
-						f.Bags[bagID][slotID]:Point("TOP", lastRowButton, "BOTTOM", 0, -buttonSpacing)
+						f.Bags[bagID][slotID]:SetPoint("TOP", lastRowButton, "BOTTOM", 0, -buttonSpacing)
 						lastRowButton = f.Bags[bagID][slotID]
 						numContainerRows = numContainerRows + 1
 					else
-						f.Bags[bagID][slotID]:Point("LEFT", lastButton, "RIGHT", buttonSpacing, 0)
+						f.Bags[bagID][slotID]:SetPoint("LEFT", lastButton, "RIGHT", buttonSpacing, 0)
 					end
 				else
-					f.Bags[bagID][slotID]:Point("TOPLEFT", f.holderFrame, "TOPLEFT")
+					f.Bags[bagID][slotID]:SetPoint("TOPLEFT", f.holderFrame, "TOPLEFT")
 					lastRowButton = f.Bags[bagID][slotID]
 					numContainerRows = numContainerRows + 1
 				end
@@ -507,14 +507,14 @@ function B:UpdateTokens()
 	end
 	f.bottomOffset = 28
 	if numTokens == 1 then
-		f.currencyButton[1]:Point("BOTTOM", f.currencyButton, "BOTTOM", -(f.currencyButton[1].text:GetWidth() / 2), 3)
+		f.currencyButton[1]:SetPoint("BOTTOM", f.currencyButton, "BOTTOM", -(f.currencyButton[1].text:GetWidth() / 2), 3)
 	elseif numTokens == 2 then
-		f.currencyButton[1]:Point("BOTTOM", f.currencyButton, "BOTTOM", -(f.currencyButton[1].text:GetWidth()) - (f.currencyButton[1]:GetWidth() / 2), 3)
-		f.currencyButton[2]:Point("BOTTOMLEFT", f.currencyButton, "BOTTOM", f.currencyButton[2]:GetWidth() / 2, 3)
+		f.currencyButton[1]:SetPoint("BOTTOM", f.currencyButton, "BOTTOM", -(f.currencyButton[1].text:GetWidth()) - (f.currencyButton[1]:GetWidth() / 2), 3)
+		f.currencyButton[2]:SetPoint("BOTTOMLEFT", f.currencyButton, "BOTTOM", f.currencyButton[2]:GetWidth() / 2, 3)
 	else
-		f.currencyButton[1]:Point("BOTTOMLEFT", f.currencyButton, "BOTTOMLEFT", 3, 3)
-		f.currencyButton[2]:Point("BOTTOM", f.currencyButton, "BOTTOM", -(f.currencyButton[2].text:GetWidth() / 3), 3)
-		f.currencyButton[3]:Point("BOTTOMRIGHT", f.currencyButton, "BOTTOMRIGHT", -(f.currencyButton[3].text:GetWidth()) - (f.currencyButton[3]:GetWidth() / 2), 3)
+		f.currencyButton[1]:SetPoint("BOTTOMLEFT", f.currencyButton, "BOTTOMLEFT", 3, 3)
+		f.currencyButton[2]:SetPoint("BOTTOM", f.currencyButton, "BOTTOM", -(f.currencyButton[2].text:GetWidth() / 3), 3)
+		f.currencyButton[3]:SetPoint("BOTTOMRIGHT", f.currencyButton, "BOTTOMRIGHT", -(f.currencyButton[3].text:GetWidth()) - (f.currencyButton[3]:GetWidth() / 2), 3)
 	end
 end
 
@@ -563,19 +563,19 @@ function B:ContructContainerFrame(name, isBank)
 	f.BagIDs = isBank and {-1, 5, 6, 7, 8, 9, 10, 11} or {0, 1, 2, 3, 4}
 	f.Bags = {}
 	f.closeButton = CreateFrame("Button", name.."CloseButton", f, "UIPanelCloseButton")
-	f.closeButton:Point("TOPRIGHT", -4, -4)
+	f.closeButton:SetPoint("TOPRIGHT", -4, -4)
 	S.ReskinClose(f.closeButton)
 	f.holderFrame = CreateFrame("Frame", nil, f)
-	f.holderFrame:Point("TOP", f, "TOP", 0, -f.topOffset)
-	f.holderFrame:Point("BOTTOM", f, "BOTTOM", 0, 8)
+	f.holderFrame:SetPoint("TOP", f, "TOP", 0, -f.topOffset)
+	f.holderFrame:SetPoint("BOTTOM", f, "BOTTOM", 0, 8)
 	f.ContainerHolder = CreateFrame("Button", name.."ContainerHolder", f)
-	f.ContainerHolder:Point("BOTTOMLEFT", f, "TOPLEFT", 0, 1)
+	f.ContainerHolder:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 1)
 	S.CreateBD(f.ContainerHolder)
 	f.ContainerHolder:Hide()
 	if isBank then
 		--Sort Button
 		f.sortButton = CreateFrame("Button", nil, f)
-		f.sortButton:Point("TOPLEFT", f, "TOPLEFT", 14, -4)
+		f.sortButton:SetPoint("TOPLEFT", f, "TOPLEFT", 14, -4)
 		f.sortButton:Size(55, 10)
 		f.sortButton.ttText = L["整理背包"]
 		f.sortButton.ttText2 = L["整理背包"]
@@ -590,7 +590,7 @@ function B:ContructContainerFrame(name, isBank)
 
 		--Toggle Bags Button
 		f.bagsButton = CreateFrame("Button", nil, f)
-		f.bagsButton:Point("LEFT", f.sortButton, "RIGHT", 3, 0)
+		f.bagsButton:SetPoint("LEFT", f.sortButton, "RIGHT", 3, 0)
 		f.bagsButton:Size(55, 10)
 		f.bagsButton.ttText = BAGSLOTTEXT
 		f.bagsButton:SetScript("OnEnter", self.Tooltip_Show)
@@ -608,7 +608,7 @@ function B:ContructContainerFrame(name, isBank)
 		
 		f.purchaseBagButton = CreateFrame("Button", nil, f)
 		f.purchaseBagButton:Size(55, 10)
-		f.purchaseBagButton:Point("LEFT", f.bagsButton, "RIGHT", 3, 0)
+		f.purchaseBagButton:SetPoint("LEFT", f.bagsButton, "RIGHT", 3, 0)
 		f.purchaseBagButton:SetFrameLevel(f.purchaseBagButton:GetFrameLevel() + 2)
 		f.purchaseBagButton.ttText = PURCHASE
 		f.purchaseBagButton:SetScript("OnEnter", self.Tooltip_Show)
@@ -625,15 +625,15 @@ function B:ContructContainerFrame(name, isBank)
 	else
 		--Gold Text
 		f.goldText = S.MakeFontString(f)
-		f.goldText:Point("BOTTOMRIGHT", f.holderFrame, "TOPRIGHT", -2, 4)
+		f.goldText:SetPoint("BOTTOMRIGHT", f.holderFrame, "TOPRIGHT", -2, 4)
 		f.goldText:SetJustifyH("RIGHT")
 		--Search
 		f.editBox = CreateFrame("EditBox", name.."EditBox", f)
 		f.editBox:SetFrameLevel(f.editBox:GetFrameLevel() + 2)
 		f.editBox:Height(15)
 		f.editBox:Hide()
-		f.editBox:Point("BOTTOMLEFT", f.holderFrame, "TOPLEFT", 3, 4)
-		f.editBox:Point("RIGHT", f.goldText, "LEFT", -5, 0)
+		f.editBox:SetPoint("BOTTOMLEFT", f.holderFrame, "TOPLEFT", 3, 4)
+		f.editBox:SetPoint("RIGHT", f.goldText, "LEFT", -5, 0)
 		f.editBox:SetAutoFocus(true)
 		f.editBox:SetScript("OnEscapePressed", self.ResetAndClear)
 		f.editBox:SetScript("OnEnterPressed", self.ResetAndClear)
@@ -646,8 +646,8 @@ function B:ContructContainerFrame(name, isBank)
 		f.editBox:SetShadowColor(0, 0, 0)
 		f.editBox:SetShadowOffset(1.25, -1.25)
 		f.editBox.border = CreateFrame("Frame", nil, f.editBox)
-		f.editBox.border:Point("TOPLEFT", -3, 0)
-		f.editBox.border:Point("BOTTOMRIGHT", 0, 0)
+		f.editBox.border:SetPoint("TOPLEFT", -3, 0)
+		f.editBox.border:SetPoint("BOTTOMRIGHT", 0, 0)
 		S.CreateBD(f.editBox.border, 0)
 
 		f.detail = S.MakeFontString(f)
@@ -673,7 +673,7 @@ function B:ContructContainerFrame(name, isBank)
 		end)
 		--Sort Button
 		f.sortButton = CreateFrame("Button", nil, f)
-		f.sortButton:Point("TOPLEFT", f, "TOPLEFT", 14, -4)
+		f.sortButton:SetPoint("TOPLEFT", f, "TOPLEFT", 14, -4)
 		f.sortButton:Size(55, 10)
 		f.sortButton.ttText = L["整理背包"]
 		f.sortButton.ttText2 = L["整理背包"]
@@ -687,7 +687,7 @@ function B:ContructContainerFrame(name, isBank)
 		
 		--Bags Button
 		f.bagsButton = CreateFrame("Button", nil, f)
-		f.bagsButton:Point("LEFT", f.sortButton, "RIGHT", 3, 0)
+		f.bagsButton:SetPoint("LEFT", f.sortButton, "RIGHT", 3, 0)
 		f.bagsButton:Size(55, 10)
 		f.bagsButton.ttText = BAGSLOTTEXT
 		f.bagsButton:SetScript("OnEnter", self.Tooltip_Show)
@@ -697,9 +697,9 @@ function B:ContructContainerFrame(name, isBank)
 
 		--Currency
 		f.currencyButton = CreateFrame("Frame", nil, f)
-		f.currencyButton:Point("BOTTOM", 0, 1)
-		f.currencyButton:Point("TOPLEFT", f.holderFrame, "BOTTOMLEFT", 0, 18)
-		f.currencyButton:Point("TOPRIGHT", f.holderFrame, "BOTTOMRIGHT", 0, 18)
+		f.currencyButton:SetPoint("BOTTOM", 0, 1)
+		f.currencyButton:SetPoint("TOPLEFT", f.holderFrame, "BOTTOMLEFT", 0, 18)
+		f.currencyButton:SetPoint("TOPRIGHT", f.holderFrame, "BOTTOMRIGHT", 0, 18)
 		f.currencyButton:Height(22)
 		for i = 1, MAX_WATCHED_TOKENS do
 			f.currencyButton[i] = CreateFrame("Button", nil, f.currencyButton)
@@ -710,7 +710,7 @@ function B:ContructContainerFrame(name, isBank)
 			f.currencyButton[i].icon:SetInside(nil, 1, 1)
 			f.currencyButton[i].icon:SetTexCoord(.08, .92, .08, .92)
 			f.currencyButton[i].text = f.currencyButton[i]:CreateFontString(nil, "OVERLAY")
-			f.currencyButton[i].text:Point("LEFT", f.currencyButton[i], "RIGHT", 2, 0)
+			f.currencyButton[i].text:SetPoint("LEFT", f.currencyButton[i], "RIGHT", 2, 0)
 			f.currencyButton[i].text:SetFont(DB.Font, DB.FontSize, "OUTLINE")
 			f.currencyButton[i].text:SetShadowColor(0, 0, 0)
 			f.currencyButton[i].text:SetShadowOffset(1.25, -1.25)
@@ -729,11 +729,11 @@ end
 function B:PositionBagFrames()
 	if self.BagFrame then
 		self.BagFrame:ClearAllPoints()
-		self.BagFrame:Point("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -55, 30)
+		self.BagFrame:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -55, 30)
 	end
 	if self.BankFrame then
 		self.BankFrame:ClearAllPoints()
-		self.BankFrame:Point("BOTTOMRIGHT", self.BagFrame, "BOTTOMLEFT", -30, 0)
+		self.BankFrame:SetPoint("BOTTOMRIGHT", self.BagFrame, "BOTTOMLEFT", -30, 0)
 	end
 end
 

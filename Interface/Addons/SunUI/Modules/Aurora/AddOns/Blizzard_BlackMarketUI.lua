@@ -24,8 +24,8 @@ DB.AuroraModules["Blizzard_BlackMarketUI"] = function()
 			header.Right:Hide()
 
 			local bg = CreateFrame("Frame", nil, header)
-			bg:Point("TOPLEFT", 2, 0)
-			bg:Point("BOTTOMRIGHT", -1, 0)
+			bg:SetPoint("TOPLEFT", 2, 0)
+			bg:SetPoint("BOTTOMRIGHT", -1, 0)
 			bg:SetFrameLevel(header:GetFrameLevel()-1)
 			S.CreateBD(bg, .25)
 		end
@@ -54,13 +54,13 @@ DB.AuroraModules["Blizzard_BlackMarketUI"] = function()
 
 					local bg = CreateFrame("Frame", nil, bu)
 					bg:SetPoint("TOPLEFT")
-					bg:Point("BOTTOMRIGHT", 0, 5)
+					bg:SetPoint("BOTTOMRIGHT", 0, 5)
 					bg:SetFrameLevel(bu:GetFrameLevel()-1)
 					S.CreateBD(bg, 0)
 
 					local tex = bu:CreateTexture(nil, "BACKGROUND")
 					tex:SetPoint("TOPLEFT")
-					tex:Point("BOTTOMRIGHT", 0, 5)
+					tex:SetPoint("BOTTOMRIGHT", 0, 5)
 					tex:SetTexture(0, 0, 0, .25)
 
 					bu:SetHighlightTexture(DB.media.backdrop)
@@ -68,12 +68,12 @@ DB.AuroraModules["Blizzard_BlackMarketUI"] = function()
 					hl:SetVertexColor(r, g, b, .2)
 					hl.SetAlpha = S.dummy
 					hl:ClearAllPoints()
-					hl:Point("TOPLEFT", 0, -1)
-					hl:Point("BOTTOMRIGHT", -1, 6)
+					hl:SetPoint("TOPLEFT", 0, -1)
+					hl:SetPoint("BOTTOMRIGHT", -1, 6)
 
 					bu.Selection:ClearAllPoints()
-					bu.Selection:Point("TOPLEFT", 0, -1)
-					bu.Selection:Point("BOTTOMRIGHT", -1, 6)
+					bu.Selection:SetPoint("TOPLEFT", 0, -1)
+					bu.Selection:SetPoint("BOTTOMRIGHT", -1, 6)
 					bu.Selection:SetTexture(DB.media.backdrop)
 					bu.Selection:SetVertexColor(r, g, b, .1)
 

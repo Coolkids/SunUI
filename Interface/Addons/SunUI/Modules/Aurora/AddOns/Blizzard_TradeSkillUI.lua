@@ -35,9 +35,9 @@ DB.AuroraModules["Blizzard_TradeSkillUI"] = function()
 
 	local a1, p, a2, x, y = TradeSkillGuildFrame:GetPoint()
 	TradeSkillGuildFrame:ClearAllPoints()
-	TradeSkillGuildFrame:Point(a1, p, a2, x + 16, y)
+	TradeSkillGuildFrame:SetPoint(a1, p, a2, x + 16, y)
 
-	TradeSkillLinkButton:Point("LEFT", 0, -1)
+	TradeSkillLinkButton:SetPoint("LEFT", 0, -1)
 
 	S.Reskin(TradeSkillCreateButton)
 	S.Reskin(TradeSkillCreateAllButton)
@@ -50,8 +50,8 @@ DB.AuroraModules["Blizzard_TradeSkillUI"] = function()
 	TradeSkillRankFrame:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
 
 	local bg = CreateFrame("Frame", nil, TradeSkillRankFrame)
-	bg:Point("TOPLEFT", -1, 1)
-	bg:Point("BOTTOMRIGHT", 1, -1)
+	bg:SetPoint("TOPLEFT", -1, 1)
+	bg:SetPoint("BOTTOMRIGHT", 1, -1)
 	bg:SetFrameLevel(TradeSkillRankFrame:GetFrameLevel()-1)
 	S.CreateBD(bg, .25)
 
@@ -66,8 +66,8 @@ DB.AuroraModules["Blizzard_TradeSkillUI"] = function()
 		S.CreateBG(ic)
 
 		local bd = CreateFrame("Frame", nil, bu)
-		bd:Point("TOPLEFT", 39, -1)
-		bd:Point("BOTTOMRIGHT", 0, 1)
+		bd:SetPoint("TOPLEFT", 39, -1)
+		bd:SetPoint("BOTTOMRIGHT", 0, 1)
 		bd:SetFrameLevel(0)
 		S.CreateBD(bd, .25)
 
@@ -78,8 +78,8 @@ DB.AuroraModules["Blizzard_TradeSkillUI"] = function()
 		local ic = TradeSkillSkillIcon:GetNormalTexture()
 		if ic then
 			ic:SetTexCoord(.08, .92, .08, .92)
-			ic:Point("TOPLEFT", 1, -1)
-			ic:Point("BOTTOMRIGHT", -1, 1)
+			ic:SetPoint("TOPLEFT", 1, -1)
+			ic:SetPoint("BOTTOMRIGHT", -1, 1)
 			S.CreateBD(TradeSkillSkillIcon)
 		else
 			TradeSkillSkillIcon:SetBackdrop(nil)
@@ -96,13 +96,13 @@ DB.AuroraModules["Blizzard_TradeSkillUI"] = function()
 
 		skillButton.bg = CreateFrame("Frame", nil, skillButton)
 		skillButton.bg:SetSize(13, 13)
-		skillButton.bg:Point("LEFT", 4, 1)
+		skillButton.bg:SetPoint("LEFT", 4, 1)
 		skillButton.bg:SetFrameLevel(skillButton:GetFrameLevel()-1)
 		S.CreateBD(skillButton.bg, 0)
 
 		skillButton.tex = S.CreateGradient(skillButton)
-		skillButton.tex:Point("TOPLEFT", skillButton.bg, 1, -1)
-		skillButton.tex:Point("BOTTOMRIGHT", skillButton.bg, -1, 1)
+		skillButton.tex:SetPoint("TOPLEFT", skillButton.bg, 1, -1)
+		skillButton.tex:SetPoint("BOTTOMRIGHT", skillButton.bg, -1, 1)
 
 		skillButton.minus = skillButton:CreateTexture(nil, "OVERLAY")
 		skillButton.minus:SetSize(7, 1)
@@ -168,9 +168,9 @@ DB.AuroraModules["Blizzard_TradeSkillUI"] = function()
 			if skillIndex <= numTradeSkills then
 				if skillType == "header" or skillType == "subheader" then
 					if skillType == "subheader" then
-						skillButton.bg:Point("LEFT", 24, 1)
+						skillButton.bg:SetPoint("LEFT", 24, 1)
 					else
-						skillButton.bg:Point("LEFT", 4, 1)
+						skillButton.bg:SetPoint("LEFT", 4, 1)
 					end
 
 					skillButton.bg:Show()
@@ -197,7 +197,7 @@ DB.AuroraModules["Blizzard_TradeSkillUI"] = function()
 		end
 	end)
 
-	TradeSkillIncrementButton:Point("RIGHT", TradeSkillCreateButton, "LEFT", -9, 0)
+	TradeSkillIncrementButton:SetPoint("RIGHT", TradeSkillCreateButton, "LEFT", -9, 0)
 
 	S.ReskinPortraitFrame(TradeSkillFrame, true)
 	S.ReskinClose(TradeSkillGuildFrameCloseButton)

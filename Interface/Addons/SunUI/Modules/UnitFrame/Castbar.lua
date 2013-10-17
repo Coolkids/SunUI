@@ -41,7 +41,7 @@ cast.setBarTicks = function(castBar, ticknum)
 				--S.CreateTop(ticks[k], 0.8, 0.6, 0.6)
 			end
 			ticks[k]:ClearAllPoints()
-			ticks[k]:Point("CENTER", castBar, "LEFT", delta * k, 0 )
+			ticks[k]:SetPoint("CENTER", castBar, "LEFT", delta * k, 0 )
 			
 			ticks[k]:Show()
 		end
@@ -76,7 +76,7 @@ cast.OnCastbarUpdate = function(self, elapsed)
 		end
 		self.duration = duration
 		self:SetValue(duration)
-		self.Spark:Point('CENTER', self, 'LEFT', (duration / self.max) * self:GetWidth(), 0)
+		self.Spark:SetPoint('CENTER', self, 'LEFT', (duration / self.max) * self:GetWidth(), 0)
 	elseif self.fadeOut then
 		self.Spark:Hide()
 		local alpha = self:GetAlpha() - 0.02

@@ -479,7 +479,7 @@ local class_spells = {
 			duration = 10,
 		}, -- Rune of Re-Origination
 		------------------------------------------------
-		--  522 Valor Point
+		--  522 Valor SetPoint
 		[138703] = {
 			desc = "",
 			type = "item",
@@ -973,9 +973,9 @@ function CCD:UpdatePositions()
 				bars[i]:SetPoint("CENTER", ClassCDAnchor)
 			else
 				if C["ClassCDDirection"] == 2 then
-					bars[i]:Point("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, C["ClassCDHeight"]*2-3)
+					bars[i]:SetPoint("BOTTOMLEFT", bars[i-1], "TOPLEFT", 0, C["ClassCDHeight"]*2-3)
 				else
-					bars[i]:Point("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -C["ClassCDHeight"]*2+3)
+					bars[i]:SetPoint("TOPLEFT", bars[i-1], "BOTTOMLEFT", 0, -C["ClassCDHeight"]*2+3)
 				end
 			end
 		else
@@ -1068,18 +1068,18 @@ local CreateBar = function()
 		S.CreateMark(bar)
 
 		bar.left = S.MakeFontString(bar, C["ClassFontSize"])
-		bar.left:Point("LEFT", 2, C["ClassCDHeight"])
+		bar.left:SetPoint("LEFT", 2, C["ClassCDHeight"])
 		bar.left:SetJustifyH("LEFT")
 		bar.left:Size(C["ClassCDWidth"], C["ClassCDHeight"])
 
 		bar.right = S.MakeFontString(bar, C["ClassFontSize"])
-		bar.right:Point("RIGHT", 1, C["ClassCDHeight"])
+		bar.right:SetPoint("RIGHT", 1, C["ClassCDHeight"])
 		bar.right:SetJustifyH("RIGHT")
 
 		bar.icon = CreateFrame("Button", nil, bar)
 		bar.icon:Width(C["ClassCDHeight"]*2)
 		bar.icon:Height(C["ClassCDHeight"]*2)
-		bar.icon:Point("BOTTOMRIGHT", bar, "BOTTOMLEFT", -5, 0)
+		bar.icon:SetPoint("BOTTOMRIGHT", bar, "BOTTOMLEFT", -5, 0)
 		bar.icon:CreateShadow()
 		bar:CreateShadow()
 		return bar

@@ -29,7 +29,7 @@ tinsert(DB.AuroraModules["SunUI"], function()
 				cta:SetAlpha(0)
 
 				button.bg2 = CreateFrame("Frame", nil, button)
-				button.bg2:Point("TOPLEFT", na, "TOPLEFT", 10, 0)
+				button.bg2:SetPoint("TOPLEFT", na, "TOPLEFT", 10, 0)
 				button.bg2:SetPoint("BOTTOMRIGHT", na, "BOTTOMRIGHT")
 				S.CreateBD(button.bg2, 0)
 
@@ -57,7 +57,7 @@ tinsert(DB.AuroraModules["SunUI"], function()
 	bonusValor.Icon:SetTexCoord(.08, .92, .08, .92)
 	bonusValor.Icon:SetPoint("CENTER", bonusValor.Border, -3, 0)
 	bonusValor.Icon:SetSize(24, 24)
-	bonusValor.BonusText:Point("LEFT", bonusValor.Border, "RIGHT", -5, -1)
+	bonusValor.BonusText:SetPoint("LEFT", bonusValor.Border, "RIGHT", -5, -1)
 	S.CreateBG(bonusValor.Icon)
 
 	S.CreateBD(LFDRoleCheckPopup)

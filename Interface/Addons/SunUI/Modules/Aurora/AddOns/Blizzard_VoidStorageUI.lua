@@ -44,14 +44,14 @@ DB.AuroraModules["Blizzard_VoidStorageUI"] = function()
 		_G["VoidStorageWithdrawButton"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
 
 		local bg1 = CreateFrame("Frame", nil, bu1)
-		bg1:Point("TOPLEFT", -1, 1)
-		bg1:Point("BOTTOMRIGHT", 1, -1)
+		bg1:SetPoint("TOPLEFT", -1, 1)
+		bg1:SetPoint("BOTTOMRIGHT", 1, -1)
 		bg1:SetFrameLevel(bu1:GetFrameLevel()-1)
 		S.CreateBD(bg1, .25)
 
 		local bg2 = CreateFrame("Frame", nil, bu2)
-		bg2:Point("TOPLEFT", -1, 1)
-		bg2:Point("BOTTOMRIGHT", 1, -1)
+		bg2:SetPoint("TOPLEFT", -1, 1)
+		bg2:SetPoint("BOTTOMRIGHT", 1, -1)
 		bg2:SetFrameLevel(bu2:GetFrameLevel()-1)
 		S.CreateBD(bg2, .25)
 	end

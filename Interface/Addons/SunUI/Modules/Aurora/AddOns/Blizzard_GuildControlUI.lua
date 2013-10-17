@@ -65,8 +65,8 @@ DB.AuroraModules["Blizzard_GuildControlUI"] = function()
 					ch:SetHighlightTexture(DB.media.backdrop)
 
 					local hl = ch:GetHighlightTexture()
-					hl:Point("TOPLEFT", 5, -5)
-					hl:Point("BOTTOMRIGHT", -5, 5)
+					hl:SetPoint("TOPLEFT", 5, -5)
+					hl:SetPoint("BOTTOMRIGHT", -5, 5)
 					hl:SetVertexColor(r, g, b, .2)
 
 					local check = ch:GetCheckedTexture()
@@ -74,32 +74,32 @@ DB.AuroraModules["Blizzard_GuildControlUI"] = function()
 					check:SetVertexColor(r, g, b)
 
 					local tex = S.CreateGradient(ch)
-					tex:Point("TOPLEFT", 5, -5)
-					tex:Point("BOTTOMRIGHT", -5, 5)
+					tex:SetPoint("TOPLEFT", 5, -5)
+					tex:SetPoint("BOTTOMRIGHT", -5, 5)
 
 					local left = ch:CreateTexture(nil, "BACKGROUND")
 					left:SetWidth(1)
 					left:SetTexture(0, 0, 0)
-					left:Point("TOPLEFT", tex, -1, 1)
-					left:Point("BOTTOMLEFT", tex, -1, -1)
+					left:SetPoint("TOPLEFT", tex, -1, 1)
+					left:SetPoint("BOTTOMLEFT", tex, -1, -1)
 
 					local right = ch:CreateTexture(nil, "BACKGROUND")
 					right:SetWidth(1)
 					right:SetTexture(0, 0, 0)
-					right:Point("TOPRIGHT", tex, 1, 1)
-					right:Point("BOTTOMRIGHT", tex, 1, -1)
+					right:SetPoint("TOPRIGHT", tex, 1, 1)
+					right:SetPoint("BOTTOMRIGHT", tex, 1, -1)
 
 					local top = ch:CreateTexture(nil, "BACKGROUND")
 					top:SetHeight(1)
 					top:SetTexture(0, 0, 0)
-					top:Point("TOPLEFT", tex, -1, 1)
-					top:Point("TOPRIGHT", tex, 1, 1)
+					top:SetPoint("TOPLEFT", tex, -1, 1)
+					top:SetPoint("TOPRIGHT", tex, 1, 1)
 
 					local bottom = ch:CreateTexture(nil, "BACKGROUND")
 					bottom:SetHeight(1)
 					bottom:SetTexture(0, 0, 0)
-					bottom:Point("BOTTOMLEFT", tex, -1, -1)
-					bottom:Point("BOTTOMRIGHT", tex, 1, -1)
+					bottom:SetPoint("BOTTOMLEFT", tex, -1, -1)
+					bottom:SetPoint("BOTTOMRIGHT", tex, 1, -1)
 				end
 
 				bu.styled = true

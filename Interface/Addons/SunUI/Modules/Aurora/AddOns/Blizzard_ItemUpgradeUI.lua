@@ -22,12 +22,12 @@ DB.AuroraModules["Blizzard_ItemUpgradeUI"] = function()
 	S.CreateBD(ItemButton, .25)
 	ItemButton:SetHighlightTexture("")
 	ItemButton:SetPushedTexture("")
-	ItemButton.IconTexture:Point("TOPLEFT", 1, -1)
-	ItemButton.IconTexture:Point("BOTTOMRIGHT", -1, 1)
+	ItemButton.IconTexture:SetPoint("TOPLEFT", 1, -1)
+	ItemButton.IconTexture:SetPoint("BOTTOMRIGHT", -1, 1)
 
 	local bg = CreateFrame("Frame", nil, ItemButton)
 	bg:SetSize(341, 50)
-	bg:Point("LEFT", ItemButton, "RIGHT", -1, 0)
+	bg:SetPoint("LEFT", ItemButton, "RIGHT", -1, 0)
 	bg:SetFrameLevel(ItemButton:GetFrameLevel()-1)
 	S.CreateBD(bg, .25)
 
@@ -52,7 +52,7 @@ DB.AuroraModules["Blizzard_ItemUpgradeUI"] = function()
 	end)
 
 	local currency = ItemUpgradeFrameMoneyFrame.Currency
-	currency.icon:Point("LEFT", currency.count, "RIGHT", 1, 0)
+	currency.icon:SetPoint("LEFT", currency.count, "RIGHT", 1, 0)
 	currency.icon:SetTexCoord(.08, .92, .08, .92)
 	S.CreateBG(currency.icon)
 

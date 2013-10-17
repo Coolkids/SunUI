@@ -25,12 +25,12 @@ tinsert(DB.AuroraModules["SunUI"], function()
 				local guildName = _G["AchievementAlertFrame"..i.."GuildName"]
 
 				ic:ClearAllPoints()
-				ic:Point("LEFT", frame, "LEFT", -26, 0)
+				ic:SetPoint("LEFT", frame, "LEFT", -26, 0)
 
 				if not frame.bg then
 					frame.bg = CreateFrame("Frame", nil, frame)
 					frame.bg:SetPoint("TOPLEFT", texture, -10, 12)
-					frame.bg:Point("BOTTOMRIGHT", texture, "BOTTOMRIGHT", 240, -12)
+					frame.bg:SetPoint("BOTTOMRIGHT", texture, "BOTTOMRIGHT", 240, -12)
 					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 					S.CreateBD(frame.bg)
 
@@ -48,8 +48,8 @@ tinsert(DB.AuroraModules["SunUI"], function()
 					_G["AchievementAlertFrame"..i.."OldAchievement"]:SetTexture("")
 
 					guildName:ClearAllPoints()
-					guildName:Point("TOPLEFT", 50, -14)
-					guildName:Point("TOPRIGHT", -50, -14)
+					guildName:SetPoint("TOPLEFT", 50, -14)
+					guildName:SetPoint("TOPRIGHT", -50, -14)
 
 					_G["AchievementAlertFrame"..i.."Unlocked"]:SetTextColor(1, 1, 1)
 					_G["AchievementAlertFrame"..i.."Unlocked"]:SetShadowOffset(1, -1)
@@ -63,7 +63,7 @@ tinsert(DB.AuroraModules["SunUI"], function()
 				texture:SetTexCoord(.08, .92, .08, .92)
 
 				if guildName:IsShown() then
-					_G["AchievementAlertFrame"..i.."Shield"]:Point("TOPRIGHT", -10, -22)
+					_G["AchievementAlertFrame"..i.."Shield"]:SetPoint("TOPRIGHT", -10, -22)
 				end
 			end
 		end
@@ -72,8 +72,8 @@ tinsert(DB.AuroraModules["SunUI"], function()
 	-- Guild challenges
 
 	local challenge = CreateFrame("Frame", nil, GuildChallengeAlertFrame)
-	challenge:Point("TOPLEFT", 8, -12)
-	challenge:Point("BOTTOMRIGHT", -8, 13)
+	challenge:SetPoint("TOPLEFT", 8, -12)
+	challenge:SetPoint("BOTTOMRIGHT", -8, 13)
 	challenge:SetFrameLevel(GuildChallengeAlertFrame:GetFrameLevel()-1)
 	S.CreateBD(challenge)
 	S.CreateBG(GuildChallengeAlertFrameEmblemBackground)
@@ -85,8 +85,8 @@ tinsert(DB.AuroraModules["SunUI"], function()
 	-- Dungeon completion rewards
 
 	local bg = CreateFrame("Frame", nil, DungeonCompletionAlertFrame1)
-	bg:Point("TOPLEFT", 6, -14)
-	bg:Point("BOTTOMRIGHT", -6, 6)
+	bg:SetPoint("TOPLEFT", 6, -14)
+	bg:SetPoint("BOTTOMRIGHT", -6, 6)
 	bg:SetFrameLevel(DungeonCompletionAlertFrame1:GetFrameLevel()-1)
 	S.CreateBD(bg)
 
@@ -100,7 +100,7 @@ tinsert(DB.AuroraModules["SunUI"], function()
 	DungeonCompletionAlertFrame1.dungeonArt4:SetAlpha(0)
 	DungeonCompletionAlertFrame1.raidArt:SetAlpha(0)
 
-	DungeonCompletionAlertFrame1.dungeonTexture:Point("BOTTOMLEFT", DungeonCompletionAlertFrame1, "BOTTOMLEFT", 13, 13)
+	DungeonCompletionAlertFrame1.dungeonTexture:SetPoint("BOTTOMLEFT", DungeonCompletionAlertFrame1, "BOTTOMLEFT", 13, 13)
 	DungeonCompletionAlertFrame1.dungeonTexture.SetPoint = S.dummy
 
 	DungeonCompletionAlertFrame1.shine:Hide()

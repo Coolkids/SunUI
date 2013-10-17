@@ -69,11 +69,11 @@ function  Module:PLAYER_ENTERING_WORLD()
 		end
 		skada.shadow:ClearAllPoints()
 		if win.db.enabletitle then
-			skada.shadow:Point('TOPLEFT', win.bargroup.button, 'TOPLEFT', -5, 5)
+			skada.shadow:SetPoint('TOPLEFT', win.bargroup.button, 'TOPLEFT', -5, 5)
 		else
-			skada.shadow:Point('TOPLEFT', win.bargroup, 'TOPLEFT', -5, 5)
+			skada.shadow:SetPoint('TOPLEFT', win.bargroup, 'TOPLEFT', -5, 5)
 		end
-		skada.shadow:Point('BOTTOMRIGHT', win.bargroup, 'BOTTOMRIGHT', 5, -5)
+		skada.shadow:SetPoint('BOTTOMRIGHT', win.bargroup, 'BOTTOMRIGHT', 5, -5)
 
 		win.bargroup.button:SetFrameStrata("MEDIUM")
 		win.bargroup.button:SetFrameLevel(5)

@@ -35,8 +35,8 @@ DB.AuroraModules["Blizzard_ItemSocketingUI"] = function()
 			edgeFile = DB.media.glow,
 			edgeSize = 4,
 		})
-		bu.glow:Point("TOPLEFT", -4, 4)
-		bu.glow:Point("BOTTOMRIGHT", 4, -4)
+		bu.glow:SetPoint("TOPLEFT", -4, 4)
+		bu.glow:SetPoint("BOTTOMRIGHT", 4, -4)
 	end
 
 	hooksecurefunc("ItemSocketingFrame_Update", function()
@@ -48,11 +48,11 @@ DB.AuroraModules["Blizzard_ItemSocketingUI"] = function()
 
 		local num = GetNumSockets()
 		if num == 3 then
-			ItemSocketingSocket1:Point("BOTTOM", ItemSocketingFrame, "BOTTOM", -75, 39)
+			ItemSocketingSocket1:SetPoint("BOTTOM", ItemSocketingFrame, "BOTTOM", -75, 39)
 		elseif num == 2 then
-			ItemSocketingSocket1:Point("BOTTOM", ItemSocketingFrame, "BOTTOM", -35, 39)
+			ItemSocketingSocket1:SetPoint("BOTTOM", ItemSocketingFrame, "BOTTOM", -35, 39)
 		else
-			ItemSocketingSocket1:Point("BOTTOM", ItemSocketingFrame, "BOTTOM", 0, 39)
+			ItemSocketingSocket1:SetPoint("BOTTOM", ItemSocketingFrame, "BOTTOM", 0, 39)
 		end
 	end)
 

@@ -262,9 +262,9 @@ local function UpdateAuraAnchors(frame)
 	for i = 1, 5 do
 		if frame.icons and frame.icons[i] and frame.icons[i]:IsShown() then
 			if frame.icons.lastShown then 
-				frame.icons[i]:Point("RIGHT", frame.icons.lastShown, "LEFT", -2, 0)
+				frame.icons[i]:SetPoint("RIGHT", frame.icons.lastShown, "LEFT", -2, 0)
 			else
-				frame.icons[i]:Point("RIGHT",frame.icons,"RIGHT")
+				frame.icons[i]:SetPoint("RIGHT",frame.icons,"RIGHT")
 			end
 			frame.icons.lastShown = frame.icons[i]
 		end
@@ -281,8 +281,8 @@ local function CreateAuraIcon(parent)
 
 	button.shadow = CreateFrame("Frame", nil, button)
 	button.shadow:SetFrameLevel(0)
-	button.shadow:Point("TOPLEFT", -2*noscalemult, 2*noscalemult)
-	button.shadow:Point("BOTTOMRIGHT", 2*noscalemult, -2*noscalemult)
+	button.shadow:SetPoint("TOPLEFT", -2*noscalemult, 2*noscalemult)
+	button.shadow:SetPoint("BOTTOMRIGHT", 2*noscalemult, -2*noscalemult)
 	button.shadow:SetBackdrop( { 
 		edgeFile = DB.GlowTex,
 		bgFile = DB.Solid,
@@ -299,16 +299,16 @@ local function CreateAuraIcon(parent)
 	
 	button.bg2 = button:CreateTexture(nil, "ARTWORK")
 	button.bg2:SetTexture( .05, .05, .05, .9)
-	button.bg2:Point("TOPLEFT",button,"TOPLEFT", noscalemult*2,-noscalemult*2)
-	button.bg2:Point("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult*2,noscalemult*2)	
+	button.bg2:SetPoint("TOPLEFT",button,"TOPLEFT", noscalemult*2,-noscalemult*2)
+	button.bg2:SetPoint("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult*2,noscalemult*2)	
 	
 	button.icon = button:CreateTexture(nil, "OVERLAY")
-	button.icon:Point("TOPLEFT",button,"TOPLEFT", noscalemult*3,-noscalemult*3)
-	button.icon:Point("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult*3,noscalemult*3)
+	button.icon:SetPoint("TOPLEFT",button,"TOPLEFT", noscalemult*3,-noscalemult*3)
+	button.icon:SetPoint("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult*3,noscalemult*3)
 	button.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 
 	button.text = button:CreateFontString(nil, 'OVERLAY')
-	button.text:Point("CENTER", 1, 1)
+	button.text:SetPoint("CENTER", 1, 1)
 	button.text:SetJustifyH('CENTER')
 	button.text:SetFont(DB.Font, 10*SunUIConfig.db.profile.MiniDB.FontScale, "OUTLINE")
 	button.text:SetShadowColor(0, 0, 0, 0)
@@ -316,7 +316,7 @@ local function CreateAuraIcon(parent)
 	button.count = button:CreateFontString(nil,"OVERLAY")
 	button.count:SetFont(DB.Font, 9*SunUIConfig.db.profile.MiniDB.FontScale, "OUTLINE")
 	button.count:SetShadowColor(0, 0, 0, 0.4)
-	button.count:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 2, 0)
+	button.count:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 2, 0)
 	return button
 end
 
@@ -401,8 +401,8 @@ local function OnAura(frame, unit)
 		if duration and match == true then
 			if not frame.icons[i] then frame.icons[i] = CreateAuraIcon(frame) end
 			local icon = frame.icons[i]
-			if i == 1 then icon:Point("RIGHT",frame.icons,"RIGHT") end
-			if i ~= 1 and i <= C["HPWidth"] / C["IconSize"] then icon:Point("RIGHT", frame.icons[i-1], "LEFT", -2, 0) end
+			if i == 1 then icon:SetPoint("RIGHT",frame.icons,"RIGHT") end
+			if i ~= 1 and i <= C["HPWidth"] / C["IconSize"] then icon:SetPoint("RIGHT", frame.icons[i-1], "LEFT", -2, 0) end
 			i = i + 1
 			UpdateAuraIcon(icon, frame.unit, index, "HARMFUL")
 		end
@@ -441,7 +441,7 @@ local function UpdateObjects(frame)
 	
 	if frame.icons then return end
 	frame.icons = CreateFrame("Frame",nil,frame)
-	frame.icons:Point("BOTTOMRIGHT",frame.hp,"TOPRIGHT", 0, 8)
+	frame.icons:SetPoint("BOTTOMRIGHT",frame.hp,"TOPRIGHT", 0, 8)
 	frame.icons:Width(C["IconSize"] + C["HPWidth"])
 	frame.icons:Height(C["IconSize"])
 	frame.icons:SetFrameLevel(frame.hp:GetFrameLevel()+2)
@@ -584,7 +584,7 @@ local function SkinObjects(frame, nameFrame)
 	frame.overlay = overlay
 	-- totem icon
 	local icon = frame:CreateTexture(nil, "BACKGROUND")
-	icon:Point("BOTTOMRIGHT", newhp, "BOTTOMLEFT", -5, 0)
+	icon:SetPoint("BOTTOMRIGHT", newhp, "BOTTOMLEFT", -5, 0)
 	icon:SetSize(cfg.TotemSize, cfg.TotemSize)
 	icon:Hide()
 	frame.icon = icon

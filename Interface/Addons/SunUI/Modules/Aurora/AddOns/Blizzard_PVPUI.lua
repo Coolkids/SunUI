@@ -41,8 +41,8 @@ DB.AuroraModules["Blizzard_PVPUI"] = function()
 
 		if cu then
 			cu:SetSize(16, 16)
-			cu:Point("TOPLEFT", bu.Name, "BOTTOMLEFT", 0, -8)
-			bu.CurrencyAmount:Point("LEFT", cu, "RIGHT", 4, 0)
+			cu:SetPoint("TOPLEFT", bu.Name, "BOTTOMLEFT", 0, -8)
+			bu.CurrencyAmount:SetPoint("LEFT", cu, "RIGHT", 4, 0)
 
 			cu:SetTexCoord(.08, .92, .08, .92)
 			cu.bg = S.CreateBG(cu)
@@ -94,11 +94,11 @@ DB.AuroraModules["Blizzard_PVPUI"] = function()
 		bu.SelectedTexture:SetAllPoints()
 	end
 
-	BonusFrame.BattlegroundReward1.Amount:Point("RIGHT", BonusFrame.BattlegroundReward1.Icon, "LEFT", -2, 0)
+	BonusFrame.BattlegroundReward1.Amount:SetPoint("RIGHT", BonusFrame.BattlegroundReward1.Icon, "LEFT", -2, 0)
 	BonusFrame.BattlegroundReward1.Icon:SetTexCoord(.08, .92, .08, .92)
 	BonusFrame.BattlegroundReward1.Icon:SetSize(16, 16)
 	S.CreateBG(BonusFrame.BattlegroundReward1.Icon)
-	BonusFrame.BattlegroundReward2.Amount:Point("RIGHT", BonusFrame.BattlegroundReward2.Icon, "LEFT", -2, 0)
+	BonusFrame.BattlegroundReward2.Amount:SetPoint("RIGHT", BonusFrame.BattlegroundReward2.Icon, "LEFT", -2, 0)
 	BonusFrame.BattlegroundReward2.Icon:SetTexCoord(.08, .92, .08, .92)
 	BonusFrame.BattlegroundReward2.Icon:SetSize(16, 16)
 	S.CreateBG(BonusFrame.BattlegroundReward2.Icon)
@@ -118,7 +118,7 @@ DB.AuroraModules["Blizzard_PVPUI"] = function()
 		end
 	end)
 
-	IncludedBattlegroundsDropDown:Point("TOPRIGHT", BonusFrame.DiceButton, 40, 26)
+	IncludedBattlegroundsDropDown:SetPoint("TOPRIGHT", BonusFrame.DiceButton, 40, 26)
 
 	-- Role buttons
 
@@ -139,8 +139,8 @@ DB.AuroraModules["Blizzard_PVPUI"] = function()
 			left:SetWidth(1)
 			left:SetTexture(DB.media.backdrop)
 			left:SetVertexColor(0, 0, 0)
-			left:Point("TOPLEFT", roleButton, 6, -4)
-			left:Point("BOTTOMLEFT", roleButton, 6, 7)
+			left:SetPoint("TOPLEFT", roleButton, 6, -4)
+			left:SetPoint("BOTTOMLEFT", roleButton, 6, 7)
 			roleButton["leftLine"..i] = left
 
 			local right = roleButton:CreateTexture()
@@ -148,8 +148,8 @@ DB.AuroraModules["Blizzard_PVPUI"] = function()
 			right:SetWidth(1)
 			right:SetTexture(DB.media.backdrop)
 			right:SetVertexColor(0, 0, 0)
-			right:Point("TOPRIGHT", roleButton, -6, -4)
-			right:Point("BOTTOMRIGHT", roleButton, -6, 7)
+			right:SetPoint("TOPRIGHT", roleButton, -6, -4)
+			right:SetPoint("BOTTOMRIGHT", roleButton, -6, 7)
 			roleButton["rightLine"..i] = right
 
 			local top = roleButton:CreateTexture()
@@ -157,8 +157,8 @@ DB.AuroraModules["Blizzard_PVPUI"] = function()
 			top:SetHeight(1)
 			top:SetTexture(DB.media.backdrop)
 			top:SetVertexColor(0, 0, 0)
-			top:Point("TOPLEFT", roleButton, 6, -4)
-			top:Point("TOPRIGHT", roleButton, -6, -4)
+			top:SetPoint("TOPLEFT", roleButton, 6, -4)
+			top:SetPoint("TOPRIGHT", roleButton, -6, -4)
 			roleButton["topLine"..i] = top
 
 			local bottom = roleButton:CreateTexture()
@@ -166,8 +166,8 @@ DB.AuroraModules["Blizzard_PVPUI"] = function()
 			bottom:SetHeight(1)
 			bottom:SetTexture(DB.media.backdrop)
 			bottom:SetVertexColor(0, 0, 0)
-			bottom:Point("BOTTOMLEFT", roleButton, 6, 7)
-			bottom:Point("BOTTOMRIGHT", roleButton, -6, 7)
+			bottom:SetPoint("BOTTOMLEFT", roleButton, 6, 7)
+			bottom:SetPoint("BOTTOMRIGHT", roleButton, -6, 7)
 			roleButton["bottomLine"..i] = bottom
 		end
 
@@ -189,15 +189,15 @@ DB.AuroraModules["Blizzard_PVPUI"] = function()
 		bu:SetHighlightTexture("")
 
 		local bg = CreateFrame("Frame", nil, bu)
-		bg:Point("TOPLEFT", 2, 0)
-		bg:Point("BOTTOMRIGHT", -1, 2)
+		bg:SetPoint("TOPLEFT", 2, 0)
+		bg:SetPoint("BOTTOMRIGHT", -1, 2)
 		S.CreateBD(bg, 0)
 		bg:SetFrameLevel(bu:GetFrameLevel()-1)
 
 		bu.tex = S.CreateGradient(bu)
 		bu.tex:SetDrawLayer("BACKGROUND")
-		bu.tex:Point("TOPLEFT", bg, 1, -1)
-		bu.tex:Point("BOTTOMRIGHT", bg, -1, 1)
+		bu.tex:SetPoint("TOPLEFT", bg, 1, -1)
+		bu.tex:SetPoint("BOTTOMRIGHT", bg, -1, 1)
 
 		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
 		bu.SelectedTexture:SetTexture(r, g, b, .2)
@@ -206,7 +206,7 @@ DB.AuroraModules["Blizzard_PVPUI"] = function()
 		bu.Icon:SetTexCoord(.08, .92, .08, .92)
 		bu.Icon.bg = S.CreateBG(bu.Icon)
 		bu.Icon.bg:SetDrawLayer("BACKGROUND", 1)
-		bu.Icon:Point("TOPLEFT", 5, -3)
+		bu.Icon:SetPoint("TOPLEFT", 5, -3)
 	end
 
 	-- Conquest Frame
@@ -229,7 +229,7 @@ DB.AuroraModules["Blizzard_PVPUI"] = function()
 		self:SetScale(UIParent:GetScale())
 
 		local p1, anchor, p2 = self:GetPoint()
-		self:Point(p1, anchor, p2, 1, 0)
+		self:SetPoint(p1, anchor, p2, 1, 0)
 	end)
 
 	for _, bu in pairs({ConquestFrame.Arena2v2, ConquestFrame.Arena3v3, ConquestFrame.Arena5v5, ConquestFrame.RatedBG}) do
@@ -240,19 +240,19 @@ DB.AuroraModules["Blizzard_PVPUI"] = function()
 		bu.SelectedTexture:SetAllPoints()
 	end
 
-	ConquestFrame.Arena3v3:Point("TOP", ConquestFrame.Arena2v2, "BOTTOM", 0, -1)
-	ConquestFrame.Arena5v5:Point("TOP", ConquestFrame.Arena3v3, "BOTTOM", 0, -1)
+	ConquestFrame.Arena3v3:SetPoint("TOP", ConquestFrame.Arena2v2, "BOTTOM", 0, -1)
+	ConquestFrame.Arena5v5:SetPoint("TOP", ConquestFrame.Arena3v3, "BOTTOM", 0, -1)
 
-	ConquestFrame.ArenaReward.Amount:Point("RIGHT", ConquestFrame.ArenaReward.Icon, "LEFT", -2, 0)
+	ConquestFrame.ArenaReward.Amount:SetPoint("RIGHT", ConquestFrame.ArenaReward.Icon, "LEFT", -2, 0)
 	ConquestFrame.ArenaReward.Icon:SetTexCoord(.08, .92, .08, .92)
 	ConquestFrame.ArenaReward.Icon:SetSize(16, 16)
 	S.CreateBG(ConquestFrame.ArenaReward.Icon)
-	ConquestFrame.RatedBGReward.Amount:Point("RIGHT", ConquestFrame.RatedBGReward.Icon, "LEFT", -2, 0)
+	ConquestFrame.RatedBGReward.Amount:SetPoint("RIGHT", ConquestFrame.RatedBGReward.Icon, "LEFT", -2, 0)
 	ConquestFrame.RatedBGReward.Icon:SetTexCoord(.08, .92, .08, .92)
 	ConquestFrame.RatedBGReward.Icon:SetSize(16, 16)
 	S.CreateBG(ConquestFrame.RatedBGReward.Icon)
 
-	ConquestFrame.ArenaReward.Icon:SetTexture("Interface\\Icons\\PVPCurrency-Honor-"..englishFaction)
+	ConquestFrame.ArenaReward.Icon:SetTexture("Interface\\Icons\\PVPCurrency-Conquest-"..englishFaction)
 	ConquestFrame.RatedBGReward.Icon:SetTexture("Interface\\Icons\\PVPCurrency-Conquest-"..englishFaction)
 
 	for i = 1, 4 do
@@ -266,8 +266,8 @@ DB.AuroraModules["Blizzard_PVPUI"] = function()
 	ConquestBar.progress:SetGradient("VERTICAL", .8, 0, 0, 1, 0, 0)
 
 	local bg = S.CreateBDFrame(ConquestBar, .25)
-	bg:Point("TOPLEFT", -1, -2)
-	bg:Point("BOTTOMRIGHT", 1, 2)
+	bg:SetPoint("TOPLEFT", -1, -2)
+	bg:SetPoint("BOTTOMRIGHT", 1, 2)
 
 	-- War games
 
@@ -303,25 +303,25 @@ DB.AuroraModules["Blizzard_PVPUI"] = function()
 		bu:SetHighlightTexture("")
 
 		local bg = CreateFrame("Frame", nil, bu)
-		bg:Point("TOPLEFT", 2, 0)
-		bg:Point("BOTTOMRIGHT", -1, 2)
+		bg:SetPoint("TOPLEFT", 2, 0)
+		bg:SetPoint("BOTTOMRIGHT", -1, 2)
 		S.CreateBD(bg, 0)
 		bg:SetFrameLevel(bu:GetFrameLevel()-1)
 
 		local tex = S.CreateGradient(bu)
 		tex:SetDrawLayer("BACKGROUND")
-		tex:Point("TOPLEFT", 3, -1)
-		tex:Point("BOTTOMRIGHT", -2, 3)
+		tex:SetPoint("TOPLEFT", 3, -1)
+		tex:SetPoint("BOTTOMRIGHT", -2, 3)
 
 		SelectedTexture:SetDrawLayer("BACKGROUND")
 		SelectedTexture:SetTexture(r, g, b, .2)
-		SelectedTexture:Point("TOPLEFT", 2, 0)
-		SelectedTexture:Point("BOTTOMRIGHT", -1, 2)
+		SelectedTexture:SetPoint("TOPLEFT", 2, 0)
+		SelectedTexture:SetPoint("BOTTOMRIGHT", -1, 2)
 
 		bu.Icon:SetTexCoord(.08, .92, .08, .92)
 		bu.Icon.bg = S.CreateBG(bu.Icon)
 		bu.Icon.bg:SetDrawLayer("BACKGROUND", 1)
-		bu.Icon:Point("TOPLEFT", 5, -3)
+		bu.Icon:SetPoint("TOPLEFT", 5, -3)
 
 		local header = button.Header
 
@@ -331,7 +331,7 @@ DB.AuroraModules["Blizzard_PVPUI"] = function()
 
 		local headerBg = CreateFrame("Frame", nil, header)
 		headerBg:SetSize(13, 13)
-		headerBg:Point("LEFT", 4, 0)
+		headerBg:SetPoint("LEFT", 4, 0)
 		headerBg:SetFrameLevel(header:GetFrameLevel()-1)
 		S.CreateBD(headerBg, 0)
 

@@ -35,7 +35,7 @@ function Module:LoadSunUI()
 			title:SetTexture("")
 			title:ClearAllPoints()
 			if title == _G["GameMenuFrameHeader"] then
-				title:Point("TOP", GameMenuFrame, 0, 7)
+				title:SetPoint("TOP", GameMenuFrame, 0, 7)
 			else
 				title:SetPoint("TOP", header[i], 0, 0)
 			end
@@ -269,7 +269,7 @@ function Module:LoadSunUI()
 				-- this part might be a bit unreliable
 				local _, _, relPoint, xOff, yOff = listFrame:GetPoint()
 				if relPoint == "BOTTOMLEFT" and xOff == 0 and floor(yOff) == 5 then
-					listFrame:Point("TOPLEFT", anchorName, "BOTTOMLEFT", 16, 9)
+					listFrame:SetPoint("TOPLEFT", anchorName, "BOTTOMLEFT", 16, 9)
 				end
 			end
 		else
@@ -288,8 +288,8 @@ function Module:LoadSunUI()
 				local hl = _G["DropDownList"..level.."Button"..j.."Highlight"]
 				local check = _G["DropDownList"..level.."Button"..j.."Check"]
 
-				hl:Point("TOPLEFT", -x + 1, 0)
-				hl:Point("BOTTOMRIGHT", listFrame:GetWidth() - bu:GetWidth() - x - 1, 0)
+				hl:SetPoint("TOPLEFT", -x + 1, 0)
+				hl:SetPoint("BOTTOMRIGHT", listFrame:GetWidth() - bu:GetWidth() - x - 1, 0)
 
 				if not bu.bg then
 					createBackdrop(bu, check)
@@ -367,8 +367,8 @@ function Module:LoadSunUI()
 			for i = 1, NUM_PET_STABLE_SLOTS do
 				local bu = _G["PetStableStabledPet"..i]
 				local bd = CreateFrame("Frame", nil, bu)
-				bd:Point("TOPLEFT", -1, 1)
-				bd:Point("BOTTOMRIGHT", 1, -1)
+				bd:SetPoint("TOPLEFT", -1, 1)
+				bd:SetPoint("BOTTOMRIGHT", 1, -1)
 				S.CreateBD(bd, .25)
 				bu:SetNormalTexture("")
 				bu:DisableDrawLayer("BACKGROUND")
@@ -378,9 +378,9 @@ function Module:LoadSunUI()
 
 		hooksecurefunc("PetPaperDollFrame_UpdateIsAvailable", function()
 			if not HasPetUI() then
-				CharacterFrameTab3:Point("LEFT", CharacterFrameTab2, "LEFT", 0, 0)
+				CharacterFrameTab3:SetPoint("LEFT", CharacterFrameTab2, "LEFT", 0, 0)
 			else
-				CharacterFrameTab3:Point("LEFT", CharacterFrameTab2, "RIGHT", -15, 0)
+				CharacterFrameTab3:SetPoint("LEFT", CharacterFrameTab2, "RIGHT", -15, 0)
 			end
 		end)
 
@@ -395,8 +395,8 @@ function Module:LoadSunUI()
 	GhostFrameContentsFrameIcon:SetTexCoord(.08, .92, .08, .92)
 
 	local GhostBD = CreateFrame("Frame", nil, GhostFrameContentsFrame)
-	GhostBD:Point("TOPLEFT", GhostFrameContentsFrameIcon, -1, 1)
-	GhostBD:Point("BOTTOMRIGHT", GhostFrameContentsFrameIcon, 1, -1)
+	GhostBD:SetPoint("TOPLEFT", GhostFrameContentsFrameIcon, -1, 1)
+	GhostBD:SetPoint("BOTTOMRIGHT", GhostFrameContentsFrameIcon, 1, -1)
 	S.CreateBD(GhostBD, 0)
 
 	-- Mail frame
@@ -415,8 +415,8 @@ function Module:LoadSunUI()
 	OpenMailLetterButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
 
 	local bgmail = CreateFrame("Frame", nil, OpenMailLetterButton)
-	bgmail:Point("TOPLEFT", -1, 1)
-	bgmail:Point("BOTTOMRIGHT", 1, -1)
+	bgmail:SetPoint("TOPLEFT", -1, 1)
+	bgmail:SetPoint("BOTTOMRIGHT", 1, -1)
 	bgmail:SetFrameLevel(OpenMailLetterButton:GetFrameLevel()-1)
 	S.CreateBD(bgmail)
 
@@ -425,12 +425,12 @@ function Module:LoadSunUI()
 	OpenMailMoneyButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
 
 	local bgmoney = CreateFrame("Frame", nil, OpenMailMoneyButton)
-	bgmoney:Point("TOPLEFT", -1, 1)
-	bgmoney:Point("BOTTOMRIGHT", 1, -1)
+	bgmoney:SetPoint("TOPLEFT", -1, 1)
+	bgmoney:SetPoint("BOTTOMRIGHT", 1, -1)
 	bgmoney:SetFrameLevel(OpenMailMoneyButton:GetFrameLevel()-1)
 	S.CreateBD(bgmoney)
 
-	SendMailSubjectEditBox:Point("TOPLEFT", SendMailNameEditBox, "BOTTOMLEFT", 0, -1)
+	SendMailSubjectEditBox:SetPoint("TOPLEFT", SendMailNameEditBox, "BOTTOMLEFT", 0, -1)
 
 	for i = 1, INBOXITEMS_TO_DISPLAY do
 		local it = _G["MailItem"..i]
@@ -450,8 +450,8 @@ function Module:LoadSunUI()
 		ic:SetTexCoord(.08, .92, .08, .92)
 
 		local bg = CreateFrame("Frame", nil, bu)
-		bg:Point("TOPLEFT", -1, 1)
-		bg:Point("BOTTOMRIGHT", 1, -1)
+		bg:SetPoint("TOPLEFT", -1, 1)
+		bg:SetPoint("BOTTOMRIGHT", 1, -1)
 		bg:SetFrameLevel(bu:GetFrameLevel()-1)
 		S.CreateBD(bg, 0)
 	end
@@ -461,8 +461,8 @@ function Module:LoadSunUI()
 		button:GetRegions():Hide()
 
 		local bg = CreateFrame("Frame", nil, button)
-		bg:Point("TOPLEFT", -1, 1)
-		bg:Point("BOTTOMRIGHT", 1, -1)
+		bg:SetPoint("TOPLEFT", -1, 1)
+		bg:SetPoint("BOTTOMRIGHT", 1, -1)
 		bg:SetFrameLevel(0)
 		S.CreateBD(bg, .25)
 	end
@@ -476,8 +476,8 @@ function Module:LoadSunUI()
 		ic:SetTexCoord(.08, .92, .08, .92)
 
 		local bg = CreateFrame("Frame", nil, bu)
-		bg:Point("TOPLEFT", -1, 1)
-		bg:Point("BOTTOMRIGHT", 1, -1)
+		bg:SetPoint("TOPLEFT", -1, 1)
+		bg:SetPoint("BOTTOMRIGHT", 1, -1)
 		bg:SetFrameLevel(0)
 		S.CreateBD(bg, .25)
 	end
@@ -510,8 +510,8 @@ function Module:LoadSunUI()
 			local bu = buttons[i]
 
 			if not bu.styled then
-				bu.highlight:Point("TOPLEFT", 1, 0)
-				bu.highlight:Point("BOTTOMRIGHT", -1, 0)
+				bu.highlight:SetPoint("TOPLEFT", 1, 0)
+				bu.highlight:SetPoint("BOTTOMRIGHT", -1, 0)
 				bu.highlight.SetPoint = S.dummy
 				bu.highlight:SetTexture(r, g, b, .2)
 				bu.highlight.SetTexture = S.dummy
@@ -546,7 +546,7 @@ function Module:LoadSunUI()
 	ReputationListScrollFrame:GetRegions():Hide()
 	select(2, ReputationListScrollFrame:GetRegions()):Hide()
 
-	ReputationDetailFrame:Point("TOPLEFT", ReputationFrame, "TOPRIGHT", 1, -28)
+	ReputationDetailFrame:SetPoint("TOPLEFT", ReputationFrame, "TOPRIGHT", 1, -28)
 
 	local function UpdateFactionSkins()
 		for i = 1, GetNumFactions() do
@@ -631,7 +631,7 @@ function Module:LoadSunUI()
 		tab:SetCheckedTexture(DB.media.checked)
 		if i == 1 then
 			local a1, p, a2, x, y = tab:GetPoint()
-			tab:Point(a1, p, a2, x + 11, y)
+			tab:SetPoint(a1, p, a2, x + 11, y)
 		end
 		S.CreateBG(tab)
 		S.CreateSD(tab, 5, 0, 0, 0, 1, 1)
@@ -713,7 +713,7 @@ function Module:LoadSunUI()
 		end
 	end)
 
-	SpellBookSkillLineTab1:Point("TOPLEFT", SpellBookSideTabsFrame, "TOPRIGHT", 11, -36)
+	SpellBookSkillLineTab1:SetPoint("TOPLEFT", SpellBookSideTabsFrame, "TOPRIGHT", 11, -36)
 
 	hooksecurefunc("SpellBookFrame_UpdateSkillLineTabs", function()
 		for i = 1, GetNumSpellTabs() do
@@ -749,7 +749,7 @@ function Module:LoadSunUI()
 			tab:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
 
 			if i == 1 then
-				tab:Point("TOPLEFT", SpellBookCoreAbilitiesFrame, "TOPRIGHT", 11, -53)
+				tab:SetPoint("TOPLEFT", SpellBookCoreAbilitiesFrame, "TOPRIGHT", 11, -53)
 			end
 		end
 	end)
@@ -789,7 +789,7 @@ function Module:LoadSunUI()
 	end)
 
 	SpellBookFrameTutorialButton.Ring:Hide()
-	SpellBookFrameTutorialButton:Point("TOPLEFT", SpellBookFrame, "TOPLEFT", -12, 12)
+	SpellBookFrameTutorialButton:SetPoint("TOPLEFT", SpellBookFrame, "TOPLEFT", -12, 12)
 
 	-- Professions
 
@@ -807,7 +807,7 @@ function Module:LoadSunUI()
 		bu.statusBar.rankText:SetPoint("CENTER")
 
 		local _, p = bu.statusBar:GetPoint()
-		bu.statusBar:Point("TOPLEFT", p, "BOTTOMLEFT", 1, -3)
+		bu.statusBar:SetPoint("TOPLEFT", p, "BOTTOMLEFT", 1, -3)
 
 		_G[button.."StatusBarLeft"]:Hide()
 		bu.statusBar.capRight:SetAlpha(0)
@@ -816,8 +816,8 @@ function Module:LoadSunUI()
 		_G[button.."StatusBarBGRight"]:Hide()
 
 		local bg = CreateFrame("Frame", nil, bu.statusBar)
-		bg:Point("TOPLEFT", -1, 1)
-		bg:Point("BOTTOMRIGHT", 1, -1)
+		bg:SetPoint("TOPLEFT", -1, 1)
+		bg:SetPoint("BOTTOMRIGHT", 1, -1)
 		bg:SetFrameLevel(bu:GetFrameLevel()-1)
 		S.CreateBD(bg, .25)
 	end
@@ -836,8 +836,8 @@ function Module:LoadSunUI()
 		if icon then
 			icon:SetTexCoord(.08, .92, .08, .92)
 			icon:ClearAllPoints()
-			icon:Point("TOPLEFT", 2, -2)
-			icon:Point("BOTTOMRIGHT", -2, 2)
+			icon:SetPoint("TOPLEFT", 2, -2)
+			icon:SetPoint("BOTTOMRIGHT", -2, 2)
 			S.CreateBG(icon)
 		end
 	end
@@ -846,7 +846,7 @@ function Module:LoadSunUI()
 		local bu = _G["PrimaryProfession"..i]
 		local bg = CreateFrame("Frame", nil, bu)
 		bg:SetPoint("TOPLEFT")
-		bg:Point("BOTTOMRIGHT", 0, -4)
+		bg:SetPoint("BOTTOMRIGHT", 0, -4)
 		bg:SetFrameLevel(0)
 		S.CreateBD(bg, .25)
 	end
@@ -879,26 +879,26 @@ function Module:LoadSunUI()
 		_G["MerchantItem"..i.."Name"]:SetHeight(20)
 
 		local a1, p, a2= bu:GetPoint()
-		bu:Point(a1, p, a2, -2, -2)
+		bu:SetPoint(a1, p, a2, -2, -2)
 		bu:SetNormalTexture("")
 		bu:SetPushedTexture("")
 		bu:SetSize(40, 40)
 
 		local a3, p2, a4, x, y = mo:GetPoint()
-		mo:Point(a3, p2, a4, x, y+2)
+		mo:SetPoint(a3, p2, a4, x, y+2)
 
 		S.CreateBD(bu, 0)
 
 		button.bd = CreateFrame("Frame", nil, button)
-		button.bd:Point("TOPLEFT", 39, 0)
+		button.bd:SetPoint("TOPLEFT", 39, 0)
 		button.bd:SetPoint("BOTTOMRIGHT")
 		button.bd:SetFrameLevel(0)
 		S.CreateBD(button.bd, .25)
 
 		ic:SetTexCoord(.08, .92, .08, .92)
 		ic:ClearAllPoints()
-		ic:Point("TOPLEFT", 1, -1)
-		ic:Point("BOTTOMRIGHT", -1, 1)
+		ic:SetPoint("TOPLEFT", 1, -1)
+		ic:SetPoint("BOTTOMRIGHT", -1, 1)
 
 		for j = 1, 3 do
 			S.CreateBG(_G["MerchantItem"..i.."AltCurrencyFrameItem"..j.."Texture"])
@@ -913,7 +913,7 @@ function Module:LoadSunUI()
 			if index <= numMerchantItems then
 				local name, texture, price, stackCount, numAvailable, isUsable, extendedCost = GetMerchantItemInfo(index)
 				if extendedCost and (price <= 0) then
-					_G["MerchantItem"..i.."AltCurrencyFrame"]:Point("BOTTOMLEFT", "MerchantItem"..i.."NameFrame", "BOTTOMLEFT", 0, 35)
+					_G["MerchantItem"..i.."AltCurrencyFrame"]:SetPoint("BOTTOMLEFT", "MerchantItem"..i.."NameFrame", "BOTTOMLEFT", 0, 35)
 				end
 
 				if AuroraConfig.qualityColour then
@@ -970,8 +970,8 @@ function Module:LoadSunUI()
 
 	MerchantBuyBackItemItemButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
 	MerchantBuyBackItemItemButtonIconTexture:ClearAllPoints()
-	MerchantBuyBackItemItemButtonIconTexture:Point("TOPLEFT", 1, -1)
-	MerchantBuyBackItemItemButtonIconTexture:Point("BOTTOMRIGHT", -1, 1)
+	MerchantBuyBackItemItemButtonIconTexture:SetPoint("TOPLEFT", 1, -1)
+	MerchantBuyBackItemItemButtonIconTexture:SetPoint("BOTTOMRIGHT", -1, 1)
 
 	MerchantGuildBankRepairButton:SetPushedTexture("")
 	S.CreateBG(MerchantGuildBankRepairButton)
@@ -996,8 +996,8 @@ function Module:LoadSunUI()
 
 				ic:SetTexCoord(.08, .92, .08, .92)
 				ic:SetDrawLayer("OVERLAY")
-				ic:Point("LEFT", co, "RIGHT", 2, 0)
-				co:Point("TOPLEFT", bu, "TOPLEFT", -2, 0)
+				ic:SetPoint("LEFT", co, "RIGHT", 2, 0)
+				co:SetPoint("TOPLEFT", bu, "TOPLEFT", -2, 0)
 
 				S.CreateBG(ic)
 				bu.reskinned = true
@@ -1034,7 +1034,7 @@ function Module:LoadSunUI()
 
 			if bu.gameIcon:IsShown() then
 				bu.bg:Show()
-				bu.gameIcon:Point("TOPRIGHT", bu, "TOPRIGHT", -2, -2)
+				bu.gameIcon:SetPoint("TOPRIGHT", bu, "TOPRIGHT", -2, -2)
 			else
 				bu.bg:Hide()
 			end
@@ -1042,29 +1042,29 @@ function Module:LoadSunUI()
 	end
 
 	local bu1 = FriendsFrameFriendsScrollFrameButton1
-	bu1.bg:Point("BOTTOMRIGHT", bu1.gameIcon, 0, -1)
+	bu1.bg:SetPoint("BOTTOMRIGHT", bu1.gameIcon, 0, -1)
 
 	hooksecurefunc("FriendsFrame_UpdateFriends", UpdateScroll)
 	hooksecurefunc(FriendsFrameFriendsScrollFrame, "update", UpdateScroll)
 
 	FriendsFrameStatusDropDown:ClearAllPoints()
-	FriendsFrameStatusDropDown:Point("TOPLEFT", FriendsFrame, "TOPLEFT", 10, -28)
+	FriendsFrameStatusDropDown:SetPoint("TOPLEFT", FriendsFrame, "TOPLEFT", 10, -28)
 
 	FriendsTabHeaderSoRButton:SetPushedTexture("")
 	FriendsTabHeaderSoRButtonIcon:SetTexCoord(.08, .92, .08, .92)
 	local SoRBg = CreateFrame("Frame", nil, FriendsTabHeaderSoRButton)
-	SoRBg:Point("TOPLEFT", -1, 1)
-	SoRBg:Point("BOTTOMRIGHT", 1, -1)
+	SoRBg:SetPoint("TOPLEFT", -1, 1)
+	SoRBg:SetPoint("BOTTOMRIGHT", 1, -1)
 	S.CreateBD(SoRBg, 0)
 
 	S.CreateBD(FriendsFrameBattlenetFrame.UnavailableInfoFrame)
-	FriendsFrameBattlenetFrame.UnavailableInfoFrame:Point("TOPLEFT", FriendsFrame, "TOPRIGHT", 1, -18)
+	FriendsFrameBattlenetFrame.UnavailableInfoFrame:SetPoint("TOPLEFT", FriendsFrame, "TOPRIGHT", 1, -18)
 
 	FriendsFrameBattlenetFrame:GetRegions():Hide()
 	S.CreateBD(FriendsFrameBattlenetFrame, .25)
 
 	FriendsFrameBattlenetFrame.Tag:SetParent(FriendsListFrame)
-	FriendsFrameBattlenetFrame.Tag:Point("TOP", FriendsFrame, "TOP", 0, -8)
+	FriendsFrameBattlenetFrame.Tag:SetPoint("TOP", FriendsFrame, "TOP", 0, -8)
 
 	hooksecurefunc("FriendsFrame_CheckBattlenetStatus", function()
 		if BNFeaturesEnabled() then
@@ -1090,7 +1090,7 @@ function Module:LoadSunUI()
 
 	local whoBg = CreateFrame("Frame", nil, WhoFrameEditBoxInset)
 	whoBg:SetPoint("TOPLEFT")
-	whoBg:Point("BOTTOMRIGHT", -1, 1)
+	whoBg:SetPoint("BOTTOMRIGHT", -1, 1)
 	whoBg:SetFrameLevel(WhoFrameEditBoxInset:GetFrameLevel()-1)
 	S.CreateBD(whoBg, .25)
 
@@ -1133,7 +1133,7 @@ function Module:LoadSunUI()
 			if navButton and lastNav then
 				navButton:SetFrameLevel(lastNav:GetFrameLevel() - 2)
 				navButton:ClearAllPoints()
-				navButton:Point("LEFT", lastNav, "RIGHT", 1, 0)
+				navButton:SetPoint("LEFT", lastNav, "RIGHT", 1, 0)
 			end
 		end
 	end
@@ -1212,28 +1212,28 @@ function Module:LoadSunUI()
 		end
 
 		tab.Highlight:SetTexture(r, g, b, .2)
-		tab.Highlight:Point("TOPLEFT", 3, -4)
-		tab.Highlight:Point("BOTTOMRIGHT", -1, 0)
+		tab.Highlight:SetPoint("TOPLEFT", 3, -4)
+		tab.Highlight:SetPoint("BOTTOMRIGHT", -1, 0)
 		tab.Hider:SetTexture(.3, .3, .3, .4)
 		tab.TabBg:SetAlpha(0)
 
 		select(2, tab:GetRegions()):ClearAllPoints()
 		if i == 1 then
-			select(2, tab:GetRegions()):Point("TOPLEFT", 3, -4)
-			select(2, tab:GetRegions()):Point("BOTTOMRIGHT", -1, 0)
+			select(2, tab:GetRegions()):SetPoint("TOPLEFT", 3, -4)
+			select(2, tab:GetRegions()):SetPoint("BOTTOMRIGHT", -1, 0)
 		else
-			select(2, tab:GetRegions()):Point("TOPLEFT", 2, -4)
-			select(2, tab:GetRegions()):Point("BOTTOMRIGHT", -1, -1)
+			select(2, tab:GetRegions()):SetPoint("TOPLEFT", 2, -4)
+			select(2, tab:GetRegions()):SetPoint("BOTTOMRIGHT", -1, -1)
 		end
 
 		tab.bg = CreateFrame("Frame", nil, tab)
-		tab.bg:Point("TOPLEFT", 2, -3)
-		tab.bg:Point("BOTTOMRIGHT", 0, -1)
+		tab.bg:SetPoint("TOPLEFT", 2, -3)
+		tab.bg:SetPoint("BOTTOMRIGHT", 0, -1)
 		tab.bg:SetFrameLevel(0)
 		S.CreateBD(tab.bg)
 
-		tab.Hider:Point("TOPLEFT", tab.bg, 1, -1)
-		tab.Hider:Point("BOTTOMRIGHT", tab.bg, -1, 1)
+		tab.Hider:SetPoint("TOPLEFT", tab.bg, 1, -1)
+		tab.Hider:SetPoint("BOTTOMRIGHT", tab.bg, -1, 1)
 	end
 
 	for i = 1, NUM_GEARSET_ICONS_SHOWN do
@@ -1242,8 +1242,8 @@ function Module:LoadSunUI()
 
 		bu:SetCheckedTexture(DB.media.checked)
 		select(2, bu:GetRegions()):Hide()
-		ic:Point("TOPLEFT", 1, -1)
-		ic:Point("BOTTOMRIGHT", -1, 1)
+		ic:SetPoint("TOPLEFT", 1, -1)
+		ic:SetPoint("BOTTOMRIGHT", -1, 1)
 		ic:SetTexCoord(.08, .92, .08, .92)
 
 		S.CreateBD(bu, .25)
@@ -1365,16 +1365,16 @@ function Module:LoadSunUI()
 	QuestFrameProgressPanelMaterialBotRight:SetAlpha(0)
 
 	QuestLogFramePushQuestButton:ClearAllPoints()
-	QuestLogFramePushQuestButton:Point("LEFT", QuestLogFrameAbandonButton, "RIGHT", 1, 0)
+	QuestLogFramePushQuestButton:SetPoint("LEFT", QuestLogFrameAbandonButton, "RIGHT", 1, 0)
 	QuestLogFramePushQuestButton:SetWidth(100)
 	QuestLogFrameTrackButton:ClearAllPoints()
-	QuestLogFrameTrackButton:Point("LEFT", QuestLogFramePushQuestButton, "RIGHT", 1, 0)
+	QuestLogFrameTrackButton:SetPoint("LEFT", QuestLogFramePushQuestButton, "RIGHT", 1, 0)
 
 	QuestLogFrameShowMapButton.texture:Hide()
 	QuestLogFrameShowMapButtonHighlight:SetAlpha(0)
 	QuestLogFrameShowMapButton:SetSize(QuestLogFrameShowMapButton.text:GetStringWidth() + 14, 22)
 	QuestLogFrameShowMapButton.text:ClearAllPoints()
-	QuestLogFrameShowMapButton.text:Point("CENTER", 1, 0)
+	QuestLogFrameShowMapButton.text:SetPoint("CENTER", 1, 0)
 	S.Reskin(QuestLogFrameShowMapButton)
 
 	local line = QuestFrameGreetingPanel:CreateTexture()
@@ -1389,15 +1389,15 @@ function Module:LoadSunUI()
 	end)
 
 	local npcbd = CreateFrame("Frame", nil, QuestNPCModel)
-	npcbd:Point("TOPLEFT", -1, 1)
-	npcbd:Point("RIGHT", 1, 0)
+	npcbd:SetPoint("TOPLEFT", -1, 1)
+	npcbd:SetPoint("RIGHT", 1, 0)
 	npcbd:SetPoint("BOTTOM", QuestNPCModelTextScrollFrame)
 	npcbd:SetFrameLevel(QuestNPCModel:GetFrameLevel()-1)
 	S.CreateBD(npcbd)
 
 	local npcLine = CreateFrame("Frame", nil, QuestNPCModel)
-	npcLine:Point("BOTTOMLEFT", 0, -1)
-	npcLine:Point("BOTTOMRIGHT", 0, -1)
+	npcLine:SetPoint("BOTTOMLEFT", 0, -1)
+	npcLine:SetPoint("BOTTOMRIGHT", 0, -1)
 	npcLine:SetHeight(1)
 	npcLine:SetFrameLevel(QuestNPCModel:GetFrameLevel()-1)
 	S.CreateBD(npcLine, 0)
@@ -1406,8 +1406,8 @@ function Module:LoadSunUI()
 	QuestInfoSkillPointFrameIconTexture:SetTexCoord(.08, .92, .08, .92)
 
 	local bg = CreateFrame("Frame", nil, QuestInfoSkillPointFrame)
-	bg:Point("TOPLEFT", -3, 0)
-	bg:Point("BOTTOMRIGHT", -3, 0)
+	bg:SetPoint("TOPLEFT", -3, 0)
+	bg:SetPoint("BOTTOMRIGHT", -3, 0)
 	bg:Lower()
 	S.CreateBD(bg, .25)
 
@@ -1420,7 +1420,7 @@ function Module:LoadSunUI()
 
 	local skillPointLine = QuestInfoSkillPointFrame:CreateTexture(nil, "BACKGROUND")
 	skillPointLine:SetSize(1, 40)
-	skillPointLine:Point("RIGHT", QuestInfoSkillPointFrameIconTexture, 1, 0)
+	skillPointLine:SetPoint("RIGHT", QuestInfoSkillPointFrameIconTexture, 1, 0)
 	skillPointLine:SetTexture(DB.media.backdrop)
 	skillPointLine:SetVertexColor(0, 0, 0)
 
@@ -1429,8 +1429,8 @@ function Module:LoadSunUI()
 	QuestInfoRewardSpellIconTexture:SetDrawLayer("OVERLAY")
 
 	local bg = CreateFrame("Frame", nil, QuestInfoRewardSpell)
-	bg:Point("TOPLEFT", 9, -1)
-	bg:Point("BOTTOMRIGHT", -10, 13)
+	bg:SetPoint("TOPLEFT", 9, -1)
+	bg:SetPoint("BOTTOMRIGHT", -10, 13)
 	bg:Lower()
 	S.CreateBD(bg, .25)
 
@@ -1441,7 +1441,7 @@ function Module:LoadSunUI()
 
 	local spellLine = QuestInfoRewardSpell:CreateTexture(nil, "BACKGROUND")
 	spellLine:SetSize(1, 40)
-	spellLine:Point("RIGHT", QuestInfoRewardSpellIconTexture, 1, 0)
+	spellLine:SetPoint("RIGHT", QuestInfoRewardSpellIconTexture, 1, 0)
 	spellLine:SetTexture(DB.media.backdrop)
 	spellLine:SetVertexColor(0, 0, 0)
 
@@ -1479,7 +1479,7 @@ function Module:LoadSunUI()
 
 		local line = CreateFrame("Frame", nil, bu)
 		line:SetSize(1, 40)
-		line:Point("RIGHT", ic, 1, 0)
+		line:SetPoint("RIGHT", ic, 1, 0)
 		S.CreateBD(line)
 	end
 
@@ -1491,7 +1491,7 @@ function Module:LoadSunUI()
 		local na = _G["QuestInfoItem"..i.."NameFrame"]
 		local co = _G["QuestInfoItem"..i.."Count"]
 
-		ic:Point("TOPLEFT", 1, -1)
+		ic:SetPoint("TOPLEFT", 1, -1)
 		ic:SetSize(39, 39)
 		ic:SetTexCoord(.08, .92, .08, .92)
 		ic:SetDrawLayer("OVERLAY")
@@ -1503,7 +1503,7 @@ function Module:LoadSunUI()
 
 		local line = CreateFrame("Frame", nil, bu)
 		line:SetSize(1, 40)
-		line:Point("RIGHT", ic, 1, 0)
+		line:SetPoint("RIGHT", ic, 1, 0)
 		S.CreateBD(line)
 	end
 
@@ -1531,7 +1531,7 @@ function Module:LoadSunUI()
 
 				questLogTitle.bg = CreateFrame("Frame", nil, questLogTitle)
 				questLogTitle.bg:SetSize(13, 13)
-				questLogTitle.bg:Point("LEFT", 4, 0)
+				questLogTitle.bg:SetPoint("LEFT", 4, 0)
 				questLogTitle.bg:SetFrameLevel(questLogTitle:GetFrameLevel()-1)
 				S.CreateBD(questLogTitle.bg, 0)
 
@@ -1577,7 +1577,7 @@ function Module:LoadSunUI()
 	QuestLogScrollFrame:HookScript("OnMouseWheel", updateQuest)
 
 	hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, _, _, _, _, y)
-		QuestNPCModel:Point("TOPLEFT", parentFrame, "TOPRIGHT", 2, y)
+		QuestNPCModel:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", 2, y)
 	end)
 
 	hooksecurefunc(QuestProgressRequiredMoneyText, "SetTextColor", function(self, r, g, b)
@@ -1621,7 +1621,7 @@ function Module:LoadSunUI()
 	NPCFriendshipStatusBarNotch4:SetSize(1, 16)
 	select(7, NPCFriendshipStatusBar:GetRegions()):Hide()
 
-	NPCFriendshipStatusBar.icon:Point("TOPLEFT", -30, 7)
+	NPCFriendshipStatusBar.icon:SetPoint("TOPLEFT", -30, 7)
 	S.CreateBDFrame(NPCFriendshipStatusBar, .25)
 
 	S.ReskinPortraitFrame(GossipFrame, true)
@@ -1638,7 +1638,7 @@ function Module:LoadSunUI()
 
 			if bar and bar:IsVisible() then
 				bar:ClearAllPoints()
-				bar:Point("TOP", UIParent, "TOP", 0, -120)
+				bar:SetPoint("TOP", UIParent, "TOP", 0, -120)
 				if not bar.skinned then
 					local left = _G[barname.."LeftBar"]
 					local right = _G[barname.."RightBar"]
@@ -1662,14 +1662,14 @@ function Module:LoadSunUI()
 					_G[barname.."RightIconHighlight"]:SetAlpha(0)
 
 					bar.bg = bar:CreateTexture(nil, "BACKGROUND")
-					bar.bg:Point("TOPLEFT", left, -1, 1)
-					bar.bg:Point("BOTTOMRIGHT", right, 1, -1)
+					bar.bg:SetPoint("TOPLEFT", left, -1, 1)
+					bar.bg:SetPoint("BOTTOMRIGHT", right, 1, -1)
 					bar.bg:SetTexture(DB.media.backdrop)
 					bar.bg:SetVertexColor(0, 0, 0)
 
 					bar.bgmiddle = CreateFrame("Frame", nil, bar)
-					bar.bgmiddle:Point("TOPLEFT", middle, -1, 1)
-					bar.bgmiddle:Point("BOTTOMRIGHT", middle, 1, -1)
+					bar.bgmiddle:SetPoint("TOPLEFT", middle, -1, 1)
+					bar.bgmiddle:SetPoint("BOTTOMRIGHT", middle, 1, -1)
 					S.CreateBD(bar.bgmiddle, 0)
 
 					bar.skinned = true
@@ -1733,8 +1733,8 @@ function Module:LoadSunUI()
 	HelpBrowserNavStop:SetSize(18, 18)
 	HelpBrowserBrowserSettings:SetSize(18, 18)
 
-	HelpBrowserNavHome:Point("BOTTOMLEFT", HelpBrowser, "TOPLEFT", 2, 4)
-	HelpBrowserBrowserSettings:Point("TOPRIGHT", HelpFrameCloseButton, "BOTTOMLEFT", -4, -1)
+	HelpBrowserNavHome:SetPoint("BOTTOMLEFT", HelpBrowser, "TOPLEFT", 2, 4)
+	HelpBrowserBrowserSettings:SetPoint("TOPRIGHT", HelpFrameCloseButton, "BOTTOMLEFT", -4, -1)
 	LoadingIcon:ClearAllPoints()
 	LoadingIcon:SetPoint("LEFT", HelpBrowserNavStop, "RIGHT")
 
@@ -1755,7 +1755,7 @@ function Module:LoadSunUI()
 
 		local line = VideoOptionsFrame:CreateTexture(nil, "ARTWORK")
 		line:SetSize(1, 512)
-		line:Point("LEFT", 205, 30)
+		line:SetPoint("LEFT", 205, 30)
 		line:SetTexture(1, 1, 1, .2)
 
 		S.CreateBD(AudioOptionsSoundPanelPlayback, .25)
@@ -1765,11 +1765,11 @@ function Module:LoadSunUI()
 		S.CreateBD(AudioOptionsVoicePanelBinding, .25)
 		S.CreateBD(AudioOptionsVoicePanelListening, .25)
 
-		AudioOptionsSoundPanelPlaybackTitle:Point("BOTTOMLEFT", AudioOptionsSoundPanelPlayback, "TOPLEFT", 5, 2)
-		AudioOptionsSoundPanelHardwareTitle:Point("BOTTOMLEFT", AudioOptionsSoundPanelHardware, "TOPLEFT", 5, 2)
-		AudioOptionsSoundPanelVolumeTitle:Point("BOTTOMLEFT", AudioOptionsSoundPanelVolume, "TOPLEFT", 5, 2)
-		AudioOptionsVoicePanelTalkingTitle:Point("BOTTOMLEFT", AudioOptionsVoicePanelTalking, "TOPLEFT", 5, 2)
-		AudioOptionsVoicePanelListeningTitle:Point("BOTTOMLEFT", AudioOptionsVoicePanelListening, "TOPLEFT", 5, 2)
+		AudioOptionsSoundPanelPlaybackTitle:SetPoint("BOTTOMLEFT", AudioOptionsSoundPanelPlayback, "TOPLEFT", 5, 2)
+		AudioOptionsSoundPanelHardwareTitle:SetPoint("BOTTOMLEFT", AudioOptionsSoundPanelHardware, "TOPLEFT", 5, 2)
+		AudioOptionsSoundPanelVolumeTitle:SetPoint("BOTTOMLEFT", AudioOptionsSoundPanelVolume, "TOPLEFT", 5, 2)
+		AudioOptionsVoicePanelTalkingTitle:SetPoint("BOTTOMLEFT", AudioOptionsVoicePanelTalking, "TOPLEFT", 5, 2)
+		AudioOptionsVoicePanelListeningTitle:SetPoint("BOTTOMLEFT", AudioOptionsVoicePanelListening, "TOPLEFT", 5, 2)
 
 		local dropdowns = {"Graphics_DisplayModeDropDown", "Graphics_ResolutionDropDown", "Graphics_RefreshDropDown", "Graphics_PrimaryMonitorDropDown", "Graphics_MultiSampleDropDown", "Graphics_VerticalSyncDropDown", "Graphics_TextureResolutionDropDown", "Graphics_FilteringDropDown", "Graphics_ProjectedTexturesDropDown", "Graphics_ShadowsDropDown", "Graphics_LiquidDetailDropDown", "Graphics_SunshaftsDropDown", "Graphics_ParticleDensityDropDown", "Graphics_ViewDistanceDropDown", "Graphics_EnvironmentalDetailDropDown", "Graphics_GroundClutterDropDown", "Graphics_SSAODropDown", "Advanced_BufferingDropDown", "Advanced_LagDropDown", "Advanced_HardwareCursorDropDown", "InterfaceOptionsLanguagesPanelLocaleDropDown", "AudioOptionsSoundPanelHardwareDropDown", "AudioOptionsSoundPanelSoundChannelsDropDown", "AudioOptionsVoicePanelInputDeviceDropDown", "AudioOptionsVoicePanelChatModeDropDown", "AudioOptionsVoicePanelOutputDeviceDropDown"}
 		for i = 1, #dropdowns do
@@ -1803,7 +1803,7 @@ function Module:LoadSunUI()
 
 		local line = InterfaceOptionsFrame:CreateTexture(nil, "ARTWORK")
 		line:SetSize(1, 546)
-		line:Point("LEFT", 205, 10)
+		line:SetPoint("LEFT", 205, 10)
 		line:SetTexture(1, 1, 1, .2)
 
 		local checkboxes = {"InterfaceOptionsControlsPanelStickyTargeting", "InterfaceOptionsControlsPanelAutoDismount", "InterfaceOptionsControlsPanelAutoClearAFK", "InterfaceOptionsControlsPanelBlockTrades", "InterfaceOptionsControlsPanelBlockGuildInvites", "InterfaceOptionsControlsPanelBlockChatChannelInvites", "InterfaceOptionsControlsPanelLootAtMouse", "InterfaceOptionsControlsPanelAutoLootCorpse", "InterfaceOptionsControlsPanelInteractOnLeftClick", "InterfaceOptionsCombatPanelAttackOnAssist", "InterfaceOptionsCombatPanelStopAutoAttack", "InterfaceOptionsNamesPanelUnitNameplatesNameplateClassColors", "InterfaceOptionsCombatPanelTargetOfTarget", "InterfaceOptionsCombatPanelShowSpellAlerts", "InterfaceOptionsCombatPanelReducedLagTolerance", "InterfaceOptionsCombatPanelActionButtonUseKeyDown", "InterfaceOptionsCombatPanelEnemyCastBarsOnPortrait", "InterfaceOptionsCombatPanelEnemyCastBarsOnNameplates", "InterfaceOptionsCombatPanelEnemyCastBarsOnOnlyTargetNameplates", "InterfaceOptionsCombatPanelEnemyCastBarsNameplateSpellNames", "InterfaceOptionsCombatPanelAutoSelfCast", "InterfaceOptionsCombatPanelLossOfControl", "InterfaceOptionsDisplayPanelShowCloak", "InterfaceOptionsDisplayPanelShowHelm", "InterfaceOptionsDisplayPanelShowAggroPercentage", "InterfaceOptionsDisplayPanelPlayAggroSounds", "InterfaceOptionsDisplayPanelShowSpellPointsAvg", "InterfaceOptionsDisplayPanelShowFreeBagSpace", "InterfaceOptionsDisplayPanelCinematicSubtitles", "InterfaceOptionsDisplayPanelRotateMinimap", "InterfaceOptionsDisplayPanelShowAccountAchievments", "InterfaceOptionsObjectivesPanelAutoQuestTracking", "InterfaceOptionsObjectivesPanelMapQuestDifficulty", "InterfaceOptionsObjectivesPanelWatchFrameWidth", "InterfaceOptionsSocialPanelProfanityFilter", "InterfaceOptionsSocialPanelSpamFilter", "InterfaceOptionsSocialPanelChatBubbles", "InterfaceOptionsSocialPanelPartyChat", "InterfaceOptionsSocialPanelChatHoverDelay", "InterfaceOptionsSocialPanelGuildMemberAlert", "InterfaceOptionsSocialPanelChatMouseScroll", "InterfaceOptionsSocialPanelWholeChatWindowClickable", "InterfaceOptionsActionBarsPanelBottomLeft", "InterfaceOptionsActionBarsPanelBottomRight", "InterfaceOptionsActionBarsPanelRight", "InterfaceOptionsActionBarsPanelRightTwo", "InterfaceOptionsActionBarsPanelLockActionBars", "InterfaceOptionsActionBarsPanelAlwaysShowActionBars", "InterfaceOptionsActionBarsPanelSecureAbilityToggle", "InterfaceOptionsNamesPanelMyName", "InterfaceOptionsNamesPanelFriendlyPlayerNames", "InterfaceOptionsNamesPanelFriendlyPets", "InterfaceOptionsNamesPanelFriendlyGuardians", "InterfaceOptionsNamesPanelFriendlyTotems", "InterfaceOptionsNamesPanelUnitNameplatesFriends", "InterfaceOptionsNamesPanelUnitNameplatesFriendlyPets", "InterfaceOptionsNamesPanelUnitNameplatesFriendlyGuardians", "InterfaceOptionsNamesPanelUnitNameplatesFriendlyTotems", "InterfaceOptionsNamesPanelGuilds", "InterfaceOptionsNamesPanelGuildTitles", "InterfaceOptionsNamesPanelTitles", "InterfaceOptionsNamesPanelNonCombatCreature", "InterfaceOptionsNamesPanelEnemyPlayerNames", "InterfaceOptionsNamesPanelEnemyPets", "InterfaceOptionsNamesPanelEnemyGuardians", "InterfaceOptionsNamesPanelEnemyTotems", "InterfaceOptionsNamesPanelUnitNameplatesEnemies", "InterfaceOptionsNamesPanelUnitNameplatesEnemyPets", "InterfaceOptionsNamesPanelUnitNameplatesEnemyGuardians", "InterfaceOptionsNamesPanelUnitNameplatesEnemyTotems", "InterfaceOptionsCombatTextPanelTargetDamage", "InterfaceOptionsCombatTextPanelPeriodicDamage", "InterfaceOptionsCombatTextPanelPetDamage", "InterfaceOptionsCombatTextPanelHealing", "InterfaceOptionsCombatTextPanelHealingAbsorbTarget", "InterfaceOptionsCombatTextPanelTargetEffects", "InterfaceOptionsCombatTextPanelOtherTargetEffects", "InterfaceOptionsCombatTextPanelEnableFCT", "InterfaceOptionsCombatTextPanelDodgeParryMiss", "InterfaceOptionsCombatTextPanelDamageReduction", "InterfaceOptionsCombatTextPanelRepChanges", "InterfaceOptionsCombatTextPanelReactiveAbilities", "InterfaceOptionsCombatTextPanelFriendlyHealerNames", "InterfaceOptionsCombatTextPanelCombatState", "InterfaceOptionsCombatTextPanelComboPoints", "InterfaceOptionsCombatTextPanelLowManaHealth", "InterfaceOptionsCombatTextPanelEnergyGains", "InterfaceOptionsCombatTextPanelPeriodicEnergyGains", "InterfaceOptionsCombatTextPanelHonorGains", "InterfaceOptionsCombatTextPanelAuras", "InterfaceOptionsStatusTextPanelPlayer", "InterfaceOptionsStatusTextPanelPet", "InterfaceOptionsStatusTextPanelParty", "InterfaceOptionsStatusTextPanelTarget", "InterfaceOptionsStatusTextPanelAlternateResource", "InterfaceOptionsStatusTextPanelXP", "InterfaceOptionsBattlenetPanelOnlineFriends", "InterfaceOptionsBattlenetPanelOfflineFriends", "InterfaceOptionsBattlenetPanelBroadcasts", "InterfaceOptionsBattlenetPanelFriendRequests", "InterfaceOptionsBattlenetPanelConversations", "InterfaceOptionsBattlenetPanelShowToastWindow", "InterfaceOptionsCameraPanelFollowTerrain", "InterfaceOptionsCameraPanelHeadBob", "InterfaceOptionsCameraPanelWaterCollision", "InterfaceOptionsCameraPanelSmartPivot", "InterfaceOptionsMousePanelInvertMouse", "InterfaceOptionsMousePanelClickToMove", "InterfaceOptionsMousePanelWoWMouse", "InterfaceOptionsHelpPanelShowTutorials", "InterfaceOptionsHelpPanelEnhancedTooltips", "InterfaceOptionsHelpPanelShowLuaErrors", "InterfaceOptionsHelpPanelColorblindMode", "InterfaceOptionsHelpPanelMovePad", "InterfaceOptionsControlsPanelAutoOpenLootHistory", "InterfaceOptionsUnitFramePanelPartyPets", "InterfaceOptionsUnitFramePanelArenaEnemyFrames", "InterfaceOptionsUnitFramePanelArenaEnemyCastBar", "InterfaceOptionsUnitFramePanelArenaEnemyPets", "InterfaceOptionsUnitFramePanelFullSizeFocusFrame", "InterfaceOptionsBuffsPanelDispellableDebuffs", "InterfaceOptionsBuffsPanelCastableBuffs", "InterfaceOptionsBuffsPanelConsolidateBuffs", "InterfaceOptionsBuffsPanelShowAllEnemyDebuffs"}
@@ -1868,12 +1868,12 @@ function Module:LoadSunUI()
 
 	SideDressUpModel:HookScript("OnShow", function(self)
 		self:ClearAllPoints()
-		self:Point("LEFT", self:GetParent():GetParent(), "RIGHT", 1, 0)
+		self:SetPoint("LEFT", self:GetParent():GetParent(), "RIGHT", 1, 0)
 	end)
 
 	SideDressUpModel.bg = CreateFrame("Frame", nil, SideDressUpModel)
-	SideDressUpModel.bg:Point("TOPLEFT", 0, 1)
-	SideDressUpModel.bg:Point("BOTTOMRIGHT", 1, -1)
+	SideDressUpModel.bg:SetPoint("TOPLEFT", 0, 1)
+	SideDressUpModel.bg:SetPoint("BOTTOMRIGHT", 1, -1)
 	SideDressUpModel.bg:SetFrameLevel(SideDressUpModel:GetFrameLevel()-1)
 	S.CreateBD(SideDressUpModel.bg)
 
@@ -1907,8 +1907,8 @@ function Module:LoadSunUI()
 	S.ReskinInput(TradePlayerInputMoneyFrameSilver)
 	S.ReskinInput(TradePlayerInputMoneyFrameCopper)
 
-	TradePlayerInputMoneyFrameSilver:Point("LEFT", TradePlayerInputMoneyFrameGold, "RIGHT", 1, 0)
-	TradePlayerInputMoneyFrameCopper:Point("LEFT", TradePlayerInputMoneyFrameSilver, "RIGHT", 1, 0)
+	TradePlayerInputMoneyFrameSilver:SetPoint("LEFT", TradePlayerInputMoneyFrameGold, "RIGHT", 1, 0)
+	TradePlayerInputMoneyFrameCopper:SetPoint("LEFT", TradePlayerInputMoneyFrameSilver, "RIGHT", 1, 0)
 
 	for i = 1, MAX_TRADE_ITEMS do
 		local bu1 = _G["TradePlayerItem"..i.."ItemButton"]
@@ -1927,14 +1927,14 @@ function Module:LoadSunUI()
 		bu2.icon:SetTexCoord(.08, .92, .08, .92)
 
 		local bg1 = CreateFrame("Frame", nil, bu1)
-		bg1:Point("TOPLEFT", -1, 1)
-		bg1:Point("BOTTOMRIGHT", 1, -1)
+		bg1:SetPoint("TOPLEFT", -1, 1)
+		bg1:SetPoint("BOTTOMRIGHT", 1, -1)
 		bg1:SetFrameLevel(bu1:GetFrameLevel()-1)
 		S.CreateBD(bg1, .25)
 
 		local bg2 = CreateFrame("Frame", nil, bu2)
-		bg2:Point("TOPLEFT", -1, 1)
-		bg2:Point("BOTTOMRIGHT", 1, -1)
+		bg2:SetPoint("TOPLEFT", -1, 1)
+		bg2:SetPoint("BOTTOMRIGHT", 1, -1)
 		bg2:SetFrameLevel(bu2:GetFrameLevel()-1)
 		S.CreateBD(bg2, .25)
 	end
@@ -1954,7 +1954,7 @@ function Module:LoadSunUI()
 	S.ReskinArrow(TutorialFrameNextButton, "right")
 
 	TutorialFrameOkayButton:ClearAllPoints()
-	TutorialFrameOkayButton:Point("BOTTOMLEFT", TutorialFrameNextButton, "BOTTOMRIGHT", 10, 0)
+	TutorialFrameOkayButton:SetPoint("BOTTOMLEFT", TutorialFrameNextButton, "BOTTOMRIGHT", 10, 0)
 
 	-- because gradient alpha and OnUpdate doesn't work for some reason...
 
@@ -1975,7 +1975,7 @@ function Module:LoadSunUI()
 	end
 	LootHistoryFrameScrollFrame:GetRegions():Hide()
 
-	LootHistoryFrame.ResizeButton:Point("TOP", LootHistoryFrame, "BOTTOM", 0, -1)
+	LootHistoryFrame.ResizeButton:SetPoint("TOP", LootHistoryFrame, "BOTTOM", 0, -1)
 	LootHistoryFrame.ResizeButton:SetFrameStrata("LOW")
 
 	S.ReskinArrow(LootHistoryFrame.ResizeButton, "down")
@@ -2097,10 +2097,10 @@ function Module:LoadSunUI()
 			local playerFrame = MasterLooterFrame["player"..i]
 			if playerFrame then
 				if not playerFrame.styled then
-					playerFrame.Bg:Point("TOPLEFT", 1, -1)
-					playerFrame.Bg:Point("BOTTOMRIGHT", -1, 1)
-					playerFrame.Highlight:Point("TOPLEFT", 1, -1)
-					playerFrame.Highlight:Point("BOTTOMRIGHT", -1, 1)
+					playerFrame.Bg:SetPoint("TOPLEFT", 1, -1)
+					playerFrame.Bg:SetPoint("BOTTOMRIGHT", -1, 1)
+					playerFrame.Highlight:SetPoint("TOPLEFT", 1, -1)
+					playerFrame.Highlight:SetPoint("BOTTOMRIGHT", -1, 1)
 
 					playerFrame.Highlight:SetTexture(DB.media.backdrop)
 
@@ -2209,8 +2209,8 @@ function Module:LoadSunUI()
 	select(2, WorldStateScoreScrollFrame:GetRegions()):Hide()
 	select(3, WorldStateScoreScrollFrame:GetRegions()):Hide()
 
-	WorldStateScoreFrameTab2:Point("LEFT", WorldStateScoreFrameTab1, "RIGHT", -15, 0)
-	WorldStateScoreFrameTab3:Point("LEFT", WorldStateScoreFrameTab2, "RIGHT", -15, 0)
+	WorldStateScoreFrameTab2:SetPoint("LEFT", WorldStateScoreFrameTab1, "RIGHT", -15, 0)
+	WorldStateScoreFrameTab3:SetPoint("LEFT", WorldStateScoreFrameTab2, "RIGHT", -15, 0)
 
 	S.ReskinPortraitFrame(WorldStateScoreFrame, true)
 	S.Reskin(WorldStateScoreFrameLeaveButton)
@@ -2287,17 +2287,17 @@ function Module:LoadSunUI()
 		MacOptionsFrameCancel:SetWidth(96)
 		MacOptionsFrameCancel:SetHeight(22)
 		MacOptionsFrameCancel:ClearAllPoints()
-		MacOptionsFrameCancel:Point("LEFT", MacOptionsButtonKeybindings, "RIGHT", 107, 0)
+		MacOptionsFrameCancel:SetPoint("LEFT", MacOptionsButtonKeybindings, "RIGHT", 107, 0)
 
 		MacOptionsFrameOkay:SetWidth(96)
 		MacOptionsFrameOkay:SetHeight(22)
 		MacOptionsFrameOkay:ClearAllPoints()
-		MacOptionsFrameOkay:Point("LEFT", MacOptionsButtonKeybindings, "RIGHT", 5, 0)
+		MacOptionsFrameOkay:SetPoint("LEFT", MacOptionsButtonKeybindings, "RIGHT", 5, 0)
 
 		MacOptionsButtonKeybindings:SetWidth(96)
 		MacOptionsButtonKeybindings:SetHeight(22)
 		MacOptionsButtonKeybindings:ClearAllPoints()
-		MacOptionsButtonKeybindings:Point("LEFT", MacOptionsFrameDefaults, "RIGHT", 5, 0)
+		MacOptionsButtonKeybindings:SetPoint("LEFT", MacOptionsFrameDefaults, "RIGHT", 5, 0)
 
 		MacOptionsFrameDefaults:SetWidth(96)
 		MacOptionsFrameDefaults:SetHeight(22)
@@ -2358,7 +2358,7 @@ function Module:LoadSunUI()
 
 				local bg = CreateFrame("Frame", nil, checkbox)
 				bg:SetPoint("TOPLEFT")
-				bg:Point("BOTTOMRIGHT", 0, 1)
+				bg:SetPoint("BOTTOMRIGHT", 0, 1)
 				bg:SetFrameLevel(checkbox:GetFrameLevel()-1)
 				S.CreateBD(bg, .25)
 
@@ -2373,7 +2373,7 @@ function Module:LoadSunUI()
 
 				local bg = CreateFrame("Frame", nil, checkbox)
 				bg:SetPoint("TOPLEFT")
-				bg:Point("BOTTOMRIGHT", 0, 1)
+				bg:SetPoint("BOTTOMRIGHT", 0, 1)
 				bg:SetFrameLevel(checkbox:GetFrameLevel()-1)
 				S.CreateBD(bg, .25)
 
@@ -2427,7 +2427,7 @@ function Module:LoadSunUI()
 
 			local bg = CreateFrame("Frame", nil, swatch)
 			bg:SetPoint("TOPLEFT")
-			bg:Point("BOTTOMRIGHT", 0, 1)
+			bg:SetPoint("BOTTOMRIGHT", 0, 1)
 			bg:SetFrameLevel(swatch:GetFrameLevel()-1)
 			S.CreateBD(bg, .25)
 
@@ -2465,8 +2465,8 @@ function Module:LoadSunUI()
 	end
 
 	local bg = CreateFrame("Frame", nil, ChatConfigCombatSettingsFilters)
-	bg:Point("TOPLEFT", 3, 0)
-	bg:Point("BOTTOMRIGHT", 0, 1)
+	bg:SetPoint("TOPLEFT", 3, 0)
+	bg:SetPoint("BOTTOMRIGHT", 0, 1)
 	bg:SetFrameLevel(ChatConfigCombatSettingsFilters:GetFrameLevel()-1)
 	S.CreateBD(bg, .25)
 
@@ -2486,10 +2486,10 @@ function Module:LoadSunUI()
 	ChatConfigMoveFilterUpButton:SetSize(28, 28)
 	ChatConfigMoveFilterDownButton:SetSize(28, 28)
 
-	ChatConfigCombatSettingsFiltersAddFilterButton:Point("RIGHT", ChatConfigCombatSettingsFiltersDeleteButton, "LEFT", -1, 0)
-	ChatConfigCombatSettingsFiltersCopyFilterButton:Point("RIGHT", ChatConfigCombatSettingsFiltersAddFilterButton, "LEFT", -1, 0)
-	ChatConfigMoveFilterUpButton:Point("TOPLEFT", ChatConfigCombatSettingsFilters, "BOTTOMLEFT", 3, 0)
-	ChatConfigMoveFilterDownButton:Point("LEFT", ChatConfigMoveFilterUpButton, "RIGHT", 1, 0)
+	ChatConfigCombatSettingsFiltersAddFilterButton:SetPoint("RIGHT", ChatConfigCombatSettingsFiltersDeleteButton, "LEFT", -1, 0)
+	ChatConfigCombatSettingsFiltersCopyFilterButton:SetPoint("RIGHT", ChatConfigCombatSettingsFiltersAddFilterButton, "LEFT", -1, 0)
+	ChatConfigMoveFilterUpButton:SetPoint("TOPLEFT", ChatConfigCombatSettingsFilters, "BOTTOMLEFT", 3, 0)
+	ChatConfigMoveFilterDownButton:SetPoint("LEFT", ChatConfigMoveFilterUpButton, "RIGHT", 1, 0)
 
 	-- Level up display
 
@@ -2538,29 +2538,29 @@ function Module:LoadSunUI()
 		left:SetWidth(1)
 		left:SetTexture(DB.media.backdrop)
 		left:SetVertexColor(0, 0, 0)
-		left:Point("TOPLEFT", 9, -7)
-		left:Point("BOTTOMLEFT", 9, 10)
+		left:SetPoint("TOPLEFT", 9, -7)
+		left:SetPoint("BOTTOMLEFT", 9, 10)
 
 		local right = PVPReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
 		right:SetWidth(1)
 		right:SetTexture(DB.media.backdrop)
 		right:SetVertexColor(0, 0, 0)
-		right:Point("TOPRIGHT", -8, -7)
-		right:Point("BOTTOMRIGHT", -8, 10)
+		right:SetPoint("TOPRIGHT", -8, -7)
+		right:SetPoint("BOTTOMRIGHT", -8, 10)
 
 		local top = PVPReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
 		top:SetHeight(1)
 		top:SetTexture(DB.media.backdrop)
 		top:SetVertexColor(0, 0, 0)
-		top:Point("TOPLEFT", 9, -7)
-		top:Point("TOPRIGHT", -8, -7)
+		top:SetPoint("TOPLEFT", 9, -7)
+		top:SetPoint("TOPRIGHT", -8, -7)
 
 		local bottom = PVPReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
 		bottom:SetHeight(1)
 		bottom:SetTexture(DB.media.backdrop)
 		bottom:SetVertexColor(0, 0, 0)
-		bottom:Point("BOTTOMLEFT", 9, 10)
-		bottom:Point("BOTTOMRIGHT", -8, 10)
+		bottom:SetPoint("BOTTOMLEFT", 9, 10)
+		bottom:SetPoint("BOTTOMRIGHT", -8, 10)
 	end
 
 	S.CreateBD(PVPReadyDialog)
@@ -2847,34 +2847,34 @@ function Module:LoadSunUI()
 	-- [[ Change positions ]]
 
 	ChatConfigFrameDefaultButton:SetWidth(125)
-	ChatConfigFrameDefaultButton:Point("TOPLEFT", ChatConfigCategoryFrame, "BOTTOMLEFT", 0, -4)
-	ChatConfigFrameOkayButton:Point("TOPRIGHT", ChatConfigBackgroundFrame, "BOTTOMRIGHT", 0, -4)
+	ChatConfigFrameDefaultButton:SetPoint("TOPLEFT", ChatConfigCategoryFrame, "BOTTOMLEFT", 0, -4)
+	ChatConfigFrameOkayButton:SetPoint("TOPRIGHT", ChatConfigBackgroundFrame, "BOTTOMRIGHT", 0, -4)
 	PaperDollEquipmentManagerPaneEquipSet:SetWidth(PaperDollEquipmentManagerPaneEquipSet:GetWidth()-1)
-	PaperDollEquipmentManagerPaneSaveSet:Point("LEFT", PaperDollEquipmentManagerPaneEquipSet, "RIGHT", 1, 0)
-	GearManagerDialogPopup:Point("LEFT", PaperDollFrame, "RIGHT", 1, 0)
-	DressUpFrameResetButton:Point("RIGHT", DressUpFrameCancelButton, "LEFT", -1, 0)
-	SendMailMailButton:Point("RIGHT", SendMailCancelButton, "LEFT", -1, 0)
-	OpenMailDeleteButton:Point("RIGHT", OpenMailCancelButton, "LEFT", -1, 0)
-	OpenMailReplyButton:Point("RIGHT", OpenMailDeleteButton, "LEFT", -1, 0)
-	HelpFrameReportBugScrollFrameScrollBar:Point("TOPLEFT", HelpFrameReportBugScrollFrame, "TOPRIGHT", 1, -16)
-	HelpFrameSubmitSuggestionScrollFrameScrollBar:Point("TOPLEFT", HelpFrameSubmitSuggestionScrollFrame, "TOPRIGHT", 1, -16)
-	HelpFrameTicketScrollFrameScrollBar:Point("TOPLEFT", HelpFrameTicketScrollFrame, "TOPRIGHT", 1, -16)
-	HelpFrameGM_ResponseScrollFrame1ScrollBar:Point("TOPLEFT", HelpFrameGM_ResponseScrollFrame1, "TOPRIGHT", 1, -16)
-	HelpFrameGM_ResponseScrollFrame2ScrollBar:Point("TOPLEFT", HelpFrameGM_ResponseScrollFrame2, "TOPRIGHT", 1, -16)
-	RaidInfoFrame:Point("TOPLEFT", RaidFrame, "TOPRIGHT", 1, -28)
-	TokenFramePopup:Point("TOPLEFT", TokenFrame, "TOPRIGHT", 1, -28)
-	CharacterFrameExpandButton:Point("BOTTOMRIGHT", CharacterFrameInset, "BOTTOMRIGHT", -14, 6)
-	TabardCharacterModelRotateRightButton:Point("TOPLEFT", TabardCharacterModelRotateLeftButton, "TOPRIGHT", 1, 0)
-	LFDQueueFrameSpecificListScrollFrameScrollBarScrollDownButton:Point("TOP", LFDQueueFrameSpecificListScrollFrameScrollBar, "BOTTOM", 0, 2)
-	LFDQueueFrameRandomScrollFrameScrollBarScrollDownButton:Point("TOP", LFDQueueFrameRandomScrollFrameScrollBar, "BOTTOM", 0, 2)
-	MerchantFrameTab2:Point("LEFT", MerchantFrameTab1, "RIGHT", -15, 0)
-	SendMailMoneySilver:Point("LEFT", SendMailMoneyGold, "RIGHT", 1, 0)
-	SendMailMoneyCopper:Point("LEFT", SendMailMoneySilver, "RIGHT", 1, 0)
-	WhoFrameWhoButton:Point("RIGHT", WhoFrameAddFriendButton, "LEFT", -1, 0)
-	WhoFrameAddFriendButton:Point("RIGHT", WhoFrameGroupInviteButton, "LEFT", -1, 0)
-	FriendsFrameTitleText:Point("TOP", FriendsFrame, "TOP", 0, -8)
-	VideoOptionsFrameOkay:Point("BOTTOMRIGHT", VideoOptionsFrameCancel, "BOTTOMLEFT", -1, 0)
-	InterfaceOptionsFrameOkay:Point("BOTTOMRIGHT", InterfaceOptionsFrameCancel, "BOTTOMLEFT", -1, 0)
+	PaperDollEquipmentManagerPaneSaveSet:SetPoint("LEFT", PaperDollEquipmentManagerPaneEquipSet, "RIGHT", 1, 0)
+	GearManagerDialogPopup:SetPoint("LEFT", PaperDollFrame, "RIGHT", 1, 0)
+	DressUpFrameResetButton:SetPoint("RIGHT", DressUpFrameCancelButton, "LEFT", -1, 0)
+	SendMailMailButton:SetPoint("RIGHT", SendMailCancelButton, "LEFT", -1, 0)
+	OpenMailDeleteButton:SetPoint("RIGHT", OpenMailCancelButton, "LEFT", -1, 0)
+	OpenMailReplyButton:SetPoint("RIGHT", OpenMailDeleteButton, "LEFT", -1, 0)
+	HelpFrameReportBugScrollFrameScrollBar:SetPoint("TOPLEFT", HelpFrameReportBugScrollFrame, "TOPRIGHT", 1, -16)
+	HelpFrameSubmitSuggestionScrollFrameScrollBar:SetPoint("TOPLEFT", HelpFrameSubmitSuggestionScrollFrame, "TOPRIGHT", 1, -16)
+	HelpFrameTicketScrollFrameScrollBar:SetPoint("TOPLEFT", HelpFrameTicketScrollFrame, "TOPRIGHT", 1, -16)
+	HelpFrameGM_ResponseScrollFrame1ScrollBar:SetPoint("TOPLEFT", HelpFrameGM_ResponseScrollFrame1, "TOPRIGHT", 1, -16)
+	HelpFrameGM_ResponseScrollFrame2ScrollBar:SetPoint("TOPLEFT", HelpFrameGM_ResponseScrollFrame2, "TOPRIGHT", 1, -16)
+	RaidInfoFrame:SetPoint("TOPLEFT", RaidFrame, "TOPRIGHT", 1, -28)
+	TokenFramePopup:SetPoint("TOPLEFT", TokenFrame, "TOPRIGHT", 1, -28)
+	CharacterFrameExpandButton:SetPoint("BOTTOMRIGHT", CharacterFrameInset, "BOTTOMRIGHT", -14, 6)
+	TabardCharacterModelRotateRightButton:SetPoint("TOPLEFT", TabardCharacterModelRotateLeftButton, "TOPRIGHT", 1, 0)
+	LFDQueueFrameSpecificListScrollFrameScrollBarScrollDownButton:SetPoint("TOP", LFDQueueFrameSpecificListScrollFrameScrollBar, "BOTTOM", 0, 2)
+	LFDQueueFrameRandomScrollFrameScrollBarScrollDownButton:SetPoint("TOP", LFDQueueFrameRandomScrollFrameScrollBar, "BOTTOM", 0, 2)
+	MerchantFrameTab2:SetPoint("LEFT", MerchantFrameTab1, "RIGHT", -15, 0)
+	SendMailMoneySilver:SetPoint("LEFT", SendMailMoneyGold, "RIGHT", 1, 0)
+	SendMailMoneyCopper:SetPoint("LEFT", SendMailMoneySilver, "RIGHT", 1, 0)
+	WhoFrameWhoButton:SetPoint("RIGHT", WhoFrameAddFriendButton, "LEFT", -1, 0)
+	WhoFrameAddFriendButton:SetPoint("RIGHT", WhoFrameGroupInviteButton, "LEFT", -1, 0)
+	FriendsFrameTitleText:SetPoint("TOP", FriendsFrame, "TOP", 0, -8)
+	VideoOptionsFrameOkay:SetPoint("BOTTOMRIGHT", VideoOptionsFrameCancel, "BOTTOMLEFT", -1, 0)
+	InterfaceOptionsFrameOkay:SetPoint("BOTTOMRIGHT", InterfaceOptionsFrameCancel, "BOTTOMLEFT", -1, 0)
 
 	-- [[ Tabs ]]
 

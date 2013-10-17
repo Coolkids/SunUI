@@ -1,4 +1,4 @@
---[[ Element: Combo Point Icons
+--[[ Element: Combo SetPoint Icons
  Toggles visibility of the player and vehicles combo points.
 
  Widget

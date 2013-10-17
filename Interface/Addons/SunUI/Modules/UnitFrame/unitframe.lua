@@ -152,7 +152,7 @@ local function  gen_hpbar(f)
 	--LFD
 		local LFDRole = h:CreateTexture(nil, "OVERLAY")
 		LFDRole:SetSize(16, 16)
-		LFDRole:Point("TOPLEFT", f, -15, 10)
+		LFDRole:SetPoint("TOPLEFT", f, -15, 10)
 		f.LFDRole = LFDRole
 		f.LFDRole:SetTexture("Interface\\AddOns\\SunUI\\media\\UnitFrame\\lfd_role")
 	end
@@ -432,7 +432,7 @@ local function gen_castbar(f)
     local i = s:CreateTexture(nil, "ARTWORK")
     --i:SetSize(s:GetHeight()+4,s:GetHeight()+4)
 	i:SetSize(s:GetHeight(),s:GetHeight())
-    i:Point("BOTTOMRIGHT", s, "BOTTOMLEFT", -6, 0)
+    i:SetPoint("BOTTOMRIGHT", s, "BOTTOMLEFT", -6, 0)
     i:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	S.CreateShadow(s, i)
 	
@@ -470,8 +470,8 @@ local function gen_castbar(f)
 		txt:Hide() t:Hide() h:Hide()
     elseif f.mystyle == "arena" then
 		s:SetSize(f.width-(f.height/1.4+4),f.height/1.4)
-		s:Point("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
-		i:Point("RIGHT", s, "LEFT", -4, 0)
+		s:SetPoint("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
+		i:SetPoint("RIGHT", s, "LEFT", -4, 0)
 		i:SetSize(s:GetHeight(),s:GetHeight())
     elseif f.mystyle == "player" then
 		if not U["playerCBuserplaced"] then
@@ -479,7 +479,7 @@ local function gen_castbar(f)
 			MoveHandle.Castbarplayer = S.MakeMoveHandle(s, L["玩家施法条"], "PlayerCastbar")
 			i:SetSize(s:GetHeight(),s:GetHeight())
 		else
-			s:Point("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
+			s:SetPoint("TOPRIGHT",f.Power,"BOTTOMRIGHT",0,-4)
 		end
 		--latency only for player unit
 		local z = s:CreateTexture(nil, "OVERLAY", 3)
@@ -632,7 +632,7 @@ local function PostCreateIcon(self, button)
 	button.count = gen_fontstring(h3, DB.Font, (U["FontSize"]-1)*S.Scale(1), "THINOUTLINE")
     button.count:ClearAllPoints()
     button.count:SetJustifyH("RIGHT")
-    button.count:Point("BOTTOMRIGHT", 2, -2)
+    button.count:SetPoint("BOTTOMRIGHT", 2, -2)
     button.count:SetTextColor(1,1,1)
     --another helper frame for our fontstring to overlap the cd frame
     local h2 = CreateFrame("Frame", nil, button)
@@ -642,8 +642,8 @@ local function PostCreateIcon(self, button)
     button.remaining:SetPoint("TOPLEFT", -2, 4)
 
     button.overlay:SetTexture("Interface\\Addons\\SunUI\\media\\icon_clean")
-    button.overlay:Point("TOPLEFT", button, "TOPLEFT", -1, 1)
-    button.overlay:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 1, -1)
+    button.overlay:SetPoint("TOPLEFT", button, "TOPLEFT", -1, 1)
+    button.overlay:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 1, -1)
     button.overlay:SetTexCoord(0.04, 0.96, 0.04, 0.96)
     button.overlay.Hide = function(self) self:SetVertexColor(0, 0, 0) end
 end
@@ -1324,7 +1324,7 @@ local function gen_alt_powerbar(f)
 	apb:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
 	apb:GetStatusBarTexture():SetHorizTile(false)
 	apb:SetStatusBarColor(1, 1, 0)
-	apb:Point("TOP", headframe, "BOTTOM", 0, -4)
+	apb:SetPoint("TOP", headframe, "BOTTOM", 0, -4)
 	apb:CreateShadow()
 	S.CreateMark(apb)
 	S.CreateBack(apb)

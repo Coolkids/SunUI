@@ -118,15 +118,15 @@ end
 
 function WM:SkinWorldMap()
 	WorldMapFrame.backdrop = CreateFrame("Frame", nil, WorldMapFrame)
-	WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapFrame, -2, 2)
-	WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapFrame, 2, -2)
+	WorldMapFrame.backdrop:SetPoint("TOPLEFT", WorldMapFrame, -2, 2)
+	WorldMapFrame.backdrop:SetPoint("BOTTOMRIGHT", WorldMapFrame, 2, -2)
 	S.SetBD(WorldMapFrame.backdrop)
 	WorldMapFrame.backdrop:SetFrameLevel(0)
 
 	WorldMapDetailFrame.backdrop = CreateFrame("Frame", nil, WorldMapFrame)
 	S.SetBD(WorldMapDetailFrame.backdrop)
-	WorldMapDetailFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, -2, 2)
-	WorldMapDetailFrame.backdrop:Point("BOTTOMRIGHT", WorldMapDetailFrame, 2, -2)
+	WorldMapDetailFrame.backdrop:SetPoint("TOPLEFT", WorldMapDetailFrame, -2, 2)
+	WorldMapDetailFrame.backdrop:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, 2, -2)
 	WorldMapDetailFrame.backdrop:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel() - 2)
 
 	S.ReskinDropDown(WorldMapZoneMinimapDropDown)
@@ -138,9 +138,9 @@ function WM:SkinWorldMap()
 	WorldMapShowDropDown:SetPoint("TOPRIGHT", WorldMapButton, "BOTTOMRIGHT", 18, 2)
 
 	S.Reskin(WorldMapZoomOutButton)
-	WorldMapZoomOutButton:Point("LEFT", WorldMapZoneDropDown, "RIGHT", 0, 4)
-	WorldMapLevelUpButton:Point("TOPLEFT", WorldMapLevelDropDown, "TOPRIGHT", -2, 8)
-	WorldMapLevelDownButton:Point("BOTTOMLEFT", WorldMapLevelDropDown, "BOTTOMRIGHT", -2, 2)
+	WorldMapZoomOutButton:SetPoint("LEFT", WorldMapZoneDropDown, "RIGHT", 0, 4)
+	WorldMapLevelUpButton:SetPoint("TOPLEFT", WorldMapLevelDropDown, "TOPRIGHT", -2, 8)
+	WorldMapLevelDownButton:SetPoint("BOTTOMLEFT", WorldMapLevelDropDown, "BOTTOMRIGHT", -2, 2)
 
 	S.ReskinCheck(WorldMapTrackQuest)
 	WorldMapFrameSizeUpButton:SetFrameStrata("HIGH")
@@ -209,8 +209,8 @@ function WM:LargeSkin()
 	WorldMapDetailFrame.backdrop:Hide()
 	WorldMapFrame.backdrop:Show()
 	WorldMapFrame.backdrop:ClearAllPoints()
-	WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -25, 70)
-	WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 25, -30)
+	WorldMapFrame.backdrop:SetPoint("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -25, 70)
+	WorldMapFrame.backdrop:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 25, -30)
 	WorldMapTrackQuest:SetScale(1)
 	WorldMapFrameCloseButton:SetScale(1)
 	WorldMapLevelDownButton:SetScale(1)
@@ -232,31 +232,31 @@ function WM:QuestSkin()
 	end
 
 	WorldMapFrame.backdrop:ClearAllPoints()
-	WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -25, 70)
-	WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 325, -235)  
+	WorldMapFrame.backdrop:SetPoint("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -25, 70)
+	WorldMapFrame.backdrop:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 325, -235)  
 
 	if not WorldMapQuestDetailScrollFrame.backdrop then
 		WorldMapQuestDetailScrollFrame.backdrop = CreateFrame("Frame", nil, WorldMapQuestDetailScrollFrame)
 		S.CreateBD(WorldMapQuestDetailScrollFrame.backdrop)
 		WorldMapQuestDetailScrollFrame.backdrop:SetFrameLevel(0)
-		WorldMapQuestDetailScrollFrame.backdrop:Point("TOPLEFT", -22, 2)
-		WorldMapQuestDetailScrollFrame.backdrop:Point("BOTTOMRIGHT", 23, -4)
+		WorldMapQuestDetailScrollFrame.backdrop:SetPoint("TOPLEFT", -22, 2)
+		WorldMapQuestDetailScrollFrame.backdrop:SetPoint("BOTTOMRIGHT", 23, -4)
 	end
 
 	if not WorldMapQuestRewardScrollFrame.backdrop then
 		WorldMapQuestRewardScrollFrame.backdrop = CreateFrame("Frame", nil, WorldMapQuestRewardScrollFrame)
 		S.CreateBD(WorldMapQuestRewardScrollFrame.backdrop)
 		WorldMapQuestRewardScrollFrame.backdrop:SetFrameLevel(0)
-		WorldMapQuestRewardScrollFrame.backdrop:Point("TOPLEFT", -2, 2)
-		WorldMapQuestRewardScrollFrame.backdrop:Point("BOTTOMRIGHT", 22, -4)
+		WorldMapQuestRewardScrollFrame.backdrop:SetPoint("TOPLEFT", -2, 2)
+		WorldMapQuestRewardScrollFrame.backdrop:SetPoint("BOTTOMRIGHT", 22, -4)
 	end
 
 	if not WorldMapQuestScrollFrame.backdrop then
 		WorldMapQuestScrollFrame.backdrop = CreateFrame("Frame", nil, WorldMapQuestScrollFrame)
 		S.CreateBD(WorldMapQuestScrollFrame.backdrop)
 		WorldMapQuestScrollFrame.backdrop:SetFrameLevel(0)
-		WorldMapQuestScrollFrame.backdrop:Point("TOPLEFT", 0, 2)
-		WorldMapQuestScrollFrame.backdrop:Point("BOTTOMRIGHT", 24, -3)
+		WorldMapQuestScrollFrame.backdrop:SetPoint("TOPLEFT", 0, 2)
+		WorldMapQuestScrollFrame.backdrop:SetPoint("BOTTOMRIGHT", 24, -3)
 	end
 end
 

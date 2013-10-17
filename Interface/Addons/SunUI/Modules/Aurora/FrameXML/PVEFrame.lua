@@ -13,7 +13,7 @@ tinsert(DB.AuroraModules["SunUI"], function()
 	select(24, PVEFrame:GetRegions()):Hide()
 	select(25, PVEFrame:GetRegions()):Hide()
 
-	PVEFrameTab2:Point("LEFT", PVEFrameTab1, "RIGHT", -15, 0)
+	PVEFrameTab2:SetPoint("LEFT", PVEFrameTab1, "RIGHT", -15, 0)
 
 	GroupFinderFrameGroupButton1.icon:SetTexture("Interface\\Icons\\INV_Helmet_08")
 	GroupFinderFrameGroupButton2.icon:SetTexture("Interface\\Icons\\Icon_Scenarios")

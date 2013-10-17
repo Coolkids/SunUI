@@ -239,7 +239,7 @@ local function EmoteIconMouseUp(self, button)
 end
 function Module:OnEnable()
 local button = CreateFrame("Button", "ButtonE", ColectorButton)
-		button:Point("TOPLEFT", ColectorButton, "TOPLEFT", 5, -5)
+		button:SetPoint("TOPLEFT", ColectorButton, "TOPLEFT", 5, -5)
 		button:Size(15)
 		button.text = button:CreateFontString(nil, 'OVERLAY')
 		button.text:SetFont(DB.Font, 10*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")

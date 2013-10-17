@@ -111,7 +111,7 @@ local function CreateRollFrame()
 	local status = CreateFrame("StatusBar", nil, frame)
 	status:CreateShadow()
 	status:Size(240, 8)
-	status:Point("BOTTOMLEFT", frame, "BOTTOMLEFT")
+	status:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT")
 	status:SetScript("OnUpdate", StatusUpdate)
 	status:SetFrameLevel(frame:GetFrameLevel() - 1)
 	status:SetStatusBarTexture(DB.Statusbar)
@@ -146,8 +146,8 @@ local function CreateRollFrame()
 	local loot = frame:CreateFontString(nil, "ARTWORK")
 	loot:SetFont(DB.Font, 12*SunUIConfig.db.profile.MiniDB.FontScale, "OUTLINE")
 	loot:SetShadowOffset(1, -1)
-	loot:Point("LEFT", bind, "RIGHT", 0, 0)
-	loot:Point("RIGHT", frame, "RIGHT", -5, 0)
+	loot:SetPoint("LEFT", bind, "RIGHT", 0, 0)
+	loot:SetPoint("RIGHT", frame, "RIGHT", -5, 0)
 	loot:Size(200, 10)
 	loot:SetJustifyH("LEFT")
 	frame.fsloot = loot
@@ -164,9 +164,9 @@ local function GetFrame()
 
 	local f = CreateRollFrame()
 	if pos == "TOP" then
-		f:Point("TOPLEFT", next(frames) and frames[#frames] or LootRollAnchor, "BOTTOMLEFT", next(frames) and frames[#frames] and 0 or 27, -23)
+		f:SetPoint("TOPLEFT", next(frames) and frames[#frames] or LootRollAnchor, "BOTTOMLEFT", next(frames) and frames[#frames] and 0 or 27, -23)
 	else
-		f:Point("BOTTOMLEFT", next(frames) and frames[#frames] or LootRollAnchor, "TOPLEFT", next(frames) and frames[#frames] and 0 or 27, 23)
+		f:SetPoint("BOTTOMLEFT", next(frames) and frames[#frames] or LootRollAnchor, "TOPLEFT", next(frames) and frames[#frames] and 0 or 27, 23)
 	end
 	table.insert(frames, f)
 	return f
@@ -209,7 +209,7 @@ local function START_LOOT_ROLL(rollID, time)
 	f.status:SetMinMaxValues(0, time)
 	f.status:SetValue(time)
 
-	f:Point("CENTER", WorldFrame, "CENTER")
+	f:SetPoint("CENTER", WorldFrame, "CENTER")
 	f:Show()
 end
 

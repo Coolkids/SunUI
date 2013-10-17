@@ -104,7 +104,7 @@ DB.AuroraModules["Blizzard_InspectUI"] = function()
 			local tab = _G["InspectFrameTab"..i]
 			S.ReskinTab(tab)
 			if i ~= 1 then
-				tab:Point("LEFT", _G["InspectFrameTab"..i-1], "RIGHT", -15, 0)
+				tab:SetPoint("LEFT", _G["InspectFrameTab"..i-1], "RIGHT", -15, 0)
 			end
 		end
 

@@ -40,27 +40,27 @@ DB.AuroraModules["Blizzard_AchievementUI"] = function()
 				local bu = _G["AchievementFrameCategoriesContainerButton"..i]
 
 				bu.background:SetTexture(0, 0, 0, .25)
-				bu.background:Point("TOPLEFT", 0, -1)
+				bu.background:SetPoint("TOPLEFT", 0, -1)
 				bu.background:SetPoint("BOTTOMRIGHT")
 
 				local bg = S.CreateBDFrame(bu, 0)
-				bg:Point("TOPLEFT", 0, -1)
+				bg:SetPoint("TOPLEFT", 0, -1)
 				bg:SetPoint("BOTTOMRIGHT")
 
 				bu:SetHighlightTexture(DB.media.backdrop)
 				local hl = bu:GetHighlightTexture()
 				hl:SetVertexColor(r, g, b, .2)
-				hl:Point("TOPLEFT", 1, -1)
-				hl:Point("BOTTOMRIGHT", -1, 1)
+				hl:SetPoint("TOPLEFT", 1, -1)
+				hl:SetPoint("BOTTOMRIGHT", -1, 1)
 			end
 			first = false
 		end
 	end)
 
-	AchievementFrameHeaderPoints:Point("TOP", AchievementFrame, "TOP", 0, -6)
-	AchievementFrameFilterDropDown:Point("TOPRIGHT", AchievementFrame, "TOPRIGHT", -98, 1)
+	AchievementFrameHeaderPoints:SetPoint("TOP", AchievementFrame, "TOP", 0, -6)
+	AchievementFrameFilterDropDown:SetPoint("TOPRIGHT", AchievementFrame, "TOPRIGHT", -98, 1)
 	AchievementFrameFilterDropDownText:ClearAllPoints()
-	AchievementFrameFilterDropDownText:Point("CENTER", -10, 1)
+	AchievementFrameFilterDropDownText:SetPoint("CENTER", -10, 1)
 
 	AchievementFrameSummaryCategoriesStatusBar:SetStatusBarTexture(DB.media.backdrop)
 	AchievementFrameSummaryCategoriesStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
@@ -69,12 +69,12 @@ DB.AuroraModules["Blizzard_AchievementUI"] = function()
 	AchievementFrameSummaryCategoriesStatusBarRight:Hide()
 	AchievementFrameSummaryCategoriesStatusBarFillBar:Hide()
 	AchievementFrameSummaryCategoriesStatusBarTitle:SetTextColor(1, 1, 1)
-	AchievementFrameSummaryCategoriesStatusBarTitle:Point("LEFT", AchievementFrameSummaryCategoriesStatusBar, "LEFT", 6, 0)
-	AchievementFrameSummaryCategoriesStatusBarText:Point("RIGHT", AchievementFrameSummaryCategoriesStatusBar, "RIGHT", -5, 0)
+	AchievementFrameSummaryCategoriesStatusBarTitle:SetPoint("LEFT", AchievementFrameSummaryCategoriesStatusBar, "LEFT", 6, 0)
+	AchievementFrameSummaryCategoriesStatusBarText:SetPoint("RIGHT", AchievementFrameSummaryCategoriesStatusBar, "RIGHT", -5, 0)
 
 	local bg = CreateFrame("Frame", nil, AchievementFrameSummaryCategoriesStatusBar)
-	bg:Point("TOPLEFT", -1, 1)
-	bg:Point("BOTTOMRIGHT", 1, -1)
+	bg:SetPoint("TOPLEFT", -1, 1)
+	bg:SetPoint("BOTTOMRIGHT", 1, -1)
 	bg:SetFrameLevel(AchievementFrameSummaryCategoriesStatusBar:GetFrameLevel()-1)
 	S.CreateBD(bg, .25)
 
@@ -107,8 +107,8 @@ DB.AuroraModules["Blizzard_AchievementUI"] = function()
 		_G["AchievementFrameAchievementsContainerButton"..i.."GuildCornerR"]:SetAlpha(0)
 
 		local bg = CreateFrame("Frame", nil, bu)
-		bg:Point("TOPLEFT", 2, -2)
-		bg:Point("BOTTOMRIGHT", -2, 2)
+		bg:SetPoint("TOPLEFT", 2, -2)
+		bg:SetPoint("BOTTOMRIGHT", -2, 2)
 		S.CreateBD(bg, 0)
 
 		bu.icon.texture:SetTexCoord(.08, .92, .08, .92)
@@ -123,8 +123,8 @@ DB.AuroraModules["Blizzard_AchievementUI"] = function()
 		ch:SetHighlightTexture(DB.media.backdrop)
 
 		local hl = ch:GetHighlightTexture()
-		hl:Point("TOPLEFT", 4, -4)
-		hl:Point("BOTTOMRIGHT", -4, 4)
+		hl:SetPoint("TOPLEFT", 4, -4)
+		hl:SetPoint("BOTTOMRIGHT", -4, 4)
 		hl:SetVertexColor(r, g, b, .2)
 
 		local check = ch:GetCheckedTexture()
@@ -132,15 +132,15 @@ DB.AuroraModules["Blizzard_AchievementUI"] = function()
 		check:SetVertexColor(r, g, b)
 
 		local tex = S.CreateGradient(ch)
-		tex:Point("TOPLEFT", 4, -4)
-		tex:Point("BOTTOMRIGHT", -4, 4)
+		tex:SetPoint("TOPLEFT", 4, -4)
+		tex:SetPoint("BOTTOMRIGHT", -4, 4)
 		tex:SetTexture(DB.media.backdrop)
 
 		local left = ch:CreateTexture(nil, "BACKGROUND")
 		left:SetWidth(1)
 		left:SetTexture(0, 0, 0)
-		left:Point("TOPLEFT", tex, -1, 1)
-		left:Point("BOTTOMLEFT", tex, -1, -1)
+		left:SetPoint("TOPLEFT", tex, -1, 1)
+		left:SetPoint("BOTTOMLEFT", tex, -1, -1)
 
 		local right = ch:CreateTexture(nil, "BACKGROUND")
 		right:SetWidth(1)
@@ -151,17 +151,17 @@ DB.AuroraModules["Blizzard_AchievementUI"] = function()
 		local top = ch:CreateTexture(nil, "BACKGROUND")
 		top:SetHeight(1)
 		top:SetTexture(0, 0, 0)
-		top:Point("TOPLEFT", tex, -1, 1)
-		top:Point("TOPRIGHT", tex, 1, -1)
+		top:SetPoint("TOPLEFT", tex, -1, 1)
+		top:SetPoint("TOPRIGHT", tex, 1, -1)
 
 		local bottom = ch:CreateTexture(nil, "BACKGROUND")
 		bottom:SetHeight(1)
 		bottom:SetTexture(0, 0, 0)
-		bottom:Point("BOTTOMLEFT", tex, -1, -1)
-		bottom:Point("BOTTOMRIGHT", tex, 1, -1)
+		bottom:SetPoint("BOTTOMLEFT", tex, -1, -1)
+		bottom:SetPoint("BOTTOMRIGHT", tex, 1, -1)
 	end
 
-	AchievementFrameAchievementsContainerButton1.background:Point("TOPLEFT", AchievementFrameAchievementsContainerButton1, "TOPLEFT", 2, -3)
+	AchievementFrameAchievementsContainerButton1.background:SetPoint("TOPLEFT", AchievementFrameAchievementsContainerButton1, "TOPLEFT", 2, -3)
 
 	hooksecurefunc("AchievementButton_DisplayAchievement", function(button, category, achievement)
 		local _, _, _, completed = GetAchievementInfo(category, achievement)
@@ -205,8 +205,8 @@ DB.AuroraModules["Blizzard_AchievementUI"] = function()
 			_G["AchievementFrameProgressBar"..index.."BorderRight"]:Hide()
 
 			local bg = CreateFrame("Frame", nil, bar)
-			bg:Point("TOPLEFT", -1, 1)
-			bg:Point("BOTTOMRIGHT", 1, -1)
+			bg:SetPoint("TOPLEFT", -1, 1)
+			bg:SetPoint("BOTTOMRIGHT", 1, -1)
 			S.CreateBD(bg, 0)
 
 			bar.reskinned = true
@@ -243,8 +243,8 @@ DB.AuroraModules["Blizzard_AchievementUI"] = function()
 				text.SetShadowOffset = S.dummy
 
 				local bg = CreateFrame("Frame", nil, bu)
-				bg:Point("TOPLEFT", 2, -2)
-				bg:Point("BOTTOMRIGHT", -2, 2)
+				bg:SetPoint("TOPLEFT", 2, -2)
+				bg:SetPoint("BOTTOMRIGHT", -2, 2)
 				S.CreateBD(bg, 0)
 
 				local ic = _G["AchievementFrameSummaryAchievement"..i.."IconTexture"]
@@ -264,11 +264,11 @@ DB.AuroraModules["Blizzard_AchievementUI"] = function()
 		bu:SetStatusBarTexture(DB.media.backdrop)
 		bar:SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
 		label:SetTextColor(1, 1, 1)
-		label:Point("LEFT", bu, "LEFT", 6, 0)
+		label:SetPoint("LEFT", bu, "LEFT", 6, 0)
 
 		local bg = CreateFrame("Frame", nil, bu)
-		bg:Point("TOPLEFT", -1, 1)
-		bg:Point("BOTTOMRIGHT", 1, -1)
+		bg:SetPoint("TOPLEFT", -1, 1)
+		bg:SetPoint("BOTTOMRIGHT", 1, -1)
 		bg:SetFrameLevel(bu:GetFrameLevel()-1)
 		S.CreateBD(bg, .25)
 
@@ -277,7 +277,7 @@ DB.AuroraModules["Blizzard_AchievementUI"] = function()
 		_G["AchievementFrameSummaryCategoriesCategory"..i.."Right"]:Hide()
 		_G["AchievementFrameSummaryCategoriesCategory"..i.."FillBar"]:Hide()
 		_G["AchievementFrameSummaryCategoriesCategory"..i.."ButtonHighlight"]:SetAlpha(0)
-		_G["AchievementFrameSummaryCategoriesCategory"..i.."Text"]:Point("RIGHT", bu, "RIGHT", -5, 0)
+		_G["AchievementFrameSummaryCategoriesCategory"..i.."Text"]:SetPoint("RIGHT", bu, "RIGHT", -5, 0)
 	end
 
 	for i = 1, 20 do
@@ -288,11 +288,11 @@ DB.AuroraModules["Blizzard_AchievementUI"] = function()
 		_G["AchievementFrameStatsContainerButton"..i.."HeaderRight"]:SetAlpha(0)
 	end
 
-	AchievementFrameComparisonHeader:Point("BOTTOMRIGHT", AchievementFrameComparison, "TOPRIGHT", 39, 25)
+	AchievementFrameComparisonHeader:SetPoint("BOTTOMRIGHT", AchievementFrameComparison, "TOPRIGHT", 39, 25)
 
 	local headerbg = CreateFrame("Frame", nil, AchievementFrameComparisonHeader)
-	headerbg:Point("TOPLEFT", 20, -20)
-	headerbg:Point("BOTTOMRIGHT", -28, -5)
+	headerbg:SetPoint("TOPLEFT", 20, -20)
+	headerbg:SetPoint("BOTTOMRIGHT", -28, -5)
 	headerbg:SetFrameLevel(AchievementFrameComparisonHeader:GetFrameLevel()-1)
 	S.CreateBD(headerbg, .25)
 
@@ -301,8 +301,8 @@ DB.AuroraModules["Blizzard_AchievementUI"] = function()
 	for _, frame in pairs(summaries) do
 		frame:SetBackdrop(nil)
 		local bg = CreateFrame("Frame", nil, frame)
-		bg:Point("TOPLEFT", 2, -2)
-		bg:Point("BOTTOMRIGHT", -2, 0)
+		bg:SetPoint("TOPLEFT", 2, -2)
+		bg:SetPoint("BOTTOMRIGHT", -2, 0)
 		bg:SetFrameLevel(frame:GetFrameLevel()-1)
 		S.CreateBD(bg, .25)
 	end
@@ -318,12 +318,12 @@ DB.AuroraModules["Blizzard_AchievementUI"] = function()
 		_G[name.."Right"]:Hide()
 		_G[name.."FillBar"]:Hide()
 		_G[name.."Title"]:SetTextColor(1, 1, 1)
-		_G[name.."Title"]:Point("LEFT", bar, "LEFT", 6, 0)
-		_G[name.."Text"]:Point("RIGHT", bar, "RIGHT", -5, 0)
+		_G[name.."Title"]:SetPoint("LEFT", bar, "LEFT", 6, 0)
+		_G[name.."Text"]:SetPoint("RIGHT", bar, "RIGHT", -5, 0)
 
 		local bg = CreateFrame("Frame", nil, bar)
-		bg:Point("TOPLEFT", -1, 1)
-		bg:Point("BOTTOMRIGHT", 1, -1)
+		bg:SetPoint("TOPLEFT", -1, 1)
+		bg:SetPoint("BOTTOMRIGHT", 1, -1)
 		bg:SetFrameLevel(bar:GetFrameLevel()-1)
 		S.CreateBD(bg, .25)
 	end
@@ -334,8 +334,8 @@ DB.AuroraModules["Blizzard_AchievementUI"] = function()
 		for _, button in pairs(buttons) do
 			button:DisableDrawLayer("BORDER")
 			local bg = CreateFrame("Frame", nil, button)
-			bg:Point("TOPLEFT", 2, -3)
-			bg:Point("BOTTOMRIGHT", -2, 2)
+			bg:SetPoint("TOPLEFT", 2, -3)
+			bg:SetPoint("BOTTOMRIGHT", -2, 2)
 			S.CreateBD(bg, 0)
 		end
 

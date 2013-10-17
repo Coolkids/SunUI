@@ -15,12 +15,12 @@ DB.AuroraModules["Blizzard_ChallengesUI"] = function()
 		S.Reskin(ChallengesFrameLeaderboard)
 
 		local bg = CreateFrame("Frame", nil, ChallengesFrameDetails)
-		bg:Point("TOPLEFT", 1, -73)
+		bg:SetPoint("TOPLEFT", 1, -73)
 		bg:SetSize(332, 49)
 		bg:SetFrameLevel(ChallengesFrameDetails:GetFrameLevel())
 		S.CreateBD(bg, .25)
 
-		ChallengesFrameDungeonButton1:Point("TOPLEFT", ChallengesFrame, "TOPLEFT", 8, -83)
+		ChallengesFrameDungeonButton1:SetPoint("TOPLEFT", ChallengesFrame, "TOPLEFT", 8, -83)
 
 		for i = 1, 9 do
 			local bu = ChallengesFrame["button"..i]
@@ -28,8 +28,8 @@ DB.AuroraModules["Blizzard_ChallengesUI"] = function()
 			bu:SetHighlightTexture("")
 			bu.selectedTex:SetTexture(DB.media.backdrop)
 			bu.selectedTex:SetAlpha(.2)
-			bu.selectedTex:Point("TOPLEFT", 1, -1)
-			bu.selectedTex:Point("BOTTOMRIGHT", -1, 1)
+			bu.selectedTex:SetPoint("TOPLEFT", 1, -1)
+			bu.selectedTex:SetPoint("BOTTOMRIGHT", -1, 1)
 		end
 
 		for i = 1, 3 do

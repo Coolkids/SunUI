@@ -72,7 +72,7 @@ function Module:BuildChatbar()
 			UIFrameFadeOut(Parent, 0.5, self:GetAlpha(), 0)
 		end)
 		if i == 1 then
-			Button:Point("TOPLEFT", ChatFrame1, "BOTTOMLEFT", 0, -7)
+			Button:SetPoint("TOPLEFT", ChatFrame1, "BOTTOMLEFT", 0, -7)
 		else
 			Button:SetPoint("LEFT", PreButton, "RIGHT", 4, 0)
 		end

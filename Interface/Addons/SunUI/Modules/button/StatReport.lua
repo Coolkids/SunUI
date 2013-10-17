@@ -360,10 +360,10 @@ if GetLocale() ~= 'zhCN' or GetLocale() ~= 'zhTW' then
 	function CH:OnEnable()
 			local statreport = CreateFrame("Button", "ButtonST", ColectorButton)
 			statreport:Size(15)
-			statreport:Point("TOPLEFT", ColectorButton, "TOPLEFT", 5, -45)
+			statreport:SetPoint("TOPLEFT", ColectorButton, "TOPLEFT", 5, -45)
 			statreport.text = statreport:CreateFontString(nil, 'OVERLAY')
 			statreport.text:SetFont(DB.Font, 10*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
-			statreport.text:Point("CENTER", statreport, "CENTER", 2, 0)
+			statreport.text:SetPoint("CENTER", statreport, "CENTER", 2, 0)
 			statreport.text:SetText("ST")
 			statreport.text:SetTextColor(23/255, 132/255, 209/255)
 

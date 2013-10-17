@@ -27,15 +27,15 @@ DB.AuroraModules["Blizzard_MacroUI"] = function()
 	MacroButtonScrollFrameTop:Hide()
 	MacroButtonScrollFrameBottom:Hide()
 
-	MacroFrameSelectedMacroButton:Point("TOPLEFT", MacroFrameSelectedMacroBackground, "TOPLEFT", 12, -16)
-	MacroFrameSelectedMacroButtonIcon:Point("TOPLEFT", 1, -1)
-	MacroFrameSelectedMacroButtonIcon:Point("BOTTOMRIGHT", -1, 1)
+	MacroFrameSelectedMacroButton:SetPoint("TOPLEFT", MacroFrameSelectedMacroBackground, "TOPLEFT", 12, -16)
+	MacroFrameSelectedMacroButtonIcon:SetPoint("TOPLEFT", 1, -1)
+	MacroFrameSelectedMacroButtonIcon:SetPoint("BOTTOMRIGHT", -1, 1)
 	MacroFrameSelectedMacroButtonIcon:SetTexCoord(.08, .92, .08, .92)
 
-	MacroPopupFrame:Point("TOPLEFT", MacroFrame, "TOPRIGHT", 1, 0)
+	MacroPopupFrame:SetPoint("TOPLEFT", MacroFrame, "TOPRIGHT", 1, 0)
 
 	MacroNewButton:ClearAllPoints()
-	MacroNewButton:Point("RIGHT", MacroExitButton, "LEFT", -1, 0)
+	MacroNewButton:SetPoint("RIGHT", MacroExitButton, "LEFT", -1, 0)
 
 	for i = 1, MAX_ACCOUNT_MACROS do
 		local bu = _G["MacroButton"..i]
@@ -44,8 +44,8 @@ DB.AuroraModules["Blizzard_MacroUI"] = function()
 		bu:SetCheckedTexture(DB.media.checked)
 		select(2, bu:GetRegions()):Hide()
 
-		ic:Point("TOPLEFT", 1, -1)
-		ic:Point("BOTTOMRIGHT", -1, 1)
+		ic:SetPoint("TOPLEFT", 1, -1)
+		ic:SetPoint("BOTTOMRIGHT", -1, 1)
 		ic:SetTexCoord(.08, .92, .08, .92)
 
 		S.CreateBD(bu, .25)
@@ -58,8 +58,8 @@ DB.AuroraModules["Blizzard_MacroUI"] = function()
 		bu:SetCheckedTexture(DB.media.checked)
 		select(2, bu:GetRegions()):Hide()
 
-		ic:Point("TOPLEFT", 1, -1)
-		ic:Point("BOTTOMRIGHT", -1, 1)
+		ic:SetPoint("TOPLEFT", 1, -1)
+		ic:SetPoint("BOTTOMRIGHT", -1, 1)
 		ic:SetTexCoord(.08, .92, .08, .92)
 
 		S.CreateBD(bu, .25)

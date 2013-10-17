@@ -12,15 +12,15 @@ DB.AuroraModules["Blizzard_BindingUI"] = function()
 		S.Reskin(KeyBindingFrameOkayButton)
 		S.Reskin(KeyBindingFrameCancelButton)
 		KeyBindingFrameOkayButton:ClearAllPoints()
-		KeyBindingFrameOkayButton:Point("RIGHT", KeyBindingFrameCancelButton, "LEFT", -1, 0)
+		KeyBindingFrameOkayButton:SetPoint("RIGHT", KeyBindingFrameCancelButton, "LEFT", -1, 0)
 		KeyBindingFrameUnbindButton:ClearAllPoints()
-		KeyBindingFrameUnbindButton:Point("RIGHT", KeyBindingFrameOkayButton, "LEFT", -1, 0)
+		KeyBindingFrameUnbindButton:SetPoint("RIGHT", KeyBindingFrameOkayButton, "LEFT", -1, 0)
 
 		for i = 1, KEY_BINDINGS_DISPLAYED do
 			local button1 = _G["KeyBindingFrameBinding"..i.."Key1Button"]
 			local button2 = _G["KeyBindingFrameBinding"..i.."Key2Button"]
 
-			button2:Point("LEFT", button1, "RIGHT", 1, 0)
+			button2:SetPoint("LEFT", button1, "RIGHT", 1, 0)
 			S.Reskin(button1)
 			S.Reskin(button2)
 		end

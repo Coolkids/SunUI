@@ -50,9 +50,9 @@ DB.AuroraModules["Blizzard_PetJournal"] = function()
 	S.ReskinArrow(MountJournal.MountDisplay.ModelFrame.RotateLeftButton, "left")
 	S.ReskinArrow(MountJournal.MountDisplay.ModelFrame.RotateRightButton, "right")
 
-	PetJournalTutorialButton:Point("TOPLEFT", PetJournal, "TOPLEFT", -14, 14)
+	PetJournalTutorialButton:SetPoint("TOPLEFT", PetJournal, "TOPLEFT", -14, 14)
 
-	PetJournalParentTab2:Point("LEFT", PetJournalParentTab1, "RIGHT", -15, 0)
+	PetJournalParentTab2:SetPoint("LEFT", PetJournalParentTab1, "RIGHT", -15, 0)
 
 	PetJournalHealPetButtonBorder:Hide()
 	PetJournalHealPetButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
@@ -67,14 +67,14 @@ DB.AuroraModules["Blizzard_PetJournal"] = function()
 			bu:GetRegions():Hide()
 			bu:SetHighlightTexture("")
 
-			bu.selectedTexture:Point("TOPLEFT", 0, -1)
-			bu.selectedTexture:Point("BOTTOMRIGHT", 0, 1)
+			bu.selectedTexture:SetPoint("TOPLEFT", 0, -1)
+			bu.selectedTexture:SetPoint("BOTTOMRIGHT", 0, 1)
 			bu.selectedTexture:SetTexture(DB.media.backdrop)
 			bu.selectedTexture:SetVertexColor(r, g, b, .2)
 
 			local bg = CreateFrame("Frame", nil, bu)
-			bg:Point("TOPLEFT", 0, -1)
-			bg:Point("BOTTOMRIGHT", 0, 1)
+			bg:SetPoint("TOPLEFT", 0, -1)
+			bg:SetPoint("BOTTOMRIGHT", 0, 1)
 			bg:SetFrameLevel(bu:GetFrameLevel()-1)
 			S.CreateBD(bg, .25)
 			bu.bg = bg
@@ -113,10 +113,10 @@ DB.AuroraModules["Blizzard_PetJournal"] = function()
 	end
 
 	local bu1 = MountJournal.ListScrollFrame.buttons[1]
-	bu1.bg:Point("TOPLEFT", 0, -1)
-	bu1.bg:Point("BOTTOMRIGHT", -1, 1)
-	bu1.selectedTexture:Point("TOPLEFT", 0, -1)
-	bu1.selectedTexture:Point("BOTTOMRIGHT", -1, 1)
+	bu1.bg:SetPoint("TOPLEFT", 0, -1)
+	bu1.bg:SetPoint("BOTTOMRIGHT", -1, 1)
+	bu1.selectedTexture:SetPoint("TOPLEFT", 0, -1)
+	bu1.selectedTexture:SetPoint("BOTTOMRIGHT", -1, 1)
 
 	hooksecurefunc("MountJournal_UpdateMountList", updateScroll)
 	hooksecurefunc(MountJournalListScrollFrame, "update", updateScroll)
@@ -132,7 +132,7 @@ DB.AuroraModules["Blizzard_PetJournal"] = function()
 	end
 
 	PetJournalLoadoutBorderSlotHeaderText:SetParent(PetJournal)
-	PetJournalLoadoutBorderSlotHeaderText:Point("CENTER", PetJournalLoadoutBorderTop, "TOP", 0, 4)
+	PetJournalLoadoutBorderSlotHeaderText:SetPoint("CENTER", PetJournalLoadoutBorderTop, "TOP", 0, 4)
 
 	local card = PetJournalPetCard
 
@@ -200,8 +200,8 @@ DB.AuroraModules["Blizzard_PetJournal"] = function()
 		bu.icon:SetTexCoord(.08, .92, .08, .92)
 		bu.icon.bg = S.CreateBDFrame(bu.icon, .25)
 
-		bu.setButton:GetRegions():Point("TOPLEFT", bu.icon, -5, 5)
-		bu.setButton:GetRegions():Point("BOTTOMRIGHT", bu.icon, 5, -5)
+		bu.setButton:GetRegions():SetPoint("TOPLEFT", bu.icon, -5, 5)
+		bu.setButton:GetRegions():SetPoint("BOTTOMRIGHT", bu.icon, 5, -5)
 
 		S.CreateBD(bu, .25)
 
@@ -290,8 +290,8 @@ DB.AuroraModules["Blizzard_PetJournal"] = function()
 		end
 	end
 
-	PetJournal.listScroll.buttons[1].selectedTexture:Point("TOPLEFT", 0, -1)
-	PetJournal.listScroll.buttons[1].selectedTexture:Point("BOTTOMRIGHT", -1, 1)
+	PetJournal.listScroll.buttons[1].selectedTexture:SetPoint("TOPLEFT", 0, -1)
+	PetJournal.listScroll.buttons[1].selectedTexture:SetPoint("BOTTOMRIGHT", -1, 1)
 
 	hooksecurefunc("PetJournal_UpdatePetList", ColourPetQuality)
 	hooksecurefunc(PetJournalListScrollFrame, "update", ColourPetQuality)
