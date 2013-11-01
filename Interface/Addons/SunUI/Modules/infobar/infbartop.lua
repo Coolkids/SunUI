@@ -326,7 +326,7 @@ local function BuildGold()
 		-- Setup Money Tooltip
 		self:SetAllPoints(Text)
 		
-		local myPlayerRealm = GetCVar("realmName");
+		local myPlayerRealm = GetRealmName();
 		local myPlayerName  = UnitName("player");				
 		if (SunUIConfig == nil) then SunUIConfig = {}; end
 		if (SunUIConfig.gold == nil) then SunUIConfig.gold = {}; end

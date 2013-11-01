@@ -1,9 +1,8 @@
-﻿local S, L, DB, _, C = unpack(select(2, ...))
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("CloseUp", "AceEvent-3.0")
-
-local _G = getfenv(0)
+﻿local _G = getfenv(0)
 local GetCursorPosition = GetCursorPosition
 local function nada() end
+local Model_OnMouseDown = _G.Model_OnMouseDown
+local Model_OnMouseUp = _G.Model_OnMouseUp
 
 -- someone wanted the feature to hide the dressing rooms' backgrounds
 local function ToggleBG(notog)
@@ -35,7 +34,11 @@ local function OnUpdate(this)
 	this.prevx, this.prevy = currentx, currenty
 end
 local function OnMouseDown(this, a1)
-	this.pMouseDown(a1)
+	if Model_OnMouseDown then
+		Model_OnMouseDown(this, a1)
+	else
+		this.pMouseDown(a1)
+	end
 	this:SetScript("OnUpdate", OnUpdate)
 	if a1 == "LeftButton" then
 		if IsControlKeyDown() then
@@ -49,7 +52,12 @@ local function OnMouseDown(this, a1)
 	this.prevx, this.prevy = GetCursorPosition()
 end
 local function OnMouseUp(this, a1)
-	this.pMouseUp(a1)
+	if Model_OnMouseUp then
+		Model_OnMouseUp(this, a1)
+	else
+		this.pMouseUp(a1)
+	end
+	
 	this:SetScript("OnUpdate", nil)
 	if a1 == "LeftButton" then
 		this.isrotating = nil
@@ -140,7 +148,6 @@ local function DoAH()
 	newbutton("CloseUpAHResetButton", du, "R", 20, 22, nil, "Reset", function() du:Dress() end):SetPoint("RIGHT", tb, "LEFT", 0, 0)
 	newbutton("CloseUpAHUndressButton", du, "U", 20, 22, nil, "Undress", function() du:Undress() end):SetPoint("LEFT", tb, "RIGHT", 0, 0)
 	ToggleBG(true)
-
 end
 local function DoIns()
 	Apply("InspectModelFrame")
@@ -162,52 +169,51 @@ if AuctionDressUpModel then DoAH() end
 if InspectModelFrame then DoIns() end
 
 -- main dressing room model with undress buttons
-function Module:OnInitialize()
-	do
-		Apply("DressUpModel", nil, 332, nil, 104)
-		local tb = DressUpFrameCancelButton
-		local w, h = 40, tb:GetHeight()
-		local m = DressUpModel
+do
+	Apply("DressUpModel", nil, 332, nil, 104)
+	local tb = DressUpFrameCancelButton
+	local w, h = 40, tb:GetHeight()
+	local m = DressUpModel
 
-		-- since 2.1 dressup models doesn't apply properly to NPCs, make a substitute
-		local tm = CreateFrame("PlayerModel", "CloseUpNPCModel", DressUpFrame)
-		tm:SetAllPoints(DressUpModel)
+	-- since 2.1 dressup models doesn't apply properly to NPCs, make a substitute
+	local tm = CreateFrame("PlayerModel", "CloseUpNPCModel", DressUpFrame)
+	tm:SetAllPoints(DressUpModel)
+	tm:Hide()
+	Apply("CloseUpNPCModel", nil, nil, nil, nil, nil, true)
+	
+	DressUpFrame:HookScript("OnShow", function()
 		tm:Hide()
-		Apply("CloseUpNPCModel", nil, nil, nil, nil, nil, true)
-		
-		DressUpFrame:HookScript("OnShow", function()
-			tm:Hide()
-			m:Show()
-			ToggleBG(true)
-		end)
-		
-		-- convert default close button into set target button
-		newbutton(nil, nil, "目标", w, h, tb, "Target", function()
-			if UnitExists("target") and UnitIsVisible("target") then 
-				if UnitIsPlayer("target") then
-					tm:Hide()
-					m:Show()
-					m:SetUnit("target")
-				else
-					tm:Show()
-					m:Hide()
-					tm:SetUnit("target")
-				end
-				SetPortraitTexture(DressUpFramePortrait, "target")
+		m:Show()
+		ToggleBG(true)
+	end)
+	
+	-- convert default close button into set target button
+	newbutton(nil, nil, "Tar", w, h, tb, "Target", function()
+		if UnitExists("target") and UnitIsVisible("target") then 
+			if UnitIsPlayer("target") then
+				tm:Hide()
+				m:Show()
+				m:SetUnit("target")
+			else
+				tm:Show()
+				m:Hide()
+				tm:SetUnit("target")
 			end
-		end)
-		local a,b,c,d,e = tb:GetPoint()
-		tb:SetPoint(a, b, c, d - (w/2), e)
-		S.Reskin(tb)
-		newbutton("CloseUpUndressButton", DressUpFrame, "脱衣", w, h, nil, "Undress", function() m:Undress() end):SetPoint("LEFT", tb, "RIGHT", 0, 0)
-		S.Reskin(CloseUpUndressButton)
-	end
+			SetPortraitTexture(DressUpFramePortrait, "target")
+		end
+	end)
+	local a,b,c,d,e = tb:GetPoint()
+	tb:SetPoint(a, b, c, d - (w/2), e)
+
+	newbutton("CloseUpUndressButton", DressUpFrame, "Und", w, h, nil, "Undress", function() m:Undress() end):SetPoint("LEFT", tb, "RIGHT", -2, 0)
 end
+
 Apply("CharacterModelFrame")
 Apply("TabardModel", nil, nil, nil, nil, "TabardCharacterModel")
 Apply("PetModelFrame")
 Apply("PetStableModel")
 Apply("SpellBookCompanionModelFrame")
+Apply("TransmogrifyModelFrame")
 Apply("QuestNPCModel", nil, nil, nil, nil, nil, true)
 Apply("TutorialNPCModel", nil, nil, nil, nil, nil, true)
 PetPaperDollPetInfo:SetFrameStrata("HIGH")
