@@ -582,7 +582,7 @@ end
 local function ShowGrid(event, str, value)
 	if str ~= "ALWAYS_SHOW_MULTIBARS_TEXT" then return end
 	if GetCVar("alwaysShowActionBars") == "1" then 
-		SetActionBarToggles(1, 1, 1, 1, 0)
+		SetActionBarToggles(true, true, true, true)
 		ActionButton_HideGrid = DB.dummy
 		for i = 1, 12 do
 			local button = _G[format("ActionButton%d", i)]
