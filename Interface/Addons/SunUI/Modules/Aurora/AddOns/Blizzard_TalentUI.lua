@@ -101,9 +101,11 @@ DB.AuroraModules["Blizzard_TalentUI"] = function()
 		PlayerTalentFrameSpecialization["specButton"..i].specIcon:SetTexture(icon)
 	end
 
-	PlayerTalentFrameSpecializationLearnButton.Flash:SetTexture("")
-	PlayerTalentFrameTalentsLearnButton.Flash:SetTexture("")
-
+	--PlayerTalentFrameSpecializationLearnButton.Flash:SetTexture("")
+	--PlayerTalentFrameTalentsLearnButton.Flash:SetTexture("")
+	PlayerTalentFrameTalentsLearnButton:StripTextures()
+	PlayerTalentFrameTalentsLearnButton.FlashAnim.Play = function() end
+	PlayerTalentFrameSpecializationLearnButton:StripTextures()
 	local buttons = {"PlayerTalentFrameSpecializationSpecButton", "PlayerTalentFramePetSpecializationSpecButton"}
 
 	for _, name in pairs(buttons) do
