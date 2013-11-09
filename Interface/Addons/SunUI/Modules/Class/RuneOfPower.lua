@@ -82,8 +82,11 @@ function ROP:UpdateSet()
 	if C["ROPEnable"] then
 		self:RegisterEvent("PLAYER_TALENT_UPDATE")
 	else
-		button1:Hide()
-		button2:Hide()
+		for i = 1, #buttons do
+			if buttons[i] then
+				buttons[i]:Hide()
+			end
+		end
 		self:UnregisterEvent("PLAYER_TALENT_UPDATE")
 		self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	end
