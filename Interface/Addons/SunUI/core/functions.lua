@@ -130,7 +130,7 @@ RoleUpdater:SetScript("OnEvent", CheckRole)
 
 function S.MakeMoveHandle(Frame, Text, key)
 	local MoveHandle = CreateFrame("Frame", nil, UIParent)
-	MoveHandle:Size(Frame:GetWidth(), Frame:GetHeight())
+	MoveHandle:SetSize(Frame:GetWidth(), Frame:GetHeight())
 	MoveHandle:SetFrameStrata("HIGH")
 	MoveHandle:SetBackdrop({
 		bgFile = DB.Solid,

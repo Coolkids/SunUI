@@ -90,19 +90,21 @@ local function ApplyChatStyle(self)
 	_G[cf.."EditBoxLanguage"]:SetSize(_G[cf.."EditBox"]:GetHeight(),_G[cf.."EditBox"]:GetHeight())
 	_G[cf.."EditBoxLanguage"]:StripTextures()
 	S.CreateBD(_G[cf.."EditBoxLanguage"], 0.6)
-	hooksecurefunc("ChatEdit_UpdateHeader", function()
-		local type = _G[cf..'EditBox']:GetAttribute("chatType")
-		if ( type == "CHANNEL" ) then
-			local id = _G[cf..'EditBox']:GetAttribute("channelTarget")
-			if id == 0 then
-				_G[cf..'EditBox']:SetBackdropBorderColor(0, 0, 0)
+	if C["ChatEditBoxColor"] then
+		hooksecurefunc("ChatEdit_UpdateHeader", function()
+			local type = _G[cf..'EditBox']:GetAttribute("chatType")
+			if ( type == "CHANNEL" ) then
+				local id = _G[cf..'EditBox']:GetAttribute("channelTarget")
+				if id == 0 then
+					_G[cf..'EditBox']:SetBackdropBorderColor(0, 0, 0)
+				else
+					_G[cf..'EditBox']:SetBackdropBorderColor(ChatTypeInfo[type..id].r,ChatTypeInfo[type..id].g,ChatTypeInfo[type..id].b)
+				end
 			else
-				_G[cf..'EditBox']:SetBackdropBorderColor(ChatTypeInfo[type..id].r,ChatTypeInfo[type..id].g,ChatTypeInfo[type..id].b)
+				_G[cf..'EditBox']:SetBackdropBorderColor(ChatTypeInfo[type].r,ChatTypeInfo[type].g,ChatTypeInfo[type].b)
 			end
-		else
-			_G[cf..'EditBox']:SetBackdropBorderColor(ChatTypeInfo[type].r,ChatTypeInfo[type].g,ChatTypeInfo[type].b)
-		end
-    end)
+		end)
+	end
 	_G[cf.."Tab"]:HookScript("OnClick", function() _G[cf.."EditBox"]:Hide() end)
     tex[6]:SetAlpha(0) tex[7]:SetAlpha(0) tex[8]:SetAlpha(0) tex[9]:SetAlpha(0) tex[10]:SetAlpha(0) tex[11]:SetAlpha(0)
     local bb = _G[cf.."ButtonFrameBottomButton"]

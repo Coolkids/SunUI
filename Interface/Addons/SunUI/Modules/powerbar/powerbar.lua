@@ -2,7 +2,7 @@ local S, L, DB, _, C = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SunUIPowerBar", "AceTimer-3.0", "AceEvent-3.0")
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local powercolor = {}
-local space = (DB.MyClass == "DEATHKNIGHT" or DB.MyClass == "SHAMAN") and 2 or 6
+local space = (DB.MyClass == "DEATHKNIGHT" or DB.MyClass == "SHAMAN") and 3 or 6
 local Holder = CreateFrame("Statusbar", nil, UIParent)
 local mainframe = {}
 local threeframe = {}
@@ -191,6 +191,7 @@ function Module:CreateQSDKPower()
 		bars[i]:SetSize((C["Width"]-space*(count-1))/count, C["Height"])
 		if count == 6 then tinsert(sixframe, bars[i]) else tinsert(sixframe, fiveframe[i]) end
 		bars[i]:SetScale(C["Scale"])
+		
 		if (i == 1) then
 			bars[i]:SetPoint("LEFT", bars, "LEFT")
 		else
@@ -200,6 +201,9 @@ function Module:CreateQSDKPower()
 			local s = bars[i]:GetStatusBarTexture()
 			S.CreateTop(s, 0.9, 0.9, 0)
 			bars[i]:Hide()
+		else
+			S.SmoothBar(bars[i])
+			S.CreateMark(bars[i])
 		end
 		bars[i]:CreateShadow()
 	end
@@ -429,9 +433,10 @@ function Module:FuckWarlock()
 		bars[i]:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
 		tinsert(fourframe, bars[i])
 		S.CreateBack(bars[i])
+		S.SmoothBar(bars[i])
 		bars[i]:CreateShadow()
+		S.CreateMark(bars[i])
 		if i == 1 then
-			S.CreateMark(bars[i])
 			bars[i]:SetPoint("LEFT", bars)
 		else
 			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", space, 0)
@@ -696,7 +701,7 @@ function Module:HealthPowerBar()
 	healthbar:SetMinMaxValues(0, UnitHealthMax("player"))
 	healthbar:SetValue(UnitHealth("player"))
 	healthbar:SetStatusBarColor(0.1, 0.8, 0.1, 0)
-	if DB.MyClass ~= "WARLOCK" and DB.MyClass ~= "SHAMAN" then
+	if DB.MyClass ~= "WARLOCK" and DB.MyClass ~= "SHAMAN" and DB.MyClass ~= "DEATHKNIGHT" then
 		S.CreateBack(healthbar)
 		S.CreateBD(healthbar, 0)
 	end

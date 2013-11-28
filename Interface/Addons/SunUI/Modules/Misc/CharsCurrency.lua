@@ -109,7 +109,7 @@ frame:SetScript("OnEvent", function(self, event, addon)
 
                 for k, v in pairs(SunUIConfig.SavedCurrency[myPlayerRealm]) do
                         if k ~= "Alliance" and k ~= "Horde" then
-                                SavedCurrency[myPlayerRealm][k] = nil
+                                SunUIConfig.SavedCurrency[myPlayerRealm][k] = nil
                         end
                 end
 

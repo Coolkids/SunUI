@@ -1248,10 +1248,16 @@ function SunUIConfig.GenerateOptionsInternal()
 								name = L["显示未探索地区"],
 								order = 23,
 							},
+							ChatEditBoxColor = {
+								type = "toggle",
+								name = "聊天栏输入框边框颜色",
+								desc = "true为根据频道颜色染色",
+								order = 24,
+							},
 							uistyle = {
 								type = "select",
 								name = L["界面风格"],
-								order = 24,
+								order = 25,
 								values = {
 									["plane"] = "win8",
 									["stereo"] = "Gradient",
@@ -1260,7 +1266,7 @@ function SunUIConfig.GenerateOptionsInternal()
 							uitexture = {
 								type = "select",
 								name = TEXTURES_SUBHEADER,
-								order = 24,
+								order = 26,
 								itemControl = "DDI-Statusbar",
 								values = statusbars,
 								get = function(info) 
@@ -1518,25 +1524,94 @@ function SunUIConfig.GenerateOptionsInternal()
 				set = function(info, value) db.InfoPanelDB[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
 				args = {
 					OpenTop = {
-					type = "toggle",
-					name = L["启用顶部信息条"],
-					order = 1,
+							type = "toggle",
+							name = L["启用顶部信息条"],
+							order = 1,
+							},
+					group1 = {
+						type = "group", order = 2,
+						name = " ",guiInline = true,
+						disabled = function(info) return not db.InfoPanelDB.OpenTop end,
+						args = {
+							TopBackground = {
+								type = "toggle",
+								name = "顶部背景",
+								order = 1,
+							},
+							SystemEnable = {
+								type = "toggle",
+								name = "性能",
+								order = 2,
+							},
+							MemoryEnable = {
+								type = "toggle",
+								name = "内存",
+								order = 3,
+							},
+							GoldEnable = {
+								type = "toggle",
+								name = "金钱",
+								order = 4,
+							},
+						}
 					},
 					OpenBottom = {
 						type = "toggle",
 						name = L["启用底部信息条"],
-						order = 2,
+						order = 3,
 					},
-					Friend = {
-					type = "toggle",
-					name = FRIENDS,
-					order = 3,
-					},
-					Guild = {
-						type = "toggle",
-						name = GUILD,
-						order = 4,
-					},
+					group2 = {
+						type = "group", order = 4,
+						name = " ",guiInline = true,
+						disabled = function(info) return not db.InfoPanelDB.OpenBottom end,
+						args = {
+							BottomBackground = {
+								type = "toggle",
+								name = "底部部背景",
+								order = 1,
+							},
+							ClockEnable = {
+								type = "toggle",
+								name = "时间",
+								order = 2,
+							},
+							Friend = {
+							type = "toggle",
+							name = FRIENDS,
+							order = 3,
+							},
+							Guild = {
+								type = "toggle",
+								name = GUILD,
+								order = 4,
+							},
+							DurabilityEnable = {
+								type = "toggle",
+								name = "耐久",
+								order = 5,
+							},
+							Stat1Enable = {
+							type = "toggle",
+							name = "状态1",
+							order = 6,
+							},
+							Stat2Enable = {
+								type = "toggle",
+								name = "状态2",
+								order = 7,
+							},
+							SpecEnable = {
+								type = "toggle",
+								name = "天赋",
+								order = 8,
+							},
+							DungeonHelperEnable = {
+								type = "toggle",
+								name = "副本",
+								order = 9,
+							},
+						}
+					},	
 				}
 			},	
 			PowerBarDB = {

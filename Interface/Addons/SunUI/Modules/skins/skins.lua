@@ -39,7 +39,7 @@ local function SkinOther()
 	end
 
 	DEFAULT_CHAT_FRAME:AddMessage("|cffDDA0DDSun|r|cff44CCFFUI|r已加载，详细设置请输入/sunui")
-	DEFAULT_CHAT_FRAME:AddMessage("更新下载请到个人主页http://code.google.com/p/coolkid-project-sunui/")
+	DEFAULT_CHAT_FRAME:AddMessage("更新下载请到个人主页http://github.com/Coolkids/SunUI")
 end
 
 function Skin:OnInitialize()

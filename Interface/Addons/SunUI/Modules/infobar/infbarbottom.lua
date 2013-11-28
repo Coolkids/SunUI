@@ -2,15 +2,17 @@
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("InfoPanelBottom")
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local function BuildClock()
-	local Clock = CreateFrame("Frame", "InfoPanelBottom1", BottomInfoPanel)
+	local Clock = CreateFrame("Frame", "InfoPanelBottom1", UIParent)
 	Clock.Text = S.MakeFontString(Clock)
-	Clock.Text:SetTextColor(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)
 	Clock.Text:SetShadowColor(0, 0, 0)
-	Clock.Text:SetShadowOffset(S.mult, -S.mult)
-	Clock.Text:SetPoint("LEFT", BottomInfoPanel, "LEFT", 10, 2)
-	Clock.Text:SetShadowOffset(S.mult, -S.mult)
+	Clock.Text:SetShadowOffset(1, -1)
+	Clock:SetSize(70, 15)
+	MoveHandle.InfoPanelBottom1 = S.MakeMoveHandle(Clock, "时间", "InfoTime")
+	
+	Clock.Text:SetPoint("LEFT", Clock)
+	Clock.Text:SetShadowOffset(1, -1)
 	Clock.Text:SetShadowColor(0, 0, 0, 0.4)
-	Clock:SetAllPoints(Clock.Text)
+	
 	local week,killmsg, nokillmsg
 	if (GetLocale() == "zhTW" or GetLocale() == "zhCN") then
 		week = {"星期天","星期一","星期二","星期三","星期四","星期五","星期六"}
@@ -149,7 +151,6 @@ local function BuildClock()
 end
 
 local function BuildFriend()
-	if C["Friend"] ~= true then return end
 	StaticPopupDialogs.SET_BN_BROADCAST = {
 		text = BN_BROADCAST_TOOLTIP,
 		button1 = ACCEPT,
@@ -174,15 +175,15 @@ local function BuildFriend()
 	local format		= string.format
 	local sort			= table.sort
 
-	local Stat = CreateFrame("Frame", "InfoPanelBottom2", BottomInfoPanel)
+	local Stat = CreateFrame("Frame", "InfoPanelBottom2", UIParent)
 	Stat:EnableMouse(true)
-
+	Stat:SetSize(70, 15)
+	MoveHandle.InfoPanelBottom2 = S.MakeMoveHandle(Stat, "好友", "InfoFriend")
+	
 	local Text  = S.MakeFontString(Stat)
-	Text:SetTextColor(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)
-	Text:SetShadowOffset(S.mult, -S.mult)
+	Text:SetShadowOffset(1, -1)
 	Text:SetShadowColor(0, 0, 0, 0.4)
-	Text:SetPoint("LEFT", InfoPanelBottom1, "RIGHT", 3, 0)
-	Stat:SetAllPoints(Text)
+	Text:SetPoint("LEFT", Stat)
 
 	local menuFrame = CreateFrame("Frame", "FriendRightClickMenu", UIParent, "UIDropDownMenuTemplate")
 	local menuList = {
@@ -283,7 +284,6 @@ local function BuildFriend()
 		dataValid = false
 
 		Text:SetText(format(true and "%s: "..("|cff%.2x%.2x%.2x"):format(classc.r * 255, classc.g * 255, classc.b * 255).."%d" or "%s:%d",FRIEND,onlineFriends + numBNetOnline))
-		self:SetAllPoints(Text)
 	end
 
 	Stat:SetScript("OnMouseUp", function(self, btn)
@@ -380,10 +380,10 @@ local function BuildFriend()
 						if battleTag == nil then battleTag = "" end
 						if not isOnline then break end
 						if isAFK then
-							status = "|cffE7E716"..L_CHAT_AFK.."|r"
+							status = "|cffE7E716AFK|r"
 						else
 							if isDND then
-								status = "|cffff0000"..L_CHAT_DND.."|r"
+								status = "|cffff0000DND|r"
 							else
 								status = ""
 							end
@@ -428,7 +428,6 @@ local function BuildFriend()
 end
 
 local function BuildGuild()
-	if C["Guild"] ~= true then return end
 	-- localized references for global functions (about 50% faster)
 	local join 			= string.join
 	local format		= string.format
@@ -439,7 +438,7 @@ local function BuildGuild()
 
 	local tthead, ttsubh, ttoff = {r=0.4, g=0.78, b=1}, {r=0.75, g=0.9, b=1}, {r=.3,g=1,b=.3}
 	local activezone, inactivezone = {r=0.3, g=1.0, b=0.3}, {r=0.65, g=0.65, b=0.65}
-	local displayString = join("", S.RGBToHex(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)..GUILD.."|r", ": %d|r")
+	local displayString = join("", GUILD, ": %d|r")
 	local noGuildString = join("", "",L["没有工会"])
 	local guildInfoString = "%s [%d]"
 	local guildInfoString2 = join("", GUILD, ": %d/%d")
@@ -456,15 +455,17 @@ local function BuildGuild()
 	local friendOnline, friendOffline = gsub(ERR_FRIEND_ONLINE_SS,"\124Hplayer:%%s\124h%[%%s%]\124h",""), gsub(ERR_FRIEND_OFFLINE_S,"%%s","")
 	local guildTable, guildXP, guildMotD = {}, {}, ""
 
-	local Stat = CreateFrame("Frame", "InfoPanelBottom3", BottomInfoPanel)
+	local Stat = CreateFrame("Frame", "InfoPanelBottom3", UIParent)
 	Stat:EnableMouse(true)
-
+	Stat:SetSize(70, 15)
+	MoveHandle.InfoPanelBottom3 = S.MakeMoveHandle(Stat, "工会", "InfoGuild")
+	
 	local Text  = S.MakeFontString(Stat)
 	Text:SetTextColor(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)
-	Text:SetShadowOffset(S.mult, -S.mult)
+	Text:SetShadowOffset(1, -1)
 	Text:SetShadowColor(0, 0, 0, 0.4)
-	Text:SetPoint("LEFT", InfoPanelBottom2 or InfoPanelBottom1, "RIGHT", 3, 0)
-	Stat:SetAllPoints(Text)
+	Text:SetPoint("LEFT", Stat)
+	
 	local function SortGuildTable(shift)
 		sort(guildTable, function(a, b)
 			if a and b then
@@ -701,13 +702,20 @@ local function BuildDurability()
 		[10] = {17, INVTYPE_SHIELD, 1000},  --L["副手"]
 	}
 	local nowSlots = {}
-	local Stat = CreateFrame("Frame", "InfoPanelBottom4", BottomInfoPanel)
+	local Stat = CreateFrame("Frame", "InfoPanelBottom4", UIParent)
+	Stat:SetFrameStrata("MEDIUM")
+	Stat:SetFrameLevel(3)
+	Stat:EnableMouse(true)
+	Stat:SetSize(70, 15)
+	MoveHandle.InfoPanelBottom4 = S.MakeMoveHandle(Stat, "耐久", "InfoDurability")
+	
 	local Text = S.MakeFontString(Stat)
-	Text:SetPoint("LEFT", InfoPanelBottom3 or InfoPanelBottom2 or InfoPanelBottom1, "RIGHT", 3, 0)
+	Text:SetPoint("LEFT", Stat)
 	Stat:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
 	Stat:RegisterEvent("MERCHANT_SHOW")
 	Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
-	Stat:SetAllPoints(Text)
+	
+	
 	Stat:SetScript("OnEvent", function(self)
 			wipe(nowSlots)
 			local total, num = 0, 0
@@ -753,17 +761,18 @@ end
 
 local function BuildStat2()
 
-	local Stat = CreateFrame("Frame", "InfoPanelBottom5", BottomInfoPanel)
+	local Stat = CreateFrame("Frame", "InfoPanelBottom5", UIParent)
 	Stat:EnableMouse(true)
 	Stat:SetFrameStrata("MEDIUM")
 	Stat:SetFrameLevel(3)
-
-	Text  = S.MakeFontString(Stat)
-	Text:SetTextColor(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)
-	Text:SetShadowOffset(S.mult, -S.mult)
+	Stat:SetSize(70, 15)
+	MoveHandle.InfoPanelBottom5 = S.MakeMoveHandle(Stat, "状态2", "InfoStat2")
+	
+	local Text  = S.MakeFontString(Stat)
+	Text:SetShadowOffset(1, -1)
 	Text:SetShadowColor(0, 0, 0, 0.4)
-	Text:SetPoint("RIGHT", BottomInfoPanel, "RIGHT", -10, 2)
-	Stat:SetAllPoints(Text)
+	Text:SetPoint("LEFT", Stat)
+
 	
 	local _G = getfenv(0)
 	local format = string.format
@@ -822,10 +831,7 @@ local function BuildStat2()
 
 	local function UpdateTank(self)
 		baseArmor, effectiveArmor, armor, posBuff, negBuff = UnitArmor("player");
-
 		Text:SetFormattedText(displayNumberString, armorString, effectiveArmor)
-		--Setup Tooltip
-		self:SetAllPoints(Text)
 	end
 
 	local function UpdateCaster(self)
@@ -836,8 +842,6 @@ local function BuildStat2()
 		else
 			Text:SetFormattedText(displayFloatString, SPELL_CRIT_CHANCE..": ", spellcrit)
 		end
-		--Setup Tooltip
-		self:SetAllPoints(Text)
 	end
 
 	local function UpdateMelee(self)
@@ -852,8 +856,6 @@ local function BuildStat2()
 		end
 
 		Text:SetFormattedText(displayFloatString, MELEE_CRIT_CHANCE..": ", critChance)
-		--Setup Tooltip
-		self:SetAllPoints(Text)
 	end
 
 	local function UpdateBattlefieldScore(self)
@@ -904,17 +906,17 @@ local function BuildStat2()
 end
 
 local function BuildStat1()
-	local Stat = CreateFrame("Frame", "InfoPanelBottom6", BottomInfoPanel)
+	local Stat = CreateFrame("Frame", "InfoPanelBottom6", UIParent)
 	Stat:EnableMouse(true)
 	Stat:SetFrameStrata("MEDIUM")
 	Stat:SetFrameLevel(3)
-
+	Stat:SetSize(70, 15)
+	MoveHandle.InfoPanelBottom6 = S.MakeMoveHandle(Stat, "状态1", "InfoStat1")
+	
 	local Text  = S.MakeFontString(Stat)
-	Text:SetTextColor(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)
-	Text:SetShadowOffset(S.mult, -S.mult)
+	Text:SetShadowOffset(1, -1)
 	Text:SetShadowColor(0, 0, 0, 0.4)
-	Text:SetPoint("RIGHT", InfoPanelBottom5, "LEFT", -3, 0)
-	Stat:SetAllPoints(Text)
+	Text:SetPoint("LEFT", Stat)
 	
 	local format = string.format
 	local targetlv, playerlv
@@ -1057,8 +1059,6 @@ local function BuildStat1()
 		avoidance = (dodge+parry+block+basemisschance)
 
 		Text:SetFormattedText(displayFloatString, L["免伤"]..": ", avoidance)
-		--Setup Tooltip
-		self:SetAllPoints(Text)
 	end
 
 	local function UpdateCaster(self)
@@ -1069,8 +1069,6 @@ local function BuildStat1()
 		end
 
 		Text:SetFormattedText(displayNumberString, STAT_SPELLPOWER..": ", spellpwr)
-		--Setup Tooltip
-		self:SetAllPoints(Text)
 	end
 
 	local function UpdateMelee(self)
@@ -1086,8 +1084,6 @@ local function BuildStat1()
 		end
 
 		Text:SetFormattedText(displayNumberString, STAT_ATTACK_POWER..": ", pwr)
-		--Setup Tooltip
-		self:SetAllPoints(Text)
 	end
 
 	local function UpdateBattlefieldScore(self)
@@ -1139,16 +1135,18 @@ local function BuildStat1()
 end
 
 local function BuildSpecswitch()
-	local Stat = CreateFrame("Frame", "InfoPanelBottom7", BottomInfoPanel)
+	local Stat = CreateFrame("Frame", "InfoPanelBottom7", UIParent)
+	Stat:EnableMouse(true)
 	Stat:SetFrameStrata("MEDIUM")
 	Stat:SetFrameLevel(3)
+	Stat:SetSize(70, 15)
+	MoveHandle.InfoPanelBottom7 = S.MakeMoveHandle(Stat, "天赋", "InfoSpec")
+	
 	local Text  = S.MakeFontString(Stat)
-	Text:SetTextColor(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)
-	Text:SetShadowOffset(S.mult, -S.mult)
+	Text:SetShadowOffset(1, -1)
 	Text:SetShadowColor(0, 0, 0, 0.4)
-	Text:SetPoint("RIGHT", InfoPanelBottom6, "LEFT", -3, 0)
+	Text:SetPoint("LEFT", Stat)
 	Text:SetText(NONE..TALENTS)
-	Stat:SetAllPoints(Text)
 	
 	local function OnEvent(self)
 		if not GetSpecialization() then
@@ -1218,16 +1216,17 @@ local function BuildSpecswitch()
 end
 
 local function DungeonHelper()
-	local Stat = CreateFrame("Frame", "InfoPanelBottom7", BottomInfoPanel)
+	local Stat = CreateFrame("Frame", "InfoPanelBottom8", UIParent)
 	Stat:SetFrameStrata("MEDIUM")
 	Stat:SetFrameLevel(3)
+	Stat:SetSize(70, 15)
+	MoveHandle.InfoPanelBottom8 = S.MakeMoveHandle(Stat, "副本", "InfoDungeonHelper")
+	
 	local Text  = S.MakeFontString(Stat)
-	--Text:SetTextColor(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)
-	Text:SetShadowOffset(S.mult, -S.mult)
+	Text:SetShadowOffset(1, -1)
 	Text:SetShadowColor(0, 0, 0, 0.4)
-	Text:SetPoint("LEFT", InfoPanelBottom4, "RIGHT", 3, 0)
+	Text:SetPoint("LEFT", Stat)
 	Text:SetText("")
-	Stat:SetAllPoints(Text)
 	
 	-- for i = 1, GetNumRandomDungeons() do
 		-- local id, name = GetLFGRandomDungeonInfo(i)
@@ -1305,16 +1304,25 @@ local function DungeonHelper()
 end
 function Module:OnInitialize()
 	C = SunUIConfig.db.profile.InfoPanelDB
+	if C["BottomBackground"] == true then
+		local bottom = CreateFrame("Frame", "UIParent", UIParent)
+		bottom:SetHeight(20)
+		bottom:SetFrameLevel(0)
+		bottom:CreateShadow("Background")
+		bottom:SetPoint("BOTTOM", 0, -3)
+		bottom:SetPoint("LEFT")
+		bottom:SetPoint("RIGHT")
+	end
 end
 function Module:OnEnable()
 	if C["OpenBottom"] == true then
-		BuildClock()
-		BuildFriend()
-		BuildGuild()
-		BuildDurability()
-		BuildStat2()
-		BuildStat1()
-		BuildSpecswitch()
-		DungeonHelper()
+		if C["ClockEnable"] then BuildClock() end
+		if C["DurabilityEnable"] then BuildDurability() end
+		if C["Friend"] then BuildFriend() end
+		if C["Guild"] then BuildGuild() end
+		if C["Stat1Enable"] then BuildStat2() end
+		if C["Stat2Enable"] then BuildStat1() end
+		if C["SpecEnable"] then BuildSpecswitch() end
+		if C["DungeonHelperEnable"] then DungeonHelper() end
 	end
 end

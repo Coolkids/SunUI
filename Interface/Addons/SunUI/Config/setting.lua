@@ -128,6 +128,7 @@ G["MiniDB"] = {
 	["DNDFilter"] = true,
 	["TimeStamps"] = true,
 	["MiniMapPanels"] = true,
+	["ChatEditBoxColor"] = false,
 	["INVITE_WORD"] = "SunUI",
 	["ChatFilter"] = true,
 	["Icicle"] = false,
@@ -177,8 +178,19 @@ G["RaidCDDB"] = {
 G["InfoPanelDB"] = {
 	["OpenTop"] = true,
 	["OpenBottom"] = true,
+	["SystemEnable"] = true,
+	["MemoryEnable"] = true,
+	["GoldEnable"] = true,
+	["ClockEnable"] = true,
+	["DurabilityEnable"] = true,
 	["Friend"] = false,
 	["Guild"] = false,
+	["Stat1Enable"] = true,
+	["Stat2Enable"] = true,
+	["SpecEnable"] = true,
+	["DungeonHelperEnable"] = true,
+	["TopBackground"] = true,
+	["BottomBackground"] = true,
 }
 G["MoveHandleDB"] = {
 	--动作条
@@ -232,8 +244,19 @@ G["MoveHandleDB"] = {
 	["Threat"] = {"BOTTOM", "UIParent", "BOTTOM", -177, 262},
 	--宠物计时
 	["ShadowPet"] = {"BOTTOM", "UIParent", "BOTTOM", -322, 201},
-	--信息条
-	["InfoPanel"] = {"TOPLEFT", "Minimap", "TOPRIGHT", 20, 3},
+	--信息条 各个模块
+	["InfoSystem"] = {"TOPLEFT", "Minimap", "TOPRIGHT", 20, 4},
+	["InfoMemory"] = {"TOPLEFT", "UIParent", "TOPLEFT", 285, -1},
+	["InfoGold"] = {"TOPLEFT", "UIParent", "TOPLEFT", 353, -1},
+	["InfoTime"] = {"BOTTOMLEFT", "UIParent", "BOTTOMLEFT", 10, 2},
+	["InfoFriend"] = {"BOTTOMLEFT", "UIParent", "BOTTOMLEFT", 366, 2},
+	["InfoGuild"] = {"BOTTOMLEFT", "UIParent", "BOTTOMLEFT", 275, 2},
+	["InfoDurability"] = {"BOTTOMLEFT", "UIParent", "BOTTOMLEFT", 70, 2},
+	["InfoStat2"] = {"BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -159, 2},
+	["InfoStat1"] = {"BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -40, 2},
+	["InfoSpec"] = {"BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -235, 2},
+	["InfoDungeonHelper"] = {"BOTTOMLEFT", "UIParent", "BOTTOMLEFT", 168, 2},
+	
 	--Mini
 	["BloodShield"] = {"BOTTOM", "UIParent", "BOTTOM", -285,  172},
 	["AutoButton"] = {"RIGHT", "UIParent", "RIGHT", -270, 188},

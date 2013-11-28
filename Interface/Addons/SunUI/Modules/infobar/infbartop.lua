@@ -73,13 +73,15 @@ local Stat = CreateFrame("Frame", "InfoPanel1", TopInfoPanel)
 	Stat:SetFrameStrata("BACKGROUND")
 	Stat:SetFrameLevel(3)
 	Stat:EnableMouse(true)
+	Stat:SetSize(80, 15)
+	MoveHandle.InfoPanel1 = S.MakeMoveHandle(Stat, "系统", "InfoSystem")
 	
 	local Text = S.MakeFontString(Stat)
-	Text:SetPoint("LEFT", InfoPanelPos)
-	Text:SetShadowOffset(S.mult, -S.mult)
+	Text:SetPoint("LEFT", Stat)
+	Text:SetShadowOffset(1, -1)
 	Text:SetShadowColor(0, 0, 0, 0.4)
 	
-	Stat:SetAllPoints(Text)
+	--Stat:SetAllPoints(Text)
 	local function colorlatency(latency)
 		if latency < 300 then
 			return "|cff0CD809"..latency
@@ -195,8 +197,6 @@ function Module:Update()
 	end
 end
 
-Module:ScheduleRepeatingTimer("Update", 10)
-
 local function formatMemory(n)
 	if n > 1024 then
 		return format("%.2f "..L_MB, n / 1024)
@@ -236,13 +236,15 @@ local function BuildMemory()
 	Stat:SetFrameStrata("BACKGROUND")
 	Stat:SetFrameLevel(3)
 	Stat:EnableMouse(true)
+	Stat:SetSize(70, 15)
+	MoveHandle.InfoPanel2 = S.MakeMoveHandle(Stat, "内存", "InfoMemory")
 	
 	local Text = S.MakeFontString(Stat)
-	Text:SetPoint("LEFT", InfoPanel1, "RIGHT", 2, 0)
-	Text:SetShadowOffset(S.mult, -S.mult)
+	Text:SetPoint("LEFT", Stat)
+	Text:SetShadowOffset(1, -1)
 	Text:SetShadowColor(0, 0, 0, 0.4)
 	Memtext = Text
-	Stat:SetAllPoints(Text)
+	
 	Stat:SetScript("OnMouseDown", function(self, button)
 		if button == "LeftButton" then 
 			UpdateAddOnMemoryUsage()
@@ -268,6 +270,8 @@ local function BuildMemory()
 		GameTooltip:Show()
 	end)
 	Stat:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
+	Module:Update()
+	Module:ScheduleRepeatingTimer("Update", 10)
 end
 -- BuildGold
 local function BuildGold()
@@ -275,12 +279,14 @@ local function BuildGold()
 	Stat:SetFrameStrata("BACKGROUND")
 	Stat:SetFrameLevel(3)
 	Stat:EnableMouse(true)
+	Stat:SetSize(70, 15)
+	MoveHandle.InfoPanel3 = S.MakeMoveHandle(Stat, "金钱", "InfoGold")
 	
 	local Text = S.MakeFontString(Stat)
-	Text:SetPoint("LEFT", InfoPanel2, "RIGHT", 2, 0)
-	Text:SetShadowOffset(S.mult, -S.mult)
+	Text:SetPoint("LEFT", Stat)
+	Text:SetShadowOffset(1, -1)
 	Text:SetShadowColor(0, 0, 0, 0.4)
-	Stat:SetAllPoints(Text)
+	
 	
 	local Profit	= 0
 	local Spent		= 0
@@ -324,7 +330,7 @@ local function BuildGold()
 		
 		Text:SetText(formatTextMoney(NewMoney))
 		-- Setup Money Tooltip
-		self:SetAllPoints(Text)
+		--self:SetAllPoints(Text)
 		
 		local myPlayerRealm = GetRealmName();
 		local myPlayerName  = UnitName("player");				
@@ -394,15 +400,17 @@ end
 	
 function Module:OnInitialize()
 	C = SunUIDB.db.profile.InfoPanelDB
-	if C["OpenTop"] == true then
+
+	if C["TopBackground"] then
 		local top = CreateFrame("Frame", "TopInfoPanel", UIParent)
 		top:SetHeight(20)
 		top:SetFrameStrata("BACKGROUND")
 		top:SetFrameLevel(0)
-		top:CreateShadow("Background")
 		top:SetPoint("TOP", 0, 3)
 		top:SetPoint("LEFT")
 		top:SetPoint("RIGHT")
+		top:CreateShadow("Background")
+		
 		top:RegisterEvent("PET_BATTLE_OPENING_START")
 		top:RegisterEvent("PET_BATTLE_CLOSE")
 		top:SetScript("OnEvent", function(self, event)
@@ -413,74 +421,6 @@ function Module:OnInitialize()
 				UIFrameFadeIn(self, 1, self:GetAlpha(), 1)
 			end
 		end)
-		
-		local InfoPanelPos = CreateFrame("Frame", "InfoPanelPos", UIParent)
-		InfoPanelPos:SetSize(350, 12)
-		InfoPanelPos:Hide()
-		MoveHandle.InfoPanel = S.MakeMoveHandle(InfoPanelPos, L["信息面板"], "InfoPanel")
-		
-		--[[ local maphide = CreateFrame("Button", nil, UIParent)
-		maphide:SetHeight(8)
-		maphide:SetWidth(100)
-		maphide:SetFrameStrata("BACKGROUND")
-		maphide:SetFrameLevel(1)
-		maphide:SetPoint("TOP", 0, -5)
-		maphide:SetAlpha(0)
-		maphide:SetScript("OnMouseDown", function(self, button)
-			if Minimap:IsShown() then 
-				S.FadeOutFrameDamage(Minimap, 1.5)
-			else
-				Minimap:Show()
-				UIFrameFadeIn(Minimap, 1.5, 0, 1)
-			end
-		end)
-		maphide:SetScript("OnEnter", function(self)
-			UIFrameFadeIn(self, 0.5, self:GetAlpha(), 1)
-			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
-			GameTooltip:AddLine(L["隐藏小地图"], .6,.8,1)
-			GameTooltip:Show()
-		end)
-		maphide:SetScript("OnLeave", function(self) 
-			UIFrameFadeOut(self, 1, self:GetAlpha(), 0)
-			GameTooltip:Hide()
-		end)
-		S.Reskin(maphide)
-		local findframe = false
-		local mapdamage = CreateFrame("Button", nil, UIParent)
-		mapdamage:SetHeight(8)
-		mapdamage:SetWidth(50)
-		mapdamage:SetFrameStrata("BACKGROUND")
-		mapdamage:SetFrameLevel(1)
-		mapdamage:SetPoint("TOP", 90, -5)
-		mapdamage:SetAlpha(0)
-		mapdamage:SetScript("OnMouseDown", function(self, button)
-			for k,v in pairs(damageframe) do
-				if _G[v] then
-					findframe = true
-					if _G[v]:IsShown() then 
-						S.FadeOutFrameDamage(_G[v], 1.5)
-					else
-						_G[v]:Show()
-						UIFrameFadeIn(_G[v], 1.5, _G[v]:GetAlpha(), 1)
-					end
-				end
-			end
-			if not findframe then
-				DEFAULT_CHAT_FRAME:AddMessage(L["暂时不兼容其他伤害统计"])
-			end
-		end)
-		mapdamage:SetScript("OnEnter", function(self)
-			UIFrameFadeIn(self, 2, self:GetAlpha(), 1)
-			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
-			GameTooltip:AddLine(L["隐藏伤害统计"], .6,.8,1)
-			GameTooltip:Show()
-		end)
-		mapdamage:SetScript("OnLeave", function(self) 
-			UIFrameFadeOut(self, 2, self:GetAlpha(), 0)
-			GameTooltip:Hide()
-		end)
-		S.Reskin(mapdamage)
-	 ]]	
 		top:SetScript("OnEnter", function()
 			if wm:IsShown() then
 				UIFrameFadeIn(wm, 0.5, wm:GetAlpha(), 1)
@@ -492,22 +432,12 @@ function Module:OnInitialize()
 			end
 		end)
 	end
-	
-	if C["OpenBottom"] == true then
-		local bottom = CreateFrame("Frame", "BottomInfoPanel", UIParent)
-		bottom:SetHeight(20)
-		bottom:SetFrameLevel(0)
-		bottom:CreateShadow("Background")
-		bottom:SetPoint("BOTTOM", 0, -3)
-		bottom:SetPoint("LEFT")
-		bottom:SetPoint("RIGHT")
-	end
 end
 function Module:OnEnable()
 	RaidTools()
-	if C["OpenTop"] == true then
-		BuildSystem()
-		BuildMemory()
-		BuildGold()
+	if C["OpenTop"] then
+		if C["SystemEnable"] then BuildSystem() end
+		if C["MemoryEnable"] then BuildMemory() end
+		if C["GoldEnable"] then BuildGold() end
 	end
 end
