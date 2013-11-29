@@ -348,14 +348,14 @@ function WM:FixSkin()
 	end
 
 	WorldMapFrameAreaLabel:SetFont(GameFontNormalSmall:GetFont(), 50, "OUTLINE")
-	WorldMapFrameAreaLabel:SetShadowOffset(S.mult, -S.mult)
+	WorldMapFrameAreaLabel:SetShadowOffset(1, -1)
 	WorldMapFrameAreaLabel:SetTextColor(0.90, 0.8294, 0.6407)
 
 	WorldMapFrameAreaDescription:SetFont(GameFontNormalSmall:GetFont(), 40, "OUTLINE")
-	WorldMapFrameAreaDescription:SetShadowOffset(S.mult, -S.mult)
+	WorldMapFrameAreaDescription:SetShadowOffset(1, -1)
 
 	WorldMapZoneInfo:SetFont(GameFontNormalSmall:GetFont(), 27, "OUTLINE")
-	WorldMapZoneInfo:SetShadowOffset(S.mult, -S.mult)
+	WorldMapZoneInfo:SetShadowOffset(1, -1)
 end
 
 function WM:OnInitialize()

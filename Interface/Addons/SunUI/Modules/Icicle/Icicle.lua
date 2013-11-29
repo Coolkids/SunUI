@@ -39,8 +39,8 @@ local addicons = function(name, f)
 	end
 	for i = 1, #db[name] do
 		db[name][i]:ClearAllPoints()
-		db[name][i]:Width(size)
-		db[name][i]:Height(size)
+		db[name][i]:SetWidth(size)
+		db[name][i]:SetHeight(size)
 		db[name][i].cooldown:SetFont(DB.Font ,Sfont, "OUTLINE")
 		if i == 1 then
 			db[name][i]:SetPoint("TOPLEFT", f, xoff, yoff)

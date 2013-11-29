@@ -46,6 +46,16 @@ local ReminderBuffs = {
 		},	
 	},
 	WARLOCK = {
+		["spell"] = { --armors group
+			["spells"] = {
+				[1459] = true, -- 奥术光辉
+				[109773] = true, --意图
+				[77747] = true,--萨满
+				[61316] = true,--法师
+			},
+			["combat"] = true,
+			["instance"] = true,
+		},	
 	},
 	PALADIN = {
 		["Righteous Fury"] = { -- righteous fury group

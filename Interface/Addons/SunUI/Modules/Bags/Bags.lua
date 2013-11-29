@@ -285,7 +285,7 @@ function B:Layout(isBank)
 	local holderWidth = ((buttonSize + buttonSpacing) * numContainerColumns) - buttonSpacing
 	local numContainerRows = 0
 	local bottomPadding = (containerWidth - holderWidth) / 2
-	f.holderFrame:Width(holderWidth)
+	f.holderFrame:SetWidth(holderWidth)
 	f.totalSlots = 0
 	local lastButton
 	local lastRowButton
@@ -325,12 +325,12 @@ function B:Layout(isBank)
 					S.CreateBackdropTexture(f.ContainerHolder[i], 0.6)
 				end
 			end
-			f.ContainerHolder:Size(((buttonSize + buttonSpacing) * (isBank and i - 1 or i)) + buttonSpacing,buttonSize + (buttonSpacing * 2))
+			f.ContainerHolder:SetSize(((buttonSize + buttonSpacing) * (isBank and i - 1 or i)) + buttonSpacing,buttonSize + (buttonSpacing * 2))
 			if isBank then
 				BankFrameItemButton_Update(f.ContainerHolder[i])
 				BankFrameItemButton_UpdateLocked(f.ContainerHolder[i])
 			end
-			f.ContainerHolder[i]:Size(buttonSize)
+			f.ContainerHolder[i]:SetSize(buttonSize, buttonSize)
 			f.ContainerHolder[i]:ClearAllPoints()
 			if (isBank and i == 2) or (not isBank and i == 1) then
 				f.ContainerHolder[i]:SetPoint("BOTTOMLEFT", f.ContainerHolder, "BOTTOMLEFT", buttonSpacing, buttonSpacing)
@@ -362,7 +362,7 @@ function B:Layout(isBank)
 					f.Bags[bagID][slotID] = CreateFrame("CheckButton", f.Bags[bagID]:GetName().."Slot"..slotID, f.Bags[bagID], bagID == -1 and "BankItemButtonGenericTemplate" or "ContainerFrameItemButtonTemplate")
 					f.Bags[bagID][slotID]:SetBackdrop({
 						bgFile = DB.Solid, 
-						insets = { left = -S.mult, right = -S.mult, top = -S.mult, bottom = -S.mult }
+						insets = { left = -1, right = -1, top = -1, bottom = -1 }
 					})
 					if not f.Bags[bagID][slotID].border then
 						local border = CreateFrame("Frame", nil, f.Bags[bagID][slotID])
@@ -379,8 +379,8 @@ function B:Layout(isBank)
 						f.Bags[bagID][slotID].shadow = shadow
 						f.Bags[bagID][slotID].shadow:SetBackdrop( { 
 							edgeFile = DB.GlowTex,
-							edgeSize = S.Scale(3),
-							insets = {left = S.Scale(3), right = S.Scale(3), top = S.Scale(3), bottom = S.Scale(3)},
+							edgeSize = 3,
+							insets = {left = 3, right = 3, top = 3, bottom = 3},
 						})
 						f.Bags[bagID][slotID].shadow:SetBackdropColor(0, 0, 0)
 						f.Bags[bagID][slotID].shadow:Hide()
@@ -407,7 +407,7 @@ function B:Layout(isBank)
 					f.Bags[bagID][slotID].slotID = slotID
 				end
 				f.Bags[bagID][slotID]:SetID(slotID)
-				f.Bags[bagID][slotID]:Size(buttonSize)
+				f.Bags[bagID][slotID]:SetSize(buttonSize, buttonSize)
 				f:UpdateSlot(bagID, slotID)
 				if f.Bags[bagID][slotID]:GetPoint() then
 					f.Bags[bagID][slotID]:ClearAllPoints()
@@ -445,7 +445,7 @@ function B:Layout(isBank)
 			end
 		end
 	end
-	f:Size(containerWidth, (((buttonSize + buttonSpacing) * numContainerRows) - buttonSpacing) + f.topOffset + f.bottomOffset); -- 8 is the cussion of the f.holderFrame
+	f:SetSize(containerWidth, (((buttonSize + buttonSpacing) * numContainerRows) - buttonSpacing) + f.topOffset + f.bottomOffset); -- 8 is the cussion of the f.holderFrame
 end
 
 function B:UpdateAll()
@@ -576,7 +576,7 @@ function B:ContructContainerFrame(name, isBank)
 		--Sort Button
 		f.sortButton = CreateFrame("Button", nil, f)
 		f.sortButton:SetPoint("TOPLEFT", f, "TOPLEFT", 14, -4)
-		f.sortButton:Size(55, 10)
+		f.sortButton:SetSize(55, 10)
 		f.sortButton.ttText = L["整理背包"]
 		f.sortButton.ttText2 = L["整理背包"]
 		f.sortButton.ttText2desc = "左键逆向,右键正向"
@@ -591,7 +591,7 @@ function B:ContructContainerFrame(name, isBank)
 		--Toggle Bags Button
 		f.bagsButton = CreateFrame("Button", nil, f)
 		f.bagsButton:SetPoint("LEFT", f.sortButton, "RIGHT", 3, 0)
-		f.bagsButton:Size(55, 10)
+		f.bagsButton:SetSize(55, 10)
 		f.bagsButton.ttText = BAGSLOTTEXT
 		f.bagsButton:SetScript("OnEnter", self.Tooltip_Show)
 		f.bagsButton:SetScript("OnLeave", self.Tooltip_Hide)
@@ -607,7 +607,7 @@ function B:ContructContainerFrame(name, isBank)
 		f:SetScript("OnHide", CloseBankFrame)
 		
 		f.purchaseBagButton = CreateFrame("Button", nil, f)
-		f.purchaseBagButton:Size(55, 10)
+		f.purchaseBagButton:SetSize(55, 10)
 		f.purchaseBagButton:SetPoint("LEFT", f.bagsButton, "RIGHT", 3, 0)
 		f.purchaseBagButton:SetFrameLevel(f.purchaseBagButton:GetFrameLevel() + 2)
 		f.purchaseBagButton.ttText = PURCHASE
@@ -630,7 +630,7 @@ function B:ContructContainerFrame(name, isBank)
 		--Search
 		f.editBox = CreateFrame("EditBox", name.."EditBox", f)
 		f.editBox:SetFrameLevel(f.editBox:GetFrameLevel() + 2)
-		f.editBox:Height(15)
+		f.editBox:SetHeight(15)
 		f.editBox:Hide()
 		f.editBox:SetPoint("BOTTOMLEFT", f.holderFrame, "TOPLEFT", 3, 4)
 		f.editBox:SetPoint("RIGHT", f.goldText, "LEFT", -5, 0)
@@ -674,7 +674,7 @@ function B:ContructContainerFrame(name, isBank)
 		--Sort Button
 		f.sortButton = CreateFrame("Button", nil, f)
 		f.sortButton:SetPoint("TOPLEFT", f, "TOPLEFT", 14, -4)
-		f.sortButton:Size(55, 10)
+		f.sortButton:SetSize(55, 10)
 		f.sortButton.ttText = L["整理背包"]
 		f.sortButton.ttText2 = L["整理背包"]
 		f.sortButton.ttText2desc = "左键逆向,右键正向"
@@ -688,7 +688,7 @@ function B:ContructContainerFrame(name, isBank)
 		--Bags Button
 		f.bagsButton = CreateFrame("Button", nil, f)
 		f.bagsButton:SetPoint("LEFT", f.sortButton, "RIGHT", 3, 0)
-		f.bagsButton:Size(55, 10)
+		f.bagsButton:SetSize(55, 10)
 		f.bagsButton.ttText = BAGSLOTTEXT
 		f.bagsButton:SetScript("OnEnter", self.Tooltip_Show)
 		f.bagsButton:SetScript("OnLeave", self.Tooltip_Hide)
@@ -700,10 +700,10 @@ function B:ContructContainerFrame(name, isBank)
 		f.currencyButton:SetPoint("BOTTOM", 0, 1)
 		f.currencyButton:SetPoint("TOPLEFT", f.holderFrame, "BOTTOMLEFT", 0, 18)
 		f.currencyButton:SetPoint("TOPRIGHT", f.holderFrame, "BOTTOMRIGHT", 0, 18)
-		f.currencyButton:Height(22)
+		f.currencyButton:SetHeight(22)
 		for i = 1, MAX_WATCHED_TOKENS do
 			f.currencyButton[i] = CreateFrame("Button", nil, f.currencyButton)
-			f.currencyButton[i]:Size(16)
+			f.currencyButton[i]:SetSize(16, 16)
 			f.currencyButton[i]:SetID(i)
 			f.currencyButton[i].icon = f.currencyButton[i]:CreateTexture(nil, "OVERLAY")
 			S.CreateBD(f.currencyButton[i])

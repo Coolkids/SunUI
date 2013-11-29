@@ -48,7 +48,7 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		S.CreateBackdropTexture(bg)
 
 		S.Reskin(button)
-		button:Size(25, 25)
+		button:SetSize(25, 25)
 		button:ClearAllPoints()
 		button:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -15, 0)
 		button:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -15, 0)
@@ -60,7 +60,7 @@ AceGUI.RegisterAsWidget = function(self, widget)
 
 		local downtex = button:CreateTexture(nil, "ARTWORK")
 		downtex:SetTexture("Interface\\AddOns\\SunUI\\media\\arrow-down-active")
-		downtex:Size(8, 8)
+		downtex:SetSize(8, 8)
 		downtex:SetPoint("CENTER")
 		downtex:SetVertexColor(1, 1, 1)
 
@@ -77,7 +77,7 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		frame:StripTextures()
 
 		S.Reskin(button)
-		button:Size(20, 20)
+		button:SetSize(20, 20)
 
 		button:SetDisabledTexture(media.backdrop)
 		local dis = button:GetDisabledTexture()
@@ -86,7 +86,7 @@ AceGUI.RegisterAsWidget = function(self, widget)
 
 		local downtex = button:CreateTexture(nil, "ARTWORK")
 		downtex:SetTexture("Interface\\AddOns\\SunUI\\media\\arrow-down-active")
-		downtex:Size(8, 8)
+		downtex:SetSize(8, 8)
 		downtex:SetPoint("CENTER")
 		downtex:SetVertexColor(1, 1, 1)
 		frame.text:ClearAllPoints()
@@ -157,7 +157,7 @@ AceGUI.RegisterAsWidget = function(self, widget)
 
 		frame:StripTextures()
 		S.CreateBD(frame, 0)
-		frame:Height(HEIGHT)
+		frame:SetHeight(HEIGHT)
 		S.CreateBackdropTexture(frame)
 
 		local slider = frame:GetThumbTexture()
@@ -167,7 +167,7 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		S.CreateBD(editbox, 0)
 		editbox.SetBackdropColor = function() end
 		editbox.SetBackdropBorderColor = function() end
-		editbox:Height(15)
+		editbox:SetHeight(15)
 		editbox:SetPoint("TOP", frame, "BOTTOM", 0, -1)
 		S.CreateBackdropTexture(editbox)
 

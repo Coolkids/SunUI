@@ -36,8 +36,8 @@ cast.setBarTicks = function(castBar, ticknum)
 				ticks[k] = castBar:CreateTexture(nil, 'OVERLAY', 2)
 				ticks[k]:SetTexture("Interface\\Buttons\\WHITE8x8")
 				ticks[k]:SetVertexColor(0.8, 0.6, 0.6)
-				ticks[k]:Width(3)
-				ticks[k]:Height(castBar:GetHeight())
+				ticks[k]:SetWidth(3)
+				ticks[k]:SetHeight(castBar:GetHeight())
 				--S.CreateTop(ticks[k], 0.8, 0.6, 0.6)
 			end
 			ticks[k]:ClearAllPoints()
@@ -117,9 +117,9 @@ cast.PostCastStart = function(self, unit, name, rank, text)
 		--print(self:GetWidth() * sf.timeDiff / self.max == self:GetWidth())
 		if self:GetWidth() * sf.timeDiff / self.max == self:GetWidth() then
 			sf.timeDiff = 0
-			sf:Width(1)
+			sf:SetWidth(1)
 		else
-			sf:Width(self:GetWidth() * sf.timeDiff / self.max)
+			sf:SetWidth(self:GetWidth() * sf.timeDiff / self.max)
 			sf:Show()
 		end
 		

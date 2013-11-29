@@ -1298,7 +1298,7 @@ for i = 1, numf do
     local f = CreateFrame("ScrollingMessageFrame", "xCT"..framenames[i], UIParent)
     f:SetFont(ct.font, ct.fontsize, ct.fontstyle)
 	f:SetShadowColor(0, 0, 0, 0.4)
-	f:SetShadowOffset(S.mult, -S.mult)
+	f:SetShadowOffset(1, -1)
     
     -- Thanks to Shestak for pointing this out!
     -- Leaves ghost icons (Uncomment at your own Risk)
@@ -1337,17 +1337,17 @@ for i = 1, numf do
         if type(ct.damagefontsize) == "number" then
             f:SetFont(a, ct.damagefontsize, c)
 			f:SetShadowColor(0, 0, 0, 0.4)
-			f:SetShadowOffset(S.mult, -S.mult)
+			f:SetShadowOffset(1, -1)
         else
             if ct.icons then
                 if ct.texticons then
                     f:SetFont(a, ct.iconsize, c)
 					f:SetShadowColor(0, 0, 0, 0.4)
-					f:SetShadowOffset(S.mult, -S.mult)
+					f:SetShadowOffset(1, -1)
                 else
                     f:SetFont(a, ct.iconsize / 2, c)
 					f:SetShadowColor(0, 0, 0, 0.4)
-					f:SetShadowOffset(S.mult, -S.mult)
+					f:SetShadowOffset(1, -1)
                 end
             end
         end
@@ -1362,17 +1362,17 @@ for i = 1, numf do
         if type(ct.critfontsize) == "number" then
             f:SetFont(ct.critfont, ct.critfontsize, ct.critfontstyle)
 			f:SetShadowColor(0, 0, 0, 0.4)
-			f:SetShadowOffset(S.mult, -S.mult)
+			f:SetShadowOffset(1, -1)
         else
             if ct.criticons then
                 if ct.texticons then
                     f:SetFont(ct.critfont, ct.criticonsize, ct.critfontstyle)
 					f:SetShadowColor(0, 0, 0, 0.4)
-					f:SetShadowOffset(S.mult, -S.mult)
+					f:SetShadowOffset(1, -1)
                 else
                     f:SetFont(ct.critfont, ct.criticonsize / 2, ct.critfontstyle)
 					f:SetShadowColor(0, 0, 0, 0.4)
-					f:SetShadowOffset(S.mult, -S.mult)
+					f:SetShadowOffset(1, -1)
                 end
             end
         end
@@ -1386,7 +1386,7 @@ for i = 1, numf do
         f:SetPoint("CENTER", -282, 67)
 		f:SetFont(ct.procfont, ct.procfontsize, ct.procfontstyle)
 		f:SetShadowColor(0, 0, 0, 0.4)
-		f:SetShadowOffset(S.mult, -S.mult)
+		f:SetShadowOffset(1, -1)
     elseif framenames[i] == "class" then
         f:SetJustifyH(ct.justify_9)
         f:SetMaxLines(1)
@@ -1395,7 +1395,7 @@ for i = 1, numf do
         f:SetPoint("CENTER", 0, 64)
 		f:SetFont(ct.classcombofont, ct.classcombofontsize, ct.classcombofontstyle)
 		f:SetShadowColor(0, 0, 0, 0.4)
-		f:SetShadowOffset(S.mult, -S.mult)
+		f:SetShadowOffset(1, -1)
         f:SetFading(false)
     -- Add a starting location to your frame
     --elseif framenames[i] == "custom" then
@@ -1418,7 +1418,7 @@ if not ct.blizzheadnumbers then
     fsTitle:SetTextColor(1.00, 0.82, 0.00, 1.00)
     fsTitle:SetFont(defaultFont, defaultSize + 6)
 	fsTitle:SetShadowColor(0, 0, 0, 0.4)		
-	fsTitle:SetShadowOffset(S.mult, -S.mult)
+	fsTitle:SetShadowOffset(1, -1)
     fsTitle:SetText("xCT+ Combat Text Options")
     fsTitle:SetPoint("TOPLEFT", 16, -90)
     
@@ -1426,7 +1426,7 @@ if not ct.blizzheadnumbers then
     local fsVersion = InterfaceOptionsCombatTextPanel:CreateFontString(nil, "OVERLAY")
     fsVersion:SetFont(defaultFont, 11)
 	fsVersion:SetShadowColor(0, 0, 0, 0.4)
-	fsVersion:SetShadowOffset(S.mult, -S.mult)
+	fsVersion:SetShadowOffset(1, -1)
     fsVersion:SetText("|cff5555FFPowered By:|r \124cffFF0000x\124rCT\124cffFFFFFF+\124r (Version "
       .. GetAddOnMetadata("xCT", "Version")..")")
     fsVersion:SetPoint("BOTTOMRIGHT", -8, 8)
@@ -1487,7 +1487,7 @@ local StartConfigmode = function()
             f.fs = f:CreateFontString(nil, "OVERLAY")
             f.fs:SetFont(ct.font, ct.fontsize, ct.fontstyle)
 			f.fs:SetShadowColor(0, 0, 0, 0.4)		
-			f.fs:SetShadowOffset(S.mult, -S.mult)
+			f.fs:SetShadowOffset(1, -1)
             f.fs:SetPoint("BOTTOM", f, "TOP", 0, 0)
             if framenames[i] == "dmg" then
                 f.fs:SetText(DAMAGE)
@@ -1545,7 +1545,7 @@ local StartConfigmode = function()
             f.fsp = f:CreateFontString(nil, "OVERLAY")
             f.fsp:SetFont(ct.font, ct.fontsize, ct.fontstyle)
 			f.fsp:SetShadowColor(0, 0, 0, 0.4)		
-			f.fsp:SetShadowOffset(S.mult, -S.mult)
+			f.fsp:SetShadowOffset(1, -1)
             f.fsp:SetPoint("TOPLEFT", f, "TOPLEFT", 3, -3)
             f.fsp:SetText("")
             f.fsp:Hide()
@@ -1554,7 +1554,7 @@ local StartConfigmode = function()
             f.fsw = f:CreateFontString(nil, "OVERLAY")
             f.fsw:SetFont(ct.font, ct.fontsize, ct.fontstyle)
 			f.fsw:SetShadowColor(0, 0, 0, 0.4)
-			f.fsw:SetShadowOffset(S.mult, -S.mult)
+			f.fsw:SetShadowOffset(1, -1)
             f.fsw:SetPoint("BOTTOM", f, "BOTTOM", 0, 0)
             f.fsw:SetText("")
             f.fsw:Hide()
@@ -1563,7 +1563,7 @@ local StartConfigmode = function()
             f.fsh = f:CreateFontString(nil, "OVERLAY")
             f.fsh:SetFont(ct.font, ct.fontsize, ct.fontstyle)
 			f.fsh:SetShadowColor(0, 0, 0, 0.4)		
-			f.fsh:SetShadowOffset(S.mult, -S.mult)
+			f.fsh:SetShadowOffset(1, -1)
             f.fsh:SetPoint("LEFT", f, "LEFT", 3, 0)
             f.fsh:SetText("")
             f.fsh:Hide()

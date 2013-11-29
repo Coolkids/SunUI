@@ -26,7 +26,7 @@ SlashCmdList["TOGGLEGRID"] = function(arg)
         isAligning = false
     else
         boxSize = (math.ceil((tonumber(arg) or boxSize) / 32) * 32)
-    if boxSize > 256 then boxSize = 256 end    
+		if boxSize > 256 then boxSize = 256 end    
         Grid_Show()
         isAligning = true
     end

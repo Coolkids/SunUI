@@ -388,72 +388,6 @@ function Module:CreateOverrideBar()
 	RegisterStateDriver(bar, "visibility", "[petbattle] hide; [overridebar][vehicleui][possessbar,@vehicle,exists] show; hide")
 	RegisterStateDriver(OverrideActionBar, "visibility", "[overridebar][vehicleui][possessbar,@vehicle,exists] show; hide")
 end
---[[ local function PetBarUpdate(self, event)
-	local petActionButton, petActionIcon, petAutoCastableTexture, petAutoCastShine
-	for i=1, NUM_PET_ACTION_SLOTS, 1 do
-		local buttonName = "PetActionButton" .. i
-		petActionButton = _G[buttonName]
-		petActionIcon = _G[buttonName.."Icon"]
-		petAutoCastableTexture = _G[buttonName.."AutoCastable"]
-		petAutoCastShine = _G[buttonName.."Shine"]
-		local name, subtext, texture, isToken, isActive, autoCastAllowed, autoCastEnabled = GetPetActionInfo(i)
-
-		if not isToken then
-			petActionIcon:SetTexture(texture)
-			petActionButton.tooltipName = name
-		else
-			petActionIcon:SetTexture(_G[texture])
-			petActionButton.tooltipName = _G[name]
-		end
-
-		petActionButton.isToken = isToken
-		petActionButton.tooltipSubtext = subtext
-
-		if isActive and name ~= "PET_ACTION_FOLLOW" then
-			petActionButton:SetChecked(1)
-			if IsPetAttackAction(i) then
-				PetActionButton_StartFlash(petActionButton)
-			end
-		else
-			petActionButton:SetChecked(0)
-			if IsPetAttackAction(i) then
-				PetActionButton_StopFlash(petActionButton)
-			end
-		end
-
-		if autoCastAllowed then
-			petAutoCastableTexture:Show()
-		else
-			petAutoCastableTexture:Hide()
-		end
-
-		if autoCastEnabled then
-			AutoCastShine_AutoCastStart(petAutoCastShine)
-		else
-			AutoCastShine_AutoCastStop(petAutoCastShine)
-		end
-
-		if texture then
-			if GetPetActionSlotUsable(i) then
-				SetDesaturation(petActionIcon, nil)
-			else
-				SetDesaturation(petActionIcon, 1)
-			end
-			petActionIcon:Show()
-		else
-			petActionIcon:Hide()
-		end
-
-		-- between level 1 and 10 on cata, we don't have any control on Pet. (I lol'ed so hard)
-		-- Setting desaturation on button to true until you learn the control on class trainer.
-		-- you can at least control "follow" button.
-		if not PetHasActionBar() and texture and name ~= "PET_ACTION_FOLLOW" then
-			PetActionButton_StopFlash(petActionButton)
-			SetDesaturation(petActionIcon, 1)
-			petActionButton:SetChecked(0)
-		end
-	end
-end ]]
 function Module:CreatePetBar()
 	local num = NUM_PET_ACTION_SLOTS
     local bar = CreateFrame("Frame", "SunUIPetBar", UIParent, "SecureHandlerStateTemplate")
@@ -531,7 +465,7 @@ function Module:CreateExitVehicle()
 	local bar = CreateFrame("Frame","ExitVehicle",UIParent, "SecureHandlerStateTemplate")
 	bar:SetHeight(C["ButtonSize"])
 	bar:SetWidth(C["ButtonSize"])
-	bar:SetScale(S.Scale(1.3))
+	bar:SetScale(1.3)
 	MoveHandle.Vehicle = S.MakeMoveHandle(bar, "SunUI离开载具按钮", "vehicleexit")
 
 	local button = CreateFrame("BUTTON", nil, bar, "SecureHandlerClickTemplate, SecureHandlerStateTemplate");
@@ -848,5 +782,5 @@ function Module:OnInitialize()
 	Module:CreatePetBar()
 	Module:CreateStanceBar()
 	Module:CreateExitVehicle()
-	if S.IsCoolkid() then  ShowGrid(nil, "ALWAYS_SHOW_MULTIBARS_TEXT", nil) end
+	ShowGrid(nil, "ALWAYS_SHOW_MULTIBARS_TEXT", nil)
 end

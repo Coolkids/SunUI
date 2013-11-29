@@ -17,18 +17,18 @@ end
 
 local backdrop = {
     bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
-    insets = {top = S.Scale(1), left = S.Scale(1), bottom = S.Scale(1), right = S.Scale(1)},
+    insets = {top = 1, left = 1, bottom = 1, right = 1},
 }
 
 local border = {
     bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
-    insets = {top = -S.Scale(1), left = -S.Scale(1), bottom = -S.Scale(1), right = -S.Scale(1)},
+    insets = {top = -1, left = -1, bottom = -1, right = -1},
 }
 
 local glowBorder = {
     bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
-    edgeFile = [=[Interface\AddOns\SunUI_Freebgrid\media\glowTex.tga]=], edgeSize = S.Scale(5),
-    insets = {left = S.Scale(3), right = S.Scale(3), top = S.Scale(3), bottom = S.Scale(3)}
+    edgeFile = [=[Interface\AddOns\SunUI_Freebgrid\media\glowTex.tga]=], edgeSize = 5,
+    insets = {left = 3, right = 3, top = 3, bottom = 3}
 }
 
 local OnAttributeChanged = function(self, name, value)
@@ -768,8 +768,8 @@ local function unitFrameStyleSetup(button)
     button.Gcd = Gcd	
 
     local fBorder = CreateFrame("Frame", nil, button)
-    fBorder:Point("TOPLEFT", button, "TOPLEFT",-1, 1)
-    fBorder:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 1, -1)
+    fBorder:SetPoint("TOPLEFT", button, "TOPLEFT",-1, 1)
+    fBorder:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 1, -1)
     fBorder:SetBackdrop(border)
     fBorder:SetBackdropColor(0, 0, 0, 0)
     fBorder:SetFrameLevel(1)
@@ -1374,16 +1374,16 @@ function ns:UpdateHealthBarLayout(self)   --ÑשÊ½
     end
 	
     healthBar:ClearAllPoints()
-	healthBar:Point("TOP", 0, -1)
+	healthBar:SetPoint("TOP", 0, -1)
     if ns.db.orientation == "VERTICAL" and ns.db.porientation == "VERTICAL" then
-		healthBar:Point("LEFT", 1, 0)
-		healthBar:Point("BOTTOM", 0, 1)
+		healthBar:SetPoint("LEFT", 1, 0)
+		healthBar:SetPoint("BOTTOM", 0, 1)
     elseif ns.db.orientation == "HORIZONTAL" and ns.db.porientation == "VERTICAL" then
-		healthBar:Point("RIGHT", -1, 0)
-		healthBar:Point("BOTTOM", 0, 1)
+		healthBar:SetPoint("RIGHT", -1, 0)
+		healthBar:SetPoint("BOTTOM", 0, 1)
     else
-		healthBar:Point("LEFT", 1, 0)
-		healthBar:Point("RIGHT", -1, 0)
+		healthBar:SetPoint("LEFT", 1, 0)
+		healthBar:SetPoint("RIGHT", -1, 0)
     end
 end
 
@@ -1648,17 +1648,17 @@ function ns:UpdatePowerBar(self)
 		end
 		power:ClearAllPoints()
 		if ns.db.orientation == "HORIZONTAL" and ns.db.porientation == "VERTICAL" then
-			power:Point("LEFT", 1, 0)
-			power:Point("TOP", 0, -1)
-			power:Point("BOTTOM", 0, 1)
+			power:SetPoint("LEFT", 1, 0)
+			power:SetPoint("TOP", 0, -1)
+			power:SetPoint("BOTTOM", 0, 1)
 		elseif ns.db.porientation == "VERTICAL" then
-			power:Point("TOP", 0, -1)
-			power:Point("RIGHT", -1, 0)
-			power:Point("BOTTOM", 0, 1)
+			power:SetPoint("TOP", 0, -1)
+			power:SetPoint("RIGHT", -1, 0)
+			power:SetPoint("BOTTOM", 0, 1)
 		else
-			power:Point("LEFT", 1, 0)
-			power:Point("RIGHT", -1, 0)
-			power:Point("BOTTOM", 0, 1)
+			power:SetPoint("LEFT", 1, 0)
+			power:SetPoint("RIGHT", -1, 0)
+			power:SetPoint("BOTTOM", 0, 1)
 		end	
 	else
 		power:Hide()

@@ -339,7 +339,7 @@ function Module:CreateEclipse()
 	local h = CreateFrame("Frame", nil, eb)
 	h:SetFrameLevel(eb:GetFrameLevel()+1)
 	h:SetAllPoints(eb)
-	local ebInd = S.MakeFontString(h, 10*S.Scale(1), "THINOUTLINE")
+	local ebInd = S.MakeFontString(h, 10*1, "THINOUTLINE")
 	ebInd:SetPoint('CENTER', h, 'CENTER', 0, 0)
 
 	eb:RegisterEvent("ECLIPSE_DIRECTION_CHANGE")
@@ -516,20 +516,20 @@ function Module:FuckWarlock()
 			end
 		end
 
-		if (event == "UNIT_POWER" or event == "UNIT_DISPLAYPOWER") and UnitAffectingCombat("player") then
+		if (event == "UNIT_POWER" or event == "UNIT_DISPLAYPOWER") then
 			if(unit ~= "player" or (powerType ~= "BURNING_EMBERS" and powerType ~= "SOUL_SHARDS" and powerType ~= "DEMONIC_FURY")) then return end
 			local wsb = self
 			local spec = GetSpecialization()
-
+	
 			if spec then
 				if (spec == SPEC_WARLOCK_DESTRUCTION) then
 					local maxPower = UnitPowerMax("player", SPELL_POWER_BURNING_EMBERS, true)
 					local power = UnitPower("player", SPELL_POWER_BURNING_EMBERS, true)
 					local numEmbers = power / MAX_POWER_PER_EMBER
 					local numBars = floor(maxPower / MAX_POWER_PER_EMBER)
-
+					--print(maxPower.."  "..power.."  "..numEmbers.."  "..numBars)
 					for i = 1, numBars do
-						wsb[i]:SetMinMaxValues((MAX_POWER_PER_EMBER * i) - MAX_POWER_PER_EMBER, MAX_POWER_PER_EMBER * i)
+						wsb[i]:SetMinMaxValues((MAX_POWER_PER_EMBER * i) - MAX_POWER_PER_EMBER , MAX_POWER_PER_EMBER * i)
 						wsb[i]:SetValue(power)
 					end
 				elseif ( spec == SPEC_WARLOCK_AFFLICTION ) then
@@ -869,22 +869,22 @@ function Module:OnEnable()
 	if not C["Open"] then Holder = nil return end
 	Holder:SetSize(C["Width"], C["Height"])
 	MoveHandle.PowerBar = S.MakeMove(Holder, "SunUIPowerBar", "PowerBar", C["Scale"])
-	Module:CreateShadowOrbs()
-	Module:CreateMonkBar()
-	Module:CreateQSDKPower()
-	Module:CreateCombatPoint()
-	Module:CreateEclipse()
-	Module:FuckWarlock()
-	Module:Mage()
-	Module:Shaman()
-	Module:HealthPowerBar()
-	Module:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+	self:CreateShadowOrbs()
+	self:CreateMonkBar()
+	self:CreateQSDKPower()
+	self:CreateCombatPoint()
+	self:CreateEclipse()
+	self:FuckWarlock()
+	self:Mage()
+	self:Shaman()
+	self:HealthPowerBar()
+	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 	if C["Fade"] then
-		Module:RegisterEvent("PLAYER_ENTERING_WORLD", function()
-			Module:UnregisterEvent("PLAYER_ENTERING_WORLD")
-			Module:PLAYER_REGEN_ENABLED()
+		self:RegisterEvent("PLAYER_ENTERING_WORLD", function()
+			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+			self:PLAYER_REGEN_ENABLED()
 		end)
-		Module:RegisterEvent("PLAYER_REGEN_ENABLED")
-		Module:RegisterEvent("PLAYER_REGEN_DISABLED")
+		self:RegisterEvent("PLAYER_REGEN_ENABLED")
+		self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	end
 end

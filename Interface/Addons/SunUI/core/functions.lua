@@ -8,7 +8,7 @@ function S.MakeFontString(parent, size, fontStyle)
 	local fs = parent:CreateFontString(nil, "OVERLAY")
 	fs:SetFont(DB.Font, size or fontHeight, fontStyle or "OUTLINE")
 	fs:SetShadowColor(0, 0, 0)
-	fs:SetShadowOffset(S.mult, -S.mult)
+	fs:SetShadowOffset(1, -1)
 	return fs
 end
 
@@ -30,36 +30,18 @@ function S.RGBToHex(r, g, b)
 	b = b <= 1 and b >= 0 and b or 0
 	return string.format("|cff%02x%02x%02x", r*255, g*255, b*255)
 end
-function S.FormatTime(Time, Short)
-	local Day = floor(Time/86400)
-	local Hour = floor((Time-Day*86400)/3600)
-	local Minute = floor((Time-Day*86400-Hour*3600)/60)
-	local Second = floor(Time-Day*86400-Hour*3600-Minute*60)
-	if not Short then
-		if Time > 86400 then
-			return Day.."d "..Hour.."m"		
-		elseif Time > 3600 then
-			return Hour.."h "..Minute.."m"
-		elseif Time < 3600 and Time > 60 then
-			return Minute.."m "..Second.."s"
-		elseif Time < 60 and Time > 0 then	
-			return Second.."s"
-		else
-			return "N/A"
-		end
-	else
-		local day, hour, minute = 86400, 3600, 60
-		if Time >= day then
-		  return format("%dd", floor(Time/day + 0.5)), Time % day
-		elseif Time >= hour then
-		  return format("%dh", floor(Time/hour + 0.5)), Time % hour
-		elseif Time >= minute then
-		  return format("%dm", floor(Time/minute + 0.5)), Time % minute
-		elseif Time >= minute / 12 then
-		  return floor(Time + 0.5) .. "s", (Time * 100 - floor(Time * 100))/100 .. "s"
-		end
-		return format("%.1fs", Time), (Time * 100 - floor(Time * 100))/100
+function S.FormatTime(Time)
+	local day, hour, minute = 86400, 3600, 60
+	if Time >= day then
+	  return format("%dd", floor(Time/day + 0.5))
+	elseif Time >= hour then
+	  return format("%dh", floor(Time/hour + 0.5))
+	elseif Time >= minute then
+	  return format("%dm", floor(Time/minute + 0.5))
+	elseif Time >= minute / 12 then
+	  return format("%ds", floor(Time + 0.5))
 	end
+	return format("%.1fs", Time)
 end
 
 function S.FormatMemory(Memory)
@@ -134,8 +116,8 @@ function S.MakeMoveHandle(Frame, Text, key)
 	MoveHandle:SetFrameStrata("HIGH")
 	MoveHandle:SetBackdrop({
 		bgFile = DB.Solid,
-		edgeFile = DB.GlowTex, edgeSize = S.Scale(1),
-		insets = {left = S.Scale(1), right = S.Scale(1), top = S.Scale(1), bottom = S.Scale(1)},
+		edgeFile = DB.GlowTex, edgeSize = 1,
+		insets = {left = 1, right = 1, top = 1, bottom = 1},
 	})
 	MoveHandle:SetBackdropColor(0, 0, 0, 0.9)
 	MoveHandle:SetBackdropBorderColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b, 0.9)
@@ -158,13 +140,13 @@ function S.MakeMoveHandle(Frame, Text, key)
 end
 function S.MakeMove(Frame, Text, key, a)
 	local MoveHandle = CreateFrame("Frame", nil, UIParent)
-	MoveHandle:Size(Frame:GetWidth(), Frame:GetHeight())
+	MoveHandle:SetSize(Frame:GetWidth(), Frame:GetHeight())
 	MoveHandle:SetScale(a)
 	MoveHandle:SetFrameStrata("HIGH")
 	MoveHandle:SetBackdrop({
 		bgFile = DB.Solid,
-		edgeFile = DB.GlowTex, edgeSize = S.Scale(1),
-		insets = {left = S.Scale(1), right = S.Scale(1), top = S.Scale(1), bottom = S.Scale(1)},
+		edgeFile = DB.GlowTex, edgeSize = 1,
+		insets = {left = 1, right = 1, top = 1, bottom = 1},
 	})
 	MoveHandle:SetBackdropColor(0, 0, 0, 0.9)
 	MoveHandle:SetBackdropBorderColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b, 0.9)
@@ -202,22 +184,22 @@ function S.CreateShadow(p, f, t)
 
 	local border = CreateFrame("Frame", nil, p)
 	border:SetFrameLevel(1)
-	border:SetPoint("TOPLEFT", f, -S.mult, S.mult)
-	border:SetPoint("BOTTOMRIGHT", f, S.mult, -S.mult)
+	border:SetPoint("TOPLEFT", f, -1, 1)
+	border:SetPoint("BOTTOMRIGHT", f, 1, -1)
 	border:CreateBorder()
 	f.border = border
 
 	local shadow = CreateFrame("Frame", nil, border)
 	shadow:SetFrameLevel(0)
-	shadow:Point("TOPLEFT", -3, 3)
-	shadow:Point("TOPRIGHT", 3, 3)
-	shadow:Point("BOTTOMRIGHT", 3, -3)
-	shadow:Point("BOTTOMLEFT", -3, -3)
+	shadow:SetPoint("TOPLEFT", -3, 3)
+	shadow:SetPoint("TOPRIGHT", 3, 3)
+	shadow:SetPoint("BOTTOMRIGHT", 3, -3)
+	shadow:SetPoint("BOTTOMLEFT", -3, -3)
 	shadow:SetBackdrop( { 
 		edgeFile = DB.GlowTex,
 		bgFile =DB.Solid,
-		edgeSize = S.Scale(4),
-		insets = {left = S.Scale(4), right = S.Scale(4), top = S.Scale(4), bottom = S.Scale(4)},
+		edgeSize = 4,
+		insets = {left = 4, right = 4, top = 4, bottom = 4},
 	})
 	shadow:SetBackdropColor( backdropr, backdropg, backdropb, backdropa )
 	shadow:SetBackdropBorderColor( borderr, borderg, borderb, bordera )
@@ -227,9 +209,9 @@ function S.CreateBorder(p, f)
 	if f.border then return end
 	local border = CreateFrame("Frame", nil, p)
 	border:SetFrameLevel(1)
-	border:SetPoint("TOPLEFT", f, -S.mult, S.mult)
-	border:SetPoint("BOTTOMRIGHT", f, S.mult, -S.mult)
-	border:CreateBorder(nil,nil,nil,0.5)
+	border:SetPoint("TOPLEFT", f, -1, 1)
+	border:SetPoint("BOTTOMRIGHT", f, 1, -1)
+	border:CreateBorder(0,0,0,1)
 	f.border = border
 end
 function S.FadeOutFrameDamage(p, t, show)  --隐藏
@@ -336,13 +318,13 @@ function S.CreateMark(f, orientation)
 	spark:SetTexture("Interface\\Buttons\\WHITE8x8")
 	spark:SetVertexColor(0, 0, 0)
 	if not orientation then
-		spark:Width(1)
-		spark:Point("TOPLEFT", f:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
-		spark:Point("BOTTOMLEFT", f:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
+		spark:SetWidth(1)
+		spark:SetPoint("TOPLEFT", f:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+		spark:SetPoint("BOTTOMLEFT", f:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
 	else
-		spark:Height(1)
-		spark:Point("TOPLEFT", f:GetStatusBarTexture(), "TOPLEFT", 0, 0)
-		spark:Point("TOPRIGHT", f:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+		spark:SetHeight(1)
+		spark:SetPoint("TOPLEFT", f:GetStatusBarTexture(), "TOPLEFT", 0, 0)
+		spark:SetPoint("TOPRIGHT", f:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
 	end
 	return spark
 end
@@ -391,7 +373,8 @@ SmoothUpdate:SetScript("OnUpdate", function()
 			new = value
 		end
 		bar:SetValue_(new)
-		if (cur == value or math.abs(new - value) < 1) then
+		
+		if (cur == value) then
 			bar:SetValue_(value)
 			smoothing[bar] = nil
 		end

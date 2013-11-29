@@ -276,21 +276,21 @@ end
 local function CreateAuraIcon(parent)
 	local button = CreateFrame("Frame",nil,parent)
 	button:SetScript("OnHide", function(self) UpdateAuraAnchors(self:GetParent()) end)
-	button:Width(C["IconSize"])
-	button:Height(C["IconSize"])
+	button:SetWidth(C["IconSize"])
+	button:SetHeight(C["IconSize"])
 
-	button.shadow = CreateFrame("Frame", nil, button)
+	--[[button.shadow = CreateFrame("Frame", nil, button)
 	button.shadow:SetFrameLevel(0)
 	button.shadow:SetPoint("TOPLEFT", -2*noscalemult, 2*noscalemult)
 	button.shadow:SetPoint("BOTTOMRIGHT", 2*noscalemult, -2*noscalemult)
 	button.shadow:SetBackdrop( { 
 		edgeFile = DB.GlowTex,
 		bgFile = DB.Solid,
-		edgeSize = S.Scale(4),
-		insets = {left = S.Scale(4), right = S.Scale(4), top = S.Scale(4), bottom = S.Scale(4)},
+		edgeSize = 4,
+		insets = {left = 4, right = 4, top = 4, bottom = 4},
 	})
 	button.shadow:SetBackdropColor( 0, 0, 0 )
-	button.shadow:SetBackdropBorderColor( 0, 0, 0 )
+	button.shadow:SetBackdropBorderColor( 0, 0, 0 ) --]]
 	
 	button.bord = button:CreateTexture(nil, "BORDER")
 	button.bord:SetTexture(0, 0, 0, 1)
@@ -442,8 +442,8 @@ local function UpdateObjects(frame)
 	if frame.icons then return end
 	frame.icons = CreateFrame("Frame",nil,frame)
 	frame.icons:SetPoint("BOTTOMRIGHT",frame.hp,"TOPRIGHT", 0, 8)
-	frame.icons:Width(C["IconSize"] + C["HPWidth"])
-	frame.icons:Height(C["IconSize"])
+	frame.icons:SetWidth(C["IconSize"] + C["HPWidth"])
+	frame.icons:SetHeight(C["IconSize"])
 	frame.icons:SetFrameLevel(frame.hp:GetFrameLevel()+2)
 	frame:HookScript("OnEvent", OnAura)
 	
@@ -505,12 +505,11 @@ local function SkinObjects(frame, nameFrame)
 
 	local threat, hpborder, overlay, level, bossicon, raidicon, elite = frame:GetRegions()
 	local oldname = nameFrame:GetRegions()
-	local _, cbborder, cbshield, cbicon = cb:GetRegions()
-	
+	local _, cbborder, cbshield, cbicon, cbtext, cbshadow = cb:GetRegions()
 	overlay:SetTexture(DB.Statusbar)
 	overlay:SetVertexColor(0.25, 0.25, 0.25, 0)
 	frame.highlight = overlay
-	
+	--cb:StripTextures()
 	-- Health Bar
 	frame.healthOriginal = hp
 	local newhp = CreateFrame("Statusbar", nil, frame)
@@ -544,16 +543,23 @@ local function SkinObjects(frame, nameFrame)
 	newhp.pct = help:CreateFontString(nil, "OVERLAY")	
 	newhp.pct:SetFont(DB.Font, C["Fontsize"], "THINOUTLINE")
 	newhp.pct:SetPoint('BOTTOMRIGHT', newhp, 'TOPRIGHT', 0, -4)
-	
 	local offset = UIParent:GetScale() / cb:GetEffectiveScale()
-	cb:CreateShadow()
+	if not cb.border then 
+		local border = CreateFrame("Frame", nil, cb)
+		border:SetFrameLevel(1)
+		border:SetPoint("TOPLEFT", cb, -offset, offset)
+		border:SetPoint("BOTTOMRIGHT", cb, offset, -offset)
+		border:CreateBorder(0,0,0,1)
+		cb.border = border
+	end
 	S.CreateBack(cb)
-
+	S.CreateMark(cb)
 	cbicon:ClearAllPoints()
-	cbicon:SetPoint("TOPRIGHT", newhp, "TOPLEFT", -4, 1)		
+	cbicon:SetPoint("TOPRIGHT", newhp, "TOPLEFT", -5, 0)		
 	cbicon:SetSize(C["CastBarIconSize"], C["CastBarIconSize"])
 	cbicon:SetTexCoord(.07, .93, .07, .93)
 	S.CreateShadow(cb, cbicon)
+	
 	
 	cb.icon = cbicon
 	cb.shield = cbshield
@@ -574,7 +580,7 @@ local function SkinObjects(frame, nameFrame)
 	frame.name = name
 	
 	
-	--level:SetFont(DB.Font, C["Fontsize"]*S.Scale(1), "THINOUTLINE")
+	--level:SetFont(DB.Font, C["Fontsize"]*1, "THINOUTLINE")
 	--level:SetShadowOffset(1.25, -1.25)
 	frame.level = level
 

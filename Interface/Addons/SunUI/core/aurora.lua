@@ -29,7 +29,7 @@ if CUSTOM_CLASS_COLORS then
 else
 	r, g, b = RAID_CLASS_COLORS[class].r, RAID_CLASS_COLORS[class].g, RAID_CLASS_COLORS[class].b
 end
-local mult = S.mult
+local mult = 1
 S.dummy = function() end
 
 S.CreateBD = function(f, a)
@@ -48,8 +48,8 @@ S.CreateBG = function(frame)
 	if frame:GetObjectType() == "Texture" then f = frame:GetParent() end
 
 	local bg = f:CreateTexture(nil, "BACKGROUND")
-	bg:Point("TOPLEFT", frame, -1, 1)
-	bg:Point("BOTTOMRIGHT", frame, 1, -1)
+	bg:SetPoint("TOPLEFT", frame, -1, 1)
+	bg:SetPoint("BOTTOMRIGHT", frame, 1, -1)
 	bg:SetTexture(media.backdrop)
 	bg:SetVertexColor(0, 0, 0)
 	frame.setbg = true
@@ -62,8 +62,8 @@ S.CreateSD = function(parent, size, r, g, b, alpha, offset)
 	sd.size = size or 5
 	sd.size = sd.size - 5
 	sd.offset = offset or 0
-	sd:Point("TOPLEFT", parent, -sd.size - 1 - sd.offset, sd.size + 1 + sd.offset)
-	sd:Point("BOTTOMRIGHT", parent, sd.size + 1 + sd.offset, -sd.size - 1 - sd.offset)
+	sd:SetPoint("TOPLEFT", parent, -sd.size - 1 - sd.offset, sd.size + 1 + sd.offset)
+	sd:SetPoint("BOTTOMRIGHT", parent, sd.size + 1 + sd.offset, -sd.size - 1 - sd.offset)
 	sd:CreateShadow()
 	sd.shadow:SetBackdropBorderColor(r or 0, g or 0, b or 0)
 	sd.border:SetBackdropBorderColor(r or 0, g or 0, b or 0)
@@ -73,8 +73,8 @@ end
 
 S.CreateGradient = function(f)
 	local tex = f:CreateTexture(nil, "BORDER")
-	tex:Point("TOPLEFT", 1, -1)
-	tex:Point("BOTTOMRIGHT", -1, 1)
+	tex:SetPoint("TOPLEFT", 1, -1)
+	tex:SetPoint("BOTTOMRIGHT", -1, 1)
 	tex:SetTexture(media.backdrop)
 	tex:SetGradientAlpha(gradOr, startR, startG, startB, startAlpha, endR, endG, endB, endAlpha)
 
@@ -139,8 +139,8 @@ S.Reskin = function(f, noGlow)
 			edgeFile = media.glow,
 			edgeSize = 5,
 		})
-		f.glow:Point("TOPLEFT", -5, 5)
-		f.glow:Point("BOTTOMRIGHT", 5, -5)
+		f.glow:SetPoint("TOPLEFT", -5, 5)
+		f.glow:SetPoint("BOTTOMRIGHT", 5, -5)
 		f.glow:SetBackdropBorderColor(r, g, b)
 		f.glow:SetAlpha(0)
 
@@ -153,15 +153,15 @@ S.ReskinTab = function(f)
 	f:DisableDrawLayer("BACKGROUND")
 
 	local bg = CreateFrame("Frame", nil, f)
-	bg:Point("TOPLEFT", 8, -3)
-	bg:Point("BOTTOMRIGHT", -8, 0)
+	bg:SetPoint("TOPLEFT", 8, -3)
+	bg:SetPoint("BOTTOMRIGHT", -8, 0)
 	bg:SetFrameLevel(f:GetFrameLevel()-1)
 	S.CreateBD(bg)
 
 	f:SetHighlightTexture(media.backdrop)
 	local hl = f:GetHighlightTexture()
-	hl:Point("TOPLEFT", 9, -4)
-	hl:Point("BOTTOMRIGHT", -9, 1)
+	hl:SetPoint("TOPLEFT", 9, -4)
+	hl:SetPoint("BOTTOMRIGHT", -9, 1)
 	hl:SetVertexColor(r, g, b, .25)
 end
 
@@ -189,13 +189,13 @@ S.ReskinScroll = function(f)
 	bu:SetWidth(17)
 
 	bu.bg = CreateFrame("Frame", nil, f)
-	bu.bg:Point("TOPLEFT", bu, 0, -2)
-	bu.bg:Point("BOTTOMRIGHT", bu, 0, 4)
+	bu.bg:SetPoint("TOPLEFT", bu, 0, -2)
+	bu.bg:SetPoint("BOTTOMRIGHT", bu, 0, 4)
 	S.CreateBD(bu.bg, 0)
 
 	local tex = f:CreateTexture(nil, "BACKGROUND")
-	tex:Point("TOPLEFT", bu.bg, 1, -1)
-	tex:Point("BOTTOMRIGHT", bu.bg, -1, 1)
+	tex:SetPoint("TOPLEFT", bu.bg, 1, -1)
+	tex:SetPoint("BOTTOMRIGHT", bu.bg, -1, 1)
 	tex:SetTexture(media.backdrop)
 	tex:SetGradientAlpha(gradOr, startR, startG, startB, startAlpha, endR, endG, endB, endAlpha)
 
@@ -287,8 +287,8 @@ S.ReskinDropDown = function(f)
 	down:HookScript("OnLeave", clearArrow)
 
 	local bg = CreateFrame("Frame", nil, f)
-	bg:Point("TOPLEFT", 16, -4)
-	bg:Point("BOTTOMRIGHT", -18, 8)
+	bg:SetPoint("TOPLEFT", 16, -4)
+	bg:SetPoint("BOTTOMRIGHT", -18, 8)
 	bg:SetFrameLevel(f:GetFrameLevel()-1)
 	S.CreateBD(bg, 0)
 
@@ -307,7 +307,7 @@ S.ReskinClose = function(f, a1, p, a2, x, y)
 	f:SetSize(17, 17)
 
 	if not a1 then
-		f:Point("TOPRIGHT", -4, -4)
+		f:SetPoint("TOPRIGHT", -4, -4)
 	else
 		f:ClearAllPoints()
 		f:SetPoint(a1, p, a2, x, y)
@@ -341,7 +341,7 @@ S.ReskinInput = function(f, height, width)
 	_G[frame.."Right"]:Hide()
 
 	local bd = CreateFrame("Frame", nil, f)
-	bd:Point("TOPLEFT", -2, 0)
+	bd:SetPoint("TOPLEFT", -2, 0)
 	bd:SetPoint("BOTTOMRIGHT")
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	S.CreateBD(bd, 0)
@@ -373,19 +373,19 @@ S.ReskinCheck = function(f)
 	f:SetPushedTexture("")
 	f:SetHighlightTexture(media.backdrop)
 	local hl = f:GetHighlightTexture()
-	hl:Point("TOPLEFT", 5, -5)
-	hl:Point("BOTTOMRIGHT", -5, 5)
+	hl:SetPoint("TOPLEFT", 5, -5)
+	hl:SetPoint("BOTTOMRIGHT", -5, 5)
 	hl:SetVertexColor(r, g, b, .2)
 
 	local bd = CreateFrame("Frame", nil, f)
-	bd:Point("TOPLEFT", 4, -4)
-	bd:Point("BOTTOMRIGHT", -4, 4)
+	bd:SetPoint("TOPLEFT", 4, -4)
+	bd:SetPoint("BOTTOMRIGHT", -4, 4)
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	S.CreateBD(bd, 0)
 
 	local tex = f:CreateTexture(nil, "BACKGROUND")
-	tex:Point("TOPLEFT", 5, -5)
-	tex:Point("BOTTOMRIGHT", -5, 5)
+	tex:SetPoint("TOPLEFT", 5, -5)
+	tex:SetPoint("BOTTOMRIGHT", -5, 5)
 	tex:SetTexture(media.backdrop)
 	tex:SetGradientAlpha(gradOr, startR, startG, startB, startAlpha, endR, endG, endB, endAlpha)
 
@@ -408,20 +408,20 @@ S.ReskinRadio = function(f)
 	f:SetCheckedTexture(media.backdrop)
 
 	local ch = f:GetCheckedTexture()
-	ch:Point("TOPLEFT", 4, -4)
-	ch:Point("BOTTOMRIGHT", -4, 4)
+	ch:SetPoint("TOPLEFT", 4, -4)
+	ch:SetPoint("BOTTOMRIGHT", -4, 4)
 	ch:SetVertexColor(r, g, b, .6)
 
 	local bd = CreateFrame("Frame", nil, f)
-	bd:Point("TOPLEFT", 3, -3)
-	bd:Point("BOTTOMRIGHT", -3, 3)
+	bd:SetPoint("TOPLEFT", 3, -3)
+	bd:SetPoint("BOTTOMRIGHT", -3, 3)
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	S.CreateBD(bd, 0)
 	f.bd = bd
 
 	local tex = f:CreateTexture(nil, "BACKGROUND")
-	tex:Point("TOPLEFT", 4, -4)
-	tex:Point("BOTTOMRIGHT", -4, 4)
+	tex:SetPoint("TOPLEFT", 4, -4)
+	tex:SetPoint("BOTTOMRIGHT", -4, 4)
 	tex:SetTexture(media.backdrop)
 	tex:SetGradientAlpha(gradOr, startR, startG, startB, startAlpha, endR, endG, endB, endAlpha)
 
@@ -434,8 +434,8 @@ S.ReskinSlider = function(f)
 	f.SetBackdrop = S.dummy
 
 	local bd = CreateFrame("Frame", nil, f)
-	bd:Point("TOPLEFT", 14, -2)
-	bd:Point("BOTTOMRIGHT", -15, 3)
+	bd:SetPoint("TOPLEFT", 14, -2)
+	bd:SetPoint("BOTTOMRIGHT", -15, 3)
 	bd:SetFrameStrata("BACKGROUND")
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	S.CreateBD(bd, 0)
@@ -469,13 +469,13 @@ S.ReskinExpandOrCollapse = function(f)
 	f.SetNormalTexture = S.dummy
 
 	f.minus = f:CreateTexture(nil, "OVERLAY")
-	f.minus:Size(7, 1)
+	f.minus:SetSize(7, 1)
 	f.minus:SetPoint("CENTER")
 	f.minus:SetTexture(media.backdrop)
 	f.minus:SetVertexColor(1, 1, 1)
 
 	f.plus = f:CreateTexture(nil, "OVERLAY")
-	f.plus:Size(1, 7)
+	f.plus:SetSize(1, 7)
 	f.plus:SetPoint("CENTER")
 	f.plus:SetTexture(media.backdrop)
 	f.plus:SetVertexColor(1, 1, 1)
@@ -563,8 +563,8 @@ S.ReskinColourSwatch = function(f)
 	nt:SetPoint("BOTTOMRIGHT", -3, 3)
 
 	bg:SetTexture(0, 0, 0)
-	bg:Point("TOPLEFT", 2, -2)
-	bg:Point("BOTTOMRIGHT", -2, 2)
+	bg:SetPoint("TOPLEFT", 2, -2)
+	bg:SetPoint("BOTTOMRIGHT", -2, 2)
 end
 
 function S.ReskinFrame(f)
@@ -572,10 +572,10 @@ function S.ReskinFrame(f)
 	f.glow = CreateFrame("Frame", nil, f)
 	f.glow:SetBackdrop({
 		edgeFile = DB.GlowTex,
-		edgeSize = S.Scale(5),
+		edgeSize = 5,
 	})
-	f.glow:Point("TOPLEFT", -6, 6)
-	f.glow:Point("BOTTOMRIGHT", 6, -6)
+	f.glow:SetPoint("TOPLEFT", -6, 6)
+	f.glow:SetPoint("BOTTOMRIGHT", 6, -6)
 	f.glow:SetBackdropBorderColor(r, g, b)
 	f.glow:SetAlpha(0)
 

@@ -3,7 +3,7 @@ local S, L, DB, _, C = unpack(select(2, ...))
  local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 if DB.zone ~= "zhTW" and DB.zone ~= "zhCN" then return end
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("chatemotion", "AceTimer-3.0")
-local IconSize = S.Scale(23)					 -- 表情IconSize
+local IconSize = 23				 -- 表情IconSize
 local fdir = "Interface\\Addons\\SunUI\\Modules\\chat\\Icon\\"			 -- 表情材质路径
 ----------------------------------------------------------------------------------------
 local customEmoteStartIndex = 9
@@ -240,7 +240,7 @@ end
 function Module:OnEnable()
 local button = CreateFrame("Button", "ButtonE", ColectorButton)
 		button:SetPoint("TOPLEFT", ColectorButton, "TOPLEFT", 5, -5)
-		button:Size(15)
+		button:SetSize(15, 15)
 		button.text = button:CreateFontString(nil, 'OVERLAY')
 		button.text:SetFont(DB.Font, 10*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
 		button.text:SetText("E")

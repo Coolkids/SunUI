@@ -82,7 +82,7 @@ local function Timer_OnSizeChanged(self, width, height)
 	else
 		self.text:SetFont(FONT_FACE, fontScale * FONT_SIZE, 'THINOUTLINE')
 		self.text:SetShadowColor(0, 0, 0, 0.5)
-		self.text:SetShadowOffset(S.mult, -S.mult)
+		self.text:SetShadowOffset(1, -1)
 		if self.enabled then
 			Timer_ForceUpdate(self)
 		end

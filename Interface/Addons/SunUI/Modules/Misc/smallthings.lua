@@ -1,5 +1,4 @@
 ﻿local S, L, DB, _, C = unpack(select(2, ...))
-local _
 --- 專業技能提升 [你的附魔技能提升到102→附魔 102]
 ERR_SKILL_UP_SI = "%s   |cff1eff00%d|r"
 if GetLocale() == "zhCN" then  

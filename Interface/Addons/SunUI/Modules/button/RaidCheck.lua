@@ -370,7 +370,7 @@ end
 
 function RC:OnEnable()
 	local RaidCheckFrameLeft = CreateFrame("Button", "RaidCheckFrameLeft",  ColectorButton)
-	RaidCheckFrameLeft:Size(15)
+	RaidCheckFrameLeft:SetSize(15, 15)
 	RaidCheckFrameLeft:SetPoint("TOPRIGHT",  ColectorButton, "TOPRIGHT", -5, -5)
 	RaidCheckFrameLeft.text = RaidCheckFrameLeft:CreateFontString(nil, 'OVERLAY')
 	RaidCheckFrameLeft.text:SetFont(DB.Font, 10*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
@@ -391,7 +391,7 @@ function RC:OnEnable()
 
 
 	local RaidCheckFrameRight = CreateFrame("Button", "RaidCheckFrameRight",  ColectorButton)
-	RaidCheckFrameRight:Size(15)
+	RaidCheckFrameRight:SetSize(15, 15)
 	RaidCheckFrameRight:SetPoint("TOP", RaidCheckFrameLeft, "BOTTOM", 0, -5)
 	RaidCheckFrameRight.text = RaidCheckFrameRight:CreateFontString(nil, 'OVERLAY')
 	RaidCheckFrameRight.text:SetFont(DB.Font, 10*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")

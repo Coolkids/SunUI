@@ -17,7 +17,7 @@ local pgcol = {1, .12, .8} 									-- Player's Guild Color
 
 local backdrop = {
 	bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
-	edgeFile = [=[Interface\ChatFrame\ChatFrameBackground]=], edgeSize = S.mult,
+	edgeFile = [=[Interface\ChatFrame\ChatFrameBackground]=], edgeSize = 1,
 	insets = {top = 0, left = 0, bottom = 0, right = 0},
 }
 
@@ -231,7 +231,7 @@ function Module:PLAYER_ENTERING_WORLD()
 			if InCombatLockdown() and C["HideInCombat"] then self:Hide() end
 			if v.NumLines then
 				for index=1, v:NumLines() do
-					_G[v:GetName()..'TextLeft'..index]:SetShadowOffset(S.mult, -S.mult)
+					_G[v:GetName()..'TextLeft'..index]:SetShadowOffset(1, -1)
 				end
 			end
 		end)
@@ -346,7 +346,7 @@ local function SkinTooltip()
 	local backdrop = {
 		bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
 		edgeFile = "Interface\\ChatFrame\\ChatFrameBackground",
-		edgeSize = S.mult,
+		edgeSize = 1,
 	}
 
 	-- so other stuff which tries to look like GameTooltip doesn't mess up
@@ -379,7 +379,7 @@ local function SkinTooltip()
 	end
 
 	local sb = _G["GameTooltipStatusBar"]
-	sb:Height(6)
+	sb:SetHeight(6)
 	sb:ClearAllPoints()
 	sb:SetPoint("BOTTOMLEFT", GameTooltip, "TOPLEFT", 1, 3)
 	sb:SetPoint("BOTTOMRIGHT", GameTooltip, "TOPRIGHT", -1, 3)

@@ -28,8 +28,8 @@ function  Module:PLAYER_ENTERING_WORLD()
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	if not IsAddOnLoaded("Skada") then return end
 	local Skada = Skada
-	local barSpacing = S.Scale(1)
-	local borderWidth = S.Scale(1)
+	local barSpacing = 1
+	local borderWidth = 1
 	local barmod = Skada.displays["bar"]
 
 	barmod.AddDisplayOptions_ = barmod.AddDisplayOptions

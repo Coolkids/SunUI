@@ -40,7 +40,7 @@ end
 
 function FBF:CreateCompatibilityCheckFrame()
 	local frame = CreateFrame("Frame", "SunUICompatibilityCheckFrame", UIParent)
-	frame:Size(400, 400)
+	frame:SetSize(400, 400)
 	frame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
 	frame:EnableMouse(true)
 	frame:SetFrameStrata("DIALOG")
@@ -64,7 +64,7 @@ function FBF:CreateCompatibilityCheckFrame()
 	messageFrame:EnableKeyboard(false) 
 	messageFrame:SetMultiLine(true)
 	messageFrame:SetMaxLetters(99999)
-	messageFrame:Size(400, 400)
+	messageFrame:SetSize(400, 400)
 
 	scrollArea:SetScrollChild(messageFrame)
 
@@ -74,7 +74,7 @@ function FBF:CreateCompatibilityCheckFrame()
 	end
 
 	local button1 = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
-	button1:Size(150, 30)
+	button1:SetSize(150, 30)
 	button1:SetPoint("BOTTOMLEFT", 10, 10)
 	S.Reskin(button1)
 	button1:SetText(L["禁用他们"])
@@ -88,7 +88,7 @@ function FBF:CreateCompatibilityCheckFrame()
 	end)
 
 	local button2 = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
-	button2:Size(150, 30)
+	button2:SetSize(150, 30)
 	button2:SetPoint("BOTTOMRIGHT", -10, 10)
 	S.Reskin(button2)
 	button2:SetText(L["不要禁用"])

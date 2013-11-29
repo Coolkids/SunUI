@@ -5,7 +5,7 @@ local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUICo
 function Module:OnEnable()
 	local button = CreateFrame("Button", "ButtonA",  ColectorButton)
 	button:SetPoint("BOTTOMRIGHT", ColectorButton, "BOTTOMRIGHT", -5, 5)
-	button:Size(15)
+	button:SetSize(15, 15)
 	button.text = button:CreateFontString(nil, 'OVERLAY')
 	button.text:SetFont(DB.Font, 10*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
 	button.text:SetText("A")

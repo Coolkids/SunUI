@@ -125,7 +125,7 @@ function AB:Style(button)
 	if Btname then
 		if C["HideMacroName"] then
 			Btname:SetDrawLayer("HIGHLIGHT")
-			Btname:Width(50)
+			Btname:SetWidth(50)
 		end
 	end
 

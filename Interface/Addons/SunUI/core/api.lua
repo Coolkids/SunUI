@@ -3,10 +3,6 @@
 local sceenheight = string.match(GetCVar("gxResolution"), "%d+x(%d+)")
 local HiddenFrame = CreateFrame("Frame")
 HiddenFrame:Hide()
-DB.Shadow = {}
-DB.Border = {}
-S.mult = 1
-S.Scale = function(x) return x end
 
 local function Kill(object)
 	if object.UnregisterAllEvents then
@@ -29,37 +25,14 @@ end
 		end
 	end		
 end
-local function Size(frame, width, height)
-	frame:SetSize(S.Scale(width), S.Scale(height or width))
-end
-
-local function Width(frame, width)
-	frame:SetWidth(S.Scale(width))
-end
-
-local function Height(frame, height)
-	frame:SetHeight(S.Scale(height))
-end
-
-local function Point(obj, arg1, arg2, arg3, arg4, arg5)
-	-- anyone has a more elegant way for this?
-	if type(arg1)=="number" then arg1 = S.Scale(arg1) end
-	if type(arg2)=="number" then arg2 = S.Scale(arg2) end
-	if type(arg3)=="number" then arg3 = S.Scale(arg3) end
-	if type(arg4)=="number" then arg4 = S.Scale(arg4) end
-	if type(arg5)=="number" then arg5 = S.Scale(arg5) end
-
-	obj:SetPoint(arg1, arg2, arg3, arg4, arg5)
-end
 
 local function CreateBorder(f, r, g, b, a)
  	f:SetBackdrop({
 		edgeFile = DB.Solid, 
-		edgeSize = S.mult,
-		insets = { left = -S.mult, right = -S.mult, top = -S.mult, bottom = -S.mult }
+		edgeSize = 1,
+		insets = { left = -1, right = -1, top = -1, bottom = -1 }
 	})
 	f:SetBackdropBorderColor(r or 0, g or 0, b or 0, a or 1)
-	tinsert(DB.Border, f)
 end
 local function SetOutside(obj, anchor, xOffset, yOffset)
 	xOffset = xOffset or 2
@@ -122,14 +95,13 @@ local function CreateShadow(f, t, offset, thickness, texture)
 	shadow:SetBackdrop( { 
 		edgeFile = DB.GlowTex,
 		bgFile =DB.Solid,
-		edgeSize = S.Scale(4),
-		insets = {left = S.Scale(4), right = S.Scale(4), top = S.Scale(4), bottom = S.Scale(4)},
+		edgeSize = 4,
+		insets = {left = 4, right = 4, top = 4, bottom = 4},
 	})
 	shadow:SetBackdropColor( backdropr, backdropg, backdropb, backdropa )
 	shadow:SetBackdropBorderColor( borderr, borderg, borderb, bordera )
 	f.shadow = shadow
-	
-	tinsert(DB.Shadow, f)
+
 end
 
 local function StyleButton(button, setallpoints)
@@ -192,10 +164,6 @@ local function FadeOut(f)
 end
 local function addapi(object)
 	local mt = getmetatable(object).__index
-	if not object.Size then mt.Size = Size end
-	if not object.Point then mt.Point = Point end
-	if not object.Width then mt.Width = Width end
-	if not object.Height then mt.Height = Height end
 	if not object.CreateBorder then mt.CreateBorder = CreateBorder end
 	if not object.CreateShadow then mt.CreateShadow = CreateShadow end
 	if not object.StyleButton then mt.StyleButton = StyleButton end

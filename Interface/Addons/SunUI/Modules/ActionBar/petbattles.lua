@@ -101,7 +101,7 @@ local function SkinPetTooltip(tt)
 	border:SetBackdrop( { 
 		bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
 		edgeFile = "Interface\\ChatFrame\\ChatFrameBackground",
-		edgeSize = S.mult,
+		edgeSize = 1,
 	})
 	border:SetBackdropColor(0, 0, 0, 0.6)
 	border:SetBackdropBorderColor(.05, .05, .05, .9)
@@ -147,7 +147,7 @@ local function SkinPetBattleFrame()
 		unit.Level:SetTextColor(1, 1, 1)
 
 		local bg = CreateFrame("Frame", nil, unit)
-		bg:Width(unit.healthBarWidth+ 2)
+		bg:SetWidth(unit.healthBarWidth+ 2)
 		bg:SetFrameLevel(unit:GetFrameLevel()-1)
 		S.CreateBD(bg)
 		

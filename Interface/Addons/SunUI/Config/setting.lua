@@ -47,12 +47,12 @@ G["NameplateDB"] = {
 	["enable"] = true,
 	["Showdebuff"] = true,
 	["HPHeight"] = 8,
-	["CastBarIconSize"] = 15,
+	["CastBarIconSize"] = 18,
 	["Fontsize"] = 10,
 	["CastBarHeight"] = 6,
 	["Combat"] = true,
 	["NotCombat"] = false,
-	["IconSize"] = 15,
+	["IconSize"] = 20,
 }
 G["TooltipDB"] = {
 	["ScaleSize"] = 1,

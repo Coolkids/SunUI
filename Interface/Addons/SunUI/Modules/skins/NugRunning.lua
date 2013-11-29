@@ -92,7 +92,7 @@ ConstructTimerBar = function(width, height)
                       "THINOUTLINE")
     powertext:SetPoint("BOTTOMLEFT", f.bar, "BOTTOMRIGHT",2,0)
 	powertext:SetShadowColor(0, 0, 0)
-	powertext:SetShadowOffset(S.mult, -S.mult)
+	powertext:SetShadowOffset(1, -1)
 	
     local sbg = f.bar:CreateTexture(nil, "ARTWORK", nil, 5)
     sbg:SetTexture("Interface\\Tooltips\\UI-Tooltip-Background")
@@ -295,7 +295,7 @@ end
 local backdrop = {
         bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
         tile = true, tileSize = 0,
-        insets = {left = -S.mult, right = -S.mult, top = -S.mult, bottom = -S.mult},
+        insets = {left = -1, right = -1, top = -1, bottom = -1},
     }
 
 function NugRunningNameplates:CreateNameplateTimer(frame)
@@ -315,8 +315,8 @@ function NugRunningNameplates:CreateNameplateTimer(frame)
         -- backdrop.insets.left = -h -1
 		local border = CreateFrame("Frame", nil, f)
 		border:SetFrameLevel(1)
-		border:SetPoint("TOPLEFT", icon, -S.mult, S.mult)
-		border:SetPoint("BOTTOMRIGHT", icon, S.mult, -S.mult)
+		border:SetPoint("TOPLEFT", icon, -1, 1)
+		border:SetPoint("BOTTOMRIGHT", icon, 1, -1)
 		border:CreateBorder()
         backdrop.insets.left = -(h*2) -1
         f.icon = icon

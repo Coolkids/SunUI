@@ -8,7 +8,7 @@ local pos = "TOP"
 local frames = {}
 local cancelled_rolls = {}
 local LootRollAnchor = CreateFrame("Frame", "LootRollAnchor", UIParent)
-LootRollAnchor:Size(362, 26)
+LootRollAnchor:SetSize(362, 26)
 local _G = _G
 local function ClickRoll(frame)
 	RollOnLoot(frame.parent.rollID, frame.rolltype)
@@ -88,14 +88,14 @@ end
 
 local function CreateRollFrame()
 	local frame = CreateFrame("Frame", nil, UIParent)
-	frame:Size(240, 8)
+	frame:SetSize(240, 8)
 	frame:SetScript("OnEvent", OnEvent)
 	frame:RegisterEvent("CANCEL_LOOT_ROLL")
 	frame:Hide()
 
 	local button = CreateFrame("Button", nil, frame)
 	button:SetPoint("BOTTOMRIGHT", frame, "BOTTOMLEFT", -5, 0)
-	button:Size(22)
+	button:SetSize(22, 22)
 	button:CreateShadow()
 	button:SetScript("OnEnter", SetItemTip)
 	button:SetScript("OnLeave", HideTip2)
@@ -110,7 +110,7 @@ local function CreateRollFrame()
 	
 	local status = CreateFrame("StatusBar", nil, frame)
 	status:CreateShadow()
-	status:Size(240, 8)
+	status:SetSize(240, 8)
 	status:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT")
 	status:SetScript("OnUpdate", StatusUpdate)
 	status:SetFrameLevel(frame:GetFrameLevel() - 1)
@@ -129,7 +129,7 @@ local function CreateRollFrame()
 	--local greed, greedtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Coin-Up", "Interface\\Buttons\\UI-GroupLoot-Coin-Highlight", "Interface\\Buttons\\UI-GroupLoot-Coin-Down", 2, GREED, "LEFT", need, "RIGHT", 0, -1)
 	--local de, detext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-DE-Up", "Interface\\Buttons\\UI-GroupLoot-DE-Highlight", "Interface\\Buttons\\UI-GroupLoot-DE-Down", 3, ROLL_DISENCHANT, "LEFT", greed, "RIGHT", 0, -1)
 	--local pass, passtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Pass-Up", nil, "Interface\\Buttons\\UI-GroupLoot-Pass-Down", 0, PASS, "LEFT", de or greed, "RIGHT", 0, 2.2)
-	local need, needtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Dice-Up", "Interface\\Buttons\\UI-GroupLoot-Dice-Highlight", "Interface\\Buttons\\UI-GroupLoot-Dice-Down", 1, NEED, "LEFT", frame.button, "RIGHT", S.Scale(5), S.Scale(-1))
+	local need, needtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Dice-Up", "Interface\\Buttons\\UI-GroupLoot-Dice-Highlight", "Interface\\Buttons\\UI-GroupLoot-Dice-Down", 1, NEED, "LEFT", frame.button, "RIGHT", 5, S.Scale(-1))
 	local greed, greedtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Coin-Up", "Interface\\Buttons\\UI-GroupLoot-Coin-Highlight", "Interface\\Buttons\\UI-GroupLoot-Coin-Down", 2, GREED, "LEFT", need, "RIGHT", 0, 0)
 	local de, detext
 	de, detext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-DE-Up", "Interface\\Buttons\\UI-GroupLoot-DE-Highlight", "Interface\\Buttons\\UI-GroupLoot-DE-Down", 3, ROLL_DISENCHANT, "LEFT", greed, "RIGHT", 0, 0)
@@ -138,7 +138,7 @@ local function CreateRollFrame()
 	frame.need, frame.greed, frame.pass, frame.disenchant = needtext, greedtext, passtext, detext
 
 	local bind = frame:CreateFontString()
-	bind:SetPoint("LEFT", de or greed, "RIGHT", S.Scale(3), S.Scale(1))
+	bind:SetPoint("LEFT", de or greed, "RIGHT", 3, 1)
 	bind:SetFont(DB.Font, 11*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
 	bind:SetShadowOffset(1,  -1)
 	frame.fsbind = bind
@@ -148,7 +148,7 @@ local function CreateRollFrame()
 	loot:SetShadowOffset(1, -1)
 	loot:SetPoint("LEFT", bind, "RIGHT", 0, 0)
 	loot:SetPoint("RIGHT", frame, "RIGHT", -5, 0)
-	loot:Size(200, 10)
+	loot:SetSize(200, 10)
 	loot:SetJustifyH("LEFT")
 	frame.fsloot = loot
 
@@ -231,7 +231,7 @@ end
 LootRollAnchor:RegisterEvent("ADDON_LOADED")
 LootRollAnchor:SetScript("OnEvent", function(frame, event, addon)
 	if addon == "SunUI" then 
-		LootRollAnchor:Size(240, 20)
+		LootRollAnchor:SetSize(240, 20)
 		LootRollAnchor:UnregisterEvent("ADDON_LOADED")
 		LootRollAnchor:RegisterEvent("LOOT_HISTORY_ROLL_CHANGED")
 		LootRollAnchor:RegisterEvent("START_LOOT_ROLL")

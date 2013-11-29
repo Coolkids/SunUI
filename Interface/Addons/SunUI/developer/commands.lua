@@ -259,3 +259,13 @@ SlashCmdList["PARTYTORAID"] = function()
 	end
 end
 SLASH_PARTYTORAID1 = '/ptr'
+
+SlashCmdList["CPUTEST"] = function()
+	for k, v in pairs(S) do
+		if type(v) == "function" then
+			local t, n = GetFunctionCPUUsage(v, true)
+			print("function: S."..k.."  占用CPU:"..format("%.2f", t).."  次数:"..n)
+		end
+	end
+end
+SLASH_CPUTEST1 = '/cputest'
