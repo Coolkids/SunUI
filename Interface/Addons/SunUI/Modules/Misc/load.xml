@@ -30,7 +30,7 @@
 	<Script file ="sMirrorBars.lua"/>
 	<Script file ="TradeTab.lua"/>
 	<Script file ="warn.lua"/>
-	
+	<Script file ="notifications.lua"/>
 	<Script file ="talenttaint.lua"/>
 	<Script file="SlotItemLevel.lua"/>
 </Ui>

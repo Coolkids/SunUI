@@ -40,6 +40,7 @@ G["ActionBarDB"] = {
 	["Bar5Fade"] = false,
 	["StanceBarFade"] = false,
 	["PetBarFade"] = false,
+	["HideStore"] = true,
 }
 G["NameplateDB"] = {
 	["CastBarWidth"] = 100,
@@ -151,7 +152,7 @@ G["MiniDB"] = {
 	["Aurora"] = true, 
 	["uiScale"] = 1,
 	["FontScale"] = 1,	
-	
+	["Notification"] = true,
 	
 }
 G["ClassCDDB"] = {
@@ -274,6 +275,8 @@ G["MoveHandleDB"] = {
 	["ClassTools"] = {"TOP", "UIParent", "TOP", 0, -35},
 	--职业助手
 	["RuneOfPower"] = {"TOP", "UIParent", "TOP", 0, -35},
+	
+	["Notification"] = {"TOPRIGHT", "UIParent", "TOPRIGHT", -50, -150}
 }
 G["PowerBarDB"] = {
 	["Open"] = true,

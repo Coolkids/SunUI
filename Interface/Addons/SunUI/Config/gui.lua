@@ -222,8 +222,12 @@ function SunUIConfig.GenerateOptionsInternal()
 								type = "toggle", order = 2,
 								name = L["隐藏宏名称显示"],		
 							},
-							CooldownFlash = {
+							HideStore = {
 								type = "toggle", order = 3,
+								name = "隐藏暴雪商店",		
+							},
+							CooldownFlash = {
+								type = "toggle", order = 4,
 								name = L["冷却闪光"],	
 								get = function(info) return db.ActionBarDB.CooldownFlash end,
 								set = function(info, value) db.ActionBarDB.CooldownFlash = value
@@ -234,7 +238,7 @@ function SunUIConfig.GenerateOptionsInternal()
 							UnLock = {
 								type = "execute",
 								name = L["按键绑定"],
-								order = 4,
+								order = 5,
 								func = function()
 									SlashCmdList.MOUSEOVERBIND()
 								end,
@@ -1254,10 +1258,21 @@ function SunUIConfig.GenerateOptionsInternal()
 								desc = "true为根据频道颜色染色",
 								order = 24,
 							},
+							Notification = {
+								type = "toggle",
+								name = "游戏内的小通知",
+								desc = "游戏内的小通知",
+								order = 25,
+								get = function(info) return db.MiniDB[ info[#info] ] end,
+								set = function(info, value) db.MiniDB[ info[#info] ] = value
+									local N = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("Notification")
+									N:UpdateSet()
+								end,
+							},
 							uistyle = {
 								type = "select",
 								name = L["界面风格"],
-								order = 25,
+								order = 26,
 								values = {
 									["plane"] = "win8",
 									["stereo"] = "Gradient",
@@ -1266,7 +1281,7 @@ function SunUIConfig.GenerateOptionsInternal()
 							uitexture = {
 								type = "select",
 								name = TEXTURES_SUBHEADER,
-								order = 26,
+								order = 27,
 								itemControl = "DDI-Statusbar",
 								values = statusbars,
 								get = function(info) 

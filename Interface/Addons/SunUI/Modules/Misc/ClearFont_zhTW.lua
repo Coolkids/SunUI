@@ -44,7 +44,7 @@ local function ApplySystemFonts(event, addon)
 	UNIT_NAME_FONT = CLEAR_FONT;
 
 -- 頭像上的名字，在姓名板上（NamePlate，按“V”後靠近目標，出現的血條）
-	NAMEPLATE_FONT = CLEAR_FONT;
+	-- NAMEPLATE_FONT = CLEAR_FONT;
 
 -- 被攻擊目標上方彈出的傷害指示（與插件SCT/DCT無關）
 	DAMAGE_TEXT_FONT = CLEAR_FONT_DAMAGE;

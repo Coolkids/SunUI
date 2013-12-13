@@ -7,11 +7,11 @@ local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUICo
 local buttonList = {}
 local bigButton = {}
 local hide = ActionButton_HideGrid
+local hideFrames = {MainMenuBar, MainMenuBarPageNumber, ActionBarDownButton, ActionBarUpButton, OverrideActionBarExpBar, OverrideActionBarHealthBar, OverrideActionBarPowerBar, OverrideActionBarPitchFrame, CharacterMicroButton, SpellbookMicroButton, TalentMicroButton, AchievementMicroButton, QuestLogMicroButton, GuildMicroButton, PVPMicroButton, LFDMicroButton, CompanionsMicroButton, EJMicroButton, MainMenuMicroButton, HelpMicroButton, MainMenuBarBackpackButton,CharacterBag0Slot,CharacterBag1Slot,CharacterBag2Slot,CharacterBag3Slot}
 function Module:blizzHider()
 	local hider = CreateFrame("Frame")
 	hider:Hide()
 
-	local hideFrames = {MainMenuBar, MainMenuBarPageNumber, ActionBarDownButton, ActionBarUpButton, OverrideActionBarExpBar, OverrideActionBarHealthBar, OverrideActionBarPowerBar, OverrideActionBarPitchFrame, CharacterMicroButton, SpellbookMicroButton, TalentMicroButton, AchievementMicroButton, QuestLogMicroButton, GuildMicroButton, PVPMicroButton, LFDMicroButton, CompanionsMicroButton, EJMicroButton, MainMenuMicroButton, HelpMicroButton, StoreMicroButton, MainMenuBarBackpackButton,CharacterBag0Slot,CharacterBag1Slot,CharacterBag2Slot,CharacterBag3Slot}
 	for k, frame in pairs(hideFrames) do
 		if frame then
 			frame:SetParent(hider)
@@ -770,7 +770,7 @@ function Module:OnInitialize()
 	Module:RegisterEvent("CVAR_UPDATE", ShowGrid)
 	Module:RegisterEvent("LOSS_OF_CONTROL_ADDED", HideLossCD)
 	Module:RegisterEvent("LOSS_OF_CONTROL_UPDATE", HideLossCD)
-	
+	if C["HideStore"] then table.insert(hideFrames, StoreMicroButton) end
 	Module:blizzHider()
 	Module:CreateBar1()
 	Module:CreateBar2()
