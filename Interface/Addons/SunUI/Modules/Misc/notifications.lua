@@ -10,10 +10,10 @@ local bannerWidth = 400
 local interval = 0.1
 
 -- Create frame and stuff
-
-local f = CreateFrame("Frame", "SunUIUINotifications", UIParent)
+local f = CreateFrame("Frame", "SunUINotifications", UIParent)
 f:SetFrameStrata("FULLSCREEN_DIALOG")
 f:SetSize(bannerWidth, 50)
+
 f:Hide()
 f:SetAlpha(0.1)
 f:SetScale(0.1)
@@ -139,7 +139,33 @@ local function display(name, message, clickFunc, texture, ...)
 		PlaySoundFile("Interface\\AddOns\\FreeUI\\media\\sound.mp3")
 	end
 end
+f:SetScript("OnEnter", function(self)
+	self:SetScript("OnUpdate", nil)
+	self:SetScale(1)
+	self:SetAlpha(1)
+	self:SetScript("OnUpdate", expand)
+end)
 
+f:SetScript("OnLeave", fadeTimer)
+
+f:SetScript("OnMouseUp", function(self, button)
+	self:SetScript("OnUpdate", nil)
+	self:Hide()
+	self:SetScale(0.1)
+	self:SetAlpha(0.1)
+	bannerShown = false
+	-- right click just hides the banner
+	if button ~= "RightButton" and f.clickFunc then
+		f.clickFunc()
+	end
+
+	-- dismiss all
+	if IsShiftKeyDown() then
+		handler:SetScript("OnUpdate", nil)
+		incoming = {}
+		processing = false
+	end
+end)
 -- Handle incoming notifications
 
 local handler = CreateFrame("Frame")
@@ -200,33 +226,7 @@ local function expand(self)
 	end
 end
 
-f:SetScript("OnEnter", function(self)
-	self:SetScript("OnUpdate", nil)
-	self:SetScale(1)
-	self:SetAlpha(1)
-	self:SetScript("OnUpdate", expand)
-end)
 
-f:SetScript("OnLeave", fadeTimer)
-
-f:SetScript("OnMouseUp", function(self, button)
-	self:SetScript("OnUpdate", nil)
-	self:Hide()
-	self:SetScale(0.1)
-	self:SetAlpha(0.1)
-	bannerShown = false
-	-- right click just hides the banner
-	if button ~= "RightButton" and f.clickFunc then
-		f.clickFunc()
-	end
-
-	-- dismiss all
-	if IsShiftKeyDown() then
-		handler:SetScript("OnUpdate", nil)
-		incoming = {}
-		processing = false
-	end
-end)
 
 -- Test function
 
@@ -241,150 +241,156 @@ SLASH_TESTALERT1 = "/testalert"
 
 local hasMail = false
 function N:UPDATE_PENDING_MAIL()
-        local newMail = HasNewMail()
-        if hasMail ~= newMail then
-                hasMail = newMail
-                if hasMail then
-                        self:Notification(MAIL_LABEL, HAVE_MAIL, nil, "Interface\\Icons\\inv_letter_15", .08, .92, .08, .92)
-                end
-        end
+	local newMail = HasNewMail()
+	if hasMail ~= newMail then
+			hasMail = newMail
+			if hasMail then
+					self:Notification(MAIL_LABEL, HAVE_MAIL, nil, "Interface\\Icons\\inv_letter_15", .08, .92, .08, .92)
+			end
+	end
 end
 
 local showRepair = true
 
 local Slots = {
-        [1] = {1, INVTYPE_HEAD, 1000},
-        [2] = {3, INVTYPE_SHOULDER, 1000},
-        [3] = {5, INVTYPE_ROBE, 1000},
-        [4] = {6, INVTYPE_WAIST, 1000},
-        [5] = {9, INVTYPE_WRIST, 1000},
-        [6] = {10, INVTYPE_HAND, 1000},
-        [7] = {7, INVTYPE_LEGS, 1000},
-        [8] = {8, INVTYPE_FEET, 1000},
-        [9] = {16, INVTYPE_WEAPONMAINHAND, 1000},
-        [10] = {17, INVTYPE_WEAPONOFFHAND, 1000},
-        [11] = {18, INVTYPE_RANGED, 1000}
+	[1] = {1, INVTYPE_HEAD, 1000},
+	[2] = {3, INVTYPE_SHOULDER, 1000},
+	[3] = {5, INVTYPE_ROBE, 1000},
+	[4] = {6, INVTYPE_WAIST, 1000},
+	[5] = {9, INVTYPE_WRIST, 1000},
+	[6] = {10, INVTYPE_HAND, 1000},
+	[7] = {7, INVTYPE_LEGS, 1000},
+	[8] = {8, INVTYPE_FEET, 1000},
+	[9] = {16, INVTYPE_WEAPONMAINHAND, 1000},
+	[10] = {17, INVTYPE_WEAPONOFFHAND, 1000},
+	[11] = {18, INVTYPE_RANGED, 1000}
 }
 
 local function ResetRepairNotification()
-        showRepair = true
+	showRepair = true
 end
 
 function N:PLAYER_REGEN_ENABLED()
-        local current, max
+	local current, max
 
-        for i = 1, 11 do
-                if GetInventoryItemLink("player", Slots[i][1]) ~= nil then
-                        current, max = GetInventoryItemDurability(Slots[i][1])
-                        if current then 
-                                Slots[i][3] = current/max
-                        end
-                end
-        end
-        table.sort(Slots, function(a, b) return a[3] < b[3] end)
-        local value = floor(Slots[1][3]*100)
+	for i = 1, 11 do
+			if GetInventoryItemLink("player", Slots[i][1]) ~= nil then
+					current, max = GetInventoryItemDurability(Slots[i][1])
+					if current then 
+							Slots[i][3] = current/max
+					end
+			end
+	end
+	table.sort(Slots, function(a, b) return a[3] < b[3] end)
+	local value = floor(Slots[1][3]*100)
 
-        if showRepair and value < 20 then
-                showRepair = false
-                R:Delay(30, ResetRepairNotification)
-                self:Notification(MINIMAP_TRACKING_REPAIR, format("你的%s栏位需要修理, 当前耐久为%d.",Slots[1][2],value))
-        end
+	if showRepair and value < 20 then
+			showRepair = false
+			R:Delay(30, ResetRepairNotification)
+			self:Notification(MINIMAP_TRACKING_REPAIR, format("你的%s栏位需要修理, 当前耐久为%d.",Slots[1][2],value))
+	end
 end
 
 local numInvites = 0 
 local function GetGuildInvites()
-        local numGuildInvites = 0
-        local _, currentMonth = CalendarGetDate()
+	local numGuildInvites = 0
+	local _, currentMonth = CalendarGetDate()
 
-        for i = 1, CalendarGetNumGuildEvents() do
-                local month, day = CalendarGetGuildEventInfo(i)
-                local monthOffset = month - currentMonth
-                local numDayEvents = CalendarGetNumDayEvents(monthOffset, day)
+	for i = 1, CalendarGetNumGuildEvents() do
+			local month, day = CalendarGetGuildEventInfo(i)
+			local monthOffset = month - currentMonth
+			local numDayEvents = CalendarGetNumDayEvents(monthOffset, day)
 
-                for i = 1, numDayEvents do
-                        local _, _, _, _, _, _, _, _, inviteStatus = CalendarGetDayEvent(monthOffset, day, i)
-                        if inviteStatus == 8 then
-                                numGuildInvites = numGuildInvites + 1
-                        end
-                end
-        end
+			for i = 1, numDayEvents do
+					local _, _, _, _, _, _, _, _, inviteStatus = CalendarGetDayEvent(monthOffset, day, i)
+					if inviteStatus == 8 then
+							numGuildInvites = numGuildInvites + 1
+					end
+			end
+	end
 
-        return numGuildInvites
+	return numGuildInvites
 end
 
 local function toggleCalendar()
-        if not CalendarFrame then LoadAddOn("Blizzard_Calendar") end
-        Calendar_Toggle()
+	if not CalendarFrame then LoadAddOn("Blizzard_Calendar") end
+	Calendar_Toggle()
 end
 
 local function alertEvents()
-        if CalendarFrame and CalendarFrame:IsShown() then return end
-        local num = CalendarGetNumPendingInvites()
-        if num ~= numInvites then
-                if num > 1 then
-                        N:Notification(CALENDAR, format("你有%s个未处理的活动邀请.", num), toggleCalendar)
-                elseif num > 0 then
-                        N:Notification(CALENDAR, format("你有%s个未处理的活动邀请.", 1), toggleCalendar)
-                end
-                numInvites = num
-        end
+	if CalendarFrame and CalendarFrame:IsShown() then return end
+	local num = CalendarGetNumPendingInvites()
+	if num ~= numInvites then
+			if num > 1 then
+					N:Notification(CALENDAR, format("你有%s个未处理的活动邀请.", num), toggleCalendar)
+			elseif num > 0 then
+					N:Notification(CALENDAR, format("你有%s个未处理的活动邀请.", 1), toggleCalendar)
+			end
+			numInvites = num
+	end
 end
 
 local function alertGuildEvents()
-        if CalendarFrame and CalendarFrame:IsShown() then return end
-        local num = GetGuildInvites()
-        if num > 1 then
-                N:Notification(CALENDAR, format("你有%s个未处理的公会活动邀请.", num), toggleCalendar)
-        elseif num > 0 then
-                N:Notification(CALENDAR, format("你有%s个未处理的公会活动邀请.", 1), toggleCalendar)
-        end
+	if CalendarFrame and CalendarFrame:IsShown() then return end
+	local num = GetGuildInvites()
+	if num > 1 then
+			N:Notification(CALENDAR, format("你有%s个未处理的公会活动邀请.", num), toggleCalendar)
+	elseif num > 0 then
+			N:Notification(CALENDAR, format("你有%s个未处理的公会活动邀请.", 1), toggleCalendar)
+	end
 end
 
 function N:CALENDAR_UPDATE_PENDING_INVITES()
-        alertEvents()
-        alertGuildEvents()
+	alertEvents()
+	alertGuildEvents()
 end
 
 function N:CALENDAR_UPDATE_GUILD_EVENTS()
-        alertGuildEvents()
+	alertGuildEvents()
 end
 
 function N:PLAYER_ENTERING_WORLD()
-        -- self:UPDATE_PENDING_MAIL()
-        alertEvents()
-        alertGuildEvents()
-        local day = select(3, CalendarGetDate())
-        local numDayEvents = CalendarGetNumDayEvents(0, day)
-        for i = 1, numDayEvents do
-                local title, hour, minute, calendarType, sequenceType, eventType, texture, modStatus, inviteStatus, invitedBy, difficulty, inviteType = CalendarGetDayEvent(0, day, i)
-                if calendarType == "HOLIDAY" and ( sequenceType == "END" or sequenceType == "" ) then
-                        self:Notification(CALENDAR, format("活动\"%s\"今天结束.", title), toggleCalendar)
-                end
-        end
-        self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+	-- self:UPDATE_PENDING_MAIL()
+	alertEvents()
+	alertGuildEvents()
+	local day = select(3, CalendarGetDate())
+	local numDayEvents = CalendarGetNumDayEvents(0, day)
+	for i = 1, numDayEvents do
+			local title, hour, minute, calendarType, sequenceType, eventType, texture, modStatus, inviteStatus, invitedBy, difficulty, inviteType = CalendarGetDayEvent(0, day, i)
+			if calendarType == "HOLIDAY" and ( sequenceType == "END" or sequenceType == "" ) then
+					self:Notification(CALENDAR, format("活动\"%s\"今天结束.", title), toggleCalendar)
+			end
+	end
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+end
+
+function N:PLAYER_LOGIN()
+	self:Notification("欢迎您回来", "SunUI正在加载中...", nil, "INTERFACE\\ICONS\\SPELL_FROST_ARCTICWINDS", .08, .92, .08, .92)
+	self:UnregisterEvent("PLAYER_LOGIN")
 end
 
 function N:VIGNETTE_ADDED(event, vignetteInstanceID)
-        local name
-        if vignetteInstanceID then
-                name = select(3, C_Vignettes.GetVignetteInfoFromInstanceID(vignetteInstanceID))
-        end
-        -- if not InCombatLockdown() then
-        --         f.button:Show()
-        --         f.button:SetAttribute("macrotext", "/targetexact "..(name or ""))
-        -- end
-		if playSounds then	
-			PlaySoundFile("Sound\\Spells\\PVPFlagTaken.wav")
-		end
-        self:Notification("发现稀有", name or "", selectTarget)
+	local name
+	if vignetteInstanceID then
+		name = select(3, C_Vignettes.GetVignetteInfoFromInstanceID(vignetteInstanceID))
+	end
+	-- if not InCombatLockdown() then
+	--     f.button:Show()
+	--     f.button:SetAttribute("macrotext", "/targetexact "..(name or ""))
+	-- end
+	if playSounds then	
+		PlaySoundFile("Sound\\Spells\\PVPFlagTaken.wav")
+	end
+	self:Notification("发现稀有", name or "")
 end
 
 function N:RESURRECT_REQUEST(name)
-        PlaySound("ReadyCheck")
+	PlaySound("ReadyCheck")
 end
 
 function N:UpdateSet()
 	if C["Notification"] then
+		self:RegisterEvent("PLAYER_LOGIN")
 		self:RegisterEvent("UPDATE_PENDING_MAIL")
 		self:RegisterEvent("PLAYER_REGEN_ENABLED")
 		self:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES")
@@ -393,6 +399,7 @@ function N:UpdateSet()
 		self:RegisterEvent("VIGNETTE_ADDED")
 		self:RegisterEvent("RESURRECT_REQUEST")
 	else
+		self:UnregisterEvent("PLAYER_LOGIN")
 		self:UnregisterEvent("UPDATE_PENDING_MAIL")
 		self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 		self:UnregisterEvent("CALENDAR_UPDATE_PENDING_INVITES")
