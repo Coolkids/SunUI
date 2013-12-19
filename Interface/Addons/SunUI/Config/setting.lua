@@ -39,8 +39,7 @@ G["ActionBarDB"] = {
 	["Bar4Fade"] = false,
 	["Bar5Fade"] = false,
 	["StanceBarFade"] = false,
-	["PetBarFade"] = false,
-	["HideStore"] = true,
+	["PetBarFade"] = false,a
 }
 G["NameplateDB"] = {
 	["CastBarWidth"] = 100,

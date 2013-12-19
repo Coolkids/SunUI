@@ -6,12 +6,12 @@ local activeButtons = LibActionButton and LibActionButton.activeButtons or Actio
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local buttonList = {}
 local bigButton = {}
-local hide = ActionButton_HideGrid
-local hideFrames = {MainMenuBar, MainMenuBarPageNumber, ActionBarDownButton, ActionBarUpButton, OverrideActionBarExpBar, OverrideActionBarHealthBar, OverrideActionBarPowerBar, OverrideActionBarPitchFrame, CharacterMicroButton, SpellbookMicroButton, TalentMicroButton, AchievementMicroButton, QuestLogMicroButton, GuildMicroButton, PVPMicroButton, LFDMicroButton, CompanionsMicroButton, EJMicroButton, MainMenuMicroButton, HelpMicroButton, MainMenuBarBackpackButton,CharacterBag0Slot,CharacterBag1Slot,CharacterBag2Slot,CharacterBag3Slot}
+local hidefunction = ActionButton_HideGrid
+
 function Module:blizzHider()
 	local hider = CreateFrame("Frame")
 	hider:Hide()
-
+	local hideFrames = {MainMenuBar, MainMenuBarPageNumber, ActionBarDownButton, ActionBarUpButton, OverrideActionBarExpBar, OverrideActionBarHealthBar, OverrideActionBarPowerBar, OverrideActionBarPitchFrame, CharacterMicroButton, SpellbookMicroButton, TalentMicroButton, AchievementMicroButton, QuestLogMicroButton, GuildMicroButton, PVPMicroButton, LFDMicroButton, CompanionsMicroButton, EJMicroButton, MainMenuMicroButton, StoreMicroButton, HelpMicroButton, MainMenuBarBackpackButton,CharacterBag0Slot,CharacterBag1Slot,CharacterBag2Slot,CharacterBag3Slot}
 	for k, frame in pairs(hideFrames) do
 		if frame then
 			frame:SetParent(hider)
@@ -540,7 +540,7 @@ local function ShowGrid(event, str, value)
 			ActionButton_ShowGrid(button)
 		end
 	else
-		ActionButton_HideGrid = hide
+		ActionButton_HideGrid = hidefunction
 		for i = 1, 12 do
 			local button = _G[format("ActionButton%d", i)]
 			button:SetAttribute("showgrid", 0)
@@ -770,7 +770,6 @@ function Module:OnInitialize()
 	Module:RegisterEvent("CVAR_UPDATE", ShowGrid)
 	Module:RegisterEvent("LOSS_OF_CONTROL_ADDED", HideLossCD)
 	Module:RegisterEvent("LOSS_OF_CONTROL_UPDATE", HideLossCD)
-	if C["HideStore"] then table.insert(hideFrames, StoreMicroButton) end
 	Module:blizzHider()
 	Module:CreateBar1()
 	Module:CreateBar2()

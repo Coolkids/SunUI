@@ -547,12 +547,10 @@ gmbAddOns:RegisterEvent("ADDON_LOADED")
 gmbAddOns:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 function AM:OnInitialize()
-	gmbAddOns:SetSize(_G["GameMenuButtonOptions"]:GetWidth(), _G["GameMenuButtonOptions"]:GetHeight())
-
-	gmbAddOns:SetText(L["插件管理"])
-	gmbAddOns:SetPoint(_G["GameMenuButtonOptions"]:GetPoint())
-	_G["GameMenuButtonOptions"]:SetPoint("TOP", gmbAddOns, "BOTTOM", 0, -1)
-	_G["GameMenuFrame"]:SetHeight(_G["GameMenuFrame"]:GetHeight()+_G["GameMenuButtonMacros"]:GetHeight());
+	gmbAddOns:SetSize(_G["GameMenuButtonMacros"]:GetWidth(), _G["GameMenuButtonMacros"]:GetHeight())
+	gmbAddOns:SetText(ADDONS)
+	gmbAddOns:SetPoint("BOTTOM", GameMenuFrame, "BOTTOM", 0, 5)
+	--调整菜单大小在gui.lua中
 	gmbAddOns:SetScript("OnClick", function()
 		HideUIPanel(_G["GameMenuFrame"]);
 		stAddonManager:LoadWindow()

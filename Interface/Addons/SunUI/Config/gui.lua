@@ -1,5 +1,5 @@
 local S, L, G, _, C = unpack(select(2, ...))
-local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SunUIConfig", "AceConsole-3.0", "AceEvent-3.0")
+local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SunUIConfig", "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0")
 local db = {}
 local defaults
 local DEFAULT_WIDTH = 800
@@ -222,12 +222,8 @@ function SunUIConfig.GenerateOptionsInternal()
 								type = "toggle", order = 2,
 								name = L["隐藏宏名称显示"],		
 							},
-							HideStore = {
-								type = "toggle", order = 3,
-								name = "隐藏暴雪商店",		
-							},
 							CooldownFlash = {
-								type = "toggle", order = 4,
+								type = "toggle", order = 3,
 								name = L["冷却闪光"],	
 								get = function(info) return db.ActionBarDB.CooldownFlash end,
 								set = function(info, value) db.ActionBarDB.CooldownFlash = value
@@ -238,7 +234,7 @@ function SunUIConfig.GenerateOptionsInternal()
 							UnLock = {
 								type = "execute",
 								name = L["按键绑定"],
-								order = 5,
+								order = 4,
 								func = function()
 									SlashCmdList.MOUSEOVERBIND()
 								end,
@@ -2148,13 +2144,15 @@ function SunUIConfig.GenerateOptionsInternal()
 	}
 	SunUIConfig.Options.args.profiles = SunUIConfig.profile
 end
-
+function SunUIConfig:ToggleGameMenu()
+	_G["GameMenuFrame"]:SetHeight(_G["GameMenuFrame"]:GetHeight()+_G["GameMenuButtonMacros"]:GetHeight()*2+8);
+end
 function SunUIConfig:OnEnable()
 	local Button = CreateFrame("Button", "SunUIGameMenuButton", GameMenuFrame, "GameMenuButtonTemplate")
 		S.Reskin(Button)
 		Button:SetSize(_G["GameMenuButtonOptions"]:GetWidth(), _G["GameMenuButtonOptions"]:GetHeight())
 		Button:SetText("|cffDDA0DDSun|r|cff44CCFFUI|r")
-		Button:SetPoint(_G["GameMenuButtonOptions"]:GetPoint())
+		Button:SetPoint("BOTTOM" , GameMenuButtonAddOns, "TOP", 0, 1)
 		Button:SetScript("OnClick", function()
 			if not UnitAffectingCombat("player") then
 				HideUIPanel(_G["GameMenuFrame"])
@@ -2164,7 +2162,6 @@ function SunUIConfig:OnEnable()
 				print(L["战斗中无法打开控制台"])
 			end
 		end)
-	_G["GameMenuButtonOptions"]:SetPoint("TOP", Button, "BOTTOM", 0, -1)
-	_G["GameMenuFrame"]:SetHeight(_G["GameMenuFrame"]:GetHeight()+Button:GetHeight())	
+	self:SecureHook("ToggleGameMenu")
 	SunUIConfig:RegisterChatCommand("sunui", "ShowConfig")
 end
