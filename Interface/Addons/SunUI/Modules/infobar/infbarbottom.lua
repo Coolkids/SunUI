@@ -1,6 +1,13 @@
 ﻿local S, L, DB, _, C = unpack(select(2, ...))
 local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("InfoPanelBottom")
 local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
+local week
+if (GetLocale() == "zhTW" or GetLocale() == "zhCN") then
+	week = {"星期天","星期一","星期二","星期三","星期四","星期五","星期六"}
+else
+	week = {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"}
+end
+
 local function BuildClock()
 	local Clock = CreateFrame("Frame", "InfoPanelBottom1", UIParent)
 	Clock.Text = S.MakeFontString(Clock)
@@ -13,43 +20,13 @@ local function BuildClock()
 	Clock.Text:SetShadowOffset(1, -1)
 	Clock.Text:SetShadowColor(0, 0, 0, 0.4)
 	
-	local week,killmsg, nokillmsg
-	if (GetLocale() == "zhTW" or GetLocale() == "zhCN") then
-		week = {"星期天","星期一","星期二","星期三","星期四","星期五","星期六"}
-		killsoa = "本周|cff228B22已经击杀|r怒之煞" 
-		nokillsoa = "本周还|cffFF0000没有击杀|r怒之煞" 
-		killGalleon = "本周|cff228B22已经击杀|r炮舰" 
-		nokillGalleon = "本周还|cffFF0000没有击杀|r炮舰" 
-		killOondasta = "本周|cff228B22已经击杀|r乌达斯塔" 
-		nokillOondasta = "本周还|cffFF0000没有击杀|r乌达斯塔" 
-		killNalak = "本周|cff228B22已经击杀|r暴风领主纳拉克" 
-		nokillNalak = "本周还|cffFF0000没有击杀|r暴风领主纳拉克" 
-		killsishen="本周|cff228B22已经击杀|r四大天神" 
-		nokillsishen="本周还|cffFF0000没有击杀|r四大天神" 
-		killordos="本周|cff228B22已经击杀|r斡耳朵斯" 
-		nokillordos="本周还|cffFF0000没有击杀|r斡耳朵斯" 
-	else
-		week = {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"}
-		killsoa = "本周|cff228B22已经击杀|r怒之煞" 
-		nokillsoa = "本周还|cffFF0000没有击杀|r怒之煞" 
-		killGalleon = "本周|cff228B22已经击杀|r炮舰" 
-		nokillGalleon = "本周还|cffFF0000没有击杀|r炮舰" 
-		killOondasta = "本周|cff228B22已经击杀|r乌达斯塔" 
-		nokillOondasta = "本周还|cffFF0000没有击杀|r乌达斯塔" 
-		killNalak = "本周|cff228B22已经击杀|r暴风领主纳拉克" 
-		nokillNalak = "本周还|cffFF0000没有击杀|r暴风领主纳拉克" 
-		killsishen="本周|cff228B22已经击杀|r四大天神" 
-		nokillsishen="本周还|cffFF0000没有击杀|r四大天神" 
-		killordos="本周|cff228B22已经击杀|r斡耳朵斯" 
-		nokillordos="本周还|cffFF0000没有击杀|r斡耳朵斯" 
-	end
-	
 	Clock:SetScript("OnEnter", function(self)
+		if InCombatLockdown() then return end
 		local w,m,d,y = CalendarGetDate()
 		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
 		GameTooltip:ClearLines()
 		if (GetLocale() == "zhTW" or GetLocale() == "zhCN") then
-			GameTooltip:AddLine(format("%s-%s-%s %s", y, m, d, week[w]), 0.40, 0.78, 1)
+			GameTooltip:AddLine(format("%s年%s月%s日 %s", y, m, d, week[w]), 0.40, 0.78, 1)
 		else
 			GameTooltip:AddLine(format("%s-%s-%s %s", m, d, y, week[w]), 0.40, 0.78, 1)
 		end
@@ -76,57 +53,17 @@ local function BuildClock()
 				GameTooltip:AddDoubleLine(format("%s |cffaaaaaa(%s%s)", name, maxPlayers, diff), S.FormatTime(reset), 1, 1, 1, tr, tg, tb)
 			end
 		end
-		--怒之煞
-		
-		if UnitLevel("player") > 89 then 
-		  GameTooltip:AddLine(" ") 
-		  local isCD = IsQuestFlaggedCompleted(32099) 
-		  if isCD then 
-			 GameTooltip:AddLine(killsoa, 0.75, 0.9, 1) 
-		  else 
-			 GameTooltip:AddLine(nokillsoa, 0.75, 0.9, 1) 
-		  end 
-	   end 
-	   if UnitLevel("player") > 89 then 
-		  local isCD = IsQuestFlaggedCompleted(32098) 
-		  if isCD then 
-			 GameTooltip:AddLine(killGalleon, 0.75, 0.9, 1) 
-		  else 
-			 GameTooltip:AddLine(nokillGalleon, 0.75, 0.9, 1) 
-		  end 
-	   end 
-	   if UnitLevel("player") > 89 then 
-		  local isCD = IsQuestFlaggedCompleted(32519) 
-		  if isCD then 
-			 GameTooltip:AddLine(killOondasta, 0.75, 0.9, 1) 
-		  else 
-			 GameTooltip:AddLine(nokillOondasta, 0.75, 0.9, 1) 
-		  end 
-	   end 
-	   if UnitLevel("player") > 89 then 
-		  local isCD = IsQuestFlaggedCompleted(32518) 
-		  if isCD then 
-			 GameTooltip:AddLine(killNalak, 0.75, 0.9, 1) 
-		  else 
-			 GameTooltip:AddLine(nokillNalak, 0.75, 0.9, 1) 
-		  end 
-	   end
-	   if UnitLevel("player") > 89 then 
-			local isCD = IsQuestFlaggedCompleted(33117) 
-			if isCD then 
-				GameTooltip:AddLine(killsishen, 0.75, 0.9, 1) 
-			else 
-				GameTooltip:AddLine(nokillsishen, 0.75, 0.9, 1) 
-			end 
-		end 
-		if UnitLevel("player") > 89 then 
-			local isCD = IsQuestFlaggedCompleted(33118) 
-			if isCD then 
-				GameTooltip:AddLine(killordos, 0.75, 0.9, 1) 
-			else 
-				GameTooltip:AddLine(nokillordos, 0.75, 0.9, 1) 
-			end 
-		end 
+		local killbossnum = GetNumSavedWorldBosses()
+		GameTooltip:AddLine(" ")
+		if killbossnum == 0 then
+			GameTooltip:AddLine("您没有击杀任何野外boss", 1, 0.1, 0.1)
+		else
+			--GameTooltip:AddDoubleLine("您已经击杀的野外boss", "下次重置时间", 1, 1, 1, 1, 1, 1)
+			for i=1, killbossnum do
+				local name, _, reset = GetSavedWorldBossInfo(i)
+				GameTooltip:AddDoubleLine(name, S.FormatTime(reset), 1, 1, 1, 1, 1, 1)
+			end
+		end
 		GameTooltip:Show()
 	end)
 	Clock:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
@@ -283,7 +220,7 @@ local function BuildFriend()
 		-- force update when showing tooltip
 		dataValid = false
 
-		Text:SetText(format(true and "%s: "..("|cff%.2x%.2x%.2x"):format(classc.r * 255, classc.g * 255, classc.b * 255).."%d" or "%s:%d",FRIEND,onlineFriends + numBNetOnline))
+		Text:SetText(format("%s:%d",FRIEND,onlineFriends + numBNetOnline))
 	end
 
 	Stat:SetScript("OnMouseUp", function(self, btn)
@@ -461,7 +398,7 @@ local function BuildGuild()
 	MoveHandle.InfoPanelBottom3 = S.MakeMoveHandle(Stat, "工会", "InfoGuild")
 	
 	local Text  = S.MakeFontString(Stat)
-	Text:SetTextColor(DB.MyClassColor.r,DB.MyClassColor.g,DB.MyClassColor.b)
+	Text:SetTextColor(1,1,1)
 	Text:SetShadowOffset(1, -1)
 	Text:SetShadowColor(0, 0, 0, 0.4)
 	Text:SetPoint("LEFT", Stat)
@@ -514,7 +451,7 @@ local function BuildGuild()
 	local function UpdateGuildMessage()
 		guildMotD = GetGuildRosterMOTD()
 	end
-
+	
 	local function Update(self, event, ...)	
 		if IsInGuild() then
 			-- special handler to request guild roster updates when guild members come online or go
@@ -615,16 +552,15 @@ local function BuildGuild()
 		local total, online = GetNumGuildMembers()
 		GuildRoster()
 		BuildGuildTable()
-		
-		
-		local guildName, guildRank = GetGuildInfo('player')
+		UpdateGuildMessage()
+		local guildName, _ = GetGuildInfo('player')
 		local guildLevel = GetGuildLevel()
 
 		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
 		
 		GameTooltip:ClearLines()
 		GameTooltip:AddDoubleLine(format(guildInfoString, guildName, guildLevel), format(guildInfoString2, online, total),tthead.r,tthead.g,tthead.b,tthead.r,tthead.g,tthead.b)
-		GameTooltip:AddLine(guildRank, unpack(tthead))
+		--GameTooltip:AddLine(guildRank, unpack(tthead))
 		GameTooltip:AddLine(' ')
 		
 		if guildMotD ~= "" then GameTooltip:AddLine(format(guildMotDString, GUILD_MOTD, guildMotD), ttsubh.r, ttsubh.g, ttsubh.b, 1) end
@@ -742,17 +678,16 @@ local function BuildDurability()
 			end
 	end)
 	Stat:SetScript("OnEnter", function(self)
-		if not InCombatLockdown() then
-			GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
-			GameTooltip:ClearLines()
-			GameTooltip:AddLine(DURABILITY, 0.4, 0.78, 1)
-			GameTooltip:AddLine(" ")
-			for k,v in pairs(nowSlots) do
-				local r, g, b = S.ColorGradient(v[3], 1, 0.2, 0.2, 1, 1, 0, 0.2, 1, 0.2)
-				GameTooltip:AddDoubleLine(v[2], format("%d %%", floor(v[3]*100)), 1 , 1 , 1, r, g, b)
-			end
-			GameTooltip:Show()
+		if InCombatLockdown() then return end
+		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+		GameTooltip:ClearLines()
+		GameTooltip:AddLine(DURABILITY, 0.4, 0.78, 1)
+		GameTooltip:AddLine(" ")
+		for k,v in pairs(nowSlots) do
+			local r, g, b = S.ColorGradient(v[3], 1, 0.2, 0.2, 1, 1, 0, 0.2, 1, 0.2)
+			GameTooltip:AddDoubleLine(v[2], format("%d %%", floor(v[3]*100)), 1 , 1 , 1, r, g, b)
 		end
+		GameTooltip:Show()
 	end)
 	Stat:SetScript("OnLeave", function() GameTooltip:Hide() end)
 	Stat:SetScript("OnMouseDown", function(self, button)
@@ -930,6 +865,7 @@ local function BuildStat1()
 	local haste, hasteBonus
 
 	local function ShowTooltip(self)
+		if InCombatLockdown() then return end
 		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(STATS_LABEL)
@@ -1165,6 +1101,7 @@ local function BuildSpecswitch()
 	Stat:RegisterEvent("PLAYER_TALENT_UPDATE")
 	Stat:SetScript("OnEvent", OnEvent)
 	Stat:SetScript("OnEnter", function(self)
+		if InCombatLockdown() then return end
 		local c = GetActiveSpecGroup(false,false)
 		local majorTree1 = GetSpecialization(false,false,1)
 		local spec1 = { }
@@ -1240,6 +1177,7 @@ local function DungeonHelper()
 	local id = 462
 	--print(tank, healer, damager)
 	local function ShowGameToolTip(self)
+		if InCombatLockdown() then return end
 		local text = ""
 		local _, forTank, forHealer, forDamage, _, _, _ = GetLFGRoleShortageRewards(id, 1)
 		local id, name = GetLFGRandomDungeonInfo(9)

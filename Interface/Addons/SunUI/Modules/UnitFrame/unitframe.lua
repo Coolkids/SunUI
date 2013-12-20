@@ -1135,6 +1135,27 @@ local function gen_InfoIcons(f)
     pvp:SetSize(25, 25)
     pvp:SetPoint("CENTER", f, "TOPRIGHT", 3, -3)
     f.PvP = pvp
+	f.PvP.Override = function(frame, event, unit)
+		if(unit ~= frame.unit) then return end
+		if(frame.PvP) then
+				local factionGroup = UnitFactionGroup(unit)
+				if factionGroup == "Neutral" then
+						frame.PvP:SetTexture(nil)
+						frame.PvP:Hide()
+				else
+						if(UnitIsPVPFreeForAll(unit)) then
+								frame.PvP:SetTexture[[Interface\TargetingFrame\UI-PVP-FFA]]
+								frame.PvP:Show()
+						elseif(factionGroup and UnitIsPVP(unit)) then
+								frame.PvP:SetTexture([[Interface\TargetingFrame\UI-PVP-]]..factionGroup)
+								frame.PvP:Show()
+						else
+								frame.PvP:Hide()
+						end
+				end
+		end
+	end
+	
 	 --QuestIcon icon
 	if f.mystyle == "target" then
 		local QuestIcon = h:CreateTexture(nil, 'OVERLAY')

@@ -2147,6 +2147,11 @@ end
 function SunUIConfig:ToggleGameMenu()
 	_G["GameMenuFrame"]:SetHeight(_G["GameMenuFrame"]:GetHeight()+_G["GameMenuButtonMacros"]:GetHeight()*2+8);
 end
+function SunUIConfig:ToggleFrame(f)
+	if f:GetName() == "GameMenuFrame" then
+		_G["GameMenuFrame"]:SetHeight(_G["GameMenuFrame"]:GetHeight()+_G["GameMenuButtonMacros"]:GetHeight()*2+8);
+	end
+end
 function SunUIConfig:OnEnable()
 	local Button = CreateFrame("Button", "SunUIGameMenuButton", GameMenuFrame, "GameMenuButtonTemplate")
 		S.Reskin(Button)
@@ -2163,5 +2168,6 @@ function SunUIConfig:OnEnable()
 			end
 		end)
 	self:SecureHook("ToggleGameMenu")
+	self:SecureHook("ToggleFrame")
 	SunUIConfig:RegisterChatCommand("sunui", "ShowConfig")
 end

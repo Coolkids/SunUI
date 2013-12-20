@@ -53,13 +53,16 @@ end
 
 local function Tab_OnClick(self)
 	local frame = _G[self.ToggleFrame]
-	if frame:IsShown() then
+	if frame and frame:IsShown() then
 		HideUIPanel(frame)
 	else
 		if self.ToggleFrame == "PVEFrame" then
 			ToggleLFDParentFrame()
 		else
 			ShowUIPanel(frame)
+		end
+		if self.ToggleFrame == "PVPFrame" then
+			TogglePVPUI()
 		end
 	end
 end

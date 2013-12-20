@@ -201,6 +201,7 @@ end)
 -- The API show function
 
 function N:Notification(name, message, clickFunc, texture, ...)
+	if InCombatLockdown() then return end
 	if UnitIsAFK("player") then
 		table.insert(incoming, {name, message, clickFunc, texture, ...})
 		handler:RegisterEvent("PLAYER_FLAGS_CHANGED")
@@ -365,7 +366,20 @@ function N:PLAYER_ENTERING_WORLD()
 end
 
 function N:PLAYER_LOGIN()
-	self:Notification("欢迎您回来", "SunUI正在加载中...", nil, "INTERFACE\\ICONS\\SPELL_FROST_ARCTICWINDS", .08, .92, .08, .92)
+	self:Notification("欢迎您回来", "SunUI正在加载中...", nil, nil, .08, .92, .08, .92)
+	local killbossnum = GetNumSavedWorldBosses()
+	local namelist = "您已击杀";
+	if killbossnum == 0 then
+		namelist = "您没有击杀任何野外boss喔"
+		self:Notification("警告", namelist, nil, "INTERFACE\\ICONS\\SPELL_FROST_ARCTICWINDS", .08, .92, .08, .92)
+	else
+		for i=1, killbossnum do
+			local name, _, _ = GetSavedWorldBossInfo(i)
+			namelist = namelist.." "..name
+		end
+		self:Notification("击杀提醒", namelist, nil, "INTERFACE\\ICONS\\SPELL_FROST_ARCTICWINDS", .08, .92, .08, .92)
+	end
+	
 	self:UnregisterEvent("PLAYER_LOGIN")
 end
 
@@ -385,7 +399,9 @@ function N:VIGNETTE_ADDED(event, vignetteInstanceID)
 end
 
 function N:RESURRECT_REQUEST(name)
-	PlaySound("ReadyCheck")
+	if playSounds then
+		PlaySound("ReadyCheck")
+	end
 end
 
 function N:UpdateSet()
