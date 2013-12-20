@@ -1,0 +1,10 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+	<Script file='SpellNames.lua'/>
+	<Script file='localization.enUS.lua'/>
+	<Script file='localization.zhCN.lua'/>
+	<Script file='localization.zhTW.lua'/>
+	<Script file='localization.deDE.lua'/>
+	<Include file="FriendsMenuXP.xml"/>
+
+</Ui>

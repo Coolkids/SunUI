@@ -1,0 +1,22 @@
+﻿## Interface: 50400
+## Title: SunUI_|cff70C0F5Freebgrid|r
+## Title-zhTW: SunUI_|cff70C0F5Freebgrid|r
+## Notes: 
+## Notes-zhTW: 
+## Author: Freebaser
+## Version: 6.7
+## SavedVariables: SunUI_FreebgridDB
+## RequiredDeps: SunUI
+## OptionalDeps: !ClassColors, Ace3, Clique, oRA3, SharedMedia
+## X-LoadOn-Slash: /freeb
+
+libs\LibStub\LibStub.lua
+libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
+libs\LibSharedMedia-3.0\lib.xml
+
+Localization.lua
+db.lua
+clickset\clickset.lua
+aura_list.lua
+freebgrid.lua
+Resurrection.lua

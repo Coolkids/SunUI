@@ -1,0 +1,35 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Include file = "aurora\Load.xml"/>
+	<Include file = "actionBar\Load.xml"/>
+	<Include file = "Announce\load.xml"/>
+	<Include file = "AutoEquipment\load.xml"/>
+	<Include file = "Automation\load.xml"/>
+	<Include file = "bags\load.xml"/>
+	<Include file = "buff\load.xml"/>
+	<Include file = "buffreminder\Load.xml"/>
+	<Include file= "button\load.xml"/>
+	<Include file = "chat\load.xml"/>
+	<Include file = "Class\load.xml"/>
+	<Include file = "CombatText\load.xml"/>
+	<Include file = "Cooldowns\load.xml"/>
+	<Include file = "infobar\load.xml"/>
+	<Include file = "loot\load.xml"/>
+	<Include file = "map\load.xml"/>
+	<Include file = "nameplates\load.xml"/>
+	<Include file = "powerbar\load.xml"/>
+	<Include file ="Quest\load.xml"/>
+	<Include file= "RayWatcher\load.xml"/>
+	<Include file = "skins\Load.xml"/>
+	<Include file = "tooltip\Load.xml"/>
+	<Include file = "unitframe\load.xml"/>
+	<Include file ="FriendsMenuXP\load.xml"/>
+	<Include file ="Icicle\load.xml"/>
+	<Include file ="TheBurningTrade\load.xml"/>
+	<Include file ="oGlow\load.xml"/>
+	<Include file ="Misc\load.xml"/>
+	<!-- 兼容性检查 -->
+	<Include file ="Compatibility\load.xml"/>
+	
+	<!--测试新的功能-->
+	<!--Include file ="test\load.xml"/-->
+</Ui>

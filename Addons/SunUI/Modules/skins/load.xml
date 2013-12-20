@@ -1,0 +1,15 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file='AuctionLite.lua' />
+	<Script file='DBM.lua' />
+	<Script file='skada.lua' />
+	<Script file='skins.lua' />
+	<Script file='ace3.lua' />
+	<Script file='BlzTimeTracker.lua' />
+	<Script file='BubbleBobble.lua' />
+	<Script file='Postal.lua' />
+	<Script file='NugRunning.lua' />
+	<Script file='ReforgeLite.lua' />
+	<Script file='Examiner.lua' />
+	<Script file='BagSync.lua' />
+	<Script file='LossOfControl.lua' />
+</Ui>

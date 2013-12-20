@@ -1,0 +1,12 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="AlertFrames.lua"/>
+	<Script file="FlexRaidFrame.lua"/>
+	<Script file="LFDFrame.lua"/>
+	<Script file="LFGFrame.lua"/>
+	<Script file="PVEFrame.lua"/>
+	<Script file="QueueStatusFrame.lua"/>
+	<Script file="RaidFinder.lua"/>
+	<Script file="RolePoll.lua"/>
+	<Script file="ScenarioFinder.lua"/>
+	<Script file="StaticPopup.lua"/>
+</Ui>

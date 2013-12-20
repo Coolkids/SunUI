@@ -1,0 +1,11 @@
+﻿<!-- -->
+
+
+
+
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+	<Include file="localization\locales.xml"/>
+	<Script file="JPack.lua"/>
+
+</Ui>

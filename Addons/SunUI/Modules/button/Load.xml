@@ -1,0 +1,13 @@
+﻿<!-- -->
+
+
+
+
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file = "collectorbutton.lua"/>
+	<Script file = "ambutton.lua"/>
+	<Script file = "configbutton.lua"/>
+	<Script file = "channel.lua"/>
+	<Script file = "StatReport.lua"/>
+	<Script file = "RaidCheck.lua"/>
+</Ui>
