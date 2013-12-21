@@ -26,8 +26,9 @@ local msleft =  {"CENTER", UIParent, "CENTER", 105, 85}  --name = "玩家右邊2
 local alldebuff = {"TOP", UIParent, "TOP", 180, -157}  --name = "玩家Debuff",
 local pvpdebuff = {"TOP", UIParent, "TOP", 180, -111}  --name = "玩家PVPDebuff",
 local inbuff1 = {"CENTER", UIParent, "CENTER", 110, 165}  --name = "药水减伤等Buff",
-local enbuff = {"BOTTOM", UIParent, "BOTTOM",-253, 234}  --name = "玩家饰品附魔触发buff",
+local enbuff = {"BOTTOM", UIParent, "BOTTOM",-253, 243}  --name = "玩家饰品附魔触发buff",
 local imbuff = {"CENTER", UIParent, "CENTER", 110, 210}  --name = "玩家重要Buff",
+local cdpos = {"BOTTOM", UIParent, "BOTTOM",-253, 281}  --name = "玩家饰品附魔触发buff",
 ns.watchers ={
 	["DRUID"] = {
 		{
@@ -185,8 +186,6 @@ ns.watchers ={
 				{ spellID = 112948 ,unitId = "target", caster = "player", filter = "DEBUFF" },
 				-- 点燃
 				{ spellID = 12654 ,unitId = "target", caster = "player", filter = "DEBUFF" },
-				-- 临界炽焰
-				{ spellID = 22959 ,unitId = "target", caster = "player", filter = "DEBUFF" },
 				-- 减速
 				{ spellID = 31589 ,unitId = "target", caster = "player", filter = "DEBUFF" },
 				-- 活动炸弹
@@ -235,6 +234,8 @@ ns.watchers ={
 				{ spellID = 2120, unitId = "player", caster = "player", filter = "DEBUFF" },
 				--能量符文
 				{ spellID = 116014, unitId = "player", caster = "player", filter = "BUFF" }, 
+				--寒冰护体
+				{ spellID = 11426, unitId = "player", caster = "player", filter = "BUFF" }, 
 		},
 		{
 			name = "玩家技能CD",
@@ -1012,8 +1013,6 @@ ns.watchers ={
 				{ spellID = 33206, unitId = "player", caster = "all", filter = "BUFF" }, 
 				-- 真言術壁
 				{ spellID = 81782, unitId = "player", caster = "all", filter = "BUFF" }, 
-				-- 真言術壁
-				{ spellID = 81781, unitId = "player", caster = "all", filter = "BUFF" }, 
 				-- 集结呐喊
 				{ spellID = 97463, unitId = "player", caster = "all", filter = "BUFF" }, 
 				-- 反魔法領域
@@ -1339,6 +1338,23 @@ ns.watchers ={
 			{ spellID = 146184, unitId = "player", caster = "player", filter = "BUFF" },
 			-- Yu'lon's Bite (暴擊, 觸發)
 			{ spellID = 146218, unitId = "player", caster = "player", filter = "BUFF" },
+			-- 物品
+			
 		},
+		{
+			name = "玩家物品CD",
+			direction = "RIGHT",
+			setpoint = cdpos,
+			size = 24,
+			-- 手套
+			{slotID = 10, filter = "CD" },
+			-- 腰带
+			{slotID = 6, filter = "CD" },
+			-- 披风
+			{slotID = 15, filter = "CD" },
+			-- 饰品
+			{slotID = 13, filter = "CD" },
+			{slotID = 14, filter = "CD" },
+		}
 	},
 }

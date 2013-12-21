@@ -1,4 +1,5 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file = "datebase.lua"/>
 	<Script file = "classCD.lua"/>
 	<Script file = "RaidCD.lua"/>
 </Ui>

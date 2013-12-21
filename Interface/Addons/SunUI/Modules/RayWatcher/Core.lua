@@ -13,49 +13,6 @@ local UnitBuff = UnitBuff
 local UnitDebuff = UnitDebuff
 local CooldownFrame_SetTimer = CooldownFrame_SetTimer
 
-local normal = "Interface\\Addons\\RayWatcher\\media\\statusbar"
-
-local StartFlash = function(self, duration)
-	if not self.anim then
-		self.anim = self:CreateAnimationGroup("Flash")
-
-		self.anim.fadein = self.anim:CreateAnimation("ALPHA", "FadeIn")
-		self.anim.fadein:SetChange(0.8)
-		self.anim.fadein:SetOrder(2)
-
-		self.anim.fadeout = self.anim:CreateAnimation("ALPHA", "FadeOut")
-		self.anim.fadeout:SetChange(-0.8)
-		self.anim.fadeout:SetOrder(1)
-	end
-
-	self.anim.fadein:SetDuration(duration)
-	self.anim.fadeout:SetDuration(duration)
-	self.anim:Play()
-end
-
-local StopFlash = function(self)
-	if self.anim then
-		self.anim:Stop()
-	end
-    if self.cooldown then
-        self.cooldown:SetAlpha(1)
-    end
-end
-
-local function Flash(self)
-	local time = self.start + self.duration - GetTime()
-
-	if time < 0 then
-		StopFlash(self)
-	end
-
-	if time < 5 then
-		StartFlash(self, .75)
-	else
-		StopFlash(self)
-	end
-end
-
 local function Round(v, decimals)
 	if not decimals then decimals = 0 end
     return (("%%.%df"):format(decimals)):format(v)
@@ -84,9 +41,16 @@ function watcherPrototype:CreateButton(mode)
 	self.parent:SetSize(self.size, self.size)
 	button.icon = button:CreateTexture(nil, "ARTWORK")
 	button.icon:SetAllPoints()
+	button.icon:SetTexCoord(.08, .92, .08, .92)
 	button.count = button:CreateFontString(nil, "OVERLAY")
 	button.count:SetFont(ns.font, ns.fontsize * (Round(self.size) / 26), ns.fontflag)
 	button.count:SetPoint("TOPRIGHT", button , "TOPRIGHT", 4, 5)
+	
+	button.value = button:CreateFontString(nil, "OVERLAY")
+	button.value:SetFont(ns.font, ns.fontsize * (Round(self.size) / 26)-2, ns.fontflag)
+	button.value:SetPoint("CENTER", button , "TOP", 0, 8)
+	button.value:SetJustifyH("RIGHT")
+	
 	button:SetScript("OnEnter", function(self)
 			GameTooltip:SetOwner(self, "ANCHOR_TOP")
 			if self.filter == "BUFF" then
@@ -95,14 +59,14 @@ function watcherPrototype:CreateButton(mode)
 				GameTooltip:SetUnitAura(self.unitID, self.index, "HARMFUL")
 			elseif self.filter == "itemCD" then
 				GameTooltip:SetHyperlink(select(2,GetItemInfo(self.spellID)))
+			elseif self.filter == "slotCD" then
+                GameTooltip:SetInventoryItem("player", self.spellID)
 			else
 				GameTooltip:SetSpellByID(self.spellID)
 			end
 			GameTooltip:Show()
 		end)
-	button:SetScript("OnLeave", function(self) 
-			GameTooltip:Hide() 
-		end)
+	button:SetScript("OnLeave", GameTooltip_Hide)
 	if mode=="BAR" then
 		button.statusbar = CreateFrame("StatusBar", nil, button)
 		button.statusbar:SetFrameStrata("BACKGROUND")
@@ -137,16 +101,17 @@ function watcherPrototype:CreateButton(mode)
 		button.cooldown = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
 		button.cooldown:SetAllPoints(button.icon)
 		button.cooldown:SetReverse()
+		button.cooldown:SetFrameLevel(3)
 		button.mode = "ICON"	
 	end
 	button.owner = self
 	return button
 end
 
-function watcherPrototype:UpdateButton(button, index, icon, count, duration, expires, spellID, unitID, filter)
+function watcherPrototype:UpdateButton(button, index, icon, count, duration, expires, spellID, unitID, filter, value)
 	button.icon:SetTexture(icon)
-	button.icon:SetTexCoord(.1, .9, .1, .9)
 	button.count:SetText(count > 1 and count or "")
+	button.value:SetText((value and value > 1000) and value or "")
 	if button.cooldown then
 		if filter:find("CD") then
 			button.cooldown:SetReverse(false)
@@ -203,8 +168,15 @@ local function BarUpdate(self, elapsed)
 					self.time:SetFormattedText("%d:%.2d", time/60, time%60)
 				end
 			end			
-		elseif self.filter == "CD" or self.filter == "itemCD" then
-			local start, duration = (self.filter == "CD" and GetSpellCooldown or GetItemCooldown)(self.spellID)
+		elseif self.filter == "CD" or self.filter == "itemCD" or self.filter == "slotCD" then
+			local start, duration
+			if self.filter == "slotCD" then
+				start, duration = GetInventoryItemCooldown("player", self.spellID)
+			elseif self.filter == "CD" then
+				start, duration = GetSpellCooldown(self.spellID)
+			elseif self.filter == "itemCD" then
+				start, duration = GetItemCooldown(self.spellID)
+			end
 			if self.mode == "BAR" then
 				self.statusbar:SetMinMaxValues(0, duration)
 				local time = start + duration - GetTime()
@@ -224,25 +196,25 @@ local function BarUpdate(self, elapsed)
 	end
 end
 
-function watcherPrototype:CheckAura(num)
+function watcherPrototype:CheckAura()
 	if self.BUFF then
 		for unitID in pairs(self.BUFF.unitIDs) do
 			if self.BUFF.unitIDs[unitID] then
 				local index = 1
-				while UnitBuff(unitID, index) and not ( index > 1024 ) do
-					local _, _, icon, count, _, duration, expires, caster, _, _, spellID = UnitBuff(unitID,index)
+				while UnitBuff(unitID, index) and not ( index > 40 ) do
+					local _, _, icon, count, _, duration, expires, caster, _, _, spellID, _, _, _, value = UnitBuff(unitID,index)
 					if self.BUFF[spellID] and self.BUFF[spellID].unitID == unitID and ( caster == self.BUFF[spellID].caster or self.BUFF[spellID].caster:lower() == "all" ) then
-						if not self.button[num] then
-							self.button[num] = self:CreateButton(self.mode)					
-							self:SetPosition(num)
+						if not self.button[self.current] then
+							self.button[self.current] = self:CreateButton(self.mode)					
+							self:SetPosition(self.current)
 						end
-						self:UpdateButton(self.button[num], index, icon, count, duration, expires, spellID, unitID, "BUFF")
+						self:UpdateButton(self.button[self.current], index, icon, count, duration, expires, spellID, unitID, "BUFF", value)
 						if self.mode == "BAR" then
-							self.button[num]:SetScript("OnUpdate", BarUpdate)
+							self.button[self.current]:SetScript("OnUpdate", BarUpdate)
 						else
-							self.button[num]:SetScript("OnUpdate", nil)
+							self.button[self.current]:SetScript("OnUpdate", nil)
 						end
-						num = num + 1
+						self.current = self.current + 1
 					end
 					index = index + 1
 				end
@@ -254,46 +226,45 @@ function watcherPrototype:CheckAura(num)
 			if self.DEBUFF.unitIDs[unitID] then
 				local index = 1
 				while UnitDebuff(unitID, index) and not ( index > 1024 ) do
-					local _, _, icon, count, _, duration, expires, caster, _, _, spellID = UnitDebuff(unitID,index)
+					local _, _, icon, count, _, duration, expires, caster, _, _, spellID, _, _, _, value = UnitDebuff(unitID,index)
 					if self.DEBUFF[spellID] and self.DEBUFF[spellID].unitID == unitID and ( caster == self.DEBUFF[spellID].caster or self.DEBUFF[spellID].caster:lower() == "all" ) then
-						if not self.button[num] then
-							self.button[num] = self:CreateButton(self.mode)					
-							self:SetPosition(num)
+						if not self.button[self.current] then
+							self.button[self.current] = self:CreateButton(self.mode)					
+							self:SetPosition(self.current)
 						end	
-						self:UpdateButton(self.button[num], index, icon, count, duration, expires, spellID, unitID, "DEBUFF")
+						self:UpdateButton(self.button[self.current], index, icon, count, duration, expires, spellID, unitID, "DEBUFF", value)
 						if self.mode == "BAR" then
-							self.button[num]:SetScript("OnUpdate", BarUpdate)
+							self.button[self.current]:SetScript("OnUpdate", BarUpdate)
 						else
-							self.button[num]:SetScript("OnUpdate", nil)
+							self.button[self.current]:SetScript("OnUpdate", nil)
 						end
-						num = num + 1
+						self.current = self.current + 1
 					end
 					index = index + 1
 				end
 			end
 		end
 	end
-	return num
 end
 
-function watcherPrototype:CheckCooldown(num)
+function watcherPrototype:CheckCooldown()
 	if self.CD then
 		for spellID in pairs(self.CD) do
 			if type(spellID) == "number" and self.CD[spellID] then
 				local start, duration = GetSpellCooldown(spellID)
 				local _, _, icon = GetSpellInfo(spellID)
 				if start ~= 0 and duration > 2.9 then
-					if not self.button[num] then
-						self.button[num] = self:CreateButton(self.mode)					
-						self:SetPosition(num)
+					if not self.button[self.current] then
+						self.button[self.current] = self:CreateButton(self.mode)					
+						self:SetPosition(self.current)
 					end	
-					self:UpdateButton(self.button[num], nil, icon, 0, duration, start, spellID, nil, "CD")
+					self:UpdateButton(self.button[self.current], nil, icon, 0, duration, start, spellID, nil, "CD")
 					if self.mode == "BAR" then
-						self.button[num]:SetScript("OnUpdate", BarUpdate)
+						self.button[self.current]:SetScript("OnUpdate", BarUpdate)
 					else
-						self.button[num]:SetScript("OnUpdate", nil)
+						self.button[self.current]:SetScript("OnUpdate", nil)
 					end
-					num = num + 1
+					self.current = self.current + 1
 				end
 			end
 		end
@@ -304,32 +275,57 @@ function watcherPrototype:CheckCooldown(num)
 				local start, duration = GetItemCooldown(itemID)
 				local _, _, _, _, _, _, _, _, _, icon = GetItemInfo(itemID)
 				if start ~= 0 and duration > 2.9 then
-					if not self.button[num] then
-						self.button[num] = self:CreateButton(self.mode)					
-						self:SetPosition(num)
+					if not self.button[self.current] then
+						self.button[self.current] = self:CreateButton(self.mode)					
+						self:SetPosition(self.current)
 					end	
-					self:UpdateButton(self.button[num], nil, icon, 0, duration, start, itemID, nil, "itemCD")
+					self:UpdateButton(self.button[self.current], nil, icon, 0, duration, start, itemID, nil, "itemCD")
 					if self.mode == "BAR" then
-						self.button[num]:SetScript("OnUpdate", BarUpdate)
+						self.button[self.current]:SetScript("OnUpdate", BarUpdate)
 					else
-						self.button[num]:SetScript("OnUpdate", nil)
+						self.button[self.current]:SetScript("OnUpdate", nil)
 					end
-					num = num + 1
+					self.current = self.current + 1
 				end
 			end
 		end
 	end
-	return num
+	if self.slotCD then
+		for slotID in pairs(self.slotCD) do
+				if type(slotID) == "number" and self.slotCD[slotID] then
+						local slotLink = GetInventoryItemLink("player", slotID)
+						if slotLink then
+								local _, _, _, _, _, _, _, _, _, icon = GetItemInfo(slotLink)
+								local start, duration = GetInventoryItemCooldown("player", slotID)
+								if start ~= 0 and duration > 2.9 then
+										if not self.button[self.current] then
+												self.button[self.current] = self:CreateButton(self.mode)
+												self:SetPosition(self.current)
+										end
+										self:UpdateButton(self.button[self.current], nil, icon, 0, duration, start, slotID, nil, "slotCD")
+										if self.mode == "BAR" then
+											self.button[self.current]:SetScript("OnUpdate", BarUpdate)
+										else
+											self.button[self.current]:SetScript("OnUpdate", nil)
+										end
+										self.current = self.current + 1
+								end
+						end
+				end
+		end
+	end
 end
 
 function watcherPrototype:Update()
-	local num = 1
+	self.current = 1
 	for i = 1, #self.button do
-		self.button[i]:Hide()
+		if self.button[i]:IsShown() then
+			self.button[i]:Hide()
+		end
 	end
 	
-	num = self:CheckAura(num)
-	num = self:CheckCooldown(num)
+	self:CheckAura()
+	self:CheckCooldown()
 end
 
 function watcherPrototype:SetPosition(num)
@@ -349,83 +345,6 @@ function watcherPrototype:SetPosition(num)
 	else
 		self.button[num]:ClearAllPoints()
 		self.button[num]:SetPoint("BOTTOM", self.button[num-1], "TOP", 0, 5)
-	end
-end
-
-function watcherPrototype:ApplyStyle()
-	for i =1, #self.button do
-		local button = self.button[i]
-		if self.mode == "BAR" then
-			if not button.statusbar then
-				self.barwidth = self.barwidth or 150
-				if self.direction == "LEFT" or self.direction == "RIGHT" then
-					self.direction = "UP"
-				end
-				button.statusbar = CreateFrame("StatusBar", nil, button)
-				button.statusbar:SetFrameStrata("BACKGROUND")
-				local shadow = CreateFrame("Frame", nil, button.statusbar)
-				shadow:SetPoint("TOPLEFT", -2, 2)
-				shadow:SetPoint("BOTTOMRIGHT", 2, -2)
-				shadow:CreateShadow("Background")
-				button.statusbar:SetWidth(self.barwidth - 6)
-				button.statusbar:SetHeight(5)
-				button.statusbar:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
-				button.statusbar:SetStatusBarColor(colors[myclass].r, colors[myclass].g, colors[myclass].b, 1)
-				if ( self.iconside == "RIGHT" ) then
-					button.statusbar:SetPoint("BOTTOMRIGHT", button, "BOTTOMLEFT", -5, 2)
-				else
-					button.statusbar:SetPoint("BOTTOMLEFT", button, "BOTTOMRIGHT", 5, 2)
-				end
-				button.statusbar:SetMinMaxValues(0, 1)
-				button.statusbar:SetValue(1)
-				local spark = button.statusbar:CreateTexture(nil, "OVERLAY")
-				spark:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
-				spark:SetBlendMode("ADD")
-				spark:SetAlpha(.8)
-				spark:SetPoint("TOPLEFT", button.statusbar:GetStatusBarTexture(), "TOPRIGHT", -10, 13)
-				spark:SetPoint("BOTTOMRIGHT", button.statusbar:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -13)
-				button.time = button:CreateFontString(nil, "OVERLAY")
-				button.time:SetFont(ns.font, ns.fontsize, ns.fontflag)
-				button.time:SetPoint("BOTTOMRIGHT", button.statusbar, "TOPRIGHT", 0, 2)
-				button.time:SetText("60")
-				button.name = button:CreateFontString(nil, "OVERLAY")
-				button.name:SetFont(ns.font, ns.fontsize, ns.fontflag)
-				button.name:SetPoint("BOTTOMLEFT", button.statusbar, "TOPLEFT", 0, 2)
-				button.name:SetText("技能名称")
-				button.mode = "BAR"					
-				button.cooldown:Hide()
-				button.cooldown = nil
-				button:SetScript("OnUpdate", nil)
-			end
-		end
-		if self.mode == "ICON" then
-			if not button.cooldown then
-				button.cooldown = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
-				button.cooldown:SetAllPoints(button.icon)
-				button.cooldown:SetReverse()
-				button.mode = "ICON"
-				button.statusbar:Hide()
-				button.statusbar = nil
-				button.time:Hide()
-				button.time = nil
-				button.name:Hide()
-				button.name = nil
-				button:SetScript("OnUpdate", nil)
-			end
-		end		
-		button:SetSize(self.size, self.size)
-		self.parent:SetSize(self.size, self.size)
-		if button.mode == "BAR" then
-			button.statusbar:SetWidth(self.barwidth)
-			button.statusbar:ClearAllPoints()
-			if ( self.iconside == "RIGHT" ) then
-				button.statusbar:SetPoint("BOTTOMRIGHT", button, "BOTTOMLEFT", -5, 2)
-			else
-				button.statusbar:SetPoint("BOTTOMLEFT", button, "BOTTOMRIGHT", 5, 2)
-			end
-		end
-		self:SetPosition(i)
-		button.mode = self.mode
 	end
 end
 
@@ -460,9 +379,9 @@ function watcherPrototype:TestMode(arg)
 		end
 		self.moverFrame:Show()
 	else
-		self:RegisterEvent("UNIT_AURA")
-		self:RegisterEvent("PLAYER_TARGET_CHANGED")
-		self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
+		self:RegisterEvent("UNIT_AURA", "OnEvent")
+		self:RegisterEvent("PLAYER_TARGET_CHANGED", "OnEvent")
+		self:RegisterEvent("SPELL_UPDATE_COOLDOWN", "OnEvent")
 		for _, v in pairs(ns.modules) do
 			v:Update()
 		end
@@ -470,26 +389,27 @@ function watcherPrototype:TestMode(arg)
 	end
 end
 
-function watcherPrototype:UNIT_AURA()
-	self:Update()
-end
-
-function watcherPrototype:PLAYER_TARGET_CHANGED()
-	self:Update()
-end
-
-function watcherPrototype:SPELL_UPDATE_COOLDOWN()
-	self:Update()
-end
-
-function watcherPrototype:PLAYER_ENTERING_WORLD()
-	if not self.parent:GetPoint() then
-		self.parent:SetPoint(unpack(self.setpoint))
+function watcherPrototype:OnEvent(event, unit)
+	if event == "PLAYER_ENTERING_WORLD" then
+		if not self.parent:GetPoint() then
+			self.parent:SetPoint(unpack(self.setpoint))
+		end
+		local _, parent = self.parent:GetPoint()
+		if parent then self.parent:SetParent(parent) end
+		self:Update()
+		if self.disabled then self:Disable() end
+		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	end
-	local _, parent = self.parent:GetPoint()
-	if parent then self.parent:SetParent(parent) end
-	self:Update()
-	if self.disabled then self:Disable() end
+	local needUpdate
+	if self.BUFF and unit and self.BUFF.unitIDs[unit] then
+		needUpdate = true
+	end
+	if self.DEBUFF and unit and self.DEBUFF.unitIDs[unit] then
+		needUpdate = true
+	end
+	if needUpdate or not unit then
+		self:Update()
+	end
 end
 
 function RayUIWatcher:OnInitialize()
@@ -537,6 +457,12 @@ function RayUIWatcher:OnInitialize()
 				for id, value in pairs(options.itemCD or {}) do
 					ns.modules[group]["itemCD"] = ns.modules[group]["itemCD"] or {}
 					ns.modules[group]["itemCD"][id] = value
+				end
+			end
+			if type(options.slotCD) == "table" then
+				for id, value in pairs(options.slotCD or {}) do
+					ns.modules[group]["slotCD"] = ns.modules[group]["slotCD"] or {}
+					ns.modules[group]["slotCD"][id] = value
 				end
 			end
 		end
@@ -601,14 +527,19 @@ function RayUIWatcher:NewWatcher(data)
 	module.button = {}	
 	
 	for i,v in pairs(data) do
+		if type(v) == "function" then
+			v = v()
+		end
 		if type(v) ~= "table" or (type(v) == "table" and type(i) ~= "number") then
 			module[i:lower()] = v
 		elseif type(v) == 'table' then
-			if (v.spellID or v.itemID) and v.filter then
+			if (v.spellID or v.itemID or v.slotID) and v.filter then
+				if v.filter == "CD" and v.slotID then v.filter = "slotCD" end
+                if v.filter == "CD" and v.itemID then v.filter = "itemCD" end
 				module[v.filter] = module[v.filter] or {}
-				module[v.filter][v.spellID or v.itemID] = module[v.filter][v.spellID or v.itemID] or {}
+				module[v.filter][v.spellID or v.itemID or v.slotID] = module[v.filter][v.spellID or v.itemID or v.slotID] or {}
 				for ii,vv in pairs(v) do
-					if ii ~= 'filter' and ii ~= 'spellID' and ii ~= 'itemID' and v.filter ~= "CD" and v.filter ~= "itemCD" then
+					if ii ~= 'filter' and ii ~= 'spellID' and ii ~= 'itemID' and ii ~= "slotID" and v.filter ~= "CD" and v.filter ~= "itemCD" and v.filter ~= "slotCD" then
 						ii = ii == 'unitId' and 'unitID' or ii
 						module[v.filter][v.spellID or v.itemID][ii] = vv
 					end
@@ -656,13 +587,16 @@ function RayUIWatcher:NewWatcher(data)
 	mover:Hide()
 	
 	if module.BUFF or module.DEBUFF then
-		module:RegisterEvent("UNIT_AURA")
-		module:RegisterEvent("PLAYER_TARGET_CHANGED")
+		module:RegisterEvent("UNIT_AURA", "OnEvent")
+		module:RegisterEvent("PLAYER_TARGET_CHANGED", "OnEvent")
+		module:RegisterEvent("PLAYER_FOCUS_CHANGED", "OnEvent")
 	end
 	if module.CD or module.itemCD then
-		module:RegisterEvent("SPELL_UPDATE_COOLDOWN")
+		module:RegisterEvent("SPELL_UPDATE_COOLDOWN", "OnEvent")
+		module:RegisterEvent("SPELL_UPDATE_USABLE", "OnEvent")
+		--module:RegisterEvent("BAG_UPDATE_COOLDOWN", "OnEvent")
 	end
-	module:RegisterEvent("PLAYER_ENTERING_WORLD")
+	module:RegisterEvent("PLAYER_ENTERING_WORLD", "OnEvent")
 	ns.modules[module.name] = module
 end
 

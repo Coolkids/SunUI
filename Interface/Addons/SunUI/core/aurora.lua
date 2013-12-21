@@ -68,16 +68,17 @@ S.CreateSD = function(parent, size, r, g, b, alpha, offset)
 	sd.shadow:SetBackdropBorderColor(r or 0, g or 0, b or 0)
 	sd.border:SetBackdropBorderColor(r or 0, g or 0, b or 0)
 	sd:SetAlpha(alpha or 1)
-	parent.sd = sd
+	parent.sd  = true
 end
 
 S.CreateGradient = function(f)
+	if f.sg then return end
 	local tex = f:CreateTexture(nil, "BORDER")
 	tex:SetPoint("TOPLEFT", 1, -1)
 	tex:SetPoint("BOTTOMRIGHT", -1, 1)
 	tex:SetTexture(media.backdrop)
 	tex:SetGradientAlpha(gradOr, startR, startG, startB, startAlpha, endR, endG, endB, endAlpha)
-
+	f.sg = true
 	return tex
 end
 

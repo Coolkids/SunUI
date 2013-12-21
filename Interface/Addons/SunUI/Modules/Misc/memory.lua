@@ -2,7 +2,7 @@ local eventcount = 0
 local a = CreateFrame("Frame") 
 a:RegisterAllEvents() 
 a:SetScript("OnEvent", function(self, event, ...) 
-	--if strfind(event, "CAST") then
+	--if strfind(event, "BAG_UPDATE_COOLDOWN") then
 		--print(event)
 	--end
 	if InCombatLockdown() then return end
