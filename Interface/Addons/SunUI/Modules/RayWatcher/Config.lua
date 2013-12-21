@@ -447,6 +447,9 @@ ns.watchers ={
 				{ spellID = 99132, unitId = "player", caster = "player", filter = "BUFF" },
 				-- 自己的盾
 				{ spellID = 6788, unitId = "player", caster = "player", filter = "DEBUFF" },
+				--盾
+				{ spellID = 17, unitId = "player", caster = "all", filter = "BUFF" },
+				
 		},
 		{
 			name = "目标框體上方",

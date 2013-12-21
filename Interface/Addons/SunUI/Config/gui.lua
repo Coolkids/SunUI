@@ -2113,7 +2113,7 @@ function SunUIConfig.GenerateOptionsInternal()
 			Other = {
 				order = 98,
 				type = "group",
-				name = "Raid and Filger",
+				name = "团队框与技能监视",
 				args = {
 					UnlockRiad = {
 						type = "execute",

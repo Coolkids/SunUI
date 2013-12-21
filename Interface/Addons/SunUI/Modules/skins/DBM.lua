@@ -310,30 +310,34 @@ function Module:OnEnable()
 	hooksecurefunc(DBM.BossHealth,"Show",SkinBossTitle)
 	hooksecurefunc(DBM.BossHealth,"AddBoss",SkinBoss)
 	hooksecurefunc(DBM.BossHealth,"UpdateSettings",SkinBoss)
+	
 	DBM.RangeCheck:Show()
 	DBM.RangeCheck:Hide()
-	DBMRangeCheck:HookScript("OnShow",function(self)
-		if not self.styled then
-			self:SetBackdrop(nil)
-			--print("call DBMRangeCheck OnShow styled")
-			S.SetBD(self)
-			--self:CreateShadow("Background")
-		end
-	end)
-	
-	DBMRangeCheckRadar:HookScript("OnShow",function(self)
-		if not self.styled then
-			--print("call DBMRangeCheckRadar OnShow styled")
-			S.SetBD(self)
-			--self:CreateShadow("Background")
-			self.text:SetFont(DB.Font, 13*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
-			DBMRangeCheckRadar.text:SetPoint("BOTTOMLEFT", DBMRangeCheckRadar, "TOPLEFT", 0, 5)
-			DBMRangeCheckRadar:SetBackdropBorderColor(65/255, 74/255, 79/255)
-			self.text:SetShadowColor(0, 0, 0)
-			self.text:SetShadowOffset(1, -1)
-			self.styled = true
-		end
-	end)
+	if DBMRangeCheck then
+		DBMRangeCheck:HookScript("OnShow",function(self)
+			if not self.styled then
+				self:SetBackdrop(nil)
+				--print("call DBMRangeCheck OnShow styled")
+				S.SetBD(self)
+				--self:CreateShadow("Background")
+			end
+		end)
+	end
+	if DBMRangeCheckRadar then
+		DBMRangeCheckRadar:HookScript("OnShow",function(self)
+			if not self.styled then
+				--print("call DBMRangeCheckRadar OnShow styled")
+				S.SetBD(self)
+				--self:CreateShadow("Background")
+				self.text:SetFont(DB.Font, 13*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
+				DBMRangeCheckRadar.text:SetPoint("BOTTOMLEFT", DBMRangeCheckRadar, "TOPLEFT", 0, 5)
+				DBMRangeCheckRadar:SetBackdropBorderColor(65/255, 74/255, 79/255)
+				self.text:SetShadowColor(0, 0, 0)
+				self.text:SetShadowOffset(1, -1)
+				self.styled = true
+			end
+		end)
+	end
 	
 	if DBM.InfoFrame then
 		DBM.InfoFrame:Show(5, "test")

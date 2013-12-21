@@ -11,7 +11,11 @@ local media = {
 AceGUI.RegisterAsWidget = function(self, widget)
 	local TYPE = widget.type
 	--print(TYPE)
-	if TYPE == "CheckBox" then
+	if TYPE == "MultiLineEditBox" then
+		local frame = widget.frame
+		S.Reskin(widget.button)
+		S.ReskinScroll(widget.scrollBar)
+	elseif TYPE == "CheckBox" then
 		widget.checkbg:Kill()
 		widget.highlight:Kill()
 		widget.frame:SetHighlightTexture(media.backdrop)
@@ -179,6 +183,13 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		local frame = widget.frame
 		local colorSwatch = widget.colorSwatch
 	]]
+	elseif TYPE == "Heading" then
+		widget.left:SetHeight(1)
+		widget.left:SetTexture(.4, .4, .4)
+		widget.left:SetGradientAlpha("HORIZONTAL", .8, .8, .8, 0, .8, .8, .8, 1)
+		widget.right:SetHeight(1)
+		widget.right:SetTexture(.4, .4, .4)
+		widget.right:SetGradientAlpha("HORIZONTAL", .8, .8, .8, 1, .8, .8, .8, 0)
 	end
 	return oldRegisterAsWidget(self, widget)
 end
