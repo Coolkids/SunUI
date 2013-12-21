@@ -14,14 +14,16 @@ local function SkinDBMBar(self)
 			local timer = _G[frame:GetName().."BarTimer"]
 			if icon1 then
 				icon1:ClearAllPoints()
-				icon1:SetSize(16, 16)
+				--icon1:SetSize(icon1:GetWidth()-5, icon1:GetWidth()-5)
+				icon1.SetSize = DB.dummy
 				icon1:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 				icon1:SetPoint("BOTTOMRIGHT", frame, "BOTTOMLEFT", -8, -1)
 			end
 
 			if icon2 then
 				icon2:ClearAllPoints()
-				icon2:SetSize(16, 16)
+				icon2.SetSize = DB.dummy
+				--icon2:SetSize(icon2:GetWidth()-5, icon2:GetWidth()-5)
 				icon2:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 				icon2:SetPoint("BOTTOMLEFT", frame, "BOTTOMRIGHT", 8, -1)
 				icon2.SetSize = DB.dummy
@@ -30,7 +32,7 @@ local function SkinDBMBar(self)
 			if not frame.styled then
 				frame:SetScale(1)
 				frame.SetScale=DB.dummy
-				frame:SetHeight(8)
+				frame:SetHeight(icon1:GetHeight()/2-4)
 				frame.SetHeight = DB.dummy
 				frame.styled = true
 			end
@@ -38,6 +40,7 @@ local function SkinDBMBar(self)
 			--if bar.enlarged then tbar:SetHeight(icon1:GetHeight()/2) else tbar:SetHeight(icon1:GetHeight()/2) end
 			if not tbar.styled then
 				tbar:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
+				tbar:SetHeight(icon1:GetHeight()/2-4)
 				S.CreateTop(tbar:GetStatusBarTexture(), DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
 				tbar.SetStatusBarTexture = function() end
 				tbar.SetStatusBarColor = function() 
@@ -180,7 +183,7 @@ local UploadDBM = function()
 	DBT_SavedOptions["DBM"].Texture = DB.Statusbar
 	DBT_SavedOptions["DBM"].ExpandUpwards = false
 	DBT_SavedOptions["DBM"].BarXOffset = 0
-	DBT_SavedOptions["DBM"].BarYOffset = 12
+	DBT_SavedOptions["DBM"].BarYOffset = 18
 	DBT_SavedOptions["DBM"].IconLeft = true
 	DBT_SavedOptions["DBM"].IconRight = false	
 	DBT_SavedOptions["DBM"].Flash = false
@@ -196,6 +199,7 @@ local UploadDBM = function()
 	DBT_SavedOptions["DBM"].EndColorG = DB.MyClassColor.g
 	DBT_SavedOptions["DBM"].EndColorB = DB.MyClassColor.b
 	DBT_SavedOptions["DBM"].Width = 130
+	DBT_SavedOptions["DBM"].Height = 20
 	DBT_SavedOptions["DBM"].HugeWidth = 155
 	DBT_SavedOptions["DBM"].HugeTimerPoint = "TOP"
 	DBT_SavedOptions["DBM"].HugeTimerX = -150
