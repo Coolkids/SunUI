@@ -83,7 +83,13 @@ ns.auras_debuffs = {
 		--[6788] = 9, --test
 	},
 	second = {
-	
+		[953] = { 
+			--Siege of Orgrimmar 
+			--Malkorok 
+			[142863] = 11, 
+			[142864] = 11, 
+			[142865] = 11, 
+		}, 
 	},	
 }
 

@@ -113,9 +113,9 @@ end
 
 --tooltips
 local function OnEnter(self)
-	itemName = GetItemInfo(self.id)
+	local itemName = GetItemInfo(self.id) or "未知ID"..id
 	GameTooltip:SetOwner(self)
-	GameTooltip:SetText(itemName..": "..GetItemCount(self.id))
+	GameTooltip:SetText(itemName..": "..GetItemCount(self.id) or 0)
 	GameTooltip:Show()
 end
 local function OnEnterMain(self)

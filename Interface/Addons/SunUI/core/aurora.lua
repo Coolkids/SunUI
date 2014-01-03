@@ -390,9 +390,15 @@ S.ReskinCheck = function(f)
 	tex:SetTexture(media.backdrop)
 	tex:SetGradientAlpha(gradOr, startR, startG, startB, startAlpha, endR, endG, endB, endAlpha)
 
-	local ch = f:GetCheckedTexture()
-	ch:SetDesaturated(true)
-	ch:SetVertexColor(r, g, b)
+	f:SetCheckedTexture(media.backdrop)
+	local ck = f:GetCheckedTexture()
+	ck:SetDesaturated(true)
+	ck:SetVertexColor(r, g, b)
+	ck:SetPoint("TOPLEFT", 5, -5)
+	ck:SetPoint("BOTTOMRIGHT", -5, 5)
+	--local ch = f:GetCheckedTexture()
+	--ch:SetDesaturated(true)
+	--ch:SetVertexColor(r, g, b)
 end
 
 local function colourRadio(f)

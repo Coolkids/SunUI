@@ -1,5 +1,4 @@
 ﻿local S, L, DB, _, C = unpack(select(2, ...))
-local _
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI then return end
 local oldRegisterAsWidget = AceGUI.RegisterAsWidget
@@ -22,7 +21,7 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		local hl = widget.frame:GetHighlightTexture()
 		hl:SetPoint("TOPLEFT", widget.checkbg, 5, -5)
 		hl:SetPoint("BOTTOMRIGHT", widget.checkbg, -5, 5)
-		hl:SetVertexColor(r, g, b, .2)
+		hl:SetVertexColor(r, g, b, .8)
 
 		if not widget.skinnedCheckBG then
 			widget.skinnedCheckBG = CreateFrame('Frame', nil, widget.frame)
@@ -37,8 +36,15 @@ AceGUI.RegisterAsWidget = function(self, widget)
 		else
 			widget.check:SetParent(widget.skinnedCheckBG)
 		end
+		--widget.check:SetTexture("")
+		widget.check:SetTexture(media.backdrop)
+		widget.check.SetTexture = function() end
+		widget.check:SetPoint("TOPLEFT", widget.checkbg, 5, -5)
+		widget.check:SetPoint("BOTTOMRIGHT", widget.checkbg, -5, 5)
+		--print(widget.check:GetTexture())
 		widget.check:SetDesaturated(true)
 		widget.check:SetVertexColor(r, g, b)
+		
 	elseif TYPE == "Dropdown" then
 		local frame = widget.dropdown
 		local button = widget.button
