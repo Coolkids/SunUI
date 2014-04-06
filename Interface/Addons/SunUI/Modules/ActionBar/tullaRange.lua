@@ -1,4 +1,4 @@
---[[
+﻿--[[
 	tullaRange
 		Adds out of range coloring to action buttons
 		Derived from RedRange with negligable improvements to CPU usage

@@ -1,4 +1,4 @@
-﻿local S, L, DB, _, C = unpack(select(2, ...))
+﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local DECIMAL_PLACES = 1
 
 -- additional strings. if you don't like it just assign 'nil'. but do not delete these variables themselves.

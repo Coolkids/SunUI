@@ -1,5 +1,4 @@
-﻿local S, L, DB, _, C = unpack(select(2, ...))
-local _
+﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 -- a command to show frame you currently have mouseovered
 SLASH_FRAME1 = "/frame"
 SlashCmdList["FRAME"] = function(arg)
@@ -93,12 +92,14 @@ wfg = CreateFrame("Frame")
 wfg:SetPoint("TOPLEFT", wf, "TOPLEFT")
 wfg:SetPoint("BOTTOMRIGHT", wf, "BOTTOMRIGHT")
 wfg.text = wfg:CreateFontString(nil, "OVERLAY")
-wfg.text:SetFont(DB.Font, 16, "THINOUTLINE")
-wfg.text:SetText("点我拖动")
-wfg.text:SetPoint("TOP", wfg, "TOP")
-wfg:CreateShadow("Background")
 wfg:Hide()
 local function WATCHFRAMELOCK()
+	if not wfg.shadow then
+		wfg:CreateShadow("Background") 
+		wfg.text:SetFont(S["media"].font, 14, "THINOUTLINE")
+		wfg.text:SetText("点我拖动")
+		wfg.text:SetPoint("TOP", wfg, "TOP")
+	end
 	if wfmove == false then
 		wfmove = true
 		wfg:Show()
@@ -132,12 +133,14 @@ vsg = CreateFrame("Frame")
 vsg:SetPoint("TOPLEFT", vs, "TOPLEFT")
 vsg:SetPoint("BOTTOMRIGHT", vs, "BOTTOMRIGHT")
 vsg.text = vsg:CreateFontString(nil, "OVERLAY")
-vsg.text:SetFont(DB.Font, 16, "THINOUTLINE")
-vsg.text:SetText("点我拖动")
-vsg.text:SetPoint("TOP", vsg, "TOP")
-vsg:CreateShadow("Background")
 vsg:Hide()
 local function VSLOCK()
+	if not vsg.shadow then
+		vsg.text:SetFont(S["media"].font, 14, "THINOUTLINE")
+		vsg.text:SetText("点我拖动")
+		vsg.text:SetPoint("TOP", vsg, "TOP")
+		vsg:CreateShadow("Background")
+	end
 	if vsmove == false then
 		vsmove = true
 		vsg:Show()
@@ -179,10 +182,12 @@ StaticPopupDialogs["CLEARSET"] = {
 	button1 = ACCEPT,
 	button2 = CANCEL,
 	OnAccept = function() 
-		wipe(SunUIConfig)
-		CoreVersion = 0
+		wipe(SunUIData)
 		wipe(nioTillerDBC)
 		wipe(RayWatcherDB)
+		wipe(SunUICharacterData)
+		wipe(stAddonProfiles)
+		wipe(stLockedAddons)
 		ReloadUI()
 	end,
 	timeout = 0,
@@ -197,7 +202,7 @@ SLASH_CLEARSUNUI1 = "/clearset"
 
 SlashCmdList["CLEARGOLD"] = function()
 	if not UnitAffectingCombat("player") then
-		wipe(SunUIConfig.gold)
+		wipe(SunUIData.gold)
 	end
 end
 SLASH_CLEARGOLD1 = "/cleargold"
@@ -259,13 +264,3 @@ SlashCmdList["PARTYTORAID"] = function()
 	end
 end
 SLASH_PARTYTORAID1 = '/ptr'
-
-SlashCmdList["CPUTEST"] = function()
-	for k, v in pairs(S) do
-		if type(v) == "function" then
-			local t, n = GetFunctionCPUUsage(v, true)
-			print("function: S."..k.."  占用CPU:"..format("%.2f", t).."  次数:"..n)
-		end
-	end
-end
-SLASH_CPUTEST1 = '/cputest'

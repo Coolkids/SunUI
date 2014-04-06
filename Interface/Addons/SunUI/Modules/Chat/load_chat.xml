@@ -1,0 +1,14 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Include file="buttons\load_buttons.xml"/>
+	
+	<Script file="chat.lua"/>
+	
+	<Script file="chatbar.lua"/>
+	<Script file="TabChannel.lua"/>
+	<Script file="ChatFilter.lua"/>
+	<!--
+	<Script file="damagemeters.lua"/>
+	
+	<Script file="urlcopy.lua"/>
+	-->
+</Ui>

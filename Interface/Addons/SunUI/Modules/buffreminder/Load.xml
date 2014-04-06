@@ -1,4 +1,6 @@
-﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">	
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file = "init.lua"/>
+	<Script file = "data.lua"/>
 	<Script file = "buffreminder.lua"/>
 	<Script file = "Raidbuffreminder.lua"/>
 </Ui>

@@ -1,15 +1,15 @@
-﻿-- Engines
-local S, L, DB, _, C = unpack(select(2, ...))
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("MiniMap", "AceTimer-3.0")
-local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
+﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+
+local MAP = S:NewModule("MAP", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
+MAP.modName = L["地图美化"]
 local function SkinMiniMap()
 	Minimap:SetMaskTexture("Interface\\ChatFrame\\ChatFrameBackground")
 	Minimap:SetFrameStrata("MEDIUM")
 	Minimap:ClearAllPoints()
 	Minimap:SetSize(120, 120)
-	
-	MoveHandle.Minimap = S.MakeMoveHandle(Minimap, L["小地图"], "Minimap")
 	Minimap:CreateShadow()
+	Minimap:SetPoint("TOPLEFT", "UIParent", "TOPLEFT", 5, -15)
+	S:CreateMover(Minimap, "MinimapMover", L["小地图"], true, nil, "ALL,GENERAL")
 end
 local function CreateFlash()
 	local PMinimap = CreateFrame("Frame", nil, Minimap)
@@ -20,7 +20,7 @@ local function CreateFlash()
 	PMinimap.texture = PMinimap:CreateTexture(nil)
 	PMinimap.texture:SetAllPoints(PMinimap)
 	PMinimap.texture:SetTexture("World\\GENERIC\\ACTIVEDOODADS\\INSTANCEPORTAL\\GENERICGLOW2.BLP")
-	PMinimap.texture:SetVertexColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
+	PMinimap.texture:SetVertexColor(S.myclasscolor.r, S.myclasscolor.g, S.myclasscolor.b)
 	PMinimap.texture:SetBlendMode("ADD")
 	
 	PMinimap.texture.anim = PMinimap.texture:CreateAnimationGroup()
@@ -162,11 +162,11 @@ local function LocationInfo()
 	local SubLoc = CreateFrame("Frame", "Sub Location", Minimap)
 	local SubText = SubLoc:CreateFontString(nil)
 	local SubText2 = SubLoc:CreateFontString(nil)
-	SubText:SetFont(DB.Font, 14*SunUIConfig.db.profile.MiniDB.FontScale, "OUTLINE")
+	SubText:FontTemplate(nil, 14)
 	SubText:SetPoint("TOP", Minimap, "TOP", 0, -5)
 	SubLoc:SetAllPoints(SubText)
 	SubText2:SetPoint("TOP", SubLoc, "BOTTOM", 0,-3)
-	SubText2:SetFont(DB.Font, 12*SunUIConfig.db.profile.MiniDB.FontScale, "OUTLINE")
+	SubText2:FontTemplate()
 	SubLoc:Hide()
 	SubText2:SetText("")
 	SubText:SetText("")
@@ -187,7 +187,7 @@ local function LocationInfo()
 		SubText:SetTextColor(r,g,b) 
 	end)
 	Minimap:HookScript('OnLeave', function() 
-		S.FadeOutFrameDamage(SubLoc)
+		S:FadeOutFrame(SubLoc)
 	end)
 end	
 local function Difficultyflag()
@@ -200,7 +200,8 @@ local function Difficultyflag()
 	rd:RegisterEvent("PLAYER_DIFFICULTY_CHANGED")
 	rd:RegisterEvent("GUILD_PARTY_STATE_UPDATED")
 	rd:RegisterEvent("UPDATE_INSTANCE_INFO")
-	local rdt = S.MakeFontString(rd)
+	local rdt = rd:CreateFontString(nil, "OVERLAY")
+	rdt:FontTemplate(nil, 14)
 	rdt:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", -5, -5)
 	rdt:SetJustifyH('RIGHT')
 	rdt:SetTextColor()
@@ -241,12 +242,68 @@ local function Difficultyflag()
 	end
 	rd:SetScript("OnEvent", diff)
 end
-function Module:OnEnable()
+
+--团队工具
+function MAP:CreateRaidTools()
+	local wm = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
+	wm:SetParent(UIParent) 
+	wm:SetFrameLevel(3)
+	wm:ClearAllPoints() 
+	wm:SetPoint("TOPRIGHT", MiniMap, "TOPRIGHT", -5, -5)
+	wm:SetSize(15, 15)
+	
+	CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButtonLeft:SetAlpha(0) 
+	CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButtonMiddle:SetAlpha(0) 
+	CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButtonRight:SetAlpha(0) 
+	wm:RegisterEvent("PLAYER_ENTERING_WORLD") 
+	wm:RegisterEvent("GROUP_ROSTER_UPDATE") 
+	wm:HookScript("OnEvent", function(self) 
+		local raid =  IsInRaid()
+		if (raid and (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player"))) or (GetNumSubgroupMembers() > 0 and not raid) then 
+			self:Show()
+		else 
+			self:Hide() 
+		end 
+	end) 
+
+	local wmmenuFrame = CreateFrame("Frame", "wmRightClickMenu", UIParent, "UIDropDownMenuTemplate") 
+	local wmmenuList = { 
+	{text = READY_CHECK, 
+	func = function() DoReadyCheck() end}, 
+	{text = ROLE_POLL, 
+	func = function() InitiateRolePoll() end}, 
+	{text = CONVERT_TO_RAID, 
+	func = function() ConvertToRaid() end}, 
+	{text = CONVERT_TO_PARTY, 
+	func = function() ConvertToParty() end}, 
+	} 
+
+	wm:SetScript('OnMouseUp', function(self, button) 
+		wm:StopMovingOrSizing() 
+		if (button=="RightButton") then 
+			EasyMenu(wmmenuList, wmmenuFrame, "cursor", -150, 0, "MENU", 2) 
+		end 
+	end)
+	local A = S:GetModule("Skins")
+	A:Reskin(wm)
+end 
+
+function MAP:Info()
+	return L["地图美化"]
+end
+
+function MAP:Initialize()
 	SkinMiniMap()
 	CreateFlash()
 	HideMinimapButton()
 	MouseScroll()
 	RightClickMenu()
-	LocationInfo()
+	--LocationInfo()
 	Difficultyflag()
+	self:CreateRaidTools()
+	self:initFogClear()
+	self:initXPBar()
+	self:initCollector()
 end
+
+S:RegisterModule(MAP:GetName())

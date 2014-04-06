@@ -1,0 +1,7 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file ="init.lua"/>
+	<Script file ="ClassTools.lua"/>
+	<Script file ="petime.lua"/>
+	<Script file ="Ignite.lua"/>
+	<Script file ="spiritshell.lua"/>
+</Ui>

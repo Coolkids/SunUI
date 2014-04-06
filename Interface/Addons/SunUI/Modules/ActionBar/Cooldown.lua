@@ -1,41 +1,29 @@
-local S, L, DB, _, C = unpack(select(2, ...))
-local font = "Interface\\Addons\\SunUI\\Media\\font.ttf"
--- want hex color instead of RGB?
---constants!
---OmniCC = true --hack to work around detection from other addons for OmniCC
-local ICON_SIZE = 36 --the normal size for an icon (don't change this)
+ï»¿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB
+local AB = S:GetModule("ActionBar")
+
 local DAY, HOUR, MINUTE = 86400, 3600, 60 --used for formatting text
 local DAYISH, HOURISH, MINUTEISH = 3600 * 23.5, 60 * 59.5, 59.5 --used for formatting text at transition points
 local HALFDAYISH, HALFHOURISH, HALFMINUTEISH = DAY/2 + 0.5, HOUR/2 + 0.5, MINUTE/2 + 0.5 --used for calculating next update times
+local FONT_SIZE = 20 --the base font size to use at a scale of 1
+local MIN_SCALE = 0.5 --the minimum scale we want to show cooldown counts at, anything below this will be hidden
+local MIN_DURATION = 2.5 --the minimum duration to show cooldown text for
+local EXPIRING_DURATION = 3 --the minimum number of seconds a cooldown must be to use to display in the expiring format
+local EXPIRING_FORMAT = S:RGBToHex(1,0,0)..'%.1f|r' --format for timers that are soon to expire
+local SECONDS_FORMAT = S:RGBToHex(1,1,0)..'%d|r' --format for timers that have seconds remaining
+local MINUTES_FORMAT = S:RGBToHex(1,1,1)..'%dm|r' --format for timers that have minutes remaining
+local HOURS_FORMAT = S:RGBToHex(0.4,1,1)..'%dh|r' --format for timers that have hours remaining
+local DAYS_FORMAT = S:RGBToHex(0.4,0.4,1)..'%dh|r' --format for timers that have days remaining
 
---configuration settings
-local FONT_FACE = font --what font to use
-local FONT_SIZE = 21 --the base font size to use at a scale of 1
-local MIN_SCALE = 0.3 --the minimum scale we want to show cooldown counts at, anything below this will be hidden
-local MIN_DURATION = 1.8 --the minimum duration to show cooldown text for
-local EXPIRING_DURATION = 2 --the minimum number of seconds a cooldown must be to use to display in the expiring format
-
-local EXPIRING_FORMAT = S.RGBToHex(1, 0, 0)..'%.1f|r' --format for timers that are soon to expire
-local SECONDS_FORMAT = S.RGBToHex(1, 1, 0)..'%d|r' --format for timers that have seconds remaining
-local MINUTES_FORMAT = S.RGBToHex(.6,.8,1)..'%dm|r' --format for timers that have minutes remaining
-local HOURS_FORMAT = S.RGBToHex(0.4, 1, 1)..'%dh|r' --format for timers that have hours remaining
-local DAYS_FORMAT = S.RGBToHex(0.4, 0.4, 1)..'%dh|r' --format for timers that have days remaining
-
---local bindings!
 local floor = math.floor
 local min = math.min
 local GetTime = GetTime
--- remove decimal from a number
 
-local function Round(number, decimals)
-	if not decimals then decimals = 0 end
-    return (("%%.%df"):format(decimals)):format(number)
-end
---returns both what text to display, and how long until the next update
-local function getTimeText(s)
+local cooldown = getmetatable(ActionButton1Cooldown).__index
+
+function AB:GetTimeText(s)
 	--format text as seconds when below a minute
 	if s < MINUTEISH then
-		local seconds = tonumber(Round(s))
+		local seconds = tonumber(S:Round(s))
 		if seconds > EXPIRING_DURATION then
 			return SECONDS_FORMAT, seconds, s - (seconds - 0.51)
 		else
@@ -43,106 +31,97 @@ local function getTimeText(s)
 		end
 	--format text as minutes when below an hour
 	elseif s < HOURISH then
-		local minutes = tonumber(Round(s/MINUTE))
+		local minutes = tonumber(S:Round(s/MINUTE))
 		return MINUTES_FORMAT, minutes, minutes > 1 and (s - (minutes*MINUTE - HALFMINUTEISH)) or (s - MINUTEISH)
 	--format text as hours when below a day
 	elseif s < DAYISH then
-		local hours = tonumber(Round(s/HOUR))
+		local hours = tonumber(S:Round(s/HOUR))
 		return HOURS_FORMAT, hours, hours > 1 and (s - (hours*HOUR - HALFHOURISH)) or (s - HOURISH)
 	--format text as days
 	else
-		local days = tonumber(Round(s/DAY))
+		local days = tonumber(S:Round(s/DAY))
 		return DAYS_FORMAT, days,  days > 1 and (s - (days*DAY - HALFDAYISH)) or (s - DAYISH)
 	end
 end
 
---stops the timer
-local function Timer_Stop(self)
-	self.enabled = nil
-	self:Hide()
+function AB:Cooldown_StopTimer(cd)
+	cd.enabled = nil
+	cd:Hide()
 end
 
---forces the given timer to update on the next frame
-local function Timer_ForceUpdate(self)
-	self.nextUpdate = 0
-	self:Show()
+function AB:Timer_ForceUpdate(cd)
+	cd.nextUpdate = 0
+	cd:Show()
 end
 
---adjust font size whenever the timer's parent size changes
---hide if it gets too tiny
-local function Timer_OnSizeChanged(self, width, height)
-	local fontScale = Round(width) / ICON_SIZE
-	if fontScale == self.fontScale then
+function AB:Cooldown_OnSizeChanged(cd, width, height)
+	local fontScale = S:Round(width) / 36
+	if fontScale == cd.fontScale then
 		return
 	end
 
-	self.fontScale = fontScale
+	cd.fontScale = fontScale
 	if fontScale < MIN_SCALE then
-		self:Hide()
+		cd:Hide()
 	else
-		self.text:SetFont(FONT_FACE, fontScale * FONT_SIZE, 'THINOUTLINE')
-		self.text:SetShadowColor(0, 0, 0, 0.5)
-		self.text:SetShadowOffset(1, -1)
-		if self.enabled then
-			Timer_ForceUpdate(self)
+		cd.text:SetFont(S["media"].cdfont, fontScale * FONT_SIZE, 'OUTLINE')
+		cd.text:SetShadowColor(0, 0, 0, 0.5)
+		cd.text:SetShadowOffset(2, -2)
+		if cd.enabled then
+			self:Timer_ForceUpdate(cd)
 		end
 	end
 end
 
---update timer text, if it needs to be
---hide the timer if done
-local function Timer_OnUpdate(self, elapsed)
-	if self.nextUpdate > 0 then
-		self.nextUpdate = self.nextUpdate - elapsed
-	else
-		local remain = self.duration - (GetTime() - self.start)
-		if tonumber(Round(remain)) > 0 then
-			if (self.fontScale * self:GetEffectiveScale() / UIParent:GetScale()) < MIN_SCALE then
-				self.text:SetText('')
-				self.nextUpdate  = 1
-			else
-				local formatStr, time, nextUpdate = getTimeText(remain)
-				self.text:SetFormattedText(formatStr, time)
-				self.nextUpdate = nextUpdate
-			end
+local function Cooldown_OnUpdate(cd, elapsed)
+	if cd.nextUpdate > 0 then
+		cd.nextUpdate = cd.nextUpdate - elapsed
+		return
+	end
+
+	local remain = cd.duration - (GetTime() - cd.start)
+	if remain > 0.05 then
+		if (cd.fontScale * cd:GetEffectiveScale() / UIParent:GetScale()) < MIN_SCALE then
+			cd.text:SetText("")
+			cd.nextUpdate  = 500
 		else
-			Timer_Stop(self)
+			local formatStr, time, nextUpdate = AB:GetTimeText(remain)
+			cd.text:SetFormattedText(formatStr, time)
+			cd.nextUpdate = nextUpdate
 		end
+	else
+		AB:Cooldown_StopTimer(cd)
 	end
 end
 
---returns a new timer object
-local function Timer_Create(self)
-	--a frame to watch for OnSizeChanged events
-	--needed since OnSizeChanged has funny triggering if the frame with the handler is not shown
-	local scaler = CreateFrame('Frame', nil, self)
-	scaler:SetAllPoints(self)
+function AB:CreateCooldownTimer(parent)
+	local scaler = CreateFrame("Frame", nil, parent)
+	scaler:SetAllPoints()
 
-	local timer = CreateFrame('Frame', nil, scaler); timer:Hide()
-	timer:SetAllPoints(scaler)
-	timer:SetScript('OnUpdate', Timer_OnUpdate)
+	local timer = CreateFrame("Frame", nil, scaler)
+	timer:Hide()
+	timer:SetAllPoints()
+	timer:SetScript("OnUpdate", Cooldown_OnUpdate)
 
-	local text = timer:CreateFontString(nil, 'OVERLAY')
-	text:SetPoint("CENTER", 2, 0)       --ÎÄ×ÖÎ»ÖÃ
+	local text = timer:CreateFontString(nil, "OVERLAY")
+	text:SetPoint("CENTER", 1, 1)
 	text:SetJustifyH("CENTER")
-	text:SetJustifyV("CENTER")
 	timer.text = text
 
-	Timer_OnSizeChanged(timer, scaler:GetSize())
-	scaler:SetScript('OnSizeChanged', function(self, ...) Timer_OnSizeChanged(timer, ...) end)
+	self:Cooldown_OnSizeChanged(timer, parent:GetSize())
+	parent:SetScript("OnSizeChanged", function(_, ...) self:Cooldown_OnSizeChanged(timer, ...) end)
 
-	self.timer = timer
+	parent.timer = timer
 	return timer
 end
 
---hook the SetCooldown method of all cooldown frames
---ActionButton1Cooldown is used here since its likely to always exist
---and I'd rather not create my own cooldown frame to preserve a tiny bit of memory
-local function Timer_Start(self, start, duration)
-	if self.noOCC then return end
+function AB:OnSetCooldown(cd, start, duration, charges, maxCharges)
+	if cd.noOCC then return end
+
+	local remainingCharges = charges or 0
 	--start timer
-	if start > 0 and duration > MIN_DURATION then
-		local timer = self.timer or Timer_Create(self)
+	if start > 0 and duration > MIN_DURATION and remainingCharges == 0 then
+		local timer = cd.timer or self:CreateCooldownTimer(cd)
 		timer.start = start
 		timer.duration = duration
 		timer.enabled = true
@@ -150,65 +129,116 @@ local function Timer_Start(self, start, duration)
 		if timer.fontScale >= MIN_SCALE then timer:Show() end
 	--stop timer
 	else
-		local timer = self.timer
+		local timer = cd.timer
 		if timer then
-			Timer_Stop(timer)
+			self:Cooldown_StopTimer(timer)
 		end
 	end
 end
 
-hooksecurefunc(getmetatable(ActionButton1Cooldown).__index, "SetCooldown", Timer_Start)
-
-local active = {}
-local hooked = {}
-
-local function cooldown_OnShow(self)
-	active[self] = true
-end
-
-local function cooldown_OnHide(self)
-	active[self] = nil
-end
-
-local function cooldown_ShouldUpdateTimer(self, start, duration)
-	local timer = self.timer
-	if not timer then
-		return true
+local active, hooked = {}, {}
+function AB:RegisterCooldown(frame)
+	if not hooked[frame.cooldown] then
+		frame.cooldown:HookScript("OnShow", function(cd) active[cd] = true end)
+		frame.cooldown:HookScript("OnHide", function(cd) active[cd] = nil end)
+		hooked[frame.cooldown] = true
 	end
-	return timer.start ~= start
 end
 
-local function cooldown_Update(self)
-	local button = self:GetParent()
+function AB:UpdateCooldown(cd)
+	local button = cd:GetParent()
 	local start, duration, enable = GetActionCooldown(button.action)
 
-	if cooldown_ShouldUpdateTimer(self, start, duration) then
-		Timer_Start(self, start, duration)
-	end
+	self:OnSetCooldown(cd, start, duration)
 end
 
-local EventWatcher = CreateFrame("Frame")
-EventWatcher:Hide()
-EventWatcher:SetScript("OnEvent", function(self, event)
+function AB:ACTIONBAR_UPDATE_COOLDOWN()
 	for cooldown in pairs(active) do
-		cooldown_Update(cooldown)
-	end
-end)
-EventWatcher:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN")
-
-local function actionButton_Register(frame)
-	local cooldown = frame.cooldown
-	if not hooked[cooldown] then
-		cooldown:HookScript("OnShow", cooldown_OnShow)
-		cooldown:HookScript("OnHide", cooldown_OnHide)
-		hooked[cooldown] = true
+		self:UpdateCooldown(cooldown)
+		if AB.db.cooldownalpha then
+			self:UpdateCDAlpha(cooldown:GetParent())
+		end
 	end
 end
 
-if _G["ActionBarButtonEventsFrame"].frames then
-	for i, frame in pairs(_G["ActionBarButtonEventsFrame"].frames) do
-		actionButton_Register(frame)
+local function CDStop(frame)
+	frame:SetScript("OnUpdate", nil)
+	frame:SetAlpha(1)
+	local index = frame:GetName():match("MultiCastActionButton(%d)")
+	if index then
+		_G["MultiCastSlotButton"..index]:SetAlpha(1)
 	end
 end
 
-hooksecurefunc("ActionBarButtonEventsFrame_RegisterFrame", actionButton_Register)
+local function CDUpdate(frame)
+	if frame.StopTime < GetTime() then
+		CDStop(frame)
+	else
+		frame:SetAlpha(AB.db.CooldownAlhpa)
+		local index = frame:GetName():match("MultiCastActionButton(%d)")
+		if index then
+			_G["MultiCastSlotButton"..index]:SetAlpha(AB.db.CooldownAlhpa)
+		end
+	end
+end
+
+function AB:UpdateCDAlpha(self)
+	if not AB.db.stancealpha and self:GetName():find("MultiCast") then return end
+	local start, duration, enable = GetActionCooldown(self.action)
+	if start>0 and duration > 1.5 then
+		self.StopTime = start + duration
+		self:SetScript("OnUpdate", CDUpdate)
+	else
+		CDStop(self)
+	end
+end
+
+function AB:UpdateShapeshiftCDAlpha()
+	for i=1, NUM_STANCE_SLOTS do
+		button = _G["ShapeshiftButton"..i]
+		local start, duration, enable = GetShapeshiftFormCooldown(i)
+		if start>0 and duration > 1.5 then
+			button.StopTime = start + duration
+			button:SetScript("OnUpdate", CDUpdate)
+		else
+			CDStop(button)
+		end
+	end
+end
+
+function AB:CooldownFrame_SetTimer(self, start, duration, enable, charges, maxCharges)
+	if not self.ex then
+		self.ex = CreateFrame("Cooldown", nil, self)
+		self.ex:SetAllPoints(self)
+	end
+	if start and duration then
+		self.ex:SetCooldown(start,duration,1,1)
+	end
+end
+
+function AB:CreateCooldown()
+	self:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN")
+	self:SecureHook("SetActionUIButton", "RegisterCooldown")
+	self:SecureHook("ActionBarButtonEventsFrame_RegisterFrame", "RegisterCooldown")
+
+	if ActionBarButtonEventsFrame.frames then
+		for _, frame in pairs(ActionBarButtonEventsFrame.frames) do
+			self:RegisterCooldown(frame)
+		end
+	end
+
+	if not self.hooks[cooldown] then
+		self:SecureHook(cooldown, "SetCooldown", "OnSetCooldown")
+	end
+
+	self:SecureHook("CooldownFrame_SetTimer")
+
+	if self.db.cooldownalpha then
+		self:SecureHook("ActionButton_UpdateState", "UpdateCDAlpha")
+		self:SecureHook("ActionButton_UpdateAction", "UpdateCDAlpha")
+	end
+
+	if self.db.stancealpha then
+		self:SecureHook("ActionButton_UpdateAction", "UpdateShapeshiftCDAlpha")
+	end
+end

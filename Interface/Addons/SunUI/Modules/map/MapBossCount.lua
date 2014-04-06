@@ -1,5 +1,4 @@
-﻿local S, L, DB, _, C = unpack(select(2, ...))
-local _G = _G
+﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 ----------------------------------------------------------------------------------------
 --	Show boss count in WorldMap(BetterMapPortraits by Magdain)
 ----------------------------------------------------------------------------------------

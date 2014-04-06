@@ -2,15 +2,8 @@
 Copyright (c) 2009-2012, Hendrik "Nevcairiel" Leppkes < h.leppkes@gmail.com >
 All rights reserved.
 ]]
-local S, L, DB, _, C = unpack(select(2, ...))
-local _G =_G
-if IsAddOnLoaded("Mapster") or IsAddOnLoaded("Carbonite") then
-	return
-end
-local Mapster = LibStub("AceAddon-3.0"):GetAddon("SunUI")
-local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
-local MODNAME = "FogClear"
-local FogClear = Mapster:NewModule(MODNAME, "AceHook-3.0", "AceEvent-3.0")
+local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+local FogClear = S:GetModule("MAP")
 
 local strlen, strsub = string.len, string.sub
 local mod, floor, ceil = math.fmod, math.floor, math.ceil
@@ -1397,7 +1390,7 @@ local defaults = {
 	},
 }
 
-function FogClear:OnInitialize()
+function FogClear:initDate()
 	self.db = defaults
 	db = self.db.profile
 	self.overlays = self.db.global.errata
@@ -1405,9 +1398,8 @@ end
 
 local worldMapCache = {}
 local battleMapCache = {}
-function FogClear:OnEnable()
-	C = SunUIConfig.db.profile.MiniDB
-	if C["FogClear"] == false then errata = nil return end 
+function FogClear:initFogClear()
+	self:initDate()
 	self:RawHook("GetNumMapOverlays", true)
 	self:SecureHook("WorldMapFrame_Update", "UpdateWorldMapOverlays")
 

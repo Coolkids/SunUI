@@ -1,6 +1,6 @@
-﻿local S, L, DB, _, C = unpack(select(2, ...))
-local _G = _G
-local L = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Loot", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0")
+﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+
+local LOOT = S:NewModule("Loot", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 local cfg = {
 	iconsize = 32, 					-- loot frame icon's size
 }
@@ -15,25 +15,15 @@ local L = {
 	fish = "钓鱼",
 	empty = "空",
 }
-local addon = CreateFrame("Button", "SunUI_Loot")
-
-local title = CreateFrame("Button", nil, addon)
-title.text = S.MakeFontString(addon)
-title.text:SetPoint("CENTER", title, "CENTER")
-title:SetHeight(25)
-title:SetPoint("BOTTOMLEFT", addon, "TOPLEFT", 0, 11)
-title:SetPoint("BOTTOMRIGHT", addon, "TOPRIGHT", 0, 11)
-title:CreateShadow("Background")
-LootTargetPortrait=CreateFrame("PlayerModel",nil,addon)
-LootTargetPortrait:SetPoint("TOPRIGHT",title,"TOPLEFT",-11,0)
-LootTargetPortrait:SetHeight(50)
-LootTargetPortrait:SetWidth(50)
-LootTargetPortrait:CreateShadow("Background")
+local addon,title
+addon = CreateFrame("Button", "SunUI_Loot")
+title = CreateFrame("Button", nil, addon)
+addon.slots = {}
 	
 local lb = CreateFrame("Button", "Loot_D", addon, "UIPanelScrollDownButtonTemplate")		-- Link button
 local LDD = CreateFrame("Frame", "Loot_b", addon, "UIDropDownMenuTemplate")				-- Link dropdown menu frame
-lb:SetFrameStrata("DIALOG")
-LDD:SetFrameStrata("DIALOG")
+
+
 local sq, ss, sn
 local OnEnter = function(self)
 	local slot = self:GetID()
@@ -150,11 +140,7 @@ local createSlot = function(id)
 	frame:SetScript("OnClick", OnClick)
 	frame:SetScript("OnUpdate", OnUpdate)
 	frame:SetFrameStrata("DIALOG")
-	local gradient = frame:CreateTexture(nil, "BACKGROUND")
-	gradient:SetPoint("TOPLEFT")
-	gradient:SetPoint("BOTTOMRIGHT")
-	gradient:SetTexture(DB.Statusbar)
-	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+	
 	local iconFrame = CreateFrame("Button", nil, frame)
 	iconFrame:SetHeight(cfg.iconsize)
 	iconFrame:SetWidth(cfg.iconsize)
@@ -201,55 +187,81 @@ local createSlot = function(id)
 	frame:CreateBorder()
 	return frame
 end
-title.text:SetTextColor(DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
-title.text:SetJustifyH"CENTER"
-addon:SetScript("OnMouseDown", function(self) self:StartMoving() end)
-addon:SetScript("OnMouseUp", function(self) self:StopMovingOrSizing() end)
-title:SetScript("OnMouseDown", function() addon:StartMoving() end)
-title:SetScript("OnMouseUp", function() addon:StopMovingOrSizing() end)
-addon:SetScript("OnHide", function(self)
-	StaticPopup_Hide"CONFIRM_LOOT_DISTRIBUTION"
-	CloseLoot()
-end)
-addon:SetMovable(true)
-addon:RegisterForClicks"anyup"
-title:SetMovable(true)
-title:RegisterForClicks"anyup"
-addon:SetParent(UIParent)
-addon:SetUserPlaced(true)
-title:SetUserPlaced(true)
 
-addon:SetPoint("TOPLEFT", 0, -104)
-addon:CreateShadow("Background")
-addon:SetWidth(210)
-addon:SetHeight(64)
-addon:SetBackdropColor(0, 0, 0, 1)
-addon:SetFrameStrata("DIALOG")
+function LOOT:SetFrame()
+	local A = S:GetModule("Skins")
+	title.text = addon:CreateFontString(nil, "OVERLAY")
+	title.text:FontTemplate()
+	title.text:SetPoint("CENTER", title, "CENTER")
+	title:SetHeight(25)
+	title:SetPoint("BOTTOMLEFT", addon, "TOPLEFT", 0, 11)
+	title:SetPoint("BOTTOMRIGHT", addon, "TOPRIGHT", 0, 11)
+	title:CreateShadow("Background")
+	LootTargetPortrait=CreateFrame("PlayerModel",nil,addon)
+	LootTargetPortrait:SetPoint("TOPRIGHT",title,"TOPLEFT",-11,0)
+	LootTargetPortrait:SetHeight(50)
+	LootTargetPortrait:SetWidth(50)
+	LootTargetPortrait:CreateShadow("Background")
+	lb:SetFrameStrata("DIALOG")
+	LDD:SetFrameStrata("DIALOG")
+	
+	title.text:SetTextColor(S.myclasscolor.r, S.myclasscolor.g, S.myclasscolor.b)
+	title.text:SetJustifyH"CENTER"
+	addon:SetScript("OnMouseDown", function(self) self:StartMoving() end)
+	addon:SetScript("OnMouseUp", function(self) self:StopMovingOrSizing() end)
+	title:SetScript("OnMouseDown", function() addon:StartMoving() end)
+	title:SetScript("OnMouseUp", function() addon:StopMovingOrSizing() end)
+	addon:SetScript("OnHide", function(self)
+		StaticPopup_Hide"CONFIRM_LOOT_DISTRIBUTION"
+		CloseLoot()
+	end)
+	addon:SetMovable(true)
+	addon:RegisterForClicks"anyup"
+	title:SetMovable(true)
+	title:RegisterForClicks"anyup"
+	addon:SetParent(UIParent)
+	addon:SetUserPlaced(true)
+	title:SetUserPlaced(true)
+
+	addon:SetPoint("TOPLEFT", 0, -104)
+	addon:CreateShadow("Background")
+	addon:SetWidth(210)
+	addon:SetHeight(64)
+	addon:SetBackdropColor(0, 0, 0, 1)
+	addon:SetFrameStrata("DIALOG")
 
 
-addon:SetClampedToScreen(true)
-addon:SetClampRectInsets(0, 0, 14, 0)
-addon:SetHitRectInsets(0, 0, -14, 0)
-addon:SetToplevel(true)
-title:SetToplevel(true)
-lb:ClearAllPoints()
-lb:SetWidth(20)
-lb:SetHeight(14)
-lb:SetScale(0.9)
-lb:SetPoint("TOPRIGHT", addon, "TOPRIGHT", -30, -5)
-lb:SetFrameStrata("TOOLTIP")
-lb:RegisterForClicks("RightButtonUp", "LeftButtonUp")
-lb:SetScript("OnClick", OnLinkClick)
-function L:OnInitialize()
-	S.ReskinArrow(lb, "down")
+	addon:SetClampedToScreen(true)
+	addon:SetClampRectInsets(0, 0, 14, 0)
+	addon:SetHitRectInsets(0, 0, -14, 0)
+	addon:SetToplevel(true)
+	title:SetToplevel(true)
+	lb:ClearAllPoints()
+	lb:SetWidth(20)
+	lb:SetHeight(14)
+	lb:SetScale(0.9)
+	lb:SetPoint("TOPRIGHT", addon, "TOPRIGHT", -30, -5)
+	lb:SetFrameStrata("TOOLTIP")
+	lb:RegisterForClicks("RightButtonUp", "LeftButtonUp")
+	lb:SetScript("OnClick", OnLinkClick)
+	A:ReskinArrow(lb, "down")
+	UIDropDownMenu_Initialize(LDD, LDD_Initialize, "MENU")
+	MasterLooterFrame:SetFrameStrata("FULLSCREEN")
+	addon:RegisterEvent("LOOT_OPENED")
+	addon:RegisterEvent("LOOT_SLOT_CLEARED")
+	addon:RegisterEvent("LOOT_CLOSED")
+	addon:RegisterEvent("OPEN_MASTER_LOOT_LIST")
+	addon:RegisterEvent("UPDATE_MASTER_LOOT_LIST")
+	addon:Hide()
+
+	-- Fuzz
+	LootFrame:UnregisterAllEvents()
+	table.insert(UISpecialFrames, "SunUI_Loot")
 end
-UIDropDownMenu_Initialize(LDD, LDD_Initialize, "MENU")
-MasterLooterFrame:SetFrameStrata("FULLSCREEN")
 
-addon.slots = {}
 addon.LOOT_CLOSED = function(self)
 	StaticPopup_Hide"LOOT_BIND"
-	S.FadeOutFrameDamage(self, 0.3)
+	S:FadeOutFrame(self, 0.3)
 	for _, v in pairs(self.slots) do
 		v:Hide()
 	end
@@ -355,7 +367,8 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 	closebutton:SetScale(0.9)
 	closebutton:SetPoint("TOPRIGHT", self, "TOPRIGHT", -6, -7)
 	closebutton:SetScript("OnClick", function(self) self:GetParent():Hide() end)
-	S.ReskinClose(closebutton)
+	local A = S:GetModule("Skins")
+	A:ReskinClose(closebutton)
 end
 
 addon.LOOT_SLOT_CLEARED = function(self, event, slot)
@@ -377,13 +390,13 @@ addon:SetScript("OnEvent", function(self, event, ...)
 	self[event](self, event, ...)
 end)
 
-addon:RegisterEvent"LOOT_OPENED"
-addon:RegisterEvent"LOOT_SLOT_CLEARED"
-addon:RegisterEvent"LOOT_CLOSED"
-addon:RegisterEvent"OPEN_MASTER_LOOT_LIST"
-addon:RegisterEvent"UPDATE_MASTER_LOOT_LIST"
-addon:Hide()
+LOOT.modName = L["拾取美化"]
+function LOOT:Info()
+	return L["拾取美化"]
+end
+function LOOT:Initialize()
+	self:SetFrame()
+	self:initRool()
+end
 
--- Fuzz
-LootFrame:UnregisterAllEvents()
-table.insert(UISpecialFrames, "SunUI_Loot")
+S:RegisterModule(LOOT:GetName())

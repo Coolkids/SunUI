@@ -1,13 +1,12 @@
-local S, L, DB, _, C = unpack(select(2, ...))
+﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+local WM = S:NewModule("WorldMap", "AceEvent-3.0", "AceHook-3.0")
 local map_scale = 0.9								-- Mini World Map scale
 local isize = 20									-- group icons size
-local WM = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("WorldMap", "AceEvent-3.0", "AceHook-3.0")
-local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
 local player, cursor
 local EJbuttonWidth, EJbuttonHeight = 30, 30
 local EJbuttonImageWidth, EJbuttonImageHeigth = 21.6, 21.6
 local ejbuttonscale = 1
-
+WM.modName = L["世界地图"]
 function WM:ResizeEJBossButton()
 	if WORLDMAP_SETTINGS.size == WORLDMAP_WINDOWED_SIZE then
 		local index = 1
@@ -30,11 +29,11 @@ end
 function WM:CreateCoordString()
 	if player or cursor then return end
 	player = WorldMapButton:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-	player:SetFont(DB.Font,14*SunUIConfig.db.profile.MiniDB.FontScale)
+	player:FontTemplate(nil, 14)
 	player:SetPoint("BOTTOMLEFT", WorldMapButton, "BOTTOM", -120, -22)
 	player:SetJustifyH("LEFT")
 	cursor = WorldMapButton:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-	cursor:SetFont(DB.Font,14*SunUIConfig.db.profile.MiniDB.FontScale)
+	cursor:FontTemplate(nil, 14)
 	cursor:SetPoint("BOTTOMLEFT", WorldMapButton, "BOTTOM", 50, -22)
 	cursor:SetJustifyH("LEFT")
 end
@@ -117,32 +116,33 @@ function WM:WORLD_MAP_UPDATE()
 end
 
 function WM:SkinWorldMap()
+	local A = S:GetModule("Skins")
 	WorldMapFrame.backdrop = CreateFrame("Frame", nil, WorldMapFrame)
 	WorldMapFrame.backdrop:SetPoint("TOPLEFT", WorldMapFrame, -2, 2)
 	WorldMapFrame.backdrop:SetPoint("BOTTOMRIGHT", WorldMapFrame, 2, -2)
-	S.SetBD(WorldMapFrame.backdrop)
 	WorldMapFrame.backdrop:SetFrameLevel(0)
-
+	A:SetBD(WorldMapFrame.backdrop)
+	
 	WorldMapDetailFrame.backdrop = CreateFrame("Frame", nil, WorldMapFrame)
-	S.SetBD(WorldMapDetailFrame.backdrop)
 	WorldMapDetailFrame.backdrop:SetPoint("TOPLEFT", WorldMapDetailFrame, -2, 2)
 	WorldMapDetailFrame.backdrop:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, 2, -2)
 	WorldMapDetailFrame.backdrop:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel() - 2)
+	A:SetBD(WorldMapDetailFrame.backdrop)
+	
+	A:ReskinDropDown(WorldMapZoneMinimapDropDown)
+	A:ReskinDropDown(WorldMapContinentDropDown)
+	A:ReskinDropDown(WorldMapZoneDropDown)
 
-	S.ReskinDropDown(WorldMapZoneMinimapDropDown)
-	S.ReskinDropDown(WorldMapContinentDropDown)
-	S.ReskinDropDown(WorldMapZoneDropDown)
-
-	S.ReskinDropDown(WorldMapShowDropDown)
+	A:ReskinDropDown(WorldMapShowDropDown)
 	WorldMapShowDropDown:ClearAllPoints()
 	WorldMapShowDropDown:SetPoint("TOPRIGHT", WorldMapButton, "BOTTOMRIGHT", 18, 2)
 
-	S.Reskin(WorldMapZoomOutButton)
+	A:Reskin(WorldMapZoomOutButton)
 	WorldMapZoomOutButton:SetPoint("LEFT", WorldMapZoneDropDown, "RIGHT", 0, 4)
 	WorldMapLevelUpButton:SetPoint("TOPLEFT", WorldMapLevelDropDown, "TOPRIGHT", -2, 8)
 	WorldMapLevelDownButton:SetPoint("BOTTOMLEFT", WorldMapLevelDropDown, "BOTTOMRIGHT", -2, 2)
 
-	S.ReskinCheck(WorldMapTrackQuest)
+	A:ReskinCheck(WorldMapTrackQuest)
 	WorldMapFrameSizeUpButton:SetFrameStrata("HIGH")
 	WorldMapFrameSizeUpButton.SetFrameStrata = function() end
 	WorldMapFrameSizeDownButton:SetFrameStrata("HIGH")
@@ -223,6 +223,7 @@ function WM:LargeSkin()
 end
 
 function WM:QuestSkin()
+	local A = S:GetModule("Skins")
 	if not InCombatLockdown() then
 		WorldMapFrame:SetParent(UIParent)
 		WorldMapFrame:EnableMouse(false)
@@ -237,7 +238,7 @@ function WM:QuestSkin()
 
 	if not WorldMapQuestDetailScrollFrame.backdrop then
 		WorldMapQuestDetailScrollFrame.backdrop = CreateFrame("Frame", nil, WorldMapQuestDetailScrollFrame)
-		S.CreateBD(WorldMapQuestDetailScrollFrame.backdrop)
+		A:CreateBD(WorldMapQuestDetailScrollFrame.backdrop)
 		WorldMapQuestDetailScrollFrame.backdrop:SetFrameLevel(0)
 		WorldMapQuestDetailScrollFrame.backdrop:SetPoint("TOPLEFT", -22, 2)
 		WorldMapQuestDetailScrollFrame.backdrop:SetPoint("BOTTOMRIGHT", 23, -4)
@@ -245,7 +246,7 @@ function WM:QuestSkin()
 
 	if not WorldMapQuestRewardScrollFrame.backdrop then
 		WorldMapQuestRewardScrollFrame.backdrop = CreateFrame("Frame", nil, WorldMapQuestRewardScrollFrame)
-		S.CreateBD(WorldMapQuestRewardScrollFrame.backdrop)
+		A:CreateBD(WorldMapQuestRewardScrollFrame.backdrop)
 		WorldMapQuestRewardScrollFrame.backdrop:SetFrameLevel(0)
 		WorldMapQuestRewardScrollFrame.backdrop:SetPoint("TOPLEFT", -2, 2)
 		WorldMapQuestRewardScrollFrame.backdrop:SetPoint("BOTTOMRIGHT", 22, -4)
@@ -253,7 +254,7 @@ function WM:QuestSkin()
 
 	if not WorldMapQuestScrollFrame.backdrop then
 		WorldMapQuestScrollFrame.backdrop = CreateFrame("Frame", nil, WorldMapQuestScrollFrame)
-		S.CreateBD(WorldMapQuestScrollFrame.backdrop)
+		A:CreateBD(WorldMapQuestScrollFrame.backdrop)
 		WorldMapQuestScrollFrame.backdrop:SetFrameLevel(0)
 		WorldMapQuestScrollFrame.backdrop:SetPoint("TOPLEFT", 0, 2)
 		WorldMapQuestScrollFrame.backdrop:SetPoint("BOTTOMRIGHT", 24, -3)
@@ -358,10 +359,7 @@ function WM:FixSkin()
 	WorldMapZoneInfo:SetShadowOffset(1, -1)
 end
 
-function WM:OnInitialize()
-	if IsAddOnLoaded("Mapster") or IsAddOnLoaded("Carbonite") then
-		return
-	end
+function WM:Initialize()
 	self:SkinWorldMap()
 	WorldMapFrame:HookScript("OnShow", function() WM:FixSkin() end)
 	WorldMapFrame:HookScript("OnUpdate", function(self, elapsed) WM:OnUpdate(self, elapsed) end)
@@ -374,4 +372,15 @@ function WM:OnInitialize()
 	self:RegisterEvent("WORLD_MAP_UPDATE")
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
+	--fix 读地图的表情
+	hooksecurefunc("DoEmote", function(emote)
+		if emote == "READ" and UnitChannelInfo("player") then
+			CancelEmote()
+		end
+	end)
 end 
+function WM:Info()
+	return L["世界地图"]
+end
+
+S:RegisterModule(WM:GetName())

@@ -1,5 +1,4 @@
-local S, L, DB, _, C = unpack(select(2, ...))
-local _
+local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 ----------------------------------------------------------------------------------------
 --	Based on tekKompare(by Tekkub)
 ----------------------------------------------------------------------------------------

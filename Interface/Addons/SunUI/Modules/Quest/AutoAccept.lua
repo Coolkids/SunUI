@@ -1,6 +1,5 @@
-﻿local S, L, DB, _, C = unpack(select(2, ...))
-local AAQ = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("AutoAccept", "AceEvent-3.0")
-local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
+﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+local AAQ = S:GetModule("Quest")
 local isRepeatableAuto = false --是否开启可重复交接任务自动交接（比如一包食材换徽记）
 
 completed_quests = {}
@@ -123,9 +122,43 @@ end
 
 
 QuestInfoDescriptionText.SetAlphaGradient=function() return false end
+function AAQ:CreateQuickSet()
+	local quickquest = CreateFrame("CheckButton", nil, WatchFrameCollapseExpandButton)
+	quickquest:ClearAllPoints()
+	quickquest:SetSize(22,22)
+	quickquest:SetPoint("TOPRIGHT", WatchFrame, "TOPLEFT", -5, 0)
+	quickquest:SetScript("OnClick", function(self)
+		if AAQ.db.AutoQuest then 
+			AAQ.db.AutoQuest = false
+		else
+			AAQ.db.AutoQuest = true
+		end
+		
+		AAQ:UpdateAutoAccept()
+		self:SetChecked(AAQ.db.AutoQuest)
+	end)
+	quickquest:SetScript("OnEnter", function(self)
+		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+		GameTooltip:AddLine(L["自动交接任务"])
+		GameTooltip:Show()
+	end)
+	quickquest:SetScript("OnEvent", function(self)
+		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+		self:SetChecked(AAQ.db.AutoQuest)
+	end)
+	quickquest:SetScript("OnLeave", function() GameTooltip:Hide() end)
+	quickquest:SetNormalTexture("Interface\\Buttons\\UI-CheckBox-Up")
+	quickquest:SetPushedTexture("Interface\\Buttons\\UI-CheckBox-Down")
+	quickquest:SetHighlightTexture("Interface\\Buttons\\UI-CheckBox-Highlight")
+	quickquest:SetDisabledCheckedTexture("Interface\\Buttons\\UI-CheckBox-Check-Disabled")
+	quickquest:SetCheckedTexture("Interface\\Buttons\\UI-CheckBox-Check")
+	quickquest:RegisterEvent("PLAYER_ENTERING_WORLD")
+	local A = S:GetModule("Skins")
+	A:ReskinCheck(quickquest)
+end
 
-function AAQ:UpdateSet()
-	if C["AutoQuest"] then
+function AAQ:UpdateAutoAccept()
+	if self.db.AutoQuest then
 		AAQ:RegisterEvent("GOSSIP_SHOW", On_GOSSIP_SHOW)
 		AAQ:RegisterEvent("QUEST_COMPLETE", On_QUEST_COMPLETE)
 		AAQ:RegisterEvent("QUEST_DETAIL", On_QUEST_DETAIL)
@@ -143,7 +176,8 @@ function AAQ:UpdateSet()
 		self:UnregisterEvent("QUEST_PROGRESS")
 	end
 end
-function AAQ:OnInitialize()
-	C = SunUIConfig.db.profile.MiniDB
-	self:UpdateSet()
+function AAQ:initAutoAccept()
+	
+	self:UpdateAutoAccept()
+	self:CreateQuickSet()
 end

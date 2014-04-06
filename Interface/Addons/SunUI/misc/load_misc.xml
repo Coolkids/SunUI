@@ -1,0 +1,15 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Include file="announce\load.xml"/>
+	<Include file="AutoEquipment\load.xml"/>
+	<Include file="automation\load.xml"/>
+	<Include file="Class\load.xml"/>
+	<Include file="cooldowns\load.xml"/>
+	<Include file="FriendsMenuXP\load.xml"/>
+    <Include file="TheBurningTrade\load.xml"/>
+	<Include file="minitools\load.xml"/>
+	<Include file="tools\load.xml"/>
+	<Include file="xct\load_xct.xml"/>
+	<!--
+	
+	-->
+</Ui>

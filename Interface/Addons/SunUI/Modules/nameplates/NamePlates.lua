@@ -1,8 +1,12 @@
-local S, L, DB, _, C = unpack(select(2, ...))
-local N = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("NamePlates", "AceEvent-3.0", "AceTimer-3.0")
-local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
-local LSM = LibStub("LibSharedMedia-3.0", true)
-local   cfg={
+﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+
+local N = S:NewModule("NamePlates", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
+
+N.modName = L["姓名板美化"]
+function N:Info()
+	return L["姓名板美化"]
+end
+local cfg={
 	TotemIcon = true, 				-- Toggle totem icons
 	TotemSize = 20,				-- Totem icon size
 }
@@ -10,14 +14,115 @@ local noscalemult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")
 local OVERLAY = "Interface\\TargetingFrame\\UI-TargetingFrame-Flash"
 local blankTex = "Interface\\Buttons\\WHITE8x8"	
 
-local backdrop = {
-	edgeFile = DB.GlowTex, edgeSize = 3,
-	insets = {left = 3, right = 3, top = 3, bottom = 3}
-}
-
 local numChildren = -1
 local frames = {}
 
+function N:GetOptions()
+	local options = {
+		group2 = {
+			type = "group", order = 2,
+			name = " ",guiInline = true,
+			args = {
+				Fontsize = {
+					type = "input",
+					name = L["姓名板字体大小"],
+					desc = L["姓名板字体大小"],
+					order = 1,
+					get = function() return tostring(self.db.Fontsize) end,
+					set = function(_, value) 
+						self.db.Fontsize = tonumber(value)
+						self:UpdateSet()
+					end,
+				},
+				HPHeight = {
+					type = "input",
+					name = L["姓名板血条高度"],
+					desc = L["姓名板血条高度"],
+					order = 2,
+					get = function() return tostring(self.db.HPHeight) end,
+					set = function(_, value) 
+						self.db.HPHeight = tonumber(value)
+						self:UpdateSet()
+					end,
+				},
+				HPWidth = {
+					type = "input",
+					name = L["姓名板血条宽度"],
+					desc = L["姓名板血条宽度"],
+					order = 3,
+					get = function() return tostring(self.db.HPWidth) end,
+					set = function(_, value) 
+						self.db.HPWidth = tonumber(value) 
+						self:UpdateSet()
+					end,
+				},
+				CastBarIconSize = {
+					type = "input",
+					name = L["姓名板施法条图标大小"],
+					desc = L["姓名板施法条图标大小"],
+					order = 4,
+					get = function() return tostring(self.db.CastBarIconSize) end,
+					set = function(_, value) 
+						self.db.CastBarIconSize = tonumber(value) 
+						self:UpdateSet()
+					end,
+				},
+				CastBarHeight = {
+					type = "input",
+					name = L["姓名板施法条高度"],
+					desc = L["姓名板施法条高度"],
+					order = 5,
+					get = function() return tostring(self.db.CastBarHeight) end,
+					set = function(_, value) 
+						self.db.CastBarHeight = tonumber(value)
+						self:UpdateSet()
+					end,
+				},
+				Combat = {
+					type = "toggle",
+					name = L["启用战斗显示"],
+					order = 6,
+					get = function() return self.db.Combat end,
+					set = function(_, value) 
+						self.db.Combat = value
+						self:UpdateSet2()
+					end,
+				},
+				NotCombat = {
+					type = "toggle",
+					name = L["启用脱离战斗隐藏"],
+					order = 7,
+					get = function() return self.db.NotCombat end,
+					set = function(_, value) 
+						self.db.NotCombat = value 
+						self:UpdateSet2()
+					end,
+				},
+				Showdebuff = {
+					type = "toggle",
+					name = L["启用debuff显示"],
+					order = 8,
+					get = function() return self.db.Showdebuff end,
+					set = function(_, value) 
+						self.db.Showdebuff = value 
+						self:UpdateSet()
+					end,
+				},
+				IconSize = {
+					type = "range", order = 10,
+					name = L["图标大小"], desc = L["图标大小"],disabled = function(info) return not self.db.Showdebuff end,
+					min = 10, max = 60, step = 1,
+					get = function() return self.db.IconSize end,
+					set = function(_, value) 
+						self.db.IconSize = value 
+						self:UpdateSet()
+					end,
+				},
+			}
+		},
+	}
+	return options
+end
 local PlateBlacklist = {
 	--["訓練假人"] = true,
 	--亡者大軍
@@ -38,7 +143,7 @@ local PlateBlacklist = {
 	["熔岩蟲"] = true,
 	["熔岩寄生虫"] = true,
 	--DS
-	["腐化之血"] = S.IsCoolkid(),
+	--["腐化之血"] = S.IsCoolkid(),
 }
 local DebuffWhiteList = {
 	-- Death Knight
@@ -203,8 +308,9 @@ local function Color(frame)
 	else
 	end
 	frame.r, frame.g, frame.b = r, g, b
+	frame.hp:SetStatusBarColor(r, g, b)
 	--S.CreateTop(texture, r, g, b)
-	S.CreateTop(frame.hp:GetStatusBarTexture(), r, g, b)
+	--S.CreateTop(frame.hp:GetStatusBarTexture(), r, g, b)
 end
 
 local function UpdateThreat(frame, elapsed)
@@ -214,24 +320,27 @@ local function UpdateThreat(frame, elapsed)
 		frame.hp.shadow:Show()
 		--print(r, g,b)
 		if g + b == 0 then
-			if DB.Role == "Tank" then
-				S.CreateTop(frame.hp:GetStatusBarTexture(), .2, .6, .1)
+			if S.Role == "Tank" then
+				frame.hp:SetStatusBarColor(.2, .6, .1)
+				--S.CreateTop(frame.hp:GetStatusBarTexture(), .2, .6, .1)
 			else
 				frame.name:SetTextColor(1, 0.2, 0.2)
 				frame.hp.shadow:SetBackdropBorderColor(1, 0.2, 0.2, 1)
 			end
 		else
-			if DB.Role == "Tank" then
+			if S.Role == "Tank" then
 				--print(1213)
-				S.CreateTop(frame.hp:GetStatusBarTexture(), 240/255, 154/255, 17/255)
+				frame.hp:SetStatusBarColor(240/255, 154/255, 17/255)
+				--S.CreateTop(frame.hp:GetStatusBarTexture(), )
 			else
 				frame.name:SetTextColor(1, 1, 0)
 				frame.hp.shadow:SetBackdropBorderColor(1, 1, 0, 1)
 			end
 		end
 	else
-		if InCombatLockdown() and DB.Role == "Tank" then
-			S.CreateTop(frame.hp:GetStatusBarTexture(), .7, .2, .1)   --bad
+		if InCombatLockdown() and S.Role == "Tank" then
+			frame.hp:SetStatusBarColor(.7, .2, .1)
+			--S.CreateTop(frame.hp:GetStatusBarTexture(), .7, .2, .1)   --bad
 		else
 			frame.hp.shadow:Hide()
 			frame.name:SetTextColor(1, 1, 1)
@@ -276,8 +385,8 @@ end
 local function CreateAuraIcon(parent)
 	local button = CreateFrame("Frame",nil,parent)
 	button:SetScript("OnHide", function(self) UpdateAuraAnchors(self:GetParent()) end)
-	button:SetWidth(C["IconSize"])
-	button:SetHeight(C["IconSize"])
+	button:SetWidth(N.db.IconSize)
+	button:SetHeight(N.db.IconSize)
 
 	--[[button.shadow = CreateFrame("Frame", nil, button)
 	button.shadow:SetFrameLevel(0)
@@ -310,11 +419,11 @@ local function CreateAuraIcon(parent)
 	button.text = button:CreateFontString(nil, 'OVERLAY')
 	button.text:SetPoint("CENTER", 1, 1)
 	button.text:SetJustifyH('CENTER')
-	button.text:SetFont(DB.Font, 10*SunUIConfig.db.profile.MiniDB.FontScale, "OUTLINE")
+	button.text:SetFont(S["media"].font, S["media"].fontsize-2, "OUTLINE")
 	button.text:SetShadowColor(0, 0, 0, 0)
 
 	button.count = button:CreateFontString(nil,"OVERLAY")
-	button.count:SetFont(DB.Font, 9*SunUIConfig.db.profile.MiniDB.FontScale, "OUTLINE")
+	button.count:SetFont(S["media"].font, S["media"].fontsize-3, "OUTLINE")
 	button.count:SetShadowColor(0, 0, 0, 0.4)
 	button.count:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 2, 0)
 	return button
@@ -388,10 +497,10 @@ end
 
 --Filter auras on nameplate, and determine if we need to update them or not.
 local function OnAura(frame, unit)
-	if not frame.icons or not frame.unit or not C["Showdebuff"] then return end  --
+	if not frame.icons or not frame.unit or not N.db.Showdebuff then return end  --
 	local i = 1
 	for index = 1,40 do
-		if i > C["HPWidth"] / C["IconSize"] then return end
+		if i > N.db.HPWidth / N.db.IconSize then return end
 		local match
 		local name,_,_,_,_,duration,_,caster,_,_,spellid = UnitAura(frame.unit,index,"HARMFUL")
 		
@@ -402,7 +511,7 @@ local function OnAura(frame, unit)
 			if not frame.icons[i] then frame.icons[i] = CreateAuraIcon(frame) end
 			local icon = frame.icons[i]
 			if i == 1 then icon:SetPoint("RIGHT",frame.icons,"RIGHT") end
-			if i ~= 1 and i <= C["HPWidth"] / C["IconSize"] then icon:SetPoint("RIGHT", frame.icons[i-1], "LEFT", -2, 0) end
+			if i ~= 1 and i <= N.db.HPWidth / N.db.IconSize then icon:SetPoint("RIGHT", frame.icons[i-1], "LEFT", -2, 0) end
 			i = i + 1
 			UpdateAuraIcon(icon, frame.unit, index, "HARMFUL")
 		end
@@ -414,7 +523,7 @@ local function UpdateObjects(frame)
 	local frame = frame:GetParent()
 	Color(frame)
 	frame.hp:ClearAllPoints()
-	frame.hp:SetSize(C["HPWidth"], C["HPHeight"])	
+	frame.hp:SetSize(N.db.HPWidth, N.db.HPHeight)	
 	frame.hp:SetPoint('CENTER', frame)
 	frame.hp:GetStatusBarTexture():SetHorizTile(true)
 	local name = frame.oldname:GetText()
@@ -439,31 +548,32 @@ local function UpdateObjects(frame)
 		frame.name:SetText(format('|cff%02x%02x%02x', lvlr*255, lvlg*255, lvlb*255)..frame.level:GetText()..'|r '..name)
 	end
 	
-	if frame.icons then return end
-	frame.icons = CreateFrame("Frame",nil,frame)
-	frame.icons:SetPoint("BOTTOMRIGHT",frame.hp,"TOPRIGHT", 0, 8)
-	frame.icons:SetWidth(C["IconSize"] + C["HPWidth"])
-	frame.icons:SetHeight(C["IconSize"])
-	frame.icons:SetFrameLevel(frame.hp:GetFrameLevel()+2)
-	frame:HookScript("OnEvent", OnAura)
-	
+	if not frame.icons then
+		frame.icons = CreateFrame("Frame",nil,frame)
+		frame.icons:SetPoint("BOTTOMRIGHT",frame.hp,"TOPRIGHT", 0, 8)
+		frame.icons:SetWidth(N.db.IconSize + N.db.HPWidth)
+		frame.icons:SetHeight(N.db.IconSize)
+		frame.icons:SetFrameLevel(frame.hp:GetFrameLevel()+2)
+		
+		frame:RegisterEvent("UNIT_AURA")
+		frame:HookScript("OnEvent", OnAura)
+	end
 	HideObjects(frame)
 end
 
 local function UpdateCastbar(frame)
     frame.border:ClearAllPoints()
     frame.border:SetPoint("TOP",frame:GetParent().hp,"BOTTOM", 0,-5)
-	frame.border:SetSize(C["HPWidth"], C["CastBarHeight"])
+	frame.border:SetSize(N.db.HPWidth, N.db.CastBarHeight)
     frame:SetPoint("RIGHT",frame.border,0,0)
     frame:SetPoint("TOP",frame.border,0,0)
     frame:SetPoint("BOTTOM",frame.border,0,0)
     frame:SetPoint("LEFT",frame.border,0,0)
-	local texture = frame:GetStatusBarTexture()
-	frame.cbtexture = texture
+	
 	if not frame.shield:IsShown() then
-		S.CreateTop(texture, .5,.65,.85)
+		frame:SetStatusBarColor(.5,.65,.85)
 	else
-		S.CreateTop(texture, 1,0,0)
+		frame:SetStatusBarColor(1,0,0)
 	end
 end	
 
@@ -473,9 +583,9 @@ local OnValueChanged = function(self)
 		self.needFix = nil
 	end
  	if not self.shield:IsShown() then
-		S.CreateTop(self.cbtexture,.5,.65,.85)
+		self:SetStatusBarColor(.5,.65,.85)
 	else
-		S.CreateTop(self.cbtexture, 1,0,0)
+		self:SetStatusBarColor(1,0,0)
 	end 
 end
 
@@ -502,46 +612,35 @@ local function OnHide(frame)
 end
 local function SkinObjects(frame, nameFrame)
 	local hp, cb = frame:GetChildren()
-
+	local A = S:GetModule("Skins")
 	local threat, hpborder, overlay, level, bossicon, raidicon, elite = frame:GetRegions()
 	local oldname = nameFrame:GetRegions()
 	local _, cbborder, cbshield, cbicon, cbtext, cbshadow = cb:GetRegions()
-	overlay:SetTexture(DB.Statusbar)
+	overlay:SetTexture(S["media"].normal)
 	overlay:SetVertexColor(0.25, 0.25, 0.25, 0)
 	frame.highlight = overlay
-	--cb:StripTextures()
-	-- Health Bar
 	frame.healthOriginal = hp
 	local newhp = CreateFrame("Statusbar", nil, frame)
 	newhp:SetFrameLevel(hp:GetFrameLevel())
 	newhp:SetFrameStrata(hp:GetFrameStrata())
-	S.SmoothBar(newhp)
-	--if not S.IsCoolkid() then
-	newhp:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
-	--else
-		--newhp:SetStatusBarTexture("Interface\\AddOns\\SunUI\\media\\statusbars\\statusbar8")
-	--end
+	S:SmoothBar(newhp)
+	newhp:SetStatusBarTexture(S["media"].normal)
 	frame.hp = newhp
 	if not newhp.shadow then
-		newhp:CreateShadow()
+		newhp:CreateShadow(0.6)
 		newhp.shadow:Hide()
-		S.CreateMark(newhp)
+		A:CreateMark(newhp)
 	end
 	newhp.border:SetFrameLevel(0)
 	newhp.hpGlow = hp.border
-	
-	local hpbg = CreateFrame("Frame", nil, newhp)
-	hpbg:SetAllPoints(newhp)
-	hpbg:SetFrameLevel(0)
-	S.CreateBack(hpbg)
 	 
 	frame.threat = threat
 
 	local help = CreateFrame("Frame", nil, newhp)
 	help:SetAllPoints(newhp)
 	help:SetFrameLevel(newhp:GetFrameLevel()+1)
-	newhp.pct = help:CreateFontString(nil, "OVERLAY")	
-	newhp.pct:SetFont(DB.Font, C["Fontsize"], "THINOUTLINE")
+	newhp.pct = help:CreateFontString(nil, "OVERLAY")
+	newhp.pct:SetFont(S["media"].font, N.db.Fontsize, "THINOUTLINE")
 	newhp.pct:SetPoint('BOTTOMRIGHT', newhp, 'TOPRIGHT', 0, -4)
 	local offset = UIParent:GetScale() / cb:GetEffectiveScale()
 	if not cb.border then 
@@ -549,16 +648,15 @@ local function SkinObjects(frame, nameFrame)
 		border:SetFrameLevel(1)
 		border:SetPoint("TOPLEFT", cb, -offset, offset)
 		border:SetPoint("BOTTOMRIGHT", cb, offset, -offset)
-		border:CreateBorder(0,0,0,1)
+		border:CreateShadow(0.6)
 		cb.border = border
 	end
-	S.CreateBack(cb)
-	S.CreateMark(cb)
+	A:CreateMark(cb)
 	cbicon:ClearAllPoints()
 	cbicon:SetPoint("TOPRIGHT", newhp, "TOPLEFT", -5, 0)		
-	cbicon:SetSize(C["CastBarIconSize"], C["CastBarIconSize"])
+	cbicon:SetSize(N.db.CastBarIconSize, N.db.CastBarIconSize)
 	cbicon:SetTexCoord(.07, .93, .07, .93)
-	S.CreateShadow(cb, cbicon)
+	A:CreateShadow(cb, cbicon)
 	
 	
 	cb.icon = cbicon
@@ -566,21 +664,19 @@ local function SkinObjects(frame, nameFrame)
 	cb:HookScript('OnShow', UpdateCastbar)
 	cb:HookScript('OnSizeChanged', OnSizeChanged)
 	cb:HookScript('OnValueChanged', OnValueChanged)	
-	if not S.IsCoolkid() then
-		cb:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
-	else
-		cb:SetStatusBarTexture("Interface\\AddOns\\SunUI\\media\\statusbars\\statusbar8")
-	end
+	
+	cb:SetStatusBarTexture(S["media"].normal)
+	
 	frame.cb = cb
 
 	local name = help:CreateFontString(nil, 'OVERLAY', 2)
 	name:SetPoint('BOTTOMLEFT', newhp, 'TOPLEFT', 0, -4)
-	name:SetFont(DB.Font, C["Fontsize"], "THINOUTLINE")
+	name:SetFont(S["media"].font, N.db.Fontsize, "THINOUTLINE")
 	frame.oldname = oldname
 	frame.name = name
 	
 	
-	--level:SetFont(DB.Font, C["Fontsize"]*1, "THINOUTLINE")
+	--level:SetFont(S["media"].font, self.db.Fontsize*1, "THINOUTLINE")
 	--level:SetShadowOffset(1.25, -1.25)
 	frame.level = level
 
@@ -609,7 +705,7 @@ local function SkinObjects(frame, nameFrame)
 	
 	raidicon:ClearAllPoints()
 	raidicon:SetPoint("BOTTOM", name, "TOP", 0, 0)
-	raidicon:SetSize(C["CastBarIconSize"]+4, C["CastBarIconSize"]+4)	
+	raidicon:SetSize(N.db.CastBarIconSize+4, N.db.CastBarIconSize+4)	
 
 	frame.oldglow = threat
 	threat:SetTexture(nil)
@@ -622,7 +718,7 @@ local function SkinObjects(frame, nameFrame)
 	QueueObject(frame, hp)
 	UpdateObjects(newhp)
 	UpdateCastbar(cb)
-	frame:RegisterEvent("UNIT_AURA")
+	
 	frame:HookScript("OnHide", OnHide)
 	newhp:HookScript("OnShow", UpdateObjects)
 	
@@ -685,13 +781,10 @@ local function HookFrames(...)
 	end
 end
 
-function N:COMBAT_LOG_EVENT_UNFILTERED(times, temp, event, ...)
-	
-	if event == "SPELL_AURA_REMOVED" then
+function N:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, ...)
+	if event == "SPELL_AURA_REMOVED" or event == "SPELL_AURA_BROKEN" or event == "SPELL_AURA_BROKEN_SPELL" then
 		local _, sourceGUID, _, _, _, destGUID, _, _, _, spellID = ...
-		--print(sourceGUID,UnitGUID("player"))
 		if sourceGUID == UnitGUID("player") then
-			--print(spellID)
 			ForEachPlate(MatchGUID, destGUID, spellID)
 		end
 	end
@@ -704,22 +797,22 @@ local function SetCV()
 end
 function N:UpdateSet()
 	for k,v in pairs(frames) do
-		k.hp:SetSize(C["HPWidth"], C["HPHeight"])
-		k.cb.border:SetSize(C["HPWidth"], C["CastBarHeight"])
-		k.hp.pct:SetFont(DB.Font, C["Fontsize"], "THINOUTLINE")
-		k.cb.icon:SetSize(C["CastBarIconSize"], C["CastBarIconSize"])
-		k.name:SetFont(DB.Font, C["Fontsize"], "THINOUTLINE")
+		k.hp:SetSize(self.db.HPWidth, self.db.HPHeight)
+		k.cb.border:SetSize(self.db.HPWidth, self.db.CastBarHeight)
+		k.hp.pct:SetFont(S["media"].font, self.db.Fontsize, "THINOUTLINE")
+		k.cb.icon:SetSize(self.db.CastBarIconSize, self.db.CastBarIconSize)
+		k.name:SetFont(S["media"].font, self.db.Fontsize, "THINOUTLINE")
 	end
 end
 function N:UpdateSet2()
-	if C["Combat"] then
+	if self.db.Combat then
 		N:RegisterEvent("PLAYER_REGEN_DISABLED", function()
 			SetCVar("nameplateShowEnemies", 1)
 		end)
 	else
 		N:UnregisterEvent("PLAYER_REGEN_DISABLED")
 	end
-	if C["NotCombat"] then
+	if self.db.NotCombat then
 		N:RegisterEvent("PLAYER_REGEN_ENABLED", function()
 			SetCVar("nameplateShowEnemies", 0)
 		end)
@@ -728,12 +821,8 @@ function N:UpdateSet2()
 	end
 
 end
-function N:OnInitialize()
-		if IsAddOnLoaded("TidyPlates") or IsAddOnLoaded("Aloft") or IsAddOnLoaded("dNamePlates") or IsAddOnLoaded("caelNamePlates") then
-			return
-		end
-	C = SunUIConfig.db.profile.NameplateDB
-	if C["enable"] ~= true then return end
+function N:Initialize()
+	
 	local Frame = CreateFrame("Frame", nil, UIParent)
 	Frame:SetScript("OnUpdate", function(self, elapsed)
 		if WorldFrame:GetNumChildren() ~= numChildren then
@@ -748,16 +837,18 @@ function N:OnInitialize()
 		ForEachPlate(CheckBlacklist)
 		ForEachPlate(CheckUnit_Guid)
 	end)
-	N:RegisterEvent("PLAYER_LOGIN", SetCV)
-	N:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-	if C["Combat"] then
-		N:RegisterEvent("PLAYER_REGEN_DISABLED", function()
+	self:RegisterEvent("PLAYER_LOGIN", SetCV)
+	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	if self.db.Combat then
+		self:RegisterEvent("PLAYER_REGEN_DISABLED", function()
 			SetCVar("nameplateShowEnemies", 1)
 		end)	
 	end
-	if C["NotCombat"] then
-		N:RegisterEvent("PLAYER_REGEN_ENABLED", function()
+	if self.db.NotCombat then
+		self:RegisterEvent("PLAYER_REGEN_ENABLED", function()
 			SetCVar("nameplateShowEnemies", 0)
 		end)
 	end
 end
+
+S:RegisterModule(N:GetName())

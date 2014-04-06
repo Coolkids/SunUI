@@ -1,11 +1,8 @@
-﻿local S, L, DB, _, C = unpack(select(2, ...))
-if IsAddOnLoaded("Prat-3.0") or IsAddOnLoaded("Chatter") then
-	return
-end
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Chat", "AceEvent-3.0", "AceHook-3.0")
-local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
-local _G = _G
-local fontsize = 10                          --other variables
+﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+
+local CT = S:NewModule("Chat", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
+
+CT.modName = L["聊天美化"]
 local tscol = "64C2F5"						-- Timestamp coloring
 local newAddMsg = {}
 for i = 1, 18 do
@@ -57,16 +54,13 @@ ChatFrame2ButtonFrameBottomButton:SetScript("OnEvent", function(f)
 	f:SetScript("OnEvent", nil)
 end)
 
----------------- > 渐隐透明度
-ChatFrameMenuButton:Kill()
-FriendsMicroButton:Kill()
-
 --new
 --美化
 local tabs = {"Left", "Middle", "Right", "SelectedLeft", "SelectedMiddle",
     "SelectedRight", "Glow", "HighlightLeft", "HighlightMiddle", 
     "HighlightRight"}
 local function ApplyChatStyle(self)
+	local A = S:GetModule("Skins")
 	if self == "PET_BATTLE_COMBAT_LOG" then self = ChatFrame11 end
 	if not self or (self and self.skinApplied) then return end
 
@@ -80,17 +74,17 @@ local function ApplyChatStyle(self)
     _G[cf..'EditBox']:ClearAllPoints()
     _G[cf..'EditBox']:SetPoint('BOTTOMLEFT', ChatFrame1, 'TOPLEFT', 0, 21)
     _G[cf..'EditBox']:SetPoint('TOPRIGHT', _G.ChatFrame1, 'TOPRIGHT', 6, 45)
-	S.CreateBD(_G[cf..'EditBox'])
+	A:CreateBD(_G[cf..'EditBox'])
     _G[cf..'EditBox']:HookScript("OnEditFocusGained", function(self) self:Show() end)
 	_G[cf..'EditBox']:HookScript("OnEditFocusLost", function(self) self:Hide() end)
-	_G[cf..'EditBox']:SetFont(DB.Font, select(2, GameFontNormal:GetFont()), "OUTLINE")
+	_G[cf..'EditBox']:FontTemplate()
     _G[cf..'EditBoxHeader']:SetShadowOffset(0, 0)
     _G[cf.."EditBoxLanguage"]:ClearAllPoints()
 	_G[cf.."EditBoxLanguage"]:SetPoint("LEFT", _G[cf.."EditBox"], "RIGHT", 5, 0)
 	_G[cf.."EditBoxLanguage"]:SetSize(_G[cf.."EditBox"]:GetHeight(),_G[cf.."EditBox"]:GetHeight())
 	_G[cf.."EditBoxLanguage"]:StripTextures()
-	S.CreateBD(_G[cf.."EditBoxLanguage"], 0.6)
-	if C["ChatEditBoxColor"] then
+	A:CreateBD(_G[cf.."EditBoxLanguage"], 0.6)
+	if CT.db.ChatEditBoxColor then
 		hooksecurefunc("ChatEdit_UpdateHeader", function()
 			local type = _G[cf..'EditBox']:GetAttribute("chatType")
 			if ( type == "CHANNEL" ) then
@@ -109,14 +103,15 @@ local function ApplyChatStyle(self)
     tex[6]:SetAlpha(0) tex[7]:SetAlpha(0) tex[8]:SetAlpha(0) tex[9]:SetAlpha(0) tex[10]:SetAlpha(0) tex[11]:SetAlpha(0)
     local bb = _G[cf.."ButtonFrameBottomButton"]
 	local flash = _G[cf.."ButtonFrameBottomButtonFlash"]
-	S.ReskinArrow(bb, "down")
+	A:ReskinArrow(bb, "down")
 	if _G[cf] == _G["ChatFrame2"] then
 		_G["CombatLogQuickButtonFrame_Custom"]:StripTextures()
 		local cb = _G["CombatLogQuickButtonFrame_CustomAdditionalFilterButton"]
 		cb:SetSize(16, 16)
-		S.ReskinArrow(cb, "down")
+		A:ReskinArrow(cb, "down")
 	end
 	bb:SetParent(_G[cf])
+	bb:SetFrameStrata("MEDIUM")
 	bb:SetHeight(16)
 	bb:SetWidth(16)
 	bb:ClearAllPoints()
@@ -124,7 +119,7 @@ local function ApplyChatStyle(self)
 	flash:ClearAllPoints()
 	flash:SetPoint("TOPLEFT", -3, 3)
 	flash:SetPoint("BOTTOMRIGHT", 3, -3)
-	bb:SetAlpha(0.4)
+	bb:SetAlpha(1)
 	bb:SetScript("OnClick", function(self)
 		self:GetParent():ScrollToBottom()
 	end)
@@ -138,8 +133,7 @@ local function ApplyChatStyle(self)
     end
 	_G[cf.."TabText"]:SetTextColor(0.40, 0.78, 1) -- 1,.7,.2
 	_G[cf.."TabText"].SetTextColor = function() end
-	_G[cf.."TabText"]:SetFont(DB.Font,12*SunUIConfig.db.profile.MiniDB.FontScale,"THINOUTLINE")
-	_G[cf.."TabText"]:SetShadowOffset(1.75, -1.75)
+	_G[cf.."TabText"]:FontTemplate()
     if cf ~= "ChatFrame2" then
 		local am = _G[cf].AddMessage 
 		_G[cf].AddMessage = function(frame, text, ...) 
@@ -149,9 +143,10 @@ local function ApplyChatStyle(self)
 	self.skinApplied = true
 end
 
--- temporary chats
-
-FloatingChatFrame_OnMouseScroll = function(self, dir)
+function CT:ChatFix()
+	ChatFrameMenuButton:Kill()
+	FriendsMicroButton:Kill()
+	FloatingChatFrame_OnMouseScroll = function(self, dir)
     if(dir > 0) then
         if(IsShiftKeyDown()) then
             self:ScrollToTop() else self:ScrollUp() end
@@ -159,23 +154,21 @@ FloatingChatFrame_OnMouseScroll = function(self, dir)
         self:ScrollToBottom() else self:ScrollDown() end
     end
 end
-
----------------- > Enable/Disable mouse for editbox
-eb_mouseon = function()
-	for i =1, 10 do
-		local eb = _G['ChatFrame'..i..'EditBox']
-		eb:EnableMouse(true)
+	eb_mouseon = function()
+		for i =1, 10 do
+			local eb = _G['ChatFrame'..i..'EditBox']
+			eb:EnableMouse(true)
+		end
 	end
-end
-eb_mouseoff = function()
-	for i =1, 10 do
-		local eb = _G['ChatFrame'..i..'EditBox']
-		eb:EnableMouse(false)
+	eb_mouseoff = function()
+		for i =1, 10 do
+			local eb = _G['ChatFrame'..i..'EditBox']
+			eb:EnableMouse(false)
+		end
 	end
+	hooksecurefunc("ChatFrame_OpenChat",eb_mouseon)
+	hooksecurefunc("ChatEdit_SendText",eb_mouseoff)
 end
-hooksecurefunc("ChatFrame_OpenChat",eb_mouseon)
-hooksecurefunc("ChatEdit_SendText",eb_mouseoff)
-
 ----------------------------------------------------------------------------------------
 --	Copy Chat
 ----------------------------------------------------------------------------------------
@@ -192,6 +185,7 @@ local sizes = {
 }
 
 local function CreatCopyFrame()
+	local A = S:GetModule("Skins")
 	frame = CreateFrame("Frame", "CopyFrame", UIParent)
 	frame:SetWidth(500)
 	frame:SetHeight(300)
@@ -204,14 +198,14 @@ local function CreatCopyFrame()
 	frame:SetScript("OnMouseDown", function(self) self:StartMoving() end)
 	frame:SetScript("OnMouseUp", function(self) self:StopMovingOrSizing() end)
 	frame:RegisterForDrag("LeftButton")
-	if not frame.style then 
-		S.SetBD(frame)
+	if not frame.style then
+		A:SetBD(frame)
 		frame.style = true
 	end
 	local scrollArea = CreateFrame("ScrollFrame", "CopyScroll", frame, "UIPanelScrollFrameTemplate")
 	scrollArea:SetPoint("TOPLEFT", frame, "TOPLEFT", 8, -30)
 	scrollArea:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -30, 8)
-	S.ReskinScroll(CopyScrollScrollBar)
+	A:ReskinScroll(CopyScrollScrollBar)
 	editBox = CreateFrame("EditBox", "CopyBox", frame)
 	editBox:SetMultiLine(true)
 	editBox:SetMaxLetters(99999)
@@ -238,7 +232,7 @@ local function CreatCopyFrame()
 	local close = CreateFrame("Button", "CopyCloseButton", frame, "UIPanelCloseButton")
 	close:SetPoint("TOPRIGHT", frame, "TOPRIGHT")
 	scrollArea:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -30, 8)
-	S.ReskinClose(close)
+	A:ReskinClose(close)
 	isf = true
 end
 
@@ -271,48 +265,92 @@ local function Copy(p)
 	editBox:SetText(text)
 end
 
-for i = 1, 10 do
-	local tab = _G[format("%s%d%s", "ChatFrame", i, "Tab")]
-	tab:SetScript("OnDoubleClick", Copy)
-	tab:HookScript("OnEnter", function(self) 
-		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
-		GameTooltip:AddLine("双击聊天标签")
-		GameTooltip:AddLine("来复制聊天信息")
-		GameTooltip:Show()  
-	end)
-	tab:HookScript("OnLeave", function() 
-		GameTooltip:Hide()
-	end)
-end
-function Module:PLAYER_ENTERING_WORLD()
+function CT:PLAYER_ENTERING_WORLD()
 	for i = 1, NUM_CHAT_WINDOWS do
 		ApplyChatStyle(_G["ChatFrame"..i])
 	end
 	hooksecurefunc("FCF_OpenTemporaryWindow", ApplyChatStyle)
+	self:UpdateChatbar()
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 end
-function Module:OnEnable()
-	Module:RegisterEvent("PLAYER_ENTERING_WORLD")
+
+function CT:GetOptions()
+	local options = {
+		DNDFilter = {
+			type = "toggle", order = 1,
+			name = L["屏蔽DND消息"],
+		},
+		TimeStamps = {
+			type = "toggle", order = 2,
+			name = L["时间戳"],
+		},
+		ChatBackground = {
+			type = "toggle", order = 3,
+			name = L["聊天框背景"],
+		},
+		ChatEditBoxColor = {
+			type = "toggle", order = 4,
+			name = L["输入框边框染色"],
+		},
+		ChannelBar = {
+			type = "toggle", order = 5,
+			name = L["频道栏"],
+			set = function(info, value) 
+				self.db.ChannelBar = value
+				self:UpdateChatbar()
+			end,
+		},
+		ChatFilter = {
+			type = "toggle", order = 6,
+			name = L["聊天过滤"],
+		},
+	}
+	return options
+end
+function CT:Info()
+	return L["聊天美化"]
+end
+function CT:Initialize()
+	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	
-	C = SunUIConfig.db.profile.MiniDB
-	if C["DNDFilter"] then  
+	if self.db.DNDFilter then  
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL_JOIN", function(msg) return true end)
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL_LEAVE", function(msg) return true end)
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_AFK", function(msg) return true end)
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_DND", function(msg) return true end)
 	end
-	if C["TimeStamps"] then 
+	if self.db.TimeStamps then 
 		if GetCVar("showTimestamps") == "none" then  
 			SetCVar("showTimestamps", [[%H:%M:%S]])
 		end
 	else
 		SetCVar("showTimestamps", "none")
 	end
-	if C["ChatBackground"] then 
+	if self.db.ChatBackground then 
+		local A = S:GetModule("Skins")
 		for i = 1, NUM_CHAT_WINDOWS do
 			local cf = _G['ChatFrame'..i]
 			if cf then
-				cf:CreateShadow("Background")
+				A:SetBD(cf)
 			end
 		end
 	end
+	
+	for i = 1, 10 do
+		local tab = _G[format("%s%d%s", "ChatFrame", i, "Tab")]
+		tab:SetScript("OnDoubleClick", Copy)
+		tab:HookScript("OnEnter", function(self) 
+			GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+			GameTooltip:AddLine(L["双击聊天标签"])
+			GameTooltip:AddLine(L["来复制聊天信息"])
+			GameTooltip:Show()  
+		end)
+		tab:HookScript("OnLeave", function() 
+			GameTooltip:Hide()
+		end)
+	end
+	self:ChatFix()
+	self:UpdateChatbar()
+	self:InitChatFilter()
 end
+S:RegisterModule(CT:GetName())

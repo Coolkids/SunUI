@@ -1,5 +1,5 @@
-﻿local S, L, DB, _, C = unpack(select(2, ...))
-local CH = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("Chat")
+﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+local CH = S:GetModule("Chat")
 
 local cycles = {
 	{
@@ -12,7 +12,7 @@ local cycles = {
     }, ]]
     {
         chatType = "PARTY",  --小队
-        use = function(self, editbox) return IsInGroup(LE_PARTY_CATEGORY_HOME) end,
+        use = function(self, editbox) return IsInGroup() end,
     },
     {
         chatType = "RAID",  --团队
@@ -20,15 +20,11 @@ local cycles = {
     },
     {
         chatType = "INSTANCE_CHAT",  --副本
-        use = function(self, editbox) return select(2, IsInInstance()) == 'pvp' or (not IsInGroup(LE_PARTY_CATEGORY_HOME) or not IsInRaid(LE_PARTY_CATEGORY_HOME)) and IsInGroup(LE_PARTY_CATEGORY_INSTANCE) end,
+        use = function(self, editbox) return select(2, IsInInstance()) == 'pvp' end,
     },
     {
         chatType = "GUILD",   --工会
         use = function(self, editbox) return IsInGuild() end,
-    },
-	{
-        chatType = "WHISPER",   --密语
-        use = function(self, editbox) return false end,
     },
 --[[     {
         chatType = "CHANNEL",
@@ -58,7 +54,6 @@ local cycles = {
 function CH:ChatEdit_CustomTabPressed(self)
 	if strsub(tostring(self:GetText()), 1, 1) == "/" then return end
     local currChatType = self:GetAttribute("chatType")
-	--print(currChatType)
     for i, curr in ipairs(cycles) do
         if curr.chatType== currChatType then
             local h, r, step = i+1, #cycles, 1
@@ -75,6 +70,6 @@ function CH:ChatEdit_CustomTabPressed(self)
     end
 end
 
-function CH:OnInitialize()
+function CH:initTabChannel()
 	self:RawHook("ChatEdit_CustomTabPressed", true)
 end

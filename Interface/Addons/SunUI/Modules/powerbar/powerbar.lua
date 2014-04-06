@@ -1,8 +1,8 @@
-local S, L, DB, _, C = unpack(select(2, ...))
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("SunUIPowerBar", "AceTimer-3.0", "AceEvent-3.0")
-local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
+local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+
+local PB = S:NewModule("PowerBar", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 local powercolor = {}
-local space = (DB.MyClass == "DEATHKNIGHT" or DB.MyClass == "SHAMAN") and 3 or 6
+local space = (S.myclass == "DEATHKNIGHT" or S.myclass == "SHAMAN") and 3 or 6
 local Holder = CreateFrame("Statusbar", nil, UIParent)
 local mainframe = {}
 local threeframe = {}
@@ -28,11 +28,98 @@ end
 local ShadowOrbs
 local eb
 local MageBars
-function Module:CreateShadowOrbs()
-	if DB.MyClass ~= "PRIEST" then return end
+PB.modName = L["PowerBar"]
+function PB:Info()
+	return L["PowerBar"]
+end
+function PB:GetOptions()
+	local options = {
+		group1 = {
+			type = "group", order = 1,
+			name = "",guiInline = true,
+			args = {
+				Open = {
+				type = "toggle",
+				name = L["启用职业能量条"],
+				order = 1,
+				},
+			}
+		},
+		group2 = {
+			type = "group", order = 2, guiInline = true, disabled = function(info) return not self.db.Open end,
+			name = "",
+			args = {
+				Width = {
+					type = "input",
+					name = L["框体宽度"],
+					order = 1,
+					get = function() return tostring(self.db.Width) end,
+					set = function(_, value)
+						self.db.Width = tonumber(value)
+						self:UpdateSize()
+					end,
+				},
+				Height = {
+					type = "input",
+					name = L["框体高度"],
+					order = 2,
+					get = function() return tostring(self.db.Height) end,
+					set = function(_, value) 
+						self.db.Height = tonumber(value)
+						self:UpdateSize()
+					end,
+				},
+				Fade = {
+					type = "toggle",
+					name = L["渐隐"],
+					order = 4,
+					get = function() return self.db.Fade end,
+					set = function(_, value)
+						self.db.Fade = value
+						self:UpdateFade()
+					end,
+				},
+				HealthPower = {
+					type = "toggle",
+					name = L["生命值"],
+					order = 5,
+					get = function() return self.db.HealthPower end,
+					set = function(_, value)
+						self.db.HealthPower = value
+						self:UpdateHealthBar()
+					end,
+				},
+				HealthPowerPer = {
+					type = "toggle",
+					name = L["生命值用百分比替代"],
+					order = 6,
+					get = function() return self.db.HealthPowerPer end,
+					set = function(_, value)
+						self.db.HealthPowerPer = value
+						self:UpdateHealthBar()
+					end,
+				},
+				
+				ManaPowerPer = {
+					type = "toggle",
+					name = L["魔法值用百分比替代"],
+					order = 7,
+					get = function() return self.db.ManaPowerPer end,
+					set = function(_, value)
+						self.db.ManaPowerPer = value
+						self:UpdateHealthBar()
+					end,
+				},
+			}
+		},
+	}
+	return options
+end
+
+function PB:CreateShadowOrbs()
+	if S.myclass ~= "PRIEST" then return end
 	ShadowOrbs = CreateFrame("Frame", nil, Holder)
-	ShadowOrbs:SetSize(C["Width"], C["Height"])
-	ShadowOrbs:SetScale(C["Scale"])
+	ShadowOrbs:SetSize(self.db.Width, self.db.Height)
 	ShadowOrbs:SetPoint("CENTER", Holder)
 	tinsert(mainframe, ShadowOrbs)
 	local maxShadowOrbs = UnitPowerMax('player', SPELL_POWER_SHADOW_ORBS)
@@ -40,11 +127,9 @@ function Module:CreateShadowOrbs()
 	for i = 1,maxShadowOrbs do
 		ShadowOrbs[i] = CreateFrame("StatusBar", nil, ShadowOrbs)
 		tinsert(threeframe, ShadowOrbs[i])
-		ShadowOrbs[i]:SetSize((C["Width"]-space*(maxShadowOrbs-1))/maxShadowOrbs, C["Height"])
-		ShadowOrbs[i]:SetScale(C["Scale"])
-		ShadowOrbs[i]:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
-		local s = ShadowOrbs[i]:GetStatusBarTexture()
-		S.CreateTop(s, .86,.22,1)
+		ShadowOrbs[i]:SetSize((self.db.Width-space*(maxShadowOrbs-1))/maxShadowOrbs, self.db.Height)
+		ShadowOrbs[i]:SetStatusBarTexture(S["media"].normal)
+		ShadowOrbs[i]:SetStatusBarColor(.86,.22,1)
 		ShadowOrbs[i]:CreateShadow()
 		ShadowOrbs[i]:Hide()
 		if (i == 1) then
@@ -55,7 +140,18 @@ function Module:CreateShadowOrbs()
 	end
 	ShadowOrbs:RegisterEvent("UNIT_POWER")
 	ShadowOrbs:RegisterEvent("UNIT_DISPLAYPOWER")
+	ShadowOrbs:RegisterEvent("PLAYER_ENTERING_WORLD")
 	ShadowOrbs:SetScript("OnEvent",function(self, event, unit, powerType)
+		if(event=="PLAYER_ENTERING_WORLD") then 
+			local numShadowOrbs = UnitPower('player', SPELL_POWER_SHADOW_ORBS)
+			for i = 1,maxShadowOrbs do
+				if i <= numShadowOrbs then
+					ShadowOrbs[i]:Show()
+				else
+					ShadowOrbs[i]:Hide()
+				end
+			end
+		end
 		if( unit ~= "player" or (powerType and powerType ~= 'SHADOW_ORBS')) then return end
 		local numShadowOrbs = UnitPower('player', SPELL_POWER_SHADOW_ORBS)
 		for i = 1,maxShadowOrbs do
@@ -68,21 +164,18 @@ function Module:CreateShadowOrbs()
 	end)
 end
 --Monk harmony bar
-function Module:CreateMonkBar()
-	if DB.MyClass ~= "MONK" then return end
+function PB:CreateMonkBar()
+	if S.myclass ~= "MONK" then return end
 	local chibar = CreateFrame("Frame",nil,Holder)
-	chibar:SetSize(C["Width"], C["Height"])
-	chibar:SetScale(C["Scale"])
+	chibar:SetSize(self.db.Width, self.db.Height)
 	chibar:SetPoint("CENTER", Holder)
 	tinsert(mainframe, chibar)
 	for i=1,5 do
 		chibar[i] = CreateFrame("StatusBar",nil,chibar)
-		chibar[i]:SetSize((C["Width"]-space*(5-1))/5, C["Height"])
-		chibar[i]:SetScale(C["Scale"])
+		chibar[i]:SetSize((self.db.Width-space*(5-1))/5, self.db.Height)
 		tinsert(fiveframe, chibar[i])
-		chibar[i]:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
-		local s = chibar[i]:GetStatusBarTexture()
-		S.CreateTop(s, 0.0, 1.00 , 0.59)
+		chibar[i]:SetStatusBarTexture(S["media"].normal)
+		chibar[i]:SetStatusBarColor(0.0, 1.00 , 0.59)
 		chibar[i]:CreateShadow()
 		if i==1 then
 			chibar[i]:SetPoint("LEFT", chibar, "LEFT")
@@ -93,7 +186,32 @@ function Module:CreateMonkBar()
 	end
 	chibar:RegisterEvent("UNIT_POWER")
 	chibar:RegisterEvent("UNIT_DISPLAYPOWER")
+	chibar:RegisterEvent("PLAYER_ENTERING_WORLD")
 	chibar:SetScript("OnEvent",function(self, event, unit, powerType)
+		if(event=="PLAYER_ENTERING_WORLD") then 
+			local chinum = UnitPower("player",SPELL_POWER_CHI)
+			local chimax = UnitPowerMax("player",SPELL_POWER_CHI)
+			if chinum ~= chimax then
+				if chimax == 4 then
+					chibar[5]:Hide()
+					for i = 1,4 do
+						chibar[i]:SetWidth((self.db.Width-space*(4-1))/4)
+					end
+				elseif chimax == 5 then
+					chibar[5]:Show()
+					for i = 1,5 do
+						chibar[i]:SetWidth((self.db.Width-space*(5-1))/5)
+					end
+				end
+			end
+			for i = 1,chimax do
+				if i <= chinum then
+					chibar[i]:Show()
+				else
+					chibar[i]:Hide()
+				end
+			end
+		end
 		if( unit ~= "player" or (powerType and powerType ~= 'CHI')) then return end
 		local chinum = UnitPower("player",SPELL_POWER_CHI)
 		local chimax = UnitPowerMax("player",SPELL_POWER_CHI)
@@ -101,12 +219,12 @@ function Module:CreateMonkBar()
 			if chimax == 4 then
 				chibar[5]:Hide()
 				for i = 1,4 do
-					chibar[i]:SetWidth((C["Width"]-space*(4-1))/4)
+					chibar[i]:SetWidth((self.db.Width-space*(4-1))/4)
 				end
 			elseif chimax == 5 then
 				chibar[5]:Show()
 				for i = 1,5 do
-					chibar[i]:SetWidth((C["Width"]-space*(5-1))/5)
+					chibar[i]:SetWidth((self.db.Width-space*(5-1))/5)
 				end
 			end
 		end
@@ -141,8 +259,7 @@ local UpdateType = function(self, rid, alt)
 	local rune = self[runemap[rid]]
 	local colors = runes[GetRuneType(rid) or alt]
 	local r, g, b = colors[1], colors[2], colors[3]
-	local s = rune:GetStatusBarTexture()
-	S.CreateTop(s, r, g, b)
+	rune:SetStatusBarColor(r, g, b)
 end
 local function OnEvent(self, event, unit)
 	if event == "RUNE_POWER_UPDATE" or "PLAYER_ENTERING_WORLD" then 
@@ -169,57 +286,82 @@ local function OnEvent(self, event, unit)
 		end
 	end
 end
-function Module:CreateQSDKPower()
-	if  DB.MyClass ~= "PALADIN" and DB.MyClass ~= "DEATHKNIGHT" then return end
+function PB:CreateQSDKPower()
+	if  S.myclass ~= "PALADIN" and S.myclass ~= "DEATHKNIGHT" then return end
     local count
-	if DB.MyClass == "DEATHKNIGHT" then 
+	if S.myclass == "DEATHKNIGHT" then 
 		count = 6
 		RuneFrame.Show = RuneFrame.Hide
 		RuneFrame:Hide()
-	elseif DB.MyClass == "PALADIN" then
+	elseif S.myclass == "PALADIN" then
 		count = 5
 	end
 	local bars = CreateFrame("Frame", nil, Holder)
-	bars:SetSize(C["Width"], C["Height"])
-	bars:SetScale(C["Scale"])
+	bars:SetSize(self.db.Width, self.db.Height)
 	bars:SetPoint("CENTER", Holder)
 	tinsert(mainframe, bars)
 	for i = 1, count do
 		bars[i] =CreateFrame("StatusBar", nil, bars)
-		bars[i]:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
+		bars[i]:SetStatusBarTexture(S["media"].normal)
 		bars[i]:GetStatusBarTexture():SetHorizTile(false)
-		bars[i]:SetSize((C["Width"]-space*(count-1))/count, C["Height"])
+		bars[i]:SetSize((self.db.Width-space*(count-1))/count, self.db.Height)
 		if count == 6 then tinsert(sixframe, bars[i]) else tinsert(sixframe, fiveframe[i]) end
-		bars[i]:SetScale(C["Scale"])
 		
 		if (i == 1) then
 			bars[i]:SetPoint("LEFT", bars, "LEFT")
 		else
 			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", space, 0)
 		end
-        if DB.MyClass == "PALADIN" then
-			local s = bars[i]:GetStatusBarTexture()
-			S.CreateTop(s, 0.9, 0.9, 0)
+        if S.myclass == "PALADIN" then
+			bars[i]:SetStatusBarColor(0.9, 0.9, 0)
 			bars[i]:Hide()
 		else
-			S.SmoothBar(bars[i])
-			S.CreateMark(bars[i])
+			local A = S:GetModule("Skins")
+			S:SmoothBar(bars[i])
+			A:CreateMark(bars[i])
 		end
-		bars[i]:CreateShadow()
+		bars[i]:CreateShadow(0.5)
 	end
-	if DB.MyClass == "DEATHKNIGHT" then
+	if S.myclass == "DEATHKNIGHT" then
 		for i=1,6 do
 			UpdateType(bars, i, math.floor((runemap[i]+1)/2))
 		end
 	end
-	if DB.MyClass == "DEATHKNIGHT" then
+	if S.myclass == "DEATHKNIGHT" then
 		bars:RegisterEvent("RUNE_POWER_UPDATE")
 		bars:RegisterEvent("RUNE_TYPE_UPDATE")
 		bars:SetScript("OnEvent", OnEvent)
-	elseif DB.MyClass == "PALADIN" then
+	elseif S.myclass == "PALADIN" then
 		bars:RegisterEvent("UNIT_POWER")
 		bars:RegisterEvent("UNIT_DISPLAYPOWER")
+		bars:RegisterEvent("PLAYER_ENTERING_WORLD")
 		bars:SetScript("OnEvent",function(self, event, unit)
+			if(event=="PLAYER_ENTERING_WORLD") then 
+				local num = UnitPower('player', SPELL_POWER_HOLY_POWER)
+				local maxnum = UnitPowerMax('player', SPELL_POWER_HOLY_POWER)
+				if num ~= maxnum then
+					if maxnum == 3 then
+						bars[4]:Hide()
+						bars[5]:Hide()
+						for i = 1,3 do
+							bars[i]:SetWidth((self.db.Width-space*(3-1))/3)
+						end
+					elseif maxnum == 5 then
+						bars[4]:Show()
+						bars[5]:Show()
+						for i = 1,5 do
+							bars[i]:SetWidth((self.db.Width-space*(5-1))/5)
+						end
+					end
+				end
+				for i = 1,count do
+					if i <= num then
+						bars[i]:Show()
+					else
+						bars[i]:Hide()
+					end
+				end
+			end
 			if( unit ~= "player" or (powerType and powerType ~= 'HOLY_POWER')) then return end
 			local num = UnitPower('player', SPELL_POWER_HOLY_POWER)
 			local maxnum = UnitPowerMax('player', SPELL_POWER_HOLY_POWER)
@@ -228,13 +370,13 @@ function Module:CreateQSDKPower()
 					bars[4]:Hide()
 					bars[5]:Hide()
 					for i = 1,3 do
-						bars[i]:SetWidth((C["Width"]-space*(3-1))/3)
+						bars[i]:SetWidth((self.db.Width-space*(3-1))/3)
 					end
 				elseif maxnum == 5 then
 					bars[4]:Show()
 					bars[5]:Show()
 					for i = 1,5 do
-						bars[i]:SetWidth((C["Width"]-space*(5-1))/5)
+						bars[i]:SetWidth((self.db.Width-space*(5-1))/5)
 					end
 				end
 			end
@@ -248,29 +390,27 @@ function Module:CreateQSDKPower()
 		end)
 	end
 end
-function Module:CreateCombatPoint()
-	if DB.MyClass ~= "ROGUE" and DB.MyClass ~= "DRUID" then return end
+function PB:CreateCombatPoint()
+	if S.myclass ~= "ROGUE" and S.myclass ~= "DRUID" then return end
 	local CombatPointBar = CreateFrame("Frame", nil, Holder)
-	CombatPointBar:SetSize(C["Width"], C["Height"])
+	CombatPointBar:SetSize(self.db.Width, self.db.Height)
 	CombatPointBar:SetPoint("CENTER", Holder)
 	tinsert(mainframe, CombatPointBar)
 	for i = 1, 5 do
 		CombatPointBar[i] =CreateFrame("StatusBar", nil, CombatPointBar)
-		CombatPointBar[i]:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
+		CombatPointBar[i]:SetStatusBarTexture(S["media"].normal)
 		CombatPointBar[i]:GetStatusBarTexture():SetHorizTile(false)
-		CombatPointBar[i]:SetSize((C["Width"]-space*4)/5, C["Height"])
-		CombatPointBar[i]:SetScale(C["Scale"])
+		CombatPointBar[i]:SetSize((self.db.Width-space*4)/5, self.db.Height)
 		tinsert(fiveframe, CombatPointBar[i])
 		if (i == 1) then
 			CombatPointBar[i]:SetPoint("LEFT", CombatPointBar, "LEFT")
 		else
 			CombatPointBar[i]:SetPoint("LEFT", CombatPointBar[i-1], "RIGHT", space, 0)
 		end
-		local s = CombatPointBar[i]:GetStatusBarTexture()
 		if i ~= 5 then 
-			S.CreateTop(s, 0.9, 0.9, 0)
+			CombatPointBar[i]:SetStatusBarColor(0.9, 0.9, 0)
 		else
-			S.CreateTop(s, 1, 0.2, 0.2)
+			CombatPointBar[i]:SetStatusBarColor(1, 0.2, 0.2)
 		end
 		CombatPointBar[i]:CreateShadow()
 		CombatPointBar[i]:Hide()
@@ -282,7 +422,7 @@ function Module:CreateCombatPoint()
 	CombatPointBar:RegisterEvent("PLAYER_REGEN_DISABLED")
 	CombatPointBar:SetScript("OnEvent", function(self, event)
 		if event == "PLAYER_TALENT_UPDATE" or event == "UPDATE_SHAPESHIFT_FORM" or event == "UNIT_COMBO_POINTS" then
-			if DB.MyClass == "DRUID" then 
+			if S.myclass == "DRUID" then 
 				local form = GetShapeshiftFormID()
 				if(not form) then
 					self:Hide()
@@ -306,40 +446,37 @@ function Module:CreateCombatPoint()
 	end)
 end
 --鸟德
-function Module:CreateEclipse()
-	if DB.MyClass ~= "DRUID" then return end
+function PB:CreateEclipse()
+	if S.myclass ~= "DRUID" then return end
 	local ECLIPSE_BAR_SOLAR_BUFF_ID = ECLIPSE_BAR_SOLAR_BUFF_ID
 	local ECLIPSE_BAR_LUNAR_BUFF_ID = ECLIPSE_BAR_LUNAR_BUFF_ID
 	local SPELL_POWER_ECLIPSE = SPELL_POWER_ECLIPSE
 	local MOONKIN_FORM = MOONKIN_FORM
 	local showBar = false
+	local A = S:GetModule("Skins")
 	eb = CreateFrame('Frame', nil, Holder)
-	eb:SetSize(C["Width"], C["Height"])
+	eb:SetSize(self.db.Width, self.db.Height)
 	eb:SetPoint("CENTER", Holder)
 	eb:CreateShadow()
 	tinsert(mainframe, eb)
 	local lb = CreateFrame('StatusBar', nil, eb)
 	lb:SetPoint('LEFT', eb, 'LEFT')
-	lb:SetSize(C["Width"], C["Height"])
+	lb:SetSize(self.db.Width, self.db.Height)
 	tinsert(mainframe, lb)
-	S.SmoothBar(lb)
-	lb:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
-	local s = lb:GetStatusBarTexture()
-	S.CreateTop(s, 0.27, 0.47, 0.74)
-	S.CreateMark(lb)
+	S:SmoothBar(lb)
+	lb:SetStatusBarTexture(S["media"].normal)
+	lb:SetStatusBarColor(0.27, 0.47, 0.74)
+	A:CreateMark(lb)
 	eb.LunarBar = lb
 	local sb = CreateFrame('StatusBar', nil, eb)
 	sb:SetPoint('LEFT', lb:GetStatusBarTexture(), 'RIGHT', 0, 0)
 	sb:SetPoint('TOPRIGHT', eb, 'TOPRIGHT', 0, 0)
-	sb:SetSize(C["Width"], C["Height"])
-	sb:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
-	local s = sb:GetStatusBarTexture()
-	S.CreateTop(s, 0.9, 0.6, 0.3)
+	sb:SetSize(self.db.Width, self.db.Height)
+	sb:SetStatusBarTexture(S["media"].normal)
+	sb:SetStatusBarColor(0.9, 0.6, 0.3)
 	eb.SolarBar = sb
-	local h = CreateFrame("Frame", nil, eb)
-	h:SetFrameLevel(eb:GetFrameLevel()+1)
-	h:SetAllPoints(eb)
-	local ebInd = S.MakeFontString(h, 10*1, "THINOUTLINE")
+	local ebInd = eb:CreateFontString(nil, "OVERLAY", 2)
+	ebInd:FontTemplate(nil, 10)
 	ebInd:SetPoint('CENTER', h, 'CENTER', 0, 0)
 
 	eb:RegisterEvent("ECLIPSE_DIRECTION_CHANGE")
@@ -405,8 +542,8 @@ function Module:CreateEclipse()
 		end
 	end)
 end
-function Module:FuckWarlock()
-	if DB.MyClass ~= "WARLOCK" then return end
+function PB:FuckWarlock()
+	if S.myclass ~= "WARLOCK" then return end
 	local MAX_POWER_PER_EMBER = 10
 	local SPELL_POWER_DEMONIC_FURY = SPELL_POWER_DEMONIC_FURY
 	local SPELL_POWER_BURNING_EMBERS = SPELL_POWER_BURNING_EMBERS
@@ -424,18 +561,17 @@ function Module:FuckWarlock()
 		[3] = {222/255, 95/255,  95/255, 1},
 	}
 	local bars = CreateFrame('Frame', nil, Holder)
-	bars:SetSize(C["Width"], C["Height"])
+	bars:SetSize(self.db.Width, self.db.Height)
 	bars:SetPoint("CENTER", Holder)
 	tinsert(mainframe, bars)
 	for i = 1, 4 do
 		bars[i] = CreateFrame("StatusBar", nil, bars)
-		bars[i]:SetSize((C["Width"]-space*(4-1))/4, C["Height"])
-		bars[i]:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
+		bars[i]:SetSize((self.db.Width-space*(4-1))/4, self.db.Height)
+		bars[i]:SetStatusBarTexture(S["media"].normal)
 		tinsert(fourframe, bars[i])
-		S.CreateBack(bars[i])
-		S.SmoothBar(bars[i])
-		bars[i]:CreateShadow()
-		S.CreateMark(bars[i])
+		S:SmoothBar(bars[i])
+		bars[i]:CreateShadow(0.5)
+		S:CreateMark(bars[i])
 		if i == 1 then
 			bars[i]:SetPoint("LEFT", bars)
 		else
@@ -483,8 +619,7 @@ function Module:FuckWarlock()
 						else
 							wsb[i]:SetWidth(w - s)
 						end
-						local s = wsb[i]:GetStatusBarTexture()
-						S.CreateTop(s, Colors[SPEC_WARLOCK_DESTRUCTION][1], Colors[SPEC_WARLOCK_DESTRUCTION][2], Colors[SPEC_WARLOCK_DESTRUCTION][3])
+						wsb[i]:SetStatusBarColor(Colors[SPEC_WARLOCK_DESTRUCTION][1], Colors[SPEC_WARLOCK_DESTRUCTION][2], Colors[SPEC_WARLOCK_DESTRUCTION][3])
 					end
 
 				elseif spec == SPEC_WARLOCK_AFFLICTION then
@@ -497,8 +632,7 @@ function Module:FuckWarlock()
 						else
 							wsb[i]:SetWidth(w - s)
 						end
-						local s = wsb[i]:GetStatusBarTexture()
-						S.CreateTop(s, Colors[SPEC_WARLOCK_AFFLICTION][1], Colors[SPEC_WARLOCK_AFFLICTION][2], Colors[SPEC_WARLOCK_AFFLICTION][3])
+						wsb[i]:SetStatusBarColor(Colors[SPEC_WARLOCK_AFFLICTION][1], Colors[SPEC_WARLOCK_AFFLICTION][2], Colors[SPEC_WARLOCK_AFFLICTION][3])
 					end
 
 				elseif spec == SPEC_WARLOCK_DEMONOLOGY then
@@ -506,8 +640,7 @@ function Module:FuckWarlock()
 					wsb[3]:Hide()
 					wsb[4]:Hide()
 					wsb[1]:SetWidth(wsb:GetWidth())
-					local s = wsb[1]:GetStatusBarTexture()
-					S.CreateTop(s, Colors[SPEC_WARLOCK_DEMONOLOGY][1], Colors[SPEC_WARLOCK_DEMONOLOGY][2], Colors[SPEC_WARLOCK_DEMONOLOGY][3])
+					wsb[1]:SetStatusBarColor(Colors[SPEC_WARLOCK_DEMONOLOGY][1], Colors[SPEC_WARLOCK_DEMONOLOGY][2], Colors[SPEC_WARLOCK_DEMONOLOGY][3])
 				end
 			else
 				if wsb:IsShown() then
@@ -554,19 +687,18 @@ function Module:FuckWarlock()
 		end
 	end)
 end
-function Module:Mage()
-	if DB.MyClass ~= "MAGE" then return end
+function PB:Mage()
+	if S.myclass ~= "MAGE" then return end
 	MageBars = CreateFrame("Frame", nil, Holder)
-	MageBars:SetSize(C["Width"], C["Height"])
+	MageBars:SetSize(self.db.Width, self.db.Height)
 	MageBars:SetPoint("CENTER", Holder)
 	tinsert(mainframe, MageBars)
 	for i = 1,4 do
 		MageBars[i] = CreateFrame("StatusBar", nil, MageBars)
-		MageBars[i]:SetSize((C["Width"]-space*(4-1))/4, C["Height"])
-		MageBars[i]:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
+		MageBars[i]:SetSize((self.db.Width-space*(4-1))/4, self.db.Height)
+		MageBars[i]:SetStatusBarTexture(S["media"].normal)
 		tinsert(fourframe, MageBars[i])
-		local s = MageBars[i]:GetStatusBarTexture()
-		S.CreateTop(s, DB.MyClassColor.r, DB.MyClassColor.g, DB.MyClassColor.b)
+		MageBars[i]:SetStatusBarColor(S.myclasscolor.r, S.myclasscolor.g, S.myclasscolor.b)
 		MageBars[i]:CreateShadow()
 		MageBars[i]:Hide()
 		if (i == 1) then
@@ -591,12 +723,12 @@ function Module:Mage()
 	end)
 end
 
-function Module:Shaman()
-	if DB.MyClass ~= "SHAMAN" then return end
+function PB:Shaman()
+	if S.myclass ~= "SHAMAN" then return end
 	local bars = {}
 	local total = 0
 	local delay = 0.01
-
+	local A = S:GetModule("Skins")
 	-- In the order, fire, earth, water, air
 	local colors = {
 		[1] = {0.752,0.172,0.02},
@@ -606,13 +738,12 @@ function Module:Shaman()
 	}
 	for i = 1, 4 do
 		bars[i] = CreateFrame("StatusBar", nil, Holder)
-		bars[i]:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
-		bars[i]:SetSize((C["Width"]-space*(4-1))/4, C["Height"])
+		bars[i]:SetStatusBarTexture(S["media"].normal)
+		bars[i]:SetSize((self.db.Width-space*(4-1))/4, self.db.Height)
 		bars[i]:GetStatusBarTexture():SetHorizTile(false)
 
-		bars[i]:CreateShadow()
-		S.CreateBack(bars[i])
-		S.CreateMark(bars[i])
+		bars[i]:CreateShadow(0.5)
+		A:CreateMark(bars[i])
 		bars[i]:SetMinMaxValues(0, 1)
 		tinsert(fourframe, bars[i])
 		if (i == 1) then
@@ -629,8 +760,7 @@ function Module:Shaman()
 
 		haveTotem, name, startTime, duration, totemIcon = GetTotemInfo(slot)
 
-		--totem[slot]:SetStatusBarColor(unpack(colors[slot]))
-		S.CreateTop(totem[slot]:GetStatusBarTexture(), unpack(colors[slot]))
+		totem[slot]:SetStatusBarColor(unpack(colors[slot]))
 		totem[slot]:SetValue(0)
 
 		-- Multipliers
@@ -693,90 +823,79 @@ function Module:Shaman()
 	end)
 end
 
-function Module:HealthPowerBar()
+function PB:HealthPowerBar()
+	local A = S:GetModule("Skins")
 	healthbar = CreateFrame("Statusbar", nil, Holder)
-	healthbar:SetSize(C["Width"], C["Height"])
+	healthbar:SetSize(self.db.Width, self.db.Height)
 	healthbar:SetPoint("CENTER", Holder)
-	healthbar:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
+	healthbar:SetStatusBarTexture(S["media"].normal)
 	healthbar:SetMinMaxValues(0, UnitHealthMax("player"))
 	healthbar:SetValue(UnitHealth("player"))
 	healthbar:SetStatusBarColor(0.1, 0.8, 0.1, 0)
-	if DB.MyClass ~= "WARLOCK" and DB.MyClass ~= "SHAMAN" and DB.MyClass ~= "DEATHKNIGHT" then
-		S.CreateBack(healthbar)
-		S.CreateBD(healthbar, 0)
+	if S.myclass ~= "WARLOCK" and S.myclass ~= "SHAMAN" and S.myclass ~= "DEATHKNIGHT" then
+		--S.CreateBack(healthbar)
+		A:CreateBD(healthbar, 0.6)
 	end
 	tinsert(mainframe, healthbar)
-	local spar =  healthbar:CreateTexture(nil, "OVERLAY")
-	spar:SetTexture("Interface\\Addons\\SunUI\\Media\\Arrow")
-	spar:SetVertexColor(1, 0, 0, 1) 
-	spar:SetSize(16, 16)
-	spar:SetPoint("TOP", healthbar:GetStatusBarTexture(), "BOTTOMRIGHT", 0, -2)
+	local spar =  healthbar:CreateFontString(nil, "OVERLAY")
+	spar:FontTemplate(nil, 20)
+	spar:SetText("∧")
+	spar:SetTextColor(1, 0, 0, 1) 
+	spar:SetPoint("TOP", healthbar:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 4)
 	
-	healthbar.healthtext = S.MakeFontString(healthbar, 12*SunUIConfig.db.profile.MiniDB.FontScale)
-	healthbar.healthtext:SetPoint("TOP", spar, "BOTTOM", 0, 7)
+	healthbar.healthtext = healthbar:CreateFontString(nil, "OVERLAY")
+	healthbar.healthtext:FontTemplate()
+	healthbar.healthtext:SetPoint("TOP", spar, "BOTTOM", 0, 3)
 	healthbar.healthtext:SetTextColor(1, 0.22, 0.52)
 
 	healthbar.power = CreateFrame("Statusbar", nil, healthbar)
-	healthbar.power:SetSize(C["Width"], C["Height"])
-	healthbar.power:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
+	healthbar.power:SetSize(self.db.Width, self.db.Height)
+	healthbar.power:SetStatusBarTexture(S["media"].normal)
 	healthbar.power:SetAllPoints(healthbar)
 	healthbar.power:SetStatusBarColor(0.1, 0.8, 0.1, 0)
 	healthbar.power:SetMinMaxValues(0, UnitPowerMax("player"))
-	local powerspar =  healthbar.power:CreateTexture(nil, "OVERLAY")
-	powerspar:SetTexture("Interface\\Addons\\SunUI\\Media\\ArrowT")
-	powerspar:SetVertexColor(.3,.45,.65, 1) 
-	powerspar:SetSize(16, 16)
-	powerspar:SetPoint("BOTTOM", healthbar.power:GetStatusBarTexture(), "TOPRIGHT", 0, 2)
+	local powerspar =  healthbar.power:CreateFontString(nil, "OVERLAY")
+	powerspar:FontTemplate(nil, 20)
+	powerspar:SetTextColor(.3,.45,.65, 1) 
+	powerspar:SetText("∨")
+	powerspar:SetPoint("BOTTOM", healthbar.power:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
 	
-	healthbar.powertext = S.MakeFontString(healthbar, 12*SunUIConfig.db.profile.MiniDB.FontScale)
-	healthbar.powertext:SetPoint("BOTTOM", powerspar, "TOP", 0, -5)
+	healthbar.powertext = healthbar:CreateFontString(nil, "OVERLAY")
+	healthbar.powertext:FontTemplate()
+	healthbar.powertext:SetPoint("BOTTOM", powerspar, "TOP", 0, -8)
 	tinsert(mainframe, healthbar.power)
-	S.SmoothBar(healthbar)
-	S.SmoothBar(healthbar.power)
-	
-	healthbar:SetScript("OnEvent", function(self, event)
-		if event == "UPDATE_SHAPESHIFT_FORM" or event == "PLAYER_ENTERING_WORLD" or event == "ACTIVE_TALENT_GROUP_CHANGED" then
-			self:SetMinMaxValues(0, UnitHealthMax("player"))
-			self.power:SetMinMaxValues(0, UnitPowerMax("player"))
-			local _, powerclass = UnitPowerType("player")
-			healthbar.powertext:SetTextColor(unpack(powercolor[powerclass]))
-		end
-		if event == "PLAYER_LEVEL_UP" or event == "UNIT_INVENTORY_CHANGED" then
-				self:SetMinMaxValues(0, UnitHealthMax("player"))
-				self.power:SetMinMaxValues(0, UnitPowerMax("player"))
-		end
-	end)
+	S:SmoothBar(healthbar)
+	S:SmoothBar(healthbar.power)
 	
 	self:UpdateHealthBar()
 end
 
-function Module:UpdateHealthBar()
-	if C["HealthPower"] then 
+function PB:UpdateHealthBar()
+	if self.db.HealthPower then 
 		healthbar:Show() 
-		healthbar:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
-		healthbar:RegisterEvent("PLAYER_ENTERING_WORLD")
-		healthbar:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-		healthbar:RegisterEvent("PLAYER_LEVEL_UP")
-		healthbar:RegisterEvent("UNIT_INVENTORY_CHANGED")
 		healthbar:SetScript("OnUpdate", function(self, elapsed)
 			self.elapsed = (self.elapsed or 0) + elapsed
 			if self.elapsed < .2 then
+				self:SetMinMaxValues(0, UnitHealthMax("player"))
+				self.power:SetMinMaxValues(0, UnitPowerMax("player"))
+				local _, powerclass = UnitPowerType("player")
+				self.powertext:SetTextColor(unpack(powercolor[powerclass]))
 				local healthnum = UnitHealth("player")
 				local powernum = UnitPower("player")
 				local maxnum = 0
 				self:SetValue(healthnum)
 				self.power:SetValue(powernum)
-				if C["HealthPowerPer"] then
+				if PB.db.HealthPowerPer then
 					maxnum = UnitHealthMax("player")
 					self.healthtext:SetText(format("%.1f ", healthnum/maxnum*100).."%")
 				else
-					self.healthtext:SetText(S.ShortValue(healthnum))
+					self.healthtext:SetText(S:ShortValue(healthnum))
 				end
-				if C["ManaPowerPer"] then
+				if PB.db.ManaPowerPer then
 					maxnum = UnitPowerMax("player")
 					self.powertext:SetText(format("%.1f ", powernum/maxnum*100).."%")
 				else
-					self.powertext:SetText(S.ShortValue(powernum))
+					self.powertext:SetText(S:ShortValue(powernum))
 				end
 			return end
 			self.elapsed = 0
@@ -784,70 +903,69 @@ function Module:UpdateHealthBar()
 	else
 		healthbar:Hide()
 		healthbar:SetScript("OnUpdate", nil)
-		healthbar:UnregisterAllEvents()
 	end
 end
-function Module:UpdateSize()
+function PB:UpdateSize()
 	for k, v in ipairs(mainframe) do 
 		if v then 
-			v:SetSize(C["Width"], C["Height"])
+			v:SetSize(self.db.Width, self.db.Height)
 		end
 	end
 	for k, v in ipairs(threeframe) do 
 		if v then 
-			v:SetSize((C["Width"]-space*(3-1))/3, C["Height"])
+			v:SetSize((self.db.Width-space*(3-1))/3, self.db.Height)
 		end
 	end
 	for k, v in ipairs(fourframe) do 
 		if v then 
-			v:SetSize((C["Width"]-space*(4-1))/4, C["Height"])
+			v:SetSize((self.db.Width-space*(4-1))/4, self.db.Height)
 		end
 	end
 	for k, v in ipairs(fiveframe) do 
 		if v then 
-			v:SetSize((C["Width"]-space*(5-1))/5, C["Height"])
+			v:SetSize((self.db.Width-space*(5-1))/5, self.db.Height)
 		end
 	end
 	for k, v in ipairs(sixframe) do 
 		if v then 
-			v:SetSize((C["Width"]-space*(6-1))/6, C["Height"])
+			v:SetSize((self.db.Width-space*(6-1))/6, self.db.Height)
 		end
 	end
 end
-function Module:PLAYER_REGEN_DISABLED()
+function PB:PLAYER_REGEN_DISABLED()
 	Holder:Show()
 	UIFrameFadeIn(Holder, 1, Holder:GetAlpha(), 1)
 end
-function Module:PLAYER_REGEN_ENABLED()
-	S.FadeOutFrameDamage(Holder, 1)
+function PB:PLAYER_REGEN_ENABLED()
+	S:FadeOutFrame(Holder, 1)
 end
-function Module:UpdateFade()
-	if C["Fade"] then
-		Module:RegisterEvent("PLAYER_REGEN_ENABLED")
-		Module:RegisterEvent("PLAYER_REGEN_DISABLED")
-		Module:PLAYER_REGEN_ENABLED()
+function PB:UpdateFade()
+	if self.db.Fade then
+		self:RegisterEvent("PLAYER_REGEN_ENABLED")
+		self:RegisterEvent("PLAYER_REGEN_DISABLED")
+		self:PLAYER_REGEN_ENABLED()
 	else
-		Module:UnregisterEvent("PLAYER_REGEN_ENABLED")
-		Module:UnregisterEvent("PLAYER_REGEN_DISABLED")
-		Module:PLAYER_REGEN_DISABLED()
+		self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+		self:UnregisterEvent("PLAYER_REGEN_DISABLED")
+		self:PLAYER_REGEN_DISABLED()
 	end
 end
-function Module:ACTIVE_TALENT_GROUP_CHANGED()
+function PB:ACTIVE_TALENT_GROUP_CHANGED()
 	local spec = GetSpecialization()
-	local talent = (DB.MyClass == "PRIEST") and 3 or (DB.MyClass == "DRUID") and 1 or (DB.MyClass == "MAGE") and 1
-	if DB.MyClass == "PRIEST" and spec ~= 3 then
+	local talent = (S.myclass == "PRIEST") and 3 or (S.myclass == "DRUID") and 1 or (S.myclass == "MAGE") and 1
+	if S.myclass == "PRIEST" and spec ~= 3 then
 		for i = 1,3 do
 			ShadowOrbs[i]:Hide()
 		end
 		ShadowOrbs:UnregisterAllEvents()
-	elseif DB.MyClass == "PRIEST" and spec == 3 then
+	elseif S.myclass == "PRIEST" and spec == 3 then
 		ShadowOrbs:RegisterEvent("UNIT_POWER")
 		ShadowOrbs:RegisterEvent("UNIT_DISPLAYPOWER")
 	end
-	if DB.MyClass == "DRUID" and spec ~= 1 then
+	if S.myclass == "DRUID" and spec ~= 1 then
 		eb:Hide()
 		eb:UnregisterAllEvents()
-	elseif DB.MyClass == "DRUID" and spec == 1 then
+	elseif S.myclass == "DRUID" and spec == 1 then
 		eb:RegisterEvent("ECLIPSE_DIRECTION_CHANGE")
 		eb:RegisterEvent("PLAYER_TALENT_UPDATE")
 		eb:RegisterEvent("UNIT_POWER")
@@ -855,20 +973,21 @@ function Module:ACTIVE_TALENT_GROUP_CHANGED()
 		eb:RegisterEvent("PLAYER_ENTERING_WORLD")
 		eb:RegisterEvent("PLAYER_REGEN_DISABLED")
 	end
-	if DB.MyClass == "MAGE" and spec ~= 1 then
+	if S.myclass == "MAGE" and spec ~= 1 then
 		for i = 1,6 do
 			MageBars[i]:Hide()
 		end
 		MageBars:UnregisterEvent("UNIT_AURA")
-	elseif DB.MyClass == "MAGE"  and spec == 1 then
+	elseif S.myclass == "MAGE"  and spec == 1 then
 		MageBars:RegisterEvent("UNIT_AURA")
 	end
 end
-function Module:OnEnable()
-	C = SunUIConfig.db.profile.PowerBarDB
-	if not C["Open"] then Holder = nil return end
-	Holder:SetSize(C["Width"], C["Height"])
-	MoveHandle.PowerBar = S.MakeMove(Holder, "SunUIPowerBar", "PowerBar", C["Scale"])
+function PB:Initialize()
+	
+	if not self.db.Open then Holder = nil return end
+	Holder:SetSize(self.db.Width, self.db.Height)
+	Holder:SetPoint("CENTER", "UIParent", "CENTER", 0, -120)
+	S:CreateMover(Holder, "PowerBarMover", L["PowerBar"], true, nil, "ALL,MINITOOLS")
 	self:CreateShadowOrbs()
 	self:CreateMonkBar()
 	self:CreateQSDKPower()
@@ -879,7 +998,7 @@ function Module:OnEnable()
 	self:Shaman()
 	self:HealthPowerBar()
 	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-	if C["Fade"] then
+	if self.db.Fade then
 		self:RegisterEvent("PLAYER_ENTERING_WORLD", function()
 			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 			self:PLAYER_REGEN_ENABLED()
@@ -888,3 +1007,5 @@ function Module:OnEnable()
 		self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	end
 end
+
+S:RegisterModule(PB:GetName())

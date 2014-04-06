@@ -1,6 +1,7 @@
-﻿local S, L, DB, _, C = unpack(select(2, ...))
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ChatFilter")
-local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
+﻿local S, _, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+
+local CT = S:GetModule("Chat")
+
 local Config = {
 	["Enabled"] = true, --Enable the ChatFilter. // 是否开启本插件
 	["ScanOurself"] = nil, --Scan ourself. // 是否扫描自己的聊天信息
@@ -623,9 +624,8 @@ local function ChatFilter_Created(self, event, msg)
 	end
 end
 
-function Module:OnInitialize()
-	C = SunUIConfig.db.profile.MiniDB
-	if C["ChatFilter"] ~= true then return end
+function CT:InitChatFilter()
+	if self.db.ChatFilter ~= true then return end
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", ChatFilter_Rubbish)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD", ChatFilter_Rubbish)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_OFFICER", ChatFilter_Rubbish)

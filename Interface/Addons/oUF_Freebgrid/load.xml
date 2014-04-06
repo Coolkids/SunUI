@@ -1,0 +1,21 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="libs\LibStub\LibStub.lua" />
+    <Include file="libs\CallbackHandler-1.0\CallbackHandler-1.0.xml" /> 
+    <Include file="libs\LibSharedMedia-3.0\lib.xml" />
+    <Include file="libs\LibMapData-1.0\library.lua" />
+
+    <Script file="db.lua" />
+    <Script file="events.lua" />
+    <Script file="aura_list.lua" />
+    <Script file="freebgrid.lua" />
+    <Script file="movable.lua" />
+    <Script file="tags.lua" /> 
+    <Script file="elements\afk.lua" />
+    <Script file="elements\auras.lua" /> 
+    <Script file="elements\indicators.lua" />
+    <Script file="elements\heals.lua" />
+    <Script file="elements\range.lua" />
+    <Script file="elements\smooth.lua" />
+    <Script file="elements\autorez.lua" />
+    <Script file="elements\cluster.lua" />
+</Ui>

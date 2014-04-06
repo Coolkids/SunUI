@@ -1,14 +1,236 @@
-local S, L, DB, _, C = unpack(select(2, ...))
-local _G = _G
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("actionbar", "AceEvent-3.0", "AceHook-3.0")
+﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+
+local AB = S:NewModule("ActionBar", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 local LibActionButton = LibStub and LibStub("LibActionButton-1.0", true)
 local activeButtons = LibActionButton and LibActionButton.activeButtons or ActionBarActionEventsFrame.frames
-local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
-local buttonList = {}
-local bigButton = {}
-local hidefunction = ActionButton_HideGrid
 
-function Module:blizzHider()
+local hidefunction = ActionButton_HideGrid
+AB.modName = L["动作条"]
+AB.visibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show"
+AB.buttonList = {}
+AB.bigButton = {}
+
+function AB:GetOptions()
+	local options = {
+		group1 = {
+			type = "group", order = 1,
+			name = " ",guiInline = true,
+			args = {
+				Bar1Layout = {
+					type = "select", order = 1,
+					name = L["bar1布局"], desc = L["请选择布局"],
+					values = {[1] = L["12x1布局"], [2] =L["6x2布局"]},
+					set = function(info, value) self.db.Bar1Layout = value
+						self:UpdateSpace()
+					end,
+				},
+				Bar2Layout = {
+					type = "select", order = 2,
+					name = L["bar2布局"], desc = L["请选择布局"],
+					values = {[1] = L["12x1布局"], [2] =L["6x2布局"]},
+					set = function(info, value) self.db.Bar2Layout = value
+						self:UpdateSpace()
+					end,
+				},
+				Bar3Layout = {
+					type = "select", order = 3,
+					name = L["bar3布局"], desc = L["请选择布局"],
+					values = {[1] = L["12x1布局"], [2] =L["6x2布局"]},
+					set = function(info, value) self.db.Bar3Layout = value
+						self:UpdateSpace()
+					end,
+				},	
+				Bar4Layout = {
+					type = "select", order = 4,
+					name = L["bar4布局"], desc = L["请选择布局"],
+					values = {[1] = L["12x1布局"], [2] =L["6x2布局"]},
+					set = function(info, value) self.db.Bar4Layout = value
+						self:UpdateSpace()
+					end,
+				},	
+				Bar5Layout = {
+					type = "select", order = 5,
+					name = L["bar5布局"], desc = L["请选择布局"].."\n 需要"..L["正常布局"],disabled = function(info) return (self.db.Big4Layout == 1) end,
+					values = {[1] = "12x1布局", [2] = "6x2布局"},
+					set = function(info, value) self.db.Bar5Layout = value
+						self:UpdateSpace()
+					end,
+				},	
+				Big4Layout = {
+					type = "select", order = 6,
+					name = L["4方块布局"], desc = L["请选择布局"],
+					values = {[1] = L["4方块布局"],  [2] = L["正常布局"] },
+				},
+			}
+		},
+		group2 = {
+			type = "group", order = 2,
+			name = " ",guiInline = true,
+			args = {
+				HideHotKey = {
+					type = "toggle", order = 1,
+					name = L["隐藏快捷键显示"],			
+				},
+				HideMacroName = {
+					type = "toggle", order = 2,
+					name = L["隐藏宏名称显示"],		
+				},
+				CooldownFlash = {
+					type = "toggle", order = 3,
+					name = L["冷却闪光"],	
+					set = function(info, value) self.db.CooldownFlash = value
+						self:UpdateSetCoolDownFlashUpdate()
+					end,
+				},
+				UnLock = {
+					type = "execute",
+					name = L["按键绑定"],
+					order = 4,
+					func = function()
+						SlashCmdList.MOUSEOVERBIND()
+					end,
+				},
+			}
+		},
+		group3 = {
+			type = "group", order = 3,
+			name = " ",guiInline = true,
+			args = {
+				ButtonSize = {
+					type = "range", order = 1,
+					name = L["动作条按钮大小"], desc = L["动作条按钮大小"],
+					min = 16, max = 64, step = 1,
+					set = function(info, value) 
+						self.db.ButtonSize = value
+						self:UpdateSize(value)
+					end,
+				},
+				ButtonSpacing = {
+					type = "range", order = 2,
+					name = L["动作条间距大小"], desc = L["动作条间距大小"],
+					min = 0, max = 6, step = 1,
+					get = function(info) return self.db.ButtonSpacing end,
+					set = function(info, value) self.db.ButtonSpacing = value
+						self:UpdateSpace()
+					end,
+				},
+				FontSize = {
+					type = "range", order = 3,
+					name = L["动作条字体大小"], desc = L["动作条字体大小"],
+					min = 1, max = 36, step = 1,
+				},
+				CooldownFlashSize = {
+					type = "input",
+					name = L["冷却闪光图标大小"],
+					desc = L["冷却闪光图标大小"],
+					order = 4,
+					disabled = function(info) return not self.db.CooldownFlash end,
+					get = function() return tostring(self.db.CooldownFlashSize) end,
+					set = function(_, value) 
+						self.db.CooldownFlashSize = tonumber(value) 
+						self:UpdateSetCoolDownFlashUpdate()
+					end,
+				},
+				CooldownAlhpa = {
+					name = L["CD时透明度"],
+					type = "range",
+					order = 5,
+					min = 0, max = 1, step = 0.05,
+				},
+			}
+		},
+		group5 = {
+			type = "group", order = 4,
+			name = " ",guiInline = true,
+			args = {		
+				AllFade = {
+					type = "toggle", order = 2,
+					name = L["全部动作条渐隐"],		
+				},
+				Bar1Fade = {
+					type = "toggle", order = 3,
+					disabled = function(info) return self.db.AllFade end,
+					name = L["Bar1渐隐"],		
+				},
+				Bar2Fade = {
+					type = "toggle", order = 4,
+					disabled = function(info) return self.db.AllFade end,
+					name = L["Bar2渐隐"],		
+				},
+				Bar3Fade = {
+					type = "toggle", order = 5,
+					disabled = function(info) return self.db.AllFade end,
+					name = L["Bar3渐隐"],		
+				},
+				Bar4Fade = {
+					type = "toggle", order = 6,
+					disabled = function(info) return self.db.AllFade end,
+					name = L["Bar4渐隐"],		
+				},
+				Bar5Fade = {
+					type = "toggle", order = 7,
+					disabled = function(info) return self.db.AllFade end,
+					name = L["Bar5渐隐"],		
+				},
+				StanceBarFade = {
+					type = "toggle", order = 8,
+					disabled = function(info) return self.db.AllFade end,
+					name = L["姿态栏渐隐"],		
+				},
+
+				PetBarFade = {
+					type = "toggle", order = 9,
+					disabled = function(info) return self.db.AllFade end,
+					name = L["宠物渐隐"],		
+				},
+			}
+		},
+		group6 = {
+			type = "group", order = 6,
+			name = " ",guiInline = true, disabled =function(info) return (self.db.Big4Layout ~= 1) end,
+			args = {
+				BigSize1 = {
+					type = "range", order = 1, desc = "大小设置为小于10的时候为关闭按钮",
+					name = L["Big1大小"],
+					min = 9, max = 80, step = 1,
+					set = function(info, value) 
+						self.db.BigSize1 = value
+						self:UpdateBigButtonSize()
+					end,
+				},
+				BigSize2 = {
+					type = "range", order = 2, desc = "大小设置为小于10的时候为关闭按钮",
+					name = L["Big2大小"],
+					min = 9, max = 80, step = 1,
+					set = function(info, value) 
+						self.db.BigSize2 = value
+						self:UpdateBigButtonSize()
+					end,
+				},
+				BigSize3 = {
+					type = "range", order = 3, desc = "大小设置为小于10的时候为关闭按钮",
+					name = L["Big3大小"],
+					min = 9, max = 80, step = 1,
+					set = function(info, value) 
+						self.db.BigSize3 = value
+						self:UpdateBigButtonSize()
+					end,
+				},
+				BigSize4 = {
+					type = "range", order = 4, desc = "大小设置为小于10的时候为关闭按钮",
+					name = L["Big4大小"],
+					min = 9, max = 80, step = 1,
+					set = function(info, value) 
+						self.db.BigSize4 = value			
+						self:UpdateBigButtonSize()
+					end,
+				},
+			}
+		},
+	}
+	return options
+end
+function AB:blizzHider()
 	local hider = CreateFrame("Frame")
 	hider:Hide()
 	local hideFrames = {MainMenuBar, MainMenuBarPageNumber, ActionBarDownButton, ActionBarUpButton, OverrideActionBarExpBar, OverrideActionBarHealthBar, OverrideActionBarPowerBar, OverrideActionBarPitchFrame, CharacterMicroButton, SpellbookMicroButton, TalentMicroButton, AchievementMicroButton, QuestLogMicroButton, GuildMicroButton, PVPMicroButton, LFDMicroButton, CompanionsMicroButton, EJMicroButton, MainMenuMicroButton, StoreMicroButton, HelpMicroButton, MainMenuBarBackpackButton,CharacterBag0Slot,CharacterBag1Slot,CharacterBag2Slot,CharacterBag3Slot}
@@ -38,328 +260,36 @@ function Module:blizzHider()
 		OverrideActionBar[tex]:SetAlpha(0)
 	end
 end
-function Module:CreateBar1()
-	local bar = CreateFrame("Frame","SunUIActionBar1",UIParent, "SecureHandlerStateTemplate")
-	if C["Bar1Layout"] == 2 then
-		bar:SetWidth(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
-		bar:SetHeight(C["ButtonSize"]*2+C["ButtonSpacing"])
-	else
-		bar:SetWidth(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
-		bar:SetHeight(C["ButtonSize"])
-	end
-	bar:SetScale(C["MainBarSacle"])
-	MoveHandle.SunUIActionBar1 = S.MakeMove(SunUIActionBar1, "SunUIActionBar1", "bar1", C["MainBarSacle"])
-	MainMenuBarArtFrame:SetParent(bar)
-	MainMenuBarArtFrame:EnableMouse(false)
 
-	for i = 1, 12 do
-		local button = _G["ActionButton"..i]
-		button:SetSize(C["ButtonSize"], C["ButtonSize"])
-		button:ClearAllPoints()
-		table.insert(buttonList, button)
-		if i == 1 then
-			button:SetPoint("BOTTOMLEFT", bar, 0,0)
-		else
-			local previous = _G["ActionButton"..i-1]
-			if C["Bar1Layout"] == 2 and i == 7 then
-				previous = _G["ActionButton1"]
-				button:SetPoint("BOTTOMLEFT", previous, "TOPLEFT", 0, C["ButtonSpacing"])
-			else
-				button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
-			end
-		end
-	end
-	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
-end
-function Module:CreateBar2()
-	local bar = CreateFrame("Frame","SunUIActionBar2",UIParent, "SecureHandlerStateTemplate")
-	if C["Bar2Layout"] == 2 then
-		bar:SetWidth(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
-		bar:SetHeight(C["ButtonSize"]*2+C["ButtonSpacing"])
-	else  
-		bar:SetWidth(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
-		bar:SetHeight(C["ButtonSize"])
-	end
-	bar:SetScale(C["MainBarSacle"])
-	MoveHandle.SunUIActionBar2 = S.MakeMove(bar, "SunUIActionBar2", "bar2", C["MainBarSacle"])
-
-
-	--move the buttons into position and reparent them
-	MultiBarBottomLeft:SetParent(bar)
-	MultiBarBottomLeft:EnableMouse(false)
-
-	for i=1, 12 do
-		local button = _G["MultiBarBottomLeftButton"..i]
-		table.insert(buttonList, button)
-		button:SetSize(C["ButtonSize"], C["ButtonSize"])
-		button:ClearAllPoints()
-		if i == 1 then
-			button:SetPoint("BOTTOMLEFT", bar, 0,0)
-		else
-			local previous = _G["MultiBarBottomLeftButton"..i-1]      
-			if C["Bar2Layout"] == 2 and i == 7 then
-				previous = _G["MultiBarBottomLeftButton1"]
-				button:SetPoint("BOTTOMLEFT", previous, "TOPLEFT", 0, C["ButtonSpacing"])
-			else
-				button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
-			end
-		end
-	end
-	--show/hide the frame on a given state driver
-	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
-end
-function Module:CreateBar3()
-	local bar = CreateFrame("Frame","SunUIActionBar3",UIParent, "SecureHandlerStateTemplate")
-	local bar2 = CreateFrame("Frame","SunUIActionBar3_2",UIParent, "SecureHandlerStateTemplate")
-	if C["Bar3Layout"] == 1 then
-		bar:SetWidth(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
-		bar:SetHeight(C["ButtonSize"])
-	else
-		bar:SetWidth(C["ButtonSize"]*3+C["ButtonSpacing"]*2)
-		bar:SetHeight(C["ButtonSize"]*2+C["ButtonSpacing"])
-		bar2:SetWidth(C["ButtonSize"]*3+C["ButtonSpacing"]*2)
-		bar2:SetHeight(C["ButtonSize"]*2+C["ButtonSpacing"])
-		bar2:SetScale(C["MainBarSacle"])
-	end
-	bar:SetScale(C["MainBarSacle"])
-	bar2:SetScale(C["MainBarSacle"])
-	if C["Bar3Layout"] == 1 then
-		MoveHandle.SunUIActionBar3 = S.MakeMove(bar, "SunUIActionBar3", "bar3", C["MainBarSacle"])
-	else
-		MoveHandle.SunUIActionBar3 = S.MakeMove(bar, "SunUIActionBar3", "bar3", C["MainBarSacle"])
-		MoveHandle.SunUIActionBar32 = S.MakeMove(bar2, "SunUIActionBar3", "bar32", C["MainBarSacle"])
-	end
-
-
-	MultiBarBottomRight:SetParent(bar)
-	MultiBarBottomRight:EnableMouse(false)
-	if C["Bar3Layout"] == 1 then
-		for i=1, 12 do
-			local button = _G["MultiBarBottomRightButton"..i]
-			table.insert(buttonList, button)
-			button:SetSize(C["ButtonSize"], C["ButtonSize"])
-			button:ClearAllPoints()
-			if i == 1 then
-				button:SetPoint("BOTTOMLEFT", bar, 0,0)
-			else
-				local previous = _G["MultiBarBottomRightButton"..i-1]     
-				button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0) 
-			end
-		end
-		RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
-	elseif C["Bar3Layout"] == 2 then
-	for i = 1, 12 do
-		button = _G["MultiBarBottomRightButton"..i]
-		table.insert(buttonList, button)
-		button:SetSize(C["ButtonSize"], C["ButtonSize"])
-		button:ClearAllPoints()
-		if i == 1 then
-				button:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", 0, 0)
-			elseif i <= 3 then
-				button:SetPoint("RIGHT", _G["MultiBarBottomRightButton"..i-1], "LEFT", -C["ButtonSpacing"], 0)
-			elseif i == 4 then
-				button:SetPoint("BOTTOMLEFT", _G["MultiBarBottomRightButton1"], "TOPLEFT", 0, C["ButtonSpacing"])
-			elseif i <= 6 then
-				button:SetPoint("RIGHT", _G["MultiBarBottomRightButton"..i-1], "LEFT", -C["ButtonSpacing"], 0)	
-			elseif i == 7 then
-				button:SetPoint("BOTTOMLEFT", bar2, "BOTTOMLEFT", 0, 0)
-			elseif i <= 9 then
-				button:SetPoint("LEFT", _G["MultiBarBottomRightButton"..i-1], "RIGHT", C["ButtonSpacing"], 0)
-			elseif i == 10 then
-				button:SetPoint("BOTTOMLEFT", _G["MultiBarBottomRightButton7"], "TOPLEFT", 0, C["ButtonSpacing"])
-			elseif i <= 12 then
-				button:SetPoint("LEFT", _G["MultiBarBottomRightButton"..i-1], "RIGHT", C["ButtonSpacing"], 0)	
-			end
-		end
-		RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
-		RegisterStateDriver(bar2, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
-	end
-end
-function Module:CreateBar4()
-	local bar = CreateFrame("Frame","SunUIActionBar4",UIParent, "SecureHandlerStateTemplate")
-	if C["Bar4Layout"] == 2 then
-		bar:SetWidth(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
-		bar:SetHeight(C["ButtonSize"]*2+C["ButtonSpacing"])
-	else  
-		bar:SetWidth(C["ButtonSize"])
-		bar:SetHeight(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
-	end
-	bar:SetScale(C["MainBarSacle"])
-	bar:SetHitRectInsets(-10, -10, -10, -10)
-	MoveHandle.SunUIActionBar4 = S.MakeMove(bar, "SunUIActionBar4", "bar4", C["MainBarSacle"])
-
-	MultiBarRight:SetParent(bar)
-	MultiBarRight:EnableMouse(false)
-
-	if C["Bar4Layout"] == 1 then
-		for i=1, 12 do
-			local button = _G["MultiBarRightButton"..i]
-			table.insert(buttonList, button)
-			button:ClearAllPoints()
-			button:SetSize(C["ButtonSize"], C["ButtonSize"])
-				if i == 1 then
-					button:SetPoint("TOPLEFT", bar, 0,0)
-				else
-					local previous = _G["MultiBarRightButton"..i-1]
-					button:SetPoint("TOP", previous, "BOTTOM", 0, -C["ButtonSpacing"])
-				end
-		end
-	elseif C["Bar4Layout"] == 2 then 
-		for i=1, 12 do
-			local button = _G["MultiBarRightButton"..i]
-			table.insert(buttonList, button)
-			button:ClearAllPoints()
-			button:SetSize(C["ButtonSize"], C["ButtonSize"])
-				if i == 1 then
-					button:SetPoint("TOPLEFT", bar, 0,0)	
-				else
-					local previous = _G["MultiBarRightButton"..i-1]
-					if  i == 7 then
-					previous = _G["MultiBarRightButton1"]
-					button:SetPoint("TOPLEFT", previous, "BOTTOMLEFT", 0, -C["ButtonSpacing"])
-					else
-					button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
-					end
-				end
-		end
-	end
-	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
-end
-function Module:CreateBar5()
-	if C["Big4Layout"] == 1 then
-		local bar51 = CreateFrame("Frame","SunUIMultiBarLeft1",UIParent, "SecureHandlerStateTemplate")
-		local bar52 = CreateFrame("Frame","SunUIMultiBarLeft2",UIParent, "SecureHandlerStateTemplate")
-		local bar53 = CreateFrame("Frame","SunUIMultiBarLeft3",UIParent, "SecureHandlerStateTemplate")
-		local bar54 = CreateFrame("Frame","SunUIMultiBarLeft4",UIParent, "SecureHandlerStateTemplate")
-		bar51:SetWidth(C["BigSize1"])
-		bar51:SetHeight(C["BigSize1"])
-		MoveHandle.SunUIMultiBarLeft1 = S.MakeMove(bar51, "SunUIBigActionBar1", "bar51", 1)
-
-		bar52:SetWidth(C["BigSize2"])
-		bar52:SetHeight(C["BigSize2"])
-		MoveHandle.SunUIMultiBarLeft2 = S.MakeMove(bar52, "SunUIBigActionBar2", "bar52", 1)
-
-		bar53:SetWidth(C["BigSize3"])
-		bar53:SetHeight(C["BigSize3"])
-		MoveHandle.SunUIMultiBarLeft3 = S.MakeMove(bar53, "SunUIBigActionBar3", "bar53", 1)
-
-		bar54:SetWidth(C["BigSize4"])
-		bar54:SetHeight(C["BigSize4"])
-		MoveHandle.SunUIMultiBarLeft4 = S.MakeMove(bar54, "SunUIBigActionBar4", "bar54", 1)
-
-		MultiBarLeft:SetParent(bar51)
-		MultiBarLeft:EnableMouse(false)
-		for i=1, 4 do
-			local button = _G["MultiBarLeftButton"..i]
-			button:ClearAllPoints()
-			button:SetSize(C["BigSize"..i], C["BigSize"..i])
-			if i == 1 then
-				button:SetAllPoints(bar51)
-			elseif i == 2 then
-				button:SetAllPoints(bar52)
-			elseif i == 3 then
-				button:SetAllPoints(bar53)
-			else
-				button:SetAllPoints(bar54)
-			end
-			if C["BigSize"..i] < 10 then
-				button:ClearAllPoints()
-			end
-		end
-
-		for i=5, 12 do
-			local button = _G["MultiBarLeftButton"..i]
-			button:ClearAllPoints()
-			button:Kill()
-		end
-		if S.IsCoolkid() == true then 
-			_G["MultiBarLeftButton1"]:ClearAllPoints()
-			_G["MultiBarLeftButton2"]:ClearAllPoints()
-		end
-		RegisterStateDriver(bar51, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
-		RegisterStateDriver(bar52, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
-		RegisterStateDriver(bar53, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
-		RegisterStateDriver(bar54, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
-	elseif C["Big4Layout"] == 2 then
-		local bar = CreateFrame("Frame","SunUIActionBar5",UIParent, "SecureHandlerStateTemplate")
-		if C["Bar5Layout"] == 2 then
-			bar:SetWidth(C["ButtonSize"]*6+C["ButtonSpacing"]*5)
-			bar:SetHeight(C["ButtonSize"]*2+C["ButtonSpacing"])
-		else  
-			bar:SetWidth(C["ButtonSize"])
-			bar:SetHeight(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
-		end
-		bar:SetScale(C["MainBarSacle"])
-		MoveHandle.SunUIActionBar5 = S.MakeMove(bar, "SunUIActionBar5", "bar5", C["MainBarSacle"])
-
-		MultiBarLeft:SetParent(bar)
-		MultiBarLeft:EnableMouse(false)
-		if C["Bar5Layout"] == 1 then 
-			for i=1, 12 do
-				local button = _G["MultiBarLeftButton"..i]
-				table.insert(buttonList, button)
-				button:ClearAllPoints()
-				button:SetSize(C["ButtonSize"], C["ButtonSize"])
-					if i == 1 then
-						button:SetPoint("TOPLEFT", bar, 0,0)
-					else
-						local previous = _G["MultiBarLeftButton"..i-1]
-						button:SetPoint("TOP", previous, "BOTTOM", 0, -C["ButtonSpacing"])
-					end
-			end
-		elseif C["Bar5Layout"] == 2 then 
-			for i=1, 12 do
-				local button = _G["MultiBarLeftButton"..i]
-				table.insert(buttonList, button)
-				button:ClearAllPoints()
-				button:SetSize(C["ButtonSize"], C["ButtonSize"])
-				if i == 1 then
-					button:SetPoint("TOPLEFT", bar, 0,0)	
-				else
-					local previous = _G["MultiBarLeftButton"..i-1]
-					if  i == 7 then
-						previous = _G["MultiBarLeftButton1"]
-						button:SetPoint("TOPLEFT", previous, "BOTTOMLEFT", 0, -C["ButtonSpacing"])
-					else
-						button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
-					end
-				end
-			end
-		end
-		RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
-	end
-end
-function Module:CreateExtrabarBar()
+function AB:CreateExtrabarBar()
 	local bar = CreateFrame("Frame","SunUIExtraActionBar",UIParent, "SecureHandlerStateTemplate")
-	bar:SetSize(C["ButtonSize"],C["ButtonSize"])
-	bar:SetScale(C["ExtraBarSacle"])
+	bar:SetSize(self.db.ButtonSize*2,self.db.ButtonSize*2)
 	bar:SetFrameStrata("MEDIUM")
-	MoveHandle.SunUIExtraActionBar = S.MakeMove(bar, "SunUI特殊按钮", "extrabar", C["ExtraBarSacle"])
+	bar:SetPoint("CENTER", "UIParent", "CENTER", 0, -150)
 
 	ExtraActionBarFrame:SetParent(bar)
 	ExtraActionBarFrame:ClearAllPoints()
 	ExtraActionBarFrame:SetPoint("CENTER", 0, 0)
 	ExtraActionBarFrame.ignoreFramePositionManager = true
-	ExtraActionButton1:SetSize(C["ButtonSize"],C["ButtonSize"])
+	ExtraActionButton1:SetSize(self.db.ButtonSize,self.db.ButtonSize)
 	ExtraActionBarFrame:SetFrameLevel(3)
 	ExtraActionButton1Cooldown:SetPoint("TOPLEFT")
 	ExtraActionButton1Cooldown:SetPoint("BOTTOMRIGHT")
-
 	ExtraActionButton1.style:SetTexture(nil)
     hooksecurefunc(ExtraActionButton1.style, "SetTexture", function(self, texture)
 		if texture then
 		self:SetTexture(nil)
 		end
     end)
+	S:CreateMover(bar, "ExtraActionBarMover", L["特殊动作条锚点"], true, nil, "ALL,ACTIONBARS")
 end
-function Module:CreateOverrideBar()
+function AB:CreateOverrideBar()
 	local num = NUM_ACTIONBAR_BUTTONS
 	--create the frame to hold the buttons
 	local bar = CreateFrame("Frame", "SunUI_OverrideBar", UIParent, "SecureHandlerStateTemplate")
-	bar:SetWidth(C["ButtonSize"]*12+C["ButtonSpacing"]*11)
-	bar:SetHeight(C["ButtonSize"])
-	bar:SetScale(C["MainBarSacle"])
-	bar:SetPoint("LEFT", SunUIActionBar1, "LEFT")
+	bar:SetWidth(self.db.ButtonSize*12+self.db.ButtonSpacing*11)
+	bar:SetHeight(self.db.ButtonSize)
+	bar:SetPoint("LEFT", "ActionBar1Mover", "LEFT")
 	--move the buttons into position and reparent them
 	OverrideActionBar:SetParent(bar)
 	OverrideActionBar:EnableMouse(false)
@@ -374,53 +304,53 @@ function Module:CreateOverrideBar()
 		if not button then
 			break
 		end
-		table.insert(buttonList, button) --add the button object to the list
-		button:SetSize(C["ButtonSize"], C["ButtonSize"])
+		table.insert(self.buttonList, button) --add the button object to the list
+		button:SetSize(self.db.ButtonSize, self.db.ButtonSize)
 		button:ClearAllPoints()
 		if i == 1 then
 			button:SetPoint("BOTTOMLEFT", bar, 0, 0)
 		else
 			local previous = _G["OverrideActionBarButton"..i-1]
-			button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
+			button:SetPoint("LEFT", previous, "RIGHT", self.db.ButtonSpacing, 0)
 		end
 	end
 	--show/hide the frame on a given state driver
 	RegisterStateDriver(bar, "visibility", "[petbattle] hide; [overridebar][vehicleui][possessbar,@vehicle,exists] show; hide")
 	RegisterStateDriver(OverrideActionBar, "visibility", "[overridebar][vehicleui][possessbar,@vehicle,exists] show; hide")
 end
-function Module:CreatePetBar()
+function AB:CreatePetBar()
 	local num = NUM_PET_ACTION_SLOTS
     local bar = CreateFrame("Frame", "SunUIPetBar", UIParent, "SecureHandlerStateTemplate")
-    bar:SetWidth(C["ButtonSize"]*num+C["ButtonSpacing"]*(num-1))
-    bar:SetHeight(C["ButtonSize"])
-    bar:SetScale(C["PetBarSacle"])
+    bar:SetWidth(self.db.ButtonSize*num+self.db.ButtonSpacing*(num-1))
+    bar:SetHeight(self.db.ButtonSize)
 	PetActionBarFrame:SetParent(bar)
 	PetActionBarFrame:EnableMouse(false)
-    MoveHandle.SunUIPetBar = S.MakeMove(bar, "SunUI宠物条", "petbar", C["PetBarSacle"])
+    bar:SetPoint("BOTTOMRIGHT", "MultiBarBottomRightButton12", "TOPRIGHT",  0,  4)
 	local button
 	
 	for i = 1, num do
 		button = _G["PetActionButton"..i]
-		button:SetSize(C["ButtonSize"], C["ButtonSize"])
+		button:SetSize(self.db.ButtonSize, self.db.ButtonSize)
 		button:ClearAllPoints()
-		table.insert(buttonList, button)
+		table.insert(self.buttonList, button)
 		if i == 1 then
 			button:SetPoint("BOTTOMLEFT", bar, 0, 0)
 		else
 			local previous = _G["PetActionButton"..i-1]
-			button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
+			button:SetPoint("LEFT", previous, "RIGHT", self.db.ButtonSpacing, 0)
 		end
 	end
 	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; [@pet,exists] show; hide")
+	S:CreateMover(bar, "PetBarMover", L["宠物动作条锚点"], true, nil, "ALL,ACTIONBARS")
 end
-function Module:CreateStanceBar()
+function AB:CreateStanceBar()
+	
 	local num = NUM_STANCE_SLOTS
 	local num2 = NUM_POSSESS_SLOTS
     local bar = CreateFrame("Frame","SunUIStanceBar",UIParent, "SecureHandlerStateTemplate")
-    bar:SetWidth(C["ButtonSize"]*6+C["ButtonSpacing"]*(6-1))
-    bar:SetHeight(C["ButtonSize"])
-    bar:SetScale(C["StanceBarSacle"])
-    MoveHandle.SunUIStanceBar = S.MakeMove(bar, "SunUI姿态栏", "stancebar", C["StanceBarSacle"])
+    bar:SetWidth(self.db.ButtonSize*6+self.db.ButtonSpacing*(6-1))
+    bar:SetHeight(self.db.ButtonSize)
+	bar:SetPoint("BOTTOMLEFT", "MultiBarBottomRightButton6", "TOPLEFT", 0, 4)
 
 	StanceBarFrame:SetParent(bar)
     StanceBarFrame:EnableMouse(false)
@@ -431,14 +361,14 @@ function Module:CreateStanceBar()
 
 	for i=1, num do
 		local button = _G["StanceButton"..i]
-		table.insert(buttonList, button)
-		button:SetSize(C["ButtonSize"], C["ButtonSize"])
+		table.insert(self.buttonList, button)
+		button:SetSize(self.db.ButtonSize, self.db.ButtonSize)
 		button:ClearAllPoints()
 		if i == 1 then
 			button:SetPoint("BOTTOMLEFT", bar, 0,0)
 		else
 			local previous = _G["StanceButton"..i-1]      
-			button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
+			button:SetPoint("LEFT", previous, "RIGHT", self.db.ButtonSpacing, 0)
 		end
     end
 	--POSSESS BAR
@@ -449,24 +379,26 @@ function Module:CreateStanceBar()
 
 	for i=1, num2 do
 		local button = _G["PossessButton"..i]
-		table.insert(buttonList, button) --add the button object to the list
-		button:SetSize(C["ButtonSize"], C["ButtonSize"])
+		table.insert(self.buttonList, button) --add the button object to the list
+		button:SetSize(self.db.ButtonSize, self.db.ButtonSize)
 		button:ClearAllPoints()
 		if i == 1 then
 			button:SetPoint("BOTTOMLEFT", bar, 0, 0)
 		else
 			local previous = _G["PossessButton"..i-1]
-			button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
+			button:SetPoint("LEFT", previous, "RIGHT", self.db.ButtonSpacing, 0)
 		end
 	end
 	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui] hide; show")
+	S:CreateMover(bar, "StanceBarMover", L["姿态栏锚点"], true, nil, "ALL,ACTIONBARS")
 end
-function Module:CreateExitVehicle()
+function AB:CreateExitVehicle()
+	
 	local bar = CreateFrame("Frame","ExitVehicle",UIParent, "SecureHandlerStateTemplate")
-	bar:SetHeight(C["ButtonSize"])
-	bar:SetWidth(C["ButtonSize"])
+	bar:SetHeight(self.db.ButtonSize)
+	bar:SetWidth(self.db.ButtonSize)
 	bar:SetScale(1.3)
-	MoveHandle.Vehicle = S.MakeMoveHandle(bar, "SunUI离开载具按钮", "vehicleexit")
+	bar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 278, 66)
 
 	local button = CreateFrame("BUTTON", nil, bar, "SecureHandlerClickTemplate, SecureHandlerStateTemplate");
 	button:SetAllPoints(bar)
@@ -484,13 +416,13 @@ function Module:CreateExitVehicle()
 	hi:SetTexCoord(0.6152344,0.6972656,0.359375,0.4414063)
 	hi:SetBlendMode("ADD")
 
-	--the button will spawn if a vehicle exists, but no vehicle ui is in place (the vehicle ui has its own exit button)
 	RegisterStateDriver(button, "visibility", "[petbattle][overridebar][vehicleui] hide; [possessbar][@vehicle,exists] show; hide")
-	--frame is visibile when no vehicle ui is visible
 	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui] hide; show")
+	S:CreateMover(bar, "ExitVehicleBarMover", L["主动作条锚点"], true, nil, "ALL,ACTIONBARS")
 end
 
-function Module:UpdateBigButtonSize()
+function AB:UpdateBigButtonSize()
+	
 	for i=1, 4 do
 		local button = _G["MultiBarLeftButton"..i]
 		button:SetSize(C["BigSize"..i], C["BigSize"..i])
@@ -506,8 +438,8 @@ function Module:UpdateBigButtonSize()
 		end
 	end
 end
-function Module:UpdateSize(val)
-	for k, v in ipairs(buttonList) do 
+function AB:UpdateSize(val)
+	for k, v in ipairs(self.buttonList) do 
 		if v then 
 			v:SetSize(val, val)
 		end
@@ -517,7 +449,7 @@ local function ShowGrid(event, str, value)
 	if str ~= "ALWAYS_SHOW_MULTIBARS_TEXT" then return end
 	if GetCVar("alwaysShowActionBars") == "1" then 
 		SetActionBarToggles(true, true, true, true)
-		ActionButton_HideGrid = DB.dummy
+		ActionButton_HideGrid = S.dummy
 		for i = 1, 12 do
 			local button = _G[format("ActionButton%d", i)]
 			button:SetAttribute("showgrid", 1)
@@ -567,23 +499,8 @@ local function HideLossCD()
 	end
 end
 
-function Module:UpdateMainScale()
-	local mainscale = {
-		SunUIActionBar1,
-		SunUIActionBar2,
-		SunUIActionBar3,
-		SunUIActionBar3_2,
-		SunUIActionBar4,
-		SunUIActionBar5,
-		SunUI_OverrideBar,
-	}
-	for k, v in pairs(mainscale) do 
-		if v then 
-			v:SetScale(C["MainBarSacle"])
-		end
-	end
-end
-function Module:UpdateSpace()
+function AB:UpdateSpace()
+	
 	for i = 1, 12 do
 		local button = _G["ActionButton"..i]
 		button:ClearAllPoints()
@@ -591,11 +508,11 @@ function Module:UpdateSpace()
 			button:SetPoint("BOTTOMLEFT", SunUIActionBar1, 0,0)
 		else
 			local previous = _G["ActionButton"..i-1]
-			if C["Bar1Layout"] == 2 and i == 7 then
+			if self.db.Bar1Layout == 2 and i == 7 then
 				previous = _G["ActionButton1"]
-				button:SetPoint("BOTTOMLEFT", previous, "TOPLEFT", 0, C["ButtonSpacing"])
+				button:SetPoint("BOTTOMLEFT", previous, "TOPLEFT", 0, self.db.ButtonSpacing)
 			else
-				button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
+				button:SetPoint("LEFT", previous, "RIGHT", self.db.ButtonSpacing, 0)
 			end
 		end
 	end
@@ -607,16 +524,16 @@ function Module:UpdateSpace()
 			button:SetPoint("BOTTOMLEFT", SunUIActionBar2, 0,0)
 		else
 			local previous = _G["MultiBarBottomLeftButton"..i-1]      
-			if C["Bar2Layout"] == 2 and i == 7 then
+			if self.db.Bar2Layout == 2 and i == 7 then
 				previous = _G["MultiBarBottomLeftButton1"]
-				button:SetPoint("BOTTOMLEFT", previous, "TOPLEFT", 0, C["ButtonSpacing"])
+				button:SetPoint("BOTTOMLEFT", previous, "TOPLEFT", 0, self.db.ButtonSpacing)
 			else
-				button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
+				button:SetPoint("LEFT", previous, "RIGHT", self.db.ButtonSpacing, 0)
 			end
 		end
 	end
 		
-	if C["Bar3Layout"] == 1 then
+	if self.db.Bar3Layout == 1 then
 		for i=1, 12 do
 			local button = _G["MultiBarBottomRightButton"..i]
 			button:ClearAllPoints()
@@ -624,34 +541,34 @@ function Module:UpdateSpace()
 				button:SetPoint("BOTTOMLEFT", SunUIActionBar3, 0,0)
 			else
 				local previous = _G["MultiBarBottomRightButton"..i-1]     
-				button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0) 
+				button:SetPoint("LEFT", previous, "RIGHT", self.db.ButtonSpacing, 0) 
 			end
 		end
-	elseif C["Bar3Layout"] == 2 then
+	elseif self.db.Bar3Layout == 2 then
 		for i = 1, 12 do
 		button = _G["MultiBarBottomRightButton"..i]
 		button:ClearAllPoints()
 			if i == 1 then
 				button:SetPoint("BOTTOMRIGHT", SunUIActionBar3, "BOTTOMRIGHT", 0, 0)
 			elseif i <= 3 then
-				button:SetPoint("RIGHT", _G["MultiBarBottomRightButton"..i-1], "LEFT", -C["ButtonSpacing"], 0)
+				button:SetPoint("RIGHT", _G["MultiBarBottomRightButton"..i-1], "LEFT", -self.db.ButtonSpacing, 0)
 			elseif i == 4 then
-				button:SetPoint("BOTTOMLEFT", _G["MultiBarBottomRightButton1"], "TOPLEFT", 0, C["ButtonSpacing"])
+				button:SetPoint("BOTTOMLEFT", _G["MultiBarBottomRightButton1"], "TOPLEFT", 0, self.db.ButtonSpacing)
 			elseif i <= 6 then
-				button:SetPoint("RIGHT", _G["MultiBarBottomRightButton"..i-1], "LEFT", -C["ButtonSpacing"], 0)	
+				button:SetPoint("RIGHT", _G["MultiBarBottomRightButton"..i-1], "LEFT", -self.db.ButtonSpacing, 0)	
 			elseif i == 7 then
 				button:SetPoint("BOTTOMLEFT", SunUIActionBar3_2, "BOTTOMLEFT", 0, 0)
 			elseif i <= 9 then
-				button:SetPoint("LEFT", _G["MultiBarBottomRightButton"..i-1], "RIGHT", C["ButtonSpacing"], 0)
+				button:SetPoint("LEFT", _G["MultiBarBottomRightButton"..i-1], "RIGHT", self.db.ButtonSpacing, 0)
 			elseif i == 10 then
-				button:SetPoint("BOTTOMLEFT", _G["MultiBarBottomRightButton7"], "TOPLEFT", 0, C["ButtonSpacing"])
+				button:SetPoint("BOTTOMLEFT", _G["MultiBarBottomRightButton7"], "TOPLEFT", 0, self.db.ButtonSpacing)
 			elseif i <= 12 then
-				button:SetPoint("LEFT", _G["MultiBarBottomRightButton"..i-1], "RIGHT", C["ButtonSpacing"], 0)	
+				button:SetPoint("LEFT", _G["MultiBarBottomRightButton"..i-1], "RIGHT", self.db.ButtonSpacing, 0)	
 			end
 		end
 	end
 		
-	if C["Bar4Layout"] == 1 then
+	if self.db.Bar4Layout == 1 then
 		for i=1, 12 do
 			local button = _G["MultiBarRightButton"..i]
 			button:ClearAllPoints()
@@ -659,10 +576,10 @@ function Module:UpdateSpace()
 					button:SetPoint("TOPLEFT", SunUIActionBar4, 0,0)
 				else
 					local previous = _G["MultiBarRightButton"..i-1]
-					button:SetPoint("TOP", previous, "BOTTOM", 0, -C["ButtonSpacing"])
+					button:SetPoint("TOP", previous, "BOTTOM", 0, -self.db.ButtonSpacing)
 				end
 		end
-	elseif C["Bar4Layout"] == 2 then 
+	elseif self.db.Bar4Layout == 2 then 
 		for i=1, 12 do
 			local button = _G["MultiBarRightButton"..i]
 			button:ClearAllPoints()
@@ -672,16 +589,16 @@ function Module:UpdateSpace()
 					local previous = _G["MultiBarRightButton"..i-1]
 					if  i == 7 then
 					previous = _G["MultiBarRightButton1"]
-					button:SetPoint("TOPLEFT", previous, "BOTTOMLEFT", 0, -C["ButtonSpacing"])
+					button:SetPoint("TOPLEFT", previous, "BOTTOMLEFT", 0, -self.db.ButtonSpacing)
 					else
-					button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
+					button:SetPoint("LEFT", previous, "RIGHT", self.db.ButtonSpacing, 0)
 					end
 				end
 		end
 	end
 	
-	if C["Big4Layout"] == 2 then
-		if C["Bar5Layout"] == 1 then 
+	if self.db.Big4Layout == 2 then
+		if self.db.Bar5Layout == 1 then 
 			for i=1, 12 do
 				local button = _G["MultiBarLeftButton"..i]
 				button:ClearAllPoints()
@@ -689,10 +606,10 @@ function Module:UpdateSpace()
 						button:SetPoint("TOPLEFT", bar, 0,0)
 					else
 						local previous = _G["MultiBarLeftButton"..i-1]
-						button:SetPoint("TOP", previous, "BOTTOM", 0, -C["ButtonSpacing"])
+						button:SetPoint("TOP", previous, "BOTTOM", 0, -self.db.ButtonSpacing)
 					end
 			end
-		elseif C["Bar5Layout"] == 2 then 
+		elseif self.db.Bar5Layout == 2 then 
 			for i=1, 12 do
 				local button = _G["MultiBarLeftButton"..i]
 				button:ClearAllPoints()
@@ -702,9 +619,9 @@ function Module:UpdateSpace()
 					local previous = _G["MultiBarLeftButton"..i-1]
 					if  i == 7 then
 						previous = _G["MultiBarLeftButton1"]
-						button:SetPoint("TOPLEFT", previous, "BOTTOMLEFT", 0, -C["ButtonSpacing"])
+						button:SetPoint("TOPLEFT", previous, "BOTTOMLEFT", 0, -self.db.ButtonSpacing)
 					else
-						button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
+						button:SetPoint("LEFT", previous, "RIGHT", self.db.ButtonSpacing, 0)
 					end
 				end
 			end
@@ -725,7 +642,7 @@ function Module:UpdateSpace()
 			button:SetPoint("BOTTOMLEFT", SunUI_OverrideBar, 0, 0)
 		else
 			local previous = _G["OverrideActionBarButton"..i-1]
-			button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
+			button:SetPoint("LEFT", previous, "RIGHT", self.db.ButtonSpacing, 0)
 		end
 	end
 	
@@ -736,7 +653,7 @@ function Module:UpdateSpace()
 			button:SetPoint("BOTTOMLEFT", SunUIPetBar, 0, 0)
 		else
 			local previous = _G["PetActionButton"..i-1]
-			button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
+			button:SetPoint("LEFT", previous, "RIGHT", self.db.ButtonSpacing, 0)
 		end
 	end
 	
@@ -747,7 +664,7 @@ function Module:UpdateSpace()
 			button:SetPoint("BOTTOMLEFT", SunUIStanceBar, 0,0)
 		else
 			local previous = _G["StanceButton"..i-1]      
-			button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
+			button:SetPoint("LEFT", previous, "RIGHT", self.db.ButtonSpacing, 0)
 		end
     end
 	
@@ -758,28 +675,38 @@ function Module:UpdateSpace()
 			button:SetPoint("BOTTOMLEFT", SunUIStanceBar, 0, 0)
 		else
 			local previous = _G["PossessButton"..i-1]
-			button:SetPoint("LEFT", previous, "RIGHT", C["ButtonSpacing"], 0)
+			button:SetPoint("LEFT", previous, "RIGHT", self.db.ButtonSpacing, 0)
 		end
 	end
 end
-function Module:OnInitialize()
-	if (IsAddOnLoaded("Dominos") or IsAddOnLoaded("Bartender4") or IsAddOnLoaded("Macaroon")) then
-		return 
-	end
-	C = SunUIConfig.db.profile.ActionBarDB
-	Module:RegisterEvent("CVAR_UPDATE", ShowGrid)
-	Module:RegisterEvent("LOSS_OF_CONTROL_ADDED", HideLossCD)
-	Module:RegisterEvent("LOSS_OF_CONTROL_UPDATE", HideLossCD)
-	Module:blizzHider()
-	Module:CreateBar1()
-	Module:CreateBar2()
-	Module:CreateBar3()
-	Module:CreateBar4()
-	Module:CreateBar5()
-	Module:CreateExtrabarBar()
-	Module:CreateOverrideBar()
-	Module:CreatePetBar()
-	Module:CreateStanceBar()
-	Module:CreateExitVehicle()
-	ShowGrid(nil, "ALWAYS_SHOW_MULTIBARS_TEXT", nil)
+function AB:Info()
+	return L["动作条"]
 end
+function AB:Initialize()
+	self:blizzHider()
+	self:CreateBar1()
+	self:CreateBar2()
+	self:CreateBar3()
+	self:CreateBar4()
+	self:CreateBar5()
+	self:CreateExtrabarBar()
+	self:CreateOverrideBar()
+	self:CreatePetBar()
+	self:CreateStanceBar()
+	self:CreateExitVehicle()
+	
+	self:UpdateAutoHide()
+	self:CreateCooldown()
+	self:initCooldownFlash()
+	self:initStyle()
+	
+	self:RegisterEvent("CVAR_UPDATE", ShowGrid)
+	self:RegisterEvent("LOSS_OF_CONTROL_ADDED", HideLossCD)
+	self:RegisterEvent("LOSS_OF_CONTROL_UPDATE", HideLossCD)
+	self:RegisterEvent("ADDON_LOADED")
+	
+	ShowGrid(nil, "ALWAYS_SHOW_MULTIBARS_TEXT", nil)
+	
+end
+
+S:RegisterModule(AB:GetName())

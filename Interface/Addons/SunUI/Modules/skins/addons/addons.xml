@@ -1,0 +1,8 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file='ace3.lua'/>
+	<Script file='DBM.lua'/>
+	<Script file='NugRunning.lua'/>
+	<Script file='mirrorbars.lua'/>
+	<Script file='lfg.lua'/>
+	<Script file='other.lua'/>
+</Ui>

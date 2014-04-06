@@ -1,55 +1,7 @@
-local S, L, DB, _, C = unpack(select(2, ...))
-local _G = _G
-local B = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Bags", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0")
-local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
-local Unusable
+﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 
-if DB.MyClass == "DEATHKNIGHT" then
-	Unusable = {{3, 4, 10, 11, 13, 14, 15, 16}, {6}}
-elseif DB.MyClass == "DRUID" then
-	Unusable = {{1, 2, 3, 4, 8, 9, 14, 15, 16}, {4, 5, 6}, true}
-elseif DB.MyClass == "HUNTER" then
-	Unusable = {{5, 6, 16}, {5, 6}}
-elseif DB.MyClass == "MAGE" then
-	Unusable = {{1, 2, 3, 4, 5, 6, 7, 9, 11, 14, 15}, {3, 4, 5, 6}, true}
-elseif DB.MyClass == "PALADIN" then
-	Unusable = {{3, 4, 10, 11, 13, 14, 15, 16}, {}, true}
-elseif DB.MyClass == "PRIEST" then
-	Unusable = {{1, 2, 3, 4, 6, 7, 8, 9, 11, 14, 15}, {3, 4, 5, 6}, true}
-elseif DB.MyClass == "ROGUE" then
-	Unusable = {{2, 6, 7, 9, 10, 16}, {4, 5, 6}}
-elseif DB.MyClass == "SHAMAN" then
-	Unusable = {{3, 4, 7, 8, 9, 14, 15, 16}, {5}}
-elseif DB.MyClass == "WARLOCK" then
-	Unusable = {{1, 2, 3, 4, 5, 6, 7, 9, 11, 14, 15}, {3, 4, 5, 6}, true}
-elseif DB.MyClass == "WARRIOR" then
-	Unusable = {{16}, {}}
-elseif DB.MyClass == "MONK" then
-	Unusable = {{2, 3, 4, 6, 9, 13, 14, 15, 16}, {4, 5, 6}}
-end
-
-for class = 1, 2 do
-	local subs = {GetAuctionItemSubClasses(class)}
-	for i, subclass in ipairs(Unusable[class]) do
-		Unusable[subs[subclass]] = true
-	end
-	Unusable[class] = nil
-	subs = nil
-end
-
-function B:IsClassUnusable(subclass, slot)
-	if subclass then
-		return Unusable[subclass] or slot == "INVTYPE_WEAPONOFFHAND" and Unusable[3]
-	end
-end
-
-function B:IsItemUnusable(...)
-	if ... then
-		local subclass, _, slot = select(7, GetItemInfo(...))
-		return B:IsClassUnusable(subclass, slot)
-	end
-end
-
+local B = S:NewModule("Bags", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
+B.modName = L["背包"]
 B.ProfessionColors = {
 	[0x0008] = {224/255, 187/255, 74/255}, -- Leatherworking
 	[0x0010] = {74/255, 77/255, 224/255}, -- Inscription
@@ -59,6 +11,60 @@ B.ProfessionColors = {
 	[0x0200] = {8/255, 180/255, 207/255}, -- Gems
 	[0x0400] = {105/255, 79/255,  7/255} -- Mining
 }
+
+function B:GetOptions()
+	local options = {
+		BagSize = {
+			type = "range", order = 1,
+			name = L["背包图标"],
+			min = 20, max = 50, step = 1,
+			set = function(info, value)
+				self.db.BagSize = value
+				self:Layout(false) 
+			end,
+		},
+		BankSize = {
+			type = "range", order = 2,
+			name = L["银行图标"],
+			min = 20, max = 50, step = 1,
+			set = function(info, value)
+				self.db.BankSize = value
+				self:Layout(true) 
+			end,
+		},
+		Spacing = {
+			type = "range", order = 3,
+			name = L["图标间距"], desc = L["图标间距"],
+			min = 0, max = 10, step = 1,
+			set = function(info, value)
+				self.db.Spacing = value
+				self:Layout(true)
+				self:Layout(false) 
+			end,
+		},
+		BagWidth = {
+			type = "input",
+			name = L["背包框体宽度"],
+			order = 4,
+			get = function() return tostring(self.db.BagWidth) end,
+			set = function(_, value) 
+				self.db.BagWidth = tonumber(value) 
+				self:Layout(false) 
+			end,
+		},
+		BankWidth = {
+			type = "input",
+			name = L["银行框体宽度"],
+			order = 5,
+			get = function() return tostring(self.db.BankWidth) end,
+			set = function(_, value) 
+				self.db.BankWidth = tonumber(value) 
+				self:Layout(true) 
+			end,
+		},
+	}
+	return options
+end
 
 function B:GetContainerFrame(arg)
 	if type(arg) == "boolean" and arg == true then
@@ -176,7 +182,7 @@ function B:UpdateSlot(bagID, slotID)
 	if (clink) then
 		local iType, _
 		slot.name, _, slot.rarity, _, _, iType = GetItemInfo(clink)
-		if B:IsItemUnusable(clink) then
+		if S:IsItemUnusable(clink) then
 			SetItemButtonTextureVertexColor(slot, RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b)
 		else
 			SetItemButtonTextureVertexColor(slot, 1, 1, 1)
@@ -276,11 +282,12 @@ function B:ResetSlotAlphaForBags(f)
 end
 
 function B:Layout(isBank)
+	local A = S:GetModule("Skins")
 	local f = self:GetContainerFrame(isBank)
 	if not f then return end
-	local buttonSize = isBank and C["BankSize"] or C["BagSize"]
-	local buttonSpacing = C["Spacing"]
-	local containerWidth = isBank and C["BankWidth"] or C["BagWidth"]
+	local buttonSize = isBank and self.db.BankSize or self.db.BagSize
+	local buttonSpacing = self.db.Spacing
+	local containerWidth = isBank and self.db.BankWidth or self.db.BagWidth
 	local numContainerColumns = math.floor(containerWidth / (buttonSize + buttonSpacing))
 	local holderWidth = ((buttonSize + buttonSpacing) * numContainerColumns) - buttonSpacing
 	local numContainerRows = 0
@@ -322,7 +329,7 @@ function B:Layout(isBank)
 					border:SetFrameLevel(f.ContainerHolder[i]:GetFrameLevel()+1)
 					f.ContainerHolder[i].border = border
 					f.ContainerHolder[i].border:CreateBorder()
-					S.CreateBackdropTexture(f.ContainerHolder[i], 0.6)
+					A:CreateBackdropTexture(f.ContainerHolder[i], 0.6)
 				end
 			end
 			f.ContainerHolder:SetSize(((buttonSize + buttonSpacing) * (isBank and i - 1 or i)) + buttonSpacing,buttonSize + (buttonSpacing * 2))
@@ -361,8 +368,8 @@ function B:Layout(isBank)
 				if not f.Bags[bagID][slotID] then
 					f.Bags[bagID][slotID] = CreateFrame("CheckButton", f.Bags[bagID]:GetName().."Slot"..slotID, f.Bags[bagID], bagID == -1 and "BankItemButtonGenericTemplate" or "ContainerFrameItemButtonTemplate")
 					f.Bags[bagID][slotID]:SetBackdrop({
-						bgFile = DB.Solid, 
-						insets = { left = -1, right = -1, top = -1, bottom = -1 }
+						bgFile = S["media"].blank, 
+						insets = { left = -S.mult, right = -S.mult, top = -S.mult, bottom = -S.mult }
 					})
 					if not f.Bags[bagID][slotID].border then
 						local border = CreateFrame("Frame", nil, f.Bags[bagID][slotID])
@@ -370,7 +377,7 @@ function B:Layout(isBank)
 						border:SetFrameLevel(f.Bags[bagID][slotID]:GetFrameLevel()+1)
 						f.Bags[bagID][slotID].border = border
 						f.Bags[bagID][slotID].border:CreateBorder()
-						S.CreateBackdropTexture(f.Bags[bagID][slotID], 0.6)
+						A:CreateBackdropTexture(f.Bags[bagID][slotID], 0.6)
 					end
 					if not f.Bags[bagID][slotID].shadow then
 						local shadow = CreateFrame("Frame", nil, f.Bags[bagID][slotID])
@@ -378,9 +385,9 @@ function B:Layout(isBank)
 						shadow:SetFrameLevel(0)
 						f.Bags[bagID][slotID].shadow = shadow
 						f.Bags[bagID][slotID].shadow:SetBackdrop( { 
-							edgeFile = DB.GlowTex,
-							edgeSize = 3,
-							insets = {left = 3, right = 3, top = 3, bottom = 3},
+							edgeFile = S["media"].glow,
+							edgeSize = S:Scale(3),
+							insets = {left = S:Scale(3), right = S:Scale(3), top = S:Scale(3), bottom = S:Scale(3)},
 						})
 						f.Bags[bagID][slotID].shadow:SetBackdropColor(0, 0, 0)
 						f.Bags[bagID][slotID].shadow:Hide()
@@ -393,7 +400,7 @@ function B:Layout(isBank)
 					end
 					f.Bags[bagID][slotID].count:ClearAllPoints()
 					f.Bags[bagID][slotID].count:SetPoint("BOTTOMRIGHT", 0, 2)
-					f.Bags[bagID][slotID].count:SetFont(DB.Font, DB.FontSize, "OUTLINE")
+					f.Bags[bagID][slotID].count:SetFont(S["media"].font, S["media"].fontsize, "OUTLINE")
 					f.Bags[bagID][slotID].questIcon = _G[f.Bags[bagID][slotID]:GetName().."IconQuestTexture"]
 					f.Bags[bagID][slotID].questIcon:SetTexture(TEXTURE_ITEM_QUEST_BANG)
 					f.Bags[bagID][slotID].questIcon:SetAllPoints(f.Bags[bagID][slotID])
@@ -534,8 +541,9 @@ function B:UpdateGoldText()
 end
 
 function B:ContructContainerFrame(name, isBank)
+	local A = S:GetModule("Skins")
 	local f = CreateFrame("Button", name, UIParent)
-	S.SetBD(f)
+	A:SetBD(f)
 	f:SetFrameStrata("DIALOG")
 	f.UpdateSlot = B.UpdateSlot
 	f.UpdateAllSlots = B.UpdateAllSlots
@@ -564,13 +572,13 @@ function B:ContructContainerFrame(name, isBank)
 	f.Bags = {}
 	f.closeButton = CreateFrame("Button", name.."CloseButton", f, "UIPanelCloseButton")
 	f.closeButton:SetPoint("TOPRIGHT", -4, -4)
-	S.ReskinClose(f.closeButton)
+	A:ReskinClose(f.closeButton)
 	f.holderFrame = CreateFrame("Frame", nil, f)
 	f.holderFrame:SetPoint("TOP", f, "TOP", 0, -f.topOffset)
 	f.holderFrame:SetPoint("BOTTOM", f, "BOTTOM", 0, 8)
 	f.ContainerHolder = CreateFrame("Button", name.."ContainerHolder", f)
 	f.ContainerHolder:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 1)
-	S.CreateBD(f.ContainerHolder)
+	A:CreateBD(f.ContainerHolder)
 	f.ContainerHolder:Hide()
 	if isBank then
 		--Sort Button
@@ -586,7 +594,7 @@ function B:ContructContainerFrame(name, isBank)
 			if InCombatLockdown() then return end
 			if button == "RightButton" then JPack:Pack(nil, 1) else JPack:Pack(nil, 2) end 
 		end)
-		S.Reskin(f.sortButton)
+		A:Reskin(f.sortButton)
 
 		--Toggle Bags Button
 		f.bagsButton = CreateFrame("Button", nil, f)
@@ -603,7 +611,7 @@ function B:ContructContainerFrame(name, isBank)
 				StaticPopup_Show("NO_BANK_BAGS")
 			end
 		end)
-		S.Reskin(f.bagsButton)
+		A:Reskin(f.bagsButton)
 		f:SetScript("OnHide", CloseBankFrame)
 		
 		f.purchaseBagButton = CreateFrame("Button", nil, f)
@@ -621,10 +629,11 @@ function B:ContructContainerFrame(name, isBank)
 				StaticPopup_Show("CANNOT_BUY_BANK_SLOT")
 			end
 		end)
-		S.Reskin(f.purchaseBagButton)
+		A:Reskin(f.purchaseBagButton)
 	else
 		--Gold Text
-		f.goldText = S.MakeFontString(f)
+		f.goldText = f:CreateFontString(nil, "OVERLAY")
+		f.goldText:FontTemplate()
 		f.goldText:SetPoint("BOTTOMRIGHT", f.holderFrame, "TOPRIGHT", -2, 4)
 		f.goldText:SetJustifyH("RIGHT")
 		--Search
@@ -642,15 +651,15 @@ function B:ContructContainerFrame(name, isBank)
 		f.editBox:SetScript("OnTextChanged", self.UpdateSearch)
 		f.editBox:SetScript("OnChar", self.UpdateSearch)
 		f.editBox:SetText(SEARCH)
-		f.editBox:SetFont(DB.Font, DB.FontSize, "OUTLINE")
+		f.editBox:SetFont(S["media"].font, S["media"].fontsize, "OUTLINE")
 		f.editBox:SetShadowColor(0, 0, 0)
 		f.editBox:SetShadowOffset(1.25, -1.25)
 		f.editBox.border = CreateFrame("Frame", nil, f.editBox)
 		f.editBox.border:SetPoint("TOPLEFT", -3, 0)
 		f.editBox.border:SetPoint("BOTTOMRIGHT", 0, 0)
-		S.CreateBD(f.editBox.border, 0)
-
-		f.detail = S.MakeFontString(f)
+		A:CreateBD(f.editBox.border, 0)
+		f.detail = f:CreateFontString(nil, "OVERLAY")
+		f.detail:FontTemplate()
 		f.detail:SetAllPoints(f.editBox)
 		f.detail:SetJustifyH("LEFT")
 		f.detail:SetText(SEARCH)
@@ -677,13 +686,13 @@ function B:ContructContainerFrame(name, isBank)
 		f.sortButton:SetSize(55, 10)
 		f.sortButton.ttText = L["整理背包"]
 		f.sortButton.ttText2 = L["整理背包"]
-		f.sortButton.ttText2desc = "左键逆向,右键正向"
+		f.sortButton.ttText2desc = L["左键逆向,右键正向"]
 		f.sortButton:SetScript("OnEnter", self.Tooltip_Show)
 		f.sortButton:SetScript("OnLeave", self.Tooltip_Hide)
 		f.sortButton:SetScript('OnMouseDown', function(self, button) 
 			if button == "RightButton" then JPack:Pack(nil, 1) else JPack:Pack(nil, 2) end 
 		end)
-		S.Reskin(f.sortButton)
+		A:Reskin(f.sortButton)
 		
 		--Bags Button
 		f.bagsButton = CreateFrame("Button", nil, f)
@@ -693,7 +702,7 @@ function B:ContructContainerFrame(name, isBank)
 		f.bagsButton:SetScript("OnEnter", self.Tooltip_Show)
 		f.bagsButton:SetScript("OnLeave", self.Tooltip_Hide)
 		f.bagsButton:SetScript("OnClick", function() ToggleFrame(f.ContainerHolder) end)
-		S.Reskin(f.bagsButton)
+		A:Reskin(f.bagsButton)
 
 		--Currency
 		f.currencyButton = CreateFrame("Frame", nil, f)
@@ -706,12 +715,12 @@ function B:ContructContainerFrame(name, isBank)
 			f.currencyButton[i]:SetSize(16, 16)
 			f.currencyButton[i]:SetID(i)
 			f.currencyButton[i].icon = f.currencyButton[i]:CreateTexture(nil, "OVERLAY")
-			S.CreateBD(f.currencyButton[i])
+			A:CreateBD(f.currencyButton[i])
 			f.currencyButton[i].icon:SetInside(nil, 1, 1)
 			f.currencyButton[i].icon:SetTexCoord(.08, .92, .08, .92)
 			f.currencyButton[i].text = f.currencyButton[i]:CreateFontString(nil, "OVERLAY")
 			f.currencyButton[i].text:SetPoint("LEFT", f.currencyButton[i], "RIGHT", 2, 0)
-			f.currencyButton[i].text:SetFont(DB.Font, DB.FontSize, "OUTLINE")
+			f.currencyButton[i].text:SetFont(S["media"].font, S["media"].fontsize, "OUTLINE")
 			f.currencyButton[i].text:SetShadowColor(0, 0, 0)
 			f.currencyButton[i].text:SetShadowOffset(1.25, -1.25)
 			f.currencyButton[i]:SetScript("OnEnter", B.Token_OnEnter)
@@ -795,10 +804,8 @@ function B:PLAYER_ENTERING_WORLD()
 	ToggleBackpack()
 	self:UpdateGoldText()
 end
-function B:OnInitialize()
-	C = SunUIConfig.db.profile.BagDB
-end
-function B:OnEnable()
+
+function B:Initialize()
 	self.BagFrames = {}
 	self.BagFrame = self:ContructContainerFrame("SunUI_Bags")
 	self:SecureHook("OpenAllBags", "OpenBags")
@@ -851,3 +858,8 @@ StaticPopupDialogs["NO_BANK_BAGS"] = {
 	timeout = 0,
 	whileDead = 1,	
 }
+
+function B:Info()
+	return L["背包"]
+end
+S:RegisterModule(B:GetName())

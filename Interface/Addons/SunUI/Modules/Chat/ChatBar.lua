@@ -1,5 +1,7 @@
-﻿local S, L, DB, _, C = unpack(select(2, ...))
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ChatFramePanel", "AceTimer-3.0")
+﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+local CT = S:GetModule("Chat")
+local Parent
+local buttons = {}
 local Channel = {
 	{"/s", "/e ", "/y"},
 	{"/g", "/o"},
@@ -40,9 +42,19 @@ local function ShowGameTip(self,i)
 	end
 	GameTooltip:Show()
 end
-function Module:BuildChatbar()
+function CT:UpdateChatbar()
+	if Parent then
+		Parent:Hide()
+		Parent = nil
+	end
+	wipe(buttons)
+	if self.db.ChannelBar then
+		self:CreateChannelBar()
+	end
+end
+function CT:CreateChannelBar()
 	local PreButton = nil
-	local Parent = CreateFrame("Frame", nil, UIParent)
+	Parent = CreateFrame("Frame", nil, UIParent)
 	Parent:SetAlpha(0)
 	for i = 1, 6 do
 		local Button = nil
@@ -57,11 +69,12 @@ function Module:BuildChatbar()
 				ChatFrame_OpenChat(Channel[i][3], SELECTED_DOCK_FRAME)
 			end
 		end)
+		--S:Debug(ChatFrame1:GetWidth())
 		Button:SetSize((ChatFrame1:GetWidth()-(4*5))/6, 6)
 		local bg = Button:CreateTexture(nil, "BACKGROUND")
 		bg:SetAllPoints(Button)
-		bg:SetTexture(DB.Statusbar)
-		S.CreateTop(bg, Color[i][1], Color[i][2], Color[i][3])
+		bg:SetTexture(S["media"].blank)
+		bg:SetVertexColor(Color[i][1], Color[i][2], Color[i][3])
 		Button:CreateShadow()
 		Button:SetScript("OnEnter", function(self)
 			UIFrameFadeIn(Parent, 0.5, Parent:GetAlpha(), 1)
@@ -76,10 +89,7 @@ function Module:BuildChatbar()
 		else
 			Button:SetPoint("LEFT", PreButton, "RIGHT", 4, 0)
 		end
+		tinsert(buttons, Button)
 		PreButton = Button;
 	end
-end
-
-function Module:OnEnable()
-	Module:BuildChatbar()
 end

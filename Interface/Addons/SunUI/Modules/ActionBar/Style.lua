@@ -1,39 +1,6 @@
-﻿local S, L, DB, _, C = unpack(select(2, ...))
---if true then return end
-local AB = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("ActionStyle", "AceEvent-3.0", "AceHook-3.0")
-local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
-function AB:GetScreenQuadrant(frame)
-	local x, y = frame:GetCenter()
-	local screenWidth = GetScreenWidth()
-	local screenHeight = GetScreenHeight()
-	local point
+﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 
-	if not frame:GetCenter() then
-		return "UNKNOWN", frame:GetName()
-	end
-
-	if (x > (screenWidth / 4) and x < (screenWidth / 4)*3) and y > (screenHeight / 4)*3 then
-		point = "TOP"
-	elseif x < (screenWidth / 4) and y > (screenHeight / 4)*3 then
-		point = "TOPLEFT"
-	elseif x > (screenWidth / 4)*3 and y > (screenHeight / 4)*3 then
-		point = "TOPRIGHT"
-	elseif (x > (screenWidth / 4) and x < (screenWidth / 4)*3) and y < (screenHeight / 4) then
-		point = "BOTTOM"
-	elseif x < (screenWidth / 4) and y < (screenHeight / 4) then
-		point = "BOTTOMLEFT"
-	elseif x > (screenWidth / 4)*3 and y < (screenHeight / 4) then
-		point = "BOTTOMRIGHT"
-	elseif x < (screenWidth / 4) and (y > (screenHeight / 4) and y < (screenHeight / 4)*3) then
-		point = "LEFT"
-	elseif x > (screenWidth / 4)*3 and y < (screenHeight / 4)*3 and y > (screenHeight / 4) then
-		point = "RIGHT"
-	else
-		point = "CENTER"
-	end
-
-	return point
-end
+local AB = S:GetModule("ActionBar")
 
 function AB:UpdateHotkey(button, actionButtonType)
 	local hotkey = _G[button:GetName() .. "HotKey"]
@@ -115,7 +82,7 @@ function AB:Style(button)
 		Count:ClearAllPoints()
 		Count:SetJustifyH("RIGHT")
 		Count:SetPoint("BOTTOMRIGHT", 3, 0)
-		Count:SetFont(DB.Font, C["FontSize"], "OUTLINE")
+		Count:SetFont(S["media"].font, self.db.FontSize, S["media"].fontflag)
 	end
 
 	if FloatingBG then
@@ -123,7 +90,7 @@ function AB:Style(button)
 	end
 
 	if Btname then
-		if C["HideMacroName"] then
+		if self.db.HideMacroName then
 			Btname:SetDrawLayer("HIGHLIGHT")
 			Btname:SetWidth(50)
 		end
@@ -132,8 +99,8 @@ function AB:Style(button)
 	if not button.shadow then
 		if not totem then
 			if not flyout then
-				--button:SetWidth(C["ButtonSize"])
-				--button:SetHeight(C["ButtonSize"])
+				--button:SetWidth(self.db.ButtonSize)
+				--button:SetHeight(self.db.ButtonSize)
 			end
 
 			button:CreateShadow("Background")
@@ -148,11 +115,11 @@ function AB:Style(button)
 	if HotKey then
 		HotKey:ClearAllPoints()
 		HotKey:SetPoint("TOPRIGHT", 0, 0)
-		HotKey:SetFont(DB.Font, C["FontSize"], "OUTLINE")
+		HotKey:SetFont(S["media"].font, self.db.FontSize, S["media"].fontflag)
 		HotKey:SetShadowColor(0, 0, 0, 0.3)
 		HotKey.ClearAllPoints = function() end
 		HotKey.SetPoint = function() end
-		if C["HideHotKey"] then
+		if self.db.HideHotKey then
 			HotKey:SetText("")
 			HotKey:Hide()
 			HotKey.Show = function() end
@@ -233,7 +200,7 @@ function AB:StyleFlyout(button)
                 layout = "VERTICAL"
             end
         end
-		local point = AB:GetScreenQuadrant(button)
+		local point = S:GetScreenQuadrant(button)
 
         if layout == "HORIZONTAL" then
             if point:find("TOP") then
@@ -275,16 +242,10 @@ function AB:UpdateOverlayGlow(button)
 		button.overlay.outerGlow:SetPoint("BOTTOMRIGHT", button.shadow, "BOTTOMRIGHT")
 	end
 end
-function AB:OnInitialize()
-	if (IsAddOnLoaded("Dominos") or IsAddOnLoaded("Bartender4") or IsAddOnLoaded("Macaroon")) then
-		return 
-	end
-	C = SunUIConfig.db.profile.ActionBarDB
+
+function AB:initStyle()
 	self:SecureHook("ActionButton_UpdateHotkeys", "UpdateHotkey")
-end
-function AB:OnEnable()
 	self:SecureHook("ActionButton_ShowOverlayGlow", "UpdateOverlayGlow")
-	
 	self:SecureHook("ActionButton_Update", "Style")
 	self:SecureHook("ActionButton_UpdateFlyout", "StyleFlyout")
 	self:SecureHook("StanceBar_Update", "StyleShift")

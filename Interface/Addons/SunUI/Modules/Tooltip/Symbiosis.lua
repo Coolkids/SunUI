@@ -1,4 +1,4 @@
-local S, L, DB, _, C = unpack(select(2, ...))
+local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 ----------------------------------------------------------------------------------------
 --	Symbiosis info(module from bTooltip by Fernir)
 ----------------------------------------------------------------------------------------
@@ -42,10 +42,10 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 			if not uspec then return end
 			local spec = SPEC_CORE_ABILITY_TEXT[select(1, GetSpecializationInfo(uspec))]
 			local spellID
-			if DB.MyClass == "DRUID" and UnitLevel("player") >= 87 and uclass ~= "DRUID" then
+			if S.myclass == "DRUID" and UnitLevel("player") >= 87 and uclass ~= "DRUID" then
 				spellID = symbiosis.grant[uclass][spec]
-			elseif DB.MyClass ~= "DRUID" and (uclass == "DRUID" and ulevel >= 87) then
-				spellID = symbiosis.gain[DB.MyClass][spec]
+			elseif S.myclass ~= "DRUID" and (uclass == "DRUID" and ulevel >= 87) then
+				spellID = symbiosis.gain[S.myclass][spec]
 			end
 			local name, _, icon = GetSpellInfo(spellID)
 			icon = icon and "|T"..icon..":12:12:0:0:64:64:5:59:5:59|t " or ""

@@ -1,13 +1,8 @@
-local S, L, DB, _, C = unpack(select(2, ...))
+﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+
+local AB = S:GetModule("ActionBar")
 local lib = LibStub("LibCooldown")
-local CF = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("CooldownFlash", "AceEvent-3.0")
-local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
-local flash = CreateFrame("Frame", nil, UIParent)
-flash.icon = flash:CreateTexture(nil, "OVERLAY")
-flash.icon:SetAllPoints(flash)
-flash.icon:SetTexCoord(.08, .92, .08, .92)
-flash:CreateShadow()
-flash:Hide()
+local flash, C
 local filter = {
 	["pet"] = "all",
 	["item"] = {
@@ -17,7 +12,7 @@ local filter = {
 		[125439] = true,
 	},
 }
-function CF:SetUpdate()
+function AB:SetCoolDownFlashUpdate()
 	flash:SetScript("OnUpdate", function(self, e)
 		flash.e = flash.e + e
 		if flash.e > .75 then
@@ -29,9 +24,9 @@ function CF:SetUpdate()
 		end
 	end)
 end
-function CF:UpdateSet()
-	if C["CooldownFlash"] then
-		CF:SetUpdate()
+function AB:UpdateSetCoolDownFlashUpdate()
+	if self.db.CooldownFlash then
+		self:SetCoolDownFlashUpdate()
 		lib:RegisterCallback("stop", function(id, class)
 			if filter[class]=="all" or filter[class][id] then return end
 			flash.icon:SetTexture(class=="item" and GetItemIcon(id) or GetSpellTexture(id))
@@ -39,21 +34,27 @@ function CF:UpdateSet()
 			flash:Show()
 		end)
 	else
-		CF:UnregisterEvent("PLAYER_ENTERING_WORLD")
+		AB:UnregisterEvent("PLAYER_ENTERING_WORLD")
 		wipe(lib.stopcalls)
 		flash:SetScript("OnUpdate", nil)
 		flash:Hide()
 	end
 end
-function CF:UpdateSize()
-	flash:SetSize(C["CooldownFlashSize"],C["CooldownFlashSize"])
+function AB:UpdateCoolDownFlashSize()
+	flash:SetSize(self.db.CooldownFlashSize,self.db.CooldownFlashSize)
 end
-function CF:OnInitialize()
+function AB:initCooldownFlash()
 	if (IsAddOnLoaded("ncCooldownFlash")) then
 		return 
 	end
-	C = SunUIConfig.db.profile.ActionBarDB
-	self:UpdateSet()
-	self:UpdateSize()
-	MoveHandle.CooldownFlash = S.MakeMoveHandle(flash, L["冷却闪光"], "CooldownFlash")
+	flash = CreateFrame("Frame", nil, UIParent)
+	flash.icon = flash:CreateTexture(nil, "OVERLAY")
+	flash.icon:SetAllPoints(flash)
+	flash.icon:SetTexCoord(.08, .92, .08, .92)
+	flash:CreateShadow()
+	flash:SetPoint("TOP", "UIParent", "TOP", 0, -95)
+	flash:Hide()
+	self:SetCoolDownFlashUpdate()
+	self:UpdateCoolDownFlashSize()
+	S:CreateMover(flash, "CooldownFlashMover", L["冷却闪光锚点"], true, nil, "ALL,ACTIONBARS")
 end

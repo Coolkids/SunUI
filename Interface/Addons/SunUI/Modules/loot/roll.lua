@@ -1,6 +1,5 @@
-﻿local S, L, DB, _, C = unpack(select(2, ...))
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("RollFrame")
-local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
+﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+local LOOT = S:GetModule("Loot")
 ----------------------------------------------------------------------------------------
 --	Based on teksLoot(by Tekkub)
 ----------------------------------------------------------------------------------------
@@ -80,9 +79,8 @@ local function CreateRollButton(parent, ntex, ptex, htex, rolltype, tiptext, ...
 	f:SetScript("OnClick", ClickRoll)
 	f:SetMotionScriptsWhileDisabled(true)
 	local txt = f:CreateFontString(nil, nil)
-	txt:SetFont(DB.Font, 11*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
+	txt:FontTemplate()
 	txt:SetPoint("CENTER", 0, rolltype == 2 and 1 or rolltype == 0 and -1.2 or 0)
-	txt:SetShadowOffset(1,  -1)
 	return f, txt
 end
 
@@ -109,20 +107,19 @@ local function CreateRollFrame()
 	button.icon.border = button.border
 	
 	local status = CreateFrame("StatusBar", nil, frame)
-	status:CreateShadow()
+	status:CreateShadow("Background")
 	status:SetSize(240, 8)
 	status:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT")
 	status:SetScript("OnUpdate", StatusUpdate)
 	status:SetFrameLevel(frame:GetFrameLevel() - 1)
-	status:SetStatusBarTexture(DB.Statusbar)
+	status:SetStatusBarTexture(S["media"].normal)
 	status:SetStatusBarColor(0.8, 0.8, 0.8, 0.9)
 	
 	status.parent = frame
 	frame.status = status
-	frame.status.bg = status:GetStatusBarTexture()
-
-	status.spark = S.CreateMark(status)
-	S.CreateBack(status)
+	local A = S:GetModule("Skins")
+	status.spark = A:CreateMark(status)
+	
 	
 			
 	--local need, needtext = CreateRollButton(frame, "Interface\\Buttons\\UI-GroupLoot-Dice-Up", "Interface\\Buttons\\UI-GroupLoot-Dice-Highlight", "Interface\\Buttons\\UI-GroupLoot-Dice-Down", 1, NEED, "LEFT", frame.button, "RIGHT", 5, -1)
@@ -139,13 +136,11 @@ local function CreateRollFrame()
 
 	local bind = frame:CreateFontString()
 	bind:SetPoint("LEFT", de or greed, "RIGHT", 3, 1)
-	bind:SetFont(DB.Font, 11*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
-	bind:SetShadowOffset(1,  -1)
+	bind:FontTemplate()
 	frame.fsbind = bind
 
 	local loot = frame:CreateFontString(nil, "ARTWORK")
-	loot:SetFont(DB.Font, 12*SunUIConfig.db.profile.MiniDB.FontScale, "OUTLINE")
-	loot:SetShadowOffset(1, -1)
+	loot:FontTemplate()
 	loot:SetPoint("LEFT", bind, "RIGHT", 0, 0)
 	loot:SetPoint("RIGHT", frame, "RIGHT", -5, 0)
 	loot:SetSize(200, 10)
@@ -205,7 +200,6 @@ local function START_LOOT_ROLL(rollID, time)
 	f.fsloot:SetText(name)
 	f.status:SetStatusBarColor(color.r, color.g, color.b, 0.7)
 	f.button.icon.border:SetBackdropBorderColor(color.r, color.g, color.b, 0.7)
-	S.CreateTop(f.status.bg, color.r, color.g, color.b)
 	f.status:SetMinMaxValues(0, time)
 	f.status:SetValue(time)
 
@@ -228,30 +222,29 @@ local function LOOT_HISTORY_ROLL_CHANGED(itemIdx, playerIdx)
 	end
 end
 
-LootRollAnchor:RegisterEvent("ADDON_LOADED")
-LootRollAnchor:SetScript("OnEvent", function(frame, event, addon)
-	if addon == "SunUI" then 
-		LootRollAnchor:SetSize(240, 20)
-		LootRollAnchor:UnregisterEvent("ADDON_LOADED")
-		LootRollAnchor:RegisterEvent("LOOT_HISTORY_ROLL_CHANGED")
-		LootRollAnchor:RegisterEvent("START_LOOT_ROLL")
-		UIParent:UnregisterEvent("START_LOOT_ROLL")
-		UIParent:UnregisterEvent("CANCEL_LOOT_ROLL")
+function LOOT:initRool()
+	LootRollAnchor:SetSize(240, 20)
+	LootRollAnchor:UnregisterEvent("ADDON_LOADED")
+	LootRollAnchor:RegisterEvent("LOOT_HISTORY_ROLL_CHANGED")
+	LootRollAnchor:RegisterEvent("START_LOOT_ROLL")
+	UIParent:UnregisterEvent("START_LOOT_ROLL")
+	UIParent:UnregisterEvent("CANCEL_LOOT_ROLL")
 
-		LootRollAnchor:SetScript("OnEvent", function(frame, event, ...) if event == "LOOT_HISTORY_ROLL_CHANGED" then return LOOT_HISTORY_ROLL_CHANGED(...) else return START_LOOT_ROLL(...) end end)
-		MoveHandle.RollFrame = S.MakeMoveHandle(LootRollAnchor, "Roll", "RollFrame")
-		SlashCmdList["LFrames"] = function(msg) 
-			local f = GetFrame()
-			local texture = select(10, GetItemInfo(32837))
-			f.button:SetNormalTexture(texture)
-			f.button:GetNormalTexture():SetTexCoord(.1, .9, .1, .9)
-			f.fsloot:SetVertexColor(ITEM_QUALITY_COLORS[5].r, ITEM_QUALITY_COLORS[5].g, ITEM_QUALITY_COLORS[5].b)
-			f.fsloot:SetText(GetItemInfo(32837))
-			f.status:SetMinMaxValues(0, 100)
-			f.status:SetValue(70)
-			S.CreateTop(f.status.bg, ITEM_QUALITY_COLORS[5].r, ITEM_QUALITY_COLORS[5].g, ITEM_QUALITY_COLORS[5].b)
-			f:Show()
-		end
-		SLASH_LFrames1 = "/rolltest"
+	LootRollAnchor:SetScript("OnEvent", function(frame, event, ...) if event == "LOOT_HISTORY_ROLL_CHANGED" then return LOOT_HISTORY_ROLL_CHANGED(...) else return START_LOOT_ROLL(...) end end)
+	LootRollAnchor:SetPoint("TOP", "UIParent", "TOP", 0, -200)
+	SlashCmdList["LFrames"] = function(msg) 
+		local f = GetFrame()
+		local texture = select(10, GetItemInfo(32837))
+		f.button:SetNormalTexture(texture)
+		f.button:GetNormalTexture():SetTexCoord(.1, .9, .1, .9)
+		f.fsloot:SetVertexColor(ITEM_QUALITY_COLORS[5].r, ITEM_QUALITY_COLORS[5].g, ITEM_QUALITY_COLORS[5].b)
+		f.fsloot:SetText(GetItemInfo(32837))
+		f.status:SetMinMaxValues(0, 100)
+		f.status:SetValue(70)
+		f.status:SetStatusBarColor(ITEM_QUALITY_COLORS[5].r, ITEM_QUALITY_COLORS[5].g, ITEM_QUALITY_COLORS[5].b)
+		f:Show()
 	end
-end)
+	SLASH_LFrames1 = "/rolltest"
+	
+	S:CreateMover(LootRollAnchor, "RollFrameMover", L["Roll锚点"], true, nil, "ALL,GENERAL")
+end

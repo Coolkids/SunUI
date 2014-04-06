@@ -1,7 +1,37 @@
-﻿local S, L, DB, _, C = unpack(select(2, ...))
-local Module = LibStub("AceAddon-3.0"):GetAddon("SunUI"):NewModule("Tooltips", "AceEvent-3.0")
-local SunUIConfig = LibStub("AceAddon-3.0"):GetAddon("SunUI"):GetModule("SunUIConfig")
-local _G = _G
+﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+
+local TT = S:NewModule("Tooltip", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
+TT.modName = L["鼠标提示"]
+
+function TT:GetOptions()
+	local options = {
+		Cursor = {
+			type = "toggle",
+			name = L["提示框体跟随鼠标"],
+			order = 1,
+		},
+		HideInCombat = {
+			type = "toggle",
+			name = L["进入战斗自动隐藏"],
+			order = 2,
+		},
+		ScaleSize = {
+			type = "range", order = 3,
+			name = L["缩放大小"],
+			min = 0.1, max = 2, step = 0.1,
+		},
+		HideTitles = {
+			type = "toggle",
+			name = L["隐藏头衔"],
+			order = 4,
+		},
+	}
+	return options
+end
+
+function TT:Info()
+	return L["鼠标提示"]
+end
 local reactionlist  = {
 	[1] = FACTION_STANDING_LABEL1,
 	[2] = FACTION_STANDING_LABEL2,
@@ -40,7 +70,6 @@ types = {
 	worldboss = " |cffFF1919B|r ",
 	rareelite = " |cff9933FAR|r|cffFFFF00+|r ",
 }
-local tooptexture = GameTooltipStatusBar:GetStatusBarTexture()
 
 function GameTooltip_UnitColor(unit)
 	local r, g, b = 1, 1, 1
@@ -130,11 +159,9 @@ local function On_OnTooltipSetUnit(self)
 			local guild, rank, tmp2 = GetGuildInfo(unit)
 			local playerGuild = GetGuildInfo("player")
 			GameTooltipStatusBar:SetStatusBarColor(unpack({GameTooltip_UnitColor(unit)}))
-			local r, g, b = unpack({GameTooltip_UnitColor(unit)})
-			S.CreateTop(tooptexture, r, g, b)
 			local a1, a2, a3, a4 = unpack(CLASS_ICON_TCOORDS[class])
 			local a1, a2, a3, a4 = a1*62.5 or 0, a2*62.5 or 0, a3*62.5 or 0, a4*62.5 or 0
-			local classtr = "|TInterface\\TargetingFrame\\UI-Classes-Circles:"..DB.FontSize..":"..DB.FontSize..":0:0:64:64:"..a1..":"..a2..":"..a3..":"..a4.."|t"
+			local classtr = "|TInterface\\TargetingFrame\\UI-Classes-Circles:"..S["media"].fontsize..":"..S["media"].fontsize..":0:0:64:64:"..a1..":"..a2..":"..a3..":"..a4.."|t"
 			--print(classtr)
 			if guild then
 				if guild:len()> 30 then guild = guild:sub(1, 30).."..." end
@@ -191,7 +218,6 @@ local function On_OnTooltipSetUnit(self)
 					end
 				end
 				GameTooltipStatusBar:SetStatusBarColor(r, g, b)
-				S.CreateTop(tooptexture, r, g, b)
 			end
 		end
 		if UnitIsPVP(unit) then
@@ -211,7 +237,7 @@ local function On_OnTooltipSetUnit(self)
 			end
 			self:AddLine(TARGET..": "..text)
 		end
-		if C["HideTitles"] then
+		if TT.db.HideTitles then
 			local name = self:GetUnit()
 			local title = UnitPVPName(unit)
 			if title then
@@ -223,12 +249,12 @@ local function On_OnTooltipSetUnit(self)
 		end
 	end
 end
-function Module:PLAYER_ENTERING_WORLD()
-	Module:UnregisterEvent("PLAYER_ENTERING_WORLD")
+function TT:PLAYER_ENTERING_WORLD()
+	TT:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	for _, v in pairs(tooltips) do
-		v:SetScale(C["ScaleSize"])
+		v:SetScale(TT.db.ScaleSize)
 		v:SetScript("OnShow", function(self)
-			if InCombatLockdown() and C["HideInCombat"] then self:Hide() end
+			if InCombatLockdown() and TT.db.HideInCombat then self:Hide() end
 			if v.NumLines then
 				for index=1, v:NumLines() do
 					_G[v:GetName()..'TextLeft'..index]:SetShadowOffset(1, -1)
@@ -262,21 +288,19 @@ function Module:PLAYER_ENTERING_WORLD()
 					r = FACTION_BAR_COLORS[reaction].r;
 					g = FACTION_BAR_COLORS[reaction].g;
 					b = FACTION_BAR_COLORS[reaction].b;
-					--GameTooltipStatusBar:SetStatusBarColor(r, g, b)
-					S.CreateTop(tooptexture, r, g, b)
+					GameTooltipStatusBar:SetStatusBarColor(r, g, b)
 				end
 			end
 			if UnitIsPlayer(unit) then
-				--GameTooltipStatusBar:SetStatusBarColor(unpack({GameTooltip_UnitColor(unit)}))
+				GameTooltipStatusBar:SetStatusBarColor(unpack({GameTooltip_UnitColor(unit)}))
 				local r, g, b = unpack({GameTooltip_UnitColor(unit)})
-				S.CreateTop(tooptexture, r, g, b)
 			end
 			min, max = UnitHealth(unit), UnitHealthMax(unit)
 			if not self.text then
 				self.text = self:CreateFontString(nil, "OVERLAY")
 				self.text:SetPoint("CENTER")
-				self.text:SetFont(DB.Font, 10*SunUIConfig.db.profile.MiniDB.FontScale, "THINOUTLINE")
-				-- self.text:SetShadowOffset(R.mult, -R.mult)
+				self.text:SetFont(S["media"].font, 10, "THINOUTLINE")
+				self.text:SetShadowOffset(S.mult, -S.mult)
 			end
 			self.text:Show()
 			local hp = truncate(min).." / "..truncate(max)
@@ -289,14 +313,15 @@ function Module:PLAYER_ENTERING_WORLD()
 	end)
 end
 local function On_SetDefaultAnchor(tooltip, parent)
-	if C["Cursor"] then
+	if TT.db.Cursor then
 		tooltip:SetOwner(parent, "ANCHOR_CURSOR")
 	else
 		tooltip:SetOwner(parent, "ANCHOR_NONE")
 		local tooltipholder = CreateFrame("Frame", nil, UIParent)
 		tooltipholder:SetFrameStrata("TOOLTIP")
 		tooltipholder:SetSize(120, 20)
-		MoveHandle.Tooltip = S.MakeMoveHandle(tooltipholder, L["鼠标提示"], "Tooltip")
+		tooltipholder:SetPoint("BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -50, 160)
+		S:CreateMover(tooltipholder, "TooltipMover", L["鼠标提示锚点"], true, nil, "ALL,GENERAL")
 		tooltip:SetPoint("BOTTOMRIGHT", tooltipholder, "BOTTOMRIGHT", 0, 0)
 	end	
 	tooltip.default = 1
@@ -383,20 +408,19 @@ local function SkinTooltip()
 	sb:ClearAllPoints()
 	sb:SetPoint("BOTTOMLEFT", GameTooltip, "TOPLEFT", 1, 3)
 	sb:SetPoint("BOTTOMRIGHT", GameTooltip, "TOPRIGHT", -1, 3)
-	sb:SetStatusBarTexture(SunUIConfig.db.profile.MiniDB.uitexturePath)
-	S.CreateBD(FriendsTooltip)
-	S.CreateMark(sb)
+	sb:SetStatusBarTexture(S["media"].normal)
+	local A = S:GetModule("Skins")
+	A:CreateBD(FriendsTooltip)
+	A:CreateMark(sb)
 end
 
-function Module:OnInitialize()
-	if IsAddOnLoaded("TipTac") or IsAddOnLoaded("FreebTip") or IsAddOnLoaded("bTooltip") or IsAddOnLoaded("PhoenixTooltip") or IsAddOnLoaded("Icetip") then
-		return
-	end
-	C=SunUIConfig.db.profile.TooltipDB
+function TT:Initialize()
+	C=self.db
 	SkinTooltip()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
-	tooptexture = GameTooltipStatusBar:GetStatusBarTexture()
 	GameTooltip:HookScript("OnTooltipSetUnit", On_OnTooltipSetUnit)
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", On_SetDefaultAnchor)
 	GameTooltip:HookScript("OnUpdate", On_ANCHOR_CURSOR)
 end
+
+S:RegisterModule(TT:GetName())
