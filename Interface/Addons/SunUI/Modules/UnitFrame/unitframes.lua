@@ -1208,7 +1208,7 @@ local UnitSpecific = {
 		Auras.numBuffs = UF.db.num_target_buffs
 		Auras:SetHeight(500)
 		Auras:SetWidth(UF.db.targetWidth)
-		Auras.size = 26
+		Auras.size = 13
 		Auras.gap = true
 
 		self.Auras = Auras
