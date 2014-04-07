@@ -205,6 +205,16 @@ local function LoadSkin()
 	A:Reskin(cancel)
 
 	A:ReskinScroll(BattleTagInviteFrameScrollFrameScrollBar)
+	
+	for _, button in pairs({FriendsTabHeaderSoRButton, FriendsTabHeaderRecruitAFriendButton}) do
+		button:SetPushedTexture("")
+		button:GetRegions():SetTexCoord(.08, .92, .08, .92)
+		
+		local hi,wi = button:GetHeight()-4, button:GetHeight()-4
+		button:SetSize(wi, hi)
+		A:CreateBDFrame(button)
+	end
+		
 end
 
 A:RegisterSkin("SunUI", LoadSkin)

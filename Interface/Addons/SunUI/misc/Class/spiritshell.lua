@@ -1,6 +1,5 @@
 ﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 
-if S.myclass ~= "PRIEST" then return end
 local SW = S:NewModule("SpiritShell_Watch", "AceEvent-3.0")
 local spellid = 114908
 local frame, damage, name
@@ -47,9 +46,7 @@ function SW:PLAYER_TARGET_CHANGED()
 end
 
 function SW:Init()
-	local Data = S:GetModule("ClassAT")
-	C = Data.db
-
+	if S.myclass ~= "PRIEST" then return end
 	frame = CreateFrame("Button", nil, UIParent)
 	frame:SetPoint("BOTTOM", "UIParent", "BOTTOM",  325,  168)
 	damage = S:CreateFS(frame)

@@ -22,7 +22,7 @@ local function SVal(Val)
     end
 end
 function EP:BuildExpBar()
-	ExpBar = CreateFrame("StatusBar", "SunUIExpBar", UIParent)
+	ExpBar = CreateFrame("StatusBar", "SunUIExpBar", Minimap)
 	ExpBar:SetFrameLevel(3)
 	ExpBar:CreateShadow(0.5)
 	ExpBar:SetStatusBarTexture(S["media"].normal)

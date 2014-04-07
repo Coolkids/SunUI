@@ -56,7 +56,7 @@ function MT:GetOptions()
 			type = "toggle",
 			name = L["低血量报警"],
 			order = 14,
-			set = function(info, value) self.db.Disenchat = value
+			set = function(info, value) self.db.LowHealth = value
 				self:UpdateLowHealthSet()
 			end,
 		},
@@ -64,7 +64,7 @@ function MT:GetOptions()
 			type = "toggle",
 			name = L["AFK界面"],
 			order = 14,
-			set = function(info, value) self.db.Disenchat = value
+			set = function(info, value) self.db.afklock = value
 				self:UpdateAFKSet()
 			end,
 		},

@@ -104,7 +104,7 @@ function IB:CreateTopBack()
 	top:RegisterEvent("PET_BATTLE_CLOSE")
 	top:SetScript("OnEvent", function(self, event)
 		if event == "PET_BATTLE_OPENING_START" then
-			S.FadeOutFrame(self, 1, false)
+			S:FadeOutFrame(self, 1, false)
 		else
 			self:Show()
 			UIFrameFadeIn(self, 1, self:GetAlpha(), 1)
@@ -127,7 +127,7 @@ function IB:CreateBottomBack()
 	bottom:RegisterEvent("PET_BATTLE_CLOSE")
 	bottom:SetScript("OnEvent", function(self, event)
 		if event == "PET_BATTLE_OPENING_START" then
-			S.FadeOutFrame(self, 1, false)
+			S:FadeOutFrame(self, 1, false)
 		else
 			self:Show()
 			UIFrameFadeIn(self, 1, self:GetAlpha(), 1)

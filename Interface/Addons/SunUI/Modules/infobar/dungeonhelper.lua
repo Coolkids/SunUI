@@ -30,8 +30,8 @@ function IB:CreateDungeonhelper()
 	--local healer = "|TInterface\\Addons\\SunUI_Freebgrid\\media\\lfd_role.tga:"..S["media"].fontsize..":"..S["media"].fontsize..":0:0:64:64:21:39:0:19|t"
 	--local damager = "|TInterface\\Addons\\SunUI_Freebgrid\\media\\lfd_role.tga:"..S["media"].fontsize..":"..S["media"].fontsize..":0:0:64:64:21:39:23:42|t"
 	local tank = "|TInterface\\Addons\\SunUI\\media\\tank.tga:"..(S["media"].fontsize+6)..":"..(S["media"].fontsize+6).."|t"
-	local healer = "|TInterface\\Addons\\SunUI_Freebgrid\\media\\healer.tga:"..(S["media"].fontsize+6)..":"..(S["media"].fontsize+6).."|t"
-	local damager = "|TInterface\\Addons\\SunUI_Freebgrid\\media\\dps.tga:"..(S["media"].fontsize+6)..":"..(S["media"].fontsize+6).."|t"
+	local healer = "|TInterface\\Addons\\SunUI\\media\\healer.tga:"..(S["media"].fontsize+6)..":"..(S["media"].fontsize+6).."|t"
+	local damager = "|TInterface\\Addons\\SunUI\\media\\dps.tga:"..(S["media"].fontsize+6)..":"..(S["media"].fontsize+6).."|t"
 	local id = 462
 	
 	local function ShowGameToolTip(self)

@@ -205,19 +205,19 @@ local PostUpdateHealth = function(Health, unit, min, max)
 end
 
 --[[ Hide Blizz frames ]]
---[[
-if IsAddOnLoaded("Blizzard_CompactRaidFrames") then
-	CompactRaidFrameManager:SetParent(Hider)
-	CompactUnitFrameProfiles:UnregisterAllEvents()
-end
+function UF:hideBlizzframes()
+	if IsAddOnLoaded("Blizzard_CompactRaidFrames") then
+		CompactRaidFrameManager:SetParent(S.HiddenFrame)
+		CompactUnitFrameProfiles:UnregisterAllEvents()
+	end
 
-for i = 1, MAX_PARTY_MEMBERS do
-	local pet = "PartyMemberFrame"..i.."PetFrame"
+	for i = 1, MAX_PARTY_MEMBERS do
+		local pet = "PartyMemberFrame"..i.."PetFrame"
 
-	_G[pet]:SetParent(Hider)
-	_G[pet.."HealthBar"]:UnregisterAllEvents()
+		_G[pet]:SetParent(S.HiddenFrame)
+		_G[pet.."HealthBar"]:UnregisterAllEvents()
+	end
 end
---]]
 --[[ Debuff highlight ]]
 
 local PostUpdateIcon = function(_, unit, icon, index, _, filter)

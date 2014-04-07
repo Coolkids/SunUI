@@ -2,7 +2,55 @@
 
 local UF = S:GetModule("UnitFrames")
 
--- [[ Filters ]]
+
+-- Buffs to show on enemy players
+
+UF.dangerousBuffs = {
+	[13750] = true, -- Adrenaline Rush
+	[23335] = true, -- Alliance Flag
+	[90355] = true, -- Ancient Hysteria
+	[48707] = true, -- Anti-Magic Shell
+	[31850] = true, -- Ardent Defender
+	[31821] = true, -- Aura Mastery
+	[31884] = true, -- Avenging Wrath
+	[46924] = true, -- Bladestorm
+	[2825] = true, -- Bloodlust
+	[51753] = true, -- Camouflage
+	[31224] = true, -- Cloak of Shadows
+	[74001] = true, -- Combat Readiness
+	[49028] = true, -- Dancing Rune Weapon (?)
+	[19263] = true, -- Deterrence
+	[47585] = true, -- Dispersion
+	[498] = true, -- Divine Protection
+	[642] = true, -- Divine Shield
+	[5277] = true, -- Evasion
+	[86669] = true, -- Guardian of Ancient Kings (holy)
+	[86659] = true, -- Guardian of Ancient Kings (protection)
+	[86698] = true, -- Guardian of Ancient Kings (retribution)
+	[47788] = true, -- Guardian Spirit
+	[1022] = true, -- Hand of Protection
+	[32182] = true, -- Heroism
+	[105809] = true, -- Holy Avenger
+	[23333] = true, -- Horde Flag
+	[11426] = true, -- Ice Barrier
+	[45438] = true, -- Ice Block
+	[48792] = true, -- Icebound Fortitude
+	[29166] = true, -- Innervate
+	[66] = true, -- Invisibility
+	[12975] = true, -- Last Stand
+	[1463] = true, -- Mana Shield
+	[103958] = true, -- Metamorphosis
+	[33206] = true, -- Pain Suppression
+	[10060] = true, -- Power Infusion
+	[17] = true, -- Power Word: Shield
+	[15473] = true, -- Shadowform
+	[871] = true, -- Shield Wall
+	[23920] = true, -- Spell Reflection
+	[2983] = true, -- Sprint
+	[80353] = true, -- Time Warp
+	[49016] = true, -- Unholy Frenzy
+}
+
 
 -- Debuffs by other players or NPCs you want to show on enemy target
 

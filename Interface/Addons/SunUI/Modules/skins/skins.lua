@@ -473,6 +473,7 @@ function A:CreateBDFrame(f, a)
 	bg:Point("BOTTOMRIGHT", 1, -1)
 	bg:SetFrameLevel(f:GetFrameLevel()-1)
 	A:CreateBD(bg, a or alpha)
+	return bg
 end
 
 function A:RegisterSkin(name, loadFunc)

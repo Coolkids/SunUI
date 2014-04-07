@@ -89,10 +89,16 @@ function PB:GetOptions()
 						self:UpdateHealthBar()
 					end,
 				},
+				DisableText = {
+					type = "toggle",
+					name = L["不显示文字"],
+					order = 6,
+				},
 				HealthPowerPer = {
 					type = "toggle",
 					name = L["生命值用百分比替代"],
-					order = 6,
+					order = 7,
+					disabled = function() return self.db.DisableText end,
 					get = function() return self.db.HealthPowerPer end,
 					set = function(_, value)
 						self.db.HealthPowerPer = value
@@ -103,7 +109,8 @@ function PB:GetOptions()
 				ManaPowerPer = {
 					type = "toggle",
 					name = L["魔法值用百分比替代"],
-					order = 7,
+					order = 8,
+					disabled = function() return self.db.DisableText end,
 					get = function() return self.db.ManaPowerPer end,
 					set = function(_, value)
 						self.db.ManaPowerPer = value
@@ -544,6 +551,7 @@ function PB:CreateEclipse()
 end
 function PB:FuckWarlock()
 	if S.myclass ~= "WARLOCK" then return end
+	local A = S:GetModule("Skins")
 	local MAX_POWER_PER_EMBER = 10
 	local SPELL_POWER_DEMONIC_FURY = SPELL_POWER_DEMONIC_FURY
 	local SPELL_POWER_BURNING_EMBERS = SPELL_POWER_BURNING_EMBERS
@@ -571,7 +579,7 @@ function PB:FuckWarlock()
 		tinsert(fourframe, bars[i])
 		S:SmoothBar(bars[i])
 		bars[i]:CreateShadow(0.5)
-		S:CreateMark(bars[i])
+		A:CreateMark(bars[i])
 		if i == 1 then
 			bars[i]:SetPoint("LEFT", bars)
 		else
@@ -833,7 +841,6 @@ function PB:HealthPowerBar()
 	healthbar:SetValue(UnitHealth("player"))
 	healthbar:SetStatusBarColor(0.1, 0.8, 0.1, 0)
 	if S.myclass ~= "WARLOCK" and S.myclass ~= "SHAMAN" and S.myclass ~= "DEATHKNIGHT" then
-		--S.CreateBack(healthbar)
 		A:CreateBD(healthbar, 0.6)
 	end
 	tinsert(mainframe, healthbar)
@@ -882,20 +889,22 @@ function PB:UpdateHealthBar()
 				self.powertext:SetTextColor(unpack(powercolor[powerclass]))
 				local healthnum = UnitHealth("player")
 				local powernum = UnitPower("player")
-				local maxnum = 0
 				self:SetValue(healthnum)
 				self.power:SetValue(powernum)
-				if PB.db.HealthPowerPer then
-					maxnum = UnitHealthMax("player")
-					self.healthtext:SetText(format("%.1f ", healthnum/maxnum*100).."%")
-				else
-					self.healthtext:SetText(S:ShortValue(healthnum))
-				end
-				if PB.db.ManaPowerPer then
-					maxnum = UnitPowerMax("player")
-					self.powertext:SetText(format("%.1f ", powernum/maxnum*100).."%")
-				else
-					self.powertext:SetText(S:ShortValue(powernum))
+				if not PB.db.DisableText then
+					local maxnum = 0
+					if PB.db.HealthPowerPer then
+						maxnum = UnitHealthMax("player")
+						self.healthtext:SetText(format("%.1f ", healthnum/maxnum*100).."%")
+					else
+						self.healthtext:SetText(S:ShortValue(healthnum))
+					end
+					if PB.db.ManaPowerPer then
+						maxnum = UnitPowerMax("player")
+						self.powertext:SetText(format("%.1f ", powernum/maxnum*100).."%")
+					else
+						self.powertext:SetText(S:ShortValue(powernum))
+					end
 				end
 			return end
 			self.elapsed = 0

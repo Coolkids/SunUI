@@ -94,14 +94,12 @@ end
 function A:Initialize()
 	local CT = S:GetModule("ClassTools")
 	CT:Init()
-	if S.myclass == "MAGE" then 
-		local IW = S:GetModule("IgniteWatch")
-		IW:Init()
-	end
-	if S.myclass == "PRIEST" then 
-		local SW = S:GetModule("SpiritShell_Watch")
-		SW:Init() 
-	end
+	
+	local IW = S:GetModule("IgniteWatch")
+	IW:Init()
+
+	local SW = S:GetModule("SpiritShell_Watch")
+	SW:Init() 
 	local PT = S:GetModule("PetTime")
 	PT:Init()
 end

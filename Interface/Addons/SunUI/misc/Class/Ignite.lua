@@ -1,11 +1,11 @@
 ﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 
 local IW = S:NewModule("IgniteWatch", "AceEvent-3.0")
-if S.myclass ~= "MAGE" then return end
 local spellid = 12654
-local frame, damage
+local damage
 local spellname = GetSpellInfo(spellid)
-
+local frame = CreateFrame("Button", nil, UIParent)
+frame:Hide()
 function IW:UpdateSet()
 	local Data = S:GetModule("ClassAT")
 	if Data.db.EnableIgniteWatch then 
@@ -35,7 +35,7 @@ function IW:UNIT_AURA(event, unit)
 	if unit ~= "target" then return end
 	local name = UnitDebuff("target", spellname, _, "PLAYER")
 	local value = select(15, UnitDebuff("target", spellname, _, "PLAYER")) or 0
-	value = S.ShortValue(value)
+	value = S:ShortValue(value)
 	if name then
 		frame:Show()
 		damage:SetText(value)
@@ -44,10 +44,7 @@ function IW:UNIT_AURA(event, unit)
 	end
 end
 function IW:Init()
-	local Data = S:GetModule("ClassAT")
-	C = Data.db
-	
-	frame = CreateFrame("Button", nil, UIParent)
+	if S.myclass ~= "MAGE" then return end
 	frame:SetPoint("BOTTOM", "UIParent", "BOTTOM",  325,  168)
 	damage = S:CreateFS(frame)
 	damage:SetPoint("BOTTOMLEFT",  frame, "BOTTOMRIGHT", 3, -3)
@@ -55,7 +52,7 @@ function IW:Init()
 	frame:SetNormalTexture(GetSpellTexture(spellid))
 	frame:GetNormalTexture():SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	frame:CreateShadow()
-	frame:Hide()
+	
 	frame.text = S:CreateFS(frame)
 	frame.text:SetPoint("TOPLEFT",  frame, "TOPRIGHT", 3, 3)
 	frame.text:SetText(GetSpellInfo(spellid))

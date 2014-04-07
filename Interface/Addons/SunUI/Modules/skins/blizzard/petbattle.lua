@@ -33,7 +33,7 @@ local function LoadSkin()
 		infoBar.HealthBarBackdrop:SetFrameLevel(infoBar:GetFrameLevel() - 1)
 		infoBar.HealthBarBackdrop:CreateShadow("Background")
 		infoBar.HealthBarBackdrop:Width(infoBar.healthBarWidth)
-		infoBar.ActualHealthBar:SetTexture(A["media"].normal)
+		infoBar.ActualHealthBar:SetTexture(S["media"].normal)
 
 		infoBar.PetTypeFrame = CreateFrame("Frame", nil, infoBar)
 		infoBar.PetTypeFrame:Size(100, 23)
@@ -233,10 +233,10 @@ end)
 			tt.XPBG:SetTexture(nil)
 		end
 		if tt.ActualHealthBar then
-			tt.ActualHealthBar:SetTexture(A["media"].normal)
+			tt.ActualHealthBar:SetTexture(S["media"].normal)
 		end
 		if tt.XPBar then
-			tt.XPBar:SetTexture(A["media"].normal)
+			tt.XPBar:SetTexture(S["media"].normal)
 		end
 		tt.BorderTop:SetTexture(nil)
 		tt.BorderTopLeft:SetTexture(nil)
@@ -285,7 +285,7 @@ end)
 		infoBar:ClearAllPoints()
 
 		infoBar.healthBarWidth = 40
-		infoBar.ActualHealthBar:SetTexture(A["media"].normal)
+		infoBar.ActualHealthBar:SetTexture(S["media"].normal)
 		infoBar.ActualHealthBar:ClearAllPoints()
 		infoBar.ActualHealthBar:SetPoint("TOPLEFT", infoBar, "BOTTOMLEFT", 0, -5)	
 
@@ -338,7 +338,7 @@ end)
 	bf.xpBar:CreateShadow("Background")
 	bf.xpBar:ClearAllPoints()
 	bf.xpBar:SetPoint("BOTTOM", bf.TurnTimer.SkipButton, "TOP", 0, 3)
-	bf.xpBar:SetScript("OnShow", function(self) self:StripTextures() self:SetStatusBarTexture(A["media"].normal) end)
+	bf.xpBar:SetScript("OnShow", function(self) self:StripTextures() self:SetStatusBarTexture(S["media"].normal) end)
 
 	-- PETS SELECTION SKIN
 	for i = 1, 3 do

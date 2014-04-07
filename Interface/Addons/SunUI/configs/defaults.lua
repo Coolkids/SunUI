@@ -94,8 +94,9 @@ P["PowerBar"]={
 	Height = 5,
 	Fade = true,
 	HealthPower = true,
-	HealthPowerPer = true,
-	ManaPowerPer = true,
+	DisableText = true,
+	HealthPowerPer = false,
+	ManaPowerPer = false,	
 }
 
 P["Quest"]={
