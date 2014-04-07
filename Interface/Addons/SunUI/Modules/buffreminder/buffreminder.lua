@@ -237,6 +237,7 @@ function BR:initBuffReminder()
 	tab = self.ReminderBuffs[S.myclass]
 	
 	if not self.db.ShowClassBuff then return end
+	if tab == nil then return end
 	for groupName, _ in pairs(tab) do
 		i = i + 1
 		local frame = CreateFrame("Frame", "ReminderFrame"..i, UIParent)

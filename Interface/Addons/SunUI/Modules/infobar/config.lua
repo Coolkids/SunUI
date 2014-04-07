@@ -155,7 +155,7 @@ function IB:CreateBottomHeader()
 	
 	local BottomInfoMoveHeader = CreateFrame("Frame", "BottomInfoMoveHeader", UIParent)
 	BottomInfoMoveHeader:SetSize(80, 15)
-	BottomInfoMoveHeader:SetPoint("BOTTOMLEFT", "UIParent", "BOTTOMLEFT", 10, 2)
+	BottomInfoMoveHeader:SetPoint("BOTTOMLEFT", "UIParent", "BOTTOMLEFT", 20, 2)
 	S:CreateMover(BottomInfoMoveHeader, "BottomInfoMoveHeaderMover", L["信息条2"], true, nil, "ALL,GENERAL")	
 		
 	if self.db.bottomback then self:CreateBottomBack() end
