@@ -7,6 +7,7 @@ local spellname = GetSpellInfo(spellid)
 
 function SW:UpdateSet()
 	local Data = S:GetModule("ClassAT")
+	if frame == nil then return end
 	if Data.db.EnableSpiritShellWatch then
 		frame:SetSize(Data.db.SpiritShellWatchSize, Data.db.SpiritShellWatchSize)
 		self:ACTIVE_TALENT_GROUP_CHANGED()

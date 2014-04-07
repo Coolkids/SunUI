@@ -256,9 +256,6 @@ function F:BAG_UPDATE()
 	UpdateLureInventory()
 end
 
-function F:Info()
-	return "Fish"
-end
 function F:Initialize()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")

@@ -83,12 +83,6 @@ function IB:GetOptions()
 	return options
 end
 
-function IB:Info()
-	return L["信息条"]
-end
-
-
-
 function IB:CreateTopBack()
 	if not self.db.topback then return end
 	local top = CreateFrame("Frame", "TopInfoPanel", UIParent)

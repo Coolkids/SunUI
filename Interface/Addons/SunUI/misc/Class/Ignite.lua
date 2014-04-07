@@ -4,10 +4,10 @@ local IW = S:NewModule("IgniteWatch", "AceEvent-3.0")
 local spellid = 12654
 local damage
 local spellname = GetSpellInfo(spellid)
-local frame = CreateFrame("Button", nil, UIParent)
-frame:Hide()
+local frame
 function IW:UpdateSet()
 	local Data = S:GetModule("ClassAT")
+	if frame == nil then return end
 	if Data.db.EnableIgniteWatch then 
 		frame:SetSize(Data.db.IgniteWatchSize, Data.db.IgniteWatchSize)
 		self:ACTIVE_TALENT_GROUP_CHANGED()
@@ -45,6 +45,8 @@ function IW:UNIT_AURA(event, unit)
 end
 function IW:Init()
 	if S.myclass ~= "MAGE" then return end
+	frame = CreateFrame("Button", nil, UIParent)
+	frame:Hide()
 	frame:SetPoint("BOTTOM", "UIParent", "BOTTOM",  325,  168)
 	damage = S:CreateFS(frame)
 	damage:SetPoint("BOTTOMLEFT",  frame, "BOTTOMRIGHT", 3, -3)

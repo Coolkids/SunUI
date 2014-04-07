@@ -94,7 +94,6 @@ local show = {
 	arena = true,
 	none = true,
 }
-local class_spells = S.CooldownsMod.ClassCD
 
 local EVENT = {
 	["SPELL_DAMAGE"] = true,
@@ -106,7 +105,7 @@ local EVENT = {
 	["SPELL_CAST_START"] = true, -- for early frost
 	["SPELL_SUMMON"] = true, -- for t12 2p
 }
-local filter = COMBATLOG_OBJECT_AFFILIATION_RAID + COMBATLOG_OBJECT_AFFILIATION_PARTY + COMBATLOG_OBJECT_AFFILIATION_MINE
+local filter = COMBATLOG_OBJECT_AFFILIATION_MINE
 local band = bit.band
 local sformat = string.format
 local floor = math.floor
@@ -268,6 +267,7 @@ local StartTimer = function(name, spellId, cd)
 		bar.icon:SetNormalTexture(icon)
 		bar.icon:GetNormalTexture():SetTexCoord(0.1, 0.9, 0.1, 0.9)
 		bar:Show()
+		
 		local color = RAID_CLASS_COLORS[select(2, UnitClass(name))]
 		if color then
 			bar:SetStatusBarColor(color.r, color.g, color.b)
@@ -291,10 +291,10 @@ local StartTimer = function(name, spellId, cd)
 end
 function CCD:COMBAT_LOG_EVENT_UNFILTERED(null, ...)
 	local _, eventType, _, _, sourceName, sourceFlags = ...
-	if band(sourceFlags, filter) == 0 or sourceName ~= DB.PlayerName then return end
+	if band(sourceFlags, filter) == 0 or sourceName ~= S.myname then return end
 	local spellId = select(12, ...)
-	if class_spells[spellId] and EVENT[eventType] then
-		StartTimer(sourceName, spellId, class_spells[spellId].cd)
+	if S.CooldownsMod.ClassCD[spellId] and EVENT[eventType] then
+		StartTimer(sourceName, spellId, S.CooldownsMod.ClassCD[spellId].cd)
 	end
 end
 
@@ -342,9 +342,6 @@ function CCD:Initialize()
 	S:CreateMover(ClassCDAnchor, "ClassCDAnchorMover", L["内置CD监视"], true, nil, "MINITOOLS")
 end
 
-function CCD:Info()
-	return L["内置CD监视"]
-end
 S:RegisterModule(CCD:GetName())
 
 SlashCmdList.ClassCD = function(msg)

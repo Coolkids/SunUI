@@ -99,8 +99,6 @@ local show = {
 	arena = true,
 }
 
-local raid_spells = S.CooldownsMod.RaidCD
-
 local filter = COMBATLOG_OBJECT_AFFILIATION_RAID + COMBATLOG_OBJECT_AFFILIATION_PARTY + COMBATLOG_OBJECT_AFFILIATION_MINE
 local band = bit.band
 local sformat = string.format
@@ -120,6 +118,7 @@ local StopTimer = function(bar)
 	bar:SetScript("OnUpdate", nil)
 	bar:Hide()
 	tremove(bars, bar.id)
+	bar = nil
 	RCD:UpdatePositions()
 end
 function RCD:UpdatePositions()
@@ -233,10 +232,10 @@ local StartTimer = function(name, spellId)
 	end
 	local bar = CreateBar()
 	local spell, rank, icon = GetSpellInfo(spellId)
-	bar.endTime = GetTime() + raid_spells[spellId]
+	bar.endTime = GetTime() + S.CooldownsMod.RaidCD[spellId]
 	bar.startTime = GetTime()
 	bar.left:SetText(name)
-	bar.right:SetText(FormatTime(raid_spells[spellId]))
+	bar.right:SetText(FormatTime(S.CooldownsMod.RaidCD[spellId]))
 	bar.icon:SetNormalTexture(icon)
 	bar.icon:GetNormalTexture():SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	bar.spell = spell
@@ -267,7 +266,7 @@ function RCD:COMBAT_LOG_EVENT_UNFILTERED(null, ...)
 	local _, eventType, _, _, sourceName, sourceFlags = ...
 	if band(sourceFlags, filter) == 0 then return end
 	local spellId = select(12, ...)
-	if raid_spells[spellId] and show[select(2, IsInInstance())] then
+	if S.CooldownsMod.RaidCD[spellId] and show[select(2, IsInInstance())] then
 		if eventType == "SPELL_RESURRECT" and not spellId == 61999 then
 			if spellId == 95750 then spellId = 6203 end
 			StartTimer(sourceName, spellId)
@@ -289,10 +288,17 @@ function RCD:COMBAT_LOG_EVENT_UNFILTERED(null, ...)
 end
 function RCD:ZONE_CHANGED_NEW_AREA()
 	if select(2, IsInInstance()) == "arena" then
-		for k, v in pairs(bars) do
-			StopTimer(v)
-		end
+		self:PLAYER_REGEN_ENABLED()
 	end
+end
+function RCD:PLAYER_REGEN_ENABLED()
+	for k, v in pairs(bars) do
+		v:SetScript("OnUpdate", nil)
+		v:Hide()
+		v = nil
+	end	
+	RCD:UpdatePositions()
+	wipe(bars)
 end
 function RCD:UpdateSize()
 	RaidCDAnchor:SetSize(self.db.RaidCDWidth, self.db.RaidCDHeight)
@@ -300,13 +306,16 @@ function RCD:UpdateSize()
 		bars[i]:SetSize(self.db.RaidCDWidth, self.db.RaidCDHeight)
 	end
 end
+
 function RCD:UpdateSet()
 	if self.db.RaidCD then
 		RCD:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 		RCD:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+		RCD:RegisterEvent("PLAYER_REGEN_ENABLED")
 	else
 		RCD:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 		RCD:UnregisterEvent("ZONE_CHANGED_NEW_AREA")
+		RCD:UnregisterEvent("PLAYER_REGEN_ENABLED")
 		for k, v in pairs(bars) do
 			StopTimer(v)
 		end
@@ -332,8 +341,4 @@ SlashCmdList.RaidCD = function(msg)
 end
 SLASH_RaidCD1 = "/raidcd"
 
-
-function RCD:Info()
-	return L["团队CD监视"]
-end
 S:RegisterModule(RCD:GetName())

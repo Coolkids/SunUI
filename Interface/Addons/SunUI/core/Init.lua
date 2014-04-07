@@ -57,18 +57,18 @@ function AddOn:OnInitialize()
 				end,
 			}
 			local t = v:GetOptions()
-			t.settingsHeader = {
-				type = "header",
-				name = Locale["设置"],
-				order = 4
-			}
+			--t.settingsHeader = {
+				--type = "header",
+				--name = Locale["设置"],
+				--order = 1
+			--}
 			if self.db[k] and self.db[k].enable ~= nil then
 				t.toggle = {
 					type = "toggle",
 					name = v.toggleLabel or (Locale["启用"] .. (v.modName or k)),
 					width = "double",
 					desc = v.Info and v:Info() or (Locale["启用"] .. (v.modName or k)),
-					order = 3,
+					order = 2,
 					get = function()
 						return AddOn.db[k].enable ~= false or false
 					end,
@@ -81,14 +81,14 @@ function AddOn:OnInitialize()
 			t.header = {
 				type = "header",
 				name = v.modName or k,
-				order = 1
+				order = 0
 			}
 			if v.Info then
 				--print("n::"..v:Info())
 				t.description = {
 					type = "description",
 					name = v:Info() .. "\n\n",
-					order = 2
+					order = 99
 				}
 			end
 			AddOn.Options.args[k:gsub(" ", "_")].args = t

@@ -379,8 +379,5 @@ function WM:Initialize()
 		end
 	end)
 end 
-function WM:Info()
-	return L["世界地图"]
-end
 
 S:RegisterModule(WM:GetName())

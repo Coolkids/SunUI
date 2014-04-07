@@ -1,4 +1,4 @@
-local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local A = S:NewModule("Skins", "AceEvent-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
 A.modName = L["插件美化"]
@@ -134,13 +134,18 @@ local function StopGlow(f)
 	f.glow:SetAlpha(0)
 end
 
-function A:Reskin(f, noGlow)
+function A:Reskin(f, noGlow, saveTexture)
 	if not f then return end
-	f:SetNormalTexture("")
-	f:SetHighlightTexture("")
-	f:SetPushedTexture("")
-	f:SetDisabledTexture("")
-
+	if saveTexture then
+		f:SetHighlightTexture("")
+		f:SetPushedTexture("")
+		f:SetDisabledTexture("")
+	else
+		f:SetNormalTexture("")
+		f:SetHighlightTexture("")
+		f:SetPushedTexture("")
+		f:SetDisabledTexture("")
+	end
 	if f.Left then f.Left:SetAlpha(0) end
 	if f.Middle then f.Middle:SetAlpha(0) end
 	if f.Right then f.Right:SetAlpha(0) end
@@ -468,10 +473,19 @@ function A:ReskinPortraitFrame(f, isButtonFrame)
 end
 
 function A:CreateBDFrame(f, a)
-	local bg = CreateFrame("Frame", nil, f)
+	local frame
+	if f:GetObjectType() == "Texture" then
+		frame = f:GetParent()
+	else
+		frame = f
+	end
+
+	local lvl = frame:GetFrameLevel()
+	
+	local bg = CreateFrame("Frame", nil, frame)
 	bg:Point("TOPLEFT", -1, 1)
 	bg:Point("BOTTOMRIGHT", 1, -1)
-	bg:SetFrameLevel(f:GetFrameLevel()-1)
+	bg:SetFrameLevel(lvl == 0 and 1 or lvl - 1)
 	A:CreateBD(bg, a or alpha)
 	return bg
 end
@@ -519,10 +533,6 @@ function A:Initialize()
 
 	A:RegisterEvent("ADDON_LOADED")
 	A:RegisterEvent("PLAYER_ENTERING_WORLD")
-end
-
-function A:Info()
-	return L["插件美化"]
 end
 
 S:RegisterModule(A:GetName())

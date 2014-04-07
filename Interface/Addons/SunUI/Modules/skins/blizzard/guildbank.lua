@@ -114,7 +114,7 @@ local function LoadSkin()
 			if link then
 				local _, _, quality, _, _, _, _, _, _, texture = GetItemInfo(link)
 				if S:IsItemUnusable(link) then
-					icontexture:SetVertexColor(RED_FONT_COLOS.r, RED_FONT_COLOS.g, RED_FONT_COLOS.b)
+					icontexture:SetVertexColor(1, 0, 0)
 				else
 					icontexture:SetVertexColor(1, 1, 1)
 				end

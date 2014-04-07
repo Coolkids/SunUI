@@ -46,10 +46,6 @@ function BR:GetOptions()
 	return options
 end
 
-
-function BR:Info()
-	return L["Buff提醒"]
-end
 function BR:Initialize()
 	self:initBuffReminder()
 	self:initRaidBuffReminder()

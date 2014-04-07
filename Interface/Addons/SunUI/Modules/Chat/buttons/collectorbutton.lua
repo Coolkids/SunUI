@@ -47,9 +47,6 @@ function B:CreateMainButton()
 end
 
 B.modName = L["其他按钮"]
-function B:Info()
-	return L["其他按钮"]
-end
 
 function B:Initialize()
 	self:CreateMainButton()

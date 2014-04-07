@@ -33,7 +33,9 @@ end
 
 function watcherPrototype:CreateButton(mode)
 	local button=CreateFrame("Button", nil, self.parent)
-	button:CreateShadow("Background")
+	local help=CreateFrame("Button", nil, button)
+	help:SetFrameLevel(button:GetFrameLevel()+2)
+	button:CreateShadow()
 	button:StyleButton(true)
 	button:SetPushedTexture(nil)
 	button:SetSize(self.size, self.size)
@@ -41,13 +43,13 @@ function watcherPrototype:CreateButton(mode)
 	button.icon = button:CreateTexture(nil, "ARTWORK")
 	button.icon:SetAllPoints()
 	button.icon:SetTexCoord(.08, .92, .08, .92)
-	button.count = button:CreateFontString(nil, "OVERLAY")
+	button.count = help:CreateFontString(nil, "OVERLAY", 2)
 	button.count:SetFont(S["media"].font, S["media"].fontsize * (Round(self.size) / 26), 'THINOUTLINE')
 	button.count:SetPoint("TOPRIGHT", button , "TOPRIGHT", 4, 5)
 	
-	button.value = button:CreateFontString(nil, "OVERLAY")
+	button.value = help:CreateFontString(nil, "OVERLAY")
 	button.value:SetFont(S["media"].font, S["media"].fontsize * (Round(self.size) / 26)-2, 'THINOUTLINE')
-	button.value:SetPoint("CENTER", button , "TOP", 0, 8)
+	button.value:SetPoint("CENTER", button , "BOTTOM", 0, 2)
 	button.value:SetJustifyH("RIGHT")
 	
 	button:SetScript("OnEnter", function(self)
@@ -100,7 +102,7 @@ function watcherPrototype:CreateButton(mode)
 		button.cooldown = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
 		button.cooldown:SetAllPoints(button.icon)
 		button.cooldown:SetReverse()
-		button.cooldown:SetFrameLevel(3)
+		button.cooldown:SetFrameLevel(button:GetFrameLevel()+1)
 		button.mode = "ICON"	
 	end
 	button.owner = self

@@ -232,12 +232,18 @@ local function LoadSkin()
 
 		na:Hide()
 		co:SetDrawLayer("OVERLAY")
-
-		local line = CreateFrame("Frame", nil, bu)
-		line:SetSize(1, 40)
-		line:Point("RIGHT", ic, 1, 0)
-		A:CreateBD(line)
-
+		if not bu.IconBD then
+			local border = CreateFrame("Frame", nil, bu)
+			border:SetFrameLevel(frameLevel)
+			border:SetOutside(ic, 1, 1)
+			border:SetTemplate("Border")
+			bu.IconBD = border
+		end
+		--local line = CreateFrame("Frame", nil, bu)
+		--line:SetSize(40, 40)
+		--line:Point("RIGHT", ic, 1, 0)
+		--A:CreateBD(line)
+		--bu.IconBD = A:CreateBDFrame(ic, 0)
 		bu:StyleButton(1)
 	end
 	

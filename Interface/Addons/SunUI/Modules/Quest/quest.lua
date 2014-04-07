@@ -18,9 +18,6 @@ function QT:GetOptions()
 	return options
 end
 
-function QT:Info()
-	return L["任务增强"]
-end
 function QT:Initialize()
 	self:initAutoAccept()
 end

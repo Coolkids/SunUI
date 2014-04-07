@@ -438,9 +438,7 @@ function N:UpdateSet()
 		self:UnregisterEvent("RESURRECT_REQUEST")
 	end
 end
-function N:Info()
-	return L["通知"]
-end
+
 function N:Initialize()
 	local A = S:GetModule("Skins")
 	self:initDate()

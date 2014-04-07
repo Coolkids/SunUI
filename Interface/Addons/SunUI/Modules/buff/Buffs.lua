@@ -323,10 +323,6 @@ function Buff:UpdateDebuffDirection()
 	end
 end
 
-function Buff:Info()
-	return L["增益美化"]
-end
-
 function Buff:Initialize()
 	
 	SetCVar("consolidateBuffs",0)

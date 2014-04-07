@@ -1,6 +1,7 @@
 local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local A = S:GetModule("Announce")
-
+local filter = COMBATLOG_OBJECT_AFFILIATION_MINE
+local band = bit.band
 local baoming = {
 	--战士
 	[871] = true,	-- 盾墙
@@ -75,75 +76,77 @@ local mislead = {
 	[34477] = true,	-- 误导
 	[57934] = true,	-- 偷天
 }
-function A:COMBAT_LOG_EVENT_UNFILTERED(_, _, ...)
-	local arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 = ...
-	--if arg5 == UnitName("player") then print(arg2, GetSpellLink(arg12)) end
+function A:COMBAT_LOG_EVENT_UNFILTERED(_, ...)
+	local _, eventType, _, _, sourceName, sourceFlags = ...
+	if band(sourceFlags, filter) == 0 or sourceName ~= S.myname then return end
+	local spellId = select(12, ...)
+	
 	--打断
-	if arg2 == "SPELL_INTERRUPT" and arg5 == UnitName("player") and self.db.Interrupt then
+	if eventType == "SPELL_INTERRUPT" and self.db.Interrupt then
 		local channel = IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT" or IsInRaid() and "RAID" or IsInGroup() and "PARTY"
 		if channel then
-			SendChatMessage(GetSpellLink(arg12).."→"..arg9..GetSpellLink(arg15), channel)
+			SendChatMessage(GetSpellLink(spellId).."→"..select(9, ...)..GetSpellLink(select(15, ...)), channel)
 		else
-			DEFAULT_CHAT_FRAME:AddMessage(GetSpellLink(arg12).."→"..arg9..GetSpellLink(arg15))
+			DEFAULT_CHAT_FRAME:AddMessage(GetSpellLink(spellId).."→"..select(9, ...)..GetSpellLink(select(15, ...)))
 		end
 	end
 	--重要通道技能	
-	if cl[arg12] and arg5 == UnitName("player") and self.db.Channel and arg2 == "SPELL_CAST_SUCCESS" then
+	if cl[spellId] and self.db.Channel and eventType == "SPELL_CAST_SUCCESS" then
 		local channel = IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT" or IsInRaid() and "RAID" or IsInGroup() and "PARTY"
 		if channel then
-			SendChatMessage(L["正在施放"]..GetSpellLink(arg12), channel)
+			SendChatMessage(L["正在施放"]..GetSpellLink(spellId), channel)
 		else
 			return
-			--DEFAULT_CHAT_FRAME:AddMessage("正在施放"..GetSpellLink(arg12))
+			--DEFAULT_CHAT_FRAME:AddMessage("正在施放"..GetSpellLink(spellId))
 		end
 	end
 	--重要给出去的技能
-	if givelist[arg12] and arg5 == UnitName("player") and self.db.Give and arg2 == "SPELL_AURA_APPLIED" then
+	if givelist[spellId] and self.db.Give and eventType == "SPELL_AURA_APPLIED" then
 		local channel = IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT" or IsInRaid() and "RAID" or IsInGroup() and "PARTY"
 		if channel then
-			SendChatMessage(GetSpellLink(arg12).."→"..arg9.."", channel)
+			SendChatMessage(GetSpellLink(spellId).."→"..select(9, ...).."", channel)
 		else
 			return
-			--DEFAULT_CHAT_FRAME:AddMessage("施放"..GetSpellLink(arg12).."给>>"..arg9.."<<")
+			--DEFAULT_CHAT_FRAME:AddMessage("施放"..GetSpellLink(spellId).."给>>"..select(9, ...).."<<")
 		end
 	end
 	--治疗大招
-	if heal[arg12] and arg5 == UnitName("player") and self.db.Heal and (arg2 == "SPELL_CAST_SUCCESS" or arg2 == "SPELL_SUMMON") then
+	if heal[spellId] and self.db.Heal and (eventType == "SPELL_CAST_SUCCESS" or eventType == "SPELL_SUMMON") then
 		local channel = IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT" or IsInRaid() and "RAID" or IsInGroup() and "PARTY"
 		if channel then
-			SendChatMessage(L["已施放"]..GetSpellLink(arg12), channel)
+			SendChatMessage(L["已施放"]..GetSpellLink(spellId), channel)
 		else
 			return
-			--DEFAULT_CHAT_FRAME:AddMessage("已施放"..GetSpellLink(arg12))
+			--DEFAULT_CHAT_FRAME:AddMessage("已施放"..GetSpellLink(spellId))
 		end
 	end
 	--保命技能
-	if baoming[arg12] and arg5 == UnitName("player") and self.db.BaoM and arg2 == "SPELL_CAST_SUCCESS" then
+	if baoming[spellId] and self.db.BaoM and eventType == "SPELL_CAST_SUCCESS" then
 		local channel = IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT" or IsInRaid() and "RAID" or IsInGroup() and "PARTY"
 		if channel then
-			SendChatMessage(L["已施放"]..GetSpellLink(arg12), channel)
+			SendChatMessage(L["已施放"]..GetSpellLink(spellId), channel)
 		else
 			return
-			--DEFAULT_CHAT_FRAME:AddMessage("已施放"..GetSpellLink(arg12))
+			--DEFAULT_CHAT_FRAME:AddMessage("已施放"..GetSpellLink(spellId))
 		end
 	end
 	--复活技能
-	if resurrect[arg12] and arg5 == UnitName("player") and self.db.Resurrect and arg2 == "SPELL_RESURRECT" then
+	if resurrect[spellId] and self.db.Resurrect and eventType == "SPELL_RESURRECT" then
 		local channel = IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT" or IsInRaid() and "RAID" or IsInGroup() and "PARTY"
 		if channel then
-			SendChatMessage(GetSpellLink(arg12)..L["复活"]..arg9, channel)
+			SendChatMessage(GetSpellLink(spellId)..L["复活"]..select(9, ...), channel)
 		else
 			return
 		end
 	end
 	--误导
-	if mislead[arg12] and arg5 == UnitName("player") and self.db.Mislead and arg2 == "SPELL_CAST_SUCCESS" then
+	if mislead[spellId] and self.db.Mislead and eventType == "SPELL_CAST_SUCCESS" then
 		local channel = IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT" or IsInRaid() and "RAID" or IsInGroup() and "PARTY"
 		if channel then
-			SendChatMessage(GetSpellLink(arg12).."→"..arg9, channel)
+			SendChatMessage(GetSpellLink(spellId).."→"..select(9, ...), channel)
 		else
 			return
-			--DEFAULT_CHAT_FRAME:AddMessage(GetSpellLink(arg12).."给>>"..arg9.."<<")
+			--DEFAULT_CHAT_FRAME:AddMessage(GetSpellLink(spellId).."给>>"..select(9, ...).."<<")
 		end
 	end
 end

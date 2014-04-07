@@ -679,9 +679,7 @@ function AB:UpdateSpace()
 		end
 	end
 end
-function AB:Info()
-	return L["动作条"]
-end
+
 function AB:Initialize()
 	self:blizzHider()
 	self:CreateBar1()

@@ -26,11 +26,16 @@ local function QuestPriceFrame_OnUpdate(self)
 		if link ~= self.link then
 			self.link = link
 			local price = link and select(11, GetItemInfo(link))
+			local quality = link and select(3, GetItemInfo(link))
 			if price and price > 0 then
 				MoneyFrame_Update(self, price)
 				self:SetAlpha(1)
 			else
 				self:SetAlpha(0)
+			end
+			if quality and quality > 1 then
+				--print(button.IconBD)
+				button.IconBD:SetBackdropBorderColor(GetItemQualityColor(quality))
 			end
 		end
 	end

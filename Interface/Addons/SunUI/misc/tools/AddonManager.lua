@@ -2,9 +2,7 @@
 local AM = S:NewModule("AddonManager", "AceEvent-3.0", "AceHook-3.0")
 
 AM.modName = ADDONS
-function AM:Info()
-	return ADDONS
-end
+
 stAddonManager = CreateFrame("Frame", "stAddonManager", UIParent)
 stAddonManager:SetFrameStrata("HIGH")
 stAddonManager.header = CreateFrame("Frame", "stAddonmanager_Header", stAddonManager)

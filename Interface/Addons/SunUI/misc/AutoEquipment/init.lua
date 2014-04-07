@@ -60,9 +60,6 @@ function A:GetOptions()
 	return options
 end
 
-function A:Info()
-	return L["自动换装"]
-end
 function A:Initialize()
 	self:init()
 end

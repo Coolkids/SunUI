@@ -69,9 +69,6 @@ function A:GetOptions()
 	return options
 end
 
-function A:Info()
-	return L["施法通告"]
-end
 function A:Initialize()
 	self:UpdateSet()
 end

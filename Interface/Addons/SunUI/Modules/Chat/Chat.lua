@@ -307,9 +307,7 @@ function CT:GetOptions()
 	}
 	return options
 end
-function CT:Info()
-	return L["聊天美化"]
-end
+
 function CT:Initialize()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	

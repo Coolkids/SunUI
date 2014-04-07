@@ -29,9 +29,7 @@ function TT:GetOptions()
 	return options
 end
 
-function TT:Info()
-	return L["鼠标提示"]
-end
+
 local reactionlist  = {
 	[1] = FACTION_STANDING_LABEL1,
 	[2] = FACTION_STANDING_LABEL2,

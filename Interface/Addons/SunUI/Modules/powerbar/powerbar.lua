@@ -29,9 +29,7 @@ local ShadowOrbs
 local eb
 local MageBars
 PB.modName = L["PowerBar"]
-function PB:Info()
-	return L["PowerBar"]
-end
+
 function PB:GetOptions()
 	local options = {
 		group1 = {
@@ -351,13 +349,13 @@ function PB:CreateQSDKPower()
 						bars[4]:Hide()
 						bars[5]:Hide()
 						for i = 1,3 do
-							bars[i]:SetWidth((self.db.Width-space*(3-1))/3)
+							bars[i]:SetWidth((PB.db.Width-space*(3-1))/3)
 						end
 					elseif maxnum == 5 then
 						bars[4]:Show()
 						bars[5]:Show()
 						for i = 1,5 do
-							bars[i]:SetWidth((self.db.Width-space*(5-1))/5)
+							bars[i]:SetWidth((PB.db.Width-space*(5-1))/5)
 						end
 					end
 				end
@@ -377,13 +375,13 @@ function PB:CreateQSDKPower()
 					bars[4]:Hide()
 					bars[5]:Hide()
 					for i = 1,3 do
-						bars[i]:SetWidth((self.db.Width-space*(3-1))/3)
+						bars[i]:SetWidth((PB.db.Width-space*(3-1))/3)
 					end
 				elseif maxnum == 5 then
 					bars[4]:Show()
 					bars[5]:Show()
 					for i = 1,5 do
-						bars[i]:SetWidth((self.db.Width-space*(5-1))/5)
+						bars[i]:SetWidth((PB.db.Width-space*(5-1))/5)
 					end
 				end
 			end

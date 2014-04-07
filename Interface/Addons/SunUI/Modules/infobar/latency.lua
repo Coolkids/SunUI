@@ -32,8 +32,9 @@ function IB:CreateLatency()
 		int = int - t
 		if int < 0 then
 			local _, _, latencyHome, latencyWorld = GetNetStats()
-			colorlatency(latencyHome)
-			stat.text:SetText(latencyHome.."|cffffd700ms|r")
+			local maxo = max(latencyHome, latencyWorld)
+			colorlatency(maxo)
+			stat.text:SetText(maxo.."|cffffd700ms|r")
 			int = 1
 		end
 	end
@@ -44,10 +45,10 @@ function IB:CreateLatency()
 		GameTooltip:AddLine(" ")
 		local _, _, latencyHome, latencyWorld = GetNetStats()
 		local bandwidth = GetAvailableBandwidth()
-		local r1, g1, b1 = S:ColorGradient(latencyHome/100, IB.InfoBarStatusColor[1][1], IB.InfoBarStatusColor[1][2], IB.InfoBarStatusColor[1][3], 
+		local r1, g1, b1 = S:ColorGradient((300-latencyHome)/300, IB.InfoBarStatusColor[1][1], IB.InfoBarStatusColor[1][2], IB.InfoBarStatusColor[1][3], 
 																			IB.InfoBarStatusColor[2][1], IB.InfoBarStatusColor[2][2], IB.InfoBarStatusColor[2][3],
 																			IB.InfoBarStatusColor[3][1], IB.InfoBarStatusColor[3][2], IB.InfoBarStatusColor[3][3])
-		local r2, g2, b2 = S:ColorGradient(latencyWorld/100, IB.InfoBarStatusColor[1][1], IB.InfoBarStatusColor[1][2], IB.InfoBarStatusColor[1][3], 
+		local r2, g2, b2 = S:ColorGradient((300-latencyWorld)/300, IB.InfoBarStatusColor[1][1], IB.InfoBarStatusColor[1][2], IB.InfoBarStatusColor[1][3], 
 																			IB.InfoBarStatusColor[2][1], IB.InfoBarStatusColor[2][2], IB.InfoBarStatusColor[2][3],
 																			IB.InfoBarStatusColor[3][1], IB.InfoBarStatusColor[3][2], IB.InfoBarStatusColor[3][3])
 		GameTooltip:ClearLines()

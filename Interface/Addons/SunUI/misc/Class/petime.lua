@@ -1,6 +1,7 @@
 local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local PT = S:NewModule("PetTime", "AceEvent-3.0", "AceTimer-3.0")
-
+local filter = COMBATLOG_OBJECT_AFFILIATION_MINE
+local band = bit.band
 local list= {
 	[132604] = 15,
 	[132603] = 15,
@@ -82,16 +83,17 @@ local OnMouseDown = function(self, button)
 end
 bar:EnableMouse(true)
 bar:SetScript("OnMouseDown", OnMouseDown)
-function PT:COMBAT_LOG_EVENT_UNFILTERED(_, _, ...)
-	local arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 = ...
-	--if arg5 == UnitName("player") then print(list[arg12], arg12, arg2) end
-	if arg2 == "SPELL_SUMMON"  and arg5 == UnitName("player") and list[arg12] then
-		bar.max = list[arg12] + GetTime()
+function PT:COMBAT_LOG_EVENT_UNFILTERED(_, ...)
+	local _, eventType, _, _, sourceName, sourceFlags = ...
+	if band(sourceFlags, filter) == 0 or sourceName ~= S.myname then return end
+	local spellId = select(12, ...)
+	if eventType == "SPELL_SUMMON" and list[spellId] then
+		bar.max = list[spellId] + GetTime()
 		bar.startTime = GetTime()
 		if not bar.texture then
-			bar.icon:SetNormalTexture(GetSpellTexture(arg12))
+			bar.icon:SetNormalTexture(GetSpellTexture(spellId))
 			bar.icon:GetNormalTexture():SetTexCoord(0.1, 0.9, 0.1, 0.9)
-			bar.left:SetText(GetSpellInfo(arg12))
+			bar.left:SetText(GetSpellInfo(spellId))
 			bar.texture = true
 		end
 		self:StartBar()

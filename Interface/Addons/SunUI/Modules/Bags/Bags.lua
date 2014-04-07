@@ -859,7 +859,4 @@ StaticPopupDialogs["NO_BANK_BAGS"] = {
 	whileDead = 1,	
 }
 
-function B:Info()
-	return L["背包"]
-end
 S:RegisterModule(B:GetName())

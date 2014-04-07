@@ -604,7 +604,7 @@ local UnitSpecific = {
 			IconFrame:SetSize(44, 44)
 		end
 
-		local PvP = S:CreateFS(self)
+		local PvP = S:CreateFS(self, 10)
 		PvP:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", -50, 3)
 		PvP:SetText("P")
 
@@ -629,6 +629,12 @@ local UnitSpecific = {
 
 		self.PvP = PvP
 		PvP.Override = UpdatePvP
+		
+		local Combat = S:CreateFS(self, 10)
+		Combat:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", -60, 3)
+		Combat:SetText("C")
+		Combat:SetTextColor(1, 1, 125/255)
+		self.Combat = Combat
 
 		-- We position these later on
 		local Debuffs = CreateFrame("Frame", nil, self)
@@ -1294,7 +1300,7 @@ local UnitSpecific = {
 
 		local HealthPoints = S:CreateFS(Health, 10, "RIGHT")
 		HealthPoints:SetPoint("RIGHT", self, "TOPRIGHT", 0, 6)
-		self:Tag(HealthPoints, '[dead][sunuf:bosshealth]')
+		self:Tag(HealthPoints, '[dead][sunuf:bosshealth]%')
 
 		Health.value = HealthPoints
 

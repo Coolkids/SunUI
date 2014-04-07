@@ -249,7 +249,7 @@ function MAP:CreateRaidTools()
 	wm:SetParent(UIParent) 
 	wm:SetFrameLevel(3)
 	wm:ClearAllPoints() 
-	wm:SetPoint("TOPRIGHT", MiniMap, "TOPRIGHT", -5, -5)
+	wm:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", -5, -5)
 	wm:SetSize(15, 15)
 	
 	CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButtonLeft:SetAlpha(0) 
@@ -262,6 +262,7 @@ function MAP:CreateRaidTools()
 		if (raid and (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player"))) or (GetNumSubgroupMembers() > 0 and not raid) then 
 			self:Show()
 		else 
+			--test
 			self:Hide() 
 		end 
 	end) 
@@ -285,12 +286,8 @@ function MAP:CreateRaidTools()
 		end 
 	end)
 	local A = S:GetModule("Skins")
-	A:Reskin(wm)
+	A:Reskin(wm, false, true)
 end 
-
-function MAP:Info()
-	return L["地图美化"]
-end
 
 function MAP:Initialize()
 	SkinMiniMap()

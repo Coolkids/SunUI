@@ -2,9 +2,7 @@
 
 local MT = S:NewModule("MiniTools", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 MT.modName = L["小工具"]
-function MT:Info()
-	return L["小工具"]
-end
+
 function MT:GetOptions()
 	local options = {
 		AutoSell = {

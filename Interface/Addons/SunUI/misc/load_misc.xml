@@ -9,6 +9,7 @@
 	<Include file="minitools\load.xml"/>
 	<Include file="tools\load.xml"/>
 	<Include file="xct\load_xct.xml"/>
+	<Include file="oGlow\load.xml"/>
 	<!--
 	
 	-->

@@ -424,10 +424,6 @@ local function nioTillersEvents(self, event)
 	end
 end
 
-
-function nioTillers:Info()
-	return "nioTillers"
-end
 function nioTillers:Initialize()
 	nioTillersFrame:RegisterEvent("ADDON_LOADED")
 	nioTillersFrame:RegisterEvent("PLAYER_ENTERING_WORLD")

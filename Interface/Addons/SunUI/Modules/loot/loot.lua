@@ -391,9 +391,7 @@ addon:SetScript("OnEvent", function(self, event, ...)
 end)
 
 LOOT.modName = L["拾取美化"]
-function LOOT:Info()
-	return L["拾取美化"]
-end
+
 function LOOT:Initialize()
 	self:SetFrame()
 	self:initRool()
