@@ -1,7 +1,5 @@
 ﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local B = S:GetModule("Cbutton")
--- Author: YYSS
--- modify by ljxx.net at 20110729
 local L = {}
 if (GetLocale() == "zhCN") then
 	L.INFO_DURABILITY_STAT1 = "法伤"
@@ -19,10 +17,10 @@ if (GetLocale() == "zhCN") then
 	L.INFO_DURABILITY_STAT13 = "格挡"
 	L.INFO_DURABILITY_STAT14 = "护甲"
 	L.INFO_DURABILITY_NO = "无"
-	L.INFO_DURABILITY_TIP3 = "角色数据报告: "
+	L.INFO_DURABILITY_TIP3 = "角色数据报告(此报告只包含装备加成): "
 	L.INFO_DURABILITY_TIP4 = "天赋"
 	L.INFO_DURABILITY_TIP5 = "装备等级"
-	L.INFO_DURABILITY_TIP6 = "精通点数"
+	L.INFO_DURABILITY_TIP6 = "精通"
 	L.INFO_DURABILITY_TIP7 = "韧性"
 	L.INFO_DURABILITY_TIP = "点击发送用户状态报告"
 elseif (GetLocale() == "zhTW") then
@@ -41,13 +39,21 @@ elseif (GetLocale() == "zhTW") then
 	L.INFO_DURABILITY_STAT13 = "格擋"
 	L.INFO_DURABILITY_STAT14 = "護甲"
 	L.INFO_DURABILITY_NO = "無"
-	L.INFO_DURABILITY_TIP3 = "角色數據報告: "
+	L.INFO_DURABILITY_TIP3 = "角色數據報告(此報告只包含裝備加成): "
 	L.INFO_DURABILITY_TIP4 = "天賦"
 	L.INFO_DURABILITY_TIP5 = "裝備等級"
-	L.INFO_DURABILITY_TIP6 = "精通點數"
+	L.INFO_DURABILITY_TIP6 = "精通"
 	L.INFO_DURABILITY_TIP7 = "韌性"
 	L.INFO_DURABILITY_TIP = "點擊發送用戶狀態報告"
 end
+local upgradeTable = {
+	["1"] = 8, ["373"] = 4, ["374"] = 8, ["375"] = 4, ["376"] = 4, ["377"] = 4,
+	["379"] = 4, ["380"] = 4, ["446"] = 4, ["447"] = 8, ["452"] = 8, ["454"] = 4,
+	["455"] = 8, ["457"] = 8, ["459"] = 4, ["460"] = 8, ["461"] = 12, ["462"] = 16,
+	["466"] = 4, ["467"] = 8, ["469"] = 4, ["470"] = 8, ["471"] = 12, ["472"] = 16,
+	["477"] = 4, ["478"] = 8, ["480"] = 8, ["492"] = 4, ["493"] = 8, ["495"] = 4,
+	["496"] = 8, ["497"] = 12, ["498"] = 16
+}
 --CH.L = L
 --状态报告
 local MyData = {};
@@ -57,7 +63,7 @@ local function StatReport_GetSpellText()
 	text = text..", ";
 	text = text..MyData.SHIT..L.INFO_DURABILITY_STAT2;
 	text = text..", ";
-	text = text..format("%.1f%%", MyData.SCRIT)..L.INFO_DURABILITY_STAT3;
+	text = text..format("%.2f%%", MyData.SCRIT)..L.INFO_DURABILITY_STAT3;
 	text = text..", ";
 	text = text..MyData.SHASTE..L.INFO_DURABILITY_STAT4;
 	text = text..", ";
@@ -69,7 +75,7 @@ local function StatReport_GetHealText()
 	local text = "";
 	text = text..MyData.SHP..L.INFO_DURABILITY_STAT6;
 	text = text..", ";
-	text = text..format("%.1f%%", MyData.SCRIT)..L.INFO_DURABILITY_STAT3;
+	text = text..format("%.2f%%", MyData.SCRIT)..L.INFO_DURABILITY_STAT3;
 	text = text..", ";
 	text = text..MyData.SHASTE..L.INFO_DURABILITY_STAT4;
 	text = text..", ";
@@ -87,7 +93,7 @@ local function StatReport_GetSpellAndHealText()
 	text = text..", ";
 	text = text..MyData.SHIT..L.INFO_DURABILITY_STAT2;
 	text = text..", ";
-	text = text..format("%.1f%%", MyData.SCRIT)..L.INFO_DURABILITY_STAT3;
+	text = text..format("%.2f%%", MyData.SCRIT)..L.INFO_DURABILITY_STAT3;
 	text = text..", ";
 	text = text..MyData.SHASTE..L.INFO_DURABILITY_STAT4;
 	text = text..", ";
@@ -103,7 +109,7 @@ local function StatReport_GetMeleeText()
 	text = text..", ";
 	text = text..MyData.MHIT..L.INFO_DURABILITY_STAT2;
 	text = text..", ";
-	text = text..format("%.1f%%", MyData.MCRIT)..L.INFO_DURABILITY_STAT3;
+	text = text..format("%.2f%%", MyData.MCRIT)..L.INFO_DURABILITY_STAT3;
 	text = text..", ";
 	text = text..MyData.MEXPER..L.INFO_DURABILITY_STAT9;
 --	text = text..", ";
@@ -117,7 +123,7 @@ local function StatReport_GetRangedText()
 	text = text..", ";
 	text = text..MyData.RHIT..L.INFO_DURABILITY_STAT2;
 	text = text..", ";
-	text = text..format("%.1f%%", MyData.RCRIT)..L.INFO_DURABILITY_STAT3;
+	text = text..format("%.2f%%", MyData.RCRIT)..L.INFO_DURABILITY_STAT3;
 --	text = text..", ";
 --	text = text..MyData.Penetr.."%破甲"	
 	return text;
@@ -129,11 +135,11 @@ local function StatReport_GetTankText()
 --	text = text..", ";
 --	text = text..MyData.DEF.."防御";
 	text = text..", ";
-	text = text..format("%.1f%%", MyData.DODGE)..L.INFO_DURABILITY_STAT11;
+	text = text..format("%.2f%%", MyData.DODGE)..L.INFO_DURABILITY_STAT11;
 	text = text..", ";
-	text = text..format("%.1f%%", MyData.PARRY)..L.INFO_DURABILITY_STAT12;
+	text = text..format("%.2f%%", MyData.PARRY)..L.INFO_DURABILITY_STAT12;
 	text = text..", ";
-	text = text..format("%.1f%%", MyData.BLOCK)..L.INFO_DURABILITY_STAT13;
+	text = text..format("%.2f%%", MyData.BLOCK)..L.INFO_DURABILITY_STAT13;
 	text = text..", ";
 	text = text..MyData.ARMOR..L.INFO_DURABILITY_STAT14;
 	return text;
@@ -188,9 +194,16 @@ local function GetAiL(unit)
 
 	for i in pairs(slotName) do
 		slot = GetInventoryItemLink(unit, GetInventorySlotInfo(slotName[i]))
+
 		if slot ~= nil then
 			itn = itn + 1
 			level = select(4, GetItemInfo(slot))
+			if level and level >= 458 then
+				local upgradeId = slot:match(":(%d+)\124h%[")
+				if (upgradeId and upgradeTable[upgradeId]) then
+					level = level + upgradeTable[upgradeId];
+				end
+			end
 			total = total + level
 		end
 	end
@@ -209,7 +222,7 @@ local function StatReport_UpdateMyData()
 	MyData.TDATA = StatReport_TalentData();		--天赋
 --	MyData.ILVL = floor(GetAverageItemLevel());						--平均装备等级
 	MyData.ILVL = GetAiL("player");
-	MyData.Mastery = format("%.2f", GetMastery());								--精通点数
+	MyData.Mastery = format("%.2f", GetMastery()).."%";								--精通点数
 	--基础属性
 	MyData.STR = UnitStat("player", 1);							--力量
 	MyData.AGI = UnitStat("player", 2);							--敏捷
@@ -219,21 +232,21 @@ local function StatReport_UpdateMyData()
 
 	--近战
 	MyData.MAP = StatReport_UnitAttackPower();					--强度
-	MyData.MHIT = GetCombatRating(6);							--命中等级
+	MyData.MHIT = format("%.2f", GetCombatRatingBonus(6)).."%";							--命中等级
 	MyData.MCRIT = GetCritChance();								--爆击率%
 	MyData.MEXPER = GetExpertise();								--精准
 --	MyData.Penetr = floor(GetArmorPenetration());						--破甲等级
 	--远程
 	MyData.RAP = StatReport_UnitRangedAttackPower();			--强度
-	MyData.RHIT = GetCombatRating(7);							--命中等级
+	MyData.RHIT = format("%.2f", GetCombatRatingBonus(7)).."%";							--命中等级
 	MyData.RCRIT = GetRangedCritChance();						--爆击率%
 	--法术
 	MyData.SSP = StatReport_GetSpellBonusDamage();				--伤害加成
 	MyData.SHP = GetSpellBonusHealing();						--治疗加成
-	MyData.SHIT = GetCombatRating(8);							--命中等级
+	MyData.SHIT = format("%.2f", GetCombatRatingBonus(8)).."%";							--命中等级
 	MyData.SCRIT = StatReport_GetSpellCritChance();				--爆击率
-	MyData.SHASTE = GetCombatRating(20);						--急速等级
-	MyData.SMR = floor(GetManaRegen()*5);						--法力回复（每5秒）
+	MyData.SHASTE = format("%.2f", GetCombatRatingBonus(20)).."%";						--急速等级
+	MyData.SMR = floor(select(2, GetManaRegen()));						--法力回复（每5秒）
 	--防御
 	_,_,MyData.ARMOR = UnitArmor("player");						--护甲
 	MyData.DEF = StatReport_UnitDefense();						--防御

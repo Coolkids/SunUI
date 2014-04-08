@@ -362,6 +362,7 @@ function B:CheckRaidStatus()
 	if ((GetNumGroupMembers(LE_PARTY_CATEGORY_HOME) > 0) and not IsInRaid() or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and not (inInstance and (instanceType == "pvp" or instanceType == "arena")) then
 		return true
 	else
+		--TEST
 		return false
 	end
 end
@@ -382,7 +383,7 @@ function B:CreateRaidCheck()
 	RaidCheckFrameLeft:SetScript("OnMouseDown", function(self, btn)
 		if InCombatLockdown() then return end
 		if btn == "LeftButton" then
-			if RaidUtilityPanel and RC:CheckRaidStatus() then RaidUtilityPanel:Show() else RC:CheckPosition() end
+			if RaidUtilityPanel and B:CheckRaidStatus() then RaidUtilityPanel:Show() else B:CheckPosition() end
 		elseif btn == "RightButton" then
 			DoReadyCheck()
 		end
@@ -402,9 +403,9 @@ function B:CreateRaidCheck()
 	RaidCheckFrameRight:SetScript("OnMouseDown", function(self, btn)
 		if InCombatLockdown() then return end
 		if btn == "LeftButton" then
-			RC:CheckRaidBuff()
+			B:CheckRaidBuff()
 		elseif btn == "RightButton" then
-			RC:CheckRaidFlask()
+			B:CheckRaidFlask()
 		end
 	end)	
 end

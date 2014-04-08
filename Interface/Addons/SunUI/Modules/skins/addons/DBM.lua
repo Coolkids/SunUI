@@ -272,7 +272,7 @@ local function SkinDBM()
 				select(7, editBox:GetRegions()):Hide()
 				select(8, editBox:GetRegions()):Hide()
 
-				local bg = S:CreateBDFrame(editBox, .25)
+				local bg = A:CreateBDFrame(editBox, .25)
 				bg:SetPoint("TOPLEFT", -2, -6)
 				bg:SetPoint("BOTTOMRIGHT", 2, 8)
 

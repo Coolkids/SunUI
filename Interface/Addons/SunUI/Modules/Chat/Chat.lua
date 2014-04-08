@@ -350,5 +350,6 @@ function CT:Initialize()
 	self:ChatFix()
 	self:UpdateChatbar()
 	self:InitChatFilter()
+	self:initTabChannel()
 end
 S:RegisterModule(CT:GetName())
