@@ -80,14 +80,14 @@ function A:COMBAT_LOG_EVENT_UNFILTERED(_, ...)
 	local _, eventType, _, _, sourceName, sourceFlags = ...
 	if band(sourceFlags, filter) == 0 or sourceName ~= S.myname then return end
 	local spellId = select(12, ...)
-	
+	local tspellId = select(15, ...)
 	--打断
 	if eventType == "SPELL_INTERRUPT" and self.db.Interrupt then
 		local channel = IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT" or IsInRaid() and "RAID" or IsInGroup() and "PARTY"
 		if channel then
-			SendChatMessage(GetSpellLink(spellId).."→"..select(9, ...)..GetSpellLink(select(15, ...)), channel)
+			SendChatMessage(GetSpellLink(spellId).."→"..select(9, ...)..GetSpellLink(tspellId), channel)
 		else
-			DEFAULT_CHAT_FRAME:AddMessage(GetSpellLink(spellId).."→"..select(9, ...)..GetSpellLink(select(15, ...)))
+			DEFAULT_CHAT_FRAME:AddMessage(GetSpellLink(spellId).."→"..select(9, ...)..GetSpellLink(tspellId))
 		end
 	end
 	--重要通道技能	
@@ -104,7 +104,7 @@ function A:COMBAT_LOG_EVENT_UNFILTERED(_, ...)
 	if givelist[spellId] and self.db.Give and eventType == "SPELL_AURA_APPLIED" then
 		local channel = IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT" or IsInRaid() and "RAID" or IsInGroup() and "PARTY"
 		if channel then
-			SendChatMessage(GetSpellLink(spellId).."→"..select(9, ...).."", channel)
+			SendChatMessage(GetSpellLink(spellId).."→"..select(9, ...), channel)
 		else
 			return
 			--DEFAULT_CHAT_FRAME:AddMessage("施放"..GetSpellLink(spellId).."给>>"..select(9, ...).."<<")

@@ -200,12 +200,12 @@ function PB:CreateMonkBar()
 				if chimax == 4 then
 					chibar[5]:Hide()
 					for i = 1,4 do
-						chibar[i]:SetWidth((self.db.Width-space*(4-1))/4)
+						chibar[i]:SetWidth((PB.db.Width-space*(4-1))/4)
 					end
 				elseif chimax == 5 then
 					chibar[5]:Show()
 					for i = 1,5 do
-						chibar[i]:SetWidth((self.db.Width-space*(5-1))/5)
+						chibar[i]:SetWidth((PB.db.Width-space*(5-1))/5)
 					end
 				end
 			end
@@ -224,12 +224,12 @@ function PB:CreateMonkBar()
 			if chimax == 4 then
 				chibar[5]:Hide()
 				for i = 1,4 do
-					chibar[i]:SetWidth((self.db.Width-space*(4-1))/4)
+					chibar[i]:SetWidth((PB.db.Width-space*(4-1))/4)
 				end
 			elseif chimax == 5 then
 				chibar[5]:Show()
 				for i = 1,5 do
-					chibar[i]:SetWidth((self.db.Width-space*(5-1))/5)
+					chibar[i]:SetWidth((PB.db.Width-space*(5-1))/5)
 				end
 			end
 		end

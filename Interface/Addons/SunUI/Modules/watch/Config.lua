@@ -22,9 +22,9 @@ local msleft =  {"CENTER", UIParent, "CENTER", 105, 85}  --name = "玩家右邊2
 local alldebuff = {"TOP", UIParent, "TOP", 180, -157}  --name = "玩家Debuff",
 local pvpdebuff = {"TOP", UIParent, "TOP", 180, -111}  --name = "玩家PVPDebuff",
 local inbuff1 = {"CENTER", UIParent, "CENTER", 110, 165}  --name = "药水减伤等Buff",
-local enbuff = {"BOTTOM", UIParent, "BOTTOM",-273, 273}  --name = "玩家饰品附魔触发buff",
+local enbuff = {"BOTTOM", UIParent, "BOTTOM",-273, 265}  --name = "玩家饰品附魔触发buff",
 local imbuff = {"CENTER", UIParent, "CENTER", 110, 210}  --name = "玩家重要Buff",
-local cdpos = {"BOTTOM", UIParent, "BOTTOM",-273, 313}  --name = "玩家饰品附魔触发buff",
+local cdpos = {"BOTTOM", UIParent, "BOTTOM",-273, 305}  --name = "玩家饰品附魔触发buff",
 ns.watchers ={
 	["DRUID"] = {
 		{
@@ -1344,6 +1344,7 @@ ns.watchers ={
 			name = "玩家物品CD",
 			direction = "RIGHT",
 			setpoint = cdpos,
+			disabled = true,
 			size = 24,
 			-- 手套
 			{slotID = 10, filter = "CD" },
