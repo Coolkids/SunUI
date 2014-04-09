@@ -480,10 +480,13 @@ function PB:CreateEclipse()
 	sb:SetStatusBarTexture(S["media"].normal)
 	sb:SetStatusBarColor(0.9, 0.6, 0.3)
 	eb.SolarBar = sb
-	local ebInd = eb:CreateFontString(nil, "OVERLAY", 2)
-	ebInd:FontTemplate(nil, 10)
-	ebInd:SetPoint('CENTER', h, 'CENTER', 0, 0)
-
+	local help = CreateFrame('Frame', nil, eb)
+	help:SetAllPoints(eb)
+	help:SetFrameLevel(eb:GetFrameLevel()+1)
+	local ebInd = help:CreateFontString(nil, "OVERLAY")
+	ebInd:FontTemplate(nil, nil, "OUTLINEMONOCHROME")
+	ebInd:SetPoint('CENTER', help, 'CENTER', 0, 0)
+	ebInd:SetJustifyV("MIDDLE")
 	eb:RegisterEvent("ECLIPSE_DIRECTION_CHANGE")
 	eb:RegisterEvent("PLAYER_TALENT_UPDATE")
 	eb:RegisterEvent("UNIT_POWER")
@@ -494,9 +497,9 @@ function PB:CreateEclipse()
 		if event == "ECLIPSE_DIRECTION_CHANGE" or event == "PLAYER_ENTERING_WORLD" then
 			local dir = GetEclipseDirection()
 			if dir=="sun" then
-				ebInd:SetText("|cff4478BC-->|r")
+				ebInd:SetText("|cff4478BC>>>|r")
 			elseif dir=="moon" then
-				ebInd:SetText("|cffE5994C<--|r")
+				ebInd:SetText("|cffE5994C<<<|r")
 			end
 		end
 		if event == "PLAYER_TALENT_UPDATE" or event == "UPDATE_SHAPESHIFT_FORM" or event == "PLAYER_REGEN_DISABLED" then
@@ -843,15 +846,15 @@ function PB:HealthPowerBar()
 	end
 	tinsert(mainframe, healthbar)
 	local spar =  healthbar:CreateFontString(nil, "OVERLAY")
-	spar:FontTemplate(nil, 20)
+	spar:FontTemplate(nil, 20, "OUTLINEMONOCHROME")
 	spar:SetText("∧")
-	spar:SetTextColor(1, 0, 0, 1) 
+	spar:SetTextColor(210/255, 100/255, 100/255) 
 	spar:SetPoint("TOP", healthbar:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 4)
 	
 	healthbar.healthtext = healthbar:CreateFontString(nil, "OVERLAY")
 	healthbar.healthtext:FontTemplate()
 	healthbar.healthtext:SetPoint("TOP", spar, "BOTTOM", 0, 3)
-	healthbar.healthtext:SetTextColor(1, 0.22, 0.52)
+	healthbar.healthtext:SetTextColor(210/255, 100/255, 100/255)
 
 	healthbar.power = CreateFrame("Statusbar", nil, healthbar)
 	healthbar.power:SetSize(self.db.Width, self.db.Height)
@@ -860,8 +863,8 @@ function PB:HealthPowerBar()
 	healthbar.power:SetStatusBarColor(0.1, 0.8, 0.1, 0)
 	healthbar.power:SetMinMaxValues(0, UnitPowerMax("player"))
 	local powerspar =  healthbar.power:CreateFontString(nil, "OVERLAY")
-	powerspar:FontTemplate(nil, 20)
-	powerspar:SetTextColor(.3,.45,.65, 1) 
+	powerspar:FontTemplate(nil, 20, "OUTLINEMONOCHROME")
+	powerspar:SetTextColor(.3,.45,.65) 
 	powerspar:SetText("∨")
 	powerspar:SetPoint("BOTTOM", healthbar.power:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
 	

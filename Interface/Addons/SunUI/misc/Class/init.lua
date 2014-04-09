@@ -32,60 +32,6 @@ function A:GetOptions()
 				},
 			}
 		},
-		group2 = {
-			type = "group", order = 2, guiInline = true,
-			name = "",
-			args = {
-				EnableIgniteWatch = {
-					type = "toggle",
-					name = L["燃火监视"],
-					order = 1,
-					disabled = function(info) return S.myclass ~= "MAGE" end,
-					set = function(info, value) 
-						self.db.EnableIgniteWatch = value 
-						local IW = S:GetModule("IgniteWatch")
-						IW:UpdateSet()
-					end,
-				},
-				IgniteWatchSize = {
-					type = "range", order = 2, disabled = function(info) return (not self.db.EnableIgniteWatch) or S.myclass ~= "MAGE" end,
-					name = L["图标大小"],
-					min = 20, max = 100, step = 1,
-					set = function(info, value) 
-						self.db.IgniteWatchSize = value 
-						local IW = S:GetModule("IgniteWatch")
-						IW:UpdateSet()
-					end,
-				},
-			}
-		},
-		group3 = {
-			type = "group", order = 3, guiInline = true,
-			name = "",
-			args = {
-				EnableSpiritShellWatch = {
-					type = "toggle",
-					name = L["精神护罩监视"],
-					order = 1,
-					disabled = function(info) return S.myclass ~= "PRIEST" end,
-					set = function(info, value) 
-						self.db.EnableSpiritShellWatch = value 
-						local SSW = S:GetModule("SpiritShell_Watch")
-						SSW:UpdateSet()
-					end,
-				},
-				SpiritShellWatchSize = {
-					type = "range", order = 2, disabled = function(info) return (not self.db.EnableSpiritShellWatch) or S.myclass ~= "PRIEST" end,
-					name = L["图标大小"],
-					min = 20, max = 100, step = 1,
-					set = function(info, value) 
-						self.db.SpiritShellWatchSize = value 
-						local SSW = S:GetModule("SpiritShell_Watch")
-						SSW:UpdateSet()
-					end,
-				},
-			}
-		},		
 	}
 	return options
 end
@@ -94,11 +40,6 @@ function A:Initialize()
 	local CT = S:GetModule("ClassTools")
 	CT:Init()
 	
-	local IW = S:GetModule("IgniteWatch")
-	IW:Init()
-
-	local SW = S:GetModule("SpiritShell_Watch")
-	SW:Init() 
 	local PT = S:GetModule("PetTime")
 	PT:Init()
 end

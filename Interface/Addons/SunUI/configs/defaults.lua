@@ -197,12 +197,6 @@ P["AutoEquipment"] = {
 P["ClassAT"] = {
 	Enable = true,
 	Size = 48,
-	EnableIgniteWatch = true,
-	IgniteWatchSize = 24,
-	EnableSpiritShellWatch = true,
-	SpiritShellWatchSize = 24,
-	ROPEnable = true,
-	ROPSize = 24,
 }
 
 P["ClassCD"] = {

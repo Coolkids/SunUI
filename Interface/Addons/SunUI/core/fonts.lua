@@ -16,7 +16,7 @@ function S:UpdateBlizzardFonts()
 	local _, editBoxFontSize, _, _, _, _, _, _, _, _ = GetChatWindowInfo(1)
 
 	UIDROPDOWNMENU_DEFAULT_TEXT_HEIGHT = 12
-	CHAT_FONT_HEIGHTS = {12, 13, 14, 15, 16, 17, 18, 19, 20}
+	CHAT_FONT_HEIGHTS = {12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30}
 
 	UNIT_NAME_FONT     = NORMAL
 	-- NAMEPLATE_FONT     = NORMAL
@@ -24,7 +24,8 @@ function S:UpdateBlizzardFonts()
 	STANDARD_TEXT_FONT = NORMAL
 
 	-- Base fonts
-	SetFont(GameFontNormal,                     NORMAL, self.global.media.fontsize)
+	SetFont(ChatFontNormal,                     NORMAL, select(2, ChatFontNormal:GetFont()), "THINOUTLINE")
+	SetFont(GameFontNormal,                     NORMAL, self.global.media.fontsize, "THINOUTLINE")
 	SetFont(GameTooltipHeader,                  NORMAL, self.global.media.fontsize)
 	SetFont(NumberFont_OutlineThick_Mono_Small, NUMBER, self.global.media.fontsize, "OUTLINE")
 	SetFont(NumberFont_Outline_Huge,            NUMBER, 28, "THICKOUTLINE")

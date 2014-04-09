@@ -33,7 +33,7 @@ local function QuestPriceFrame_OnUpdate(self)
 			else
 				self:SetAlpha(0)
 			end
-			if quality and quality > 1 then
+			if quality and quality > 1 and button.IconBD then
 				--print(button.IconBD)
 				button.IconBD:SetBackdropBorderColor(GetItemQualityColor(quality))
 			end

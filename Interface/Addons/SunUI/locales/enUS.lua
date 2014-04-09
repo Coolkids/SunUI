@@ -380,9 +380,6 @@ do
 	L["斩杀提示"] = true
 	L["职业助手"] = true
 	L["图标大小"] = true
-	L["燃火监视"] = true
-	L["精神护罩监视"] = true
-	L["力之符文监视"] = true
 	L["宠物计时"] = true
 end
 do
