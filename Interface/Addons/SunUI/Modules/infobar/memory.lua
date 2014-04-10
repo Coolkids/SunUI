@@ -138,7 +138,11 @@ function IB:CreateMemory()
 																	IB.InfoBarStatusColor[2][1], IB.InfoBarStatusColor[2][2], IB.InfoBarStatusColor[2][3],
 																	IB.InfoBarStatusColor[1][1], IB.InfoBarStatusColor[1][2], IB.InfoBarStatusColor[1][3])
 			stat.icon:SetVertexColor(r, g, b)
-			int = 10
+			if InCombatLockdown() then
+				int = 30
+			else
+				int = 10
+			end
 		end
 		if int2 < 0 then
 			if enteredFrame then

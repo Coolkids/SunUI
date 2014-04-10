@@ -2,7 +2,7 @@
 local A = S:GetModule("Skins")
 
 local function LoadSkin()
-	BonusRollFrame:StripTextures()
+	--[[BonusRollFrame:StripTextures()
 	A:CreateBD(BonusRollFrame)
 	BonusRollFrame.PromptFrame.Icon:SetTexCoord(.08, .92, .08, .92)
 	BonusRollFrame.PromptFrame.IconBackdrop = CreateFrame("Frame", nil, BonusRollFrame.PromptFrame)
@@ -68,7 +68,18 @@ local function LoadSkin()
 	BonusRollLootWonFrame.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	BonusRollLootWonFrame.IconBorder:Kill()
 	BonusRollFrame.SpecIcon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-	A:CreateBG(BonusRollFrame.SpecIcon)
+	A:CreateBG(BonusRollFrame.SpecIcon) --]]
+	BonusRollFrame.Background:SetAlpha(0)
+	BonusRollFrame.IconBorder:Hide()
+	BonusRollFrame.BlackBackgroundHoist.Background:Hide()
+
+	BonusRollFrame.PromptFrame.Icon:SetTexCoord(.08, .92, .08, .92)
+	A:CreateBG(BonusRollFrame.PromptFrame.Icon)
+
+	BonusRollFrame.PromptFrame.Timer.Bar:SetTexture(A.media.backdrop)
+
+	A:CreateBD(BonusRollFrame)
+	A:CreateBDFrame(BonusRollFrame.PromptFrame.Timer, .25)
 end
 
 A:RegisterSkin("SunUI", LoadSkin)

@@ -656,7 +656,7 @@ local function SkinObjects(frame, nameFrame)
 	cbicon:SetTexCoord(.07, .93, .07, .93)
 	A:CreateShadow(cb, cbicon)
 	
-	
+	cbtext:FontTemplate(nil, 9, "THINOUTLINE")
 	cb.icon = cbicon
 	cb.shield = cbshield
 	cb:HookScript('OnShow', UpdateCastbar)
@@ -712,7 +712,7 @@ local function SkinObjects(frame, nameFrame)
 	QueueObject(frame, cbshield)
 	QueueObject(frame, cbborder)
 	QueueObject(frame, oldname)
-	
+	QueueObject(frame, cbshadow)
 	QueueObject(frame, hp)
 	UpdateObjects(newhp)
 	UpdateCastbar(cb)

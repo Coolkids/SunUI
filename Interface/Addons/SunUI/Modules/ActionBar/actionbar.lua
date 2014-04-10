@@ -271,14 +271,14 @@ function AB:CreateExtrabarBar()
 	ExtraActionBarFrame:ClearAllPoints()
 	ExtraActionBarFrame:SetPoint("CENTER", 0, 0)
 	ExtraActionBarFrame.ignoreFramePositionManager = true
-	ExtraActionButton1:SetSize(self.db.ButtonSize,self.db.ButtonSize)
+	ExtraActionButton1:SetSize(self.db.ButtonSize*2,self.db.ButtonSize*2)
 	ExtraActionBarFrame:SetFrameLevel(3)
 	ExtraActionButton1Cooldown:SetPoint("TOPLEFT")
 	ExtraActionButton1Cooldown:SetPoint("BOTTOMRIGHT")
 	ExtraActionButton1.style:SetTexture(nil)
     hooksecurefunc(ExtraActionButton1.style, "SetTexture", function(self, texture)
 		if texture then
-		self:SetTexture(nil)
+			self:SetTexture(nil)
 		end
     end)
 	S:CreateMover(bar, "ExtraActionBarMover", L["特殊动作条锚点"], true, nil, "ALL,ACTIONBARS")
@@ -418,7 +418,7 @@ function AB:CreateExitVehicle()
 
 	RegisterStateDriver(button, "visibility", "[petbattle][overridebar][vehicleui] hide; [possessbar][@vehicle,exists] show; hide")
 	RegisterStateDriver(bar, "visibility", "[petbattle][overridebar][vehicleui] hide; show")
-	S:CreateMover(bar, "ExitVehicleBarMover", L["主动作条锚点"], true, nil, "ALL,ACTIONBARS")
+	S:CreateMover(bar, "ExitVehicleBarMover", BINDING_NAME_VEHICLEEXIT, true, nil, "ALL,ACTIONBARS")
 end
 
 function AB:UpdateBigButtonSize()

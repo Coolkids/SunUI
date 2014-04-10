@@ -2,7 +2,7 @@
 
 local AB = S:GetModule("ActionBar")
 local lib = LibStub("LibCooldown")
-local flash, C
+local flash
 local filter = {
 	["pet"] = "all",
 	["item"] = {
@@ -44,9 +44,6 @@ function AB:UpdateCoolDownFlashSize()
 	flash:SetSize(self.db.CooldownFlashSize,self.db.CooldownFlashSize)
 end
 function AB:initCooldownFlash()
-	if (IsAddOnLoaded("ncCooldownFlash")) then
-		return 
-	end
 	flash = CreateFrame("Frame", nil, UIParent)
 	flash.icon = flash:CreateTexture(nil, "OVERLAY")
 	flash.icon:SetAllPoints(flash)
@@ -54,7 +51,7 @@ function AB:initCooldownFlash()
 	flash:CreateShadow()
 	flash:SetPoint("TOP", "UIParent", "TOP", 0, -95)
 	flash:Hide()
-	self:SetCoolDownFlashUpdate()
+	self:UpdateSetCoolDownFlashUpdate()
 	self:UpdateCoolDownFlashSize()
 	S:CreateMover(flash, "CooldownFlashMover", L["冷却闪光锚点"], true, nil, "ALL,ACTIONBARS")
 end

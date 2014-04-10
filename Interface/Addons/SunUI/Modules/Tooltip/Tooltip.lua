@@ -320,7 +320,7 @@ local function On_SetDefaultAnchor(tooltip, parent)
 		tooltipholder:SetSize(120, 20)
 		tooltipholder:SetPoint("BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -50, 160)
 		S:CreateMover(tooltipholder, "TooltipMover", L["鼠标提示锚点"], true, nil, "ALL,GENERAL")
-		tooltip:SetPoint("BOTTOMRIGHT", tooltipholder, "BOTTOMRIGHT", 0, 0)
+		tooltip:SetPoint("BOTTOMRIGHT", TooltipMover, "BOTTOMRIGHT", 0, 0)
 	end	
 	tooltip.default = 1
 end
