@@ -11,7 +11,7 @@ local function UploadDBM()
 	DBM_SavedOptions["ShowWarningsInChat"] = false
 	DBM_SavedOptions["HideBossEmoteFrame"] = true
 	DBM_SavedOptions["DisableCinematics"] = true
-	if DBT_SavedOptions["DBM"] then
+	if DBT_SavedOptions then
 		DBT_SavedOptions["DBM"].Scale = 1
 		DBT_SavedOptions["DBM"].HugeScale = 1
 		DBT_SavedOptions["DBM"].ExpandUpwards = false
