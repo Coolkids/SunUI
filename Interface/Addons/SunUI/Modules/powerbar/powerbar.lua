@@ -25,9 +25,15 @@ for power, color in next, PowerBarColor do
 		end
 	end
 end
-local ShadowOrbs
-local eb
-local MageBars
+
+local ShadowOrbs,eb,MageBars
+if S.myclass == "PRIEST" then
+	ShadowOrbs = CreateFrame("Frame", nil, Holder)
+elseif S.myclass == "DRUID" then
+	eb = CreateFrame("Frame", nil, Holder)
+elseif S.myclass == "MAGE" then
+	MageBars = CreateFrame("Frame", nil, Holder)
+end
 PB.modName = L["PowerBar"]
 
 function PB:GetOptions()
@@ -123,12 +129,10 @@ end
 
 function PB:CreateShadowOrbs()
 	if S.myclass ~= "PRIEST" then return end
-	ShadowOrbs = CreateFrame("Frame", nil, Holder)
 	ShadowOrbs:SetSize(self.db.Width, self.db.Height)
 	ShadowOrbs:SetPoint("CENTER", Holder)
 	tinsert(mainframe, ShadowOrbs)
 	local maxShadowOrbs = UnitPowerMax('player', SPELL_POWER_SHADOW_ORBS)
-
 	for i = 1,maxShadowOrbs do
 		ShadowOrbs[i] = CreateFrame("StatusBar", nil, ShadowOrbs)
 		tinsert(threeframe, ShadowOrbs[i])
@@ -698,7 +702,6 @@ function PB:FuckWarlock()
 end
 function PB:Mage()
 	if S.myclass ~= "MAGE" then return end
-	MageBars = CreateFrame("Frame", nil, Holder)
 	MageBars:SetSize(self.db.Width, self.db.Height)
 	MageBars:SetPoint("CENTER", Holder)
 	tinsert(mainframe, MageBars)
@@ -962,7 +965,6 @@ function PB:UpdateFade()
 end
 function PB:ACTIVE_TALENT_GROUP_CHANGED()
 	local spec = GetSpecialization()
-	local talent = (S.myclass == "PRIEST") and 3 or (S.myclass == "DRUID") and 1 or (S.myclass == "MAGE") and 1
 	if S.myclass == "PRIEST" and spec ~= 3 then
 		for i = 1,3 do
 			ShadowOrbs[i]:Hide()
@@ -984,7 +986,7 @@ function PB:ACTIVE_TALENT_GROUP_CHANGED()
 		eb:RegisterEvent("PLAYER_REGEN_DISABLED")
 	end
 	if S.myclass == "MAGE" and spec ~= 1 then
-		for i = 1,6 do
+		for i = 1,4 do
 			MageBars[i]:Hide()
 		end
 		MageBars:UnregisterEvent("UNIT_AURA")
