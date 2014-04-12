@@ -107,11 +107,11 @@ frame:SetScript("OnEvent", function(self, event, addon)
 				if not S.global.SavedCurrency[myPlayerRealm][faction] then S.global.SavedCurrency[myPlayerRealm][faction] = {} end
 				if not S.global.SavedCurrency[myPlayerRealm][faction][myPlayerName] then S.global.SavedCurrency[myPlayerRealm][faction][myPlayerName] = {} end
 
-                for k, v in pairs(S.global.SavedCurrency[myPlayerRealm]) do
-                        if k ~= "Alliance" and k ~= "Horde" then
-                                S.global.SavedCurrency[myPlayerRealm][k] = nil
-                        end
-                end
+                --for k, v in pairs(S.global.SavedCurrency[myPlayerRealm]) do
+                        --if k ~= "Alliance" and k ~= "Horde" then
+                                --S.global.SavedCurrency[myPlayerRealm][k] = nil
+                        --end
+                --end
 
                 local now = time()
 
@@ -154,9 +154,4 @@ frame:SetScript("OnEvent", function(self, event, addon)
                 end
                 self:UnregisterEvent("PLAYER_LOGIN")
         end
-end)
-
-
-		
-		
-		
+end)	

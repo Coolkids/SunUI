@@ -1901,12 +1901,17 @@ function ns:UpdateIndicators(self)
 			for i, v in pairs(ns.general.IndicatorsSet[k]) do			
 
 				if type(ns.general.IndicatorsSet[k][i]) == "table" then	
+					if v.talent then
+						local tlent = GetSpecialization() or -1
+						if v.talent ~= tlent then
+							return
+						end
+					end
 					if type(v.color) == "table" then
 						r, g, b = v.color.r, v.color.g, v.color.b
 					else
 						r, g, b = 0.0, 1, 0.0
 					end
-
 					local name, rank, texture, count, dtype, duration, expires, caster = UpdateIndicatorsAura(self, v.id, v.isbuff)																	
 					if not name then	
 						if v.lack then

@@ -972,7 +972,7 @@ function PB:UpdateFade()
 	end
 end
 function PB:ACTIVE_TALENT_GROUP_CHANGED()
-	local spec = GetSpecialization()
+	local spec = GetSpecialization() or -1
 	if S.myclass == "PRIEST" and spec ~= 3 then
 		for i = 1,3 do
 			ShadowOrbs[i]:Hide()
