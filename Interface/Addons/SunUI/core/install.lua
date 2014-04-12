@@ -71,6 +71,58 @@ function S:CreateInstallFrame()
 			
 		end
 		--SetUpDBM
+		local function oldDate()
+			DBT_SavedOptions["DBM"].Scale = 1
+			DBT_SavedOptions["DBM"].HugeScale = 1
+			DBT_SavedOptions["DBM"].ExpandUpwards = false
+			DBT_SavedOptions["DBM"].BarXOffset = 0
+			DBT_SavedOptions["DBM"].BarYOffset = 18
+			DBT_SavedOptions["DBM"].IconLeft = true
+			DBT_SavedOptions["DBM"].IconRight = false	
+			DBT_SavedOptions["DBM"].Flash = false
+			DBT_SavedOptions["DBM"].FadeIn = true
+			DBT_SavedOptions["DBM"].TimerX = 420
+			DBT_SavedOptions["DBM"].TimerY = -29
+			DBT_SavedOptions["DBM"].TimerPoint = "TOPLEFT"
+			DBT_SavedOptions["DBM"].StartColorR = S.myclasscolor.r
+			DBT_SavedOptions["DBM"].StartColorG = S.myclasscolor.g
+			DBT_SavedOptions["DBM"].StartColorB = S.myclasscolor.b
+			DBT_SavedOptions["DBM"].EndColorR = S.myclasscolor.r
+			DBT_SavedOptions["DBM"].EndColorG = S.myclasscolor.g
+			DBT_SavedOptions["DBM"].EndColorB = S.myclasscolor.b
+			DBT_SavedOptions["DBM"].Width = 130
+			DBT_SavedOptions["DBM"].Height = 20
+			DBT_SavedOptions["DBM"].HugeWidth = 155
+			DBT_SavedOptions["DBM"].HugeTimerPoint = "TOP"
+			DBT_SavedOptions["DBM"].HugeTimerX = -150
+			DBT_SavedOptions["DBM"].HugeTimerY = -207
+		end
+		local function newDate()
+			DBT_PersistentOptions["DBM"].Scale = 1
+			DBT_PersistentOptions["DBM"].HugeScale = 1
+			DBT_PersistentOptions["DBM"].ExpandUpwards = false
+			DBT_PersistentOptions["DBM"].BarXOffset = 0
+			DBT_PersistentOptions["DBM"].BarYOffset = 18
+			DBT_PersistentOptions["DBM"].IconLeft = true
+			DBT_PersistentOptions["DBM"].IconRight = false	
+			DBT_PersistentOptions["DBM"].Flash = false
+			DBT_PersistentOptions["DBM"].FadeIn = true
+			DBT_PersistentOptions["DBM"].TimerX = 420
+			DBT_PersistentOptions["DBM"].TimerY = -29
+			DBT_PersistentOptions["DBM"].TimerPoint = "TOPLEFT"
+			DBT_PersistentOptions["DBM"].StartColorR = S.myclasscolor.r
+			DBT_PersistentOptions["DBM"].StartColorG = S.myclasscolor.g
+			DBT_PersistentOptions["DBM"].StartColorB = S.myclasscolor.b
+			DBT_PersistentOptions["DBM"].EndColorR = S.myclasscolor.r
+			DBT_PersistentOptions["DBM"].EndColorG = S.myclasscolor.g
+			DBT_PersistentOptions["DBM"].EndColorB = S.myclasscolor.b
+			DBT_PersistentOptions["DBM"].Width = 130
+			DBT_PersistentOptions["DBM"].Height = 20
+			DBT_PersistentOptions["DBM"].HugeWidth = 155
+			DBT_PersistentOptions["DBM"].HugeTimerPoint = "TOP"
+			DBT_PersistentOptions["DBM"].HugeTimerX = -150
+			DBT_PersistentOptions["DBM"].HugeTimerY = -207
+		end
 		local function SetDBM()
 			if not IsAddOnLoaded("DBM-Core") then return end
 
@@ -83,59 +135,10 @@ function S:CreateInstallFrame()
 			}
 			DBM_SavedOptions["ShowWarningsInChat"] = false
 			DBM_SavedOptions["HideBossEmoteFrame"] = true
-			if DBT_SavedOptions then
-				DBT_SavedOptions["DBM"].Scale = 1
-				DBT_SavedOptions["DBM"].HugeScale = 1
-				DBT_SavedOptions["DBM"].ExpandUpwards = false
-				DBT_SavedOptions["DBM"].BarXOffset = 0
-				DBT_SavedOptions["DBM"].BarYOffset = 18
-				DBT_SavedOptions["DBM"].IconLeft = true
-				DBT_SavedOptions["DBM"].IconRight = false	
-				DBT_SavedOptions["DBM"].Flash = false
-				DBT_SavedOptions["DBM"].FadeIn = true
-				DBT_SavedOptions["DBM"].TimerX = 420
-				DBT_SavedOptions["DBM"].TimerY = -29
-				DBT_SavedOptions["DBM"].TimerPoint = "TOPLEFT"
-				DBT_SavedOptions["DBM"].StartColorR = S.myclasscolor.r
-				DBT_SavedOptions["DBM"].StartColorG = S.myclasscolor.g
-				DBT_SavedOptions["DBM"].StartColorB = S.myclasscolor.b
-				DBT_SavedOptions["DBM"].EndColorR = S.myclasscolor.r
-				DBT_SavedOptions["DBM"].EndColorG = S.myclasscolor.g
-				DBT_SavedOptions["DBM"].EndColorB = S.myclasscolor.b
-				DBT_SavedOptions["DBM"].Width = 130
-				DBT_SavedOptions["DBM"].Height = 20
-				DBT_SavedOptions["DBM"].HugeWidth = 155
-				DBT_SavedOptions["DBM"].HugeTimerPoint = "TOP"
-				DBT_SavedOptions["DBM"].HugeTimerX = -150
-				DBT_SavedOptions["DBM"].HugeTimerY = -207
+			if pcall(oldDate) then
 			else
-				DBT_PersistentOptions["DBM"].Scale = 1
-				DBT_PersistentOptions["DBM"].HugeScale = 1
-				DBT_PersistentOptions["DBM"].ExpandUpwards = false
-				DBT_PersistentOptions["DBM"].BarXOffset = 0
-				DBT_PersistentOptions["DBM"].BarYOffset = 18
-				DBT_PersistentOptions["DBM"].IconLeft = true
-				DBT_PersistentOptions["DBM"].IconRight = false	
-				DBT_PersistentOptions["DBM"].Flash = false
-				DBT_PersistentOptions["DBM"].FadeIn = true
-				DBT_PersistentOptions["DBM"].TimerX = 420
-				DBT_PersistentOptions["DBM"].TimerY = -29
-				DBT_PersistentOptions["DBM"].TimerPoint = "TOPLEFT"
-				DBT_PersistentOptions["DBM"].StartColorR = S.myclasscolor.r
-				DBT_PersistentOptions["DBM"].StartColorG = S.myclasscolor.g
-				DBT_PersistentOptions["DBM"].StartColorB = S.myclasscolor.b
-				DBT_PersistentOptions["DBM"].EndColorR = S.myclasscolor.r
-				DBT_PersistentOptions["DBM"].EndColorG = S.myclasscolor.g
-				DBT_PersistentOptions["DBM"].EndColorB = S.myclasscolor.b
-				DBT_PersistentOptions["DBM"].Width = 130
-				DBT_PersistentOptions["DBM"].Height = 20
-				DBT_PersistentOptions["DBM"].HugeWidth = 155
-				DBT_PersistentOptions["DBM"].HugeTimerPoint = "TOP"
-				DBT_PersistentOptions["DBM"].HugeTimerX = -150
-				DBT_PersistentOptions["DBM"].HugeTimerY = -207
+				newDate()
 			end
-			
-			
 		end
 		--按钮
 		local step4 = function()

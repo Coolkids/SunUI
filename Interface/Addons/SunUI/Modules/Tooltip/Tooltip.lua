@@ -128,7 +128,7 @@ local function LevelColor(target)
 	if target < 0 then
 		color = {["r"] = 1, ["g"] = 0.1, ["b"] = 0.1}
 	elseif temp >= 5 then
-		color = {["r"] = 1, ["g"] = 1, ["b"] = 0}
+		color = {["r"] = 1, ["g"] = 0, ["b"] = 0}
 	elseif temp < 5 and temp >= 3 then
 		color = {["r"] = 1, ["g"] = 0.5, ["b"] = 0.25}
 	elseif temp < 3 and temp > -3 then

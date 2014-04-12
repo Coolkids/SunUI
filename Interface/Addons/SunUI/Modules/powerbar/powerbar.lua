@@ -97,6 +97,11 @@ function PB:GetOptions()
 					type = "toggle",
 					name = L["不显示文字"],
 					order = 6,
+					get = function() return self.db.DisableText end,
+					set = function(_, value)
+						self.db.DisableText = value
+						self:UpdateHealthBar()
+					end,
 				},
 				HealthPowerPer = {
 					type = "toggle",
@@ -848,11 +853,11 @@ function PB:HealthPowerBar()
 		A:CreateBD(healthbar, 0.6)
 	end
 	tinsert(mainframe, healthbar)
-	local spar =  healthbar:CreateFontString(nil, "OVERLAY")
-	spar:FontTemplate(nil, 20, "OUTLINEMONOCHROME")
-	spar:SetText("∧")
-	spar:SetTextColor(210/255, 100/255, 100/255) 
-	spar:SetPoint("TOP", healthbar:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 4)
+	local spar = healthbar:CreateTexture(nil, "OVERLAY")
+	spar:SetTexture("Interface\\Addons\\SunUI\\Media\\textureArrowBelow.tga")
+	spar:SetVertexColor(1, 0, 0, 1) 
+	spar:SetSize(12, 12)
+	spar:SetPoint("TOP", healthbar:GetStatusBarTexture(), "BOTTOMRIGHT", -1, -2)
 	
 	healthbar.healthtext = healthbar:CreateFontString(nil, "OVERLAY")
 	healthbar.healthtext:FontTemplate()
@@ -865,15 +870,15 @@ function PB:HealthPowerBar()
 	healthbar.power:SetAllPoints(healthbar)
 	healthbar.power:SetStatusBarColor(0.1, 0.8, 0.1, 0)
 	healthbar.power:SetMinMaxValues(0, UnitPowerMax("player"))
-	local powerspar =  healthbar.power:CreateFontString(nil, "OVERLAY")
-	powerspar:FontTemplate(nil, 20, "OUTLINEMONOCHROME")
-	powerspar:SetTextColor(.3,.45,.65) 
-	powerspar:SetText("∨")
-	powerspar:SetPoint("BOTTOM", healthbar.power:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+	local powerspar =  healthbar.power:CreateTexture(nil, "OVERLAY")
+	powerspar:SetTexture("Interface\\Addons\\SunUI\\Media\\textureArrowAbove.tga")
+	powerspar:SetVertexColor(.3,.45,.65) 
+	powerspar:SetSize(12, 12)
+	powerspar:SetPoint("BOTTOM", healthbar.power:GetStatusBarTexture(), "TOPRIGHT", -1, 2)
 	
 	healthbar.powertext = healthbar:CreateFontString(nil, "OVERLAY")
 	healthbar.powertext:FontTemplate()
-	healthbar.powertext:SetPoint("BOTTOM", powerspar, "TOP", 0, -8)
+	healthbar.powertext:SetPoint("BOTTOM", powerspar, "TOP", 0, -3)
 	tinsert(mainframe, healthbar.power)
 	S:SmoothBar(healthbar)
 	S:SmoothBar(healthbar.power)
@@ -899,16 +904,19 @@ function PB:UpdateHealthBar()
 					local maxnum = 0
 					if PB.db.HealthPowerPer then
 						maxnum = UnitHealthMax("player")
-						self.healthtext:SetText(format("%.1f ", healthnum/maxnum*100).."%")
+						self.healthtext:SetText(format("%d", healthnum/maxnum*100).."%")
 					else
 						self.healthtext:SetText(S:ShortValue(healthnum))
 					end
 					if PB.db.ManaPowerPer then
 						maxnum = UnitPowerMax("player")
-						self.powertext:SetText(format("%.1f ", powernum/maxnum*100).."%")
+						self.powertext:SetText(format("%d", powernum/maxnum*100).."%")
 					else
 						self.powertext:SetText(S:ShortValue(powernum))
 					end
+				else
+					self.healthtext:SetText("")
+					self.powertext:SetText("")
 				end
 			return end
 			self.elapsed = 0

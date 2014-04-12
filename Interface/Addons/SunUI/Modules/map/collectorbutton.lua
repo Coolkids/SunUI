@@ -60,7 +60,7 @@ function MM:initCollector()
 	end
 	MBCF:SetSize(20, 150)
 	MBCF:SetFrameStrata("BACKGROUND")
-	MBCF:SetFrameLevel(1)
+	MBCF:SetFrameLevel(4)
 	-- MBCF.bg = MBCF:CreateTexture(nil, "BACKGROUND")
 	-- MBCF.bg:SetAllPoints(MBCF)
 	-- MBCF.bg:SetGradientAlpha("VERTICAL", 0, 0, 0, 0, 0, 0, 0, .6)
