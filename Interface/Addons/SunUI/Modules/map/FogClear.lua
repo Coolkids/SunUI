@@ -657,6 +657,17 @@ local errata = {
 		["Mudsprocket"] = 336195845553,
 		["BlackhoofVillage"] = 208854360,
 	},
+	["Dustwallow_terrain1"] = {
+		["BRACKENWLLVILLAGE"] = 63490483584,
+		["THERAMOREISLE"] = 240013008177,
+		["ALCAZISLAND"] = 23236649166,
+		["THEWYRMBOG"] = 396587478452,
+		["MUDSPROCKET"] = 336195845553,
+		["BLACKHOOFVILLAGE"] = 208854360,
+		["SHADYRESTINN"] = 202007353661,
+		["DIREHORNPOST"] = 181838066967,
+		["WITCHHILL"] = 449152270,
+	},
 	["Felwood"] = {
 		["BloodvenomFalls"] = 248265245017,
 		["JadefireGlen"] = 492075960549,
@@ -1371,8 +1382,8 @@ local errata = {
 		["KYPARIVOR"] = 508754245,
 		["ZANVESS"] = 413560761634,
 	},
-	["IsleoftheThunderKing"] = {
-	},
+	["IsleoftheThunderKing"] = false,
+	["IsleoftheThunderKingScenario"] = false,
 	['*'] = {},
 }
 
@@ -1420,10 +1431,10 @@ function FogClear:initFogClear()
 		self:SecureHook("BattlefieldMinimap_Update", "UpdateBattlefieldMinimapOverlays")
 
 		wipe(battleMapCache)
-		for i = 1, NUM_BATTLEFIELDMAP_OVERLAYS do
+		for i = 1, BattlefieldMinimap:GetAttribute("NUM_BATTLEFIELDMAP_OVERLAYS") do
 			tinsert(battleMapCache, _G[format("BattlefieldMinimapOverlay%d", i)])
 		end
-		NUM_BATTLEFIELDMAP_OVERLAYS = 0
+		BattlefieldMinimap:SetAttribute("NUM_BATTLEFIELDMAP_OVERLAYS", 0)
 
 		if BattlefieldMinimap:IsShown() then
 			BattlefieldMinimap_Update()
@@ -1452,7 +1463,7 @@ function FogClear:RealHasOverlays()
 	if not mapFileName or not self.overlays then return false end
 
 	local overlayMap = self.overlays[mapFileName]
-	if overlayMap and next(overlayMap) then return true end
+	if overlayMap and next(overlayMap) then return true else return false end
 end
 
 local discoveredOverlays = {}
@@ -1470,7 +1481,10 @@ local function updateOverlayTextures(frame, frameName, textureCache, scale, alph
 	if strmatch(mapFileName, "%_terrain(.+)") then mapFileName = mapFileName:gsub("%_terrain(.+)","") end
 	--print(mapFileName)
 	local overlayMap = self.overlays[mapFileName]
-	--if overlayMap == nil then return end
+	if not overlayMap then
+		overlayMap = {}
+	end
+	
 	local numOverlays = self.hooks.GetNumMapOverlays()
 	local pathLen = strlen(pathPrefix) + 1
 	
