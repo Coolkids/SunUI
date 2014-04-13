@@ -1859,6 +1859,7 @@ function ns:UpdateIndicatorTimer(self, elapsed)
 			--else
 				--text = ns:hex(1, 0.0, 0.0)..text.."|r"
 			--end
+			--print(text)
 			tbl[k]:SetText(text)
 			text = ""
 		end
@@ -1892,30 +1893,32 @@ function ns:UpdateIndicators(self)
 	local unit = self.displayedUnit or self.unit
 	if not UnitExists(unit) then return end
 	if string.match(unit, "pet") or not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit) then return end
-
+	local tlent = GetSpecialization() or -1
 	local text = ""
 	local r, g, b
 	for k, _ in pairs(self.Indicators) do
 		text = ""
 		if type(ns.general.IndicatorsSet[k]) == "table" then		
-			for i, v in pairs(ns.general.IndicatorsSet[k]) do			
-
+			for i, v in pairs(ns.general.IndicatorsSet[k]) do
+				
 				if type(ns.general.IndicatorsSet[k][i]) == "table" then	
-					if v.talent then
-						local tlent = GetSpecialization() or -1
-						if v.talent ~= tlent then
-							return
-						end
-					end
+					
 					if type(v.color) == "table" then
 						r, g, b = v.color.r, v.color.g, v.color.b
 					else
 						r, g, b = 0.0, 1, 0.0
 					end
 					local name, rank, texture, count, dtype, duration, expires, caster = UpdateIndicatorsAura(self, v.id, v.isbuff)																	
+					
 					if not name then	
 						if v.lack then
-							text = text..ns:hex(r, g, b)..i.."|r"
+							if v.talent then
+								if v.talent == tlent then
+									text = text..ns:hex(r, g, b)..i.."|r"
+								end
+							else
+								text = text..ns:hex(r, g, b)..i.."|r"
+							end
 						end
 						self.Indicators[k].expires = nil
 						self.Indicators[k].count = nil
@@ -1930,7 +1933,13 @@ function ns:UpdateIndicators(self)
 								end
 							else
 								if not v.lack then
-									text = text..ns:hex(r, g, b)..i.."|r"
+									if v.talent then
+										if v.talent == tlent then
+											text = text..ns:hex(r, g, b)..i.."|r"
+										end
+									else
+										text = text..ns:hex(r, g, b)..i.."|r"
+									end
 								end
 								if not v.count and not v.etime then
 									self.Indicators[k].expires = nil
@@ -1953,12 +1962,14 @@ function ns:UpdateIndicators(self)
 				end
 				if text ~= "" then
 					self.Indicators[k]:SetText(text)
+					--print(text.."  "..k)
 				end
 			else
 				if self.Indicators[k]:IsShown() then
 					self.Indicators[k]:Hide()
 				end
 			end
+			
 		end
 	end
 end

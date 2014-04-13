@@ -142,6 +142,7 @@ local Indicators_class_default = {
 			["1"] = {
 				id 		= {62618},		--"真言术:障"
 				isbuff	= true,
+				lack = false,
 			},
 		},
 		["RC"] = {},
@@ -374,6 +375,7 @@ local Indicators_class_default = {
 				id 		= {119611},		--"复苏之雾"
 				isbuff	= true,
 				mine	= true,
+				--lack	= true, --test
 			},
 		},
         ["TR"] = {	

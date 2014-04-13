@@ -476,6 +476,8 @@ ns.watchers ={
 				{ spellID = 81292, unitId = "player", caster = "player", filter = "BUFF" },
 				--恐惧之心4号的易伤
 				{ spellID = 123059, unitId = "target", caster = "all", filter = "DEBUFF" },
+				--精神护罩
+				{ spellID = 114908, unitId = "target", caster = "player", filter = "BUFF" },
 		},
 		{
 			name = "玩家右邊1",
