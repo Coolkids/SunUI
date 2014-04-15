@@ -2,7 +2,7 @@
 
 local UF = S:NewModule("UnitFrames", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 UF.modName = L["头像美化"]
-
+UF.order = 6
 function UF:GetOptions()
 	local options = {
 		group1 = {

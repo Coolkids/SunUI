@@ -2,6 +2,7 @@
 
 local B = S:NewModule("Bags", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 B.modName = L["背包"]
+B.order = 9
 B.ProfessionColors = {
 	[0x0008] = {224/255, 187/255, 74/255}, -- Leatherworking
 	[0x0010] = {74/255, 77/255, 224/255}, -- Inscription

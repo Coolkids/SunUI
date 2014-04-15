@@ -2,7 +2,7 @@
 
 local QT = S:NewModule("Quest", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 QT.modName = L["任务增强"]
-
+QT.order = 12
 function QT:GetOptions()
 	local options = {
 		AutoQuest = {

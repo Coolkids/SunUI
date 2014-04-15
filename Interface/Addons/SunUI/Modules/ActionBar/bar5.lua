@@ -42,7 +42,8 @@ function AB:CreateBar5()
 			end
 			if self.db["BigSize"..i] < 10 then
 				button:ClearAllPoints()
-				button:Kill()
+				button:SetParent(S.HiddenFrame)
+				--button:Kill()
 			end
 		end
 

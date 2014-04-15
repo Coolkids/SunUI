@@ -5,7 +5,7 @@ local Buff = S:NewModule("Buff", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0"
 Buff.modName = L["增益美化"]
 local holder = CreateFrame("Frame", "BuffFrameHolder", UIParent)
 local debuffholder = CreateFrame("Frame", "DeBuffFrameHolder", UIParent)
-
+Buff.order = 5
 function Buff:GetOptions()
 	local options = {
 		IconSize = {

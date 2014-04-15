@@ -6,6 +6,7 @@ local activeButtons = LibActionButton and LibActionButton.activeButtons or Actio
 
 local hidefunction = ActionButton_HideGrid
 AB.modName = L["动作条"]
+AB.order = 4
 AB.visibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show"
 AB.buttonList = {}
 AB.bigButton = {}
@@ -422,19 +423,25 @@ function AB:CreateExitVehicle()
 end
 
 function AB:UpdateBigButtonSize()
-	
+	local C = self.db
 	for i=1, 4 do
 		local button = _G["MultiBarLeftButton"..i]
 		button:SetSize(C["BigSize"..i], C["BigSize"..i])
 		_G["SunUIMultiBarLeft"..i]:SetSize(C["BigSize"..i], C["BigSize"..i])
-		if i == 1 then
-			button:SetAllPoints(SunUIMultiBarLeft1)
-		elseif i == 2 then
-			button:SetAllPoints(SunUIMultiBarLeft2)
-		elseif i == 3 then
-			button:SetAllPoints(SunUIMultiBarLeft3)
+		if C["BigSize"..i] < 10 then
+			button:ClearAllPoints()
+			button:SetParent(S.HiddenFrame)
 		else
-			button:SetAllPoints(SunUIMultiBarLeft4)
+			button:SetParent(_G["SunUIMultiBarLeft"..i])
+			if i == 1 then
+				button:SetAllPoints(ActionBar5_1Mover)
+			elseif i == 2 then
+				button:SetAllPoints(ActionBar5_2Mover)
+			elseif i == 3 then
+				button:SetAllPoints(ActionBar5_3Mover)
+			else
+				button:SetAllPoints(ActionBar5_4Mover)
+			end
 		end
 	end
 end

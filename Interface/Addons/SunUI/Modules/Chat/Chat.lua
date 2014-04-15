@@ -3,6 +3,7 @@
 local CT = S:NewModule("Chat", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 
 CT.modName = L["聊天美化"]
+CT.order = 8
 local tscol = "64C2F5"						-- Timestamp coloring
 local newAddMsg = {}
 for i = 1, 18 do

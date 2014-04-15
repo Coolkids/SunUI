@@ -3,7 +3,7 @@
 local A = S:NewModule("AutoEquipment", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 A.equipments = {}
 A.modName = L["自动换装"]
-
+A.order = 20
 function A:GetOptions()
 	local options = {
 		group1 = {

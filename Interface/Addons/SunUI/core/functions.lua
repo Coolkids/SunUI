@@ -716,7 +716,7 @@ function S:GetTopCPUFunc(msg)
 	self:Print("Calculating CPU Usage..")
 end
 
-S.Developer = {"Coolkid", "Coolkids", "Coolkid", "Kenans", "月殤軒", "月殤玄", "月殤妶", "月殤玹", "月殤旋", "月殤璇"}
+S.Developer = {"Coolkid", "Coolkids", "Coolkid", "Kenans", "月殤軒", "月殤玄", "月殤妶", "月殤玹", "月殤旋", "月殤璇", "Coolkida"}
 
 function S:IsDeveloper()
 	for _, name in pairs(S.Developer) do

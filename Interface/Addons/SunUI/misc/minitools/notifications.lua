@@ -3,7 +3,8 @@ local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 
 local N = S:NewModule("Notifications", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 N.modName = L["通知"]
-local playSounds = false
+N.order = 21
+
 local animations = true
 local timeShown = 5
 
@@ -136,8 +137,8 @@ local function display(name, message, clickFunc, texture, ...)
 
 	showBanner()
 
-	if playSounds then
-		PlaySoundFile("Interface\\AddOns\\FreeUI\\media\\sound.mp3")
+	if N.db.playSounds then
+		PlaySoundFile("Interface\\AddOns\\SunUI\\media\\sound.mp3")
 	end
 end
 f:SetScript("OnEnter", function(self)
@@ -393,14 +394,14 @@ function N:VIGNETTE_ADDED(event, vignetteInstanceID)
 	--     f.button:Show()
 	--     f.button:SetAttribute("macrotext", "/targetexact "..(name or ""))
 	-- end
-	if playSounds then	
+	if self.db.playSounds then	
 		PlaySoundFile("Sound\\Spells\\PVPFlagTaken.wav")
 	end
 	self:Notification("发现稀有", name or "")
 end
 
 function N:RESURRECT_REQUEST(name)
-	if playSounds then
+	if self.db.playSounds then
 		PlaySound("ReadyCheck")
 	end
 end
@@ -412,6 +413,14 @@ function N:GetOptions()
 			order = 1,
 			set = function(info, value) self.db.Notification = value
 				self:UpdateSet()
+			end,
+		},
+		playSounds = {
+			type = "toggle",
+			name = L["开启声音提示"],
+			disabled = function(info) return not self.db.Notification end,
+			order = 2,
+			set = function(info, value) self.db.AutoSell = value
 			end,
 		},
 	}
@@ -438,7 +447,9 @@ function N:UpdateSet()
 		self:UnregisterEvent("RESURRECT_REQUEST")
 	end
 end
-
+function N:Info()
+	return "包含以下通知内容\n1.欢迎玩家登陆\n2.收到新邮件\n3.行事历/工会活动\n4.发现稀有生物(未测试)\n5.复活提示(需要开始声音)"
+end
 function N:Initialize()
 	local A = S:GetModule("Skins")
 	self:initDate()

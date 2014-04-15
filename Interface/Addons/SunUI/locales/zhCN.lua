@@ -257,6 +257,7 @@ end
 --通知
 do
 	L["通知"] = true
+	L["开启声音提示"] = true
 end
 --头像
 do

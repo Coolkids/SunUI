@@ -2,7 +2,7 @@
 
 local BR = S:NewModule("BufferReminder", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 BR.modName = L["Buff提醒"]
-
+BR.order = 11
 function BR:GetOptions()
 	local options = {
 		ShowRaidBuff = {

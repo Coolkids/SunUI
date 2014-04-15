@@ -3,7 +3,7 @@
 local N = S:NewModule("NamePlates", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 
 N.modName = L["姓名板美化"]
-
+N.order = 7
 local cfg={
 	TotemIcon = true, 				-- Toggle totem icons
 	TotemSize = 20,				-- Totem icon size

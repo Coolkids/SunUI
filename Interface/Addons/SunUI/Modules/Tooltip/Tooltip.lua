@@ -2,7 +2,7 @@
 
 local TT = S:NewModule("Tooltip", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 TT.modName = L["鼠标提示"]
-
+TT.order = 14
 function TT:GetOptions()
 	local options = {
 		Cursor = {

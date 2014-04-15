@@ -2,7 +2,7 @@ local S, L, DB, _, C = unpack(select(2, ...))
 
 local RCD = S:NewModule("RaidCD", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 RCD.modName = L["团队CD监视"]
-
+RCD.order = 19
 function RCD:GetOptions()
 	local options = {
 		RaidCD = {

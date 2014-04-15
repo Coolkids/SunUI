@@ -2,7 +2,7 @@
 local CCD = S:NewModule("ClassCD", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 
 CCD.modName = L["内置CD监视"]
-
+CCD.order = 17
 function CCD:GetOptions()
 	local options = {
 			ClassCDOpen = {

@@ -123,6 +123,7 @@ P["MiniTools"]={
 
 P["Notifications"]={
 	Notification = true,
+	playSounds = false,
 }
 
 P["UnitFrames"]={

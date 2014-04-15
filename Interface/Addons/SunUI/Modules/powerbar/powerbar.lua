@@ -10,6 +10,7 @@ local fourframe = {}
 local fiveframe = {}
 local sixframe = {}
 local healthbar
+PB.order = 13
 for power, color in next, PowerBarColor do
 	if (type(power) == "string") then
 		if power == "MANA" then 

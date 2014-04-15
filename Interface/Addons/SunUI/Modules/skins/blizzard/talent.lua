@@ -104,6 +104,9 @@ local function LoadSkin()
 		PlayerTalentFrameSpecialization["specButton"..i]:DisableDrawLayer("BACKGROUND")
 	end
 	
+	PlayerTalentFrameTalentsLearnButton:StripTextures()
+	PlayerTalentFrameTalentsLearnButton.FlashAnim.Play = function() end
+	PlayerTalentFrameSpecializationLearnButton:StripTextures()
 	local buttons = {"PlayerTalentFrameSpecializationSpecButton", "PlayerTalentFramePetSpecializationSpecButton"}
 	
 	for _, name in pairs(buttons) do

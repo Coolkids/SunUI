@@ -2,6 +2,7 @@
 
 local IB = S:NewModule("InfoBar", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 IB.modName = L["信息条"]
+IB.order = 10
 IB.InfoBarStatusColor = {{210/255, 100/255, 100/255}, {1, 1, 125/255}, {0, 125/255, 1}}
 IB.backdrop = "Interface\\ChatFrame\\ChatFrameBackground"
 IB.font = "Interface\\Addons\\SunUI\\media\\ROADWAY.TTF"
