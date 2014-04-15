@@ -174,7 +174,7 @@ function S:PLAYER_ENTERING_WORLD()
 	Advanced_UseUIScale:Kill()
 	SetCVar("useUiScale", 1)
 	SetCVar("uiScale", S.global.general.uiscale)
-	DEFAULT_CHAT_FRAME:AddMessage("欢迎使用SunUI,更新地址http://bbs.ngacn.cc/read.php?tid=6532916&_ff=200")
+	DEFAULT_CHAT_FRAME:AddMessage("欢迎使用SunUI,更新地址http://git.oschina.net/Coolkid/SunUI")
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD" )
 
 	local eventcount = 0
@@ -182,12 +182,12 @@ function S:PLAYER_ENTERING_WORLD()
 	GarbageCollector:RegisterAllEvents()
 	GarbageCollector:SetScript("OnEvent", function(self, event, addon)
 		eventcount = eventcount + 1
-		if QuestDifficultyColors["trivial"].r ~= 0.50 then
-			QuestDifficultyColors["trivial"].r = 0.50
-			QuestDifficultyColors["trivial"].g = 0.50
-			QuestDifficultyColors["trivial"].b = 0.50
-			QuestDifficultyColors["trivial"].font = QuestDifficulty_Trivial
-		end
+		--if QuestDifficultyColors["trivial"].r ~= 0.50 then
+			--QuestDifficultyColors["trivial"].r = 0.50
+			--QuestDifficultyColors["trivial"].g = 0.50
+			--QuestDifficultyColors["trivial"].b = 0.50
+			--QuestDifficultyColors["trivial"].font = QuestDifficulty_Trivial
+		--end
 		if InCombatLockdown() then return end
 
 		if eventcount > 6000 then

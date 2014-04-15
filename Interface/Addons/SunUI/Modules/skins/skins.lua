@@ -403,8 +403,8 @@ function A:ReskinCheck(f)
 	local ck = f:GetCheckedTexture()
 	ck:SetDesaturated(true)
 	ck:SetVertexColor(r, g, b)
-	ck:SetPoint("TOPLEFT", 8, -8)
-	ck:SetPoint("BOTTOMRIGHT", -8, 8)
+	ck:SetPoint("TOPLEFT", 5, -5)
+	ck:SetPoint("BOTTOMRIGHT", -5, 5)
 end
 
 function A:ReskinSlider(f)

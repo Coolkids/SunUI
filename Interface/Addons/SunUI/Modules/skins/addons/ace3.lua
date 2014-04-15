@@ -22,7 +22,7 @@ local function SkinAce3()
 			local hl = widget.frame:GetHighlightTexture()
 			hl:SetPoint("TOPLEFT", widget.checkbg, 5, -5)
 			hl:SetPoint("BOTTOMRIGHT", widget.checkbg, -5, 5)
-			hl:SetVertexColor(r, g, b, .8)
+			hl:SetVertexColor(r, g, b)
 
 			if not widget.skinnedCheckBG then
 				widget.skinnedCheckBG = CreateFrame('Frame', nil, widget.frame)
