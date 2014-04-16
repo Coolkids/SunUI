@@ -17,9 +17,21 @@ local frames = {}
 
 function N:GetOptions()
 	local options = {
+		group1 = {
+			type = "group", order = 1,
+			name = " ",guiInline = true,
+			args = {
+				enable = {
+					type = "toggle",
+					name = L["启用"],
+					desc = L["启用"],
+					order = 1,
+				},
+			},
+		},
 		group2 = {
 			type = "group", order = 2,
-			name = " ",guiInline = true,
+			name = " ",guiInline = true,disabled = function() return not self.db.enable end,
 			args = {
 				Fontsize = {
 					type = "input",
@@ -822,6 +834,7 @@ end
 function N:Initialize()
 	
 	local Frame = CreateFrame("Frame", nil, UIParent)
+	if not self.db.enable then return end
 	Frame:SetScript("OnUpdate", function(self, elapsed)
 		if WorldFrame:GetNumChildren() ~= numChildren then
 			numChildren = WorldFrame:GetNumChildren()

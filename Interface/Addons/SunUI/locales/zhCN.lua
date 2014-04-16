@@ -302,6 +302,12 @@ do
 	L["目标的目标"] = true
 	L["Boss"] = true
 	L["竞技场"] = true
+	L["玩家debuff大小"] = true
+	L["目标状态大小"] = true
+	L["焦点debuff大小"] = true
+	L["boss buff大小"] = true
+	L["竞技场buff大小"] = true
+	L["头像自动隐藏"] = true
 end
 --afk
 do

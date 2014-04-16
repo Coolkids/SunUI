@@ -545,7 +545,7 @@ function oUF:Spawn(unit, overrideName)
 	unit = unit:lower()
 
 	local name = overrideName or generateName(unit)
-	local object = CreateFrame("Button", name, UIParent, "SecureUnitButtonTemplate")
+	local object = CreateFrame("Button", name, oUF_PetBattleFrameHider, "SecureUnitButtonTemplate")
 	
 	Private.UpdateUnits(object, unit)
 

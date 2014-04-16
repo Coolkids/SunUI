@@ -52,15 +52,18 @@
 	</Button>
 
 	<!-- Pet Battle Hider Frame -->
-	<!--
+	
 	<Frame name="oUF_PetBattleFrameHider" inherits="SecureHandlerStateTemplate" parent="UIParent" setAllPoints="true">
 		<Scripts>
 			<OnLoad>
+				self:ClearAllPoints()
+				self:SetSize(1,1)
+				self:SetPoint("LEFT", -1000, 0)
 				RegisterStateDriver(self, "visibility", "[petbattle] hide; show")
 			</OnLoad>
 		</Scripts>
 	</Frame>
-	-->
+
 	<!--
 		Sub-object as a child of the parent unit frame:
 	<Button name="oUF_HeaderTargetTemplate" inherits="SecureUnitButtonTemplate" hidden="true" virtual="true">

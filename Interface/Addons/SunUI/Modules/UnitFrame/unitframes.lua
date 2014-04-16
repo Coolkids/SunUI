@@ -3,7 +3,7 @@ local A = S:GetModule("Skins")
 local UF = S:GetModule("UnitFrames")
 local parent, ns = ...
 local oUF = ns.oUF
-
+UF.font = "Interface\\Addons\\SunUI\\media\\ROADWAY.TTF"
 local class = select(2, UnitClass("player"))
 
 local colors = setmetatable({
@@ -371,7 +371,7 @@ local Shared = function(self, unit, isSingle)
 		abd:SetFrameLevel(AltPowerBar:GetFrameLevel()-1)
 		A:CreateBD(abd)
 
-		AltPowerBar.Text = S:CreateFS(AltPowerBar, 10, "RIGHT")
+		AltPowerBar.Text = S:CreateFS(AltPowerBar, 12, "RIGHT", nil, "THINOUTLINE")
 		AltPowerBar.Text:SetPoint("RIGHT", oUF_SunUFPlayer, "TOPRIGHT", 0, 6)
 
 		AltPowerBar:SetScript("OnValueChanged", function(_, value)
@@ -414,7 +414,7 @@ local Shared = function(self, unit, isSingle)
 
 	local PostCastStart = function(Castbar, unit, spell, spellrank)
 		if self.Iconbg then
-			if Castbar.interrupt and (unit=="target" or unit:find("boss%d")) then
+			if Castbar.interrupt then
 				self.Iconbg:SetVertexColor(1, 0, 0)
 			else
 				self.Iconbg:SetVertexColor(0, 0, 0)
@@ -509,6 +509,11 @@ local Shared = function(self, unit, isSingle)
 
 	Health.PostUpdate = PostUpdateHealth
 	Power.PostUpdate = PostUpdatePower
+	
+	--[[Fader]]
+	self.Fader = UF.db.fader
+	self.FadeSmooth = 0.3
+	self.FadeMinAlpha = 0
 end
 
 -- [[ Unit specific functions ]]
@@ -540,8 +545,8 @@ local UnitSpecific = {
 
 		Health:SetHeight(UF.db.playerHeight - UF.db.powerHeight - 1)
 
-		local HealthPoints = S:CreateFS(Health, 10, "LEFT")
-		self.MaxHealthPoints = S:CreateFS(Health, 10, "RIGHT")
+		local HealthPoints = S:CreateFS(Health, 10, "LEFT", nil, "THINOUTLINE")
+		self.MaxHealthPoints = S:CreateFS(Health, 10, "RIGHT", nil, "THINOUTLINE")
 
 		HealthPoints:SetPoint("BOTTOMLEFT", Health, "TOPLEFT", 0, 3)
 		self.MaxHealthPoints:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", 0, 3)
@@ -552,7 +557,7 @@ local UnitSpecific = {
 
 		local _, UnitPowerType = UnitPowerType("player")
 		if UnitPowerType == "MANA" or class == "DRUID" then
-			local PowerPoints = S:CreateFS(Power, 10)
+			local PowerPoints = S:CreateFS(Power, 10, nil, nil, "THINOUTLINE")
 			PowerPoints:SetPoint("LEFT", HealthPoints, "RIGHT", 2, 0)
 			PowerPoints:SetTextColor(.4, .7, 1)
 
@@ -562,7 +567,7 @@ local UnitSpecific = {
 
 		Castbar.Width = self:GetWidth()
 		Spark:SetHeight(self.Health:GetHeight())
-		Castbar.Text = S:CreateFS(Castbar)
+		Castbar.Text = S:CreateFS(Castbar, nil, nil, nil, "THINOUTLINE")
 		Castbar.Text:SetDrawLayer("ARTWORK")
 
 		local IconFrame = CreateFrame("Frame", nil, Castbar)
@@ -587,7 +592,7 @@ local UnitSpecific = {
 			S:CreateMover(Castbar, "PlayCastBarMover", L["玩家施法条"], true, nil, "ALL,UNITFRAMES")
 			Castbar.Text:SetAllPoints(Castbar)
 			local sf = Castbar:CreateTexture(nil, "OVERLAY")
-			sf:SetVertexColor(.5, .5, .5, .5)
+			sf:SetVertexColor(.5, .5, .5, .8)
 			Castbar.SafeZone = sf
 			IconFrame:SetPoint("RIGHT", Castbar, "LEFT", -3, 0)
 			IconFrame:SetSize(22, 22)
@@ -604,7 +609,7 @@ local UnitSpecific = {
 			IconFrame:SetSize(44, 44)
 		end
 
-		local PvP = S:CreateFS(self, 10)
+		local PvP = S:CreateFS(self, 10, nil, nil, "THINOUTLINE")
 		PvP:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", -50, 3)
 		PvP:SetText("P")
 
@@ -630,7 +635,7 @@ local UnitSpecific = {
 		self.PvP = PvP
 		PvP.Override = UpdatePvP
 		
-		local Combat = S:CreateFS(self, 10)
+		local Combat = S:CreateFS(self, 10, nil, nil, "THINOUTLINE")
 		Combat:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", -60, 3)
 		Combat:SetText("C")
 		Combat:SetTextColor(1, 1, 125/255)
@@ -647,7 +652,7 @@ local UnitSpecific = {
 		Debuffs:SetHeight(60)
 		Debuffs:SetWidth(UF.db.playerWidth)
 		Debuffs.num = UF.db.num_player_debuffs
-		Debuffs.size = 26
+		Debuffs.size = UF.db.playerbuffsize
 
 		self.Debuffs = Debuffs
 		Debuffs.PostUpdateIcon = PostUpdateIcon
@@ -780,7 +785,7 @@ local UnitSpecific = {
 			spark:SetHeight(4)
 			spark:SetPoint("CENTER", SolarBar:GetStatusBarTexture(), "LEFT")
 
-			local eclipseBarText = S:CreateFS(eclipseBar, 24)
+			local eclipseBarText = S:CreateFS(eclipseBar, 24, nil, nil, "THINOUTLINE")
 			eclipseBarText:SetPoint("LEFT", self, "RIGHT", 10, 0)
 			eclipseBarText:Hide()
 
@@ -892,7 +897,7 @@ local UnitSpecific = {
 
 			self.glow = glow
 
-			local count = S:CreateFS(self, 24)
+			local count = S:CreateFS(self, 24, nil, nil, "THINOUTLINE")
 			count:SetPoint("LEFT", self, "RIGHT", 10, 0)
 
 			self.count = count
@@ -946,7 +951,7 @@ local UnitSpecific = {
 
 			self.glow = glow
 
-			local count = S:CreateFS(self, 24)
+			local count = S:CreateFS(self, 24, nil, nil, "THINOUTLINE")
 			count:SetPoint("LEFT", self, "RIGHT", 10, 0)
 
 			self.count = count
@@ -989,7 +994,7 @@ local UnitSpecific = {
 
 			self.glow = glow
 
-			local count = S:CreateFS(self, 24)
+			local count = S:CreateFS(self, 24, nil, nil, "THINOUTLINE")
 			count:SetPoint("LEFT", self, "RIGHT", 10, 0)
 
 			self.count = count
@@ -1062,7 +1067,7 @@ local UnitSpecific = {
 		cbd:SetFrameLevel(CounterBar:GetFrameLevel()-1)
 		A:CreateBD(cbd)
 
-		CounterBar.Text = S:CreateFS(CounterBar)
+		CounterBar.Text = S:CreateFS(CounterBar, nil, nil, nil, "THINOUTLINE")
 		CounterBar.Text:SetPoint("CENTER")
 
 		local r, g, b
@@ -1077,53 +1082,6 @@ local UnitSpecific = {
 		end)
 
 		self.CounterBar = CounterBar
-
-		-- do
-			-- local f = CreateFrame("Frame")
-
-			-- local function incrementAlpha()
-				-- local alpha = self:GetAlpha()
-
-				-- if alpha >= 1 then
-					-- self:SetAlpha(1)
-					-- f:SetScript("OnUpdate", nil)
-					-- return
-				-- end
-
-				-- self:SetAlpha(alpha + 0.05)
-			-- end
-
-			-- local function decrementAlpha()
-				-- local alpha = self:GetAlpha()
-
-				-- if alpha <= 0 then
-					-- self:SetAlpha(0)
-					-- f:SetScript("OnUpdate", nil)
-					-- return
-				-- end
-
-				-- self:SetAlpha(alpha - 0.05)
-			-- end
-
-			-- f:RegisterEvent("PLAYER_REGEN_ENABLED")
-			-- f:RegisterEvent("PLAYER_REGEN_DISABLED")
-			-- f:RegisterEvent("PLAYER_TARGET_CHANGED")
-			-- f:SetScript("OnEvent", function(_, event)
-				-- if event == "PLAYER_REGEN_ENABLED" then
-					-- f:SetScript("OnUpdate", decrementAlpha)
-				-- elseif event == "PLAYER_REGEN_DISABLED" then
-					-- f:SetScript("OnUpdate", incrementAlpha)
-				-- else
-					-- if UnitName("target") ~= nil then
-						-- f:SetScript("OnUpdate", incrementAlpha)
-					-- else
-						-- f:SetScript("OnUpdate", decrementAlpha)
-					-- end
-				-- end
-			-- end)
-
-			-- self:SetAlpha(0)
-		-- end
 	end,
 
 	target = function(self, ...)
@@ -1136,14 +1094,14 @@ local UnitSpecific = {
 
 		Health:SetHeight(UF.db.targetHeight - UF.db.powerHeight - 1)
 
-		local HealthPoints = S:CreateFS(Health, 10, "LEFT")
+		local HealthPoints = S:CreateFS(Health, 10, "LEFT", nil, "THINOUTLINE")
 
 		HealthPoints:SetPoint("BOTTOMLEFT", Health, "TOPLEFT", 0, 2)
 
 		self:Tag(HealthPoints, '[dead][offline][sunuf:health]%')
 		Health.value = HealthPoints
 
-		local PowerPoints = S:CreateFS(Power, 10)
+		local PowerPoints = S:CreateFS(Power, 10, nil, nil, "THINOUTLINE")
 		PowerPoints:SetPoint("BOTTOMLEFT", Health.value, "BOTTOMRIGHT", 3, 0)
 
 		self:Tag(PowerPoints, '[sunuf:power]')
@@ -1155,7 +1113,7 @@ local UnitSpecific = {
 		tt:SetWidth(110)
 		tt:SetHeight(12)
 
-		ttt = S:CreateFS(tt, S["media"].fontsize, "RIGHT")
+		ttt = S:CreateFS(tt, S["media"].fontsize, "RIGHT", nil, "THINOUTLINE")
 		ttt:SetPoint("BOTTOMRIGHT", tt)
 
 		tt:RegisterEvent("UNIT_TARGET")
@@ -1175,7 +1133,7 @@ local UnitSpecific = {
 
 		Spark:SetHeight(self.Health:GetHeight())
 
-		Castbar.Text = S:CreateFS(Castbar)
+		Castbar.Text = S:CreateFS(Castbar, nil, nil, nil, "THINOUTLINE")
 		Castbar.Text:SetDrawLayer("ARTWORK")
 		Castbar.Text:SetAllPoints(Health)
 
@@ -1194,7 +1152,7 @@ local UnitSpecific = {
 		self.Iconbg:SetPoint("BOTTOMRIGHT", 1, -1)
 		self.Iconbg:SetTexture("Interface\\ChatFrame\\ChatFrameBackground")
 
-		local Name = S:CreateFS(self)
+		local Name = S:CreateFS(self, nil, nil, nil, "THINOUTLINE")
 		Name:SetPoint("BOTTOMLEFT", Power.value, "BOTTOMRIGHT")
 		Name:SetPoint("RIGHT", self)
 		Name:SetJustifyH"RIGHT"
@@ -1214,7 +1172,7 @@ local UnitSpecific = {
 		Auras.numBuffs = UF.db.num_target_buffs
 		Auras:SetHeight(500)
 		Auras:SetWidth(UF.db.targetWidth)
-		Auras.size = 13
+		Auras.size = UF.db.targetbuffsize
 		Auras.gap = true
 
 		self.Auras = Auras
@@ -1264,7 +1222,7 @@ local UnitSpecific = {
 		Debuffs["spacing-x"] = 3
 		Debuffs:SetHeight(22)
 		Debuffs:SetWidth(UF.db.focusWidth)
-		Debuffs.size = 22
+		Debuffs.size = UF.db.focusbuffsize
 		Debuffs.num = UF.db.num_focus_debuffs
 		self.Debuffs = Debuffs
 
@@ -1298,13 +1256,13 @@ local UnitSpecific = {
 
 		Health:SetHeight(UF.db.bossHeight - UF.db.powerHeight - 1)
 
-		local HealthPoints = S:CreateFS(Health, 10, "RIGHT")
+		local HealthPoints = S:CreateFS(Health, 10, "RIGHT", nil, "THINOUTLINE")
 		HealthPoints:SetPoint("RIGHT", self, "TOPRIGHT", 0, 6)
 		self:Tag(HealthPoints, '[dead][sunuf:bosshealth]%')
 
 		Health.value = HealthPoints
 
-		local Name = S:CreateFS(self, 10, "LEFT")
+		local Name = S:CreateFS(self, 10, "LEFT", nil, "THINOUTLINE")
 		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 2)
 		Name:SetWidth((UF.db.bossWidth / 2) + 10)
 		Name:SetHeight(8)
@@ -1324,7 +1282,7 @@ local UnitSpecific = {
 		abd:SetFrameLevel(AltPowerBar:GetFrameLevel()-1)
 		A:CreateBD(abd)
 
-		AltPowerBar.Text = S:CreateFS(AltPowerBar, 10, "CENTER")
+		AltPowerBar.Text = S:CreateFS(AltPowerBar, 10, "CENTER", nil, "THINOUTLINE")
 		AltPowerBar.Text:SetPoint("CENTER", self, "TOP", 0, 6)
 
 		AltPowerBar:SetScript("OnValueChanged", function(_, value)
@@ -1346,7 +1304,7 @@ local UnitSpecific = {
 
 		Spark:SetHeight(self.Health:GetHeight())
 
-		Castbar.Text = S:CreateFS(self)
+		Castbar.Text = S:CreateFS(self, nil, nil, nil, "THINOUTLINE")
 		Castbar.Text:SetDrawLayer("ARTWORK")
 		Castbar.Text:SetAllPoints(Health)
 
@@ -1377,7 +1335,7 @@ local UnitSpecific = {
 		Buffs:SetHeight(22)
 		Buffs:SetWidth(UF.db.bossWidth - 24)
 		Buffs.num = UF.db.num_boss_buffs
-		Buffs.size = 26
+		Buffs.size = UF.db.bossbuffsize
 
 		self.Buffs = Buffs
 
@@ -1406,13 +1364,13 @@ local UnitSpecific = {
 
 		Health:SetHeight(UF.db.arenaHeight - UF.db.powerHeight - 1)
 
-		local HealthPoints = S:CreateFS(Health, 10, "RIGHT")
+		local HealthPoints = S:CreateFS(Health, 10, "RIGHT", nil, "THINOUTLINE")
 		HealthPoints:SetPoint("RIGHT", self, "TOPRIGHT", 0, 6)
 		self:Tag(HealthPoints, '[dead][sunuf:health]')
 
 		Health.value = HealthPoints
 
-		local Name = S:CreateFS(self, 10, "LEFT")
+		local Name = S:CreateFS(self, 10, "LEFT", nil, "THINOUTLINE")
 		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 2)
 		Name:SetWidth(110)
 		Name:SetHeight(8)
@@ -1425,7 +1383,7 @@ local UnitSpecific = {
 
 		Spark:SetHeight(self.Health:GetHeight())
 
-		Castbar.Text = S:CreateFS(self)
+		Castbar.Text = S:CreateFS(self, nil, nil, nil, "THINOUTLINE")
 		Castbar.Text:SetDrawLayer("ARTWORK")
 		Castbar.Text:SetAllPoints(Health)
 
@@ -1456,7 +1414,7 @@ local UnitSpecific = {
 		Buffs:SetHeight(22)
 		Buffs:SetWidth(UF.db.arenaWidth)
 		Buffs.num = UF.db.num_arena_buffs
-		Buffs.size = 26
+		Buffs.size = UF.db.arenabuffsize
 
 		self.Buffs = Buffs
 
@@ -1479,7 +1437,7 @@ do
 
 		local Health, Power = self.Health, self.Power
 
-		local Text = S:CreateFS(Health, 10, "CENTER")
+		local Text = S:CreateFS(Health, 10, "CENTER", nil, "THINOUTLINE")
 		Text:SetPoint("CENTER", 1, 0)
 		self.Text = Text
 
@@ -1503,13 +1461,13 @@ do
 		self.RaidIcon:ClearAllPoints()
 		self.RaidIcon:SetPoint("CENTER", self, "CENTER")
 
-		local Leader = S:CreateFS(self, 10, "LEFT")
+		local Leader = S:CreateFS(self, 10, "LEFT", nil, "THINOUTLINE")
 		Leader:SetText("l")
 		Leader:SetPoint("TOPLEFT", Health, 2, -1)
 
 		self.Leader = Leader
 
-		local MasterLooter = S:CreateFS(self, 10, "RIGHT")
+		local MasterLooter = S:CreateFS(self, 10, "RIGHT", nil, "THINOUTLINE")
 		MasterLooter:SetText("m")
 		MasterLooter:SetPoint("TOPRIGHT", Health, 1, 0)
 
@@ -1539,7 +1497,7 @@ do
 			end
 		end
 
-		local lfd = S:CreateFS(Health, 10, "CENTER")
+		local lfd = S:CreateFS(Health, 10, "CENTER", nil, "THINOUTLINE")
 		lfd:SetPoint("BOTTOM", Health, 1, 1)
 		lfd.Override = UpdateLFD
 

@@ -773,13 +773,13 @@ function S:FormatTime(s)
 	return format("%ds", s), (s * 100 - floor(s * 100))/100
 end
 
-function S:CreateFS(parent, fontSize, justify, fontname)
+function S:CreateFS(parent, fontSize, justify, fontname, fontStyle)
     local f = parent:CreateFontString(nil, "OVERLAY")
 	
 	if fontname == nil then
-		f:FontTemplate(nil, fontSize, nil)
+		f:FontTemplate(nil, fontSize, fontStyle)
 	else
-		f:FontTemplate(fontname, fontSize, nil)
+		f:FontTemplate(fontname, fontSize, fontStyle)
 	end
 
     if justify then f:SetJustifyH(justify) end

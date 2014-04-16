@@ -1,7 +1,11 @@
 ﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 
 local function SetFont(obj, font, size, style, r, g, b, sr, sg, sb, sox, soy)
-	obj:SetFont(font, size, style)
+	if size then
+		obj:SetFont(font, size, style)
+	else
+		obj:SetFont(font, select(2, obj:GetFont()), style)
+	end
 	if sr and sg and sb then obj:SetShadowColor(sr, sg, sb) end
 	if sox and soy then obj:SetShadowOffset(sox, soy) end
 	if r and g and b then obj:SetTextColor(r, g, b)
@@ -24,9 +28,9 @@ function S:UpdateBlizzardFonts()
 	STANDARD_TEXT_FONT = NORMAL
 
 	-- Base fonts
-	SetFont(ChatFontNormal,                     NORMAL, select(2, ChatFontNormal:GetFont()), "THINOUTLINE")
+	SetFont(ChatFontNormal,                     NORMAL, nil, "THINOUTLINE")
 	SetFont(GameFontNormal,                     NORMAL, self.global.media.fontsize, "THINOUTLINE")
-	SetFont(GameTooltipHeader,                  NORMAL, self.global.media.fontsize)
+	SetFont(GameTooltipHeader,                  NORMAL, nil, "THINOUTLINE")
 	SetFont(NumberFont_OutlineThick_Mono_Small, NUMBER, self.global.media.fontsize, "OUTLINE")
 	SetFont(NumberFont_Outline_Huge,            NUMBER, 28, "THICKOUTLINE")
 	SetFont(NumberFont_Outline_Large,           NUMBER, 15, "OUTLINE")

@@ -76,6 +76,7 @@ P["Chat"]={
 }
 
 P["NamePlates"]={
+	enable = true,
 	CastBarWidth = 100,
 	HPWidth = 100,
 	Showdebuff = true,
@@ -156,6 +157,12 @@ P["UnitFrames"]={
 	num_boss_buffs = 5,
 	num_arena_buffs = 8,
 	num_focus_debuffs = 4,
+	playerbuffsize = 26,
+	targetbuffsize = 13,
+	focusbuffsize = 22,
+	bossbuffsize = 26,
+	arenabuffsize = 26,
+	fader = false,
 }
 
 P["InfoBar"]={
