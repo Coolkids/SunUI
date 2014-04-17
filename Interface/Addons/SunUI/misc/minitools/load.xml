@@ -5,5 +5,6 @@
 	<Script file="lowhealth.lua"/>
 	<Script file="OCES.lua"/>
 	<Script file="afklock.lua"/>
+	<Script file="combatalert.lua"/>
 	<Script file="notifications.lua"/>
 </Ui>

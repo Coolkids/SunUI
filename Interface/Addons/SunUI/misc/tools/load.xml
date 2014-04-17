@@ -10,6 +10,7 @@
 	<Script file="Durability.lua"/>
 	<Script file="Focuser.lua"/>
 	<Script file="FriendColor.lua"/>
+	<Script file="juwe.lua"/>
 	<Script file="Molinari.lua"/>
 	<Script file="Pd.lua"/>
 	<Script file="smallthings.lua"/>

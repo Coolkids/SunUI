@@ -136,5 +136,5 @@ function PT:Init()
 		self:ACTIVE_TALENT_GROUP_CHANGED()
 	end
 	
-	S:CreateMover(bar, "PetTimeMover", L["宠物计时"], true, nil, "MINITOOLS")
+	S:CreateMover(bar, "PetTimeMover", L["宠物计时"], true, nil, "ALL,MINITOOLS")
 end

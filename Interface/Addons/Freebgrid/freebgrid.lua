@@ -1087,6 +1087,7 @@ function ns:UpdateRoleIcon(self)
 			elseif role == 'HEALER' then
 				self.RoleIcon:SetTexture([[Interface\AddOns\Freebgrid\media\healer.tga]])
 			elseif role == 'DAMAGER' then
+				self.RoleIcon:SetTexture("")
 				--self.RoleIcon:SetTexture([[Interface\AddOns\Freebgrid\media\dps.tga]])
 			end
 			self.RoleIcon:SetTexCoord(0, 1, 0, 1)

@@ -120,6 +120,7 @@ P["MiniTools"]={
 	Resurrect = true,
 	LowHealth = true,
 	afklock = true,
+	combat = false,
 }
 
 P["Notifications"]={

@@ -4,7 +4,7 @@ local AddOnName = ...
 local AceConfig = LibStub("AceConfigDialog-3.0")
 
 S.CreatedMovers = {}
-local selectedValue = "GENERAL"
+local selectedValue = "ALL"
 local MoverTypes = {
     "ALL",
     "GENERAL",
@@ -85,7 +85,7 @@ local function CreatePopup()
 	lock:SetScript("OnClick", function(self)
 		S:ToggleConfigMode(true)
 		AceConfig["Open"](AceConfig,"SunUI") 
-		selectedValue = "GENERAL"
+		selectedValue = "ALL"
 		UIDropDownMenu_SetSelectedValue(SunUIMoverPopupWindowDropDown, selectedValue)
 	end)
 
@@ -287,7 +287,7 @@ function S:ToggleConfigMode(override, moverType)
 		moverType = nil
 	end
 	
-	self:ToggleMovers(S.ConfigurationMode, moverType or "GENERAL")
+	self:ToggleMovers(S.ConfigurationMode, moverType or "ALL")
 end
 
 function S:ToggleMovers(show, moverType)

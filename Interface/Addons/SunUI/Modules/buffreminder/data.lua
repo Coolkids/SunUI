@@ -87,7 +87,11 @@ BR.ReminderBuffs = {
 	WARRIOR = {
 		["Commanding Shout"] = { -- commanding Shout group
 			["spells"] = {
-				[469] = true, 
+				[21562] = true, -- 真言术：韧
+				  [469] = true, -- 命令怒吼
+				[109773] = true,		--意图
+				[90364] = true, -- 其拉虫群坚韧
+				[72590] = true, -- 坚韧
 			},
 			["negate_spells"] = {
 				[6307] = true, -- Blood Pact

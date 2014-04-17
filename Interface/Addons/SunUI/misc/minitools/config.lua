@@ -66,6 +66,16 @@ function MT:GetOptions()
 				self:UpdateAFKSet()
 			end,
 		},
+		combat = {
+			type = "toggle",
+			name = COMBAT_TEXT_SHOW_COMBAT_STATE_TEXT,
+			order = 15,
+			set = function(info, value) self.db.combat = value
+				self:UpdateCombatSet()
+			end,
+		},
+		
+		
 	}
 	return options
 end
@@ -217,7 +227,6 @@ function MT:MERCHANT_SHOW()
 					if guildMoney > cost and CanGuildBankRepair() then
 						RepairAllItems(1)
 						DEFAULT_CHAT_FRAME:AddMessage("|cffffff00您修理装备花费了公会：|r"..format(GOLD_AMOUNT_TEXTURE, g, 0, 0).." "..format(SILVER_AMOUNT_TEXTURE, s, 0, 0).." "..format(COPPER_AMOUNT_TEXTURE, c, 0, 0),255,255,255)
-						return
 					else
 						RepairAllItems()
 					end
@@ -286,6 +295,7 @@ function MT:Initialize()
 	self:UpdateFastErrorSet()
 	self:UpdateLowHealthSet()
 	self:UpdateAFKSet()
+	self:initCombatDate()
 	self:RegisterEvent("ADDON_LOADED")
 end
 

@@ -179,5 +179,5 @@ function CT:Init()
 	C = Data.db
 	Frame:CreateShadow()
 	self:UpdateSet()
-	S:CreateMover(Frame, "ClassToolsMover", L["斩杀提示"], true, nil, "MINITOOLS")
+	S:CreateMover(Frame, "ClassToolsMover", L["斩杀提示"], true, nil, "ALL,MINITOOLS")
 end

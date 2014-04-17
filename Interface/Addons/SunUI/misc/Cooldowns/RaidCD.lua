@@ -327,7 +327,7 @@ function RCD:Initialize()
 	RCD:UpdateSet()
 	RaidCDAnchor:SetPoint("LEFT", "UIParent", "LEFT", 30, 0)
 	
-	S:CreateMover(RaidCDAnchor, "RaidCDAnchorMover", L["团队CD监视"], true, nil, "MINITOOLS")
+	S:CreateMover(RaidCDAnchor, "RaidCDAnchorMover", L["团队CD监视"], true, nil, "ALL,MINITOOLS")
 end
 SlashCmdList.RaidCD = function(msg)
 	for i = 1, 6 do

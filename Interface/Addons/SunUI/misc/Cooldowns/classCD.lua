@@ -339,7 +339,7 @@ function CCD:Initialize()
 	end
 	ClassCDAnchor:SetPoint("LEFT", "UIParent", "LEFT", 30, 240)
 	self:UpdateSet()
-	S:CreateMover(ClassCDAnchor, "ClassCDAnchorMover", L["内置CD监视"], true, nil, "MINITOOLS")
+	S:CreateMover(ClassCDAnchor, "ClassCDAnchorMover", L["内置CD监视"], true, nil, "ALL,MINITOOLS")
 end
 
 S:RegisterModule(CCD:GetName())

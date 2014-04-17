@@ -399,7 +399,7 @@ function AB:CreateExitVehicle()
 	bar:SetHeight(self.db.ButtonSize)
 	bar:SetWidth(self.db.ButtonSize)
 	bar:SetScale(1.3)
-	bar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 278, 66)
+	bar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 278, 70)
 
 	local button = CreateFrame("BUTTON", nil, bar, "SecureHandlerClickTemplate, SecureHandlerStateTemplate");
 	button:SetAllPoints(bar)

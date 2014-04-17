@@ -5,7 +5,7 @@ local function LoadSkin()
 	local AlertFrameHolder = CreateFrame("Frame", "AlertFrameHolder", UIParent)
 	AlertFrameHolder:SetWidth(180)
 	AlertFrameHolder:SetHeight(20)
-	AlertFrameHolder:SetPoint("RIGHT", "UIParent", "RIGHT", -220, -100)
+	AlertFrameHolder:SetPoint("RIGHT", "UIParent", "RIGHT", -320, -50)
 	S:CreateMover(AlertFrameHolder, "AlertFrameHolderMover", L["成就锚点"], true, nil, "ALL,GENERAL")
 	local POSITION, ANCHOR_POINT, YOFFSET = "TOP", "BOTTOM", -10
 

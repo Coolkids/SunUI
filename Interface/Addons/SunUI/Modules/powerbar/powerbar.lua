@@ -139,10 +139,11 @@ function PB:CreateShadowOrbs()
 	ShadowOrbs:SetPoint("CENTER", Holder)
 	tinsert(mainframe, ShadowOrbs)
 	local maxShadowOrbs = UnitPowerMax('player', SPELL_POWER_SHADOW_ORBS)
-	for i = 1,maxShadowOrbs do
+	--print(maxShadowOrbs)
+	for i = 1,3 do  --maxShadowOrbs
 		ShadowOrbs[i] = CreateFrame("StatusBar", nil, ShadowOrbs)
 		tinsert(threeframe, ShadowOrbs[i])
-		ShadowOrbs[i]:SetSize((self.db.Width-space*(maxShadowOrbs-1))/maxShadowOrbs, self.db.Height)
+		ShadowOrbs[i]:SetSize((self.db.Width-space*(3-1))/3, self.db.Height)
 		ShadowOrbs[i]:SetStatusBarTexture(S["media"].normal)
 		ShadowOrbs[i]:SetStatusBarColor(.86,.22,1)
 		ShadowOrbs[i]:CreateShadow()

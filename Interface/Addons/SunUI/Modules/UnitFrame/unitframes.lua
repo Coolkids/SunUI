@@ -1658,13 +1658,13 @@ function UF:initLayout()
 		end
 
 		for n = 1, MAX_BOSS_FRAMES do
-			local boss = spawnHelper(self, 'boss' .. n, 'RIGHT', -50, 0 - (56 * n))
+			local boss = spawnHelper(self, 'boss' .. n, "RIGHT", UIParent, "RIGHT", -85, 0 - (56 * n))
 			S:CreateMover(boss, "Boss"..n.."FrameMover", L["Boss"]..n, true, nil, "ALL,UNITFRAMES")
 		end
 
 		if UF.db.enableArena then
 			for n = 1, 5 do
-				local are = spawnHelper(self, 'arena' .. n, 'RIGHT', -50, -14 - (56 * n))
+				local are = spawnHelper(self, 'arena' .. n, "RIGHT", UIParent, "RIGHT", -85, -16 - (56 * n))
 				S:CreateMover(are, "Arena"..n.."FrameMover", L["竞技场"]..n, true, nil, "ALL,UNITFRAMES")
 			end
 		end
