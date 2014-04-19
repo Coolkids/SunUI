@@ -58,6 +58,12 @@ function UF:GetOptions()
 					desc = L["头像自动隐藏"],
 					order = 8,
 				},
+				hideblz = {
+					type = "toggle",
+					name = L["隐藏暴雪小队/团队"],
+					desc = L["隐藏暴雪小队/团队"],
+					order = 9,
+				},
 			},
 		},
 		group2 = {
@@ -239,8 +245,10 @@ function UF:GetOptions()
 end
 
 function UF:Initialize()
-	UF:initLayout()
-	UF:hideBlizzframes()
+	self:initLayout()
+	if self.db.hideblz then
+		self:hideBlizzframes()
+	end
 end
 
 S:RegisterModule(UF:GetName())

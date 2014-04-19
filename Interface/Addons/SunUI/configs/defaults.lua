@@ -136,6 +136,7 @@ P["UnitFrames"]={
 	castbarSeparateOnlyCasters = false, 		-- separate bar only for mages/warlocks/priests
 	targettarget = true, 					-- show target of target frame
 	enableArena = true,					-- enable arena/flag carrier frames
+	hideblz = true,
 	altPowerHeight = 1,
 	powerHeight = 1,
 	playerWidth = 229,

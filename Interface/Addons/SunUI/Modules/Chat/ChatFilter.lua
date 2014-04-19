@@ -37,7 +37,7 @@ local Config = {
 	["ShieldAdvPlayer"] = true, --Shield the player who`s advertising. // 屏蔽发广告的玩家
 	["ShieldTimes"] = 30, --How many times shall we shield. // 屏蔽多长时间后解封(分钟)
 	
-	["FilterMultiLine"] = true, --Filter the multiple messages. // 过滤多行信息
+	["FilterMultiLine"] = false, --Filter the multiple messages. // 过滤多行信息
 	["AllowLines"] = 3, --How many lines can be allowd. // 允许的最大行数
 	
 	["FilterRepeat"] = true, --Filter the repeat messages. // 过滤重复聊天信息

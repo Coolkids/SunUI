@@ -20,6 +20,7 @@ local firstLines = {
 	"^(.*) Done for (.*)$"	,								-- TinyDPS
 	"^Numeration: (.*) for (.*)$",                        -- Numeration	
 	"alDamageMeter : (.*)$",								-- alDamageMeter
+	"^Numeration:(.*) - (.*)$",                        -- Numeration	
 }
 local nextLines = {
 	"^(%d+). (.*)$",										-- Recount and Skada
@@ -71,6 +72,7 @@ local function FilterLine(event, source, message, ...)
 	for k, v in ipairs(firstLines) do
 		local newID = 0
 		if message:match(v) then
+
 			local curTime = time()
 			
 			for i, j in ipairs(meters) do
