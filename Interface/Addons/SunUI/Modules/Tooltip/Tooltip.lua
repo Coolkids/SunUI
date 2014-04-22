@@ -193,6 +193,8 @@ local function On_OnTooltipSetUnit(self)
 				GameTooltipStatusBar:SetStatusBarColor(r, g, b)
 				S.CreateTop(tooptexture, r, g, b)
 			end
+			local guid=UnitGUID(unit)
+			GameTooltip:AddLine("NPC ID: "..tonumber(guid:sub(6,10),16))
 		end
 		if UnitIsPVP(unit) then
 			for i = 2, GameTooltip:NumLines() do
