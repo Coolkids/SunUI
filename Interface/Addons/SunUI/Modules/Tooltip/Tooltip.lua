@@ -194,7 +194,11 @@ local function On_OnTooltipSetUnit(self)
 				S.CreateTop(tooptexture, r, g, b)
 			end
 			local guid=UnitGUID(unit)
-			GameTooltip:AddLine("NPC ID: "..tonumber(guid:sub(6,10),16))
+			local knownTypes = {[0]="player", [1]="world object", [3]="NPC", [4]="pet", [5]="vehicle"}
+			local maskedTypeBit = tonumber(guid:sub(5,5), 16) % 8
+			if knownTypes[maskedTypeBit] == "NPC" then
+				GameTooltip:AddLine("NPC ID: "..tonumber(guid:sub(6,10),16))
+			end	
 		end
 		if UnitIsPVP(unit) then
 			for i = 2, GameTooltip:NumLines() do
