@@ -289,7 +289,7 @@ function N:PLAYER_REGEN_ENABLED()
 
 	if showRepair and value < 20 then
 			showRepair = false
-			R:Delay(30, ResetRepairNotification)
+			S:Delay(30, ResetRepairNotification)
 			self:Notification(MINIMAP_TRACKING_REPAIR, format("你的%s栏位需要修理, 当前耐久为%d.",Slots[1][2],value))
 	end
 end

@@ -69,7 +69,11 @@ function IB:CreateSpecs()
 			for i = 1, #spec1 do
 				GameTooltip:AddDoubleLine(" ", spec1[i],1,1,1,1,1,1)
 			end
-			GameTooltip:AddLine("|cff00FF00"..(c == 2 and "* " or "   ") .. "|r" .. select(2,GetSpecializationInfo(majorTree2))..": ",1,1,1)
+			if majorTree2 then
+				GameTooltip:AddLine("|cff00FF00"..(c == 2 and "* " or "   ") .. "|r" .. select(2,GetSpecializationInfo(majorTree2))..": ",1,1,1)
+			else
+				GameTooltip:AddLine("|cff00FF00"..(c == 2 and "* " or "   ") .. "|r" ..NONE..TALENTS..": ",1,1,1)
+			end
 			for i = 1, #spec2 do
 				GameTooltip:AddDoubleLine(" ", spec2[i],1,1,1,1,1,1)
 			end

@@ -80,7 +80,7 @@ oUF.Tags.Methods['sunuf:health'] = function(unit)
 	if unit == "player" then
 		return siValue(min)
 	else
-		return format("|cffffffff%s|r %.0f", siValue(min), (min/max)*100)
+		return format("|cffffffff%s|r %.0f", siValue(min), (min/max)*100).."%"
 	end
 end
 oUF.Tags.Events['sunuf:health'] = oUF.Tags.Events.missinghp
@@ -1098,7 +1098,7 @@ local UnitSpecific = {
 
 		HealthPoints:SetPoint("BOTTOMLEFT", Health, "TOPLEFT", 0, 2)
 
-		self:Tag(HealthPoints, '[dead][offline][sunuf:health]%')
+		self:Tag(HealthPoints, '[dead][offline][sunuf:health]')
 		Health.value = HealthPoints
 
 		local PowerPoints = S:CreateFS(Power, 10, nil, nil, "THINOUTLINE")
@@ -1258,7 +1258,7 @@ local UnitSpecific = {
 
 		local HealthPoints = S:CreateFS(Health, 10, "RIGHT", nil, "THINOUTLINE")
 		HealthPoints:SetPoint("RIGHT", self, "TOPRIGHT", 0, 6)
-		self:Tag(HealthPoints, '[dead][sunuf:bosshealth]%')
+		self:Tag(HealthPoints, '[dead][sunuf:bosshealth]')
 
 		Health.value = HealthPoints
 

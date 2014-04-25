@@ -232,13 +232,4 @@ function AB:CreateCooldown()
 	end
 
 	self:SecureHook("CooldownFrame_SetTimer")
-
-	if self.db.cooldownalpha then
-		self:SecureHook("ActionButton_UpdateState", "UpdateCDAlpha")
-		self:SecureHook("ActionButton_UpdateAction", "UpdateCDAlpha")
-	end
-
-	if self.db.stancealpha then
-		self:SecureHook("ActionButton_UpdateAction", "UpdateShapeshiftCDAlpha")
-	end
 end

@@ -51,6 +51,7 @@ local function newDate()
 	DBT_PersistentOptions["DBM"].HugeTimerPoint = "TOP"
 	DBT_PersistentOptions["DBM"].HugeTimerX = -150
 	DBT_PersistentOptions["DBM"].HugeTimerY = -207
+	DBT_PersistentOptions["DBM"].Texture = S["media"].normal
 end
 local function UploadDBM()
 	DBM_SavedOptions.Enabled = true

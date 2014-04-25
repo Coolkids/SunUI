@@ -23,6 +23,7 @@ function AB:UpdateHotkey(button, actionButtonType)
 	text = string.gsub(text, KEY_MOUSEWHEELUP, "M+")
 	text = string.gsub(text, KEY_MOUSEWHEELDOWN, "M-")
 	text = string.gsub(text, '(數字鍵盤)', 'N')
+	text = string.gsub(text, '数字键盘', 'N')
 	
 	if hotkey:GetText() == _G["RANGE_INDICATOR"] then
 		hotkey:SetText("")

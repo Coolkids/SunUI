@@ -132,12 +132,12 @@ function AB:GetOptions()
 						self:UpdateSetCoolDownFlashUpdate()
 					end,
 				},
-				CooldownAlhpa = {
-					name = L["CD时透明度"],
-					type = "range",
-					order = 5,
-					min = 0, max = 1, step = 0.05,
-				},
+				--CooldownAlhpa = {
+					--name = L["CD时透明度"],
+					--type = "range",
+					--order = 5,
+					--min = 0, max = 1, step = 0.05,
+				--},
 			}
 		},
 		group5 = {

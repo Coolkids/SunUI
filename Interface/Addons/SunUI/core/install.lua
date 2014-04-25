@@ -122,6 +122,7 @@ function S:CreateInstallFrame()
 			DBT_PersistentOptions["DBM"].HugeTimerPoint = "TOP"
 			DBT_PersistentOptions["DBM"].HugeTimerX = -150
 			DBT_PersistentOptions["DBM"].HugeTimerY = -207
+			DBT_PersistentOptions["DBM"].Texture = S["media"].normal
 		end
 		local function SetDBM()
 			if not IsAddOnLoaded("DBM-Core") then return end
