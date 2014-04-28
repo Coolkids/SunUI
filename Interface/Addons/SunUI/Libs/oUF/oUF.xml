@@ -42,7 +42,8 @@
 	<Script file='elements\druidmana.lua' />
 	<Script file='elements\harmonyorbs.lua' />
 	<Script file='elements\shadoworbs.lua' />
-
+	<Script file='elements\stagger.lua' />
+	
 	<!-- Clique support -->
 	<Button name="oUF_ClickCastUnitTemplate" virtual="true" inherits="SecureUnitButtonTemplate,SecureHandlerEnterLeaveTemplate">
 		<Attributes>

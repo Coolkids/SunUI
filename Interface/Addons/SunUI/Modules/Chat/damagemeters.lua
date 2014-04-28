@@ -54,7 +54,7 @@ local function FilterLine(event, source, message, ...)
 			local curTime = time()
 			for i, j in ipairs(meters) do
 				local elapsed = curTime - j.time
-				if j.source == source and j.event == event and elapsed < 1 then
+				if j.source == source and j.event == event and elapsed < 1.5 then
 					local toInsert = true
 					for a, b in ipairs(j.data) do
 						if b == message then
@@ -77,7 +77,7 @@ local function FilterLine(event, source, message, ...)
 			
 			for i, j in ipairs(meters) do
 				local elapsed = curTime - j.time
-				if j.source == source and j.event == event and elapsed < 1 then
+				if j.source == source and j.event == event and elapsed < 1.5 then
 					newID = i
 					return true, true, string.format("|HSunUIDamegeMeters:%1$d|h|cFFFFFF00[%2$s]|r|h", newID or 0, message or "nil")
 				end

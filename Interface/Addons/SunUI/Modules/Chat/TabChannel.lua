@@ -45,7 +45,16 @@ local cycles = {
             end
         end,
     }, ]]
-    {
+    
+	{
+		chatType = "BN_WHISPER",
+		use = function(self, editbox) return false end,
+	},
+	{
+		chatType = "WHISPER",
+		use = function(self, editbox) return false end,
+	},
+	{
         chatType = "SAY",
         use = function(self, editbox) return 1 end,
     },
@@ -54,6 +63,7 @@ local cycles = {
 function CH:ChatEdit_CustomTabPressed(self)
 	if strsub(tostring(self:GetText()), 1, 1) == "/" then return end
     local currChatType = self:GetAttribute("chatType")
+	--print(currChatType)
     for i, curr in ipairs(cycles) do
         if curr.chatType== currChatType then
             local h, r, step = i+1, #cycles, 1

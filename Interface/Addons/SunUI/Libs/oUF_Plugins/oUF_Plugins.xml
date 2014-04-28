@@ -1,13 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file="AuraBars.lua"/>
-	<Script file="AuraWatch.lua"/>
 	<Script file="HealPredictionAndAbsorb.lua"/>
 	<Script file="Fader.lua"/>
 	<Script file="PVPSpecIcons.lua"/>
 	<Script file="RuneOfPower.lua"/>
-	<Script file="Smooth.lua"/>
 	<Script file="TotemBar.lua"/>
-	<Script file="Trinkets.lua"/>
 	<Script file="Vengeance.lua"/>
 	<Script file="oUF_CounterBar.lua"/>
 	<Script file="oUF_WarlockSpecBars.lua"/>

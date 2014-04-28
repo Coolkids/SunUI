@@ -207,8 +207,9 @@ end
 --[[ Hide Blizz frames ]]
 function UF:hideBlizzframes()
 	if IsAddOnLoaded("Blizzard_CompactRaidFrames") then
-		CompactRaidFrameManager:SetParent(S.HiddenFrame)
-		CompactUnitFrameProfiles:UnregisterAllEvents()
+		CompactRaidFrameManager:Kill()
+		CompactRaidFrameContainer:UnregisterAllEvents() 
+		CompactRaidFrameManager_SetSetting("IsShown", "0")
 	end
 
 	for i = 1, MAX_PARTY_MEMBERS do
@@ -391,6 +392,7 @@ local Shared = function(self, unit, isSingle)
 			oUF_SunUFPlayer.MaxHealthPoints:Hide()
 		end)
 		AltPowerBar:HookScript("OnHide", function()
+			--oUF_SunUFPlayer.MaxHealthPoints:Hide()  --test
 			oUF_SunUFPlayer.MaxHealthPoints:Show()
 		end)
 
