@@ -1127,9 +1127,9 @@ local UnitSpecific = {
 
 		self.CounterBar = CounterBar
 		
-		local Threat = CreateFrame("Frame", nil, self)
-		self.Threat = Threat
-		Threat.Override = UpdateThreat
+		--local Threat = CreateFrame("Frame", nil, self)
+		--self.Threat = Threat
+		--Threat.Override = UpdateThreat
 		
 		local Vengeance = CreateFrame("StatusBar", nil, self)
 		Vengeance.showInfight = true
