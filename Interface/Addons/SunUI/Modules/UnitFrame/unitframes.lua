@@ -29,7 +29,15 @@ local reactioncolours = {
 	[7] = {0.26, 1, 0.22},
 	[8] = {0.26, 1, 0.22},
 }
-
+--[[ turn hex colors into RGB format ]]
+local function hex(r, g, b)
+	if r then
+		if (type(r) == 'table') then
+			if(r.r) then r, g, b = r.r, r.g, r.b else r, g, b = unpack(r) end
+		end
+		return ('|cff%02x%02x%02x'):format(r * 255, g * 255, b * 255)
+	end
+end
 --[[ Short values ]]
 
 local siValue = function(val)
@@ -76,11 +84,16 @@ oUF.Tags.Methods['sunuf:health'] = function(unit)
 	if(not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit)) then return end
 
 	local min, max = UnitHealth(unit), UnitHealthMax(unit)
-
+	
 	if unit == "player" then
 		return siValue(min)
 	else
-		return format("|cffffffff%s|r %.0f", siValue(min), (min/max)*100).."%"
+		local value = (min/max)*100
+		if (value==100) then
+			return "|cffffffff"..siValue(max).."|r"
+		end
+		local r, g, b = oUF.ColorGradient(value, 100, unpack(oUF.colors.smooth))
+		return "|cffffffff"..siValue(min).."||"..format(hex(r,g,b).."%.0f", value).."%|r"
 	end
 end
 oUF.Tags.Events['sunuf:health'] = oUF.Tags.Events.missinghp
@@ -145,6 +158,29 @@ oUF.Tags.Methods['sunuf:power'] = function(unit)
 	return siValue(min)
 end
 oUF.Tags.Events['sunuf:power'] = oUF.Tags.Events.missingpp
+
+oUF.Tags.Methods['sunuf:pp'] = function(u)
+	if( u~="player") then
+		local min, max = UnitPower(u), UnitPowerMax(u)
+		if(min == 0 or max == 0 or not UnitIsConnected(u) or UnitIsDead(u) or UnitIsGhost(u)) then return end
+	end
+	local _, str = UnitPowerType(u)
+	local per = oUF.Tags.Methods['perpp'](u).."%" or 0
+	if str then
+		if str == "MANA" then
+			return hex(.4, .7, 1)..per
+		else
+			return hex(colors.power[str] or {250/255,  75/255,  60/255})..siValue(oUF.Tags.Methods['curpp'](u))
+		end
+	end
+end
+oUF.Tags.Events['sunuf:pp'] = oUF.Tags.Events.missingpp
+
+oUF.Tags.Methods['sunuf:druidpower'] = function(u)
+	local min, max = UnitPower(u, 0), UnitPowerMax(u, 0)
+	return u == 'player' and UnitPowerType(u) ~= 0 and min ~= max and ('|cff5F9BFF%d%%|r'):format(min / max * 100).."|cffffffff||"
+end
+oUF.Tags.Events['sunuf:druidpower'] = "UNIT_POWER UNIT_MAXPOWER UNIT_DISPLAYPOWER"
 
 --[[ Update health ]]
 
@@ -243,18 +279,24 @@ end
 -- [[ Threat update (party) ]]
 
 local UpdateThreat = function(self, event, unit)
-	if(unit ~= self.unit) then return end
+	local party = GetNumGroupMembers()
+	local raid = GetNumGroupMembers()
+	local pet = select(1, HasPetUI())
 
-	local threat = self.Threat
+	if party > 0 or raid > 0 or pet == 1 then
+		if(unit ~= self.unit) then return end
 
-	unit = unit or self.unit
-	local status = UnitThreatSituation(unit)
+		local threat = self.Threat
 
-	if(status and status > 0) then
-		local r, g, b = GetThreatStatusColor(status)
-		self.bd:SetBackdropBorderColor(r, g, b)
-	else
-		self.bd:SetBackdropBorderColor(0, 0, 0)
+		unit = unit or self.unit
+		local status = UnitThreatSituation(unit)
+
+		if(status and status > 0) then
+			local r, g, b = GetThreatStatusColor(status)
+			self.bd:SetBackdropBorderColor(r, g, b)
+		else
+			self.bd:SetBackdropBorderColor(0, 0, 0)
+		end
 	end
 end
 
@@ -557,16 +599,16 @@ local UnitSpecific = {
 		self:Tag(self.MaxHealthPoints, '[sunuf:maxhealth]')
 		Health.value = HealthPoints
 
-		local _, UnitPowerType = UnitPowerType("player")
-		if UnitPowerType == "MANA" or class == "DRUID" then
-			local PowerPoints = S:CreateFS(Power, 10, nil, nil, "THINOUTLINE")
-			PowerPoints:SetPoint("LEFT", HealthPoints, "RIGHT", 2, 0)
-			PowerPoints:SetTextColor(.4, .7, 1)
-
-			self:Tag(PowerPoints, '[sunuf:power]')
-			Power.value = PowerPoints
+		local PowerPoints = S:CreateFS(Power, 10, nil, nil, "THINOUTLINE")
+		PowerPoints:SetPoint("LEFT", HealthPoints, "RIGHT", 2, 0)
+		--PowerPoints:SetTextColor(.4, .7, 1)
+		if class == "DRUID" then
+			self:Tag(PowerPoints, '[sunuf:druidpower][sunuf:pp]')
+		else
+			self:Tag(PowerPoints, '[sunuf:pp]')
 		end
-
+		Power.value = PowerPoints
+		
 		Castbar.Width = self:GetWidth()
 		Spark:SetHeight(self.Health:GetHeight())
 		Castbar.Text = S:CreateFS(Castbar, nil, nil, nil, "THINOUTLINE")
@@ -1084,6 +1126,31 @@ local UnitSpecific = {
 		end)
 
 		self.CounterBar = CounterBar
+		
+		local Threat = CreateFrame("Frame", nil, self)
+		self.Threat = Threat
+		Threat.Override = UpdateThreat
+		
+		local Vengeance = CreateFrame("StatusBar", nil, self)
+		Vengeance.showInfight = true
+		Vengeance.Text = S:CreateFS(Vengeance, 12, nil, nil, "THINOUTLINE")
+		Vengeance.Text:SetPoint("RIGHT", self, "TOPRIGHT", 0, 6)
+		self.Vengeance = Vengeance
+		
+		Vengeance:HookScript("OnShow", function()
+			self.MaxHealthPoints:Hide()
+			if self.AltPowerBar:IsShown() then 
+				Vengeance:Hide()
+			end
+		end)
+		Vengeance:HookScript("OnHide", function()
+			if self.AltPowerBar:IsShown() then 
+				self.MaxHealthPoints:Hide()
+			else 
+				self.MaxHealthPoints:Show()
+			end
+		end)
+		
 	end,
 
 	target = function(self, ...)
@@ -1106,7 +1173,7 @@ local UnitSpecific = {
 		local PowerPoints = S:CreateFS(Power, 10, nil, nil, "THINOUTLINE")
 		PowerPoints:SetPoint("BOTTOMLEFT", Health.value, "BOTTOMRIGHT", 3, 0)
 
-		self:Tag(PowerPoints, '[sunuf:power]')
+		self:Tag(PowerPoints, '[sunuf:pp]')
 
 		Power.value = PowerPoints
 

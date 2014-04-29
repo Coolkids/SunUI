@@ -3,7 +3,15 @@ local oUF = ns.oUF or oUF
 
 local vengeance = GetSpellInfo(93098)
 -- local vengeance = GetSpellInfo(76691)
-
+local siValue = function(val)
+	if(val >= 1e6) then
+		return format("%.2fm", val * 0.000001)
+	elseif(val >= 1e4) then
+		return format("%.1fk", val * 0.001)
+	else
+		return val
+	end
+end
 local function valueChanged(self, event, unit)
 	local S, L = unpack(SunUI)
 	if unit ~= "player" then return end
@@ -15,7 +23,6 @@ local function valueChanged(self, event, unit)
 	end
 
 	local name = UnitAura("player", vengeance, nil, "PLAYER|HELPFUL")
-
 	if name then
 		local value = select(15, UnitAura("player", vengeance, nil, "PLAYER|HELPFUL")) or -1
 		if value > 0 then
@@ -24,7 +31,7 @@ local function valueChanged(self, event, unit)
 			if value == bar.value then return end
 
 			bar:SetMinMaxValues(0, bar.max)
-			bar:SetValue(value)
+			bar:SetValue(siValue(value))
 			bar.value = value
 			bar:Show()
 
