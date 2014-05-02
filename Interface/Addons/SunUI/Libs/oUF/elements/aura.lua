@@ -25,6 +25,9 @@ local createAuraIcon = function(icons, index)
 	local S, L, P = unpack(SunUI) --Import: Engine, Locales, ProfileDB, local
 	icons.createdIcons = icons.createdIcons + 1
 	
+	local sizex = (icons.size or 16)
+	local countfs = sizex > 16 and 11 or 2
+	
 	local button = CreateFrame("Button", nil, icons)
 	button:RegisterForClicks'RightButtonUp'
 
@@ -36,8 +39,8 @@ local createAuraIcon = function(icons, index)
 	icon:SetAllPoints(button)
 	icon:SetTexCoord(.08, .92, .08, .92)
 
-	local count = S:CreateFS(button, 8, "CENTER")
-	count:SetPoint("TOP", button, "TOP", 2, -2)
+	local count = S:CreateFS(button, countfs, "CENTER")
+	count:SetPoint("TOPRIGHT", button, "TOPRIGHT", 2, 2)
 
 	local overlay = button:CreateTexture(nil, "OVERLAY")
 	overlay:SetTexture"Interface\\Buttons\\UI-Debuff-Overlays"

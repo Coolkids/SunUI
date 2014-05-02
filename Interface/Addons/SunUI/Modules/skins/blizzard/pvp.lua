@@ -190,8 +190,8 @@ local function LoadSkin()
 		bu:SetHighlightTexture("")
 
 		local bg = CreateFrame("Frame", nil, bu)
-		bg:SetPoint("TOPLEFT", 2, 0)
-		bg:SetPoint("BOTTOMRIGHT", -1, 2)
+		bg:Point("TOPLEFT", 2, 0)
+		bg:Point("BOTTOMRIGHT", -1, 2)
 		A:CreateBD(bg, 0)
 		bg:SetFrameLevel(bu:GetFrameLevel()-1)
 
@@ -265,12 +265,12 @@ local function LoadSkin()
 
 	ConquestBar.shadow:Hide()
 
-	ConquestBar.progress:SetTexture(A["media"].normal)
+	ConquestBar.progress:SetTexture(A.media.backdrop)
 	ConquestBar.progress:SetGradient("VERTICAL", .8, 0, 0, 1, 0, 0)
 
 	local bg = A:CreateBDFrame(ConquestBar, .25)
-	bg:SetPoint("TOPLEFT", -1, -2)
-	bg:SetPoint("BOTTOMRIGHT", 1, 2)
+	bg:Point("TOPLEFT", -1, -1)
+	bg:Point("BOTTOMRIGHT", 1, 1)
 
 	-- War games
 
