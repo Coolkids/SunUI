@@ -368,7 +368,7 @@ local onUpdate = function(self, elapsed)
 				if(self.CustomTimeText) then
 					self:CustomTimeText(duration)
 				else
-					self.Time:SetFormattedText("%.1f", duration)
+					self.Time:SetFormattedText("%.1f/%.1f", duration, self.max)
 				end
 			end
 		end
@@ -401,7 +401,7 @@ local onUpdate = function(self, elapsed)
 				if(self.CustomTimeText) then
 					self:CustomTimeText(duration)
 				else
-					self.Time:SetFormattedText("%.1f", duration)
+					self.Time:SetFormattedText("%.1f/%.1f", duration, self.max)
 				end
 			end
 		end

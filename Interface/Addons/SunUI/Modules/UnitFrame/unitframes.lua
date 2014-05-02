@@ -633,6 +633,7 @@ local UnitSpecific = {
 			Castbar:SetWidth(self:GetWidth())
 			Castbar:SetHeight(self:GetHeight())
 			Castbar:SetPoint("BOTTOM", "UIParent", "BOTTOM",0, 110) --玩家施法条
+			
 			S:CreateMover(Castbar, "PlayCastBarMover", L["玩家施法条"], true, nil, "ALL,UNITFRAMES")
 			Castbar.Text:SetAllPoints(Castbar)
 			local sf = Castbar:CreateTexture(nil, "OVERLAY")
@@ -640,7 +641,10 @@ local UnitSpecific = {
 			Castbar.SafeZone = sf
 			IconFrame:SetPoint("RIGHT", Castbar, "LEFT", -3, 0)
 			IconFrame:SetSize(22, 22)
-
+			
+			Castbar.Time = S:CreateFS(Castbar, 10, nil, nil, "THINOUTLINE")
+			Castbar.Time:SetPoint("RIGHT", Castbar, "RIGHT", -10, 0) --玩家施法条
+			
 			local bg = CreateFrame("Frame", nil, Castbar)
 			bg:SetPoint("TOPLEFT", -1, 1)
 			bg:SetPoint("BOTTOMRIGHT", 1, -1)
