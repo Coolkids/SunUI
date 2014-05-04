@@ -74,7 +74,14 @@ function MT:GetOptions()
 				self:UpdateCombatSet()
 			end,
 		},
-		
+		currencycap = {
+			type = "toggle",
+			name = L["正义/勇气点检查"],
+			order = 16,
+			set = function(info, value) self.db.currencycap = value
+				self:UpdateCCSet()
+			end,
+		},
 		
 	}
 	return options
@@ -234,8 +241,8 @@ function MT:MERCHANT_SHOW()
 				if possible and not CanGuildBankRepair() then
 					RepairAllItems()
 					DEFAULT_CHAT_FRAME:AddMessage("|cffffff00您修理装备花费了：|r"..format(GOLD_AMOUNT_TEXTURE, g, 0, 0).." "..format(SILVER_AMOUNT_TEXTURE, s, 0, 0).." "..format(COPPER_AMOUNT_TEXTURE, c, 0, 0),255,255,255)
-				else
-					DEFAULT_CHAT_FRAME:AddMessage("您没有足够的金币以完成修理！",255,0,0)
+				--else
+					--DEFAULT_CHAT_FRAME:AddMessage("您没有足够的金币以完成修理！",255,0,0)
 				end
 			end
 		end
@@ -296,6 +303,7 @@ function MT:Initialize()
 	self:UpdateFastErrorSet()
 	self:UpdateLowHealthSet()
 	self:UpdateAFKSet()
+	self:UpdateCCSet()
 	self:initCombatDate()
 	self:RegisterEvent("ADDON_LOADED")
 end

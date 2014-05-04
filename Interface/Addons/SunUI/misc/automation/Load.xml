@@ -5,7 +5,6 @@
 
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="AutoChefsHat.lua"/>
-	<Script file="CurrencyCap.lua"/>
 	<Script file="TabBinder.lua"/>
 	<Script file="fish.lua"/>
 	<Script file="nioTiller.lua"/>

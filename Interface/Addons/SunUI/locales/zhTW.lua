@@ -1,7 +1,6 @@
 ﻿local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
 local L = AceLocale:NewLocale("SunUI", "zhTW")
 if not L then return end
-
 --core 区域文字
 do
 	L["一般"] = true
@@ -254,6 +253,7 @@ do
 	L["自动接受复活"] = true
 	L["低血量报警"] = true
 	L["AFK界面"] = true
+	L["正义/勇气点检查"] = true
 end
 --通知
 do

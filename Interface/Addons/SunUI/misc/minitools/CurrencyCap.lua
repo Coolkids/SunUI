@@ -1,7 +1,9 @@
 ﻿----------------------------------------------------------------------------------------
 --	Auto popup for currency cap(EnoughPoints by gi2k15)
 ----------------------------------------------------------------------------------------
+local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 
+local CC = S:GetModule("MiniTools")
 StaticPopupDialogs.EnoughPoints = {
 	button1 = OKAY,
 	hideOnEscape = true,
@@ -37,20 +39,22 @@ local defaults = {
 	},
 }
 
-local frame = CreateFrame("Frame", "EnoughPoints", UIParent)
-frame:SetScript("OnEvent", function(self, event, ...) self[event](self, event, ...) end)
-frame:RegisterEvent("ADDON_LOADED")
 
-function frame:ADDON_LOADED(event, name)
-	if name == "SunUI" then
+function CC:UpdateCCSet()
+	if self.db.currencycap then
 		self:RegisterEvent("PLAYER_LOGIN")
 		self:RegisterEvent("PLAYER_ENTERING_WORLD")
 		self:RegisterEvent("LFG_UPDATE")
 		self:RegisterEvent("LFG_PROPOSAL_SHOW")
+	else
+		self:UnregisterEvent("PLAYER_LOGIN")
+		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+		self:UnregisterEvent("LFG_UPDATE")
+		self:UnregisterEvent("LFG_PROPOSAL_SHOW")
 	end
 end
 
-function frame:CheckBadges(kind)
+function CC:CheckBadges(kind)
 	if isValor then
 		isValor = false
 		StaticPopupDialogs.EnoughPoints.OnHide = nil
@@ -62,7 +66,7 @@ function frame:CheckBadges(kind)
 	end
 end
 
-function frame:PLAYER_ENTERING_WORLD()
+function CC:PLAYER_ENTERING_WORLD()
 	local inInstance, instanceType = IsInInstance()
 	local difficulty = select(3, GetInstanceInfo())
 	if inInstance and (instanceType == "raid" or difficulty == 2) then
@@ -72,7 +76,7 @@ function frame:PLAYER_ENTERING_WORLD()
 	end
 end
 
-function frame:PLAYER_LOGIN()
+function CC:PLAYER_LOGIN()
 	if defaults.honor.logging then
 		self:CheckBadges("honor")
 	end
@@ -87,7 +91,7 @@ function frame:PLAYER_LOGIN()
 	end
 end
 
-function frame:LFG_UPDATE()
+function CC:LFG_UPDATE()
 	if hasShown == false and logging == false then
 		if defaults.justice.queueing then
 			StaticPopupDialogs.EnoughPoints.OnHide = function() self:CheckBadges("valor") end
@@ -105,6 +109,6 @@ function frame:LFG_UPDATE()
 	end
 end
 
-function frame:LFG_PROPOSAL_SHOW()
+function CC:LFG_PROPOSAL_SHOW()
 	hasShown = false
 end

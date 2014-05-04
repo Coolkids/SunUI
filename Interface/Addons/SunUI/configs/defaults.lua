@@ -121,6 +121,7 @@ P["MiniTools"]={
 	LowHealth = true,
 	afklock = true,
 	combat = false,
+	currencycap = true,
 }
 
 P["Notifications"]={

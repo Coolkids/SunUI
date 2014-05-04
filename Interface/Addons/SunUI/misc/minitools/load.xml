@@ -1,10 +1,12 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	
 	<Script file="config.lua"/>
+	<Script file="CurrencyCap.lua"/>
 	<Script file="FastError.lua"/>
 	<Script file="lowhealth.lua"/>
 	<Script file="OCES.lua"/>
 	<Script file="afklock.lua"/>
 	<Script file="combatalert.lua"/>
 	<Script file="notifications.lua"/>
+	
 </Ui>

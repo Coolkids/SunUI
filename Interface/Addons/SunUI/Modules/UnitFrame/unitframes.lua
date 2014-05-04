@@ -105,13 +105,13 @@ oUF.Tags.Methods['sunuf:bosshealth'] = function(unit)
 end
 oUF.Tags.Events['sunuf:bosshealth'] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_TARGETABLE_CHANGED"
 
-oUF.Tags.Methods['sunuf:maxhealth'] = function(unit)
+--[[oUF.Tags.Methods['sunuf:maxhealth'] = function(unit)
 	if(not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit)) then return end
 
 	local max = UnitHealthMax(unit)
 	return max
 end
-oUF.Tags.Events['sunuf:maxhealth'] = oUF.Tags.Events.missinghp
+oUF.Tags.Events['sunuf:maxhealth'] = oUF.Tags.Events.missinghp]]
 
 local function shortName(unit)
 	name = UnitName(unit)
@@ -150,14 +150,14 @@ oUF.Tags.Methods['sunuf:missinghealth'] = function(unit)
 end
 oUF.Tags.Events['sunuf:missinghealth'] = oUF.Tags.Events.missinghp
 
-oUF.Tags.Methods['sunuf:power'] = function(unit)
+--[[oUF.Tags.Methods['sunuf:power'] = function(unit)
 	local min, max = UnitPower(unit), UnitPowerMax(unit)
 	local _, class = UnitClass(unit)
 	if(min == 0 or max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit)) then return end
 
 	return siValue(min)
 end
-oUF.Tags.Events['sunuf:power'] = oUF.Tags.Events.missingpp
+oUF.Tags.Events['sunuf:power'] = oUF.Tags.Events.missingpp]]
 
 oUF.Tags.Methods['sunuf:pp'] = function(u)
 	if( u~="player") then
@@ -414,8 +414,8 @@ local Shared = function(self, unit, isSingle)
 		abd:SetFrameLevel(AltPowerBar:GetFrameLevel()-1)
 		A:CreateBD(abd)
 
-		AltPowerBar.Text = S:CreateFS(AltPowerBar, 12, "RIGHT", nil, "THINOUTLINE")
-		AltPowerBar.Text:SetPoint("RIGHT", oUF_SunUFPlayer, "TOPRIGHT", 0, 6)
+		AltPowerBar.Text = S:CreateFS(AltPowerBar, 10, "RIGHT", nil, "THINOUTLINE")
+		AltPowerBar.Text:SetPoint("BOTTOMRIGHT", oUF_SunUFPlayer.Health, "TOPRIGHT", 3, 3)
 
 		AltPowerBar:SetScript("OnValueChanged", function(_, value)
 			local min, max = AltPowerBar:GetMinMaxValues()
@@ -430,13 +430,13 @@ local Shared = function(self, unit, isSingle)
 
 		S:SmoothBar(AltPowerBar)
 
-		AltPowerBar:HookScript("OnShow", function()
-			oUF_SunUFPlayer.MaxHealthPoints:Hide()
-		end)
-		AltPowerBar:HookScript("OnHide", function()
+		--AltPowerBar:HookScript("OnShow", function()
+			--oUF_SunUFPlayer.MaxHealthPoints:Hide()
+		--end)
+		--AltPowerBar:HookScript("OnHide", function()
 			--oUF_SunUFPlayer.MaxHealthPoints:Hide()  --test
-			oUF_SunUFPlayer.MaxHealthPoints:Show()
-		end)
+			--oUF_SunUFPlayer.MaxHealthPoints:Show()
+		--end)
 
 		AltPowerBar:EnableMouse(true)
 
@@ -590,13 +590,13 @@ local UnitSpecific = {
 		Health:SetHeight(UF.db.playerHeight - UF.db.powerHeight - 1)
 
 		local HealthPoints = S:CreateFS(Health, 10, "LEFT", nil, "THINOUTLINE")
-		self.MaxHealthPoints = S:CreateFS(Health, 10, "RIGHT", nil, "THINOUTLINE")
+		--self.MaxHealthPoints = S:CreateFS(Health, 10, "RIGHT", nil, "THINOUTLINE")
 
 		HealthPoints:SetPoint("BOTTOMLEFT", Health, "TOPLEFT", 0, 3)
-		self.MaxHealthPoints:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", 0, 3)
+		--self.MaxHealthPoints:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", 0, 3)
 
 		self:Tag(HealthPoints, '[dead][offline][sunuf:health]')
-		self:Tag(self.MaxHealthPoints, '[sunuf:maxhealth]')
+		--self:Tag(self.MaxHealthPoints, '[sunuf:maxhealth]')
 		Health.value = HealthPoints
 
 		local PowerPoints = S:CreateFS(Power, 10, nil, nil, "THINOUTLINE")
@@ -658,7 +658,7 @@ local UnitSpecific = {
 		end
 
 		local PvP = S:CreateFS(self, 10, nil, nil, "THINOUTLINE")
-		PvP:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", -50, 3)
+		PvP:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", -70, 3)
 		PvP:SetText("P")
 
 		local UpdatePvP = function(self, event, unit)
@@ -684,7 +684,7 @@ local UnitSpecific = {
 		PvP.Override = UpdatePvP
 		
 		local Combat = S:CreateFS(self, 10, nil, nil, "THINOUTLINE")
-		Combat:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", -60, 3)
+		Combat:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", -80, 3)
 		Combat:SetText("C")
 		Combat:SetTextColor(1, 1, 125/255)
 		self.Combat = Combat
@@ -1137,23 +1137,25 @@ local UnitSpecific = {
 		
 		local Vengeance = CreateFrame("StatusBar", nil, self)
 		Vengeance.showInfight = true
-		Vengeance.Text = S:CreateFS(Vengeance, 12, nil, nil, "THINOUTLINE")
-		Vengeance.Text:SetPoint("RIGHT", self, "TOPRIGHT", 0, 6)
+		Vengeance.Text = S:CreateFS(Vengeance, 10, nil, nil, "THINOUTLINE")
+		Vengeance.Text:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", -25, 3)
 		self.Vengeance = Vengeance
 		
-		Vengeance:HookScript("OnShow", function()
-			self.MaxHealthPoints:Hide()
-			if self.AltPowerBar:IsShown() then 
-				Vengeance:Hide()
-			end
-		end)
-		Vengeance:HookScript("OnHide", function()
-			if self.AltPowerBar:IsShown() then 
-				self.MaxHealthPoints:Hide()
-			else 
-				self.MaxHealthPoints:Show()
-			end
-		end)
+		--Vengeance:HookScript("OnShow", function()
+			--self.MaxHealthPoints:Hide()
+			--if self.AltPowerBar:IsShown() then
+				--Vengeance:Hide()
+				--self.AltPowerBar:Show()
+				--self.AltPowerBar.Text:SetText(100)
+			--end
+		--end)
+		--Vengeance:HookScript("OnHide", function()
+			--if self.AltPowerBar:IsShown() then 
+				--self.MaxHealthPoints:Hide()
+			--else 
+				--self.MaxHealthPoints:Show()
+			--end
+		--end)
 		
 	end,
 

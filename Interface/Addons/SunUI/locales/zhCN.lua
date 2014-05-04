@@ -253,6 +253,7 @@ do
 	L["自动接受复活"] = true
 	L["低血量报警"] = true
 	L["AFK界面"] = true
+	L["正义/勇气点检查"] = true
 end
 --通知
 do
