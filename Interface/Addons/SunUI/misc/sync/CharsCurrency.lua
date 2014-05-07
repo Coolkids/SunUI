@@ -1,4 +1,4 @@
-local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 
 ----------------------------------------------------------------------------------------
 --	Tracks your currency tokens across multiple characters(Exonumist by Phanx)

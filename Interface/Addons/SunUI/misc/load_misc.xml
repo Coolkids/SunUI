@@ -11,4 +11,5 @@
 	<Include file="tools\load.xml"/>
 	<Include file="xct\load_xct.xml"/>
 	<Include file="oGlow\load.xml"/>
+	<Include file="sync\load_sync.xml"/>
 </Ui>

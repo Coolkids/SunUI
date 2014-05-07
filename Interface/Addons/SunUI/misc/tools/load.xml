@@ -1,9 +1,9 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="AuctionPlus.lua"/>
 	<Script file="AddonManager.lua"/>
 	<Script file="Align.lua"/>
 	<Script file="AlreadyKnown.lua"/>
 	<Script file="BiggerTradeSkillUI.lua"/>
-	<Script file="CharsCurrency.lua"/>
 	<Script file="ClassColors.lua"/>
 	<Script file="CloseUp.lua"/>
 	<Script file="DragEmAll.lua"/>
