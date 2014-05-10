@@ -508,9 +508,9 @@ local function Colorize(frame)
 				frame.class.Glow:Show()
 				frame.class:SetTexCoord(texcoord[1], texcoord[2], texcoord[3], texcoord[4])
 			end
-			frame.hp.name:SetTextColor(unpack(RAID_CLASS_COLORS[class]))
-			frame.hp:SetStatusBarColor(unpack(RAID_CLASS_COLORS[class]))
-			frame.hp.bg:SetTexture(RAID_CLASS_COLORS[class][1], RAID_CLASS_COLORS[class][2], RAID_CLASS_COLORS[class][3], 0.2)
+			frame.hp.name:SetTextColor(RAID_CLASS_COLORS[class].r, RAID_CLASS_COLORS[class].g, RAID_CLASS_COLORS[class].b)
+			frame.hp:SetStatusBarColor(RAID_CLASS_COLORS[class].r, RAID_CLASS_COLORS[class].g, RAID_CLASS_COLORS[class].b)
+			frame.hp.bg:SetTexture(RAID_CLASS_COLORS[class].r, RAID_CLASS_COLORS[class].g, RAID_CLASS_COLORS[class].b, 0.2)
 			return
 		end
 	end
