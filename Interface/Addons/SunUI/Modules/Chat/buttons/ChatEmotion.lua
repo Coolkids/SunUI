@@ -144,6 +144,20 @@ if S.zone == "zhCN" then
 end
 local fmtstring = format("\124T%%s:%d\124t",max(floor(select(2,SELECTED_CHAT_FRAME:GetFont())),IconSize))
 
+local temp = CreateFrame("Frame", nil, UIParent)
+temp.time = 0
+temp.ettime = 0
+local function getFouse()
+	local frame = GetMouseFocus():GetParent():GetName()
+	if frame == "CollectorButton" or frame == "EmoteTableFrame" then
+		isFocus = true
+		temp.ettime = 0
+	else
+		isFocus = false
+	end
+end
+
+
 local function myChatFilter(self, event, msg, ...)
 	for i = customEmoteStartIndex, #emotes do
 		if msg:find(emotes[i][1]) then
@@ -172,7 +186,8 @@ function Chat:AddMessageFilter()
 end
 local function CreateEmoteTableFrame()
 	local A = S:GetModule("Skins")
-	EmoteTableFrame = CreateFrame("Frame", "EmoteTableFrame", UIParent)
+	local EmoteTableFrame = CreateFrame("Frame", "EmoteTableFrame", UIParent)
+	temp.ettime = 0
 	A:SetBD(EmoteTableFrame)
 	EmoteTableFrame:SetWidth((IconSize+2) * 12+4)
 	EmoteTableFrame:SetHeight((IconSize+2) * 5+4)
@@ -198,11 +213,14 @@ local function CreateEmoteTableFrame()
 		icon:SetPoint("TOPLEFT", (col-1)*(IconSize+2)+2, -(row-1)*(IconSize+2)-2)
 		icon:SetScript("OnMouseUp", function(self)   
 		local ChatFrame1EditBox = ChatEdit_ChooseBoxForSend()
-		if (not ChatFrame1EditBox:IsShown()) then
-			ChatEdit_ActivateChat(ChatFrame1EditBox)
-		end
-		ChatFrame1EditBox:Insert(self.text)
-		EmoteTableFrame:Hide()
+			if (not ChatFrame1EditBox:IsShown()) then
+				ChatEdit_ActivateChat(ChatFrame1EditBox)
+			end
+			ChatFrame1EditBox:Insert(self.text)
+			temp:SetScript("OnUpdate", nil)
+			EmoteTableFrame:SetScript("OnUpdate", nil)
+			EmoteTableFrame:Hide()
+			
 		end)
 		icon:SetScript("OnEnter",  function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
@@ -222,8 +240,34 @@ local function ToggleEmoteTable()
 	if (not EmoteTableFrame) then CreateEmoteTableFrame() end
 	if (EmoteTableFrame:IsShown()) then
 		EmoteTableFrame:Hide()
+		EmoteTableFrame:SetScript("OnUpdate", nil)
+		temp:SetScript("OnUpdate", nil)
+		temp.ettime = 0
 	else
 		EmoteTableFrame:Show()
+		UIFrameFadeIn(EmoteTableFrame, 0.2, EmoteTableFrame:GetAlpha(), 1)
+		temp:SetScript("OnUpdate", function(self, elasped)
+			self.time = self.time + elasped
+			if self.time > 1 then
+				local _, catch = pcall(getFouse)
+				if catch then
+					isFocus = false
+				end
+				--S:Debug("temp:Call",isFocus, self.time)
+				self.time = 0
+			end
+		end)
+		EmoteTableFrame:SetScript("OnUpdate", function(self, elasped)
+			if isFocus then return end
+			temp.ettime = temp.ettime + elasped
+			if temp.ettime > 6 then
+				--S:Debug("EmoteTableFrame:Call",temp.ettime)
+				S:FadeOutFrame(self, 0.3, false)  
+				temp.ettime = 0
+				temp:SetScript("OnUpdate", nil)
+				self:SetScript("OnUpdate", nil)
+			end
+		end)
 	end
 
 end

@@ -1,16 +1,29 @@
 ﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local B = S:NewModule("Cbutton", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 if S.zone ~= "zhTW" and S.zone ~= "zhCN" then return end
+local isFocus = false
+local collectorButton = CreateFrame("Button", nil, UIParent)
+local collector = CreateFrame("Frame", "CollectorButton", UIParent)
+local function getFouse()
+	local frame = GetMouseFocus():GetParent():GetName()
+	if frame == "CollectorButton" or frame == "EmoteTableFrame" then
+		isFocus = true
+		collectorButton.time = 0
+	else
+		isFocus = false
+	end
+end
+
 function B:CreateMainButton()
 	local A = S:GetModule("Skins")
-	local collectorButton = CreateFrame("Button", nil, UIParent)
+	
 	collectorButton:SetSize(15, 15)
 	collectorButton:SetPoint("TOPLEFT", ChatFrame1, "TOPRIGHT", 5, 0)
-	UIFrameFadeIn(collectorButton, 1, 1, 0.2)
-	local collector = CreateFrame("Frame", "CollectorButton", UIParent)
+
 	collector:SetWidth(45)
 	collector:SetHeight(85)
 	collector:SetPoint("TOPLEFT", collectorButton, "BOTTOMLEFT", -5, -5)
+	collector.time = 0
 	collector:Hide()
 
 	collectorButton.text = collectorButton:CreateFontString(nil, 'OVERLAY')
@@ -18,31 +31,48 @@ function B:CreateMainButton()
 	collectorButton.text:SetText("B")
 	collectorButton.text:SetPoint("CENTER")
 	collectorButton.text:SetTextColor(23/255, 132/255, 209/255)
+	collectorButton.time = 0
+	
 	collectorButton:SetScript("OnMouseUp", function(self)
 		if not CollectorButton:IsShown() then 
 			collector:Show()
-			UIFrameFadeIn(collector, 0.5, collector:GetAlpha(), 1)
-			local Timer = 0
-			self:SetScript("OnUpdate", function(self, elasped)
-				Timer = Timer + elasped
-				if Timer > 6 then
-					UIFrameFadeOut(collector, 0.5, collector:GetAlpha(), 0)
+			UIFrameFadeIn(collector, 0.3, collector:GetAlpha(), 1)
+			collector:SetScript("OnUpdate", function(self, elasped)
+				self.time = self.time + elasped
+				if self.time > 1 then
+					local _, catch = pcall(getFouse)
+					if catch then
+						isFocus = false
+					end
+					--S:Debug("collector:Call",isFocus, self.time)
+					self.time = 0
 				end
-				if Timer > 8 then
-					collector:Hide()
+			end)
+			collectorButton:SetScript("OnUpdate", function(self, elasped)
+				if isFocus then return end
+				self.time = self.time + elasped
+				if self.time > 6 then
+					--S:Debug("collectorButton:Call",self.time)
+					S:FadeOutFrame(collector, 0.3, false)  
+					collector:SetScript("OnUpdate", nil)
+					self.time = 0
+					self:SetScript("OnUpdate", nil)
 				end
 			end)
 		else
-			collector:Hide()
+			collector:SetScript("OnUpdate", nil)
+			collectorButton:SetScript("OnUpdate", nil)
+			S:FadeOutFrame(collector, 0.3, false)
+			collectorButton.time = 0
 		end
 	end)
 	collectorButton:SetScript("OnEnter",  function(self)
-			UIFrameFadeIn(self, 0.5, self:GetAlpha(), 1)
 			GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
 			GameTooltip:AddLine(L["按钮集合"])
 			GameTooltip:Show()  
 	end)
-	collectorButton:SetScript("OnLeave", function(self) UIFrameFadeOut(self, 1, self:GetAlpha(), 0) GameTooltip:Hide() end)
+	collectorButton:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
+	
 	A:Reskin(collectorButton)
 end
 
@@ -54,6 +84,21 @@ function B:Initialize()
 	self:CreateRaidCheck()
 	self:CreateStatReport()
 	self:CreateEmoteTableFrame()
+	self:RegisterEvent("PLAYER_REGEN_DISABLED", function()
+		S:FadeOutFrame(collectorButton, 0.3, false)
+		if _G["EmoteTableFrame"] and _G["EmoteTableFrame"]:IsShown() then
+			S:FadeOutFrame(EmoteTableFrame, 0.3, false)
+		end
+		if collector:IsShown() then
+			S:FadeOutFrame(collector, 0.3, false)
+		end
+	end)	
+
+	self:RegisterEvent("PLAYER_REGEN_ENABLED", function()
+		collectorButton:Show()
+		UIFrameFadeIn(collectorButton, 0.3, collectorButton:GetAlpha(), 1)
+		
+	end)
 end
 
 S:RegisterModule(B:GetName())

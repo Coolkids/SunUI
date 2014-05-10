@@ -344,7 +344,7 @@ function S:Print(...)
 		n=n+1
 		tmp[n] = tostring(select(i, ...))
 	end
-	DEFAULT_CHAT_FRAME:AddMessage(L["SunUI"] .. table.concat(tmp," ",1,n) )
+	DEFAULT_CHAT_FRAME:AddMessage(L["SunUI"].." "..table.concat(tmp," ",1,n) )
 end
 
 function S:Debug(...)

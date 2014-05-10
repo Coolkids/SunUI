@@ -4,8 +4,7 @@ local CT = S:NewModule("Chat", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 
 CT.modName = L["聊天美化"]
 CT.order = 8
-local tscol = "64C2F5"						-- Timestamp coloring
-local newAddMsg = {}
+
 for i = 1, 18 do
 	CHAT_FONT_HEIGHTS[i] = i+6
 end
@@ -40,122 +39,141 @@ _G.CHAT_YELL_GET = "%s:\32"
 _G.CHAT_FLAG_AFK = "|cffFF0000".."[AFK]".."|r "
 _G.CHAT_FLAG_DND = "|cffE7E716".."[DND]".."|r "
 _G.CHAT_FLAG_GM = "|cff4154F5".."[GM]".."|r "
- 
--------------- > Custom timestamps color
-
-ChatFrame2ButtonFrameBottomButton:RegisterEvent("PLAYER_LOGIN")
-ChatFrame2ButtonFrameBottomButton:SetScript("OnEvent", function(f)
-	TIMESTAMP_FORMAT_HHMM = "|cff"..tscol.."[%I:%M]|r "
-	TIMESTAMP_FORMAT_HHMMSS = "|cff"..tscol.."[%I:%M:%S]|r "
-	TIMESTAMP_FORMAT_HHMMSS_24HR = "|cff"..tscol.."[%H:%M:%S]|r "
-	TIMESTAMP_FORMAT_HHMMSS_AMPM = "|cff"..tscol.."[%I:%M:%S %p]|r "
-	TIMESTAMP_FORMAT_HHMM_24HR = "|cff"..tscol.."[%H:%M]|r "
-	TIMESTAMP_FORMAT_HHMM_AMPM = "|cff"..tscol.."[%I:%M %p]|r "
-	f:UnregisterEvent("PLAYER_LOGIN")
-	f:SetScript("OnEvent", nil)
-end)
-
---new
---美化
-local tabs = {"Left", "Middle", "Right", "SelectedLeft", "SelectedMiddle",
-    "SelectedRight", "Glow", "HighlightLeft", "HighlightMiddle", 
-    "HighlightRight"}
-local function ApplyChatStyle(self)
-	local A = S:GetModule("Skins")
-	if self == "PET_BATTLE_COMBAT_LOG" then self = ChatFrame11 end
-	if not self or (self and self.skinApplied) then return end
-
-	local cf = self:GetName()
-    local tex = ({_G[cf..'EditBox']:GetRegions()})
-    _G[cf]:SetClampedToScreen(false)
-    _G[cf..'ButtonFrame'].Show = _G[cf..'ButtonFrame'].Hide 
-    _G[cf..'ButtonFrame']:Hide()
-    
-    _G[cf..'EditBox']:SetAltArrowKeyMode(false)
-    _G[cf..'EditBox']:ClearAllPoints()
-    _G[cf..'EditBox']:SetPoint('BOTTOMLEFT', ChatFrame1, 'TOPLEFT', 0, 21)
-    _G[cf..'EditBox']:SetPoint('TOPRIGHT', _G.ChatFrame1, 'TOPRIGHT', 6, 45)
-	A:CreateBD(_G[cf..'EditBox'])
-	_G[cf..'EditBox']:Hide()
-    _G[cf..'EditBox']:HookScript("OnEditFocusGained", function(self) self:Show() end)
-	_G[cf..'EditBox']:HookScript("OnEditFocusLost", function(self) self:Hide() end)
-	_G[cf..'EditBox']:FontTemplate()
-    _G[cf..'EditBoxHeader']:SetShadowOffset(0, 0)
-    _G[cf.."EditBoxLanguage"]:ClearAllPoints()
-	_G[cf.."EditBoxLanguage"]:SetPoint("LEFT", _G[cf.."EditBox"], "RIGHT", 5, 0)
-	_G[cf.."EditBoxLanguage"]:SetSize(_G[cf.."EditBox"]:GetHeight(),_G[cf.."EditBox"]:GetHeight())
-	_G[cf.."EditBoxLanguage"]:StripTextures()
-	A:CreateBD(_G[cf.."EditBoxLanguage"], 0.6)
-	if CT.db.ChatEditBoxColor then
-		hooksecurefunc("ChatEdit_UpdateHeader", function()
-			local type = _G[cf..'EditBox']:GetAttribute("chatType")
-			if ( type == "CHANNEL" ) then
-				local id = _G[cf..'EditBox']:GetAttribute("channelTarget")
-				if id == 0 then
-					_G[cf..'EditBox']:SetBackdropBorderColor(0, 0, 0)
-				else
-					_G[cf..'EditBox']:SetBackdropBorderColor(ChatTypeInfo[type..id].r,ChatTypeInfo[type..id].g,ChatTypeInfo[type..id].b)
-				end
-			else
-				_G[cf..'EditBox']:SetBackdropBorderColor(ChatTypeInfo[type].r,ChatTypeInfo[type].g,ChatTypeInfo[type].b)
-			end
-		end)
+--时间戳颜色
+TIMESTAMP_FORMAT_HHMM = "|cff64C2F5[%I:%M]|r "
+TIMESTAMP_FORMAT_HHMMSS = "|cff64C2F5[%I:%M:%S]|r "
+TIMESTAMP_FORMAT_HHMMSS_24HR = "|cff64C2F5[%H:%M:%S]|r "
+TIMESTAMP_FORMAT_HHMMSS_AMPM = "|cff64C2F5[%I:%M:%S %p]|r "
+TIMESTAMP_FORMAT_HHMM_24HR = "|cff64C2F5[%H:%M]|r "
+TIMESTAMP_FORMAT_HHMM_AMPM = "|cff64C2F5[%I:%M %p]|r "
+local function toggleDown(f)
+	if f:GetCurrentScroll() > 0 then
+		_G[f:GetName().."ButtonFrameBottomButton"]:Show()
+	else
+		_G[f:GetName().."ButtonFrameBottomButton"]:Hide()
 	end
-	_G[cf.."Tab"]:HookScript("OnClick", function() _G[cf.."EditBox"]:Hide() end)
-    tex[6]:SetAlpha(0) tex[7]:SetAlpha(0) tex[8]:SetAlpha(0) tex[9]:SetAlpha(0) tex[10]:SetAlpha(0) tex[11]:SetAlpha(0)
-    local bb = _G[cf.."ButtonFrameBottomButton"]
-	local flash = _G[cf.."ButtonFrameBottomButtonFlash"]
-	A:ReskinArrow(bb, "down")
-	if _G[cf] == _G["ChatFrame2"] then
-		_G["CombatLogQuickButtonFrame_Custom"]:StripTextures()
-		local cb = _G["CombatLogQuickButtonFrame_CustomAdditionalFilterButton"]
-		cb:SetSize(16, 16)
-		A:ReskinArrow(cb, "down")
-	end
-	bb:SetParent(_G[cf])
-	bb:SetFrameStrata("MEDIUM")
-	bb:SetHeight(16)
-	bb:SetWidth(16)
-	bb:ClearAllPoints()
-	bb:SetPoint("TOPRIGHT", _G[cf], "TOPRIGHT", -5, -5)
-	flash:ClearAllPoints()
-	flash:SetPoint("TOPLEFT", -3, 3)
-	flash:SetPoint("BOTTOMRIGHT", 3, -3)
-	bb:SetAlpha(0.8)
-	bb:SetScript("OnClick", function(self)
-		self:GetParent():ScrollToBottom()
-	end)
-    
-    for g = 1, #CHAT_FRAME_TEXTURES do
-        _G[cf..CHAT_FRAME_TEXTURES[g]]:SetTexture(nil)
-    end
-    for index, value in pairs(tabs) do
-        local texture = _G[cf..'Tab'..value]
-        texture:SetTexture(nil)
-    end
-	_G[cf.."TabText"]:SetTextColor(0.40, 0.78, 1) -- 1,.7,.2
-	_G[cf.."TabText"].SetTextColor = function() end
-	_G[cf.."TabText"]:FontTemplate()
-    if cf ~= "ChatFrame2" then
-		local am = _G[cf].AddMessage 
-		_G[cf].AddMessage = function(frame, text, ...) 
-			return am(frame, text:gsub('|h%[(%d+)%. .-%]|h', '|h%[%1%]|h'), ...)
-		end 
-	end
-	self.skinApplied = true
 end
 
+local function ApplyChatStyle(self)
+	if self == "PET_BATTLE_COMBAT_LOG" then self = ChatFrame11 end
+	local f = self:GetName()
+	if self.reskinned then return end
+	self.reskinned = true
+	local A = S:GetModule("Skins")
+
+	self:HookScript("OnMessageScrollChanged", toggleDown)
+	self:HookScript("OnShow", toggleDown)
+	self:SetClampedToScreen(false)
+	self:SetFading(true)
+
+	--self:SetShadowOffset(0, 0, 0, 0)
+
+	self:SetMinResize(0,0)
+	self:SetMaxResize(0,0)
+
+	self.editBox:ClearAllPoints()
+	self.editBox:SetPoint('BOTTOMLEFT', ChatFrame1, 'TOPLEFT', 0, 21)
+    self.editBox:SetPoint('TOPRIGHT', ChatFrame1, 'TOPRIGHT', 6, 45)
+	self.editBox:SetFont(S["media"].font, 12, "THINOUTLINE")
+	self.editBox.header:SetFont(S["media"].font, 12, "THINOUTLINE")
+	self.editBox.header:SetShadowColor(0, 0, 0, 0)
+	self.editBox:SetShadowColor(0, 0, 0, 0)
+	self.editBox:SetAltArrowKeyMode(nil)
+	self.editBox:Hide()
+	self.editBox:HookScript("OnEditFocusGained", function(self) self:Show() end)
+	self.editBox:HookScript("OnEditFocusLost", function(self) self:Hide() end)
+	_G[f.."Tab"]:HookScript("OnClick", function() _G[f.."EditBox"]:Hide() end)
+	
+	_G[f.."EditBoxLanguage"]:SetPoint("LEFT", _G[f.."EditBox"], "RIGHT", 5, 0)
+	_G[f.."EditBoxLanguage"]:SetSize(_G[f.."EditBox"]:GetHeight(),_G[f.."EditBox"]:GetHeight())
+	_G[f.."EditBoxLanguage"]:StripTextures()
+	A:CreateBD(_G[f.."EditBoxLanguage"], 0.6)
+	local x=({_G[f.."EditBox"]:GetRegions()})
+	x[9]:SetAlpha(0)
+	x[10]:SetAlpha(0)
+	x[11]:SetAlpha(0)
+
+	A:CreateBD(self.editBox)
+
+	for j = 1, #CHAT_FRAME_TEXTURES do
+		_G[f..CHAT_FRAME_TEXTURES[j]]:SetTexture(nil)
+	end
+
+	--Hide the new editbox "ghost"
+	_G[f.."EditBoxLeft"]:SetAlpha(0)
+	_G[f.."EditBoxRight"]:SetAlpha(0)
+	_G[f.."EditBoxMid"]:SetAlpha(0)
+
+	--self:SetClampRectInsets(0, 0, 0, 0)
+	--按钮
+	_G[f..'ButtonFrame'].Show = _G[f..'ButtonFrame'].Hide
+    _G[f..'ButtonFrame']:Hide()
+	
+	local bb = _G[f.."ButtonFrameBottomButton"]
+	local flash = _G[f.."ButtonFrameBottomButtonFlash"]
+	A:ReskinArrow(bb, "down")
+	bb:SetParent(self)
+	bb:ClearAllPoints()
+	bb:Hide()
+	bb:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, -20)
+	bb.SetPoint = S.dummy
+	flash:Kill()
+	bb:SetScript("OnClick", function(self) 
+		self:GetParent():ScrollToBottom()
+        self:Hide() 
+	end)
+	--频道
+    if f ~= "ChatFrame2" then
+		local am = _G[f].AddMessage 
+		_G[f].AddMessage = function(self, text, ...) 
+			return am(self, text:gsub('|h%[(%d+)%. .-%]|h', '|h%[%1%]|h'), ...)
+		end 
+	end
+	--战斗记录部分
+	if self == ChatFrame2 then
+		_G["CombatLogQuickButtonFrame_Custom"]:StripTextures()
+	end
+	
+	--标签美化
+	_G[f.."TabText"]:SetTextColor(0.40, 0.78, 1) -- 1,.7,.2
+	_G[f.."TabText"].SetTextColor = function() end
+	_G[f.."TabText"]:FontTemplate(nil,nil,"THINOUTLINE")
+end
+function CT:ChatEditBoxColor()
+	if self.db.ChatEditBoxColor then
+		for i = 1, NUM_CHAT_WINDOWS do
+			local cf = _G["ChatFrame"..i]:GetName()
+			hooksecurefunc("ChatEdit_UpdateHeader", function()
+				local type = _G[cf..'EditBox']:GetAttribute("chatType")
+				if ( type == "CHANNEL" ) then
+					local id = _G[cf..'EditBox']:GetAttribute("channelTarget")
+					if id == 0 then
+						_G[cf..'EditBox']:SetBackdropBorderColor(0, 0, 0)
+					else
+						_G[cf..'EditBox']:SetBackdropBorderColor(ChatTypeInfo[type..id].r,ChatTypeInfo[type..id].g,ChatTypeInfo[type..id].b)
+					end
+				else
+					_G[cf..'EditBox']:SetBackdropBorderColor(ChatTypeInfo[type].r,ChatTypeInfo[type].g,ChatTypeInfo[type].b)
+				end
+			end)
+		end
+	end
+end
 function CT:ChatFix()
 	ChatFrameMenuButton:Kill()
 	FriendsMicroButton:Kill()
+	--GeneralDockManager:Kill()
+	--GeneralDockManager:SetParent(S.HiddenFrame)
+	--GeneralDockManagerScrollFrame:SetScript("OnShow", function(self) self:Hide() end)
+	--GeneralDockManagerScrollFrame:SetSize(0.001,0.001)
 	FloatingChatFrame_OnMouseScroll = function(self, dir)
-    if(dir > 0) then
-        if(IsShiftKeyDown()) then
-            self:ScrollToTop() else self:ScrollUp() end
-    else if(IsShiftKeyDown()) then 
-        self:ScrollToBottom() else self:ScrollDown() end
-    end
-end
+		if(dir > 0) then
+			if(IsShiftKeyDown()) then
+				self:ScrollToTop() else self:ScrollUp() end
+		else if(IsShiftKeyDown()) then 
+			self:ScrollToBottom() else self:ScrollDown() end
+		end
+	end
 	eb_mouseon = function()
 		for i =1, 10 do
 			local eb = _G['ChatFrame'..i..'EditBox']
@@ -171,6 +189,54 @@ end
 	hooksecurefunc("ChatFrame_OpenChat",eb_mouseon)
 	hooksecurefunc("ChatEdit_SendText",eb_mouseoff)
 end
+-- Colour real ID links
+
+local function GetLinkColor(data)
+	local type, id, arg1 = string.match(data, '(%w+):(%d+)')
+	if(type == 'item') then
+		local _, _, quality = GetItemInfo(id)
+		if(quality) then
+			local _, _, _, hex = GetItemQualityColor(quality)
+			return '|c' .. hex
+		else
+			-- Item is not cached yet, show a white color instead
+			-- Would like to fix this somehow
+			return '|cffffffff'
+		end
+	elseif(type == 'quest') then
+		local _, _, level = string.match(data, '(%w+):(%d+):(%d+)')
+		if not level then level = UnitLevel("player") end -- fix for account wide quests
+		local color = GetQuestDifficultyColor(level)
+		return format('|cff%02x%02x%02x', color.r * 255, color.g * 255, color.b * 255)
+	elseif(type == 'spell') then
+		return '|cff71d5ff'
+	elseif(type == 'achievement') then
+		return '|cffffff00'
+	elseif(type == 'trade' or type == 'enchant') then
+		return '|cffffd000'
+	elseif(type == 'instancelock') then
+		return '|cffff8000'
+	elseif(type == 'glyph' or type == 'journal') then
+		return '|cff66bbff'
+	elseif(type == 'talent') then
+		return '|cff4e96f7'
+	elseif(type == 'levelup') then
+		return '|cffFF4E00'
+	else
+		return '|cffffffff'
+	end
+end
+
+local function AddLinkColors(self, event, msg, ...)
+	local data = string.match(msg, '|H(.-)|h(.-)|h')
+	if(data) then
+		local newmsg = string.gsub(msg, '|H(.-)|h(.-)|h', GetLinkColor(data) .. '|H%1|h%2|h|r')
+		return false, newmsg, ...
+	else
+		return false, msg, ...
+	end
+end
+
 ----------------------------------------------------------------------------------------
 --	Copy Chat
 ----------------------------------------------------------------------------------------
@@ -273,7 +339,11 @@ function CT:PLAYER_ENTERING_WORLD()
 	end
 	hooksecurefunc("FCF_OpenTemporaryWindow", ApplyChatStyle)
 	self:UpdateChatbar()
+	self:ChatEditBoxColor()
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+	
+	ChatFrame_AddMessageEventFilter('CHAT_MSG_BN_WHISPER', AddLinkColors)
+	ChatFrame_AddMessageEventFilter('CHAT_MSG_BN_WHISPER_INFORM', AddLinkColors)
 end
 
 function CT:GetOptions()
@@ -319,9 +389,9 @@ function CT:Initialize()
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_AFK", function(msg) return true end)
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_DND", function(msg) return true end)
 	end
-	if self.db.TimeStamps then 
+	if self.db.TimeStamps then
 		if GetCVar("showTimestamps") == "none" then  
-			SetCVar("showTimestamps", [[%H:%M:%S]])
+			SetCVar("showTimestamps", TIMESTAMP_FORMAT_HHMMSS)
 		end
 	else
 		SetCVar("showTimestamps", "none")

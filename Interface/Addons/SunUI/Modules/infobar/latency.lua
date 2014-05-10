@@ -41,7 +41,7 @@ function IB:CreateLatency()
 	stat:SetScript("OnEnter", function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 		GameTooltip:ClearLines()
-		GameTooltip:AddLine(L["延迟"],0,.6,1)
+		GameTooltip:AddLine(L["延迟"], 0, .6, 1)
 		GameTooltip:AddLine(" ")
 		local _, _, latencyHome, latencyWorld = GetNetStats()
 		local bandwidth = GetAvailableBandwidth()
@@ -51,7 +51,7 @@ function IB:CreateLatency()
 		local r2, g2, b2 = S:ColorGradient((300-latencyWorld)/300, IB.InfoBarStatusColor[1][1], IB.InfoBarStatusColor[1][2], IB.InfoBarStatusColor[1][3], 
 																			IB.InfoBarStatusColor[2][1], IB.InfoBarStatusColor[2][2], IB.InfoBarStatusColor[2][3],
 																			IB.InfoBarStatusColor[3][1], IB.InfoBarStatusColor[3][2], IB.InfoBarStatusColor[3][3])
-		GameTooltip:ClearLines()
+		
 		GameTooltip:AddDoubleLine(L["本地延迟"], latencyHome.."ms", 0.75, 0.9, 1, r1, g1, b1)
 		GameTooltip:AddDoubleLine(L["世界延迟"], latencyWorld.."ms", 0.75, 0.9, 1, r2, g2, b2)
 		if bandwidth ~= 0 then

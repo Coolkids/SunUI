@@ -214,7 +214,7 @@ function RayWatcherConfig.GenerateOptionsInternal()
 						set = function(info, value)
 							db[db.RayWatcher.GroupSelect].mode = value
 							ns.modules[db.RayWatcher.GroupSelect].mode = value
-							ns.modules[db.RayWatcher.GroupSelect]:ApplyStyle()
+							--ns.modules[db.RayWatcher.GroupSelect]:ApplyStyle()
 							db[db.RayWatcher.GroupSelect].direction = ns.modules[db.RayWatcher.GroupSelect].direction
 							db[db.RayWatcher.GroupSelect].barwidth = ns.modules[db.RayWatcher.GroupSelect].barwidth
 						end,
@@ -240,7 +240,7 @@ function RayWatcherConfig.GenerateOptionsInternal()
 						set = function(info, value)
 							db[db.RayWatcher.GroupSelect].direction = value
 							ns.modules[db.RayWatcher.GroupSelect].direction = value
-							ns.modules[db.RayWatcher.GroupSelect]:ApplyStyle()
+							--ns.modules[db.RayWatcher.GroupSelect]:ApplyStyle()
 						end,
 						get = function() return db[db.RayWatcher.GroupSelect].direction end,
 						disabled = function(info) return not db.RayWatcher.GroupSelect or db[db.RayWatcher.GroupSelect].disabled end,
@@ -274,7 +274,7 @@ function RayWatcherConfig.GenerateOptionsInternal()
 						set = function(info, value)
 							db[db.RayWatcher.GroupSelect].size = value
 							ns.modules[db.RayWatcher.GroupSelect].size = value
-							ns.modules[db.RayWatcher.GroupSelect]:ApplyStyle()
+							--ns.modules[db.RayWatcher.GroupSelect]:ApplyStyle()
 						end,
 						get = function() return db[db.RayWatcher.GroupSelect].size end,
 						disabled = function(info) return not db.RayWatcher.GroupSelect or db[db.RayWatcher.GroupSelect].disabled end,
@@ -287,7 +287,7 @@ function RayWatcherConfig.GenerateOptionsInternal()
 						set = function(info, value)
 							db[db.RayWatcher.GroupSelect].barwidth = value
 							ns.modules[db.RayWatcher.GroupSelect].barwidth = value
-							ns.modules[db.RayWatcher.GroupSelect]:ApplyStyle()
+							--ns.modules[db.RayWatcher.GroupSelect]:ApplyStyle()
 						end,
 						get = function() return (db[db.RayWatcher.GroupSelect].barwidth or 150) end,
 						hidden = function(info) return db[db.RayWatcher.GroupSelect].mode ~= "BAR" end,
@@ -300,7 +300,7 @@ function RayWatcherConfig.GenerateOptionsInternal()
 						set = function(info, value)
 							db[db.RayWatcher.GroupSelect].iconside = value
 							ns.modules[db.RayWatcher.GroupSelect].iconside = value
-							ns.modules[db.RayWatcher.GroupSelect]:ApplyStyle()
+							--ns.modules[db.RayWatcher.GroupSelect]:ApplyStyle()
 						end,
 						get = function() return (db[db.RayWatcher.GroupSelect].iconside or "LEFT") end,
 						hidden = function(info) return db[db.RayWatcher.GroupSelect].mode ~= "BAR" end,

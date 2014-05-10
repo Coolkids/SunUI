@@ -211,7 +211,11 @@ do
 	L["启用脱离战斗隐藏"] = true
 	L["启用debuff显示"] = true
 	L["图标大小"] = true
-	
+	L["显示职业图标"] = true
+	L["显示仇恨"] = true
+	L["名字长度限制"] = true
+	L["显示生命值"] = true
+	L["显示法术名"] = true
 end
 --powerbar
 do

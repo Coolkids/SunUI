@@ -77,16 +77,18 @@ P["Chat"]={
 
 P["NamePlates"]={
 	enable = true,
-	CastBarWidth = 100,
-	HPWidth = 100,
+	HPWidth = 125,
 	Showdebuff = true,
 	HPHeight = 8,
-	CastBarIconSize = 18,
-	Fontsize = 10,
-	CastBarHeight = 6,
+	Fontsize = 9,
 	Combat = true,
 	NotCombat = false,
-	IconSize = 20,
+	IconSize = 15,
+	classicon = true,
+	enhancethreat = true,
+	nameabbrev = false,
+	health_value = true,
+	castbar_name = true,
 }
 
 P["PowerBar"]={

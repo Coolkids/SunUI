@@ -365,9 +365,9 @@ function watcherPrototype:TestMode(arg)
 					end
 					local icon
 					if subt == "itemCD" then
-						_, _, _, _, _, _, _, _, _, icon = GetItemInfo(i)
+						icon = select(10, GetItemInfo(i))
 					else
-						_, _, icon = GetSpellInfo(i)
+						icon = select(3, GetSpellInfo(i))
 					end
 					if icon then
 						self:UpdateButton(self.button[num], 1, icon, 9, 0, 0, i, "player", subt:upper())
