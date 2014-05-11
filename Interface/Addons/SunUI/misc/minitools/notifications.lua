@@ -418,9 +418,9 @@ function N:GetOptions()
 		playSounds = {
 			type = "toggle",
 			name = L["开启声音提示"],
-			disabled = function(info) return not self.db.Notification end,
+			disabled = function(info) return not self.db.playSounds end,
 			order = 2,
-			set = function(info, value) self.db.AutoSell = value
+			set = function(info, value) self.db.playSounds = value
 			end,
 		},
 	}
