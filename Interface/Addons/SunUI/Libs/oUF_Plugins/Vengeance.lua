@@ -31,12 +31,12 @@ local function valueChanged(self, event, unit)
 			if value == bar.value then return end
 
 			bar:SetMinMaxValues(0, bar.max)
-			bar:SetValue(siValue(value))
+			bar:SetValue(value)
 			bar.value = value
 			bar:Show()
 
 			if bar.Text then
-				bar.Text:SetText(value)
+				bar.Text:SetText(siValue(value))
 			end
 		end
 	elseif bar.showInfight and InCombatLockdown() then
