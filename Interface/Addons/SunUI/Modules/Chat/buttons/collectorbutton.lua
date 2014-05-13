@@ -19,7 +19,8 @@ function B:CreateMainButton()
 	
 	collectorButton:SetSize(15, 15)
 	collectorButton:SetPoint("TOPLEFT", ChatFrame1, "TOPRIGHT", 5, 0)
-
+	collectorButton:SetAlpha(0.3)
+	
 	collector:SetWidth(45)
 	collector:SetHeight(85)
 	collector:SetPoint("TOPLEFT", collectorButton, "BOTTOMLEFT", -5, -5)
@@ -67,11 +68,16 @@ function B:CreateMainButton()
 		end
 	end)
 	collectorButton:SetScript("OnEnter",  function(self)
-			GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
-			GameTooltip:AddLine(L["按钮集合"])
-			GameTooltip:Show()  
+		GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
+		GameTooltip:AddLine(L["按钮集合"])
+		GameTooltip:Show()  
+			
+		UIFrameFadeIn(collectorButton, 0.3, collector:GetAlpha(), 1)
 	end)
-	collectorButton:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
+	collectorButton:SetScript("OnLeave", function(self) 
+		GameTooltip:Hide() 
+		UIFrameFadeOut(collectorButton, 0.3, collector:GetAlpha(), 0.3)
+	end)
 	
 	A:Reskin(collectorButton)
 end

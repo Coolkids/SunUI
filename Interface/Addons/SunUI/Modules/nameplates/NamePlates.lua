@@ -635,7 +635,7 @@ local function SkinObjects(frame, nameFrame)
 	-- Create Health Text
 	if N.db.health_value == true then
 		hp.value = hp:CreateFontString(nil, "OVERLAY")
-		hp.value:SetFont(S["media"].font, S["media"].fontsize * (N.db.HPHeight / 16), "THINOUTLINE")
+		hp.value:SetFont(S["media"].font, N.db.Fontsize * (N.db.HPHeight / 10), "THINOUTLINE")
 		hp.value:SetShadowOffset(S.mult, -S.mult)
 		hp.value:SetPoint("RIGHT", hp, "RIGHT", 0, 0)
 		hp.value:SetTextColor(1, 1, 1)
@@ -1000,7 +1000,7 @@ function N:UpdateSet()
 			k.cb.name:SetFont(S["media"].font, N.db.Fontsize, "THINOUTLINE")
 		end
 		if N.db.health_value == true then
-			k.hp.value:SetFont(S["media"].font, N.db.Fontsize, "THINOUTLINE")
+			k.hp.value:SetFont(S["media"].font, N.db.Fontsize * (N.db.HPHeight / 10), "THINOUTLINE")
 		end
 	end
 end

@@ -4,27 +4,13 @@ local LOOT = S:NewModule("Loot", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0"
 local cfg = {
 	iconsize = 32, 					-- loot frame icon's size
 }
-local TitleText = "Items"
-if GetLocale() == "zhCN" then
-    TitleText = "战利品"
-end
-if GetLocale() == "zhTW" then
-    TitleText = "戰利品"
-end
-local L = {
-	fish = "钓鱼",
-	empty = "空",
-}
-local addon,title
-addon = CreateFrame("Button", "SunUI_Loot")
-title = CreateFrame("Button", nil, addon)
+
+local addon = CreateFrame("Button", "SunUI_Loot")
 addon.slots = {}
 	
 local lb = CreateFrame("Button", "Loot_D", addon, "UIPanelScrollDownButtonTemplate")		-- Link button
 local LDD = CreateFrame("Frame", "Loot_b", addon, "UIDropDownMenuTemplate")				-- Link dropdown menu frame
 
-
-local sq, ss, sn
 local OnEnter = function(self)
 	local slot = self:GetID()
 	if GetLootSlotType(slot) == 1 then
@@ -69,28 +55,28 @@ local function LDD_Initialize()
     
     --announce chanels
     info = {}
-    info.text = "  raid"
+    info.text = CHAT_MSG_RAID
     info.value = "raid"
     info.notCheckable = 1
     info.func = LDD_OnClick
     UIDropDownMenu_AddButton(info)
     
     info = {}
-    info.text = "  guild"
+    info.text = CHAT_MSG_GUILD
     info.value = "guild"
     info.notCheckable = 1
     info.func = LDD_OnClick
     UIDropDownMenu_AddButton(info)
 	
 	info = {}
-    info.text = "  party"
+    info.text = CHAT_MSG_PARTY
     info.value = "party"
     info.notCheckable = 1
     info.func = LDD_OnClick
     UIDropDownMenu_AddButton(info)
 
     info = {}
-    info.text = "  say"
+    info.text = CHAT_MSG_SAY
     info.value = "say"
     info.notCheckable = 1
     info.func = LDD_OnClick
@@ -99,8 +85,7 @@ local function LDD_Initialize()
     info = nil
 end
 
-local OnLeave = function(self)
-	local color = ITEM_QUALITY_COLORS[self.quality]
+local OnLeave = function(self)	
 	GameTooltip:Hide()
 	ResetCursor()
 end
@@ -109,15 +94,12 @@ local OnClick = function(self)
 	if(IsModifiedClick()) then
 		HandleModifiedItemClick(GetLootSlotLink(self:GetID()))
 	else
-		ss = self:GetID()
-		sq = self.quality
-		sn = self.name:GetText()
 		LootFrame.selectedLootButton = self
 		LootFrame.selectedTexture = self.icon:GetTexture()
-		LootFrame.selectedSlot = ss
-		LootFrame.selectedQuality = sq
-		LootFrame.selectedItemName = sn
-		LootSlot(ss)
+		LootFrame.selectedSlot = self:GetID()
+		LootFrame.selectedQuality = self.quality
+		LootFrame.selectedItemName = self.name:GetText()
+		LootSlot(self:GetID())
 	end
 end
 
@@ -130,7 +112,7 @@ local OnUpdate = function(self)
 end
 
 local createSlot = function(id)
-	local frame = CreateFrame("Button", 'm_LootSlot'..id, addon)
+	local frame = CreateFrame("Button", 'SunUI_LootSlot'..id, addon)
 	frame:SetPoint("LEFT", cfg.iconsize+8, 0)
 	frame:SetPoint("RIGHT", -8, 0)
 	frame:SetHeight(cfg.iconsize+2)
@@ -141,15 +123,20 @@ local createSlot = function(id)
 	frame:SetScript("OnUpdate", OnUpdate)
 	frame:SetFrameStrata("DIALOG")
 	
+	local A = S:GetModule("Skins")
+	A:ReskinFrame(frame)
+	
 	local iconFrame = CreateFrame("Button", nil, frame)
 	iconFrame:SetHeight(cfg.iconsize)
 	iconFrame:SetWidth(cfg.iconsize)
 	iconFrame:ClearAllPoints()
 	iconFrame:SetPoint("RIGHT", frame, "LEFT", -3,0)
+	
 	iconFrame:SetScript("OnEnter", function() OnEnter(frame) end)
 	iconFrame:SetScript("OnLeave", function() OnLeave(frame) end)
 	iconFrame:SetScript("OnClick", function() OnClick(frame) end)
 	iconFrame:SetScript("OnUpdate",function()  OnUpdate(frame) end)
+	
 	local icon = iconFrame:CreateTexture(nil, "BACKGROUND")
 	icon:SetAlpha(.8)
 	icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
@@ -185,44 +172,32 @@ local createSlot = function(id)
 	frame:SetPoint("TOP", addon, 8, (-5+cfg.iconsize)-(id*(cfg.iconsize+10))-10)
 	addon.slots[id] = frame
 	frame:CreateBorder()
+		
 	return frame
 end
 
 function LOOT:SetFrame()
 	local A = S:GetModule("Skins")
-	title.text = addon:CreateFontString(nil, "OVERLAY")
-	title.text:FontTemplate()
-	title.text:SetPoint("CENTER", title, "CENTER")
-	title:SetHeight(25)
-	title:SetPoint("BOTTOMLEFT", addon, "TOPLEFT", 0, 11)
-	title:SetPoint("BOTTOMRIGHT", addon, "TOPRIGHT", 0, 11)
-	title:CreateShadow("Background")
-	LootTargetPortrait=CreateFrame("PlayerModel",nil,addon)
-	LootTargetPortrait:SetPoint("TOPRIGHT",title,"TOPLEFT",-11,0)
-	LootTargetPortrait:SetHeight(50)
-	LootTargetPortrait:SetWidth(50)
-	LootTargetPortrait:CreateShadow("Background")
+
 	lb:SetFrameStrata("DIALOG")
 	LDD:SetFrameStrata("DIALOG")
 	
-	title.text:SetTextColor(S.myclasscolor.r, S.myclasscolor.g, S.myclasscolor.b)
-	title.text:SetJustifyH"CENTER"
 	addon:SetScript("OnMouseDown", function(self) self:StartMoving() end)
 	addon:SetScript("OnMouseUp", function(self) self:StopMovingOrSizing() end)
-	title:SetScript("OnMouseDown", function() addon:StartMoving() end)
-	title:SetScript("OnMouseUp", function() addon:StopMovingOrSizing() end)
+
 	addon:SetScript("OnHide", function(self)
 		StaticPopup_Hide"CONFIRM_LOOT_DISTRIBUTION"
 		CloseLoot()
 	end)
 	addon:SetMovable(true)
 	addon:RegisterForClicks"anyup"
-	title:SetMovable(true)
-	title:RegisterForClicks"anyup"
 	addon:SetParent(UIParent)
 	addon:SetUserPlaced(true)
-	title:SetUserPlaced(true)
-
+	
+	addon.text = S:CreateFS(addon)
+	addon.text:SetText(BUTTON_LAG_LOOT)
+	addon.text:SetPoint("TOPLEFT", addon, "TOPLEFT", 5, -5)
+	
 	addon:SetPoint("TOPLEFT", 0, -104)
 	addon:CreateShadow("Background")
 	addon:SetWidth(210)
@@ -235,7 +210,7 @@ function LOOT:SetFrame()
 	addon:SetClampRectInsets(0, 0, 14, 0)
 	addon:SetHitRectInsets(0, 0, -14, 0)
 	addon:SetToplevel(true)
-	title:SetToplevel(true)
+
 	lb:ClearAllPoints()
 	lb:SetWidth(20)
 	lb:SetHeight(14)
@@ -261,43 +236,21 @@ end
 
 addon.LOOT_CLOSED = function(self)
 	StaticPopup_Hide"LOOT_BIND"
-	S:FadeOutFrame(self, 0.3)
 	for _, v in pairs(self.slots) do
 		v:Hide()
 	end
 	lb:Hide()
+	self:Hide()
 end
 addon.LOOT_OPENED = function(self, event, autoloot)
 	self:Show()
-	UIFrameFadeIn(self, 0.3, 0, 1)
 	lb:Show()
 	if(not self:IsShown()) then
 		CloseLoot(not autoLoot)
 	end
-
+	
 	local items = GetNumLootItems()
-
-	if(IsFishingLoot()) then
-		title.text:SetText(L.fish)
-	elseif(not UnitIsFriend("player", "target") and UnitIsDead"target") then
-		title.text:SetText(UnitName("target"))
-	else
-		title.text:SetText(LOOT)
-	end
-	if(UnitExists("target") and not IsFishingLoot()) then
-		LootTargetPortrait:SetUnit("target")
-		LootTargetPortrait:SetCamera(0)
-	elseif IsFishingLoot() then
-		LootTargetPortrait:ClearModel()
-		LootTargetPortrait:SetUnit("player")
-		--LootTargetPortrait:SetModel("PARTICLES\\Lootfx.m2")
-		LootTargetPortrait:SetCamera(0)
-	else
-		LootTargetPortrait:ClearModel()
-		LootTargetPortrait:SetUnit("player")
-		LootTargetPortrait:SetCamera(0)
-		--LootTargetPortrait:SetModel("PARTICLES\\Lootfx.m2")
-	end
+	
 	-- Blizzard uses strings here
 	if(GetCVar("lootUnderMouse") == "1") then
 		local x, y = GetCursorPosition()
@@ -310,14 +263,13 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 		self:Raise()
 	end
 
-	local m = 0
 	if(items > 0) then
-		title.text:SetText(TitleText.." x "..items)
+		
 		for i=1, items do
 			local slot = addon.slots[i] or createSlot(i)
 			local texture, item, quantity, quality, locked = GetLootSlotInfo(i)
 			local color = ITEM_QUALITY_COLORS[quality or 1]
-
+			--local color = ITEM_QUALITY_COLORS[3]
 			if(quantity and quantity > 1) then
 				slot.count:SetText(quantity)
 				slot.count:Show()
@@ -326,16 +278,15 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 			end
 			if (quality and quality <= 1) then 
 				slot.overlay:SetBackdropBorderColor(0, 0, 0)
-				slot:SetBackdropBorderColor(0, 0, 0)
+				--slot:SetBackdropBorderColor(0, 0, 0)
 			else
 				slot.overlay:SetBackdropBorderColor(color.r , color.g, color.b)
-				slot:SetBackdropBorderColor(color.r or 0, color.g or 0, color.b or 0)
+				--slot:SetBackdropBorderColor(color.r or 0, color.g or 0, color.b or 0)
 			end
 			slot.quality = quality or 0
 			slot.name:SetText(item)
 			slot.name:SetTextColor(color.r or 0, color.g or 0, color.b or 0)
 			slot.icon:SetTexture(texture)
-			m = math.max(m, quality)
 
 			slot:Enable()
 			slot:Show()
@@ -355,8 +306,6 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 		slot:Show()
 	end
 
-	local color = ITEM_QUALITY_COLORS[m]
-	self:SetBackdropBorderColor(color.r, color.g, color.b, .8)
 	self:SetHeight(math.max((items*(cfg.iconsize+10))+27), 20)
 	self:SetWidth(210)
 	

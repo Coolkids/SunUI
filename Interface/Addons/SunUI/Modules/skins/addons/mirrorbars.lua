@@ -61,7 +61,9 @@ do
 	local OnUpdate = function(self, elapsed) 
 		if(self.paused) then return end 
 
-		self:SetValue(GetMirrorTimerProgress(self.type) / 1e3) 
+		self:SetValue(GetMirrorTimerProgress(self.type) / 1e3)
+		local value = self:GetValue()
+		self.text2:SetText(format("%ds", value))
 	end 
 
 	local Start = function(self, value, maxvalue, scale, paused, text) 
@@ -72,7 +74,7 @@ do
 		end 
 
 		self.text:SetText(text) 
-
+		self.text2:SetText("")
 		self:SetMinMaxValues(0, maxvalue / 1e3) 
 		self:SetValue(value / 1e3) 
 
@@ -90,7 +92,7 @@ do
 		frame:CreateShadow(0.5)
 
 		local text = frame:CreateFontString(nil, 'OVERLAY') 
-		text:SetFont(GameFontNormalSmall:GetFont(), 14, "THINOUTLINE") 
+		text:SetFont(S["media"].font, S["media"].fontsize, "THINOUTLINE") 
 		text:SetShadowOffset(1, -1) 
 		text:SetShadowColor(0, 0, 0, 1) 
 
@@ -101,7 +103,15 @@ do
 		text:SetPoint('RIGHT', frame) 
 		text:SetPoint('TOP', frame, 0, 2) 
 		text:SetPoint('BOTTOM', frame) 
-
+	
+		local text2 = frame:CreateFontString(nil, 'OVERLAY') 
+		text2:SetFont(S["media"].font, S["media"].fontsize, "THINOUTLINE") 
+		text2:SetShadowOffset(1, -1) 
+		text2:SetShadowColor(0, 0, 0, 1) 
+		text2:SetJustifyH'CENTER' 
+		text2:SetTextColor(1, 1, 1) 
+		text2:SetPoint("RIGHT", frame, "RIGHT", -10, 0) 
+		
 		frame:SetSize(settings.width, settings.height) 
 
 		frame:SetStatusBarTexture(S["media"].normal)
@@ -111,7 +121,8 @@ do
 	  
 		frame.type = type 
 		frame.text = text 
-
+		frame.text2 = text2
+		
 		frame.Start = Start 
 		frame.Stop = Stop 
 
@@ -150,8 +161,7 @@ function MB:MIRROR_TIMER_PAUSE(event, duration)
 end 
 local function SkinMirrorBar()
 	UIParent:UnregisterEvent("MIRROR_TIMER_START")
-	--MB:RegisterEvent("PLAYER_ENTERING_WORLD")
-	MB:PLAYER_ENTERING_WORLD()
+	MB:RegisterEvent("PLAYER_ENTERING_WORLD")
 	MB:RegisterEvent("MIRROR_TIMER_START")
 	MB:RegisterEvent("MIRROR_TIMER_STOP")
 	MB:RegisterEvent("MIRROR_TIMER_PAUSE")
