@@ -86,8 +86,8 @@ P["NamePlates"]={
 	IconSize = 15,
 	classicon = true,
 	enhancethreat = true,
-	nameabbrev = false,
 	health_value = true,
+	health_value_config = 2,
 	castbar_name = true,
 }
 

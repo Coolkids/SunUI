@@ -630,8 +630,8 @@ local UnitSpecific = {
 		if UF.db.castbarSeparate and (class == "MAGE" or class == "PRIEST" or class == "WARLOCK" or not UF.db.castbarSeparateOnlyCasters) then
 			Castbar:SetStatusBarTexture(S["media"].normal)
 			Castbar:SetStatusBarColor(S.myclasscolor.r, S.myclasscolor.g, S.myclasscolor.b)
-			Castbar:SetWidth(self:GetWidth())
-			Castbar:SetHeight(self:GetHeight())
+			Castbar:SetWidth(230)
+			Castbar:SetHeight(14)
 			Castbar:SetPoint("BOTTOM", "UIParent", "BOTTOM",0, 110) --玩家施法条
 			
 			S:CreateMover(Castbar, "PlayCastBarMover", L["玩家施法条"], true, nil, "ALL,UNITFRAMES")

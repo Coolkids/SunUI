@@ -106,20 +106,27 @@ function N:GetOptions()
 					name = L["显示仇恨"],
 					order = 11,
 				},
-				nameabbrev = {
-					type = "toggle",
-					name = L["名字长度限制"],
-					order = 12,
-				},
 				health_value = {
 					type = "toggle",
 					name = L["显示生命值"],
 					order = 13,
 				},
+				health_value_config = {
+					type = "select",
+					name = L["生命值显示模式"],
+					desc = L["生命值显示模式"],
+					order = 14,
+					values = {[1] = L["只显示数值"], [2] = L["只显示百分比"], [3] = L["都显示"]},
+					disabled = function(info) return not self.db.health_value end,
+					get = function() return self.db.health_value_config end,
+					set = function(_, value) 
+						self.db.health_value_config = value
+					end,
+				},
 				castbar_name = {
 					type = "toggle",
 					name = L["显示法术名"],
-					order = 14,
+					order = 15,
 				},
 			}
 		},
@@ -213,38 +220,6 @@ local DebuffWhiteList = {
 local DebuffBlackList = {
 	[GetSpellInfo(15407)] = true,
 }
-function N:UTF(string, i, dots)
-	if not string then return end
-	local bytes = string:len()
-	if bytes <= i then
-		return string
-	else
-		local len, pos = 0, 1
-		while (pos <= bytes) do
-			len = len + 1
-			local c = string:byte(pos)
-			if c > 0 and c <= 127 then
-				pos = pos + 1
-			elseif c >= 192 and c <= 223 then
-				pos = pos + 2
-			elseif c >= 224 and c <= 239 then
-				pos = pos + 3
-			elseif c >= 240 and c <= 247 then
-				pos = pos + 4
-			end
-			if len == i then break end
-		end
-		if len == i and pos <= bytes then
-			return string:sub(1, pos - 1)..(dots and "..." or "")
-		else
-			return string
-		end
-	end
-end
-local function Abbrev(name)
-	local newname = (string.len(name) > 18) and string.gsub(name, "%s?(.[\128-\191]*)%S+%s", "%1. ") or name
-	return N:UTF(newname, 18, false)
-end
 
 local function QueueObject(frame, object)
 	frame.queue = frame.queue or {}
@@ -579,11 +554,8 @@ local function UpdateObjects(frame)
 	SetVirtualBorder(frame.hp, unpack(S["media"].bordercolor))
 
 	-- Set the name text
-	if N.db.nameabbrev == true and N.db.Showdebuff ~= true then
-		frame.hp.name:SetText(Abbrev(frame.hp.oldname:GetText()))
-	else
-		frame.hp.name:SetText(frame.hp.oldname:GetText())
-	end
+	frame.hp.name:SetText(frame.hp.oldname:GetText())
+
 
 	-- Setup level text
 	local level, elite, mylevel = tonumber(frame.hp.oldlevel:GetText()), frame.hp.elite:IsShown(), UnitLevel("player")
@@ -815,7 +787,6 @@ end
 
 -- Create our blacklist for nameplates
 local function CheckBlacklist(frame, ...)
-	if N.db.nameabbrev == true then return end
 	if PlateBlacklist[frame.hp.name:GetText()] then
 		frame:SetScript("OnUpdate", function() end)
 		frame.hp:Hide()
@@ -845,7 +816,13 @@ local function ShowHealth(frame, ...)
 	local d = (valueHealth / maxHealth) * 100
 
 	if N.db.health_value == true then
-		frame.hp.value:SetText(S:ShortValue(valueHealth).." - "..(string.format("%d%%", math.floor((valueHealth / maxHealth) * 100))))
+		if N.db.health_value_config == 1 then
+			frame.hp.value:SetText(S:ShortValue(valueHealth))
+		elseif N.db.health_value_config == 2 then
+			frame.hp.value:SetText((string.format("%d%%", math.floor(d))))
+		elseif N.db.health_value_config == 3 then
+			frame.hp.value:SetText(S:ShortValue(valueHealth).." - "..(string.format("%d%%", math.floor(d))))
+		end
 	end
 
 	-- Setup frame shadow to change depending on enemy players health, also setup targetted unit to have white shadow

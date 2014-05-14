@@ -205,17 +205,18 @@ do
 	L["姓名板字体大小"] = true
 	L["姓名板血条高度"] = true
 	L["姓名板血条宽度"] = true
-	L["姓名板施法条图标大小"] = true
-	L["姓名板施法条高度"] = true
 	L["启用战斗显示"] = true
 	L["启用脱离战斗隐藏"] = true
 	L["启用debuff显示"] = true
 	L["图标大小"] = true
 	L["显示职业图标"] = true
 	L["显示仇恨"] = true
-	L["名字长度限制"] = true
 	L["显示生命值"] = true
 	L["显示法术名"] = true
+	L["生命值显示模式"] = true
+	L["只显示数值"] = true
+	L["只显示百分比"] = true
+	L["都显示"] = true
 end
 --powerbar
 do
