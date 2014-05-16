@@ -166,6 +166,18 @@ function UF:GetOptions()
 					order = 16,
 					min = 1, max = 100, step = 1,
 				},
+				castbarwidth = {
+					type = "range",
+					name = L["施法条宽度"],
+					order = 17,
+					min = 1, max = 400, step = 1,
+				},
+				castbarheight = {
+					type = "range",
+					name = L["施法条宽度"],
+					order = 18,
+					min = 1, max = 100, step = 1,
+				},
 			},
 		},
 		group3 = {

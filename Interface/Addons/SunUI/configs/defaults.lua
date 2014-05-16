@@ -159,7 +159,7 @@ P["UnitFrames"]={
 	num_player_debuffs = 8,
 	num_target_debuffs = 16,
 	num_target_buffs = 16,
-	num_boss_buffs = 5,
+	num_boss_buffs = 4,
 	num_arena_buffs = 8,
 	num_focus_debuffs = 4,
 	playerbuffsize = 26,
@@ -168,6 +168,8 @@ P["UnitFrames"]={
 	bossbuffsize = 26,
 	arenabuffsize = 26,
 	fader = false,
+	castbarwidth = 220,
+	castbarheight = 14,
 }
 
 P["InfoBar"]={

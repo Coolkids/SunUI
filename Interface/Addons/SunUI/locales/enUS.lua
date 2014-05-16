@@ -315,6 +315,8 @@ do
 	L["竞技场buff大小"] = true
 	L["头像自动隐藏"] = true
 	L["隐藏暴雪小队/团队"] = true
+	L["施法条高度"] = true
+	L["施法条宽度"] = true
 end
 --afk
 do

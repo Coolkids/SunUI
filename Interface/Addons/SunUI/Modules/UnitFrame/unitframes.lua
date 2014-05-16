@@ -630,8 +630,8 @@ local UnitSpecific = {
 		if UF.db.castbarSeparate and (class == "MAGE" or class == "PRIEST" or class == "WARLOCK" or not UF.db.castbarSeparateOnlyCasters) then
 			Castbar:SetStatusBarTexture(S["media"].normal)
 			Castbar:SetStatusBarColor(S.myclasscolor.r, S.myclasscolor.g, S.myclasscolor.b)
-			Castbar:SetWidth(230)
-			Castbar:SetHeight(14)
+			Castbar:SetWidth(UF.db.castbarwidth)
+			Castbar:SetHeight(UF.db.castbarheight)
 			Castbar:SetPoint("BOTTOM", "UIParent", "BOTTOM",0, 110) --玩家施法条
 			
 			S:CreateMover(Castbar, "PlayCastBarMover", L["玩家施法条"], true, nil, "ALL,UNITFRAMES")
@@ -640,7 +640,7 @@ local UnitSpecific = {
 			sf:SetVertexColor(.5, .5, .5, .8)
 			Castbar.SafeZone = sf
 			IconFrame:SetPoint("RIGHT", Castbar, "LEFT", -3, 0)
-			IconFrame:SetSize(22, 22)
+			IconFrame:SetSize(UF.db.castbarheight+8, UF.db.castbarheight+8)
 			
 			Castbar.Time = S:CreateFS(Castbar, 10, nil, nil, "THINOUTLINE")
 			Castbar.Time:SetPoint("RIGHT", Castbar, "RIGHT", -10, 0) --玩家施法条
@@ -1415,13 +1415,33 @@ local UnitSpecific = {
 		self.Buffs = Buffs
 
 		Buffs.PostUpdateIcon = PostUpdateIcon
+		--[[
+		local Debuffs = CreateFrame("Frame", nil, self)
+		Debuffs.initialAnchor = "TOPRIGHT"
+		Debuffs.onlyShowPlayer = true
+		Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -4)
+		Debuffs["growth-x"] = "LEFT"
+		Debuffs["growth-y"] = "DOWN"
+		Debuffs['spacing-x'] = 3
+		Debuffs['spacing-y'] = 3
+	
+		Debuffs:SetHeight(22)
+		Debuffs:SetWidth(UF.db.bossWidth - 24)
+		Debuffs.num = UF.db.num_boss_buffs
+		Debuffs.size = UF.db.bossbuffsize
 
+		self.Debuffs = Debuffs
+
+		Debuffs.PostUpdateIcon = PostUpdateIcon
+		]]
 		AltPowerBar:HookScript("OnShow", function()
 			Buffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -(5 + UF.db.altPowerHeight))
+			--Debuffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -(5 + UF.db.altPowerHeight))
 		end)
 
 		AltPowerBar:HookScript("OnHide", function()
 			Buffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -(3 + UF.db.altPowerHeight))
+			--Debuffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -(5 + UF.db.altPowerHeight))
 		end)
 	end,
 

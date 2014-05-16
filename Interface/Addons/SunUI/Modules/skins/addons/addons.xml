@@ -2,6 +2,7 @@
 	<Script file='ace3.lua'/>
 	<Script file='DBM.lua'/>
 	<Script file='NugRunning.lua'/>
+	<Script file='BubbleBobble.lua'/>
 	<Script file='mirrorbars.lua'/>
 	<Script file='lfg.lua'/>
 	<Script file='other.lua'/>
