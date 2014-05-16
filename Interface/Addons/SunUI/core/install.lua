@@ -136,9 +136,9 @@ function S:CreateInstallFrame()
 			}
 			DBM_SavedOptions["ShowWarningsInChat"] = false
 			DBM_SavedOptions["HideBossEmoteFrame"] = true
-			if pcall(oldDate) then
-			else
-				newDate()
+			local _, catch = pcall(newDate)
+			if catch then
+				oldDate()
 			end
 		end
 		--按钮

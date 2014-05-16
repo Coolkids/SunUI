@@ -63,12 +63,10 @@ local function UploadDBM()
 	DBM_SavedOptions["ShowWarningsInChat"] = false
 	DBM_SavedOptions["HideBossEmoteFrame"] = true
 	DBM_SavedOptions["DisableCinematics"] = true
-	if pcall(oldDate) then
-		
-	else
-		newDate()
+	local _, catch = pcall(newDate)
+	if catch then
+		oldDate()
 	end
-	
 end
 
 local function SkinDBM()
