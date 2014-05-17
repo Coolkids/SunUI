@@ -1,4 +1,4 @@
-local orig1 = GameTooltip:GetScript("OnTooltipSetItem")
+﻿local orig1 = GameTooltip:GetScript("OnTooltipSetItem")
 GameTooltip:SetScript("OnTooltipSetItem", function(self, ...)
 	if not ShoppingTooltip1:IsVisible() and not self:IsEquippedItem() then GameTooltip_ShowCompareItem(self, 1) end
 	if orig1 then return orig1(self, ...) end

@@ -295,7 +295,7 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 		local slot = addon.slots[1] or createSlot(1)
 		local color = ITEM_QUALITY_COLORS[0]
 
-		slot.name:SetText(L.empty)
+		slot.name:SetText(EMPTY)
 		slot.name:SetTextColor(color.r, color.g, color.b)
 		slot.icon:SetTexture[[Interface\Icons\INV_Misc_Herb_AncientLichen]]
 

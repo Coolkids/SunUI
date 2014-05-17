@@ -34,7 +34,8 @@ local CreateTip = function(link)
 	
 	local close = CreateFrame("Button", "ItemRefTooltip"..num.."CloseButton", tip)
 	close:SetScript("OnClick", function(self) HideUIPanel(tip) end)
-	S.ReskinClose(close)
+	local A = S:GetModule("Skins")
+	A:ReskinClose(close)
 
 	table.insert(UISpecialFrames, tip:GetName())
 
