@@ -181,16 +181,9 @@ function S:PLAYER_ENTERING_WORLD()
 	local GarbageCollector = CreateFrame("Frame")
 	GarbageCollector:RegisterAllEvents()
 	GarbageCollector:SetScript("OnEvent", function(self, event, addon)
-		eventcount = eventcount + 1
-		--if QuestDifficultyColors["trivial"].r ~= 0.50 then
-			--QuestDifficultyColors["trivial"].r = 0.50
-			--QuestDifficultyColors["trivial"].g = 0.50
-			--QuestDifficultyColors["trivial"].b = 0.50
-			--QuestDifficultyColors["trivial"].font = QuestDifficulty_Trivial
-		--end
 		if InCombatLockdown() then return end
-
-		if eventcount > 6000 then
+		eventcount = eventcount + 1
+		if eventcount > 6000 or event == "PLAYER_ENTERING_WORLD" or event == "PLAYER_REGEN_ENABLED"  then
 			collectgarbage("collect")
 			eventcount = 0
 		end
@@ -732,7 +725,7 @@ function S:ADDON_LOADED(event, addon)
 end
 S:RegisterEvent("ADDON_LOADED")
 
-function S:FadeOutFrame(p, t, show)  --隐藏
+function S:FadeOutFrame(p, t, show)  --隐藏  show为false时候为完全隐藏
 	if type(p) == "table" then 
 		if p:GetAlpha()>0 then
 			local fadeInfo = {}

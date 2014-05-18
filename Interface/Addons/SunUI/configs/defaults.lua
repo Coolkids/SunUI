@@ -140,6 +140,7 @@ P["UnitFrames"]={
 	targettarget = true, 					-- show target of target frame
 	enableArena = true,					-- enable arena/flag carrier frames
 	hideblz = true,
+	powerbar = false,
 	altPowerHeight = 1,
 	powerHeight = 1,
 	playerWidth = 229,

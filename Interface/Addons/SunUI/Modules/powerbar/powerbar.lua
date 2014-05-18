@@ -955,22 +955,58 @@ function PB:UpdateSize()
 		end
 	end
 end
-function PB:PLAYER_REGEN_DISABLED()
+
+local function FaderUpdate()
+	if
+		(UnitCastingInfo("player") or UnitChannelInfo("player")) or
+		UnitAffectingCombat("player") or
+		UnitExists("target")
+	then
+		PB:On_Show()
+	else
+		PB:On_Hide()
+	end
+end
+
+function PB:On_Show()
+	if Holder:IsShown() then return end
 	Holder:Show()
-	UIFrameFadeIn(Holder, 1, Holder:GetAlpha(), 1)
+	UIFrameFadeIn(Holder, 0.3, Holder:GetAlpha(), 1)
 end
-function PB:PLAYER_REGEN_ENABLED()
-	S:FadeOutFrame(Holder, 1)
+function PB:On_Hide()
+	if not Holder:IsShown() then return end
+	S:FadeOutFrame(Holder, 0.3)
 end
+
 function PB:UpdateFade()
 	if self.db.Fade then
-		self:RegisterEvent("PLAYER_REGEN_ENABLED")
-		self:RegisterEvent("PLAYER_REGEN_DISABLED")
-		self:PLAYER_REGEN_ENABLED()
+		self:RegisterEvent("PLAYER_REGEN_ENABLED", FaderUpdate)
+		self:RegisterEvent("PLAYER_REGEN_DISABLED", FaderUpdate)
+		self:RegisterEvent('UNIT_TARGET', FaderUpdate)
+		self:RegisterEvent('PLAYER_TARGET_CHANGED', FaderUpdate)
+
+		self:RegisterEvent('UNIT_SPELLCAST_START', FaderUpdate)
+		self:RegisterEvent('UNIT_SPELLCAST_FAILED', FaderUpdate)
+		self:RegisterEvent('UNIT_SPELLCAST_STOP', FaderUpdate)
+		self:RegisterEvent('UNIT_SPELLCAST_INTERRUPTED', FaderUpdate)
+		self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_START', FaderUpdate)
+		self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_INTERRUPTED', FaderUpdate)
+		self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_STOP', FaderUpdate)
+		self:On_Hide()
 	else
-		self:UnregisterEvent("PLAYER_REGEN_ENABLED")
-		self:UnregisterEvent("PLAYER_REGEN_DISABLED")
-		self:PLAYER_REGEN_DISABLED()
+		self:UnregisterEvent("PLAYER_REGEN_ENABLED", FaderUpdate)
+		self:UnregisterEvent("PLAYER_REGEN_DISABLED", FaderUpdate)
+		self:UnregisterEvent('UNIT_TARGET', FaderUpdate)
+		self:UnregisterEvent('PLAYER_TARGET_CHANGED', FaderUpdate)
+
+		self:UnregisterEvent('UNIT_SPELLCAST_START', FaderUpdate)
+		self:UnregisterEvent('UNIT_SPELLCAST_FAILED', FaderUpdate)
+		self:UnregisterEvent('UNIT_SPELLCAST_STOP', FaderUpdate)
+		self:UnregisterEvent('UNIT_SPELLCAST_INTERRUPTED', FaderUpdate)
+		self:UnregisterEvent('UNIT_SPELLCAST_CHANNEL_START', FaderUpdate)
+		self:UnregisterEvent('UNIT_SPELLCAST_CHANNEL_INTERRUPTED', FaderUpdate)
+		self:UnregisterEvent('UNIT_SPELLCAST_CHANNEL_STOP', FaderUpdate)
+		self:On_Show()
 	end
 end
 function PB:ACTIVE_TALENT_GROUP_CHANGED()
@@ -1020,14 +1056,7 @@ function PB:Initialize()
 	self:Shaman()
 	self:HealthPowerBar()
 	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-	if self.db.Fade then
-		self:RegisterEvent("PLAYER_ENTERING_WORLD", function()
-			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-			self:PLAYER_REGEN_ENABLED()
-		end)
-		self:RegisterEvent("PLAYER_REGEN_ENABLED")
-		self:RegisterEvent("PLAYER_REGEN_DISABLED")
-	end
+	self:UpdateFade()
 end
 
 S:RegisterModule(PB:GetName())

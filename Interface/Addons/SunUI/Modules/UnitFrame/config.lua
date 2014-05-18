@@ -64,6 +64,12 @@ function UF:GetOptions()
 					desc = L["隐藏暴雪小队/团队"],
 					order = 9,
 				},
+				powerbar = {
+					type = "toggle",
+					name = L["启用职业能量条"],
+					desc = L["启用职业能量条"],
+					order = 10,
+				},
 			},
 		},
 		group2 = {

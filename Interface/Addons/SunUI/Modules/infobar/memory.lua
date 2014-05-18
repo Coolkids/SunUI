@@ -53,7 +53,7 @@ function IB:CreateMemory()
 			cpuTable[i] = { i, select(2, GetAddOnInfo(i)), 0, IsAddOnLoaded(i) }
 		end
 	end
-
+	
 	local function UpdateMemory()
 		UpdateAddOnMemoryUsage()
 		local addOnMem = 0
@@ -141,14 +141,18 @@ function IB:CreateMemory()
 			if InCombatLockdown() then
 				int = 30
 			else
-				int = 10
+				int = 5
 			end
 		end
 		if int2 < 0 then
 			if enteredFrame then
 				OnEnter(self)
 			end
-			int2 = 1
+			if InCombatLockdown() then
+				int2 = 30
+			else
+				int2 = 5
+			end
 		end
 	end
 
@@ -163,6 +167,5 @@ function IB:CreateMemory()
 	stat:HookScript("OnUpdate", OnUpdate)
 	stat:HookScript("OnEnter", OnEnter)
 	stat:HookScript("OnLeave", OnLeave)
-
 	hooksecurefunc("collectgarbage", function() OnUpdate(Status, 10) end)
 end

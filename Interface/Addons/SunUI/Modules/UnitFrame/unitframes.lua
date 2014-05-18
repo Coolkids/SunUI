@@ -704,9 +704,8 @@ local UnitSpecific = {
 
 		self.Debuffs = Debuffs
 		Debuffs.PostUpdateIcon = PostUpdateIcon
-		local PB = S:GetModule("PowerBar")
 		
-		if class == "DEATHKNIGHT" and PB.db.Open == false then
+		if class == "DEATHKNIGHT" and UF.db.powerbar then
 			local runes = CreateFrame("Frame", nil, self)
 			runes:SetWidth(UF.db.playerWidth)
 			runes:SetHeight(2)
@@ -747,7 +746,7 @@ local UnitSpecific = {
 
 			self.Runes = runes
 			self.SpecialPowerBar = runes
-		elseif class == "DRUID" and PB.db.Open == false then
+		elseif class == "DRUID" and UF.db.powerbar then
 			local DruidMana, eclipseBar
 
 			local function moveDebuffAnchors()
@@ -895,7 +894,7 @@ local UnitSpecific = {
 
 			self.RunePower = rp
 			self.SpecialPowerBar = rp
-		elseif class == "MONK" and PB.db.Open == false then
+		elseif class == "MONK" and UF.db.powerbar then
 			local pulsating = false
 
 			local r, g, b = PowerBarColor["CHI"].r, PowerBarColor["CHI"].g, PowerBarColor["CHI"].b
@@ -963,7 +962,7 @@ local UnitSpecific = {
 
 			self.Stagger = staggerBar
 			self.SpecialPowerBar = staggerBar
-		elseif class == "PALADIN" and PB.db.Open == false then
+		elseif class == "PALADIN" and UF.db.powerbar then
 			local UpdateHoly = function(self, event, unit, powerType)
 				if(self.unit ~= unit or (powerType and powerType ~= 'HOLY_POWER')) then return end
 
@@ -1006,7 +1005,7 @@ local UnitSpecific = {
 
 			self.HolyPower = glow
 			glow.Override = UpdateHoly
-		elseif class == "PRIEST" and PB.db.Open == false then
+		elseif class == "PRIEST" and UF.db.powerbar then
 			local UpdateOrbs = function(self, event, unit, powerType)
 				if(self.unit ~= unit or (powerType and powerType ~= 'SHADOW_ORBS')) then return end
 
@@ -1049,7 +1048,7 @@ local UnitSpecific = {
 
 			self.ShadowOrbs = glow
 			glow.Override = UpdateOrbs
-		elseif class == "WARLOCK" and PB.db.Open == false then
+		elseif class == "WARLOCK" and UF.db.powerbar then
 			local bars = CreateFrame("Frame", nil, self)
 			bars:SetWidth(UF.db.playerWidth)
 			bars:SetHeight(2)
