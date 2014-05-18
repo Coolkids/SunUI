@@ -47,7 +47,7 @@ function SlashCmdList.LUAERROR(msg, editbox)
 	elseif (msg == 'off') then
 		SetCVar("scriptErrors", 0)
 	else
-		print("/luaerror on - /luaerror off")
+		S:Print("/luaerror on - /luaerror off")
 	end
 end
 SLASH_LUAERROR1 = '/luaerror'
@@ -61,10 +61,10 @@ SLASH_READYCHECK1 = '/rc'
 SlashCmdList["CHECKROLE"] = function() InitiateRolePoll() end
 SLASH_CHECKROLE1 = '/cr'
 
-SlashCmdList["DISABLE_ADDON"] = function(s) DisableAddOn(s) print(s, format("|cffd36b6b disabled")) end
+SlashCmdList["DISABLE_ADDON"] = function(s) DisableAddOn(s) S:Print(s, format("|cffd36b6b disabled")) end
 SLASH_DISABLE_ADDON1 = "/dis"   -- You need to reload UI after enabling/disabling addon
 
-SlashCmdList["ENABLE_ADDON"] = function(s) EnableAddOn(s) print(s, format("|cfff07100 enabled")) end
+SlashCmdList["ENABLE_ADDON"] = function(s) EnableAddOn(s) S:Print(s, format("|cfff07100 enabled")) end
 SLASH_ENABLE_ADDON1 = "/en"   -- You need to reload UI after enabling/disabling addon
 
 SlashCmdList["CLCE"] = function() CombatLogClearEntries() end
@@ -78,7 +78,7 @@ end
 SLASH_SPEC1 = "/ss"
 
 -- Quest tracker(by Tukz)
-local wf = WatchFrame
+local wf = _G["WatchFrame"]
 local wfmove = false 
 
 wf:SetMovable(true);
@@ -88,7 +88,7 @@ wf:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -35, -200)
 wf:SetUserPlaced(true)
 wf:SetSize(180, 500)
 wf.SetPoint = function() end
-wfg = CreateFrame("Frame")
+local wfg = CreateFrame("Frame", nil, UIParent)
 wfg:SetPoint("TOPLEFT", wf, "TOPLEFT")
 wfg:SetPoint("BOTTOMRIGHT", wf, "BOTTOMRIGHT")
 wfg.text = wfg:CreateFontString(nil, "OVERLAY")
@@ -103,7 +103,7 @@ local function WATCHFRAMELOCK()
 	if wfmove == false then
 		wfmove = true
 		wfg:Show()
-		print("|cffFFD700任务追踪框|r |cff228B22解锁|r")
+		S:Print("|cffFFD700任务追踪框|r |cff228B22解锁|r")
 		wf:EnableMouse(true);
 		wf:RegisterForDrag("LeftButton"); 
 		wf:SetScript("OnDragStart", wf.StartMoving); 
@@ -112,13 +112,13 @@ local function WATCHFRAMELOCK()
 		wf:EnableMouse(false);
 		wfmove = false
 		wfg:Hide()
-		print("|cffFFD700任务追踪框|r |cffFF0000锁定|r")
+		S:Print("|cffFFD700任务追踪框|r |cffFF0000锁定|r")
 	end
 end
 SLASH_WATCHFRAMELOCK1 = "/wf"
 SlashCmdList["WATCHFRAMELOCK"] = WATCHFRAMELOCK
 -- VS移动(by Coolkid)
-local vs = VehicleSeatIndicator
+local vs = _G["VehicleSeatIndicator"]
 local vsmove = false 
 
 vs:SetMovable(true);
@@ -129,7 +129,7 @@ vs:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -150, 250)
 
 vs:SetUserPlaced(true)
 vs.SetPoint = function() end
-vsg = CreateFrame("Frame")
+local vsg = CreateFrame("Frame", nil, UIParent)
 vsg:SetPoint("TOPLEFT", vs, "TOPLEFT")
 vsg:SetPoint("BOTTOMRIGHT", vs, "BOTTOMRIGHT")
 vsg.text = vsg:CreateFontString(nil, "OVERLAY")
@@ -144,7 +144,7 @@ local function VSLOCK()
 	if vsmove == false then
 		vsmove = true
 		vsg:Show()
-		print("|cffFFD700载具框|r |cff228B22解锁|r")
+		S:Print("|cffFFD700载具框|r |cff228B22解锁|r")
 		vs:EnableMouse(true);
 		vs:RegisterForDrag("LeftButton"); 
 		vs:SetScript("OnDragStart", vs.StartMoving); 
@@ -153,7 +153,7 @@ local function VSLOCK()
 		vs:EnableMouse(false);
 		vsmove = false
 		vsg:Hide()
-		print("|cffFFD700载具框|r |cffFF0000锁定|r")
+		S:Print("|cffFFD700载具框|r |cffFF0000锁定|r")
 	end
 end
 
@@ -165,7 +165,7 @@ StaticPopupDialogs["TESTUI"] = {
 	button1 = ACCEPT,
 	button2 = CANCEL,
 	OnAccept = function() 
-		print("测试弹窗系统")
+		S:Print("测试弹窗系统")
 	end,
 	timeout = 0,
 	whileDead = 1,
@@ -225,7 +225,7 @@ SLASH_CLEARGOLD1 = "/clearcc"
 local GroupDisband = function()
 	local pName = UnitName("player")
 	if UnitInRaid("player") then
-	SendChatMessage("Disbanding group.", "RAID")
+	SendChatMessage("解散团队", "RAID")
 		for i = 1, GetNumGroupMembers() do
 			local name, _, _, _, _, _, _, online = GetRaidRosterInfo(i)
 			if online and name ~= pName then
@@ -233,7 +233,7 @@ local GroupDisband = function()
 			end
 		end
 	else
-		SendChatMessage("Disbanding group.", "PARTY")
+		SendChatMessage("解散小队", "PARTY")
 		for i = MAX_PARTY_MEMBERS, 1, -1 do
 			if GetPartyMember(i) then
 				UninviteUnit(UnitName("party"..i))
@@ -243,7 +243,7 @@ local GroupDisband = function()
 	LeaveParty()
 end
 StaticPopupDialogs["DISBAND_RAID"] = {
-	text = "Do you really want to disband this group?",
+	text = "解散团队?",
 	button1 = YES,
 	button2 = NO,
 	OnAccept = GroupDisband,
@@ -256,24 +256,24 @@ SLASH_GROUPDISBAND1 = '/rd'
 -- convert group from raid to party
 SlashCmdList["RAIDTOPARTY"] = function()
 	if not IsInRaid() then
-		print("You are not in a raid.")
+		S:Print("你不是团队中")
 	elseif GetNumGroupMembers() <= MEMBERS_PER_RAID_GROUP and IsInRaid() then
 		ConvertToParty()
-		print("Converting raid into a party complete.")
+		S:Print("已经转换成小队")
 	else
-		print("Unable to convert the raid into a party.")
+		S:Print("未能转换成小队")
 	end
 end
 SLASH_RAIDTOPARTY1 = '/rtp'
 -- convert group from party to raid
 SlashCmdList["PARTYTORAID"] = function()
 	if IsInRaid() then
-		print("You are in a raid.")
+		S:Print("你在团队中")
 	elseif GetNumSubgroupMembers() > 0 and not IsInRaid() then
 		ConvertToRaid()
-		print("Converting party into a raid complete.")
+		S:Print("已经转成团队")
 	else
-		print("You are not in a party.")
+		S:Print("你不在小队中")
 	end
 end
 SLASH_PARTYTORAID1 = '/ptr'
