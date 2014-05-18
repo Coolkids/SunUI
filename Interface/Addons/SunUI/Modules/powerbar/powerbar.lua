@@ -498,6 +498,7 @@ function PB:CreateEclipse()
 	ebInd:FontTemplate(nil, nil, "OUTLINEMONOCHROME")
 	ebInd:SetPoint('CENTER', help, 'CENTER', 0, 0)
 	ebInd:SetJustifyV("MIDDLE")
+	eb.LunarBar.text = ebInd
 	eb:RegisterEvent("ECLIPSE_DIRECTION_CHANGE")
 	eb:RegisterEvent("PLAYER_TALENT_UPDATE")
 	eb:RegisterEvent("UNIT_POWER")
@@ -508,9 +509,9 @@ function PB:CreateEclipse()
 		if event == "ECLIPSE_DIRECTION_CHANGE" or event == "PLAYER_ENTERING_WORLD" then
 			local dir = GetEclipseDirection()
 			if dir=="sun" then
-				ebInd:SetText("|cff4478BC>>>|r")
+				ebInd:SetTextColor(68/255, 120/255, 188/255)
 			elseif dir=="moon" then
-				ebInd:SetText("|cffE5994C<<<|r")
+				ebInd:SetTextColor(229/255, 153/255, 76/255)
 			end
 		end
 		if event == "PLAYER_TALENT_UPDATE" or event == "UPDATE_SHAPESHIFT_FORM" or event == "PLAYER_REGEN_DISABLED" then
@@ -536,6 +537,7 @@ function PB:CreateEclipse()
 			if(self.LunarBar) then
 				self.LunarBar:SetMinMaxValues(-maxPower, maxPower)
 				self.LunarBar:SetValue(power)
+				self.LunarBar.text:SetText(power)
 			end
 
 			if(self.SolarBar) then
@@ -552,6 +554,7 @@ function PB:CreateEclipse()
 			if(self.LunarBar) then
 				self.LunarBar:SetMinMaxValues(-maxPower, maxPower)
 				self.LunarBar:SetValue(power)
+				self.LunarBar.text:SetText(power)
 			end
 
 			if(self.SolarBar) then

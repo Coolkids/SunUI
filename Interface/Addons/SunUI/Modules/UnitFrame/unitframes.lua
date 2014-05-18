@@ -635,7 +635,7 @@ local UnitSpecific = {
 			Castbar:SetPoint("BOTTOM", "UIParent", "BOTTOM",0, 110) --玩家施法条
 			
 			S:CreateMover(Castbar, "PlayCastBarMover", L["玩家施法条"], true, nil, "ALL,UNITFRAMES")
-			Castbar.Text:SetAllPoints(Castbar)
+			Castbar.Text:SetPoint("LEFT", 10, 0)
 			local sf = Castbar:CreateTexture(nil, "OVERLAY")
 			sf:SetVertexColor(.5, .5, .5, .8)
 			Castbar.SafeZone = sf
