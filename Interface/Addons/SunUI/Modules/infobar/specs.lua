@@ -23,7 +23,7 @@ function IB:CreateSpecs()
 	local function OnEvent(self)
 		local currentSpec = GetSpecialization()
 		local currentSpecName = currentSpec and select(2, GetSpecializationInfo(currentSpec)) or NONE..TALENTS
-		local _, currentSpecName, _, icon = GetSpecializationInfo(currentSpec)
+		local _, _, _, icon = GetSpecializationInfo(currentSpec)
         icon = icon and "|T"..icon..":12:12:0:0:64:64:5:59:5:59|t " or ""
 		if not GetSpecialization() then
 			stat.text:SetText(NONE..TALENTS) 
