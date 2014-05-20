@@ -271,7 +271,7 @@ do
 	L["显示模式"] = true
 	L["治疗模式"] = true
 	L["DPS/Tank模式"] = true
-	L["治疗模式下职业着色"] = true
+	L["职业着色"] = true
 	L["显示吸收"] = true
 	L["独立施法条"] = true
 	L["布衣职业施法条"] = true

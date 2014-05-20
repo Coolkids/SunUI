@@ -135,7 +135,7 @@ function IB:CreateTopHeader()
 	
 	local TopInfoMoveHeader = CreateFrame("Frame", "TopInfoMoveHeader", UIParent)
 	TopInfoMoveHeader:SetSize(80, 15)
-	TopInfoMoveHeader:SetPoint("TOPLEFT", "Minimap", "TOPRIGHT", 20, 3)
+	TopInfoMoveHeader:SetPoint("TOPLEFT", "Minimap", "TOPRIGHT", 20, 13)
 	S:CreateMover(TopInfoMoveHeader, "TopInfoMoveHeaderMover", L["信息条1"], true, nil, "ALL,GENERAL")
 	
 	if self.db.topback then self:CreateTopBack() end

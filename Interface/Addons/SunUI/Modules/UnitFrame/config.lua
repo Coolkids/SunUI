@@ -18,8 +18,8 @@ function UF:GetOptions()
 				},
 				healerClasscolours = {
 					type = "toggle",
-					name = L["治疗模式下职业着色"],
-					desc = L["治疗模式下职业着色"],
+					name = L["职业着色"],
+					desc = L["职业着色"],
 					order = 2,
 				},
 				absorb = {
