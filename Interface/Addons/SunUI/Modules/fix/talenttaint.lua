@@ -178,6 +178,19 @@ end
 
 function B:ADDON_LOADED(event, addon)
 	 if(addon=="Blizzard_TalentUI")then
+		StaticPopupDialogs["CONFIRM_UNLEARN_AND_SWITCH_TALENT"] = {
+			text = "请使用鼠标右键来移除天赋",
+			button1 = YES,
+			OnAccept = function (self)
+			end,
+			hideOnEscape = 1,
+			timeout = 0,
+			exclusive = 1,
+		}
+		--StaticPopupDialogs["CONFIRM_UNLEARN_AND_SWITCH_TALENT"].OnShow = function() end
+		
+		--StaticPopupDialogs["CONFIRM_UNLEARN_AND_SWITCH_TALENT"].OnAccept = function() S:Print("请使用鼠标右键来移除天赋") end
+		
 		self:UnregisterEvent("ADDON_LOADED")
 		self:RawHook("PlayerTalentFrame_Toggle", true)
 		 for i=1, 10 do

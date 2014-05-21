@@ -69,7 +69,7 @@ types = {
 	rareelite = " |cff9933FAR|r|cffFFFF00+|r ",
 }
 
-function GameTooltip_UnitColor(unit)
+local function GameTooltip_UnitColor(unit)
 	local r, g, b = 1, 1, 1
 	if UnitPlayerControlled(unit) then
 		if UnitCanAttack(unit, "player") then
