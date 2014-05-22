@@ -46,14 +46,7 @@ elseif (GetLocale() == "zhTW") then
 	L.INFO_DURABILITY_TIP7 = "韌性"
 	L.INFO_DURABILITY_TIP = "點擊發送用戶狀態報告"
 end
-local upgradeTable = {
-	["1"] = 8, ["373"] = 4, ["374"] = 8, ["375"] = 4, ["376"] = 4, ["377"] = 4,
-	["379"] = 4, ["380"] = 4, ["446"] = 4, ["447"] = 8, ["452"] = 8, ["454"] = 4,
-	["455"] = 8, ["457"] = 8, ["459"] = 4, ["460"] = 8, ["461"] = 12, ["462"] = 16,
-	["466"] = 4, ["467"] = 8, ["469"] = 4, ["470"] = 8, ["471"] = 12, ["472"] = 16,
-	["477"] = 4, ["478"] = 8, ["480"] = 8, ["492"] = 4, ["493"] = 8, ["495"] = 4,
-	["496"] = 8, ["497"] = 12, ["498"] = 16
-}
+
 --CH.L = L
 --状态报告
 local MyData = {};
@@ -197,13 +190,7 @@ local function GetAiL(unit)
 
 		if slot ~= nil then
 			itn = itn + 1
-			level = select(4, GetItemInfo(slot))
-			if level and level >= 458 then
-				local upgradeId = slot:match(":(%d+)\124h%[")
-				if (upgradeId and upgradeTable[upgradeId]) then
-					level = level + upgradeTable[upgradeId];
-				end
-			end
+			level = S:GetItemUpgradeLevel(slot)
 			total = total + level
 		end
 	end

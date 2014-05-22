@@ -56,26 +56,6 @@ function N:GetOptions()
 						self:UpdateSet()
 					end,
 				},			
-				Combat = {
-					type = "toggle",
-					name = L["启用战斗显示"],
-					order = 6,
-					get = function() return self.db.Combat end,
-					set = function(_, value) 
-						self.db.Combat = value
-						self:UpdateSet2()
-					end,
-				},
-				NotCombat = {
-					type = "toggle",
-					name = L["启用脱离战斗隐藏"],
-					order = 7,
-					get = function() return self.db.NotCombat end,
-					set = function(_, value) 
-						self.db.NotCombat = value 
-						self:UpdateSet2()
-					end,
-				},
 				Showdebuff = {
 					type = "toggle",
 					name = L["启用debuff显示"],
@@ -278,13 +258,6 @@ local function CreateVirtualFrame(frame, point)
 		frame.backdrop:SetFrameLevel(0)
 	end
 	
-end
-
-local function SetVirtualBorder(frame, r, g, b)
-	--frame.bordertop:SetTexture(r, g, b)
-	--frame.borderbottom:SetTexture(r, g, b)
-	--frame.borderleft:SetTexture(r, g, b)
-	--frame.borderright:SetTexture(r, g, b)
 end
 
 -- Create aura icons
@@ -551,7 +524,6 @@ local function UpdateObjects(frame)
 	-- Colorize Plate
 	Colorize(frame)
 	frame.hp.rcolor, frame.hp.gcolor, frame.hp.bcolor = frame.hp:GetStatusBarColor()
-	SetVirtualBorder(frame.hp, unpack(S["media"].bordercolor))
 
 	-- Set the name text
 	frame.hp.name:SetText(frame.hp.oldname:GetText())
@@ -742,16 +714,7 @@ local function UpdateThreat(frame, elapsed)
 	if frame.isClass or frame.isTapped then return end
 
 	if N.db.enhancethreat ~= true then
-		if frame.threat:IsShown() then
-			local _, val = frame.threat:GetVertexColor()
-			if val > 0.7 then
-				SetVirtualBorder(frame.hp, transitionR, transitionG, transitionB)
-			else
-				SetVirtualBorder(frame.hp, badR, badG, badB)
-			end
-		else
-			SetVirtualBorder(frame.hp, unpack(S["media"].bordercolor))
-		end
+
 	else
 		if not frame.threat:IsShown() then
 			if InCombatLockdown() and frame.isFriendly ~= true then
@@ -823,19 +786,6 @@ local function ShowHealth(frame, ...)
 		elseif N.db.health_value_config == 3 then
 			frame.hp.value:SetText(S:ShortValue(valueHealth).." - "..(string.format("%d%%", math.floor(d))))
 		end
-	end
-
-	-- Setup frame shadow to change depending on enemy players health, also setup targetted unit to have white shadow
-	if frame.isClass == true or frame.isFriendly == true then
-		if d <= 50 and d >= 20 then
-			SetVirtualBorder(frame.hp, 1, 1, 0)
-		elseif d < 20 then
-			SetVirtualBorder(frame.hp, 1, 0, 0)
-		else
-			SetVirtualBorder(frame.hp, unpack(S["media"].bordercolor))
-		end
-	elseif (frame.isClass ~= true and frame.isFriendly ~= true) and N.db.enhancethreat == true then
-		SetVirtualBorder(frame.hp, unpack(S["media"].bordercolor))
 	end
 
 	if GetUnitName("target") and frame:GetParent():GetAlpha() == 1 then
@@ -938,16 +888,6 @@ function N:Initialize()
 	if N.db.Showdebuff then
 		self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	end
-	if self.db.Combat then
-		self:RegisterEvent("PLAYER_REGEN_DISABLED", function()
-			SetCVar("nameplateShowEnemies", 1)
-		end)	
-	end
-	if self.db.NotCombat then
-		self:RegisterEvent("PLAYER_REGEN_ENABLED", function()
-			SetCVar("nameplateShowEnemies", 0)
-		end)
-	end
 	
 	SetCVar("bloatthreat",0)
 	SetCVar("bloattest",0)
@@ -981,21 +921,5 @@ function N:UpdateSet()
 		end
 	end
 end
-function N:UpdateSet2()
-	if self.db.Combat then
-		N:RegisterEvent("PLAYER_REGEN_DISABLED", function()
-			SetCVar("nameplateShowEnemies", 1)
-		end)
-	else
-		N:UnregisterEvent("PLAYER_REGEN_DISABLED")
-	end
-	if self.db.NotCombat then
-		N:RegisterEvent("PLAYER_REGEN_ENABLED", function()
-			SetCVar("nameplateShowEnemies", 0)
-		end)
-	else
-		N:UnregisterEvent("PLAYER_REGEN_ENABLED")
-	end
 
-end
 S:RegisterModule(N:GetName())

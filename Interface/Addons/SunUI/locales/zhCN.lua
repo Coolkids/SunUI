@@ -205,8 +205,6 @@ do
 	L["姓名板字体大小"] = true
 	L["姓名板血条高度"] = true
 	L["姓名板血条宽度"] = true
-	L["启用战斗显示"] = true
-	L["启用脱离战斗隐藏"] = true
 	L["启用debuff显示"] = true
 	L["图标大小"] = true
 	L["显示职业图标"] = true

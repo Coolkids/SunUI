@@ -16,7 +16,7 @@ S.HiddenFrame:Hide()
 local AddonNotSupported = {}
 local demoFrame
 
-local ItemUpgrade = setmetatable ({
+S.ItemUpgrade = setmetatable ({
 	[1]   = 8,
 	[373] = 4,
 	[374] = 8,
@@ -60,7 +60,11 @@ local ItemUpgrade = setmetatable ({
 	[495] = 4,
 	[496] = 8,
 	[497] = 12,
-	[498] = 16
+	[498] = 16,
+	[504] = 12,
+	[505] = 16,
+	[506] = 20,
+	[507] = 24, 
 },{__index=function() return 0 end})
 
 function S.dummy()
@@ -114,7 +118,7 @@ function S:Scale(x)
 	return (self.mult*math.floor(x/self.mult+.5))
 end
 
-function DoSkill(name)
+function S:DoSkill(name)
 	for i=1,GetNumTradeSkills()do
 		local skillName,skillType,numAvailable=GetTradeSkillInfo(i)
 		if skillName and skillName:find(name)and numAvailable>0 then
@@ -149,7 +153,7 @@ function S:GetItemUpgradeLevel(iLink)
 		local _, _, itemRarity, itemLevel, _, _, _, _, itemEquip = GetItemInfo(iLink)
 		local code = string.match(iLink, ":(%d+)|h")
 		if not itemLevel then return 0 end
-		return itemLevel + ItemUpgrade[tonumber(code)]
+		return itemLevel + self.ItemUpgrade[tonumber(code)], itemEquip
 	end
 end
 

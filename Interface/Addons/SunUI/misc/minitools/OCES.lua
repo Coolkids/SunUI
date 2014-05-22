@@ -3,6 +3,7 @@ local OCE = S:GetModule("MiniTools")
 local TEXT = "Scroll" --button text
 local VZ = GetSpellInfo(7411)
 local loc = GetLocale()
+local upgrades = S.ItemUpgrade
 if loc == "deDE" then
 	TEXT = "Rolle"
 elseif loc == "frFR" then
@@ -21,14 +22,6 @@ local slots = {
 	"HeadSlot", "NeckSlot", "ShoulderSlot", "BackSlot", "ChestSlot", "ShirtSlot", "TabardSlot",
 	"WristSlot", "MainHandSlot", "SecondaryHandSlot", "HandsSlot", "WaistSlot",
 	"LegsSlot", "FeetSlot", "Finger0Slot", "Finger1Slot", "Trinket0Slot", "Trinket1Slot"
-}
-local upgrades = {
-	["1"] = 8, ["373"] = 4, ["374"] = 8, ["375"] = 4, ["376"] = 4, ["377"] = 4,
-	["379"] = 4, ["380"] = 4, ["446"] = 4, ["447"] = 8, ["452"] = 8, ["454"] = 4,
-	["455"] = 8, ["457"] = 8, ["459"] = 4, ["460"] = 8, ["461"] = 12, ["462"] = 16,
-	["466"] = 4, ["467"] = 8, ["469"] = 4, ["470"] = 8, ["471"] = 12, ["472"] = 16,
-	["477"] = 4, ["478"] = 8, ["480"] = 8, ["492"] = 4, ["493"] = 8, ["495"] = 4,
-	["496"] = 8, ["497"] = 12, ["498"] = 16
 }
 local function CreateButtonsText(frame)
 	for _, slot in pairs(slots) do
@@ -59,7 +52,7 @@ local function UpdateButtonsText(frame)
 			local oldilevel = text:GetText()
 			local ilevel = select(4, GetItemInfo(item))
 			local heirloom = select(3, GetItemInfo(item))
-			local upgrade = item:match(":(%d+)\124h%[")
+			local upgrade = tonumber(item:match(":(%d+)\124h%["))
 
 			if ilevel then
 				if ilevel ~= oldilevel then

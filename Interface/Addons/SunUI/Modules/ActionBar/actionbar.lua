@@ -686,7 +686,9 @@ function AB:UpdateSpace()
 		end
 	end
 end
-
+local function initShowGrid()
+	ShowGrid(nil, "ALWAYS_SHOW_MULTIBARS_TEXT", nil)
+end
 function AB:Initialize()
 	self:blizzHider()
 	self:CreateBar1()
@@ -704,14 +706,11 @@ function AB:Initialize()
 	self:CreateCooldown()
 	self:initCooldownFlash()
 	self:initStyle()
-	
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", initShowGrid)
 	self:RegisterEvent("CVAR_UPDATE", ShowGrid)
 	self:RegisterEvent("LOSS_OF_CONTROL_ADDED", HideLossCD)
 	self:RegisterEvent("LOSS_OF_CONTROL_UPDATE", HideLossCD)
 	self:RegisterEvent("ADDON_LOADED")
-	
-	ShowGrid(nil, "ALWAYS_SHOW_MULTIBARS_TEXT", nil)
-	
 end
 
 S:RegisterModule(AB:GetName())
