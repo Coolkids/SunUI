@@ -23,7 +23,7 @@ function IB:CreateSpecs()
 	local function OnEvent(self)
 		local currentSpec = GetSpecialization()
 		local currentSpecName = currentSpec and select(2, GetSpecializationInfo(currentSpec)) or NONE..TALENTS
-		local _, _, _, icon = GetSpecializationInfo(currentSpec)
+		local _, _, _, icon = currentSpec and GetSpecializationInfo(currentSpec) or ""
         icon = icon and "|T"..icon..":12:12:0:0:64:64:5:59:5:59|t " or ""
 		if not GetSpecialization() then
 			stat.text:SetText(NONE..TALENTS) 
@@ -68,7 +68,7 @@ function IB:CreateSpecs()
 		if GetNumSpecGroups() == 1 then
 			local currentSpec = GetSpecialization()
 			local currentSpecName = currentSpec and select(2, GetSpecializationInfo(majorTree1)) or NONE..TALENTS
-			local _, currentSpecName, _, icon = GetSpecializationInfo(majorTree1)
+			local _, _, _, icon = currentSpec and GetSpecializationInfo(currentSpec) or ""
 			icon = icon and "|T"..icon..":12:12:0:0:64:64:5:59:5:59|t " or ""
 			GameTooltip:AddLine(icon.."|cff00FF00* " ..currentSpecName.. "|r",1,1,1)
 			for i = 1, #spec1 do
@@ -84,7 +84,7 @@ function IB:CreateSpecs()
 			end
 			if majorTree2 then
 				local currentSpecName2 = select(2, GetSpecializationInfo(majorTree2)) or NONE..TALENTS
-				local _, currentSpecName2, _, icon2 = GetSpecializationInfo(majorTree2)
+				local _, _, _, icon2 = GetSpecializationInfo(majorTree2)
 				icon2 = icon2 and "|T"..icon2..":12:12:0:0:64:64:5:59:5:59|t " or ""
 				GameTooltip:AddLine("|cff00FF00"..(c == 2 and "* " or "   ") .. "|r" .. icon2..currentSpecName2..": ",1,1,1)
 			else
