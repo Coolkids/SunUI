@@ -254,6 +254,8 @@ function UF:hideBlizzframes()
 		_G[pet]:SetParent(S.HiddenFrame)
 		_G[pet.."HealthBar"]:UnregisterAllEvents()
 	end
+	
+	CompactUnitFrame_UpdateVisible = function() end
 end
 --[[ Debuff highlight ]]
 
@@ -612,7 +614,7 @@ local UnitSpecific = {
 		Castbar.Width = self:GetWidth()
 		Spark:SetHeight(self.Health:GetHeight())
 		Castbar.Text = S:CreateFS(Castbar, nil, nil, nil, "THINOUTLINE")
-		Castbar.Text:SetDrawLayer("ARTWORK")
+		--Castbar.Text:SetDrawLayer("ARTWORK")
 
 		local IconFrame = CreateFrame("Frame", nil, Castbar)
 

@@ -138,12 +138,13 @@ function PB:CreateShadowOrbs()
 	ShadowOrbs:SetSize(self.db.Width, self.db.Height)
 	ShadowOrbs:SetPoint("CENTER", Holder)
 	tinsert(mainframe, ShadowOrbs)
-	local maxShadowOrbs = UnitPowerMax('player', SPELL_POWER_SHADOW_ORBS)
+	local maxShadowOrbs = 3
+	--local maxShadowOrbs = UnitPowerMax('player', SPELL_POWER_SHADOW_ORBS) = 3
 	--print(maxShadowOrbs)
-	for i = 1,3 do  --maxShadowOrbs
+	for i = 1,maxShadowOrbs do  --maxShadowOrbs
 		ShadowOrbs[i] = CreateFrame("StatusBar", nil, ShadowOrbs)
 		tinsert(threeframe, ShadowOrbs[i])
-		ShadowOrbs[i]:SetSize((self.db.Width-space*(3-1))/3, self.db.Height)
+		ShadowOrbs[i]:SetSize((self.db.Width-space*(maxShadowOrbs-1))/maxShadowOrbs, self.db.Height)
 		ShadowOrbs[i]:SetStatusBarTexture(S["media"].normal)
 		ShadowOrbs[i]:SetStatusBarColor(.86,.22,1)
 		ShadowOrbs[i]:CreateShadow()
@@ -186,9 +187,10 @@ function PB:CreateMonkBar()
 	chibar:SetSize(self.db.Width, self.db.Height)
 	chibar:SetPoint("CENTER", Holder)
 	tinsert(mainframe, chibar)
-	for i=1,5 do
+	local maxChi = 5
+	for i=1,maxChi do
 		chibar[i] = CreateFrame("StatusBar",nil,chibar)
-		chibar[i]:SetSize((self.db.Width-space*(5-1))/5, self.db.Height)
+		chibar[i]:SetSize((self.db.Width-space*(maxChi-1))/maxChi, self.db.Height)
 		tinsert(fiveframe, chibar[i])
 		chibar[i]:SetStatusBarTexture(S["media"].normal)
 		chibar[i]:SetStatusBarColor(0.0, 1.00 , 0.59)
@@ -209,14 +211,14 @@ function PB:CreateMonkBar()
 			local chimax = UnitPowerMax("player",SPELL_POWER_CHI)
 			if chinum ~= chimax then
 				if chimax == 4 then
-					chibar[5]:Hide()
+					chibar[maxChi]:Hide()
 					for i = 1,4 do
 						chibar[i]:SetWidth((PB.db.Width-space*(4-1))/4)
 					end
-				elseif chimax == 5 then
-					chibar[5]:Show()
-					for i = 1,5 do
-						chibar[i]:SetWidth((PB.db.Width-space*(5-1))/5)
+				elseif chimax == maxChi then
+					chibar[maxChi]:Show()
+					for i = 1,maxChi do
+						chibar[i]:SetWidth((PB.db.Width-space*(maxChi-1))/maxChi)
 					end
 				end
 			end
@@ -233,14 +235,14 @@ function PB:CreateMonkBar()
 		local chimax = UnitPowerMax("player",SPELL_POWER_CHI)
 		if chinum ~= chimax then
 			if chimax == 4 then
-				chibar[5]:Hide()
+				chibar[maxChi]:Hide()
 				for i = 1,4 do
 					chibar[i]:SetWidth((PB.db.Width-space*(4-1))/4)
 				end
-			elseif chimax == 5 then
-				chibar[5]:Show()
-				for i = 1,5 do
-					chibar[i]:SetWidth((PB.db.Width-space*(5-1))/5)
+			elseif chimax == maxChi then
+				chibar[maxChi]:Show()
+				for i = 1,maxChi do
+					chibar[i]:SetWidth((PB.db.Width-space*(maxChi-1))/maxChi)
 				end
 			end
 		end
@@ -1043,6 +1045,10 @@ function PB:ACTIVE_TALENT_GROUP_CHANGED()
 		MageBars:RegisterEvent("UNIT_AURA")
 	end
 end
+
+function PB:PLAYER_ENTERING_WORLD()
+	self:ACTIVE_TALENT_GROUP_CHANGED()
+end
 function PB:Initialize()
 	
 	if not self.db.Open then Holder = nil return end
@@ -1059,6 +1065,7 @@ function PB:Initialize()
 	self:Shaman()
 	self:HealthPowerBar()
 	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:UpdateFade()
 end
 
