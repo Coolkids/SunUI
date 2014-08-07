@@ -178,7 +178,9 @@ function S:PLAYER_ENTERING_WORLD()
 	Advanced_UseUIScale:Kill()
 	SetCVar("useUiScale", 1)
 	SetCVar("uiScale", S.global.general.uiscale)
-	DEFAULT_CHAT_FRAME:AddMessage("欢迎使用SunUI,更新地址http://git.oschina.net/Coolkid/SunUI")
+	DEFAULT_CHAT_FRAME:AddMessage("欢迎使用SunUI")
+	DEFAULT_CHAT_FRAME:AddMessage("有问题可以加QQ群:180175370")
+	DEFAULT_CHAT_FRAME:AddMessage("永久更新地址http://git.oschina.net/Coolkid/SunUI")
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD" )
 
 	local eventcount = 0
