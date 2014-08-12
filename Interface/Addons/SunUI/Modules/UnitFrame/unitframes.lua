@@ -536,6 +536,8 @@ local Shared = function(self, unit, isSingle)
 			self:SetSize(UF.db.targetWidth, UF.db.targetHeight)
 		elseif unit == "targettarget" then
 			self:SetSize(UF.db.targettargetWidth, UF.db.targettargetHeight)
+		elseif unit == "focustarget" then
+			self:SetSize(UF.db.focusTargetWidth, UF.db.focusTargetHeight)
 		elseif unit:find("arena%d") then
 			self:SetSize(UF.db.arenaWidth, UF.db.arenaHeight)
 		elseif unit == "focus" then
@@ -1304,7 +1306,42 @@ local UnitSpecific = {
 
 		Debuffs.PostUpdateIcon = PostUpdateIcon
 	end,
+	
+	focustarget = function(self, ...)
+		Shared(self, ...)
 
+		local Health = self.Health
+		local Power = self.Power
+		local Castbar = self.Castbar
+		local Spark = Castbar.Spark
+
+		Health:SetHeight(UF.db.focusTargetHeight - UF.db.powerHeight - 1)
+		
+		local HealthPoints = S:CreateFS(Health, 10, "LEFT", nil, "THINOUTLINE")
+		HealthPoints:SetPoint("BOTTOMLEFT", Health, "TOPLEFT", 0, 2)
+		self:Tag(HealthPoints, '[dead][offline][sunuf:health]')
+		Health.value = HealthPoints
+
+		local PowerPoints = S:CreateFS(Power, 10, nil, nil, "THINOUTLINE")
+		PowerPoints:SetPoint("BOTTOMLEFT", Health.value, "BOTTOMRIGHT", 3, 0)
+		self:Tag(PowerPoints, '[sunuf:pp]')
+		Power.value = PowerPoints
+			
+		local Name = S:CreateFS(self, 10, nil, nil, "THINOUTLINE")
+		Name:SetPoint("BOTTOMLEFT", Power.value, "BOTTOMRIGHT")
+		Name:SetPoint("RIGHT", self)
+		Name:SetJustifyH"RIGHT"
+		Name:SetTextColor(1, 1, 1)
+
+		self:Tag(Name, '[name]')
+		self.Name = Name
+		
+		Castbar:SetAllPoints(Health)
+		Castbar.Width = self:GetWidth()
+
+		Spark:SetHeight(Health:GetHeight())
+	end,
+	
 	targettarget = function(self, ...)
 		Shared(self, ...)
 
@@ -1734,7 +1771,7 @@ function UF:initLayout()
 	
 	oUF:Factory(function(self)
 		
-		local player, target, focus, pet
+		local player, target, focus, pet, focustarget
 		
 		player = spawnHelper(self, 'player', unpack({"BOTTOM", "UIParent", "BOTTOM", -175, 172}))
 		S:CreateMover(player, "PlayFrameMover", L["玩家"], true, nil, "ALL,UNITFRAMES")
@@ -1745,6 +1782,9 @@ function UF:initLayout()
 		focus = spawnHelper(self, 'focus', "BOTTOMRIGHT", player, "TOPRIGHT", 0, S["media"].fontsize + 7)
 		S:CreateMover(focus, "FocusFrameMover", L["焦点"], true, nil, "ALL,UNITFRAMES")
 		
+		focustarget = spawnHelper(self, 'focustarget', "TOPLEFT", focus, "TOPRIGHT", 4, 0)
+		S:CreateMover(focustarget, "FocusTargetFrameMover", L["焦点"]..L["目标"], true, nil, "ALL,UNITFRAMES")
+		
 		pet = spawnHelper(self, 'pet', "BOTTOMLEFT", player, "TOPLEFT", 0, S["media"].fontsize + 7)
 		S:CreateMover(pet, "PetFrameMover", L["宠物"], true, nil, "ALL,UNITFRAMES")
 		
@@ -1752,7 +1792,7 @@ function UF:initLayout()
 			local tot = spawnHelper(self, 'targettarget', "BOTTOM", target, "TOP", 0, S["media"].fontsize + 7)
 			S:CreateMover(tot, "ToTFrameMover", L["目标的目标"], true, nil, "ALL,UNITFRAMES")
 		end
-
+			
 		for n = 1, MAX_BOSS_FRAMES do
 			local boss = spawnHelper(self, 'boss' .. n, "RIGHT", UIParent, "RIGHT", -85, 0 - (56 * n))
 			S:CreateMover(boss, "Boss"..n.."FrameMover", L["Boss"]..n, true, nil, "ALL,UNITFRAMES")

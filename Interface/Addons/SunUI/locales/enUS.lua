@@ -286,6 +286,8 @@ do
 	L["目标的目标宽度"] = true
 	L["焦点高度"] = true
 	L["焦点宽度"] = true
+	L["焦点目标高度"] = true
+	L["焦点目标宽度"] = true
 	L["宠物高度"] = true
 	L["宠物宽度"] = true
 	L["boss高度"] = true
