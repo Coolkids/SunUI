@@ -10,7 +10,8 @@ B.ProfessionColors = {
 	[0x0040] = {160/255, 3/255, 168/255}, -- Enchanting
 	[0x0080] = {232/255, 118/255, 46/255}, -- Engineering
 	[0x0200] = {8/255, 180/255, 207/255}, -- Gems
-	[0x0400] = {105/255, 79/255,  7/255} -- Mining
+	[0x0400] = {105/255, 79/255,  7/255}, -- Mining
+	[0x010000] = {222/255, 13/255,  65/255} -- Cooking
 }
 
 function B:GetOptions()
@@ -146,15 +147,15 @@ function B:INVENTORY_SEARCH_UPDATE()
 			for slotID = 1, GetContainerNumSlots(bagID) do
 				local _, _, _, _, _, _, _, isFiltered = GetContainerItemInfo(bagID, slotID)
 				local button = bagFrame.Bags[bagID][slotID]
-				if button:IsShown() then
-					if ( isFiltered ) then
-						SetItemButtonDesaturated(button, 1, 1, 1, 1)
-						button:SetAlpha(0.4)
-					else
-						SetItemButtonDesaturated(button, 0, 1, 1, 1)
-						button:SetAlpha(1)
-					end
+				
+				if ( isFiltered ) then
+					SetItemButtonDesaturated(button, 1);
+					button:SetAlpha(0.4);
+				else
+					SetItemButtonDesaturated(button);
+					button:SetAlpha(1);
 				end
+				
 			end
 		end
 	end
@@ -189,7 +190,14 @@ function B:UpdateSlot(bagID, slotID)
 	end
 	slot.name, slot.rarity = nil, nil
 	local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
-	CooldownFrame_SetTimer(slot.cooldown, start, duration, enable)
+	if slot.cooldown then 
+		CooldownFrame_SetTimer(slot.cooldown, start, duration, enable)
+	end
+	if ( duration > 0 and enable == 0 ) then
+		SetItemButtonTextureVertexColor(slot, 0.4, 0.4, 0.4);
+	else
+		SetItemButtonTextureVertexColor(slot, 1, 1, 1);
+	end
 	if B.ProfessionColors[bagType] then
 		slot.shadow:Show()
 		slot.shadow:SetBackdropBorderColor(unpack(B.ProfessionColors[bagType]))
@@ -224,7 +232,7 @@ function B:UpdateSlot(bagID, slotID)
 			slot.border:SetBackdropBorderColor(0, 0, 0)
 		end
 	else
-		slot.iconTexture:SetAllPoints()
+		--slot.iconTexture:SetAllPoints()
 		--slot:StyleButton(true)
 		slot:SetBackdropColor(0, 0, 0, 0)
 		slot.border:SetBackdropBorderColor(0, 0, 0)
@@ -232,10 +240,10 @@ function B:UpdateSlot(bagID, slotID)
 	
 	if(C_NewItems.IsNewItem(bagID, slotID)) then
 		slot.shadow:Show()
-		E:Flash(slot.shadow, 1, true)
+		S:Flash(slot.shadow, 1, true)
 	else
 		slot.shadow:Hide()
-		E:StopFlash(slot.shadow)
+		S:StopFlash(slot.shadow)
 	end
 	
 	SetItemButtonTexture(slot, texture)
@@ -309,6 +317,10 @@ function B:ResetSlotAlphaForBags(f)
 			end
 		end
 	end
+end
+
+function B:REAGENTBANK_PURCHASED()
+	SunUIReagentBankFrame.cover:Hide()
 end
 
 function B:Layout(isBank)
@@ -385,7 +397,7 @@ function B:Layout(isBank)
 		local numSlots = GetContainerNumSlots(bagID)
 		if numSlots > 0 then
 			if not f.Bags[bagID] then
-				f.Bags[bagID] = CreateFrame("Frame", f:GetName().."Bag"..bagID, f)
+				f.Bags[bagID] = CreateFrame("Frame", f:GetName().."Bag"..bagID, f.holderFrame)
 				f.Bags[bagID]:SetID(bagID)
 				f.Bags[bagID].UpdateBagSlots = B.UpdateBagSlots
 				f.Bags[bagID].UpdateSlot = UpdateSlot
@@ -433,20 +445,28 @@ function B:Layout(isBank)
 					if(_G[f.Bags[bagID][slotID]:GetName().."NewItemTexture"]) then
 						_G[f.Bags[bagID][slotID]:GetName().."NewItemTexture"]:Hide()
 					end
-					f.Bags[bagID][slotID].count:ClearAllPoints()
-					f.Bags[bagID][slotID].count:SetPoint("BOTTOMRIGHT", 0, 2)
-					f.Bags[bagID][slotID].count:SetFont(S["media"].font, S["media"].fontsize, "OUTLINE")
-					f.Bags[bagID][slotID].questIcon = _G[f.Bags[bagID][slotID]:GetName().."IconQuestTexture"]
-					f.Bags[bagID][slotID].questIcon:SetTexture(TEXTURE_ITEM_QUEST_BANG)
-					f.Bags[bagID][slotID].questIcon:SetAllPoints(f.Bags[bagID][slotID])
-					f.Bags[bagID][slotID].questIcon:SetTexCoord(.08, .92, .08, .92)
-					f.Bags[bagID][slotID].questIcon:Hide()
+					f.Bags[bagID][slotID].Count:ClearAllPoints()
+					f.Bags[bagID][slotID].Count:SetPoint("BOTTOMRIGHT", 0, 2)
+					f.Bags[bagID][slotID].Count:SetFont(S["media"].font, S["media"].fontsize, "OUTLINE")
+					if(f.Bags[bagID][slotID].questIcon) then
+						f.Bags[bagID][slotID].questIcon = _G[f.Bags[bagID][slotID]:GetName().."IconQuestTexture"]
+						f.Bags[bagID][slotID].questIcon:SetTexture(TEXTURE_ITEM_QUEST_BANG)
+						f.Bags[bagID][slotID].questIcon:SetAllPoints(f.Bags[bagID][slotID])
+						f.Bags[bagID][slotID].questIcon:SetTexCoord(.08, .92, .08, .92)
+						f.Bags[bagID][slotID].questIcon:Hide()
+					end
+					
 					f.Bags[bagID][slotID].iconTexture = _G[f.Bags[bagID][slotID]:GetName().."IconTexture"]
-					--f.Bags[bagID][slotID].iconTexture:SetInside(f.Bags[bagID][slotID])
 					f.Bags[bagID][slotID].iconTexture:SetTexCoord(.08, .92, .08, .92)
+					
 					f.Bags[bagID][slotID].cooldown = _G[f.Bags[bagID][slotID]:GetName().."Cooldown"]
+			
 					f.Bags[bagID][slotID].bagID = bagID
 					f.Bags[bagID][slotID].slotID = slotID
+					
+					if(f.Bags[bagID][slotID].BattlepayItemTexture) then
+						f.Bags[bagID][slotID].BattlepayItemTexture:Hide()
+					end
 				end
 				f.Bags[bagID][slotID]:SetID(slotID)
 				f.Bags[bagID][slotID]:SetSize(buttonSize, buttonSize)
@@ -509,10 +529,10 @@ function B:Layout(isBank)
 
 				f.reagentFrame.slots[i]:StyleButton(true)
 				f.reagentFrame.slots[i]:SetNormalTexture(nil);
-				f.reagentFrame.slots[i]:SetCheckedTexture(nil);
+				--f.reagentFrame.slots[i]:SetCheckedTexture(nil);
 				
 				f.reagentFrame.slots[i].Count:ClearAllPoints();
-				f.reagentFrame.slots[i].Count:Point('BOTTOMRIGHT', 0, 2);
+				f.reagentFrame.slots[i].Count:SetPoint('BOTTOMRIGHT', 0, 2);
 
 				f.reagentFrame.slots[i].iconTexture = _G[f.reagentFrame.slots[i]:GetName()..'IconTexture'];
 				f.reagentFrame.slots[i].iconTexture:SetTexCoord(.08, .92, .08, .92);
@@ -526,14 +546,14 @@ function B:Layout(isBank)
 			f.reagentFrame.slots[i]:Size(buttonSize)
 			if(f.reagentFrame.slots[i-1]) then
 				if(totalSlots - 1) % numContainerColumns == 0 then
-					f.reagentFrame.slots[i]:Point('TOP', lastRowButton, 'BOTTOM', 0, -buttonSpacing);
+					f.reagentFrame.slots[i]:SetPoint('TOP', lastRowButton, 'BOTTOM', 0, -buttonSpacing);
 					lastRowButton = f.reagentFrame.slots[i];
 					numContainerRows = numContainerRows + 1;
 				else
-					f.reagentFrame.slots[i]:Point('LEFT', f.reagentFrame.slots[i-1], 'RIGHT', buttonSpacing, 0);
+					f.reagentFrame.slots[i]:SetPoint('LEFT', f.reagentFrame.slots[i-1], 'RIGHT', buttonSpacing, 0);
 				end
 			else
-				f.reagentFrame.slots[i]:Point('TOPLEFT', f.reagentFrame, 'TOPLEFT');
+				f.reagentFrame.slots[i]:SetPoint('TOPLEFT', f.reagentFrame, 'TOPLEFT');
 				lastRowButton = f.reagentFrame.slots[i]
 			end			
 
@@ -639,7 +659,7 @@ function B:OnEvent(event, ...)
 		self:UpdateBagSlots(...)
 	elseif event == "BAG_UPDATE_COOLDOWN" then
 		self:UpdateCooldowns()
-	elseif event == "PLAYERBANKSLOTS_CHANGED" or event == "QUEST_ACCEPTED" or event == "UNIT_QUEST_LOG_CHANGED" then
+	elseif event == "PLAYERBANKSLOTS_CHANGED" then
 		self:UpdateAllSlots()
 	elseif event == 'PLAYERREAGENTBANKSLOTS_CHANGED' then
 		B:UpdateReagentSlot(...)
@@ -745,8 +765,8 @@ function B:ContructContainerFrame(name, isBank)
 	f.ContainerHolder:Hide()
 	if isBank then
 		f.reagentFrame = CreateFrame("Frame", "SunUIReagentBankFrame", f);
-		f.reagentFrame:Point('TOP', f, 'TOP', 0, -f.topOffset);
-		f.reagentFrame:Point('BOTTOM', f, 'BOTTOM', 0, 8);	
+		f.reagentFrame:SetPoint('TOP', f, 'TOP', 0, -f.topOffset);
+		f.reagentFrame:SetPoint('BOTTOM', f, 'BOTTOM', 0, 8);	
 		f.reagentFrame.slots = {}
 		f.reagentFrame:SetID(REAGENTBANK_CONTAINER)
 		f.reagentFrame:Hide()
@@ -759,7 +779,7 @@ function B:ContructContainerFrame(name, isBank)
 		f.reagentFrame.cover.purchaseButton = CreateFrame("Button", nil, f.reagentFrame.cover)
 		f.reagentFrame.cover.purchaseButton:Height(20)
 		f.reagentFrame.cover.purchaseButton:Width(150)
-		f.reagentFrame.cover.purchaseButton:Point('CENTER', f.reagentFrame.cover, 'CENTER')
+		f.reagentFrame.cover.purchaseButton:SetPoint('CENTER', f.reagentFrame.cover, 'CENTER')
 		f.reagentFrame.cover.purchaseButton:SetFrameLevel(f.reagentFrame.cover.purchaseButton:GetFrameLevel() + 2)
 		--f.reagentFrame.cover.purchaseButton:SetTemplate('Default', true)
 		f.reagentFrame.cover.purchaseButton.text = f.reagentFrame.cover.purchaseButton:CreateFontString(nil, 'OVERLAY')
@@ -782,36 +802,9 @@ function B:ContructContainerFrame(name, isBank)
 		--Bag Text
 		f.bagText = f:CreateFontString(nil, 'OVERLAY')
 		f.bagText:FontTemplate()
-		f.bagText:Point('BOTTOMRIGHT', f.holderFrame, 'TOPRIGHT', -2, 4)
+		f.bagText:SetPoint('TOPRIGHT', f, 'TOPRIGHT', -25, -4)
 		f.bagText:SetJustifyH("RIGHT")	
 		f.bagText:SetText(BANK)	
-
-		f.reagentToggle = CreateFrame("Button", name..'ReagentButton', f);
-		f.reagentToggle:SetSize(55, 10)
-		f.reagentToggle:SetPoint("RIGHT", f.bagText, "LEFT", -5, 2 * 2)	
-		A:Reskin(f.reagentToggle)
-		f.reagentToggle.ttText = REAGENT_BANK;
-		f.reagentToggle:SetScript("OnEnter", self.Tooltip_Show)
-		f.reagentToggle:SetScript("OnLeave", self.Tooltip_Hide)
-		f.reagentToggle:SetScript("OnClick", function()
-			PlaySound("igCharacterInfoTab");
-			if f.holderFrame:IsShown() then
-				BankFrame.selectedTab = 2
-				f.holderFrame:Hide()
-				f.reagentFrame:Show()
-				f.editBox:Point('RIGHT', f.depositButton, 'LEFT', -5, 0);
-				f.bagText:SetText(REAGENT_BANK)
-			else
-				BankFrame.selectedTab = 1
-				f.reagentFrame:Hide()
-				f.holderFrame:Show()
-				f.editBox:Point('RIGHT', f.purchaseBagButton, 'LEFT', -5, 0);
-				f.bagText:SetText(BANK)
-			end
-
-			self:Layout(true)
-			f:Show()
-		end)
 		
 		--Sort Button
 		f.sortButton = CreateFrame("Button", nil, f)
@@ -862,6 +855,34 @@ function B:ContructContainerFrame(name, isBank)
 			end
 		end)
 		A:Reskin(f.purchaseBagButton)
+		
+		f.reagentToggle = CreateFrame("Button", name..'ReagentButton', f);
+		f.reagentToggle:SetSize(55, 10)
+		f.reagentToggle:SetPoint("LEFT", f.purchaseBagButton, "RIGHT", 3, 0)
+		A:Reskin(f.reagentToggle)
+		f.reagentToggle.ttText = REAGENT_BANK;
+		f.reagentToggle:SetScript("OnEnter", self.Tooltip_Show)
+		f.reagentToggle:SetScript("OnLeave", self.Tooltip_Hide)
+		f.reagentToggle:SetScript("OnClick", function()
+			PlaySound("igCharacterInfoTab");
+			if f.holderFrame:IsShown() then
+				BankFrame.selectedTab = 2
+				f.holderFrame:Hide()
+				f.reagentFrame:Show()
+				--f.editBox:SetPoint('RIGHT', f.depositButton, 'LEFT', -5, 0);
+				f.bagText:SetText(REAGENT_BANK)
+			else
+				BankFrame.selectedTab = 1
+				f.reagentFrame:Hide()
+				f.holderFrame:Show()
+				--f.editBox:SetPoint('TOPLEFT', f.sortButton, 'BOTTOMLEFT', 0, -5);
+				f.bagText:SetText(BANK)
+			end
+
+			self:Layout(true)
+			f:Show()
+		end)
+		A:Reskin(f.reagentToggle)
 	else
 		--Gold Text
 		f.goldText = f:CreateFontString(nil, "OVERLAY")
@@ -1016,6 +1037,7 @@ function B:OpenBank()
 		self:PositionBagFrames()
 	end
 	self:Layout(true)
+	
 	self.BankFrame:Show()
 	self.BankFrame:UpdateAllSlots()
 	self.BagFrame:Show()
@@ -1038,6 +1060,7 @@ function B:PLAYER_ENTERING_WORLD()
 end
 
 function B:Initialize()
+	S.bags = self
 	self.BagFrames = {}
 	self.BagFrame = self:ContructContainerFrame("SunUI_Bags")
 	self:SecureHook("OpenAllBags", "OpenBags")
