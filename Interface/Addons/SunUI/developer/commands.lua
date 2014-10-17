@@ -78,7 +78,8 @@ end
 SLASH_SPEC1 = "/ss"
 
 -- Quest tracker(by Tukz)
-local wf = _G["WatchFrame"]
+--[[
+local wf = _G["ObjectiveTrackerFrame"]
 local wfmove = false 
 
 wf:SetMovable(true);
@@ -159,7 +160,7 @@ end
 
 SLASH_VehicleSeatIndicatorLOCK1 = "/vs"
 SlashCmdList["VehicleSeatIndicatorLOCK"] = VSLOCK
-
+--]]
 StaticPopupDialogs["TESTUI"] = {
 	text = "测试弹窗系统",
 	button1 = ACCEPT,

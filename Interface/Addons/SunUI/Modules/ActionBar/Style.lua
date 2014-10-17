@@ -189,7 +189,7 @@ function AB:StyleFlyout(button)
 	else
 		arrowDistance = 2
 	end
-
+	--[[
 	if button:GetParent() and button:GetParent():GetParent() and button:GetParent():GetParent():GetName() and button:GetParent():GetParent():GetName() == "SpellBookSpellIconsFrame" then
 		return
 	end
@@ -229,6 +229,7 @@ function AB:StyleFlyout(button)
             end
         end
 	end
+	--]]
 end
 
 function AB:UpdateOverlayGlow(button)

@@ -145,14 +145,17 @@ function S:SetUpAnimGroup(object, type, ...)
 	end
 end
 
-function S:Flash(object, duration)
+function S:Flash(object, duration, loop)
 	if not object.anim then
-		S:SetUpAnimGroup(object, "Flash")
+		S:SetUpAnimGroup(object, loop and "FlashLoop" or 'Flash')
 	end
 
-	object.anim.fadein:SetDuration(duration)
-	object.anim.fadeout:SetDuration(duration)
-	object.anim:Play()
+	if not object.anim.playing then
+		object.anim.fadein:SetDuration(duration)
+		object.anim.fadeout:SetDuration(duration)
+		object.anim:Play()
+		object.anim.playing = true
+	end
 end
 
 function S:StopFlash(object)

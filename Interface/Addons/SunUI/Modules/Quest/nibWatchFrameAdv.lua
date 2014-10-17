@@ -1,6 +1,7 @@
 -- Author: Nibelheim
 -- Notes: Adjust Position, Colors and Auto-hide the Quest Watch Frame
 -- Version: 1.2
+--[[
 local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local nWFA = CreateFrame("Frame")
 local EventsRegistered
@@ -259,3 +260,5 @@ hooksecurefunc("WatchFrameItem_UpdateCooldown", function(self)
 		self.skinned = true
 	end
 end)
+
+--]]
