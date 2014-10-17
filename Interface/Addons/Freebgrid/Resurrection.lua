@@ -14,7 +14,6 @@ local ResurrectionSpells = {
 	[GetSpellInfo(61999)] = true, 	--复活盟友
 	[GetSpellInfo(115178)] = true, --轮回转世
 	[GetSpellInfo(20707)] = true, 	--灵魂石复活
-	[GetSpellInfo(331)] = true, 	--灵魂石复活
 }
 
 local Resurrection = function(self, event,...)
