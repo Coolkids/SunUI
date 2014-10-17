@@ -10,15 +10,7 @@ local function LoadSkin()
 	local ConquestFrame = ConquestFrame
 	local WarGamesFrame = WarGamesFrame
 	local PVPArenaTeamsFrame = PVPArenaTeamsFrame
-
-	PVPUIFrame:DisableDrawLayer("ARTWORK")
-	PVPUIFrame.LeftInset:DisableDrawLayer("BORDER")
-	PVPUIFrame.Background:Hide()
-	PVPUIFrame.Shadows:Hide()
-	PVPUIFrame.LeftInset:GetRegions():Hide()
-	select(24, PVPUIFrame:GetRegions()):Hide()
-	select(25, PVPUIFrame:GetRegions()):Hide()
-
+	
 	-- Category buttons
 
 	for i = 1, 3 do
@@ -56,8 +48,8 @@ local function LoadSkin()
 	PVPQueueFrame.CategoryButton3.Icon:SetTexture("Interface\\Icons\\ability_warrior_offensivestance")
 
 	local englishFaction = UnitFactionGroup("player")
-	PVPQueueFrame.CategoryButton1.CurrencyIcon:SetTexture("Interface\\Icons\\PVPCurrency-Honor-"..englishFaction)
-	PVPQueueFrame.CategoryButton2.CurrencyIcon:SetTexture("Interface\\Icons\\PVPCurrency-Conquest-"..englishFaction)
+	PVPQueueFrame.CategoryButton1.CurrencyDisplay.Icon:SetTexture("Interface\\Icons\\PVPCurrency-Honor-"..englishFaction)
+	PVPQueueFrame.CategoryButton2.CurrencyDisplay.Icon:SetTexture("Interface\\Icons\\PVPCurrency-Conquest-"..englishFaction)
 
 	hooksecurefunc("PVPQueueFrame_SelectButton", function(index)
 		local self = PVPQueueFrame
@@ -87,7 +79,7 @@ local function LoadSkin()
 
 	A:Reskin(BonusFrame.DiceButton)
 
-	for _, bu in pairs({BonusFrame.RandomBGButton, BonusFrame.CallToArmsButton, BonusFrame.WorldPVP1Button, BonusFrame.WorldPVP2Button}) do
+	for _, bu in pairs({BonusFrame.RandomBGButton, BonusFrame.Arena1Button, BonusFrame.Arena2Button}) do
 		A:Reskin(bu, true)
 
 		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
@@ -356,10 +348,8 @@ local function LoadSkin()
 
 		hooksecurefunc(header, "SetNormalTexture", onSetNormalTexture)
 	end
-
+	A:ReskinCheck(WarGameTournamentModeCheckButton)
 	-- Main style
-
-	A:ReskinPortraitFrame(PVPUIFrame)
 	A:Reskin(HonorFrame.SoloQueueButton)
 	A:Reskin(HonorFrame.GroupQueueButton)
 	A:Reskin(ConquestFrame.JoinButton)

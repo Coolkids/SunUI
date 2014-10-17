@@ -117,6 +117,8 @@ local function LoadSkin()
 
 		bu.bg = CreateFrame("Frame", nil, bu)
 		bu.bg:SetAllPoints(ic)
+		--bu.bg:SetPoint("TOPLEFT", ic, -1, 1)
+		--bu.bg:SetPoint("BOTTOMRIGHT", ic, 1, -1)
 		A:CreateBD(bu.bg, 0)
 	end
 
@@ -193,14 +195,14 @@ local function LoadSkin()
 
 	-- Battletag invite frame
 	for i = 1, 9 do
-		select(i, BattleTagInviteFrame.NoteFrame:GetRegions()):Hide()
+		select(i, BattleTagInviteFrame:GetRegions()):Hide()
 	end
 
 	A:CreateBD(BattleTagInviteFrame)
 	A:CreateSD(BattleTagInviteFrame)
-	A:CreateBD(BattleTagInviteFrame.NoteFrame, .25)
+	--A:CreateBD(BattleTagInviteFrame.NoteFrame, .25)
 
-	local _, send, cancel = BattleTagInviteFrame:GetChildren()
+	local send, cancel = BattleTagInviteFrame:GetChildren()
 	A:Reskin(send)
 	A:Reskin(cancel)
 

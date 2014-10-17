@@ -64,7 +64,7 @@ local frames = {
   ["TutorialFrame"] = false,
   ["MissingLootFrame"] = false,
   ["ScrollOfResurrectionSelectionFrame"] = false,
-
+  ["AddFriendFrame"] = false,
   -- New frames in MoP
   ["PVPBannerFrame"] = false,
   ["PVEFrame"] = false, -- dungeon finder + challenges

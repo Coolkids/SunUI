@@ -11,6 +11,7 @@ local function LoadSkin()
 	select(25, PVEFrame:GetRegions()):Hide()
 	
 	PVEFrameTab2:SetPoint("LEFT", PVEFrameTab1, "RIGHT", -15, 0)
+	--PVEFrameTab3:SetPoint("LEFT", PVEFrameTab2, "RIGHT", -15, 0)
 	
 	GroupFinderFrameGroupButton1.icon:SetTexture("Interface\\Icons\\INV_Helmet_08")
 	GroupFinderFrameGroupButton2.icon:SetTexture("Interface\\Icons\\inv_helmet_06")
@@ -59,6 +60,7 @@ local function LoadSkin()
 	A:ReskinPortraitFrame(PVEFrame)
 	A:CreateTab(PVEFrameTab1)
 	A:CreateTab(PVEFrameTab2)
+	A:CreateTab(PVEFrameTab3)
 
 	A:Reskin(LFDQueueFrameFindGroupButton)
 	A:Reskin(LFDQueueFrameCancelButton)
@@ -235,14 +237,14 @@ local function LoadSkin()
 	end
 
 	--Flex Raid
-	FlexRaidFrameScrollFrame:StripTextures()
+	--[[FlexRaidFrameScrollFrame:StripTextures()
 	FlexRaidFrameBottomInset:StripTextures()
 	hooksecurefunc("FlexRaidFrame_Update", function()
 		FlexRaidFrame.ScrollFrame.Background:SetTexture(nil)
 	end)
 
 	A:ReskinDropDown(FlexRaidFrameSelectionDropDown)
-	A:Reskin(FlexRaidFrameStartRaidButton)
+	A:Reskin(FlexRaidFrameStartRaidButton)--]]
 end
 
 A:RegisterSkin("SunUI", LoadSkin)

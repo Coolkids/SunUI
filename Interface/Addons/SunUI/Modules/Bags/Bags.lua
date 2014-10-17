@@ -363,12 +363,13 @@ function B:Layout(isBank)
 				f.ContainerHolder[i]:HookScript("OnEnter", function(self) B.SetSlotAlphaForBag(self, f) end)
 				f.ContainerHolder[i]:HookScript("OnLeave", function(self) B.ResetSlotAlphaForBags(self, f) end)
 				if isBank then
-					f.ContainerHolder[i]:SetID(bagID)
+					f.ContainerHolder[i]:SetID(bagID - 4)
 					if not f.ContainerHolder[i].tooltipText then
 						f.ContainerHolder[i].tooltipText = ""
 					end
 				end
 				f.ContainerHolder[i].iconTexture = _G[f.ContainerHolder[i]:GetName().."IconTexture"]
+				f.ContainerHolder[i].iconTexture:SetInside()
 				f.ContainerHolder[i].iconTexture:SetTexCoord(.08, .92, .08, .92)
 				if not f.ContainerHolder[i].border then
 					local border = CreateFrame("Frame", nil, f.ContainerHolder[i])
@@ -524,12 +525,34 @@ function B:Layout(isBank)
 			totalSlots = totalSlots + 1;
 
 			if(not f.reagentFrame.slots[i]) then
-				f.reagentFrame.slots[i] = CreateFrame("Button", "ElvUIReagentBankFrameItem"..i, f.reagentFrame, "ReagentBankItemButtonGenericTemplate");
+				f.reagentFrame.slots[i] = CreateFrame("Button", "SunUIReagentBankFrameItem"..i, f.reagentFrame, "ReagentBankItemButtonGenericTemplate");
 				f.reagentFrame.slots[i]:SetID(i)
 
 				f.reagentFrame.slots[i]:StyleButton(true)
 				f.reagentFrame.slots[i]:SetNormalTexture(nil);
-				--f.reagentFrame.slots[i]:SetCheckedTexture(nil);
+				
+				if not f.reagentFrame.slots[i].border then
+					local border = CreateFrame("Frame", nil, f.reagentFrame.slots[i])
+					border:SetAllPoints()
+					border:SetFrameLevel(f.reagentFrame.slots[i]:GetFrameLevel()+1)
+					f.reagentFrame.slots[i].border = border
+					f.reagentFrame.slots[i].border:CreateBorder()
+					A:CreateBackdropTexture(f.reagentFrame.slots[i], 0.6)
+				end
+				if not f.reagentFrame.slots[i].shadow then
+					local shadow = CreateFrame("Frame", nil, f.reagentFrame.slots[i])
+					shadow:SetOutside(f.reagentFrame.slots[i], 3, 3)
+					shadow:SetFrameLevel(0)
+					f.reagentFrame.slots[i].shadow = shadow
+					f.reagentFrame.slots[i].shadow:SetBackdrop( { 
+						edgeFile = S["media"].glow,
+						edgeSize = S:Scale(3),
+						insets = {left = S:Scale(3), right = S:Scale(3), top = S:Scale(3), bottom = S:Scale(3)},
+					})
+					f.reagentFrame.slots[i].shadow:SetBackdropColor(0, 0, 0)
+					f.reagentFrame.slots[i].shadow:Hide()
+				end
+				
 				
 				f.reagentFrame.slots[i].Count:ClearAllPoints();
 				f.reagentFrame.slots[i].Count:SetPoint('BOTTOMRIGHT', 0, 2);
@@ -538,8 +561,8 @@ function B:Layout(isBank)
 				f.reagentFrame.slots[i].iconTexture:SetTexCoord(.08, .92, .08, .92);
 				f.reagentFrame.slots[i].IconBorder:SetAlpha(0)	
 				f.reagentFrame.slots[i]:SetScript("OnClick", BankFrameItemButtonGeneric_OnClick)
-				f.reagentFrame.slots[i]:CreateShadow()
-				f.reagentFrame.slots[i].shadow:Hide()
+				--f.reagentFrame.slots[i]:CreateShadow()
+				--f.reagentFrame.slots[i].shadow:Hide()
 			end
 
 			f.reagentFrame.slots[i]:ClearAllPoints()
@@ -572,7 +595,7 @@ function B:UpdateReagentSlot(slotID)
 	local bagID = REAGENTBANK_CONTAINER
 	local texture, count, locked = GetContainerItemInfo(bagID, slotID);
 	local clink = GetContainerItemLink(bagID, slotID);
-	local slot = _G["ElvUIReagentBankFrameItem"..slotID]
+	local slot = _G["SunUIReagentBankFrameItem"..slotID]
 
 	slot:Show();
 	if(slot.questIcon) then

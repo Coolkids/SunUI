@@ -186,6 +186,10 @@ function A:CreateTab(f)
 	hl:SetVertexColor(r, g, b, .25)
 end
 
+function A:ReskinTab(f)
+	self:CreateTab(f)
+end
+
 function A:ReskinScroll(f)
 	if not f then return end
 	local frame = f:GetName()
