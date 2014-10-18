@@ -427,6 +427,25 @@ local function LoadSkin()
 		"Graphics_EnvironmentalDetailDropDown",
 		"Graphics_GroundClutterDropDown",
 		"Graphics_SSAODropDown",
+		"Graphics_RefractionDropDown",
+		"RaidGraphics_DisplayModeDropDown",
+		"RaidGraphics_ResolutionDropDown",
+		"RaidGraphics_RefreshDropDown",
+		"RaidGraphics_PrimaryMonitorDropDown",
+		"RaidGraphics_MultiSampleDropDown",
+		"RaidGraphics_VerticalSyncDropDown",
+		"RaidGraphics_TextureResolutionDropDown",
+		"RaidGraphics_FilteringDropDown",
+		"RaidGraphics_ProjectedTexturesDropDown",
+		"RaidGraphics_ShadowsDropDown",
+		"RaidGraphics_LiquidDetailDropDown",
+		"RaidGraphics_SunshaftsDropDown",
+		"RaidGraphics_ParticleDensityDropDown",
+		"RaidGraphics_ViewDistanceDropDown",
+		"RaidGraphics_EnvironmentalDetailDropDown",
+		"RaidGraphics_GroundClutterDropDown",
+		"RaidGraphics_SSAODropDown",
+		"RaidGraphics_RefractionDropDown",
 		"Advanced_BufferingDropDown",
 		"Advanced_LagDropDown",
 		"Advanced_HardwareCursorDropDown",
@@ -443,9 +462,12 @@ local function LoadSkin()
 
 	Graphics_RightQuality:GetRegions():Hide()
 	Graphics_RightQuality:DisableDrawLayer("BORDER")
-
+	RaidGraphics_RightQuality:GetRegions():Hide()
+	RaidGraphics_RightQuality:DisableDrawLayer("BORDER")
+	
 	local sliders = {
 		"Graphics_Quality",
+		"RaidGraphics_Quality",
 		"Advanced_UIScaleSlider",
 		"Advanced_MaxFPSSlider",
 		"Advanced_MaxFPSBKSlider",
@@ -490,7 +512,10 @@ local function LoadSkin()
 		"AudioOptionsVoicePanelEnableVoice",
 		"AudioOptionsVoicePanelEnableMicrophone",
 		"AudioOptionsVoicePanelPushToTalkSound",
-		"AudioOptionsSoundPanelPetBattleMusic"
+		"AudioOptionsSoundPanelPetBattleMusic",
+		"Display_RaidSettingsEnabledCheckBox",
+		"Advanced_ShowHDModels",
+		"NetworkOptionsPanelAdvancedCombatLogging"
 	}
 	for i = 1, #checkboxes do
 		A:ReskinCheck(_G[checkboxes[i]])
@@ -515,6 +540,8 @@ local function LoadSkin()
 		"InterfaceOptionsControlsPanelLootAtMouse",
 		"InterfaceOptionsControlsPanelAutoLootCorpse",
 		"InterfaceOptionsControlsPanelInteractOnLeftClick",
+		"InterfaceOptionsControlsPanelReverseCleanUpBags",
+		"InterfaceOptionsControlsPanelReverseNewLoot",
 		"InterfaceOptionsCombatPanelAttackOnAssist",
 		"InterfaceOptionsCombatPanelStopAutoAttack",
 		"InterfaceOptionsCombatPanelNameplateClassColors",
@@ -542,6 +569,7 @@ local function LoadSkin()
 		"InterfaceOptionsObjectivesPanelAutoQuestProgress",
 		"InterfaceOptionsObjectivesPanelMapQuestDifficulty",
 		"InterfaceOptionsObjectivesPanelWatchFrameWidth",
+		"InterfaceOptionsObjectivesPanelMapFade",
 		"InterfaceOptionsSocialPanelProfanityFilter",
 		"InterfaceOptionsSocialPanelSpamFilter",
 		"InterfaceOptionsSocialPanelChatBubbles",
@@ -556,7 +584,9 @@ local function LoadSkin()
 		"InterfaceOptionsActionBarsPanelLockActionBars",
 		"InterfaceOptionsActionBarsPanelAlwaysShowActionBars",
 		"InterfaceOptionsActionBarsPanelSecureAbilityToggle",
+		"InterfaceOptionsActionBarsPanelCountdownCounldowns",
 		"InterfaceOptionsNamesPanelMyName",
+		"InterfaceOptionsNamesPanelMinus",
 		"InterfaceOptionsNamesPanelFriendlyPlayerNames",
 		"InterfaceOptionsNamesPanelFriendlyPets",
 		"InterfaceOptionsNamesPanelFriendlyGuardians",
@@ -571,6 +601,7 @@ local function LoadSkin()
 		"InterfaceOptionsNamesPanelNonCombatCreature",
 		"InterfaceOptionsNamesPanelEnemyPlayerNames",
 		"InterfaceOptionsNamesPanelEnemyPets",
+		"InterfaceOptionsNamesPanelEnemyMinus",
 		"InterfaceOptionsNamesPanelEnemyGuardians",
 		"InterfaceOptionsNamesPanelEnemyTotems",
 		"InterfaceOptionsNamesPanelUnitNameplatesEnemies",
@@ -599,6 +630,7 @@ local function LoadSkin()
 		"InterfaceOptionsCombatTextPanelPeriodicEnergyGains",
 		"InterfaceOptionsCombatTextPanelHonorGains",
 		"InterfaceOptionsCombatTextPanelAuras",
+		"InterfaceOptionsCombatTextPanelPetBattle",
 		"InterfaceOptionsStatusTextPanelPlayer",
 		"InterfaceOptionsStatusTextPanelPet",
 		"InterfaceOptionsStatusTextPanelParty",
@@ -673,6 +705,8 @@ local function LoadSkin()
 		"InterfaceOptionsCombatPanelSelfCastKeyDropDown",
 		"InterfaceOptionsDisplayPanelAggroWarningDisplay",
 		"InterfaceOptionsDisplayPanelWorldPVPObjectiveDisplay",
+		"InterfaceOptionsDisplayPanelOutlineDropDown",
+		"InterfaceOptionsObjectivesPanelQuestSorting",
 		"InterfaceOptionsSocialPanelChatStyle",
 		"InterfaceOptionsSocialPanelTimestamps",
 		"InterfaceOptionsSocialPanelWhisperMode",
@@ -842,6 +876,8 @@ local function LoadSkin()
 	for i = 1, 4 do
 		select(i, SideDressUpFrame:GetRegions()):Hide()
 	end
+	GraphicsButton:StripTextures(true)
+	RaidButton:StripTextures(true)
 end
 
 A:RegisterSkin("SunUI", LoadSkin)

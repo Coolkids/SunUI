@@ -123,7 +123,7 @@ end
 
 QuestInfoDescriptionText.SetAlphaGradient=function() return false end
 function AAQ:CreateQuickSet()
-	local quickquest = CreateFrame("CheckButton", nil, ObjectiveTrackerFrame)
+	local quickquest = CreateFrame("CheckButton", nil, ObjectiveTrackerFrame.BlocksFrame.QuestHeader)
 	quickquest:ClearAllPoints()
 	quickquest:SetSize(22,22)
 	quickquest:SetPoint("TOPRIGHT", ObjectiveTrackerBlocksFrame.QuestHeader, "TOPLEFT", -5, 0)
@@ -155,6 +155,8 @@ function AAQ:CreateQuickSet()
 	quickquest:RegisterEvent("PLAYER_ENTERING_WORLD")
 	local A = S:GetModule("Skins")
 	A:ReskinCheck(quickquest)
+	--ObjectiveTrackerFrame.QuestHeader:HookScript("OnShow", function() quickquest:Show() end)
+	--ObjectiveTrackerFrame.QuestHeader:HookScript("OnHide", function() quickquest:Hide() end)
 end
 
 function AAQ:UpdateAutoAccept()

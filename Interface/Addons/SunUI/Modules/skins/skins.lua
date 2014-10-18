@@ -359,10 +359,13 @@ function A:ReskinInput(f, height, width)
 	if not f then return end
 	local frame = f:GetName()
 	if frame then
-		if _G[frame.."Left"] then _G[frame.."Left"]:Hide() end
-		if _G[frame.."Right"] then _G[frame.."Right"]:Hide() end
-		if _G[frame.."Middle"] then _G[frame.."Middle"]:Hide() end
-		if _G[frame.."Mid"] then _G[frame.."Mid"]:Hide() end
+		local left = f.Left or _G[frame.."Left"]
+		local middle = f.Middle or _G[frame.."Middle"] or _G[frame.."Mid"]
+		local right = f.Right or _G[frame.."Right"]
+
+		left:Hide()
+		middle:Hide()
+		right:Hide()
 	end
 	A:CreateBD(f, 0)
 	A:CreateBackdropTexture(f)
@@ -619,8 +622,16 @@ local function colourArrow(f)
 	end
 end
 
+function A:colourArrow(f)
+	colourArrow(f)
+end
+
 local function clearArrow(f)
 	f.tex:SetVertexColor(1, 1, 1)
+end
+
+function A:clearArrow(f)
+	clearArrow(f)
 end
 
 function A:ReskinNavBar(f)
@@ -642,4 +653,14 @@ function A:ReskinNavBar(f)
 
 	overflowButton:HookScript("OnEnter", colourArrow)
 	overflowButton:HookScript("OnLeave", clearArrow)
+end
+
+function A:CreateGradient(f)
+	local tex = f:CreateTexture(nil, "BORDER")
+	tex:SetPoint("TOPLEFT", 1, -1)
+	tex:SetPoint("BOTTOMRIGHT", -1, 1)
+	tex:SetTexture(A.media.backdrop)
+	tex:SetVertexColor(0.2, 0.2, 0.2, 1)
+
+	return tex
 end

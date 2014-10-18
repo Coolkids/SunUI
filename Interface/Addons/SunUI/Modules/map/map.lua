@@ -4,7 +4,6 @@ WM.modName = L["世界地图"]
 function WM:SetLargeWorldMap()
 	if InCombatLockdown() then return end
 
-	WorldMapFrame:SetParent(E.UIParent)
 	WorldMapFrame:EnableKeyboard(false)
 	WorldMapFrame:SetScale(1)
 	WorldMapFrame:EnableMouse(true)

@@ -606,6 +606,7 @@ function B:UpdateReagentSlot(slotID)
 	
 	local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
 	CooldownFrame_SetTimer(slot.Cooldown, start, duration, enable)
+
 	if ( duration > 0 and enable == 0 ) then
 		SetItemButtonTextureVertexColor(slot, 0.4, 0.4, 0.4);
 	else
@@ -614,7 +615,8 @@ function B:UpdateReagentSlot(slotID)
 	
 	if B.ProfessionColors[bagType] then
 		slot:SetBackdropBorderColor(unpack(B.ProfessionColors[bagType]))
-	elseif (clink) then
+	end
+	if (clink) then
 		local iType;
 		slot.name, _, slot.rarity, _, _, iType = GetItemInfo(clink);
 		
@@ -762,6 +764,7 @@ function B:ContructContainerFrame(name, isBank)
 	f:RegisterEvent("QUEST_ACCEPTED")
 	f:RegisterUnitEvent("UNIT_QUEST_LOG_CHANGED", "player")
 	f:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
+	f:RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")
 	f:SetMovable(true)
 	f:RegisterForDrag("LeftButton", "RightButton")
 	f:RegisterForClicks("AnyUp")

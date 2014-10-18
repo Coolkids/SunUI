@@ -50,17 +50,21 @@ local backdrop = {
 }
 
 local tooltips = {
-	GameTooltip, 
+	GameTooltip,
 	ItemRefTooltip,
+	ShoppingTooltip1,
+	ShoppingTooltip2,
+	WorldMapTooltip,
+	WorldMapCompareTooltip1,
+	WorldMapCompareTooltip2,
+	FriendsTooltip,
+	ConsolidatedBuffsTooltip,
 	ItemRefShoppingTooltip1,
 	ItemRefShoppingTooltip2,
-	ItemRefShoppingTooltip3,
-	ShoppingTooltip1, 
-	ShoppingTooltip2, 
-	ShoppingTooltip3, 
-	WorldMapTooltip, 
-	DropDownList1MenuBackdrop, 
-	DropDownList2MenuBackdrop, 
+	AtlasLootTooltip,
+	QuestHelperTooltip,
+	QuestGuru_QuestWatchTooltip,
+	StoryTooltip
 }
 types = {
 	rare = " |cffFF44FFR|r ",
@@ -353,18 +357,6 @@ local function On_ANCHOR_CURSOR(self, ...)
 end
 
 local function SkinTooltip()
-	local tooltips = {
-		"GameTooltip",
-		"ItemRefTooltip",
-		"ShoppingTooltip1",
-		"ShoppingTooltip2",
-		"ShoppingTooltip3",
-		"WorldMapTooltip",
-		"ChatMenu",
-		"EmoteMenu",
-		"LanguageMenu",
-		"VoiceMacroMenu",
-	}
 
 	local backdrop = {
 		bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
@@ -385,8 +377,7 @@ local function SkinTooltip()
 		return 0, 0, 0
 	end
 
-	for i = 1, #tooltips do
-		local t = _G[tooltips[i]]
+	for _, t in pairs(tooltips) do
 		t:SetBackdrop(nil)
 		local bg = CreateFrame("Frame", nil, t)
 		bg:SetPoint("TOPLEFT")
@@ -413,7 +404,6 @@ local function SkinTooltip()
 end
 
 function TT:Initialize()
-	C=self.db
 	SkinTooltip()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	GameTooltip:HookScript("OnTooltipSetUnit", On_OnTooltipSetUnit)
