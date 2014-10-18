@@ -34,7 +34,7 @@ local function LoadSkin()
 			GameMenuFrame:SetHeight(GameMenuFrame:GetHeight()+1)
 		end
 	end
-
+	
 	for i = 1, 4 do
 		for j = 1, 3 do
 			A:Reskin(_G["StaticPopup"..i.."Button"..j])

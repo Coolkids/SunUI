@@ -46,8 +46,9 @@ function IB:CreateSpecs()
 		local majorTree1 = GetSpecialization(false,false,1)
 		local spec1 = { }
 		for i = 1, 18 do 
-			local name, iconTexture, tier, column, selected, available = GetTalentInfo(i,false,1)
+			local name, iconTexture, tier, column, selected, available = GetTalentInfo(i, false, 1)
 			iconTexture = iconTexture and "|T"..iconTexture..":12:12:0:0:64:64:5:59:5:59|t " or ""
+			print(name)
 			if selected then
 				table.insert(spec1, iconTexture..name)
 			end
@@ -55,7 +56,7 @@ function IB:CreateSpecs()
 		local majorTree2 = GetSpecialization(false,false,2)
 		local spec2 = { }
 		for i = 1, 18 do 
-			local name, iconTexture, tier, column, selected, available = GetTalentInfo(i,false,2)
+			local name, iconTexture, tier, column, selected, available = GetTalentInfo(i, false, 2, nil, nil)
 			iconTexture = iconTexture and "|T"..iconTexture..":12:12:0:0:64:64:5:59:5:59|t " or ""
 			if selected then
 				table.insert(spec2, iconTexture..name)

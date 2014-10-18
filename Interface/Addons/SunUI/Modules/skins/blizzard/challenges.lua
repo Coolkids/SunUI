@@ -23,12 +23,14 @@ local function LoadSkin()
 	
 	for i = 1, 9 do
 		local bu = ChallengesFrame["button"..i]
-		A:CreateBD(bu, .25)
-		bu:SetHighlightTexture("")
-		bu.selectedTex:SetTexture(A["media"].backdrop)
-		bu.selectedTex:SetAlpha(.2)
-		bu.selectedTex:SetPoint("TOPLEFT", 1, -1)
-		bu.selectedTex:SetPoint("BOTTOMRIGHT", -1, 1)
+		if bu then
+			A:CreateBD(bu, .25)
+			bu:SetHighlightTexture("")
+			bu.selectedTex:SetTexture(A["media"].backdrop)
+			bu.selectedTex:SetAlpha(.2)
+			bu.selectedTex:SetPoint("TOPLEFT", 1, -1)
+			bu.selectedTex:SetPoint("BOTTOMRIGHT", -1, 1)
+		end
 	end
 	
 	for i = 1, 3 do

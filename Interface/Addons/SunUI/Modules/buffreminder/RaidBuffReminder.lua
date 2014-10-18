@@ -62,30 +62,42 @@ local function OnEvent_UNIT_AURA(event, unit, ...)
 			end
 		end
 	end
-	if Melee then --法术/物理加速
-		if BR.RaidBuffList[8] and BR.RaidBuffList[8][1] then
-			BuffFrame[6]:SetAlpha(1)
-			BuffFrame[6].Icon:SetTexture(select(3, GetSpellInfo(BR.RaidBuffList[8][1])))
-			for key, value in pairs(BR.RaidBuffList[8]) do
-				local name = GetSpellInfo(value)
-				if name and UnitAura("player", name) then 
-					BuffFrame[6].Icon:SetTexture(select(3, GetSpellInfo(value)))
-					BuffFrame[6]:SetAlpha(0.2)
-					break
-				end
+	 --加速
+	if BR.RaidBuffList[7] and BR.RaidBuffList[7][1] then
+		BuffFrame[6]:SetAlpha(1)
+		BuffFrame[6].Icon:SetTexture(select(3, GetSpellInfo(BR.RaidBuffList[8][1])))
+		for key, value in pairs(BR.RaidBuffList[8]) do
+			local name = GetSpellInfo(value)
+			if name and UnitAura("player", name) then 
+				BuffFrame[6].Icon:SetTexture(select(3, GetSpellInfo(value)))
+				BuffFrame[6]:SetAlpha(0.2)
+				break
 			end
 		end
-	else
-		if BR.RaidBuffList[7] and BR.RaidBuffList[7][1] then
-			BuffFrame[6]:SetAlpha(1)
-			BuffFrame[6].Icon:SetTexture(select(3, GetSpellInfo(BR.RaidBuffList[7][1])))
-			for key, value in pairs(BR.RaidBuffList[7]) do
-				local name = GetSpellInfo(value)
-				if name and UnitAura("player", name) then 
-					BuffFrame[6].Icon:SetTexture(select(3, GetSpellInfo(value)))
-					BuffFrame[6]:SetAlpha(0.2)
-					break
-				end
+	end
+	--全能
+	if BR.RaidBuffList[8] and BR.RaidBuffList[8][1] then
+		BuffFrame[7]:SetAlpha(1)
+		BuffFrame[7].Icon:SetTexture(select(3, GetSpellInfo(BR.RaidBuffList[7][1])))
+		for key, value in pairs(BR.RaidBuffList[7]) do
+			local name = GetSpellInfo(value)
+			if name and UnitAura("player", name) then 
+				BuffFrame[7].Icon:SetTexture(select(3, GetSpellInfo(value)))
+				BuffFrame[7]:SetAlpha(0.2)
+				break
+			end
+		end
+	end
+	--溅射
+	if BR.RaidBuffList[9] and BR.RaidBuffList[9][1] then
+		BuffFrame[8]:SetAlpha(1)
+		BuffFrame[8].Icon:SetTexture(select(3, GetSpellInfo(BR.RaidBuffList[8][1])))
+		for key, value in pairs(BR.RaidBuffList[8]) do
+			local name = GetSpellInfo(value)
+			if name and UnitAura("player", name) then 
+				BuffFrame[8].Icon:SetTexture(select(3, GetSpellInfo(value)))
+				BuffFrame[8]:SetAlpha(0.2)
+				break
 			end
 		end
 	end
@@ -95,83 +107,15 @@ local function OnEvent_PLAYER_ENTERING_WORLD(event, ...)
 		for key, value in pairs(BuffFrame) do value:SetAlpha(0) end
 		return
 	end
-	if unit ~= "player" then return end
-	for i = 1, 4 do
-		if BR.RaidBuffList[i] and BR.RaidBuffList[i][1] then
-			BuffFrame[i]:SetAlpha(1)
-			BuffFrame[i].Icon:SetTexture(select(3, GetSpellInfo(BR.RaidBuffList[i][1])))
-			for key, value in pairs(BR.RaidBuffList[i]) do
-				local name = GetSpellInfo(value)
-				if name and UnitAura("player", name) then 
-					BuffFrame[i].Icon:SetTexture(select(3, GetSpellInfo(value)))
-					BuffFrame[i]:SetAlpha(0.2)
-					break
-				end
-			end
-		end
-	end
-	if Melee then   --法伤/AP
-		if BR.RaidBuffList[6] and BR.RaidBuffList[6][1] then
-			BuffFrame[5]:SetAlpha(1)
-			BuffFrame[5].Icon:SetTexture(select(3, GetSpellInfo(BR.RaidBuffList[6][1])))
-			for key, value in pairs(BR.RaidBuffList[6]) do
-				local name = GetSpellInfo(value)
-				if name and UnitAura("player", name) then 
-					BuffFrame[5].Icon:SetTexture(select(3, GetSpellInfo(value)))
-					BuffFrame[5]:SetAlpha(0.2)
-					break
-				end
-			end
-		end
-	else
-		if BR.RaidBuffList[5] and BR.RaidBuffList[5][1] then
-			BuffFrame[5]:SetAlpha(1)
-			BuffFrame[5].Icon:SetTexture(select(3, GetSpellInfo(BR.RaidBuffList[5][1])))
-			for key, value in pairs(BR.RaidBuffList[5]) do
-				local name = GetSpellInfo(value)
-				if name and UnitAura("player", name) then 
-					BuffFrame[5].Icon:SetTexture(select(3, GetSpellInfo(value)))
-					BuffFrame[5]:SetAlpha(0.2)
-					break
-				end
-			end
-		end
-	end
-	if Melee then --法术/物理加速
-		if BR.RaidBuffList[8] and BR.RaidBuffList[8][1] then
-			BuffFrame[6]:SetAlpha(1)
-			BuffFrame[6].Icon:SetTexture(select(3, GetSpellInfo(BR.RaidBuffList[8][1])))
-			for key, value in pairs(BR.RaidBuffList[8]) do
-				local name = GetSpellInfo(value)
-				if name and UnitAura("player", name) then 
-					BuffFrame[6].Icon:SetTexture(select(3, GetSpellInfo(value)))
-					BuffFrame[6]:SetAlpha(0.2)
-					break
-				end
-			end
-		end
-	else
-		if BR.RaidBuffList[7] and BR.RaidBuffList[7][1] then
-			BuffFrame[6]:SetAlpha(1)
-			BuffFrame[6].Icon:SetTexture(select(3, GetSpellInfo(BR.RaidBuffList[7][1])))
-			for key, value in pairs(BR.RaidBuffList[7]) do
-				local name = GetSpellInfo(value)
-				if name and UnitAura("player", name) then 
-					BuffFrame[6].Icon:SetTexture(select(3, GetSpellInfo(value)))
-					BuffFrame[6]:SetAlpha(0.2)
-					break
-				end
-			end
-		end
-	end
+	OnEvent_UNIT_AURA(nil, "player")
 end
 local function BuildBuffFrame()
 	local MoveHander = CreateFrame("Frame", nil, UIParent)
-	MoveHander:SetSize(120, (120-(6-1)*2)/6)
+	MoveHander:SetSize(160, (160-(8-1)*2)/8)
 	MoveHander:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, -5)
-	for i = 1, 6 do
+	for i = 1, 8 do
 		local Temp = CreateFrame("Frame", nil, UIParent)
-		Temp:SetSize((120-(6-1)*2)/6, (120-(6-1)*2)/6)
+		Temp:SetSize((160-(8-1)*2)/8, (160-(8-1)*2)/8)
 		Temp:SetFrameStrata("LOW")
 		Temp:CreateBorder()
 		Temp.Icon = Temp:CreateTexture(nil, "ARTWORK")

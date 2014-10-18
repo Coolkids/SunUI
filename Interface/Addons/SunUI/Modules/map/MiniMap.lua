@@ -6,7 +6,7 @@ local function SkinMiniMap()
 	Minimap:SetMaskTexture("Interface\\ChatFrame\\ChatFrameBackground")
 	Minimap:SetFrameStrata("MEDIUM")
 	Minimap:ClearAllPoints()
-	Minimap:SetSize(120, 120)
+	Minimap:SetSize(160, 160)
 	Minimap:CreateShadow()
 	Minimap:SetPoint("TOPLEFT", "UIParent", "TOPLEFT", 5, -15)
 	S:CreateMover(Minimap, "MinimapMover", L["小地图"], true, nil, "ALL,GENERAL")
@@ -133,19 +133,60 @@ end
 local function RightClickMenu()
 	local menuFrame = CreateFrame("Frame", "MinimapRightClickMenu", UIParent, "UIDropDownMenuTemplate")
 	local menuList = {
-		{text = CHARACTER_BUTTON, func = function() ToggleCharacter("PaperDollFrame") end},
-		{text = SPELLBOOK_ABILITIES_BUTTON, func = function() ToggleSpellBook("spell") end},
-		{text = TALENTS_BUTTON, func = function() ToggleTalentFrame() end},
-		{text = ACHIEVEMENT_BUTTON, func = function() ToggleAchievementFrame() end},
-		{text = QUESTLOG_BUTTON, func = function() ToggleFrame(QuestLogFrame) end},
-		{text = SOCIAL_BUTTON, func = function() ToggleFriendsFrame(1) end},
-		{text = GUILD, func = function() ToggleGuildFrame(1) end},
-		{text = PLAYER_V_PLAYER, func = function() TogglePVPUI() end},
-		{text = LFG_TITLE, func = function() ToggleFrame(PVEFrame) end},
-		{text = HELP_BUTTON, func = function() ToggleHelpFrame() end},
+		{text = CHARACTER_BUTTON,
+		func = function() ToggleCharacter("PaperDollFrame") end},
+		{text = SPELLBOOK_ABILITIES_BUTTON,
+		func = function() if not SpellBookFrame:IsShown() then ShowUIPanel(SpellBookFrame) else HideUIPanel(SpellBookFrame) end end},
+		{text = TALENTS_BUTTON,
+		func = function()
+			if not PlayerTalentFrame then
+				TalentFrame_LoadUI()
+			end
+
+			if not GlyphFrame then
+				GlyphFrame_LoadUI()
+			end
+			
+			if not PlayerTalentFrame:IsShown() then
+				ShowUIPanel(PlayerTalentFrame)
+			else
+				HideUIPanel(PlayerTalentFrame)
+			end
+		end},	
+		{text = MOUNTS,
+		func = function()
+			TogglePetJournal(1);
+		end},
+		{text = PETS,
+		func = function()
+			TogglePetJournal(2)
+		end},
+		{text = TOY_BOX,
+		func = function() 
+			TogglePetJournal(3)
+		end},
+		{text = TIMEMANAGER_TITLE,
+		func = function() ToggleFrame(TimeManagerFrame) end},		
+		{text = ACHIEVEMENT_BUTTON,
+		func = function() ToggleAchievementFrame() end},
+		{text = SOCIAL_BUTTON,
+		func = function() ToggleFriendsFrame() end},
 		{text = SLASH_CALENDAR2:gsub("/(.*)","%1"), func = function() if(not CalendarFrame) then LoadAddOn("Blizzard_Calendar") end Calendar_Toggle() end},
-		{text = PET_JOURNAL,func = function() TogglePetJournal() end},
-		{text = ENCOUNTER_JOURNAL,func = function() ToggleEncounterJournal() end},
+		{text = ACHIEVEMENTS_GUILD_TAB,
+		func = function()
+			if IsInGuild() then
+				if not GuildFrame then GuildFrame_LoadUI() end
+				GuildFrame_Toggle()
+			else
+				if not LookingForGuildFrame then LookingForGuildFrame_LoadUI() end
+				if not LookingForGuildFrame then return end
+				LookingForGuildFrame_Toggle()
+			end
+		end},
+		{text = LFG_TITLE,
+		func = function() PVEFrame_ToggleFrame(); end},
+		{text = ENCOUNTER_JOURNAL, 
+		func = function() if not IsAddOnLoaded('Blizzard_EncounterJournal') then EncounterJournal_LoadUI(); end ToggleFrame(EncounterJournal) end},
 		{text = MAINMENU_BUTTON,func = function() ToggleFrame(GameMenuFrame) end},
 		{text = INVTYPE_BAG,func = function() ToggleAllBags() end},
 	}

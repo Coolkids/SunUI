@@ -72,6 +72,7 @@ local frames = {
   ["QuestLogPopupDetailFrame"] = false,
   -- AddOns
   ["LudwigFrame"] = false,
+  ["AddonList"] = false,
 }
 
 if not mop then

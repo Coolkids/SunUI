@@ -661,6 +661,95 @@ function A:CreateGradient(f)
 	tex:SetPoint("BOTTOMRIGHT", -1, 1)
 	tex:SetTexture(A.media.backdrop)
 	tex:SetVertexColor(0.2, 0.2, 0.2, 1)
-
 	return tex
+end
+
+function A:ReskinFilterButton(f)
+	f.TopLeft:Hide()
+	f.TopRight:Hide()
+	f.BottomLeft:Hide()
+	f.BottomRight:Hide()
+	f.TopMiddle:Hide()
+	f.MiddleLeft:Hide()
+	f.MiddleRight:Hide()
+	f.BottomMiddle:Hide()
+	f.MiddleMiddle:Hide()
+
+	A:Reskin(f)
+	f.Icon:SetTexture(A.media.arrowRight)
+
+	f.Text:SetPoint("CENTER")
+	f.Icon:SetPoint("RIGHT", f, "RIGHT", -5, 0)
+	f.Icon:SetSize(8, 8)
+end
+
+
+local function colourRadio(f)
+	f.bd:SetBackdropBorderColor(r, g, b)
+end
+
+local function clearRadio(f)
+	f.bd:SetBackdropBorderColor(0, 0, 0)
+end
+
+function A:ReskinRadio(f)
+	f:SetNormalTexture("")
+	f:SetHighlightTexture("")
+	f:SetCheckedTexture(A.media.backdrop)
+
+	local ch = f:GetCheckedTexture()
+	ch:SetPoint("TOPLEFT", 4, -4)
+	ch:SetPoint("BOTTOMRIGHT", -4, 4)
+	ch:SetVertexColor(r, g, b, .6)
+
+	local bd = CreateFrame("Frame", nil, f)
+	bd:SetPoint("TOPLEFT", 3, -3)
+	bd:SetPoint("BOTTOMRIGHT", -3, 3)
+	bd:SetFrameLevel(f:GetFrameLevel()-1)
+	A:CreateBD(bd, 0)
+	f.bd = bd
+
+	A:CreateBackdropTexture(f)
+	f.backdropTexture:SetPoint("TOPLEFT", 4, -4)
+	f.backdropTexture:SetPoint("BOTTOMRIGHT", -4, 4)
+
+	f:HookScript("OnEnter", colourRadio)
+	f:HookScript("OnLeave", clearRadio)
+end
+
+local function colourExpandOrCollapse(f)
+	if f:IsEnabled() then
+		f.plus:SetVertexColor(r, g, b)
+		f.minus:SetVertexColor(r, g, b)
+	end
+end
+
+local function clearExpandOrCollapse(f)
+	f.plus:SetVertexColor(1, 1, 1)
+	f.minus:SetVertexColor(1, 1, 1)
+end
+
+A.colourExpandOrCollapse = colourExpandOrCollapse
+A.clearExpandOrCollapse = clearExpandOrCollapse
+
+function A:ReskinExpandOrCollapse(f)
+	f:SetSize(13, 13)
+
+	A:Reskin(f, true)
+	f.SetNormalTexture = S.dummy
+
+	f.minus = f:CreateTexture(nil, "OVERLAY")
+	f.minus:SetSize(7, 1)
+	f.minus:SetPoint("CENTER")
+	f.minus:SetTexture(A.media.backdrop)
+	f.minus:SetVertexColor(1, 1, 1)
+
+	f.plus = f:CreateTexture(nil, "OVERLAY")
+	f.plus:SetSize(1, 7)
+	f.plus:SetPoint("CENTER")
+	f.plus:SetTexture(A.media.backdrop)
+	f.plus:SetVertexColor(1, 1, 1)
+
+	f:HookScript("OnEnter", colourExpandOrCollapse)
+	f:HookScript("OnLeave", clearExpandOrCollapse)
 end
