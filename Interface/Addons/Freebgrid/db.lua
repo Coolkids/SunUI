@@ -50,7 +50,7 @@ local Gcd_class_spells = {
 	["SHAMAN"] 		= 331,			
 	["ROGUE"]		= 1752,			
 	["DRUID"] 		= 1126,		
-	["MONK"] 		= 6603,	
+	["MONK"] 		= 115921,	
 }
 
 local Indicators_class_default = {
@@ -64,14 +64,22 @@ local Indicators_class_default = {
 		},						
         ["TR"] = {							--色块的位置	
 			["1"] = {						
-				id 	= {1126, 20217, 90363, 117667},	--监视的spellid,可以设置多个,buff与debuff不能共存	5%属性
+				id 	= {1126, 20217, 90363, 115921, 116781, 159988, 160017, 160077, 160206},-- 5%属性
+				--监视的spellid,可以设置多个,buff与debuff不能共存	
 				isbuff	= true,				--是否为buff
 				mine	= false,			--是否为玩家自己释放,监视缺失的buff时,建议设置为false
 				lack	= true,				--是否在缺少时显示
 				etime	= false,			--显示为aura剩余时间.
 				count	= false,			--显示为aura堆叠层数. etime和count 只有CEN和BR位置设置有效
-				color   = {r = 1, g = 0.0, b = 0.0},	--色块颜色,如不设置,默认为绿色.	颜色为0的需输入0.0					
-			},	
+				color   = {r = 1, g = 0.0, b = 0.0},	--色块颜色,如不设置,默认为绿色.	颜色为0的需输入0.0
+			},
+			["2"] = {
+				id 		= {1126, 35290, 50518, 55610, 57386, 159735, 160045, 160077, 167187, 167188},	--3%全能
+				isbuff	= true,
+				mine	= false,
+				lack	= true,
+				color   = {r = .8, g = 1, b = 0.0},
+			},
 		},
         ["BL"] = {
 			["1"] = {
@@ -126,7 +134,7 @@ local Indicators_class_default = {
 		
 		},
         ["TR"] = {	["1"] = {
-				id 		= {21562, 469, 90364, 109773},		--10%耐
+				id 		= {21562, 469, 90364, 166928, 160003, 160014, 160199},-- 10%耐
 				isbuff	= true,
 				lack	= true,
 				color   = {r = 1, g = 0.0, b = 0.0},
@@ -142,7 +150,7 @@ local Indicators_class_default = {
 			["1"] = {
 				id 		= {62618},		--"真言术:障"
 				isbuff	= true,
-				lack = false,
+				--lack	= false,
 			},
 		},
 		["RC"] = {},
@@ -152,7 +160,7 @@ local Indicators_class_default = {
 				isbuff	= true,
 				mine	= true,
 				lack	= false,
-				etime	= true,
+				etime	= false,
 				count 	= true,
 			},
 		},
@@ -176,7 +184,7 @@ local Indicators_class_default = {
 				color   = {r = 1, g = 0.0, b = 0.0},
 			},
 			["2"] = {
-				id	= {114163},		--"永恒之火"
+				id	= {157007},		--"洞察道标"
 				isbuff	= true,
 				mine	= true,
 				lack	= false,
@@ -185,14 +193,14 @@ local Indicators_class_default = {
 		},
         ["TR"] = {
 			["1"] = {
-				id 		= {19740, 116956, 93435, 128997},		--精通
+				id 		= {19740, 116956, 93435, 128997, 24907, 155522, 160039, 160073, 160198},-- 精通
 				isbuff	= true,
 				mine	= false,
 				lack	= true,
 				color   = {r = 1, g = 0.0, b = 0.0},
 			},
 			["2"] = {
-				id 		= {1126, 20217, 90363, 115921},	--5%属性
+				id 		= {1126, 20217, 90363, 115921, 116781, 159988, 160017, 160077, 160206},-- 5%属性
 				isbuff	= true,
 				mine	= false,
 				lack	= true,
@@ -201,7 +209,7 @@ local Indicators_class_default = {
 		},
         ["BL"] = {
 			["1"] = {
-				id 		= {53563},		--"圣光道标"
+				id 		= {53563, 156910},		--"圣光道标, 信仰道标"
 				isbuff	= true,
 				mine	= true,
 				lack	= false,
@@ -210,11 +218,10 @@ local Indicators_class_default = {
 		["RC"] = {},
         ["BR"] = {
 			["1"] = {
-				id 		= {53563},		--"圣光道标"
+				id 		= {157007},		--"洞察道标"
 				isbuff	= true,
 				mine	= false,
 				lack	= false,
-				etime	= false,
 			},
 		},
         ["Cen"] = {
@@ -231,10 +238,16 @@ local Indicators_class_default = {
         ["TL"] = {},
         ["TR"] = {
 			["1"] = {
-				id 		= {109773, 77747, 1459, 61316},		--10%SP
+				id 		= {109773, 90364, 1459, 61316, 126309, 160205},-- 10%法伤
 				isbuff	= true,
 				lack	= true,
 				color   = {r = 1, g = 0.0, b = 0.0},
+			},
+			["2"] = {
+				id 		= {24844, 34889, 49868, 54644, 57386, 58604, 109773, 113742, 159733, 160011, 166916},		--5%溅射
+				isbuff	= true,
+				lack	= true,
+				color   = {r = .8, g = 1, b = 0.0},
 			},
 		},
         ["BL"] = {
@@ -266,13 +279,13 @@ local Indicators_class_default = {
 		},
         ["TR"] = {
 			["1"] = {
-				id 		= {6673, 57330, 30809, 19506},		--10%AP
+				id 		= {6673, 57330, 19506},-- 10%攻强
 				isbuff	= true,
 				lack	= true,
 				color   = {r = 1, g = 0.0, b = 0.0},
 			},
 			["2"] = {
-				id 		= {21562, 6307, 469, 90364},		--10%耐
+				id 		= {21562, 469, 90364, 166928, 160003, 160014, 160199},-- 10%耐
 				isbuff	= true,
 				lack	= true,
 				color   = {r = .8, g = 1.0, b = 0.0},
@@ -286,7 +299,7 @@ local Indicators_class_default = {
     ["DEATHKNIGHT"] = {
         ["TL"] = {},
         ["TR"] = {		["1"] = {
-				id 		= {6673, 57330, 19506},		--10%AP
+				id 		= {6673, 57330, 19506},		--10%攻强
 				isbuff	= true,
 				lack	= true,
 				color   = {r = 1, g = 0.0, b = 0.0},
@@ -333,7 +346,7 @@ local Indicators_class_default = {
 				mine	= true,
 				lack	= false,
 				count	= true,
-				etime	= true,
+				etime	= false,
 			},
 		},
         ["Cen"] = {
@@ -355,15 +368,6 @@ local Indicators_class_default = {
     },
     ["ROGUE"] = {
         ["TL"] = {},
-        ["TR"] = {
-			["1"] = {
-				id 		= {113742, 128432,128433, 30809, 55610 },	--近战急速
-				isbuff	= true,
-				mine	= false,
-				lack	= true,
-				color   = {r = 1, g = 0.0, b = 0.0},
-			},
-		},
         ["BL"] = {},
 		["RC"] = {},
         ["BR"] = {},
@@ -375,19 +379,18 @@ local Indicators_class_default = {
 				id 		= {119611},		--"复苏之雾"
 				isbuff	= true,
 				mine	= true,
-				--lack	= true, --test
 			},
 		},
         ["TR"] = {	
 			["1"] = {						
-				id 		= {1126, 20217, 90363, 117667},	--5%属性
+				id 		= {1126, 20217, 90363, 115921, 116781, 159988, 160017, 160077, 160206},-- 5%属性
 				isbuff	= true,				
 				mine	= false,				
 				lack	= true,						
 				color   = {r = 1, g = 0.0, b = 0.0},
 			},
 			["2"] = {
-				id 		= {1459, 61316,126309, 24604, 90309, 126373, 97229, 24932, 116781},		--5%暴击
+				id 		= {17007, 1459, 61316, 116781, 24604, 126309, 90309, 126373, 160052,  90363, 160200},--5%暴击
 				talent    = 3,
 				isbuff	= true,
 				lack	= true,
@@ -416,11 +419,17 @@ local Indicators_class_default = {
         ["TL"] = {},
         ["TR"] = {
 			["1"] = {
-				id 		= {1459, 61316,126309, 24604, 90309, 126373, 97229, 24932, 116781},		--10%SP5%爆
+				id 		= {109773, 90364, 1459, 61316, 126309, 160205},-- 10%法伤
 				isbuff	= true,
 				mine	= false,
 				lack	= true,
 				color   = {r = 1, g = 0.0, b = 0.0},
+			},
+			["2"] = {
+				id 		= {17007, 1459, 61316, 116781, 24604, 126309, 90309, 126373, 160052,  90363, 160200},--5%暴击
+				isbuff	= true,
+				lack	= true,
+				color   = {r = .8, g = 1, b = 0.0},
 			},
 		},
         ["BL"] = {},
@@ -429,26 +438,19 @@ local Indicators_class_default = {
         ["Cen"] = {},
     }
 }
---local version, internalVersion, date, uiVersion = GetBuildInfo()
---local standard_text_font
---if GetLocale() == "zhCN" then
---	standard_text_font = [[Fonts\ARKai_T.ttf]]
---elseif GetLocale() == "zhTW" then
---	standard_text_font = [[Fonts\bLEI00D.ttf]]
---elseif GetLocale() == "enUS" then
---end
+
 
 ns.defaults = {
     scale = 1.0,
     width = 78,
-    height = 42,
-    texture = "gradient",
+    height = 38,
+    texture = "Blizzard",
     texturePath = mediapath.."gradient",   
     fontPath = STANDARD_TEXT_FONT,
     font = L.defaultfont,
     fontsize = 12,
     fontsizeEdge = 10,
-    outline = "NONE",
+    outline = "THINOUTLINE",
 	shadowoffset = 1,
     solo = true,
     player = true,
@@ -461,11 +463,11 @@ ns.defaults = {
     pethorizontal = true,
     MThorizontal = true,
 	abbnumber = true,
-    growth = "DOWN",
-    petgrowth = "DOWN",
+    growth = "UP",
+    petgrowth = "UP",
     MTgrowth = "DOWN",
 	Gcd = true,
-    reversecolors = false,
+    reversecolors = true,
     definecolors = false,
     powerbar = true,
     onlymana = true,
