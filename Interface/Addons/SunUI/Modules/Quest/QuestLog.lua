@@ -1,12 +1,12 @@
 local S, L, DB, _, C = unpack(select(2, ...))
-
+--[[
 ----------------------------------------------------------------------------------------
 --	Quest level(yQuestLevel by Yleaf)
 ----------------------------------------------------------------------------------------
 local function questlevel()
-	local buttons = QuestLogScrollFrame.buttons
+	local buttons = QuestScrollFrameScrollBar.buttons
 	local numButtons = #buttons
-	local scrollOffset = HybridScrollFrame_GetOffset(QuestLogScrollFrame)
+	local scrollOffset = HybridScrollFrame_GetOffset(QuestScrollFrameScrollBar)
 	local numEntries, numQuests = GetNumQuestLogEntries()
 
 	for i = 1, numButtons do
@@ -16,13 +16,14 @@ local function questlevel()
 			local title, level, questTag, suggestedGroup, isHeader, isCollapsed, isComplete, isDaily = GetQuestLogTitle(questIndex)
 			if not isHeader then
 				questLogTitle:SetText("["..level.."] "..title)
-				QuestLogTitleButton_Resize(questLogTitle)
+				print("["..level.."] "..title)
+				QuestFrame_UpdatePortraitText(questLogTitle)
 			end
 		end
 	end
 end
 hooksecurefunc("QuestLog_Update", questlevel)
-QuestLogScrollFrameScrollBar:HookScript("OnValueChanged", questlevel)
+QuestScrollFrameScrollBar:HookScript("OnValueChanged", questlevel)
 
 ----------------------------------------------------------------------------------------
 --	CTRL+Click to abandon a quest or ALT+Click to share a quest(by Suicidal Katt)
@@ -84,3 +85,4 @@ hooksecurefunc("QuestLog_UpdateQuestCount", function()
 	end
 	QuestLogCount:SetWidth(width + 15)
 end)
+]]

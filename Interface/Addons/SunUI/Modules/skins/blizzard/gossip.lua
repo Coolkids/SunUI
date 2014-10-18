@@ -27,14 +27,19 @@ local function LoadSkin()
 	A:ReskinClose(GossipFrameCloseButton)
 	hooksecurefunc("GossipFrameUpdate", function()
 		for i=1, NUMGOSSIPBUTTONS do
-			local text = _G["GossipTitleButton" .. i]:GetText()
-			if text then
-				text = string.gsub(text,"|cFF0008E8","|cFF0080FF")
-				_G["GossipTitleButton" .. i]:SetText(text)
+			local button = _G["GossipTitleButton"..i]
+			if button:GetFontString() then
+				if button:GetFontString():GetText() and button:GetFontString():GetText():find("|cff000000") then
+					button:GetFontString():SetText(string.gsub(button:GetFontString():GetText(), "|cff000000", "|cffFFFF00"))
+				end
 			end
 		end
 	end)
-
+	hooksecurefunc(ItemTextPageText, "SetTextColor", function(self, r, g, b)
+		if r ~= 1 or g ~= 1 or b ~= 1 then
+			ItemTextPageText:SetTextColor(1, 1, 1)
+		end
+	end)
 	select(18, ItemTextFrame:GetRegions()):Hide()
 	InboxFrameBg:Hide()
 	ItemTextScrollFrameMiddle:SetAlpha(0)

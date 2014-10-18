@@ -143,10 +143,6 @@ local function Tab_OnClick(self)
 		LookingForGuildFrame_LoadUI()
 	end
 
-	if (self.ToggleFrame == "PVPUIFrame") then
-		PVP_LoadUI()
-	end
-
 	local frame = _G[self.ToggleFrame]
 
 
@@ -247,18 +243,6 @@ local function STHookFrame(fname)
 		frametabs['RaidBrowserFrame']:Disable()
 	end
 
-	-- PVP tab
-	frametabs['PVPUIFrame'] = SocialTabs.createTab(frame, "PVPUIFrame", prevtab)
-	frametabs['PVPUIFrame'].tooltip = PLAYER_V_PLAYER
-	frametabs['PVPUIFrame']:SetNormalTexture("Interface\\BattlefieldFrame\\UI-Battlefield-Icon")
-	prevtab = frametabs['PVPUIFrame']
-
-	if ((playerLevel < SHOW_PVP_LEVEL) or (playerFacion == "Neutral")) then
-		frametabs['PVPUIFrame']:SetAlpha(0.5)
-		SetDesaturation(frametabs['PVPUIFrame']:GetNormalTexture(), true)
-		frametabs['PVPUIFrame']:Disable()
-	end
-
 	-- LookingForGuild tab
 	frametabs['LookingForGuildFrame'] = SocialTabs.createTab(frame, "LookingForGuildFrame", prevtab)
 	frametabs['LookingForGuildFrame'].tooltip = LOOKINGFORGUILD
@@ -279,8 +263,6 @@ local function STHookFrame(fname)
 	if (fname == "RaidBrowserFrame") then
 		LFRParentFrameSideTab1:SetPoint("TOPLEFT", LFRParentFrame, "TOPRIGHT", -3, -316)
 	end
-
-
 
 	TabRefArray[fname] = frametabs
 
@@ -328,11 +310,6 @@ SocialTabs:SetScript("OnEvent", function(self, event, addon)
 		-- Hook LookingForGuild window
 		elseif (addon == "Blizzard_LookingForGuildUI") then
 			STHookFrame("LookingForGuildFrame")
-		-- Hook PVPUIFrame
-		elseif (addon == "Blizzard_PVPUI") then
-			STHookFrame("PVPUIFrame")
-		elseif (addon == "Blizzard_PVPUI") then
-			STHookFrame("PVPUIFrame")
 		end
 	elseif (event == 'PLAYER_GUILD_UPDATE') then
 		CheckTabCriteria("guild")

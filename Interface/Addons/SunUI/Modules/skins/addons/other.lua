@@ -1,7 +1,7 @@
 ﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
-local A = S:GetModule("Skins")
 
 local function SkinOther(self)
+	local A = S:GetModule("Skins")
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	
 	if FriendsMenuXPSecure then
@@ -40,6 +40,13 @@ local function SkinOther(self)
 	end
 	--local MB = S:GetModule("MirrorBar")
 	--MB:PLAYER_ENTERING_WORLD()
+	
+	if CloseUpUndressButton then
+		local a,b,c,d,e = CloseUpUndressButton:GetPoint()
+		CloseUpUndressButton:SetPoint(a, b, c, d+3, e)
+		A:Reskin(CloseUpUndressButton)
+	end
+	
 	_G["TimeManagerClockButton"]:Hide()
 	GameTimeFrame:Hide()
 end

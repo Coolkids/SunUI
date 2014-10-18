@@ -106,6 +106,8 @@ local function LoadSkin()
 		"GameMenuButtonQuit",
 		"GameMenuButtonContinue",
 		"GameMenuButtonMacOptions",
+		"GameMenuButtonWhatsNew",
+		"GameMenuButtonAddons",
 		"ColorPickerOkayButton",
 		"ColorPickerCancelButton",
 		"GuildInviteFrameJoinButton",

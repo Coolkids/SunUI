@@ -1,6 +1,6 @@
 ﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 
-local MAP = S:NewModule("MAP", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
+local MAP = S:NewModule("MINIMAP", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 MAP.modName = L["地图美化"]
 local function SkinMiniMap()
 	Minimap:SetMaskTexture("Interface\\ChatFrame\\ChatFrameBackground")
@@ -170,11 +170,11 @@ local function LocationInfo()
 	SubLoc:Hide()
 	SubText2:SetText("")
 	SubText:SetText("")
-	Minimap:HookScript('OnEnter', function() 
+	Minimap:HookScript('OnEnter', function()
 		SubLoc:Show() 
 		SubText2:SetText(GetZoneText())
 		SubText:SetText(GetSubZoneText()) 
-		UIFrameFadeIn(SubLoc, 1, SubLoc:GetAlpha(), 1)
+		UIFrameFadeIn(SubLoc, 0.3, SubLoc:GetAlpha(), 1)
 		local pvp = GetZonePVPInfo()
 		if pvp == "friendly" then r,g,b = 0.1,1,0.1 
 			elseif pvp == "sanctuary" then r,g,b = 0.41,0.8,0.94 
@@ -187,7 +187,7 @@ local function LocationInfo()
 		SubText:SetTextColor(r,g,b) 
 	end)
 	Minimap:HookScript('OnLeave', function() 
-		S:FadeOutFrame(SubLoc)
+		S:FadeOutFrame(SubLoc, 0.3)
 	end)
 end	
 local function Difficultyflag()
@@ -246,7 +246,7 @@ function MAP:CreateRaidTools()
 	wm:SetFrameLevel(3)
 	wm:ClearAllPoints() 
 	wm:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", -5, -5)
-	wm:SetSize(15, 15)
+	wm:SetSize(20, 20)
 	
 	CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButtonLeft:SetAlpha(0) 
 	CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButtonMiddle:SetAlpha(0) 
@@ -291,12 +291,9 @@ function MAP:Initialize()
 	HideMinimapButton()
 	MouseScroll()
 	RightClickMenu()
-	--LocationInfo()
+	LocationInfo()
 	Difficultyflag()
 	self:CreateRaidTools()
-	self:initFogClear()
-	self:initXPBar()
-	self:initCollector()
 end
 
 S:RegisterModule(MAP:GetName())

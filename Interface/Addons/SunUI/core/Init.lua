@@ -13,7 +13,7 @@ Engine[1] = AddOn
 Engine[2] = Locale
 Engine[3] = AddOn.DF["profile"]
 Engine[4] = AddOn.DF["global"]
-
+SunUI = Engine
 _G[AddOnName] = Engine
 
 function AddOn:OnProfileChanged(event, database, newProfileKey)

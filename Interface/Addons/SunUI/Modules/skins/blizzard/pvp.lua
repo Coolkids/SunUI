@@ -13,10 +13,10 @@ local function LoadSkin()
 	
 	-- Category buttons
 
-	for i = 1, 3 do
+	for i = 1, 4 do
 		local bu = PVPQueueFrame["CategoryButton"..i]
 		local icon = bu.Icon
-		local cu = bu.CurrencyIcon
+		local cu = bu.CurrencyDisplay
 
 		bu.Ring:Hide()
 
@@ -33,13 +33,14 @@ local function LoadSkin()
 		icon.bg:SetDrawLayer("ARTWORK")
 
 		if cu then
-			cu:SetSize(16, 16)
-			cu:SetPoint("TOPLEFT", bu.Name, "BOTTOMLEFT", 0, -8)
-			bu.CurrencyAmount:SetPoint("LEFT", cu, "RIGHT", 4, 0)
+			local ic = cu.Icon
+			ic:SetSize(16, 16)
+			ic:SetPoint("TOPLEFT", bu.Name, "BOTTOMLEFT", 0, -8)
+			cu.Amount:SetPoint("LEFT", ic, "RIGHT", 4, 0)
 
-			cu:SetTexCoord(.08, .92, .08, .92)
-			cu.bg = A:CreateBG(cu)
-			cu.bg:SetDrawLayer("BACKGROUND", 1)
+			ic:SetTexCoord(.08, .92, .08, .92)
+			ic.bg = A:CreateBG(ic)
+			ic.bg:SetDrawLayer("BACKGROUND", 1)
 		end
 	end
 

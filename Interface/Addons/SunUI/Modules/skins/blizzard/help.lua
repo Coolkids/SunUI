@@ -121,7 +121,7 @@ local function LoadSkin()
 			local navButton = self.navList[i]
 			local lastNav = self.navList[i-1]
 			if navButton and lastNav then
-				navButton:SetFrameLevel(lastNav:GetFrameLevel() - 2)
+				navButton:SetFrameLevel((lastNav:GetFrameLevel() - 2)>0 and (lastNav:GetFrameLevel() - 2) or 0)
 				navButton:ClearAllPoints()
 				navButton:SetPoint("LEFT", lastNav, "RIGHT", 1, 0)
 			end

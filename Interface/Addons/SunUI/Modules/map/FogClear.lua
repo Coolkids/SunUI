@@ -3,7 +3,7 @@ Copyright (c) 2009-2012, Hendrik "Nevcairiel" Leppkes < h.leppkes@gmail.com >
 All rights reserved.
 ]]
 local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
-local FogClear = S:GetModule("MAP")
+local FogClear = S:NewModule("FogClear", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 
 local strlen, strsub = string.len, string.sub
 local mod, floor, ceil = math.fmod, math.floor, math.ceil
@@ -1409,7 +1409,7 @@ end
 
 local worldMapCache = {}
 local battleMapCache = {}
-function FogClear:initFogClear()
+function FogClear:Initialize()
 	self:initDate()
 	self:RawHook("GetNumMapOverlays", true)
 	self:SecureHook("WorldMapFrame_Update", "UpdateWorldMapOverlays")
@@ -1604,3 +1604,4 @@ function FogClear:SetOverlayColor(info, r,g,b,a)
 	self.db.profile.colorR, self.db.profile.colorG, self.db.profile.colorB, self.db.profile.colorA = r,g,b,a
 	if self:IsEnabled() then self:Refresh() end
 end
+S:RegisterModule(FogClear:GetName())

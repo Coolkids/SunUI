@@ -25,6 +25,8 @@ A["media"] = {
 	["arrowLeft"] = "Interface\\AddOns\\SunUI\\media\\arrow-left-active",
 	["arrowRight"] = "Interface\\AddOns\\SunUI\\media\\arrow-right-active",
 	["backdrop"] = "Interface\\ChatFrame\\ChatFrameBackground",
+	["arrowLeft"] = "Interface\\AddOns\\SunUI\\media\\arrow-left-active",
+	["arrowRight"] = "Interface\\AddOns\\SunUI\\media\\arrow-right-active",
 }
 
 
@@ -609,4 +611,35 @@ function A:ReskinFrame(f)
 	f:HookScript("OnEnter", StartGlow)
  	f:HookScript("OnLeave", StopGlow)
 	f.reskin = true
+end
+
+local function colourArrow(f)
+	if f:IsEnabled() then
+		f.tex:SetVertexColor(r, g, b)
+	end
+end
+
+local function clearArrow(f)
+	f.tex:SetVertexColor(1, 1, 1)
+end
+
+function A:ReskinNavBar(f)
+	local overflowButton = f.overflowButton
+
+	f:GetRegions():Hide()
+	f:DisableDrawLayer("BORDER")
+	f.overlay:Hide()
+	f.homeButton:GetRegions():Hide()
+
+	A:Reskin(f.homeButton)
+	A:Reskin(overflowButton, true)
+
+	local tex = overflowButton:CreateTexture(nil, "ARTWORK")
+	tex:SetTexture(A.media.arrowLeft)
+	tex:SetSize(8, 8)
+	tex:SetPoint("CENTER")
+	overflowButton.tex = tex
+
+	overflowButton:HookScript("OnEnter", colourArrow)
+	overflowButton:HookScript("OnLeave", clearArrow)
 end

@@ -1,5 +1,5 @@
 local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
-local EP = S:GetModule("MAP")
+local EP = S:NewModule("EXPBAR", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 local ExpBar = nil
 local exptitle1 , exptitle2, exptext1, exptext2 = "", "", "", ""
 local FactionInfo = {
@@ -118,8 +118,9 @@ function EP:OnEvent()
 	end
 end
 
-function EP:initXPBar()
-
-	EP:BuildExpBar()
-	EP:Register()
+function EP:Initialize()
+	self:BuildExpBar()
+	self:Register()
 end
+
+S:RegisterModule(EP:GetName())

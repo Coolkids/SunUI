@@ -123,10 +123,10 @@ end
 
 QuestInfoDescriptionText.SetAlphaGradient=function() return false end
 function AAQ:CreateQuickSet()
-	local quickquest = CreateFrame("CheckButton", nil, WatchFrameCollapseExpandButton)
+	local quickquest = CreateFrame("CheckButton", nil, ObjectiveTrackerFrame)
 	quickquest:ClearAllPoints()
 	quickquest:SetSize(22,22)
-	quickquest:SetPoint("TOPRIGHT", WatchFrame, "TOPLEFT", -5, 0)
+	quickquest:SetPoint("TOPRIGHT", ObjectiveTrackerBlocksFrame.QuestHeader, "TOPLEFT", -5, 0)
 	quickquest:SetScript("OnClick", function(self)
 		if AAQ.db.AutoQuest then 
 			AAQ.db.AutoQuest = false
@@ -177,7 +177,6 @@ function AAQ:UpdateAutoAccept()
 	end
 end
 function AAQ:initAutoAccept()
-	
 	self:UpdateAutoAccept()
 	self:CreateQuickSet()
 end

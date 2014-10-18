@@ -93,7 +93,7 @@ local function LoadSkin()
 		A:CreateTab(_G["CharacterFrameTab"..i])
 	end
 
-	function PaperDollFrame_SetLevel()
+	hooksecurefunc("PaperDollFrame_SetLevel", function()
         local primaryTalentTree = GetSpecialization()
         local classDisplayName, class = UnitClass("player")
         local classColor
@@ -110,7 +110,7 @@ local function LoadSkin()
         else
             CharacterLevelText:SetFormattedText(PLAYER_LEVEL_NO_SPEC, UnitLevel("player"), classColorString, classDisplayName);
         end
-	end
+	end)
 
 	EquipmentFlyoutFrameButtons:DisableDrawLayer("BACKGROUND")
 	EquipmentFlyoutFrameButtons:DisableDrawLayer("ARTWORK")
@@ -140,7 +140,7 @@ local function LoadSkin()
 		local slot = _G["Character"..slots[i].."Slot"]
 		local ic = _G["Character"..slots[i].."SlotIconTexture"]
 		_G["Character"..slots[i].."SlotFrame"]:Hide()
-
+		slot:StripTextures()
 		slot.backgroundTextureName = ""
 		slot.checkRelic = nil
 		slot:SetNormalTexture("")

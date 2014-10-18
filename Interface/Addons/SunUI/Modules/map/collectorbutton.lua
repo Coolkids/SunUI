@@ -1,9 +1,25 @@
 ﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
-local MM = S:GetModule("MAP")
+local MM = S:NewModule("COLLECTORBUTTON", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 local MBCF
 local buttons = {}
 local List = {
 	["BagSync_MinimapButton"] = true,
+}
+local BlackList = { 
+	["MiniMapTracking"] = true,
+	["MiniMapVoiceChatFrame"] = true,
+	["MiniMapWorldMapButton"] = true,
+	["MiniMapLFGFrame"] = true,
+	["MinimapZoomIn"] = true,
+	["MinimapZoomOut"] = true,
+	["MiniMapMailFrame"] = true,
+	["BattlefieldMinimap"] = true,
+	["MinimapBackdrop"] = true,
+	["GameTimeFrame"] = true,
+	["TimeManagerClockButton"] = true,
+	["FeedbackUIButton"] = true,
+	["HelpOpenTicketButton"] = true,
+	["MiniMapBattlefieldFrame"] = true,
 }
 function MM:PositionButtonCollector(self, screenQuadrant)
 	local line = math.ceil(Minimap:GetWidth() / 20)
@@ -34,23 +50,7 @@ function MM:PositionButtonCollector(self, screenQuadrant)
 	end
 end
 
-function MM:initCollector()
-	local BlackList = { 
-		["MiniMapTracking"] = true,
-		["MiniMapVoiceChatFrame"] = true,
-		["MiniMapWorldMapButton"] = true,
-		["MiniMapLFGFrame"] = true,
-		["MinimapZoomIn"] = true,
-		["MinimapZoomOut"] = true,
-		["MiniMapMailFrame"] = true,
-		["BattlefieldMinimap"] = true,
-		["MinimapBackdrop"] = true,
-		["GameTimeFrame"] = true,
-		["TimeManagerClockButton"] = true,
-		["FeedbackUIButton"] = true,
-		["HelpOpenTicketButton"] = true,
-		["MiniMapBattlefieldFrame"] = true,
-	}
+function MM:Initialize()
 
 	MBCF = CreateFrame("Frame", "MinimapButtonCollectFrame", UIParent)
 	if select(3, Minimap:GetPoint()):upper():find("TOP") then
@@ -123,3 +123,4 @@ function MM:initCollector()
 		UIFrameFadeOut(MBCF, .5, MBCF:GetAlpha(), 0)
 	end)
 end
+S:RegisterModule(MM:GetName())

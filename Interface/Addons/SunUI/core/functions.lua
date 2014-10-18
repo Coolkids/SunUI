@@ -196,7 +196,7 @@ function S:PLAYER_ENTERING_WORLD()
 	end)
 end
 function S:GameMenuFrame_UpdateVisibleButtons()
-	_G["GameMenuFrame"]:SetHeight(_G["GameMenuFrame"]:GetHeight()+_G["GameMenuButtonMacros"]:GetHeight()*2+8);
+	_G["GameMenuFrame"]:SetHeight(_G["GameMenuFrame"]:GetHeight()+_G["GameMenuButtonMacros"]:GetHeight()+8);
 end
 function S:ToggleGameMenu()
 end

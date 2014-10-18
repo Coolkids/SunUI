@@ -17,17 +17,12 @@ local function LoadSkin()
 	GroupFinderFrameGroupButton2.icon:SetTexture("Interface\\Icons\\inv_helmet_06")
 	GroupFinderFrameGroupButton3.icon:SetTexture("Interface\\Icons\\Icon_Scenarios")
 	
-	local function onEnter(self)
-		self:SetBackdropColor(r, g, b, .4)
-	end
-	
-	local function onLeave(self)
-		self:SetBackdropColor(0, 0, 0, 0)
-	end
 
 	for i = 1, 4 do
 		local bu = GroupFinderFrame["groupButton"..i]
-
+		local icon = bu.Icon
+		local cu = bu.CurrencyDisplay
+		
 		bu.ring:Hide()
 		bu.bg:SetTexture(A["media"].backdrop)
 		bu.bg:SetVertexColor(r, g, b, .2)
@@ -113,6 +108,7 @@ local function LoadSkin()
 	LFDQueueFrameRandomScrollFrame:SetWidth(304)
 
 	hooksecurefunc("LFGRewardsFrame_SetItemButton", function(parentFrame, dungeonID, index)
+		
 		local parentName = parentFrame:GetName()
 		local button = _G[parentName.."Item"..index]
 		local icon = _G[parentName.."Item"..index.."IconTexture"]
@@ -135,6 +131,27 @@ local function LoadSkin()
 			A:CreateBD(button.bg2, 0)
 
 			button.reskinned = true
+		end
+		
+		local money = _G[parentName.."MoneyReward"]
+		local mi = _G[parentName.."MoneyRewardIconTexture"]
+		mi:SetTexCoord(.08, .92, .08, .92)
+		if not money.reskinned then
+			local count = _G[parentName.."MoneyRewardCount"]
+			local na = _G[parentName.."MoneyRewardNameFrame"]
+
+			A:CreateBG(mi)
+			mi:SetDrawLayer("OVERLAY")
+			count:SetDrawLayer("OVERLAY")
+			na:SetTexture(0, 0, 0, .25)
+			na:SetSize(118, 39)
+
+			money.bg2 = CreateFrame("Frame", nil, money)
+			money.bg2:SetPoint("TOPLEFT", na, "TOPLEFT", 10, 0)
+			money.bg2:SetPoint("BOTTOMRIGHT", na, "BOTTOMRIGHT")
+			A:CreateBD(money.bg2, 0)
+
+			money.reskinned = true
 		end
 	end)
 

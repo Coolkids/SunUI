@@ -69,7 +69,7 @@ local frames = {
   ["PVPBannerFrame"] = false,
   ["PVEFrame"] = false, -- dungeon finder + challenges
   ["GuildInviteFrame"] = false,
-
+  ["QuestLogPopupDetailFrame"] = false,
   -- AddOns
   ["LudwigFrame"] = false,
 }
@@ -123,7 +123,7 @@ local lodFrames = {
   Blizzard_ChallengesUI = { ["ChallengesLeaderboardFrame"] = false }, -- UNTESTED
   Blizzard_ItemUpgradeUI = { ["ItemUpgradeFrame"] = false, }, -- UNTESTED
 
-  Blizzard_PVPUI = { ["PVPUIFrame"] = false },
+  --Blizzard_PVPUI = { ["PVPUIFrame"] = false },
 }
 
 local parentFrame = {}
