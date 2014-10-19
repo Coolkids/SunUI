@@ -1,8 +1,6 @@
 ﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 
 local AB = S:NewModule("ActionBar", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
-local LibActionButton = LibStub and LibStub("LibActionButton-1.0", true)
-local activeButtons = LibActionButton and LibActionButton.activeButtons or ActionBarActionEventsFrame.frames
 
 local hidefunction = ActionButton_HideGrid
 AB.modName = L["动作条"]
@@ -500,10 +498,10 @@ local function ShowGrid(event, str, value)
 	end
 end
 
-local function HideLossCD()
-	for button in pairs(activeButtons) do
-		button.cooldown:SetLossOfControlCooldown(0, 0)
-	end
+function AB:LossOfControlFrame_OnEvent(button, event, ...)
+	button:UnregisterEvent("LOSS_OF_CONTROL_UPDATE")
+	button:UnregisterEvent("LOSS_OF_CONTROL_ADDED")
+	button:Hide()
 end
 
 function AB:UpdateSpace()
@@ -708,9 +706,8 @@ function AB:Initialize()
 	self:initStyle()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", initShowGrid)
 	self:RegisterEvent("CVAR_UPDATE", ShowGrid)
-	self:RegisterEvent("LOSS_OF_CONTROL_ADDED", HideLossCD)
-	self:RegisterEvent("LOSS_OF_CONTROL_UPDATE", HideLossCD)
 	self:RegisterEvent("ADDON_LOADED")
+	self:SecureHook("LossOfControlFrame_OnEvent")	
 end
 
 S:RegisterModule(AB:GetName())
