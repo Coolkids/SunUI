@@ -65,8 +65,8 @@ local function OnEvent_UNIT_AURA(event, unit, ...)
 	 --加速
 	if BR.RaidBuffList[7] and BR.RaidBuffList[7][1] then
 		BuffFrame[6]:SetAlpha(1)
-		BuffFrame[6].Icon:SetTexture(select(3, GetSpellInfo(BR.RaidBuffList[8][1])))
-		for key, value in pairs(BR.RaidBuffList[8]) do
+		BuffFrame[6].Icon:SetTexture(select(3, GetSpellInfo(BR.RaidBuffList[7][1])))
+		for key, value in pairs(BR.RaidBuffList[7]) do
 			local name = GetSpellInfo(value)
 			if name and UnitAura("player", name) then 
 				BuffFrame[6].Icon:SetTexture(select(3, GetSpellInfo(value)))
@@ -78,8 +78,8 @@ local function OnEvent_UNIT_AURA(event, unit, ...)
 	--全能
 	if BR.RaidBuffList[8] and BR.RaidBuffList[8][1] then
 		BuffFrame[7]:SetAlpha(1)
-		BuffFrame[7].Icon:SetTexture(select(3, GetSpellInfo(BR.RaidBuffList[7][1])))
-		for key, value in pairs(BR.RaidBuffList[7]) do
+		BuffFrame[7].Icon:SetTexture(select(3, GetSpellInfo(BR.RaidBuffList[8][1])))
+		for key, value in pairs(BR.RaidBuffList[8]) do
 			local name = GetSpellInfo(value)
 			if name and UnitAura("player", name) then 
 				BuffFrame[7].Icon:SetTexture(select(3, GetSpellInfo(value)))
@@ -91,8 +91,8 @@ local function OnEvent_UNIT_AURA(event, unit, ...)
 	--溅射
 	if BR.RaidBuffList[9] and BR.RaidBuffList[9][1] then
 		BuffFrame[8]:SetAlpha(1)
-		BuffFrame[8].Icon:SetTexture(select(3, GetSpellInfo(BR.RaidBuffList[8][1])))
-		for key, value in pairs(BR.RaidBuffList[8]) do
+		BuffFrame[8].Icon:SetTexture(select(3, GetSpellInfo(BR.RaidBuffList[9][1])))
+		for key, value in pairs(BR.RaidBuffList[9]) do
 			local name = GetSpellInfo(value)
 			if name and UnitAura("player", name) then 
 				BuffFrame[8].Icon:SetTexture(select(3, GetSpellInfo(value)))

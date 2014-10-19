@@ -3,6 +3,7 @@
 local TT = S:NewModule("Tooltip", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 TT.modName = L["鼠标提示"]
 TT.order = 14
+local tooltipholder = nil
 function TT:GetOptions()
 	local options = {
 		Cursor = {
@@ -318,13 +319,16 @@ local function On_SetDefaultAnchor(tooltip, parent)
 	if TT.db.Cursor then
 		tooltip:SetOwner(parent, "ANCHOR_CURSOR")
 	else
-		tooltip:SetOwner(parent, "ANCHOR_NONE")
-		local tooltipholder = CreateFrame("Frame", nil, UIParent)
-		tooltipholder:SetFrameStrata("TOOLTIP")
-		tooltipholder:SetSize(120, 20)
-		tooltipholder:SetPoint("BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -50, 160)
-		S:CreateMover(tooltipholder, "TooltipMover", L["鼠标提示锚点"], true, nil, "ALL,GENERAL")
-		tooltip:SetPoint("BOTTOMRIGHT", TooltipMover, "BOTTOMRIGHT", 0, 0)
+		if not TooltipMover then
+			tooltipholder = CreateFrame("Frame", nil, UIParent)
+			tooltipholder:SetFrameStrata("TOOLTIP")
+			tooltipholder:SetSize(120, 20)
+			tooltipholder:SetPoint("BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -50, 160)
+			S:CreateMover(tooltipholder, "TooltipMover", L["鼠标提示锚点"], true, nil, "ALL,GENERAL")
+		end
+		if TooltipMover then
+			tooltip:SetPoint("BOTTOMRIGHT", TooltipMover, "BOTTOMRIGHT", 0, 0)
+		end
 	end	
 	tooltip.default = 1
 end
@@ -402,13 +406,46 @@ local function SkinTooltip()
 	A:CreateBD(FriendsTooltip)
 	A:CreateMark(sb)
 end
+function TT:GameTooltip_ShowStatusBar(tt, min, max, value, text)
+	local statusBar = _G[tt:GetName().."StatusBar"..tt.shownStatusBars];
+	local IB = S:GetModule("InfoBar")
+	local r, g, b = S:ColorGradient(value/(max), 210/255, 100/255, 100/255, 1, 1, 125/255, 0, 0.9, 0)
+	statusBar:SetStatusBarColor(r, g, b)
+			
+	if statusBar and not statusBar.skinned then
+		statusBar:StripTextures()
+		statusBar:SetStatusBarTexture(S["media"].normal)
+		--local A = S:GetModule("Skins")
+		--A:CreateMark(statusBar)
+	
+		statusBar.bg = CreateFrame("Frame", nil, statusBar)
+		statusBar.bg:SetPoint("TOPLEFT", statusBar, "TOPLEFT", -1, 1)
+		statusBar.bg:SetPoint("BOTTOMRIGHT", statusBar, "BOTTOMRIGHT", 1, -1)
+		statusBar.bg:SetFrameStrata(statusBar:GetFrameStrata())
+		statusBar.bg:SetFrameLevel(statusBar:GetFrameLevel() - 1)
+		statusBar.bg:SetBackdrop(backdrop)
+		statusBar.bg:SetBackdropColor(0, 0, 0, 0.5)
+		statusBar.bg:SetBackdropBorderColor(0, 0, 0, 1)
 
+		statusBar.skinned = true;
+	end
+end
 function TT:Initialize()
 	SkinTooltip()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
+	self:SecureHook('GameTooltip_ShowStatusBar')
 	GameTooltip:HookScript("OnTooltipSetUnit", On_OnTooltipSetUnit)
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", On_SetDefaultAnchor)
 	GameTooltip:HookScript("OnUpdate", On_ANCHOR_CURSOR)
+	if TT.db.Cursor then
+		
+	else
+		tooltipholder = CreateFrame("Frame", nil, UIParent)
+		tooltipholder:SetFrameStrata("TOOLTIP")
+		tooltipholder:SetSize(120, 20)
+		tooltipholder:SetPoint("BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -50, 160)
+		S:CreateMover(tooltipholder, "TooltipMover", L["鼠标提示锚点"], true, nil, "ALL,GENERAL")
+	end	
 end
 
 S:RegisterModule(TT:GetName())

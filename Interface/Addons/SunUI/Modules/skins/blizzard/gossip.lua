@@ -30,7 +30,9 @@ local function LoadSkin()
 			local button = _G["GossipTitleButton"..i]
 			if button:GetFontString() then
 				if button:GetFontString():GetText() and button:GetFontString():GetText():find("|cff000000") then
-					button:GetFontString():SetText(string.gsub(button:GetFontString():GetText(), "|cff000000", "|cffFFFF00"))
+					button:GetFontString():SetTextColor(255,255,0)
+				elseif button:GetFontString():GetText() then
+					button:GetFontString():SetTextColor(1,1,1)
 				end
 			end
 		end

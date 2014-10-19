@@ -68,6 +68,7 @@ end
 function EP:OnEvent()
 	local currXP = UnitXP("player")
 	local playerMaxXP = UnitXPMax("player")
+	if playerMaxXP <= 0 then playerMaxXP = 1 end
 	local exhaustionXP  = GetXPExhaustion("player")
 	local name, standingID, barMin, barMax, barValue = GetWatchedFactionInfo()
 	if UnitLevel("player") == MAX_PLAYER_LEVEL or IsXPUserDisabled == true then

@@ -2,7 +2,19 @@
 local IB = S:GetModule("InfoBar")
 
 function IB:CreateSpecs()
-
+	local join = string.join
+	local activeString = join("", "|cff00FF00" , ACTIVE_PETS, "|r")
+	local inactiveString = join("", "|cffFF0000", FACTION_INACTIVE, "|r")
+	local menuList = {
+		{ text = SELECT_LOOT_SPECIALIZATION, isTitle = true, notCheckable = true },
+		{ notCheckable = true, func = function() SetLootSpecialization(0) end },
+		{ notCheckable = true },
+		{ notCheckable = true },
+		{ notCheckable = true },
+		{ notCheckable = true }
+	}
+	local menuFrame = CreateFrame("Frame", "LootSpecializationDatatextClickMenu", UIParent, "UIDropDownMenuTemplate")
+	
 	local A = S:GetModule("Skins")
 	local stat = CreateFrame("Frame", "InfoPanelBottom4", BottomInfoPanel or UIParent)
 	stat:SetFrameStrata("BACKGROUND")
@@ -21,15 +33,33 @@ function IB:CreateSpecs()
 	A:CreateShadow(stat, stat.icon)
 	
 	local function OnEvent(self)
-		local currentSpec = GetSpecialization()
-		local currentSpecName = currentSpec and select(2, GetSpecializationInfo(currentSpec)) or NONE..TALENTS
-		local _, _, _, icon = currentSpec and GetSpecializationInfo(currentSpec) or ""
-        icon = icon and "|T"..icon..":12:12:0:0:64:64:5:59:5:59|t " or ""
-		if not GetSpecialization() then
-			stat.text:SetText(NONE..TALENTS) 
-		else		
-			stat.text:SetText(icon..currentSpecName)
+		local specIndex = GetSpecialization();
+		if not specIndex then stat.text:SetText(NONE..TALENTS) return; end	
+		local active = GetActiveSpecGroup()
+		local talent, loot = '', ''
+		if GetSpecialization(false, false, active) then
+			talent = format('|T%s:14:14:0:0:64:64:4:60:4:60|t', select(4, GetSpecializationInfo(GetSpecialization(false, false, active)))).." "..select(2, GetSpecializationInfo(GetSpecialization(false, false, active)))
 		end
+		local specialization = GetLootSpecialization()
+		if specialization == 0 then
+			local specIndex = GetSpecialization();
+			
+			if specIndex then
+				local specID, name, _, texture = GetSpecializationInfo(specIndex);
+				loot = format('|T%s:14:14:0:0:64:64:4:60:4:60|t', texture).." "..name
+			else
+				loot = NONE..TALENTS
+			end
+		else
+			local specID, name, _, texture = GetSpecializationInfoByID(specialization);
+			if specID then
+				loot = format('|T%s:14:14:0:0:64:64:4:60:4:60|t', texture).." "..name
+			else
+				loot = NONE..TALENTS
+			end
+		end
+		
+		self.text:SetText(format('%s: %s %s: %s', TALENTS, talent, LOOT, loot))
 	end
 
 	local function Checktalentgroup(index)
@@ -39,27 +69,34 @@ function IB:CreateSpecs()
 
 	stat:RegisterEvent("PLAYER_ENTERING_WORLD")
 	stat:RegisterEvent("PLAYER_TALENT_UPDATE")
+	stat:RegisterEvent("CHARACTER_POINTS_CHANGED")
+	stat:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+	stat:RegisterEvent("PLAYER_LOOT_SPEC_UPDATED")
+	
 	stat:SetScript("OnEvent", OnEvent)
 	stat:SetScript("OnEnter", function(self)
 		if InCombatLockdown() then return end
 		local c = GetActiveSpecGroup(false,false)
 		local majorTree1 = GetSpecialization(false,false,1)
 		local spec1 = { }
-		for i = 1, 18 do 
-			local name, iconTexture, tier, column, selected, available = GetTalentInfo(i, false, 1)
-			iconTexture = iconTexture and "|T"..iconTexture..":12:12:0:0:64:64:5:59:5:59|t " or ""
-			print(name)
-			if selected then
-				table.insert(spec1, iconTexture..name)
+		for i = 1, 7 do
+			for j = 1, 3 do
+				local _, name, iconTexture, selected, available = GetTalentInfo(i, j, 1)
+				iconTexture = iconTexture and "|T"..iconTexture..":12:12:0:0:64:64:5:59:5:59|t " or ""
+				if selected then
+					table.insert(spec1, iconTexture..name)
+				end
 			end
 		end
 		local majorTree2 = GetSpecialization(false,false,2)
 		local spec2 = { }
-		for i = 1, 18 do 
-			local name, iconTexture, tier, column, selected, available = GetTalentInfo(i, false, 2, nil, nil)
-			iconTexture = iconTexture and "|T"..iconTexture..":12:12:0:0:64:64:5:59:5:59|t " or ""
-			if selected then
-				table.insert(spec2, iconTexture..name)
+		for i = 1, 7 do 
+			for j = 1, 3 do
+				local _,name, iconTexture, selected, available = GetTalentInfo(i, j, 2)
+				iconTexture = iconTexture and "|T"..iconTexture..":12:12:0:0:64:64:5:59:5:59|t " or ""
+				if selected then
+					table.insert(spec2, iconTexture..name)
+				end
 			end
 		end
 		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
@@ -95,11 +132,49 @@ function IB:CreateSpecs()
 				GameTooltip:AddDoubleLine(" ", spec2[i],1,1,1,1,1,1)
 			end
 		end
+		
+		GameTooltip:AddLine(' ')
+		local specialization = GetLootSpecialization()
+		if specialization == 0 then
+			local specIndex = GetSpecialization();
+			
+			if specIndex then
+				local specID, name = GetSpecializationInfo(specIndex);
+				GameTooltip:AddLine(format('|cffFFFFFF%s:|r %s', SELECT_LOOT_SPECIALIZATION, format(LOOT_SPECIALIZATION_DEFAULT, name)))
+			end
+		else
+			local specID, name = GetSpecializationInfoByID(specialization);
+			if specID then
+				GameTooltip:AddLine(format('|cffFFFFFF%s:|r %s', SELECT_LOOT_SPECIALIZATION, name))
+			end
+		end
+
+		GameTooltip:AddLine(' ')
+		GameTooltip:AddLine('|cffFFFFFF'..KEY_BUTTON1..':|r '..GARRISON_SWITCH_SPECIALIZATIONS)  --左键
+		GameTooltip:AddLine('|cffFFFFFF'..KEY_BUTTON3..':|r '..TALENTS)	--中键
+		GameTooltip:AddLine('|cffFFFFFF'..KEY_BUTTON2..':|r '..SELECT_LOOT_SPECIALIZATION)	--右键
+		
 		GameTooltip:Show()
 	end)
 	stat:SetScript("OnLeave", function() GameTooltip:Hide() end)
 	stat:SetScript("OnMouseDown", function(_,btn)
-		if btn == "LeftButton" then
+		if btn == "RightButton" then
+			local specIndex = GetSpecialization();
+			if not specIndex then return end
+			GameTooltip:Hide()
+			local specID, specName = GetSpecializationInfo(specIndex);
+			menuList[2].text = format(LOOT_SPECIALIZATION_DEFAULT, specName);
+			for index = 1, 4 do
+				local id, name = GetSpecializationInfo(index);
+				if ( id ) then
+					menuList[index + 2].text = name
+					menuList[index + 2].func = function() SetLootSpecialization(id) end
+				else
+					menuList[index + 2] = nil
+				end
+			end
+			EasyMenu(menuList, menuFrame, "cursor", -15, -7, "MENU", 2)
+		elseif btn == "MiddleButton" then
 			ToggleTalentFrame()
 		else
 			local c = GetActiveSpecGroup(false,false)

@@ -5,7 +5,7 @@ local ot = ObjectiveTrackerFrame
 local BlocksFrame = ot.BlocksFrame
 
 local function LoadSkin()
-	--ÒÆ¶¯ÈÎÎñ×·×Ù
+	--ç§»åŠ¨ä»»åŠ¡è¿½è¸ª
 	local holder = CreateFrame("Frame", UIParent)
 	holder:SetSize(ObjectiveTrackerFrame:GetWidth(), ObjectiveTrackerFrame:GetHeight())
 	holder:SetPoint(ObjectiveTrackerFrame:GetPoint())
@@ -16,10 +16,11 @@ local function LoadSkin()
 		if (a~=aa and a2a~=a2 and x~=xa and y~=ya) and not isMove then
 			ot:ClearAllPoints()
 			ot:_SetPoint("TOPLEFT", holder, "TOPLEFT", 90, 0)
+            ot:SetHeight(638)
 		end
 	end)
 	
-	--ÒÆ¶¯ÔØ¾ß
+	--ç§»åŠ¨è½½å…·
 	local holder2 = CreateFrame("Frame", UIParent)
 	holder2:SetSize(VehicleSeatIndicator:GetWidth(), VehicleSeatIndicator:GetHeight())
 	holder2:SetPoint(VehicleSeatIndicator:GetPoint())
