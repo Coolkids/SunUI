@@ -38,7 +38,7 @@ local function LoadSkin()
 
 	-- Header
 
-	ot.HeaderMenu.Title:FontTemplate()
+	ot.HeaderMenu.Title:FontTemplate(nil, nil, "OUTLINE")
 	
 	-- Minimize button
 	local minimizeButton = ot.HeaderMenu.MinimizeButton
@@ -58,19 +58,19 @@ local function LoadSkin()
 		local header = BlocksFrame[headerName]
 
 		header.Background:Hide()
-		header.Text:FontTemplate()
+		header.Text:FontTemplate(nil, nil, "OUTLINE")
 	end
 
 	hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, "SetBlockHeader", function(_, block)
 		if not block.headerStyled then
-			block.HeaderText:FontTemplate()
+			block.HeaderText:FontTemplate(nil, nil, "OUTLINE")
 			block.headerStyled = true
 		end
 	end)
 
 	hooksecurefunc(QUEST_TRACKER_MODULE, "SetBlockHeader", function(_, block)
 		if not block.headerStyled then
-			block.HeaderText:FontTemplate()
+			block.HeaderText:FontTemplate(nil, nil, "OUTLINE")
 			block.headerStyled = true
 		end
 
@@ -83,7 +83,7 @@ local function LoadSkin()
 			itemButton.HotKey:ClearAllPoints()
 			itemButton.HotKey:SetPoint("TOP", itemButton, -1, 0)
 			itemButton.HotKey:SetJustifyH("CENTER")
-			itemButton.HotKey:FontTemplate()
+			itemButton.HotKey:FontTemplate(nil, nil, "OUTLINE")
 
 			itemButton.icon:SetTexCoord(.08, .92, .08, .92)
 			A:CreateBG(itemButton)
@@ -123,11 +123,11 @@ local function LoadSkin()
 		if block.lines then
 			for _, line in pairs(block.lines) do
 				if not line.styled then
-					line.Text:FontTemplate()
+					line.Text:FontTemplate(nil, nil, "OUTLINE")
 					line.Text:SetSpacing(2)
 
 					if line.Dash then
-						line.Dash:FontTemplate()
+						line.Dash:FontTemplate(nil, nil, "OUTLINE")
 					end
 
 					line:SetHeight(line.Text:GetHeight())
