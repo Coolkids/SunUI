@@ -6,55 +6,59 @@ A.modName = L["施法通告"]
 A.order = 15
 
 A.baoming = {
-	[GetSpellInfo(871)] = true,	-- 盾墙
-	[GetSpellInfo(12975)] = true,	--破釜沉舟
-	[GetSpellInfo(97462)] = true,	--集结呐喊
-	[GetSpellInfo(642)] = true,	--圣盾术
-	[GetSpellInfo(86659)] = true,	--远古列王守卫
-	[GetSpellInfo(31821)] = true,	--虔诚光环
-	[GetSpellInfo(31850)] = true,	--炽热防御者
-	[GetSpellInfo(498)] = true,	--圣佑术
-	[GetSpellInfo(48707)] = true,	--反魔法护罩
-	[GetSpellInfo(50461)] = true,	--反魔法领域
-	[GetSpellInfo(48792)] = true,	--冰封之韧
-	[GetSpellInfo(61336)] = true,	--生存本能
-	[GetSpellInfo(115176)] = true, 	--禅悟冥想
-	[GetSpellInfo(115203)] = true, 	--壮胆酒
+	[GetSpellInfo(871)]    = true,	-- 盾墙
+	[GetSpellInfo(12975)]  = true,	-- 破釜沉舟
+	[GetSpellInfo(97462)]  = true,	-- 集结呐喊
+	[GetSpellInfo(2565)]   = true,	-- 盾牌格挡
+	[GetSpellInfo(642)]    = true,	-- 圣盾术
+	[GetSpellInfo(86659)]  = true,	-- 远古列王守卫
+	[GetSpellInfo(31821)]  = true,	-- 虔诚光环
+	[GetSpellInfo(31850)]  = true,	-- 炽热防御者
+	[GetSpellInfo(498)]    = true,	-- 圣佑术
+	[GetSpellInfo(48707)]  = true,	-- 反魔法护罩
+	[GetSpellInfo(50461)]  = true,	-- 反魔法领域
+	[GetSpellInfo(48792)]  = true,	-- 冰封之韧
+	[GetSpellInfo(55233)]  = true,	-- 吸血鬼之血
+	[GetSpellInfo(61336)]  = true,	-- 生存本能
+	[GetSpellInfo(22812)]  = true,	-- 树皮术
+	[GetSpellInfo(115176)] = true, 	-- 禅悟冥想
+	[GetSpellInfo(115203)] = true, 	-- 壮胆酒
+	[GetSpellInfo(122278)] = true, 	-- 躯不坏
+	[GetSpellInfo(122783)] = true, 	-- 散魔功
+	[GetSpellInfo(88611)]  = true, 	-- 烟雾弹
 }
 A.heal = {
 	--治疗
-	[GetSpellInfo(62618)] = true, 	--真言术:障
+	[GetSpellInfo(62618)] = true,  -- 真言术:障
 	[GetSpellInfo(98008)] = true,  -- 灵魂链接图腾
-	[GetSpellInfo(31821)] = true,  -- 光环掌握(NQ)
-	[GetSpellInfo(31821)] = true,  -- 光环掌握(NQ)
-	[GetSpellInfo(724)] = true, --光束泉
+	[GetSpellInfo(31821)] = true,  -- 虔诚光环
+	[GetSpellInfo(724)]   = true,  -- 光明之泉
 	[GetSpellInfo(15286)] = true,  -- 吸血鬼的拥抱 *
-	--test
-	--(586) = true,
 }
 A.cl = {		
 	[GetSpellInfo(64843)] = true,  -- 神圣赞美诗 *
-	[GetSpellInfo(740)] = true,  -- 宁静(ND) *
+	[GetSpellInfo(740)]   = true,  -- 宁静(ND) *
 }
 A.givelist = {
-	[GetSpellInfo(116849)] = true, 	--作茧缚命
-	[GetSpellInfo(33206)] = true, 	--痛苦压制
-	[GetSpellInfo(47788)] = true, 	--守护之魂
-	[GetSpellInfo(1022)] = true,	--保护之手
-	[GetSpellInfo(1038)] = true,	--拯救之手
-	[GetSpellInfo(6940)] = true,	--牺牲之手
-	[GetSpellInfo(114039)] = true,	--纯净之手
-	[GetSpellInfo(115310)] = true,  --五气归元
-	[GetSpellInfo(115176)] = true,  --冥思禅功
+	[GetSpellInfo(116849)] = true, 	-- 作茧缚命
+	[GetSpellInfo(102342)] = true, 	-- 铁木树皮
+	[GetSpellInfo(33206)]  = true, 	-- 痛苦压制
+	[GetSpellInfo(47788)]  = true, 	-- 守护之魂
+	[GetSpellInfo(1022)]   = true,	-- 保护之手
+	[GetSpellInfo(1038)]   = true,	-- 拯救之手
+	[GetSpellInfo(6940)]   = true,	-- 牺牲之手
+	[GetSpellInfo(114039)] = true,	-- 纯净之手
+	[GetSpellInfo(1044)]   = true,	-- 自由之手
 }
 A.resurrect = {
-	[GetSpellInfo(20484)] = true,	-- 复生
-	[GetSpellInfo(61999)] = true,	-- 复活盟友
-	[GetSpellInfo(20707)] = true,	-- 灵魂石复活	
+	[GetSpellInfo(20484)]  = true,	-- 复生
+	[GetSpellInfo(61999)]  = true,	-- 复活盟友
+	[GetSpellInfo(20707)]  = true,	-- 灵魂石复活
+	[GetSpellInfo(126393)] = true,	-- 永恒守护者
 }
 A.mislead = {
-	[GetSpellInfo(34477)] = true,	-- 误导
-	[GetSpellInfo(57934)] = true,	-- 偷天
+	[GetSpellInfo(34477)]  = true,	-- 误导
+	[GetSpellInfo(57934)]  = true,	-- 嫁祸诀窍
 }
 function A:GetOptions()
 	local options = {
