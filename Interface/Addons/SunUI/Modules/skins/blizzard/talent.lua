@@ -37,26 +37,34 @@ local function LoadSkin()
 		
 		PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild.Seperator:SetTexture(1, 1, 1)
 		PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild.Seperator:SetAlpha(.2)
-		PlayerTalentFramePetSpecializationTutorialButton.Ring:Hide()
 		
 		for i = 1, GetNumSpecializations(false, true) do
 			local _, _, _, icon = GetSpecializationInfo(i, false, true)
 			PlayerTalentFramePetSpecialization["specButton"..i].specIcon:SetTexture(icon)
-			PlayerTalentFramePetSpecialization["specButton"..i]:DisableDrawLayer("BACKGROUND")
 		end
 	end
 
+	hooksecurefunc("PlayerTalentFrame_UpdateTabs", function()
+		for i = 1, NUM_TALENT_FRAME_TABS do
+			local tab = _G["PlayerTalentFrameTab"..i]
+			local a1, p, a2, x = tab:GetPoint()
+
+			tab:ClearAllPoints()
+			tab:SetPoint(a1, p, a2, x, 2)
+		end
+	end)
+
 	for i = 1, NUM_TALENT_FRAME_TABS do
-		local tab = _G["PlayerTalentFrameTab"..i]
-		A:CreateTab(tab)
+		A:CreateTab(_G["PlayerTalentFrameTab"..i])
 	end
 
-	PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.ring:Hide()	
-	PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.specIcon:SetTexCoord(.08, .92, .08, .92)
-	A:CreateBG(PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.specIcon)
-	PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild.ring:Hide()	
-	PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild.specIcon:SetTexCoord(.08, .92, .08, .92)
-	A:CreateBG(PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild.specIcon)
+	for _, frame in pairs({PlayerTalentFrameSpecialization, PlayerTalentFramePetSpecialization}) do
+		local scrollChild = frame.spellsScroll.child
+
+		scrollChild.ring:Hide()
+		scrollChild.specIcon:SetTexCoord(.08, .92, .08, .92)
+		A:CreateBG(scrollChild.specIcon)
+	end
 	
 	hooksecurefunc("PlayerTalentFrame_UpdateSpecFrame", function(self, spec)
 		local playerTalentSpec = GetSpecialization(nil, self.isPet, PlayerSpecTab2:GetChecked() and 2 or 1)
@@ -74,26 +82,32 @@ local function LoadSkin()
 		else
 			bonuses = SPEC_SPELLS_DISPLAY[id]
 		end
+
 		for i = 1, #bonuses, 2 do
 			local frame = scrollChild["abilityButton"..index]
 			local _, icon = GetSpellTexture(bonuses[i])
+
 			frame.icon:SetTexture(icon)
-			if not frame.reskinned then
-				frame.reskinned = true
+			frame.subText:SetTextColor(.75, .75, .75)
+
+			if not frame.styled then
 				frame.ring:Hide()
 				frame.icon:SetTexCoord(.08, .92, .08, .92)
 				A:CreateBG(frame.icon)
-			end
-			frame.subText:SetTextColor(1, 1, 1)
+
+			frame.styled = true
+		end
+
 			index = index + 1
 		end
-		
+
 		for i = 1, GetNumSpecializations(nil, self.isPet) do
 			local bu = self["specButton"..i]
-			if bu.selected then
-				bu.glowTex:Show()
+
+			if bu.disabled then
+				bu.roleName:SetTextColor(.5, .5, .5)
 			else
-				bu.glowTex:Hide()
+				bu.roleName:SetTextColor(1, 1, 1)
 			end
 		end
 	end)
@@ -101,12 +115,11 @@ local function LoadSkin()
 	for i = 1, GetNumSpecializations(false, nil) do
 		local _, _, _, icon = GetSpecializationInfo(i, false, nil)
 		PlayerTalentFrameSpecialization["specButton"..i].specIcon:SetTexture(icon)
-		PlayerTalentFrameSpecialization["specButton"..i]:DisableDrawLayer("BACKGROUND")
 	end
-	
-	PlayerTalentFrameTalentsLearnButton:StripTextures()
-	PlayerTalentFrameTalentsLearnButton.FlashAnim.Play = function() end
-	PlayerTalentFrameSpecializationLearnButton:StripTextures()
+
+	PlayerTalentFrameSpecializationLearnButton.Flash:SetTexture("")
+	PlayerTalentFrameTalentsLearnButton.Flash:SetTexture("")
+
 	local buttons = {"PlayerTalentFrameSpecializationSpecButton", "PlayerTalentFramePetSpecializationSpecButton"}
 	
 	for _, name in pairs(buttons) do
@@ -146,11 +159,16 @@ local function LoadSkin()
 			bu.glowTex:Hide()
 		end
 	end
-	
+			
 	for i = 1, MAX_TALENT_TIERS do
 		local row = _G["PlayerTalentFrameTalentsTalentRow"..i]
 		_G["PlayerTalentFrameTalentsTalentRow"..i.."Bg"]:Hide()
 		row:DisableDrawLayer("BORDER")
+
+		row.TopLine:SetDesaturated(true)
+		row.TopLine:SetVertexColor(r, g, b)
+		row.BottomLine:SetDesaturated(true)
+		row.BottomLine:SetVertexColor(r, g, b)
 
 		for j = 1, NUM_TALENT_COLUMNS do
 			local bu = _G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j]
@@ -174,7 +192,7 @@ local function LoadSkin()
 	end
 	
 	hooksecurefunc("TalentFrame_Update", function()
-		for i = 1, MAX_TALENT_TIERS do	
+		for i = 1, MAX_TALENT_TIERS do
 			for j = 1, NUM_TALENT_COLUMNS do
 				local bu = _G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j]
 				if bu.knownSelection:IsShown() then

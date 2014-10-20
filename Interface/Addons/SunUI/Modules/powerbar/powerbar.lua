@@ -290,10 +290,12 @@ local function OnEvent(self, event, unit)
 					rune:SetValue(1)
 					rune:SetScript("OnUpdate", nil)
 				else
-					rune.duration = GetTime() - start
-					rune.max = duration
-					rune:SetMinMaxValues(1, duration)
-					rune:SetScript("OnUpdate", OnUpdate)
+					if start then
+						rune.duration = GetTime() - start
+						rune.max = duration
+						rune:SetMinMaxValues(1, duration)
+						rune:SetScript("OnUpdate", OnUpdate)
+					end
 				end
 			end
 		end

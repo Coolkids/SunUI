@@ -38,7 +38,10 @@ function IB:CreateSpecs()
 		local active = GetActiveSpecGroup()
 		local talent, loot = '', ''
 		if GetSpecialization(false, false, active) then
-			talent = format('|T%s:14:14:0:0:64:64:4:60:4:60|t', select(4, GetSpecializationInfo(GetSpecialization(false, false, active)))).." "..select(2, GetSpecializationInfo(GetSpecialization(false, false, active)))
+			local _, name, _, icon = GetSpecializationInfo(GetSpecialization(false, false, active))
+			if name and icon then
+				talent = format('|T%s:14:14:0:0:64:64:4:60:4:60|t', icon).." "..name
+			end
 		end
 		local specialization = GetLootSpecialization()
 		if specialization == 0 then
@@ -46,16 +49,20 @@ function IB:CreateSpecs()
 			
 			if specIndex then
 				local specID, name, _, texture = GetSpecializationInfo(specIndex);
-				loot = format('|T%s:14:14:0:0:64:64:4:60:4:60|t', texture).." "..name
+				if texture and name then
+					loot = format('|T%s:14:14:0:0:64:64:4:60:4:60|t', texture).." "..name
+				end
 			else
-				loot = NONE..TALENTS
+				loot = NONE
 			end
 		else
 			local specID, name, _, texture = GetSpecializationInfoByID(specialization);
 			if specID then
-				loot = format('|T%s:14:14:0:0:64:64:4:60:4:60|t', texture).." "..name
+				if texture and name then
+					loot = format('|T%s:14:14:0:0:64:64:4:60:4:60|t', texture).." "..name
+				end
 			else
-				loot = NONE..TALENTS
+				loot = NONE
 			end
 		end
 		

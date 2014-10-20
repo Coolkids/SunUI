@@ -1,7 +1,7 @@
 local _, ns = ...
 local oUF = ns.oUF or oUF
 
-local vengeance = GetSpellInfo(93098)
+local vengeance = GetSpellInfo(158300)
 -- local vengeance = GetSpellInfo(76691)
 local siValue = function(val)
 	if(val >= 1e6) then
