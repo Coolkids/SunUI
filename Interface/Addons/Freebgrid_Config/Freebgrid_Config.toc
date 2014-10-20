@@ -1,4 +1,4 @@
-## Interface: 50400
+## Interface: 60000
 ## Title: |cff70C0F5Freebgrid_Config|r
 ## Title-zhTW: |cff70C0F5Freebgrid_Config|r
 ## Notes: Freebgrid's configuration gui
