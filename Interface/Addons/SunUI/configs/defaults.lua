@@ -171,6 +171,8 @@ P["UnitFrames"]={
 	fader = false,
 	castbarwidth = 220,
 	castbarheight = 14,
+	targetcastbarwidth = 220,   
+	targetcastbarheight = 14,
 }
 
 P["InfoBar"]={
