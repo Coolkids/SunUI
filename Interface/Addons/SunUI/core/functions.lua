@@ -151,7 +151,7 @@ function S:GetItemUpgradeLevel(iLink)
 		return 0
 	else
 		local _, _, itemRarity, itemLevel, _, _, _, _, itemEquip = GetItemInfo(iLink)
-		local code = string.match(iLink, ":(%d+)|h")
+		local code = string.match(iLink, ":(%d+):%d:%d|h")
 		if not itemLevel then return 0 end
 		return itemLevel + self.ItemUpgrade[tonumber(code)], itemEquip
 	end
