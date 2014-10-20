@@ -1,17 +1,34 @@
-﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local A = S:GetModule("Skins")
 
 local function LoadSkin()
 	EncounterJournalEncounterFrameInfo:DisableDrawLayer("BACKGROUND")
 	EncounterJournal:DisableDrawLayer("BORDER")
 	EncounterJournalInset:DisableDrawLayer("BORDER")
+	EncounterJournalNavBar:DisableDrawLayer("BORDER")
+	EncounterJournalSearchResults:DisableDrawLayer("BORDER")
 	EncounterJournal:DisableDrawLayer("OVERLAY")
+	EncounterJournalInstanceSelectDungeonTab:DisableDrawLayer("OVERLAY")
+	EncounterJournalInstanceSelectRaidTab:DisableDrawLayer("OVERLAY")
 
 	EncounterJournalPortrait:Hide()
 	EncounterJournalInstanceSelectBG:Hide()
+	EncounterJournalNavBar:GetRegions():Hide()
+	EncounterJournalNavBarOverlay:Hide()
 	EncounterJournalBg:Hide()
 	EncounterJournalTitleBg:Hide()
 	EncounterJournalInsetBg:Hide()
+	EncounterJournalInstanceSelectDungeonTabMid:Hide()
+	EncounterJournalInstanceSelectDungeonTabLeft:Hide()
+	EncounterJournalInstanceSelectDungeonTabRight:Hide()
+	EncounterJournalInstanceSelectRaidTabMid:Hide()
+	EncounterJournalInstanceSelectRaidTabLeft:Hide()
+	EncounterJournalInstanceSelectRaidTabRight:Hide()
+	EncounterJournalNavBarHomeButtonLeft:Hide()
+	for i = 8, 10 do
+		select(i, EncounterJournalInstanceSelectDungeonTab:GetRegions()):SetAlpha(0)
+		select(i, EncounterJournalInstanceSelectRaidTab:GetRegions()):SetAlpha(0)
+	end
 	EncounterJournalEncounterFrameInfoModelFrameShadow:Hide()
 	EncounterJournalEncounterFrameInfoModelFrame.dungeonBG:Hide()
 	EncounterJournalEncounterFrameInfoDifficultyUpLeft:SetAlpha(0)
@@ -26,54 +43,12 @@ local function LoadSkin()
 	EncounterJournalEncounterFrameInfoLootScrollFrameFilterToggleDownRIGHT:SetAlpha(0)
 	select(5, EncounterJournalEncounterFrameInfoLootScrollFrameFilterToggle:GetRegions()):Hide()
 	select(6, EncounterJournalEncounterFrameInfoLootScrollFrameFilterToggle:GetRegions()):Hide()
+	EncounterJournalSearchResultsBg:Hide()
 
 	A:SetBD(EncounterJournal)
+	A:CreateBD(EncounterJournalSearchResults, .75)
 
-	-- [[ Dungeon / raid tabs ]]
-
-	local function onEnable(self)
-		self:SetHeight(self.storedHeight) -- prevent it from resizing
-		self:SetBackdropColor(0, 0, 0, 0)
-	end
-
-	local function onDisable(self)
-		self:SetBackdropColor(r, g, b, .2)
-	end
-
-	local function onClick(self)
-		self:GetFontString():SetTextColor(1, 1, 1)
-	end
-
-	for _, tabName in pairs({"EncounterJournalInstanceSelectDungeonTab", "EncounterJournalInstanceSelectRaidTab"}) do
-		local tab = _G[tabName]
-		local text = tab:GetFontString()
-
-		tab:DisableDrawLayer("OVERLAY")
-
-		tab.mid:Hide()
-		tab.left:Hide()
-		tab.right:Hide()
-
-		tab.midHighlight:SetAlpha(0)
-		tab.leftHighlight:SetAlpha(0)
-		tab.rightHighlight:SetAlpha(0)
-
-		tab:SetHeight(tab.storedHeight)
-		tab.grayBox:GetRegions():SetAllPoints(tab)
-
-		text:SetPoint("CENTER")
-		text:SetTextColor(1, 1, 1)
-
-		tab:HookScript("OnEnable", onEnable)
-		tab:HookScript("OnDisable", onDisable)
-		tab:HookScript("OnClick", onClick)
-
-		A:Reskin(tab)
-	end
-
-	EncounterJournalInstanceSelectDungeonTab:SetBackdropColor(r, g, b, .2)
-
-	-- [[ Side tabs ]]
+		-- [[ Side tabs ]]
 
 	EncounterJournalEncounterFrameInfoOverviewTab:ClearAllPoints()
 	EncounterJournalEncounterFrameInfoOverviewTab:SetPoint("TOPLEFT", EncounterJournalEncounterFrameInfo, "TOPRIGHT", 9, -35)
@@ -87,8 +62,8 @@ local function LoadSkin()
 		tab:SetScale(.75)
 
 		tab:SetBackdrop({
-			bgFile = A.media.backdrop,
-			edgeFile = A.media.backdrop,
+			bgFile = A["media"].backdrop,
+			edgeFile = A["media"].backdrop,
 			edgeSize = 1 / .75,
 		})
 
@@ -191,7 +166,7 @@ local function LoadSkin()
 				header.button.expandedIcon:SetTextColor(1, 1, 1)
 				header.button.expandedIcon.SetTextColor = S.dummy
 
-				A:Reskin(header.button, true)
+				A:Reskin(header.button)
 
 				header.button.abilityIcon:SetTexCoord(.08, .92, .08, .92)
 				header.button.bg = A:CreateBG(header.button.abilityIcon)
@@ -226,7 +201,7 @@ local function LoadSkin()
 			header.button.expandedIcon:SetTextColor(1, 1, 1)
 			header.button.expandedIcon.SetTextColor = S.dummy
 
-			A:Reskin(header.button, true)
+			A:Reskin(header.button)
 
 			header.styled = true
 		end
@@ -270,7 +245,7 @@ local function LoadSkin()
 		A:CreateBD(bg, .25)
 	end
 
-	-- [[ Search results ]]
+		-- [[ Search results ]]
 
 	EncounterJournalSearchResultsBg:Hide()
 	for i = 3, 11 do
@@ -309,7 +284,7 @@ local function LoadSkin()
 
 		local hl = result:CreateTexture(nil, "BACKGROUND")
 		hl:SetAllPoints()
-		hl:SetTexture(A.media.backdrop)
+		hl:SetTexture(A["media"].backdrop)
 		hl:SetVertexColor(r, g, b, .2)
 		hl:Hide()
 		result.hl = hl
@@ -384,18 +359,21 @@ local function LoadSkin()
 
 	-- [[ Various controls ]]
 
+	A:Reskin(EncounterJournalNavBarHomeButton)
+	A:Reskin(EncounterJournalInstanceSelectDungeonTab)
+	A:Reskin(EncounterJournalInstanceSelectRaidTab)
 	A:Reskin(EncounterJournalEncounterFrameInfoDifficulty)
 	A:Reskin(EncounterJournalEncounterFrameInfoResetButton)
 	A:Reskin(EncounterJournalEncounterFrameInfoLootScrollFrameFilterToggle)
-	A:ReskinArrow(EncounterJournalInstanceSelectScrollDownButton, "down")
 	A:ReskinClose(EncounterJournalCloseButton)
+	A:ReskinClose(EncounterJournalSearchResultsCloseButton)
 	A:ReskinInput(EncounterJournalSearchBox)
 	A:ReskinScroll(EncounterJournalInstanceSelectScrollFrameScrollBar)
 	A:ReskinScroll(EncounterJournalEncounterFrameInstanceFrameLoreScrollFrameScrollBar)
-	A:ReskinScroll(EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollBar)
-	A:ReskinScroll(EncounterJournalEncounterFrameInfoBossesScrollFrameScrollBar)
 	A:ReskinScroll(EncounterJournalEncounterFrameInfoDetailsScrollFrameScrollBar)
 	A:ReskinScroll(EncounterJournalEncounterFrameInfoLootScrollFrameScrollBar)
+	A:ReskinScroll(EncounterJournalEncounterFrameInfoBossesScrollFrameScrollBar)
+	A:ReskinScroll(EncounterJournalSearchResultsScrollFrameScrollBar)
 end
 
 A:RegisterSkin("Blizzard_EncounterJournal", LoadSkin)
