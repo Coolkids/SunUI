@@ -6,14 +6,16 @@ local function GetSpellInfo(a)
 end
 
 local ResurrectionSpells = {
-	[GetSpellInfo(7328)] = true, 	--救赎
-	[GetSpellInfo(2008)] = true, 	--先祖之魂
-	[GetSpellInfo(50769)] = true, 	--起死回生
-	[GetSpellInfo(20484)] = true, 	--复生
-	[GetSpellInfo(2006)] = true, 	--复活术
-	[GetSpellInfo(61999)] = true, 	--复活盟友
-	[GetSpellInfo(115178)] = true, --轮回转世
-	[GetSpellInfo(20707)] = true, 	--灵魂石复活
+	[GetSpellInfo(7328)]   = true, 	--救赎
+	[GetSpellInfo(2008)]   = true, 	--先祖之魂
+	[GetSpellInfo(50769)]  = true, 	--起死回生
+	[GetSpellInfo(115178)] = true, 	--轮回转世
+	[GetSpellInfo(2006)]   = true, 	--复活术
+
+	[GetSpellInfo(61999)]  = true, 	--复活盟友
+	[GetSpellInfo(20484)]  = true, 	--复生
+	[GetSpellInfo(20707)]  = true, 	--灵魂石复活
+	[GetSpellInfo(126393)] = true, 	--永恒守护者(LR BB)
 }
 
 local Resurrection = function(self, event,...)
