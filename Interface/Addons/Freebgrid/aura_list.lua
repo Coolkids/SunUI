@@ -40,49 +40,49 @@ ns.auras_buffs = {
 
 	},
 	second = {
-		--[GetSpellInfo(61295)]=  9, 	--test
 		--------------------------战士---------------
-		[GetSpellInfo(871)]=  2,	  -- 盾墙
-		[GetSpellInfo(12975)]=  2,	--破釜沉舟
-		[GetSpellInfo(97462)]=  2,	--集结呐喊
-		[GetSpellInfo(2565)]=  2,	  --盾牌格挡
-		--[GetSpellInfo(114030)]=  2,	--警戒
-		[GetSpellInfo(114203)]=  2,	--挫志战旗
+		[GetSpellInfo(871)]     = 2,	-- 盾墙
+		[GetSpellInfo(12975)]   = 2,	-- 破釜沉舟
+		[GetSpellInfo(97462)]   = 2,	-- 集结呐喊
+		[GetSpellInfo(2565)]    = 2,	-- 盾牌格挡
+		[GetSpellInfo(112048)]  = 2,	-- 盾牌屏障
 		--------------------------骑士---------------
-		[GetSpellInfo(642)]=  2,	  --圣盾术
-		[GetSpellInfo(86659)]=  2,	--远古列王守卫
-		[GetSpellInfo(31821)]=  2,	--虔诚光环
-		[GetSpellInfo(31850)]=  2,	--炽热防御者
-		[GetSpellInfo(498)]=  2,	  --圣佑术
-		[GetSpellInfo(1022)]=  2,	  --保护之手
-		[GetSpellInfo(1038)]=  2,	  --拯救之手
-		[GetSpellInfo(6940)]=  2,	  --牺牲之手
-		[GetSpellInfo(114039)]=  2,	--纯净之手		
+		[GetSpellInfo(642)]     = 2,	-- 圣盾术
+		[GetSpellInfo(86659)]   = 2,	-- 远古列王守卫
+		[GetSpellInfo(31821)]   = 2,	-- 虔诚光环
+		[GetSpellInfo(31850)]   = 2,	-- 炽热防御者
+		[GetSpellInfo(498)]     = 2,	-- 圣佑术
+		[GetSpellInfo(1022)]    = 2,	-- 保护之手
+		[GetSpellInfo(1038)]    = 2,	-- 拯救之手
+		[GetSpellInfo(6940)]    = 2,	-- 牺牲之手
+		[GetSpellInfo(114039)]  = 2,	-- 纯净之手
 		--------------------------DK---------------
-		[GetSpellInfo(48707)]=  2,	--反魔法护罩
-		[GetSpellInfo(50461)]=  2,	--反魔法领域
-		--[GetSpellInfo(42650)]=  2,	--亡者大军
-		--[GetSpellInfo(49222)]=  2,	--白骨之盾
-		[GetSpellInfo(48792)]=  2,	--冰封之韧
-		[GetSpellInfo(55233)]=  2,	--吸血鬼之血
-		[GetSpellInfo(81256)]=  2,	--符文刃舞
+		[GetSpellInfo(48707)]   = 2,	-- 反魔法护罩
+		[GetSpellInfo(50461)]   = 2,	-- 反魔法领域
+		--[GetSpellInfo(49222)] = 2,	-- 白骨之盾
+		[GetSpellInfo(48792)]   = 2,	-- 冰封之韧
+		[GetSpellInfo(55233)]   = 2,	-- 吸血鬼之血
+		[GetSpellInfo(81256)]   = 2,	-- 符文刃舞
+		[GetSpellInfo(171049)]  = 2,	-- 符文分流
 		------------------------德鲁伊---------------
-		[GetSpellInfo(22812)]=  2,	--树皮术
-		[GetSpellInfo(22842)]=  2,	--狂暴回复
-		[GetSpellInfo(61336)]=  2,	--生存本能
-		[GetSpellInfo(106922)]=  2,	--乌索尔之力
+		[GetSpellInfo(22812)]   = 2,	-- 树皮术
+		[GetSpellInfo(22842)]   = 2,	-- 狂暴回复
+		[GetSpellInfo(61336)]   = 2,	-- 生存本能
+		[GetSpellInfo(155835)]  = 2,	-- 鬃毛倒竖
+		[GetSpellInfo(102342)]  = 2,	-- 铁木树皮
+		[GetSpellInfo(132402)]  = 2,	-- 野蛮防御
 		------------------------牧师--------------------
-		[GetSpellInfo(33206)]=  2, 	--痛苦压制
-		[GetSpellInfo(47788)]=  2, 	--守护之魂
-		[GetSpellInfo(62618)]=  2, 	--真言术:障
+		[GetSpellInfo(33206)]   = 2,	-- 痛苦压制
+		[GetSpellInfo(47788)]   = 2,	-- 守护之魂
+		[GetSpellInfo(62618)]   = 2,	-- 真言术:障
 		------------------------武僧--------------------
-		[GetSpellInfo(116849)]=  2, 	--作茧缚命
-		[GetSpellInfo(115213)]=  2, 	--慈悲庇护
-		[GetSpellInfo(115176)]=  2, 	--禅悟冥想
-		[GetSpellInfo(122783)]=  2, 	--散魔功
-		--[GetSpellInfo(115308)]=  2, 	--飘渺酒
-		[GetSpellInfo(115295)]=  2, 	--金钟罩
-		[GetSpellInfo(115203)]=  2, 	--壮胆酒
+		[GetSpellInfo(116849)]  = 2,	-- 作茧缚命
+		[GetSpellInfo(115176)]  = 2,	-- 禅悟冥想
+		[GetSpellInfo(122783)]  = 2,	-- 散魔功
+		[GetSpellInfo(115308)]  = 2,	-- 飘渺酒
+		[GetSpellInfo(115295)]  = 2,	-- 金钟罩
+		[GetSpellInfo(115203)]  = 2,	-- 壮胆酒
+		[GetSpellInfo(122278)]  = 2,	-- 躯不坏
 		------------------------raid-------------------
 		[GetSpellInfo(106213)]=  71, 	--奈萨里奥的血液
 	},	
@@ -100,6 +100,58 @@ ns.auras_debuffs = {
 
 ns.auras_instances_debuffs = {
 	first = {
+-------------------------------德拉诺之王------------------------------------
+		[988] = {--黑石铸造厂
+			-- 格鲁尔
+			 [GetSpellInfo(155326)] = 5,  -- 石化猛击
+			-- 奥尔高格
+			 [GetSpellInfo(156324)] = 4,  -- 酸液洪流
+			-- 兽王达玛克
+			 [GetSpellInfo(155365)] = 5,  -- 长矛钉刺
+			 [GetSpellInfo(155399)] = 4,  -- 爆燃
+			 [GetSpellInfo(154989)] = 4,  -- 炼狱吐息
+			 [GetSpellInfo(155499)] = 4,  -- 高热弹片
+			-- 缚火者卡格拉兹
+			 [GetSpellInfo(155277)] = 5,  -- 炽热光辉
+			-- 汉斯加尔与弗兰佐克
+			 [GetSpellInfo(157139)] = 4,  -- 折脊碎椎
+			-- 主管索戈尔
+			 [GetSpellInfo(155921)] = 4,  -- 点燃
+			-- 爆裂熔炉
+			 [GetSpellInfo(155240)] = 4,  -- 淬火
+			 [GetSpellInfo(155242)] = 4,  -- 高热
+			-- 克罗莫格
+			 [GetSpellInfo(157060)] = 4,  -- 纠缠之手符文
+			-- 钢铁妇武神
+			 [GetSpellInfo(158315)] = 4,  -- 暗影猎杀
+			-- 黑手
+			 [GetSpellInfo(156096)] = 4,  -- 死亡标记
+		},
+
+		[970] = {--悬槌堡
+			-- 卡加斯.刃拳
+			[GetSpellInfo(159178)] = 4,  -- 进裂创伤 (仅坦克)
+			[GetSpellInfo(159113)] = 5,  -- 穿刺 (DoT)
+			-- 屠夫
+			[GetSpellInfo(156152)] = 5,  -- 龟裂创伤
+			[GetSpellInfo(156143)] = 4,  -- 切肉刀
+			-- 布兰肯斯波
+			[GetSpellInfo(159463)] = 4,  -- 活性孢子
+			[GetSpellInfo(163242)] = 4,  -- 感染孢子
+			-- 独眼魔双子
+			[GetSpellInfo(143834)] = 4,  -- 盾击
+			-- 克拉戈
+			[GetSpellInfo(161242)] = 4,  -- 腐蚀能量
+			[GetSpellInfo(163134)] = 4,  -- 废灵壁垒
+			[GetSpellInfo(162185)] = 4,  -- 魔能散射:火焰
+			[GetSpellInfo(162186)] = 5,  -- 魔能散射:奥术
+			-- 元首马尔高克
+			[GetSpellInfo(156238)] = 4,  -- 奥术愤怒
+			[GetSpellInfo(159515)] = 4,  -- 狂莽突击
+			[GetSpellInfo(158605)] = 5,  -- 混沌标记
+		},
+
+-------------------------------熊猫人之谜-----------------------------------
 			[953]=  {--决战奥格瑞玛
 			--小怪
 			[GetSpellInfo(149207)]=  1, --腐蚀之触
@@ -721,7 +773,62 @@ ns.auras_instances_debuffs = {
 			[GetSpellInfo(108649)]=  87, --腐蚀寄生虫
 		},	
 
-    --5人FB		
+-------------------------------WOD(5H)------------------------------------
+		[1008] = {-- 永茂林地
+			[GetSpellInfo(164294)] = 4,  -- 失控蔓生
+			[GetSpellInfo(168187)] = 4,  -- 撕裂冲锋
+			[GetSpellInfo(169376)] = 5,  -- 剧毒蛰针
+			[GetSpellInfo(169179)] = 4,  -- 巨灵猛击
+		},
+
+		[995] = {-- 黑石塔上层
+			[GetSpellInfo(161288)] = 4,  -- 邪血药水
+			[GetSpellInfo(155031)] = 4,  -- 噬体火焰
+		},
+
+		[993] = {-- 恐轨车站
+			[GetSpellInfo(161089)] = 4,  -- 疯狂冲锋
+			[GetSpellInfo(160681)] = 4,  -- 火力压制
+			[GetSpellInfo(162058)] = 4,  -- 蚀骨之矛
+			[GetSpellInfo(162066)] = 4,  -- 冰冻诱捕
+		},
+
+		[989] = {-- 通天峰
+			[GetSpellInfo(154149)] = 4,  -- 充能
+			[GetSpellInfo(153794)] = 4,  -- 穿刺护甲
+			[GetSpellInfo(153795)] = 4,  -- 穿甲
+			[GetSpellInfo(154043)] = 4,  -- 眩光
+		},
+
+		[987] = {-- 钢铁码头
+			[GetSpellInfo(163390)] = 4,  -- 食人魔陷阱
+			[GetSpellInfo(162418)] = 5,  -- 吞食狂热
+		},
+
+		[984] = {-- 奥金顿
+			[GetSpellInfo(153006)] = 4,  -- 圣洁之光
+			[GetSpellInfo(153477)] = 4,  -- 灵魂容器
+			[GetSpellInfo(154018)] = 4,  -- 烈火
+			[GetSpellInfo(153396)] = 5,  -- 火幕
+			[GetSpellInfo(156921)] = 5,  -- 怨毒之种
+			[GetSpellInfo(156842)] = 4,  -- 腐蚀术
+			[GetSpellInfo(156964)] = 4,  -- 献祭
+		},
+
+		[969] = {-- 影月墓地
+			[GetSpellInfo(162652)] = 4,  -- 纯净之月
+			[GetSpellInfo(153692)] = 4,  -- 死疽沥青
+		},
+
+		[964] = {-- 血槌炉渣矿井
+			[GetSpellInfo(149997)] = 4,  -- 火焰风暴
+			[GetSpellInfo(149975)] = 5,  -- 跳动烈焰
+			[GetSpellInfo(150032)] = 5,  -- 凋零烈焰
+			[GetSpellInfo(149941)] = 4,  -- 蛮力猛击
+			[GetSpellInfo(150023)] = 4,  -- 炉渣猛击
+			[GetSpellInfo(150745)] = 4,  -- 重压跳跃
+		},
+--------------------------------MOP--------------------------------		
 		[875]=  { --残阳关
 			[GetSpellInfo(107268)]=  7,
 			[GetSpellInfo(106933)]=  7,
