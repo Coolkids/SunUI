@@ -287,7 +287,7 @@ QQI:SetScript("OnEvent",function(self,event,...)
 	elseif event == "BAG_UPDATE" then
 		Q:QQI_ParseInventory()
 	elseif event == "PLAYER_ALIVE" then
-		GTT:HookScript("OnShow",Q:QQI_ParseTooltip)
+		GTT:HookScript("OnShow",Q:QQI_ParseTooltip())
 	--[[else
 		if debug then
 			if arg2 then
