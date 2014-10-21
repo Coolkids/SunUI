@@ -252,7 +252,7 @@ function Q:QQI_CreateMacro()
 	if InCombatLockdown() then return end
 	
 	global,character = GetNumMacros()
-	local isFound, macroSlot = QQI_MacroFinder()
+	local isFound, macroSlot = self:QQI_MacroFinder()
 	local hasSpace = global < 36 -- Checks to make sure there is macro space (36 is max in global?).
 	if hasSpace then 
 		if not isFound and not InCombatLockdown() then
@@ -287,7 +287,7 @@ QQI:SetScript("OnEvent",function(self,event,...)
 	elseif event == "BAG_UPDATE" then
 		Q:QQI_ParseInventory()
 	elseif event == "PLAYER_ALIVE" then
-		GTT:HookScript("OnShow",QQI_ParseTooltip)
+		GTT:HookScript("OnShow",Q:QQI_ParseTooltip)
 	--[[else
 		if debug then
 			if arg2 then

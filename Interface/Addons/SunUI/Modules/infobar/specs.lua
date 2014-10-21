@@ -89,7 +89,7 @@ function IB:CreateSpecs()
 		for i = 1, 7 do
 			for j = 1, 3 do
 				local _, name, iconTexture, selected, available = GetTalentInfo(i, j, 1)
-				iconTexture = iconTexture and "|T"..iconTexture..":12:12:0:0:64:64:5:59:5:59|t " or ""
+				iconTexture = iconTexture and "|T"..iconTexture..":14:14:0:0:64:64:4:60:4:60|t " or ""
 				if selected then
 					table.insert(spec1, iconTexture..name)
 				end
@@ -97,12 +97,14 @@ function IB:CreateSpecs()
 		end
 		local majorTree2 = GetSpecialization(false,false,2)
 		local spec2 = { }
-		for i = 1, 7 do 
-			for j = 1, 3 do
-				local _,name, iconTexture, selected, available = GetTalentInfo(i, j, 2)
-				iconTexture = iconTexture and "|T"..iconTexture..":12:12:0:0:64:64:5:59:5:59|t " or ""
-				if selected then
-					table.insert(spec2, iconTexture..name)
+		if majorTree2 then
+			for i = 1, 7 do 
+				for j = 1, 3 do
+					local _, name, iconTexture, selected, available = GetTalentInfo(i, j, 2)
+					iconTexture = iconTexture and "|T"..iconTexture..":14:14:0:0:64:64:4:60:4:60|t " or ""
+					if selected then
+						table.insert(spec2, iconTexture..name)
+					end
 				end
 			end
 		end
@@ -114,7 +116,7 @@ function IB:CreateSpecs()
 			local currentSpec = GetSpecialization()
 			local currentSpecName = currentSpec and select(2, GetSpecializationInfo(majorTree1)) or NONE..TALENTS
 			local _, _, _, icon = currentSpec and GetSpecializationInfo(currentSpec) or ""
-			icon = icon and "|T"..icon..":12:12:0:0:64:64:5:59:5:59|t " or ""
+			icon = icon and "|T"..icon..":14:14:0:0:64:64:4:60:4:60|t " or ""
 			GameTooltip:AddLine(icon.."|cff00FF00* " ..currentSpecName.. "|r",1,1,1)
 			for i = 1, #spec1 do
 				GameTooltip:AddDoubleLine(" ", spec1[i],1,1,1,1,1,1)
@@ -122,7 +124,7 @@ function IB:CreateSpecs()
 		else
 			local currentSpecName = select(2, GetSpecializationInfo(majorTree1)) or NONE..TALENTS
 			local _, currentSpecName, _, icon = GetSpecializationInfo(majorTree1)
-			icon = icon and "|T"..icon..":12:12:0:0:64:64:5:59:5:59|t " or ""
+			icon = icon and "|T"..icon..":14:14:0:0:64:64:4:60:4:60|t " or ""
 			GameTooltip:AddLine("|cff00FF00"..(c == 1 and "* " or "   ") .. "|r" .. icon..currentSpecName..": ",1,1,1)
 			for i = 1, #spec1 do
 				GameTooltip:AddDoubleLine(" ", spec1[i],1,1,1,1,1,1)
@@ -130,7 +132,7 @@ function IB:CreateSpecs()
 			if majorTree2 then
 				local currentSpecName2 = select(2, GetSpecializationInfo(majorTree2)) or NONE..TALENTS
 				local _, _, _, icon2 = GetSpecializationInfo(majorTree2)
-				icon2 = icon2 and "|T"..icon2..":12:12:0:0:64:64:5:59:5:59|t " or ""
+				icon2 = icon2 and "|T"..icon2..":14:14:0:0:64:64:4:60:4:60|t " or ""
 				GameTooltip:AddLine("|cff00FF00"..(c == 2 and "* " or "   ") .. "|r" .. icon2..currentSpecName2..": ",1,1,1)
 			else
 				GameTooltip:AddLine("|cff00FF00"..(c == 2 and "* " or "   ") .. "|r" ..NONE..TALENTS..": ",1,1,1)
