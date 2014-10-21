@@ -116,6 +116,49 @@ local function IsInInventory(itemName)
 	return false
 end
 
+local function QQI_UpdateMacro(unit)
+	local isFound,macroSlot = QQI_MacroFinder()
+	if isFound and macroSlot then
+		if unit then -- Unit Update is the only point we save QQI_DB.last since we have a Unit we can match a quest item to.
+			local itemName = QQI_DB.itemlist[UnitName(unit)]
+			if itemName and IsInInventory( itemName ) then
+				if not InCombatLockdown() then
+					QQI_MacroUpdater( macroSlot, itemName )
+				else -- Only places information for QQI_DB.last if we're in combat.
+					QQI_DB.last = itemName
+					queuedItem = true
+				end
+			end
+		else -- Use Parsed Item List
+			if not InCombatLockdown() then
+				if queuedItem then
+					if QQI_DB.last then
+						QQI_MacroUpdater( macroSlot, QQI_DB.last )
+						QQI_DB.last = nil
+						queuedItem = false
+					end
+				else
+					if QQI_ParsedItems and #QQI_ParsedItems > 0 then
+						local useList = ""
+						for f=0,#QQI_ParsedItems do -- Creates a multiline string for the macro to use all parsed items. (This is affected by macro character limits of course)
+							if f == 1 then
+								useList = QQI_ParsedItems[f]
+							elseif f > 1 then
+								useList = useList.."\n/use "..QQI_ParsedItems[f]
+							end
+						end
+						QQI_MacroUpdater( macroSlot, useList )
+					else
+						QQI_MacroUpdater( macroSlot, false)
+					end
+				end				
+			end
+		end
+	else
+		QQI_CreateMacro()
+	end
+end
+
 local function QQI_ParseInventory()
 	QQI_ParsedItems = {} -- Clear the table.
 	for b = 0,4,1 do 
@@ -213,7 +256,7 @@ local function QQI_CreateMacro()
 			QQI_UpdateMacro()
 		end
 	else
-		print(Meta("Title")..": No global macro space. Please delete a macro to create space.")
+		print(": No global macro space. Please delete a macro to create space.")
 		spaceNeeded = true
 	end
 end
@@ -223,49 +266,6 @@ local function QQI_MacroUpdater(macroSlot,itemName)
 		EditMacro(macroSlot, "任务物品宏","INV_MISC_QUESTIONMARK","#showtooltip\n/use "..itemName,nil,nil)
 	elseif macroSlot and not itemName then
 		EditMacro(macroSlot, "任务物品宏","Icon_PetFamily_Magical","--QQI MACRO--\n--No items available!--",nil,nil)
-	end
-end
-
-local function QQI_UpdateMacro(unit)
-	local isFound,macroSlot = QQI_MacroFinder()
-	if isFound and macroSlot then
-		if unit then -- Unit Update is the only point we save QQI_DB.last since we have a Unit we can match a quest item to.
-			local itemName = QQI_DB.itemlist[UnitName(unit)]
-			if itemName and IsInInventory( itemName ) then
-				if not InCombatLockdown() then
-					QQI_MacroUpdater( macroSlot, itemName )
-				else -- Only places information for QQI_DB.last if we're in combat.
-					QQI_DB.last = itemName
-					queuedItem = true
-				end
-			end
-		else -- Use Parsed Item List
-			if not InCombatLockdown() then
-				if queuedItem then
-					if QQI_DB.last then
-						QQI_MacroUpdater( macroSlot, QQI_DB.last )
-						QQI_DB.last = nil
-						queuedItem = false
-					end
-				else
-					if QQI_ParsedItems and #QQI_ParsedItems > 0 then
-						local useList = ""
-						for f=0,#QQI_ParsedItems do -- Creates a multiline string for the macro to use all parsed items. (This is affected by macro character limits of course)
-							if f == 1 then
-								useList = QQI_ParsedItems[f]
-							elseif f > 1 then
-								useList = useList.."\n/use "..QQI_ParsedItems[f]
-							end
-						end
-						QQI_MacroUpdater( macroSlot, useList )
-					else
-						QQI_MacroUpdater( macroSlot, false)
-					end
-				end				
-			end
-		end
-	else
-		QQI_CreateMacro()
 	end
 end
 
