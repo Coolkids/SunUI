@@ -9,7 +9,8 @@ local function LoadSkin()
 	A:Reskin(AddonListOkayButton)
 	A:ReskinCheck(AddonListForceLoad)
 	A:ReskinDropDown(AddonCharacterDropDown)
-
+	A:ReskinScroll(AddonListScrollFrameScrollBar)
+	
 	AddonCharacterDropDown:SetWidth(170)
 
 	for i = 1, MAX_ADDONS_DISPLAYED do

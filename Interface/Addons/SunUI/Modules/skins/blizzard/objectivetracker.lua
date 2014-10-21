@@ -83,7 +83,7 @@ local function LoadSkin()
 			itemButton.HotKey:ClearAllPoints()
 			itemButton.HotKey:SetPoint("TOP", itemButton, -1, 0)
 			itemButton.HotKey:SetJustifyH("CENTER")
-			itemButton.HotKey:FontTemplate(nil, nil, "OUTLINE")
+			--itemButton.HotKey:FontTemplate(nil, nil, "OUTLINE")  会引起无法使用任务物品么?待测试
 
 			itemButton.icon:SetTexCoord(.08, .92, .08, .92)
 			A:CreateBG(itemButton)
