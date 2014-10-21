@@ -187,8 +187,6 @@ StaticPopupDialogs["CLEARSET"] = {
 		wipe(nioTillerDBC)
 		wipe(RayWatcherDB)
 		wipe(SunUICharacterData)
-		wipe(stAddonProfiles)
-		wipe(stLockedAddons)
 		ReloadUI()
 	end,
 	timeout = 0,
