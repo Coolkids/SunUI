@@ -821,7 +821,8 @@ function B:ContructContainerFrame(name, isBank)
 			PlaySound("igMainMenuOption");
 			StaticPopup_Show("CONFIRM_BUY_REAGENTBANK_TAB");
 		end)
-
+		A:Reskin(f.reagentFrame.cover.purchaseButton)
+		
 		f.reagentFrame.cover.purchaseText = f.reagentFrame.cover:CreateFontString(nil, 'OVERLAY')
 		f.reagentFrame.cover.purchaseText:FontTemplate()
 		f.reagentFrame.cover.purchaseText:SetPoint("BOTTOM", f.reagentFrame.cover.purchaseButton, "TOP", 0, 10)
@@ -884,7 +885,7 @@ function B:ContructContainerFrame(name, isBank)
 		end)
 		A:Reskin(f.purchaseBagButton)
 		
-		f.reagentToggle = CreateFrame("Button", name..'ReagentButton', f);
+		f.reagentToggle = CreateFrame("Button", nil, f);
 		f.reagentToggle:SetSize(55, 10)
 		f.reagentToggle:SetPoint("LEFT", f.purchaseBagButton, "RIGHT", 3, 0)
 		A:Reskin(f.reagentToggle)
@@ -892,7 +893,7 @@ function B:ContructContainerFrame(name, isBank)
 		f.reagentToggle:SetScript("OnEnter", self.Tooltip_Show)
 		f.reagentToggle:SetScript("OnLeave", self.Tooltip_Hide)
 		f.reagentToggle:SetScript("OnClick", function()
-			PlaySound("igCharacterInfoTab");
+			--PlaySound("igCharacterInfoTab");
 			if f.holderFrame:IsShown() then
 				BankFrame.selectedTab = 2
 				f.holderFrame:Hide()
@@ -911,6 +912,28 @@ function B:ContructContainerFrame(name, isBank)
 			f:Show()
 		end)
 		A:Reskin(f.reagentToggle)
+		
+		f.DespositButton = CreateFrame("Button", nil, f);
+		f.DespositButton:SetSize(55, 10)
+		f.DespositButton:SetPoint("LEFT", f.reagentToggle, "RIGHT", 3, 0)
+		f.DespositButton.ttText = REAGENTBANK_DEPOSIT;
+		f.DespositButton:SetScript("OnEnter", self.Tooltip_Show)
+		f.DespositButton:SetScript("OnLeave", self.Tooltip_Hide)
+		f.DespositButton:SetScript("OnClick", function()
+			DepositReagentBank()
+		end)
+		A:Reskin(f.DespositButton)
+		
+		f.sortReagentButton = CreateFrame("Button", nil, f);
+		f.sortReagentButton:SetSize(55, 10)
+		f.sortReagentButton:SetPoint("LEFT", f.DespositButton, "RIGHT", 3, 0)
+		f.sortReagentButton.ttText = BAG_CLEANUP_REAGENT_BANK;
+		f.sortReagentButton:SetScript("OnEnter", self.Tooltip_Show)
+		f.sortReagentButton:SetScript("OnLeave", self.Tooltip_Hide)
+		f.sortReagentButton:SetScript("OnClick", function()
+			SortReagentBankBags()
+		end)
+		A:Reskin(f.sortReagentButton)
 	else
 		--Gold Text
 		f.goldText = f:CreateFontString(nil, "OVERLAY")

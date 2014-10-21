@@ -28,12 +28,15 @@ function IB:CreateLatency()
 		end
 	end
 	local int = 1
+	local latencyHomedata,latencyWorlddata = {}, {}
 	local function Update(self, t)
 		int = int - t
 		if int < 0 then
 			local _, _, latencyHome, latencyWorld = GetNetStats()
 			local maxo = max(latencyHome, latencyWorld)
 			colorlatency(maxo)
+			latencyHomedata = IB:InsertTable(latencyHome, latencyHomedata)
+			latencyWorlddata = IB:InsertTable(latencyWorld, latencyWorlddata)
 			stat.text:SetText(maxo.."|cffffd700ms|r")
 			int = 1
 		end
@@ -42,18 +45,34 @@ function IB:CreateLatency()
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(L["延迟"], 0, .6, 1)
+		GameTooltip:AddLine("最近10分钟数据")
 		GameTooltip:AddLine(" ")
 		local _, _, latencyHome, latencyWorld = GetNetStats()
 		local bandwidth = GetAvailableBandwidth()
-		local r1, g1, b1 = S:ColorGradient((300-latencyHome)/300, IB.InfoBarStatusColor[1][1], IB.InfoBarStatusColor[1][2], IB.InfoBarStatusColor[1][3], 
-																			IB.InfoBarStatusColor[2][1], IB.InfoBarStatusColor[2][2], IB.InfoBarStatusColor[2][3],
-																			IB.InfoBarStatusColor[3][1], IB.InfoBarStatusColor[3][2], IB.InfoBarStatusColor[3][3])
-		local r2, g2, b2 = S:ColorGradient((300-latencyWorld)/300, IB.InfoBarStatusColor[1][1], IB.InfoBarStatusColor[1][2], IB.InfoBarStatusColor[1][3], 
-																			IB.InfoBarStatusColor[2][1], IB.InfoBarStatusColor[2][2], IB.InfoBarStatusColor[2][3],
-																			IB.InfoBarStatusColor[3][1], IB.InfoBarStatusColor[3][2], IB.InfoBarStatusColor[3][3])
 		
-		GameTooltip:AddDoubleLine(L["本地延迟"], latencyHome.."ms", 0.75, 0.9, 1, r1, g1, b1)
-		GameTooltip:AddDoubleLine(L["世界延迟"], latencyWorld.."ms", 0.75, 0.9, 1, r2, g2, b2)
+		
+		local homemin, homemax, homerms = latencyHomedata[1], latencyHomedata[#latencyHomedata], 0
+		local worldmin, worldmax, worldrms = latencyWorlddata[1], latencyWorlddata[#latencyWorlddata], 0
+		for i=1, #latencyHomedata do
+			homerms = homerms + latencyHomedata[i]
+		end
+		homerms = math.floor(homerms/#latencyHomedata)
+		for i=1, #latencyWorlddata do
+			worldrms = worldrms + latencyWorlddata[i]
+		end
+		worldrms = math.floor(worldrms/#latencyWorlddata)
+		
+		
+		GameTooltip:AddLine(L["本地延迟"], 0.75, 0.9, 1)
+		GameTooltip:AddDoubleLine("最小值", homemin)
+		GameTooltip:AddDoubleLine("最大值", homemax)
+		GameTooltip:AddDoubleLine("平均值", homerms)
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddLine(L["世界延迟"], 0.75, 0.9, 1)
+		GameTooltip:AddDoubleLine("最小值", worldmin)
+		GameTooltip:AddDoubleLine("最大值", worldmax)
+		GameTooltip:AddDoubleLine("平均值", worldrms)
+		
 		if bandwidth ~= 0 then
 			GameTooltip:AddDoubleLine(L["带宽"]..": " , string.format("%.2f Mbps", bandwidth),0.69, 0.31, 0.31,0.84, 0.75, 0.65)
 			GameTooltip:AddDoubleLine(L["下载"]..": " , string.format("%.2f%%", GetDownloadedPercentage() *100),0.69, 0.31, 0.31, 0.84, 0.75, 0.65)

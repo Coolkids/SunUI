@@ -84,6 +84,23 @@ function IB:GetOptions()
 	return options
 end
 
+function IB:InsertTable(data, t)
+	tinsert(t, data)
+	if #t > 600 then
+		tremove (t, 1)
+	end
+	table.sort(t)
+	return t
+end
+
+function IB:ColorText(num, total)
+
+	local r, g, b = S:ColorGradient(num/total, IB.InfoBarStatusColor[1][1], IB.InfoBarStatusColor[1][2], IB.InfoBarStatusColor[1][3], 
+																			IB.InfoBarStatusColor[2][1], IB.InfoBarStatusColor[2][2], IB.InfoBarStatusColor[2][3],
+																			IB.InfoBarStatusColor[3][1], IB.InfoBarStatusColor[3][2], IB.InfoBarStatusColor[3][3])
+	return {r, g, b}
+end
+
 function IB:CreateTopBack()
 	if not self.db.topback then return end
 	local top = CreateFrame("Frame", "TopInfoPanel", UIParent)

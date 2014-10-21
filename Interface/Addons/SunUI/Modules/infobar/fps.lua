@@ -24,15 +24,39 @@ function IB:CreateFPS()
 		stat.icon:SetVertexColor(r, g, b, 0.8)
 	end
 	local int = 1
+	local fpsdata = {}
 	local function Update(self, t)
 		int = int - t
 		if int < 0 then
 			local fps = floor(GetFramerate())
 			color(fps)
+			fpsdata = IB:InsertTable(fps, fpsdata)
 			stat.text:SetText(fps.."|cffffd700fps|r")
 			int = 1
 		end
 	end
 
+	stat:SetScript("OnEnter", function(self)
+		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
+		GameTooltip:ClearLines()
+		GameTooltip:AddLine("FPS", 0, .6, 1)
+		GameTooltip:AddLine("最近10分钟数据")
+		GameTooltip:AddLine(" ")
+		
+		local fpsmin, fpsmax, fpsrms = fpsdata[1], fpsdata[#fpsdata], 0
+
+		for i=1, #fpsdata do
+			fpsrms = fpsrms + fpsdata[i]
+		end
+		fpsrms = math.floor(fpsrms/#fpsdata)
+		
+		GameTooltip:AddDoubleLine("最小值", fpsmin)
+		GameTooltip:AddDoubleLine("最大值", fpsmax)
+		GameTooltip:AddDoubleLine("平均值", fpsrms)
+		
+		GameTooltip:Show()
+	end)
+	stat:SetScript("OnLeave", function() GameTooltip:Hide() end)
+	
 	stat:SetScript("OnUpdate", Update) 
 end

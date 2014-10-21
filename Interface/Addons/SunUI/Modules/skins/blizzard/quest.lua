@@ -470,8 +470,8 @@ local function LoadSkin()
 
 		if not entry.styled then
 			for _, roleButton in pairs({entry.HealersFound, entry.TanksFound, entry.DamagersFound}) do
-				roleButton.Texture:SetTexture(A.media.roleIcons)
-				roleButton.Cover:SetTexture(A.media.roleIcons)
+				--roleButton.Texture:SetTexture(A.media.roleIcons)
+				--roleButton.Cover:SetTexture(A.media.roleIcons)
 
 				local left = roleButton:CreateTexture(nil, "OVERLAY")
 				left:SetWidth(1)
@@ -505,7 +505,7 @@ local function LoadSkin()
 			for i = 1, LFD_NUM_ROLES do
 				local roleIcon = entry["RoleIcon"..i]
 
-				roleIcon:SetTexture(A.media.roleIcons)
+				--roleIcon:SetTexture(A.media.roleIcons)
 
 				entry["RoleIconBorders"..i] = {}
 				local borders = entry["RoleIconBorders"..i]
