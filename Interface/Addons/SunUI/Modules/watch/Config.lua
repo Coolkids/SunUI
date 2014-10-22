@@ -979,7 +979,7 @@ ns.watchers ={
 				-- 吸血药膏
 				{ spellID = 112961, unitID = "target", caster = "player", filter = "DEBUFF"},
 				-- 猩红风暴
-				{ spellID = 122223, unitID = "target", caster = "player", filter = "DEBUFF"},
+				{ spellID = 122233, unitID = "target", caster = "player", filter = "DEBUFF"},
 				-- 致命投掷
 				{ spellID =  26679, unitID = "target", caster = "player", filter = "DEBUFF"},
 				-- 死亡标志
