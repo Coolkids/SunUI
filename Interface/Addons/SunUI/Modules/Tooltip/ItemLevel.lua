@@ -85,7 +85,6 @@ do
 	local formatString = '%.' .. DECIMAL_PLACES .. 'f'
 
 	local function scan (unit, slot, total, count, twoHanded, incomplete)
-		if count<= 0 then return end
 		if ( slot > INVSLOT_LAST_EQUIPPED ) then
 			return formatString:format(total / (twoHanded and count - 2 or count-1)), incomplete
 		end
