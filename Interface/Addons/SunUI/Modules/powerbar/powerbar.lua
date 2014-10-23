@@ -138,12 +138,12 @@ function PB:CreateShadowOrbs()
 	ShadowOrbs:SetSize(self.db.Width, self.db.Height)
 	ShadowOrbs:SetPoint("CENTER", Holder)
 	tinsert(mainframe, ShadowOrbs)
-	local maxShadowOrbs = 3
+	local maxShadowOrbs = 5
 	--local maxShadowOrbs = UnitPowerMax('player', SPELL_POWER_SHADOW_ORBS) = 3
 	--print(maxShadowOrbs)
 	for i = 1,maxShadowOrbs do  --maxShadowOrbs
 		ShadowOrbs[i] = CreateFrame("StatusBar", nil, ShadowOrbs)
-		tinsert(threeframe, ShadowOrbs[i])
+		tinsert(fiveframe, ShadowOrbs[i])
 		ShadowOrbs[i]:SetSize((self.db.Width-space*(maxShadowOrbs-1))/maxShadowOrbs, self.db.Height)
 		ShadowOrbs[i]:SetStatusBarTexture(S["media"].normal)
 		ShadowOrbs[i]:SetStatusBarColor(.86,.22,1)
@@ -161,6 +161,21 @@ function PB:CreateShadowOrbs()
 	ShadowOrbs:SetScript("OnEvent",function(self, event, unit, powerType)
 		if(event=="PLAYER_ENTERING_WORLD") then 
 			local numShadowOrbs = UnitPower('player', SPELL_POWER_SHADOW_ORBS)
+			local tpmaxShadowOrbs = UnitPowerMax("player",SPELL_POWER_SHADOW_ORBS)
+			if tpmaxShadowOrbs == maxShadowOrbs then
+				--ShadowOrbs[4]:Show()
+				--ShadowOrbs[5]:Show()
+				for i = 1,maxShadowOrbs do
+					ShadowOrbs[i]:SetWidth((PB.db.Width-space*(maxShadowOrbs-1))/maxShadowOrbs)
+				end
+			else
+				--ShadowOrbs[4]:Hide()
+				--ShadowOrbs[5]:Hide()
+				for i = 1,tpmaxShadowOrbs do
+					ShadowOrbs[i]:SetWidth((PB.db.Width-space*(tpmaxShadowOrbs-1))/tpmaxShadowOrbs)
+				end
+			end
+			
 			for i = 1,maxShadowOrbs do
 				if i <= numShadowOrbs then
 					ShadowOrbs[i]:Show()
@@ -171,6 +186,20 @@ function PB:CreateShadowOrbs()
 		end
 		if( unit ~= "player" or (powerType and powerType ~= 'SHADOW_ORBS')) then return end
 		local numShadowOrbs = UnitPower('player', SPELL_POWER_SHADOW_ORBS)
+		local tpmaxShadowOrbs = UnitPowerMax("player",SPELL_POWER_SHADOW_ORBS)
+		if tpmaxShadowOrbs == maxShadowOrbs then
+			--ShadowOrbs[4]:Show()
+			--ShadowOrbs[5]:Show()
+			for i = 1,maxShadowOrbs do
+				ShadowOrbs[i]:SetWidth((PB.db.Width-space*(maxShadowOrbs-1))/maxShadowOrbs)
+			end
+		else
+			--ShadowOrbs[4]:Hide()
+			--ShadowOrbs[5]:Hide()
+			for i = 1,tpmaxShadowOrbs do
+				ShadowOrbs[i]:SetWidth((PB.db.Width-space*(tpmaxShadowOrbs-1))/tpmaxShadowOrbs)
+			end
+		end
 		for i = 1,maxShadowOrbs do
 			if i <= numShadowOrbs then
 				ShadowOrbs[i]:Show()

@@ -1015,7 +1015,7 @@ local UnitSpecific = {
 
 				local numOrbs = UnitPower("player", SPELL_POWER_SHADOW_ORBS)
 				
-				if(numOrbs == PRIEST_BAR_NUM_ORBS) then
+				if(numOrbs == UnitPowerMax('player', SPELL_POWER_SHADOW_ORBS)) then
 					self.glow:SetAlpha(1)
 					A:CreatePulse(self.glow)
 					self.count:SetText(numOrbs)
