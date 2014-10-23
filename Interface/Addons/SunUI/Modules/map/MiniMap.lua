@@ -256,7 +256,7 @@ local function Difficultyflag()
 		elseif instanceType == 'raid' and dynamic then
 			text = maxPlayers..S.DiffIDToString[difficulty]	
 		else
-			text = maxPlayers..'N'
+			text = maxPlayers
 		end
 		if GuildInstanceDifficulty:IsShown() then
 			rdt:SetTextColor(0.40, 0.78, 1)
