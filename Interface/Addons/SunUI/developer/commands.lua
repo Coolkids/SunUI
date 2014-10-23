@@ -211,14 +211,14 @@ SlashCmdList["CLEARBS"] = function()
 		wipe(SunUIData.BagSyncDB)
 	end
 end
-SLASH_CLEARGOLD1 = "/clearbs"
+SLASH_CLEARBS1 = "/clearbs"
 
 SlashCmdList["CLEARCC"] = function()
 	if not UnitAffectingCombat("player") then
 		wipe(SunUIData.SavedCurrency)
 	end
 end
-SLASH_CLEARGOLD1 = "/clearcc"
+SLASH_CLEARCC1 = "/clearcc"
 
 ---------------- > Disband Group
 local GroupDisband = function()
