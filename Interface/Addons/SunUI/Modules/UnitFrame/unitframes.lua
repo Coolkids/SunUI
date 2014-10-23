@@ -1331,7 +1331,7 @@ local UnitSpecific = {
 
 		Health:SetHeight(UF.db.targettargetHeight - UF.db.powerHeight - 1)
 
-		local Name = S:CreateFS(tt, S["media"].fontsize, "RIGHT", nil, "THINOUTLINE")
+		local Name = S:CreateFS(self, S["media"].fontsize, "RIGHT", nil, "THINOUTLINE")
 		Name:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", 0, 2)
 		Name:SetJustifyH"RIGHT"
 		Name:SetTextColor(1, 1, 1)
