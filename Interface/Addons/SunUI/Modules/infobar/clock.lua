@@ -44,16 +44,15 @@ function IB:CreateClock()
 		end
 		local oneraid = false
 		for i = 1, GetNumSavedInstances() do
-			local name, _, reset, difficulty, locked, extended, _, isRaid, maxPlayers = GetSavedInstanceInfo(i)
+			local name, _, reset, difficulty, locked, extended, _, isRaid, maxPlayers, diff = GetSavedInstanceInfo(i)
 			if isRaid and (locked or extended) then
-				local tr, tg, tb, diff
+				local tr, tg, tb
 				if not oneraid then
 					GameTooltip:AddLine(" ")
 					GameTooltip:AddLine(RAID_INFO, 0.75, 0.9, 1)
 					oneraid = true
 				end
 				if extended then tr, tg, tb = 0.3, 1, 0.3 else tr, tg, tb = 1, 1, 1 end
-				if difficulty == 3 or difficulty == 4 then diff = "H" else diff = "N" end
 				GameTooltip:AddDoubleLine(format("%s |cffaaaaaa(%s%s)", name, maxPlayers, diff), S:FormatTime(reset), 1, 1, 1, tr, tg, tb)
 			end
 		end

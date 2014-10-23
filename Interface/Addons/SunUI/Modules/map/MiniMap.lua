@@ -252,21 +252,9 @@ local function Difficultyflag()
 	 	if (instanceType=='pvp') or (instanceType=='arena') then rdt:SetText(text) return end
 		
 		if instanceType == 'party' then
-			if GetChallengeMode() then 
-				text = maxPlayers..'C'
-			elseif difficulty >= 2 then
-				text = maxPlayers..'H'
-			else
-				text = maxPlayers..'N'
-			end
+			text = maxPlayers..S.DiffIDToString[difficulty]	
 		elseif instanceType == 'raid' and dynamic then
-			if difficulty >= 7 then
-				text = 'LFR'
-			elseif difficulty >= 5 then
-				text = maxPlayers..'H'
-			else
-				text = maxPlayers..'N'
-			end
+			text = maxPlayers..S.DiffIDToString[difficulty]	
 		else
 			text = maxPlayers..'N'
 		end
