@@ -49,24 +49,10 @@ local function UpdateButtonsText(frame)
 		if slot == "ShirtSlot" or slot == "TabardSlot" then
 			text:SetText("")
 		elseif item then
-			local oldilevel = text:GetText()
-			local ilevel = select(4, GetItemInfo(item))
-			local heirloom = select(3, GetItemInfo(item))
-			local upgrade = tonumber(item:match(":(%d+)\124h%["))
+			local ilevel, _ = S:GetItemUpgradeLevel(item)
 
-			if ilevel then
-				if ilevel ~= oldilevel then
-					if heirloom == 7 then
-						text:SetText("")
-					else
-						if upgrades[upgrade] == nil then upgrades[upgrade] = 0 end
-						if upgrades[upgrade] > 0 then
-							text:SetText("|cffffd200"..ilevel + upgrades[upgrade])
-						else
-							text:SetText("|cFFFFFF00"..ilevel + upgrades[upgrade])
-						end
-					end
-				end
+			if ilevel ~= 0 then
+				text:SetText("|cffffd200"..ilevel.."|r")
 			else
 				text:SetText("")
 			end

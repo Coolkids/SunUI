@@ -165,7 +165,7 @@ SocialTabs.createTab = function(pf, fname, prevtab)
 	if prevtab then
 		tframe:SetPoint("TOPLEFT", prevtab, "BOTTOMLEFT", 0, -15)
 	else
-		tframe:SetPoint("TOPLEFT", pf, "TOPRIGHT", 8, -35)
+		tframe:SetPoint("TOPLEFT", pf, "TOPRIGHT", 15, -20)
 	end		
 	tframe:SetFrameStrata("LOW")
 	tframe.ToggleFrame = fname
