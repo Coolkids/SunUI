@@ -44,7 +44,7 @@ function IB:CreateClock()
 		end
 		local oneraid = false
 		for i = 1, GetNumSavedInstances() do
-			local name, _, reset, difficulty, locked, extended, _, isRaid, maxPlayers, diff = GetSavedInstanceInfo(i)
+			local name, _, reset, difficulty, locked, extended, _, isRaid, maxPlayers = GetSavedInstanceInfo(i)
 			if isRaid and (locked or extended) then
 				local tr, tg, tb
 				if not oneraid then
@@ -53,7 +53,7 @@ function IB:CreateClock()
 					oneraid = true
 				end
 				if extended then tr, tg, tb = 0.3, 1, 0.3 else tr, tg, tb = 1, 1, 1 end
-				GameTooltip:AddDoubleLine(format("%s |cffaaaaaa(%s%s)", name, maxPlayers, diff), S:FormatTime(reset), 1, 1, 1, tr, tg, tb)
+				GameTooltip:AddDoubleLine(format("%s |cffaaaaaa(%s%s)", name, maxPlayers, S.DiffIDToString[difficulty]), S:FormatTime(reset), 1, 1, 1, tr, tg, tb)
 			end
 		end
 		local killbossnum = GetNumSavedWorldBosses()
