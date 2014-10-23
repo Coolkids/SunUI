@@ -1186,26 +1186,6 @@ local UnitSpecific = {
 
 		Power.value = PowerPoints
 
-		local tt = CreateFrame("Frame", nil, self)
-		tt:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 7 + S["media"].fontsize + (UF.db.targettarget and 10 or 0))
-		tt:SetWidth(110)
-		tt:SetHeight(12)
-
-		ttt = S:CreateFS(tt, S["media"].fontsize, "RIGHT", nil, "THINOUTLINE")
-		ttt:SetPoint("BOTTOMRIGHT", tt)
-
-		tt:RegisterEvent("UNIT_TARGET")
-		tt:RegisterEvent("PLAYER_TARGET_CHANGED")
-		tt:SetScript("OnEvent", function()
-			if(UnitName("targettarget")==UnitName("player")) then
-				ttt:SetText("> YOU <")
-				ttt:SetTextColor(1, 0, 0)
-			else
-				ttt:SetText(UnitName"targettarget")
-				ttt:SetTextColor(1, 1, 1)
-			end
-		end)
-
 		Castbar:SetAllPoints(Health)
 		Castbar.Width = self:GetWidth()
 
@@ -1351,6 +1331,12 @@ local UnitSpecific = {
 
 		Health:SetHeight(UF.db.targettargetHeight - UF.db.powerHeight - 1)
 
+		local Name = S:CreateFS(tt, S["media"].fontsize, "RIGHT", nil, "THINOUTLINE")
+		Name:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", 0, 2)
+		Name:SetJustifyH"RIGHT"
+		Name:SetTextColor(1, 1, 1)
+		self:Tag(Name, '[name]')
+		
 		Castbar:SetAllPoints(Health)
 		Castbar.Width = self:GetWidth()
 

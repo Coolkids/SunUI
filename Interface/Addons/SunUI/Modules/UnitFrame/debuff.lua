@@ -4,6 +4,7 @@ local UF = S:GetModule("UnitFrames")
 
 
 -- Buffs to show on enemy players
+-- 目标头像上 显示的敌对玩家buff
 
 UF.dangerousBuffs = {
 	[13750] = true, -- Adrenaline Rush
@@ -18,15 +19,14 @@ UF.dangerousBuffs = {
 	[51753] = true, -- Camouflage
 	[31224] = true, -- Cloak of Shadows
 	[74001] = true, -- Combat Readiness
-	[49028] = true, -- Dancing Rune Weapon (?)
 	[19263] = true, -- Deterrence
+	[122783] = true, -- Diffuse Magic
 	[47585] = true, -- Dispersion
 	[498] = true, -- Divine Protection
 	[642] = true, -- Divine Shield
 	[5277] = true, -- Evasion
-	[86669] = true, -- Guardian of Ancient Kings (holy)
-	[86659] = true, -- Guardian of Ancient Kings (protection)
-	[86698] = true, -- Guardian of Ancient Kings (retribution)
+	[110959] = true, -- Greater Invisibility
+	[86659] = true, -- Guardian of Ancient Kings
 	[47788] = true, -- Guardian Spirit
 	[1022] = true, -- Hand of Protection
 	[32182] = true, -- Heroism
@@ -35,7 +35,6 @@ UF.dangerousBuffs = {
 	[11426] = true, -- Ice Barrier
 	[45438] = true, -- Ice Block
 	[48792] = true, -- Icebound Fortitude
-	[29166] = true, -- Innervate
 	[66] = true, -- Invisibility
 	[12975] = true, -- Last Stand
 	[1463] = true, -- Mana Shield
@@ -48,32 +47,14 @@ UF.dangerousBuffs = {
 	[23920] = true, -- Spell Reflection
 	[2983] = true, -- Sprint
 	[80353] = true, -- Time Warp
-	[49016] = true, -- Unholy Frenzy
+	[122470] = true, -- Touch of Karma
+	[115176] = true, -- Zen Meditation
 }
 
 
 -- Debuffs by other players or NPCs you want to show on enemy target
-
+-- 目标头像上显示NPC或者其他玩家释放的debuff
 UF.debuffFilter = {
-	-- Weakened Armor
-	[113746] = true,
-
-	-- Physical Vulnerability
-	[81326] = true,
-
-	-- Weakened Blows
-	[115798] = true,
-	[109466] = true, -- Curse of Enfeeblement
-
-	-- Magic Vulnerability
-	[93068] = true, -- Master Poisoner
-	[1490] = true, -- Curse of the Elements
-
-	-- Slow Casting
-	[73975] = true, -- Necrotic Strike
-	[5760] = true, -- Mind-numbing Poison
-	[109466] = true, -- Curse of Enfeeblement
-
 	-- Stuns
 	[408] = true, -- Kidney Shot
 	[1833] = true, -- Cheap Shot
@@ -88,7 +69,6 @@ UF.debuffFilter = {
 
 	-- Taunt
 	[355] = true, -- Taunt
-	[1161] = true, -- Challenging Shout
 	[21008] = true, -- Mocking Blow
 	[62124] = true, -- Reckoning
 	[49576] = true, -- Death Grip
@@ -96,12 +76,6 @@ UF.debuffFilter = {
 	[6795] = true, -- Growl
 	[2649] = true, -- Growl (pet)
 	[116189] = true, -- Provoke
-
-	-- Disarm
-	[676] = true, -- Disarm
-	[124539] = true, -- Disarm (Voidwalker)
-	[51722] = true, -- Dismantle
-	[117368] = true, -- Grapple Weapon
 
 	-- Crowd control
 	[118] = true, -- Polymorph (sheep)
@@ -115,11 +89,9 @@ UF.debuffFilter = {
 	[20066] = true, -- Repentance
 	[9484] = true, -- Shackle Undead
 	[339] = true, -- Entangling Roots
-	[2637] = true, -- Hibernate
 	[710] = true, -- Banish
 	[19386] = true, -- Wyvern Sting
 	[51514] = true, -- Hex
-	[76780] = true, -- Bind Elemental
 	[5782] = true, -- Fear
 	[1499] = true, -- Freezing Trap (1?)
 	[3355] = true, -- Freezing Trap (2?)
@@ -129,11 +101,11 @@ UF.debuffFilter = {
 	[115078] = true, -- Paralysis
 }
 
--- Buffs to show on enemy players
 
 
 
 -- Debuffs healers don't want to see on raid frames
+-- 治疗不想看到的debuff 仅限于头像团队框架. 因为我精简了这模块so 请无视这个
 
 UF.hideDebuffs = {
 	[57724] = true, -- Sated
@@ -168,6 +140,7 @@ UF.hideDebuffs = {
 if select(2, UnitClass("player")) == "PRIEST" then UF.hideDebuffs[6788] = false end
 
 -- Buffs cast by the player that healers want to see on raid frames
+-- 治疗想要看到的玩家释放的buff 仅限于头像团队框架. 因为我精简了这模块so 请无视这个
 
 UF.myBuffs = {
 	[774] = true, -- Rejuvenation
@@ -195,16 +168,23 @@ UF.myBuffs = {
 }
 
 -- Buffs cast by anyone that healers want to see on raid frames
+-- 治疗想要看到的buff  仅限于头像团队框架. 因为我精简了这模块so 请无视这个
 
 UF.allBuffs = {
 	[86657] = true, -- Ancient Guardian
-	[642] = true, -- Divine Shield
-	[47788] = true, -- Guardian Spirit
-	[33206] = true, -- Pain Suppression
 	[31850] = true, -- Ardent Defender
-	[61336] = true, -- Survival Instincts
+	[642] = true, -- Divine Shield
+	[110959] = true, -- Greater Invisibility
+	[86659] = true, -- Guardian of Ancient Kings
+	[47788] = true, -- Guardian Spirit
+	[45438] = true, -- Ice Block
 	[48792] = true, -- Icebound Fortitude
+	[66] = true, -- Invisibility
+	[12975] = true, -- Last Stand
+	[33206] = true, -- Pain Suppression
 	[871] = true, -- Shield Wall
+	[61336] = true, -- Survival Instincts
+	[122470] = true, -- Touch of Karma
 
 	[1022] = true, -- Hand of Protection
 	[1038] = true, -- Hand of Salvation

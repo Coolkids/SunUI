@@ -598,7 +598,7 @@ function B:UpdateReagentSlot(slotID)
 	local texture, count, locked = GetContainerItemInfo(bagID, slotID);
 	local clink = GetContainerItemLink(bagID, slotID);
 	local slot = _G["SunUIReagentBankFrameItem"..slotID]
-
+	if not slot then return end
 	slot:Show();
 	if(slot.questIcon) then
 		slot.questIcon:Hide();
@@ -759,14 +759,12 @@ function B:ContructContainerFrame(name, isBank)
 	f.UpdateAllSlots = B.UpdateAllSlots
 	f.UpdateBagSlots = B.UpdateBagSlots
 	f.UpdateCooldowns = B.UpdateCooldowns
-	f:RegisterEvent("ITEM_LOCK_CHANGED")
-	f:RegisterEvent("ITEM_UNLOCKED")
+	f:RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED");
+	f:RegisterEvent("ITEM_LOCK_CHANGED");
+	f:RegisterEvent("ITEM_UNLOCKED");	
 	f:RegisterEvent("BAG_UPDATE_COOLDOWN")
-	f:RegisterEvent("BAG_UPDATE")
-	f:RegisterEvent("QUEST_ACCEPTED")
-	f:RegisterUnitEvent("UNIT_QUEST_LOG_CHANGED", "player")
-	f:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
-	f:RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")
+	f:RegisterEvent("BAG_UPDATE");
+	f:RegisterEvent("PLAYERBANKSLOTS_CHANGED");
 	f:SetMovable(true)
 	f:RegisterForDrag("LeftButton", "RightButton")
 	f:RegisterForClicks("AnyUp")
@@ -1088,7 +1086,7 @@ function B:OpenBank()
 		self:PositionBagFrames()
 	end
 	self:Layout(true)
-	
+	BankFrame:Show()
 	self.BankFrame:Show()
 	self.BankFrame:UpdateAllSlots()
 	self.BagFrame:Show()
@@ -1102,6 +1100,8 @@ end
 function B:CloseBank()
 	if not self.BankFrame then return end -- WHY???, WHO KNOWS!
 	self.BankFrame:Hide()
+	BankFrame:Hide()
+	self.BagFrame:Hide()
 end
 
 function B:PLAYER_ENTERING_WORLD()
@@ -1131,6 +1131,10 @@ function B:Initialize()
 	self:RegisterEvent("BANKFRAME_OPENED", "OpenBank")
 	self:RegisterEvent("BANKFRAME_CLOSED", "CloseBank")
 	self:RegisterEvent("PLAYERBANKBAGSLOTS_CHANGED")
+	BankFrame:SetScale(0.00001)
+	BankFrame:SetAlpha(0)
+	BankFrame:SetPoint("BOTTOMRIGHT", UIParent, "TOPLEFT", -20000, 20000)
+	BankFrame:SetScript("OnShow", nil)		
 	StackSplitFrame:SetFrameStrata("DIALOG")
 	self:HookScript(TradeFrame, "OnShow", "OpenBags")
 	self:HookScript(TradeFrame, "OnHide", "CloseBags")
