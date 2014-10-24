@@ -3,6 +3,7 @@ local FG = S:GetModule("Filger")
 
 --------------------------------设置参数----------------------------------------
 --Mode 计时条模式 参数为 BAR ICON  BAR为计时条模式  ICON为图标模式
+--IconSide 图标位置 BAR模式下才能用 参数 LEFT RIGHT
 --Direction 增长方向 参数为LEFT RIGHT UP DOWN 对应 左 右 上 下
 --Name 组名
 --Interval 排列间距 参数为数字 输入字符为0-9 严禁其他符号字符
@@ -17,7 +18,7 @@ FG["filger_spells"] = {
 	["DEATHKNIGHT"] = {
 		{
 			Name = "P_BUFF_ICON",
-			Direction = "LEFT",
+			Direction = "RIGHT",
 			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
@@ -143,9 +144,8 @@ FG["filger_spells"] = {
 		},
 		{
 			Name = "T_DE/BUFF_BAR",
-			Direction = "UP",
-			IconSide = "LEFT",
-			Mode = "BAR",
+			Direction = "RIGHT",
+			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
 			IconSize = 25,
@@ -263,7 +263,7 @@ FG["filger_spells"] = {
 	["DRUID"] = {
 		{
 			Name = "P_BUFF_ICON",
-			Direction = "LEFT",
+			Direction = "RIGHT",
 			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
@@ -486,9 +486,8 @@ FG["filger_spells"] = {
 		},
 		{
 			Name = "T_DE/BUFF_BAR",
-			Direction = "UP",
-			IconSide = "LEFT",
-			Mode = "BAR",
+			Direction = "RIGHT",
+			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
 			IconSize = 25,
@@ -508,9 +507,8 @@ FG["filger_spells"] = {
 		},
 		{
 			Name = "PVE/PVP_CC",
-			Direction = "DOWN",
-			IconSide = "LEFT",
-			Mode = "BAR",
+			Direction = "RIGHT",
+			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
 			IconSize = 25,
@@ -620,7 +618,7 @@ FG["filger_spells"] = {
 	["HUNTER"] = {
 		{
 			Name = "P_BUFF_ICON",
-			Direction = "LEFT",
+			Direction = "RIGHT",
 			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
@@ -728,9 +726,9 @@ FG["filger_spells"] = {
 		},
 		{
 			Name = "PVE/PVP_CC",
-			Direction = "DOWN",
-			IconSide = "LEFT",
-			Mode = "BAR",
+			Direction = "RIGHT",
+			
+			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
 			IconSize = 25,
@@ -850,7 +848,7 @@ FG["filger_spells"] = {
 	["MAGE"] = {
 		{
 			Name = "P_BUFF_ICON",
-			Direction = "LEFT",
+			Direction = "RIGHT",
 			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
@@ -994,9 +992,9 @@ FG["filger_spells"] = {
 		},
 		{
 			Name = "PVE/PVP_CC",
-			Direction = "DOWN",
-			IconSide = "LEFT",
-			Mode = "BAR",
+			Direction = "RIGHT",
+			
+			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
 			IconSize = 25,
@@ -1124,7 +1122,7 @@ FG["filger_spells"] = {
 	["MONK"] = {
 		{
 			Name = "P_BUFF_ICON",
-			Direction = "LEFT",
+			Direction = "RIGHT",
 			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
@@ -1382,7 +1380,7 @@ FG["filger_spells"] = {
 	["PALADIN"] = {
 		{
 			Name = "P_BUFF_ICON",
-			Direction = "LEFT",
+			Direction = "RIGHT",
 			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
@@ -1646,7 +1644,7 @@ FG["filger_spells"] = {
 	["PRIEST"] = {
 		{
 			Name = "P_BUFF_ICON",
-			Direction = "LEFT",
+			Direction = "RIGHT",
 			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
@@ -1784,9 +1782,8 @@ FG["filger_spells"] = {
 		},
 		{
 			Name = "T_DE/BUFF_BAR",
-			Direction = "UP",
-			IconSide = "LEFT",
-			Mode = "BAR",
+			Direction = "RIGHT",
+			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
 			IconSize = 25,
@@ -1810,9 +1807,9 @@ FG["filger_spells"] = {
 		},
 		{
 			Name = "PVE/PVP_CC",
-			Direction = "DOWN",
-			IconSide = "LEFT",
-			Mode = "BAR",
+			Direction = "RIGHT",
+			
+			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
 			IconSize = 25,
@@ -1932,7 +1929,7 @@ FG["filger_spells"] = {
 	["ROGUE"] = {
 		{
 			Name = "P_BUFF_ICON",
-			Direction = "LEFT",
+			Direction = "RIGHT",
 			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
@@ -2072,9 +2069,9 @@ FG["filger_spells"] = {
 		},
 		{
 			Name = "PVE/PVP_CC",
-			Direction = "DOWN",
-			IconSide = "LEFT",
-			Mode = "BAR",
+			Direction = "RIGHT",
+			
+			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
 			IconSize = 25,
@@ -2164,7 +2161,7 @@ FG["filger_spells"] = {
 	["SHAMAN"] = {
 		{
 			Name = "P_BUFF_ICON",
-			Direction = "LEFT",
+			Direction = "RIGHT",
 			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
@@ -2339,9 +2336,8 @@ FG["filger_spells"] = {
 		},
 		{
 			Name = "T_DE/BUFF_BAR",
-			Direction = "UP",
-			IconSide = "LEFT",
-			Mode = "BAR",
+			Direction = "RIGHT",
+			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
 			IconSize = 25,
@@ -2355,9 +2351,9 @@ FG["filger_spells"] = {
 		},
 		{
 			Name = "PVE/PVP_CC",
-			Direction = "DOWN",
-			IconSide = "LEFT",
-			Mode = "BAR",
+			Direction = "RIGHT",
+			
+			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
 			IconSize = 25,
@@ -2459,7 +2455,7 @@ FG["filger_spells"] = {
 	["WARLOCK"] = {
 		{
 			Name = "P_BUFF_ICON",
-			Direction = "LEFT",
+			Direction = "RIGHT",
 			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
@@ -2574,9 +2570,8 @@ FG["filger_spells"] = {
 		},
 		{
 			Name = "T_DE/BUFF_BAR",
-			Direction = "UP",
-			IconSide = "LEFT",
-			Mode = "BAR",
+			Direction = "RIGHT",
+			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
 			IconSize = 25,
@@ -2600,9 +2595,9 @@ FG["filger_spells"] = {
 		},
 		{
 			Name = "PVE/PVP_CC",
-			Direction = "DOWN",
-			IconSide = "LEFT",
-			Mode = "BAR",
+			Direction = "RIGHT",
+			
+			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
 			IconSize = 25,
@@ -2690,7 +2685,7 @@ FG["filger_spells"] = {
 	["WARRIOR"] = {
 		{
 			Name = "P_BUFF_ICON",
-			Direction = "LEFT",
+			Direction = "RIGHT",
 			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
@@ -2927,7 +2922,7 @@ FG["filger_spells"] = {
 	["ALL"] = {
 		{
 			Name = "SPECIAL_P_BUFF_ICON",
-			Direction = "LEFT",
+			Direction = "RIGHT",
 			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
@@ -3032,11 +3027,11 @@ FG["filger_spells"] = {
 		},
 		{
 			Name = "PVE/PVP_DEBUFF",
-			Direction = "UP",
+			Direction = "RIGHT",
 			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
-			IconSize = 60,
+			IconSize = 40,
 			Position = {unpack(FG["filger_position"].pve_debuff)},
 
 			-- Death Knight
@@ -3315,11 +3310,11 @@ FG["filger_spells"] = {
 		},
 		{
 			Name = "T_BUFF",
-			Direction = "UP",
+			Direction = "RIGHT",
 			Mode = "ICON",
 			Interval = 3,
 			Alpha = 1,
-			IconSize = 60,
+			IconSize = 40,
 			Position = {unpack(FG["filger_position"].target_buff_icon)},
 
 			-- Death knight

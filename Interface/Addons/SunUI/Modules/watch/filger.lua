@@ -505,3 +505,5 @@ function FG:Initialize()
 		end
 	end
 end
+
+S:RegisterModule(FG:GetName())
