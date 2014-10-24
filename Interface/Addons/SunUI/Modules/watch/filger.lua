@@ -1,4 +1,4 @@
-local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+ï»¿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local FG = S:GetModule("Filger")
 
 ----------------------------------------------------------------------------------------
@@ -84,10 +84,11 @@ function Filger:DisplayActives()
 		if not bar then
 			bar = CreateFrame("Frame", "FilgerAnchor"..id.."Frame"..index, self)
 			bar:SetScale(1)
-			bar:CreateShadow()  --ÃÀ»¯²¿·Ö
+			bar:CreateShadow()  --ç¾åŒ–éƒ¨åˆ†
 
 			if index == 1 then
-				bar:SetPoint(unpack(self.Position))
+				--print(self:GetName())
+				bar:SetPoint(self:GetPoint())
 			else
 				if self.Direction == "UP" then
 					bar:SetPoint("BOTTOM", previous, "TOP", 0, self.Interval)
@@ -103,7 +104,7 @@ function Filger:DisplayActives()
 			if bar.icon then
 				bar.icon = _G[bar.icon:GetName()]
 			else
-				bar.icon = bar:CreateTexture("$parentIcon", "BORDER")   --Í¼±ê
+				bar.icon = bar:CreateTexture("$parentIcon", "BORDER")   --å›¾æ ‡
 				bar.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 				bar.icon:SetAllPoints(bar)
 			end
@@ -145,7 +146,7 @@ function Filger:DisplayActives()
 				end
 				bar.statusbar:SetMinMaxValues(0, 1)
 				bar.statusbar:SetValue(0)
-				--ÃÀ»¯
+				--ç¾åŒ–
 				if not bar.statusbar.shadow then
 					bar.statusbar:CreateShadow("Background")
 				end
@@ -213,7 +214,7 @@ function Filger:DisplayActives()
 	end
 
 	local activeCount = 1
-	local limit = (S:GetModule("ActionBar").db.ButtonSize * 12)/self.IconSize  --¶¯×÷Ìõ´óĞ¡*12 / Í¼±ê´óĞ¡? ÕâÊÇ¸ÉÂï..
+	local limit = (S:GetModule("ActionBar").db.ButtonSize * 12)/self.IconSize  --åŠ¨ä½œæ¡å¤§å°*12 / å›¾æ ‡å¤§å°? è¿™æ˜¯å¹²å˜›..
 	for n in pairs(self.actives) do
 		self.sortedIndex[activeCount] = n
 		activeCount = activeCount + 1
@@ -269,7 +270,7 @@ function Filger:DisplayActives()
 			bar:SetScript("OnUpdate", nil)
 		end
 		bar.spellID = value.spid
-		if FG["filger_settings"].show_tooltip then
+		if FG.db.ShowTooltip then
 			bar:EnableMouse(true)
 			bar:SetScript("OnEnter", Filger.TooltipOnEnter)
 			bar:SetScript("OnLeave", Filger.TooltipOnLeave)
@@ -385,8 +386,9 @@ function Filger:OnEvent(event, unit)
 	end
 end
 
---¿ÉÒÔ¿ªÊ¼ÑÓ³Ù¼ÓÔØÁËÃ´?
+--å¯ä»¥å¼€å§‹å»¶è¿ŸåŠ è½½äº†ä¹ˆ?
 function FG:Initialize()
+	if not FG.db.enable then return end
 	if FG["filger_spells"] and FG["filger_spells"]["ALL"] then
 		if not FG["filger_spells"][S.myclass] then
 			FG["filger_spells"][S.myclass] = {}
@@ -471,7 +473,12 @@ function FG:Initialize()
 			frame.BarWidth = data.BarWidth or 186
 			frame.Position = data.Position or "CENTER"
 			frame:SetPoint(unpack(data.Position))
-
+			if (frame.Mode=="ICON") then
+				frame:SetSize(frame.IconSize, frame.IconSize)
+			else
+				frame:SetSize(frame.BarWidth, self.IconSize - 10)
+			end
+			
 			if FG["filger_settings"].config_mode then
 				frame.actives = {}
 				for j = 1, math.min(FG["filger_settings"].max_test_icon, #FG["filger_spells"][S.myclass][i]), 1 do
@@ -502,6 +509,7 @@ function FG:Initialize()
 				frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 				frame:SetScript("OnEvent", Filger.OnEvent)
 			end
+			S:CreateMover(frame, "FilgerFrame"..i, data.Name, true, nil, "FILGER")
 		end
 	end
 end

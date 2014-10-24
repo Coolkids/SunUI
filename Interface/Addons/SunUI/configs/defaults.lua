@@ -234,3 +234,8 @@ P["RaidCD"] = {
 	MaxNumber = 30,
 	RowDirection = "right",
 }
+
+P["Filger"] = {
+	Enable = true,
+	ShowTooltip = true,
+}

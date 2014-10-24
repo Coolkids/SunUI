@@ -50,6 +50,7 @@ do
 	L["UNITFRAMES"] = "头像"
 	L["MINITOOLS"] = "小工具"
 	L["ACTIONBARS"] = "动作条"
+	L["FILGER"] = "技能监视"
 	L["ARENA"] = true
 	L["成就锚点"] = true
 end
