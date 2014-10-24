@@ -20,16 +20,6 @@ function A:GetOptions()
 						CT:UpdateSet()
 					end,
 				},
-				Size = {
-					type = "range", order = 2, disabled = function(info) return not self.db.Enable end,
-					name = L["图标大小"],
-					min = 20, max = 100, step = 1,
-					set = function(info, value) 
-						self.db.Size = value 
-						local CT = S:GetModule("ClassTools")
-						CT:UpdateSet()
-					end,
-				},
 			}
 		},
 	}
@@ -42,6 +32,11 @@ function A:Initialize()
 	
 	local PT = S:GetModule("PetTime")
 	PT:Init()
+end
+
+function A:Info()
+	return "\n\n 斩杀提示改为 动作条技能闪光 当达到触发血量后动作条上相应按钮会出现闪光 "
+
 end
 
 S:RegisterModule(A:GetName())

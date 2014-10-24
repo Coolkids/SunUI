@@ -6,59 +6,59 @@ A.modName = L["施法通告"]
 A.order = 15
 
 A.baoming = {
-	[GetSpellInfo(871)]    = true,	-- 盾墙
-	[GetSpellInfo(12975)]  = true,	-- 破釜沉舟
-	[GetSpellInfo(97462)]  = true,	-- 集结呐喊
-	[GetSpellInfo(2565)]   = true,	-- 盾牌格挡
-	[GetSpellInfo(642)]    = true,	-- 圣盾术
-	[GetSpellInfo(86659)]  = true,	-- 远古列王守卫
-	[GetSpellInfo(31821)]  = true,	-- 虔诚光环
-	[GetSpellInfo(31850)]  = true,	-- 炽热防御者
-	[GetSpellInfo(498)]    = true,	-- 圣佑术
-	[GetSpellInfo(48707)]  = true,	-- 反魔法护罩
-	[GetSpellInfo(50461)]  = true,	-- 反魔法领域
-	[GetSpellInfo(48792)]  = true,	-- 冰封之韧
-	[GetSpellInfo(55233)]  = true,	-- 吸血鬼之血
-	[GetSpellInfo(61336)]  = true,	-- 生存本能
-	[GetSpellInfo(22812)]  = true,	-- 树皮术
-	[GetSpellInfo(115176)] = true, 	-- 禅悟冥想
-	[GetSpellInfo(115203)] = true, 	-- 壮胆酒
-	[GetSpellInfo(122278)] = true, 	-- 躯不坏
-	[GetSpellInfo(122783)] = true, 	-- 散魔功
-	[GetSpellInfo(88611)]  = true, 	-- 烟雾弹
+	[871]    = true,	-- 盾墙
+	[12975]  = true,	-- 破釜沉舟
+	[97462]  = true,	-- 集结呐喊
+	[2565]   = true,	-- 盾牌格挡
+	[642]    = true,	-- 圣盾术
+	[86659]  = true,	-- 远古列王守卫
+	[31821]  = true,	-- 虔诚光环
+	[31850]  = true,	-- 炽热防御者
+	[498]    = true,	-- 圣佑术
+	[48707]  = true,	-- 反魔法护罩
+	[50461]  = true,	-- 反魔法领域
+	[48792]  = true,	-- 冰封之韧
+	[55233]  = true,	-- 吸血鬼之血
+	[61336]  = true,	-- 生存本能
+	[22812]  = true,	-- 树皮术
+	[115176] = true, 	-- 禅悟冥想
+	[115203] = true, 	-- 壮胆酒
+	[122278] = true, 	-- 躯不坏
+	[122783] = true, 	-- 散魔功
+	[88611]  = true, 	-- 烟雾弹
 }
 A.heal = {
 	--治疗
-	[GetSpellInfo(62618)] = true,  -- 真言术:障
-	[GetSpellInfo(98008)] = true,  -- 灵魂链接图腾
-	[GetSpellInfo(31821)] = true,  -- 虔诚光环
-	[GetSpellInfo(724)]   = true,  -- 光明之泉
-	[GetSpellInfo(15286)] = true,  -- 吸血鬼的拥抱 *
+	[62618] = true,  -- 真言术:障
+	[98008] = true,  -- 灵魂链接图腾
+	[31821] = true,  -- 虔诚光环
+	[724]   = true,  -- 光明之泉
+	[15286] = true,  -- 吸血鬼的拥抱 *
 }
 A.cl = {		
-	[GetSpellInfo(64843)] = true,  -- 神圣赞美诗 *
-	[GetSpellInfo(740)]   = true,  -- 宁静(ND) *
+	[64843] = true,  -- 神圣赞美诗 *
+	[740]   = true,  -- 宁静(ND) *
 }
 A.givelist = {
-	[GetSpellInfo(116849)] = true, 	-- 作茧缚命
-	[GetSpellInfo(102342)] = true, 	-- 铁木树皮
-	[GetSpellInfo(33206)]  = true, 	-- 痛苦压制
-	[GetSpellInfo(47788)]  = true, 	-- 守护之魂
-	[GetSpellInfo(1022)]   = true,	-- 保护之手
-	[GetSpellInfo(1038)]   = true,	-- 拯救之手
-	[GetSpellInfo(6940)]   = true,	-- 牺牲之手
-	[GetSpellInfo(114039)] = true,	-- 纯净之手
-	[GetSpellInfo(1044)]   = true,	-- 自由之手
+	[116849] = true, 	-- 作茧缚命
+	[102342] = true, 	-- 铁木树皮
+	[33206]  = true, 	-- 痛苦压制
+	[47788]  = true, 	-- 守护之魂
+	[1022]   = true,	-- 保护之手
+	[1038]   = true,	-- 拯救之手
+	[6940]   = true,	-- 牺牲之手
+	[114039] = true,	-- 纯净之手
+	[1044]   = true,	-- 自由之手
 }
 A.resurrect = {
-	[GetSpellInfo(20484)]  = true,	-- 复生
-	[GetSpellInfo(61999)]  = true,	-- 复活盟友
-	[GetSpellInfo(20707)]  = true,	-- 灵魂石复活
-	[GetSpellInfo(126393)] = true,	-- 永恒守护者
+	[20484]  = true,	-- 复生
+	[61999]  = true,	-- 复活盟友
+	[20707]  = true,	-- 灵魂石复活
+	[126393] = true,	-- 永恒守护者
 }
 A.mislead = {
-	[GetSpellInfo(34477)]  = true,	-- 误导
-	[GetSpellInfo(57934)]  = true,	-- 嫁祸诀窍
+	[34477]  = true,	-- 误导
+	[57934]  = true,	-- 嫁祸诀窍
 }
 function A:GetOptions()
 	local options = {
@@ -127,38 +127,38 @@ end
 function A:Info()
 	local baomingstring = "保命技能包含:\n"
 	for k,v in pairs(self.baoming) do
-		baomingstring = baomingstring..k..", "
+		baomingstring = baomingstring..GetSpellInfo(k)..", "
 	end
 	baomingstring = baomingstring.."\n"
 	
 	local healstring = "团队减伤技能包含:\n"
 	for k,v in pairs(self.heal) do
-		healstring = healstring..k..", "
+		healstring = healstring..GetSpellInfo(k)..", "
 	end
 	healstring = healstring.."\n"
 	
 	local clstring = "治疗大招包含:\n"
 	for k,v in pairs(self.cl) do
-		clstring = clstring..k..", "
+		clstring = clstring..GetSpellInfo(k)..", "
 	end
 	clstring = clstring.."\n"
 	
 	
 	local giveliststring = "治疗给出大招包含:\n"
 	for k,v in pairs(self.givelist) do
-		giveliststring = giveliststring..k..", "
+		giveliststring = giveliststring..GetSpellInfo(k)..", "
 	end
 	giveliststring = giveliststring.."\n"
 	
 	local restring = "复活技能包含:\n"
 	for k,v in pairs(self.resurrect) do
-		restring = restring..k..", "
+		restring = restring..GetSpellInfo(k)..", "
 	end
 	restring = restring.."\n"
 	
 	local misstring = "误导类包含:\n"
 	for k,v in pairs(self.mislead) do
-		misstring = misstring..k..", "
+		misstring = misstring..GetSpellInfo(k)..", "
 	end
 	misstring = misstring.."\n"
 	return baomingstring..healstring..clstring..giveliststring..restring..misstring

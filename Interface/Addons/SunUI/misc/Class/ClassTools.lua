@@ -1,6 +1,5 @@
 local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local CT = S:NewModule("ClassTools", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
-local start, duration
 
 local datebase = {
 	["PRIEST"] = {
@@ -90,94 +89,122 @@ local datebase = {
 	},
 	["MONK"] = {},
 }
---Parent
-local Frame = CreateFrame("Frame", nil, UIParent)
-Frame:Hide()
-Frame:SetPoint("TOP", "UIParent", "TOP", 0, -35)
---Children
-	--CooldownFrame
-Frame.Cooldown = CreateFrame("Cooldown", nil, Frame)
-Frame.Cooldown:SetAllPoints()
-Frame.Cooldown:SetReverse(true)
-	-- IconTexture
-Frame.Icon = Frame:CreateTexture(nil, "ARTWORK") 
-Frame.Icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
-Frame.Icon:SetAllPoints(Frame)
+CT.ButtonList = {}
 function CT:ACTIVE_TALENT_GROUP_CHANGED()
 	local spec = GetSpecialization()
-	local texture
 	if not spec then return end
 	--print(#datebase[S.myclass])
 	if #datebase[S.myclass] == 0 then 
-		CT:UnregisterAllEvents()
+		self:UnregisterAllEvents()
 		return
 	end
 	if datebase[S.myclass][0].spellid then
-		texture = GetSpellTexture(datebase[S.myclass][0].spellid)
-		Frame.spellid = datebase[S.myclass][0].spellid
-		Frame.per = datebase[S.myclass][0].per
-		Frame.level = datebase[S.myclass][0].level
-		CT:RegisterEvent("UNIT_HEALTH")
-		CT:RegisterEvent("PLAYER_TARGET_CHANGED")
-		CT:RegisterEvent("SPELL_UPDATE_COOLDOWN")
-		Frame.Icon:SetTexture(texture) 
+		self.spellid = datebase[S.myclass][0].spellid
+		self.per = datebase[S.myclass][0].per
+		self.level = datebase[S.myclass][0].level
+		self:RegisterEvent("UNIT_HEALTH")
+		self:RegisterEvent("PLAYER_TARGET_CHANGED")
+		self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
+		self:RegisterEvent("ACTIONBAR_SLOT_CHANGED")
 		return
 	end
 	if datebase[S.myclass][spec].spellid then 
-		texture = GetSpellTexture(datebase[S.myclass][spec].spellid)
-		Frame.spellid = datebase[S.myclass][spec].spellid
-		Frame.per = datebase[S.myclass][spec].per
-		Frame.level = datebase[S.myclass][spec].level
-		CT:RegisterEvent("UNIT_HEALTH")
-		CT:RegisterEvent("PLAYER_TARGET_CHANGED")
-		CT:RegisterEvent("SPELL_UPDATE_COOLDOWN")
-		Frame.Icon:SetTexture(texture) 
+		self.spellid = datebase[S.myclass][spec].spellid
+		self.per = datebase[S.myclass][spec].per
+		self.level = datebase[S.myclass][spec].level
+		self:RegisterEvent("UNIT_HEALTH")
+		self:RegisterEvent("PLAYER_TARGET_CHANGED")
+		self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
+		self:RegisterEvent("ACTIONBAR_SLOT_CHANGED")
 		return
 	else
-		CT:UnregisterEvent("UNIT_HEALTH")
-		CT:UnregisterEvent("PLAYER_TARGET_CHANGED")
-		CT:UnregisterEvent("SPELL_UPDATE_COOLDOWN")
-		Frame:Hide()
+		self:UnregisterEvent("UNIT_HEALTH")
+		self:UnregisterEvent("PLAYER_TARGET_CHANGED")
+		self:UnregisterEvent("SPELL_UPDATE_COOLDOWN")
+		self:UnregisterEvent("ACTIONBAR_SLOT_CHANGED")
 	end
 end
+
 function CT:UpdateSet()
 	local Data = S:GetModule("ClassAT")
 	if Data.db.Enable then
-		Frame:SetSize(Data.db.Size, Data.db.Size)
-		CT:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-		CT:RegisterEvent("PLAYER_ENTERING_WORLD", function()
-			CT:UnregisterEvent("PLAYER_ENTERING_WORLD")
-			CT:ACTIVE_TALENT_GROUP_CHANGED()
+		self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+		self:RegisterEvent("PLAYER_ENTERING_WORLD", function()
+			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+			self:ACTIVE_TALENT_GROUP_CHANGED()
 		end)
 	else
-		Frame:Hide()
-		CT:UnregisterAllEvents()
+		self:UnregisterAllEvents()
 	end
 end
+
+function CT:ShowOverlayGlow()
+	if self.SunUIShowOverlayGlow then return end
+	for i=1, #(self.ButtonList) do
+		ActionButton_ShowOverlayGlow(self.ButtonList[i].shadow)
+		self.SunUIShowOverlayGlow = true
+	end
+end
+
+function CT:HideOverlayGlow()
+	for i=1, #(self.ButtonList) do
+		ActionButton_HideOverlayGlow(self.ButtonList[i].shadow)
+		self.SunUIShowOverlayGlow = false
+	end
+end
+
 function CT:UNIT_HEALTH(event, unit)
 	if unit ~= "target" then return end
-	if ( UnitCanAttack("player", "target") and not UnitIsDead("target") and ( UnitHealth("target")/UnitHealthMax("target") < Frame.per and UnitLevel("player") > Frame.level ) and not UnitIsDead("player") ) then
-		if not Frame:IsShown() then
-			Frame:Show()
-		end
+	if ( UnitCanAttack("player", "target") and not UnitIsDead("target") and ( UnitHealth("target")/UnitHealthMax("target") < self.per and UnitLevel("player") > self.level ) and not UnitIsDead("player") ) then
+		self:ShowOverlayGlow()
 	else
-		if Frame:IsShown() then
-			Frame:Hide()
-		end
+		self:HideOverlayGlow()
 	end
 end
 function CT:SPELL_UPDATE_COOLDOWN()
-	local start, duration = GetSpellCooldown(Frame.spellid)
-	Frame.Cooldown:SetReverse(false)
-	CooldownFrame_SetTimer(Frame.Cooldown, start, duration, 1)
+	local start, duration = GetSpellCooldown(self.spellid)
+	if duration > 0 then
+		self:HideOverlayGlow()
+	end
+	self:UNIT_HEALTH("", "target" )
 end
 function CT:PLAYER_TARGET_CHANGED()
-	self:UNIT_HEALTH(event, "target")
+	self:UNIT_HEALTH("", "target")
 end
+
+function CT:GetSpellID(button)
+	local type,id,subtype = GetActionInfo(button.action)
+	if id then 
+		return button.action, button, id
+	end
+end
+
+function CT:InsertTable(button)
+	local action, button, id = self:GetSpellID(button)
+	if id and self.spellid and id == self.spellid then
+		tinsert(self.ButtonList, button)
+	end
+end
+
+function CT:ScanButton()
+	self:ACTIVE_TALENT_GROUP_CHANGED()
+	self:HideOverlayGlow()
+	wipe(self.ButtonList)
+	for i = 1, 12 do
+		self:InsertTable(_G[format("ActionButton%d", i)])
+		self:InsertTable(_G[format("MultiBarRightButton%d", i)])
+		self:InsertTable(_G[format("MultiBarBottomRightButton%d", i)])
+		self:InsertTable(_G[format("MultiBarLeftButton%d", i)])
+		self:InsertTable(_G[format("MultiBarBottomLeftButton%d", i)])
+	end
+end
+
+function CT:ACTIONBAR_SLOT_CHANGED()
+	self:ScanButton()
+	self:UNIT_HEALTH("", "target")
+end
+
 function CT:Init()
-	local Data = S:GetModule("ClassAT")
-	C = Data.db
-	Frame:CreateShadow()
 	self:UpdateSet()
-	S:CreateMover(Frame, "ClassToolsMover", L["斩杀提示"], true, nil, "ALL,MINITOOLS")
+	self:ScanButton()
 end

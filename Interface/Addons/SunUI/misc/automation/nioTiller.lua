@@ -3,6 +3,7 @@ local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 
 local nioTillers = S:NewModule("nioTillers", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 nioTillers.modName = "nioTillers"
+
 local seedIDs = {
 	79102, --绿色卷心菜
 	80590, --胡萝卜
@@ -69,25 +70,25 @@ end
 -----------------------------
 local function MainbuttonOnClick(self, button)
 	if button == "LeftButton" then
-		if nioTillerDBC.Shown then 
-			nioTillerDBC.Shown = false
+		if S.db["nioTillerDBC"].Shown then 
+			S.db["nioTillerDBC"].Shown = false
 			for i = 2, #seedIDs+1 do nioTillers.btn[i]:Hide() end
 		else
-			nioTillerDBC.Shown = true
+			S.db["nioTillerDBC"].Shown = true
 			nioTillers:ShowButtons()	
 		end
 	elseif button == "RightButton" and not IsModifierKeyDown() then
-		if nioTillerDBC.ShowOnlyOwned then nioTillerDBC.ShowOnlyOwned = false					
-		else nioTillerDBC.ShowOnlyOwned = true end
+		if S.db["nioTillerDBC"].ShowOnlyOwned then S.db["nioTillerDBC"].ShowOnlyOwned = false					
+		else S.db["nioTillerDBC"].ShowOnlyOwned = true end
 		nioTillers:HideButtons()
 		nioTillers:ShowButtons()
 		nioTillers:RefreshItemCount()
 	elseif button == "RightButton" and IsShiftKeyDown() then
-		if nioTillerDBC.ShowTooltip then nioTillerDBC.ShowTooltip = false					
-		else nioTillerDBC.ShowTooltip = true end
+		if S.db["nioTillerDBC"].ShowTooltip then S.db["nioTillerDBC"].ShowTooltip = false					
+		else S.db["nioTillerDBC"].ShowTooltip = true end
 	elseif button == "RightButton" and IsControlKeyDown() then
-		if nioTillerDBC.Orientation < 4 then nioTillerDBC.Orientation = nioTillerDBC.Orientation + 1					
-		else nioTillerDBC.Orientation = 1 end
+		if S.db["nioTillerDBC"].Orientation < 4 then S.db["nioTillerDBC"].Orientation = S.db["nioTillerDBC"].Orientation + 1					
+		else S.db["nioTillerDBC"].Orientation = 1 end
 		nioTillers:SetOrientation()
 	end
 end
@@ -122,7 +123,7 @@ local function OnEnter(self)
 	GameTooltip:Show()
 end
 local function OnEnterMain(self)
-	if not nioTillerDBC.ShowTooltip then return end
+	if not S.db["nioTillerDBC"].ShowTooltip then return end
 	GameTooltip:SetOwner(self)
 	if GetLocale() == "zhTW" then
 		GameTooltip:SetText("使用方法:")
@@ -196,10 +197,10 @@ end
 function nioTillers:SetOrientation()
 	for i = 2, #seedIDs+1 do
 		self.btn[i]:ClearAllPoints()
-		if nioTillerDBC.Orientation == 1 then self.btn[i]:SetPoint("LEFT", self.btn[1], "RIGHT", (i-2)*(config.Normalbutton.size + 2) +4, 0)
-		elseif nioTillerDBC.Orientation == 2 then self.btn[i]:SetPoint("TOP", self.btn[1], "BOTTOM", 0, -(i-2)*(config.Normalbutton.size + 2) -2)
-		elseif nioTillerDBC.Orientation == 3 then self.btn[i]:SetPoint("RIGHT", self.btn[1], "LEFT", -(i-2)*(config.Normalbutton.size + 2) -4, 0)
-		elseif nioTillerDBC.Orientation == 4 then self.btn[i]:SetPoint("BOTTOM", self.btn[1], "TOP", 0, (i-2)*(config.Normalbutton.size + 2) +2) end
+		if S.db["nioTillerDBC"].Orientation == 1 then self.btn[i]:SetPoint("LEFT", self.btn[1], "RIGHT", (i-2)*(config.Normalbutton.size + 2) +4, 0)
+		elseif S.db["nioTillerDBC"].Orientation == 2 then self.btn[i]:SetPoint("TOP", self.btn[1], "BOTTOM", 0, -(i-2)*(config.Normalbutton.size + 2) -2)
+		elseif S.db["nioTillerDBC"].Orientation == 3 then self.btn[i]:SetPoint("RIGHT", self.btn[1], "LEFT", -(i-2)*(config.Normalbutton.size + 2) -4, 0)
+		elseif S.db["nioTillerDBC"].Orientation == 4 then self.btn[i]:SetPoint("BOTTOM", self.btn[1], "TOP", 0, (i-2)*(config.Normalbutton.size + 2) +2) end
 	end
 end
 
@@ -209,7 +210,7 @@ function nioTillers:MakeButtons()
 	local holder = CreateFrame("Button", "nioTillersMainButton", UIParent)
 	holder = StyleButton(holder, config.Mainbutton.size, config.Mainbutton.fontsize)
 	holder:SetMovable(true)
-	holder:SetPoint(nioTillerDBC.Position.pos, UIParent, nioTillerDBC.Position.position, nioTillerDBC.Position.xoff, nioTillerDBC.Position.yoff) 
+	holder:SetPoint(S.db["nioTillerDBC"].Position.pos, UIParent, S.db["nioTillerDBC"].Position.position, S.db["nioTillerDBC"].Position.xoff, S.db["nioTillerDBC"].Position.yoff) 
 	holder:EnableMouse(true)
 	holder:RegisterForClicks("AnyUp");
 	holder:SetScript("OnMouseDown", function(self, button)
@@ -221,7 +222,7 @@ function nioTillers:MakeButtons()
 	holder:SetScript("OnMouseUp", function(self, button)
 		if button == "RightButton" then self:StopMovingOrSizing() end
 		local AnchorF, _, AnchorT, X, Y = self:GetPoint()
-		nioTillerDBC.Position.pos, nioTillerDBC.Position.position, nioTillerDBC.Position.xoff, nioTillerDBC.Position.yoff =  AnchorF,AnchorT, X, Y
+		S.db["nioTillerDBC"].Position.pos, S.db["nioTillerDBC"].Position.position, S.db["nioTillerDBC"].Position.xoff, S.db["nioTillerDBC"].Position.yoff =  AnchorF,AnchorT, X, Y
 	end)
 	holder:SetScript("OnEnter", OnEnterMain)
 	holder:SetScript("OnLeave", OnLeave)
@@ -266,16 +267,8 @@ local function WF_OnMouseDown(...)
 	-- Only steal 'right clicks' (self is arg #1!)
 	local button = select(2, ...)
 	if button == "RightButton" and not InCombatLockdown() and nioTillers:CheckForDoubleClick() then	
-		local guid = UnitGUID("target")
-		local ID = 0
-		if guid then ID = tonumber(guid:sub(6, 12), 16) end
-		--print(323)
-		--print(guid, ID)
-		--local name = UnitName("target")
-		--14992129
-		if ID == 14992129 or ID == 14992128 and GetItemCount(nioTillers.SAButtons[1].itemid) > 0 then
-		--if name == "開墾過的沃土" and GetItemCount(nioTillers.SAButtons[1].itemid) > 0 then
-			--print(23)
+		local name = UnitName("target")
+		if (name == "开垦过的土壤" or name == "開墾過的沃土") and GetItemCount(nioTillers.SAButtons[1].itemid) > 0 then
 			if IsMouselooking() then MouselookStop() end
 			nioTillersFrame:RegisterEvent("UNIT_SPELLCAST_SENT")
 			nioTillersFrame:RegisterEvent("UI_ERROR_MESSAGE")
@@ -308,14 +301,14 @@ local function SetMainButton(id, sabtn, holder, iconname)
 	holder.icon:SetTexture(iconname)
 	holder.count:SetText(GetItemCount(id))
 	holder.id = id
-	nioTillerDBC.LastSeed = id
+	S.db["nioTillerDBC"].LastSeed = id
 end
 
 function nioTillers:ShowButtons()	
 	btncount = 2
 	for i,v in ipairs(seedIDs) do		
 		local count = GetItemCount(v)
-		if (count > 0 and nioTillerDBC.ShowOnlyOwned) or not nioTillerDBC.ShowOnlyOwned then
+		if (count > 0 and S.db["nioTillerDBC"].ShowOnlyOwned) or not S.db["nioTillerDBC"].ShowOnlyOwned then
 			local btn = self.btn[btncount]
 			--print(btn, v, btncount)
 			btn.iconname = GetItemIcon(v)
@@ -372,7 +365,7 @@ function nioTillers:Enable()
 	SetOverrideBindingClick(self.SAButtons[2], false, "ALT-BUTTON2", "TillerButton2")
 	SetOverrideBindingClick(self.SAButtons[3], false, "CTRL-BUTTON2", "TillerButton3")
 	
-	SetMainButton(nioTillerDBC.LastSeed, nioTillers.SAButtons[1], nioTillers.btn[1], GetItemIcon(nioTillerDBC.LastSeed))
+	SetMainButton(S.db["nioTillerDBC"].LastSeed, nioTillers.SAButtons[1], nioTillers.btn[1], GetItemIcon(S.db["nioTillerDBC"].LastSeed))
 	
 	nioTillersFrame:RegisterEvent("BAG_UPDATE")
 end
@@ -411,10 +404,8 @@ local function nioTillersEvents(self, event)
 		nioTillersFrame:UnregisterEvent("UNIT_SPELLCAST_SENT")
 		nioTillersFrame:UnregisterEvent("UI_ERROR_MESSAGE")
 	elseif event == "ADDON_LOADED" then
-		--if not nioTillerDBC then nioTillerDBC = {} end
-		--if nioTillerDBC == {} then nioTillerDBC = default_options end
-		nioTillerDBC = nioTillerDBC or default_options	
-		if nioTillerDBC["Position"] == nil then nioTillerDBC = default_options end
+		if not S.db["nioTillerDBC"] then S.db["nioTillerDBC"] = default_options end
+		if S.db["nioTillerDBC"].Position == nil then S.db["nioTillerDBC"] = default_options end
 		nioTillers:MakeButtons()
 		nioTillersFrame:UnregisterEvent("ADDON_LOADED")
 	elseif event == "PLAYER_ENTERING_WORLD" then

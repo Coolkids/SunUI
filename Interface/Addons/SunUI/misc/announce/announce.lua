@@ -8,6 +8,7 @@ function A:COMBAT_LOG_EVENT_UNFILTERED(_, ...)
 	if band(sourceFlags, filter) == 0 or sourceName ~= S.myname then return end
 	local spellId = select(12, ...)
 	local tspellId = select(15, ...)
+	
 	--打断
 	if eventType == "SPELL_INTERRUPT" and self.db.Interrupt then
 		local channel = IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT" or IsInRaid() and "RAID" or IsInGroup() and "PARTY"
@@ -61,7 +62,7 @@ function A:COMBAT_LOG_EVENT_UNFILTERED(_, ...)
 	if self.resurrect[spellId] and self.db.Resurrect and eventType == "SPELL_RESURRECT" then
 		local channel = IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT" or IsInRaid() and "RAID" or IsInGroup() and "PARTY"
 		if channel then
-			SendChatMessage(GetSpellLink(spellId)..L["复活"]..select(9, ...), channel)
+			SendChatMessage(GetSpellLink(spellId).."→"..select(9, ...), channel)
 		else
 			return
 		end
@@ -71,9 +72,9 @@ function A:COMBAT_LOG_EVENT_UNFILTERED(_, ...)
 		local channel = IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT" or IsInRaid() and "RAID" or IsInGroup() and "PARTY"
 		if channel then
 			SendChatMessage(GetSpellLink(spellId).."→"..select(9, ...), channel)
-		else
+		else	
+			--DEFAULT_CHAT_FRAME:AddMessage(GetSpellLink(spellId).."→"..select(9, ...))
 			return
-			--DEFAULT_CHAT_FRAME:AddMessage(GetSpellLink(spellId).."给>>"..select(9, ...).."<<")
 		end
 	end
 end

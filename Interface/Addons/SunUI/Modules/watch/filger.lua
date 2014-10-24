@@ -388,7 +388,7 @@ end
 
 --可以开始延迟加载了么?
 function FG:Initialize()
-	if not FG.db.enable then return end
+	if not FG.db.Enable then return end
 	if FG["filger_spells"] and FG["filger_spells"]["ALL"] then
 		if not FG["filger_spells"][S.myclass] then
 			FG["filger_spells"][S.myclass] = {}
@@ -509,6 +509,7 @@ function FG:Initialize()
 				frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 				frame:SetScript("OnEvent", Filger.OnEvent)
 			end
+			--S:Print(frame.IconSize, frame.Mode)
 			S:CreateMover(frame, "FilgerFrame"..i, data.Name, true, nil, "FILGER")
 		end
 	end
