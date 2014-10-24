@@ -70,6 +70,12 @@ function UF:GetOptions()
 					desc = L["启用职业能量条"],
 					order = 10,
 				},
+				auraFilter = {
+					type = "toggle",
+					name = "头像状态过滤",
+					desc = "头像状态过滤",
+					order = 11,
+				},
 			},
 		},
 		group2 = {

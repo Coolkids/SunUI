@@ -1248,13 +1248,14 @@ local UnitSpecific = {
 			pet = true,
 			vehicle = true,
 		}
-
-		Auras.CustomFilter = function(_, unit, icon, _, _, _, _, _, _, _, caster, _, _, spellID)
-			if(icon.isDebuff and not UnitIsFriend("player", unit) and not playerUnits[icon.owner] and icon.owner ~= self.unit and not UF.debuffFilter[spellID])
-			or(not icon.isDebuff and UnitIsPlayer(unit) and not UnitIsFriend("player", unit) and not UF.dangerousBuffs[spellID]) then
-				return false
+		if UF.db.auraFilter then
+			Auras.CustomFilter = function(_, unit, icon, _, _, _, _, _, _, _, caster, _, _, spellID)
+				if(icon.isDebuff and not UnitIsFriend("player", unit) and not playerUnits[icon.owner] and icon.owner ~= self.unit and not UF.debuffFilter[spellID])
+				or(not icon.isDebuff and UnitIsPlayer(unit) and not UnitIsFriend("player", unit) and not UF.dangerousBuffs[spellID]) then
+					return false
+				end
+				return true
 			end
-			return true
 		end
 	end,
 
