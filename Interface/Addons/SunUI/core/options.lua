@@ -56,17 +56,6 @@ S.Options = {
                         S:ToggleConfigMode()
 					end,
 				},
-				ChoosLayout = {
-					order = 5,
-					type = "execute",
-					name = L["技能监视"],
-					desc = L["技能监视"],
-					func = function()
-						AceConfigDialog["Close"](AceConfigDialog,"SunUI")
-						AceConfigDialog["Open"](AceConfigDialog,"RayWatcherConfig")
-						GameTooltip_Hide()
-					end,
-				},
 			},
 		},
 		media = {
