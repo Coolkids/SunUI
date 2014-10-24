@@ -61,14 +61,14 @@ function IB:CreateLatency()
 			worldrms = worldrms + latencyWorlddata[i]
 		end
 		worldrms = math.floor(worldrms/#latencyWorlddata)
-		
-		
 		GameTooltip:AddLine(L["本地延迟"], 0.75, 0.9, 1)
+		GameTooltip:AddDoubleLine("当前值", latencyHome)
 		GameTooltip:AddDoubleLine("最小值", homemin)
 		GameTooltip:AddDoubleLine("最大值", homemax)
 		GameTooltip:AddDoubleLine("平均值", homerms)
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddLine(L["世界延迟"], 0.75, 0.9, 1)
+		GameTooltip:AddDoubleLine("当前值", latencyWorld)
 		GameTooltip:AddDoubleLine("最小值", worldmin)
 		GameTooltip:AddDoubleLine("最大值", worldmax)
 		GameTooltip:AddDoubleLine("平均值", worldrms)

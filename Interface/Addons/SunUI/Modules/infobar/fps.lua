@@ -48,7 +48,7 @@ function IB:CreateFPS()
 		for i=1, #fpsdata do
 			fpsrms = fpsrms + fpsdata[i]
 		end
-		fpsrms = math.floor(fpsrms/#fpsdata)
+		fpsrms = format("%0.1f", fpsrms/#fpsdata)
 		
 		GameTooltip:AddDoubleLine("最小值", fpsmin)
 		GameTooltip:AddDoubleLine("最大值", fpsmax)

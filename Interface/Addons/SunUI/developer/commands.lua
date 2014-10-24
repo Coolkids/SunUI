@@ -201,24 +201,27 @@ SLASH_CLEARSUNUI1 = "/clearset"
 
 SlashCmdList["CLEARGOLD"] = function()
 	if not UnitAffectingCombat("player") then
-		wipe(SunUIData.gold)
+		wipe(S.global.gold)
+		ReloadUI()
 	end
 end
 SLASH_CLEARGOLD1 = "/cleargold"
 
 SlashCmdList["CLEARBS"] = function()
 	if not UnitAffectingCombat("player") then
-		wipe(SunUIData.BagSyncDB)
+		wipe(S.global.BagSyncDB)
+		ReloadUI()
 	end
 end
-SLASH_CLEARGOLD1 = "/clearbs"
+SLASH_CLEARBS1 = "/clearbs"
 
 SlashCmdList["CLEARCC"] = function()
 	if not UnitAffectingCombat("player") then
-		wipe(SunUIData.SavedCurrency)
+		wipe(S.global.SavedCurrency)
+		ReloadUI()
 	end
 end
-SLASH_CLEARGOLD1 = "/clearcc"
+SLASH_CLEARCC1 = "/clearcc"
 
 ---------------- > Disband Group
 local GroupDisband = function()
