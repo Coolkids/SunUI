@@ -10,6 +10,8 @@ local FG = S:GetModule("Filger")
 --IconSize 图标大小 参数为数字 输入字符为0-9 严禁其他符号字符
 --Position 组的显示位置 例如 {"CENTER", UIParent, "CENTER"}
 --最后一条: 大小写敏感, 请不要随意更改大小写
+
+--spellID =    871, unitID = "player", caster = "player", filter = "BUFF", absID = true
 --------------------------------------------------------------------------------
 
 
@@ -1341,7 +1343,7 @@ FG["filger_spells"] = {
 			-- 粗暴打断
 			{ spellID =  86663, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 破坏者
-			{ spellID = 152277, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID = 152277, unitID = "player", caster = "player", filter = "BUFF"},
 		},
 		{
 			Name = "目标debuff",

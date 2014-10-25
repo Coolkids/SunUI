@@ -11,12 +11,14 @@ local FG = S:GetModule("Filger")
 --	Configuration example:
 --  这是一个例子
 ----------------------------------------------------------------------------------------
--- if S.myclass == "MegaChar" then
+-- if S.myclass == "WARROIR" then
 --		FG["filger_position"].player_buff_icon = {"BOTTOMRIGHT", "oUF_Player", "TOPRIGHT", 2, 173}
---		add("T_DEBUFF_ICON", {spellID = 115767, unitID = "target", caster = "player", filter = "DEBUFF"})
+--		add("目标debuff", {spellID = 115767, unitID = "target", caster = "player", filter = "DEBUFF"})
 -- end
 
---意思是给MegaChar职业的T_DEBUFF_ICON 分组 添加 法术ID为115767的技能
+--意思是给"WARROIR"(战士) 的 "目标debuff" 分组 添加 法术ID为115767的DEBUFF技能
+--- {spellID = 115767, unitID = "target", caster = "player", filter = "DEBUFF"} 这部分详细资料可以参考下面网址
+---- http://bbs.ngacn.cc/read.php?tid=5002683&_ff=200&_fp=2
 ----------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------
@@ -37,7 +39,7 @@ end
 ----------------------------------------------------------------------------------------
 --	Per Class Config (overwrite general)
 --	Class need to be UPPERCASE
--- 下面的是职业分组
+--  下面的是职业分组
 ----------------------------------------------------------------------------------------
 if S.myclass == "DRUID" then
 
