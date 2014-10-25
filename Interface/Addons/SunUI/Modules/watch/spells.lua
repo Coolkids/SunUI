@@ -140,8 +140,6 @@ FG["filger_spells"] = {
 			{ spellID = 102543, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 化身：乌索克之子
 			{ spellID = 102558, unitID = "player", caster = "player", filter = "BUFF"},
-			-- 自然的守护
-			{ spellID = 124974, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 生存本能
 			{ spellID =  61336, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 树皮术
@@ -948,10 +946,8 @@ FG["filger_spells"] = {
 			{ spellID =   5277, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 毒伤
 			{ spellID =  32645, unitID = "player", caster = "player", filter = "BUFF"},
-			-- Shadow Dance
-			{ spellID =  51713, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 暗影之舞
-			{ spellID =  31665, unitID = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  51713, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 暗影斗篷
 			{ spellID =  31224, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 消失
