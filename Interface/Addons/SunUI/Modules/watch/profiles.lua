@@ -19,6 +19,7 @@ local FG = S:GetModule("Filger")
 --意思是给"WARROIR"(战士) 的 "目标debuff" 分组 添加 法术ID为115767的DEBUFF技能
 --- {spellID = 115767, unitID = "target", caster = "player", filter = "DEBUFF"} 这部分详细资料可以参考下面网址
 ---- http://bbs.ngacn.cc/read.php?tid=5002683&_ff=200&_fp=2
+--- 请严格按照spellID, unitID, caster, filter, absID, target, player, DEBUFF, BUFF的大小写 
 ----------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------
