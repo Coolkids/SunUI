@@ -1,6 +1,6 @@
 ﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 
-local FG = S:NewModule("Filger", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
+local FG = S:GetModule("Filger")
 
 ----------------------------------------------------------------------------------------
 --	ShestakUI_Filger personal configuration file
