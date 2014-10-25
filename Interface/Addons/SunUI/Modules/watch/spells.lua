@@ -989,15 +989,15 @@ FG["filger_spells"] = {
 				-- 洞悉弱点
 				{ spellID =  91021, unitID = "target", caster = "player", filter = "DEBUFF"},
 				-- 致命药膏
-				{ spellID =   2818, unitID = "target", caster = "player", filter = "DEBUFF"},
+				{ spellID =   2818, unitID = "target", caster = "player", filter = "DEBUFF",absID = true},
 				-- 减速药膏
-				{ spellID =   3409, unitID = "target", caster = "player", filter = "DEBUFF"},
+				{ spellID =   3409, unitID = "target", caster = "player", filter = "DEBUFF",absID = true},
 				-- 致伤药膏
-				{ spellID =   8680, unitID = "target", caster = "player", filter = "DEBUFF"},
+				{ spellID =   8680, unitID = "target", caster = "player", filter = "DEBUFF",absID = true},
 				-- 吸血药膏
-				{ spellID = 112961, unitID = "target", caster = "player", filter = "DEBUFF"},
+				{ spellID = 112961, unitID = "target", caster = "player", filter = "DEBUFF",absID = true},
 				-- 猩红风暴
-				{ spellID = 122223, unitID = "target", caster = "player", filter = "DEBUFF"},
+				{ spellID = 122233, unitID = "target", caster = "player", filter = "DEBUFF"},
 				-- 致命投掷
 				{ spellID =  26679, unitID = "target", caster = "player", filter = "DEBUFF"},
 				-- 死亡标志
@@ -1531,7 +1531,7 @@ FG["filger_spells"] = {
 				-- 不眠奥术精魂            (护甲, 触发)
 				{ spellID = 177053, unitID = "player", caster = "player", filter = "BUFF" },
 				-- 石化食肉孢子            (精通, 触发)
-				{ spellID = 165824, unitID = "player", caster = "player", filter = "BUFF" },
+				{ spellID = 165824, unitID = "player", caster = "player", filter = "BUFF",absID = true},
 				-- 普尔的盲目之眼          (精通, 使用)
 				{ spellID = 176876, unitID = "player", caster = "player", filter = "BUFF" },
 				-- 齐布的愚忠              (生命, 使用)
@@ -1592,7 +1592,7 @@ FG["filger_spells"] = {
 				-- 邪恶魂能                (敏捷, 触发)
 				{ spellID = 138938, unitID = "player", caster = "player", filter = "BUFF" },
 				-- 杀戮护符                (急速, 触发)
-				{ spellID = 138895, unitID = "player", caster = "player", filter = "BUFF", absID = true},
+				{ spellID = 138895, unitID = "player", caster = "player", filter = "BUFF",absID = true},
 				-- 重生符文                (转换, 触发)
 				{ spellID = 139120, unitID = "player", caster = "player", filter = "BUFF",absID = true},
 				{ spellID = 139121, unitID = "player", caster = "player", filter = "BUFF",absID = true},
@@ -2551,6 +2551,85 @@ FG["filger_spells"] = {
 				-- 15	其它 [SooTrash]
 				-- 断骨
 				{ spellID = 147200, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+
+				----------------------------------WOD------------------------------------
+				--  [970]  悬槌堡
+				-- 卡加斯.刃拳
+				-- 进裂创伤 (仅坦克)
+				{ spellID = 159178, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 穿刺 (DoT)
+				{ spellID = 159113, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 屠夫
+				-- 龟裂创伤
+				{ spellID = 156152, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 切肉刀
+				{ spellID = 156143, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 布兰肯斯波
+				-- 活性孢子
+				{ spellID = 159463, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 感染孢子
+				{ spellID = 163242, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 独眼魔双子
+				-- 盾击
+				{ spellID = 143834, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 克拉戈
+				-- 腐蚀能量
+				{ spellID = 161242, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 废灵壁垒
+				{ spellID = 163134, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 魔能散射:火焰
+				{ spellID = 162185, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 魔能散射:奥术
+				{ spellID = 162186, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 元首马尔高克
+				-- 奥术愤怒
+				{ spellID = 156238, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 狂莽突击
+				{ spellID = 159515, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 混沌标记
+				{ spellID = 158605, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+
+				-- [988] 黑石铸造厂
+				--  格鲁尔
+				-- 石化猛击
+				{ spellID = 155326, unitID = "player", caster = "all", filter = "DEBUFF"},
+				--  奥尔高格
+				-- 酸液洪流
+				{ spellID = 156324, unitID = "player", caster = "all", filter = "DEBUFF"},
+				--  兽王达玛克
+				-- 长矛钉刺
+				{ spellID = 155365, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 爆燃
+				{ spellID = 155399, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 炼狱吐息
+				{ spellID = 154989, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 高热弹片
+				{ spellID = 155499, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 缚火者卡格拉兹
+				-- 炽热光辉
+				{ spellID = 155277, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 汉斯加尔与弗兰佐克
+				-- 折脊碎椎
+				{ spellID = 157139, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 主管索戈尔
+				-- 点燃
+				{ spellID = 155921, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 爆裂熔炉
+				-- 淬火
+				{ spellID = 155240, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 高热
+				{ spellID = 155242, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 克罗莫格
+				-- 纠缠之手符文
+				{ spellID = 157060, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 钢铁妇武神
+				-- 暗影猎杀
+				{ spellID = 158315, unitID = "player", caster = "all", filter = "DEBUFF"},
+				-- 黑手
+				-- 死亡标记
+				{ spellID = 156096, unitID = "player", caster = "all", filter = "DEBUFF"},
 		},
 	},
 }
