@@ -184,7 +184,19 @@ function IB:CreateSpecs()
 			end
 			EasyMenu(menuList, menuFrame, "cursor", -15, -7, "MENU", 2)
 		elseif btn == "MiddleButton" then
-			ToggleTalentFrame()
+			if not PlayerTalentFrame then
+				TalentFrame_LoadUI()
+			end
+
+			if not GlyphFrame then
+				GlyphFrame_LoadUI()
+			end
+			
+			if not PlayerTalentFrame:IsShown() then
+				ShowUIPanel(PlayerTalentFrame)
+			else
+				HideUIPanel(PlayerTalentFrame)
+			end
 		else
 			local c = GetActiveSpecGroup(false,false)
 			SetActiveSpecGroup(c == 1 and 2 or 1)

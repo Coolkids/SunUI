@@ -320,7 +320,9 @@ function Filger:OnEvent(event, unit)
 				end
 			elseif data.filter == "CD" and (not data.spec or data.spec == ptt) then
 				if data.spellID then
+					
 					name, _, icon = GetSpellInfo(data.spellID)
+					--S:Print(data.spellID, name)
 					if data.absID then
 						start, duration = GetSpellCooldown(data.spellID)
 					else
@@ -440,23 +442,23 @@ function FG:Initialize()
 					end
 				end
 				if not spn and not data[j].slotID then
-					print("|cffff0000WARNING: spell/slot ID ["..(data[j].spellID or data[j].slotID or "UNKNOWN").."] no longer exists! Report this to Shestak.|r")
-					table.insert(jdx, j)
+					print("|cffff0000警告: 法术/物品 ID ["..(data[j].spellID or data[j].slotID or "UNKNOWN").."] 不存在!请联系QQ群:180175370|r")
+					table.insert(jdx, data[j])
 				end
 			end
-
+			--重写remove
 			for _, v in ipairs(jdx) do
-				table.remove(data, v)
+				table.removeItem(data, v, true)
 			end
-
+			
 			if #data == 0 then
-				print("|cffff0000WARNING: section ["..data.Name.."] is empty! Report this to Shestak.|r")
-				table.insert(idx, i)
+				print("|cffff0000警告: 分组 ["..data.Name.."] 是空! 请联系QQ群:180175370  |r")
+				table.insert(idx, data)
 			end
 		end
 
 		for _, v in ipairs(idx) do
-			table.remove(FG["filger_spells"][S.myclass], v)
+			table.removeItem(FG["filger_spells"][S.myclass], v)
 		end
 
 		for i = 1, #FG["filger_spells"][S.myclass], 1 do

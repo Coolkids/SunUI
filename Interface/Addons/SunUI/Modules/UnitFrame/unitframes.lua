@@ -654,6 +654,8 @@ local UnitSpecific = {
 			bg:SetPoint("BOTTOMRIGHT", 1, -1)
 			bg:SetFrameLevel(Castbar:GetFrameLevel()-1)
 			A:CreateBD(bg)
+			
+			Castbar.Spark = A:CreateMark(Castbar)
 		else
 			Castbar:SetAllPoints(Health)
 			Castbar.Text:SetAllPoints(Health)

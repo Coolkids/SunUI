@@ -1,6 +1,7 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file = "settings.lua"/>
 	<Script file = "spells.lua"/>
+	<Script file = "profiles.lua"/>
 	<Script file = "filger.lua"/>
 </Ui>
 
