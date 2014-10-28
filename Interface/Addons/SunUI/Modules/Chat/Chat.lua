@@ -423,5 +423,6 @@ function CT:Initialize()
 	self:UpdateChatbar()
 	self:InitChatFilter()
 	self:initTabChannel()
+	self:ccfInitialize()
 end
 S:RegisterModule(CT:GetName())

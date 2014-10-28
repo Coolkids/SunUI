@@ -6,4 +6,5 @@
 	<Script file="ChatFilter.lua"/>
 	<Script file="damagemeters.lua"/>
 	<Script file="urlcopy.lua"/>
+	<Script file="CrappyChatFix.lua"/>
 </Ui>
