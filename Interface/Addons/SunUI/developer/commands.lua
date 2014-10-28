@@ -184,8 +184,6 @@ StaticPopupDialogs["CLEARSET"] = {
 	button2 = CANCEL,
 	OnAccept = function() 
 		wipe(SunUIData)
-		wipe(nioTillerDBC)
-		wipe(RayWatcherDB)
 		wipe(SunUICharacterData)
 		ReloadUI()
 	end,
