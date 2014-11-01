@@ -51,7 +51,7 @@ local function LoadSkin()
 		-- [[ Side tabs ]]
 
 	EncounterJournalEncounterFrameInfoOverviewTab:ClearAllPoints()
-	EncounterJournalEncounterFrameInfoOverviewTab:SetPoint("TOPLEFT", EncounterJournalEncounterFrameInfo, "TOPRIGHT", 9, -35)
+	EncounterJournalEncounterFrameInfoOverviewTab:SetPoint("TOPLEFT", EncounterJournalEncounterFrameInfo, "TOPRIGHT", 15, -25)
 	EncounterJournalEncounterFrameInfoLootTab:ClearAllPoints()
 	EncounterJournalEncounterFrameInfoLootTab:SetPoint("TOP", EncounterJournalEncounterFrameInfoOverviewTab, "BOTTOM", 0, 1)
 	EncounterJournalEncounterFrameInfoBossTab:ClearAllPoints()
