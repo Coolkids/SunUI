@@ -1826,9 +1826,7 @@ function ns:UpdateIndicatorTimer(self, elapsed)
 			end
 		end
 		if tbl[k]:IsShown() and (k == "Cen" or k == "BR") then
-			if tbl[k].count then
-				text = tostring(ns:toNewString(tbl[k].count, k, tbl[k].mine))
-			end
+			text = tostring(ns:toNewString(tbl[k].count, k, tbl[k].mine))
 			if tbl[k].expires and k == "BR" then
 				local timeLeft = tbl[k].expires - GetTime()
 				if timeLeft <= 0 then
@@ -1836,7 +1834,12 @@ function ns:UpdateIndicatorTimer(self, elapsed)
 					tbl[k]:Hide()
 				else
 					if text ~= "" and timeLeft < 5 and tbl[k].mine then
-						tbl[k]:SetTextColor(210/255, 100/255, 100/255)
+						if text:find("|cff") then
+							local te = string.sub(text, 11, 11)
+							text = ns:hex(210/255, 100/255, 100/255)..te.."|r"
+						end
+						--tbl[k]:SetTextColor(210/255, 100/255, 100/255)
+						
 						--text = text.."-"..FormatTime(timeLeft)
 					else
 						--tbl[k]:SetTextColor(1, 204/255, 0)
@@ -1910,7 +1913,7 @@ function ns:UpdateIndicators(self)
 						r, g, b = 0.0, 1, 0.0
 					end
 					local name, rank, texture, count, dtype, duration, expires, caster = UpdateIndicatorsAura(self, v.id, v.isbuff)																	
-					
+					if caster == "player" then self.Indicators[k].mine = true else self.Indicators[k].mine = false end
 					if not name then	
 						if v.lack then
 							if v.talent then
@@ -2378,12 +2381,10 @@ Freebgrid_NS = ns
 
 
 function ns:toNewString(int, k, mine)
-	if int==nil then return "" end
 	if k == "BR" then
 		local class = select(2, UnitClass("player"))
 		if (class == "DRUID") then
-			local lbCount = { 4, 2, 3}
-			return "|cffA7FD0A"..lbCount[int].."|r"
+			return "|cffA7FD0A3|r"
 		elseif (class == "PALADIN") then
 			if int == 1 and mine then 
 				return "|cffFFCC003|r"
@@ -2398,6 +2399,7 @@ function ns:toNewString(int, k, mine)
 			end
 		elseif (class == "SHAMAN") then
 			local earthCount = {'i','h','g','f','p','q','Z','Z','Y'}
+			if int==nil then return "" end
 			return '|cffFFCF7F'..earthCount[int]..'|r'
 		elseif (class == "PRIEST" and k == "BR") then
 			local pomCount = {
@@ -2408,12 +2410,16 @@ function ns:toNewString(int, k, mine)
 				[5] = 'Z',
 				[6] = 'Y',
 			}
+			if int==nil then return "" end
 			if mine then
 				return "|cff66FFFF"..pomCount[int].."|r"
 			else
 				return "|cffFFCF7F"..pomCount[int].."|r"
 			end
 		end
+		if int==nil then return "" end
+		return int
 	end
+	if int==nil then return "" end
 	return int
 end

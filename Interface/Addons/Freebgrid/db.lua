@@ -103,7 +103,7 @@ local Indicators_class_default = {
 				isbuff	= true,
 				mine	= true,
 				lack	= false,
-				count	= true,
+				count	= false,
 				etime	= true,
 			},
 		},
