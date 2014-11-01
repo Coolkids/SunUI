@@ -10,7 +10,8 @@ local FG = S:GetModule("Filger")
 --IconSize 图标大小 参数为数字 输入字符为0-9 严禁其他符号字符
 --Position 组的显示位置 例如 {"CENTER", UIParent, "CENTER"} 
 --最后一条: 大小写敏感, 请不要随意更改大小写
---- 请严格按照spellID, unitID, caster, filter, absID, target, player, DEBUFF, BUFF的大小写
+--- 请严格按照spec, spellID, unitID, caster, filter, absID, target, player, DEBUFF, BUFF的大小写
+--- spec 天赋号码..  天赋界面从上倒下依次为1, 2, 3, 4
 --------------------------------------------------------------------------------
 
 

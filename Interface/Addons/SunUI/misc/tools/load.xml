@@ -11,7 +11,6 @@
 	<Script file="FriendColor.lua"/>
 	<Script file="juwe.lua"/>
 	<Script file="Molinari.lua"/>
-	<Script file="Pd.lua"/>
 	<Script file="smallthings.lua"/>
 	<Script file="SocialTabs.lua"/>
 	<Script file="SR.lua"/>

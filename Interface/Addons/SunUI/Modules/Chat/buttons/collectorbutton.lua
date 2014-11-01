@@ -87,8 +87,6 @@ B.modName = L["其他按钮"]
 function B:Initialize()
 	self:CreateMainButton()
 	self:BigFootChannel()
-	self:CreateRaidCheck()
-	self:CreateStatReport()
 	self:CreateEmoteTableFrame()
 	self:RegisterEvent("PLAYER_REGEN_DISABLED", function()
 		S:FadeOutFrame(collectorButton, 0.3, false)

@@ -23,16 +23,17 @@ function CT:ccfInitialize()
 
         f["historyIndex"] = 1;
 
-        hooksecurefunc(f, "AddHistoryLine", CT.mod_AddHistoryLine);
-        hooksecurefunc(f, "ClearHistory", CT.mod_ClearHistory);
+        hooksecurefunc(f, "AddHistoryLine", function(self, text) CT:mod_AddHistoryLine(self, text) end);
+        hooksecurefunc(f, "ClearHistory", function(self, text)  CT:mod_ClearHistory(self) end);
         -- SetScript vice HookScript, so we override the AutoComplete OnArrowPressed event
-        f:SetScript("OnArrowPressed", CT.mod_OnArrowPressed);
+        f:SetScript("OnArrowPressed", function(self, text) CT:mod_OnArrowPressed(self, text) end);
         -- Accept arrow keys into our hearts... and edit boxes
         f:SetAltArrowKeyMode(false);
 	end
 end
 
 function CT:mod_AddHistoryLine(self, text)
+	--S:Print(text)
     if ( (text == nil) or (text == "") ) then
         return;
     end
@@ -69,10 +70,11 @@ function CT:mod_ClearHistory(self)
 end
 
 function CT:mod_OnArrowPressed(self, key)
+	--S:Print("KEY", key)
 	if ( key == "UP" ) then
-		return self:ChatHistory_FetchNext(self, true);
+		return CT:ChatHistory_FetchNext(self, true);
 	elseif ( key == "DOWN" ) then
-		return self:ChatHistory_FetchNext(self, false);
+		return CT:ChatHistory_FetchNext(self, false);
 	end
 end
 
