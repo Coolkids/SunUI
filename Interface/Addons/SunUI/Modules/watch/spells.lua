@@ -90,8 +90,6 @@ FG["filger_spells"] = {
 			{ spellID = 108194, unitID = "target", caster = "player", filter = "DEBUFF" },
 			-- 黑暗模拟
 			{ spellID =  77606, unitID = "target", caster = "player", filter = "DEBUFF" },
-			-- 武器虚弱
-			{ spellID =  17196, unitID = "target", caster = "player", filter = "DEBUFF" },
 		},
 		{
 			Name = "玩家技能CD",
@@ -110,6 +108,14 @@ FG["filger_spells"] = {
 			{ spellID =  49206, filter = "CD" },
 			-- 复活盟友
 			{ spellID =  61999, filter = "CD" },
+			-- 反魔法护罩
+			{ spellID =  48707, filter = "CD" },
+			-- 冰封之韧
+			{ spellID =  48792, filter = "CD" },
+			-- 符文刃舞
+			{ spellID =  49028, filter = "CD" },
+			-- 符文武器增效
+			{ spellID =  47568, filter = "CD" },
 
 			-- 物品
 			-- 手套
@@ -183,6 +189,8 @@ FG["filger_spells"] = {
 			-- 节能施法
 			{ spellID =  16870, unitID = "player", caster = "player", filter = "BUFF", absID = true},
 			{ spellID = 135700, unitID = "player", caster = "player", filter = "BUFF", absID = true},
+			-- 自然迅捷
+			{ spellID = 132158, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 相生
 			{ spellID = 100977, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 铁木树皮
@@ -210,6 +218,8 @@ FG["filger_spells"] = {
 			{ spellID =  48438, unitID = "target", caster = "player", filter = "BUFF"  },
 			-- 回春术
 			{ spellID =    774, unitID = "target", caster = "player", filter = "BUFF"  },
+			-- 回春术(萌芽)
+			{ spellID = 155777, unitID = "target", caster = "player", filter = "BUFF", absID = true},
 			-- 愈合
 			{ spellID =   8936, unitID = "target", caster = "player", filter = "BUFF"  },
 			-- 生命之种
@@ -840,7 +850,7 @@ FG["filger_spells"] = {
 			{ spellID = 123254, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 福音传播
 			{ spellID =  81661, unitID = "player", caster = "player", filter = "BUFF"},
-			-- Worlds of Mending
+			-- 愈合之语
 			{ spellID = 155362, unitID = "player", caster = "player", filter = "BUFF"},
 		},
 		{
@@ -1402,6 +1412,8 @@ FG["filger_spells"] = {
 			{ spellID = 107566, filter = "CD" },
 			-- 剑刃风暴
 			{ spellID =  46924, filter = "CD" },
+			-- 英勇飞跃
+			{ spellID =   6544, filter = "CD" },
 
 			-- 物品
 			-- 手套
