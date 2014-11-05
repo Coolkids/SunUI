@@ -60,7 +60,13 @@ local Indicators_class_default = {
 				id 	= {774},			--"回春术"
 				isbuff	= true,
 				mine	= true,
-			},		
+			},
+			["2"] = {
+				id 	= {155777},		--"回春术(萌芽)"
+				isbuff	= true,
+				mine	= true,
+				color	= {r = .8, g = 1, b = 0.0},
+			},
 		},						
         ["TR"] = {							--色块的位置	
 			["1"] = {						
