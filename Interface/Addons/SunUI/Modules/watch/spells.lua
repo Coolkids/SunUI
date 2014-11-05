@@ -158,7 +158,9 @@ FG["filger_spells"] = {
 			-- 鬃毛倒竖(熊)
 			{ spellID = 155835, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 野蛮咆哮(猫)
-			{ spellID =  52610, unitID = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  52610, unitID = "player", caster = "player", filter = "BUFF", absID = true},
+			-- 野蛮咆哮雕文(猫)
+			{ spellID = 174544, unitID = "player", caster = "player", filter = "BUFF", absID = true},
 			-- 野性之心(猫)
 			{ spellID = 108293, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 掠食者的迅捷(猫)
@@ -870,6 +872,8 @@ FG["filger_spells"] = {
 			{ spellID = 155274, unitID = "target", caster = "player", filter = "BUFF"  },
 			-- 暗言术：痛
 			{ spellID =    589, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 暗言术：乱
+			{ spellID = 132573, unitID = "target", caster = "player", filter = "DEBUFF"},
 			-- 吸血鬼之触
 			{ spellID =  34914, unitID = "target", caster = "player", filter = "DEBUFF"},
 			-- 噬灵疫病
@@ -1504,22 +1508,22 @@ FG["filger_spells"] = {
 
 			-- 暗月卡牌
 			-- 骑士徽章                (爆击, 触发)
-			{ spellID = 162917, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 162917, unitID = "player", caster = "player", filter = "BUFF", absID = true},
 			-- 战争之颅                (爆击, 触发)
-			{ spellID = 162915, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 162915, unitID = "player", caster = "player", filter = "BUFF", absID = true},
 			-- 睡魔之袋                (爆击, 触发)
-			{ spellID = 162919, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 162919, unitID = "player", caster = "player", filter = "BUFF", absID = true},
 			-- 羽翼沙漏                (精神, 触发)
-			{ spellID = 162913, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 162913, unitID = "player", caster = "player", filter = "BUFF", absID = true},
 
 			-- 玉珑圣物                (智力, 触发)
-			{ spellID = 128985, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 128985, unitID = "player", caster = "player", filter = "BUFF", absID = true},
 			-- 雪怒圣物                (力量, 触发)
-			{ spellID = 128986, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 128986, unitID = "player", caster = "player", filter = "BUFF", absID = true},
 			-- 雪怒圣物                (敏捷, 触发)
-			{ spellID = 128984, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 128984, unitID = "player", caster = "player", filter = "BUFF", absID = true},
 			-- 赤精圣物                (精神, 触发)
-			{ spellID = 128987, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 128987, unitID = "player", caster = "player", filter = "BUFF", absID = true},
 
 			-- PvP 饰品
 			{ spellID = 126697, unitID = "player", caster = "player", filter = "BUFF" },
