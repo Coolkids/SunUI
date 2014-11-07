@@ -149,19 +149,20 @@ function CT:ShowOverlayGlow()
 	if self.SunUIShowOverlayGlow then return end
 	for i=1, #(self.ButtonList) do
 		ActionButton_ShowOverlayGlow(self.ButtonList[i].shadow)
-		self.SunUIShowOverlayGlow = true
 	end
+	self.SunUIShowOverlayGlow = true
 end
 
 function CT:HideOverlayGlow()
+	if self.SunUIShowOverlayGlow == false then return end
 	for i=1, #(self.ButtonList) do
 		ActionButton_HideOverlayGlow(self.ButtonList[i].shadow)
-		self.SunUIShowOverlayGlow = false
 	end
+	self.SunUIShowOverlayGlow = false
 end
 
 function CT:UNIT_HEALTH(event, unit)
-	if unit ~= "target" then return end
+	if unit ~= "target" or unit ~= "palyer" then return end
 	if ( UnitCanAttack("player", "target") and not UnitIsDead("target") and ( UnitHealth("target")/UnitHealthMax("target") < self.per and UnitLevel("player") > self.level ) and not UnitIsDead("player") ) then
 		self:ShowOverlayGlow()
 	else
