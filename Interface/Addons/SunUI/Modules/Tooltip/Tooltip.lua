@@ -320,7 +320,7 @@ function TT:GameTooltip_SetDefaultAnchor(tooltip, parent)
 	--print(frame:GetName())
 	if self.db.Cursor then
 		--GameTooltip中有StatusBar的 如果用SetOwner(parent, "ANCHOR_CURSOR") 会导致StatusBar显示异常
-		if frame:GetName():find("Achievement") then
+		if frame and frame:GetName():find("Achievement") then
 			local x, y = GetCursorPosition()
 			local effScale = tooltip:GetEffectiveScale()
 			local width = tooltip:GetWidth() or 0
