@@ -512,7 +512,7 @@ function FG:Initialize()
 				frame:SetScript("OnEvent", Filger.OnEvent)
 			end
 			--S:Print(frame.IconSize, frame.Mode)
-			S:CreateMover(frame, "FilgerFrame"..i, data.Name, true, nil, "FILGER")
+			S:CreateMover(frame, "FilgerFrame"..i, data.Name, true, nil, "ALL,FILGER")
 		end
 	end
 end

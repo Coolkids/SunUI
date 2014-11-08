@@ -315,9 +315,20 @@ function TT:PLAYER_ENTERING_WORLD()
 		end
 	end)
 end
-local function On_SetDefaultAnchor(tooltip, parent)
-	if TT.db.Cursor then
-		tooltip:SetOwner(parent, "ANCHOR_CURSOR")
+function TT:GameTooltip_SetDefaultAnchor(tooltip, parent)
+	local frame = GetMouseFocus()
+	--print(frame:GetName())
+	if self.db.Cursor then
+		--GameTooltip中有StatusBar的 如果用SetOwner(parent, "ANCHOR_CURSOR") 会导致StatusBar显示异常
+		if frame:GetName():find("Achievement") then
+			local x, y = GetCursorPosition()
+			local effScale = tooltip:GetEffectiveScale()
+			local width = tooltip:GetWidth() or 0
+			tooltip:ClearAllPoints()
+			tooltip:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", x / effScale +5, y / effScale + 10)
+		else
+			tooltip:SetOwner(parent, "ANCHOR_CURSOR")
+		end
 	else
 		if not TooltipMover then
 			tooltipholder = CreateFrame("Frame", nil, UIParent)
@@ -329,7 +340,7 @@ local function On_SetDefaultAnchor(tooltip, parent)
 		if TooltipMover then
 			tooltip:SetPoint("BOTTOMRIGHT", TooltipMover, "BOTTOMRIGHT", 0, 0)
 		end
-	end	
+	end
 	tooltip.default = 1
 end
 local function On_ANCHOR_CURSOR(self, ...)
@@ -338,26 +349,8 @@ local function On_ANCHOR_CURSOR(self, ...)
 		local effScale = self:GetEffectiveScale()
 		local width = self:GetWidth() or 0
 		self:ClearAllPoints()
-		self:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", x / effScale +5, y / effScale + 20)
+		self:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", x / effScale +5, y / effScale + 10)
 	end
-	--颜色
-	--[[ local unit = select(2, self:GetUnit())
-	if unit then
-		if (not UnitIsPlayer(unit)) then 
-			local reaction = UnitReaction(unit, "player");
-			if ( reaction ) then
-				local r, g, b
-				local r = FACTION_BAR_COLORS[reaction].r
-				local g = FACTION_BAR_COLORS[reaction].g
-				local b = FACTION_BAR_COLORS[reaction].b
-				self.bg:SetBackdropColor(r/3, g/3, b/3, .6)
-			end
-		else
-			self.bg:SetBackdropColor(0, 0, 0, .6)
-		end
-	else
-		self.bg:SetBackdropColor(0, 0, 0, .6)
-	end ]]
 end
 
 local function SkinTooltip()
@@ -411,7 +404,6 @@ function TT:GameTooltip_ShowStatusBar(tt, min, max, value, text)
 	local IB = S:GetModule("InfoBar")
 	local r, g, b = S:ColorGradient(value/(max), 210/255, 100/255, 100/255, 1, 1, 125/255, 0, 0.9, 0)
 	statusBar:SetStatusBarColor(r, g, b)
-			
 	if statusBar and not statusBar.skinned then
 		statusBar:StripTextures()
 		statusBar:SetStatusBarTexture(S["media"].normal)
@@ -429,23 +421,22 @@ function TT:GameTooltip_ShowStatusBar(tt, min, max, value, text)
 
 		statusBar.skinned = true;
 	end
+	
 end
 function TT:Initialize()
 	SkinTooltip()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:SecureHook('GameTooltip_ShowStatusBar')
 	GameTooltip:HookScript("OnTooltipSetUnit", On_OnTooltipSetUnit)
-	hooksecurefunc("GameTooltip_SetDefaultAnchor", On_SetDefaultAnchor)
-	GameTooltip:HookScript("OnUpdate", On_ANCHOR_CURSOR)
-	if TT.db.Cursor then
-		
-	else
+	self:SecureHook("GameTooltip_SetDefaultAnchor")
+	if not TT.db.Cursor then
 		tooltipholder = CreateFrame("Frame", nil, UIParent)
 		tooltipholder:SetFrameStrata("TOOLTIP")
 		tooltipholder:SetSize(120, 20)
 		tooltipholder:SetPoint("BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -50, 160)
 		S:CreateMover(tooltipholder, "TooltipMover", L["鼠标提示锚点"], true, nil, "ALL,GENERAL")
 	end	
+	GameTooltip:HookScript("OnUpdate", On_ANCHOR_CURSOR)
 end
 
 S:RegisterModule(TT:GetName())

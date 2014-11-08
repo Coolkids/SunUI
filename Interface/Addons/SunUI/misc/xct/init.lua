@@ -11,7 +11,7 @@ XT.config = {
         ["blizzheadnumbers"]    = true, -- (You need to restart WoW to see changes!)
         
         -- "Everything else" font size (heals/interrupts and the like)
-        ["fontsize"]        = select(2, CombatTextFont:GetFont()),
+        ["fontsize"]        = select(2, GameFontNormal:GetFont())+2,
         ["font"]            = CombatTextFont:GetFont(),  -- "Fonts\\ARIALN.ttf" is default WoW font.
         
         
@@ -149,7 +149,7 @@ XT.config = {
     -- --------------------------------------------------------------------------------------
         --[[Justification Options: "RIGHT", "LEFT", "CENTER" ]]
         ["justify_1"] = "RIGHT",             -- Damage Incoming Frame            (frame is called "xCTdmg")
-        ["justify_2"] = "RIGHT",            -- Healing Incoming Frame           (frame is called "xCTheal")
+        ["justify_2"] = "LEFT",            -- Healing Incoming Frame           (frame is called "xCTheal")
         ["justify_3"] = "RIGHT",           -- General Buffs Gains/Drops Frame  (frame is called "xCTgen")
         ["justify_4"] = "RIGHT",            -- Healing/Damage Outgoing Frame    (frame is called "xCTdone")
         ["justify_5"] = "CENTER",           -- Loot/Money Gains Frame           (frame is called "xCTloot")

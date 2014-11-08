@@ -20,11 +20,132 @@ function A:GetOptions()
 						CT:UpdateSet()
 					end,
 				},
+				
+				Icon = {
+					type = "toggle", disabled = function(info) return not self.db.Enable end,
+					name = L["启用图标模式"],
+					order = 2,
+					set = function(info, value)
+						self.db.Icon = value
+						local CT = S:GetModule("ClassTools")
+						CT:UpdateSet()
+					end,
+				
+				},
+				
+				Size = {
+					type = "range", order = 3, disabled = function(info) return not self.db.Enable or not self.db.Icon end,
+					name = L["图标大小"],
+					min = 20, max = 100, step = 1,
+					set = function(info, value) 
+						self.db.Size = value 
+						local CT = S:GetModule("ClassTools")
+						CT:UpdateSet()
+					end,
+				},
 			}
 		},
 	}
 	return options
 end
+
+
+A.ClassTools = {
+	["PRIEST"] = {
+		[0] = {},
+		[1] = {},
+		[2] = {},
+		[3] = {
+			["spellid"] = 32379,	--暗言术：灭
+			["per"] = 0.2,
+			["level"] = 46,
+		},
+	},
+	["HUNTER"] = {
+		[0] = {},
+		[1] = {
+		["spellid"] = 53351,	     --夺命射击
+			["per"] = 0.2,
+			["level"] = 35,
+		},
+		[2] = {},
+		[3] = {},
+	},
+	["MAGE"] = {},
+	["WARLOCK"] = {
+		[0] = {},
+		[1] = {},
+		[2] = {},
+		[3] = {
+			["spellid"] = 17877,	--暗影灼烧
+			["per"] = 0.2,
+			["level"] = 47,
+		},
+	},
+	["PALADIN"] = {
+		[0] = {
+			["spellid"] = 24275,	--愤怒之锤
+			["per"] = 0.2,
+			["level"] = 38,		
+		},
+		[1] = {},
+		[2] = {},
+		[3] = {},
+	},
+	["ROGUE"] = {
+		[0] = {},
+		[1] = {
+			["spellid"] = 111240,	 --斩击
+			["per"] = 0.35,
+			["level"] = 40,
+		},
+		[2] = {},
+		[3] = {},
+	},
+	["DRUID"] = {},
+	["SHAMAN"] = {},
+	["WARRIOR"] = {
+		[0] = {},
+		[1] = {
+			["spellid"] = 163201,	 --斩杀
+			["per"] = 0.2,
+			["level"] = 7,
+		},
+		[2] = {
+			["spellid"] = 5308,	     --斩杀
+			["per"] = 0.2,
+			["level"] = 7,
+		},
+		[3] = {},
+	},
+	["DEATHKNIGHT"] = {
+		[0] = {
+		},
+		[1] = {
+			["spellid"] = 114866,	--灵魂收割
+			["per"] = 0.35,
+			["level"] = 87,
+		},
+		[2] = {
+			["spellid"] = 130735,	--灵魂收割
+			["per"] = 0.35,
+			["level"] = 87,
+		},
+		[3] = {
+			["spellid"] = 130736,	--灵魂收割
+			["per"] = 0.35,
+			["level"] = 87,
+		},
+	},
+	["MONK"] = {
+		[0] = {
+			["spellid"] = 115080,	--轮回之触
+			["per"] = 0.1,
+			["level"] = 22,		
+		},
+	},
+}
+
 
 function A:Initialize()
 	local CT = S:GetModule("ClassTools")
@@ -35,7 +156,7 @@ function A:Initialize()
 end
 
 function A:Info()
-	return "\n\n 斩杀提示改为 动作条技能闪光 当达到触发血量后动作条上相应按钮会出现闪光 "
+	return "\n\n 斩杀提示改为 动作条技能闪光 当达到触发血量后动作条上相应按钮会出现闪光 图标模式可选"
 
 end
 

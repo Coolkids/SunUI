@@ -1,102 +1,46 @@
 local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local CT = S:NewModule("ClassTools", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
+local datebase
 
-local datebase = {
-	["PRIEST"] = {
-		[0] = {},
-		[1] = {},
-		[2] = {},
-		[3] = {
-			["spellid"] = 32379,	--暗言术：灭
-			["per"] = 0.2,
-			["level"] = 46,
-		},
-	},
-	["HUNTER"] = {
-		[0] = {},
-		[1] = {
-		["spellid"] = 53351,	     --夺命射击
-			["per"] = 0.2,
-			["level"] = 35,
-		},
-		[2] = {},
-		[3] = {},
-	},
-	["MAGE"] = {},
-	["WARLOCK"] = {
-		[0] = {},
-		[1] = {},
-		[2] = {},
-		[3] = {
-			["spellid"] = 17877,	--暗影灼烧
-			["per"] = 0.2,
-			["level"] = 47,
-		},
-	},
-	["PALADIN"] = {
-		[0] = {
-			["spellid"] = 24275,	--愤怒之锤
-			["per"] = 0.2,
-			["level"] = 38,		
-		},
-		[1] = {},
-		[2] = {},
-		[3] = {},
-	},
-	["ROGUE"] = {
-		[0] = {},
-		[1] = {
-			["spellid"] = 111240,	 --斩击
-			["per"] = 0.35,
-			["level"] = 40,
-		},
-		[2] = {},
-		[3] = {},
-	},
-	["DRUID"] = {},
-	["SHAMAN"] = {},
-	["WARRIOR"] = {
-		[0] = {},
-		[1] = {
-			["spellid"] = 163201,	 --斩杀
-			["per"] = 0.2,
-			["level"] = 7,
-		},
-		[2] = {
-			["spellid"] = 5308,	     --斩杀
-			["per"] = 0.2,
-			["level"] = 7,
-		},
-		[3] = {},
-	},
-	["DEATHKNIGHT"] = {
-		[0] = {
-		},
-		[1] = {
-			["spellid"] = 114866,	--灵魂收割
-			["per"] = 0.35,
-			["level"] = 87,
-		},
-		[2] = {
-			["spellid"] = 130735,	--灵魂收割
-			["per"] = 0.35,
-			["level"] = 87,
-		},
-		[3] = {
-			["spellid"] = 130736,	--灵魂收割
-			["per"] = 0.35,
-			["level"] = 87,
-		},
-	},
-	["MONK"] = {
-		[0] = {
-			["spellid"] = 115080,	--轮回之触
-			["per"] = 0.1,
-			["level"] = 22,		
-		},
-	},
-}
 CT.ButtonList = {}
+
+function CT:initFrame()
+	if not self.Frame then
+		local Data = S:GetModule("ClassAT")
+		self.Frame = CreateFrame("Frame", nil, UIParent)
+		self.Frame:Hide()
+		self.Frame:SetPoint("TOP", "UIParent", "TOP", 0, -35)
+		self.Frame:SetSize(Data.db.Size, Data.db.Size)
+		self.Frame.Cooldown = CreateFrame("Cooldown", nil, self.Frame)
+		self.Frame.Cooldown:SetAllPoints()
+		self.Frame.Cooldown:SetReverse(true)
+
+		self.Frame.Icon = self.Frame:CreateTexture(nil, "ARTWORK") 
+		self.Frame.Icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+		self.Frame.Icon:SetAllPoints(self.Frame)
+		
+		self.Frame:CreateShadow()
+		S:CreateMover(self.Frame, "ClassToolsMover", L["斩杀提示"], true, nil, "ALL,MINITOOLS")
+	end
+end
+
+function CT:disFrame()
+	if self.Frame then
+		self.Frame:Hide()
+	end
+end
+
+function CT:setIconTexture()
+	local texture;
+	if self.spellid then
+		texture = GetSpellTexture(self.spellid);
+	end
+	if texture then
+		self.Frame.Icon:SetTexture(texture) 
+	end
+end
+
+
 function CT:ACTIVE_TALENT_GROUP_CHANGED()
 	local spec = GetSpecialization()
 	if not spec then return end
@@ -113,9 +57,11 @@ function CT:ACTIVE_TALENT_GROUP_CHANGED()
 		self:RegisterEvent("PLAYER_TARGET_CHANGED")
 		self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
 		self:RegisterEvent("ACTIONBAR_SLOT_CHANGED")
+		self:setIconTexture()
 		return
 	end
-	if datebase[S.myclass][spec].spellid then 
+
+	if datebase[S.myclass][spec].spellid then
 		self.spellid = datebase[S.myclass][spec].spellid
 		self.per = datebase[S.myclass][spec].per
 		self.level = datebase[S.myclass][spec].level
@@ -123,6 +69,7 @@ function CT:ACTIVE_TALENT_GROUP_CHANGED()
 		self:RegisterEvent("PLAYER_TARGET_CHANGED")
 		self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
 		self:RegisterEvent("ACTIONBAR_SLOT_CHANGED")
+		self:setIconTexture()
 		return
 	else
 		self:UnregisterEvent("UNIT_HEALTH")
@@ -134,21 +81,34 @@ end
 
 function CT:UpdateSet()
 	local Data = S:GetModule("ClassAT")
+	self:initFrame();
+	
 	if Data.db.Enable then
 		self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 		self:RegisterEvent("PLAYER_ENTERING_WORLD", function()
 			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 			self:ACTIVE_TALENT_GROUP_CHANGED()
 		end)
+		if self.Frame then
+			self.Frame:SetSize(Data.db.Size, Data.db.Size)
+		end
+		if not Data.db.Icon then
+			self:disFrame();
+		end
 	else
 		self:UnregisterAllEvents()
+		self:disFrame();
 	end
 end
 
 function CT:ShowOverlayGlow()
 	if self.SunUIShowOverlayGlow then return end
+	local Data = S:GetModule("ClassAT")
 	for i=1, #(self.ButtonList) do
 		ActionButton_ShowOverlayGlow(self.ButtonList[i].shadow)
+	end
+	if self.Frame and (not self.Frame:IsShown()) and Data.db.Icon then
+		self.Frame:Show()
 	end
 	self.SunUIShowOverlayGlow = true
 end
@@ -158,14 +118,20 @@ function CT:HideOverlayGlow()
 	for i=1, #(self.ButtonList) do
 		ActionButton_HideOverlayGlow(self.ButtonList[i].shadow)
 	end
+	if self.Frame and self.Frame:IsShown() then
+		self.Frame:Hide()
+	end
 	self.SunUIShowOverlayGlow = false
 end
 
 function CT:UNIT_HEALTH(event, unit)
-	if unit ~= "target" or unit ~= "palyer" then return end
+	if unit ~= "target" then return end
 	if ( UnitCanAttack("player", "target") and not UnitIsDead("target") and ( UnitHealth("target")/UnitHealthMax("target") < self.per and UnitLevel("player") > self.level ) and not UnitIsDead("player") ) then
 		self:ShowOverlayGlow()
 	else
+		self:HideOverlayGlow()
+	end
+	if UnitIsDead("target") then
 		self:HideOverlayGlow()
 	end
 end
@@ -173,6 +139,10 @@ function CT:SPELL_UPDATE_COOLDOWN()
 	local start, duration = GetSpellCooldown(self.spellid)
 	if duration > 0 then
 		self:HideOverlayGlow()
+	end
+	if self.Frame.Cooldown then
+		self.Frame.Cooldown:SetReverse(false)
+		CooldownFrame_SetTimer(self.Frame.Cooldown, start, duration, 1)
 	end
 	self:UNIT_HEALTH("", "target" )
 end
@@ -195,7 +165,6 @@ function CT:InsertTable(button)
 end
 
 function CT:ScanButton()
-	self:ACTIVE_TALENT_GROUP_CHANGED()
 	self:HideOverlayGlow()
 	wipe(self.ButtonList)
 	for i = 1, 12 do
@@ -213,6 +182,8 @@ function CT:ACTIONBAR_SLOT_CHANGED()
 end
 
 function CT:Init()
+	local Data = S:GetModule("ClassAT")
+	datebase = Data.ClassTools
 	self:UpdateSet()
 	self:ScanButton()
 end

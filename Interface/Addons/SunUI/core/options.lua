@@ -239,14 +239,3 @@ StaticPopupDialogs["CFG_RELOAD"] = {
 	timeout = 0,
 	whileDead = 1,
 }
-
-StaticPopupDialogs["RESETMOVER_CHECK"] = {
-	text = L["是否重置所有锚点"],
-	button1 = ACCEPT,
-	button2 = CANCEL,
-	OnAccept = function(self)
-		R:ResetMovers()
-	end,
-	timeout = 0,
-	whileDead = 1,
-}

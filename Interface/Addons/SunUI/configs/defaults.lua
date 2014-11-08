@@ -213,6 +213,7 @@ P["AutoEquipment"] = {
 }
 P["ClassAT"] = {
 	Enable = true,
+	Icon = true,
 	Size = 48,
 }
 
