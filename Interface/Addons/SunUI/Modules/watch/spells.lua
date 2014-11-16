@@ -1516,8 +1516,7 @@ FG["filger_spells"] = {
 			{ spellID = 125487, unitID = "player", caster = "all",    filter = "BUFF" },
 
 
-			-- 饰品触发
-
+			------------------------------饰品触发-------------------------------------
 			-- 暗月卡牌
 			-- 骑士徽章                (爆击, 触发)
 			{ spellID = 162917, unitID = "player", caster = "player", filter = "BUFF", absID = true},
@@ -1538,18 +1537,18 @@ FG["filger_spells"] = {
 			{ spellID = 128987, unitID = "player", caster = "player", filter = "BUFF", absID = true},
 
 			-- PvP 饰品
+			-- 全能
+			{ spellID = 126397, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 生命上限
 			{ spellID = 126697, unitID = "player", caster = "player", filter = "BUFF" },
-			-- PvP 饰品
+			-- 敏捷
 			{ spellID = 126690, unitID = "player", caster = "player", filter = "BUFF" },
-			-- 恶孽角斗士的征服徽记    (第14赛季)
 			{ spellID = 126707, unitID = "player", caster = "player", filter = "BUFF" },
-			-- PvP飾品 (法术强度, 使用)
+			-- 智力
 			{ spellID = 126683, unitID = "player", caster = "player", filter = "BUFF" },
-			-- 恶孽角斗士的统御徽记    (第14赛季)
 			{ spellID = 126705, unitID = "player", caster = "player", filter = "BUFF" },
-			-- PvP飾品 (力量, 使用)
+			-- 力量
 			{ spellID = 126679, unitID = "player", caster = "player", filter = "BUFF" },
-			-- 恶孽角斗士的胜利徽记    (第14赛季)
 			{ spellID = 126700, unitID = "player", caster = "player", filter = "BUFF" },
 
 			-- 坦克
@@ -1568,8 +1567,6 @@ FG["filger_spells"] = {
 			{ spellID = 176876, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 齐布的愚忠              (生命, 使用)
 			{ spellID = 176460, unitID = "player", caster = "player", filter = "BUFF" },
-			-- 威凌鲜血圣物            (急速, 触发)
-			{ spellID = 176937, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 岩心雕像                (爆击, 触发)
 			{ spellID = 176982, unitID = "player", caster = "player", filter = "BUFF" },
 			-------------------------------MOP-----------------------------------------
@@ -1606,8 +1603,6 @@ FG["filger_spells"] = {
 			{ spellID = 177038, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 双面幸运金币            (敏捷, 使用)
 			{ spellID = 177597, unitID = "player", caster = "player", filter = "BUFF", absID = true},
-			-- 威凌毁灭之罐            (精通, 触发)
-			{ spellID = 176939, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 黑心执行者勋章          (溅射, 触发)
 			{ spellID = 176984, unitID = "player", caster = "player", filter = "BUFF" },
 			-------------------------------MOP-----------------------------------------
@@ -1644,7 +1639,7 @@ FG["filger_spells"] = {
 
 			-- 物理力量DPS
 			-------------------------------WOD-----------------------------------------
-			-- 熔炉主管的徽记          (爆击, 触发)
+			-- 熔炉主管的徽记          (溅射, 触发)
 			{ spellID = 177096, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 尖啸之魂号角            (精通, 触发)
 			{ spellID = 177042, unitID = "player", caster = "player", filter = "BUFF" },
@@ -1654,8 +1649,6 @@ FG["filger_spells"] = {
 			{ spellID = 177040, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 奇亚诺斯的剑鞘          (力量, 使用)
 			{ spellID = 177189, unitID = "player", caster = "player", filter = "BUFF" },
-			-- 威凌之牙                (精通, 触发)
-			{ spellID = 176935, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 活山之尘                (全能, 触发)
 			{ spellID = 176974, unitID = "player", caster = "player", filter = "BUFF" },
 			-------------------------------MOP-----------------------------------------
@@ -1692,7 +1685,7 @@ FG["filger_spells"] = {
 			
 			-- 法系DPS
 			-------------------------------WOD-----------------------------------------
-			-- 黑石微型坩埚            (爆击, 触发)
+			-- 黑石微型坩埚            (溅射, 触发)
 			{ spellID = 177081, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 达玛克的无常护符        (急速, 触发)
 			{ spellID = 177051, unitID = "player", caster = "player", filter = "BUFF" },
@@ -1700,8 +1693,6 @@ FG["filger_spells"] = {
 			{ spellID = 177046, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 科普兰的清醒            (法强, 使用)
 			{ spellID = 177594, unitID = "player", caster = "player", filter = "BUFF" },
-			-- 威凌腐败宝珠            (精通, 触发)
-			{ spellID = 176941, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 虚无碎片                (急速 使用)
 			{ spellID = 176875, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 狂怒之心                (急速, 触发)
@@ -1746,8 +1737,6 @@ FG["filger_spells"] = {
 			{ spellID = 176978, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 永燃蜡烛                (法力, 使用)
 			{ spellID = 177592, unitID = "player", caster = "player", filter = "BUFF" },
-			-- 威凌信仰香炉            (精通, 触发)
-			{ spellID = 176943, unitID = "player", caster = "player", filter = "BUFF" },
 			-------------------------------MOP-----------------------------------------
 			-- 傲慢之棱光囚笼          (智力, 触发)
 			{ spellID = 146314, unitID = "player", caster = "player", filter = "BUFF" },
