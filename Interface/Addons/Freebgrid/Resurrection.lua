@@ -15,7 +15,9 @@ local ResurrectionSpells = {
 	[GetSpellInfo(61999)]  = true, 	--复活盟友
 	[GetSpellInfo(20484)]  = true, 	--复生
 	[GetSpellInfo(20707)]  = true, 	--灵魂石复活
-	[GetSpellInfo(126393)] = true, 	--永恒守护者(LR BB)
+	[GetSpellInfo(126393)] = true, 	--永恒守护者(魁麟/兽王)
+	[GetSpellInfo(159956)] = true, 	--生命之尘(蛾)
+	[GetSpellInfo(159956)] = true, 	--赤精之赐(鹤)
 }
 
 local Resurrection = function(self, event,...)
