@@ -1538,7 +1538,7 @@ FG["filger_spells"] = {
 			{ spellID = 128987, unitID = "player", caster = "player", filter = "BUFF", absID = true},
 
 			-- PvP 饰品
-			{ spellID = 126697, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 170397, unitID = "player", caster = "player", filter = "BUFF" },
 			-- PvP 饰品
 			{ spellID = 126690, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 恶孽角斗士的征服徽记    (第14赛季)
