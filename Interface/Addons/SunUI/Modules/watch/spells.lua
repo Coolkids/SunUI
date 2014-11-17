@@ -1258,7 +1258,7 @@ FG["filger_spells"] = {
 			-- 痛楚
 			{ spellID =    980, unitID = "target", caster = "player", filter = "DEBUFF" },
 			-- 痛苦无常
-			{ spellID =  30108, unitID = "target", caster = "player", filter = "DEBUFF" },
+			{ spellID =  30108, unitID = "target", caster = "player", filter = "DEBUFF", absID = true},
 			-- 鬼影缠身
 			{ spellID =  48181, unitID = "target", caster = "player", filter = "DEBUFF" },
 			-- 腐蚀之种
@@ -1320,6 +1320,8 @@ FG["filger_spells"] = {
 			{ spellID = 132404, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 盾牌屏障
 			{ spellID = 112048, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 盾牌冲锋
+			{ spellID = 169667, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 法术反射
 			{ spellID =  23920, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 剑在人在
@@ -1504,7 +1506,6 @@ FG["filger_spells"] = {
 			{ spellID = 142530, unitID = "player", caster = "all",    filter = "BUFF" },
 
 
-
 			-- 专业技能
 			-- 神经元弹簧
 			{ spellID = 126734, unitID = "player", caster = "all",    filter = "BUFF" },
@@ -1512,44 +1513,42 @@ FG["filger_spells"] = {
 			{ spellID =  54861, unitID = "player", caster = "all",    filter = "BUFF" },
 			-- 降落伞
 			{ spellID =  55001, unitID = "player", caster = "all",    filter = "BUFF" },
-			-- 亮纹
-			{ spellID = 125487, unitID = "player", caster = "all",    filter = "BUFF" },
 
 
 			-- 饰品触发
 
 			-- 暗月卡牌
 			-- 骑士徽章                (爆击, 触发)
-			{ spellID = 162917, unitID = "player", caster = "player", filter = "BUFF", absID = true},
+			{ spellID = 162917, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 战争之颅                (爆击, 触发)
-			{ spellID = 162915, unitID = "player", caster = "player", filter = "BUFF", absID = true},
+			{ spellID = 162915, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 睡魔之袋                (爆击, 触发)
-			{ spellID = 162919, unitID = "player", caster = "player", filter = "BUFF", absID = true},
+			{ spellID = 162919, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 羽翼沙漏                (精神, 触发)
-			{ spellID = 162913, unitID = "player", caster = "player", filter = "BUFF", absID = true},
+			{ spellID = 162913, unitID = "player", caster = "player", filter = "BUFF"},
 
 			-- 玉珑圣物                (智力, 触发)
-			{ spellID = 128985, unitID = "player", caster = "player", filter = "BUFF", absID = true},
+			{ spellID = 128985, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 雪怒圣物                (力量, 触发)
-			{ spellID = 128986, unitID = "player", caster = "player", filter = "BUFF", absID = true},
+			{ spellID = 128986, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 雪怒圣物                (敏捷, 触发)
-			{ spellID = 128984, unitID = "player", caster = "player", filter = "BUFF", absID = true},
+			{ spellID = 128984, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 赤精圣物                (精神, 触发)
-			{ spellID = 128987, unitID = "player", caster = "player", filter = "BUFF", absID = true},
+			{ spellID = 128987, unitID = "player", caster = "player", filter = "BUFF"},
 
 			-- PvP 饰品
+			-- 全能
 			{ spellID = 170397, unitID = "player", caster = "player", filter = "BUFF" },
-			-- PvP 饰品
+			-- 生命上限
+			{ spellID = 126697, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 敏捷
 			{ spellID = 126690, unitID = "player", caster = "player", filter = "BUFF" },
-			-- 恶孽角斗士的征服徽记    (第14赛季)
 			{ spellID = 126707, unitID = "player", caster = "player", filter = "BUFF" },
-			-- PvP飾品 (法术强度, 使用)
+			-- 智力
 			{ spellID = 126683, unitID = "player", caster = "player", filter = "BUFF" },
-			-- 恶孽角斗士的统御徽记    (第14赛季)
 			{ spellID = 126705, unitID = "player", caster = "player", filter = "BUFF" },
-			-- PvP飾品 (力量, 使用)
+			-- 力量
 			{ spellID = 126679, unitID = "player", caster = "player", filter = "BUFF" },
-			-- 恶孽角斗士的胜利徽记    (第14赛季)
 			{ spellID = 126700, unitID = "player", caster = "player", filter = "BUFF" },
 
 			-- 坦克
@@ -1568,8 +1567,6 @@ FG["filger_spells"] = {
 			{ spellID = 176876, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 齐布的愚忠              (生命, 使用)
 			{ spellID = 176460, unitID = "player", caster = "player", filter = "BUFF" },
-			-- 威凌鲜血圣物            (急速, 触发)
-			{ spellID = 176937, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 岩心雕像                (爆击, 触发)
 			{ spellID = 176982, unitID = "player", caster = "player", filter = "BUFF" },
 			-------------------------------MOP-----------------------------------------
@@ -1605,9 +1602,7 @@ FG["filger_spells"] = {
 			-- 毁灭之鳞                (溅射, 触发)
 			{ spellID = 177038, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 双面幸运金币            (敏捷, 使用)
-			{ spellID = 177597, unitID = "player", caster = "player", filter = "BUFF", absID = true},
-			-- 威凌毁灭之罐            (精通, 触发)
-			{ spellID = 176939, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 177597, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 黑心执行者勋章          (溅射, 触发)
 			{ spellID = 176984, unitID = "player", caster = "player", filter = "BUFF" },
 			-------------------------------MOP-----------------------------------------
@@ -1654,8 +1649,6 @@ FG["filger_spells"] = {
 			{ spellID = 177040, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 奇亚诺斯的剑鞘          (力量, 使用)
 			{ spellID = 177189, unitID = "player", caster = "player", filter = "BUFF" },
-			-- 威凌之牙                (精通, 触发)
-			{ spellID = 176935, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 活山之尘                (全能, 触发)
 			{ spellID = 176974, unitID = "player", caster = "player", filter = "BUFF" },
 			-------------------------------MOP-----------------------------------------
@@ -1700,8 +1693,6 @@ FG["filger_spells"] = {
 			{ spellID = 177046, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 科普兰的清醒            (法强, 使用)
 			{ spellID = 177594, unitID = "player", caster = "player", filter = "BUFF" },
-			-- 威凌腐败宝珠            (精通, 触发)
-			{ spellID = 176941, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 虚无碎片                (急速 使用)
 			{ spellID = 176875, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 狂怒之心                (急速, 触发)
@@ -1746,8 +1737,6 @@ FG["filger_spells"] = {
 			{ spellID = 176978, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 永燃蜡烛                (法力, 使用)
 			{ spellID = 177592, unitID = "player", caster = "player", filter = "BUFF" },
-			-- 威凌信仰香炉            (精通, 触发)
-			{ spellID = 176943, unitID = "player", caster = "player", filter = "BUFF" },
 			-------------------------------MOP-----------------------------------------
 			-- 傲慢之棱光囚笼          (智力, 触发)
 			{ spellID = 146314, unitID = "player", caster = "player", filter = "BUFF" },
@@ -1877,6 +1866,8 @@ FG["filger_spells"] = {
 			{ spellID = 111400, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 蒸馏：虎眼酒
 			{ spellID = 125195, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 飘渺酒
+			{ spellID = 128939, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 法力茶
 			{ spellID = 115867, unitID = "player", caster = "player", filter = "BUFF"},
 
@@ -2589,40 +2580,128 @@ FG["filger_spells"] = {
 			----------------------------------WOD------------------------------------
 			--  [970]  悬槌堡
 
-			-- 卡加斯.刃拳
-			-- 进裂创伤 (仅坦克)
+			-- 1	卡加斯.刃拳
+			-- 烈焰喷射
+			{ spellID = 159311, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 抓钩
+			{ spellID = 159188, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 狂暴冲锋
+			{ spellID = 158986, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 钢铁炸弹
+			{ spellID = 159386, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 迸裂创伤 (仅坦克)
 			{ spellID = 159178, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 穿刺 (DoT)
 			{ spellID = 159113, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 屠夫
+			-- 锁链投掷
+			{ spellID = 159947, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 暴虐酒
+			{ spellID = 159413, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 邪恶吐息
+			{ spellID = 160521, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 搜寻猎物
+			{ spellID = 162497, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 着火
+			{ spellID = 163130, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+			-- 2	屠夫
+			-- 捶肉槌
+			{ spellID = 156151, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 龟裂创伤
 			{ spellID = 156152, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 切肉刀
 			{ spellID = 156143, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 布兰肯斯波
-			-- 活性孢子
-			{ spellID = 159463, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 白鬼硫酸
+			{ spellID = 163046, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+			-- 3	布兰肯斯波
 			-- 感染孢子
 			{ spellID = 163242, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 独眼魔双子
-			-- 盾击
-			{ spellID = 143834, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 克拉戈
+			-- 蚀脑真菌
+			{ spellID = 163140, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 160179, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 死疽吐息
+			{ spellID = 159220, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 爆裂灌注
+			{ spellID = 165223, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 脉冲高热
+			{ spellID = 163666, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 溃烂
+			{ spellID = 163241, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 滑溜溜的苔藓
+			{ spellID = 163590, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+			-- 4	泰克图斯
+			-- 晶化弹幕
+			{ spellID = 162346, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 162370, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 石化
+			{ spellID = 162892, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+
+			-- 5	独眼魔双子
+			-- 致衰咆哮
+			{ spellID = 158026, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 防御削弱
+			{ spellID = 159709, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 受伤
+			{ spellID = 155569, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 烈焰
+			{ spellID = 158241, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 奥能动荡
+			{ spellID = 163372, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 奥术之伤
+			{ spellID = 167200, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+			-- 6	克拉戈
 			-- 腐蚀能量
 			{ spellID = 161242, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 压制力场
+			{ spellID = 161345, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 废灵壁垒
-			{ spellID = 163134, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 156803, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 魔能散射:冰霜
+			{ spellID = 172813, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 魔能散射:暗影
+			{ spellID = 162184, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 魔能散射:火焰
 			{ spellID = 162185, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 魔能散射:奥术
 			{ spellID = 162186, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 元首马尔高克
-			-- 奥术愤怒
-			{ spellID = 156238, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 狂莽突击
-			{ spellID = 159515, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 魔能散射:邪能
+			{ spellID = 172895, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 172917, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 统御之力
+			{ spellID = 163472, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+			-- 7	元首马尔高克
 			-- 混沌标记
 			{ spellID = 158605, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 混沌标记:偏移
+			{ spellID = 164176, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 混沌标记:强固
+			{ spellID = 164178, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 混沌标记:复制
+			{ spellID = 164191, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 拘禁
+			{ spellID = 158619, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 碾碎护甲
+			{ spellID = 158553, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 锁定
+			{ spellID = 157763, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 减速
+			{ spellID = 157801, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 毁灭共鸣
+			{ spellID = 159200, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 174106, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 烙印
+			{ spellID = 156225, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 烙印:偏移
+			{ spellID = 164004, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 烙印:强固
+			{ spellID = 164005, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 烙印:复制
+			{ spellID = 164006, unitID = "player", caster = "all", filter = "DEBUFF"},
 
 
 			-- [988] 黑石铸造厂
