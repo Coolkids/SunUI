@@ -601,16 +601,17 @@ end
 
 function A:ReskinFrame(f)
 	if f.reskin == true then return end
-	f.glow = CreateFrame("Frame", nil, f)
-	f.glow:SetBackdrop({
-		edgeFile = S["media"].glow,
-		edgeSize = 5,
-	})
-	f.glow:SetPoint("TOPLEFT", -6, 6)
-	f.glow:SetPoint("BOTTOMRIGHT", 6, -6)
-	f.glow:SetBackdropBorderColor(r, g, b)
-	f.glow:SetAlpha(0)
-
+	if not f.glow then
+		f.glow = CreateFrame("Frame", nil, f)
+		f.glow:SetBackdrop({
+			edgeFile = S["media"].glow,
+			edgeSize = 5,
+		})
+		f.glow:SetPoint("TOPLEFT", -6, 6)
+		f.glow:SetPoint("BOTTOMRIGHT", 6, -6)
+		f.glow:SetBackdropBorderColor(r, g, b)
+		f.glow:SetAlpha(0)
+	end
 	f:HookScript("OnEnter", StartGlow)
  	f:HookScript("OnLeave", StopGlow)
 	f.reskin = true
