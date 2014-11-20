@@ -215,9 +215,9 @@ function MT:RESURRECT_REQUEST()
 			AcceptResurrect()
 			DoEmote('thanks')
 		else
-			local b = CreateFrame("Button")
-			local formattedText = b:GetText(b:SetFormattedText("%d |4second:seconds", delay))
-			AddMessage(string.format(AREA_SPIRIT_HEAL,formattedText))
+			--local b = CreateFrame("Button")
+			--local formattedText = b:GetText(b:SetFormattedText("%d |4second:seconds", delay))
+			--AddMessage(string.format(AREA_SPIRIT_HEAL,formattedText))
 		end
 	end
 end
