@@ -6,5 +6,4 @@
 	<Script file='mirrorbars.lua'/>
 	<Script file='lfg.lua'/>
 	<Script file='other.lua'/>
-	<Script file='QuestGuru.lua'/>
 </Ui>

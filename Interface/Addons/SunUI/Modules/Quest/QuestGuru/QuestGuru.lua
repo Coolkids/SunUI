@@ -2,10 +2,6 @@
 ---Ãû×Ö:QuestGuru  ×÷Õß Lazzy-Kilrogg 
 --------------------------------------------------------------
 
-local QGC_NAME = UnitName("player")
-local QGC_LEVEL = UnitLevel("player")
-local QGC_CLASS = UnitClass("player")
-
 local qgc = QuestGuru
 local QGC_LOADMSG = ""
 QuestGuruSettings = {} --CFFFF8A08  |c
@@ -18,7 +14,7 @@ BINDING_NAME_QUESTGURU_TOGGLE = "Show/Hide QuestGuru"
 
 function qgc:OnEvent(event)
 	if event=="PLAYER_ENTERING_WORLD" then
-		print(123)
+
 		qgc:UnregisterEvent("PLAYER_ENTERING_WORLD")
 		local scrollFrame = qgc.scrollFrame
 		scrollFrame.update = qgc.UpdateLogList
