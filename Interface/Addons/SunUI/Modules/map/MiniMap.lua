@@ -106,6 +106,13 @@ local function HideMinimapButton()
 	GameTimeCalendarInvitesTexture:SetParent("Minimap")
 	GameTimeCalendarInvitesTexture:SetPoint("TOPRIGHT")
 
+	
+	-- Hide Garrison icon
+	GarrisonLandingPageMinimapButton:SetScale(0.0001)
+	GarrisonLandingPageMinimapButton:SetAlpha(0)
+	GarrisonLandingPageMinimapButton:ClearAllPoints()
+	GarrisonLandingPageMinimapButton:SetPoint("BOTTOM", UIParent, "TOP", 0, 20000)
+	
 	if FeedbackUIButton then
 		FeedbackUIButton:ClearAllPoints()
 		FeedbackUIButton:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 6, -6)
@@ -183,10 +190,17 @@ local function RightClickMenu()
 				LookingForGuildFrame_Toggle()
 			end
 		end},
+		{text = QUESTLOG_BUTTON, func = function()
+			ToggleQuestLog()
+		end},
 		{text = LFG_TITLE,
 		func = function() PVEFrame_ToggleFrame(); end},
 		{text = ENCOUNTER_JOURNAL, 
 		func = function() if not IsAddOnLoaded('Blizzard_EncounterJournal') then EncounterJournal_LoadUI(); end ToggleFrame(EncounterJournal) end},
+		{text = GARRISON_LANDING_PAGE_TITLE, 
+		func = function() 
+			GarrisonLandingPage_Toggle()
+		end},
 		{text = MAINMENU_BUTTON,func = function() ToggleFrame(GameMenuFrame) end},
 		{text = INVTYPE_BAG,func = function() ToggleAllBags() end},
 	}
