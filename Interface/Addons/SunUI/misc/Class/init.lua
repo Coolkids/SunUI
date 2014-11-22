@@ -50,7 +50,7 @@ function A:GetOptions()
 end
 
 
-A.ClassTools = {
+A.ClassTools = setmetatable ({
 	["PRIEST"] = {
 		[0] = {},
 		[1] = {},
@@ -133,18 +133,18 @@ A.ClassTools = {
 		},
 		[3] = {
 			["spellid"] = 130736,	--灵魂收割
-			["per"] = 0.35,
+			["per"] = 0.45,
 			["level"] = 87,
 		},
 	},
 	["MONK"] = {
 		[0] = {
 			["spellid"] = 115080,	--轮回之触
-			["per"] = 0.1,
+			["per"] = 1.1,
 			["level"] = 22,		
 		},
 	},
-}
+},{__index=function() return -1 end})
 
 
 function A:Initialize()

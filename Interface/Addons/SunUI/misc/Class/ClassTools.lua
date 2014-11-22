@@ -42,13 +42,15 @@ end
 
 
 function CT:ACTIVE_TALENT_GROUP_CHANGED()
+	
 	local spec = GetSpecialization()
 	if not spec then return end
 	--print(#datebase[S.myclass])
-	if #datebase[S.myclass] == 0 then 
+	if datebase[S.myclass] == -1 then 
 		self:UnregisterAllEvents()
 		return
 	end
+	--print(datebase[S.myclass][0].spellid)
 	if datebase[S.myclass][0].spellid then
 		self.spellid = datebase[S.myclass][0].spellid
 		self.per = datebase[S.myclass][0].per
@@ -85,10 +87,8 @@ function CT:UpdateSet()
 	
 	if Data.db.Enable then
 		self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-		self:RegisterEvent("PLAYER_ENTERING_WORLD", function()
-			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-			self:ACTIVE_TALENT_GROUP_CHANGED()
-		end)
+		self:ACTIVE_TALENT_GROUP_CHANGED()
+		
 		if self.Frame then
 			self.Frame:SetSize(Data.db.Size, Data.db.Size)
 		end
@@ -105,7 +105,7 @@ function CT:ShowOverlayGlow()
 	if self.SunUIShowOverlayGlow then return end
 	local Data = S:GetModule("ClassAT")
 	for i=1, #(self.ButtonList) do
-		ActionButton_ShowOverlayGlow(self.ButtonList[i].shadow)
+		ActionButton_ShowOverlayGlow(self.ButtonList[i])
 	end
 	if self.Frame and (not self.Frame:IsShown()) and Data.db.Icon then
 		self.Frame:Show()
@@ -116,7 +116,7 @@ end
 function CT:HideOverlayGlow()
 	if self.SunUIShowOverlayGlow == false then return end
 	for i=1, #(self.ButtonList) do
-		ActionButton_HideOverlayGlow(self.ButtonList[i].shadow)
+		ActionButton_HideOverlayGlow(self.ButtonList[i])
 	end
 	if self.Frame and self.Frame:IsShown() then
 		self.Frame:Hide()
@@ -152,9 +152,7 @@ end
 
 function CT:GetSpellID(button)
 	local type,id,subtype = GetActionInfo(button.action)
-	if id then 
-		return button.action, button, id
-	end
+	return button.action, button, id
 end
 
 function CT:InsertTable(button)
@@ -180,10 +178,13 @@ function CT:ACTIONBAR_SLOT_CHANGED()
 	self:ScanButton()
 	self:UNIT_HEALTH("", "target")
 end
-
+function CT:PLAYER_ENTERING_WORLD()
+	self:ScanButton()
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+end
 function CT:Init()
 	local Data = S:GetModule("ClassAT")
 	datebase = Data.ClassTools
 	self:UpdateSet()
-	self:ScanButton()
+	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 end

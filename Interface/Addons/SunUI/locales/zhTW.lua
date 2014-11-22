@@ -234,6 +234,7 @@ end
 do
 	L["任务增强"] = true
 	L["自动交接任务"] = true
+	L["原始任务窗口"] = true
 end
 --鼠标提示
 do

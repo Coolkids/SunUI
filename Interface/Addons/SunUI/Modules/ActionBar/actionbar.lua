@@ -2,7 +2,6 @@
 
 local AB = S:NewModule("ActionBar", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 
-local hidefunction = ActionButton_HideGrid
 AB.modName = L["动作条"]
 AB.order = 4
 AB.visibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show"
@@ -453,8 +452,6 @@ end
 local function ShowGrid(event, str, value)
 	if str ~= "ALWAYS_SHOW_MULTIBARS_TEXT" then return end
 	if GetCVar("alwaysShowActionBars") == "1" then 
-		SetActionBarToggles(true, true, true, true)
-		ActionButton_HideGrid = S.dummy
 		for i = 1, 12 do
 			local button = _G[format("ActionButton%d", i)]
 			button:SetAttribute("showgrid", 1)
@@ -477,7 +474,6 @@ local function ShowGrid(event, str, value)
 			ActionButton_ShowGrid(button)
 		end
 	else
-		ActionButton_HideGrid = hidefunction
 		for i = 1, 12 do
 			local button = _G[format("ActionButton%d", i)]
 			button:SetAttribute("showgrid", 0)
@@ -687,6 +683,7 @@ end
 local function initShowGrid()
 	ShowGrid(nil, "ALWAYS_SHOW_MULTIBARS_TEXT", nil)
 end
+
 function AB:Initialize()
 	self:blizzHider()
 	self:CreateBar1()
@@ -706,7 +703,6 @@ function AB:Initialize()
 	self:initStyle()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", initShowGrid)
 	self:RegisterEvent("CVAR_UPDATE", ShowGrid)
-	self:RegisterEvent("ADDON_LOADED")
 	self:SecureHook("LossOfControlFrame_OnEvent")	
 end
 

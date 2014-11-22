@@ -1,0 +1,5 @@
+<Bindings>
+	<Binding name="QUESTGURU_TOGGLE" header="QUESTGURU" category="BINDING_CATEGORY_QUESTGURU">
+		QuestGuru:SetShown(not QuestGuru:IsVisible())
+	</Binding>
+</Bindings>

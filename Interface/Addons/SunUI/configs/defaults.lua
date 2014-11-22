@@ -102,6 +102,7 @@ P["PowerBar"]={
 
 P["Quest"]={
 	AutoQuest = true,
+	QuestGuru = false,
 }
 
 P["Tooltip"]={

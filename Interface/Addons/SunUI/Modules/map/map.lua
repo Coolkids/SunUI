@@ -108,11 +108,11 @@ function WM:Initialize()
 		self:SetSmallWorldMap()
 	end
 	
-	hooksecurefunc("DoEmote", function(emote)
+	--[[hooksecurefunc("DoEmote", function(emote)
 		if emote == "READ" and UnitChannelInfo("player") then
 			CancelEmote()
 		end
-	end)
+	end)]]
 end
 
 S:RegisterModule(WM:GetName())
