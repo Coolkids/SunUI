@@ -514,7 +514,6 @@ function PB:CreateCombatPoint()
 	AnticipationBar:SetScript("OnEvent", function(self, event, unit)
 		if unit ~= "player" then return end
 		local count = select(4, UnitBuff("player", GetSpellInfo(115189))) or 0
-		if count == 0 then return end
 		for i = 1, 5 do
 			if i <= count then
 				self[i]:Show()
