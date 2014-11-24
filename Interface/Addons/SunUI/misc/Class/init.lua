@@ -140,7 +140,7 @@ A.ClassTools = setmetatable ({
 	["MONK"] = {
 		[0] = {
 			["spellid"] = 115080,	--轮回之触
-			["per"] = 1.1,
+			["per"] = 0.1,
 			["level"] = 22,		
 		},
 	},

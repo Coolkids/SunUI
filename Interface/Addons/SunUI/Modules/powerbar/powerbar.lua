@@ -3,7 +3,7 @@ local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 local PB = S:NewModule("PowerBar", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 local space = (S.myclass == "DEATHKNIGHT" or S.myclass == "SHAMAN") and 3 or 6
 local Holder, ShadowOrbs, eb, MageBars, healthbar
-local powercolor, mainframe = {}
+local powercolor, mainframe = {}, {}
 local threeframe, fourframe, fiveframe, sixframe = {}, {}, {}, {}
 PB.modName = L["PowerBar"]
 PB.order = 13
