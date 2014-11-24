@@ -216,11 +216,11 @@ function PB:CreateMonkBar()
 	chibar:SetSize(self.db.Width, self.db.Height)
 	chibar:SetPoint("CENTER", Holder)
 	tinsert(mainframe, chibar)
-	local maxChi = 5
+	local maxChi = 6
 	for i=1,maxChi do
 		chibar[i] = CreateFrame("StatusBar",nil,chibar)
 		chibar[i]:SetSize((self.db.Width-space*(maxChi-1))/maxChi, self.db.Height)
-		tinsert(fiveframe, chibar[i])
+		tinsert(sixframe, chibar[i])
 		chibar[i]:SetStatusBarTexture(S["media"].normal)
 		chibar[i]:SetStatusBarColor(0.0, 1.00 , 0.59)
 		chibar[i]:CreateShadow()
@@ -239,19 +239,21 @@ function PB:CreateMonkBar()
 			local chinum = UnitPower("player",SPELL_POWER_CHI)
 			local chimax = UnitPowerMax("player",SPELL_POWER_CHI)
 			if chinum ~= chimax then
-				if chimax == 4 then
-					chibar[maxChi]:Hide()
-					for i = 1,4 do
-						chibar[i]:SetWidth((PB.db.Width-space*(4-1))/4)
+				if chimax ~= maxChi then
+					for i = 1,maxChi do
+						if i<=chimax then
+							chibar[i]:SetWidth((PB.db.Width-space*(chimax-1))/chimax)
+						else
+							chibar[i]:Hide()
+						end
 					end
-				elseif chimax == maxChi then
-					chibar[maxChi]:Show()
+				else
 					for i = 1,maxChi do
 						chibar[i]:SetWidth((PB.db.Width-space*(maxChi-1))/maxChi)
 					end
 				end
 			end
-			for i = 1,chimax do
+			for i = 1,maxChi do
 				if i <= chinum then
 					chibar[i]:Show()
 				else
@@ -263,19 +265,21 @@ function PB:CreateMonkBar()
 		local chinum = UnitPower("player",SPELL_POWER_CHI)
 		local chimax = UnitPowerMax("player",SPELL_POWER_CHI)
 		if chinum ~= chimax then
-			if chimax == 4 then
-				chibar[maxChi]:Hide()
-				for i = 1,4 do
-					chibar[i]:SetWidth((PB.db.Width-space*(4-1))/4)
+			if chimax ~= maxChi then
+				for i = 1,maxChi do
+					if i<=chimax then
+						chibar[i]:SetWidth((PB.db.Width-space*(chimax-1))/chimax)
+					else
+						chibar[i]:Hide()
+					end
 				end
-			elseif chimax == maxChi then
-				chibar[maxChi]:Show()
+			else
 				for i = 1,maxChi do
 					chibar[i]:SetWidth((PB.db.Width-space*(maxChi-1))/maxChi)
 				end
 			end
 		end
-		for i = 1,chimax do
+		for i = 1,maxChi do
 			if i <= chinum then
 				chibar[i]:Show()
 			else

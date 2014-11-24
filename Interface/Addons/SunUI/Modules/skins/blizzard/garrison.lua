@@ -3,7 +3,7 @@ local A = S:GetModule("Skins")
 
 local function LoadSkin()
     local r, g, b = RAID_CLASS_COLORS[S.myclass].r, RAID_CLASS_COLORS[S.myclass].g, RAID_CLASS_COLORS[S.myclass].b
-		-- [[ Capacitive display frame ]]
+	-- [[ Capacitive display frame ]]
 
 	local GarrisonCapacitiveDisplayFrame = GarrisonCapacitiveDisplayFrame
 
@@ -146,6 +146,21 @@ local function LoadSkin()
 
 	A:ReskinScroll(scrollFrame.scrollBar)
 
+	-- Follower tab
+
+	local FollowerTab = GarrisonLandingPage.FollowerTab
+
+	local xpBar = FollowerTab.XPBar
+
+	select(1, xpBar:GetRegions()):Hide()
+	xpBar.XPLeft:Hide()
+	xpBar.XPRight:Hide()
+	select(4, xpBar:GetRegions()):Hide()
+
+	xpBar:SetStatusBarTexture(A.media.backdrop)
+
+	A:CreateBDFrame(xpBar)
+
 	-- [[ Recruiter frame ]]
 
 	local GarrisonRecruiterFrame = GarrisonRecruiterFrame
@@ -165,7 +180,7 @@ local function LoadSkin()
 	-- [[ Shared templates ]]
 
 	hooksecurefunc("GarrisonFollowerList_Update", function(self)
-		local followerFrame = self;
+		local followerFrame = self
 		local followers = followerFrame.FollowerList.followers
 		local followersList = followerFrame.FollowerList.followersList
 		local numFollowers = #followersList
@@ -181,6 +196,9 @@ local function LoadSkin()
 				button.BG:Hide()
 
 				button.Selection:SetTexture(r, g, b, .2)
+				button.Selection:ClearAllPoints()
+				button.Selection:SetPoint("TOPLEFT", 2, -1)
+				button.Selection:SetPoint("BOTTOMRIGHT", -1, 1)
 
 				A:CreateBD(button, .25)
 
@@ -195,7 +213,25 @@ local function LoadSkin()
 			end
 		end
 	end)
-    
+
+	do
+		local abilityIndex = 1
+
+		hooksecurefunc("GarrisonFollowerPage_ShowFollower", function(self, followerID)
+			local abilities = self.AbilitiesFrame.Abilities
+
+			local ability = abilities[abilityIndex]
+			while ability do
+				local icon = ability.IconButton.Icon
+
+				icon:SetTexCoord(.08, .92, .08, .92)
+				A:CreateBG(icon)
+
+				abilityIndex = abilityIndex + 1
+				ability = abilities[abilityIndex]
+			end
+		end)
+	end
 end
 
 A:RegisterSkin("Blizzard_GarrisonUI", LoadSkin)
