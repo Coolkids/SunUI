@@ -504,10 +504,15 @@ function PB:CreateCombatPoint()
 		AnticipationBar[i] =CreateFrame("StatusBar", nil, AnticipationBar)
 		AnticipationBar[i]:SetStatusBarTexture(S["media"].normal)
 		AnticipationBar[i]:GetStatusBarTexture():SetHorizTile(false)
+		AnticipationBar[i]:SetFrameLevel(CombatPointBar[i]:GetFrameLevel()+1)
 		AnticipationBar[i]:SetSize(((self.db.Width-2*4)/5)/1.2, self.db.Height/3)
-
 		AnticipationBar[i]:SetPoint("CENTER", CombatPointBar[i], 0, 0)
-		AnticipationBar[i]:SetStatusBarColor(0.8, 0, 0)
+		if i ~= 5 then 
+			AnticipationBar[i]:SetStatusBarColor(0.8, 0.2, 0.2)
+		else
+			AnticipationBar[i]:SetStatusBarColor(102/255, 204/255, 102/255)
+		end
+		AnticipationBar[i]:CreateShadow()
 		AnticipationBar[i]:Hide()
 	end
 	AnticipationBar:RegisterEvent("UNIT_AURA")
