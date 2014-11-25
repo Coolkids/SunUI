@@ -31,13 +31,13 @@ local function LoadSkin()
 			if button:GetFontString() then
 				if button:GetFontString():GetText() and button:GetFontString():GetText():find("|cff000000") then
 					button:GetFontString():SetText(string.gsub(button:GetFontString():GetText(), "|cff000000", "|cffFFFF00"))
-				elseif button:GetFontString():GetText() then
+				--[[elseif button:GetFontString():GetText() then
 					local str = button:GetFontString():GetText()
 					--print(str)
 					string.gsub(str, "|cff%w%w%w%w%w%w", "")
 					string.gsub(str, "|r", "")
 					button:GetFontString():SetText(str)
-					button:GetFontString():SetTextColor(1,1,1)
+					button:GetFontString():SetTextColor(1,1,1)]]
 				end
 			end
 		end
