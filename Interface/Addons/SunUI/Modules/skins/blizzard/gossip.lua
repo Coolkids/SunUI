@@ -28,18 +28,15 @@ local function LoadSkin()
 	hooksecurefunc("GossipFrameUpdate", function()
 		for i=1, NUMGOSSIPBUTTONS do
 			local button = _G["GossipTitleButton"..i]
-			if button:GetFontString() then
-				if button:GetFontString():GetText() and button:GetFontString():GetText():find("|cff000000") then
-					button:GetFontString():SetText(string.gsub(button:GetFontString():GetText(), "|cff000000", "|cffFFFF00"))
-				--[[elseif button:GetFontString():GetText() then
-					local str = button:GetFontString():GetText()
-					--print(str)
-					string.gsub(str, "|cff%w%w%w%w%w%w", "")
-					string.gsub(str, "|r", "")
-					button:GetFontString():SetText(str)
-					button:GetFontString():SetTextColor(1,1,1)]]
-				end
+			local text = button:GetText()
+			if text and test:find("|cff000000") then
+				text = string.gsub(text, "|cff000000", "|cffFFFF00")
+				button:SetText(text)
+			elseif text then
+				text = string.gsub(text, "|cff......", "|cffFFFFFF")
+				button:SetText(text)
 			end
+			
 		end
 	end)
 	hooksecurefunc(ItemTextPageText, "SetTextColor", function(self, r, g, b)
