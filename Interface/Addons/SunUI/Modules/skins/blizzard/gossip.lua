@@ -35,6 +35,7 @@ local function LoadSkin()
 			elseif text then
 				text = string.gsub(text, "|cff......", "|cffFFFFFF")
 				button:SetText(text)
+				button:GetFontString():SetTextColor(1, 1, 1)
 			end
 			
 		end
