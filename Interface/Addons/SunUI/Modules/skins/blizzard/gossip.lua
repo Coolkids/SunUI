@@ -29,7 +29,7 @@ local function LoadSkin()
 		for i=1, NUMGOSSIPBUTTONS do
 			local button = _G["GossipTitleButton"..i]
 			local text = button:GetText()
-			if text and test:find("|cff000000") then
+			if text and text:find("|cff000000") then
 				text = string.gsub(text, "|cff000000", "|cffFFFF00")
 				button:SetText(text)
 			elseif text then
