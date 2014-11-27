@@ -61,6 +61,13 @@ local function LoadSkin()
 		header.Text:FontTemplate(nil, nil, "OUTLINE")
 	end
 
+	do
+		local header = BONUS_OBJECTIVE_TRACKER_MODULE.Header
+
+		header.Background:Hide()
+		header.Text:FontTemplate(nil, nil, "OUTLINE")
+	end
+
 	hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, "SetBlockHeader", function(_, block)
 		if not block.headerStyled then
 			block.HeaderText:FontTemplate(nil, nil, "OUTLINE")
@@ -83,7 +90,7 @@ local function LoadSkin()
 			itemButton.HotKey:ClearAllPoints()
 			itemButton.HotKey:SetPoint("TOP", itemButton, -1, 0)
 			itemButton.HotKey:SetJustifyH("CENTER")
-			itemButton.HotKey:FontTemplate(nil, nil, "OUTLINE")  --会引起无法使用任务物品么?待测试
+			itemButton.HotKey:FontTemplate(nil, nil, "OUTLINE")
 
 			itemButton.icon:SetTexCoord(.08, .92, .08, .92)
 			A:CreateBG(itemButton)
@@ -143,5 +150,35 @@ local function LoadSkin()
 			block.styled = true
 		end
 	end)
+
+	-- [[ Bonus objective progress bar ]]
+
+	hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", function(self, block, line)
+		local progressBar = line.ProgressBar
+
+		if not progressBar.styled then
+			local bar = progressBar.Bar
+			local label = bar.Label
+
+			bar.BorderLeft:Hide()
+			bar.BorderRight:Hide()
+			bar.BorderMid:Hide()
+			select(5, bar:GetRegions()):Hide()
+
+			bar:SetStatusBarTexture(A["media"].backdrop)
+
+			label:ClearAllPoints()
+			label:SetPoint("CENTER", 0, -1)
+			label:FontTemplate(nil, nil, "OUTLINE")
+
+			local bg = A:CreateBDFrame(bar)
+			bg:SetPoint("TOPLEFT", -1, 0)
+			bg:SetPoint("BOTTOMRIGHT", 0, -3)
+
+			progressBar.styled = true
+		end
+	end)
+
 end
+
 A:RegisterSkin("SunUI", LoadSkin)
