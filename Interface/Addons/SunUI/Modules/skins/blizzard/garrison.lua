@@ -3,6 +3,35 @@ local A = S:GetModule("Skins")
 
 local function LoadSkin()
     local r, g, b = RAID_CLASS_COLORS[S.myclass].r, RAID_CLASS_COLORS[S.myclass].g, RAID_CLASS_COLORS[S.myclass].b
+
+	-- [[ Shared functions ]]
+
+	local function restyleFollowerPortrait(portrait)
+		local level = portrait.Level
+		local cover = portrait.PortraitRingCover
+
+		portrait.PortraitRing:Hide()
+		portrait.PortraitRingQuality:SetTexture("")
+
+		portrait.LevelBorder:SetTexture(0, 0, 0, .5)
+		portrait.LevelBorder:SetSize(44, 11)
+		portrait.LevelBorder:ClearAllPoints()
+		portrait.LevelBorder:SetPoint("BOTTOM", 0, 12)
+
+		level:ClearAllPoints()
+		level:SetPoint("BOTTOM", portrait, 0, 12)
+
+		local squareBG = CreateFrame("Frame", nil, portrait)
+		squareBG:SetFrameLevel(portrait:GetFrameLevel()-1)
+		squareBG:SetPoint("TOPLEFT", 3, -3)
+		squareBG:SetPoint("BOTTOMRIGHT", -3, 11)
+		A:CreateBD(squareBG, 1)
+		portrait.squareBG = squareBG
+
+		cover:SetTexture(0, 0, 0)
+		cover:SetAllPoints(squareBG)
+	end
+
 	-- [[ Capacitive display frame ]]
 
 	local GarrisonCapacitiveDisplayFrame = GarrisonCapacitiveDisplayFrame
@@ -150,16 +179,223 @@ local function LoadSkin()
 
 	local FollowerTab = GarrisonLandingPage.FollowerTab
 
-	local xpBar = FollowerTab.XPBar
+	do
+		local xpBar = FollowerTab.XPBar
 
-	select(1, xpBar:GetRegions()):Hide()
-	xpBar.XPLeft:Hide()
-	xpBar.XPRight:Hide()
-	select(4, xpBar:GetRegions()):Hide()
+		select(1, xpBar:GetRegions()):Hide()
+		xpBar.XPLeft:Hide()
+		xpBar.XPRight:Hide()
+		select(4, xpBar:GetRegions()):Hide()
 
-	xpBar:SetStatusBarTexture(A.media.backdrop)
+		xpBar:SetStatusBarTexture(A["media"].backdrop)
 
-	A:CreateBDFrame(xpBar)
+		A:CreateBDFrame(xpBar)
+	end
+
+	-- [[ Mission UI ]]
+
+	local GarrisonMissionFrame = GarrisonMissionFrame
+
+	for i = 1, 18 do
+		select(i, GarrisonMissionFrame:GetRegions()):Hide()
+	end
+
+	GarrisonMissionFrame.TitleText:Show()
+
+	A:CreateBD(GarrisonMissionFrame)
+	A:ReskinClose(GarrisonMissionFrame.CloseButton)
+	A:ReskinTab(GarrisonMissionFrameTab1)
+	A:ReskinTab(GarrisonMissionFrameTab2)
+
+	GarrisonMissionFrameTab1:ClearAllPoints()
+	GarrisonMissionFrameTab1:SetPoint("BOTTOMLEFT", 11, -40)
+
+	do
+		local f = CreateFrame("Frame")
+		f:RegisterEvent("ADDON_LOADED")
+		f:SetScript("OnEvent", function(self, event, addon)
+			if addon == "MasterPlan" then
+				A:ReskinTab(GarrisonMissionFrameTab3)
+				self:UnregisterEvent("ADDON_LOADED")
+			end
+		end)
+	end
+
+	-- Follower list
+
+	local FollowerList = GarrisonMissionFrame.FollowerList
+
+	FollowerList:DisableDrawLayer("BORDER")
+	FollowerList.MaterialFrame:GetRegions():Hide()
+
+	A:ReskinInput(FollowerList.SearchBox)
+	A:ReskinScroll(FollowerList.listScroll.scrollBar)
+
+	local MissionTab = GarrisonMissionFrame.MissionTab
+
+	-- Mission list
+
+	local MissionList = MissionTab.MissionList
+
+	MissionList:DisableDrawLayer("BORDER")
+
+	A:ReskinScroll(MissionList.listScroll.scrollBar)
+
+	for i = 1, 2 do
+		local tab = _G["GarrisonMissionFrameMissionsTab"..i]
+
+		tab.Left:Hide()
+		tab.Middle:Hide()
+		tab.Right:Hide()
+		tab.SelectedLeft:SetTexture("")
+		tab.SelectedMid:SetTexture("")
+		tab.SelectedRight:SetTexture("")
+
+		A:CreateBD(tab, .25)
+	end
+
+	GarrisonMissionFrameMissionsTab1:SetBackdropColor(r, g, b, .2)
+
+	hooksecurefunc("GarrisonMissonListTab_SetSelected", function(tab, isSelected)
+		if isSelected then
+			tab:SetBackdropColor(r, g, b, .2)
+		else
+			tab:SetBackdropColor(0, 0, 0, .25)
+		end
+	end)
+
+	do
+		MissionList.MaterialFrame:GetRegions():Hide()
+		local bg = A:CreateBDFrame(MissionList.MaterialFrame, .25)
+		bg:SetPoint("TOPLEFT", 5, -5)
+		bg:SetPoint("BOTTOMRIGHT", -5, 6)
+	end
+
+	A:Reskin(MissionList.CompleteDialog.BorderFrame.ViewButton)
+
+	local buttons = MissionList.listScroll.buttons
+	for i = 1, #buttons do
+		local button = buttons[i]
+
+		for i = 1, 12 do
+			local rareOverlay = button.RareOverlay
+			local rareText = button.RareText
+
+			select(i, button:GetRegions()):Hide()
+
+			A:CreateBD(button, .25)
+
+			rareText:ClearAllPoints()
+			rareText:SetPoint("BOTTOMLEFT", button, 20, 10)
+
+			rareOverlay:SetDrawLayer("BACKGROUND")
+			rareOverlay:SetTexture(A["media"].backdrop)
+			rareOverlay:ClearAllPoints()
+			rareOverlay:SetAllPoints()
+			rareOverlay:SetVertexColor(0.098, 0.537, 0.969, 0.2)
+		end
+	end
+
+	hooksecurefunc("GarrisonMissionButton_SetRewards", function(self, rewards, numRewards)
+		if self.numRewardsStyled == nil then
+			self.numRewardsStyled = 0
+		end
+
+		while self.numRewardsStyled < numRewards do
+			self.numRewardsStyled = self.numRewardsStyled + 1
+
+			local reward = self.Rewards[self.numRewardsStyled]
+			local icon = reward.Icon
+
+			reward:GetRegions():Hide()
+
+			reward.Icon:SetTexCoord(.08, .92, .08, .92)
+			A:CreateBG(reward.Icon)
+		end
+	end)
+
+	-- Mission page
+
+	local MissionPage = MissionTab.MissionPage
+
+	for i = 1, 11 do
+		select(i, MissionPage:GetRegions()):Hide()
+	end
+
+	A:Reskin(MissionPage.StartMissionButton)
+	A:ReskinClose(MissionPage.CloseButton)
+
+	MissionPage.CloseButton:ClearAllPoints()
+	MissionPage.CloseButton:SetPoint("TOPRIGHT", -10, -5)
+
+	for i = 4, 8 do
+		select(i, MissionPage.Stage:GetRegions()):Hide()
+	end
+	for i = 19, 21 do
+		select(i, MissionPage.Stage:GetRegions()):Hide()
+	end
+
+	do
+		local bg = CreateFrame("Frame", nil, MissionPage.Stage)
+		bg:SetPoint("TOPLEFT", 4, 1)
+		bg:SetPoint("BOTTOMRIGHT", -4, -1)
+		bg:SetFrameLevel(MissionPage.Stage:GetFrameLevel() - 1)
+		A:CreateBD(bg)
+
+		local overlay = MissionPage.Stage:CreateTexture()
+		overlay:SetDrawLayer("ARTWORK", 3)
+		overlay:SetAllPoints(bg)
+		overlay:SetTexture(0, 0, 0, .5)
+
+		local iconbg = MissionPage.Stage.IconBG
+		iconbg:ClearAllPoints()
+		iconbg:SetPoint("TOPLEFT", 3, -1)
+	end
+
+	-- Follower tab
+
+	local FollowerTab = GarrisonMissionFrame.FollowerTab
+
+	FollowerTab:DisableDrawLayer("BORDER")
+
+	do
+		local xpBar = FollowerTab.XPBar
+
+		select(1, xpBar:GetRegions()):Hide()
+		xpBar.XPLeft:Hide()
+		xpBar.XPRight:Hide()
+		select(4, xpBar:GetRegions()):Hide()
+
+		xpBar:SetStatusBarTexture(A["media"].backdrop)
+
+		A:CreateBDFrame(xpBar)
+	end
+
+	for _, item in pairs({FollowerTab.ItemWeapon, FollowerTab.ItemArmor}) do
+		local icon = item.Icon
+
+		item.Border:Hide()
+
+		icon:SetTexCoord(.08, .92, .08, .92)
+		A:CreateBG(icon)
+
+		local bg = A:CreateBDFrame(item, .25)
+		bg:SetPoint("TOPLEFT", 41, -1)
+		bg:SetPoint("BOTTOMRIGHT", 0, 1)
+	end
+
+	-- Portraits
+
+	hooksecurefunc("GarrisonMissionFrame_SetFollowerPortrait", function(portraitFrame, followerInfo)
+		if not portraitFrame.styled then
+			restyleFollowerPortrait(portraitFrame)
+			portraitFrame.styled = true
+		end
+
+		local color = ITEM_QUALITY_COLORS[followerInfo.quality]
+
+		portraitFrame.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
+	end)
 
 	-- [[ Recruiter frame ]]
 
@@ -191,47 +427,78 @@ local function LoadSkin()
 
 		for i = 1, #buttons do
 			local button = buttons[i]
+			local portrait = button.PortraitFrame
 
 			if not button.restyled then
 				button.BG:Hide()
-
-				button.Selection:SetTexture(r, g, b, .2)
-				button.Selection:ClearAllPoints()
-				button.Selection:SetPoint("TOPLEFT", 2, -1)
-				button.Selection:SetPoint("BOTTOMRIGHT", -1, 1)
+				button.Selection:SetTexture("")
+				button.AbilitiesBG:SetTexture("")
 
 				A:CreateBD(button, .25)
 
-				local portrait = button.PortraitFrame
+				button.BusyFrame:SetAllPoints()
 
 				if portrait then
-					portrait.PortraitRing:Hide()
-					portrait.LevelBorder:SetAlpha(0)
+					restyleFollowerPortrait(portrait)
+					portrait:ClearAllPoints()
+					portrait:SetPoint("TOPLEFT", 4, -1)
 				end
 
 				button.restyled = true
 			end
+
+			if button.Selection:IsShown() then
+				button:SetBackdropColor(r, g, b, .2)
+			else
+				button:SetBackdropColor(0, 0, 0, .25)
+			end
+
+			if portrait then
+				if portrait.PortraitRingQuality:IsShown() then
+					portrait.squareBG:SetBackdropBorderColor(portrait.PortraitRingQuality:GetVertexColor())
+				else
+					portrait.squareBG:SetBackdropBorderColor(0, 0, 0)
+				end
+			end
 		end
 	end)
 
-	do
-		local abilityIndex = 1
+	hooksecurefunc("GarrisonFollowerButton_AddAbility", function(self, index)
+		local ability = self.Abilities[index]
 
-		hooksecurefunc("GarrisonFollowerPage_ShowFollower", function(self, followerID)
-			local abilities = self.AbilitiesFrame.Abilities
+		if not ability.styled then
+			local icon = ability.Icon
 
-			local ability = abilities[abilityIndex]
-			while ability do
-				local icon = ability.IconButton.Icon
+			icon:SetSize(19, 19)
+			icon:SetTexCoord(.08, .92, .08, .92)
+			A:CreateBG(icon)
 
-				icon:SetTexCoord(.08, .92, .08, .92)
-				A:CreateBG(icon)
+			ability.styled = true
+		end
+	end)
 
-				abilityIndex = abilityIndex + 1
-				ability = abilities[abilityIndex]
-			end
-		end)
-	end
+	hooksecurefunc("GarrisonFollowerPage_ShowFollower", function(self, followerID)
+		local abilities = self.AbilitiesFrame.Abilities
+
+		if self.numAbilitiesStyled == nil then
+			self.numAbilitiesStyled = 1
+		end
+
+		local numAbilitiesStyled = self.numAbilitiesStyled
+
+		local ability = abilities[numAbilitiesStyled]
+		while ability do
+			local icon = ability.IconButton.Icon
+
+			icon:SetTexCoord(.08, .92, .08, .92)
+			A:CreateBG(icon)
+
+			numAbilitiesStyled = numAbilitiesStyled + 1
+			ability = abilities[numAbilitiesStyled]
+		end
+
+		self.numAbilitiesStyled = numAbilitiesStyled
+	end)
 end
 
 A:RegisterSkin("Blizzard_GarrisonUI", LoadSkin)
