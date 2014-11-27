@@ -726,7 +726,10 @@ FG["filger_spells"] = {
 			{ spellID =  87173, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 远古列王的圣光
 			{ spellID =  86678, unitID = "player", caster = "player", filter = "BUFF"},
-
+			-- 炽天使
+			{ spellID = 152262, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 最终审判
+			{ spellID = 157048, unitID = "player", caster = "player", filter = "BUFF"},
 			-- DPS 4T16
 			{ spellID = 144595, unitID = "player", caster = "player", filter = "BUFF"},
 		},
@@ -880,6 +883,8 @@ FG["filger_spells"] = {
 			{ spellID =  33206, unitID = "target", caster = "player", filter = "BUFF"  },
 			-- 救赎恩惠
 			{ spellID = 155274, unitID = "target", caster = "player", filter = "BUFF"  },
+			-- 意志洞悉
+			{ spellID = 152118, unitID = "target", caster = "all",    filter = "BUFF"  },
 			-- 暗言术：痛
 			{ spellID =    589, unitID = "target", caster = "player", filter = "DEBUFF"},
 			-- 暗言术：乱
@@ -1226,7 +1231,14 @@ FG["filger_spells"] = {
 			{ spellID = 108359, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 基尔加丹的狡诈
 			{ spellID = 137587, unitID = "player", caster = "player", filter = "BUFF" },
-
+			-- 献祭光环
+			{ spellID = 104025, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 协同魔典
+			{ spellID = 171975, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 硫磺烈火
+			{ spellID = 108683, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 恶魔箭
+			{ spellID = 157695, unitID = "player", caster = "player", filter = "DEBUFF"},
 			-- 术士T16 - 炽燃之怒 / 毁灭浩劫 / 灰烬精通 
 			{ spellID = 145164, unitID = "player", caster = "player", filter = "BUFF" },
 			{ spellID = 145085, unitID = "player", caster = "player", filter = "BUFF" }, 
@@ -1270,8 +1282,6 @@ FG["filger_spells"] = {
 			{ spellID =    603, unitID = "target", caster = "player", filter = "DEBUFF" },
 			-- 古尔丹之手
 			{ spellID =  47960, unitID = "target", caster = "player", filter = "DEBUFF" },
-			-- 恶魔箭
-			{ spellID =  157695, unitID = "target", caster = "player", filter = "DEBUFF" },
 
 			-- 披风
 			{ spellID = 146198, unitID = "target", caster = "player", filter = "DEBUFF" },
@@ -1864,6 +1874,8 @@ FG["filger_spells"] = {
 			{ spellID = 114851, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 爆燃冲刺
 			{ spellID = 111400, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 地狱烈焰
+			{ spellID =   1949, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 蒸馏：虎眼酒
 			{ spellID = 125195, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 飘渺酒
