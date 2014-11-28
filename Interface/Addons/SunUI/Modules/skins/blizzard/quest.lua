@@ -565,7 +565,23 @@ local function LoadSkin()
 		end
 	end)
 	
-	
+	----QuestTitleButton 按钮颜色 MAX_NUM_QUESTS
+	hooksecurefunc("QuestFrameGreetingPanel_OnShow", function()
+		for i = 1, MAX_NUM_QUESTS do
+			local questTitleButton = _G["QuestTitleButton"..i]
+			if questTitleButton then
+				local text = questTitleButton:GetText()
+				if text and text:find("|cff000000") then
+					text = string.gsub(text, "|cff000000", "|cffFFFF00")
+					questTitleButton:SetText(text)
+				elseif text then
+					text = string.gsub(text, "|cff......", "|cffFFFFFF")
+					questTitleButton:SetText(text)
+					questTitleButton:GetFontString():SetTextColor(1, 1, 1)
+				end
+			end
+		end
+	end)
 end
 
 A:RegisterSkin("SunUI", LoadSkin)
