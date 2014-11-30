@@ -102,7 +102,7 @@ S.Options = {
 						fontflag = {
 							type = "select",
 							order = 3,
-							name = L["字体大小"],
+							name = L["字体描边"],
 							values = {["NONE"] = "NONE", ["THINOUTLINE"] = "THINOUTLINE", ["MONOCHROME"] = "MONOCHROME", ["OUTLINE"] = "OUTLINE", ["THICKOUTLINE"] = "THICKOUTLINE" },
 							set = function(info, value)
 								S.global.media[ info[#info] ] = value

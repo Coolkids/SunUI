@@ -28,6 +28,7 @@ do
 	L["字体"] = true
 	L["一般字体"] = true
 	L["字体大小"] = true
+	L["字体描边"] = true
 	L["伤害字体"] = true
 	L["像素字体"] = true
 	L["冷却字体"] = true
