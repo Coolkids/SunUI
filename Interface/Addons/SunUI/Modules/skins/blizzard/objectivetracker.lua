@@ -178,27 +178,33 @@ local function LoadSkin()
 			progressBar.styled = true
 		end
 	end)
-	
-	hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, "AddTimerBar", function(block, line, duration, startTime)
-		local timerBar = block.currentLine.Bar
-		if timerBar and not timerBar.skinned then
-			timerBar:StripTextures()
-			timerBar:SetStatusBarTexture(A["media"].backdrop)
-			A:CreateMark(timerBar)
+	--[[
+	hooksecurefunc(SCENARIO_TRACKER_MODULE, "AddTimerBar", function(block, line, duration, startTime)
+		local timerBar = line.TimerBar
+		S:Print(line.TimerBar)
+		
+		if timerBar then
+			print(_G[timerBar:GetName().."Bar"])
+		end
+		
+		if timerBar.Bar and not timerBar.Bar.skinned then
+			timerBar.Bar:StripTextures()
+			timerBar.Bar:SetStatusBarTexture(A["media"].backdrop)
+			A:CreateMark(timerBar.Bar)
 			
-			timerBar.bg = CreateFrame("Frame", nil, timerBar)
-			timerBar.bg:SetPoint("TOPLEFT", timerBar, "TOPLEFT", -1, 1)
-			timerBar.bg:SetPoint("BOTTOMRIGHT", timerBar, "BOTTOMRIGHT", 1, -1)
-			timerBar.bg:SetFrameStrata(timerBar:GetFrameStrata())
-			timerBar.bg:SetFrameLevel(timerBar:GetFrameLevel() - 1)
-			timerBar.bg:SetBackdrop(backdrop)
-			timerBar.bg:SetBackdropColor(0, 0, 0, 0.5)
-			timerBar.bg:SetBackdropBorderColor(0, 0, 0, 1)
+			timerBar.Bar.bg = CreateFrame("Frame", nil, timerBar.Bar)
+			timerBar.Bar.bg:SetPoint("TOPLEFT", timerBar.Bar, "TOPLEFT", -1, 1)
+			timerBar.Bar.bg:SetPoint("BOTTOMRIGHT", timerBar.Bar, "BOTTOMRIGHT", 1, -1)
+			timerBar.Bar.bg:SetFrameStrata(timerBar.Bar:GetFrameStrata())
+			timerBar.Bar.bg:SetFrameLevel(timerBar.Bar:GetFrameLevel() - 1)
+			timerBar.Bar.bg:SetBackdrop(backdrop)
+			timerBar.Bar.bg:SetBackdropColor(0, 0, 0, 0.5)
+			timerBar.Bar.bg:SetBackdropBorderColor(0, 0, 0, 1)
 			
-			timerBar.skinned = true
+			timerBar.Bar.skinned = true
 		end
 	end)
-	
+	]]
 end
 
 A:RegisterSkin("SunUI", LoadSkin)
