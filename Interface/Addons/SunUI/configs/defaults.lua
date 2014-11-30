@@ -10,6 +10,7 @@ G["media"]={
 	blank = "SunUI Blank",
 	normal = "SunUI Normal",
 	cdfont = "SunUI Roadway",
+	pxfont = "SunUI PIEXL",
 	glow = "SunUI GlowBorder",
 	backdropcolor = { .1, .1, .1 },
 	backdropfadecolor = { .04, .04, .04, .7 },
@@ -102,7 +103,7 @@ P["PowerBar"]={
 
 P["Quest"]={
 	AutoQuest = true,
-	QuestGuru = false,
+	QuestGuru = true,
 }
 
 P["Tooltip"]={

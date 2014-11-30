@@ -220,20 +220,29 @@ local function Skin()
 		local ic = f.icon:GetParent()
 		ic:CreateShadow()
 
-		f.bar:CreateShadow()
-
+		f.bar:CreateShadow(0.5)
+		
 		f.bar:SetStatusBarTexture(S["media"].normal)
 		f.bar:GetStatusBarTexture():SetDrawLayer("ARTWORK")
 		f.bar.bg:SetTexture(S["media"].normal)
-		f.bar.bg:SetAlpha(0.5)
+		f.bar.bg:SetAlpha(0)
+		f.bar.bg:Hide()
+		f.bar.bg.Show = S.dummy
+		
 		A:CreateMark(f.bar)
-
+		
+		--mark
+		f.mark.texture:SetTexture("Interface\\AddOns\\SunUI\\media\\mark")
+		
 		f.timeText:SetFont(S["media"].font, S["media"].fontsize, "THINOUTLINE")
 		f.timeText:SetShadowOffset(S.mult, -S.mult)
+		f.timeText:SetDrawLayer("OVERLAY")
 		f.spellText:SetFont(S["media"].font, S["media"].fontsize, "THINOUTLINE")
 		f.spellText:SetShadowOffset(S.mult, -S.mult)
+		f.spellText:SetDrawLayer("OVERLAY")
 		f.stacktext:SetFont(S["media"].font, S["media"].fontsize, "THINOUTLINE")
 		f.stacktext:SetShadowOffset(S.mult, -S.mult)
+		f.stacktext:SetDrawLayer("OVERLAY")
 
 		TimerBar.Resize(f, w, h)
 

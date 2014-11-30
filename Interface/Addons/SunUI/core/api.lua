@@ -250,6 +250,7 @@ local function FontTemplate(fs, font, fontSize, fontStyle)
 	
 	if not font then font = LSM:Fetch("font", S.global.media.font) end
 	if not fontSize then fontSize = S.global.media.fontsize end
+	if not fontStyle then fontStyle = S.global.media.fontflag end
 	
 	fs:SetFont(font, fontSize, fontStyle)
 	if fontStyle then

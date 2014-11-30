@@ -547,7 +547,7 @@ end
 S:RegisterModule(A:GetName())
 
 function A:CreateMark(f, orientation)
-	local spark =  f:CreateTexture(nil, "OVERLAY", 1)
+	local spark =  f:CreateTexture(nil, "BORDER", 1)
 	spark:SetTexture("Interface\\Buttons\\WHITE8x8")
 	spark:SetVertexColor(0, 0, 0)
 	if not orientation then

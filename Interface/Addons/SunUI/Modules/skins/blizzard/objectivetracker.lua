@@ -178,7 +178,27 @@ local function LoadSkin()
 			progressBar.styled = true
 		end
 	end)
-
+	
+	hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, "AddTimerBar", function(block, line, duration, startTime)
+		local timerBar = block.currentLine.Bar
+		if timerBar and not timerBar.skinned then
+			timerBar:StripTextures()
+			timerBar:SetStatusBarTexture(A["media"].backdrop)
+			A:CreateMark(timerBar)
+			
+			timerBar.bg = CreateFrame("Frame", nil, timerBar)
+			timerBar.bg:SetPoint("TOPLEFT", timerBar, "TOPLEFT", -1, 1)
+			timerBar.bg:SetPoint("BOTTOMRIGHT", timerBar, "BOTTOMRIGHT", 1, -1)
+			timerBar.bg:SetFrameStrata(timerBar:GetFrameStrata())
+			timerBar.bg:SetFrameLevel(timerBar:GetFrameLevel() - 1)
+			timerBar.bg:SetBackdrop(backdrop)
+			timerBar.bg:SetBackdropColor(0, 0, 0, 0.5)
+			timerBar.bg:SetBackdropBorderColor(0, 0, 0, 1)
+			
+			timerBar.skinned = true
+		end
+	end)
+	
 end
 
 A:RegisterSkin("SunUI", LoadSkin)

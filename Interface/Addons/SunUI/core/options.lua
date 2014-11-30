@@ -99,9 +99,20 @@ S.Options = {
 								S:UpdateFontTemplates()
 							end,
 						},
+						fontflag = {
+							type = "select",
+							order = 3,
+							name = L["字体大小"],
+							values = {["NONE"] = "NONE", ["THINOUTLINE"] = "THINOUTLINE", ["MONOCHROME"] = "MONOCHROME", ["OUTLINE"] = "OUTLINE", ["THICKOUTLINE"] = "THICKOUTLINE" },
+							set = function(info, value)
+								S.global.media[ info[#info] ] = value
+								S:UpdateMedia()
+								S:UpdateFontTemplates()
+							end,
+						},
 						dmgfont = {
 							type = "select", dialogControl = "LSM30_Font",
-							order = 3,
+							order = 4,
 							name = L["伤害字体"],
 							values = AceGUIWidgetLSMlists.font,
 							set = function(info, value)
@@ -112,13 +123,13 @@ S.Options = {
 						},
 						pxfont = {
 							type = "select", dialogControl = "LSM30_Font",
-							order = 4,
+							order = 5,
 							name = L["像素字体"],
 							values = AceGUIWidgetLSMlists.font,
 						},
 						cdfont = {
 							type = "select", dialogControl = "LSM30_Font",
-							order = 5,
+							order = 6,
 							name = L["冷却字体"],
 							values = AceGUIWidgetLSMlists.font,
 						},

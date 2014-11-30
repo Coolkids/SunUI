@@ -5,6 +5,8 @@ local function SkinFrame()
 	local QT = S:GetModule("Quest")
 	if not QT.db.QuestGuru then return end
 	QuestGuru:StripTextures(true)
+	QuestGuru:SetFrameLevel(90)
+	QuestGuru:SetFrameStrata("HIGH")
 	QuestGuruInset:Kill()
 	QuestGuruScrollFrameScrollBar:StripTextures(true)
 	QuestGuru.mapButton:SetHighlightTexture("")

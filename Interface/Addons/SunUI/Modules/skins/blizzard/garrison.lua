@@ -2,7 +2,7 @@
 local A = S:GetModule("Skins")
 
 local function LoadSkin()
-    local r, g, b = RAID_CLASS_COLORS[S.myclass].r, RAID_CLASS_COLORS[S.myclass].g, RAID_CLASS_COLORS[S.myclass].b
+	local r, g, b = RAID_CLASS_COLORS[S.myclass].r, RAID_CLASS_COLORS[S.myclass].g, RAID_CLASS_COLORS[S.myclass].b
 
 	-- [[ Shared functions ]]
 
@@ -352,6 +352,63 @@ local function LoadSkin()
 		iconbg:SetPoint("TOPLEFT", 3, -1)
 	end
 
+	for i = 1, 3 do
+		local follower = MissionPage.Followers[i]
+
+		follower:GetRegions():Hide()
+
+		A:CreateBD(follower, .25)
+	end
+
+	hooksecurefunc("GarrisonMissionPage_SetFollower", function(frame)
+		local portrait = frame.PortraitFrame
+
+		portrait.LevelBorder:SetTexture(0, 0, 0, .5)
+		portrait.LevelBorder:SetSize(44, 11)
+	end)
+
+	hooksecurefunc("GarrisonMissionPage_ClearFollower", function(frame)
+		local portrait = frame.PortraitFrame
+
+		portrait.LevelBorder:SetTexture(0, 0, 0, .5)
+		portrait.LevelBorder:SetSize(44, 11)
+
+		if portrait.squareBG then portrait.squareBG:SetBackdropBorderColor(0, 0, 0) end
+	end)
+
+	for i = 1, 10 do
+		select(i, MissionPage.RewardsFrame:GetRegions()):Hide()
+	end
+
+	--[[for i = 1, 3 do
+		local portrait = MissionPage.RewardsFrame.Rewards[i]
+		local icon = reward.Icon
+
+		reward.BG:Hide()
+
+		icon:SetTexCoord(.08, .92, .08, .92)
+		icon:SetDrawLayer("BORDER", 1)
+		A:CreateBG(icon)
+
+		reward.ItemBurst:SetDrawLayer("BORDER", 2)]]
+
+	A:CreateBD(MissionPage.RewardsFrame, .25)
+
+	for i = 1, 2 do
+		local reward = MissionPage.RewardsFrame.Rewards[i]
+		local icon = reward.Icon
+
+		reward.BG:Hide()
+
+		icon:SetTexCoord(.08, .92, .08, .92)
+		icon:SetDrawLayer("BORDER", 1)
+		A:CreateBG(icon)
+
+		reward.ItemBurst:SetDrawLayer("BORDER", 2)
+
+		A:CreateBD(reward, .15)
+	end
+
 	-- Follower tab
 
 	local FollowerTab = GarrisonMissionFrame.FollowerTab
@@ -407,11 +464,87 @@ local function LoadSkin()
 
 	A:ReskinPortraitFrame(GarrisonRecruiterFrame, true)
 
+	-- Pick
+
+	local Pick = GarrisonRecruiterFrame.Pick
+
+	A:Reskin(Pick.ChooseRecruits)
+	A:ReskinDropDown(Pick.ThreatDropDown)
+	A:ReskinRadio(Pick.Radio1)
+	A:ReskinRadio(Pick.Radio2)
+
 	-- Unavailable frame
 
 	local UnavailableFrame = GarrisonRecruiterFrame.UnavailableFrame
 
 	A:Reskin(UnavailableFrame:GetChildren())
+
+	-- [[ Recruiter select frame ]]
+
+	local GarrisonRecruitSelectFrame = GarrisonRecruitSelectFrame
+
+	for i = 1, 18 do
+		select(i, GarrisonRecruitSelectFrame:GetRegions()):Hide()
+	end
+	GarrisonRecruitSelectFrame.TitleText:Show()
+
+	A:CreateBD(GarrisonRecruitSelectFrame)
+	A:ReskinClose(GarrisonRecruitSelectFrame.CloseButton)
+
+	-- Follower list
+
+	local FollowerList = GarrisonRecruitSelectFrame.FollowerList
+
+	FollowerList:DisableDrawLayer("BORDER")
+
+	A:ReskinScroll(FollowerList.listScroll.scrollBar)
+	A:ReskinInput(FollowerList.SearchBox)
+
+	-- Follower selection
+
+	local FollowerSelection = GarrisonRecruitSelectFrame.FollowerSelection
+
+	FollowerSelection:DisableDrawLayer("BORDER")
+
+	for i = 1, 3 do
+		local recruit = FollowerSelection["Recruit"..i]
+
+		restyleFollowerPortrait(recruit.PortraitFrame)
+
+		A:Reskin(recruit.HireRecruits)
+	end
+
+	hooksecurefunc("GarrisonRecruitSelectFrame_UpdateRecruits", function(waiting)
+		if waiting then return end
+
+		for i = 1, 3 do
+			local recruit = FollowerSelection["Recruit"..i]
+			local portrait = recruit.PortraitFrame
+
+			portrait.squareBG:SetBackdropBorderColor(portrait.LevelBorder:GetVertexColor())
+
+			-- local abilities = recruit.Abilities
+
+			-- if recruit.numAbilitiesStyled == nil then
+				-- recruit.numAbilitiesStyled = 1
+			-- end
+
+			-- local numAbilitiesStyled = recruit.numAbilitiesStyled
+
+			-- local ability = abilities[numAbilitiesStyled]
+			-- while ability do
+				-- local icon = ability.Icon
+
+				-- icon:SetTexCoord(.08, .92, .08, .92)
+				-- A:CreateBG(icon)
+
+				-- numAbilitiesStyled = numAbilitiesStyled + 1
+				-- ability = abilities[numAbilitiesStyled]
+			-- end
+
+			-- recruit.numAbilitiesStyled = numAbilitiesStyled
+		end
+	end)
 
 	-- [[ Shared templates ]]
 

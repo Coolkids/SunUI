@@ -150,8 +150,8 @@ local function LoadSkin()
 					insets = { left = -S.mult, right = -S.mult, top = -S.mult, bottom = -S.mult }
 				})
 		ic:SetTexCoord(.08, .92, .08, .92)
-		ic:Point("TOPLEFT", 2, -2)
-		ic:Point("BOTTOMRIGHT", -2, 2)
+		ic:Point("TOPLEFT", 1, -1)
+		ic:Point("BOTTOMRIGHT", -1, 1)
 		slot.glow = CreateFrame("Frame", nil, slot)
 		slot.glow:SetAllPoints()
 		slot.glow:CreateBorder()
@@ -159,15 +159,16 @@ local function LoadSkin()
 
 	select(8, CharacterMainHandSlot:GetRegions()):Kill()
 	select(8, CharacterSecondaryHandSlot:GetRegions()):Kill()
-
+	--[[
 	local function SkinItemFlyouts()
 		for i = 1, (EquipmentFlyoutFrame.totalItems or 0) do
 			local bu = _G["EquipmentFlyoutFrameButton"..i]
 			local icon = _G["EquipmentFlyoutFrameButton"..i.."IconTexture"]
 			if bu and not bu.reskinned then
+				bu.IconBorder:Hide()
 				bu:SetNormalTexture("")
 				bu:StyleButton()
-				_G["EquipmentFlyoutFrameButton"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
+				icon:SetTexCoord(.08, .92, .08, .92)
 				icon:Point("TOPLEFT", 2, -2)
 				icon:Point("BOTTOMRIGHT", -2, 2)
 				bu.reskinned = true
@@ -176,7 +177,26 @@ local function LoadSkin()
 	end
 	EquipmentFlyoutFrameButtons:HookScript("OnShow", SkinItemFlyouts)
 	hooksecurefunc("EquipmentFlyout_Show", SkinItemFlyouts)
+	]]
+	EquipmentFlyoutFrameButtons.bg1:SetAlpha(0)
+	hooksecurefunc("EquipmentFlyout_CreateButton", function()
+		local bu = EquipmentFlyoutFrame.buttons[#EquipmentFlyoutFrame.buttons]
+		local border = bu.IconBorder
 
+		bu:SetNormalTexture("")
+		bu:SetPushedTexture("")
+		bu:StyleButton()
+		--A:CreateBG(bu)
+		border:SetTexture(A.media.backdrop)
+		--border:SetPoint("TOPLEFT", -1, 1)
+		--border:SetPoint("BOTTOMRIGHT", 1, -1)
+		border:SetDrawLayer("BACKGROUND", 1)
+		border:SetAlpha(0)
+		
+		bu.icon:SetTexCoord(.08, .92, .08, .92)
+		bu.icon:Point("TOPLEFT", 2, -2)
+		bu.icon:Point("BOTTOMRIGHT", -2, 2)
+	end)
 	local function ColorItemBorder()
 		for i = 1, #slots do
 			-- Colour the equipment slots by rarity

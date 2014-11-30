@@ -72,7 +72,7 @@
 	<Frame name="QuestGuru" parent="UIParent" toplevel="true" clampedToScreen="true" enableMouse="true" movable="true" inherits="ButtonFrameTemplate" hidden="true">
 		<Size x="667" y="496"/>
 		<Anchors>
-			<Anchor point="CENTER"/>
+			<Anchor point="LEFT" x="-30" y="0"/>
 		</Anchors>
 		<Layers>
 			<Layer level="OVERLAY" textureSubLevel="-1">
