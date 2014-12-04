@@ -1502,7 +1502,22 @@ FG["filger_spells"] = {
 			-------------------------------MOP----------------------------------------
 			-- 霜狼之印(溅射)
 			{ spellID = 159676, unitID = "player", caster = "all",    filter = "BUFF" },
-
+			-- 黑石之印(护甲)
+			{ spellID = 159679, unitID = "player", caster = "all",    filter = "BUFF" },
+			-- 战歌之印(急速)
+			{ spellID = 159675, unitID = "player", caster = "all",    filter = "BUFF" },
+			-- 影月之印(精神)
+			{ spellID = 159678, unitID = "player", caster = "all",    filter = "BUFF" },
+			-- 雷神之印(爆击)
+			{ spellID = 159234, unitID = "player", caster = "all",    filter = "BUFF" },
+			-- 血环之印(精通)
+			{ spellID = 173322, unitID = "player", caster = "all",    filter = "BUFF" },
+			-- 赫米特的觅心者(精通)
+			{ spellID = 173288, unitID = "player", caster = "all",    filter = "BUFF" },
+			-- 奥格索普的飞弹分离器(溅射)
+			{ spellID = 156055, unitID = "player", caster = "all",    filter = "BUFF" },
+			-- 兆瓦纤维(爆击)
+			{ spellID = 156060, unitID = "player", caster = "all",    filter = "BUFF" },
 			-------------------------------MOP----------------------------------------
 			-- 涓咏
 			{ spellID = 116660, unitID = "player", caster = "all",    filter = "BUFF" },
