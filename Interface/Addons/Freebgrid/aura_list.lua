@@ -129,26 +129,79 @@ ns.auras_instances_debuffs = {
 		},
 
 		[970] = {--悬槌堡
-			-- 卡加斯.刃拳
-			[GetSpellInfo(159178)] = 4,  -- 进裂创伤 (仅坦克)
-			[GetSpellInfo(159113)] = 5,  -- 穿刺 (DoT)
-			-- 屠夫
-			[GetSpellInfo(156152)] = 5,  -- 龟裂创伤
-			[GetSpellInfo(156143)] = 4,  -- 切肉刀
-			-- 布兰肯斯波
-			[GetSpellInfo(159463)] = 4,  -- 活性孢子
-			[GetSpellInfo(163242)] = 4,  -- 感染孢子
-			-- 独眼魔双子
-			[GetSpellInfo(143834)] = 4,  -- 盾击
-			-- 克拉戈
-			[GetSpellInfo(161242)] = 4,  -- 腐蚀能量
-			[GetSpellInfo(163134)] = 4,  -- 废灵壁垒
-			[GetSpellInfo(162185)] = 4,  -- 魔能散射:火焰
-			[GetSpellInfo(162186)] = 5,  -- 魔能散射:奥术
-			-- 元首马尔高克
-			[GetSpellInfo(156238)] = 4,  -- 奥术愤怒
-			[GetSpellInfo(159515)] = 4,  -- 狂莽突击
-			[GetSpellInfo(158605)] = 5,  -- 混沌标记
+			-- Trash 小怪
+			[GetSpellInfo(175601)]=  5, -- 污染之爪
+			[GetSpellInfo(172069)]=  5, -- 剧毒辐射
+			[GetSpellInfo( 56037)]=  4, -- 毁灭符文
+			[GetSpellInfo(175654)]=  5, -- 瓦解符文
+
+			-- 1 Kargath Bladefist 卡加斯·刃拳
+			[GetSpellInfo(159113)]=  5, -- 穿刺(坦克)
+			[GetSpellInfo(159178)]=  6, -- 迸裂创伤(坦克)
+			[GetSpellInfo(159947)]=  5, -- 锁链投掷
+			[GetSpellInfo(158986)]=  4, -- 狂暴冲锋
+			[GetSpellInfo(159413)]=  5, -- 暴虐酒
+			[GetSpellInfo(160521)]=  6, -- 邪恶吐息
+			[GetSpellInfo(159386)]=  5, -- 钢铁炸弹
+			[GetSpellInfo(159188)]=  5, -- 抓钩
+			[GetSpellInfo(162497)]=  4, -- 搜寻猎物
+			[GetSpellInfo(159311)]=  5, -- 烈焰喷射
+
+			-- 2 The Butcher  屠夫
+			[GetSpellInfo(156152)]=  5, -- 龟裂创伤
+			[GetSpellInfo(156151)]=  6, -- 捶肉槌
+			[GetSpellInfo(156147)]=  5, -- 切肉刀
+			[GetSpellInfo(163046)]=  5, -- 白鬼硫酸
+
+			-- 3 Tectus 泰克图斯
+			[GetSpellInfo(162892)]=  5, -- 石化
+			[GetSpellInfo(162346)]=  5, -- 晶化弹幕(点名)
+			[GetSpellInfo(162370)]=  5, -- 晶化弹幕(踩到)
+
+			-- 4 Brackenspore 深渊行者布兰肯斯波
+			[GetSpellInfo(163242)]=  5, -- 感染孢子
+			[GetSpellInfo(163590)]=  5, -- 滑溜溜的苔藓
+			[GetSpellInfo(163241)]=  5, -- 溃烂
+			[GetSpellInfo(159220)]=  4, -- 死疽吐息
+			[GetSpellInfo(160179)]=  6, -- 蚀脑真菌
+			[GetSpellInfo(163140)]=  6, -- 蚀脑真菌
+			[GetSpellInfo(163666)]=  4, -- 脉冲高热
+
+			-- 5 Twin Ogron 独眼魔双子
+			[GetSpellInfo(158026)]=  6, -- 致衰咆哮
+			[GetSpellInfo(158241)]=  5, -- 烈焰
+			[GetSpellInfo(155569)]=  5, -- 受伤
+			[GetSpellInfo(167200)]=  5, -- 奥术之伤
+			[GetSpellInfo(159709)]=  6, -- 防御削弱
+			[GetSpellInfo(163372)]=  4, -- 奥能动荡
+
+			-- 6 Ko'ragh 克拉戈
+			[GetSpellInfo(161242)]=  4, -- 腐蚀能量
+			[GetSpellInfo(161345)]=  4, -- 压制力场
+			[GetSpellInfo(162184)]=  6, -- 魔能散射：暗影
+			[GetSpellInfo(162186)]=  6, -- 魔能散射：奥术
+			[GetSpellInfo(172813)]=  6, -- 魔能散射：冰霜
+			[GetSpellInfo(162185)]=  7, -- 魔能散射：火焰
+			[GetSpellInfo(163472)]=  4, -- 统御之力
+			[GetSpellInfo(172895)]=  6, -- 魔能散射：邪能
+			[GetSpellInfo(172917)]=  5, -- 魔能散射：邪能
+
+			-- 7 Imperator Mar'gok 元首马尔高克
+			[GetSpellInfo(159200)]=  5, -- 毁灭共鸣
+			[GetSpellInfo(174106)]=  5, -- 毁灭共鸣(昏迷)
+			[GetSpellInfo(157353)]=  5, -- 奥能新星
+			[GetSpellInfo(158605)]=  4, -- 混沌标记
+			[GetSpellInfo(164176)]=  4, -- 混沌标记：偏移
+			[GetSpellInfo(164178)]=  4, -- 混沌标记：强固
+			[GetSpellInfo(158619)]=  5, -- 拘禁
+			[GetSpellInfo(164191)]=  4, -- 混沌标记：复制
+			[GetSpellInfo(157763)]=  4, -- 锁定
+			[GetSpellInfo(158553)]=  6, -- 碾碎护甲
+			[GetSpellInfo(157801)]=  6, -- 减速
+			[GetSpellInfo(156225)]=  5, -- 烙印
+			[GetSpellInfo(164004)]=  5, -- 烙印：偏移
+			[GetSpellInfo(164005)]=  5, -- 烙印：强固
+			[GetSpellInfo(164006)]=  5, -- 烙印：复制
 		},
 
 -------------------------------熊猫人之谜-----------------------------------
