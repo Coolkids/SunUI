@@ -64,11 +64,15 @@ A.ClassTools = setmetatable ({
 	["HUNTER"] = {
 		[0] = {},
 		[1] = {
-		["spellid"] = 53351,	     --夺命射击
+		["spellid"] = 53351,		--夺命射击
 			["per"] = 0.2,
 			["level"] = 35,
 		},
-		[2] = {},
+		[2] = {
+		["spellid"] = 53351,		--夺命射击
+			["per"] = 0.2,
+			["level"] = 35,
+		},
 		[3] = {},
 	},
 	["MAGE"] = {
