@@ -128,7 +128,7 @@ ns.auras_instances_debuffs = {
 			 [GetSpellInfo(156096)] = 4,  -- 死亡标记
 		},
 
-		[970] = {--悬槌堡
+		[994] = {--悬槌堡
 			-- Trash 小怪
 			[GetSpellInfo(175601)]=  5, -- 污染之爪
 			[GetSpellInfo(172069)]=  5, -- 剧毒辐射
@@ -189,7 +189,6 @@ ns.auras_instances_debuffs = {
 			-- 7 Imperator Mar'gok 元首马尔高克
 			[GetSpellInfo(159200)]=  5, -- 毁灭共鸣
 			[GetSpellInfo(174106)]=  5, -- 毁灭共鸣(昏迷)
-			[GetSpellInfo(157353)]=  5, -- 奥能新星
 			[GetSpellInfo(158605)]=  4, -- 混沌标记
 			[GetSpellInfo(164176)]=  4, -- 混沌标记：偏移
 			[GetSpellInfo(164178)]=  4, -- 混沌标记：强固
