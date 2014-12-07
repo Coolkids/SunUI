@@ -469,6 +469,72 @@ local function LoadSkin()
 		end
 	end)
 
+	-- Garrison building alert
+
+	do
+		local frame = GarrisonBuildingAlertFrame
+		local icon = frame.Icon
+
+		frame:GetRegions():Hide()
+		frame.glow:SetTexture("")
+		frame.shine:SetTexture("")
+
+		local bg = CreateFrame("Frame", nil, frame)
+		bg:SetPoint("TOPLEFT", 8, -8)
+		bg:SetPoint("BOTTOMRIGHT", -8, 10)
+		bg:SetFrameLevel(frame:GetFrameLevel()-1)
+		A:CreateBD(bg)
+
+		icon:SetTexCoord(.08, .92, .08, .92)
+		icon:SetDrawLayer("ARTWORK")
+		A:CreateBG(icon)
+	end
+
+	-- Garrison mission alert
+
+	do
+		local frame = GarrisonMissionAlertFrame
+
+		frame:GetRegions():Hide()
+		frame.IconBG:Hide()
+		frame.glow:SetTexture("")
+		frame.shine:SetTexture("")
+
+		local bg = CreateFrame("Frame", nil, frame)
+		bg:SetPoint("TOPLEFT", 8, -8)
+		bg:SetPoint("BOTTOMRIGHT", -8, 10)
+		bg:SetFrameLevel(frame:GetFrameLevel()-1)
+		A:CreateBD(bg)
+	end
+
+	-- Garrison follower alert
+
+	do
+		local frame = GarrisonFollowerAlertFrame
+
+		frame:GetRegions():Hide()
+		frame.FollowerBG:SetAlpha(0)
+		frame.glow:SetTexture("")
+		frame.shine:SetTexture("")
+
+		local bg = CreateFrame("Frame", nil, frame)
+		bg:SetPoint("TOPLEFT", 16, -3)
+		bg:SetPoint("BOTTOMRIGHT", -16, 16)
+		bg:SetFrameLevel(frame:GetFrameLevel()-1)
+		A:CreateBD(bg)
+
+		A:ReskinGarrisonPortrait(frame.PortraitFrame)
+	end
+
+	hooksecurefunc("GarrisonFollowerAlertFrame_ShowAlert", function(_, _, _, _, quality)
+		local color = BAG_ITEM_QUALITY_COLORS[quality]
+		if color then
+			GarrisonFollowerAlertFrame.PortraitFrame.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
+		else
+			GarrisonFollowerAlertFrame.PortraitFrame.squareBG:SetBackdropBorderColor(0, 0, 0)
+		end
+	end)
+
     hooksecurefunc("GroupLootContainer_AddFrame", function()
         AlertFrame_FixAnchors()
     end)
