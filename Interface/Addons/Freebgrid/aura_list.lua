@@ -136,7 +136,7 @@ ns.auras_instances_debuffs = {
 			[GetSpellInfo(175654)]=  5, -- 瓦解符文
 
 			-- 1 Kargath Bladefist 卡加斯·刃拳
-			[GetSpellInfo(159113)]=  5, -- 穿刺(坦克)
+			[GetSpellInfo(159113)]=  5, -- 穿刺(Dot)
 			[GetSpellInfo(159178)]=  6, -- 迸裂创伤(坦克)
 			[GetSpellInfo(159947)]=  5, -- 锁链投掷
 			[GetSpellInfo(158986)]=  4, -- 狂暴冲锋
@@ -144,18 +144,18 @@ ns.auras_instances_debuffs = {
 			[GetSpellInfo(160521)]=  6, -- 邪恶吐息
 			[GetSpellInfo(159386)]=  5, -- 钢铁炸弹
 			[GetSpellInfo(159188)]=  5, -- 抓钩
-			[GetSpellInfo(162497)]=  4, -- 搜寻猎物
+			[GetSpellInfo(162497)]=  4, -- 搜寻猎物(M)
 			[GetSpellInfo(159311)]=  5, -- 烈焰喷射
 
 			-- 2 The Butcher  屠夫
 			[GetSpellInfo(156152)]=  5, -- 龟裂创伤
 			[GetSpellInfo(156151)]=  6, -- 捶肉槌
 			[GetSpellInfo(156147)]=  5, -- 切肉刀
-			[GetSpellInfo(163046)]=  5, -- 白鬼硫酸
+			[GetSpellInfo(163046)]=  5, -- 白鬼硫酸(M)
 
 			-- 3 Tectus 泰克图斯
 			[GetSpellInfo(162892)]=  5, -- 石化
-			[GetSpellInfo(162346)]=  5, -- 晶化弹幕(点名)
+			[GetSpellInfo(162346)]=  6, -- 晶化弹幕(点名)
 			[GetSpellInfo(162370)]=  5, -- 晶化弹幕(踩到)
 
 			-- 4 Brackenspore 深渊行者布兰肯斯波
@@ -164,7 +164,6 @@ ns.auras_instances_debuffs = {
 			[GetSpellInfo(163241)]=  5, -- 溃烂
 			[GetSpellInfo(159220)]=  4, -- 死疽吐息
 			[GetSpellInfo(160179)]=  6, -- 蚀脑真菌
-			[GetSpellInfo(163140)]=  6, -- 蚀脑真菌
 			[GetSpellInfo(163666)]=  4, -- 脉冲高热
 
 			-- 5 Twin Ogron 独眼魔双子
@@ -183,8 +182,9 @@ ns.auras_instances_debuffs = {
 			[GetSpellInfo(172813)]=  6, -- 魔能散射：冰霜
 			[GetSpellInfo(162185)]=  7, -- 魔能散射：火焰
 			[GetSpellInfo(163472)]=  4, -- 统御之力
-			[GetSpellInfo(172895)]=  6, -- 魔能散射：邪能
-			[GetSpellInfo(172917)]=  5, -- 魔能散射：邪能
+			[GetSpellInfo(172886)]=  5, -- 废灵标记
+			[GetSpellInfo(172895)]=  6, -- 魔能散射：邪能(点名)(M)
+			[GetSpellInfo(172917)]=  5, -- 魔能散射：邪能(踩到)(M)
 
 			-- 7 Imperator Mar'gok 元首马尔高克
 			[GetSpellInfo(159200)]=  5, -- 毁灭共鸣
@@ -194,7 +194,7 @@ ns.auras_instances_debuffs = {
 			[GetSpellInfo(164178)]=  4, -- 混沌标记：强固
 			[GetSpellInfo(158619)]=  5, -- 拘禁
 			[GetSpellInfo(164191)]=  4, -- 混沌标记：复制
-			[GetSpellInfo(157763)]=  4, -- 锁定
+			[GetSpellInfo(157763)]=  7, -- 锁定
 			[GetSpellInfo(158553)]=  6, -- 碾碎护甲
 			[GetSpellInfo(157801)]=  6, -- 减速
 			[GetSpellInfo(156225)]=  5, -- 烙印
