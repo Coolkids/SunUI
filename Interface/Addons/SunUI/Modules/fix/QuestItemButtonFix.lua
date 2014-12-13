@@ -1,4 +1,6 @@
-﻿
+﻿-------------------------------------------------------------------------------------------
+-----------!QuestItemButtonFix  ## Author: nbluewiz(everfinale@gmail.com)  from:curse
+------------------------------------------------------------------------------------------
 -- Item Button Function
 local itemButtons = {}
 local InCombatLockdown = _G.InCombatLockdown
