@@ -58,10 +58,6 @@ FG["filger_spells"] = {
 			{ spellID =  63560, unitID = "pet",    caster = "player", filter = "BUFF" },
 			-- 暗影灌注
 			{ spellID =  91342, unitID = "pet",    caster = "player", filter = "BUFF" },
-
-			-- 2T16, 
-			{ spellID = 144901, unitID = "player", caster = "player", filter = "BUFF" },
-			{ spellID = 144948, unitID = "player", caster = "player", filter = "BUFF" },
 		},
 		{
 			Name = "目标debuff",
@@ -201,9 +197,6 @@ FG["filger_spells"] = {
 			{ spellID = 124974, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 急奔
 			{ spellID =   1850, unitID = "player", caster = "player", filter = "BUFF"},
-
-			--  治疗T16
-			{ spellID = 144871, unitID = "player", caster = "player", filter = "BUFF"},
 		},
 		{
 			Name = "目标debuff",
@@ -344,6 +337,8 @@ FG["filger_spells"] = {
 			{ spellID =  19574, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 稳固集中
 			{ spellID = 177668, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 眼镜蛇打击
+			{ spellID =  53257, unitID = "player", caster = "player", filter = "BUFF"},
 			-- T17 威猛射击
 			{ spellID = 168980, unitID = "player", caster = "player", filter = "BUFF"},
 			{ spellID = 167165, unitID = "player", caster = "player", filter = "BUFF"},
@@ -466,10 +461,6 @@ FG["filger_spells"] = {
 			{ spellID = 159916, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 奥术充能
 			{ spellID =  36032, unitID = "player", caster = "player", filter = "BUFF"},
-
-			-- 法师T16
-			{ spellID = 146557, unitID = "player", caster = "player", filter = "BUFF"},
-			{ spellID = 145252, unitID = "player", caster = "player", filter = "BUFF"},
 		},
 		{
 			Name = "目标debuff",
@@ -730,8 +721,6 @@ FG["filger_spells"] = {
 			{ spellID = 152262, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 最终审判
 			{ spellID = 157048, unitID = "player", caster = "player", filter = "BUFF"},
-			-- DPS 4T16
-			{ spellID = 144595, unitID = "player", caster = "player", filter = "BUFF"},
 		},
 		{
 			Name = "目标debuff",
@@ -769,7 +758,9 @@ FG["filger_spells"] = {
 			-- 永恒之火
 			{ spellID = 156322, unitID = "target", caster = "player", filter = "BUFF"   },
 			-- 圣光救赎
-			{ spellID = 157131, unitID = "target", caster = "player", filter = "BUFF"   },
+			{ spellID = 157128, unitID = "target", caster = "player", filter = "BUFF"   },
+			-- 洞察道标
+			{ spellID = 157007, unitID = "target", caster = "player", filter = "BUFF"   },
 			-- 光辉治疗
 			{ spellID =  86273, unitID = "target", caster = "player", filter = "BUFF"   },
 			-- 圣洁护盾
@@ -1239,11 +1230,6 @@ FG["filger_spells"] = {
 			{ spellID = 108683, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 恶魔箭
 			{ spellID = 157695, unitID = "player", caster = "player", filter = "DEBUFF"},
-			-- 术士T16 - 炽燃之怒 / 毁灭浩劫 / 灰烬精通 
-			{ spellID = 145164, unitID = "player", caster = "player", filter = "BUFF" },
-			{ spellID = 145085, unitID = "player", caster = "player", filter = "BUFF" }, 
-			{ spellID = 145075, unitID = "player", caster = "player", filter = "BUFF" }, 
-
 		},
 		{
 			Name = "目标debuff",
@@ -1466,37 +1452,6 @@ FG["filger_spells"] = {
 			{ spellID = 156423, unitID = "player", caster = "player", filter = "BUFF" },
 			-- WOD隐身药水
 			{ spellID = 175833, unitID = "player", caster = "player", filter = "BUFF" },
-			-------------------------------MOP----------------------------------------
-			-- 兔妖之啮
-			{ spellID = 105697, unitID = "player", caster = "player", filter = "BUFF" },
-			-- 魔古之力药水
-			{ spellID = 105706, unitID = "player", caster = "player", filter = "BUFF" },
-			-- 青龙药水
-			{ spellID = 105702, unitID = "player", caster = "player", filter = "BUFF" },
-			-- 加速 (药水)
-			{ spellID =   2379, unitID = "player", caster = "player", filter = "BUFF", absID = true},
-
-			-- 橙色头部宝石
-			-- 不屈之源钻              (耐力, 减伤)
-			{ spellID = 137593, unitID = "player", caster = "all", filter = "BUFF", absID = true},
-			-- 阴险之源钻              (爆击, 急速)
-			{ spellID = 137590, unitID = "player", caster = "all", filter = "BUFF", absID = true},
-			-- 英勇之源钻              (智力, 节能)
-			{ spellID = 137331, unitID = "player", caster = "all", filter = "BUFF", absID = true},
-			{ spellID = 137247, unitID = "player", caster = "all", filter = "BUFF", absID = true},
-			{ spellID = 137323, unitID = "player", caster = "all", filter = "BUFF", absID = true},
-			{ spellID = 137326, unitID = "player", caster = "all", filter = "BUFF", absID = true},
-			{ spellID = 137288, unitID = "player", caster = "all", filter = "BUFF", absID = true},
-
-			-- 橙色披风
-			-- 赤精之魂                (治疗)
-			{ spellID = 146200, unitID = "player", caster = "all",    filter = "BUFF" },
-			-- 雪怒之捷                (物理)
-			{ spellID = 146194, unitID = "player", caster = "all",    filter = "BUFF" },
-			-- 玉珑之精                (法系)
-			{ spellID = 146198, unitID = "player", caster = "all",    filter = "BUFF" },
-			-- 砮皂之韧                (坦克)
-			{ spellID = 148010, unitID = "player", caster = "all",    filter = "BUFF" },
 
 			-- 武器附魔(caster = 必须是all)
 			-------------------------------MOP----------------------------------------
@@ -1551,15 +1506,6 @@ FG["filger_spells"] = {
 			{ spellID = 162919, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 羽翼沙漏                (精神, 触发)
 			{ spellID = 162913, unitID = "player", caster = "player", filter = "BUFF"},
-
-			-- 玉珑圣物                (智力, 触发)
-			{ spellID = 128985, unitID = "player", caster = "player", filter = "BUFF"},
-			-- 雪怒圣物                (力量, 触发)
-			{ spellID = 128986, unitID = "player", caster = "player", filter = "BUFF"},
-			-- 雪怒圣物                (敏捷, 触发)
-			{ spellID = 128984, unitID = "player", caster = "player", filter = "BUFF"},
-			-- 赤精圣物                (精神, 触发)
-			{ spellID = 128987, unitID = "player", caster = "player", filter = "BUFF"},
 
 			-- PvP 饰品
 			-- 全能
@@ -2606,6 +2552,15 @@ FG["filger_spells"] = {
 
 			----------------------------------WOD------------------------------------
 			--  [970]  悬槌堡
+			-- 0	小怪
+			-- 污染之爪
+			{ spellID = 175601, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 剧毒辐射
+			{ spellID = 172069, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 毁灭符文
+			{ spellID =  56037, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 瓦解符文
+			{ spellID = 175654, unitID = "player", caster = "all", filter = "DEBUFF"},
 
 			-- 1	卡加斯.刃拳
 			-- 烈焰喷射
@@ -2628,8 +2583,6 @@ FG["filger_spells"] = {
 			{ spellID = 160521, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 搜寻猎物
 			{ spellID = 162497, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 着火
-			{ spellID = 163130, unitID = "player", caster = "all", filter = "DEBUFF"},
 
 			-- 2	屠夫
 			-- 捶肉槌
@@ -2641,30 +2594,26 @@ FG["filger_spells"] = {
 			-- 白鬼硫酸
 			{ spellID = 163046, unitID = "player", caster = "all", filter = "DEBUFF"},
 
-			-- 3	布兰肯斯波
-			-- 感染孢子
-			{ spellID = 163242, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 蚀脑真菌
-			{ spellID = 163140, unitID = "player", caster = "all", filter = "DEBUFF"},
-			{ spellID = 160179, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 死疽吐息
-			{ spellID = 159220, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 爆裂灌注
-			{ spellID = 165223, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 脉冲高热
-			{ spellID = 163666, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 溃烂
-			{ spellID = 163241, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 滑溜溜的苔藓
-			{ spellID = 163590, unitID = "player", caster = "all", filter = "DEBUFF"},
-
-			-- 4	泰克图斯
+			-- 3	泰克图斯
 			-- 晶化弹幕
 			{ spellID = 162346, unitID = "player", caster = "all", filter = "DEBUFF"},
 			{ spellID = 162370, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 石化
 			{ spellID = 162892, unitID = "player", caster = "all", filter = "DEBUFF"},
 
+			-- 4	布兰肯斯波
+			-- 感染孢子
+			{ spellID = 163242, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 蚀脑真菌
+			{ spellID = 160179, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 死疽吐息
+			{ spellID = 159220, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 脉冲高热
+			{ spellID = 163666, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 溃烂
+			{ spellID = 163241, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 滑溜溜的苔藓
+			{ spellID = 163590, unitID = "player", caster = "all", filter = "DEBUFF"},
 
 			-- 5	独眼魔双子
 			-- 致衰咆哮
@@ -2685,8 +2634,6 @@ FG["filger_spells"] = {
 			{ spellID = 161242, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 压制力场
 			{ spellID = 161345, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 废灵壁垒
-			{ spellID = 156803, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 魔能散射:冰霜
 			{ spellID = 172813, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 魔能散射:暗影
@@ -2700,6 +2647,8 @@ FG["filger_spells"] = {
 			{ spellID = 172917, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 统御之力
 			{ spellID = 163472, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 废灵标记
+			{ spellID = 172886, unitID = "player", caster = "all", filter = "DEBUFF"},
 
 			-- 7	元首马尔高克
 			-- 混沌标记
