@@ -5,6 +5,7 @@ Launch:RegisterEvent("ADDON_LOADED")
 Launch:SetScript("OnEvent", function(self, event, addon)
 	if addon == "Blizzard_TradeSkillUI" then
 		TRADE_SKILLS_DISPLAYED = 25
+
 		-- Add skill buttons if needed
 		for i=1, TRADE_SKILLS_DISPLAYED do
 			if (not _G["TradeSkillSkill"..i]) then
@@ -12,12 +13,12 @@ Launch:SetScript("OnEvent", function(self, event, addon)
 				local newSkillButton = CreateFrame("Button", "TradeSkillSkill"..i, TradeSkillSkill1:GetParent(), "TradeSkillSkillButtonTemplate")
 				newSkillButton:SetPoint("TOPLEFT", _G["TradeSkillSkill"..(i-1)], "BOTTOMLEFT")
 			end
-		end   
+		end
 
 
 		-- Resize the main window
-		_G["TradeSkillFrame"]:SetWidth(570)
-		_G["TradeSkillFrame"]:SetHeight(525)
+		TradeSkillFrame:SetWidth(550)
+		TradeSkillFrame:SetHeight(525)
 
 		-- Hide Horizontal bar in the default UI
 		TradeSkillHorizontalBarLeft:Hide()
@@ -123,9 +124,9 @@ Launch:SetScript("OnEvent", function(self, event, addon)
 		BTSUiOnlySkillupCheck:SetHitRectInsets(0, -1 * BTSUiOnlySkillupCheckText:GetWidth() , 0, 0) -- Increase click area so text is also clickable
 
 		BTSUiOnlySkillupCheck:SetScript("OnClick", function(self)
-			  TradeSkillFrame.filterTbl.hasSkillUp = not TradeSkillFrame.filterTbl.hasSkillUp
-			  TradeSkillOnlyShowSkillUps(TradeSkillFrame.filterTbl.hasSkillUp)
-			  TradeSkillUpdateFilterBar()
+			TradeSkillFrame.filterTbl.hasSkillUp = not TradeSkillFrame.filterTbl.hasSkillUp
+			TradeSkillOnlyShowSkillUps(TradeSkillFrame.filterTbl.hasSkillUp)
+			TradeSkillUpdateFilterBar()
 		end)
 
 		function BTSUi.TradeSkillOnlyShowSkillUps(show)
@@ -134,7 +135,7 @@ Launch:SetScript("OnEvent", function(self, event, addon)
 
 		-- Subclass filter
 		if not BTSUiSubClassFilterDropDown then
-		   CreateFrame("Button", "BTSUiSubClassFilterDropDown", TradeSkillFrame, "UIDropDownMenuTemplate")
+			CreateFrame("Button", "BTSUiSubClassFilterDropDown", TradeSkillFrame, "UIDropDownMenuTemplate")
 		end
 
 		BTSUiSubClassFilterDropDown:ClearAllPoints()
@@ -143,10 +144,11 @@ Launch:SetScript("OnEvent", function(self, event, addon)
 		BTSUiSubClassFilterDropDownButton:SetHitRectInsets(-110, 0, 0, 0) -- To make Text part of combobox clickable
 
 		UIDropDownMenu_SetWidth(BTSUiSubClassFilterDropDown, 115); -- Need to set the width explicitly so text will be truncated correctly
+		-- When changing width also update ElvUI support
 
 		-- Slot filter
 		if not BTSUiSlotFilterDropDown then
-		   CreateFrame("Button", "BTSUiSlotFilterDropDown", TradeSkillFrame, "UIDropDownMenuTemplate")
+			CreateFrame("Button", "BTSUiSlotFilterDropDown", TradeSkillFrame, "UIDropDownMenuTemplate")
 		end
 
 		BTSUiSlotFilterDropDown:ClearAllPoints()
@@ -156,31 +158,32 @@ Launch:SetScript("OnEvent", function(self, event, addon)
 		BTSUiSlotFilterDropDownButton:SetHitRectInsets(-110, 0, 0, 0) -- To make Text part of combobox clickable
 
 		UIDropDownMenu_SetWidth(BTSUiSlotFilterDropDown, 115); -- Need to set the width explicitly so text will be truncated correctly
+		-- When changing width also update ElvUI support
 
 		-- Add a vertical bar between the recipelist and the details pane
 		-- Usually the scrollbar will be over it, but when there is no scrollbar this one shows and looks better
 		if (not BTSUiVerticalBarTop) then
-		   BTSUiVerticalBarTop = TradeSkillFrame:CreateTexture("BTSUiVerticalBarTop", "BACKGROUND")
+			BTSUiVerticalBarTop = TradeSkillFrame:CreateTexture("BTSUiVerticalBarTop", "BACKGROUND")
 		end
-		BTSUiVerticalBarTop:SetTexture("")
+		BTSUiVerticalBarTop:SetTexture("Interface\\FriendsFrame\\UI-ChannelFrame-VerticalBar")
 		BTSUiVerticalBarTop:SetTexCoord(0, 0.1875, 0, 1.0) 
 		BTSUiVerticalBarTop:SetPoint("TOPLEFT", TradeSkillDetailScrollFrame, "TOPLEFT", -7, 0)
 		BTSUiVerticalBarTop:SetWidth(8)
 		BTSUiVerticalBarTop:SetHeight(128)
 
 		if (not BTSUiVerticalBarMiddle) then
-		   BTSUiVerticalBarMiddle = TradeSkillFrame:CreateTexture("BTSUiVerticalBarMiddle", "BACKGROUND")
+			BTSUiVerticalBarMiddle = TradeSkillFrame:CreateTexture("BTSUiVerticalBarMiddle", "BACKGROUND")
 		end
-		BTSUiVerticalBarMiddle:SetTexture("")
+		BTSUiVerticalBarMiddle:SetTexture("Interface\\FriendsFrame\\UI-ChannelFrame-VerticalBar")
 		BTSUiVerticalBarMiddle:SetTexCoord(0.421875, 0.5625, 0, 1.0) 
 		BTSUiVerticalBarMiddle:SetPoint("TOPLEFT", BTSUiVerticalBarTop, "BOTTOMLEFT", 0, 0)
 		BTSUiVerticalBarMiddle:SetWidth(7)
 		BTSUiVerticalBarMiddle:SetHeight(159)
 
 		if (not BTSUiVerticalBarBottom) then
-		   BTSUiVerticalBarBottom = TradeSkillFrame:CreateTexture("BTSUiVerticalBarBottom", "BACKGROUND")
+			BTSUiVerticalBarBottom = TradeSkillFrame:CreateTexture("BTSUiVerticalBarBottom", "BACKGROUND")
 		end
-		BTSUiVerticalBarBottom:SetTexture("")
+		BTSUiVerticalBarBottom:SetTexture("Interface\\FriendsFrame\\UI-ChannelFrame-VerticalBar")
 		BTSUiVerticalBarBottom:SetTexCoord(0.8125, 1, 0, 1.0) 
 		BTSUiVerticalBarBottom:SetPoint("TOPLEFT", BTSUiVerticalBarMiddle, "BOTTOMLEFT", 0, 0)
 		BTSUiVerticalBarBottom:SetWidth(8)
@@ -211,8 +214,8 @@ Launch:SetScript("OnEvent", function(self, event, addon)
 		-- The values in the hook function are leading when they are different from here
 		TradeSkillDescription:SetPoint("TOPLEFT", TradeSkillDetailHeaderLeft, "BOTTOMLEFT", 5, 5)
 		TradeSkillDescription:SetWidth(180)  -- Set a width that matches the real width for the autosizing 
-											 -- to work. Smaller widths seem to add height, bigger widths 
-											 -- will cut off the text instead of expanding the textheight
+		-- to work. Smaller widths seem to add height, bigger widths 
+		-- will cut off the text instead of expanding the textheight
 
 		-- Recolor label so it looks better
 		TradeSkillRequirementLabel:SetTextColor(TradeSkillReagentLabel:GetTextColor())
@@ -223,18 +226,19 @@ Launch:SetScript("OnEvent", function(self, event, addon)
 		TradeSkillReagentLabel:SetPoint("TOPLEFT", TradeSkillRequirementText, "BOTTOMLEFT", 0, -15)
 
 		-- Reposition reagent buttons
+		_G["TradeSkillReagent1"]:SetPoint("RIGHT", TradeSkillDetailScrollFrame, "RIGHT")
 		for i=2, MAX_TRADE_SKILL_REAGENTS do
-		   local reagentButton = _G["TradeSkillReagent"..i]
-		   
-		   reagentButton:ClearAllPoints()
-		   reagentButton:SetPoint("TOPLEFT", _G["TradeSkillReagent"..(i-1)], "BOTTOMLEFT", 0, -3)
-		   reagentButton:SetPoint("RIGHT", TradeSkillDetailScrollFrame, "RIGHT")
+			local reagentButton = _G["TradeSkillReagent"..i]
+			
+			reagentButton:ClearAllPoints()
+			reagentButton:SetPoint("TOPLEFT", _G["TradeSkillReagent"..(i-1)], "BOTTOMLEFT", 0, -3)
+			reagentButton:SetPoint("RIGHT", TradeSkillDetailScrollFrame, "RIGHT")
 		end
 
 		-- Background for reagents/detailarea
 		-- Note that the background is also needed to hide a part of the original
 		-- horizontal bar that I can't figure out how to hide.
-		local detailBackground = TradeSkillDetailScrollFrame:CreateTexture(nil,"BACKGROUND")
+		local detailBackground = TradeSkillDetailScrollFrame:CreateTexture("BTSUiTexDetailBackground","BACKGROUND")
 		detailBackground:SetPoint("TOPLEFT", TradeSkillDetailScrollFrame)
 		detailBackground:SetPoint("BOTTOMRIGHT", TradeSkillFrame, "BOTTOMRIGHT", -10, 29)
 		detailBackground:SetTexCoord(0, 0.2, 0, 1)  -- Mess with TexCoords so the texture does not look too compressed/stretched
@@ -242,17 +246,18 @@ Launch:SetScript("OnEvent", function(self, event, addon)
 		--detailBackground:SetTexture("Interface\\ACHIEVEMENTFRAME\\UI-GuildAchievement-Parchment")
 		--detailBackground:SetTexture("Interface\\FrameGeneral\\UI-Background-Marble")
 
+
 		-- Scrollbar of the recipe list
 		TradeSkillListScrollFrame:ClearAllPoints()
 		TradeSkillListScrollFrame:SetPoint("TOPRIGHT", TradeSkillDetailScrollFrame, "TOPLEFT", -28, 0)
 		TradeSkillListScrollFrame:SetPoint("BOTTOMRIGHT", TradeSkillDetailScrollFrame, "BOTTOMLEFT", -28, 0)
 
 		if (not BTSUiTradeSkillListScrollBarMiddle) then
-		   -- Use horrible random name for texture. When using a proper name like BTSUiTradeSkillListScrollBarMiddle
-		   -- the top and bottom parts of the scrollbar disappear
-		   BTSUiTradeSkillListScrollBarMiddle = TradeSkillListScrollFrame:CreateTexture("kjfeowjpfa", "BACKGROUND")
+			-- Use horrible random name for texture. When using a proper name like BTSUiTradeSkillListScrollBarMiddle
+			-- the top and bottom parts of the scrollbar disappear
+			BTSUiTradeSkillListScrollBarMiddle = TradeSkillListScrollFrame:CreateTexture("BTSUi_kjfeowjpfa", "BACKGROUND")
 		end
-		BTSUiTradeSkillListScrollBarMiddle:SetTexture("")
+		BTSUiTradeSkillListScrollBarMiddle:SetTexture("Interface\\PaperDollInfoFrame\\UI-Character-ScrollBar")
 		BTSUiTradeSkillListScrollBarMiddle:SetTexCoord(0, 0.45, 0.1640625, 1)
 		BTSUiTradeSkillListScrollBarMiddle:SetPoint("TOPRIGHT", TradeSkillListScrollFrame, "TOPRIGHT", 27, -110)
 		BTSUiTradeSkillListScrollBarMiddle:SetPoint("BOTTOMRIGHT", TradeSkillListScrollFrame, "BOTTOMRIGHT", 27, 120)
@@ -260,20 +265,20 @@ Launch:SetScript("OnEvent", function(self, event, addon)
 
 		-- Scrollbar of the recipe details list
 		if (not BTSUiDetailScrollBarMiddle) then
-		   -- Use horrible random name for texture. When using a proper name like BTSUiTradeSkillListScrollBarMiddle
-		   -- the top and bottom parts of the scrollbar disappear
-		   BTSUiDetailScrollBarMiddle = TradeSkillDetailScrollFrame:CreateTexture("afiepipnp", "BACKGROUND")
-		   -- Additional blackish background for in the scrollbar, just because it looks better
-		   BTSUiDetailScrollBarMiddleBackground = TradeSkillDetailScrollFrame:CreateTexture("BTSUiMiddle2Background", "BACKGROUND")
+			-- Use horrible random name for texture. When using a proper name like BTSUiTradeSkillListScrollBarMiddle
+			-- the top and bottom parts of the scrollbar disappear
+			BTSUiDetailScrollBarMiddle = TradeSkillDetailScrollFrame:CreateTexture("BTSUi_afiepipnp", "BACKGROUND")
+			-- Additional blackish background for in the scrollbar, just because it looks better
+			BTSUiDetailScrollBarMiddleBackground = TradeSkillDetailScrollFrame:CreateTexture("BTSUiMiddle2Background", "BACKGROUND")
 		end
-		BTSUiDetailScrollBarMiddle:SetTexture("")
+		BTSUiDetailScrollBarMiddle:SetTexture("Interface\\PaperDollInfoFrame\\UI-Character-ScrollBar")
 		BTSUiDetailScrollBarMiddle:SetTexCoord(0, 0.44, 0.1640625, 1)
 		BTSUiDetailScrollBarMiddle:SetPoint("TOPRIGHT", TradeSkillDetailScrollFrame, "TOPRIGHT", 28, -110)
 		BTSUiDetailScrollBarMiddle:SetPoint("BOTTOMRIGHT", TradeSkillDetailScrollFrame, "BOTTOMRIGHT", 28, 120)
 		BTSUiDetailScrollBarMiddle:SetWidth(29)
 		BTSUiDetailScrollBarMiddle:SetParent(TradeSkillDetailScrollFrameScrollBar)  -- Reparent to make it hide properly
 
-		BTSUiDetailScrollBarMiddleBackground:SetTexture("")
+		BTSUiDetailScrollBarMiddleBackground:SetTexture("Interface\\FrameGeneral\\UI-Background-Marble")
 		BTSUiDetailScrollBarMiddleBackground:SetAllPoints(TradeSkillDetailScrollFrameScrollBar)
 		BTSUiDetailScrollBarMiddleBackground:SetParent(TradeSkillDetailScrollFrameScrollBar)  -- Reparent to make it hide properly
 		BTSUiDetailScrollBarMiddleBackground:SetTexCoord(0, 0.2, 0, 1)
@@ -312,7 +317,7 @@ Launch:SetScript("OnEvent", function(self, event, addon)
 				else
 					checked = GetTradeSkillInvSlotFilter(i);
 					if ( checked ) then
-						UIDropDownMenu_SetText(BTSUiSlotFilterDropDown, select(i, ...));
+								UIDropDownMenu_SetText(BTSUiSlotFilterDropDown, select(i, ...));
 					end
 				end
 
@@ -416,9 +421,9 @@ Launch:SetScript("OnEvent", function(self, event, addon)
 		-- Also taken from the old code btw
 		function BTSUi.TradeSkillFrame_Update()
 			local name, rank, maxRank = GetTradeSkillLine();
-					
+
 			if ( BTSUi.CURRENT_TRADESKILL ~= name ) then
-		--		StopTradeSkillRepeat();
+				--StopTradeSkillRepeat();
 
 				if ( BTSUi.CURRENT_TRADESKILL ~= "" ) then
 					-- To fix problem with switching between two tradeskills
@@ -439,13 +444,33 @@ Launch:SetScript("OnEvent", function(self, event, addon)
 
 			local anchorTo = TradeSkillDetailHeaderLeft
 			local anchorOffsetX = 5
-			local anchorOffsetY = 5
+			local anchorOffsetY = 10
+
+			-- Add a bit of space for the extra lines that TradeSkillInfo adds
+			-- It adds 2 lines, but the second line is anchored to the first one, so we only have to move that one
+			-- becaus of 2 lines add a bit more Y offset than just for 1 line
+			if (TradeskillInfoSkillText and TradeskillInfoSkillText:IsVisible()) then
+				TradeskillInfoSkillText:ClearAllPoints()
+				TradeskillInfoSkillText:SetPoint("TOPLEFT", anchorTo, "BOTTOMLEFT", anchorOffsetX, anchorOffsetY)
+
+				anchorTo = TradeskillInfoSkillText
+				anchorOffsetX = 0
+				anchorOffsetY = -3
+			end
+			if (TradeskillInfoProfitText and TradeskillInfoProfitText:IsVisible()) then
+				TradeskillInfoProfitText:ClearAllPoints()
+				TradeskillInfoProfitText:SetPoint("TOPLEFT", anchorTo, "BOTTOMLEFT", anchorOffsetX, anchorOffsetY)
+
+				anchorTo = TradeskillInfoProfitText
+				anchorOffsetX = 0
+				anchorOffsetY = -5
+			end
 
 			-- Add Auctionator AH button on the left side so people with small screens can still see it while at the AH
 			-- since the BiggerTradeSkillUI can be partly offscreen then
-			if (Auctionator_Search) then
+			if (Auctionator_Search and Auctionator_Search:IsVisible()) then
 				Auctionator_Search:ClearAllPoints()
-				Auctionator_Search:SetPoint("TOPLEFT", anchorTo, "BOTTOMLEFT", anchorOffsetX, 10)
+				Auctionator_Search:SetPoint("TOPLEFT", anchorTo, "BOTTOMLEFT", anchorOffsetX, anchorOffsetY)
 
 				anchorTo = Auctionator_Search
 				anchorOffsetX = 0
