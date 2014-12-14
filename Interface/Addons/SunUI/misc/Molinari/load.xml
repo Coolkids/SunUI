@@ -1,4 +1,4 @@
-﻿<Script file="AuctionPlus.lua"/>
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="embeds\LibStub\LibStub.lua"/>
 	<Script file="embeds\LibProcessable\LibProcessable.lua"/>
 

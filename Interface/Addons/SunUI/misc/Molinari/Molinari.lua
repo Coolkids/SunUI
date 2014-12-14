@@ -2,8 +2,8 @@ local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, loc
 local Molinari = CreateFrame('Button', (...), UIParent, 'SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerEnterLeaveTemplate, AutoCastShineTemplate')
 Molinari:RegisterForClicks('AnyUp')
 Molinari:SetFrameStrata('TOOLTIP')
-Molinari:SetScript('OnHide', AutoCastShine_AutoCastStop)
-Molinari:HookScript('OnLeave', AutoCastShine_AutoCastStop)
+--Molinari:SetScript('OnHide', AutoCastShine_AutoCastStop)
+--Molinari:HookScript('OnLeave', AutoCastShine_AutoCastStop)
 Molinari:Hide()
 
 RegisterStateDriver(Molinari, 'visible', '[nomod:alt] hide; show')
