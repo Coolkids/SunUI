@@ -116,6 +116,7 @@ A.ClassTools = setmetatable ({
 		[1] = {},
 		[2] = {},
 		[3] = {},
+		[4] = {},
 	},
 	["SHAMAN"] = {
 		[0] = {},
