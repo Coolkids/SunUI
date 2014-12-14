@@ -1,0 +1,6 @@
+﻿<Script file="AuctionPlus.lua"/>
+	<Script file="embeds\LibStub\LibStub.lua"/>
+	<Script file="embeds\LibProcessable\LibProcessable.lua"/>
+
+	<Script file="Molinari.lua"/>
+</Ui>

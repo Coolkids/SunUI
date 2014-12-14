@@ -1,0 +1,15 @@
+## Interface: 60000
+## Author: p3lim
+## Version: 60000.34-Release
+## Title: Molinari
+## Notes: One-click Milling, Prospecting, Disenchanting and Lockpicking!
+## OptionalDeps: LibStub, LibProcessable
+## X-Curse-Packaged-Version: 60000.34-Release
+## X-Curse-Project-Name: Molinari
+## X-Curse-Project-ID: molinari
+## X-Curse-Repository-ID: wow/molinari/mainline
+
+embeds\LibStub\LibStub.lua
+embeds\LibProcessable\LibProcessable.lua
+
+Molinari.lua

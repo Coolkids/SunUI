@@ -7,6 +7,7 @@
 	<Include file="FriendsMenuXP\load.xml"/>
 	<Include file="BuyEmAll\load.xml"/>
     <Include file="TheBurningTrade\load.xml"/>
+	<Include file="Molinari\load.xml"/>
 	<Include file="minitools\load.xml"/>
 	<Include file="tools\load.xml"/>
 	<Include file="xct\load_xct.xml"/>
