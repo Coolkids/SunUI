@@ -70,7 +70,7 @@ A.ClassTools = setmetatable ({
 		},
 		[2] = {
 		["spellid"] = 53351,		--夺命射击
-			["per"] = 0.2,
+			["per"] = 0.35,
 			["level"] = 35,
 		},
 		[3] = {},
