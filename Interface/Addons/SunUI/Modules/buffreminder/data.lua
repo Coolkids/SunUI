@@ -153,6 +153,28 @@ BR.ReminderBuffs = {
 				["pvp"] = true
 			},
 		},
+		HUNTER = { 
+			[1] = {
+				["spells"] = {
+					[77769] = true,		-- 陷阱发射器
+				},
+				["combat"] = true,
+				["instance"] = true,
+				["pvp"] = true,
+			},
+			[2] = {
+				["spells"] = {
+					[162537] = true,	-- 毒液弹
+				},
+				["negate_spells"] = {
+					[162536] = true,	-- 烈焰弹
+					[162539] = true,	-- 寒冰弹
+				},
+				["combat"] = true,
+				["instance"] = true,
+				["pvp"] = true,
+			},
+		},
 		ROGUE = {
 			[1] = {
 				["spells"] = {
