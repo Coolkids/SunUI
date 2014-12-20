@@ -339,6 +339,8 @@ FG["filger_spells"] = {
 			{ spellID = 177668, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 眼镜蛇打击
 			{ spellID =  53257, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 狂轰乱炸
+			{ spellID =  82921, unitID = "player", caster = "player", filter = "BUFF"},
 			-- T17 威猛射击
 			{ spellID = 168980, unitID = "player", caster = "player", filter = "BUFF"},
 			{ spellID = 167165, unitID = "player", caster = "player", filter = "BUFF"},
@@ -721,6 +723,10 @@ FG["filger_spells"] = {
 			{ spellID = 152262, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 最终审判
 			{ spellID = 157048, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 玛尔拉德的真理
+			{ spellID = 156990, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 莉亚德琳的公正
+			{ spellID = 156989, unitID = "player", caster = "player", filter = "BUFF"},
 		},
 		{
 			Name = "目标debuff",
@@ -1205,7 +1211,7 @@ FG["filger_spells"] = {
 			-- 灵魂燃烧
 			{ spellID =  74434, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 熔火之心
-			{ spellID = 122355, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 140074, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 爆燃
 			{ spellID = 117828, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 火焰之雨
@@ -1224,10 +1230,12 @@ FG["filger_spells"] = {
 			{ spellID = 137587, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 献祭光环
 			{ spellID = 104025, unitID = "player", caster = "player", filter = "BUFF" },
-			-- 协同魔典
-			{ spellID = 171975, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 鬼魅灵魂
+			{ spellID = 157698, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 硫磺烈火
 			{ spellID = 108683, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 恶魔协同
+			{ spellID = 171982, unitID = "player", caster = "pet",    filter = "BUFF" },
 			-- 恶魔箭
 			{ spellID = 157695, unitID = "player", caster = "player", filter = "DEBUFF"},
 		},
@@ -2561,6 +2569,12 @@ FG["filger_spells"] = {
 			{ spellID =  56037, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 瓦解符文
 			{ spellID = 175654, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 冰冻核心
+			{ spellID = 174404, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 野火
+			{ spellID = 173827, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 熔火炸弹
+			{ spellID = 161635, unitID = "player", caster = "all", filter = "DEBUFF"},
 
 			-- 1	卡加斯.刃拳
 			-- 烈焰喷射
@@ -2649,6 +2663,8 @@ FG["filger_spells"] = {
 			{ spellID = 163472, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 废灵标记
 			{ spellID = 172886, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 废灵壁垒
+			{ spellID = 163134, unitID = "player", caster = "all", filter = "DEBUFF"},
 
 			-- 7	元首马尔高克
 			-- 混沌标记
