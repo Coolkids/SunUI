@@ -333,6 +333,7 @@ end
 
 addon.UPDATE_MASTER_LOOT_LIST = function(self)
 	UIDropDownMenu_Refresh(GroupLootDropDown)
+	MasterLooterFrame_UpdatePlayers()
 end
 
 addon:SetScript("OnEvent", function(self, event, ...)
