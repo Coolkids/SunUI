@@ -15,7 +15,7 @@ local default_ClassClick = {
 				["action"]	= 527,--"纯净术",
 							},
 			["alt-"]		= {
-				["action"]	= 2061,--"快速治療",
+				["action"]	= 528,--"驅除疾病",
 							},
 			["alt-ctrl-"]	= {
 				["action"]	= 2006,--"復活術",
@@ -29,10 +29,10 @@ local default_ClassClick = {
 				["action"]	= 33076,--"癒合禱言",
 							},
 			["ctrl-"]		= {
-				["action"]	= 528,--"驅除疾病", 
+				["action"]	=  2061,--"快速治療",
 							},
 			["alt-"]		= {
-				["action"]	= 2060,--"強效治療術",
+				["action"]	= 2060,--"治療術",
 							},
 			["alt-ctrl-"]	= {
 				["action"]	= 32546,--"连结治疗",
@@ -41,9 +41,6 @@ local default_ClassClick = {
 		["3"] = {
 			["Click"]			= {
 				["action"]	= 34861,--"治療之環",
-							},
-			["shift-"]		= {
-				["action"]	= 2050, --治疗术
 							},
 			["alt-"]		= {
 				["action"]	= 1706, --漂浮术
@@ -65,16 +62,10 @@ local default_ClassClick = {
 			["ctrl-"]		= {
 				["action"]	= 73325, -- 信仰飞跃
 							},
-			["alt-ctrl-"]	= {
-				["action"]	= 108968,--"虚空转移",
-							},
 		},
 		["5"] = {
 			["Click"]			= {
 				["action"]	= 48153, -- 守护之魂
-							},
-			["shift-"]		= {
-				["action"]	= 88625, -- 圣言术
 							},
 			["ctrl-"]		= {
 				["action"]	= 33206,--痛苦压制
@@ -102,16 +93,13 @@ local default_ClassClick = {
 		},
 		["2"] = {
 			["Click"]			= {
-				["action"]	= 48438,--"野性成长",
+				["action"]	= 102342,--铁木树皮
 							},
 			["shift-"]		= {
 				["action"]	= 18562,--"迅捷治愈",
 							},
 			["ctrl-"]		= {
 				["action"]	= 88423, -- 自然治愈
-							},
-			["alt-"]		= {
-				["action"]	= 50464,--"滋補術",
 							},
 			["alt-ctrl-"]	= {
 				["action"]	= 1126, -- 野性印记
@@ -129,9 +117,6 @@ local default_ClassClick = {
 							},
 		},
 		["4"] = {
-			["Click"]			= {
-				["action"]	= 29166,----激活
-							},
 			["alt-"]		= {
 				["action"]		= 33763,----生命之花
 							},
@@ -154,9 +139,6 @@ local default_ClassClick = {
 			["shift-"]		= {
 				["action"]	= 1064,		--"治疗链",
 							},
-			["alt-ctrl-"]	= {
-				["action"]	= 331,		--"治疗波",
-							},
 		},
 		["2"] = {
 			["Click"]			= {
@@ -174,10 +156,7 @@ local default_ClassClick = {
 				["action"]	= 61295,	--"激流",
 							},
 			["alt-ctrl-"]	= {
-				["action"]	= 77472,	--"强效治疗波",	
-							},
-			["alt-"]		= {
-				["action"]	= 138925,	--赞达拉结界
+				["action"]	= 77472,	--"治疗波",	
 							},
 		},
 		["4"] = {
@@ -194,9 +173,6 @@ local default_ClassClick = {
 		["1"] = {
 			["Click"]		= {
 				["action"]	= "target",
-							},
-			["shift-"]		= {
-				["action"]	= 635,--"聖光術",
 							},
 			["alt-"]		= {
 				["action"]	= 19750,--"聖光閃現",
@@ -256,7 +232,7 @@ local default_ClassClick = {
 			["Click"]			= {
 				["action"]	= "target",
 							},
-			["ctrl-"]		= {
+			["alt-"]		= {
 				["action"]	= 50720,--"戒備守護",
 							},
 		},
@@ -275,9 +251,6 @@ local default_ClassClick = {
 			["alt-"]		= {
 				["action"]	= 1459,--"秘法智力",
 							},
-			["ctrl-"]		= {
-				["action"]	= 54646,--"专注",
-							},
 		},
 		["2"] = {
 			["Click"]			= {
@@ -295,7 +268,7 @@ local default_ClassClick = {
 				["action"]	= "target",
 							},
 			["alt-"]		= {
-				["action"]	= 80398,--"黑暗意图",
+				["action"]	= 20707,--"灵魂石",
 							},
 		},
 		["2"] = {
@@ -332,7 +305,7 @@ local default_ClassClick = {
 		},
 		["2"] = {
 			["Click"]			= {
-				["action"]	= 57933,--"偷天換日",
+				["action"]	= 57933,--"嫁祸诀窍",
 							},
 		},
 	},
@@ -342,16 +315,13 @@ local default_ClassClick = {
 			["Click"]			= {
 				["action"]	= "target",
 							},
-			["shift-"]		= {
+			["alt-"]		= {
 				["action"]	= 61999, --复活盟友
 							},
 		},
 		["2"] = {
 			["Click"]			= {
 				["action"]	= 47541, --死缠
-							},
-			["alt-"]		= {
-				["action"]	= 49016, -- 邪恶狂乱（邪恶天赋)
 							},
 		},
 	},
