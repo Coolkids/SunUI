@@ -374,7 +374,7 @@ end
 
 
 addon.OPEN_MASTER_LOOT_LIST = function(self)
-	ToggleDropDownMenu(1, nil, GroupLootDropDown, addon.slots[ss], 0, 0)
+	ToggleDropDownMenu(1, nil, GroupLootDropDown, SunUI_Loot, 0, 0)
 end
 
 addon.UPDATE_MASTER_LOOT_LIST = function(self)

@@ -29,7 +29,9 @@ A["media"] = {
 	["arrowRight"] = "Interface\\AddOns\\SunUI\\media\\arrow-right-active",
 }
 
-
+function A:classcolours(class)
+	return RAID_CLASS_COLORS[class]
+end
 
 function A:CreateStripesThin(f)
 	if not f then return end
