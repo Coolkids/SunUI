@@ -317,20 +317,20 @@ local function LoadSkin()
 					yAddOffset = -offBottom
 				end
 				listFrame:ClearAllPoints()
-				listFrame:Point(point, relativeTo, relativePoint, xOffset + xAddOffset, yOffset + yAddOffset)
+				listFrame:SetPoint(point, relativeTo, relativePoint, xOffset + xAddOffset, yOffset + yAddOffset)
 			elseif anchorName ~= "cursor" then
 				-- this part might be a bit unreliable
 				local _, _, relPoint, xOff, yOff = listFrame:GetPoint()
 				if relPoint == "BOTTOMLEFT" and xOff == 0 and floor(yOff) == 5 then
-					listFrame:Point("TOPLEFT", anchorName, "BOTTOMLEFT", 16, 9)
+					listFrame:SetPoint("TOPLEFT", anchorName, "BOTTOMLEFT", 16, 9)
 				end
 			end
 		else
 			local point, anchor, relPoint, _, y = listFrame:GetPoint()
 			if point:find("RIGHT") then
-				listFrame:Point(point, anchor, relPoint, -14, y)
+				listFrame:SetPoint(point, anchor, relPoint, -14, y)
 			else
-				listFrame:Point(point, anchor, relPoint, 9, y)
+				listFrame:SetPoint(point, anchor, relPoint, 9, y)
 			end
 		end
 
@@ -341,8 +341,8 @@ local function LoadSkin()
 				local hl = _G["DropDownList"..level.."Button"..j.."Highlight"]
 				local check = _G["DropDownList"..level.."Button"..j.."Check"]
 
-				hl:Point("TOPLEFT", -x + 1, 0)
-				hl:Point("BOTTOMRIGHT", listFrame:GetWidth() - bu:GetWidth() - x - 1, 0)
+				hl:SetPoint("TOPLEFT", -x + 1, 0)
+				hl:SetPoint("BOTTOMRIGHT", listFrame:GetWidth() - bu:GetWidth() - x - 1, 0)
 
 				if not bu.bg then
 					createBackdrop(bu, check)
@@ -373,6 +373,13 @@ local function LoadSkin()
 					toggleBackdrop(bu, false)
 				end
 			end
+		end
+	end)
+	
+	hooksecurefunc("UIDropDownMenu_SetIconImage", function(icon, texture)
+		if texture:find("Divider") then
+			icon:SetTexture(1, 1, 1, .2)
+			icon:SetHeight(1)
 		end
 	end)
 

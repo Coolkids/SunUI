@@ -232,6 +232,52 @@ function LOOT:SetFrame()
 	-- Fuzz
 	LootFrame:UnregisterAllEvents()
 	table.insert(UISpecialFrames, "SunUI_Loot")
+	
+	
+	--MasterLooterFrame
+	
+	MasterLooterFrame:StripTextures()
+	A:CreateBD(MasterLooterFrame)
+	MasterLooterFrame:SetFrameStrata("FULLSCREEN_DIALOG")
+
+	hooksecurefunc("MasterLooterFrame_Show", function()
+		local b = MasterLooterFrame.Item
+		if b then
+			local i = b.Icon
+			local icon = i:GetTexture()
+			local c = ITEM_QUALITY_COLORS[LootFrame.selectedQuality]
+
+			b:StripTextures()
+			i:SetTexture(icon)
+			i:SetTexCoord(.08, .92, .08, .92)
+			b.border = CreateFrame("Frame", nil, b)
+			b.border:SetBackdrop({
+				edgeFile = A["media"].blank,
+				bgFile = A["media"].blank,
+				edgeSize = S.mult,
+				insets = { left = -S.mult, right = -S.mult, top = -S.mult, bottom = -S.mult }
+			})
+			b.border:SetOutside(i)
+			b.border:SetBackdropBorderColor(c.r, c.g, c.b)
+			b.border:SetBackdropColor(0, 0, 0)
+			b.border:SetFrameLevel(b:GetFrameLevel() - 1)
+		end
+
+		for i=1, MasterLooterFrame:GetNumChildren() do
+			local child = select(i, MasterLooterFrame:GetChildren())
+			if child and not child.isSkinned and not child:GetName() then
+				if child:GetObjectType() == "Button" then
+					if child:GetPushedTexture() then
+						A:ReskinClose(child)
+					else
+						A:Reskin(child)
+					end
+					if child.Highlight then child.Highlight:SetAlpha(0) end
+					child.isSkinned = true
+				end
+			end
+		end
+	end)
 end
 
 addon.LOOT_CLOSED = function(self)
