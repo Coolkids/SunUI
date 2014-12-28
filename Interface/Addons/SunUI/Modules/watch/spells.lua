@@ -58,6 +58,8 @@ FG["filger_spells"] = {
 			{ spellID =  63560, unitID = "pet",    caster = "player", filter = "BUFF" },
 			-- 暗影灌注
 			{ spellID =  91342, unitID = "pet",    caster = "player", filter = "BUFF" },
+			-- 大地之墓的意志
+			{ spellID = 157335, unitID = "player", caster = "player", filter = "DEBUFF"},
 		},
 		{
 			Name = "目标debuff",
@@ -1358,6 +1360,8 @@ FG["filger_spells"] = {
 			{ spellID =  12292, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 粗暴打断
 			{ spellID =  86663, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 猝死
+			{ spellID =  52437, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 破坏者
 			{ spellID = 152277, unitID = "player", caster = "player", filter = "BUFF", absID = true},
 		},
@@ -1806,8 +1810,11 @@ FG["filger_spells"] = {
 			{ spellID = 102342, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 宁静
 			{ spellID =    740, unitID = "player", caster = "all",    filter = "BUFF"},
+			-- 警戒
+			{ spellID = 114030, unitId = "player", caster = "all",    filter = "BUFF"},
 			-- 狂奔怒吼
-			{ spellID = 106898, unitID = "player", caster = "all",    filter = "BUFF"},
+			{ spellID = 106898, unitID = "player", caster = "all",    filter = "BUFF", absID = true},
+			{ spellID =  77764, unitID = "player", caster = "all",    filter = "BUFF", absID = true},
 			-- 根基图腾效果
 			{ spellID =   8178, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 灵魂链接图腾
@@ -2694,6 +2701,16 @@ FG["filger_spells"] = {
 			{ spellID = 164005, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 烙印:复制
 			{ spellID = 164006, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 蔓延暗影(M)
+			{ spellID = 176533, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 深渊凝视(M)
+			{ spellID = 176537, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 深渊凝视(爆炸)(M)
+			{ spellID = 165595, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 无尽黑暗制(M)
+			{ spellID = 165102, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 熵能冲击(M)
+			{ spellID = 165116, unitID = "player", caster = "all", filter = "DEBUFF"},
 
 
 			-- [988] 黑石铸造厂
