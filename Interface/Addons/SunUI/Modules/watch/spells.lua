@@ -1811,7 +1811,7 @@ FG["filger_spells"] = {
 			-- 宁静
 			{ spellID =    740, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 警戒
-			{ spellID = 114030, unitId = "player", caster = "all",    filter = "BUFF"},
+			{ spellID = 114030, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 狂奔怒吼
 			{ spellID = 106898, unitID = "player", caster = "all",    filter = "BUFF", absID = true},
 			{ spellID =  77764, unitID = "player", caster = "all",    filter = "BUFF", absID = true},
