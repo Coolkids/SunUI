@@ -275,11 +275,11 @@ end
 
 function ns:IsHealer(class )
 
-	return (class == "PALADIN" and IsSpellKnown(112859))
-	or (class == "SHAMAN" and IsSpellKnown(95862))
-	or (class == "DRUID" and IsSpellKnown(85101))
-	or (class == "PRIEST" and (IsSpellKnown(95860) or IsSpellKnown(95861)))
-	or (class == "MONK" and IsSpellKnown(121278))
+	return (class == "PALADIN" and IsSpellKnown(20473))
+	or (class == "SHAMAN" and IsSpellKnown(77130))
+	or (class == "DRUID" and IsSpellKnown(88423))
+	or (class == "PRIEST" and IsSpellKnown(527))
+	or (class == "MONK" and IsSpellKnown(115070))
 
 end
 
@@ -293,12 +293,12 @@ function ns:GetDispelClass()
 	local class = ns.general.class
 	local spec = GetSpecialization() or 0
 	local dispelClass = {				
-		["PRIEST"] 	= { Magic = true, Disease = self:IsHealer(class ) },
-		["SHAMAN"] 	= { Curse = true, Magic = self:IsHealer(class ) },
-		["PALADIN"] = { Poison = true, Disease = true,  Magic = self:IsHealer(class ) },
-		["MAGE"] = { Curse = true,  Magic = self:IsHealer(class )},
-		["DRUID"] = { Curse = true, Poison = true,  Magic = self:IsHealer(class ) },
-		["MONK"] = { Poison = true, Disease = true,  Magic = self:IsHealer(class ) },
+		["PRIEST"]	= { Magic = true, Disease = self:IsHealer(class ) },
+		["SHAMAN"]	= { Curse = true, Magic = self:IsHealer(class ) },
+		["PALADIN"]	= { Poison = true, Disease = true, Magic = self:IsHealer(class ) },
+		["MAGE"]	= { Curse = true },
+		["DRUID"]	= { Curse = true, Poison = true, Magic = self:IsHealer(class ) },
+		["MONK"]	= { Poison = true, Disease = true, Magic = self:IsHealer(class ) },
 	}
 
 	return dispelClass[class] or {}
