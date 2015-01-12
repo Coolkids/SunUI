@@ -1,5 +1,10 @@
 ﻿local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
-local L = AceLocale:NewLocale("SunUI", "enUS")
+local area = GetLocale()
+local L
+if (area ~= "zhTW") and (area ~= "zhCN") then
+	L = AceLocale:NewLocale("SunUI", area)
+end
+
 if not L then return end
 --core 区域文字
 do
