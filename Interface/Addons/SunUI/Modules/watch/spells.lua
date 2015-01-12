@@ -856,6 +856,8 @@ FG["filger_spells"] = {
 			{ spellID =  81661, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 愈合之语
 			{ spellID = 155362, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 愈合之语(十层)
+			{ spellID = 155363, unitID = "player", caster = "player", filter = "BUFF"},
 		},
 		{
 			Name = "目标debuff",
@@ -880,8 +882,10 @@ FG["filger_spells"] = {
 			{ spellID =  47788, unitID = "target", caster = "player", filter = "BUFF"  },
 			-- 痛苦压制
 			{ spellID =  33206, unitID = "target", caster = "player", filter = "BUFF"  },
-			-- 救赎恩惠
-			{ spellID = 155274, unitID = "target", caster = "player", filter = "BUFF"  },
+			-- 神圣之火
+			{ spellID =  14914, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 真言术：慰
+			{ spellID = 129250, unitID = "target", caster = "player", filter = "DEBUFF"},
 			-- 意志洞悉
 			{ spellID = 152118, unitID = "target", caster = "all",    filter = "BUFF"  },
 			-- 暗言术：痛
@@ -1811,7 +1815,7 @@ FG["filger_spells"] = {
 			-- 宁静
 			{ spellID =    740, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 警戒
-			{ spellID = 114030, unitId = "player", caster = "all",    filter = "BUFF"},
+			{ spellID = 114030, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 狂奔怒吼
 			{ spellID = 106898, unitID = "player", caster = "all",    filter = "BUFF", absID = true},
 			{ spellID =  77764, unitID = "player", caster = "all",    filter = "BUFF", absID = true},
