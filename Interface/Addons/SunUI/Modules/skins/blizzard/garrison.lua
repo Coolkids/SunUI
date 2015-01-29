@@ -332,6 +332,7 @@ local function LoadSkin()
 	A:ReskinClose(GarrisonMissionFrame.CloseButton)
 	A:ReskinTab(GarrisonMissionFrameTab1)
 	A:ReskinTab(GarrisonMissionFrameTab2)
+	A:ReskinTab(GarrisonMissionFrameTab4)
 
 	GarrisonMissionFrameTab1:ClearAllPoints()
 	GarrisonMissionFrameTab1:SetPoint("BOTTOMLEFT", 11, -40)
