@@ -32,6 +32,8 @@ local function newDate()
 	DBT_PersistentOptions["DBM"].ExpandUpwards = false
 	DBT_PersistentOptions["DBM"].BarXOffset = 0
 	DBT_PersistentOptions["DBM"].BarYOffset = 18
+	DBT_PersistentOptions["DBM"].HugeBarXOffset = 0
+	DBT_PersistentOptions["DBM"].HugeBarYOffset = 18
 	DBT_PersistentOptions["DBM"].IconLeft = true
 	DBT_PersistentOptions["DBM"].IconRight = false	
 	DBT_PersistentOptions["DBM"].Flash = false
