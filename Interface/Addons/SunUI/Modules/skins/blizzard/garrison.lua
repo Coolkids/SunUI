@@ -332,7 +332,6 @@ local function LoadSkin()
 	A:ReskinClose(GarrisonMissionFrame.CloseButton)
 	A:ReskinTab(GarrisonMissionFrameTab1)
 	A:ReskinTab(GarrisonMissionFrameTab2)
-	A:ReskinTab(GarrisonMissionFrameTab4)
 
 	GarrisonMissionFrameTab1:ClearAllPoints()
 	GarrisonMissionFrameTab1:SetPoint("BOTTOMLEFT", 11, -40)
@@ -343,6 +342,7 @@ local function LoadSkin()
 		f:SetScript("OnEvent", function(self, event, addon)
 			if addon == "MasterPlan" then
 				A:ReskinTab(GarrisonMissionFrameTab3)
+				A:ReskinTab(GarrisonMissionFrameTab4)
 				self:UnregisterEvent("ADDON_LOADED")
 			end
 		end)
