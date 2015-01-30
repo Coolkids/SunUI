@@ -6,6 +6,8 @@ local function oldDate()
 	DBT_SavedOptions["DBM"].ExpandUpwards = false
 	DBT_SavedOptions["DBM"].BarXOffset = 0
 	DBT_SavedOptions["DBM"].BarYOffset = 18
+	DBT_SavedOptions["DBM"].HugeBarXOffset = 0
+	DBT_SavedOptions["DBM"].HugeBarYOffset = 18
 	DBT_SavedOptions["DBM"].IconLeft = true
 	DBT_SavedOptions["DBM"].IconRight = false	
 	DBT_SavedOptions["DBM"].Flash = false
@@ -32,6 +34,8 @@ local function newDate()
 	DBT_PersistentOptions["DBM"].ExpandUpwards = false
 	DBT_PersistentOptions["DBM"].BarXOffset = 0
 	DBT_PersistentOptions["DBM"].BarYOffset = 18
+	DBT_PersistentOptions["DBM"].HugeBarXOffset = 0
+	DBT_PersistentOptions["DBM"].HugeBarYOffset = 18
 	DBT_PersistentOptions["DBM"].IconLeft = true
 	DBT_PersistentOptions["DBM"].IconRight = false	
 	DBT_PersistentOptions["DBM"].Flash = false
