@@ -12,6 +12,9 @@ local FG = S:GetModule("Filger")
 --最后一条: 大小写敏感, 请不要随意更改大小写
 --- 请严格按照spec, spellID, unitID, caster, filter, absID, target, player, DEBUFF, BUFF的大小写
 --- spec 天赋号码..  天赋界面从上倒下依次为1, 2, 3, 4
+---- 这部分详细资料可以参考下面网址
+---- http://bbs.ngacn.cc/read.php?tid=5002683&_ff=200&_fp=2
+--- 请严格按照spellID, unitID, caster, filter, absID, target, player, DEBUFF, BUFF的大小写 
 --------------------------------------------------------------------------------
 
 

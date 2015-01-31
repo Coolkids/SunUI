@@ -54,7 +54,7 @@ function IB:CreateClock()
 				end
 				if extended then tr, tg, tb = 0.3, 1, 0.3 else tr, tg, tb = 1, 1, 1 end
 				--GameTooltip:AddDoubleLine(format("%s |cffaaaaaa(%s%s)", name, maxPlayers, S.DiffIDToString[difficulty]), S:FormatTime(reset), 1, 1, 1, tr, tg, tb)
-				GameTooltip:AddDoubleLine(format("%s |cffaaaaaa(%s)", name, difficultyName or ""), S:FormatTime(reset), 1, 1, 1, tr, tg, tb)
+				GameTooltip:AddDoubleLine(format("%s |cffaaaaaa[%s]", name, difficultyName or ""), S:FormatTime(reset), 1, 1, 1, tr, tg, tb)
 			end
 		end
 		local killbossnum = GetNumSavedWorldBosses()

@@ -179,7 +179,7 @@ end
 SLASH_TESTUI1 = "/testui"
 
 StaticPopupDialogs["CLEARSET"] = {
-	text = "确定清空所有设置么",
+	text = RESET_TO_DEFAULT,
 	button1 = ACCEPT,
 	button2 = CANCEL,
 	OnAccept = function() 

@@ -772,11 +772,14 @@ end
 function S:FormatTime(s)
 	local day, hour, minute = 86400, 3600, 60
 	if s >= day then
-		return format("%dd", floor(s/day + 0.5)), s % day
+		--return format("%dd", floor(s/day + 0.5)), s % day
+		return format(COOLDOWN_DURATION_DAYS, floor(s/day + 0.5)), s % day
 	elseif s >= hour then
-		return format("%dh", floor(s/hour + 0.5)), s % hour
+		--return format("%dh", floor(s/hour + 0.5)), s % hour
+		return format(COOLDOWN_DURATION_HOURS, floor(s/hour + 0.5)), s % hour
 	elseif s >= minute then
-		return format("%dm", floor(s/minute + 0.5)), s % minute
+		--return format("%dm", floor(s/minute + 0.5)), s % minute
+		return format(COOLDOWN_DURATION_MIN, floor(s/minute + 0.5)), s % minute
 	end
 	return format("%ds", s), (s * 100 - floor(s * 100))/100
 end
