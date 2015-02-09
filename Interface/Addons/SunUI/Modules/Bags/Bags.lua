@@ -271,7 +271,7 @@ function B:UpdateCooldowns()
 	for _, bagID in ipairs(self.BagIDs) do
 		for slotID = 1, GetContainerNumSlots(bagID) do
 			local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
-			if self.Bags[bagID][slotID].cooldown then
+			if bagID and slotID and self.Bags[bagID][slotID].cooldown then
 				CooldownFrame_SetTimer(self.Bags[bagID][slotID].cooldown, start, duration, enable)
 			end
 			if ( duration > 0 and enable == 0 ) then
