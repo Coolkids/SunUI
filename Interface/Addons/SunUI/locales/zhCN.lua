@@ -85,6 +85,9 @@ do
 	L["结束"] = true
 	L["安装"] = true
 	L["跳过"] = true
+	L["欢迎使用SunUI"] = true
+	L["QQ群"] = "有问题可以加QQ群:180175370"
+	L["更新地址"] = "永久更新地址http://git.oschina.net/Coolkid/SunUI"
 end
 
 	--actionbar区域

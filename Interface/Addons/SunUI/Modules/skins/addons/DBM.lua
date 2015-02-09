@@ -1,75 +1,5 @@
 ﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local A = S:GetModule("Skins")
-local function oldDate()
-	DBT_SavedOptions["DBM"].Scale = 1
-	DBT_SavedOptions["DBM"].HugeScale = 1
-	DBT_SavedOptions["DBM"].ExpandUpwards = false
-	DBT_SavedOptions["DBM"].BarXOffset = 0
-	DBT_SavedOptions["DBM"].BarYOffset = 18
-	DBT_SavedOptions["DBM"].IconLeft = true
-	DBT_SavedOptions["DBM"].IconRight = false	
-	DBT_SavedOptions["DBM"].Flash = false
-	DBT_SavedOptions["DBM"].FadeIn = true
-	DBT_SavedOptions["DBM"].TimerX = 420
-	DBT_SavedOptions["DBM"].TimerY = -29
-	DBT_SavedOptions["DBM"].TimerPoint = "TOPLEFT"
-	DBT_SavedOptions["DBM"].StartColorR = S.myclasscolor.r
-	DBT_SavedOptions["DBM"].StartColorG = S.myclasscolor.g
-	DBT_SavedOptions["DBM"].StartColorB = S.myclasscolor.b
-	DBT_SavedOptions["DBM"].EndColorR = S.myclasscolor.r
-	DBT_SavedOptions["DBM"].EndColorG = S.myclasscolor.g
-	DBT_SavedOptions["DBM"].EndColorB = S.myclasscolor.b
-	DBT_SavedOptions["DBM"].Width = 130
-	DBT_SavedOptions["DBM"].Height = 20
-	DBT_SavedOptions["DBM"].HugeWidth = 155
-	DBT_SavedOptions["DBM"].HugeTimerPoint = "TOP"
-	DBT_SavedOptions["DBM"].HugeTimerX = -150
-	DBT_SavedOptions["DBM"].HugeTimerY = -207
-end
-local function newDate()
-	DBT_PersistentOptions["DBM"].Scale = 1
-	DBT_PersistentOptions["DBM"].HugeScale = 1
-	DBT_PersistentOptions["DBM"].ExpandUpwards = false
-	DBT_PersistentOptions["DBM"].BarXOffset = 0
-	DBT_PersistentOptions["DBM"].BarYOffset = 18
-	DBT_PersistentOptions["DBM"].HugeBarXOffset = 0
-	DBT_PersistentOptions["DBM"].HugeBarYOffset = 18
-	DBT_PersistentOptions["DBM"].IconLeft = true
-	DBT_PersistentOptions["DBM"].IconRight = false	
-	DBT_PersistentOptions["DBM"].Flash = false
-	DBT_PersistentOptions["DBM"].FadeIn = true
-	DBT_PersistentOptions["DBM"].TimerX = 420
-	DBT_PersistentOptions["DBM"].TimerY = -29
-	DBT_PersistentOptions["DBM"].TimerPoint = "TOPLEFT"
-	DBT_PersistentOptions["DBM"].StartColorR = S.myclasscolor.r
-	DBT_PersistentOptions["DBM"].StartColorG = S.myclasscolor.g
-	DBT_PersistentOptions["DBM"].StartColorB = S.myclasscolor.b
-	DBT_PersistentOptions["DBM"].EndColorR = S.myclasscolor.r
-	DBT_PersistentOptions["DBM"].EndColorG = S.myclasscolor.g
-	DBT_PersistentOptions["DBM"].EndColorB = S.myclasscolor.b
-	DBT_PersistentOptions["DBM"].Width = 130
-	DBT_PersistentOptions["DBM"].Height = 20
-	DBT_PersistentOptions["DBM"].HugeWidth = 155
-	DBT_PersistentOptions["DBM"].HugeTimerPoint = "TOP"
-	DBT_PersistentOptions["DBM"].HugeTimerX = -150
-	DBT_PersistentOptions["DBM"].HugeTimerY = -207
-	DBT_PersistentOptions["DBM"].Texture = S["media"].normal
-end
-local function UploadDBM()
-	DBM_SavedOptions.Enabled = true
-	DBM_SavedOptions["SpecialWarningFontColor"] = {
-		0.40,
-		0.78,
-		1,
-	}
-	DBM_SavedOptions["ShowWarningsInChat"] = false
-	DBM_SavedOptions["HideBossEmoteFrame"] = true
-	DBM_SavedOptions["DisableCinematics"] = true
-	local _, catch = pcall(newDate)
-	if catch then
-		oldDate()
-	end
-end
 
 local function SkinDBM()
 	local function SkinDBMBar(self)
@@ -142,7 +72,7 @@ local function SkinDBM()
 					name:ClearAllPoints()
 					name:SetPoint("LEFT", frame, 5, icon1:GetHeight()/2)
 					name.SetPoint = S.dummy
-					name:SetFont(S["media"].font, S["media"].fontsize, "THINOUTLINE")
+					name:SetFont(S["media"].font, S["media"].fontsize, S["media"].fontflag)
 					name:SetShadowOffset(0, 0)
 					name:SetJustifyH("LEFT")
 					name.SetFont = function() end
@@ -152,7 +82,7 @@ local function SkinDBM()
 				if not timer.styled then
 					timer:ClearAllPoints()
 					timer:SetPoint("RIGHT", frame, -5, icon1:GetHeight()/2)					
-					timer:SetFont(S["media"].font, S["media"].fontsize, "THINOUTLINE")
+					timer:SetFont(S["media"].font, S["media"].fontsize, S["media"].fontflag)
 					timer:SetShadowOffset(0,0)
 					timer:SetJustifyH("RIGHT")
 					timer.SetFont = function() end
@@ -168,7 +98,7 @@ local function SkinDBM()
 		if not anchor.styled then
 			local header={anchor:GetRegions()}
 				if header[1]:IsObjectType("FontString") then
-					header[1]:SetFont(S["media"].font, S["media"].fontsize, "THINOUTLINE")
+					header[1]:SetFont(S["media"].font, S["media"].fontsize, S["media"].fontflag)
 					header[1]:SetTextColor(1,1,1,1)
 					header[1]:SetShadowColor(0, 0, 0, 0)
 					anchor.styled=true	
@@ -228,7 +158,7 @@ local function SkinDBM()
 			if not name.styled then
 				name:ClearAllPoints()
 				name:SetPoint("LEFT", bar, "LEFT", 4, 6)
-				name:SetFont(S["media"].font,  S["media"].fontsize, "THINOUTLINE")
+				name:SetFont(S["media"].font,  S["media"].fontsize, S["media"].fontflag)
 				name:SetJustifyH("LEFT")
 				name:SetShadowColor(0, 0, 0, 0)
 				name.styled=true
@@ -237,7 +167,7 @@ local function SkinDBM()
 			if not timer.styled then
 				timer:ClearAllPoints()
 				timer:SetPoint("RIGHT", bar, "RIGHT", -4, 6)
-				timer:SetFont(S["media"].font, S["media"].fontsize, "THINOUTLINE")
+				timer:SetFont(S["media"].font, S["media"].fontsize, S["media"].fontflag)
 				timer:SetJustifyH("RIGHT")
 				timer:SetShadowColor(0, 0, 0, 0)
 				timer.styled=true
@@ -269,7 +199,7 @@ local function SkinDBM()
 				--print("call DBMRangeCheckRadar OnShow styled")
 				A:SetBD(self)
 				--self:CreateShadow("Background")
-				self.text:SetFont(S["media"].font, S["media"].fontsize+1, "THINOUTLINE")
+				self.text:SetFont(S["media"].font, S["media"].fontsize+1, S["media"].fontflag)
 				DBMRangeCheckRadar.text:SetPoint("BOTTOMLEFT", DBMRangeCheckRadar, "TOPLEFT", 0, 5)
 				DBMRangeCheckRadar:SetBackdropBorderColor(65/255, 74/255, 79/255)
 				self.text:SetShadowColor(0, 0, 0)
@@ -332,34 +262,9 @@ local function SkinDBM()
 		return RaidNotice_AddMessage_(noticeFrame, textString, colorInfo)
 	end
 	
-	if S:IsDeveloper() then UploadDBM() end
 end
 A:RegisterSkin("DBM-Core", SkinDBM)
 
-StaticPopupDialogs["SUNUI_DBM_CFG_RELOAD"] = {
-	text = "改变DBM参数需重载应用设置",
-	button1 = ACCEPT,
-	button2 = CANCEL,
-	OnAccept = function() UploadDBM() ReloadUI() end,
-	timeout = 0,
-	whileDead = 1,
-}
-StaticPopupDialogs["SUNUI_DBM_NOT_FAND"] = {
-	text = "您没有安装DBM",
-	button1 = CANCEL,
-	timeout = 0,
-	whileDead = 1,
-}
-SlashCmdList["SetDBM"] = function()
-	if not UnitAffectingCombat("player") then	
-		if IsAddOnLoaded("DBM-Core") then 
-			StaticPopup_Show("SUNUI_DBM_CFG_RELOAD") 
-		else
-			StaticPopup_Show("SUNUI_DBM_NOT_FAND") 
-		end
-	end
-end
-SLASH_SetDBM1 = "/SetDBM"
 local function SkinGUI()
 	DBM_GUI_OptionsFrameHeader:SetTexture(nil)
 	DBM_GUI_OptionsFramePanelContainer:SetBackdrop(nil)

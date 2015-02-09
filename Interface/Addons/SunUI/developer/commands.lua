@@ -277,3 +277,53 @@ SlashCmdList["PARTYTORAID"] = function()
 	end
 end
 SLASH_PARTYTORAID1 = '/ptr'
+
+StaticPopupDialogs["SUNUI_DBM_CFG_RELOAD"] = {
+	text = "改变DBM参数需重载应用设置",
+	button1 = ACCEPT,
+	button2 = CANCEL,
+	OnAccept = function() S.db.IsSetDBM = false; ReloadUI() end,
+	timeout = 0,
+	whileDead = 1,
+}
+StaticPopupDialogs["SUNUI_DBM_NOT_FAND"] = {
+	text = "您没有安装DBM",
+	button1 = CANCEL,
+	timeout = 0,
+	whileDead = 1,
+}
+SlashCmdList["SetDBM"] = function()
+	if not UnitAffectingCombat("player") then	
+		if IsAddOnLoaded("DBM-Core") then 
+			StaticPopup_Show("SUNUI_DBM_CFG_RELOAD") 
+		else
+			StaticPopup_Show("SUNUI_DBM_NOT_FAND") 
+		end
+	end
+end
+SLASH_SetDBM1 = "/SetDBM"
+
+StaticPopupDialogs["SUNUI_BW_CFG_RELOAD"] = {
+	text = "改变bigwigs参数需重载应用设置",
+	button1 = ACCEPT,
+	button2 = CANCEL,
+	OnAccept = function() S.db.IsSetBW = false; ReloadUI() end,
+	timeout = 0,
+	whileDead = 1,
+}
+StaticPopupDialogs["SUNUI_BW_NOT_FAND"] = {
+	text = "您没有安装bigwigs",
+	button1 = CANCEL,
+	timeout = 0,
+	whileDead = 1,
+}
+SlashCmdList["SetBW"] = function()
+	if not UnitAffectingCombat("player") then	
+		if IsAddOnLoaded("BigWigs") then 
+			StaticPopup_Show("SUNUI_BW_CFG_RELOAD") 
+		else
+			StaticPopup_Show("SUNUI_BW_NOT_FAND") 
+		end
+	end
+end
+SLASH_SetBW1 = "/SetBW"

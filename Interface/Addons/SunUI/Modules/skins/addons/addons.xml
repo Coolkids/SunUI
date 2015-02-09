@@ -1,5 +1,6 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file='ace3.lua'/>
+	<Script file='bigwigs.lua'/>
 	<Script file='DBM.lua'/>
 	<Script file='NugRunning.lua'/>
 	<Script file='BubbleBobble.lua'/>

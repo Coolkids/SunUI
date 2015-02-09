@@ -654,6 +654,9 @@ function PB:FuckWarlock()
 	local bars = CreateFrame('Frame', nil, Holder)
 	bars:SetSize(self.db.Width, self.db.Height)
 	bars:SetPoint("CENTER", Holder)
+	bars.text = bar:FontTemplate()
+	bars.text:SetPoint("LEFT", -5, 0)
+	bars.text:SetText("")
 	tinsert(mainframe, bars)
 	for i = 1, 4 do
 		bars[i] = CreateFrame("StatusBar", nil, bars)
@@ -681,7 +684,7 @@ function PB:FuckWarlock()
 			local spacing = select(4, wsb[4]:GetPoint())
 			local w = wsb:GetWidth()
 			local s = 0
-
+			
 			local spec = GetSpecialization()
 			if spec then
 				if not wsb:IsShown() then
@@ -738,6 +741,8 @@ function PB:FuckWarlock()
 					wsb:Hide()
 				end
 			end
+			
+			wsb.text:SetText("") --数字0
 		end
 
 		if (event == "UNIT_POWER" or event == "UNIT_DISPLAYPOWER") then
@@ -773,6 +778,7 @@ function PB:FuckWarlock()
 					wsb[1]:SetAlpha(1)
 					wsb[1]:SetMinMaxValues(0, maxPower)
 					wsb[1]:SetValue(power)
+					wsb.text:SetText(power)
 				end
 			end
 		end

@@ -91,6 +91,9 @@ do
 	L["结束"] = "Done"
 	L["安装"] = "Install"
 	L["跳过"] = "Skip"
+	L["欢迎使用SunUI"] = "Welcome to SunUI"
+	L["QQ群"] = ""
+	L["更新地址"] = "update URL https://github.com/Coolkids/SunUI"
 end
 
 	--actionbar area
