@@ -160,17 +160,9 @@ local function RightClickMenu()
 				HideUIPanel(PlayerTalentFrame)
 			end
 		end},	
-		{text = MOUNTS,
-		func = function()
-			TogglePetJournal(1);
-		end},
-		{text = PETS,
-		func = function()
-			TogglePetJournal(2)
-		end},
-		{text = TOY_BOX,
+		{text = COLLECTIONS, 
 		func = function() 
-			TogglePetJournal(3)
+			ToggleCollectionsJournal(); 
 		end},
 		{text = TIMEMANAGER_TITLE,
 		func = function() ToggleFrame(TimeManagerFrame) end},		
