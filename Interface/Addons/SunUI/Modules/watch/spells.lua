@@ -1541,7 +1541,23 @@ FG["filger_spells"] = {
 			{ spellID = 126679, unitID = "player", caster = "player", filter = "BUFF" },
 			{ spellID = 126700, unitID = "player", caster = "player", filter = "BUFF" },
 
-			-- 坦克
+			-----------------------------橙戒特效--------------------------------------
+			-- 大法师的灼热(690)
+			-- 智力 
+			{ spellID = 177159, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 力量 
+			{ spellID = 177160, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 敏捷 
+			{ spellID = 177161, unitID = "player", caster = "player", filter = "BUFF" },
+
+			-- 大法师的炽燃(710)
+			-- 智力 
+			{ spellID = 177176, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 力量 
+			{ spellID = 177175, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 敏捷 
+			{ spellID = 177172, unitID = "player", caster = "player", filter = "BUFF" },			-- 坦克
+
 			-------------------------------WOD-----------------------------------------
 			-- 重击护符                (急速, 触发)
 			{ spellID = 177102, unitID = "player", caster = "player", filter = "BUFF" },
@@ -2721,44 +2737,181 @@ FG["filger_spells"] = {
 
 
 			-- [988] 黑石铸造厂
-			--  格鲁尔
-			-- 石化猛击
-			{ spellID = 155326, unitID = "player", caster = "all", filter = "DEBUFF"},
-			--  奥尔高格
+			-- 1	Gruul 格鲁尔
+			-- 炼狱切割
+			{ spellID = 155080, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 压迫打击
+			{ spellID = 155078, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 炼狱打击
+			{ spellID = 162322, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 石化
+			{ spellID = 155506, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 火耀石
+			{ spellID = 165298, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+			-- 2	Oregorger 奥尔高格
+			-- 呕吐黑石
+			{ spellID = 156203, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 爆裂残片
+			{ spellID = 156374, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 酸液洪流
-			{ spellID = 156324, unitID = "player", caster = "all", filter = "DEBUFF"},
-			--  兽王达玛克
-			-- 长矛钉刺
-			{ spellID = 155365, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 爆燃
-			{ spellID = 155399, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 炼狱吐息
-			{ spellID = 154989, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 高热弹片
-			{ spellID = 155499, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 缚火者卡格拉兹
-			-- 炽热光辉
-			{ spellID = 155277, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 汉斯加尔与弗兰佐克
-			-- 折脊碎椎
-			{ spellID = 157139, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 主管索戈尔
-			-- 点燃
-			{ spellID = 155921, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 爆裂熔炉
+			{ spellID = 156297, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 酸液巨口
+			{ spellID = 173471, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 翻滚之怒
+			{ spellID = 155900, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+			-- 3	Blast Furnace 爆裂熔炉
+			-- 崩裂
+			{ spellID = 156932, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 炸弹
+			{ spellID = 178279, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 155192, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 174176, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 不稳定的火焰
+			{ spellID = 176121, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 锁定
+			{ spellID = 155196, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 熔渣池
+			{ spellID = 155743, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 淬火
 			{ spellID = 155240, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 高热
 			{ spellID = 155242, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 克罗莫格
-			-- 纠缠之手符文
-			{ spellID = 157060, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 钢铁妇武神
+			-- 熔化
+			{ spellID = 155225, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 155223, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+			-- 4	Hans'gar and Franzok 汉斯加尔与弗兰佐克 
+			-- 折脊碎椎
+			{ spellID = 157139, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 干扰怒吼
+			{ spellID = 160838, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 160845, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 160847, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 160848, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 灼热燃烧
+			{ spellID = 155818, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+			-- 5	Flamebender Ka'graz 缚火者卡格拉兹 
+			-- 锁定
+			{ spellID = 154952, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 焦灼吐息
+			{ spellID = 155074, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 火焰链接
+			{ spellID = 155049, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 熔岩激流
+			{ spellID = 154932, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 炽热光辉
+			{ spellID = 155277, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 岩浆猛击
+			{ spellID = 155314, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 升腾烈焰
+			{ spellID = 163284, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+			-- 6	Kromog 克罗莫格 
+			-- 扭曲护甲
+			{ spellID = 156766, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 纠缠之地符文
+			{ spellID = 157059, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 破碎大地符文
+			{ spellID = 161839, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 161923, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+			-- 7	Beastlord Darmac 兽王达玛克
+			-- 长矛钉刺
+			{ spellID = 154960, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 狂乱撕扯
+			{ spellID = 155061, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 162283, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 炼狱吐息
+			{ spellID = 154989, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 爆燃
+			{ spellID = 154981, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 炽燃利齿
+			{ spellID = 155030, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 碾碎护甲
+			{ spellID = 155236, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 高热弹片
+			{ spellID = 155499, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 烈焰灌注
+			{ spellID = 155657, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 地动山摇
+			{ spellID = 159044, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 162277, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+			-- 8	Operator Thogar 主管索戈尔 
+			-- 点燃
+			{ spellID = 155921, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 实验型脉冲手雷
+			{ spellID = 165195, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 灼疗之箭
+			{ spellID = 160140, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 锯齿劈斩
+			{ spellID = 155921, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 熔岩震击
+			{ spellID = 156310, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 延时攻城炸弹
+			{ spellID = 159481, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 燃烧
+			{ spellID = 164380, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 热能冲击
+			{ spellID = 164280, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+			-- 9	Iron Maidens 钢铁女武神 
+			-- 急速射击
+			{ spellID = 156631, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 穿透射击
+			{ spellID = 164271, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 主炮轰击
+			{ spellID = 158601, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 震颤暗影
+			{ spellID = 156214, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 暗影猎杀
 			{ spellID = 158315, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 黑手
+			-- 鲜血仪式
+			{ spellID = 159724, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 浸血觅心者
+			{ spellID = 158010, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 致命投掷
+			{ spellID = 158692, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 锁定
+			{ spellID = 158702, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 堕落之血
+			{ spellID = 158683, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 玛拉卡的血腥召唤
+			{ spellID = 170405, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 苏卡的猎物
+			{ spellID = 170395, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+			-- 10	Warlord Blackhand  黑手 
 			-- 死亡标记
 			{ spellID = 156096, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 锁定
+			{ spellID = 156653, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 断骨
+			{ spellID = 157354, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 熔渣冲击
+			{ spellID = 156047, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 157018, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 157322, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 穿刺
+			{ spellID = 156743, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 175020, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 巨力粉碎猛击
+			{ spellID = 158054, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 燃烧
+			{ spellID = 162490, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 156604, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 熔火熔渣
+			{ spellID = 156401, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 烧伤
+			{ spellID = 156404, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 燃烧射击
+			{ spellID = 156772, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 投掷炉渣炸弹
+			{ spellID = 157000, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 159179, unitID = "player", caster = "all", filter = "DEBUFF"},
 		},
 	},
 }
