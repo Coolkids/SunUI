@@ -44,7 +44,7 @@
 	<Script file='objectivetracker.lua'/>
 	<Script file='petbattle.lua'/>
 	<Script file='petition.lua'/>
-	<Script file='petjournal.lua'/>
+	<Script file='collections.lua'/>
 	<Script file='pve.lua'/>
 	<Script file='pvp.lua'/>
 	<Script file='quest.lua'/>
