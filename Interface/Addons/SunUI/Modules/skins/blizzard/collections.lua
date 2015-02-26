@@ -1,18 +1,34 @@
-﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local A = S:GetModule("Skins")
+local ToyBoxFilterFixerFilter = false
 
 local function LoadSkin()
 	local r, g, b = RAID_CLASS_COLORS[S.myclass].r, RAID_CLASS_COLORS[S.myclass].g, RAID_CLASS_COLORS[S.myclass].b
+
+	-- [[ General ]]
+
+	for i = 1, 14 do
+		if i ~= 8 then
+			select(i, CollectionsJournal:GetRegions()):Hide()
+		end
+	end
+
+	A:CreateBD(CollectionsJournal)
+	A:ReskinTab(CollectionsJournalTab1)
+	A:ReskinTab(CollectionsJournalTab2)
+	A:ReskinTab(CollectionsJournalTab3)
+	A:ReskinTab(CollectionsJournalTab4)
+	A:ReskinClose(CollectionsJournalCloseButton)
+
+	CollectionsJournalTab2:SetPoint("LEFT", CollectionsJournalTab1, "RIGHT", -15, 0)
+	CollectionsJournalTab3:SetPoint("LEFT", CollectionsJournalTab2, "RIGHT", -15, 0)
+	CollectionsJournalTab4:SetPoint("LEFT", CollectionsJournalTab3, "RIGHT", -15, 0)
+
 	-- [[ Mounts and pets ]]
 
 	local PetJournal = PetJournal
 	local MountJournal = MountJournal
 
-	for i = 1, 14 do
-		if i ~= 8 then
-			select(i, PetJournalParent:GetRegions()):Hide()
-		end
-	end
 	for i = 1, 9 do
 		select(i, MountJournal.MountCount:GetRegions()):Hide()
 		select(i, PetJournal.PetCount:GetRegions()):Hide()
@@ -29,7 +45,6 @@ local function LoadSkin()
 	MountJournal.MountDisplay.ShadowOverlay:Hide()
 	PetJournalTutorialButton.Ring:Hide()
 
-	A:CreateBD(PetJournalParent)
 	A:CreateBD(MountJournal.MountCount, .25)
 	A:CreateBD(PetJournal.PetCount, .25)
 	A:CreateBD(MountJournal.MountDisplay.ModelFrame, .25)
@@ -37,10 +52,6 @@ local function LoadSkin()
 	A:Reskin(MountJournalMountButton)
 	A:Reskin(PetJournalSummonButton)
 	A:Reskin(PetJournalFindBattle)
-	A:ReskinTab(PetJournalParentTab1)
-	A:ReskinTab(PetJournalParentTab2)
-	A:ReskinTab(PetJournalParentTab3)
-	A:ReskinClose(PetJournalParentCloseButton)
 	A:ReskinScroll(MountJournalListScrollFrameScrollBar)
 	A:ReskinScroll(PetJournalListScrollFrameScrollBar)
 	A:ReskinInput(MountJournalSearchBox)
@@ -54,9 +65,6 @@ local function LoadSkin()
 	PetJournalFilterButton:SetPoint("TOPRIGHT", PetJournalLeftInset, -5, -8)
 
 	PetJournalTutorialButton:SetPoint("TOPLEFT", PetJournal, "TOPLEFT", -14, 14)
-
-	PetJournalParentTab2:SetPoint("LEFT", PetJournalParentTab1, "RIGHT", -15, 0)
-	PetJournalParentTab3:SetPoint("LEFT", PetJournalParentTab2, "RIGHT", -15, 0)
 
 	local scrollFrames = {MountJournal.ListScrollFrame.buttons, PetJournal.listScroll.buttons}
 	for _, scrollFrame in pairs(scrollFrames) do
@@ -158,11 +166,6 @@ local function LoadSkin()
 	PetJournal.HealPetButton:SetPushedTexture("")
 	A:CreateBG(PetJournal.HealPetButton)
 
-	MountJournalSummonRandomFavoriteButton:SetPoint("TOPRIGHT", -7, -32)
-	MountJournalSummonRandomFavoriteButtonBorder:Hide()
-	MountJournalSummonRandomFavoriteButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
-	MountJournalSummonRandomFavoriteButton:SetPushedTexture("")
-	A:CreateBG(MountJournalSummonRandomFavoriteButton)
 
 	do
 		local ic = MountJournal.MountDisplay.InfoButton.Icon
@@ -170,7 +173,6 @@ local function LoadSkin()
 		A:CreateBG(ic)
 	end
 
-	
 	for _, f in pairs({PetJournalPrimaryAbilityTooltip, PetJournalSecondaryAbilityTooltip}) do
 		f:DisableDrawLayer("BACKGROUND")
 		local bg = CreateFrame("Frame", nil, f)
@@ -178,10 +180,26 @@ local function LoadSkin()
 		bg:SetFrameLevel(0)
 		A:CreateBD(bg)
 	end
-	
 
 	PetJournalLoadoutBorderSlotHeaderText:SetParent(PetJournal)
 	PetJournalLoadoutBorderSlotHeaderText:SetPoint("CENTER", PetJournalLoadoutBorderTop, "TOP", 0, 4)
+
+	-- Favourite mount button
+
+	MountJournalSummonRandomFavoriteButtonBorder:Hide()
+	MountJournalSummonRandomFavoriteButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
+	MountJournalSummonRandomFavoriteButton:SetPushedTexture("")
+	A:CreateBG(MountJournalSummonRandomFavoriteButton)
+
+	do
+		local movedButton = false
+		MountJournal:HookScript("OnShow", function()
+			if not InCombatLockdown() then
+				MountJournalSummonRandomFavoriteButton:SetPoint("TOPRIGHT", -7, -32)
+				movedButton = true
+			end
+		end)
+	end
 
 	-- Pet card
 
@@ -320,50 +338,55 @@ local function LoadSkin()
 
 	-- [[ Toy box ]]
 
-	ToyBoxIconsFrame.Bg:Hide()
-	ToyBoxIconsFrameBackgroundTile:Hide()
-	ToyBoxIconsFrame:DisableDrawLayer("BORDER")
-	ToyBoxIconsFrame:DisableDrawLayer("ARTWORK")
-	ToyBoxIconsFrame:DisableDrawLayer("OVERLAY")
+	local ToyBox = ToyBox
+
+	local icons = ToyBox.iconsFrame
+	icons.Bg:Hide()
+	icons.BackgroundTile:Hide()
+	icons:DisableDrawLayer("BORDER")
+	icons:DisableDrawLayer("ARTWORK")
+	icons:DisableDrawLayer("OVERLAY")
 
 	A:ReskinInput(ToyBox.searchBox)
 	A:ReskinFilterButton(ToyBoxFilterButton)
-	A:ReskinArrow(ToyBoxPrevPageButton, "left")
-	A:ReskinArrow(ToyBoxNextPageButton, "right")
+	A:ReskinArrow(ToyBox.navigationFrame.prevPageButton, "left")
+	A:ReskinArrow(ToyBox.navigationFrame.nextPageButton, "right")
 
-	ToyBoxPrevPageButton:SetPoint("BOTTOMRIGHT", -320, 51)
-	ToyBoxNextPageButton:SetPoint("BOTTOMRIGHT", -285, 51)
+	ToyBox.navigationFrame.prevPageButton:SetPoint("BOTTOMRIGHT", -320, 51)
+	ToyBox.navigationFrame.nextPageButton:SetPoint("BOTTOMRIGHT", -285, 51)
 
 	-- Progress bar
 
-	ToyBoxProgressBarBorder:Hide()
-	ToyBoxProgressBarBackground:Hide()
+	local progressBar = ToyBox.progressBar
+	progressBar.border:Hide()
+	progressBar:DisableDrawLayer("BACKGROUND")
 
-	ToyBoxProgressBar.text:SetPoint("CENTER", 0, 1)
-	ToyBoxProgressBarBar:SetTexture(A.media.backdrop)
+	progressBar.text:SetPoint("CENTER", 0, 1)
+	progressBar:SetStatusBarTexture(A.media.backdrop)
 
-	A:CreateBDFrame(ToyBoxProgressBar, .25)
+	A:CreateBDFrame(progressBar, .25)
 
 	-- Toys!
 
+	local buttons = ToyBox.iconsFrame
 	for i = 1, 18 do
-		local bu = _G["ToySpellButton"..i]
-		local ic = _G["ToySpellButton"..i.."IconTexture"]
+		local bu = buttons["spellButton"..i]
+		local ic = bu.iconTexture
 
 		bu:SetPushedTexture("")
 		bu:SetHighlightTexture("")
 
 		bu.cooldown:SetAllPoints(ic)
 
-		_G["ToySpellButton"..i.."SlotFrameCollected"]:SetTexture("")
-		_G["ToySpellButton"..i.."SlotFrameUncollected"]:SetTexture("")
+		bu.slotFrameCollected:SetTexture("")
+		bu.slotFrameUncollected:SetTexture("")
 
 		ic:SetTexCoord(.08, .92, .08, .92)
 		A:CreateBG(ic)
 	end
 
 	hooksecurefunc("ToySpellButton_UpdateButton", function(self)
-		local toyString = _G[self:GetName().."ToyName"]
+		local toyString = self.name
 
 		if PlayerHasToy(self.itemID) then
 			local _, _, quality = GetItemInfo(self.itemID)
@@ -376,6 +399,40 @@ local function LoadSkin()
 			toyString:SetTextColor(.5, .5, .5)
 		end
 	end)
+
+	C_ToyBox.SetFilterUncollected(ToyBoxFilterFixerFilter)
+ 	hooksecurefunc(C_ToyBox, "SetFilterUncollected", function(filter) ToyBoxFilterFixerFilter = filter end)
+
+	-- [[ Heirlooms ]]
+
+	local HeirloomsJournal = HeirloomsJournal
+
+	local icons = HeirloomsJournal.iconsFrame
+	icons.Bg:Hide()
+	icons.BackgroundTile:Hide()
+	icons:DisableDrawLayer("BORDER")
+	icons:DisableDrawLayer("ARTWORK")
+	icons:DisableDrawLayer("OVERLAY")
+
+	A:ReskinInput(HeirloomsJournalSearchBox)
+	A:ReskinDropDown(HeirloomsJournalClassDropDown)
+	A:ReskinFilterButton(HeirloomsJournalFilterButton)
+	A:ReskinArrow(HeirloomsJournal.navigationFrame.prevPageButton, "left")
+	A:ReskinArrow(HeirloomsJournal.navigationFrame.nextPageButton, "right")
+
+	HeirloomsJournal.navigationFrame.prevPageButton:SetPoint("BOTTOMRIGHT", -320, 51)
+	HeirloomsJournal.navigationFrame.nextPageButton:SetPoint("BOTTOMRIGHT", -285, 51)
+
+	-- Progress bar
+
+	local progressBar = HeirloomsJournal.progressBar
+	progressBar.border:Hide()
+	progressBar:DisableDrawLayer("BACKGROUND")
+
+	progressBar.text:SetPoint("CENTER", 0, 1)
+	progressBar:SetStatusBarTexture(A.media.backdrop)
+
+	A:CreateBDFrame(progressBar, .25)
 end
 
-A:RegisterSkin("Blizzard_PetJournal", LoadSkin)
+A:RegisterSkin("Blizzard_Collections", LoadSkin)
