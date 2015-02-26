@@ -117,10 +117,10 @@ local lodFrames = {
   Blizzard_VoidStorageUI = { ["VoidStorageFrame"] = false, ["VoidStorageBorderFrameMouseBlockFrame"] = "VoidStorageFrame" },
   Blizzard_ItemAlterationUI = { ["TransmogrifyFrame"] = false },
   Blizzard_EncounterJournal = { ["EncounterJournal"] = false }, -- as of 4.3
-  Blizzard_GarrisonUI = { ["GarrisonLandingPage"] = false, ["GarrisonLandingPageReport"] = true, ["GarrisonMissionFrame"] = false, ["GarrisonMissionFrame.MissionTab"] = true, ["GarrisonBuildingFrame"] = false, GarrisonRecruiterFrame = false, GarrisonCapacitiveDisplayFrame = false},
+  Blizzard_GarrisonUI = { ["GarrisonLandingPage"] = false, ["GarrisonLandingPageReport"] = true, ["GarrisonMissionFrame"] = false, ["GarrisonMissionFrame.MissionTab"] = true, ["GarrisonBuildingFrame"] = false, GarrisonRecruiterFrame = false,GarrisonRecruitSelectFrame = false, GarrisonCapacitiveDisplayFrame = false},
 
   -- New frames in MoP
-  Blizzard_PetJournal = { ["PetJournalParent"] = false },
+  Blizzard_Collections = { ["CollectionsJournal"] = false },
   Blizzard_BlackMarketUI = { ["BlackMarketFrame"] = false }, -- UNTESTED
   Blizzard_ChallengesUI = { ["ChallengesLeaderboardFrame"] = false }, -- UNTESTED
   Blizzard_ItemUpgradeUI = { ["ItemUpgradeFrame"] = false, }, -- UNTESTED
