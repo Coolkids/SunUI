@@ -1,4 +1,4 @@
-﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local A = S:GetModule("Skins")
 
 local function LoadSkin()
@@ -92,6 +92,7 @@ local function LoadSkin()
 		"InterfaceOptionsFrameDefaults",
 		"InterfaceOptionsFrameOkay",
 		"InterfaceOptionsFrameCancel",
+		"InterfaceOptionsSocialPanelTwitterLoginButton",
 		"ChatConfigFrameOkayButton",
 		"ChatConfigFrameDefaultButton",
 		"StackSplitOkayButton",
@@ -417,12 +418,12 @@ local function LoadSkin()
 	AudioOptionsVoicePanelListeningTitle:SetPoint("BOTTOMLEFT", AudioOptionsVoicePanelListening, "TOPLEFT", 5, 2)
 
 	local dropdowns = {
-		"Graphics_DisplayModeDropDown",
-		"Graphics_ResolutionDropDown",
-		"Graphics_RefreshDropDown",
-		"Graphics_PrimaryMonitorDropDown",
-		"Graphics_MultiSampleDropDown",
-		"Graphics_VerticalSyncDropDown",
+		"Display_DisplayModeDropDown",
+		"Display_ResolutionDropDown",
+		"Display_RefreshDropDown",
+		"Display_PrimaryMonitorDropDown",
+		"Display_AntiAliasingDropDown",
+		"Display_VerticalSyncDropDown",
 		"Graphics_TextureResolutionDropDown",
 		"Graphics_FilteringDropDown",
 		"Graphics_ProjectedTexturesDropDown",
@@ -432,9 +433,12 @@ local function LoadSkin()
 		"Graphics_ParticleDensityDropDown",
 		"Graphics_ViewDistanceDropDown",
 		"Graphics_EnvironmentalDetailDropDown",
+		"Graphics_DepthEffectsDropDown",
 		"Graphics_GroundClutterDropDown",
 		"Graphics_SSAODropDown",
-		"Graphics_RefractionDropDown",
+		"Graphics_DepthEffectsDropDown",
+		"Graphics_LightingQualityDropDown",
+		"Graphics_OutlineModeDropDown",
 		"RaidGraphics_DisplayModeDropDown",
 		"RaidGraphics_ResolutionDropDown",
 		"RaidGraphics_RefreshDropDown",
@@ -456,11 +460,17 @@ local function LoadSkin()
 		"Advanced_BufferingDropDown",
 		"Advanced_LagDropDown",
 		"Advanced_HardwareCursorDropDown",
+		"Advanced_MultisampleAntiAliasingDropDown",
+		"Advanced_MultisampleAlphaTest",
+		"Advanced_PostProcessAntiAliasingDropDown",
+		"Advanced_ResampleQualityDropDown",
 		"AudioOptionsSoundPanelHardwareDropDown",
 		"AudioOptionsSoundPanelSoundChannelsDropDown",
 		"AudioOptionsVoicePanelInputDeviceDropDown",
 		"AudioOptionsVoicePanelChatModeDropDown",
 		"AudioOptionsVoicePanelOutputDeviceDropDown",
+		"InterfaceOptionsLanguagesPanelLocaleDropDown",
+		"InterfaceOptionsLanguagesPanelAudioLocaleDropDown",
 		"InterfaceOptionsStatusTextPanelDisplayDropDown"
 	}
 	for i = 1, #dropdowns do
@@ -478,12 +488,14 @@ local function LoadSkin()
 		"Advanced_UIScaleSlider",
 		"Advanced_MaxFPSSlider",
 		"Advanced_MaxFPSBKSlider",
+		"Advanced_RenderScaleSlider",
 		"Advanced_GammaSlider",
 		"AudioOptionsSoundPanelSoundQuality",
 		"AudioOptionsSoundPanelMasterVolume",
 		"AudioOptionsSoundPanelSoundVolume",
 		"AudioOptionsSoundPanelMusicVolume",
 		"AudioOptionsSoundPanelAmbienceVolume",
+		"AudioOptionsSoundPanelDialogVolume",
 		"AudioOptionsVoicePanelMicrophoneVolume",
 		"AudioOptionsVoicePanelSpeakerVolume",
 		"AudioOptionsVoicePanelSoundFade",
@@ -511,6 +523,7 @@ local function LoadSkin()
 		"AudioOptionsSoundPanelMusic",
 		"AudioOptionsSoundPanelLoopMusic",
 		"AudioOptionsSoundPanelAmbientSounds",
+		"AudioOptionsSoundPanelDialogSounds",
 		"AudioOptionsSoundPanelSoundInBG",
 		"AudioOptionsSoundPanelReverb",
 		"AudioOptionsSoundPanelHRTF",
@@ -584,6 +597,8 @@ local function LoadSkin()
 		"InterfaceOptionsSocialPanelChatHoverDelay",
 		"InterfaceOptionsSocialPanelGuildMemberAlert",
 		"InterfaceOptionsSocialPanelChatMouseScroll",
+		"InterfaceOptionsSocialPanelEnableTwitter",
+		"InterfaceOptionsSocialPanelWholeChatWindowClickable",
 		"InterfaceOptionsActionBarsPanelBottomLeft",
 		"InterfaceOptionsActionBarsPanelBottomRight",
 		"InterfaceOptionsActionBarsPanelRight",
@@ -692,6 +707,7 @@ local function LoadSkin()
 		"InterfaceOptionsMousePanelInvertMouse",
 		"InterfaceOptionsMousePanelClickToMove",
 		"InterfaceOptionsMousePanelWoWMouse",
+		"InterfaceOptionsMousePanelEnableMouseSpeed",
 		"InterfaceOptionsHelpPanelShowTutorials",
 		"InterfaceOptionsHelpPanelLoadingScreenTips",
 		"InterfaceOptionsHelpPanelEnhancedTooltips",
@@ -699,7 +715,9 @@ local function LoadSkin()
 		"InterfaceOptionsHelpPanelColorblindMode",
 		"InterfaceOptionsHelpPanelMovePad",
 		"InterfaceOptionsControlsPanelAutoOpenLootHistory",
-		"InterfaceOptionsCombatPanelLossOfControl"
+		"InterfaceOptionsCombatPanelLossOfControl",
+		"InterfaceOptionsAccessibilityPanelMovePad",
+		"InterfaceOptionsAccessibilityPanelColorblindMode"
 	}
 	for i = 1, #checkboxes do
 		A:ReskinCheck(_G[checkboxes[i]])
@@ -723,11 +741,13 @@ local function LoadSkin()
 		"InterfaceOptionsNamesPanelNPCNamesDropDown",
 		"InterfaceOptionsNamesPanelUnitNameplatesMotionDropDown",
 		"InterfaceOptionsCombatTextPanelFCTDropDown",
+		"InterfaceOptionsCombatTextPanelTargetModeDropDown",
 		"CompactUnitFrameProfilesProfileSelector",
 		"CompactUnitFrameProfilesGeneralOptionsFrameSortByDropdown",
 		"CompactUnitFrameProfilesGeneralOptionsFrameHealthTextDropdown",
 		"InterfaceOptionsCameraPanelStyleDropDown",
 		"InterfaceOptionsMousePanelClickMoveStyleDropDown",
+		"InterfaceOptionsAccessibilityPanelColorFilterDropDown",
 		"Advanced_GraphicsAPIDropDown",
 		"InterfaceOptionsCombatPanelLossOfControlFullDropDown",
 		"InterfaceOptionsCombatPanelLossOfControlSilenceDropDown",
@@ -748,7 +768,8 @@ local function LoadSkin()
 		"InterfaceOptionsCameraPanelMaxDistanceSlider",
 		"InterfaceOptionsCameraPanelFollowSpeedSlider",
 		"InterfaceOptionsMousePanelMouseSensitivitySlider",
-		"InterfaceOptionsMousePanelMouseLookSpeedSlider"
+		"InterfaceOptionsMousePanelMouseLookSpeedSlider",
+		"InterfaceOptionsAccessibilityPanelColorblindStrengthSlider"
 	}
 	for i = 1, #sliders do
 		A:ReskinSlider(_G[sliders[i]])
