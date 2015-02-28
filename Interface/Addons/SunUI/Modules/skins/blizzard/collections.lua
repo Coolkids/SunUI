@@ -399,10 +399,10 @@ local function LoadSkin()
 			toyString:SetTextColor(.5, .5, .5)
 		end
 
-		if not self.updateFixed then
+		--[[if not self.updateFixed then
 			hooksecurefunc(self, "updateFunction", ToySpellButton_UpdateButton)
 			self.updateFixed = true
-		end
+		end]]
 	end)
 
 	C_ToyBox.SetFilterUncollected(ToyBoxFilterFixerFilter)
