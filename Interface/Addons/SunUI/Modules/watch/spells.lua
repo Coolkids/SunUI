@@ -1373,7 +1373,9 @@ FG["filger_spells"] = {
 			-- 猝死
 			{ spellID =  52437, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 破坏者
-			{ spellID = 152277, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 152277, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 不屈打击
+			{ spellID = 169685, unitID = "player", caster = "player", filter = "BUFF"},
 		},
 		{
 			Name = "目标debuff",

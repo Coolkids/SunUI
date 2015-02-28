@@ -6,9 +6,7 @@
 
 
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Include file="QuestGuru\QuestGuru.xml"/>
-	<Script file ="QuestGuru\QuestGuru.lua"/>
-	<Script file ="QuestGuru\skins.lua"/>
+	<Include file="QuestGuru\load_QuestGuru.xml"/>
 	<Script file ="quest.lua"/>
 	<Script file ="AutoAccept.lua"/>
 	<Script file ="nibWatchFrameAdv.lua"/>

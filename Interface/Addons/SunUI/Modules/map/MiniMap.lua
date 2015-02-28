@@ -111,7 +111,7 @@ local function HideMinimapButton()
 	GarrisonLandingPageMinimapButton:SetScale(0.5)
 	--GarrisonLandingPageMinimapButton:SetAlpha(0)
 	GarrisonLandingPageMinimapButton:ClearAllPoints()
-	GarrisonLandingPageMinimapButton:SetPoint("TOPLEFT", Minimap, "TOPLEFT", -6, -6)
+	GarrisonLandingPageMinimapButton:SetPoint("BOTTOM", MiniMapTracking, "TOP", 0, 8)
 	
 	if FeedbackUIButton then
 		FeedbackUIButton:ClearAllPoints()

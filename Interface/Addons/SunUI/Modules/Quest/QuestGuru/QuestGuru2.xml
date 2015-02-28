@@ -1,4 +1,4 @@
-﻿<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
 
 	<Button name="QuestGuruListTemplate" virtual="true" text="Quest Title Example">
@@ -104,13 +104,6 @@
 			</Layer>
 		</Layers>
 		<Frames>
-			<Frame parentKey="update" hidden="true">
-				<Scripts>
-					<OnUpdate>
-						self:GetParent():UpdateLog()
-					</OnUpdate>
-				</Scripts>
-			</Frame>
 			<!-- close button in bottomright -->
 			<Button inherits="UIPanelButtonTemplate" text="CLOSE">
 				<Size x="110" y="22"/>
@@ -230,7 +223,7 @@
 			<Frame parentKey="count" inherits="InsetFrameTemplate3">
 				<Size x="120" y="20"/>
 				<Anchors>
-					<Anchor point="TOPLEFT" x="140" y="-33"/>
+					<Anchor point="TOPLEFT" x="70" y="-33"/>
 				</Anchors>
 				<Layers>
 					<Layer level="ARTWORK">
@@ -307,63 +300,6 @@
 					</Layer>
 				</Layers>
 				<Frames>
-<!-- expand/collapse all button -->
-					<Button parentKey="expandAll">
-						<Size x="64" y="32"/>
-						<Anchors>
-							<Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="48" y="0"/>
-						</Anchors>
-						<Layers>
-							<Layer level="BACKGROUND">
-								<Texture file="Interface\QuestFrame\UI-QuestLogSortTab-Left">
-									<Size x="8" y="32"/>
-									<Anchors>
-										<Anchor point="LEFT"/>
-									</Anchors>
-								</Texture>
-								<Texture file="Interface\QuestFrame\UI-QuestLogSortTab-Right">
-									<Size x="8" y="32"/>
-									<Anchors>
-										<Anchor point="RIGHT"/>
-									</Anchors>
-								</Texture>
-								<Texture file="Interface\QuestFrame\UI-QuestLogSortTab-Middle">
-									<Size x="0" y="32"/>
-									<Anchors>
-										<Anchor point="LEFT" x="8" y="0"/>
-										<Anchor point="RIGHT" x="-8" y="0"/>
-									</Anchors>
-								</Texture>
-							</Layer>
-						</Layers>
-						<!-- quest title/header normalText is shifted to right 20 -->
-						<ButtonText parentKey="normalText" text="ALL">
-							<Size x="0" y="10"/>
-								<Anchors>
-								<Anchor point="LEFT" x="28" y="-4"/>
-							</Anchors> 
-						</ButtonText>
-						<NormalTexture file="Interface\Buttons\UI-MinusButton-UP">
-							<Size x="16" y="16"/>
-							<Anchors>
-								<Anchor point="LEFT" x="11" y="-4"/>
-							</Anchors>
-						</NormalTexture>
-						<HighlightTexture file="Interface\Buttons\UI-PlusButton-Hilight" alphaMode="ADD">
-							<Size x="16" y="16"/>
-							<Anchors>
-								<Anchor point="LEFT" x="11" y="-4"/>
-							</Anchors>
-						</HighlightTexture>
-						<NormalFont style="GameFontNormalLeft"/>
-						<HighlightFont style="GameFontHighlightLeft"/>
-						<DisabledFont style="GameFontHighlightLeft"/>
-						<Scripts>
-							<OnClick>
-								QuestGuru:ExpandAllOnClick()
-							</OnClick>
-						</Scripts>
-					</Button>
 					<Slider name="$parentScrollBar" inherits="HybridScrollBarTemplate" parentKey="scrollBar">
 						<Anchors>
 							<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="0" y="-13"/>
@@ -411,7 +347,7 @@
 			</ScrollFrame>
 		</Frames>
 		<Scripts>
-		
+			
 		</Scripts>
 	</Frame>
 </Ui>
