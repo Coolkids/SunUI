@@ -389,14 +389,14 @@ end
 do
 	L["施法通告"] = "Casting Announcement"
 	L["只是通告自己施放的法术"] = "Announce Cast Spells"
-	L["启用打断通告"] = "Announce Interrupt"
-	L["启用治疗大招通告"] = "Announce Heal"
-	L["启用误导通告"] = "Announce Misdirect"
-	L["启用保命技能通告"] = "life-saving skills to enable Notices"
-	L["启用给出大招通告"] = "enable gives notice big move"
+	L["打断通告"] = "Announce Interrupt"
+	L["治疗大招通告"] = "Announce Heal"
+	L["误导通告"] = "Announce Misdirect"
+	L["保命技能通告"] = "life-saving skills to enable Notices"
+	L["给出大招通告"] = "enable gives notice big move"
 	L["包含天使,痛苦压制,保护等等"] = "Include Angel, Pain Suppression, Protection, etc."
-	L["启用复活技能通告"] = "Announce Resurrection"
-	L["启用团队减伤通告"] = "Enable team by injury Notice"
+	L["复活技能通告"] = "Announce Resurrection"
+	L["团队减伤通告"] = "Enable team by injury Notice"
 	L["正在施放"] = " being cast."
 	L["已施放"] = " has been cast."
 	L["复活"] = "Resurrection"
@@ -431,4 +431,8 @@ do
 	L["向左"] = "Left"
 	L["向右"] = "Right"
 	L["上限"] = "Cap"
+end
+do
+	L["技能监视"] = true
+	L["技能监视信息"] = "\n\nShestakUI_Filger"
 end

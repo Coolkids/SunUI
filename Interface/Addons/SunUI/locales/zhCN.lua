@@ -383,14 +383,14 @@ end
 do
 	L["施法通告"] = true
 	L["只是通告自己施放的法术"] = true
-	L["启用打断通告"] = true
-	L["启用治疗大招通告"] = true
-	L["启用误导通告"] = true
-	L["启用保命技能通告"] = true
-	L["启用给出大招通告"] = true
+	L["打断通告"] = true
+	L["治疗大招通告"] = true
+	L["误导通告"] = true
+	L["保命技能通告"] = true
+	L["给出大招通告"] = true
 	L["包含天使,痛苦压制,保护等等"] = true
-	L["启用复活技能通告"] = true
-	L["启用团队减伤通告"] = true
+	L["复活技能通告"] = true
+	L["团队减伤通告"] = true
 	L["正在施放"] = true
 	L["已施放"] = true
 	L["复活"] = true
@@ -425,4 +425,8 @@ do
 	L["向左"] = true
 	L["向右"] = true
 	L["上限"] = true
+end
+do
+	L["技能监视"] = true
+	L["技能监视信息"] = "\n\n此模块使用ShestakUI_Filger的代码做可移动化处理\n\n解锁方法:在控制台中解锁  选择技能监视  即可移动\n\n添加新的技能 or 修改默认监视列表 or 设置图标大小 请修改文件: SunUI\\modules\\watch\\spells.lua |cffff0000(此文件会被更新器覆盖)|r  \n\n方法参考:  http://bbs.ngacn.cc/read.php?tid=5002683&_ff=200&_ff=200 \n\n单独添加技能请修改文件: SunUI\\modules\\watch\\profiles.lua |cffff0000(此文件不会被更新器更新覆盖)|r \n\n如果实在无法自己添加可以加入QQ群: 180175370 获取帮助"
 end

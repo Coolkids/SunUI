@@ -85,38 +85,38 @@ function A:GetOptions()
 			args = {
 				Interrupt = {
 					type = "toggle",
-					name = L["启用打断通告"],
+					name = L["打断通告"],
 					order = 1,
 				},
 				Channel = {
 					type = "toggle",
-					name = L["启用治疗大招通告"],
+					name = L["治疗大招通告"],
 					order = 2,
 				},
 				Mislead = {
 					type = "toggle",
-					name = L["启用误导通告"],
+					name = L["误导通告"],
 					order = 3,
 				},
 				BaoM = {
 					type = "toggle",
-					name = L["启用保命技能通告"],
+					name = L["保命技能通告"],
 					order = 4,
 				},
 				Give = {
 					type = "toggle",
-					name = L["启用给出大招通告"],
+					name = L["给出大招通告"],
 					desc = L["包含天使,痛苦压制,保护等等"],
 					order = 5,
 				},
 				Resurrect = {
 					type = "toggle",
-					name = L["启用复活技能通告"],
+					name = L["复活技能通告"],
 					order = 6,
 				},
 				Heal = {
 					type = "toggle",
-					name = L["启用团队减伤通告"],
+					name = L["团队减伤通告"],
 					order = 7,
 				},
 			}
@@ -125,38 +125,38 @@ function A:GetOptions()
 	return options
 end
 function A:Info()
-	local baomingstring = "保命技能包含:\n"
+	local baomingstring = L["保命技能通告"]..":\n"
 	for k,v in pairs(self.baoming) do
 		baomingstring = baomingstring..GetSpellInfo(k)..", "
 	end
 	baomingstring = baomingstring.."\n"
 	
-	local healstring = "团队减伤技能包含:\n"
+	local healstring = L["团队减伤通告"]..":\n"
 	for k,v in pairs(self.heal) do
 		healstring = healstring..GetSpellInfo(k)..", "
 	end
 	healstring = healstring.."\n"
 	
-	local clstring = "治疗大招包含:\n"
+	local clstring = L["治疗大招通告"]..":\n"
 	for k,v in pairs(self.cl) do
 		clstring = clstring..GetSpellInfo(k)..", "
 	end
 	clstring = clstring.."\n"
 	
 	
-	local giveliststring = "治疗给出大招包含:\n"
+	local giveliststring = L["给出大招通告"]..":\n"
 	for k,v in pairs(self.givelist) do
 		giveliststring = giveliststring..GetSpellInfo(k)..", "
 	end
 	giveliststring = giveliststring.."\n"
 	
-	local restring = "复活技能包含:\n"
+	local restring = L["复活技能通告"]..":\n"
 	for k,v in pairs(self.resurrect) do
 		restring = restring..GetSpellInfo(k)..", "
 	end
 	restring = restring.."\n"
 	
-	local misstring = "误导类包含:\n"
+	local misstring = L["误导通告"]..":\n"
 	for k,v in pairs(self.mislead) do
 		misstring = misstring..GetSpellInfo(k)..", "
 	end

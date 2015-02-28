@@ -107,21 +107,21 @@ local function HideMinimapButton()
 	GameTimeCalendarInvitesTexture:SetPoint("TOPRIGHT")
 
 	
-	-- Hide Garrison icon
-	GarrisonLandingPageMinimapButton:SetScale(0.0001)
-	GarrisonLandingPageMinimapButton:SetAlpha(0)
+	-- Garrison icon
+	GarrisonLandingPageMinimapButton:SetScale(0.5)
+	--GarrisonLandingPageMinimapButton:SetAlpha(0)
 	GarrisonLandingPageMinimapButton:ClearAllPoints()
-	GarrisonLandingPageMinimapButton:SetPoint("BOTTOM", UIParent, "TOP", 0, 20000)
+	GarrisonLandingPageMinimapButton:SetPoint("TOPLEFT", Minimap, "TOPLEFT", -6, -6)
 	
 	if FeedbackUIButton then
 		FeedbackUIButton:ClearAllPoints()
-		FeedbackUIButton:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 6, -6)
+		FeedbackUIButton:SetPoint("TOPLEFT", Minimap, "TOPLEFT", -6, -26)
 		FeedbackUIButton:SetScale(0.8)
 	end
 
 	if StreamingIcon then
 		StreamingIcon:ClearAllPoints()
-		StreamingIcon:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 8, 8)
+		StreamingIcon:SetPoint("TOPLEFT", Minimap, "TOPLEFT", -6, -46)
 		StreamingIcon:SetScale(0.8)
 	end
 end
