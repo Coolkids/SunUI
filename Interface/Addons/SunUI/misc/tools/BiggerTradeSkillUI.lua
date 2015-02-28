@@ -242,10 +242,10 @@ Launch:SetScript("OnEvent", function(self, event, addon)
 		detailBackground:SetPoint("TOPLEFT", TradeSkillDetailScrollFrame)
 		detailBackground:SetPoint("BOTTOMRIGHT", TradeSkillFrame, "BOTTOMRIGHT", -10, 29)
 		detailBackground:SetTexCoord(0, 0.2, 0, 1)  -- Mess with TexCoords so the texture does not look too compressed/stretched
-		detailBackground:SetTexture("Interface\\ACHIEVEMENTFRAME\\UI-GuildAchievement-Parchment-Horizontal-Desaturated")
+		--detailBackground:SetTexture("Interface\\ACHIEVEMENTFRAME\\UI-GuildAchievement-Parchment-Horizontal-Desaturated")
 		--detailBackground:SetTexture("Interface\\ACHIEVEMENTFRAME\\UI-GuildAchievement-Parchment")
 		--detailBackground:SetTexture("Interface\\FrameGeneral\\UI-Background-Marble")
-
+		detailBackground:SetTexture(1, 1, 1, 0)
 
 		-- Scrollbar of the recipe list
 		TradeSkillListScrollFrame:ClearAllPoints()
