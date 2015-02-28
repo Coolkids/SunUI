@@ -1442,7 +1442,7 @@ local UnitSpecific = {
 		self.Buffs = Buffs
 
 		Buffs.PostUpdateIcon = PostUpdateIcon
-		--[[
+		
 		local Debuffs = CreateFrame("Frame", nil, self)
 		Debuffs.initialAnchor = "TOPRIGHT"
 		Debuffs.onlyShowPlayer = true
@@ -1460,7 +1460,7 @@ local UnitSpecific = {
 		self.Debuffs = Debuffs
 
 		Debuffs.PostUpdateIcon = PostUpdateIcon
-		]]
+		
 		AltPowerBar:HookScript("OnShow", function()
 			Buffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -(5 + UF.db.altPowerHeight))
 			--Debuffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -(5 + UF.db.altPowerHeight))
