@@ -495,7 +495,7 @@ local function LoadSkin()
 			local button = HeirloomsJournal.heirloomEntryFrames[i]
 			
 			if not button.bg then
-				button.bg = A:ReskinIcon(ic)
+				button.bg = A:ReskinIcon(button.iconTexture)
 			end
 			
 			if button.iconTexture:IsShown() then
