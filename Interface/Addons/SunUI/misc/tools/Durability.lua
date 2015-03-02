@@ -1,7 +1,7 @@
 ﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+local DUR = S:NewModule("Durability", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 -- Based on tekability by Tekkub
 local SLOTIDS = {}
-for _, slot in pairs({"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "MainHand", "SecondaryHand"}) do SLOTIDS[slot] = GetInventorySlotInfo(slot .. "Slot") end
 
 local function RYGColorGradient(perc)
 	local relperc = perc*2 % 1
@@ -12,17 +12,11 @@ local function RYGColorGradient(perc)
 	else                    return           0,       1, 0 end
 end
 
-local CreateFS = function(parent, size, justify)
-    local f = parent:CreateFontString(nil, "OVERLAY", "NumberFontNormal")
-    f:SetShadowColor(0, 0, 0, 0)
-    if(justify) then f:SetJustifyH(justify) end
-    return f
-end
 local fontstrings = setmetatable({}, {
 	__index = function(t,i)
 		local gslot = _G["Character"..i.."Slot"]
 		assert(gslot, "Character"..i.."Slot does not exist")
-		local fstr = CreateFS(gslot)
+		local fstr = S:CreateFS(gslot)
 		fstr:SetPoint("CENTER", gslot, "BOTTOM", 1, 8)
 		t[i] = fstr
 		return fstr
@@ -43,7 +37,13 @@ local onEvent = function()
 		end
 	end
 end
-local eventFrame = CreateFrame("Frame")
-eventFrame:RegisterEvent("UNIT_INVENTORY_CHANGED")
-eventFrame:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
-eventFrame:SetScript("OnEvent", onEvent)
+
+function DUR:Initialize()
+	for _, slot in pairs({"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "MainHand", "SecondaryHand"}) do 
+		SLOTIDS[slot] = GetInventorySlotInfo(slot .. "Slot") 
+	end
+	self:RegisterEvent("UNIT_INVENTORY_CHANGED", onEvent)
+	self:RegisterEvent("UPDATE_INVENTORY_DURABILITY", onEvent)
+end
+
+S:RegisterModule(DUR:GetName())

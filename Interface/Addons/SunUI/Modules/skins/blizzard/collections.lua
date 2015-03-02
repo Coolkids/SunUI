@@ -464,6 +464,10 @@ local function LoadSkin()
 
 			button.styled = true
 		end
+		
+		if not button.bg then
+			button.bg = A:ReskinIcon(ic)
+		end
 
 		if button.iconTexture:IsShown() then
 			button.name:SetTextColor(1, 1, 1)
@@ -489,7 +493,11 @@ local function LoadSkin()
 
 		for i = 1, #HeirloomsJournal.heirloomEntryFrames do
 			local button = HeirloomsJournal.heirloomEntryFrames[i]
-
+			
+			if not button.bg then
+				button.bg = A:ReskinIcon(ic)
+			end
+			
 			if button.iconTexture:IsShown() then
 				button.name:SetTextColor(1, 1, 1)
 				button.bg:SetVertexColor(.9, .8, .5)

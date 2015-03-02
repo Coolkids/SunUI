@@ -41,7 +41,7 @@ function Filger:UnitDebuff(unitID, inSpellID, spn, relName)
 	if relName then
 		return UnitDebuff(unitID, spn)
 	else
-		for i = 1, 40, 1 do
+		for i = 1, 120, 1 do
 			local name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellID = UnitDebuff(unitID, i)
 			if not name then break end
 			if inSpellID == spellID then
