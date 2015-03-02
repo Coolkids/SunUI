@@ -440,7 +440,7 @@ local function LoadSkin()
 	A:CreateBDFrame(progressBar, .25)
 
 	-- Buttons
-
+	--[[
 	hooksecurefunc("HeirloomsJournal_UpdateButton", function(button)
 		if not button.styled then
 			local ic = button.iconTexture
@@ -501,6 +501,7 @@ local function LoadSkin()
 			end
 		end
 	end)
+	]]
 end
 
 A:RegisterSkin("Blizzard_Collections", LoadSkin)
