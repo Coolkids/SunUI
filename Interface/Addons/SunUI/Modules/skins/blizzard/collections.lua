@@ -1,4 +1,4 @@
-local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local A = S:GetModule("Skins")
 local ToyBoxFilterFixerFilter = false
 
@@ -466,7 +466,7 @@ local function LoadSkin()
 		end
 		
 		if not button.bg then
-			button.bg = A:ReskinIcon(ic)
+			button.bg = A:ReskinIcon(button.iconTexture)
 		end
 
 		if button.iconTexture:IsShown() then
