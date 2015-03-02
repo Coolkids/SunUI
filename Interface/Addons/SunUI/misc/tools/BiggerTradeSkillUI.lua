@@ -1,4 +1,4 @@
-local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local BS = S:NewModule("BiggerTradeSkillUI", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 
 local function init()
@@ -12,7 +12,7 @@ local function init()
 
 	-- Settings defaults
 	local BiggerTradeSkillUiDB = {}
-	local BiggerTradeSkillUiDB.height = 114 + (TRADE_SKILLS_DISPLAYED * 16)
+	BiggerTradeSkillUiDB.height = 114 + (TRADE_SKILLS_DISPLAYED * 16)
 
 
 	-- Functions for dropdowns, these are based on the old (3.3.5 patch) Blizzard code
@@ -640,6 +640,7 @@ local function skin()
 	BTSUiMiddle2Background:Hide()
 end
 
+
 function BS:ADDON_LOADED(event, addon)
 	if addon == "Blizzard_TradeSkillUI" then
 		init()
@@ -652,3 +653,13 @@ function BS:Initialize()
 end
 
 S:RegisterModule(BS:GetName())
+
+--[[
+local eventFrame = CreateFrame("Frame")
+eventFrame:RegisterEvent("ADDON_LOADED")
+eventFrame:SetScript("OnEvent", function(self, event, addon)
+	if addon == "Blizzard_TradeSkillUI" then
+		init()
+		skin()
+	end
+end)]]
