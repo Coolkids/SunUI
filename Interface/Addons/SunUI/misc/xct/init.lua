@@ -149,8 +149,17 @@ XT.config = {
     -- --------------------------------------------------------------------------------------
         --[[Justification Options: "RIGHT", "LEFT", "CENTER" ]]
         ["justify_1"] = "RIGHT",             -- Damage Incoming Frame            (frame is called "xCTdmg")
+		["xdmg"] = {"CENTER", 170, 30},
+		["xdmgwidth"] = 160,
+		["xdmgheight"] = 200,
         ["justify_2"] = "LEFT",            -- Healing Incoming Frame           (frame is called "xCTheal")
+		["xheal"] = {"CENTER", 180, 30},
+		["xhealwidth"] = 200,
+		["xhealheight"] = 200,
         ["justify_3"] = "RIGHT",           -- General Buffs Gains/Drops Frame  (frame is called "xCTgen")
+		["xgen"] = {"CENTER", 298, 65},
+		["xgenwidth"] = 160,
+		["xgenheight"] = 128,
         ["justify_4"] = "RIGHT",            -- Healing/Damage Outgoing Frame    (frame is called "xCTdone")
         ["justify_5"] = "CENTER",           -- Loot/Money Gains Frame           (frame is called "xCTloot")
         ["justify_6"] = "RIGHT",            -- Criticals Outgoing Frame         (frame is called "xCTcrit")

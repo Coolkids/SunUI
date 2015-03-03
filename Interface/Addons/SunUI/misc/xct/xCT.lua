@@ -1116,16 +1116,16 @@ for i = 1, numf do
     f:SetClampRectInsets(0, 0, ct.fontsize, 0)
     if framenames[i] == "dmg" then
         f:SetJustifyH(ct.justify_1)
-        f:SetPoint("CENTER", 170, 30)
-		f:SetSize(160, 200)
+        f:SetPoint(unpack(ct.xdmg))
+		f:SetSize(ct.xdmgwidth, ct.xdmgheight)
     elseif framenames[i] == "heal" then
         f:SetJustifyH(ct.justify_2)
-		f:SetPoint("CENTER", 180, 30)
-		f:SetSize(160, 200)
+		f:SetPoint(unpack(ct.xheal))
+		f:SetSize(ct.xhealwidth, ct.xhealheight)
     elseif framenames[i] == "gen" then
         f:SetJustifyH(ct.justify_3)
-        f:SetSize(160, 128)
-        f:SetPoint("CENTER", 298, 65)
+        f:SetSize(ct.xgenwidth, ct.xgenheight)
+        f:SetPoint(unpack(ct.xgen))
     elseif framenames[i] == "done" then
         f:SetJustifyH(ct.justify_4)
         f:SetHeight(384)
