@@ -81,47 +81,91 @@ local function LoadSkin()
 	StaticPopup4MoneyInputFrameCopper:SetPoint("LEFT", StaticPopup4MoneyInputFrameSilver, "RIGHT", 1, 0)
 	StackSplitFrame:GetRegions():Hide()
 
-	local buttons = {
-		"VideoOptionsFrameOkay",
-		"VideoOptionsFrameCancel",
-		"VideoOptionsFrameDefaults",
-		"VideoOptionsFrameApply",
-		"AudioOptionsFrameOkay",
-		"AudioOptionsFrameCancel",
-		"AudioOptionsFrameDefaults",
-		"InterfaceOptionsFrameDefaults",
-		"InterfaceOptionsFrameOkay",
-		"InterfaceOptionsFrameCancel",
-		"InterfaceOptionsSocialPanelTwitterLoginButton",
-		"ChatConfigFrameOkayButton",
-		"ChatConfigFrameDefaultButton",
-		"StackSplitOkayButton",
-		"StackSplitCancelButton",
-		"GameMenuButtonHelp",
-		"GameMenuButtonStore",
-		"GameMenuButtonOptions",
-		"GameMenuButtonUIOptions",
-		"GameMenuButtonKeybindings",
-		"GameMenuButtonMacros",
-		"GameMenuButtonLogout",
-		"GameMenuButtonQuit",
-		"GameMenuButtonContinue",
-		"GameMenuButtonMacOptions",
-		"GameMenuButtonWhatsNew",
-		"GameMenuButtonAddons",
-		"ColorPickerOkayButton",
-		"ColorPickerCancelButton",
-		"GuildInviteFrameJoinButton",
-		"GuildInviteFrameDeclineButton",
-		"RolePollPopupAcceptButton",
-		"GhostFrame",
-		"InterfaceOptionsHelpPanelResetTutorials",
-		"SideDressUpModelResetButton"
-	}
+	local buttons = {"AudioOptionsFrameOkay", 
+		"AudioOptionsFrameCancel", 
+		"AudioOptionsFrameDefaults", 
+		"ChatConfigFrameOkayButton", 
+		"ChatConfigFrameDefaultButton", 
+		"DressUpFrameCancelButton", 
+		"DressUpFrameResetButton", 
+		"WhoFrameWhoButton", 
+		"WhoFrameAddFriendButton", 
+		"WhoFrameGroupInviteButton", 
+		"ChannelFrameNewButton", 
+		"RaidFrameRaidInfoButton", 
+		"RaidFrameConvertToRaidButton", 
+		"GearManagerDialogPopupOkay", 
+		"GearManagerDialogPopupCancel", 
+		"StackSplitOkayButton", 
+		"StackSplitCancelButton", 
+		"GameMenuButtonHelp", 
+		"GameMenuButtonWhatsNew", 
+		"GameMenuButtonStore", 
+		"GameMenuButtonOptions", 
+		"GameMenuButtonUIOptions", 
+		"GameMenuButtonKeybindings", 
+		"GameMenuButtonMacros", 
+		"GameMenuButtonAddons", 
+		"GameMenuButtonLogout", 
+		"GameMenuButtonQuit", 
+		"GameMenuButtonContinue", 
+		"LFDQueueFrameFindGroupButton", 
+		"AddFriendEntryFrameAcceptButton", 
+		"AddFriendEntryFrameCancelButton", 
+		"FriendsFriendsSendRequestButton", 
+		"FriendsFriendsCloseButton", 
+		"ColorPickerOkayButton", 
+		"ColorPickerCancelButton", 
+		"GuildInviteFrameJoinButton", 
+		"GuildInviteFrameDeclineButton", 
+		"FriendsFramePendingButton1AcceptButton", 
+		"FriendsFramePendingButton1DeclineButton", 
+		"RaidInfoExtendButton", 
+		"RaidInfoCancelButton", 
+		"PaperDollEquipmentManagerPaneEquipSet", 
+		"PaperDollEquipmentManagerPaneSaveSet", 
+		"HelpFrameAccountSecurityOpenTicket", 
+		"HelpFrameCharacterStuckStuck", 
+		"HelpFrameOpenTicketHelpTopIssues", 
+		"HelpFrameOpenTicketHelpOpenTicket", 
+		"ReadyCheckFrameYesButton", 
+		"ReadyCheckFrameNoButton", 
+		"HelpFrameTicketSubmit", 
+		"HelpFrameTicketCancel", 
+		"HelpFrameKnowledgebaseSearchButton", 
+		"GhostFrame", 
+		"HelpFrameGM_ResponseNeedMoreHelp", 
+		"HelpFrameGM_ResponseCancel", 
+		"GMChatOpenLog", 
+		"AddFriendInfoFrameContinueButton", 
+		"LFDQueueFramePartyBackfillBackfillButton", 
+		"LFDQueueFramePartyBackfillNoBackfillButton", 
+		"ChannelFrameDaughterFrameOkayButton", 
+		"ChannelFrameDaughterFrameCancelButton", 
+		"PendingListInfoFrameContinueButton", 
+		"LFDQueueFrameNoLFDWhileLFRLeaveQueueButton", 
+		"RaidFinderFrameFindRaidButton", 
+		"RaidFinderQueueFrameIneligibleFrameLeaveQueueButton", 
+		"SideDressUpModelResetButton", 
+		"RaidFinderQueueFramePartyBackfillBackfillButton", 
+		"RaidFinderQueueFramePartyBackfillNoBackfillButton", 
+		"ScrollOfResurrectionSelectionFrameAcceptButton", 
+		"ScrollOfResurrectionSelectionFrameCancelButton", 
+		"ScrollOfResurrectionFrameAcceptButton", 
+		"ScrollOfResurrectionFrameCancelButton", 
+		"HelpFrameReportBugSubmit", 
+		"HelpFrameSubmitSuggestionSubmit", 
+		"ReportPlayerNameDialogReportButton", 
+		"ReportPlayerNameDialogCancelButton", 
+		"ReportCheatingDialogReportButton", 
+		"ReportCheatingDialogCancelButton", 
+		"HelpFrameOpenTicketHelpItemRestoration"}
 
 	for i = 1, #buttons do
 		local button = _G[buttons[i]]
-		A:Reskin(button)
+		if button then
+			A:Reskin(button)
+		end
 	end
 
 	A:ReskinClose(RolePollPopupCloseButton)
@@ -842,52 +886,6 @@ local function LoadSkin()
 	hooksecurefunc("PanelTemplates_SelectTab", function(tab)
 		_G[tab:GetName().."Text"]:SetPoint("CENTER", tab, "CENTER")
 	end)
-
-	if IsMacClient() then
-		A:CreateBD(MacOptionsFrame)
-		MacOptionsFrameHeader:SetTexture("")
-		MacOptionsFrameHeader:ClearAllPoints()
-		MacOptionsFrameHeader:SetPoint("TOP", MacOptionsFrame, 0, 0)
-
-		A:CreateBD(MacOptionsFrameMovieRecording, .25)
-		A:CreateBD(MacOptionsITunesRemote, .25)
-
-		A:Reskin(MacOptionsButtonKeybindings)
-		A:Reskin(MacOptionsButtonCompress)
-		A:Reskin(MacOptionsFrameCancel)
-		A:Reskin(MacOptionsFrameOkay)
-		A:Reskin(MacOptionsFrameDefaults)
-
-		A:ReskinDropDown(MacOptionsFrameResolutionDropDown)
-		A:ReskinDropDown(MacOptionsFrameFramerateDropDown)
-		A:ReskinDropDown(MacOptionsFrameCodecDropDown)
-		for i = 1, 10 do
-			if _G["MacOptionsFrameCheckButton"..i] then
-				A:ReskinCheck(_G["MacOptionsFrameCheckButton"..i])
-			end
-		end
-		A:ReskinSlider(MacOptionsFrameQualitySlider)
-
-		MacOptionsButtonCompress:SetWidth(136)
-
-		MacOptionsFrameCancel:SetWidth(96)
-		MacOptionsFrameCancel:SetHeight(22)
-		MacOptionsFrameCancel:ClearAllPoints()
-		MacOptionsFrameCancel:SetPoint("LEFT", MacOptionsButtonKeybindings, "RIGHT", 107, 0)
-
-		MacOptionsFrameOkay:SetWidth(96)
-		MacOptionsFrameOkay:SetHeight(22)
-		MacOptionsFrameOkay:ClearAllPoints()
-		MacOptionsFrameOkay:SetPoint("LEFT", MacOptionsButtonKeybindings, "RIGHT", 5, 0)
-
-		MacOptionsButtonKeybindings:SetWidth(96)
-		MacOptionsButtonKeybindings:SetHeight(22)
-		MacOptionsButtonKeybindings:ClearAllPoints()
-		MacOptionsButtonKeybindings:SetPoint("LEFT", MacOptionsFrameDefaults, "RIGHT", 5, 0)
-
-		MacOptionsFrameDefaults:SetWidth(96)
-		MacOptionsFrameDefaults:SetHeight(22)
-	end
 
 	SideDressUpModel:HookScript("OnShow", function(self)
 		self:ClearAllPoints()
