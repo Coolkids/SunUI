@@ -78,7 +78,7 @@ function Filger:DisplayActives()
 	local id = self.Id
 	local index = 1
 	local previous = nil
-
+	--S:Print("显示图标入口")
 	for _, _ in pairs(self.actives) do
 		local bar = self.bars[index]
 		if not bar then
@@ -245,6 +245,7 @@ function Filger:DisplayActives()
 		if value.duration and value.duration > 0 then
 			if self.Mode == "ICON" then
 				CooldownFrame_SetTimer(bar.cooldown, value.start, value.duration, 1)
+				--S:Print("显示图标2", bar.spellName)
 				if value.data.filter == "CD" or value.data.filter == "ICD" then
 					bar.value = value
 					bar.activeIndex = activeIndex
@@ -260,7 +261,7 @@ function Filger:DisplayActives()
 				bar:SetScript("OnUpdate", Filger.UpdateCD)
 			end
 		else
-			if self.Mode == "ICON" then
+			if self.Mode == "BAR" then
 				bar.cooldown:Hide()
 			else
 				bar.statusbar:SetMinMaxValues(0, 1)
@@ -289,108 +290,140 @@ function Filger:DisplayActives()
 end
 
 function Filger:OnEvent(event, unit)
-	if event == "SPELL_UPDATE_COOLDOWN" or event == "PLAYER_TARGET_CHANGED" or event == "PLAYER_FOCUS_CHANGED" or event == "PLAYER_ENTERING_WORLD" or event == "UNIT_AURA" and (unit == "target" or unit == "player" or unit == "pet" or unit == "focus") then
-		local ptt = GetSpecialization()
-		local needUpdate = false
-		local id = self.Id
+	if (event == "SPELL_UPDATE_COOLDOWN" or event == "PLAYER_TARGET_CHANGED" or event == "PLAYER_FOCUS_CHANGED" or event == "PLAYER_ENTERING_WORLD" or event == "UNIT_AURA") and (unit == "target" or unit == "player" or unit == "pet" or unit == "focus") then
+		if unit then  
+			local ptt = GetSpecialization()
+			local needUpdate = false
+			local id = self.Id
 
-		local spellList = FG:tableFormat(FG["filger_spells"][S.myclass][id])
+			local spellList = FG:tableFormat(FG["filger_spells"][S.myclass][id])
 
-		local index = 1
-		while UnitBuff(unit, index) and not ( index > 40 ) do
-			local spellName, _, icon, count, _, duration, expires, caster, _, _, spellID, _, _, _, value = UnitBuff(unit,index)
-			if (spellList.BUFF[spellID] and spellList.BUFF[spellID].unitID == unit and ( caster == spellList.BUFF[spellID].caster or spellList.BUFF[spellID].caster:lower() == "all" )) or
-				(spellList.BUFF[spellName] and spellList.BUFF[spellName].unitID == unit and ( caster == spellList.BUFF[spellName].caster or spellList.BUFF[spellName].caster:lower() == "all" )) then
-				local data = spellList.BUFF[spellID] or spellList.BUFF[spellName]
-				local name, icon, count, duration, start, spid
-				name, _, icon, count, _, duration, expirationTime, caster, _, _, spid = UnitBuff(unit,index)
-				if not data.count or count >= data.count then
-					start = expirationTime - duration
-				end
-				if not self.actives then setmetatable ({}, {__index=function() return nil end}) end
-				if not self.actives[spellID] then
-					self.actives[spellID] = {data = data, name = name, icon = icon, count = count, start = start, duration = duration, spid = spid}
+			local index = 1
+			while UnitBuff(unit, index) and not ( index > 40 ) do
+				local spellName, _, icon, count, _, duration, expires, caster, _, _, spellID, _, _, _, value = UnitBuff(unit,index)
+				if (spellList.BUFF[spellID] and spellList.BUFF[spellID].unitID == unit and ( caster == spellList.BUFF[spellID].caster or spellList.BUFF[spellID].caster:lower() == "all" )) or
+					(spellList.BUFF[spellName] and spellList.BUFF[spellName].unitID == unit and ( caster == spellList.BUFF[spellName].caster or spellList.BUFF[spellName].caster:lower() == "all" )) then
+					local data = spellList.BUFF[spellID] or spellList.BUFF[spellName]
+					local name, icon, count, duration, start, spid
+					name, _, icon, count, _, duration, expirationTime, caster, _, _, spid = UnitBuff(unit,index)
+					--S:Print(name, caster, spid)
+					if not data.count or count >= data.count then
+						start = expirationTime - duration
+					end
+					--S:Print("图标列表:", self.actives)
+					if not self.actives then 
+						self.actives = setmetatable ({}, {__index=function() return nil end}) 
+						--S:Print("新建图标列表")
+					end
+					if not self.actives[spellID] then
+						--S:Print("增加到图标列表")
+						self.actives[spellID] = {data = data, name = name, icon = icon, count = count, start = start, duration = duration, spid = spid}
+					else
+						--S:Print("更新图标列表")
+						if data.filter ~= "ICD" and (self.actives[spellID].count ~= count or self.actives[spellID].start ~= start or self.actives[spellID].duration ~= duration) then
+							self.actives[spellID].count = count
+							self.actives[spellID].start = start
+							self.actives[spellID].duration = duration
+						end
+					end
 				else
-					if data.filter ~= "ICD" and (self.actives[spellID].count ~= count or self.actives[spellID].start ~= start or self.actives[spellID].duration ~= duration) then
-						self.actives[spellID].count = count
-						self.actives[spellID].start = start
-						self.actives[spellID].duration = duration
+					if self.actives and self.actives[spellID] then
+						S:Print("从图标列表中移除")
+						self.actives[spellID] = nil
 					end
 				end
-			else
-				if self.actives and self.actives[spellID] then
-					self.actives[spellID] = nil
-				end
+				index = index + 1
 			end
-			index = index + 1
-		end
-        
-		index = 1
-		while UnitDebuff(unit, index) and not ( index > 1024 ) do
-			local spellName, _, icon, count, _, duration, expires, caster, _, _, spellID, _, _, _, value = UnitDebuff(unit,index)
-			if (spellList.DEBUFF[spellID] and spellList.DEBUFF[spellID].unitID == unit and ( caster == spellList.DEBUFF[spellID].caster or spellList.DEBUFF[spellID].caster:lower() == "all" )) or
-				(spellList.DEBUFF[spellName] and spellList.DEBUFF[spellName].unitID == unit and ( caster == spellList.DEBUFF[spellName].caster or spellList.DEBUFF[spellName].caster:lower() == "all" )) then
-				local data = spellList.DEBUFF[spellID] or spellList.DEBUFF[spellName]
-				local name, icon, count, duration, start, spid
-				name, _, icon, count, _, duration, expirationTime, caster, _, _, spid = UnitDebuff(unit,index)
-				if not data.count or count >= data.count then
-					start = expirationTime - duration
-				end
-				if not self.actives then setmetatable ({}, {__index=function() return nil end}) end
-				if not self.actives[spellID] then
-					self.actives[spellID] = {data = data, name = name, icon = icon, count = count, start = start, duration = duration, spid = spid}
+			
+			index = 1
+			while UnitDebuff(unit, index) and not ( index > 1024 ) do
+				local spellName, _, icon, count, _, duration, expires, caster, _, _, spellID, _, _, _, value = UnitDebuff(unit,index)
+				if (spellList.DEBUFF[spellID] and spellList.DEBUFF[spellID].unitID == unit and ( caster == spellList.DEBUFF[spellID].caster or spellList.DEBUFF[spellID].caster:lower() == "all" )) or
+					(spellList.DEBUFF[spellName] and spellList.DEBUFF[spellName].unitID == unit and ( caster == spellList.DEBUFF[spellName].caster or spellList.DEBUFF[spellName].caster:lower() == "all" )) then
+					local data = spellList.DEBUFF[spellID] or spellList.DEBUFF[spellName]
+					local name, icon, count, duration, start, spid
+					name, _, icon, count, _, duration, expirationTime, caster, _, _, spid = UnitDebuff(unit,index)
+					if not data.count or count >= data.count then
+						start = expirationTime - duration
+					end
+					if not self.actives then setmetatable ({}, {__index=function() return nil end}) end
+					if not self.actives[spellID] then
+						self.actives[spellID] = {data = data, name = name, icon = icon, count = count, start = start, duration = duration, spid = spid}
+					else
+						if data.filter ~= "ICD" and (self.actives[spellID].count ~= count or self.actives[spellID].start ~= start or self.actives[spellID].duration ~= duration) then
+							self.actives[spellID].count = count
+							self.actives[spellID].start = start
+							self.actives[spellID].duration = duration
+						end
+					end
 				else
-					if data.filter ~= "ICD" and (self.actives[spellID].count ~= count or self.actives[spellID].start ~= start or self.actives[spellID].duration ~= duration) then
-						self.actives[spellID].count = count
-						self.actives[spellID].start = start
-						self.actives[spellID].duration = duration
+					if self.actives and self.actives[spellID] then
+						self.actives[spellID] = nil
 					end
 				end
-			else
-				if self.actives and self.actives[spellID] then
-					self.actives[spellID] = nil
-				end
+				index = index + 1
 			end
-			index = index + 1
+			
 		end
-		for k,v in pairs(spellList.CD) do
-			local data = v
-			local name, icon, count, duration, start, spid
-			if v.spellID then
-				name, _, icon = GetSpellInfo(v.spellID)
-				--S:Print(data.spellID, name)
-				if v.relName then
-					start, duration = GetSpellCooldown(v.spellID)
-				else
-					start, duration = GetSpellCooldown(name)
-				end
-				spid = v.spellID
-			elseif v.slotID then
-				spid = v.slotID
-				local slotLink = GetInventoryItemLink("player", v.slotID)
-				if slotLink then
-					name, _, _, _, _, _, _, _, _, icon = GetItemInfo(slotLink)
-					start, duration = GetInventoryItemCooldown("player", v.slotID)
-				end
-			end
-			if name then
-				if not self.actives then self.actives = setmetatable ({}, {__index=function() return nil end})  end
-				if not self.actives[spid] then
-					self.actives[spid] = {data = data, name = name, icon = icon, count = count, start = start, duration = duration, spid = spid}
-				else
-					if data.filter ~= "ICD" and (self.actives[spid].count ~= count or self.actives[spid].start ~= start or self.actives[spid].duration ~= duration) then
-						self.actives[spid].count = count
-						self.actives[spid].start = start
-						self.actives[spid].duration = duration
+		
+		if event == "SPELL_UPDATE_COOLDOWN" or event == "PLAYER_TARGET_CHANGED" or event == "PLAYER_FOCUS_CHANGED" or event == "PLAYER_ENTERING_WORLD" then
+			for k,v in pairs(spellList.CD) do
+				local data = v
+				local name, icon, count, duration, start, spid, tempId
+				
+				if v.spellID then
+					name, _, icon = GetSpellInfo(v.spellID)
+					if v.relName then
+						start, duration = GetSpellCooldown(v.spellID)
+					else
+						start, duration = GetSpellCooldown(name)
+					end
+					spid = v.spellID
+					if name then
+						if not self.actives then self.actives = setmetatable ({}, {__index=function() return nil end})  end
+						if not self.actives[spid] then
+							self.actives[spid] = {data = data, name = name, icon = icon, count = count, start = start, duration = duration, spid = spid}
+						else
+							if data.filter ~= "ICD" and (self.actives[spid].count ~= count or self.actives[spid].start ~= start or self.actives[spid].duration ~= duration) then
+								self.actives[spid].count = count
+								self.actives[spid].start = start
+								self.actives[spid].duration = duration
+							end
+						end
+					else
+						if self.actives and self.actives[spid] then
+							self.actives[spid] = nil
+						end
+					end
+				elseif v.slotID then
+					spid = v.slotID
+					tempId = "slot"..v.slotID
+					local slotLink = GetInventoryItemLink("player", v.slotID)
+					if slotLink then
+						name, _, _, _, _, _, _, _, _, icon = GetItemInfo(slotLink)
+						start, duration = GetInventoryItemCooldown("player", v.slotID)
+					end
+					
+					if name then
+						if not self.actives then self.actives = setmetatable ({}, {__index=function() return nil end})  end
+						if not self.actives[tempId] then
+							self.actives[tempId] = {data = data, name = name, icon = icon, count = count, start = start, duration = duration, spid = spid}
+						else
+							if data.filter ~= "ICD" and (self.actives[tempId].count ~= count or self.actives[tempId].start ~= start or self.actives[tempId].duration ~= duration) then
+								self.actives[tempId].count = count
+								self.actives[tempId].start = start
+								self.actives[tempId].duration = duration
+							end
+						end
+					else
+						if self.actives and self.actives[tempId] then
+							self.actives[tempId] = nil
+						end
 					end
 				end
-			else
-				if self.actives and self.actives[spellID] then
-					self.actives[spellID] = nil
-				end
 			end
 		end
-
+		
 		if self.actives then
 			Filger.DisplayActives(self)
 		end
@@ -542,7 +575,11 @@ function FG:initAuraData(data, table)
 	elseif data.filter == "DEBUFF" then
 		table.DEBUFF[data.spellID] = data
 	elseif data.filter == "CD" then
-		table.CD[data.spellID] = data
+		if data.spellID then
+			table.CD[data.spellID] = data
+		elseif data.slotID then
+			table.CD["slot"..data.slotID] = data
+		end
 	elseif data.filter == "ICD" then
 		table.ICD[data.spellID] = data
 	end
