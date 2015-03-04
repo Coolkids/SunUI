@@ -180,7 +180,7 @@ BR.ReminderBuffs = {
 				["spells"] = {
 					[2823]   = true,	-- 致命药膏
 					[8679]   = true,	-- 致伤药膏
-					--[157584] = true,	-- 速效毒药
+					[157584] = true,	-- 速效毒药
 				},
 				["combat"] = true,
 				["instance"] = true,
