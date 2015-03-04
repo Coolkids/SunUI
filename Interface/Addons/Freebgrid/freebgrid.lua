@@ -2402,16 +2402,14 @@ function ns:toNewString(int, k, mine)
 			if int==nil then return "" end
 			return '|cffFFCF7F'..earthCount[int]..'|r'
 		elseif (class == "PRIEST" and k == "BR") then
-			local pomCount = {
-				[0] = 'i',
+			local pomCount = ({
 				[1] = 'i',
 				[2] = 'h',
 				[3] = 'g',
 				[4] = 'f',
 				[5] = 'Z',
 				[6] = 'Y',
-				[7] = 'Y',
-			}
+			}, {__index=function() return "Y" end})
 			if int==nil then return "" end
 			if mine then
 				return "|cff66FFFF"..pomCount[int].."|r"
