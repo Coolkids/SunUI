@@ -2402,7 +2402,7 @@ function ns:toNewString(int, k, mine)
 			if int==nil then return "" end
 			return '|cffFFCF7F'..earthCount[int]..'|r'
 		elseif (class == "PRIEST" and k == "BR") then
-			local pomCount = ({
+			local pomCount = setmetatable ({
 				[1] = 'i',
 				[2] = 'h',
 				[3] = 'g',
