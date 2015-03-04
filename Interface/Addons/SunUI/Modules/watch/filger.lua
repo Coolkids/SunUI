@@ -294,95 +294,104 @@ function Filger:OnEvent(event, unit)
 		local needUpdate = false
 		local id = self.Id
 
-		for i = 1, #FG["filger_spells"][S.myclass][id], 1 do
-			local data = FG["filger_spells"][S.myclass][id][i]
-			local found = false
-			local name, icon, count, duration, start, spid
-			spid = 0
+		local spellList = FG:tableFormat(FG["filger_spells"][S.myclass][id])
 
-			if data.filter == "BUFF" and (not data.spec or data.spec == ptt) then
-				local caster, spn, expirationTime
-				spn, _, _ = GetSpellInfo(data.spellID)
-				name, _, icon, count, _, duration, expirationTime, caster, _, _, spid = Filger:UnitBuff(data.unitID, data.spellID, spn, data.relName)
-				if name and (data.caster ~= 1 and (caster == data.caster or data.caster == "all") or MyUnits[caster]) then
-					if not data.count or count >= data.count then
-						start = expirationTime - duration
-						found = true
-					end
-				end
-			elseif data.filter == "DEBUFF" and (not data.spec or data.spec == ptt) then
-				local caster, spn, expirationTime
-				spn, _, _ = GetSpellInfo(data.spellID)
-				name, _, icon, count, _, duration, expirationTime, caster, _, _, spid = Filger:UnitDebuff(data.unitID, data.spellID, spn, data.relName)
-				if name and (data.caster ~= 1 and (caster == data.caster or data.caster == "all") or MyUnits[caster]) then
+		local index = 1
+		while UnitBuff(unit, index) and not ( index > 40 ) do
+			local spellName, _, icon, count, _, duration, expires, caster, _, _, spellID, _, _, _, value = UnitBuff(unit,index)
+			if (spellList.BUFF[spellID] and spellList.BUFF[spellID].unitID == unit and ( caster == spellList.BUFF[spellID].caster or spellList.BUFF[spellID].caster:lower() == "all" )) or
+				(spellList.BUFF[spellName] and spellList.BUFF[spellName].unitID == unit and ( caster == spellList.BUFF[spellName].caster or spellList.BUFF[spellName].caster:lower() == "all" )) then
+				local data = spellList.BUFF[spellID] or spellList.BUFF[spellName]
+				local name, icon, count, duration, start, spid
+				name, _, icon, count, _, duration, expirationTime, caster, _, _, spid = UnitBuff(unit,index)
+				if not data.count or count >= data.count then
 					start = expirationTime - duration
-					found = true
 				end
-			elseif data.filter == "CD" and (not data.spec or data.spec == ptt) then
-				if data.spellID then
-					
-					name, _, icon = GetSpellInfo(data.spellID)
-					--S:Print(data.spellID, name)
-					if data.relName then
-						start, duration = GetSpellCooldown(data.spellID)
-					else
-						start, duration = GetSpellCooldown(name)
-					end
-					spid = data.spellID
-				elseif data.slotID then
-					spid = data.slotID
-					local slotLink = GetInventoryItemLink("player", data.slotID)
-					if slotLink then
-						name, _, _, _, _, _, _, _, _, icon = GetItemInfo(slotLink)
-						start, duration = GetInventoryItemCooldown("player", data.slotID)
-					end
-				end
-				if name and (S.myclass ~= "DEATHKNIGHT" and (duration or 0) > 1.5) or (duration or 0) > 10 then
-					found = true
-				end
-			elseif data.filter == "ICD" and (not data.spec or data.spec == ptt) then
-				if data.trigger == "BUFF" then
-					local spn
-					spn, _, icon = GetSpellInfo(data.spellID)
-					name, _, _, _, _, _, _, _, _, _, spid = Filger:UnitBuff("player", data.spellID, spn, data.relName)
-				elseif data.trigger == "DEBUFF" then
-					local spn
-					spn, _, icon = GetSpellInfo(data.spellID)
-					name, _, _, _, _, _, _, _, _, _, spid = Filger:UnitDebuff("player", data.spellID, spn, data.relName)
-				end
-				if name then
-					if data.slotID then
-						local slotLink = GetInventoryItemLink("player", data.slotID)
-						_, _, _, _, _, _, _, _, _, icon = GetItemInfo(slotLink)
-					end
-					duration = data.duration
-					start = GetTime()
-					found = true
-				end
-			end
-
-			if found then
-				if not self.actives then self.actives = {} end
-				if not self.actives[i] then
-					self.actives[i] = {data = data, name = name, icon = icon, count = count, start = start, duration = duration, spid = spid}
-					needUpdate = true
+				if not self.actives then setmetatable ({}, {__index=function() return nil end}) end
+				if not self.actives[spellID] then
+					self.actives[spellID] = {data = data, name = name, icon = icon, count = count, start = start, duration = duration, spid = spid}
 				else
-					if data.filter ~= "ICD" and (self.actives[i].count ~= count or self.actives[i].start ~= start or self.actives[i].duration ~= duration) then
-						self.actives[i].count = count
-						self.actives[i].start = start
-						self.actives[i].duration = duration
-						needUpdate = true
+					if data.filter ~= "ICD" and (self.actives[spellID].count ~= count or self.actives[spellID].start ~= start or self.actives[spellID].duration ~= duration) then
+						self.actives[spellID].count = count
+						self.actives[spellID].start = start
+						self.actives[spellID].duration = duration
 					end
 				end
 			else
-				if data.filter ~= "ICD" and self.actives and self.actives[i] then
-					self.actives[i] = nil
-					needUpdate = true
+				if self.actives and self.actives[spellID] then
+					self.actives[spellID] = nil
+				end
+			end
+			index = index + 1
+		end
+        
+		index = 1
+		while UnitDebuff(unit, index) and not ( index > 1024 ) do
+			local spellName, _, icon, count, _, duration, expires, caster, _, _, spellID, _, _, _, value = UnitDebuff(unit,index)
+			if (spellList.DEBUFF[spellID] and spellList.DEBUFF[spellID].unitID == unit and ( caster == spellList.DEBUFF[spellID].caster or spellList.DEBUFF[spellID].caster:lower() == "all" )) or
+				(spellList.DEBUFF[spellName] and spellList.DEBUFF[spellName].unitID == unit and ( caster == spellList.DEBUFF[spellName].caster or spellList.DEBUFF[spellName].caster:lower() == "all" )) then
+				local data = spellList.DEBUFF[spellID] or spellList.DEBUFF[spellName]
+				local name, icon, count, duration, start, spid
+				name, _, icon, count, _, duration, expirationTime, caster, _, _, spid = UnitDebuff(unit,index)
+				if not data.count or count >= data.count then
+					start = expirationTime - duration
+				end
+				if not self.actives then setmetatable ({}, {__index=function() return nil end}) end
+				if not self.actives[spellID] then
+					self.actives[spellID] = {data = data, name = name, icon = icon, count = count, start = start, duration = duration, spid = spid}
+				else
+					if data.filter ~= "ICD" and (self.actives[spellID].count ~= count or self.actives[spellID].start ~= start or self.actives[spellID].duration ~= duration) then
+						self.actives[spellID].count = count
+						self.actives[spellID].start = start
+						self.actives[spellID].duration = duration
+					end
+				end
+			else
+				if self.actives and self.actives[spellID] then
+					self.actives[spellID] = nil
+				end
+			end
+			index = index + 1
+		end
+		for k,v in pairs(spellList.CD) do
+			local data = v
+			local name, icon, count, duration, start, spid
+			if v.spellID then
+				name, _, icon = GetSpellInfo(v.spellID)
+				--S:Print(data.spellID, name)
+				if v.relName then
+					start, duration = GetSpellCooldown(v.spellID)
+				else
+					start, duration = GetSpellCooldown(name)
+				end
+				spid = v.spellID
+			elseif v.slotID then
+				spid = v.slotID
+				local slotLink = GetInventoryItemLink("player", v.slotID)
+				if slotLink then
+					name, _, _, _, _, _, _, _, _, icon = GetItemInfo(slotLink)
+					start, duration = GetInventoryItemCooldown("player", v.slotID)
+				end
+			end
+			if name then
+				if not self.actives then self.actives = setmetatable ({}, {__index=function() return nil end})  end
+				if not self.actives[spid] then
+					self.actives[spid] = {data = data, name = name, icon = icon, count = count, start = start, duration = duration, spid = spid}
+				else
+					if data.filter ~= "ICD" and (self.actives[spid].count ~= count or self.actives[spid].start ~= start or self.actives[spid].duration ~= duration) then
+						self.actives[spid].count = count
+						self.actives[spid].start = start
+						self.actives[spid].duration = duration
+					end
+				end
+			else
+				if self.actives and self.actives[spellID] then
+					self.actives[spellID] = nil
 				end
 			end
 		end
 
-		if needUpdate and self.actives then
+		if self.actives then
 			Filger.DisplayActives(self)
 		end
 	end
@@ -515,6 +524,38 @@ function FG:Initialize()
 			S:CreateMover(frame, "FilgerFrame"..i, data.Name, true, nil, "ALL,FILGER")
 		end
 	end
+end
+
+function FG:initAuraTable(table)
+	--local id = {"target", "player", "pet", "focus"}
+	
+	local name = {"BUFF", "DEBUFF", "CD", "ICD"}
+	for i = 1, 4 do
+		table[name[i]] = {}
+	end
+	return table
+end
+
+function FG:initAuraData(data, table)
+	if data.filter == "BUFF" then
+		table.BUFF[data.spellID] = data
+	elseif data.filter == "DEBUFF" then
+		table.DEBUFF[data.spellID] = data
+	elseif data.filter == "CD" then
+		table.CD[data.spellID] = data
+	elseif data.filter == "ICD" then
+		table.ICD[data.spellID] = data
+	end
+end
+
+function FG:tableFormat(old)
+	local spellList = {}
+	spellList = self:initAuraTable(spellList)
+	for i = 1, #old, 1 do
+		local data = old[i]
+		self:initAuraData(data, spellList)
+	end
+	return spellList
 end
 
 S:RegisterModule(FG:GetName())
