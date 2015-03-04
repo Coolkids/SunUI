@@ -505,7 +505,7 @@ function PB:CreateCombatPoint()
 		AnticipationBar[i]:SetStatusBarTexture(S["media"].normal)
 		AnticipationBar[i]:GetStatusBarTexture():SetHorizTile(false)
 		AnticipationBar[i]:SetFrameLevel(CombatPointBar[i]:GetFrameLevel()+1)
-		AnticipationBar[i]:SetSize(((self.db.Width-2*4)/5)/1.2, self.db.Height/3)
+		AnticipationBar[i]:SetSize(((self.db.Width-2*4)/5)/1.2, self.db.Height/1.5)
 		AnticipationBar[i]:SetPoint("CENTER", CombatPointBar[i], 0, 0)
 		if i ~= 5 then 
 			AnticipationBar[i]:SetStatusBarColor(0.8, 0.2, 0.2)
