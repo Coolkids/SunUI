@@ -1,0 +1,14 @@
+﻿## Interface: 50001
+## Title: |cff7aa6d6Ray|r|cffff0000W|r|cff7aa6d6atcher|r
+## Version: 2.0 beta
+## Author: Ray
+## SavedVariables: RayWatcherDB
+## X-WoWBox-Ver: 1
+## X-WoWBox-ID: 3341
+
+libs\libs.xml
+locale\locale.xml
+
+Config.lua
+Options.lua
+Core.lua

@@ -434,5 +434,5 @@ do
 end
 do
 	L["技能监视"] = true
-	L["技能监视信息"] = "\n\nShestakUI_Filger"
+	L["技能监视信息"] = "\n\nRayWatch"
 end

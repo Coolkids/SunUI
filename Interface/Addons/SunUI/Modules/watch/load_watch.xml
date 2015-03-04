@@ -1,8 +1,16 @@
-﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file = "settings.lua"/>
+﻿
+
+
+
+
+
+
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file = "guisuppest.lua"/>
+	<Include file="locale\locale.xml"/>
 	<Script file = "spells.lua"/>
-	<Script file = "profiles.lua"/>
-	<Script file = "filger.lua"/>
+	<Script file = "Options.lua"/>
+	<Script file = "Core.lua"/>
 </Ui>
 
 <!--	<Script file="Load.lua"/>  -->
