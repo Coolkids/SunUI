@@ -53,47 +53,6 @@ AddOn_Enable["DBM-Core"] = function()
 	S.db.IsSetDBM = true
 end
 
-AddOn_Enable["BigWigs"] = function()
-	LoadAddOn("BigWigs_Core")
-	LoadAddOn("BigWigs_Plugins")
-	LoadAddOn("BigWigs_Options")
-end
-AddOn_Init["BigWigs_Plugins"] = function()
-	if S.db.IsSetBW then return end
-	local bars = BigWigs and BigWigs:GetPlugin("Bars")
-	if bars then
-		bars.db.profile.barStyle = "SunUI"
-		bars.db.profile.font = "SunUI Font"
-		bars.db.profile.BigWigsAnchor_width = 130
-		bars.db.profile.BigWigsAnchor_x = 170
-		bars.db.profile.BigWigsAnchor_y = 740
-		bars.db.profile.BigWigsEmphasizeAnchor_width = 130
-		bars.db.profile.BigWigsEmphasizeAnchor_x = 340
-		bars.db.profile.BigWigsEmphasizeAnchor_y = 595
-		bars.db.profile.emphasizeGrowup = true
-	end
-	local mess = BigWigs and BigWigs:GetPlugin("Messages")
-	if mess then
-		mess.db.profile.font = "SunUI Font"
-		mess.db.profile.fontSize = 20
-		mess.db.profile.BWMessageAnchor_x = 595
-		mess.db.profile.BWMessageAnchor_y = 405
-		mess.db.profile.BWEmphasizeMessageAnchor_x = 595
-		mess.db.profile.BWEmphasizeMessageAnchor_y = 595
-		mess.db.profile.BWEmphasizeCountdownMessageAnchor_x = 520
-		mess.db.profile.BWEmphasizeCountdownMessageAnchor_y = 610
-	end
-	local prox = BigWigs and BigWigs:GetPlugin("Proximity")
-	if prox then
-		prox.db.profile.font = "SunUI Font"
-		prox.db.profile.objects.ability = false
-	end
-	BigWigs3IconDB.hide = true
-	BigWigs:GetPlugin("Super Emphasize").db.profile.font = "SunUI Font"
-	BigWigs:GetPlugin("Alt Power").db.profile.font = "SunUI Font"
-	S.db.IsSetBW = true
-end
-
 local eventFrame = CreateFrame("Frame")
 eventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 eventFrame:RegisterEvent("ADDON_LOADED")

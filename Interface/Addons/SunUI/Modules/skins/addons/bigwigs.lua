@@ -135,8 +135,7 @@ end
 
 local function registerStyle()
 	if not BigWigs then return end
-	local bars = BigWigs:GetPlugin("Bars", true)
-	local prox = BigWigs:GetPlugin("Proximity", true)
+	local bars = BigWigs:GetPlugin("Bars")
 	if bars then
 		bars:RegisterBarStyle("SunUI", {
 			apiVersion = 1,
@@ -146,26 +145,18 @@ local function registerStyle()
 			BarStopped = freestyle,
 			GetStyleName = function() return "SunUI" end,
 		})
-	end
-	bars.defaultDB.barStyle = "SunUI"
-	if prox and bars.defaultDB.barStyle == "SunUI" then
-		hooksecurefunc(prox, "RestyleWindow", function()
-			BigWigsProximityAnchor:CreateShadow("Background")
-		end)
+		
 	end
 end
 
-local function skin()
-	local f = CreateFrame("Frame")
-	f:RegisterEvent("ADDON_LOADED")
-	f:SetScript("OnEvent", function(self, event, addon)
-		if event == "ADDON_LOADED" then
-			if addon == "BigWigs_Plugins" then
-				registerStyle()
-				f:UnregisterEvent("ADDON_LOADED")
-			end
+
+local f = CreateFrame("Frame")
+f:RegisterEvent("ADDON_LOADED")
+f:SetScript("OnEvent", function(self, event, addon)
+	if event == "ADDON_LOADED" then
+		if addon == "BigWigs_Plugins" then
+			registerStyle()
+			f:UnregisterEvent("ADDON_LOADED")
 		end
-	end)
-end
-
-A:RegisterSkin("BigWigs", skin)
+	end
+end)
