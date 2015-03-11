@@ -103,109 +103,111 @@ ns.auras_instances_debuffs = {
 -------------------------------德拉诺之王------------------------------------
 		[988] = {--黑石铸造厂
 			-- 1 Gruul 格鲁尔
-			[GetSpellInfo(155080)] = 4, -- 炼狱切割
-			[GetSpellInfo(155078)] = 3, -- 压迫打击
-			[GetSpellInfo(162322)] = 5, -- 炼狱打击
-			[GetSpellInfo(155506)] = 2, -- 石化
-			[GetSpellInfo(165298)] = 2, -- 火耀石M
+			[GetSpellInfo(155080)] = 5, -- 炼狱切割
+			[GetSpellInfo(155078)] = 6, -- 压迫打击
+			[GetSpellInfo(162322)] = 6, -- 炼狱打击
+			[GetSpellInfo(155506)] = 5, -- 石化
+			[GetSpellInfo(155326)] = 5, -- 石化猛击
+			[GetSpellInfo(165298)] = 6, -- 火耀石M
 
 			-- 2 Oregorger 奥尔高格
 			[GetSpellInfo(156203)] = 5, -- 呕吐黑石
 			[GetSpellInfo(156374)] = 5, -- 爆裂残片
-			[GetSpellInfo(156297)] = 3, -- 酸液洪流
-			[GetSpellInfo(173471)] = 4, -- 酸液巨口
-			[GetSpellInfo(155900)] = 2, -- 翻滚之怒
+			[GetSpellInfo(156297)] = 6, -- 酸液洪流
+			[GetSpellInfo(173471)] = 5, -- 酸液巨口
+			[GetSpellInfo(155900)] = 3, -- 翻滚之怒
 
 			-- 3 Blast Furnace 爆裂熔炉
 			[GetSpellInfo(156932)] = 5, -- 崩裂
 			[GetSpellInfo(178279)] = 4, -- 炸弹
 			[GetSpellInfo(155192)] = 4, -- 炸弹
 			[GetSpellInfo(174176)] = 4, -- 炸弹
-			[GetSpellInfo(176121)] = 6, -- 不稳定的火焰
-			[GetSpellInfo(155196)] = 2, -- 锁定
+			[GetSpellInfo(176121)] = 4, -- 不稳定的火焰
+			[GetSpellInfo(155196)] = 4, -- 锁定
 			[GetSpellInfo(155743)] = 5, -- 熔渣池
-			[GetSpellInfo(155240)] = 3, -- 淬火
-			[GetSpellInfo(155242)] = 3, -- 高热
+			[GetSpellInfo(155240)] = 6, -- 淬火
+			[GetSpellInfo(155242)] = 5, -- 高热
 			[GetSpellInfo(155225)] = 5, -- 熔化
 			[GetSpellInfo(155223)] = 5, -- 熔化
 
 			-- 4 Hans'gar and Franzok 汉斯加尔与弗兰佐克 
-			[GetSpellInfo(157139)] = 3, -- 折脊碎椎
-			[GetSpellInfo(160838)] = 2, -- 干扰怒吼
-			[GetSpellInfo(160845)] = 2, -- 干扰怒吼
-			[GetSpellInfo(160847)] = 2, -- 干扰怒吼
-			[GetSpellInfo(160848)] = 2, -- 干扰怒吼
+			[GetSpellInfo(157139)] = 6, -- 折脊碎椎
+			[GetSpellInfo(160838)] = 6, -- 干扰怒吼
+			[GetSpellInfo(160845)] = 6, -- 干扰怒吼
+			[GetSpellInfo(160847)] = 6, -- 干扰怒吼
+			[GetSpellInfo(160848)] = 6, -- 干扰怒吼
 			[GetSpellInfo(155818)] = 4, -- 灼热燃烧
+			[GetSpellInfo(157853)] = 5, -- 余震
 
 			-- 5 Flamebender Ka'graz 缚火者卡格拉兹 
-			[GetSpellInfo(154952)] = 3, -- 锁定
-			[GetSpellInfo(155074)] = 1, -- 焦灼吐息
-			[GetSpellInfo(155049)] = 2, -- 火焰链接
-			[GetSpellInfo(154932)] = 4, -- 熔岩激流
-			[GetSpellInfo(155277)] = 5, -- 炽热光辉
-			[GetSpellInfo(155314)] = 1, -- 岩浆猛击
-			[GetSpellInfo(163284)] = 2, -- 升腾烈焰
+			[GetSpellInfo(154952)] = 4, -- 锁定
+			[GetSpellInfo(155074)] = 6, -- 焦灼吐息
+			[GetSpellInfo(155049)] = 4, -- 烧灼
+			[GetSpellInfo(154932)] = 5, -- 熔岩激流
+			[GetSpellInfo(155277)] = 4, -- 炽热光辉
+			[GetSpellInfo(155314)] = 5, -- 岩浆猛击
+			[GetSpellInfo(163284)] = 5, -- 升腾烈焰
 
 			-- 6 Kromog 克罗莫格 
-			[GetSpellInfo(156766)] = 1, -- 扭曲护甲
-			[GetSpellInfo(157059)] = 2, -- 纠缠之地符文
-			[GetSpellInfo(161839)] = 3, -- 破碎大地符文
-			[GetSpellInfo(161923)] = 3, -- 破碎大地符文
+			[GetSpellInfo(156766)] = 6, -- 扭曲护甲
+			[GetSpellInfo(157059)] = 5, -- 纠缠之地符文
+			[GetSpellInfo(161839)] = 7, -- 破碎大地符文
+			[GetSpellInfo(161923)] = 7, -- 破碎大地符文
 
 			-- 7 Beastlord Darmac 兽王达玛克
-			[GetSpellInfo(154960)] = 4, -- 长矛钉刺
-			[GetSpellInfo(155061)] = 1, -- 狂乱撕扯
-			[GetSpellInfo(162283)] = 1, -- 狂乱撕扯
-			[GetSpellInfo(154989)] = 3, -- 炼狱吐息
-			[GetSpellInfo(154981)] = 5, -- 爆燃
-			[GetSpellInfo(155030)] = 2, -- 炽燃利齿
-			[GetSpellInfo(155236)] = 2, -- 碾碎护甲
-			[GetSpellInfo(155499)] = 3, -- 高热弹片
-			[GetSpellInfo(155657)] = 4, -- 烈焰灌注
-			[GetSpellInfo(159044)] = 1, -- 地动山摇
-			[GetSpellInfo(162277)] = 1, -- 地动山摇
+			[GetSpellInfo(154960)] = 6, -- 长矛钉刺
+			[GetSpellInfo(155061)] = 5, -- 狂乱撕扯
+			[GetSpellInfo(162283)] = 6, -- 狂乱撕扯
+			[GetSpellInfo(154989)] = 6, -- 炼狱吐息
+			[GetSpellInfo(154981)] = 6, -- 爆燃
+			[GetSpellInfo(155030)] = 6, -- 炽燃利齿
+			[GetSpellInfo(155236)] = 6, -- 碾碎护甲
+			[GetSpellInfo(155499)] = 6, -- 高热弹片
+			[GetSpellInfo(155657)] = 5, -- 烈焰灌注
+			[GetSpellInfo(159044)] = 6, -- 地动山摇
+			[GetSpellInfo(162277)] = 6, -- 地动山摇
 
 			-- 8 Operator Thogar 主管索戈尔 
-			[GetSpellInfo(155921)] = 2, -- 点燃
-			[GetSpellInfo(165195)] = 4, -- 实验型脉冲手雷
+			[GetSpellInfo(155921)] = 5, -- 点燃
+			[GetSpellInfo(165195)] = 5, -- 实验型脉冲手雷
 			[GetSpellInfo(160140)] = 4, -- 灼疗之箭
 			[GetSpellInfo(155921)] = 4, -- 锯齿劈斩
-			[GetSpellInfo(156310)] = 3, -- 熔岩震击
-			[GetSpellInfo(159481)] = 3, -- 延时攻城炸弹
-			[GetSpellInfo(164380)] = 2, -- 燃烧
-			[GetSpellInfo(164280)] = 2, -- 热能冲击
+			[GetSpellInfo(156310)] = 5, -- 熔岩震击
+			[GetSpellInfo(159481)] = 6, -- 延时攻城炸弹
+			[GetSpellInfo(164380)] = 5, -- 燃烧
+			[GetSpellInfo(164280)] = 5, -- 热能冲击
 
 			-- 9 Iron Maidens 钢铁女武神 
 			[GetSpellInfo(156631)] = 2, -- 急速射击
-			[GetSpellInfo(164271)] = 3, -- 穿透射击
-			[GetSpellInfo(158601)] = 1, -- 主炮轰击
-			[GetSpellInfo(156214)] = 4, -- 震颤暗影
-			[GetSpellInfo(158315)] = 2, -- 暗影猎杀
-			[GetSpellInfo(159724)] = 3, -- 鲜血仪式
-			[GetSpellInfo(158010)] = 2, -- 浸血觅心者
-			[GetSpellInfo(158692)] = 1, -- 致命投掷
-			[GetSpellInfo(158702)] = 2, -- 锁定
-			[GetSpellInfo(158683)] = 3, -- 堕落之血
-			[GetSpellInfo(170405)] = 3, -- 玛拉卡的血腥召唤
-			[GetSpellInfo(170395)] = 3, -- 苏卡的猎物
+			[GetSpellInfo(164271)] = 6, -- 穿透射击
+			[GetSpellInfo(158601)] = 6, -- 主炮轰击
+			[GetSpellInfo(156214)] = 5, -- 震颤暗影
+			[GetSpellInfo(158315)] = 6, -- 暗影猎杀
+			[GetSpellInfo(159724)] = 4, -- 鲜血仪式
+			[GetSpellInfo(158010)] = 5, -- 浸血觅心者
+			[GetSpellInfo(158692)] = 6, -- 致命投掷
+			[GetSpellInfo(158702)] = 4, -- 锁定
+			[GetSpellInfo(158683)] = 5, -- 堕落之血
+			[GetSpellInfo(170405)] = 6, -- 玛拉卡的血腥召唤
+			[GetSpellInfo(170395)] = 6, -- 苏卡的猎物
 
 			-- 10 Warlord Blackhand  黑手 
-			[GetSpellInfo(156096)] = 5, -- 死亡标记
-			[GetSpellInfo(156653)] = 2, -- 锁定
+			[GetSpellInfo(156096)] = 4, -- 死亡标记
+			[GetSpellInfo(156653)] = 4, -- 锁定
 			[GetSpellInfo(157354)] = 5, -- 断骨
-			[GetSpellInfo(156047)] = 2, -- 熔渣冲击
-			[GetSpellInfo(157018)] = 2, -- 熔渣冲击
-			[GetSpellInfo(157322)] = 5, -- 熔渣冲击
-			[GetSpellInfo(156743)] = 5, -- 穿刺
-			[GetSpellInfo(175020)] = 5, -- 穿刺
-			[GetSpellInfo(158054)] = 5, -- 巨力粉碎猛击
+			[GetSpellInfo(156047)] = 6, -- 熔渣冲击
+			[GetSpellInfo(157018)] = 6, -- 熔渣冲击
+			[GetSpellInfo(157322)] = 6, -- 熔渣冲击
+			[GetSpellInfo(156743)] = 7, -- 穿刺
+			[GetSpellInfo(175020)] = 7, -- 穿刺
+			[GetSpellInfo(158054)] = 7, -- 巨力粉碎猛击
 			[GetSpellInfo(162490)] = 5, -- 燃烧
 			[GetSpellInfo(156604)] = 5, -- 燃烧
-			[GetSpellInfo(156401)] = 4, -- 熔火熔渣
-			[GetSpellInfo(156404)] = 5, -- 烧伤
+			[GetSpellInfo(156401)] = 5, -- 熔火熔渣
+			[GetSpellInfo(156404)] = 6, -- 烧伤
 			[GetSpellInfo(156772)] = 5, -- 燃烧射击
-			[GetSpellInfo(157000)] = 2, -- 投掷炉渣炸弹
-			[GetSpellInfo(159179)] = 5, -- 投掷炉渣炸弹
+			[GetSpellInfo(157000)] = 4, -- 投掷炉渣炸弹
+			[GetSpellInfo(159179)] = 4, -- 投掷炉渣炸弹
 		},
 
 		[994] = {--悬槌堡
