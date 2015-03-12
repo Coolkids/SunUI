@@ -14,6 +14,38 @@ B.ProfessionColors = {
 	[0x010000] = {222/255, 13/255,  65/255} -- Cooking
 }
 
+B.INVTYPE = setmetatable({
+	"INVTYPE_2HWEAPON" = INVTYPE_2HWEAPON;
+	"INVTYPE_AMMO" = INVTYPE_AMMO;
+	"INVTYPE_BAG" = INVTYPE_BAG;
+	"INVTYPE_BODY" = INVTYPE_BODY;
+	"INVTYPE_CHEST" = INVTYPE_CHEST;
+	"INVTYPE_CLOAK" = INVTYPE_CLOAK;
+	"INVTYPE_FEET" = INVTYPE_FEET;
+	"INVTYPE_FINGER" = INVTYPE_FINGER;
+	"INVTYPE_HAND" = INVTYPE_HAND;
+	"INVTYPE_HEAD" = INVTYPE_HEAD;
+	"INVTYPE_HOLDABLE" = INVTYPE_HOLDABLE;
+	"INVTYPE_LEGS" = INVTYPE_LEGS;
+	"INVTYPE_NECK" = INVTYPE_NECK;
+	"INVTYPE_QUIVER" = INVTYPE_QUIVER;
+	"INVTYPE_RANGED" = INVTYPE_RANGED;
+	"INVTYPE_RANGEDRIGHT" = INVTYPE_RANGEDRIGHT;
+	"INVTYPE_RELIC" = INVTYPE_RELIC;
+	"INVTYPE_ROBE" = INVTYPE_ROBE;
+	"INVTYPE_SHIELD" = INVTYPE_SHIELD;
+	"INVTYPE_SHOULDER" = INVTYPE_SHOULDER;
+	"INVTYPE_TABARD" = INVTYPE_TABARD;
+	"INVTYPE_THROWN" = INVTYPE_THROWN;
+	"INVTYPE_TRINKET" = INVTYPE_TRINKET;
+	"INVTYPE_WAIST" = INVTYPE_WAIST;
+	"INVTYPE_WEAPON" = INVTYPE_WEAPON;
+	"INVTYPE_WEAPONMAINHAND" = INVTYPE_WEAPONMAINHAND;
+	"INVTYPE_WEAPONMAINHAND_PET" = INVTYPE_WEAPONMAINHAND_PET;
+	"INVTYPE_WEAPONOFFHAND" = INVTYPE_WEAPONOFFHAND;
+	"INVTYPE_WRIST" = INVTYPE_WRIST;
+},{__index=function() return "" end})
+
 function B:GetOptions()
 	local options = {
 		BagSize = {
@@ -206,7 +238,7 @@ function B:UpdateSlot(bagID, slotID)
 	end
 	if (clink) then
 		local iType, _
-		slot.name, _, slot.rarity, iLevel, _, iType = GetItemInfo(clink)
+		slot.name, _, slot.rarity, iLevel, _, iClass, iSubClass, _, iType = GetItemInfo(clink)
 		if S:IsItemUnusable(clink) then
 			SetItemButtonTextureVertexColor(slot, RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b)
 		else
@@ -237,8 +269,12 @@ function B:UpdateSlot(bagID, slotID)
 			slot.equiplevel:Show()
 			slot.equiplevel:SetText(iLevel)
 			slot.equiptype:Show()
-			slot.equiptype:SetText(iType)
-			
+			if GetLocale() == "zhCN" or GetLocale() == "zhTW" then
+				slot.equiptype:SetText(B.INVTYPE[iType])
+			else
+				slot.equiptype:SetText("")
+				slot.equiptype:Hide()
+			end
 			if S:IsItemUnusable(clink) then
 				slot.equiptype:SetTextColor(RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b)
 			elseif slot.rarity then
@@ -299,7 +335,7 @@ end
 function B:UpdateCooldowns()
 	for _, bagID in ipairs(self.BagIDs) do
 		for slotID = 1, GetContainerNumSlots(bagID) do
-			if (self.Bags[bagID] or not self.Bags[bagID] or not self.Bags[bagID][slotID] then
+			if (self.Bags[bagID] or not self.Bags[bagID] or not self.Bags[bagID][slotID]) then
 				return
 			end
 			local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
@@ -486,11 +522,11 @@ function B:Layout(isBank)
 					
 					f.Bags[bagID][slotID].equiptype = S:CreateFS(f.Bags[bagID][slotID])
 					f.Bags[bagID][slotID].equiptype:SetPoint("TOPRIGHT", 0, -2)
-					f.Bags[bagID][slotID].equiptype:SetFont(S["media"].font, S["media"].fontsize, "OUTLINE")
+					f.Bags[bagID][slotID].equiptype:SetFont(S["media"].font, S["media"].fontsize-2, "OUTLINE")
 					
 					f.Bags[bagID][slotID].equiplevel = S:CreateFS(f.Bags[bagID][slotID])
-					f.Bags[bagID][slotID].equiplevel:SetPoint("BOTTOMRIGHT", 0, 2)
-					f.Bags[bagID][slotID].equiplevel:SetFont(S["media"].font, S["media"].fontsize, "OUTLINE")
+					f.Bags[bagID][slotID].equiplevel:SetPoint("BOTTOMLEFT", 0, 2)
+					f.Bags[bagID][slotID].equiplevel:SetFont(S["media"].font, S["media"].fontsize-2, "OUTLINE")
 					
 					if(f.Bags[bagID][slotID].questIcon) then
 						f.Bags[bagID][slotID].questIcon = _G[f.Bags[bagID][slotID]:GetName().."IconQuestTexture"]
