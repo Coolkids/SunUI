@@ -233,7 +233,7 @@ function B:UpdateSlot(bagID, slotID)
 		end
 		
 		--装备类型 + 等级
-		if iType and (not slot.questIcon:IsShown()) and not (questId or isQuestItem) then
+		if iType and not (questId and not isActive) and not (questId or isQuestItem) then
 			slot.equiplevel:Show()
 			slot.equiplevel:SetText(iLevel)
 			slot.equiptype:Show()
@@ -299,8 +299,11 @@ end
 function B:UpdateCooldowns()
 	for _, bagID in ipairs(self.BagIDs) do
 		for slotID = 1, GetContainerNumSlots(bagID) do
+			if (self.Bags[bagID] or not self.Bags[bagID] or not self.Bags[bagID][slotID] then
+				return
+			end
 			local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
-			if bagID and slotID and self.Bags[bagID][slotID].cooldown then
+			if self.Bags[bagID][slotID].cooldown then
 				CooldownFrame_SetTimer(self.Bags[bagID][slotID].cooldown, start, duration, enable)
 			end
 			if ( duration > 0 and enable == 0 ) then
