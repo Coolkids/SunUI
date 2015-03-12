@@ -51,44 +51,42 @@ local function LoadSkin()
 		for i = 1, DUNGEON_COMPLETION_MAX_REWARDS do
 			local frame = _G["DungeonCompletionAlertFrame"..i]
 			if frame then
-                frame:SetAlpha(1)
-                frame.SetAlpha = S.dummy
-                if not frame.bg then
-                    frame.bg = CreateFrame("Frame", nil, frame)
-                    frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", -2, -6)
-                    frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 6)
-                    frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+				if not frame.bg then
+					frame.bg = CreateFrame("Frame", nil, frame)
+					frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", -2, -6)
+					frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 6)
+					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 					
 
 					if not frame.dungeonTexture.b then
-                        frame.dungeonTexture.b = CreateFrame("Frame", nil, frame)
-                        frame.dungeonTexture.b:SetOutside(frame.dungeonTexture, 1, 1)
-                        A:CreateBD(frame.dungeonTexture.b, 0)
+						frame.dungeonTexture.b = CreateFrame("Frame", nil, frame)
+						frame.dungeonTexture.b:SetOutside(frame.dungeonTexture, 1, 1)
+						A:CreateBD(frame.dungeonTexture.b, 0)
 					end
 
-                    frame:HookScript("OnEnter", function()
-                        A:CreateBD(frame.dungeonTexture.b, 0)
-                        A:CreateBD(frame.bg)
-                    end)
+					frame:HookScript("OnEnter", function()
+						A:CreateBD(frame.dungeonTexture.b, 0)
+						A:CreateBD(frame.bg)
+					end)
 
-                    frame.animIn:HookScript("OnFinished", function()
-                        A:CreateBD(frame.dungeonTexture.b, 0)
-                        A:CreateBD(frame.bg)
-                    end)
-                end
-                frame.raidArt:Kill()
-                frame.dungeonArt1:Kill()
-                frame.dungeonArt2:Kill()
-                frame.dungeonArt3:Kill()
-                frame.dungeonArt4:Kill()
-                frame.heroicIcon:Kill()
+					frame.animIn:HookScript("OnFinished", function()
+						A:CreateBD(frame.dungeonTexture.b, 0)
+						A:CreateBD(frame.bg)
+					end)
+				end
+				frame.raidArt:Kill()
+				frame.dungeonArt1:Kill()
+				frame.dungeonArt2:Kill()
+				frame.dungeonArt3:Kill()
+				frame.dungeonArt4:Kill()
+				frame.heroicIcon:Kill()
 
-                -- Icon
-                frame.dungeonTexture:SetTexCoord(.08, .92, .08, .92)
-                frame.dungeonTexture:SetDrawLayer("OVERLAY")
-                frame.dungeonTexture:ClearAllPoints()
-                frame.dungeonTexture:Point("LEFT", frame, 7, 0)
-                A:CreateBD(frame.bg)
+				-- Icon
+				frame.dungeonTexture:SetTexCoord(.08, .92, .08, .92)
+				frame.dungeonTexture:SetDrawLayer("OVERLAY")
+				frame.dungeonTexture:ClearAllPoints()
+				frame.dungeonTexture:Point("LEFT", frame, 7, 0)
+				A:CreateBD(frame.bg)
 			end
 		end
 	end)
@@ -97,9 +95,6 @@ local function LoadSkin()
 		local frame = GuildChallengeAlertFrame
 
 		if frame then
-			frame:SetAlpha(1)
-			frame.SetAlpha = S.dummy
-
 			if not frame.bg then
 				frame.bg = CreateFrame("Frame", nil, frame)
 				frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", -2, -6)
@@ -114,16 +109,16 @@ local function LoadSkin()
 					A:CreateBD(frame.bg)
 				end)
 			end
-            -- Background
-            for i=1, GuildChallengeAlertFrame:GetNumRegions() do
-                local region = select(i, GuildChallengeAlertFrame:GetRegions()) 
-                if region:GetObjectType() == "Texture" then
-                    if region:GetTexture() == "Interface\\GuildFrame\\GuildChallenges" then
-                        region:Kill()
-                    end
-                end
-            end
-            GuildChallengeAlertFrameEmblemBorder:Kill()
+			-- Background
+			for i=1, GuildChallengeAlertFrame:GetNumRegions() do
+				local region = select(i, GuildChallengeAlertFrame:GetRegions()) 
+				if region:GetObjectType() == "Texture" then
+					if region:GetTexture() == "Interface\\GuildFrame\\GuildChallenges" then
+						region:Kill()
+					end
+				end
+			end
+			GuildChallengeAlertFrameEmblemBorder:Kill()
 			A:CreateBD(frame.bg)
 			SetLargeGuildTabardTextures("player", GuildChallengeAlertFrameEmblemIcon, nil, nil)
 		end	
@@ -133,9 +128,6 @@ local function LoadSkin()
 		local frame = ChallengeModeAlertFrame1
 
 		if frame then
-			frame:SetAlpha(1)
-			frame.SetAlpha = S.dummy
-
 			if not frame.bg then
 				frame.bg = CreateFrame("Frame", nil, frame)
 				frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 19, -6)
@@ -153,23 +145,26 @@ local function LoadSkin()
 				end
 
 				frame:HookScript("OnEnter", function()
-                        A:CreateBD(frame.bg)
-                    end)
+					A:CreateBD(frame.bg)
+				end)
 
-                    frame.animIn:HookScript("OnFinished", function()
-                        A:CreateBD(frame.bg)
-                    end)
+				frame.animIn:HookScript("OnFinished", function()
+					A:CreateBD(frame.bg)
+				end)
 			end
-            -- Background
-            for i = 1, frame:GetNumRegions() do
-                local region = select(i, frame:GetRegions())
-                if region:GetObjectType() == "Texture" then
-                    if region:GetTexture() == "Interface\\Challenges\\challenges-main" then
-                        region:Kill()
-                    end
-                end
-            end
-            ChallengeModeAlertFrame1Border:Kill()
+			-- Background
+			for i = 1, frame:GetNumRegions() do
+				local region = select(i, frame:GetRegions())
+				if region:GetObjectType() == "Texture" then
+					if region:GetTexture() and region:GetTexture():find("Challenges") then
+						region:Kill()
+					end
+				end
+			end
+
+			ChallengeModeAlertFrame1GlowFrame:Kill()
+			ChallengeModeAlertFrame1GlowFrame.glow:Kill()
+			ChallengeModeAlertFrame1Border:Kill()
 			A:CreateBD(frame.bg)
 		end	
 	end)
@@ -178,9 +173,6 @@ local function LoadSkin()
 		local frame = ScenarioAlertFrame1
 
 		if frame then
-			frame:SetAlpha(1)
-			frame.SetAlpha = S.dummy
-
 			if not frame.bg then
 				frame.bg = CreateFrame("Frame", nil, frame)
 				frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 4, -4)
@@ -195,27 +187,27 @@ local function LoadSkin()
 				end
 
 				frame:HookScript("OnEnter", function()
-                        A:CreateBD(frame.bg)
-                    end)
+					A:CreateBD(frame.bg)
+				end)
 
-                    frame.animIn:HookScript("OnFinished", function()
-                        A:CreateBD(frame.bg)
-                    end)
+				frame.animIn:HookScript("OnFinished", function()
+					A:CreateBD(frame.bg)
+				end)
 			end
-            -- Background
-            for i = 1, frame:GetNumRegions() do
-                local region = select(i, frame:GetRegions())
-                if region:GetObjectType() == "Texture" then
-                    if region:GetTexture() == "Interface\\Scenarios\\ScenariosParts" then
-                        region:Kill()
-                    end
-                end
-            end
+			-- Background
+			for i = 1, frame:GetNumRegions() do
+				local region = select(i, frame:GetRegions())
+				if region:GetObjectType() == "Texture" then
+					if region:GetTexture() and region:GetTexture():find("Scenarios") then
+						region:Kill()
+					end
+				end
+			end
 
-            -- Icon
-            ScenarioAlertFrame1DungeonTexture:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-            ScenarioAlertFrame1DungeonTexture:ClearAllPoints()
-            ScenarioAlertFrame1DungeonTexture:Point("LEFT", frame.bg, 9, 0)
+			-- Icon
+			ScenarioAlertFrame1DungeonTexture:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+			ScenarioAlertFrame1DungeonTexture:ClearAllPoints()
+			ScenarioAlertFrame1DungeonTexture:Point("LEFT", frame.bg, 9, 0)
 			A:CreateBD(frame.bg)
 		end
 	end)
@@ -224,9 +216,6 @@ local function LoadSkin()
 		for i = 1, MAX_ACHIEVEMENT_ALERTS do
 			local frame = _G["CriteriaAlertFrame"..i]
 			if frame then
-				frame:SetAlpha(1)
-				frame.SetAlpha = S.dummy
-
 				if not frame.bg then
 					frame.bg = CreateFrame("Frame", nil, frame)
 					frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 39, -6)
@@ -235,98 +224,168 @@ local function LoadSkin()
 
 					-- Icon border
 					if not _G["CriteriaAlertFrame"..i.."IconTexture"].b then
-                        _G["CriteriaAlertFrame"..i.."IconTexture"].b = CreateFrame("Frame", nil, frame)
-                        _G["CriteriaAlertFrame"..i.."IconTexture"].b:SetOutside(_G["CriteriaAlertFrame"..i.."IconTexture"], 1, 1)
-                        A:CreateBD(_G["CriteriaAlertFrame"..i.."IconTexture"].b, 0)
+						_G["CriteriaAlertFrame"..i.."IconTexture"].b = CreateFrame("Frame", nil, frame)
+						_G["CriteriaAlertFrame"..i.."IconTexture"].b:SetOutside(_G["CriteriaAlertFrame"..i.."IconTexture"], 1, 1)
+						A:CreateBD(_G["CriteriaAlertFrame"..i.."IconTexture"].b, 0)
 					end
 					_G["CriteriaAlertFrame"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
 
-					 frame:HookScript("OnEnter", function()
-                        A:CreateBD(_G["CriteriaAlertFrame"..i.."IconTexture"].b, 0)
-                        A:CreateBD(frame.bg)
-                    end)
+					frame:HookScript("OnEnter", function()
+						A:CreateBD(_G["CriteriaAlertFrame"..i.."IconTexture"].b, 0)
+						A:CreateBD(frame.bg)
+					end)
 
-                    frame.animIn:HookScript("OnFinished", function()
-                        A:CreateBD(_G["CriteriaAlertFrame"..i.."IconTexture"].b, 0)
-                        A:CreateBD(frame.bg)
-                    end)
+					frame.animIn:HookScript("OnFinished", function()
+						A:CreateBD(_G["CriteriaAlertFrame"..i.."IconTexture"].b, 0)
+						A:CreateBD(frame.bg)
+					end)
 				end
-                _G["CriteriaAlertFrame"..i.."Unlocked"]:SetTextColor(1, 1, 1)
-                _G["CriteriaAlertFrame"..i.."Name"]:SetTextColor(1, 1, 0)
-                _G["CriteriaAlertFrame"..i.."Background"]:Kill()
-                _G["CriteriaAlertFrame"..i.."IconBling"]:Kill()
-                _G["CriteriaAlertFrame"..i.."IconOverlay"]:Kill()
+				_G["CriteriaAlertFrame"..i.."Unlocked"]:SetTextColor(1, 1, 1)
+				_G["CriteriaAlertFrame"..i.."Name"]:SetTextColor(1, 1, 0)
+				_G["CriteriaAlertFrame"..i.."Background"]:Kill()
+				_G["CriteriaAlertFrame"..i.."IconBling"]:Kill()
+				_G["CriteriaAlertFrame"..i.."IconOverlay"]:Kill()
 				A:CreateBD(frame.bg)
 			end	
 		end
 	end)
 
-	hooksecurefunc("AlertFrame_SetLootWonAnchors", function()
-		for i=1, #LOOT_WON_ALERT_FRAMES do
-			local frame = LOOT_WON_ALERT_FRAMES[i]
-			if frame then
-				frame:SetAlpha(1)
-				frame.SetAlpha = S.dummy
+	hooksecurefunc("LootWonAlertFrame_SetUp", function(frame)
+		if not frame.bg then
+			frame.bg = CreateFrame("Frame", nil, frame)
+			frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 8, -8)
+			frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -6, 8)
+			frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+			A:CreateBD(frame.bg)
 
-				if not frame.bg then
-					frame.bg = CreateFrame("Frame", nil, frame)
-					frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 8, -8)
-					frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -6, 8)
-					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
-
-					-- Icon border
-					if not frame.Icon.b then
-						frame.Icon.b = A:CreateBG(frame.Icon)
-					end
-
-					frame:HookScript("OnEnter", function()
-                        A:CreateBD(frame.bg)
-                    end)
-
-                    frame.animIn:HookScript("OnFinished", function()
-                        A:CreateBD(frame.bg)
-                    end)
-                end
-                frame.Background:Kill()
-                frame.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-                frame.IconBorder:Kill()
-			end
-		end	
+			-- Icon border
+			frame.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+			A:CreateBG(frame.Icon)
+		end
+		frame.Icon:SetDrawLayer("BORDER")
+		frame.Background:Kill()
+		frame.BGAtlas:Kill()
+		frame.PvPBackground:Kill()
+		frame.IconBorder:Kill()
 	end)
 
-	hooksecurefunc("AlertFrame_SetMoneyWonAnchors", function()
-		for i=1, #MONEY_WON_ALERT_FRAMES do
-			local frame = MONEY_WON_ALERT_FRAMES[i]
-			if frame then
-				frame:SetAlpha(1)
-				frame.SetAlpha = S.dummy
+	hooksecurefunc("MoneyWonAlertFrame_SetUp", function(frame)
+		if not frame.bg then
+			frame.bg = CreateFrame("Frame", nil, frame)
+			frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 8, -8)
+			frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -6, 8)
+			frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+			A:CreateBD(frame.bg)
 
-				if not frame.bg then
-					frame.bg = CreateFrame("Frame", nil, frame)
-					frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 8, -8)
-					frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -6, 8)
-					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
-
-					-- Icon border
-					if not frame.Icon.b then
-						frame.Icon.b = A:CreateBG(frame.Icon)
-					end
-
-					frame:HookScript("OnEnter", function()
-                        A:CreateBD(frame.bg)
-                    end)
-
-                    frame.animIn:HookScript("OnFinished", function()
-                        A:CreateBD(frame.bg)
-                    end)
-				end
-                frame.Background:Kill()
-                frame.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-                frame.IconBorder:Kill()
-			end
+			-- Icon border
+			frame.Icon:SetDrawLayer("ARTWORK")
+			frame.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+			A:CreateBG(frame.Icon)
 		end
-	end)	
+		frame.IconBorder:Kill()
+		frame.Background:Kill()
+	end)
 
+	-- Digsite completion alert
+
+	do
+		local frame = DigsiteCompleteToastFrame
+		local icon = frame.DigsiteTypeTexture
+
+		A:CreateBD(frame)
+
+		frame:GetRegions():Hide()
+	end
+
+	-- Garrison building alert
+
+	do
+		local frame = GarrisonBuildingAlertFrame
+		local icon = frame.Icon
+
+		frame:GetRegions():Hide()
+
+		frame.bg = CreateFrame("Frame", nil, frame)
+		frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 8, -8)
+		frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -6, 8)
+		frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+		A:CreateBD(frame.bg)
+
+		icon:SetTexCoord(.08, .92, .08, .92)
+		icon:SetDrawLayer("ARTWORK")
+		A:CreateBG(icon)
+	end
+
+	-- Garrison mission alert
+
+	do
+		local frame = GarrisonMissionAlertFrame
+
+		frame:GetRegions():Hide()
+		frame.IconBG:Hide()
+
+		frame.bg = CreateFrame("Frame", nil, frame)
+		frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 8, -8)
+		frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -6, 8)
+		frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+		A:CreateBD(frame.bg)
+	end
+
+	-- Garrison follower alert
+
+	do
+		local frame = GarrisonFollowerAlertFrame
+
+		frame:GetRegions():Hide()
+		frame.FollowerBG:SetAlpha(0)
+
+		frame.bg = CreateFrame("Frame", nil, frame)
+		frame.bg:SetPoint("TOPLEFT", frame, "TOPLEFT", 16, -3)
+		frame.bg:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -16, 16)
+		frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+		A:CreateBD(frame.bg)
+
+		A:ReskinGarrisonPortrait(frame.PortraitFrame)
+
+	end
+
+	hooksecurefunc("GarrisonFollowerAlertFrame_ShowAlert", function(_, _, _, _, quality)
+		local color = BAG_ITEM_QUALITY_COLORS[quality]
+		if color then
+			GarrisonFollowerAlertFrame.PortraitFrame.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
+		else
+			GarrisonFollowerAlertFrame.PortraitFrame.squareBG:SetBackdropBorderColor(0, 0, 0)
+		end
+	end)
+
+	-- Loot upgrade alert
+	hooksecurefunc("LootUpgradeFrame_SetUp", function(frame)
+		if not frame.bg then
+			local bg = CreateFrame("Frame", nil, frame)
+			bg:SetPoint("TOPLEFT", 10, -10)
+			bg:SetPoint("BOTTOMRIGHT", -10, 10)
+			bg:SetFrameLevel(frame:GetFrameLevel()-1)
+			A:CreateBD(bg)
+			frame.bg = bg
+
+			frame.Background:Hide()
+
+			frame.Icon:SetTexCoord(.08, .92, .08, .92)
+			A:CreateBG(frame.icon)
+			frame.Icon:SetDrawLayer("BORDER", 5)
+			frame.Icon:ClearAllPoints()
+			frame.Icon:SetPoint("CENTER", frame.BaseQualityBorder)
+		end
+
+		frame.BaseQualityBorder:SetTexture(A["media"].backdrop)
+		frame.UpgradeQualityBorder:SetTexture(A["media"].backdrop)
+		frame.BaseQualityBorder:SetSize(52, 52)
+		frame.UpgradeQualityBorder:SetSize(52, 52)
+		frame.BaseQualityBorder:SetVertexColor(frame.BaseQualityItemName:GetTextColor())
+		frame.UpgradeQualityBorder:SetVertexColor(frame.UpgradeQualityItemName:GetTextColor())
+	end)
+
+	--position
 	hooksecurefunc("AlertFrame_FixAnchors", function(self, screenQuadrant)	
 		if POSITION == "TOP" then
 			ANCHOR_POINT = "BOTTOM"
@@ -335,40 +394,40 @@ local function LoadSkin()
 			ANCHOR_POINT = "TOP"
 			YOFFSET = 10
 		end
-        if type(rollBars) == "table" then
-            local lastframe, lastShownFrame
-            for i, frame in pairs(rollBars) do
-                frame:ClearAllPoints()
-                if i ~= 1 then
-                    if POSITION == "TOP" then
-                        frame:Point("TOP", lastframe, "BOTTOM", 0, -4)
-                    else
-                        frame:Point("BOTTOM", lastframe, "TOP", 0, 4)
-                    end 
-                else
-                    if POSITION == "TOP" then
-                        frame:Point("TOP", AlertFrameHolder, "BOTTOM", 0, -4)
-                    else
-                        frame:Point("BOTTOM", AlertFrameHolder, "TOP", 0, 4)
-                    end
-                end
-                lastframe = frame
+		if type(rollBars) == "table" then
+			local lastframe, lastShownFrame
+			for i, frame in pairs(rollBars) do
+				frame:ClearAllPoints()
+				if i ~= 1 then
+					if POSITION == "TOP" then
+						frame:Point("TOP", lastframe, "BOTTOM", 0, -4)
+					else
+						frame:Point("BOTTOM", lastframe, "TOP", 0, 4)
+					end 
+				else
+					if POSITION == "TOP" then
+						frame:Point("TOP", AlertFrameHolder, "BOTTOM", 0, -4)
+					else
+						frame:Point("BOTTOM", AlertFrameHolder, "TOP", 0, 4)
+					end
+				end
+				lastframe = frame
 
-                if frame:IsShown() then
-                    lastShownFrame = frame
-                end
-            end
+				if frame:IsShown() then
+					lastShownFrame = frame
+				end
+			end
 
-            AlertFrame:ClearAllPoints()
-            if lastShownFrame then
-                AlertFrame:SetAllPoints(lastShownFrame)         
-            else
-                AlertFrame:SetAllPoints(AlertFrameHolder)                   
-            end
-        else
-            AlertFrame:ClearAllPoints()
-            AlertFrame:SetAllPoints(AlertFrameHolder)
-        end	
+			AlertFrame:ClearAllPoints()
+			if lastShownFrame then
+				AlertFrame:SetAllPoints(lastShownFrame)
+			else
+				AlertFrame:SetAllPoints(AlertFrameHolder)
+			end
+		else
+			AlertFrame:ClearAllPoints()
+			AlertFrame:SetAllPoints(AlertFrameHolder)
+		end	
 
 		if screenQuadrant then
 			AlertFrame_FixAnchors()
@@ -377,16 +436,16 @@ local function LoadSkin()
 
 	hooksecurefunc("AlertFrame_SetLootAnchors", function(alertAnchor)
 		if ( MissingLootFrame:IsShown() ) then
-            MissingLootFrame:ClearAllPoints()
-            MissingLootFrame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT)
-            if ( GroupLootContainer:IsShown() ) then
-                GroupLootContainer:ClearAllPoints()
-                GroupLootContainer:SetPoint(POSITION, MissingLootFrame, ANCHOR_POINT, 0, YOFFSET)
-            end		
-        elseif ( GroupLootContainer:IsShown() ) then
-            GroupLootContainer:ClearAllPoints()
-            GroupLootContainer:SetPoint(POSITION, alertAnchor, ANCHOR_POINT)	
-        end
+			MissingLootFrame:ClearAllPoints()
+			MissingLootFrame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT)
+			if ( GroupLootContainer:IsShown() ) then
+				GroupLootContainer:ClearAllPoints()
+				GroupLootContainer:SetPoint(POSITION, MissingLootFrame, ANCHOR_POINT, 0, YOFFSET)
+			end
+		elseif ( GroupLootContainer:IsShown() ) then
+			GroupLootContainer:ClearAllPoints()
+			GroupLootContainer:SetPoint(POSITION, alertAnchor, ANCHOR_POINT)
+		end
 	end)
 
 	hooksecurefunc("AlertFrame_SetLootWonAnchors", function(alertAnchor)
@@ -469,75 +528,52 @@ local function LoadSkin()
 		end
 	end)
 
-	-- Garrison building alert
-
-	do
-		local frame = GarrisonBuildingAlertFrame
-		local icon = frame.Icon
-
-		frame:GetRegions():Hide()
-		frame.glow:SetTexture("")
-		frame.shine:SetTexture("")
-
-		local bg = CreateFrame("Frame", nil, frame)
-		bg:SetPoint("TOPLEFT", 8, -8)
-		bg:SetPoint("BOTTOMRIGHT", -8, 10)
-		bg:SetFrameLevel(frame:GetFrameLevel()-1)
-		A:CreateBD(bg)
-
-		icon:SetTexCoord(.08, .92, .08, .92)
-		icon:SetDrawLayer("ARTWORK")
-		A:CreateBG(icon)
-	end
-
-	-- Garrison mission alert
-
-	do
-		local frame = GarrisonMissionAlertFrame
-
-		frame:GetRegions():Hide()
-		frame.IconBG:Hide()
-		frame.glow:SetTexture("")
-		frame.shine:SetTexture("")
-
-		local bg = CreateFrame("Frame", nil, frame)
-		bg:SetPoint("TOPLEFT", 8, -8)
-		bg:SetPoint("BOTTOMRIGHT", -8, 10)
-		bg:SetFrameLevel(frame:GetFrameLevel()-1)
-		A:CreateBD(bg)
-	end
-
-	-- Garrison follower alert
-
-	do
-		local frame = GarrisonFollowerAlertFrame
-
-		frame:GetRegions():Hide()
-		frame.FollowerBG:SetAlpha(0)
-		frame.glow:SetTexture("")
-		frame.shine:SetTexture("")
-
-		local bg = CreateFrame("Frame", nil, frame)
-		bg:SetPoint("TOPLEFT", 16, -3)
-		bg:SetPoint("BOTTOMRIGHT", -16, 16)
-		bg:SetFrameLevel(frame:GetFrameLevel()-1)
-		A:CreateBD(bg)
-
-		A:ReskinGarrisonPortrait(frame.PortraitFrame)
-	end
-
-	hooksecurefunc("GarrisonFollowerAlertFrame_ShowAlert", function(_, _, _, _, quality)
-		local color = BAG_ITEM_QUALITY_COLORS[quality]
-		if color then
-			GarrisonFollowerAlertFrame.PortraitFrame.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
-		else
-			GarrisonFollowerAlertFrame.PortraitFrame.squareBG:SetBackdropBorderColor(0, 0, 0)
+	hooksecurefunc("AlertFrame_SetLootUpgradeFrameAnchors", function(alertAnchor)
+		for i=1, #LOOT_UPGRADE_ALERT_FRAMES do
+			local frame = LOOT_UPGRADE_ALERT_FRAMES[i];
+			if ( frame:IsShown() ) then
+				frame:ClearAllPoints()
+				frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET);
+				alertAnchor = frame
+			end
 		end
 	end)
 
-    hooksecurefunc("GroupLootContainer_AddFrame", function()
-        AlertFrame_FixAnchors()
-    end)
+	hooksecurefunc("AlertFrame_SetDigsiteCompleteToastFrameAnchors", function(alertAnchor)
+		if ( DigsiteCompleteToastFrame and DigsiteCompleteToastFrame:IsShown() ) then
+			DigsiteCompleteToastFrame:ClearAllPoints()
+			DigsiteCompleteToastFrame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+			alertAnchor = DigsiteCompleteToastFrame
+		end
+	end)
+
+	hooksecurefunc("AlertFrame_SetGarrisonBuildingAlertFrameAnchors", function(alertAnchor)
+		if ( GarrisonBuildingAlertFrame and GarrisonBuildingAlertFrame:IsShown() ) then
+			GarrisonBuildingAlertFrame:ClearAllPoints()
+			GarrisonBuildingAlertFrame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+			alertAnchor = GarrisonBuildingAlertFrame
+		end
+	end)
+
+	hooksecurefunc("AlertFrame_SetGarrisonMissionAlertFrameAnchors", function(alertAnchor)
+		if ( GarrisonMissionAlertFrame and GarrisonMissionAlertFrame:IsShown() ) then
+			GarrisonMissionAlertFrame:ClearAllPoints()
+			GarrisonMissionAlertFrame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+			alertAnchor = GarrisonMissionAlertFrame
+		end
+	end)
+
+	hooksecurefunc("AlertFrame_SetGarrisonFollowerAlertFrameAnchors", function(alertAnchor)
+		if ( GarrisonFollowerAlertFrame and GarrisonFollowerAlertFrame:IsShown() ) then
+			GarrisonFollowerAlertFrame:ClearAllPoints()
+			GarrisonFollowerAlertFrame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+			alertAnchor = GarrisonFollowerAlertFrame
+		end
+	end)
+
+	hooksecurefunc("GroupLootContainer_AddFrame", function()
+		AlertFrame_FixAnchors()
+	end)
 
 	hooksecurefunc(GroupLootContainer, "SetPoint", function(self, point, anchorTo, attachPoint, xOffset, yOffset)
 		if _G[anchorTo] == UIParent then
