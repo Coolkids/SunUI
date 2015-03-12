@@ -302,6 +302,10 @@ function B:UpdateSlot(bagID, slotID)
 		--slot:StyleButton(true)
 		slot:SetBackdropColor(0, 0, 0, 0)
 		slot.border:SetBackdropBorderColor(0, 0, 0)
+		slot.equiplevel:SetText("")
+		slot.equiplevel:Hide()
+		slot.equiptype:SetText("")
+		slot.equiptype:Hide()
 	end
 	
 	if(C_NewItems.IsNewItem(bagID, slotID)) then
@@ -521,15 +525,19 @@ function B:Layout(isBank)
 					f.Bags[bagID][slotID].Count:SetPoint("BOTTOMRIGHT", 0, 2)
 					f.Bags[bagID][slotID].Count:SetFont(S["media"].font, S["media"].fontsize, "OUTLINE")
 					
-					f.Bags[bagID][slotID].equiptype = S:CreateFS(f.Bags[bagID][slotID])
-					f.Bags[bagID][slotID].equiptype:SetPoint("TOPRIGHT", 0, -2)
-					f.Bags[bagID][slotID].equiptype:SetJustifyH("RIGHT")
-					f.Bags[bagID][slotID].equiptype:SetFont(S["media"].font, S["media"].fontsize-1, "OUTLINE")
+					if not f.Bags[bagID][slotID].equiptype then
+						f.Bags[bagID][slotID].equiptype = S:CreateFS(f.Bags[bagID][slotID])
+						f.Bags[bagID][slotID].equiptype:SetPoint("TOPRIGHT", 0, -2)
+						f.Bags[bagID][slotID].equiptype:SetJustifyH("RIGHT")
+						f.Bags[bagID][slotID].equiptype:SetFont(S["media"].font, S["media"].fontsize-1, "OUTLINE")
+					end
 					
-					f.Bags[bagID][slotID].equiplevel = S:CreateFS(f.Bags[bagID][slotID])
-					f.Bags[bagID][slotID].equiplevel:SetPoint("BOTTOMRIGHT", 0, 2)
-					f.Bags[bagID][slotID].equiplevel:SetJustifyH("RIGHT")
-					f.Bags[bagID][slotID].equiplevel:SetFont(S["media"].font, S["media"].fontsize, "OUTLINE")
+					if not f.Bags[bagID][slotID].equiplevel then
+						f.Bags[bagID][slotID].equiplevel = S:CreateFS(f.Bags[bagID][slotID])
+						f.Bags[bagID][slotID].equiplevel:SetPoint("BOTTOMRIGHT", 0, 2)
+						f.Bags[bagID][slotID].equiplevel:SetJustifyH("RIGHT")
+						f.Bags[bagID][slotID].equiplevel:SetFont(S["media"].font, S["media"].fontsize, "OUTLINE")
+					end
 					
 					if(f.Bags[bagID][slotID].questIcon) then
 						f.Bags[bagID][slotID].questIcon = _G[f.Bags[bagID][slotID]:GetName().."IconQuestTexture"]
