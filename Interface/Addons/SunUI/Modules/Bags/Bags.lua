@@ -206,7 +206,7 @@ function B:UpdateSlot(bagID, slotID)
 	end
 	if (clink) then
 		local iType, _
-		slot.name, _, slot.rarity, _, _, iType = GetItemInfo(clink)
+		slot.name, _, slot.rarity, iLevel, _, iType = GetItemInfo(clink)
 		if S:IsItemUnusable(clink) then
 			SetItemButtonTextureVertexColor(slot, RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b)
 		else
@@ -231,6 +231,35 @@ function B:UpdateSlot(bagID, slotID)
 			slot:SetBackdropColor(0, 0, 0, 0, 0)
 			slot.border:SetBackdropBorderColor(0, 0, 0)
 		end
+		
+		--装备类型 + 等级
+		if iType and (not slot.questIcon:IsShown()) and not (questId or isQuestItem) then
+			slot.equiplevel:Show()
+			slot.equiplevel:SetText(iLevel)
+			slot.equiptype:Show()
+			slot.equiptype:SetText(iType)
+			
+			if S:IsItemUnusable(clink) then
+				slot.equiptype:SetTextColor(RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b)
+			elseif slot.rarity then
+				local r, g, b = GetItemQualityColor(slot.rarity)
+				slot.equiptype:SetTextColor(r, g, b)
+			end
+			if iLevel then
+				local total, equipped = GetAverageItemLevel()
+				local StatusColor = {{0.5, 0.5, 0.5}, {1, 1, 0}, {0.25, 0.75, 0.25}} --灰 黄 绿
+				local r, g, b = S:ColorGradient(iLevel/equipped, StatusColor[1][1], StatusColor[1][2], StatusColor[1][3],StatusColor[2][1], StatusColor[2][2], StatusColor[2][3],StatusColor[3][1], StatusColor[3][2],StatusColor[3][3])
+				slot.equiplevel:SetTextColor(r, g, b)
+			else
+				slot.equiplevel:SetTextColor(1, 1, 1)
+			end
+		else
+			slot.equiplevel:SetText("")
+			slot.equiplevel:Hide()
+			slot.equiptype:SetText("")
+			slot.equiptype:Hide()
+		end
+		
 	else
 		--slot.iconTexture:SetAllPoints()
 		--slot:StyleButton(true)
@@ -451,6 +480,15 @@ function B:Layout(isBank)
 					f.Bags[bagID][slotID].Count:ClearAllPoints()
 					f.Bags[bagID][slotID].Count:SetPoint("BOTTOMRIGHT", 0, 2)
 					f.Bags[bagID][slotID].Count:SetFont(S["media"].font, S["media"].fontsize, "OUTLINE")
+					
+					f.Bags[bagID][slotID].equiptype = S:CreateFS(f.Bags[bagID][slotID])
+					f.Bags[bagID][slotID].equiptype:SetPoint("TOPRIGHT", 0, -2)
+					f.Bags[bagID][slotID].equiptype:SetFont(S["media"].font, S["media"].fontsize, "OUTLINE")
+					
+					f.Bags[bagID][slotID].equiplevel = S:CreateFS(f.Bags[bagID][slotID])
+					f.Bags[bagID][slotID].equiplevel:SetPoint("BOTTOMRIGHT", 0, 2)
+					f.Bags[bagID][slotID].equiplevel:SetFont(S["media"].font, S["media"].fontsize, "OUTLINE")
+					
 					if(f.Bags[bagID][slotID].questIcon) then
 						f.Bags[bagID][slotID].questIcon = _G[f.Bags[bagID][slotID]:GetName().."IconQuestTexture"]
 						f.Bags[bagID][slotID].questIcon:SetTexture(TEXTURE_ITEM_QUEST_BANG)
@@ -461,8 +499,13 @@ function B:Layout(isBank)
 					
 					f.Bags[bagID][slotID].iconTexture = _G[f.Bags[bagID][slotID]:GetName().."IconTexture"]
 					f.Bags[bagID][slotID].iconTexture:SetTexCoord(.08, .92, .08, .92)
-					
-					f.Bags[bagID][slotID].cooldown = _G[f.Bags[bagID][slotID]:GetName().."Cooldown"]
+					if _G[f.Bags[bagID][slotID]:GetName().."Cooldown"] then
+						f.Bags[bagID][slotID].cooldown = _G[f.Bags[bagID][slotID]:GetName().."Cooldown"]
+					else
+						f.Bags[bagID][slotID].cooldown = CreateFrame("Cooldown", f.Bags[bagID][slotID]:GetName().."Cooldown", _G[f.Bags[bagID][slotID]:GetName()])
+						f.Bags[bagID][slotID].cooldown:SetAllPoints()
+						f.Bags[bagID][slotID].cooldown:SetReverse(true)
+					end
 			
 					f.Bags[bagID][slotID].bagID = bagID
 					f.Bags[bagID][slotID].slotID = slotID
