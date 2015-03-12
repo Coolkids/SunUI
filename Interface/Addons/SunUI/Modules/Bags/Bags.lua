@@ -15,35 +15,35 @@ B.ProfessionColors = {
 }
 
 B.INVTYPE = setmetatable({
-	"INVTYPE_2HWEAPON" = INVTYPE_2HWEAPON;
-	"INVTYPE_AMMO" = INVTYPE_AMMO;
-	"INVTYPE_BAG" = INVTYPE_BAG;
-	"INVTYPE_BODY" = INVTYPE_BODY;
-	"INVTYPE_CHEST" = INVTYPE_CHEST;
-	"INVTYPE_CLOAK" = INVTYPE_CLOAK;
-	"INVTYPE_FEET" = INVTYPE_FEET;
-	"INVTYPE_FINGER" = INVTYPE_FINGER;
-	"INVTYPE_HAND" = INVTYPE_HAND;
-	"INVTYPE_HEAD" = INVTYPE_HEAD;
-	"INVTYPE_HOLDABLE" = INVTYPE_HOLDABLE;
-	"INVTYPE_LEGS" = INVTYPE_LEGS;
-	"INVTYPE_NECK" = INVTYPE_NECK;
-	"INVTYPE_QUIVER" = INVTYPE_QUIVER;
-	"INVTYPE_RANGED" = INVTYPE_RANGED;
-	"INVTYPE_RANGEDRIGHT" = INVTYPE_RANGEDRIGHT;
-	"INVTYPE_RELIC" = INVTYPE_RELIC;
-	"INVTYPE_ROBE" = INVTYPE_ROBE;
-	"INVTYPE_SHIELD" = INVTYPE_SHIELD;
-	"INVTYPE_SHOULDER" = INVTYPE_SHOULDER;
-	"INVTYPE_TABARD" = INVTYPE_TABARD;
-	"INVTYPE_THROWN" = INVTYPE_THROWN;
-	"INVTYPE_TRINKET" = INVTYPE_TRINKET;
-	"INVTYPE_WAIST" = INVTYPE_WAIST;
-	"INVTYPE_WEAPON" = INVTYPE_WEAPON;
-	"INVTYPE_WEAPONMAINHAND" = INVTYPE_WEAPONMAINHAND;
-	"INVTYPE_WEAPONMAINHAND_PET" = INVTYPE_WEAPONMAINHAND_PET;
-	"INVTYPE_WEAPONOFFHAND" = INVTYPE_WEAPONOFFHAND;
-	"INVTYPE_WRIST" = INVTYPE_WRIST;
+	["INVTYPE_2HWEAPON"] = INVTYPE_2HWEAPON,
+	["INVTYPE_AMMO"] = INVTYPE_AMMO,
+	["INVTYPE_BAG"] = INVTYPE_BAG,
+	["INVTYPE_BODY"] = INVTYPE_BODY,
+	["INVTYPE_CHEST"] = INVTYPE_CHEST,
+	["INVTYPE_CLOAK"] = INVTYPE_CLOAK,
+	["INVTYPE_FEET"] = INVTYPE_FEET,
+	["INVTYPE_FINGER"] = INVTYPE_FINGER,
+	["INVTYPE_HAND"] = INVTYPE_HAND,
+	["INVTYPE_HEAD"] = INVTYPE_HEAD,
+	["INVTYPE_HOLDABLE"] = INVTYPE_HOLDABLE,
+	["INVTYPE_LEGS"] = INVTYPE_LEGS,
+	["INVTYPE_NECK"] = INVTYPE_NECK,
+	["INVTYPE_QUIVER"] = INVTYPE_QUIVER,
+	["INVTYPE_RANGED"] = INVTYPE_RANGED,
+	["INVTYPE_RANGEDRIGHT"] = INVTYPE_RANGEDRIGHT,
+	["INVTYPE_RELIC"] = INVTYPE_RELIC,
+	["INVTYPE_ROBE"] = INVTYPE_ROBE,
+	["INVTYPE_SHIELD"] = INVTYPE_SHIELD,
+	["INVTYPE_SHOULDER"] = INVTYPE_SHOULDER,
+	["INVTYPE_TABARD"] = INVTYPE_TABARD,
+	["INVTYPE_THROWN"] = INVTYPE_THROWN,
+	["INVTYPE_TRINKET"] = INVTYPE_TRINKET,
+	["INVTYPE_WAIST"] = INVTYPE_WAIST,
+	["INVTYPE_WEAPON"] = INVTYPE_WEAPON,
+	["INVTYPE_WEAPONMAINHAND"] = INVTYPE_WEAPONMAINHAND,
+	["INVTYPE_WEAPONMAINHAND_PET"] = INVTYPE_WEAPONMAINHAND_PET,
+	["INVTYPE_WEAPONOFFHAND"] = INVTYPE_WEAPONOFFHAND,
+	["INVTYPE_WRIST"] = INVTYPE_WRIST,
 },{__index=function() return "" end})
 
 function B:GetOptions()
@@ -237,7 +237,7 @@ function B:UpdateSlot(bagID, slotID)
 		slot.shadow:Hide()
 	end
 	if (clink) then
-		local iType, _
+		local iType, iLevel, iClass, iSubClass
 		slot.name, _, slot.rarity, iLevel, _, iClass, iSubClass, _, iType = GetItemInfo(clink)
 		if S:IsItemUnusable(clink) then
 			SetItemButtonTextureVertexColor(slot, RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b)
@@ -266,8 +266,6 @@ function B:UpdateSlot(bagID, slotID)
 		
 		--装备类型 + 等级
 		if iType and not (questId and not isActive) and not (questId or isQuestItem) then
-			slot.equiplevel:Show()
-			slot.equiplevel:SetText(iLevel)
 			slot.equiptype:Show()
 			if GetLocale() == "zhCN" or GetLocale() == "zhTW" then
 				slot.equiptype:SetText(B.INVTYPE[iType])
@@ -281,13 +279,16 @@ function B:UpdateSlot(bagID, slotID)
 				local r, g, b = GetItemQualityColor(slot.rarity)
 				slot.equiptype:SetTextColor(r, g, b)
 			end
-			if iLevel then
+			if B.INVTYPE[iType] ~= "" then
+				slot.equiplevel:Show()
+				slot.equiplevel:SetText(iLevel)
 				local total, equipped = GetAverageItemLevel()
 				local StatusColor = {{0.5, 0.5, 0.5}, {1, 1, 0}, {0.25, 0.75, 0.25}} --灰 黄 绿
 				local r, g, b = S:ColorGradient(iLevel/equipped, StatusColor[1][1], StatusColor[1][2], StatusColor[1][3],StatusColor[2][1], StatusColor[2][2], StatusColor[2][3],StatusColor[3][1], StatusColor[3][2],StatusColor[3][3])
 				slot.equiplevel:SetTextColor(r, g, b)
 			else
-				slot.equiplevel:SetTextColor(1, 1, 1)
+				slot.equiptype:SetText("")
+				slot.equiptype:Hide()
 			end
 		else
 			slot.equiplevel:SetText("")
@@ -522,11 +523,13 @@ function B:Layout(isBank)
 					
 					f.Bags[bagID][slotID].equiptype = S:CreateFS(f.Bags[bagID][slotID])
 					f.Bags[bagID][slotID].equiptype:SetPoint("TOPRIGHT", 0, -2)
-					f.Bags[bagID][slotID].equiptype:SetFont(S["media"].font, S["media"].fontsize-2, "OUTLINE")
+					f.Bags[bagID][slotID].equiptype:SetJustifyH("RIGHT")
+					f.Bags[bagID][slotID].equiptype:SetFont(S["media"].font, S["media"].fontsize-1, "OUTLINE")
 					
 					f.Bags[bagID][slotID].equiplevel = S:CreateFS(f.Bags[bagID][slotID])
-					f.Bags[bagID][slotID].equiplevel:SetPoint("BOTTOMLEFT", 0, 2)
-					f.Bags[bagID][slotID].equiplevel:SetFont(S["media"].font, S["media"].fontsize-2, "OUTLINE")
+					f.Bags[bagID][slotID].equiplevel:SetPoint("BOTTOMRIGHT", 0, 2)
+					f.Bags[bagID][slotID].equiplevel:SetJustifyH("RIGHT")
+					f.Bags[bagID][slotID].equiplevel:SetFont(S["media"].font, S["media"].fontsize, "OUTLINE")
 					
 					if(f.Bags[bagID][slotID].questIcon) then
 						f.Bags[bagID][slotID].questIcon = _G[f.Bags[bagID][slotID]:GetName().."IconQuestTexture"]
