@@ -348,13 +348,13 @@ function B:UpdateSlot(bagID, slotID)
 		slot.equiptype:Hide()
 	end
 	
-	if(C_NewItems.IsNewItem(bagID, slotID)) then
+	--[[if(C_NewItems.IsNewItem(bagID, slotID)) then
 		slot.shadow:Show()
 		S:Flash(slot.shadow, 1, true)
 	else
 		slot.shadow:Hide()
 		S:StopFlash(slot.shadow)
-	end
+	end]]
 	
 	SetItemButtonTexture(slot, texture)
 	SetItemButtonCount(slot, count)
@@ -773,13 +773,13 @@ function B:UpdateReagentSlot(slotID)
 		slot:SetBackdropBorderColor(unpack(S["media"].bordercolor));
 	end
 
-	if(C_NewItems.IsNewItem(bagID, slotID)) then
+	--[[if(C_NewItems.IsNewItem(bagID, slotID)) then
 		slot.shadow:Show()
 		S:Flash(slot.shadow, 1, true)
 	else
 		slot.shadow:Hide()
 		S:StopFlash(slot.shadow)
-	end
+	end]]
 	
 	SetItemButtonTexture(slot, texture);
 	SetItemButtonCount(slot, count);
