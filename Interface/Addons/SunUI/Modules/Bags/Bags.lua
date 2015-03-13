@@ -46,6 +46,15 @@ B.INVTYPE = setmetatable({
 	["INVTYPE_WRIST"] = INVTYPE_WRIST,
 },{__index=function() return "" end})
 
+local function Round(v, decimals)
+	if not decimals then decimals = 0 end
+    return (("%%.%df"):format(decimals)):format(v)
+end
+
+local function StringLength(v, a)
+	return Round(a/v, 2)
+end
+
 function B:GetOptions()
 	local options = {
 		BagSize = {
@@ -270,11 +279,16 @@ function B:UpdateSlot(bagID, slotID)
 		end
 		
 		--装备类型 + 等级
-		if self.db.EquipType then
+		if B.db.EquipType then
 			if iType and not (questId and not isActive) and not (questId or isQuestItem) then
 				slot.equiptype:Show()
 				if GetLocale() == "zhCN" or GetLocale() == "zhTW" then
-					slot.equiptype:SetText(iSubClass)
+					if iType:find("WEAPON") then
+						slot.equiptype:SetText(iSubClass)
+					elseif
+						slot.equiptype:SetText(B.INVTYPE[iType])
+					end
+					slot.equiptype:SetFont(S["media"].font, S["media"].fontsize * (StringLength(2, string.len(slot.equiptype:GetText()))), select(3, slot.equiptype:GetFont()))
 					S:Print(iSubClass, B.INVTYPE[iType])
 				else
 					slot.equiptype:SetText("")
@@ -354,6 +368,7 @@ function B:UpdateCooldowns()
 	for _, bagID in ipairs(self.BagIDs) do
 		for slotID = 1, GetContainerNumSlots(bagID) do
 			if (self.Bags[bagID] or not self.Bags[bagID] or not self.Bags[bagID][slotID]) then
+				S:Print(self.Bags[bagID][slotID].cooldown)
 				return
 			end
 			local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
