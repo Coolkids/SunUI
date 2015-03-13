@@ -3,7 +3,7 @@
 	<Script file="chat.lua"/>
 	<Script file="chatbar.lua"/>
 	<Script file="TabChannel.lua"/>
-	<Include file="ChatFilter\load_chatfilter.lua"/>
+	<Include file="ChatFilter\load_chatfilter.xml"/>
 	<Script file="damagemeters.lua"/>
 	<Script file="urlcopy.lua"/>
 	<Script file="CrappyChatFix.lua"/>

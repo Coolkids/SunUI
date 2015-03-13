@@ -46,15 +46,6 @@ B.INVTYPE = setmetatable({
 	["INVTYPE_WRIST"] = INVTYPE_WRIST,
 },{__index=function() return "" end})
 
-local function Round(v, decimals)
-	if not decimals then decimals = 0 end
-    return (("%%.%df"):format(decimals)):format(v)
-end
-
-local function StringLength(v, a)
-	return Round(a/v, 2)
-end
-
 function B:GetOptions()
 	local options = {
 		BagSize = {
@@ -280,15 +271,29 @@ function B:UpdateSlot(bagID, slotID)
 		
 		--装备类型 + 等级
 		if B.db.EquipType then
-			if iType and not (questId and not isActive) and not (questId or isQuestItem) then
+			if iType and not (questId and not isActive) and not (questId or isQuestItem) and B.INVTYPE[iType]~= "" then
 				slot.equiptype:Show()
 				if GetLocale() == "zhCN" or GetLocale() == "zhTW" then
+					local temptext, round
 					if iType:find("WEAPON") then
 						slot.equiptype:SetText(iSubClass)
+						temptext = iSubClass
 					else
 						slot.equiptype:SetText(B.INVTYPE[iType])
+						temptext = B.INVTYPE[iType]
 					end
-					slot.equiptype:SetFont(S["media"].font, S["media"].fontsize * (StringLength(2, slot.equiptype:GetText():len())), select(3, slot.equiptype:GetFont()))
+					round = temptext:len()
+					--S:Print("字数:", round)
+					if round == 0 then 
+						round = 1 
+					else
+						round = 2/(round/3)
+					end
+					if round > 1 then
+						round = 1
+					end
+					--S:Print("系数:", round, "倒数:", 1-round,"字号:", S["media"].fontsize * round)
+					slot.equiptype:SetFont(S["media"].font, (S["media"].fontsize - 1) * round, S["media"].fontflag)
 					--S:Print(iSubClass, B.INVTYPE[iType])
 				else
 					slot.equiptype:SetText("")
@@ -304,8 +309,16 @@ function B:UpdateSlot(bagID, slotID)
 					slot.equiplevel:Show()
 					slot.equiplevel:SetText(iLevel)
 					local total, equipped = GetAverageItemLevel()
-					local StatusColor = {{0.5, 0.5, 0.5}, {1, 1, 0}, {0.25, 0.75, 0.25}} --灰 黄 绿
-					local r, g, b = S:ColorGradient(iLevel/equipped, StatusColor[1][1], StatusColor[1][2], StatusColor[1][3],StatusColor[2][1], StatusColor[2][2], StatusColor[2][3],StatusColor[3][1], StatusColor[3][2],StatusColor[3][3])
+					--local StatusColor = {{0.5, 0.5, 0.5}, {1, 1, 0}, {0.25, 0.75, 0.25}} --灰 黄 绿
+					local temp = iLevel - equipped
+					local r, g, b
+					if temp > 0 then
+						r, g, b = 0.25, 0.75, 0.25
+					elseif temp < -20 then
+						r, g, b = 0.5, 0.5, 0.5
+					elseif temp <=0 and temp >= -20
+						r, g, b = 1, 1, 0
+					end
 					slot.equiplevel:SetTextColor(r, g, b)
 				else
 					slot.equiptype:SetText("")
