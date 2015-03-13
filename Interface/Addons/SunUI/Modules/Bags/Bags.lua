@@ -235,10 +235,10 @@ function B:UpdateSlot(bagID, slotID)
 		slot.questIcon:Hide();
 	end
 	slot.name, slot.rarity = nil, nil
+	
 	local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
-	if slot.cooldown then 
-		CooldownFrame_SetTimer(slot.cooldown, start, duration, enable)
-	end
+	CooldownFrame_SetTimer(slot.cooldown, start, duration, enable)
+	
 	if ( duration > 0 and enable == 0 ) then
 		SetItemButtonTextureVertexColor(slot, 0.4, 0.4, 0.4);
 	else
@@ -367,14 +367,8 @@ end
 function B:UpdateCooldowns()
 	for _, bagID in ipairs(self.BagIDs) do
 		for slotID = 1, GetContainerNumSlots(bagID) do
-			if (self.Bags[bagID] or not self.Bags[bagID] or not self.Bags[bagID][slotID]) then
-				S:Print(self.Bags[bagID][slotID].cooldown)
-				return
-			end
 			local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
-			if self.Bags[bagID][slotID].cooldown then
-				CooldownFrame_SetTimer(self.Bags[bagID][slotID].cooldown, start, duration, enable)
-			end
+			CooldownFrame_SetTimer(self.Bags[bagID][slotID].cooldown, start, duration, enable)
 			if ( duration > 0 and enable == 0 ) then
 				SetItemButtonTextureVertexColor(self.Bags[bagID][slotID], 0.4, 0.4, 0.4);
 			else
