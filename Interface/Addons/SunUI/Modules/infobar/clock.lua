@@ -83,9 +83,7 @@ function IB:CreateClock()
 		self.Timer = self.Timer + elapsed
 		if self.Timer > 1 then
 			self.Timer = 0
-			local Text = GameTime_GetLocalTime(true)
-			local index = Text:find(":")
-			self.text:SetText(Text:sub(index-2, index-1).." : "..Text:sub(index+1, index+2))
+			self.text:SetText(GameTime_GetLocalTime(true))
 		end
 	end)
 	RequestRaidInfo()

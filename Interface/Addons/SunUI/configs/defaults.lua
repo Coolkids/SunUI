@@ -58,6 +58,7 @@ P["Bags"]={
 	Spacing = 5,
 	BagWidth = 400,
 	BankWidth = 580,
+	EquipType = true,
 }
 
 P["Buff"]={

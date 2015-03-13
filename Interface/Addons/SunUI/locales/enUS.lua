@@ -156,6 +156,7 @@ do
 	L["银行框体宽度"] = "Bank Frame width"
 	L["整理背包"] = "Sort Bags"
 	L["左键逆向,右键正向"] = "Left Reverse, Right forward"
+	L["物品类型及等级"] = "Equip Type and Level"
 end
 --buff
 do

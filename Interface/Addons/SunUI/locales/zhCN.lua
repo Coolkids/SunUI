@@ -150,6 +150,7 @@ do
 	L["银行框体宽度"] = true
 	L["整理背包"] = true
 	L["左键逆向,右键正向"] = true
+	L["物品类型及等级"] = true
 end
 --buff
 do

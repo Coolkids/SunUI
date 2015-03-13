@@ -96,6 +96,11 @@ function B:GetOptions()
 				self:Layout(true) 
 			end,
 		},
+		EquipType = {
+			type = "toggle",
+			name = L["物品类型及等级"],
+			order = 6,
+		},
 	}
 	return options
 end
@@ -265,28 +270,36 @@ function B:UpdateSlot(bagID, slotID)
 		end
 		
 		--装备类型 + 等级
-		if iType and not (questId and not isActive) and not (questId or isQuestItem) then
-			slot.equiptype:Show()
-			if GetLocale() == "zhCN" or GetLocale() == "zhTW" then
-				slot.equiptype:SetText(B.INVTYPE[iType])
+		if self.db.EquipType then
+			if iType and not (questId and not isActive) and not (questId or isQuestItem) then
+				slot.equiptype:Show()
+				if GetLocale() == "zhCN" or GetLocale() == "zhTW" then
+					slot.equiptype:SetText(iSubClass)
+					S:Print(iSubClass, B.INVTYPE[iType])
+				else
+					slot.equiptype:SetText("")
+					slot.equiptype:Hide()
+				end
+				if S:IsItemUnusable(clink) then
+					slot.equiptype:SetTextColor(RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b)
+				elseif slot.rarity then
+					local r, g, b = GetItemQualityColor(slot.rarity)
+					slot.equiptype:SetTextColor(r, g, b)
+				end
+				if B.INVTYPE[iType] ~= "" then
+					slot.equiplevel:Show()
+					slot.equiplevel:SetText(iLevel)
+					local total, equipped = GetAverageItemLevel()
+					local StatusColor = {{0.5, 0.5, 0.5}, {1, 1, 0}, {0.25, 0.75, 0.25}} --灰 黄 绿
+					local r, g, b = S:ColorGradient(iLevel/equipped, StatusColor[1][1], StatusColor[1][2], StatusColor[1][3],StatusColor[2][1], StatusColor[2][2], StatusColor[2][3],StatusColor[3][1], StatusColor[3][2],StatusColor[3][3])
+					slot.equiplevel:SetTextColor(r, g, b)
+				else
+					slot.equiptype:SetText("")
+					slot.equiptype:Hide()
+				end
 			else
-				slot.equiptype:SetText("")
-				slot.equiptype:Hide()
-			end
-			if S:IsItemUnusable(clink) then
-				slot.equiptype:SetTextColor(RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b)
-			elseif slot.rarity then
-				local r, g, b = GetItemQualityColor(slot.rarity)
-				slot.equiptype:SetTextColor(r, g, b)
-			end
-			if B.INVTYPE[iType] ~= "" then
-				slot.equiplevel:Show()
-				slot.equiplevel:SetText(iLevel)
-				local total, equipped = GetAverageItemLevel()
-				local StatusColor = {{0.5, 0.5, 0.5}, {1, 1, 0}, {0.25, 0.75, 0.25}} --灰 黄 绿
-				local r, g, b = S:ColorGradient(iLevel/equipped, StatusColor[1][1], StatusColor[1][2], StatusColor[1][3],StatusColor[2][1], StatusColor[2][2], StatusColor[2][3],StatusColor[3][1], StatusColor[3][2],StatusColor[3][3])
-				slot.equiplevel:SetTextColor(r, g, b)
-			else
+				slot.equiplevel:SetText("")
+				slot.equiplevel:Hide()
 				slot.equiptype:SetText("")
 				slot.equiptype:Hide()
 			end
