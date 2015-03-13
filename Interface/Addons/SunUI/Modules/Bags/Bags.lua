@@ -285,7 +285,7 @@ function B:UpdateSlot(bagID, slotID)
 				if GetLocale() == "zhCN" or GetLocale() == "zhTW" then
 					if iType:find("WEAPON") then
 						slot.equiptype:SetText(iSubClass)
-					elseif
+					else
 						slot.equiptype:SetText(B.INVTYPE[iType])
 					end
 					slot.equiptype:SetFont(S["media"].font, S["media"].fontsize * (StringLength(2, string.len(slot.equiptype:GetText()))), select(3, slot.equiptype:GetFont()))
