@@ -316,7 +316,7 @@ function B:UpdateSlot(bagID, slotID)
 						r, g, b = 0.25, 0.75, 0.25
 					elseif temp < -20 then
 						r, g, b = 0.5, 0.5, 0.5
-					elseif temp <=0 and temp >= -20
+					elseif temp <=0 and temp >= -20 then
 						r, g, b = 1, 1, 0
 					end
 					slot.equiplevel:SetTextColor(r, g, b)
