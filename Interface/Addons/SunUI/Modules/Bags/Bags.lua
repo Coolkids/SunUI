@@ -289,7 +289,7 @@ function B:UpdateSlot(bagID, slotID)
 						slot.equiptype:SetText(B.INVTYPE[iType])
 					end
 					slot.equiptype:SetFont(S["media"].font, S["media"].fontsize * (StringLength(2, string.len(slot.equiptype:GetText()))), select(3, slot.equiptype:GetFont()))
-					S:Print(iSubClass, B.INVTYPE[iType])
+					--S:Print(iSubClass, B.INVTYPE[iType])
 				else
 					slot.equiptype:SetText("")
 					slot.equiptype:Hide()
