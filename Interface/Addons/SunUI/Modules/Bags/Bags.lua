@@ -228,13 +228,20 @@ function B:UpdateSlot(bagID, slotID)
 	slot.name, slot.rarity = nil, nil
 	
 	local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
+	
 	CooldownFrame_SetTimer(slot.cooldown, start, duration, enable)
+	if duration > 0 then
+		slot.cooldown:Show()
+	else
+		slot.cooldown:Hide()
+	end
 	
 	if ( duration > 0 and enable == 0 ) then
 		SetItemButtonTextureVertexColor(slot, 0.4, 0.4, 0.4);
 	else
 		SetItemButtonTextureVertexColor(slot, 1, 1, 1);
 	end
+	
 	if B.ProfessionColors[bagType] then
 		slot.shadow:Show()
 		slot.shadow:SetBackdropBorderColor(unpack(B.ProfessionColors[bagType]))
@@ -382,11 +389,17 @@ function B:UpdateCooldowns()
 		for slotID = 1, GetContainerNumSlots(bagID) do
 			local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
 			CooldownFrame_SetTimer(self.Bags[bagID][slotID].cooldown, start, duration, enable)
+			if duration > 0 then
+				self.Bags[bagID][slotID].cooldown:Show()
+			else
+				self.Bags[bagID][slotID].cooldown:Hide()
+			end
+			
 			if ( duration > 0 and enable == 0 ) then
 				SetItemButtonTextureVertexColor(self.Bags[bagID][slotID], 0.4, 0.4, 0.4);
 			else
 				SetItemButtonTextureVertexColor(self.Bags[bagID][slotID], 1, 1, 1);
-			end					
+			end				
 		end
 	end
 end
@@ -584,14 +597,9 @@ function B:Layout(isBank)
 					
 					f.Bags[bagID][slotID].iconTexture = _G[f.Bags[bagID][slotID]:GetName().."IconTexture"]
 					f.Bags[bagID][slotID].iconTexture:SetTexCoord(.08, .92, .08, .92)
-					if _G[f.Bags[bagID][slotID]:GetName().."Cooldown"] then
-						f.Bags[bagID][slotID].cooldown = _G[f.Bags[bagID][slotID]:GetName().."Cooldown"]
-					else
-						f.Bags[bagID][slotID].cooldown = CreateFrame("Cooldown", f.Bags[bagID][slotID]:GetName().."Cooldown", _G[f.Bags[bagID][slotID]:GetName()])
-						f.Bags[bagID][slotID].cooldown:SetAllPoints()
-						f.Bags[bagID][slotID].cooldown:SetReverse(true)
-					end
-			
+		
+					f.Bags[bagID][slotID].cooldown = _G[f.Bags[bagID][slotID]:GetName().."Cooldown"]
+		
 					f.Bags[bagID][slotID].bagID = bagID
 					f.Bags[bagID][slotID].slotID = slotID
 					
@@ -735,8 +743,13 @@ function B:UpdateReagentSlot(slotID)
 	slot.name, slot.rarity = nil, nil;
 	
 	local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
+	
 	CooldownFrame_SetTimer(slot.Cooldown, start, duration, enable)
-
+	if duration > 0 then
+		slot.Cooldown:Show()
+	else
+		slot.Cooldown:Hide()
+	end
 	if ( duration > 0 and enable == 0 ) then
 		SetItemButtonTextureVertexColor(slot, 0.4, 0.4, 0.4);
 	else

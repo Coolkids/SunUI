@@ -746,8 +746,12 @@ function PB:FuckWarlock()
 			wsb.text:SetText("") --数字0
 		end
 
-		if (event == "UNIT_POWER" or event == "UNIT_DISPLAYPOWER") then
-			if(unit ~= "player" or (powerType ~= "BURNING_EMBERS" and powerType ~= "SOUL_SHARDS" and powerType ~= "DEMONIC_FURY")) then return end
+		if (event == "UNIT_POWER" or event == "UNIT_DISPLAYPOWER" or event == "PLAYER_ENTERING_WORLD") then
+			if ( event == "UNIT_POWER" or event == "UNIT_DISPLAYPOWER") then
+				if(unit ~= "player" or (powerType ~= "BURNING_EMBERS" and powerType ~= "SOUL_SHARDS" and powerType ~= "DEMONIC_FURY")) then return end
+			else
+				--print(UnitPower("player", SPELL_POWER_BURNING_EMBERS, true))
+			end
 			local wsb = self
 			local spec = GetSpecialization()
 	
