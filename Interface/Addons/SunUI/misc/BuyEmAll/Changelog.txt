@@ -1,4 +1,27 @@
-﻿v3.1.8
+﻿v3.2.4
+Added in reagent bank support.
+Did some reformatting and adjusting of the code, mostly for looks.
+Updated TOC.
+
+v3.2.3
+Fixed an issue where there was a chance of the number of items to purchase going below 1 into negative numbers.
+Changed how the price is calculated for alternate currency items to be correct.
+
+v3.2.2
+Super derp on my part, turns out there was a problem with how the addon passed arguments to regular functions, fixed that.
+Minor adjustments to follow Blizzard's 1/nil/0 -> true/false changes.
+Added new WoD currencies.
+Turns out I was super wrong on handling saved variables, so no one's preferences about the confirm window were saved. Sorry, I fixed it now!
+In case I missed anything, please let me know.
+
+v3.2.1
+Thought there was a problem, guess it was just a bug on Blizzard's end.
+Made some minor adjustments to sort out off textures.
+
+v3.2.0
+Haven't found any problems, so just TOC update.
+
+v3.1.8
 TOC bump, added new currency.
 
 v3.1.7
