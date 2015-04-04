@@ -419,6 +419,61 @@ function AB:CreateExitVehicle()
 	S:CreateMover(bar, "ExitVehicleBarMover", BINDING_NAME_VEHICLEEXIT, true, nil, "ALL,ACTIONBARS")
 end
 
+function AB:CreateExitTaxi()
+	
+	local bar = CreateFrame("Frame","ExitTaxi",UIParent, "SecureHandlerStateTemplate")
+	bar:SetHeight(self.db.ButtonSize)
+	bar:SetWidth(self.db.ButtonSize)
+	bar:SetScale(1.3)
+	bar:SetPoint("BOTTOM", "UIParent", "BOTTOM", 278-self.db.ButtonSize-5, 70)
+
+	local button = CreateFrame("BUTTON", nil, bar, "SecureHandlerClickTemplate, SecureHandlerStateTemplate");
+	button:SetAllPoints(bar)
+	button:RegisterForClicks("AnyUp")
+	button:SetNormalTexture("INTERFACE\\PLAYERACTIONBARALT\\NATURAL")
+	button:SetPushedTexture("INTERFACE\\PLAYERACTIONBARALT\\NATURAL")
+	button:SetHighlightTexture("INTERFACE\\PLAYERACTIONBARALT\\NATURAL")
+	button:SetScript("OnClick", function(self) 
+		TaxiRequestEarlyLanding()
+		ActionButton_ShowOverlayGlow(button)
+	end)
+	
+	button:SetScript("OnEnter", function(self)
+		GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+		GameTooltip:SetText(TAXI_CANCEL, 1, 1, 1);
+		GameTooltip:AddLine(TAXI_CANCEL_DESCRIPTION, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, true);
+		GameTooltip:Show();
+	end)
+
+	button:SetScript("OnLeave", function() GameTooltip:Hide() end)
+	
+	local nt = button:GetNormalTexture()
+	local pu = button:GetPushedTexture()
+	local hi = button:GetHighlightTexture()
+	nt:SetTexCoord(0.0859375,0.1679688,0.359375,0.4414063)
+	pu:SetTexCoord(0.001953125,0.08398438,0.359375,0.4414063)
+	hi:SetTexCoord(0.6152344,0.6972656,0.359375,0.4414063)
+	hi:SetBlendMode("ADD")
+
+	S:CreateMover(bar, "ExitTaxiBarMover", TAXI_CANCEL, true, nil, "ALL,ACTIONBARS")
+	
+	button:Hide()
+	
+	hooksecurefunc("MainMenuBarVehicleLeaveButton_Update", function()
+		if CanExitVehicle() then
+			if UnitOnTaxi("player") then
+				button:Show()
+			else
+				button:Hide()
+				ActionButton_HideOverlayGlow(button)
+			end
+		else
+			button:Hide()
+			ActionButton_HideOverlayGlow(button)
+		end
+	end)
+end
+
 function AB:UpdateBigButtonSize()
 	local C = self.db
 	for i=1, 4 do
@@ -696,6 +751,7 @@ function AB:Initialize()
 	self:CreatePetBar()
 	self:CreateStanceBar()
 	self:CreateExitVehicle()
+	self:CreateExitTaxi()
 	
 	self:UpdateAutoHide()
 	self:CreateCooldown()
