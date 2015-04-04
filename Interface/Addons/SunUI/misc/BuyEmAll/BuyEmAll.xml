@@ -190,7 +190,7 @@
 				</Backdrop>
 				<Layers>
 					<Layer>
-						<Texture name="BuyEmAllCurrency1" file="">
+						<Texture name="BuyEmAllCurrency1" file="nil">
 							<Size>
 								<AbsDimension x="16" y="16" />
 							</Size>
@@ -200,7 +200,7 @@
 								</Anchor>
 							</Anchors>
 						</Texture>
-						<Texture name="BuyEmAllCurrency2" file="">
+						<Texture name="BuyEmAllCurrency2" file="nil">
 							<Size>
 								<AbsDimension x="16" y="16" />
 							</Size>
@@ -210,7 +210,7 @@
 								</Anchor>
 							</Anchors>
 						</Texture>
-						<Texture name="BuyEmAllCurrency3" file="">
+						<Texture name="BuyEmAllCurrency3" file="nil">
 							<Size>
 								<AbsDimension x="16" y="16" />
 							</Size>
