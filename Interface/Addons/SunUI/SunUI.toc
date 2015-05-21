@@ -1,4 +1,4 @@
-﻿## Interface: 60100
+﻿## Interface: 60200
 ## Title: |cff00d2ffSun|r|cffffffffUI|r
 ## Notes: 界面美化用UI, 包含少量功能整合.
 ## Version: 20150405
