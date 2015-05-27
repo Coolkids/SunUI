@@ -1,15 +1,13 @@
-﻿local orig1 = GameTooltip:GetScript("OnTooltipSetItem")
-GameTooltip:SetScript("OnTooltipSetItem", function(self, ...)
-	if not ShoppingTooltip1:IsVisible() and not self:IsEquippedItem() then GameTooltip_ShowCompareItem(self, 1) end
-	if orig1 then return orig1(self, ...) end
-end)
+
+-- Force the CVar to the setting we want
+SetCVar("alwaysCompareItems", 1)
 
 
-local orig2 = ItemRefTooltip:GetScript("OnTooltipSetItem")
+local orig = ItemRefTooltip:GetScript("OnTooltipSetItem")
 ItemRefTooltip:SetScript("OnTooltipSetItem", function(self, ...)
 	GameTooltip_ShowCompareItem(self, 1)
 	self.comparing = true
-	if orig2 then return orig2(self, ...) end
+	if orig then return orig(self, ...) end
 end)
 
 
@@ -17,7 +15,9 @@ end)
 ItemRefTooltip:SetScript("OnEnter", nil)
 ItemRefTooltip:SetScript("OnLeave", nil)
 ItemRefTooltip:SetScript("OnDragStart", function(self)
-	ItemRefShoppingTooltip1:Hide(); ItemRefShoppingTooltip2:Hide();
+	ItemRefShoppingTooltip1:Hide()
+	ItemRefShoppingTooltip2:Hide()
+	if ItemRefShoppingTooltip3 then ItemRefShoppingTooltip3:Hide() end
 	self:StartMoving()
 end)
 ItemRefTooltip:SetScript("OnDragStop", function(self)

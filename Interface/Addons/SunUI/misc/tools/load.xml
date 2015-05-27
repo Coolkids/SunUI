@@ -13,6 +13,5 @@
 	<Script file="smallthings.lua"/>
 	<Script file="SocialTabs.lua"/>
 	<Script file="SR.lua"/>
-	<Script file="tekKompare.lua"/>
 	<Script file="TradeTab.lua"/>
 </Ui>

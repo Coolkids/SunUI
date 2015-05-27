@@ -92,7 +92,7 @@ do
 	L["安装"] = "Install"
 	L["跳过"] = "Skip"
 	L["欢迎使用SunUI"] = "Welcome to SunUI"
-	L["QQ群"] = ""
+	L["QQ群"] = "home page:http://weibo.com/sunui"
 	L["更新地址"] = "update URL https://github.com/Coolkids/SunUI"
 end
 
