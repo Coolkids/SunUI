@@ -593,7 +593,7 @@ local UnitSpecific = {
 
 		Health:SetHeight(UF.db.playerHeight - UF.db.powerHeight - 1)
 
-		local HealthPoints = S:CreateFS(Health, 10, "LEFT", nil, "THINOUTLINE")
+		local HealthPoints = S:CreateFS(Health, S["media"].fontsize, "LEFT", nil, "THINOUTLINE")
 		--self.MaxHealthPoints = S:CreateFS(Health, 10, "RIGHT", nil, "THINOUTLINE")
 
 		HealthPoints:SetPoint("BOTTOMLEFT", Health, "TOPLEFT", 0, 3)
@@ -603,7 +603,7 @@ local UnitSpecific = {
 		--self:Tag(self.MaxHealthPoints, '[sunuf:maxhealth]')
 		Health.value = HealthPoints
 
-		local PowerPoints = S:CreateFS(Power, 10, nil, nil, "THINOUTLINE")
+		local PowerPoints = S:CreateFS(Power, S["media"].fontsize, nil, nil, "THINOUTLINE")
 		PowerPoints:SetPoint("LEFT", HealthPoints, "RIGHT", 2, 0)
 		--PowerPoints:SetTextColor(.4, .7, 1)
 		if class == "DRUID" then
@@ -1174,14 +1174,14 @@ local UnitSpecific = {
 
 		Health:SetHeight(UF.db.targetHeight - UF.db.powerHeight - 1)
 
-		local HealthPoints = S:CreateFS(Health, 10, "LEFT", nil, "THINOUTLINE")
+		local HealthPoints = S:CreateFS(Health, S["media"].fontsize, "LEFT", nil, "THINOUTLINE")
 
 		HealthPoints:SetPoint("BOTTOMLEFT", Health, "TOPLEFT", 0, 2)
 
 		self:Tag(HealthPoints, '[dead][offline][sunuf:health]')
 		Health.value = HealthPoints
 
-		local PowerPoints = S:CreateFS(Power, 10, nil, nil, "THINOUTLINE")
+		local PowerPoints = S:CreateFS(Power, S["media"].fontsize, nil, nil, "THINOUTLINE")
 		PowerPoints:SetPoint("BOTTOMLEFT", Health.value, "BOTTOMRIGHT", 3, 0)
 
 		self:Tag(PowerPoints, '[sunuf:pp]')
