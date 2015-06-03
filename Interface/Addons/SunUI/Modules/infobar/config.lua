@@ -106,7 +106,7 @@ function IB:CreateInfoFrame(parent, line, row, width, height)
 		for i=1, row do
 			frame["l"..li.."n"..i] = S:CreateFS(frame);
 			if (i==1) then 
-				frame["l"..li.."n"..i]:SetPoint("TOP", ["t"..li], "BOTTOM", 0, -5)
+				frame["l"..li.."n"..i]:SetPoint("TOP", frame["t"..li], "BOTTOM", 0, -5)
 			else
 				frame["l"..li.."n"..i]:SetPoint("LEFT", l1last, "RIGHT", 10, 0)
 			end
@@ -122,13 +122,13 @@ function IB:CreateInfoFrame(parent, line, row, width, height)
 end
 
 function IB:PositionInfoFrame(frame, parent)
-	frame:ClearAllPoints()
-	local screenQuadrant = S:GetScreenQuadrant(frame:GetParent())
-	if screenQuadrant:find("TOP") then
+	--frame:ClearAllPoints()
+	--local screenQuadrant = S:GetScreenQuadrant(frame:GetParent())
+	--[[if screenQuadrant:find("TOP") then
 		frame:SetPoint("TOPLEFT", parent, "BOTTOMLEFT", 0, -5)
-	else if screenQuadrant:find("BOTTOM") then
+	else
 		frame:SetPoint("BOTTOMLEFT", parent, "TOPLEFT", 0, 5)
-	end
+	end]]
 end
 
 function IB:InsertTable(data, t)
