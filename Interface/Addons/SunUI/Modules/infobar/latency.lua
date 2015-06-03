@@ -27,8 +27,81 @@ function IB:CreateLatency()
 			stat.icon:SetVertexColor(210/255, 100/255, 100/255, 0.8)
 		end
 	end
+	local function colorfont(latency, fonttext)
+		if latency < 100 then
+			fonttext:SetTextColor(100/255, 210/255, 100/255, 0.8)
+		elseif (latency >= 100 and latency < 200) then
+			fonttext:SetTextColor(232/255, 218/255, 15/255, 0.8)
+		else
+			fonttext:SetTextColor(210/255, 100/255, 100/255, 0.8)
+		end
+	end
+	
 	local int = 1
 	local latencyHomedata,latencyWorlddata = {}, {}
+	local infoframe = IB:CreateInfoFrame(stat, 2, 4, 220, 115)
+	infoframe:Hide()
+	infoframe["t1"]:SetText(L["本地延迟"])
+	infoframe["t1"]:SetTextColor(0.75, 0.9, 1)
+	infoframe["t2"]:SetText(L["世界延迟"])
+	infoframe["t2"]:SetTextColor(0.75, 0.9, 1)
+	infoframe["l1n1"]:SetText(L["当前值"])
+	infoframe["l1n1"]:SetTextColor(255, 215, 0)
+	infoframe["l1n2"]:SetText(L["最小值"])
+	infoframe["l1n2"]:SetTextColor(255, 215, 0)
+	infoframe["l1n3"]:SetText(L["最大值"])
+	infoframe["l1n3"]:SetTextColor(255, 215, 0)
+	infoframe["l1n4"]:SetText(L["平均值"])
+	infoframe["l1n4"]:SetTextColor(255, 215, 0)
+	infoframe["l2n1"]:SetText(L["当前值"])
+	infoframe["l2n1"]:SetTextColor(255, 215, 0)
+	infoframe["l2n2"]:SetText(L["最小值"])
+	infoframe["l2n2"]:SetTextColor(255, 215, 0)
+	infoframe["l2n3"]:SetText(L["最大值"])
+	infoframe["l2n3"]:SetTextColor(255, 215, 0)
+	infoframe["l2n4"]:SetText(L["平均值"])
+	infoframe["l2n4"]:SetTextColor(255, 215, 0)
+	
+	local int2 = 1
+	local function UpdateInfo(self, t)
+		int2 = int2 - t
+		if int2 < 0 then
+			local _, _, latencyHome, latencyWorld = GetNetStats()
+			
+			
+			local homemin, homemax, homerms = latencyHomedata[1], latencyHomedata[#latencyHomedata], 0
+			local worldmin, worldmax, worldrms = latencyWorlddata[1], latencyWorlddata[#latencyWorlddata], 0
+			for i=1, #latencyHomedata do
+				homerms = homerms + latencyHomedata[i]
+			end
+			homerms = math.floor(homerms/#latencyHomedata)
+			for i=1, #latencyWorlddata do
+				worldrms = worldrms + latencyWorlddata[i]
+			end
+			worldrms = math.floor(worldrms/#latencyWorlddata)
+		
+
+			infoframe["l1v1"]:SetText(latencyHome)
+			colorfont(latencyHome, infoframe["l1v1"])
+			infoframe["l1v2"]:SetText(homemin)
+			colorfont(homemin, infoframe["l1v2"])
+			infoframe["l1v3"]:SetText(homemax)
+			colorfont(homemax, infoframe["l1v3"])
+			infoframe["l1v4"]:SetText(homerms)
+			colorfont(homerms, infoframe["l1v4"])
+			infoframe["l2v1"]:SetText(latencyWorld)
+			colorfont(latencyWorld, infoframe["l2v1"])
+			infoframe["l2v2"]:SetText(worldmin)
+			colorfont(worldmin, infoframe["l2v2"])
+			infoframe["l2v3"]:SetText(worldmax)
+			colorfont(worldmax, infoframe["l2v3"])
+			infoframe["l2v4"]:SetText(worldrms)
+			colorfont(worldrms, infoframe["l2v4"])
+			int2 = 1
+		end
+	end
+	
+	
 	local function Update(self, t)
 		int = int - t
 		if int < 0 then
@@ -41,45 +114,17 @@ function IB:CreateLatency()
 			int = 1
 		end
 	end
+	
+	
 	stat:SetScript("OnEnter", function(self)
-		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
-		GameTooltip:ClearLines()
-		GameTooltip:AddLine(L["延迟"], 0, .6, 1)
-		GameTooltip:AddLine("最近10分钟数据")
-		GameTooltip:AddLine(" ")
-		local _, _, latencyHome, latencyWorld = GetNetStats()
-		local bandwidth = GetAvailableBandwidth()
-		
-		
-		local homemin, homemax, homerms = latencyHomedata[1], latencyHomedata[#latencyHomedata], 0
-		local worldmin, worldmax, worldrms = latencyWorlddata[1], latencyWorlddata[#latencyWorlddata], 0
-		for i=1, #latencyHomedata do
-			homerms = homerms + latencyHomedata[i]
-		end
-		homerms = math.floor(homerms/#latencyHomedata)
-		for i=1, #latencyWorlddata do
-			worldrms = worldrms + latencyWorlddata[i]
-		end
-		worldrms = math.floor(worldrms/#latencyWorlddata)
-		GameTooltip:AddLine(L["本地延迟"], 0.75, 0.9, 1)
-		GameTooltip:AddDoubleLine("当前值", latencyHome)
-		GameTooltip:AddDoubleLine("最小值", homemin)
-		GameTooltip:AddDoubleLine("最大值", homemax)
-		GameTooltip:AddDoubleLine("平均值", homerms)
-		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine(L["世界延迟"], 0.75, 0.9, 1)
-		GameTooltip:AddDoubleLine("当前值", latencyWorld)
-		GameTooltip:AddDoubleLine("最小值", worldmin)
-		GameTooltip:AddDoubleLine("最大值", worldmax)
-		GameTooltip:AddDoubleLine("平均值", worldrms)
-		
-		if bandwidth ~= 0 then
-			GameTooltip:AddDoubleLine(L["带宽"]..": " , string.format("%.2f Mbps", bandwidth),0.69, 0.31, 0.31,0.84, 0.75, 0.65)
-			GameTooltip:AddDoubleLine(L["下载"]..": " , string.format("%.2f%%", GetDownloadedPercentage() *100),0.69, 0.31, 0.31, 0.84, 0.75, 0.65)
-		end
-		GameTooltip:Show()
+		IB:PositionInfoFrame(infoframe, stat)
+		infoframe:Show()
+		infoframe:SetScript("OnUpdate", UpdateInfo)
 	end)
-	stat:SetScript("OnLeave", function() GameTooltip:Hide() end)
+	stat:SetScript("OnLeave", function() 
+		infoframe:Hide() 
+		infoframe:SetScript("OnUpdate", nil) 
+	end)
 	stat:SetScript("OnMouseDown", function(self, button) 
 		ToggleFrame(GameMenuFrame)
 	end)

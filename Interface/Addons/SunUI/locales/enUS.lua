@@ -14,7 +14,7 @@ do
 	L["启用"] = "Enable"
 	L["SunUI"] = "|cff3f7bf5SunUI|r"
 	L["布局选择"] = "Select Layout"
-	L["技能监视"] = "Skills Monitor"
+	L["技能监视"] = "Spell Filter"
 	L["请选择一个布局开始使用"] = "Please Select A Layout"
 	L["默认"] = "Default"
 	L["设置完成"] = "Setup Complete"
@@ -370,6 +370,10 @@ do
 	L["总CPU使用"] = "Total CPU usage"
 	L["总内存使用"] = "Total memory usage"
 	L["共释放内存"] = "Total release memory"
+	L["当前值"] = "NOW"
+	L["最小值"] = "MIN"
+	L["最大值"] = "MAX"
+	L["平均值"] = "AVG"
 end
 
 do

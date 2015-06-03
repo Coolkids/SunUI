@@ -1,6 +1,7 @@
 ﻿local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
 local L = AceLocale:NewLocale("SunUI", "zhTW")
 if not L then return end
+--繁化个蛋啊!
 --core 区域文字
 do
 	L["一般"] = true
@@ -364,6 +365,10 @@ do
 	L["总CPU使用"] = true
 	L["总内存使用"] = true
 	L["共释放内存"] = true
+	L["当前值"] = true
+	L["最小值"] = true
+	L["最大值"] = true
+	L["平均值"] = true
 end
 
 do

@@ -23,8 +23,30 @@ function IB:CreateFPS()
 																			IB.InfoBarStatusColor[3][1], IB.InfoBarStatusColor[3][2], IB.InfoBarStatusColor[3][3])
 		stat.icon:SetVertexColor(r, g, b, 0.8)
 	end
+	
+	local function colorfont(latency, fonttext)
+		local r, g, b = S:ColorGradient(num/24, IB.InfoBarStatusColor[1][1], IB.InfoBarStatusColor[1][2], IB.InfoBarStatusColor[1][3], 
+																			IB.InfoBarStatusColor[2][1], IB.InfoBarStatusColor[2][2], IB.InfoBarStatusColor[2][3],
+																			IB.InfoBarStatusColor[3][1], IB.InfoBarStatusColor[3][2], IB.InfoBarStatusColor[3][3])
+		fonttext:SetTextColor(r, g, b)
+	end
+	
 	local int = 1
 	local fpsdata = {}
+	
+	local infoframe = IB:CreateInfoFrame(stat, 1, 4, 220, 70)
+	infoframe:Hide()
+	infoframe["t1"]:SetText("FPS")
+	infoframe["t1"]:SetTextColor(0.75, 0.9, 1)
+	infoframe["l1n1"]:SetText(L["当前值"])
+	infoframe["l1n1"]:SetTextColor(255, 215, 0)
+	infoframe["l1n2"]:SetText(L["最小值"])
+	infoframe["l1n2"]:SetTextColor(255, 215, 0)
+	infoframe["l1n3"]:SetText(L["最大值"])
+	infoframe["l1n3"]:SetTextColor(255, 215, 0)
+	infoframe["l1n4"]:SetText(L["平均值"])
+	infoframe["l1n4"]:SetTextColor(255, 215, 0)
+	
 	local function Update(self, t)
 		int = int - t
 		if int < 0 then
@@ -35,28 +57,45 @@ function IB:CreateFPS()
 			int = 1
 		end
 	end
-
-	stat:SetScript("OnEnter", function(self)
-		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
-		GameTooltip:ClearLines()
-		GameTooltip:AddLine("FPS", 0, .6, 1)
-		GameTooltip:AddLine("最近10分钟数据")
-		GameTooltip:AddLine(" ")
+	
+	local int2 = 1
+	local function UpdateInfo(self, t)
+		int2 = int2 - t
+		if int2 < 0 then
+			local fpsmin, fpsmax, fpsrms = fpsdata[1], fpsdata[#fpsdata], 0
+			local fps = floor(GetFramerate())
+			
+			for i=1, #fpsdata do
+				fpsrms = fpsrms + fpsdata[i]
+			end
+			fpsrms = format("%0.1f", fpsrms/#fpsdata)
+			
+			GameTooltip:AddDoubleLine("最小值", fpsmin)
+			GameTooltip:AddDoubleLine("最大值", fpsmax)
+			GameTooltip:AddDoubleLine("平均值", fpsrms)
 		
-		local fpsmin, fpsmax, fpsrms = fpsdata[1], fpsdata[#fpsdata], 0
 
-		for i=1, #fpsdata do
-			fpsrms = fpsrms + fpsdata[i]
+			infoframe["l1v1"]:SetText(fps)
+			colorfont(fps, infoframe["l1v1"])
+			infoframe["l1v2"]:SetText(fpsmin)
+			colorfont(fpsmin, infoframe["l1v2"])
+			infoframe["l1v3"]:SetText(fpsmax)
+			colorfont(fpsmax, infoframe["l1v3"])
+			infoframe["l1v4"]:SetText(fpsrms)
+			colorfont(fpsrms, infoframe["l1v4"])
+			int2 = 1
 		end
-		fpsrms = format("%0.1f", fpsrms/#fpsdata)
-		
-		GameTooltip:AddDoubleLine("最小值", fpsmin)
-		GameTooltip:AddDoubleLine("最大值", fpsmax)
-		GameTooltip:AddDoubleLine("平均值", fpsrms)
-		
-		GameTooltip:Show()
+	end
+	
+	stat:SetScript("OnEnter", function(self)
+		IB:PositionInfoFrame(infoframe, stat)
+		infoframe:Show()
+		infoframe:SetScript("OnUpdate", UpdateInfo)
 	end)
-	stat:SetScript("OnLeave", function() GameTooltip:Hide() end)
+	stat:SetScript("OnLeave", function() 
+		infoframe:Hide() 
+		infoframe:SetScript("OnUpdate", nil)
+	end)
 	
 	stat:SetScript("OnUpdate", Update) 
 end

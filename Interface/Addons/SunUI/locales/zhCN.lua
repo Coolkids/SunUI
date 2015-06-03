@@ -364,6 +364,10 @@ do
 	L["总CPU使用"] = true
 	L["总内存使用"] = true
 	L["共释放内存"] = true
+	L["当前值"] = true
+	L["最小值"] = true
+	L["最大值"] = true
+	L["平均值"] = true
 end
 
 do

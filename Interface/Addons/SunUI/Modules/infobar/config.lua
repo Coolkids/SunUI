@@ -84,6 +84,53 @@ function IB:GetOptions()
 	return options
 end
 
+function IB:CreateInfoFrame(parent, line, row, width, height)
+	local frame = CreateFrame("Frame", nil, parent)
+	frame:SetSize(width,  height)
+	frame:SetClampedToScreen(true)
+	frame:SetPoint("TOPLEFT", parent, "BOTTOMLEFT", 0, -5)
+	frame:CreateShadow("Background")
+	--第一行标题
+	
+	local last;
+	--第一行列名
+	
+	for li=1, line do
+		frame["t"..li] = S:CreateFS(frame, 24, "LEFT");
+		if(li==1)then 
+			frame["t"..li]:SetPoint("TOP", 0, -5)
+		else
+			frame["t"..li]:SetPoint("TOP", 0, -45*(li-1))
+		end
+		--列名
+		for i=1, row do
+			frame["l"..li.."n"..i] = S:CreateFS(frame);
+			if (i==1) then 
+				frame["l"..li.."n"..i]:SetPoint("TOP", ["t"..li], "BOTTOM", 0, -5)
+			else
+				frame["l"..li.."n"..i]:SetPoint("LEFT", l1last, "RIGHT", 10, 0)
+			end
+			last = frame["l"..li.."n"..i];
+		end
+		--值
+		for i=1, row do
+			frame["l"..li.."v"..i] = S:CreateFS(frame);
+			frame["l"..li.."v"..i]:SetPoint("TOP", frame["l"..li.."n"..i], "BOTTOM", 0, -5)
+		end
+	end
+	return frame
+end
+
+function IB:PositionInfoFrame(frame, parent)
+	frame:ClearAllPoints()
+	local screenQuadrant = S:GetScreenQuadrant(frame:GetParent())
+	if screenQuadrant:find("TOP") then
+		frame:SetPoint("TOPLEFT", parent, "BOTTOMLEFT", 0, -5)
+	else if screenQuadrant:find("BOTTOM") then
+		frame:SetPoint("BOTTOMLEFT", parent, "TOPLEFT", 0, 5)
+	end
+end
+
 function IB:InsertTable(data, t)
 	tinsert(t, data)
 	if #t > 600 then
