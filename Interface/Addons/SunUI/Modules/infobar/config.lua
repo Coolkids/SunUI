@@ -89,6 +89,7 @@ function IB:CreateInfoFrame(parent, line, row, width, height)
 	frame:SetSize(width,  height)
 	frame:SetClampedToScreen(true)
 	frame:SetPoint("TOPLEFT", parent, "BOTTOMLEFT", 0, -5)
+	frame:SetFrameStrata("DIALOG")
 	frame:CreateShadow("Background")
 	--第一行标题
 	
@@ -100,7 +101,7 @@ function IB:CreateInfoFrame(parent, line, row, width, height)
 		if(li==1)then 
 			frame["t"..li]:SetPoint("TOPLEFT", 10, -5)
 		else
-			frame["t"..li]:SetPoint("TOPLEFT", 0, -50*(li-1))
+			frame["t"..li]:SetPoint("TOPLEFT", 10, -60*(li-1))
 		end
 		--列名
 		for i=1, row do

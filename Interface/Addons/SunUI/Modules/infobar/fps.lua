@@ -24,11 +24,14 @@ function IB:CreateFPS()
 		stat.icon:SetVertexColor(r, g, b, 0.8)
 	end
 	
-	local function colorfont(latency, fonttext)
-		local r, g, b = S:ColorGradient(num/24, IB.InfoBarStatusColor[1][1], IB.InfoBarStatusColor[1][2], IB.InfoBarStatusColor[1][3], 
-																			IB.InfoBarStatusColor[2][1], IB.InfoBarStatusColor[2][2], IB.InfoBarStatusColor[2][3],
-																			IB.InfoBarStatusColor[3][1], IB.InfoBarStatusColor[3][2], IB.InfoBarStatusColor[3][3])
-		fonttext:SetTextColor(r, g, b)
+	local function colorfont(num, fonttext)
+		if num > 60 then
+			fonttext:SetTextColor(100/255, 210/255, 100/255, 0.8)
+		elseif (num >= 24 and num < 60) then
+			fonttext:SetTextColor(232/255, 218/255, 15/255, 0.8)
+		else
+			fonttext:SetTextColor(210/255, 100/255, 100/255, 0.8)
+		end
 	end
 	
 	local int = 1
@@ -69,11 +72,6 @@ function IB:CreateFPS()
 				fpsrms = fpsrms + fpsdata[i]
 			end
 			fpsrms = format("%0.1f", fpsrms/#fpsdata)
-			
-			GameTooltip:AddDoubleLine("最小值", fpsmin)
-			GameTooltip:AddDoubleLine("最大值", fpsmax)
-			GameTooltip:AddDoubleLine("平均值", fpsrms)
-		
 
 			infoframe["l1v1"]:SetText(fps)
 			colorfont(fps, infoframe["l1v1"])
