@@ -24,7 +24,8 @@ function IB:CreateFPS()
 		stat.icon:SetVertexColor(r, g, b, 0.8)
 	end
 	
-	local function colorfont(num, fonttext)
+	local function colorfont(num2, fonttext)
+		local num = tonumber(num2)
 		if num > 60 then
 			fonttext:SetTextColor(100/255, 210/255, 100/255, 0.8)
 		elseif (num >= 24 and num < 60) then
