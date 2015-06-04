@@ -19,153 +19,125 @@ function IB:CreateMemory()
 	stat.icon:SetVertexColor(unpack(IB.InfoBarStatusColor[3]))
 	A:CreateShadow(stat, stat.icon)
 	
-	local scriptProfile = GetCVar("scriptProfile") == "1"
-
-    local maxMemorySize = 35
-	local int, int2 = 6, 5
-	local kiloByteString = "%d |cffffd700kb|r"
-	local megaByteString = "%.2f |cffffd700mb|r"
-	local enteredFrame = false
-
-	stat.text:SetText(string.format(megaByteString, 0))
-
-	local function formatMem(memory)
-		local mult = 10^1
-		if memory > 999 then
-			local mem = ((memory/1024) * mult) / mult
-			return string.format(megaByteString, mem)
-		else
-			local mem = (memory * mult) / mult
-			return string.format(kiloByteString, mem)
-		end
+	local function sortdesc(a, b) return a[2] > b[2] end
+	local function formatmem(val,dec)
+		return format(format("%%.%df %s", dec or 1, val > 1024 and "MB" or "KB"), val / (val > 1024 and 1024 or 1))
 	end
-
-	local memoryTable = {}
-	local cpuTable = {}
-
-	local function RebuildAddonList()
-		local addOnCount = GetNumAddOns()
-		if (addOnCount == #memoryTable) then return end
-		memoryTable = {}
-		cpuTable = {}
-		for i = 1, addOnCount do
-			memoryTable[i] = { i, select(2, GetAddOnInfo(i)), 0, IsAddOnLoaded(i) }
-			cpuTable[i] = { i, select(2, GetAddOnInfo(i)), 0, IsAddOnLoaded(i) }
-		end
+	local function gradient(perc)
+		perc = perc > 1 and 1 or perc < 0 and 0 or perc -- Stay between 0-1
+		local seg, relperc = math.modf(perc*2)
+		local r1, g1, b1, r2, g2, b2 = select(seg * 3 + 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0) -- R -> Y -> G
+		local r, g, b = r1 + (r2 - r1) * relperc, g1 + (g2 - g1) * relperc, b1 + (b2 - b1) * relperc
+		return format("|cff%02x%02x%02x", r * 255, g * 255, b * 255), r, g, b
 	end
-	
-	local function UpdateMemory()
-		UpdateAddOnMemoryUsage()
-		local addOnMem = 0
-		local totalMemory = 0
-		for i = 1, #memoryTable do
-			addOnMem = GetAddOnMemoryUsage(memoryTable[i][1])
-			memoryTable[i][3] = addOnMem
-			totalMemory = totalMemory + addOnMem
-		end
-		table.sort(memoryTable, function(a, b)
-			if a and b then
-				return a[3] > b[3]
-			end
-		end)
-		return totalMemory
-	end
-
-	local function UpdateCPU()
-		UpdateAddOnCPUUsage()
-		local addOnCPU = 0
-		local totalCPU = 0
-		for i = 1, #cpuTable do
-			addOnCPU = GetAddOnCPUUsage(cpuTable[i][1])
-			cpuTable[i][3] = addOnCPU
-			totalCPU = totalCPU + addOnCPU
-		end
-		table.sort(cpuTable, function(a, b)
-			if a and b then
-				return a[3] > b[3]
-			end
-		end)
-		return totalCPU
-	end
-
-	local function OnEnter(self)
-		enteredFrame = true
-		GameTooltip:SetOwner(stat, "ANCHOR_BOTTOMRIGHT")
-		GameTooltip:ClearLines()
-		GameTooltip:AddLine(L["内存"],0,.6,1)
-		GameTooltip:AddLine(" ")
-		
-		if IsAltKeyDown() and scriptProfile then
-			local totalCPU = UpdateCPU()
-			GameTooltip:AddDoubleLine(L["总CPU使用"]..": ",  format("%dms", totalCPU), 0.69, 0.31, 0.31,0.84, 0.75, 0.65)
-			GameTooltip:AddLine(" ")
-			for i = 1, #cpuTable do
-				if (cpuTable[i][4]) then
-					local red = cpuTable[i][3] / totalCPU
-					local green = 1 - red
-					GameTooltip:AddDoubleLine(cpuTable[i][2], format("%dms", cpuTable[i][3]), 1, 1, 1, red, green + .5, 0)
-				end
-			end
-		else
-			local totalMemory = UpdateMemory()
-			GameTooltip:AddDoubleLine(L["总内存使用"]..": ", formatMem(totalMemory), 0.69, 0.31, 0.31,0.84, 0.75, 0.65)
-			GameTooltip:AddLine(" ")
-			for i = 1, #memoryTable do
-				if (memoryTable[i][4]) then
-					local red = memoryTable[i][3] / totalMemory
-					local green = 1 - red
-					GameTooltip:AddDoubleLine(memoryTable[i][2], formatMem(memoryTable[i][3]), 1, 1, 1, red, green + .5, 0)
-				end
-			end
-		end
-		GameTooltip:Show()
-	end
-
-	local function OnLeave()
-		enteredFrame = false
-		GameTooltip_Hide()
-	end
-
+	local memoryt = {}
+	stat.total = 0
+	stat.hovered = false
+	stat.textnum = 0
+	local int = -1
+	local int2 = -1
+	local maxnum = 5
 	local function OnUpdate(self, t)
 		int = int - t
 		int2 = int2 - t
-
 		if int < 0 then
-			RebuildAddonList()
-			local total = UpdateMemory()
-			stat.text:SetText(formatMem(total))
-			local r, g, b = S:ColorGradient(total/(maxMemorySize * 1024), IB.InfoBarStatusColor[3][1], IB.InfoBarStatusColor[3][2], IB.InfoBarStatusColor[3][3], 
-																	IB.InfoBarStatusColor[2][1], IB.InfoBarStatusColor[2][2], IB.InfoBarStatusColor[2][3],
-																	IB.InfoBarStatusColor[1][1], IB.InfoBarStatusColor[1][2], IB.InfoBarStatusColor[1][3])
-			stat.icon:SetVertexColor(r, g, b)
+			UpdateAddOnMemoryUsage()
+			--print(GetTime())
+			for i = 1, GetNumAddOns() do self.total = self.total + GetAddOnMemoryUsage(i) end
+			
+			local text = self.total >= 1024 and format("%.1fmb", self.total / 1024) or format("%.0fkb", self.total)
+			stat.textnum = self.total
+			stat.text:SetText(text)
+			local r, g, b = S:ColorGradient(self.total/(35 * 1024), IB.InfoBarStatusColor[3][1], IB.InfoBarStatusColor[3][2], IB.InfoBarStatusColor[3][3], 
+                                                               IB.InfoBarStatusColor[2][1], IB.InfoBarStatusColor[2][2], IB.InfoBarStatusColor[2][3],
+                                                               IB.InfoBarStatusColor[1][1], IB.InfoBarStatusColor[1][2], IB.InfoBarStatusColor[1][3])
+       		stat.icon:SetVertexColor(r, g, b)
+       		self.total = 0
 			if InCombatLockdown() then
-				int = 30
-			else
-				int = 5
-			end
+               int = 30
+           	else
+               int = 5
+           	end
 		end
 		if int2 < 0 then
-			if enteredFrame then
-				OnEnter(self)
-			end
-			if InCombatLockdown() then
-				int2 = 30
-			else
-				int2 = 5
-			end
+			if self.hovered then self:GetScript("OnEnter")(self) end
+			int2 = 0.5
 		end
 	end
 
-	stat:HookScript("OnMouseDown", function(self)
-		UpdateAddOnMemoryUsage()
-		local before = gcinfo()
-		collectgarbage("collect")
-		ResetCPUUsage()
-		UpdateAddOnMemoryUsage()
-		S:Print(L["共释放内存"], formatMem(before - gcinfo()))
-	end)
-	stat:HookScript("OnUpdate", OnUpdate)
-	stat:HookScript("OnEnter", OnEnter)
-	stat:HookScript("OnLeave", OnLeave)
-	hooksecurefunc("collectgarbage", function() OnUpdate(Status, 10) end)
+	local function OnEnter(self)
+		self.hovered = true
+		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
+		GameTooltip:ClearLines()
+		local lat, r = select(4, GetNetStats()), 750
+		GameTooltip:AddDoubleLine(
+			format("|cffffffff%s|r %s, %s%s|r %s", floor(GetFramerate()), FPS_ABBR, gradient(1 - lat / r), lat,MILLISECONDS_ABBR),
+			format("%s: |cffffffff%s", ADDONS, formatmem(self.textnum)), 0.4, 0.78, 1, 0.4, 0.78, 1)
+		GameTooltip:AddLine(" ")
+		
+		if not self.timer or self.timer + 5 < time() then
+			self.timer = time()
+			collectgarbage()
+			UpdateAddOnMemoryUsage()
+			for i = 1, #memoryt do memoryt[i] = nil end
+			for i = 1, GetNumAddOns() do
+				local addon, name = GetAddOnInfo(i)
+				if IsAddOnLoaded(i) then tinsert(memoryt, {name or addon, GetAddOnMemoryUsage(i)}) end
+			end
+			table.sort(memoryt, sortdesc)
+		end
+		local exmem = 0
+		for i,t in ipairs(memoryt) do
+			if i > maxnum and not IsAltKeyDown() then
+				exmem = exmem + t[2]
+			else
+				local color = t[2] <= 512 and {0,1} -- 0 - 100
+					or t[2] <= 1024 and {0.75,1} -- 100 - 512
+					or t[2] <= 2560 and {1,1} -- 512 - 1mb
+					or t[2] <= 5120 and {1,0.75} -- 1mb - 2.5mb
+					or t[2] <= 7680 and {1,0.5} -- 2.5mb - 5mb
+					or {1,0.1} -- 5mb +
+				GameTooltip:AddDoubleLine(t[1], formatmem(t[2]), 1, 1, 1, color[1], color[2], 0)
+			end
+		end
+		if exmem > 0 and not IsAltKeyDown() then
+			local more = #memoryt - maxnum
+			GameTooltip:AddDoubleLine(format("%d %s (%s)", more, HIDE, ALT_KEY), formatmem(exmem), 0.75, 0.90, 1, 0.75, 0.90, 1)
+		end
+		GameTooltip:AddDoubleLine(" ", "--------------", 1, 1, 1, 0.5, 0.5, 0.5)
+		
+		local bandwidth = GetAvailableBandwidth()
+		if bandwidth ~= 0 then
+			GameTooltip:AddDoubleLine(L["带宽"], format("%s ".."Mbps", S:Round(bandwidth, 2)), 0.75, 0.90, 1, 1, 1, 1)
+			GameTooltip:AddDoubleLine(L["下载"], format("%s%%", floor(GetDownloadedPercentage() * 100 + 0.5)), 0.75, 0.90, 1, 1, 1, 1)
+			GameTooltip:AddLine(" ")
+		end
+		GameTooltip:AddDoubleLine(L["暴雪插件内存"], formatmem(gcinfo() - self.textnum), 0.75, 0.90, 1, 1, 1, 1)
+		GameTooltip:AddDoubleLine(L["总内存使用"], formatmem(collectgarbage"count"), 0.75, 0.90, 1, 1, 1, 1)
+		GameTooltip:Show()
+	end
+
+
+	stat:SetScript("OnEnter", OnEnter)
+	stat:SetScript("OnLeave", function(self) self.hovered = false GameTooltip:Hide() end)
+	stat:SetScript("OnUpdate", OnUpdate) 
+
+	stat:HookScript("OnMouseDown", function(self, button)
+		if button == "LeftButton" then
+			UpdateAddOnMemoryUsage()
+			local before = gcinfo()
+			collectgarbage("collect")
+			UpdateAddOnMemoryUsage()
+			S:Print(L["共释放内存"], formatmem(before - gcinfo()))
+			self.timer, int = nil, 5
+			self:GetScript("OnEnter")(self)
+		elseif button == "RightButton" then
+			if AddonList:IsShown() then
+				AddonList_OnCancel()
+			else
+				--PlaySound("igMainMenuOption")
+				ShowUIPanel(AddonList)
+			end
+		end
+   end)
 end

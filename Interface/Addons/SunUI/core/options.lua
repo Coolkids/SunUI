@@ -54,6 +54,7 @@ S.Options = {
 					desc = L["解锁锚点"],
 					func = function()
                         S:ToggleConfigMode()
+                        SlashCmdList.TOGGLEGRID()
 					end,
 				},
 			},

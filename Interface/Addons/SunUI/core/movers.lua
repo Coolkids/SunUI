@@ -5,6 +5,7 @@ local AceConfig = LibStub("AceConfigDialog-3.0")
 
 S.CreatedMovers = {}
 local selectedValue = "ALL"
+local selectedFrame
 local MoverTypes = {
     "ALL",
     "GENERAL",
@@ -43,6 +44,21 @@ local function MoverTypes_Initialize()
 	end
 
 	UIDropDownMenu_SetSelectedValue(SunUIMoverPopupWindowDropDown, selectedValue)
+end
+
+local function Mover_Setting(arrow)
+	if selectedFrame == nil then return end
+	local point, anchor, secondaryPoint, x, y = string.split("\031", GetPoint(_G[selectedFrame.name]))
+	if arrow == "up" then
+		selectedFrame:SetPoint(point, anchor, secondaryPoint, x, y+1)
+	elseif arrow == "down" then
+		selectedFrame:SetPoint(point, anchor, secondaryPoint, x, y-1)
+	elseif arrow == "left" then
+		selectedFrame:SetPoint(point, anchor, secondaryPoint, x-1, y)
+	elseif arrow == "right" then
+		selectedFrame:SetPoint(point, anchor, secondaryPoint, x+1, y)
+	end	
+	S:SaveMoverPosition(selectedFrame.name)
 end
 
 local function CreatePopup()
@@ -84,6 +100,7 @@ local function CreatePopup()
 	_G[lock:GetName() .. "Text"]:SetText(L["锁定"])
 
 	lock:SetScript("OnClick", function(self)
+		SlashCmdList.TOGGLEGRID()
 		S:ToggleConfigMode(true)
 		AceConfig["Open"](AceConfig,"SunUI") 
 		selectedValue = "ALL"
@@ -110,6 +127,138 @@ local function CreatePopup()
 	
 	
 	UIDropDownMenu_Initialize(moverTypes, MoverTypes_Initialize)
+
+
+	--框体细调
+	local fs = CreateFrame("Frame", "SunUIMoverSetPopupWindow", UIParent)
+	fs:SetFrameStrata("DIALOG")
+	fs:SetToplevel(true)
+	fs:EnableMouse(true)
+	fs:SetClampedToScreen(true)
+	fs:SetWidth(360)
+	fs:SetHeight(150)
+	fs:SetPoint("LEFT", 200, 0)
+	fs:Hide()
+	A:SetBD(fs)
+	fs:SetMovable(true)
+	fs:RegisterForDrag("LeftButton")
+	fs:SetScript("OnDragStart", function(self) self:StartMoving() self:SetUserPlaced(false) end)
+	fs:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
+
+	local ti = fs:CreateFontString(nil, "OVERLAY")
+	ti:SetFontObject(GameFontNormal)
+	ti:SetShadowOffset(S.mult, -S.mult)
+	ti:SetShadowColor(0, 0, 0)
+	ti:SetPoint("TOPLEFT", fs, "TOPLEFT", 10, -10)
+	ti:SetJustifyH("CENTER")
+	ti:SetText(L["框体名字"])
+
+	fs.name = fs:CreateFontString(nil, "ARTWORK")
+	fs.name:SetFontObject("GameFontHighlight")
+	fs.name:SetJustifyV("TOP")
+	fs.name:SetJustifyH("LEFT")
+	fs.name:SetPoint("LEFT", ti, "RIGHT", 5, 0)
+	fs.name:SetText("")
+
+
+	fs.point = fs:CreateFontString(nil, "ARTWORK")
+	fs.point:SetFontObject("GameFontHighlight")
+	fs.point:SetPoint("TOPLEFT", ti, "BOTTOMLEFT", 0, -5)
+	fs.point:SetText("")
+	
+	local ti2 = fs:CreateFontString(nil, "OVERLAY")
+	ti2:SetFontObject(GameFontNormal)
+	ti2:SetShadowOffset(S.mult, -S.mult)
+	ti2:SetShadowColor(0, 0, 0)
+	ti2:SetPoint("LEFT", 10, 0)
+	ti2:SetJustifyH("CENTER")
+	ti2:SetText(L["手动输入"])
+
+	local editBox = CreateFrame("EditBox", "SunUIMoverSetEditBox", fs)
+	editBox:SetMaxLetters(99999)
+	editBox:EnableMouse(true)
+	editBox:SetAutoFocus(false)
+	editBox:SetFontObject(ChatFontNormal)
+	editBox:SetPoint("TOPLEFT", ti2, "BOTTOMLEFT", 0, -5)
+	editBox:SetWidth(230)
+	editBox:SetHeight(20)
+	editBox.border = CreateFrame("Frame", nil, editBox)
+	editBox.border:SetPoint("TOPLEFT", -3, 0)
+	editBox.border:SetPoint("BOTTOMRIGHT", 0, 0)
+	A:CreateBD(editBox.border, 0)
+	
+	editBox:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
+	editBox:SetScript("OnEnterPressed", function(self)
+		if selectedFrame == nil then return end
+		local point, anchor, secondaryPoint, x, y
+		if self:GetText():find(",") then
+			point, anchor, secondaryPoint, x, y = string.split(",", self:GetText())
+			selectedFrame:ClearAllPoints()
+			selectedFrame:SetPoint(point, anchor, secondaryPoint, x, y)
+			S:SaveMoverPosition(selectedFrame.name)
+			SunUIMoverSetPopupWindow.point:SetText(tostring(point).." ,"..tostring(anchor).." ,"..tostring(secondaryPoint).." ,"..tostring(x).." ,"..tostring(y))
+			editBox:SetText("")
+		else
+			editBox:SetText(L["格式不正确"])
+		end
+		self:ClearFocus() 
+	end)
+
+	local up = CreateFrame("Button", "SunUIMoverSetUp", fs, "OptionsButtonTemplate")
+	_G[up:GetName() .. "Text"]:SetText("↑")
+
+	up:SetScript("OnMouseWheel", function(self)
+		Mover_Setting("up")
+	end)
+	up:SetScript("OnMouseDown", function(self)
+		Mover_Setting("up")
+	end)
+
+	up:SetSize(20, 20)
+	up:SetPoint("TOPRIGHT", -45, -50)
+	A:Reskin(up)
+
+	
+	local down = CreateFrame("Button", "SunUIMoverSetDown", fs, "OptionsButtonTemplate")
+	_G[down:GetName() .. "Text"]:SetText("↓")
+
+	down:SetScript("OnMouseWheel", function(self)
+		Mover_Setting("down")
+	end)
+	down:SetScript("OnMouseDown", function(self)
+		Mover_Setting("down")
+	end)
+	down:SetSize(20, 20)
+	down:SetPoint("TOP", up, "BOTTOM", 0, -20)
+	A:Reskin(down)
+
+	local left = CreateFrame("Button", "SunUIMoverSetLeft", fs, "OptionsButtonTemplate")
+	_G[left:GetName() .. "Text"]:SetText("←")
+
+	left:SetScript("OnMouseWheel", function(self)
+		Mover_Setting("left")
+	end)
+	left:SetScript("OnMouseDown", function(self)
+		Mover_Setting("left")
+	end)
+	left:SetSize(20, 20)
+	left:SetPoint("TOPRIGHT", up, "BOTTOMLEFT", -10, 0)
+	A:Reskin(left)
+
+	local right = CreateFrame("Button", "SunUIMoverSetRight", fs, "OptionsButtonTemplate")
+	_G[right:GetName() .. "Text"]:SetText("→")
+
+	right:SetScript("OnMouseWheel", function(self)
+		Mover_Setting("right")
+	end)
+	right:SetScript("OnMouseDown", function(self)
+		Mover_Setting("right")
+	end)
+	right:SetSize(20, 20)
+	right:SetPoint("TOPLEFT", up, "BOTTOMRIGHT", 10, 0)
+	A:Reskin(right)
+
+
 end
 
 local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChange)
@@ -146,6 +295,15 @@ local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChan
 	end
 	A:Reskin(f)
 	f:RegisterForDrag("LeftButton", "RightButton")
+	f:HookScript("OnMouseDown", function(self)
+		selectedFrame = self
+		selectedFrame.parent = parent
+		selectedFrame.name = name
+		SunUIMoverSetPopupWindow.name:SetText(text)
+		local point, anchor, secondaryPoint, x, y = string.split("\031", GetPoint(_G[name]))
+		SunUIMoverSetPopupWindow.point:SetText(tostring(point).." ,"..tostring(anchor).." ,"..tostring(secondaryPoint).." ,"..tostring(x).." ,"..tostring(y))
+	end)
+
 	f:SetScript("OnDragStart", function(self) 
 		if InCombatLockdown() then S:Print(ERR_NOT_IN_COMBAT) return end
 		self:StartMoving() 
@@ -191,6 +349,7 @@ local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChan
 		end
 
 		self:SetUserPlaced(false)
+
 	end)
 
     if not ignoreSizeChange then
@@ -261,6 +420,8 @@ function S:SaveMoverPosition(name)
 	if not S.db.movers then S.db.movers = {} end
 
 	S.db.movers[name] = GetPoint(_G[name])
+	local point, anchor, secondaryPoint, x, y = string.split("\031", S.db["movers"][name])
+	SunUIMoverSetPopupWindow.point:SetText(tostring(point).." ,"..tostring(anchor).." ,"..tostring(secondaryPoint).." ,"..tostring(x).." ,"..tostring(y))
 end
 
 function S:ToggleConfigMode(override, moverType)
@@ -273,12 +434,14 @@ function S:ToggleConfigMode(override, moverType)
 		end
 		
 		SunUIMoverPopupWindow:Show()
+		SunUIMoverSetPopupWindow:Show()
 		AceConfig["Close"](AceConfig, "SunUI") 
 		GameTooltip:Hide()		
 		S.ConfigurationMode = true
 	else
 		if SunUIMoverPopupWindow then
 			SunUIMoverPopupWindow:Hide()
+			SunUIMoverSetPopupWindow:Hide()
 		end	
 		
 		S.ConfigurationMode = false

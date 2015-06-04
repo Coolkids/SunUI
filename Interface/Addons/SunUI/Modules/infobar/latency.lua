@@ -37,7 +37,7 @@ function IB:CreateLatency()
 		end
 	end
 	
-	local int = 1
+	
 	local latencyHomedata,latencyWorlddata = {}, {}
 	local infoframe = IB:CreateInfoFrame(stat, 2, 4, 220, 115)
 	infoframe:Hide()
@@ -62,7 +62,7 @@ function IB:CreateLatency()
 	infoframe["l2n4"]:SetText(L["平均值"])
 	infoframe["l2n4"]:SetTextColor(255, 215, 0)
 	
-	local int2 = 1
+	local int2 = -1
 	local function UpdateInfo(self, t)
 		int2 = int2 - t
 		if int2 < 0 then
@@ -101,7 +101,7 @@ function IB:CreateLatency()
 		end
 	end
 	
-	
+	local int = -1
 	local function Update(self, t)
 		int = int - t
 		if int < 0 then

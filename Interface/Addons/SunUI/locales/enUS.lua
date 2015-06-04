@@ -60,6 +60,9 @@ do
 	L["FILGER"] = true
 	L["ARENA"] = true
 	L["成就锚点"] = "Achievement anchor"
+	L["手动输入"] = "input proint,|cffff0000warning|r"
+	L["框体名字"] = "Frame Name:"
+	L["格式不正确"] = "error"
 end
 --安装
 do
@@ -366,7 +369,7 @@ do
 	L["世界延迟"] = "World Delay"
 	L["带宽"] = "Bandwidth"
 	L["下载"] = "Download"
-	L["内存"] = "Memory"
+	L["暴雪插件内存"] = "Blizzard memory usage"
 	L["总CPU使用"] = "Total CPU usage"
 	L["总内存使用"] = "Total memory usage"
 	L["共释放内存"] = "Total release memory"

@@ -35,12 +35,12 @@ function IB:CreateFPS()
 		end
 	end
 	
-	local int = 1
+	local int = -1
 	local fpsdata = {}
 	
 	local infoframe = IB:CreateInfoFrame(stat, 1, 4, 220, 70)
 	infoframe:Hide()
-	infoframe["t1"]:SetText("FPS")
+	infoframe["t1"]:SetText(FPS_ABBR)
 	infoframe["t1"]:SetTextColor(0.75, 0.9, 1)
 	infoframe["l1n1"]:SetText(L["当前值"])
 	infoframe["l1n1"]:SetTextColor(255, 215, 0)
@@ -62,7 +62,7 @@ function IB:CreateFPS()
 		end
 	end
 	
-	local int2 = 1
+	local int2 = -1
 	local function UpdateInfo(self, t)
 		int2 = int2 - t
 		if int2 < 0 then

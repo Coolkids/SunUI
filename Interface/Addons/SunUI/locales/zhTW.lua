@@ -55,6 +55,9 @@ do
 	L["FILGER"] = "技能监视"
 	L["ARENA"] = true
 	L["成就锚点"] = true
+	L["手动输入"] = "手动输入坐标,|cffff0000不懂的人千万别手动输入|r"
+	L["框体名字"] = "框体名字:"
+	L["格式不正确"] = true
 end
 --安装
 do
@@ -361,7 +364,7 @@ do
 	L["世界延迟"] = true
 	L["带宽"] = true
 	L["下载"] = true
-	L["内存"] = true
+	L["暴雪插件内存"] = true
 	L["总CPU使用"] = true
 	L["总内存使用"] = true
 	L["共释放内存"] = true

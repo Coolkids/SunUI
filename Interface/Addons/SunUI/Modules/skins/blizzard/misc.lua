@@ -159,7 +159,16 @@ local function LoadSkin()
 		"ReportPlayerNameDialogCancelButton", 
 		"ReportCheatingDialogReportButton", 
 		"ReportCheatingDialogCancelButton", 
-		"HelpFrameOpenTicketHelpItemRestoration"}
+		"HelpFrameOpenTicketHelpItemRestoration",
+		"VideoOptionsFrameOkay",
+		"VideoOptionsFrameApply",
+		"VideoOptionsFrameCancel",
+		"VideoOptionsFrameDefaults",
+		"InterfaceOptionsFrameOkay",
+		"InterfaceOptionsFrameApply",
+		"InterfaceOptionsFrameCancel",
+		"InterfaceOptionsFrameDefaults",
+	}
 
 	for i = 1, #buttons do
 		local button = _G[buttons[i]]
