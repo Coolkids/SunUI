@@ -13,21 +13,21 @@ local function OnEvent(...)
 	if InCombatLockdown() then return end
 	if unit == "player" then 
 		if spell == 63645 then
-			if self.db.Enable and self.equipments[self.db.FirstName] then
-				EquipmentManager_EquipSet(self.equipments[self.db.FirstName])   -- 主天賦套裝名稱為spec1
-				S:Print("|cffFFD700切换到|r:"..self.equipments[self.db.FirstName])
+			if A.db.Enable and A.equipments[A.db.FirstName] then
+				EquipmentManager_EquipSet(A.equipments[A.db.FirstName])   -- 主天賦套裝名稱為spec1
+				S:Print("|cffFFD700切换到|r:"..A.equipments[A.db.FirstName])
 			end
-			if (self.db.bindLayout) then
-				S.db.layout.mainLayout = self.db.SecondLayout
+			if (A.db.bindLayout) then
+				S.db.layout.mainLayout = A.db.FirstLayout
 				S:SetMoversPositions()
 			end
 		elseif spell == 63644 then
-			if self.db.Enable and self.equipments[self.db.SecondName] then
-				EquipmentManager_EquipSet(self.equipments[self.db.SecondName])   -- 副天賦套裝名稱為spec2 
-				S:Print("|cffFFD700切换到|r:"..self.equipments[self.db.SecondName])
+			if A.db.Enable and A.equipments[A.db.SecondName] then
+				EquipmentManager_EquipSet(A.equipments[A.db.SecondName])   -- 副天賦套裝名稱為spec2 
+				S:Print("|cffFFD700切换到|r:"..A.equipments[A.db.SecondName])
 			end
-			if (self.db.bindLayout) then
-				S.db.layout.mainLayout = self.db.SecondLayout
+			if (A.db.bindLayout) then
+				S.db.layout.mainLayout = A.db.SecondLayout
 				S:SetMoversPositions()
 			end
 		end 
