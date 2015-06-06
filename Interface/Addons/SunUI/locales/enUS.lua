@@ -63,6 +63,7 @@ do
 	L["手动输入"] = "input proint,|cffff0000warning|r"
 	L["框体名字"] = "Frame Name:"
 	L["格式不正确"] = "error"
+	L["布局管理器"] = "Layout Manage"
 end
 --安装
 do
@@ -411,9 +412,13 @@ do
 end
 --Automatic Specialization
 do
-	L["自动换装"] = "Auto spec"
+	L["切换天赋"] = "switch spec"
+	L["自动换装"] = "Auto switch equipment"
 	L["选择主天赋装备"] = "Select the main spec and equipment"
 	L["选择副天赋装备"] = "Selected secondary spec and equipment"
+	L["绑定布局"] = "Bind Layout"
+	L["选择主天赋布局"] = "Select main spec Layout"
+	L["选择副天赋布局"] = "Select secondary spec Layout"
 end
 --Professions Assistant
 do

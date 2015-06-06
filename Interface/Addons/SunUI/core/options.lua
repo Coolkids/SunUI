@@ -47,8 +47,35 @@ S.Options = {
 					desc = " ",
 					type = "description",
 				},
-				ToggleAnchors = {
+				mainLayout = {
 					order = 4,
+					type = "toggle",
+					name = L["布局管理器"],
+					desc = L["布局管理器"],
+					type = "select",
+					values = {
+						[1] = 1,
+						[2] = 2,
+						[3] = 3,
+						[4] = 4,
+						[5] = 5,
+						[6] = 6,
+						[7] = 7,
+						[8] = 8,
+						[9] = 9,
+						[10] = 10,
+					},
+					get = function(info)
+						return S.db.layout.mainLayout
+					end,
+					set = function(info, value)
+						S.db.layout.mainLayout = value
+						S:SetMoversPositions()
+					end,
+
+				},
+				ToggleAnchors = {
+					order = 5,
 					type = "execute",
 					name = L["解锁锚点"],
 					desc = L["解锁锚点"],

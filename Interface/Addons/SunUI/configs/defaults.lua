@@ -16,6 +16,9 @@ G["media"]={
 	backdropfadecolor = { .04, .04, .04, .7 },
 	bordercolor = { 0, 0, 0 },
 }
+P["layout"]={
+	mainLayout = 1,
+}
 
 G["general"]={
 	uiscale = 0.75,
@@ -213,6 +216,9 @@ P["Announce"]={
 
 P["AutoEquipment"] = {
 	Enable = true,
+	bindLayout = true,
+	FirstLayout = 1,
+	SecondLayout = 2,
 }
 P["ClassAT"] = {
 	Enable = true,

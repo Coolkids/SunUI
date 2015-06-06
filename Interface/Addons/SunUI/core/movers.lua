@@ -130,15 +130,14 @@ local function CreatePopup()
 
 
 	--框体细调
-	local fs = CreateFrame("Frame", "SunUIMoverSetPopupWindow", UIParent)
+	local fs = CreateFrame("Frame", "SunUIMoverSetPopupWindow", f)
 	fs:SetFrameStrata("DIALOG")
 	fs:SetToplevel(true)
 	fs:EnableMouse(true)
 	fs:SetClampedToScreen(true)
 	fs:SetWidth(360)
 	fs:SetHeight(150)
-	fs:SetPoint("LEFT", 200, 0)
-	fs:Hide()
+	fs:SetPoint("LEFT", UIParent, "LEFT", 200, 0)
 	A:SetBD(fs)
 	fs:SetMovable(true)
 	fs:RegisterForDrag("LeftButton")
@@ -264,7 +263,7 @@ end
 local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChange)
 	if not parent then return end
 	if S.CreatedMovers[name].Created then return end
-
+	local index = S.db.layout.mainLayout
 	local A = S:GetModule("Skins")
 
 	if overlay == nil then overlay = true end
@@ -281,14 +280,14 @@ local function CreateMover(parent, name, text, overlay, postdrag, ignoreSizeChan
 	else
 		f:SetFrameStrata("BACKGROUND")
 	end
-	if S.db["movers"] and S.db["movers"][name] then
-		if type(S.db["movers"][name]) == "table" then
-            f:SetPoint(S.db["movers"][name]["p"], UIParent, S.db["movers"][name]["p2"], S.db["movers"][name]["p3"], S.db["movers"][name]["p4"])
-			S.db["movers"][name] = GetPoint(f)
+	if S.db["movers"]and S.db["movers"][index] and S.db["movers"][index][name] then
+		if type(S.db["movers"][index][name]) == "table" then
+            f:SetPoint(S.db["movers"][index][name]["p"], UIParent, S.db["movers"][index][name]["p2"], S.db["movers"][index][name]["p3"], S.db["movers"][index][name]["p4"])
+			S.db["movers"][index][name] = GetPoint(f)
 			f:ClearAllPoints()
 		end
 
-		local point, anchor, secondaryPoint, x, y = string.split("\031", S.db["movers"][name])
+		local point, anchor, secondaryPoint, x, y = string.split("\031", S.db["movers"][index][name])
 		f:SetPoint(point, anchor, secondaryPoint, x, y)
 	else
 		f:SetPoint(point, anchor, secondaryPoint, x, y)
@@ -416,11 +415,13 @@ function S:CreateMover(parent, name, text, overlay, postdrag, moverTypes, ignore
 end
 
 function S:SaveMoverPosition(name)
+	local index = S.db.layout.mainLayout
 	if not _G[name] then return end
 	if not S.db.movers then S.db.movers = {} end
+	if not S.db.movers[index] then S.db.movers[index] = {} end
 
-	S.db.movers[name] = GetPoint(_G[name])
-	local point, anchor, secondaryPoint, x, y = string.split("\031", S.db["movers"][name])
+	S.db.movers[index][name] = GetPoint(_G[name])
+	local point, anchor, secondaryPoint, x, y = string.split("\031", S.db["movers"][index][name])
 	SunUIMoverSetPopupWindow.point:SetText(tostring(point).." ,"..tostring(anchor).." ,"..tostring(secondaryPoint).." ,"..tostring(x).." ,"..tostring(y))
 end
 
@@ -434,14 +435,12 @@ function S:ToggleConfigMode(override, moverType)
 		end
 		
 		SunUIMoverPopupWindow:Show()
-		SunUIMoverSetPopupWindow:Show()
 		AceConfig["Close"](AceConfig, "SunUI") 
 		GameTooltip:Hide()		
 		S.ConfigurationMode = true
 	else
 		if SunUIMoverPopupWindow then
 			SunUIMoverPopupWindow:Hide()
-			SunUIMoverSetPopupWindow:Hide()
 		end	
 		
 		S.ConfigurationMode = false
@@ -509,11 +508,12 @@ function S:ResetMovers(arg)
 end
 
 function S:SetMoversPositions()
+	local index = S.db.layout.mainLayout
 	for name, _ in pairs(S.CreatedMovers) do
 		local f = _G[name]
 		local point, anchor, secondaryPoint, x, y
-		if S.db["movers"] and S.db["movers"][name] and type(S.db["movers"][name]) == "string" then
-			point, anchor, secondaryPoint, x, y = string.split("\031", S.db["movers"][name])
+		if S.db["movers"] and S.db["movers"][index] and S.db["movers"][index][name] and type(S.db["movers"][index][name]) == "string" then
+			point, anchor, secondaryPoint, x, y = string.split("\031", S.db["movers"][index][name])
 			f:ClearAllPoints()
 			f:SetPoint(point, anchor, secondaryPoint, x, y)
 		elseif f then
