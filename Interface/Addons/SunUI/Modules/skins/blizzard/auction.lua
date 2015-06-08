@@ -51,10 +51,20 @@ local function LoadSkin()
 	AuctionsDurationSort:DisableDrawLayer("BACKGROUND")
 	AuctionsHighBidderSort:DisableDrawLayer("BACKGROUND")
 	AuctionsBidSort:DisableDrawLayer("BACKGROUND")
+	select(6, BrowseCloseButton:GetRegions()):Hide()
+	select(6, BrowseBuyoutButton:GetRegions()):Hide()
+	select(6, BrowseBidButton:GetRegions()):Hide()
+	select(6, BidCloseButton:GetRegions()):Hide()
+	select(6, BidBuyoutButton:GetRegions()):Hide()
+	select(6, BidBidButton:GetRegions()):Hide()
 
 	for i = 1, NUM_FILTERS_TO_DISPLAY do
-		_G["AuctionFilterButton"..i]:SetNormalTexture("")
+		_G["AuctionFilterButton"..i]:GetNormalTexture():SetAlpha(0)
 	end
+
+	hooksecurefunc("FilterButton_SetType", function(button)
+		button:SetNormalTexture("")
+	end)
 
 	local lastSkinnedTab = 1
 	AuctionFrame:HookScript("OnShow", function()
@@ -253,8 +263,34 @@ local function LoadSkin()
 
 	A:CreateBackdropTexture(bg)
 
-	--BrowseDropDownButton:HookScript("OnEnter", A:colourArrow(self))
-	--BrowseDropDownButton:HookScript("OnLeave", A:clearArrow(self))
+
+	-- [[ WoW token ]]
+
+	local BrowseWowTokenResults = BrowseWowTokenResults
+
+	A:Reskin(BrowseWowTokenResults.Buyout)
+
+	-- Tutorial
+
+	local WowTokenGameTimeTutorial = WowTokenGameTimeTutorial
+
+	A:ReskinPortraitFrame(WowTokenGameTimeTutorial, true)
+	A:Reskin(StoreButton)
+
+	-- Token
+
+	do
+		local Token = BrowseWowTokenResults.Token
+		local icon = Token.Icon
+		local iconBorder = Token.IconBorder
+
+		Token.ItemBorder:Hide()
+		iconBorder:SetTexture(A.media.backdrop)
+		iconBorder:SetDrawLayer("BACKGROUND")
+		iconBorder:Point("TOPLEFT", icon, -1, 1)
+		iconBorder:Point("BOTTOMRIGHT", icon, 1, -1)
+		icon:SetTexCoord(.08, .92, .08, .92)
+	end
 
 	local inputs = {"BrowseMinLevel", "BrowseMaxLevel", "BrowseBidPriceGold", "BrowseBidPriceSilver", "BrowseBidPriceCopper", "BidBidPriceGold", "BidBidPriceSilver", "BidBidPriceCopper", "StartPriceGold", "StartPriceSilver", "StartPriceCopper", "BuyoutPriceGold", "BuyoutPriceSilver", "BuyoutPriceCopper", "AuctionsStackSizeEntry", "AuctionsNumStacksEntry"}
 	for i = 1, #inputs do
