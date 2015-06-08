@@ -161,8 +161,18 @@ local function LoadSkin()
 
 	local GarrisonCapacitiveDisplayFrame = GarrisonCapacitiveDisplayFrame
 
+	GarrisonCapacitiveDisplayFrameLeft:Hide()
+	GarrisonCapacitiveDisplayFrameMiddle:Hide()
+	GarrisonCapacitiveDisplayFrameRight:Hide()
+	A:CreateBD(GarrisonCapacitiveDisplayFrame.Count, .25)
+	GarrisonCapacitiveDisplayFrame.Count:SetWidth(38)
+	GarrisonCapacitiveDisplayFrame.Count:SetTextInsets(3, 0, 0, 0)
+
 	A:ReskinPortraitFrame(GarrisonCapacitiveDisplayFrame, true)
 	A:Reskin(GarrisonCapacitiveDisplayFrame.StartWorkOrderButton, true)
+	A:Reskin(GarrisonCapacitiveDisplayFrame.CreateAllWorkOrdersButton, true)
+	A:ReskinArrow(GarrisonCapacitiveDisplayFrame.DecrementButton, "left")
+	A:ReskinArrow(GarrisonCapacitiveDisplayFrame.IncrementButton, "right")
 
 	-- Capacitive display
 
@@ -335,18 +345,6 @@ local function LoadSkin()
 
 	GarrisonMissionFrameTab1:ClearAllPoints()
 	GarrisonMissionFrameTab1:SetPoint("BOTTOMLEFT", 11, -40)
-
-	do
-		local f = CreateFrame("Frame")
-		f:RegisterEvent("ADDON_LOADED")
-		f:SetScript("OnEvent", function(self, event, addon)
-			if addon == "MasterPlan" then
-				A:ReskinTab(GarrisonMissionFrameTab3)
-				A:ReskinTab(GarrisonMissionFrameTab4)
-				self:UnregisterEvent("ADDON_LOADED")
-			end
-		end)
-	end
 
 	-- Follower list
 
@@ -574,6 +572,13 @@ local function LoadSkin()
 		portraitFrame.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
 	end)
 
+	-- Mechanic tooltip
+
+	GarrisonMissionMechanicTooltip:SetBackdrop(nil)
+	GarrisonMissionMechanicFollowerCounterTooltip:SetBackdrop(nil)
+	A:CreateBDFrame(GarrisonMissionMechanicTooltip, .6)
+	A:CreateBDFrame(GarrisonMissionMechanicFollowerCounterTooltip, .6)
+
 	-- [[ Recruiter frame ]]
 
 	local GarrisonRecruiterFrame = GarrisonRecruiterFrame
@@ -778,6 +783,33 @@ local function LoadSkin()
 
 		self.numAbilitiesStyled = numAbilitiesStyled
 	end)
+
+	-- [[ Master plan support ]]
+
+	do
+		local f = CreateFrame("Frame")
+		f:RegisterEvent("ADDON_LOADED")
+		f:SetScript("OnEvent", function(self, event, addon)
+			if addon == "MasterPlan" then
+				local minimize = MissionPage.MinimizeButton
+
+				A:ReskinTab(GarrisonMissionFrameTab3)
+				A:ReskinTab(GarrisonMissionFrameTab4)
+
+				MissionPage.CloseButton:SetSize(17, 17)
+				MissionPage.CloseButton:ClearAllPoints()
+				MissionPage.CloseButton:SetPoint("TOPRIGHT", -10, -5)
+
+				A:ReskinExpandOrCollapse(minimize)
+				minimize:SetSize(17, 17)
+				minimize:ClearAllPoints()
+				minimize:SetPoint("RIGHT", MissionPage.CloseButton, "LEFT", -1, 0)
+				minimize.plus:Hide()
+
+				self:UnregisterEvent("ADDON_LOADED")
+			end
+		end)
+	end
 end
 
 A:RegisterSkin("Blizzard_GarrisonUI", LoadSkin)
