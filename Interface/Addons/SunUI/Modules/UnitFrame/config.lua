@@ -198,7 +198,7 @@ function UF:GetOptions()
 				},
 				castbarheight = {
 					type = "range",
-					name = L["施法条宽度"],
+					name = L["施法条高度"],
 					order = 20,
 					min = 1, max = 100, step = 1,
 				},
