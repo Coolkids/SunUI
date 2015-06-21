@@ -1,7 +1,7 @@
 local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local DEV_MOD = false
 local debug = function() end
-
+local JP = S:GetModule("JPack")
 --[===[@debug@
 local debugf = tekDebug and tekDebug:GetFrame("JPack")--tekDebug
 if debugf then
@@ -14,7 +14,8 @@ local JPackDB = {}
 --[[===================================
 			Local
 =====================================]]
-JPack = CreateFrame"Frame"
+local JPack = CreateFrame"Frame"
+JP.Tools = JPack
 JPack.DEV_MOD = DEV_MOD
 
 JPack.bankOpened = false
@@ -112,11 +113,6 @@ local JPACK_STOPPED=0
 --[[===================================
 			lib
 =====================================]]
-
-local function print(msg,r,g,b)
-	DEFAULT_CHAT_FRAME:AddMessage('SunUI: '..msg, r or .41, g or .8, b or .94)
-end
-
 local function CheckCursor()
 	ClearCursor()
 	if GetCursorInfo() then
@@ -204,25 +200,25 @@ local function getPerffix(item)
 	if not item then return end
 	if item.subType == nil and item.type == nil then item.subType = "PET" item.type = "PET"end
 	--按名称获取顺序
-	local i=IndexOfTable(JPACK_ORDER,item.name)
+	local i=IndexOfTable(JP.JPACK_ORDER,item.name)
 	if(i<=0)then
 		--按子类别获取顺序
-		i=IndexOfTable(JPACK_ORDER,"#"..item.type.."##"..item.subType)
+		i=IndexOfTable(JP.JPACK_ORDER,"#"..item.type.."##"..item.subType)
 	else
 		--名称匹配直接返回
 		return '1'..string.format("%3d",999-i)
 	end
 	if(i<=0)then
 		--按子类别获取顺序
-		i=IndexOfTable(JPACK_ORDER,"##"..item.subType)
+		i=IndexOfTable(JP.JPACK_ORDER,"##"..item.subType)
 	end
 	if(i<=0)then
 		--按类别获取顺序
-		i=IndexOfTable(JPACK_ORDER,"#"..item.type)
+		i=IndexOfTable(JP.JPACK_ORDER,"#"..item.type)
 	end
 	if(i<=0)then
 		--默认类别顺序
-		i=IndexOfTable(JPACK_ORDER,"#")
+		i=IndexOfTable(JP.JPACK_ORDER,"#")
 	end
 	if(i<=0)then
 		--默认顺序
@@ -232,7 +228,7 @@ local function getPerffix(item)
 	--灰色物品、可装备的非优秀物品
 	if(item.rarity==0)then
 		return "00"..s
-	elseif(IsEquippableItem(item.name) and item.type~=L.TYPE_BAG and item.subType~=L.TYPE_FISHWEAPON) and item.subType~=L.TYPE_MISC then 
+	elseif(IsEquippableItem(item.name) and item.type~=JP.TYPE_BAG and item.subType~=JP.TYPE_FISHWEAPON) and item.subType~=JP.TYPE_MISC then 
 		if(item.rarity <= 1 ) then
 			return '01'..s
 		end
@@ -255,7 +251,7 @@ return 是否需要保存到银行
 ]]
 local function shouldSaveToBank(bag,slot)
 	local item=getJPackItem(bag,slot)
-	return item~=nil and ((IndexOfTable(JPACK_DEPOSIT,"#"..item.type.."##"..item.subType)>0) or (IndexOfTable(JPACK_DEPOSIT,"#"..item.type)>0) or (IndexOfTable(JPACK_DEPOSIT,"##"..item.subType)>0) or (IndexOfTable(JPACK_DEPOSIT,item.name)>0))
+	return item~=nil and ((IndexOfTable(JP.JPACK_DEPOSIT,"#"..item.type.."##"..item.subType)>0) or (IndexOfTable(JP.JPACK_DEPOSIT,"#"..item.type)>0) or (IndexOfTable(JP.JPACK_DEPOSIT,"##"..item.subType)>0) or (IndexOfTable(JP.JPACK_DEPOSIT,item.name)>0))
 end
 
 --[[
@@ -265,7 +261,7 @@ return 是否需要从银行取出
 ]]
 local function shouldLoadFromBank(bag,slot)
 	local item=getJPackItem(bag,slot)
-	return item~=nil and ((IndexOfTable(JPACK_DRAW,"#"..item.type.."##"..item.subType)>0) or (IndexOfTable(JPACK_DRAW,"#"..item.type)>0) or (IndexOfTable(JPACK_DRAW,"##"..item.subType)>0) or (IndexOfTable(JPACK_DRAW,item.name)>0))
+	return item~=nil and ((IndexOfTable(JP.JPACK_DRAW,"#"..item.type.."##"..item.subType)>0) or (IndexOfTable(JP.JPACK_DRAW,"#"..item.type)>0) or (IndexOfTable(JP.JPACK_DRAW,"##"..item.subType)>0) or (IndexOfTable(JP.JPACK_DRAW,item.name)>0))
 end
 
 --[[
@@ -406,11 +402,11 @@ local function moveToSpecialBag(flag)
 	end
 	
 	--从容器中取出物品 ,fromBags = 容器
-	local fromBags = bagTypes[L.TYPE_BAG]
+	local fromBags = bagTypes[JP.TYPE_BAG]
 	
 	for k,v in pairs(bagTypes) do
 		--针对每种不同的背包,k is type,v is slots
-		if k ~= L.TYPE_BAG then 
+		if k ~= JP.TYPE_BAG then 
 		local toBags = v
 		local frombagIndex,tobagIndex=table.getn(fromBags),table.getn(toBags)
 		local frombag,tobag = fromBags[frombagIndex],toBags[tobagIndex]
@@ -440,7 +436,7 @@ local function moveToSpecialBag(flag)
 				break
 			end
 			if CheckCursor() then
-				print(L["WARN"],1,0,0)
+				S:Print(JP["WARN"],1,0,0)
 			end
 			PickupContainerItem(frombag,fromslot)
 			PickupContainerItem(tobag,toslot)
@@ -480,7 +476,7 @@ local function saveToBank()
 				break
 			end
 			if CheckCursor() then
-				print(L["WARN"],1,0,0)
+				S:Print(JP["WARN"],1,0,0)
 			end
 			PickupContainerItem(bagTypes[bag],slot)
 			PickupContainerItem(bkTypes[bkBag],bkSlot)
@@ -515,7 +511,7 @@ local function loadFromBank()
 				break
 			end
 			if CheckCursor() then
-				print(L["WARN"],1,0,0)
+				S:Print(JP["WARN"],1,0,0)
 			end
 			PickupContainerItem(bkTypes[bkBag],bkSlot)
 			PickupContainerItem(bagTypes[bag],slot)
@@ -537,8 +533,8 @@ packingBags
 ]]
 local function groupBags()
 	local bagTypes={}
-	bagTypes[L.TYPE_BAG]={}
-	bagTypes[L.TYPE_BAG][1]=0
+	bagTypes[JP.TYPE_BAG]={}
+	bagTypes[JP.TYPE_BAG][1]=0
 	for i=1,4 do
 		local name=GetBagName(i)
 		if(name)then
@@ -555,8 +551,8 @@ itemEquipLoc, itemTexture = GetItemInfo(name)
 
 	local bankSlotTypes={}
 	if(JPack.bankOpened)then
-		bankSlotTypes[L.TYPE_BAG]={}
-		bankSlotTypes[L.TYPE_BAG][1]=-1
+		bankSlotTypes[JP.TYPE_BAG]={}
+		bankSlotTypes[JP.TYPE_BAG][1]=-1
 		for i=5,11 do
 			local name=GetBagName(i)
 			if(name)then
@@ -854,7 +850,7 @@ function JPack:ADDON_LOADED(event, addon)
 		debug'JPack loaded'
 		JPackDB = JPackDB or {}
 		
-		print(format('%s %s', version, L["HELP"]))
+		S:Print(format('%s %s', version, JP["HELP"]))
 		self:UnregisterEvent("ADDON_LOADED")
 		self.ADDON_LOADED = nil
 	end
@@ -978,13 +974,13 @@ function JPack.OnUpdate(self, el)
 	-- 计算排序, 移动物品
 	elseif(JPACK_STEP == JPACK_GUILDBANK_SORTING)then
 		JPACK_STEP = JPACK_GUILDBANK_COMPLETE
-		--_G.print'123123123'
+		--_G.S:Print'123123123'
 		--if isGBReady() then
 	
 	--公会银行整理结束, 结束整理工作
 	elseif(JPACK_STEP == JPACK_GUILDBANK_COMPLETE) then
 		debug"GUILDBANK PACKUP COMPLETE"
-		print(L["COMPLETE"])
+		S:Print(JP["COMPLETE"])
 		JPack:UnregisterEvent("GUILDBANKBAGSLOTS_CHANGED")
 		
 	-- 普通整理
@@ -1046,7 +1042,7 @@ function JPack.OnUpdate(self, el)
 				debug"PACKUP COMPLETE"
 				JPACK_STEP=JPACK_STOPPED
 				JPack.bagGroups={}
-				print(L["COMPLETE"])
+				S:Print(JP["COMPLETE"])
 				JPack:SetScript("OnUpdate",nil)
 				current=nil
 				to=nil
@@ -1061,7 +1057,7 @@ end
 local function pack()
 	debug("\n\n\n\nPACK START")
 	if CheckCursor() then
-		print(L["WARN"],2,0.28,2)
+		S:Print(JP["WARN"],2,0.28,2)
 	else
 		JPACK_STEP=JPACK_STARTED
 		if JPack.packupguildbank then
@@ -1096,16 +1092,16 @@ SlashCmdList.JPACK = function(msg)
 		stopPacking()
 	elseif(c=="help")then
 		local text = "%s - |cffffffff%s|r"
-		print(L["Slash command"]..": /jpack |cffffffffor|r /jp")
-		print(format(text, "/jp", L["Pack"]))
-		print(format(text, "/jp asc", L["Set sequence to ascend"]))
-		print(format(text, "/jp desc", L["Set sequence to descend"]))
-		print(format(text, "/jp deposit |cffffffffor|r save", L["Save to the bank"]))
-		print(format(text, "/jp draw |cffffffffor|r load", L["Load from the bank"]))
-		if DEV_MOD then print(format(text, "/jp gb |cffffffffor|r guildback", L["Packup guildbank"])) end
-		print(format(text, "/jp help", L["Print help info"]))
+		S:Print(JP["Slash command"]..": /jpack |cffffffffor|r /jp")
+		S:Print(format(text, "/jp", JP["Pack"]))
+		S:Print(format(text, "/jp asc", JP["Set sequence to ascend"]))
+		S:Print(format(text, "/jp desc", JP["Set sequence to descend"]))
+		S:Print(format(text, "/jp deposit |cffffffffor|r save", JP["Save to the bank"]))
+		S:Print(format(text, "/jp draw |cffffffffor|r load", JP["Load from the bank"]))
+		if DEV_MOD then S:Print(format(text, "/jp gb |cffffffffor|r guildback", JP["Packup guildbank"])) end
+		S:Print(format(text, "/jp help", JP["Print help info"]))
 	else
-		print(format("%s: |cffff0000%s|r , %s", L["Unknown command"], c, L["HELP"]))
+		S:Print(format("%s: |cffff0000%s|r , %s", JP["Unknown command"], c, JP["HELP"]))
 	end
 end
 

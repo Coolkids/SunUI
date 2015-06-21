@@ -11,15 +11,19 @@ function IB:CreateDungeonhelper()
 
 	stat.text = S:CreateFS(stat, nil, nil, IB.font)
 	stat.text:SetPoint("LEFT", InfoPanelBottom2 or InfoPanelBottom1, "RIGHT", 20, 0)
-	stat:SetAllPoints(stat.text)
 	
 	stat.icon = stat:CreateTexture(nil, "OVERLAY")
 	stat.icon:SetSize(8, 8)
-	stat.icon:SetPoint("RIGHT", stat, "LEFT", -5, 0)
+	stat.icon:SetPoint("RIGHT", stat.text, "LEFT", -5, 0)
 	stat.icon:SetTexture(IB.backdrop)
 	stat.icon:SetVertexColor(unpack(IB.InfoBarStatusColor[3]))
 	A:CreateShadow(stat, stat.icon)
 	
+	stat:SetPoint("TOPLEFT", stat.icon)
+	stat:SetPoint("BOTTOMLEFT", stat.icon)
+	stat:SetPoint("TOPRIGHT", stat.text)
+	stat:SetPoint("BOTTOMRIGHT", stat.text)
+
 	-- for i = 1, GetNumRandomDungeons() do
 		-- local id, name = GetLFGRandomDungeonInfo(i)
 		-- print(id .. ": " .. name.. "index:"..i)
@@ -49,7 +53,7 @@ function IB:CreateDungeonhelper()
 		if forDamage then 
 			text = text..damager
 		end
-		if text == "" then text = "N/A" end
+		if text == "" then text = "|cffffd700N/A|r" end
 		
 		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
 		GameTooltip:ClearLines()
@@ -71,7 +75,7 @@ function IB:CreateDungeonhelper()
 		if forDamage then 
 			text = text..damager
 		end
-		if text == "" then text = "N/A" end
+		if text == "" then text = "|cffffd700N/A|r" end
 		stat.text:SetText(text)
 	end
 	stat:SetScript("OnEvent", OnEvent)

@@ -985,7 +985,12 @@ function B:ContructContainerFrame(name, isBank)
 		f.sortButton:SetScript("OnLeave", self.Tooltip_Hide)
 		f.sortButton:SetScript('OnMouseDown', function(self, button) 
 			if InCombatLockdown() then return end
-			if button == "RightButton" then JPack:Pack(nil, 1) else JPack:Pack(nil, 2) end 
+			local JP = S:GetModule("JPack")
+			if button == "RightButton" then
+				JP.Tools.Pack(nil, nil, 1)
+			else 
+				JP.Tools.Pack(nil, nil, 2)
+			end 
 		end)
 		A:Reskin(f.sortButton)
 
@@ -1132,8 +1137,13 @@ function B:ContructContainerFrame(name, isBank)
 		f.sortButton.ttText2desc = L["左键逆向,右键正向"]
 		f.sortButton:SetScript("OnEnter", self.Tooltip_Show)
 		f.sortButton:SetScript("OnLeave", self.Tooltip_Hide)
-		f.sortButton:SetScript('OnMouseDown', function(self, button) 
-			if button == "RightButton" then JPack:Pack(nil, 1) else JPack:Pack(nil, 2) end 
+		f.sortButton:SetScript('OnMouseDown', function(self, button)
+			local JP = S:GetModule("JPack")
+			if button == "RightButton" then
+				JP.Tools.Pack(nil, nil, 1) 
+			else
+				JP.Tools.Pack(nil, nil, 2) 
+			end 
 		end)
 		A:Reskin(f.sortButton)
 		

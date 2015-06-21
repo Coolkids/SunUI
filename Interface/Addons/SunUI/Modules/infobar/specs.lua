@@ -23,14 +23,18 @@ function IB:CreateSpecs()
 
 	stat.text = S:CreateFS(stat)
 	stat.text:SetPoint("LEFT", InfoPanelBottom3 or InfoPanelBottom2 or InfoPanelBottom1, "RIGHT", 20, 0)
-	stat:SetAllPoints(stat.text)
 	
 	stat.icon = stat:CreateTexture(nil, "OVERLAY")
 	stat.icon:SetSize(8, 8)
-	stat.icon:SetPoint("RIGHT", stat, "LEFT", -5, 0)
+	stat.icon:SetPoint("RIGHT", stat.text, "LEFT", -5, 0)
 	stat.icon:SetTexture(IB.backdrop)
 	stat.icon:SetVertexColor(unpack(IB.InfoBarStatusColor[3]))
 	A:CreateShadow(stat, stat.icon)
+
+	stat:SetPoint("TOPLEFT", stat.icon)
+	stat:SetPoint("BOTTOMLEFT", stat.icon)
+	stat:SetPoint("TOPRIGHT", stat.text)
+	stat:SetPoint("BOTTOMRIGHT", stat.text)
 	
 	local function OnEvent(self)
 		local specIndex = GetSpecialization();

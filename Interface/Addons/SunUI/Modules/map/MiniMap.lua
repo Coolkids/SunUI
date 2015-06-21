@@ -276,7 +276,7 @@ local function Difficultyflag()
 end
 
 --团队工具
-function MAP:CreateRaidTools()
+--[[function MAP:CreateRaidTools()
 	local wm = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
 	wm:SetParent(UIParent) 
 	wm:SetFrameLevel(3)
@@ -319,7 +319,7 @@ function MAP:CreateRaidTools()
 	end)
 	local A = S:GetModule("Skins")
 	A:Reskin(wm, false, true)
-end 
+end ]]
 
 function MAP:Initialize()
 	SkinMiniMap()
@@ -329,7 +329,6 @@ function MAP:Initialize()
 	RightClickMenu()
 	LocationInfo()
 	Difficultyflag()
-	self:CreateRaidTools()
 end
 
 S:RegisterModule(MAP:GetName())

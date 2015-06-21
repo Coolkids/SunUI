@@ -9,14 +9,23 @@ function IB:CreateFPS()
 	stat:EnableMouse(true)
 
 	stat.text = S:CreateFS(stat, nil, nil, IB.font)
-	stat.text:SetPoint("LEFT", InfoPanel1, "RIGHT", 20, 0)
-	stat:SetAllPoints(stat.text)
+	if InfoPanel1 then
+		stat.text:SetPoint("LEFT", InfoPanel1, "RIGHT", 20, 0)
+	else
+		stat.text:SetPoint("LEFT", TopInfoMoveHeader, "LEFT", 0, 0)
+	end
 	
 	stat.icon = stat:CreateTexture(nil, "OVERLAY")
 	stat.icon:SetSize(8, 8)
-	stat.icon:SetPoint("RIGHT", stat, "LEFT", -5, 0)
+	stat.icon:SetPoint("RIGHT", stat.text, "LEFT", -5, 0)
 	stat.icon:SetTexture(IB.backdrop)
 	A:CreateShadow(stat, stat.icon)
+
+	stat:SetPoint("TOPLEFT", stat.icon)
+	stat:SetPoint("BOTTOMLEFT", stat.icon)
+	stat:SetPoint("TOPRIGHT", stat.text)
+	stat:SetPoint("BOTTOMRIGHT", stat.text)
+
 	local function color(num)
 		local r, g, b = S:ColorGradient(num/24, IB.InfoBarStatusColor[1][1], IB.InfoBarStatusColor[1][2], IB.InfoBarStatusColor[1][3], 
 																			IB.InfoBarStatusColor[2][1], IB.InfoBarStatusColor[2][2], IB.InfoBarStatusColor[2][3],
@@ -27,11 +36,11 @@ function IB:CreateFPS()
 	local function colorfont(num2, fonttext)
 		local num = tonumber(num2)
 		if num > 60 then
-			fonttext:SetTextColor(100/255, 210/255, 100/255, 0.8)
+			fonttext:SetTextColor(210/255, 100/255, 100/255, 0.8)
 		elseif (num >= 24 and num < 60) then
 			fonttext:SetTextColor(232/255, 218/255, 15/255, 0.8)
 		else
-			fonttext:SetTextColor(210/255, 100/255, 100/255, 0.8)
+			fonttext:SetTextColor(100/255, 210/255, 100/255, 0.8)
 		end
 	end
 	

@@ -24,14 +24,18 @@ function IB:CreateDurability()
 
 	stat.text = S:CreateFS(stat, nil, nil, IB.font)
 	stat.text:SetPoint("LEFT", InfoPanelBottom1, "RIGHT", 20, 0)
-	stat:SetAllPoints(stat.text)
 	
 	stat.icon = stat:CreateTexture(nil, "OVERLAY")
 	stat.icon:SetSize(8, 8)
-	stat.icon:SetPoint("RIGHT", stat, "LEFT", -5, 0)
+	stat.icon:SetPoint("RIGHT", stat.text, "LEFT", -5, 0)
 	stat.icon:SetTexture(IB.backdrop)
 	stat.icon:SetVertexColor(unpack(IB.InfoBarStatusColor[3]))
 	A:CreateShadow(stat, stat.icon)
+	
+	stat:SetPoint("TOPLEFT", stat.icon)
+	stat:SetPoint("BOTTOMLEFT", stat.icon)
+	stat:SetPoint("TOPRIGHT", stat.text)
+	stat:SetPoint("BOTTOMRIGHT", stat.text)
 	
 	stat:SetScript("OnEvent", function(self)
 		wipe(nowSlots)
@@ -53,10 +57,10 @@ function IB:CreateDurability()
 			local r, g, b = S:ColorGradient(((100-value)/100), IB.InfoBarStatusColor[3][1], IB.InfoBarStatusColor[3][2], IB.InfoBarStatusColor[3][3], 
 																IB.InfoBarStatusColor[2][1], IB.InfoBarStatusColor[2][2], IB.InfoBarStatusColor[2][3],
 																IB.InfoBarStatusColor[1][1], IB.InfoBarStatusColor[1][2], IB.InfoBarStatusColor[1][3])
-			self.text:SetText(value.."%")
+			self.text:SetText(value.."|cffffd700%|r")
 			self.icon:SetVertexColor(r, g, b, 0.8)
 		else
-			self.text:SetText("N/A")
+			self.text:SetText("|cffffd700N/A|r")
 			stat.icon:SetVertexColor(unpack(IB.InfoBarStatusColor[3]))
 		end
 	end)
@@ -69,7 +73,7 @@ function IB:CreateDurability()
 		for k,v in pairs(nowSlots) do
 			local green = v[3]*2
 			local red = 1 - green
-			GameTooltip:AddDoubleLine(v[2], format("%d %%", floor(v[3]*100)), 1 ,1 , 1, red + 1, green, 0)
+			GameTooltip:AddDoubleLine(v[2], format("%d |cffffd700%%|r", floor(v[3]*100)), 1 ,1 , 1, red + 1, green, 0)
 		end
 		GameTooltip:Show()
 	end)

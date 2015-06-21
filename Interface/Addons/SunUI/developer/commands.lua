@@ -32,9 +32,9 @@ SlashCmdList["FRAME"] = function(arg)
 		end
 		ChatFrame1:AddMessage("|cffCC0000~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 	elseif arg == nil then
-		ChatFrame1:AddMessage("Invalid frame name")
+		ChatFrame1:AddMessage(L["Frame没名字"])
 	else
-		ChatFrame1:AddMessage("Could not find frame info")
+		ChatFrame1:AddMessage(L["找不到Frame"])
 	end
 end
 
@@ -61,10 +61,10 @@ SLASH_READYCHECK1 = '/rc'
 SlashCmdList["CHECKROLE"] = function() InitiateRolePoll() end
 SLASH_CHECKROLE1 = '/cr'
 
-SlashCmdList["DISABLE_ADDON"] = function(s) DisableAddOn(s) S:Print(s, format("|cffd36b6b disabled")) end
+SlashCmdList["DISABLE_ADDON"] = function(s) DisableAddOn(s) S:Print(s, "|cffd36b6b"..DISABLE) end
 SLASH_DISABLE_ADDON1 = "/dis"   -- You need to reload UI after enabling/disabling addon
 
-SlashCmdList["ENABLE_ADDON"] = function(s) EnableAddOn(s) S:Print(s, format("|cfff07100 enabled")) end
+SlashCmdList["ENABLE_ADDON"] = function(s) EnableAddOn(s) S:Print(s, "|cfff07100"..ENABLE) end
 SLASH_ENABLE_ADDON1 = "/en"   -- You need to reload UI after enabling/disabling addon
 
 SlashCmdList["CLCE"] = function() CombatLogClearEntries() end
@@ -77,90 +77,6 @@ SlashCmdList["SPEC"] = function()
 end
 SLASH_SPEC1 = "/ss"
 
--- Quest tracker(by Tukz)
---[[
-local wf = _G["ObjectiveTrackerFrame"]
-local wfmove = false 
-
-wf:SetMovable(true);
-wf:SetClampedToScreen(false); 
-wf:ClearAllPoints()
-wf:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -35, -200)
-wf:SetUserPlaced(true)
-wf:SetSize(180, 500)
-wf.SetPoint = function() end
-local wfg = CreateFrame("Frame", nil, UIParent)
-wfg:SetPoint("TOPLEFT", wf, "TOPLEFT")
-wfg:SetPoint("BOTTOMRIGHT", wf, "BOTTOMRIGHT")
-wfg.text = wfg:CreateFontString(nil, "OVERLAY")
-wfg:Hide()
-local function WATCHFRAMELOCK()
-	if not wfg.shadow then
-		wfg:CreateShadow("Background") 
-		wfg.text:SetFont(S["media"].font, 14, "THINOUTLINE")
-		wfg.text:SetText("点我拖动")
-		wfg.text:SetPoint("TOP", wfg, "TOP")
-	end
-	if wfmove == false then
-		wfmove = true
-		wfg:Show()
-		S:Print("|cffFFD700任务追踪框|r |cff228B22解锁|r")
-		wf:EnableMouse(true);
-		wf:RegisterForDrag("LeftButton"); 
-		wf:SetScript("OnDragStart", wf.StartMoving); 
-		wf:SetScript("OnDragStop", wf.StopMovingOrSizing);
-	elseif wfmove == true then
-		wf:EnableMouse(false);
-		wfmove = false
-		wfg:Hide()
-		S:Print("|cffFFD700任务追踪框|r |cffFF0000锁定|r")
-	end
-end
-SLASH_WATCHFRAMELOCK1 = "/wf"
-SlashCmdList["WATCHFRAMELOCK"] = WATCHFRAMELOCK
--- VS移动(by Coolkid)
-local vs = _G["VehicleSeatIndicator"]
-local vsmove = false 
-
-vs:SetMovable(true);
-vs:SetClampedToScreen(false);
-vs:ClearAllPoints()
-vs:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -150, 250)
-
-
-vs:SetUserPlaced(true)
-vs.SetPoint = function() end
-local vsg = CreateFrame("Frame", nil, UIParent)
-vsg:SetPoint("TOPLEFT", vs, "TOPLEFT")
-vsg:SetPoint("BOTTOMRIGHT", vs, "BOTTOMRIGHT")
-vsg.text = vsg:CreateFontString(nil, "OVERLAY")
-vsg:Hide()
-local function VSLOCK()
-	if not vsg.shadow then
-		vsg.text:SetFont(S["media"].font, 14, "THINOUTLINE")
-		vsg.text:SetText("点我拖动")
-		vsg.text:SetPoint("TOP", vsg, "TOP")
-		vsg:CreateShadow("Background")
-	end
-	if vsmove == false then
-		vsmove = true
-		vsg:Show()
-		S:Print("|cffFFD700载具框|r |cff228B22解锁|r")
-		vs:EnableMouse(true);
-		vs:RegisterForDrag("LeftButton"); 
-		vs:SetScript("OnDragStart", vs.StartMoving); 
-		vs:SetScript("OnDragStop", vs.StopMovingOrSizing);
-	elseif vsmove == true then
-		vs:EnableMouse(false);
-		vsmove = false
-		vsg:Hide()
-		S:Print("|cffFFD700载具框|r |cffFF0000锁定|r")
-	end
-end
-
-SLASH_VehicleSeatIndicatorLOCK1 = "/vs"
-SlashCmdList["VehicleSeatIndicatorLOCK"] = VSLOCK
---]]
 StaticPopupDialogs["TESTUI"] = {
 	text = "测试弹窗系统",
 	button1 = ACCEPT,
@@ -225,15 +141,15 @@ SLASH_CLEARCC1 = "/clearcc"
 local GroupDisband = function()
 	local pName = UnitName("player")
 	if UnitInRaid("player") then
-	SendChatMessage("解散团队", "RAID")
+		SendChatMessage(TEAM_DISBAND, "RAID")
 		for i = 1, GetNumGroupMembers() do
 			local name, _, _, _, _, _, _, online = GetRaidRosterInfo(i)
 			if online and name ~= pName then
 				UninviteUnit(name)
 			end
 		end
-	else
-		SendChatMessage("解散小队", "PARTY")
+	else  --if UnitInParty("player") then
+		SendChatMessage(TEAM_DISBAND, "PARTY")
 		for i = MAX_PARTY_MEMBERS, 1, -1 do
 			if GetPartyMember(i) then
 				UninviteUnit(UnitName("party"..i))
@@ -243,51 +159,60 @@ local GroupDisband = function()
 	LeaveParty()
 end
 StaticPopupDialogs["DISBAND_RAID"] = {
-	text = "解散团队?",
+	text = TEAM_DISBAND.."?",
 	button1 = YES,
 	button2 = NO,
 	OnAccept = GroupDisband,
 	timeout = 0,
 	whileDead = 1,}
+StaticPopupDialogs["ERROR_DISBAND_RAID"] = {
+	text = ERR_NOT_IN_GROUP.."\n"..ERR_NOT_IN_INSTANCE_GROUP,
+	button1 = YES,
+	timeout = 0,
+	whileDead = 1,}
 SlashCmdList["GROUPDISBAND"] = function()
-	StaticPopup_Show("DISBAND_RAID")
+	if UnitInParty("player") or UnitInRaid("player") then
+		StaticPopup_Show("DISBAND_RAID")
+	else
+		StaticPopup_Show("ERROR_DISBAND_RAID")
+	end
 end
 SLASH_GROUPDISBAND1 = '/rd'
 -- convert group from raid to party
 SlashCmdList["RAIDTOPARTY"] = function()
 	if not IsInRaid() then
-		S:Print("你不是团队中")
+		S:Print(ERR_NOT_IN_RAID)
 	elseif GetNumGroupMembers() <= MEMBERS_PER_RAID_GROUP and IsInRaid() then
 		ConvertToParty()
-		S:Print("已经转换成小队")
+		S:Print(CONVERT_TO_PARTY)
 	else
-		S:Print("未能转换成小队")
+		S:Print(L["未能转换成小队"])
 	end
 end
 SLASH_RAIDTOPARTY1 = '/rtp'
 -- convert group from party to raid
 SlashCmdList["PARTYTORAID"] = function()
 	if IsInRaid() then
-		S:Print("你在团队中")
+		S:Print(L["你在团队中"])
 	elseif GetNumSubgroupMembers() > 0 and not IsInRaid() then
 		ConvertToRaid()
-		S:Print("已经转成团队")
+		S:Print(CONVERT_TO_PARTY)
 	else
-		S:Print("你不在小队中")
+		S:Print(L["你不在小队中"])
 	end
 end
 SLASH_PARTYTORAID1 = '/ptr'
 
 StaticPopupDialogs["SUNUI_DBM_CFG_RELOAD"] = {
-	text = "改变DBM参数需重载应用设置",
+	text = L["改变DBM参数需重载应用设置"],
 	button1 = ACCEPT,
 	button2 = CANCEL,
 	OnAccept = function() S.db.IsSetDBM = false; ReloadUI() end,
 	timeout = 0,
 	whileDead = 1,
 }
-StaticPopupDialogs["SUNUI_DBM_NOT_FAND"] = {
-	text = "您没有安装DBM",
+StaticPopupDialogs["SUNUI_DBM_NOT_FAUND"] = {
+	text = L["您没有安装DBM"],
 	button1 = CANCEL,
 	timeout = 0,
 	whileDead = 1,
@@ -297,14 +222,14 @@ SlashCmdList["SetDBM"] = function()
 		if IsAddOnLoaded("DBM-Core") then 
 			StaticPopup_Show("SUNUI_DBM_CFG_RELOAD") 
 		else
-			StaticPopup_Show("SUNUI_DBM_NOT_FAND") 
+			StaticPopup_Show("SUNUI_DBM_NOT_FAUND") 
 		end
 	end
 end
 SLASH_SetDBM1 = "/SetDBM"
 
 StaticPopupDialogs["SUNUI_BW_CFG_RELOAD"] = {
-	text = "改变bigwigs参数需重载应用设置",
+	text = L["改变bigwigs参数需重载应用设置"],
 	button1 = ACCEPT,
 	button2 = CANCEL,
 	OnAccept = function() S.db.IsSetBW = false; ReloadUI() end,
@@ -312,7 +237,7 @@ StaticPopupDialogs["SUNUI_BW_CFG_RELOAD"] = {
 	whileDead = 1,
 }
 StaticPopupDialogs["SUNUI_BW_NOT_FAND"] = {
-	text = "您没有安装bigwigs",
+	text = L["您没有安装bigwigs"],
 	button1 = CANCEL,
 	timeout = 0,
 	whileDead = 1,

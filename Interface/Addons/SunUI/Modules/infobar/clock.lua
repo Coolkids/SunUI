@@ -15,15 +15,19 @@ function IB:CreateClock()
 
 	stat.text = S:CreateFS(stat, nil, nil, IB.font)
 	stat.text:SetPoint("LEFT", BottomInfoMoveHeader, "LEFT", 0, 0)
-	stat:SetAllPoints(stat.text)
 	
 	stat.icon = stat:CreateTexture(nil, "OVERLAY")
 	stat.icon:SetSize(8, 8)
-	stat.icon:SetPoint("RIGHT", stat, "LEFT", -5, 0)
+	stat.icon:SetPoint("RIGHT", stat.text, "LEFT", -5, 0)
 	stat.icon:SetTexture(IB.backdrop)
 	stat.icon:SetVertexColor(unpack(IB.InfoBarStatusColor[3]))
 	A:CreateShadow(stat, stat.icon)
-	
+
+	stat:SetPoint("TOPLEFT", stat.icon)
+	stat:SetPoint("BOTTOMLEFT", stat.icon)
+	stat:SetPoint("TOPRIGHT", stat.text)
+	stat:SetPoint("BOTTOMRIGHT", stat.text)
+
 	stat:SetScript("OnEnter", function(self)
 		if InCombatLockdown() then return end
 		local w,m,d,y = CalendarGetDate()

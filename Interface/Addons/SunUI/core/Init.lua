@@ -18,7 +18,12 @@ _G[AddOnName] = Engine
 function AddOn:OnProfileChanged(event, database, newProfileKey)
 	StaticPopup_Show("CFG_RELOAD")
 end
+--[[
 
+	S.global.XXX = 全局设置
+	S.db.XXX = 角色设置
+
+]]
 --初始化部分
 function AddOn:OnInitialize()
 	--初始化角色数据

@@ -60,6 +60,18 @@ do
 	L["格式不正确"] = true
 	L["布局管理器"] = true
 end
+--commands
+do
+	L["Frame没名字"] = true
+	L["找不到Frame"] = true
+	L["未能转换成小队"] = true
+	L["你在团队中"] = true
+	L["你不在小队中"] = true
+	L["改变DBM参数需重载应用设置"] = true
+	L["您没有安装DBM"] = true
+	L["改变bigwigs参数需重载应用设置"] = true
+	L["您没有安装bigwigs"] = true
+end
 --安装
 do
 	L["安装完毕"] = "安装完毕"

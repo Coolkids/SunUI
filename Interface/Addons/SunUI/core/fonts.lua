@@ -16,7 +16,7 @@ function S:UpdateBlizzardFonts()
 	local NORMAL     = self["media"].font
 	local COMBAT     = self["media"].dmgfont
 	local NUMBER     = self["media"].font
-
+	--S:Print(NORMAL)
 	local _, editBoxFontSize, _, _, _, _, _, _, _, _ = GetChatWindowInfo(1)
 
 	UIDROPDOWNMENU_DEFAULT_TEXT_HEIGHT = 12

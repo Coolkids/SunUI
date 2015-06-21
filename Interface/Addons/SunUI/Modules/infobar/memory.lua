@@ -10,14 +10,18 @@ function IB:CreateMemory()
 
 	stat.text = S:CreateFS(stat, nil, nil, IB.font)
 	stat.text:SetPoint("LEFT", InfoPanel2 or InfoPanel1, "RIGHT", 20, 0)
-	stat:SetAllPoints(stat.text)
 	
 	stat.icon = stat:CreateTexture(nil, "OVERLAY")
 	stat.icon:SetSize(8, 8)
-	stat.icon:SetPoint("RIGHT", stat, "LEFT", -5, 0)
+	stat.icon:SetPoint("RIGHT", stat.text, "LEFT", -5, 0)
 	stat.icon:SetTexture(IB.backdrop)
 	stat.icon:SetVertexColor(unpack(IB.InfoBarStatusColor[3]))
 	A:CreateShadow(stat, stat.icon)
+
+	stat:SetPoint("TOPLEFT", stat.icon)
+	stat:SetPoint("BOTTOMLEFT", stat.icon)
+	stat:SetPoint("TOPRIGHT", stat.text)
+	stat:SetPoint("BOTTOMRIGHT", stat.text)
 	
 	local function sortdesc(a, b) return a[2] > b[2] end
 	local function formatmem(val,dec)
@@ -45,7 +49,7 @@ function IB:CreateMemory()
 			--print(GetTime())
 			for i = 1, GetNumAddOns() do self.total = self.total + GetAddOnMemoryUsage(i) end
 			
-			local text = self.total >= 1024 and format("%.1fmb", self.total / 1024) or format("%.0fkb", self.total)
+			local text = self.total >= 1024 and format("%.1f|cffffd700mb|r", self.total / 1024) or format("%.0f|cffffd700kb|r", self.total)
 			stat.textnum = self.total
 			stat.text:SetText(text)
 			local r, g, b = S:ColorGradient(self.total/(35 * 1024), IB.InfoBarStatusColor[3][1], IB.InfoBarStatusColor[3][2], IB.InfoBarStatusColor[3][3], 

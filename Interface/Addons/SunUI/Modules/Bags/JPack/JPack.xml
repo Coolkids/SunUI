@@ -4,7 +4,7 @@
 
 
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-
+	<Script file="init.lua"/>
 	<Include file="localization\locales.xml"/>
 	<Script file="JPack.lua"/>
 

@@ -22,6 +22,7 @@ local function SkinFrame()
 			end
 		end
 	end
+	QuestGuru.emptyLog:Kill()
 	A:ReskinClose(QuestGuruCloseButton)
 	
 	A:ReskinScroll(QuestGuruScrollFrameScrollBar)

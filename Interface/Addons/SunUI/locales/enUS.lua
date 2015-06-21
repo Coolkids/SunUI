@@ -65,6 +65,20 @@ do
 	L["格式不正确"] = "error"
 	L["布局管理器"] = "Layout Manage"
 end
+
+--commands
+do
+	L["Frame没名字"] = "Invalid frame name"
+	L["找不到Frame"] = "Could not find frame info"
+	L["未能转换成小队"] = ""
+	L["你在团队中"] = "Your in RAID"
+	L["你不在小队中"] = ""
+	L["改变DBM参数需重载应用设置"] = "Set DBM?"
+	L["您没有安装DBM"] = "You not intsall DBM"
+	L["改变bigwigs参数需重载应用设置"] = "Set Bigwigs?"
+	L["您没有安装bigwigs"] = "You not intsall Bigwigs"
+end
+
 --安装
 do
 	L["安装完毕"] = "Installed"

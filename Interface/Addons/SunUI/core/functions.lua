@@ -1,9 +1,6 @@
 ﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local LSM = LibStub("LibSharedMedia-3.0")
 
-SlashCmdList["RELOAD"] = function() ReloadUI() end
-SLASH_RELOAD1 = "/rl"
-
 S["RegisteredModules"] = {}
 S.resolution           = GetCVar("gxResolution")
 S.screenheight         = tonumber(string.match(S.resolution, "%d+x(%d+)"))
@@ -232,10 +229,6 @@ function S:Initialize()
 	configButton:SetPoint("BOTTOM" , GameMenuFrame, "BOTTOM", 0, 10)
 	configButton:SetText(L["SunUI"])
 	configButton:SetScript("OnClick", function()
-		if SunUIConfigTutorial then
-			SunUIConfigTutorial:Hide()
-			S.global.Tutorial.configbutton = true
-		end
 		HideUIPanel(GameMenuFrame)
 		self:OpenConfig()
 	end)
@@ -796,4 +789,19 @@ function S:CreateFS(parent, fontSize, justify, fontname, fontStyle)
     if justify then f:SetJustifyH(justify) end
 
     return f
+end
+
+function S:CheckChat(warning)
+	if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
+		return "INSTANCE_CHAT"
+	elseif IsInRaid(LE_PARTY_CATEGORY_HOME) then
+		if warning and (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player") or IsEveryoneAssistant()) then
+			return "RAID_WARNING"
+		else
+			return "RAID"
+		end
+	elseif IsInGroup(LE_PARTY_CATEGORY_HOME) then
+		return "PARTY"
+	end
+	return "SAY"
 end

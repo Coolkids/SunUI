@@ -10,14 +10,19 @@ function IB:CreateLatency()
 	
 	stat.text = S:CreateFS(stat, nil, nil, IB.font)
 	stat.text:SetPoint("LEFT", TopInfoMoveHeader, "LEFT", 0, 0)
-	stat:SetAllPoints(stat.text)
 	
 	stat.icon = stat:CreateTexture(nil, "OVERLAY")
 	stat.icon:SetSize(8, 8)
-	stat.icon:SetPoint("RIGHT", stat, "LEFT", -5, 0)
+	stat.icon:SetPoint("RIGHT", stat.text, "LEFT", -5, 0)
 	stat.icon:SetTexture(IB.backdrop)
 	
 	A:CreateShadow(stat, stat.icon)
+
+	stat:SetPoint("TOPLEFT", stat.icon)
+	stat:SetPoint("BOTTOMLEFT", stat.icon)
+	stat:SetPoint("TOPRIGHT", stat.text)
+	stat:SetPoint("BOTTOMRIGHT", stat.text)
+
 	local function colorlatency(latency)
 		if latency < 100 then
 			stat.icon:SetVertexColor(100/255, 210/255, 100/255, 0.8)

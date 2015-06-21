@@ -94,6 +94,19 @@ do
 	L["更新地址"] = "永久更新地址http://sp2.misaka.pw:8080/"
 end
 
+--commands
+do
+	L["Frame没名字"] = true
+	L["找不到Frame"] = true
+	L["未能转换成小队"] = true
+	L["你在团队中"] = true
+	L["你不在小队中"] = true
+	L["改变DBM参数需重载应用设置"] = true
+	L["您没有安装DBM"] = true
+	L["改变bigwigs参数需重载应用设置"] = true
+	L["您没有安装bigwigs"] = true
+end
+
 	--actionbar区域
 do
 	L["动作条"] = true

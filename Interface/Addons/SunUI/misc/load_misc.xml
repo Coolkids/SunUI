@@ -12,6 +12,7 @@
 	<Include file="tools\load.xml"/>
 	<Include file="xct\load_xct.xml"/>
 	<Include file="oGlow\load.xml"/>
+	<Include file="rltools\load_rltools.xml"/>
 	<Include file="sync\load_sync.xml"/>
 	<Include file="tekKompare\load_tekKompare.xml"/>
 </Ui>

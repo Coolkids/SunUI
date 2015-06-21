@@ -151,48 +151,28 @@ end
 
 function IB:CreateTopBack()
 	if not self.db.topback then return end
-	local top = CreateFrame("Frame", "TopInfoPanel", UIParent)
+	local top = CreateFrame("Frame", "TopInfoPanel", oUF_PetBattleFrameHider)
 	top:SetHeight(20)
 	top:SetFrameStrata("BACKGROUND")
 	top:SetFrameLevel(0)
-	top:SetPoint("TOP", 0, 3)
-	top:SetPoint("LEFT")
-	top:SetPoint("RIGHT")
+	top:SetPoint("TOP", UIParent, 0, 3)
+	top:SetPoint("LEFT", UIParent)
+	top:SetPoint("RIGHT", UIParent)
 	top:CreateShadow("Background")
 	
-	top:RegisterEvent("PET_BATTLE_OPENING_START")
-	top:RegisterEvent("PET_BATTLE_CLOSE")
-	top:SetScript("OnEvent", function(self, event)
-		if event == "PET_BATTLE_OPENING_START" then
-			S:FadeOutFrame(self, 1, false)
-		else
-			self:Show()
-			UIFrameFadeIn(self, 1, self:GetAlpha(), 1)
-		end
-	end)
 end
 
 function IB:CreateBottomBack()
 	if not self.db.bottomback then return end
-	local bottom = CreateFrame("Frame", "BottomInfoPanel", UIParent)
+	local bottom = CreateFrame("Frame", "BottomInfoPanel", oUF_PetBattleFrameHider)
 	bottom:SetHeight(20)
 	bottom:SetFrameStrata("BACKGROUND")
 	bottom:SetFrameLevel(0)
 	bottom:CreateShadow("Background")
-	bottom:SetPoint("BOTTOM", 0, -3)
-	bottom:SetPoint("LEFT")
-	bottom:SetPoint("RIGHT")
+	bottom:SetPoint("BOTTOM", UIParent, 0, -3)
+	bottom:SetPoint("LEFT", UIParent)
+	bottom:SetPoint("RIGHT", UIParent)
 
-	bottom:RegisterEvent("PET_BATTLE_OPENING_START")
-	bottom:RegisterEvent("PET_BATTLE_CLOSE")
-	bottom:SetScript("OnEvent", function(self, event)
-		if event == "PET_BATTLE_OPENING_START" then
-			S:FadeOutFrame(self, 1, false)
-		else
-			self:Show()
-			UIFrameFadeIn(self, 1, self:GetAlpha(), 1)
-		end
-	end)
 end
 
 function IB:CreateTopHeader()
