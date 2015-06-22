@@ -1,60 +1,6 @@
 local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local RT = S:NewModule("RLTools", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 
-
--- Banner show/hide animations
-
-local bannerShown = false
-local interval = 0.1
-
-function RT:hideBanner()
-	local scale
-	self.mainFrame:SetScript("OnUpdate", function(self)
-		scale = self:GetScale() - interval
-		if scale <= 0.1 then
-			self:SetScript("OnUpdate", nil)
-			self:Hide()
-			bannerShown = false
-			return
-		end
-		self:SetScale(scale)
-		self:SetAlpha(scale)
-	end)
-end
-
-function RT:fadeTimer()
-	local last = 0
-	self.mainFrame:SetScript("OnUpdate", function(self, elapsed)
-		local width = RT.mainFrame:GetWidth()
-		if width > bannerWidth then
-			self:SetWidth(width - (interval*100))
-		end
-		last = last + elapsed
-		if last >= timeShown then
-			self:SetWidth(bannerWidth)
-			self:SetScript("OnUpdate", nil)
-			RT.hideBanner()
-		end
-	end)
-end
-
-function RT:showBanner()
-	bannerShown = true
-	self.mainFrame:Show()
-	local scale
-	self.mainFrame:SetScript("OnUpdate", function(self)
-		scale = self:GetScale() + interval
-		self:SetScale(scale)
-		self:SetAlpha(scale)
-		if scale >= 1 then
-			self:SetScale(1)
-			self:SetScript("OnUpdate", nil)
-		end
-	end)
-end
-
----end
-
 function RT:CreateText(parent, text, point)
 	local texture = S:CreateFS(parent)
 	texture:SetText(text)
@@ -85,23 +31,22 @@ end
 function RT:initButton()
 	--主按钮
 	self.mainButton = self:CreateButton(oUF_PetBattleFrameHider, 70, 20, RT.L.RAIDCHECK_RAIDTOOL, {"TOP", TopInfoPanel, "BOTTOM", 0, -5}, function()
-		if not bannerShown then
-			RT:showBanner()
+		if not self.mainFrame.bannerShown then
+			S:ShowAnima(self.mainFrame)
 		else
-			RT:hideBanner()
+			S:HideAnima(self.mainFrame)
 		end
-	end) 
+	end)
 	S:CreateMover(self.mainButton, "RLToolsMover", RT.L.RAIDCHECK_RAIDTOOL, true, nil, "ALL,GENERAL")
 	--主界面
 	self.mainFrame = CreateFrame("Button", nil, self.mainButton)
 	self.mainFrame:SetSize(226, 166)
 	self.mainFrame:SetPoint("TOP", self.mainButton, "BOTTOM", 0, -5)
 	self.mainFrame:Hide()
-	self.mainFrame:SetAlpha(0.1)
-	self.mainFrame:SetScale(0.1)
+	
 	--返回按钮
 	self.backButton = self:CreateButton(self.mainFrame, 22, 22, "^", {"TOP", self.mainFrame, "BOTTOM", 0, -5}, function()
-		RT:hideBanner()
+		S:HideAnima(self.mainFrame)
 	end)
 
 	--解散队伍/团队

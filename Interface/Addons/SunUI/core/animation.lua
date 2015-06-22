@@ -105,7 +105,7 @@ function S:Slide(frame, direction, length, speed)
 	frame.speed = frame.mod * speed
 	frame.point_1 = p1
 	frame.point_2 = p2
-	frame:SetScript("OnUpdate",R.simple_move)
+	frame:SetScript("OnUpdate",S.simple_move)
 end
 
 function S:SetUpAnimGroup(object, type, ...)
@@ -386,3 +386,42 @@ SmoothUpdate:SetScript("OnUpdate", function()
 		end
 	end
 end)
+
+-- Banner show/hide animations
+
+local interval = 0.1
+
+function S:ShowAnima(f)
+	if not f:IsShown() then
+		f:SetAlpha(0.1)
+		f:SetScale(0.1)
+	end 
+	f.bannerShown = true
+	f:Show()
+	local scale
+	f:SetScript("OnUpdate", function(self)
+		scale = self:GetScale() + interval
+		self:SetScale(scale)
+		self:SetAlpha(scale)
+		if scale >= 1 then
+			self:SetScale(1)
+			self:SetScript("OnUpdate", nil)
+		end
+	end)
+
+end
+
+function S:HideAnima(f)
+	local scale
+	f:SetScript("OnUpdate", function(self)
+		scale = self:GetScale() - interval
+		if scale <= 0.1 then
+			self:SetScript("OnUpdate", nil)
+			self:Hide()
+			f.bannerShown = false
+			return
+		end
+		self:SetScale(scale)
+		self:SetAlpha(scale)
+	end)
+end

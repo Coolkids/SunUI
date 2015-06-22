@@ -144,14 +144,10 @@ if S.zone == "zhCN" then
 end
 local fmtstring = format("\124T%%s:%d\124t",max(floor(select(2,SELECTED_CHAT_FRAME:GetFont())),IconSize))
 
-local temp = CreateFrame("Frame", nil, UIParent)
-temp.time = 0
-temp.ettime = 0
 local function getFouse()
 	local frame = GetMouseFocus():GetParent():GetName()
 	if frame == "CollectorButton" or frame == "EmoteTableFrame" then
 		isFocus = true
-		temp.ettime = 0
 	else
 		isFocus = false
 	end
@@ -187,13 +183,14 @@ end
 local function CreateEmoteTableFrame()
 	local A = S:GetModule("Skins")
 	local EmoteTableFrame = CreateFrame("Frame", "EmoteTableFrame", UIParent)
-	temp.ettime = 0
+
 	A:SetBD(EmoteTableFrame)
 	EmoteTableFrame:SetWidth((IconSize+2) * 12+4)
 	EmoteTableFrame:SetHeight((IconSize+2) * 5+4)
 	EmoteTableFrame:SetPoint("BOTTOMRIGHT", ChatFrame1, "TOPRIGHT", 0, 5)
 	EmoteTableFrame:Hide()
 	EmoteTableFrame:SetFrameStrata("DIALOG")
+	EmoteTableFrame.time = 0
 
 	local icon, row, col
 	row = 1
@@ -217,10 +214,8 @@ local function CreateEmoteTableFrame()
 				ChatEdit_ActivateChat(ChatFrame1EditBox)
 			end
 			ChatFrame1EditBox:Insert(self.text)
-			temp:SetScript("OnUpdate", nil)
-			EmoteTableFrame:SetScript("OnUpdate", nil)
-			EmoteTableFrame:Hide()
-			
+			S:HideAnima(EmoteTableFrame)
+			Chat:CancelTimer(EmoteTableFrame.Timer)
 		end)
 		icon:SetScript("OnEnter",  function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
@@ -239,38 +234,32 @@ end
 local function ToggleEmoteTable()
 	if (not EmoteTableFrame) then CreateEmoteTableFrame() end
 	if (EmoteTableFrame:IsShown()) then
-		EmoteTableFrame:Hide()
-		EmoteTableFrame:SetScript("OnUpdate", nil)
-		temp:SetScript("OnUpdate", nil)
-		temp.ettime = 0
+		S:HideAnima(EmoteTableFrame)
+		Chat:CancelTimer(EmoteTableFrame.Timer)
 	else
-		EmoteTableFrame:Show()
-		UIFrameFadeIn(EmoteTableFrame, 0.2, EmoteTableFrame:GetAlpha(), 1)
-		temp:SetScript("OnUpdate", function(self, elasped)
-			self.time = self.time + elasped
-			if self.time > 1 then
-				local _, catch = pcall(getFouse)
-				if catch then
-					isFocus = false
-				end
-				--S:Debug("temp:Call",isFocus, self.time)
-				self.time = 0
-			end
-		end)
-		EmoteTableFrame:SetScript("OnUpdate", function(self, elasped)
-			if isFocus then return end
-			temp.ettime = temp.ettime + elasped
-			if temp.ettime > 6 then
-				--S:Debug("EmoteTableFrame:Call",temp.ettime)
-				S:FadeOutFrame(self, 0.3, false)  
-				temp.ettime = 0
-				temp:SetScript("OnUpdate", nil)
-				self:SetScript("OnUpdate", nil)
-			end
-		end)
+		S:ShowAnima(EmoteTableFrame)
+		EmoteTableFrame.Timer = Chat:ScheduleRepeatingTimer("CheckEmoteTableFrame", 1)
 	end
-
 end
+
+
+function Chat:CheckEmoteTableFrame()
+  	local _, catch = pcall(getFouse)
+	if catch then
+		isFocus = false
+	end
+	if not isFocus then
+		EmoteTableFrame.time = EmoteTableFrame.time + 1
+	else
+		EmoteTableFrame.time = 0
+	end
+	if EmoteTableFrame.time >= 5 then
+		S:HideAnima(EmoteTableFrame)
+		EmoteTableFrame.time = 0
+		Chat:CancelTimer(EmoteTableFrame.Timer)
+	end
+end
+
 
 local function EmoteIconMouseUp(self, button)
 	if (button == "LeftButton") then
