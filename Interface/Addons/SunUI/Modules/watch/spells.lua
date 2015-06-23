@@ -2846,6 +2846,321 @@ ns.watchers ={
 			-- 投掷炉渣炸弹
 			{ spellID = 157000, unitId = "player", caster = "all", filter = "DEBUFF"},
 			{ spellID = 159179, unitId = "player", caster = "all", filter = "DEBUFF"},
+
+
+
+			-- 地狱火堡垒
+			-- 1	奇袭地狱火
+			-- 邪火弹药
+			{ spellID = 186016, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 啸风战斧
+			{ spellID = 184379, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 颤抖！
+			{ spellID = 184238, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 猛击
+			{ spellID = 184243, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 导电冲击脉冲
+			{ spellID = 185806, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 钻孔
+			{ spellID = 180022, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 灼烧
+			{ spellID = 185157, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 腐化虹吸
+			{ spellID = 187655, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+
+			-- 2	钢铁掠夺者
+			-- 献祭
+			{ spellID = 182074, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 不稳定的宝珠
+			{ spellID = 182001, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 炮击
+			{ spellID = 182280, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 燃料尾痕
+			{ spellID = 182003, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 迅猛突袭
+			{ spellID = 179897, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 185242, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 易爆火焰炸弹
+			{ spellID = 185978, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+
+			-- 3	考莫克
+			-- 攫取之手
+			{ spellID = 181345, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 邪能之触
+			{ spellID = 181321, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 爆裂冲击
+			{ spellID = 181306, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 邪污碾压
+			{ spellID = 187819, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 暗影血球
+			{ spellID = 180270, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 炽热血球
+			{ spellID = 185519, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 邪污血球
+			{ spellID = 185521, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 暗影残渣
+			{ spellID = 181208, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 爆炸残渣
+			{ spellID = 185686, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+
+			-- 4	高阶地狱火议会
+			-- 死灵印记
+			{ spellID = 184449, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 184450, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 184676, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 185065, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 185066, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 血沸點名
+			{ spellID = 184360, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 酸性创伤
+			{ spellID = 184847, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 暗影收割
+			{ spellID = 184652, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 污血
+			{ spellID = 184357, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 血液沸腾
+			{ spellID = 184355, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+
+			-- 5	基尔罗格·死眼
+			-- 剖心飞刀
+			{ spellID = 188929, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 180389, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 邪能腐蚀
+			{ spellID = 182159, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 184396, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 恶魔附身
+			{ spellID = 180313, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 永痕的决心
+			{ spellID = 180718, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 死亡幻象
+			{ spellID = 181488, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 永恒的救赎
+			{ spellID = 185563, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 碎甲
+			{ spellID = 180200, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 邪能烈焰
+			{ spellID = 180575, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 撕裂嚎叫
+			{ spellID = 183917, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 溅血
+			{ spellID = 188852, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 邪能腐液
+			{ spellID = 184067, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+
+			-- 6	血魔
+			-- 灵魂箭雨
+			{ spellID = 180093, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 死亡之影
+			{ spellID = 179864, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 血魔的腐化
+			{ spellID = 179867, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 消化
+			{ spellID = 181295, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 生命渴望
+			{ spellID = 180148, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 毁灭之触
+			{ spellID = 179977, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 末日井
+			{ spellID = 179995, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 邪能之怒
+			{ spellID = 185189, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 命运相连
+			{ spellID = 179908, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 179909, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 灵魂之池
+			{ spellID = 186770, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+
+			-- 7	暗影领主艾斯卡
+			-- 安苏之光
+			{ spellID = 185239, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 幻影之伤
+			{ spellID = 182325, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 邪能焚化
+			{ spellID = 182600, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 幻影之风
+			{ spellID = 181957, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 邪能飞轮
+			{ spellID = 182200, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 182178, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 幻影邪能炸弹
+			{ spellID = 179219, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 邪能炸弹
+			{ spellID = 181753, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 幻影腐蚀
+			{ spellID = 181824, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 幻影焚化
+			{ spellID = 187344, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 绝望之链
+			{ spellID = 185456, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 暗影之缚
+			{ spellID = 185510, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+
+			-- 8	邪能领主扎昆
+			-- 破碎之魂
+			{ spellID = 189260, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 魂不附体
+			{ spellID = 179407, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 潜伏能量
+			{ spellID = 182008, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 被玷污
+			{ spellID = 189032, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 189031, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 189030, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 轰鸣的裂隙
+			{ spellID = 179428, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 毁灭之种
+			{ spellID = 181508, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 181515, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 邪能水晶
+			{ spellID = 181653, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 枯竭灵魂
+			{ spellID = 188998, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+
+			-- 9	祖霍拉克
+			-- 邪蚀
+			{ spellID = 186134, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 灵媒
+			{ spellID = 186135, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 邪影屠戮
+			{ spellID = 185656, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 邪能炙烤
+			{ spellID = 186073, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 虚空消耗
+			{ spellID = 186063, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 魔能喷涌
+			{ spellID = 186407, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 灵能涌动
+			{ spellID = 186333, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 邪焰乱舞
+			{ spellID = 186448, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 186453, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 凋零凝视
+			{ spellID = 186785, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 186783, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 点燃
+			{ spellID = 188208, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 黑洞
+			{ spellID = 186547, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 邪能锁链
+			{ spellID = 186500, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 強化魔化锁链
+			{ spellID = 189775, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+
+			-- 10	永恒者索克雷萨
+			-- 粉碎防御
+			{ spellID = 182038, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 易爆的邪能宝珠
+			{ spellID = 189627, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 魔炎残渣
+			{ spellID = 182218, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 邪能牢笼
+			{ spellID = 180415, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 183017, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 压倒能量
+			{ spellID = 189540, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 堕落者之赐
+			{ spellID = 184124, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 魅影重重
+			{ spellID = 182769, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 暗言术：恶
+			{ spellID = 184239, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 恶毒鬼魅
+			{ spellID = 182900, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 无尽饥渴
+			{ spellID = 188666, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 索克雷萨之咒
+			{ spellID = 190776, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+
+			-- 11	暴君维哈里
+			-- 凋零契印
+			{ spellID = 180000, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 蔑视光环
+			{ spellID = 179987, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 抑制光环
+			{ spellID = 181683, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 怨恨光环
+			{ spellID = 179993, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 腐蚀序列
+			{ spellID = 180526, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 裂伤之触
+			{ spellID = 180166, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 180164, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 谴责法令
+			{ spellID = 182459, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 亵渎之地
+			{ spellID = 180604, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+
+			-- 12	玛诺洛斯
+			-- 军团诅咒
+			{ spellID = 181275, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 末日印记
+			{ spellID = 181099, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 末日之刺
+			{ spellID = 181119, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 189717, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 玛洛诺斯之血
+			{ spellID = 182171, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 穿刺之伤
+			{ spellID = 184252, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 191231, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 巨力冲击
+			{ spellID = 181359, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 玛诺洛斯凝视
+			{ spellID = 181597, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 暗影之力
+			{ spellID = 181841, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 强化玛诺洛斯凝视
+			{ spellID = 182006, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 强化暗影之力
+			{ spellID = 182088, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 凝视暗影
+			{ spellID = 182031, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 束缚暗影
+			{ spellID = 190482, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+
+			-- 13	阿克蒙德
+			-- 暗影冲击(击飞)
+			{ spellID = 183634, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 暗影冲击
+			{ spellID = 187742, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 183864, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 死亡烙印
+			{ spellID = 183828, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 魔火
+			{ spellID = 183586, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 魔火锁定
+			{ spellID = 182879, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 纳鲁之光
+			{ spellID = 183963, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 聚焦混乱
+			{ spellID = 185014, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 精炼混乱
+			{ spellID = 186123, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 枷锁酷刑
+			{ spellID = 184964, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 虚空放逐
+			{ spellID = 186952, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 186961, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 吞噬声明
+			{ spellID = 187047, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 虚空撕裂
+			{ spellID = 189891, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 虚空腐化
+			{ spellID = 190049, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 邪能腐蚀
+			{ spellID = 188796, unitID = "player", caster = "all", filter = "DEBUFF"},
 		},
 	},
 }
