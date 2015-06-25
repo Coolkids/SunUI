@@ -101,6 +101,106 @@ ns.auras_debuffs = {
 ns.auras_instances_debuffs = {
 	first = {
 -------------------------------德拉诺之王------------------------------------
+		[1026] = {-- 地狱火堡垒
+
+			-- 奇袭地狱火
+			[GetSpellInfo(184369)] = 7, -- Howling Axe (target)
+			[GetSpellInfo(180079)] = 4, -- Fellfire Munition
+
+			-- 钢铁掠夺者
+			[GetSpellInfo(179897)] = 6, -- Blitz
+			[GetSpellInfo(185978)] = 7, -- Firebomb Vulnerability
+			[GetSpellInfo(182373)] = 4, -- Firebomb Vulnerability
+			[GetSpellInfo(182280)] = 8, -- Artillery
+			[GetSpellInfo(182074)] = 3, -- Immolation, Unstable Orb
+			[GetSpellInfo(182001)] = 3, -- Immolation, Unstable Orb
+
+			-- 血魔
+			[GetSpellInfo(179867)] = 3, -- Gorefiend's Corruption
+			[GetSpellInfo(181295)] = 4, -- Digest
+			[GetSpellInfo(179977)] = 8, -- Touch of Doom
+			[GetSpellInfo(179864)] = 6, -- Shadow of Death
+			[GetSpellInfo(179909)] = 9, -- Shared Fate (rooted player)
+			[GetSpellInfo(179908)] = 8, -- Shared Fate (other players)
+
+			-- 基尔罗格·死眼
+			[GetSpellInfo(181488)] = 3, -- Vision of Death
+			[GetSpellInfo(188929)] = 7, -- Heart Seeker (target)
+			[GetSpellInfo(180389)] = 4, -- Heart Seeker (dot)
+
+			-- 永恒者索克雷萨
+			[GetSpellInfo(182038)] = 3, -- Shattered Defense
+			[GetSpellInfo(188666)] = 7, -- Eternal Hunger (mythic add fixate)
+			[GetSpellInfo(189627)] = 7, -- Volatile Fel Orb (fixate)
+			[GetSpellInfo(180415)] = 4, -- Fel Prison
+
+			-- 祖霍拉克
+			[GetSpellInfo(188208)] = 7, -- Ablaze
+			[GetSpellInfo(186073)] = 7, -- Felsinged
+			[GetSpellInfo(186407)] = 8, -- Fel Surge
+			[GetSpellInfo(186500)] = 9, -- Chains of Fel
+			[GetSpellInfo(186063)] = 7, -- Wasting Void
+			[GetSpellInfo(186333)] = 8, -- Void Surge
+
+			-- 邪能领主扎昆
+			[GetSpellInfo(181508)] = 9, -- Seed of Destruction
+			[GetSpellInfo(181653)] = 7, -- Fel Crystals (too close)
+			[GetSpellInfo(179428)] = 8, -- Rumbling Fissure (soak)
+			[GetSpellInfo(182008)] = 3, -- Latent Energy (can't soak anymore)
+			[GetSpellInfo(179407)] = 6, -- Disembodied (in shadow realm)
+
+			-- 考莫克
+			[GetSpellInfo(187819)] = 7, -- Hands
+			[GetSpellInfo(181345)] = 7, -- Hand (tank)
+
+			-- 暴君维哈里
+			[GetSpellInfo(185237)] = 6, -- Touch of Harm
+			[GetSpellInfo(185238)] = 6, -- Touch of Harm
+			[GetSpellInfo(185241)] = 7, -- Edict of Condemnation
+			[GetSpellInfo(180526)] = 7, -- Font of Corruption
+
+			-- 暗影领主艾斯卡
+			[GetSpellInfo(181957)] = 9, -- Phantasmal Wind
+			[GetSpellInfo(182200)] = 4, -- Fel Chakram
+			[GetSpellInfo(182178)] = 4, -- Fel Chakram
+			[GetSpellInfo(182325)] = 2, -- Phantasmal Wounds
+			[GetSpellInfo(185239)] = 1, -- Radiance of Anzu
+			[GetSpellInfo(185510)] = 3, -- Dark Bindings
+			[GetSpellInfo(182600)] = 2, -- Fel Fire
+			[GetSpellInfo(179219)] = 3, -- Fel Bomb
+			[GetSpellInfo(181753)] = 3, -- Fel Bomb
+
+			-- 玛诺洛斯
+			[GetSpellInfo(181275)] = 8, -- Curse of Legion
+			[GetSpellInfo(181099)] = 7, -- Mark of Doom
+			[GetSpellInfo(181597)] = 4, -- Mannoroths Gaze
+			[GetSpellInfo(182006)] = 4, -- Mannoroths Gaze
+			[GetSpellInfo(181841)] = 6, -- Shadowforce
+			[GetSpellInfo(182088)] = 6, -- Shadowforce
+
+			-- 高阶地狱火议会
+			[GetSpellInfo(184360)] = 7, -- Fel Rage
+			[GetSpellInfo(184449)] = 5, -- Mark of Necromancer
+			[GetSpellInfo(185065)] = 5, -- Mark of Necromancer
+			[GetSpellInfo(184450)] = 5, -- Mark of Necromancer
+			[GetSpellInfo(185066)] = 5, -- Mark of Necromancer
+			[GetSpellInfo(184676)] = 5, -- Mark of Necromancer
+			[GetSpellInfo(184652)] = 3, -- Reap
+
+			-- 阿克蒙德
+			[GetSpellInfo(184964)] = 7, -- Shackled Torment
+			[GetSpellInfo(186123)] = 6, -- Focused Chaos
+			[GetSpellInfo(185014)] = 6, -- Wrought Chaos
+			[GetSpellInfo(186952)] = 8, -- Nether Banish
+			[GetSpellInfo(189891)] = 8, -- Nether Banish
+			[GetSpellInfo(186961)] = 8, -- Nether Banish
+			[GetSpellInfo(183634)] = 7, -- Shadowfel Burst
+			[GetSpellInfo(189895)] = 6, -- Void Star Fixate
+			[GetSpellInfo(190049)] = 4, -- Nether Corruption
+
+		},
+
+
 		[988] = {--黑石铸造厂
 			-- 1 Gruul 格鲁尔
 			[GetSpellInfo(155080)] = 5, -- 炼狱切割
