@@ -225,6 +225,7 @@ local function LoadSkin()
 	A:ReskinClose(GarrisonLandingPage.CloseButton)
 	A:ReskinTab(GarrisonLandingPageTab1)
 	A:ReskinTab(GarrisonLandingPageTab2)
+	A:ReskinTab(GarrisonLandingPageTab3)
 
 	GarrisonLandingPageTab1:ClearAllPoints()
 	GarrisonLandingPageTab1:SetPoint("TOPLEFT", GarrisonLandingPage, "BOTTOMLEFT", 70, 2)
@@ -302,8 +303,21 @@ local function LoadSkin()
 
 	local FollowerList = GarrisonLandingPage.FollowerList
 
+	FollowerList:GetRegions():Hide()
 	select(2, FollowerList:GetRegions()):Hide()
-	FollowerList.FollowerHeaderBar:Hide()
+
+	A:ReskinInput(FollowerList.SearchBox)
+
+	local scrollFrame = FollowerList.listScroll
+
+	A:ReskinScroll(scrollFrame.scrollBar)
+
+	-- Ship follower list
+
+	local FollowerList = GarrisonLandingPage.ShipFollowerList
+
+	FollowerList:GetRegions():Hide()
+	select(2, FollowerList:GetRegions()):Hide()
 
 	A:ReskinInput(FollowerList.SearchBox)
 
@@ -326,6 +340,37 @@ local function LoadSkin()
 		xpBar:SetStatusBarTexture(A["media"].backdrop)
 
 		A:CreateBDFrame(xpBar)
+	end
+
+	-- Ship follower tab
+
+	local FollowerTab = GarrisonLandingPage.ShipFollowerTab
+
+	do
+		local xpBar = FollowerTab.XPBar
+
+		select(1, xpBar:GetRegions()):Hide()
+		xpBar.XPLeft:Hide()
+		xpBar.XPRight:Hide()
+		select(4, xpBar:GetRegions()):Hide()
+
+		xpBar:SetStatusBarTexture(A["media"].backdrop)
+
+		A:CreateBDFrame(xpBar)
+	end
+
+	for i = 1, 2 do
+		local trait = FollowerTab.Traits[i]
+
+		trait.Border:Hide()
+		A:ReskinIcon(trait.Portrait)
+
+		local equipment = FollowerTab.EquipmentFrame.Equipment[i]
+
+		equipment.BG:Hide()
+		equipment.Border:Hide()
+
+		A:ReskinIcon(equipment.Icon)
 	end
 
 	-- [[ Mission UI ]]
@@ -443,9 +488,12 @@ local function LoadSkin()
 
 	local MissionPage = MissionTab.MissionPage
 
-	for i = 1, 11 do
+	for i = 1, 15 do
 		select(i, MissionPage:GetRegions()):Hide()
 	end
+	select(18, MissionPage:GetRegions()):Hide()
+	select(19, MissionPage:GetRegions()):Hide()
+	select(20, MissionPage:GetRegions()):Hide()
 	MissionPage.StartMissionButton.Flash:SetTexture("")
 
 	A:Reskin(MissionPage.StartMissionButton)
@@ -454,16 +502,8 @@ local function LoadSkin()
 	MissionPage.CloseButton:ClearAllPoints()
 	MissionPage.CloseButton:SetPoint("TOPRIGHT", -10, -5)
 
-	hooksecurefunc("GarrisonMissionPage_UpdateStartButton", function(missionPage)
-		missionPage.StartMissionButton.FlashAnim:Stop()
-	end)
-
-	for i = 4, 8 do
-		select(i, MissionPage.Stage:GetRegions()):Hide()
-	end
-	for i = 19, 21 do
-		select(i, MissionPage.Stage:GetRegions()):Hide()
-	end
+	select(4, MissionPage.Stage:GetRegions()):Hide()
+	select(5, MissionPage.Stage:GetRegions()):Hide()
 
 	do
 		local bg = CreateFrame("Frame", nil, MissionPage.Stage)
@@ -477,7 +517,7 @@ local function LoadSkin()
 		overlay:SetAllPoints(bg)
 		overlay:SetTexture(0, 0, 0, .5)
 
-		local iconbg = MissionPage.Stage.IconBG
+		local iconbg = select(16, MissionPage:GetRegions())
 		iconbg:ClearAllPoints()
 		iconbg:SetPoint("TOPLEFT", 3, -1)
 	end
@@ -490,21 +530,24 @@ local function LoadSkin()
 		A:CreateBD(follower, .25)
 	end
 
-	hooksecurefunc("GarrisonMissionPage_SetFollower", function(frame)
+	local function onAssignFollowerToMission(self, frame)
 		local portrait = frame.PortraitFrame
 
 		portrait.LevelBorder:SetTexture(0, 0, 0, .5)
 		portrait.LevelBorder:SetSize(44, 11)
-	end)
+	end
 
-	hooksecurefunc("GarrisonMissionPage_ClearFollower", function(frame)
+	local function onRemoveFollowerFromMission(self, frame)
 		local portrait = frame.PortraitFrame
 
 		portrait.LevelBorder:SetTexture(0, 0, 0, .5)
 		portrait.LevelBorder:SetSize(44, 11)
 
 		if portrait.squareBG then portrait.squareBG:SetBackdropBorderColor(0, 0, 0) end
-	end)
+	end
+
+	hooksecurefunc(GarrisonMissionFrame, "AssignFollowerToMission", onAssignFollowerToMission)
+	hooksecurefunc(GarrisonMissionFrame, "RemoveFollowerFromMission", onRemoveFollowerFromMission)
 
 	for i = 1, 10 do
 		select(i, MissionPage.RewardsFrame:GetRegions()):Hide()
@@ -648,26 +691,6 @@ local function LoadSkin()
 
 			portrait.squareBG:SetBackdropBorderColor(portrait.LevelBorder:GetVertexColor())
 
-			-- local abilities = recruit.Abilities
-
-			-- if recruit.numAbilitiesStyled == nil then
-				-- recruit.numAbilitiesStyled = 1
-			-- end
-
-			-- local numAbilitiesStyled = recruit.numAbilitiesStyled
-
-			-- local ability = abilities[numAbilitiesStyled]
-			-- while ability do
-				-- local icon = ability.Icon
-
-				-- icon:SetTexCoord(.08, .92, .08, .92)
-				-- A:CreateBG(icon)
-
-				-- numAbilitiesStyled = numAbilitiesStyled + 1
-				-- ability = abilities[numAbilitiesStyled]
-			-- end
-
-			-- recruit.numAbilitiesStyled = numAbilitiesStyled
 		end
 	end)
 
@@ -693,8 +716,8 @@ local function LoadSkin()
 
 	-- [[ Shared templates ]]
 
-	hooksecurefunc("GarrisonFollowerList_Update", function(self)
-		local followerFrame = self
+	local function onUpdateData(self)
+		local followerFrame = self:GetParent()
 		local followers = followerFrame.FollowerList.followers
 		local followersList = followerFrame.FollowerList.followersList
 		local numFollowers = #followersList
@@ -745,7 +768,10 @@ local function LoadSkin()
 				end
 			end
 		end
-	end)
+	end
+
+	hooksecurefunc(GarrisonMissionFrameFollowers, "UpdateData", onUpdateData)
+	hooksecurefunc(GarrisonLandingPageFollowerList, "UpdateData", onUpdateData)
 
 	hooksecurefunc("GarrisonFollowerButton_AddAbility", function(self, index)
 		local ability = self.Abilities[index]
@@ -761,7 +787,10 @@ local function LoadSkin()
 		end
 	end)
 
-	hooksecurefunc("GarrisonFollowerPage_ShowFollower", function(self, followerID)
+	local function onShowFollower(self, followerId)
+		local followerList = self
+		local self = self.followerTab
+
 		local abilities = self.AbilitiesFrame.Abilities
 
 		if self.numAbilitiesStyled == nil then
@@ -775,6 +804,7 @@ local function LoadSkin()
 			local icon = ability.IconButton.Icon
 
 			icon:SetTexCoord(.08, .92, .08, .92)
+			icon:SetDrawLayer("BACKGROUND", 1)
 			A:CreateBG(icon)
 
 			numAbilitiesStyled = numAbilitiesStyled + 1
@@ -782,7 +812,32 @@ local function LoadSkin()
 		end
 
 		self.numAbilitiesStyled = numAbilitiesStyled
-	end)
+	end
+
+	hooksecurefunc(GarrisonMissionFrame.FollowerList, "ShowFollower", onShowFollower)
+	hooksecurefunc(GarrisonLandingPageFollowerList, "ShowFollower", onShowFollower)
+
+	-- [[ Shipyard ]]
+
+	A:CreateBD(GarrisonShipyardMapMissionTooltip)
+
+	-- Follower tab
+
+	local FollowerTab = GarrisonShipyardFrame.FollowerTab
+
+	for i = 1, 2 do
+		local trait = FollowerTab.Traits[i]
+
+		trait.Border:Hide()
+		A:ReskinIcon(trait.Portrait)
+
+		local equipment = FollowerTab.EquipmentFrame.Equipment[i]
+
+		equipment.BG:Hide()
+		equipment.Border:Hide()
+
+		A:ReskinIcon(equipment.Icon)
+	end
 
 	-- [[ Master plan support ]]
 
