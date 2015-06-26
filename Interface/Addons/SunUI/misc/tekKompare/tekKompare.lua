@@ -5,7 +5,7 @@ SetCVar("alwaysCompareItems", 1)
 
 local orig = ItemRefTooltip:GetScript("OnTooltipSetItem")
 ItemRefTooltip:SetScript("OnTooltipSetItem", function(self, ...)
-	GameTooltip_ShowCompareItem(self, 1)
+	pcall(GameTooltip_ShowCompareItem, self, 1)
 	self.comparing = true
 	if orig then return orig(self, ...) end
 end)
@@ -23,5 +23,5 @@ end)
 ItemRefTooltip:SetScript("OnDragStop", function(self)
 	self:StopMovingOrSizing()
 	ValidateFramePosition(self)
-	GameTooltip_ShowCompareItem(self, 1)
+	pcall(GameTooltip_ShowCompareItem, self, 1)
 end)

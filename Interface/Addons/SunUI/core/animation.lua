@@ -392,10 +392,28 @@ end)
 local interval = 0.1
 
 function S:ShowAnima(f)
-	if not f:IsShown() then
-		f:SetAlpha(0.1)
-		f:SetScale(0.1)
+	if type(f) == "string" then
+		f = _G[f]
+		if _G[f] == nil then
+			error(f.." frame is null")
+			return
+		end
+	else
+		if type(f) ~= "table" then
+			error(f.."not a frame or frame name")
+			return
+		end
+	end
+	if f:IsShown() then
+		f:Hide()
 	end 
+	if f:GetAlpha() > 0.11 then
+		f:SetAlpha(0.1)
+	end
+	if f:GetScale() > 0.11 then
+		f:SetScale(0.1)
+	end
+	
 	f.bannerShown = true
 	f:Show()
 	local scale
@@ -412,6 +430,18 @@ function S:ShowAnima(f)
 end
 
 function S:HideAnima(f)
+	if type(f) == "string" then
+		f = _G[f]
+		if _G[f] == nil then
+			error(f.." frame is null")
+			return
+		end
+	else
+		if type(f) ~= "table" then
+			error(f.."not a frame or frame name")
+			return
+		end
+	end
 	local scale
 	f:SetScript("OnUpdate", function(self)
 		scale = self:GetScale() - interval
