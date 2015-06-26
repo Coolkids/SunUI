@@ -73,7 +73,7 @@ function IB:CreateDurability()
 		for k,v in pairs(nowSlots) do
 			local green = v[3]*2
 			local red = 1 - green
-			GameTooltip:AddDoubleLine(v[2], format("%d |cffffd700%%|r", floor(v[3]*100)), 1 ,1 , 1, red + 1, green, 0)
+			GameTooltip:AddDoubleLine(v[2], format("%d|cffffd700%%|r", floor(v[3]*100)), 1 ,1 , 1, red + 1, green, 0)
 		end
 		GameTooltip:Show()
 	end)
