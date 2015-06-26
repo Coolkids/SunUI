@@ -10,14 +10,8 @@ local function LoadSkin()
 	holder:SetSize(ObjectiveTrackerFrame:GetWidth(), ObjectiveTrackerFrame:GetHeight())
 	holder:SetPoint(ObjectiveTrackerFrame:GetPoint())
 	S:CreateMover(holder, "ObjectiveTrackerFrameMover", TRACK_QUEST, true, nil, "ALL,GENERAL")
-	ot._SetPoint = ot.SetPoint
 	hooksecurefunc(ot, "SetPoint", function(a, p, a2, x, y)
-		local aa, pa, a2a, xa, ya = ObjectiveTrackerFrameMover:GetPoint()
-		if (a~=aa and a2a~=a2 and x~=xa and y~=ya) and not isMove then
-			ot:ClearAllPoints()
-			ot:_SetPoint("TOPLEFT", holder, "TOPLEFT", 90, 0)
-            ot:SetHeight(638)
-		end
+		ot:SetAllPoints(ObjectiveTrackerFrameMover)
 	end)
 	
 	--移动载具
@@ -27,11 +21,7 @@ local function LoadSkin()
 	S:CreateMover(holder2, "VehicleSeatIndicatorMover", BINDING_HEADER_VEHICLE, true, nil, "ALL,GENERAL")
 	VehicleSeatIndicator._SetPoint = VehicleSeatIndicator.SetPoint
 	hooksecurefunc(VehicleSeatIndicator, "SetPoint", function(a, p, a2, x, y)
-		local aa, pa, a2a, xa, ya = VehicleSeatIndicatorMover:GetPoint()
-		if (a~=aa and a2a~=a2 and x~=xa and y~=ya) and not isMove2 then
-			VehicleSeatIndicator:ClearAllPoints()
-			VehicleSeatIndicator:_SetPoint("TOPLEFT", holder2, "TOPLEFT", 0, 0)
-		end
+		VehicleSeatIndicator:SetAllPoints(VehicleSeatIndicatorMover)
 	end)
 
 	-- [[ Header ]]

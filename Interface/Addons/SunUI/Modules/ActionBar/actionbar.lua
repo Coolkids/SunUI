@@ -460,6 +460,7 @@ function AB:CreateExitTaxi()
 	button:Hide()
 	
 	hooksecurefunc("MainMenuBarVehicleLeaveButton_Update", function()
+		if InCombatLockdown() then return end   --战斗保护
 		if CanExitVehicle() then
 			if UnitOnTaxi("player") then
 				button:Show()
