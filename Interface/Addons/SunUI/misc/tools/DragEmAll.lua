@@ -117,7 +117,7 @@ local lodFrames = {
   Blizzard_VoidStorageUI = { ["VoidStorageFrame"] = false, ["VoidStorageBorderFrameMouseBlockFrame"] = "VoidStorageFrame" },
   Blizzard_ItemAlterationUI = { ["TransmogrifyFrame"] = false },
   Blizzard_EncounterJournal = { ["EncounterJournal"] = false }, -- as of 4.3
-  Blizzard_GarrisonUI = { ["GarrisonLandingPage"] = false, ["GarrisonLandingPageReport"] = true, ["GarrisonMissionFrame"] = false, ["GarrisonMissionFrame.MissionTab"] = true, ["GarrisonBuildingFrame"] = false, GarrisonRecruiterFrame = false,GarrisonRecruitSelectFrame = false, GarrisonCapacitiveDisplayFrame = false},
+  Blizzard_GarrisonUI = { ["GarrisonLandingPage"] = false, ["GarrisonLandingPageReport"] = true, ["GarrisonMissionFrame"] = false, ["GarrisonMissionFrame.MissionTab"] = true, ["GarrisonBuildingFrame"] = false, GarrisonRecruiterFrame = false,GarrisonRecruitSelectFrame = false, GarrisonCapacitiveDisplayFrame = false, GarrisonShipyardFrame = false},
 
   -- New frames in MoP
   Blizzard_Collections = { ["CollectionsJournal"] = false },
