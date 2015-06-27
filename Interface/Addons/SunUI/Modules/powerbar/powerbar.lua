@@ -69,9 +69,14 @@ function PB:GetOptions()
 			name = "",guiInline = true,
 			args = {
 				Open = {
-				type = "toggle",
-				name = L["启用职业能量条"],
-				order = 1,
+					type = "toggle",
+					name = L["启用职业能量条"],
+					order = 1,
+					get = function() return self.db.Open end,
+					set = function(_, value)
+						self.db.Open = value
+						self:UpdateEnable()
+					end,
 				},
 			}
 		},
@@ -882,11 +887,13 @@ end
 function PB:On_Show()
 	if self.holder:IsShown() then return end
 	self.holder:Show()
-	UIFrameFadeIn(self.holder, 0.3, self.holder:GetAlpha(), 1)
+	--S:ShowAnima(self.holder)
+	UIFrameFadeIn(self.holder, 0.15, self.holder:GetAlpha(), 1)
 end
 function PB:On_Hide()
 	if not self.holder:IsShown() then return end
-	S:FadeOutFrame(self.holder, 0.3)
+	S:FadeOutFrame(self.holder, 0.15)
+	--S:HideAnima(self.holder)
 end
 
 function PB:UpdateFade()
@@ -958,6 +965,17 @@ function PB:PLAYER_ENTERING_WORLD()
 	self:ACTIVE_TALENT_GROUP_CHANGED()
 end
 
+function PB:UpdateEnable()
+	if self.db.Open then
+		self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+		self:RegisterEvent("PLAYER_ENTERING_WORLD")
+		self:UpdateFade()
+	else
+		self:UnregisterAllEvents()
+		self:On_Hide()
+	end
+end
+
 function PB:Initialize()
 	self:CreateMainFrame()    					--新建主体
 	self:CreateHealthFrame()  					--hp条
@@ -981,9 +999,8 @@ function PB:Initialize()
 	elseif S.myclass == "MAGE" then					--法师
 		self:MAGE()
 	end
-	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-	self:RegisterEvent("PLAYER_ENTERING_WORLD")
-	self:UpdateFade()
+	self:UpdateEnable()
+	
 end
 
 S:RegisterModule(PB:GetName())

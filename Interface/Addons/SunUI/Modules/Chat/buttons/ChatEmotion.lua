@@ -187,7 +187,7 @@ local function CreateEmoteTableFrame()
 	A:SetBD(EmoteTableFrame)
 	EmoteTableFrame:SetWidth((IconSize+2) * 12+4)
 	EmoteTableFrame:SetHeight((IconSize+2) * 5+4)
-	EmoteTableFrame:SetPoint("BOTTOMRIGHT", ChatFrame1, "TOPRIGHT", 0, 5)
+	EmoteTableFrame:SetPoint("BOTTOMRIGHT", ChatFrame1, "TOPRIGHT", 0, 50)
 	EmoteTableFrame:Hide()
 	EmoteTableFrame:SetFrameStrata("DIALOG")
 	EmoteTableFrame.time = 0
