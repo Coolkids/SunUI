@@ -58,10 +58,18 @@ function MT:GetOptions()
 				self:UpdateLowHealthSet()
 			end,
 		},
+		LowHealthPer = {
+			order = 15,
+			name = L["低血量报警"],
+			desc = L["低血量报警"],
+			type = "range",
+			min = 0.01, max = 1, step = 0.01,
+			isPercent = true,
+		},
 		afklock  = {
 			type = "toggle",
 			name = L["AFK界面"],
-			order = 14,
+			order = 16,
 			set = function(info, value) self.db.afklock = value
 				self:UpdateAFKSet()
 			end,
@@ -69,7 +77,7 @@ function MT:GetOptions()
 		combat = {
 			type = "toggle",
 			name = COMBAT_TEXT_SHOW_COMBAT_STATE_TEXT,
-			order = 15,
+			order = 17,
 			set = function(info, value) self.db.combat = value
 				self:UpdateCombatSet()
 			end,
@@ -77,7 +85,7 @@ function MT:GetOptions()
 		currencycap = {
 			type = "toggle",
 			name = L["正义/勇气点检查"],
-			order = 16,
+			order = 18,
 			set = function(info, value) self.db.currencycap = value
 				self:UpdateCCSet()
 			end,

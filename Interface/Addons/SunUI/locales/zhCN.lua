@@ -221,6 +221,7 @@ end
 do
 	L["地图美化"] = true
 	L["小地图"] = true
+	L["探索"] = true
 end
 --姓名板
 do

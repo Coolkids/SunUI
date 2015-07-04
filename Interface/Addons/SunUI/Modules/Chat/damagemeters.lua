@@ -20,7 +20,8 @@ local firstLines = {
 	"^(.*) Done for (.*)$"	,								-- TinyDPS
 	"^Numeration: (.*) for (.*)$",                        -- Numeration	
 	"alDamageMeter : (.*)$",								-- alDamageMeter
-	"^Numeration:(.*) - (.*)$",                        -- Numeration	
+	"^Numeration:(.*) - (.*)$",                        -- Numeration
+	"^Skada：([^:]*)：([^:]*)：$",					-- Skada zhCN, might change in new Skada version	
 }
 local nextLines = {
 	"^(%d+). (.*)$",										-- Recount and Skada

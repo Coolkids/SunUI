@@ -5,8 +5,7 @@ S.CooldownsMod.ClassCD = {
 	-- talent
 	-- type = "talent" 
 	-- talent = the location of the talent(from 1 to 18)
-	-- monk
-	
+	-- monk	
 	[121283] = {
 		desc = "",
 		type = "talent",
@@ -62,7 +61,7 @@ S.CooldownsMod.ClassCD = {
 		desc = "",
 		type = "talent",
 		class = "PRIEST",
-		tier = 4,
+		tier = 1,
 		column = 3,
 		cd = 90,
 	}, -- Angelic Bulwark
@@ -78,7 +77,19 @@ S.CooldownsMod.ClassCD = {
 		duration = 3,
 	}, -- Purgatory	
 	
--- spec
+	-- warlock
+	[171982] = {
+		desc = "",
+		type = "talent",
+		class = "WARLOCK",
+		tier = 5,
+		column = 3,
+		cd = 0,
+		ppm = 1.33,
+		duration = 15,
+	}, -- Grimoire of Synergy
+	
+	-- spec
 	-- type = "spec" 
 	-- spec = {the numbers of the spec(from 1 to 3(4 for druid))}
 	-- druid
@@ -89,17 +100,7 @@ S.CooldownsMod.ClassCD = {
 		spec = {2},
 		cd = 6,
 	}, -- Leader of the Pack
-	
-	--[[--dk
-	[96171] = {
-		desc = "",
-		type = "spec",
-		class = "DEATHKNIGHT",
-		spec = {1},
-		cd = 45,
-		duration = 8,
-	}, -- Will of the Necropolis
-	]]
+
 	--warlock
 	[104317] = {
 		desc = "",
@@ -109,12 +110,109 @@ S.CooldownsMod.ClassCD = {
 		cd = 20,
 	}, --
 		
-
 	
 -- item
 	-- type = "item" 
 	-- item = {the item id}
+	-- WOD 6.2
+	[183926] = {
+		desc = "",
+		type = "item",
+		item = {124226},
+		cd = 0,
+		ppm = 1,
+		duration = 20,
+	}, -- Malicious Censer
+	[184073] = {
+		desc = "",
+		type = "item",
+		item = {124230},
+		cd = 0,
+		ppm = 1.5,
+		duration = 10,
+	}, -- Prophecy of Fear
+	[183931] = {
+		desc = "",
+		type = "item",
+		item = {124241},
+		cd = 0,
+		ppm = 3,
+		duration = 10,
+	}, -- Anzu's Cursed Plume
+	[184293] = {
+		desc = "",
+		type = "item",
+		item = {124225},
+		cd = 0,
+		ppm = 1,
+		duration = 10,
+	}, -- Soul Capacitor
+	[183941] = {
+		desc = "",
+		type = "item",
+		item = {124236},
+		cd = 0,
+		ppm = 1,
+		duration = 20,
+	}, -- Unending Hunger
+	[183924] = {
+		desc = "",
+		type = "item",
+		item = {124228},
+		cd = 0,
+		ppm = 1,
+		duration = 20,
+	}, -- Desecrated Shadowmoon Insignia
+	
 	-- WOD 6.0
+	[177161] = {
+		desc = "",
+		type = "item",
+		item = {118302, 118303},
+		cd = 0,
+		ppm = 0.92,
+		duration = 10,
+	}, -- AGI Ring 690
+	[177172] = {
+		desc = "",
+		type = "item",
+		item = {118308, 118307},
+		cd = 0,
+		ppm = 0.92,
+		duration = 10,
+	}, -- AGI Ring 710
+	[177159] = {
+		desc = "",
+		type = "item",
+		item = {118301, 118304},
+		cd = 0,
+		ppm = 0.92,
+		duration = 10,
+	}, -- INT Ring 690
+	[177176] = {
+		desc = "",
+		type = "item",
+		item = {118306, 118309},
+		cd = 0,
+		ppm = 0.92,
+		duration = 10,
+	}, -- INT Ring 710
+	[177160] = {
+		desc = "",
+		type = "item",
+		item = {118300, 118303},
+		cd = 0,
+		ppm = 0.92,
+		duration = 10,
+	}, -- STR Ring 690
+	[177175] = {
+		desc = "",
+		type = "item",
+		item = {118305, 118308},
+		cd = 0,
+		ppm = 0.92,
+		duration = 10,
+	}, -- STR Ring 710
 	[177063] = {
 		desc = "",
 		type = "item",
@@ -134,7 +232,7 @@ S.CooldownsMod.ClassCD = {
 	[177051] = {
 		desc = "",
 		type = "item",
-		item = {113931},
+		item = {113948},
 		cd = 0,
 		ppm = 0.92,
 		duration = 10,
@@ -349,6 +447,7 @@ S.CooldownsMod.ClassCD = {
 		duration = 10,
 	}, -- Xeri'tac's Unhatched Egg Sac
 	
+	--[[ removed procs
 	-- MOP 5.4
 	-- Legendary cloak
 	[148010] = {
@@ -788,31 +887,99 @@ S.CooldownsMod.ClassCD = {
 		cd = 45,
 		duration = 20,
 	}, -- H
+	]]
+	-- pvp 705(H/L WS3)
+	[190026] = {
+		desc = "",
+		type = "item",
+		item = {125336, 124857, 125971, 126450},
+		cd = 50,
+		duration = 20,
+	}, -- AGI
+	[190027] = {
+		desc = "",
+		type = "item",
+		item = {125341, 124862, 125976, 126455},
+		cd = 50,
+		duration = 20,
+	}, -- INT
+	[190025] = {
+		desc = "",
+		type = "item",
+		item = {124868, 125345, 125982, 126459},
+		cd = 50,
+		duration = 20,
+	}, -- STR
 	
+	-- pvp 660(H/L WS1, Tourment H/L)
+	[182068] = {
+		desc = "",
+		type = "item",
+		item = {111223, 115750, 117730, 117931},
+		cd = 50,
+		duration = 20,
+	}, -- AGI
+	[182067] = {
+		desc = "",
+		type = "item",
+		item = {111228, 115755, 117735, 117936},
+		cd = 50,
+		duration = 20,
+	}, -- INT
+	[182069] = {
+		desc = "",
+		type = "item",
+		item = {111233, 115760, 117740, 117941},
+		cd = 50,
+		duration = 20,
+	}, -- STR
+	-- pvp 620(H/L WS1 WS2 WS3)
+	[182059] = {
+		desc = "",
+		type = "item",
+		item = {119927, 115150, 125031, 125508, 126145, 126622},
+		cd = 50,
+		duration = 20,
+	}, -- AGI
+	[182057] = {
+		desc = "",
+		type = "item",
+		item = {119932, 115155, 125036, 125513, 126150, 126627},
+		cd = 50,
+		duration = 20,
+	}, -- INT
+	[182062] = {
+		desc = "",
+		type = "item",
+		item = {119937, 115160, 125519, 125042, 126156, 126633},
+		cd = 50,
+		duration = 20,
+	}, -- STR
 	
-	-- pvp 660(H/L Tournoment set) 660(H/L set) 620(H/L set) 550(H/L set) 522(H/L set) 496(H/L set) 496(H/L) 483 476 458
+	--[[pvp 660(H/L Tournoment set) 660(H/L set) 620(H/L set) 550(H/L set) 522(H/L set) 496(H/L set) 496(H/L) 483 476 458
 	[126707] = {
 		desc = "",
 		type = "item",
-		item = {117730, 117931, 111223, 115750, 119927, 115150, 103347,102643,102840,103150,100586,100200,100026,99777,94356,91104,84935,91457,84349},
+		item = {117730, 117931, 103347,102643,102840,103150,100586,100200,100026,99777,94356,91104,84935,91457,84349},
 		cd = 50,
 		duration = 20,
 	}, -- AGI
 	[126705] = {
 		desc = "",
 		type = "item",
-		item = {117735, 117936, 111228, 115755, 119932, 115155, 103506,102766,102963,103309,100712,100491,100152,99938,94482,91401,84941,91754,84489},
+		item = {117735, 117936, 103506,102766,102963,103309,100712,100491,100152,99938,94482,91401,84941,91754,84489},
 		cd = 50,
 		duration = 20,
 	}, -- SP
 	[126700] = {
 		desc = "",
 		type = "item",
-		item = {117740, 117941, 111233, 115760, 119937, 115160, 103516,102699,102896,103319,100505,100645,100085,99948,94415,91415,84937,91768,84495},
+		item = {117740, 117941, 103516,102699,102896,103319,100505,100645,100085,99948,94415,91415,84937,91768,84495},
 		cd = 50,
 		duration = 20,
-	}, -- STR
+	}, -- STR ]]
 	
+	--[[ removed procs
 	-- Darkmoon Card 476
 	[128985] = {
 		desc = "",
@@ -923,29 +1090,29 @@ S.CooldownsMod.ClassCD = {
 		cd = 85,
 		duration = 25,
 	}, -- Searing Words
-	
-	-- 450 and others
+	]]
+	-- Alchemist's Stones
 	[60234] = {
 		desc = "",
 		type = "item",
-		item = {75274},
+		item = {75274, 122604, 122603, 122602, 122601, 109262, 128024, 128023},
 		cd = 55,
 		duration = 15,
-	}, -- Zen Alchemist Stone(Intellect)
+	}, -- Alchemist's Stone(Intellect)
 	[60233] = {
 		desc = "",
 		type = "item",
-		item = {75274},
+		item = {75274, 122604, 122603, 122602, 122601, 109262, 128024, 128023},
 		cd = 55,
 		duration = 15,
-	}, -- Zen Alchemist Stone(Agility)
+	}, -- Alchemist's Stone(Agility)
 	[60229] = {
 		desc = "",
 		type = "item",
-		item = {75274},
+		item = {75274, 122604, 122603, 122602, 122601, 109262, 128024, 128023},
 		cd = 55,
 		duration = 15,
-	}, -- Zen Alchemist Stone(Strength)
+	}, -- Alchemist's Stone(Strength)
 
 -- item set
 	-- type = "itemset"
@@ -961,6 +1128,15 @@ S.CooldownsMod.ClassCD = {
 		cd = 30,
 	}, -- Feral PVP 4P
 	]]
+	[166868] = {
+		type = "itemset",
+		class = "MAGE",
+		spec = 2,
+		items = {115550, 115551, 115552, 115553, 115554},
+		piece = 4,
+		ppm = 0.7,
+		duration = 4,
+	}, -- Fire Mage T17 4P
 
 -- enchant
 	-- type = "enchant",
@@ -1057,7 +1233,7 @@ S.CooldownsMod.ClassCD = {
 	[159675] = {
 		desc = "",
 		type = "enchant",
-		enchant = {5337},
+		enchant = {5337, 5355},
 		slot = 16,
 		ppm = 1.15,
 		duration = 20,
@@ -1066,16 +1242,17 @@ S.CooldownsMod.ClassCD = {
 	[159234] = {
 		desc = "",
 		type = "enchant",
-		enchant = {5330},
+		enchant = {5330, 5352},
 		slot = 16,
 		ppm = 2.5,
 		duration = 6,
+		refreshable = true,
 		cd = 0
 	}, -- Mark of the Thunderlord
 	[159676] = {
 		desc = "",
 		type = "enchant",
-		enchant = {5334},
+		enchant = {5334, 5356},
 		slot = 16,
 		ppm = 3,
 		duration = 6,
@@ -1084,7 +1261,7 @@ S.CooldownsMod.ClassCD = {
 	[159678] = {
 		desc = "",
 		type = "enchant",
-		enchant = {5335},
+		enchant = {5335, 5353},
 		slot = 16,
 		duration = 15,
 		cd = 40
@@ -1101,87 +1278,35 @@ S.CooldownsMod.ClassCD = {
 	[159679] = {
 		desc = "",
 		type = "enchant",
-		enchant = {5336},
+		enchant = {5336, 5354},
 		slot = 16,
 		duration = 12,
 		cd = 40
 	}, -- Mark of Blackrock
-	
-	
-	
-	-- meta gems
-	-- type = "gem",
-	-- slot = 1 (head)  
-	-- gem = {gem Id}
-	[137593] = {
-		type = "gem",
-		gem = {5030},
-		slot = 1,
-		cd = 0,
-		duration = 15,
-		ppm = 2.57
-	}, -- Indomitable Primal Diamond
-	[137590] = {
-		type = "gem",
-		gem = {5033},
-		slot = 1,
-		cd = 0,
-		duration = 10,
-		ppm = {
-			MAGE = {0.761, 0.302, 1.387},
-			WARLOCK = {0.625, 0.598, 0.509},
-			SHAMAN = {1.891, 1, 1},
-			DRUID = {1.872, 1, 1, 1},
-			PRIEST = {1, 1, 0.933},
-			OTHER = 1,
-			BASE = 1.35
-		}
-	}, -- Sinister Primal Diamond
-	[137331] = {
-		type = "gem",
-		gem = {5031},
-		slot = 1,
-		cd = 0,
-		class = "MONK",
-		duration = 4,
-		ppm = 1.61
-	}, -- Courageous Primal Diamond -- Monk
-	[137247] = {
-		type = "gem",
-		gem = {5031},
-		slot = 1,
-		cd = 0,
-		class = "DRUID",
-		duration = 4,
-		ppm = 1.61
-	}, -- Courageous Primal Diamond -- Druid
-	[137288] = {
-		type = "gem",
-		gem = {5031},
-		slot = 1,
-		cd = 0,
-		class = "PALADIN",
-		duration = 4,
-		ppm = 1.61
-	}, -- Courageous Primal Diamond -- Paladin
-	[137323] = {
-		type = "gem",
-		gem = {5031},
-		slot = 1,
-		cd = 0,
-		class = "PRIEST",
-		duration = 4,
-		ppm = 1.61
-	}, -- Courageous Primal Diamond -- Priest
-	[137326] = {
-		type = "gem",
-		gem = {5031},
-		slot = 1,
-		cd = 0,
-		class = "SHAMAN",
-		duration = 4,
-		ppm = 1.61
-	}, -- Courageous Primal Diamond -- Shaman
+	[156055] = {
+		desc = "",
+		type = "enchant",
+		enchant = {5275},
+		slot = 16,
+		duration = 12,
+		ppm = 1.55,
+	}, -- Oglethorpe's Missile Splitter
+	[173288] = {
+		desc = "",
+		type = "enchant",
+		enchant = {5383},
+		slot = 16,
+		duration = 12,
+		ppm = 1.55,
+	}, -- Hemet's Heartseeker
+	[156060] = {
+		desc = "",
+		type = "enchant",
+		enchant = {5276},
+		slot = 16,
+		duration = 12,
+		ppm = 1.55,
+	}, -- Megawatt Filament
 }
 
 S.CooldownsMod.RaidCD = {

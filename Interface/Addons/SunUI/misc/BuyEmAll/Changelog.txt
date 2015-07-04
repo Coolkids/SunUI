@@ -1,4 +1,7 @@
-﻿v3.2.4
+﻿v3.2.5
+Updated TOC.
+
+v3.2.4
 Added in reagent bank support.
 Did some reformatting and adjusting of the code, mostly for looks.
 Updated TOC.

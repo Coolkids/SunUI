@@ -93,7 +93,7 @@ oUF.Tags.Methods['sunuf:health'] = function(unit)
 			return "|cffffffff"..siValue(max).."|r"
 		end
 		local r, g, b = oUF.ColorGradient(value, 100, unpack(oUF.colors.smooth))
-		return "|cffffffff"..siValue(min).."||"..format(hex(r,g,b).."%.0f", value).."%|r"
+		return "|cffffffff"..siValue(min).." || "..format(hex(r,g,b).."%.0f", value).."%|r"
 	end
 end
 oUF.Tags.Events['sunuf:health'] = oUF.Tags.Events.missinghp

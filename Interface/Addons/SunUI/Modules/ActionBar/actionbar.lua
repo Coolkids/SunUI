@@ -475,6 +475,24 @@ function AB:CreateExitTaxi()
 	end)
 end
 
+function AB:CreateDraenorZoneAbilityBar()
+	DraenorZoneAbilityFrameNormalTexture:Kill()
+	--DraenorZoneAbilityFrame.SpellButton:StripTextures()
+	
+	--print(DraenorZoneAbilityFrame.SpellButton)
+	--DraenorZoneAbilityFrame.SpellButton.Style:SetTexture(nil)
+	--self:Style(DraenorZoneAbilityFrame.SpellButton)
+	DraenorZoneAbilityFrame.SpellButton:SetSize(40, 40)
+	local Icon = DraenorZoneAbilityFrame.SpellButton.Icon
+
+	DraenorZoneAbilityFrame.SpellButton:CreateShadow("Background")
+	if Icon then
+		Icon:SetTexCoord(.08, .92, .08, .92)
+		Icon:SetAllPoints()
+	end
+	DraenorZoneAbilityFrame.SpellButton:StyleButton(true)
+end
+
 function AB:UpdateBigButtonSize()
 	local C = self.db
 	for i=1, 4 do
@@ -753,14 +771,17 @@ function AB:Initialize()
 	self:CreateStanceBar()
 	self:CreateExitVehicle()
 	self:CreateExitTaxi()
-	
+	self:CreateDraenorZoneAbilityBar()
+
 	self:UpdateAutoHide()
 	self:CreateCooldown()
 	self:initCooldownFlash()
 	self:initStyle()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", initShowGrid)
 	self:RegisterEvent("CVAR_UPDATE", ShowGrid)
-	self:SecureHook("LossOfControlFrame_OnEvent")	
+	self:SecureHook("LossOfControlFrame_OnEvent")
+
+	
 end
 
 S:RegisterModule(AB:GetName())

@@ -26,10 +26,16 @@ function IB:CreateFPS()
 	stat:SetPoint("TOPRIGHT", stat.text)
 	stat:SetPoint("BOTTOMRIGHT", stat.text)
 
-	local function color(num)
-		local r, g, b = S:ColorGradient(num/24, IB.InfoBarStatusColor[1][1], IB.InfoBarStatusColor[1][2], IB.InfoBarStatusColor[1][3], 
-																			IB.InfoBarStatusColor[2][1], IB.InfoBarStatusColor[2][2], IB.InfoBarStatusColor[2][3],
-																			IB.InfoBarStatusColor[3][1], IB.InfoBarStatusColor[3][2], IB.InfoBarStatusColor[3][3])
+	local function color(num2)
+		local r, g, b
+		local num = tonumber(num2)
+		if num > 60 then
+			r, g, b = 210/255, 100/255, 100/255
+		elseif (num >= 24 and num < 60) then
+			r, g, b = 232/255, 218/255, 15/255
+		else
+			r, g, b = 100/255, 210/255, 100/255
+		end
 		stat.icon:SetVertexColor(r, g, b, 0.8)
 	end
 	

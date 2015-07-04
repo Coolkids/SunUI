@@ -892,8 +892,9 @@ function PB:On_Show()
 end
 function PB:On_Hide()
 	if not self.holder:IsShown() then return end
-	S:FadeOutFrame(self.holder, 0.15)
 	--S:HideAnima(self.holder)
+	S:FadeOutFrame(self.holder, 0.15)
+	
 end
 
 function PB:UpdateFade()

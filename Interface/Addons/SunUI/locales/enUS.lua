@@ -244,6 +244,7 @@ end
 do
 	L["地图美化"] = "Skin Map"
 	L["小地图"] = "Small Map"
+	L["探索"] = "Explored:"
 end
 
 --powerbar

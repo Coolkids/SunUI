@@ -125,6 +125,7 @@ P["MiniTools"]={
 	Disenchat = true,
 	Resurrect = true,
 	LowHealth = true,
+	LowHealthPer = 0.3,
 	afklock = true,
 	combat = false,
 	currencycap = true,

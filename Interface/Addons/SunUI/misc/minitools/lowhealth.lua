@@ -29,7 +29,7 @@ f.tex.anim:SetLooping("REPEAT")
 
 function LH:UNIT_HEALTH(event, unit)
 	if unit ~= "player" then return end
-	if ( UnitHealth("player")/UnitHealthMax("player") < 0.3 ) and not UnitIsDead("player") and not UnitIsGhost("player") then
+	if ( UnitHealth("player")/UnitHealthMax("player") < self.db.LowHealthPer ) and not UnitIsDead("player") and not UnitIsGhost("player") then
 		f:Show()
 		if not f.tex.anim:IsPlaying() then
 			f.tex.anim:Play()
