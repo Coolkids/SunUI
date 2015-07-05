@@ -11,10 +11,13 @@ function FG:GetOptions()
 			name = L["技能监视"],
 			desc = L["技能监视"],
 			func = function()
-				local GUI = LibStub("AceAddon-3.0"):GetAddon("RayWatcherConfig")
-				if GUI then
-					GUI:ShowConfig()
-				end
+				LibStub("AceConfigDialog-3.0"):Open("RayWatcherConfig")
+				LibStub("AceConfigDialog-3.0"):Close("SunUI")
+				local f = LibStub("AceConfigDialog-3.0").OpenFrames["RayWatcherConfig"].frame
+				f:HookScript("OnHide", function(self) 
+	       	 		LibStub("AceConfigDialog-3.0"):Open("SunUI")
+	       	 		--self:SetScript("OnHide", nil)
+       	 		end)
 			end,
 		},
 	}

@@ -4,9 +4,9 @@
 ## Notes: 
 ## Notes-zhTW: 
 ## Author: Freebaser
-## Version: 6.7
+## Version: 6.8 - Coolkid modify
 ## SavedVariables: FreebgridDB
-## OptionalDeps: !ClassColors, Ace3, Clique, oRA3, SharedMedia
+## OptionalDeps: !ClassColors, Ace3, Clique, oRA3, SharedMedia, SunUI
 ## X-LoadOn-Slash: /freeb
 
 libs\LibStub\LibStub.lua

@@ -110,6 +110,8 @@ function AddOn:OnInitialize()
 	self:RegisterChatCommand("sunui", "OpenConfig")
 	self:RegisterChatCommand("cpuusage", "GetTopCPUFunc")
 	self:RegisterChatCommand("gm", ToggleHelpFrame)
+
+	AceConfigDialog:AddToBlizOptions(AddOnName, AddOnName)
 end
 
 function AddOn:PLAYER_REGEN_ENABLED()

@@ -1,6 +1,9 @@
 ﻿local S, L, P, G = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
-
+S.layoutList = {}
+for i=1,20 do
+	table.insert(S.layoutList, i)
+end
 S.Options = {
 	type = "group",
 	name = AddOnName,
@@ -53,18 +56,7 @@ S.Options = {
 					name = L["布局管理器"],
 					desc = L["布局管理器"],
 					type = "select",
-					values = {
-						[1] = 1,
-						[2] = 2,
-						[3] = 3,
-						[4] = 4,
-						[5] = 5,
-						[6] = 6,
-						[7] = 7,
-						[8] = 8,
-						[9] = 9,
-						[10] = 10,
-					},
+					values = S.layoutList,
 					get = function(info)
 						return S.db.layout.mainLayout
 					end,

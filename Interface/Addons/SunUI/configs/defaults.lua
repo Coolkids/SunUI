@@ -247,6 +247,13 @@ P["RaidCD"] = {
 }
 
 P["Filger"] = {
-	Enable = true,
-	ShowTooltip = true,
+
+}
+
+P["SunUI_RaidFrameGUISuppest"] = {
+	
+}
+
+P["SunUI_LayoutManger"] = {
+	
 }

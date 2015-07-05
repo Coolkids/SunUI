@@ -350,8 +350,15 @@ ns.options.args.statusbar = {
 					values = orientation,
 					set = function(info,val) ns.db.orientation = val; ns.UpdateObjectLayout() end,
 				},
+                aurora = {
+                    name = "透明模式",
+                    type = "toggle",
+                    order = 2,
+                    set = function(info,val) ns.db.aurora = val; StaticPopup_Show("CFG_RELOAD") end,
+                },
 			},
 		},
+        
 		--[[		
 		altpowertext = {
 			name = L.statusbaraltpower,

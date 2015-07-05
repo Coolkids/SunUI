@@ -15,7 +15,8 @@
 	<Include file="quest\load_quest.xml"/>
 	<Include file="tooltip\load_tooltip.xml"/>
 	<Include file="watch\load_watch.xml"/>
-	
+	<Include file="raidframe\load_raidframe.xml"/>
+	<Include file="layoutmanger\load_layoutmanger.xml"/>
 	<!--
 	
 	-->

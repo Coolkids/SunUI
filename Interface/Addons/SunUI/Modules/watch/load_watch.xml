@@ -6,7 +6,7 @@
 
 
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file = "guisuppest.lua"/>
+	<Script file = "guisupport.lua"/>
 	<Include file="locale\locale.xml"/>
 	<Script file = "spells.lua"/>
 	<Script file = "Options.lua"/>

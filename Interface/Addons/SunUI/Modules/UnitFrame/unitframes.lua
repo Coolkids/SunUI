@@ -3,6 +3,7 @@ local A = S:GetModule("Skins")
 local UF = S:GetModule("UnitFrames")
 local parent, ns = ...
 local oUF = ns.oUF
+S.oUF = oUF
 UF.font = "Interface\\Addons\\SunUI\\media\\ROADWAY.TTF"
 local class = select(2, UnitClass("player"))
 

@@ -1,7 +1,8 @@
 local ADDON_NAME, ns = ...
 
 local L = ns.Locale
-
+local S = unpack(SunUI)
+local A = S:GetModule("Skins")
 ns._Objects = {}
 ns._Headers = {}
 
@@ -613,7 +614,31 @@ local menu = function (self)
     dropdown:SetParent(self)
     return ToggleDropDownMenu(1, nil, dropdown, 'cursor', 0, 0)
 end
+------mark start--------------------------------
+local function auraomod(button)
+	if not ns.db.aurora then return end
+	local Health = button.HealthBar
 
+	local gradient = Health:CreateTexture(nil, "BACKGROUND")
+	gradient:SetPoint("TOPLEFT")
+	gradient:SetPoint("BOTTOMRIGHT")
+	gradient:SetTexture("Interface\\ChatFrame\\ChatFrameBackground")
+	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+
+	local Healthdef = CreateFrame("StatusBar", nil, button)
+	Healthdef:SetFrameStrata("LOW")
+	Healthdef:SetAllPoints(Health)
+	Healthdef:SetStatusBarTexture(ns.db.texturePath)
+	Healthdef:SetStatusBarColor(1, 1, 1)
+	Healthdef:SetMinMaxValues(0, 100)
+	Healthdef:SetValue(0)
+	Healthdef:SetReverseFill(true)
+
+	S:SmoothBar(Healthdef)
+
+	button.Healthdef = Healthdef
+end
+------mark end--------------------------------
 local function unitFrameStyleSetup(button)
 
 	button.menu = menu
@@ -769,6 +794,8 @@ local function unitFrameStyleSetup(button)
     button.Auras.second = secauras
 	button.Auras.second.Button = ns:CreateAuraIcon(button.Auras.second)
 	
+	auraomod(button)
+
 	ns:UpdatePowerBar(button)
 	ns:UpdateHealthBarLayout(button)
 	ns:UpdateHealPredictionBarLayout(button)
@@ -793,7 +820,6 @@ local function unitFrameStyleSetup(button)
 	end
 	
     button:SetScale(ns.db.scale)
-	
 end
 
 local function defaultUnitFrameSetup(header, name)
@@ -1283,7 +1309,26 @@ function ns:CheckReadyCheckDecay(self, elapsed)
 		end
 	end
 end
+------mark start--------------------------------
+local function UpdateHealthBarAurora(button)
+	if not ns.db.aurora then return end
+	local healthBar = button.HealthBar
+	local Border = button.Border
+	Border:SetPoint("TOPLEFT", button, "TOPLEFT", -1, 1)
+    Border:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 1, -1)
+    Border:SetFrameLevel(button.BG:GetFrameLevel() - 1)
+    Border:SetBackdrop(nil)
+    Border:SetBackdropColor(0, 0, 0, 0)
 
+    local bg = button.BG
+    bg:SetPoint("TOPLEFT", button, "TOPLEFT", -1, 1)
+    bg:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 1, -1)
+    bg:SetFrameLevel(3)
+    bg:SetBackdrop(nil)
+    bg:SetBackdropColor(0, 0, 0, 0)
+	A:CreateBD(healthBar, 0)
+end
+------mark end--------------------------------
 function ns:UpdateHealthBarLayout(self)
 	local healthBar = self.HealthBar
 	local power = self.PowerBar
@@ -1311,8 +1356,16 @@ function ns:UpdateHealthBarLayout(self)
         healthBar:SetPoint"LEFT"
         healthBar:SetPoint"RIGHT"
     end
+    UpdateHealthBarAurora(self)
 end
-
+------mark start--------------------------------
+local function UpdateHealthBarAuroraColor(button)
+	if not ns.db.aurora then return end
+	local healthBar = button.HealthBar
+	healthBar:SetStatusBarColor(0, 0, 0, 0)
+	healthBar.bg:SetVertexColor(0, 0, 0, 0)
+end
+------mark end--------------------------------
 function ns:UpdateHealthColor(self)
 	local healthBar = self.HealthBar
 	local unit = self.displayedUnit or self.unit
@@ -1363,13 +1416,21 @@ function ns:UpdateHealthColor(self)
 		healthBar:SetStatusBarColor(ns.db.enemycolor.r, ns.db.enemycolor.g, ns.db.enemycolor.b)
 		healthBar.bg:SetVertexColor(ns.db.enemycolor.r*.2, ns.db.enemycolor.g*.2, ns.db.enemycolor.b*.2)
 	end
+	UpdateHealthBarAuroraColor(self)
 end
-
+------mark start--------------------------------
+local function updateAuraoraMaxHealth(button)
+	if not ns.db.aurora then return end
+	local unit = button.displayedUnit or button.unit
+	button.Healthdef:SetMinMaxValues(0, UnitHealthMax(unit))
+end
+------mark end--------------------------------
 function ns:UpdateMaxHealth(self)
 	local healthBar = self.HealthBar
 	local unit = self.displayedUnit or self.unit
 
 	healthBar:SetMinMaxValues(0, UnitHealthMax(unit))
+	updateAuraoraMaxHealth(self)
 end
 
 local min, max, abs = math.min, math.max, abs
@@ -1391,7 +1452,22 @@ function ns:UpdateHealthSmooth(self)
         self.HealthBar.smoothing = nil
     end
 end
-
+------mark start--------------------------------
+local function updateAuraoraHealth(button)
+	if not ns.db.aurora then return end
+	local oUF = S.oUF
+	local unit = button.displayedUnit or button.unit
+	local offline = not UnitIsConnected(unit)
+	local max, min = UnitHealthMax(unit), UnitHealth(unit)
+	if offline or UnitIsDead(unit) or UnitIsGhost(unit) then
+		button.Healthdef:SetValue(0)
+	else
+		button.Healthdef:SetMinMaxValues(0, max)
+		button.Healthdef:SetValue(max-min)
+		button.Healthdef:GetStatusBarTexture():SetVertexColor(oUF.ColorGradient(min, max, unpack(oUF.colors.smooth)))
+	end
+end
+------mark end--------------------------------
 function ns:UpdateHealth(self)
 	local healthBar = self.HealthBar
 	local unit = self.displayedUnit or self.unit
@@ -1400,6 +1476,7 @@ function ns:UpdateHealth(self)
 	else
 		self.HealthBar:SetValue(UnitHealth(unit))
 	end
+	updateAuraoraHealth(self)
 end
 
 function ns:UpdateHealPredictionBarColor(self)
@@ -1474,6 +1551,31 @@ function ns:UpdateHealPrediction(self)
     self.otherHealPredictionBar:Show()
 end
 
+local function updatePowerBarAurora(button)
+	if not ns.db.aurora then return end
+	local power = button.PowerBar
+	
+	if ns.db.orientation == "HORIZONTAL" and ns.db.porientation == "VERTICAL" then
+		power:SetPoint"LEFT"
+		power:SetPoint"TOP"
+		power:SetPoint"BOTTOM"
+	elseif ns.db.porientation == "VERTICAL" then
+		power:SetPoint"TOP"
+		power:SetPoint"RIGHT"
+		power:SetPoint"BOTTOM"
+	else
+		power:SetPoint("LEFT", 1, 0)
+		power:SetPoint("RIGHT", -1, 0)
+		power:SetPoint("TOP", button.HealthBar, "BOTTOM", 0, -1)
+	end
+
+
+	local PBorder = CreateFrame("Frame", nil, power)
+	PBorder:SetPoint("TOPLEFT", power, "TOPLEFT", -1, 1)
+    PBorder:SetPoint("BOTTOMRIGHT", power, "BOTTOMRIGHT", 1, -1)
+    PBorder:SetFrameLevel(button.Border:GetFrameLevel())
+	A:CreateBD(PBorder, 0)
+end
 function ns:UpdatePowerBar(self) 
 	local power = self.PowerBar
 	local health = self.HealthBar  
@@ -1519,6 +1621,7 @@ function ns:UpdatePowerBar(self)
 		health:SetHeight(ns.db.height)
         health:SetWidth(ns.db.width)
 	end
+	updatePowerBarAurora(self)
 end
 
 

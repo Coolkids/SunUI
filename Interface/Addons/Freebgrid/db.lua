@@ -523,7 +523,7 @@ ns.defaults = {
 	Resurrection = true,
 	hideblzraid = true,
 	hideblzparty = true,
-	
+	aurora = false,
 	Freebgridomf2Char = {
 		["Defaults"] ={
 			["FreebgridPetFrame"] = "LEFTUIParent2500",
