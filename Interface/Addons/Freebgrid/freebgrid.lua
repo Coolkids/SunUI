@@ -1240,7 +1240,13 @@ function ns:UpdateResurrectIcon(self)
 		resurrect:Hide()
 	end
 end
-
+local function UpdateAuroraName(button)
+	if not ns.db.aurora then return end
+	local unit = button.displayedUnit or button.unit
+	if not unit then return end
+	local class = select(2, UnitClass(unit))
+	button.Name:SetTextColor(RAID_CLASS_COLORS[class].r, RAID_CLASS_COLORS[class].g, RAID_CLASS_COLORS[class].b)
+end
 function ns:UpdateName(self)
 	local unit = self.displayedUnit or self.unit
 	if not unit then return end
@@ -1262,6 +1268,7 @@ function ns:UpdateName(self)
 	else
 		self.Name:SetTextColor(1, 1, 1)
 	end
+	UpdateAuroraName(self)
 end
 
 function ns:UpdateReadyCheck(self)

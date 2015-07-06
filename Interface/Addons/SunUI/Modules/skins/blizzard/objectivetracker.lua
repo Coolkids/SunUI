@@ -52,12 +52,12 @@ local function LoadSkin()
 		header.Text:FontTemplate(nil, nil, "OUTLINE")
 	end
 
-	--[[do
+	do
 		local header = BONUS_OBJECTIVE_TRACKER_MODULE.Header
 		header.Background:Hide()
 		header.Text:FontTemplate(nil, nil, "OUTLINE")
-	end]]
-	BONUS_OBJECTIVE_TRACKER_MODULE.Header.Background:Hide()
+	end
+	--BONUS_OBJECTIVE_TRACKER_MODULE.Header.Background:Hide()
 
 	hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, "SetBlockHeader", function(_, block)
 		if not block.headerStyled then
@@ -146,20 +146,19 @@ local function LoadSkin()
 
 	hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", function(self, block, line)
 		local progressBar = line.ProgressBar
+		local bar = progressBar.Bar
+		local icon = bar.Icon
 
 		if not progressBar.styled then
-			local bar = progressBar.Bar
 			local label = bar.Label
-			local icon = bar.Icon
 
-			bar.IconBG:Hide()
 			bar.BarBG:Hide()
 
 			icon:SetMask(nil)
 			icon:SetDrawLayer("BACKGROUND", 1)
 			icon:ClearAllPoints()
 			icon:SetPoint("RIGHT", 35, 2)
-			A:ReskinIcon(icon)
+			bar.newIconBg = A:ReskinIcon(icon)
 
 			bar.BarFrame:Hide()
 
@@ -176,8 +175,9 @@ local function LoadSkin()
 			progressBar.styled = true
 		end
 
-		progressBar.Bar:SetValue(50)
+		bar.IconBG:Hide()
+		bar.newIconBg:SetShown(icon:IsShown())
 	end)
 end
-A:RegisterSkin("SunUI", LoadSkin)
+
 A:RegisterSkin("SunUI", LoadSkin)
