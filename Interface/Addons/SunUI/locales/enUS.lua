@@ -466,15 +466,30 @@ do
 end
 
 do
-	L["在这里你可以对角色的页面布局配置文件进行设置."] = true
-	L["当前布局为: \"|cffFF0000"] = true
-	L["|r\"号布局.\n"] = true
-	L["从当前可用的配置文件里面选择一个进行配置."] = true
-	L["复制到"] = true
-	L["复制布局"] = true
-	L["将会清空目标布局,你确认要复制这个布局?"] = true
-	L["重置"] = true
-	L["从当前可用的配置文件里面选择一个进行配置."] = true
-	L["重置布局"] = true
-	L["将会清空目标布局,你确认要重置这个布局?"] = true
+	L["在这里你可以对角色的页面布局配置文件进行设置."] = ""
+	L["当前布局为: \"|cffFF0000"] = "Layout index:"
+	L["|r\"号布局.\n"] = ""
+	L["从当前可用的配置文件里面选择一个进行配置."] = ""
+	L["复制到"] = "copy to"
+	L["复制布局"] = "copy"
+	L["将会清空目标布局,你确认要复制这个布局?"] = "will clear Layout"
+	L["重置"] = "clear"
+	L["从当前可用的配置文件里面选择一个进行配置."] = ""
+	L["重置布局"] = "clear"
+	L["将会清空目标布局,你确认要重置这个布局?"] = "will clear Layout"
+end
+
+do
+	L["你的%s栏位需要修理, 当前耐久为%d."] = "%s need repair %d"
+	L["你有%s个未处理的活动邀请."] = "you has %s Invite"
+	L["你有%s个未处理的公会活动邀请."] = "you has %s Invite"
+	L["活动\"%s\"今天结束."] = "Invite %s is end today"
+	L["欢迎您回来"] = "Welcome Back"
+	L["SunUI已经加载"] = "Loading SunUI"
+	L["您已击杀"] = "you killed"
+	L["您没有击杀任何野外boss喔"] = "you not kill any boss in world"
+	L["警告"] = "warning"
+	L["击杀提醒"] = " "
+	L["发现稀有"] = "found rare"
+	L["包含以下通知内容\n1.欢迎玩家登陆\n2.收到新邮件\n3.行事历/工会活动\n4.发现稀有生物(未测试)\n5.复活提示(需要开始声音)"] = " "
 end

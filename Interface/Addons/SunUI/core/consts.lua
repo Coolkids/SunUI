@@ -11,7 +11,7 @@ S.myname             = UnitName("player")
 S.myrealm            = GetRealmName()
 S.version            = GetAddOnMetadata(AddOnName, "Version")
 S.zone = GetLocale()
-
+S.level = UnitLevel("player")
 
 ---重要的方法
 function table.removeItem(list, item, removeAll)

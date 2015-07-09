@@ -6,5 +6,6 @@
 	<Script file='BubbleBobble.lua'/>
 	<Script file='mirrorbars.lua'/>
 	<Script file='lfg.lua'/>
+	<Script file='skada.lua'/>
 	<Script file='other.lua'/>
 </Ui>

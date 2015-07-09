@@ -290,7 +290,7 @@ function N:PLAYER_REGEN_ENABLED()
 	if showRepair and value < 20 then
 			showRepair = false
 			S:Delay(30, ResetRepairNotification)
-			self:Notification(MINIMAP_TRACKING_REPAIR, format("你的%s栏位需要修理, 当前耐久为%d.",Slots[1][2],value))
+			self:Notification(MINIMAP_TRACKING_REPAIR, format(L["你的%s栏位需要修理, 当前耐久为%d."],Slots[1][2],value))
 	end
 end
 
@@ -325,9 +325,9 @@ local function alertEvents()
 	local num = CalendarGetNumPendingInvites()
 	if num ~= numInvites then
 			if num > 1 then
-					N:Notification(CALENDAR, format("你有%s个未处理的活动邀请.", num), toggleCalendar)
+					N:Notification(CALENDAR, format(L["你有%s个未处理的活动邀请."], num), toggleCalendar)
 			elseif num > 0 then
-					N:Notification(CALENDAR, format("你有%s个未处理的活动邀请.", 1), toggleCalendar)
+					N:Notification(CALENDAR, format(L["你有%s个未处理的活动邀请."], 1), toggleCalendar)
 			end
 			numInvites = num
 	end
@@ -337,9 +337,9 @@ local function alertGuildEvents()
 	if CalendarFrame and CalendarFrame:IsShown() then return end
 	local num = GetGuildInvites()
 	if num > 1 then
-			N:Notification(CALENDAR, format("你有%s个未处理的公会活动邀请.", num), toggleCalendar)
+			N:Notification(CALENDAR, format(L["你有%s个未处理的公会活动邀请."], num), toggleCalendar)
 	elseif num > 0 then
-			N:Notification(CALENDAR, format("你有%s个未处理的公会活动邀请.", 1), toggleCalendar)
+			N:Notification(CALENDAR, format(L["你有%s个未处理的公会活动邀请."], 1), toggleCalendar)
 	end
 end
 
@@ -361,25 +361,26 @@ function N:PLAYER_ENTERING_WORLD()
 	for i = 1, numDayEvents do
 			local title, hour, minute, calendarType, sequenceType, eventType, texture, modStatus, inviteStatus, invitedBy, difficulty, inviteType = CalendarGetDayEvent(0, day, i)
 			if calendarType == "HOLIDAY" and ( sequenceType == "END" or sequenceType == "" ) then
-					self:Notification(CALENDAR, format("活动\"%s\"今天结束.", title), toggleCalendar)
+					self:Notification(CALENDAR, format(L["活动\"%s\"今天结束."], title), toggleCalendar)
 			end
 	end
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 end
 
 function N:PLAYER_LOGIN()
-	self:Notification("欢迎您回来", "SunUI正在加载中...", nil, nil, .08, .92, .08, .92)
+	self:Notification(L["欢迎您回来"], L["SunUI已经加载"], nil, nil, .08, .92, .08, .92)
+	if S.level < 98 then return end
 	local killbossnum = GetNumSavedWorldBosses()
-	local namelist = "您已击杀";
+	local namelist = L["您已击杀"];
 	if killbossnum == 0 then
-		namelist = "您没有击杀任何野外boss喔"
-		self:Notification("警告", namelist, nil, "INTERFACE\\ICONS\\SPELL_FROST_ARCTICWINDS", .08, .92, .08, .92)
+		namelist = L["您没有击杀任何野外boss喔"]
+		self:Notification(L["警告"], namelist, nil, "INTERFACE\\ICONS\\SPELL_FROST_ARCTICWINDS", .08, .92, .08, .92)
 	else
 		for i=1, killbossnum do
 			local name, _, _ = GetSavedWorldBossInfo(i)
 			namelist = namelist.." "..name
 		end
-		self:Notification("击杀提醒", namelist, nil, "INTERFACE\\ICONS\\SPELL_FROST_ARCTICWINDS", .08, .92, .08, .92)
+		self:Notification(L["击杀提醒"], namelist, nil, "INTERFACE\\ICONS\\SPELL_FROST_ARCTICWINDS", .08, .92, .08, .92)
 	end
 	
 	self:UnregisterEvent("PLAYER_LOGIN")
@@ -397,7 +398,7 @@ function N:VIGNETTE_ADDED(event, vignetteInstanceID)
 	if self.db.playSounds then	
 		PlaySoundFile("Sound\\Spells\\PVPFlagTaken.wav")
 	end
-	self:Notification("发现稀有", name or "")
+	self:Notification(L["发现稀有"], name or "")
 end
 
 function N:RESURRECT_REQUEST(name)
@@ -448,7 +449,7 @@ function N:UpdateSet()
 	end
 end
 function N:Info()
-	return "包含以下通知内容\n1.欢迎玩家登陆\n2.收到新邮件\n3.行事历/工会活动\n4.发现稀有生物(未测试)\n5.复活提示(需要开始声音)"
+	return L["包含以下通知内容\n1.欢迎玩家登陆\n2.收到新邮件\n3.行事历/工会活动\n4.发现稀有生物(未测试)\n5.复活提示(需要开始声音)"]
 end
 function N:Initialize()
 	local A = S:GetModule("Skins")
