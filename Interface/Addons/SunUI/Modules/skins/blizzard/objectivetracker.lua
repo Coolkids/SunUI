@@ -158,7 +158,7 @@ local function LoadSkin()
 			icon:SetDrawLayer("BACKGROUND", 1)
 			icon:ClearAllPoints()
 			icon:SetPoint("RIGHT", 35, 2)
-			bar.newIconBg = A:ReskinIcon(icon)
+			--bar.newIconBg = A:ReskinIcon(icon)
 
 			bar.BarFrame:Hide()
 
@@ -176,7 +176,7 @@ local function LoadSkin()
 		end
 
 		bar.IconBG:Hide()
-		bar.newIconBg:SetShown(icon:IsShown())
+		--bar.newIconBg:SetShown(icon:IsShown())
 	end)
 end
 

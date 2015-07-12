@@ -1245,6 +1245,8 @@ local function UpdateAuroraName(button)
 	local unit = button.displayedUnit or button.unit
 	if not unit then return end
 	local class = select(2, UnitClass(unit))
+	if not class then return end
+	if not RAID_CLASS_COLORS[class] then return end
 	button.Name:SetTextColor(RAID_CLASS_COLORS[class].r, RAID_CLASS_COLORS[class].g, RAID_CLASS_COLORS[class].b)
 end
 function ns:UpdateName(self)
