@@ -295,9 +295,9 @@ do
 	L["通知"] = "Notification"
 	L["开启声音提示"] = "Turn On Voice Prompts"
 end
---Nameplates
+--UnitFrames
 do
-	L["头像美化"] = "Nameplates"
+	L["头像美化"] = "UnitFrames"
 	L["显示模式"] = "Display Mode"
 	L["治疗模式"] = "Caster Mode"
 	L["DPS/Tank模式"] = "DPS/Tank Mode"
