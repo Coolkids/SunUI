@@ -1498,6 +1498,18 @@ ns.watchers ={
 			-- 敏捷 
 			{ spellID = 177172, unitId = "player", caster = "player", filter = "BUFF" },			-- 坦克
 
+			-- 尼萨姆斯
+			{ spellID = 187616, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 萨克图斯
+			{ spellID = 187617, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 伊瑟拉鲁斯
+			{ spellID = 187618, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 索拉苏斯
+			{ spellID = 187619, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 玛鲁斯
+			{ spellID = 187620, unitID = "player", caster = "player", filter = "BUFF" },
+
+
 			-------------------------------WOD-----------------------------------------
 			-- 重击护符                (急速, 触发)
 			{ spellID = 177102, unitId = "player", caster = "player", filter = "BUFF" },
@@ -3013,6 +3025,7 @@ ns.watchers ={
 			{ spellID = 189032, unitID = "player", caster = "all", filter = "DEBUFF"},
 			{ spellID = 189031, unitID = "player", caster = "all", filter = "DEBUFF"},
 			{ spellID = 189030, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 179711, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 轰鸣的裂隙
 			{ spellID = 179428, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 毁灭之种
