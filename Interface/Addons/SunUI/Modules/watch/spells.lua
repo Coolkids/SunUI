@@ -1498,6 +1498,18 @@ ns.watchers ={
 			-- 敏捷 
 			{ spellID = 177172, unitId = "player", caster = "player", filter = "BUFF" },			-- 坦克
 
+			-- 尼萨姆斯
+			{ spellID = 187616, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 萨克图斯
+			{ spellID = 187617, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 伊瑟拉鲁斯
+			{ spellID = 187618, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 索拉苏斯
+			{ spellID = 187619, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 玛鲁斯
+			{ spellID = 187620, unitID = "player", caster = "player", filter = "BUFF" },
+
+
 			-------------------------------WOD-----------------------------------------
 			-- 重击护符                (急速, 触发)
 			{ spellID = 177102, unitId = "player", caster = "player", filter = "BUFF" },
@@ -2852,9 +2864,9 @@ ns.watchers ={
 			-- 地狱火堡垒
 			-- 1	奇袭地狱火
 			-- 邪火弹药
-			{ spellID = 186016, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 180079, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 啸风战斧
-			{ spellID = 184379, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 184369, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 颤抖！
 			{ spellID = 184238, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 猛击
@@ -2883,6 +2895,8 @@ ns.watchers ={
 			{ spellID = 185242, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 易爆火焰炸弹
 			{ spellID = 185978, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 火焰易伤
+			{ spellID = 182373, unitID = "player", caster = "all", filter = "DEBUFF"},
 
 
 			-- 3	考莫克
@@ -2900,10 +2914,18 @@ ns.watchers ={
 			{ spellID = 185519, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 邪污血球
 			{ spellID = 185521, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 暗影之池
+			{ spellID = 181082, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 火焰之池
+			{ spellID = 186559, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 邪污之池
+			{ spellID = 186560, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 暗影残渣
 			{ spellID = 181208, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 爆炸残渣
 			{ spellID = 185686, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 邪恶残渣
+			{ spellID = 185687, unitID = "player", caster = "all", filter = "DEBUFF"},
 
 
 			-- 4	高阶地狱火议会
@@ -2913,7 +2935,7 @@ ns.watchers ={
 			{ spellID = 184676, unitID = "player", caster = "all", filter = "DEBUFF"},
 			{ spellID = 185065, unitID = "player", caster = "all", filter = "DEBUFF"},
 			{ spellID = 185066, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 血沸點名
+			-- 堕落狂怒
 			{ spellID = 184360, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 酸性创伤
 			{ spellID = 184847, unitID = "player", caster = "all", filter = "DEBUFF"},
@@ -2969,6 +2991,8 @@ ns.watchers ={
 			{ spellID = 179995, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 邪能之怒
 			{ spellID = 185189, unitID = "player", caster = "all", filter = "DEBUFF"},
+			-- 邪能烈焰
+			{ spellID = 185190, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 命运相连
 			{ spellID = 179908, unitID = "player", caster = "all", filter = "DEBUFF"},
 			{ spellID = 179909, unitID = "player", caster = "all", filter = "DEBUFF"},
@@ -2996,8 +3020,6 @@ ns.watchers ={
 			{ spellID = 181824, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 幻影焚化
 			{ spellID = 187344, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 绝望之链
-			{ spellID = 185456, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 暗影之缚
 			{ spellID = 185510, unitID = "player", caster = "all", filter = "DEBUFF"},
 
@@ -3009,10 +3031,11 @@ ns.watchers ={
 			{ spellID = 179407, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 潜伏能量
 			{ spellID = 182008, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 被玷污
+			-- 玷污
 			{ spellID = 189032, unitID = "player", caster = "all", filter = "DEBUFF"},
 			{ spellID = 189031, unitID = "player", caster = "all", filter = "DEBUFF"},
 			{ spellID = 189030, unitID = "player", caster = "all", filter = "DEBUFF"},
+			{ spellID = 179711, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 轰鸣的裂隙
 			{ spellID = 179428, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 毁灭之种
@@ -3131,9 +3154,9 @@ ns.watchers ={
 
 
 			-- 13	阿克蒙德
-			-- 暗影冲击(击飞)
+			-- 影魔冲击
 			{ spellID = 183634, unitID = "player", caster = "all", filter = "DEBUFF"},
-			-- 暗影冲击
+			-- 暗影爆破
 			{ spellID = 187742, unitID = "player", caster = "all", filter = "DEBUFF"},
 			{ spellID = 183864, unitID = "player", caster = "all", filter = "DEBUFF"},
 			-- 死亡烙印
