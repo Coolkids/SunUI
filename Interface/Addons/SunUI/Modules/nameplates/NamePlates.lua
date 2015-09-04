@@ -546,7 +546,7 @@ end
 -- This is where we create most 'Static' objects for the nameplate
 local function SkinObjects(frame, nameFrame)
 	
-	local oldhp, cb = frame:GetChildren()
+	local oldhp, absorb, cb = frame:GetChildren()
 	local threat, hpborder, overlay, oldlevel, bossicon, raidicon, elite = frame:GetRegions()
 	local oldname = nameFrame:GetRegions()
 	local _, cbborder, cbshield, cbicon, cbname, cbshadow = cb:GetRegions()
