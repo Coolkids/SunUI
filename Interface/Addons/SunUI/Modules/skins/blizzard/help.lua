@@ -1,4 +1,4 @@
-﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
+local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local A = S:GetModule("Skins")
 
 local function LoadSkin()
@@ -9,7 +9,6 @@ local function LoadSkin()
 	A:SetBD(ReportCheatingDialog)
 	HelpFrameHeader:Hide()
 	HelpFrameLeftInsetBg:Hide()
-	select(4, HelpFrameTicket:GetChildren()):Hide()
 	HelpFrameKnowledgebaseStoneTex:Hide()
 	HelpFrameKnowledgebaseNavBarOverlay:Hide()
 	select(5, HelpFrameGM_Response:GetChildren()):Hide()
@@ -20,7 +19,6 @@ local function LoadSkin()
 	HelpFrameKnowledgebaseNavBarHomeButtonLeft:Hide()
 	HelpFrameKnowledgebaseTopTileStreaks:Hide()
 	HelpFrameKnowledgebaseNavBar:GetRegions():Hide()
-	HelpFrameTicketScrollFrameScrollBar:SetPoint("TOPLEFT", HelpFrameTicketScrollFrame, "TOPRIGHT", 1, -16)
 	HelpFrameGM_ResponseScrollFrame1ScrollBar:SetPoint("TOPLEFT", HelpFrameGM_ResponseScrollFrame1, "TOPRIGHT", 1, -16)
 	HelpFrameGM_ResponseScrollFrame2ScrollBar:SetPoint("TOPLEFT", HelpFrameGM_ResponseScrollFrame2, "TOPRIGHT", 1, -16)
 	select(2, HelpFrameCharacterStuckHearthstone:GetRegions()):SetAlpha(0)
@@ -47,14 +45,11 @@ local function LoadSkin()
 		"HelpFrameAccountSecurityOpenTicket",
 		"HelpFrameCharacterStuckStuck",
 		"HelpFrameOpenTicketHelpTopIssues",
-		"HelpFrameOpenTicketHelpOpenTicket",
 		"HelpFrameKnowledgebaseSearchButton",
 		"HelpFrameGM_ResponseNeedMoreHelp",
 		"HelpFrameGM_ResponseCancel",
 		"GMChatOpenLog",
 		"HelpFrameKnowledgebaseNavBarHomeButton",
-		"HelpFrameTicketSubmit",
-		"HelpFrameTicketCancel",
 		"HelpFrameOpenTicketHelpItemRestoration"
 	}
 	for i = 1, #buttons do
@@ -75,7 +70,6 @@ local function LoadSkin()
 	end
 
 	local lightbds = {
-		"HelpFrameTicketScrollFrame",
 		"HelpFrameReportBugScrollFrame",
 		"HelpFrameGM_ResponseScrollFrame1",
 		"HelpFrameGM_ResponseScrollFrame2"
