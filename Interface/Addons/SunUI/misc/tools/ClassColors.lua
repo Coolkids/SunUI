@@ -195,8 +195,8 @@ local function update()
 	for i, button in ipairs(buttons) do
 		if button:IsShown() and button.online and button.guildIndex then
 			if _VIEW == "tradeskill" then
-				local skillID, isCollapsed, iconTexture, headerName, numOnline, numVisible, numPlayers, playerName, class, online, zone, skill, classFileName, isMobile = GetGuildTradeSkillInfo(button.guildIndex)
-				if not headerName and playerName then
+				local skillID, isCollapsed, iconTexture, headerName, numOnline, numVisible, numPlayers, playerDisplayName, playerFullName, class, online, zone, skill, classFileName, isMobile = GetGuildTradeSkillInfo(button.guildIndex)
+				if not headerName and playerDisplayName then
 					local c = classColorRaw[classFileName]
 					button.string1:SetTextColor(c.r, c.g, c.b)
 					if zone == playerArea then
