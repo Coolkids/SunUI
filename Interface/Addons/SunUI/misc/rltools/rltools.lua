@@ -16,7 +16,15 @@ function RT:CreateText(parent, text, point)
 end
 
 function RT:CreateButton(parent, width, height, text, point, func, reskin)
-	local button = CreateFrame("Button", nil, parent)
+	local button
+	if type(parent) == "table" then
+		button = CreateFrame("Button", nil, parent)
+	elseif _G[parent] then
+		button = CreateFrame("Button", nil, _G[parent])
+	else
+		button = CreateFrame("Button", nil, UIParent)
+	end
+	 
 	button:SetSize(width, height)
 	button:SetPoint(unpack(point))
 	button.text = self:CreateText(button, text)
@@ -30,7 +38,7 @@ end
 
 function RT:initButton()
 	--主按钮
-	self.mainButton = self:CreateButton(oUF_PetBattleFrameHider, 70, 20, RT.L.RAIDCHECK_RAIDTOOL, {"TOP", TopInfoPanel, "BOTTOM", 0, -5}, function()
+	self.mainButton = self:CreateButton(oUF_PetBattleFrameHider, 70, 20, RT.L.RAIDCHECK_RAIDTOOL, {"TOP", TopInfoPanel or UIParent, "TOP", 0, -8}, function()
 		if not self.mainFrame.bannerShown then
 			S:ShowAnima(self.mainFrame)
 		else

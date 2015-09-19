@@ -778,6 +778,7 @@ local function ShowHealth(frame, ...)
 		elseif N.db.health_value_config == 3 then
 			frame.hp.value:SetText(S:ShortValue(valueHealth).." - "..(string.format("%d%%", math.floor(d))))
 		end]]
+		--S:Print(GetTime(), valueHealth, maxHealth, (string.format("%d%%", math.floor(d))))
 		frame.hp.value:SetText((string.format("%d%%", math.floor(d))))
 	end
 
