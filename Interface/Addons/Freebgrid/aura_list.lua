@@ -106,101 +106,191 @@ ns.auras_instances_debuffs = {
 -------------------------------德拉诺之王------------------------------------
 		[1026] = {-- 地狱火堡垒
 
+			-- 小怪 Trash
+			[GetSpellInfo(185806)] = 5, -- 导电冲击脉冲
+			[GetSpellInfo(187459)] = 4, -- 魔能震击
+			[GetSpellInfo(190735)] = 6, -- 腐化虹吸
+			[GetSpellInfo(188087)] = 6, -- 地火滔天
+			[GetSpellInfo(188216)] = 5, -- 烈焰
+			[GetSpellInfo(188189)] = 4, -- 邪能污秽
+			[GetSpellInfo(187122)] = 5, -- 原始能量
+			[GetSpellInfo(188541)] = 6, -- 狂乱
+			[GetSpellInfo(187099)] = 5, -- 暗影残渣
+			[GetSpellInfo(187110)] = 6, -- 集火
+			[GetSpellInfo(188474)] = 6, -- 活动炸弹
+			[GetSpellInfo(188104)] = 6, -- 定向爆破
+			[GetSpellInfo(188476)] = 4, -- 口臭
+			[GetSpellInfo(188510)] = 5, -- 加拉戈之击
+			[GetSpellInfo(182644)] = 6, -- 黑暗命运
+			[GetSpellInfo(184587)] = 5, -- 致死之触
+			[GetSpellInfo(186046)] = 5, -- 炽阳飞轮
+			[GetSpellInfo(186197)] = 5, -- 恶魔献祭
+			[GetSpellInfo(190044)] = 6, -- 邪血腐蚀
+			[GetSpellInfo(189551)] = 5, -- 噬灵之击
+			[GetSpellInfo(189554)] = 6, -- 吞噬之痛
+			[GetSpellInfo(189564)] = 5, -- 蛰伏
+			[GetSpellInfo(189532)] = 5, -- 灵魂灼烧
+			[GetSpellInfo(184734)] = 5, -- 地火斩
+			[GetSpellInfo(184725)] = 4, -- 暗影烈焰冲击
+			[GetSpellInfo(189550)] = 5, -- 火焰之雨
+
 			-- 奇袭地狱火 Hellfire Assault
-			[GetSpellInfo(184369)] = 7, -- 啸风战斧
-			[GetSpellInfo(180079)] = 4, -- 邪火弹药
+			[GetSpellInfo(184369)] = 6, -- 啸风战斧
+			[GetSpellInfo(184243)] = 4, -- 猛击
+			[GetSpellInfo(184238)] = 1, -- 颤抖！
+			[GetSpellInfo(180022)] = 2, -- 钻孔
+			[GetSpellInfo(185157)] = 6, -- 灼烧
+			[GetSpellInfo(180079)] = 6, -- 邪火弹药
 
 			-- 钢铁掠夺者 Fel Reaver
-			[GetSpellInfo(179897)] = 6, -- 迅猛突袭
-			[GetSpellInfo(185978)] = 7, -- 易爆火焰炸弹
-			[GetSpellInfo(182373)] = 4, -- 火焰易伤
-			[GetSpellInfo(182280)] = 8, -- 炮击
+			[GetSpellInfo(182280)] = 6, -- 炮击
+			[GetSpellInfo(185242)] = 5, -- 迅猛突袭
+			[GetSpellInfo(182003)] = 1, -- 燃料尾痕
 			[GetSpellInfo(182074)] = 3, -- 献祭
-			[GetSpellInfo(182001)] = 3, -- 不稳定的宝珠
+			[GetSpellInfo(182001)] = 4, -- 不稳定的宝珠
+			[GetSpellInfo(185978)] = 2, -- 火焰炸弹易伤
 
-			-- 血魔 Gorefiend
-			[GetSpellInfo(179867)] = 3, -- 血魔的腐化
-			[GetSpellInfo(181295)] = 4, -- 消化
-			[GetSpellInfo(179977)] = 8, -- 毁灭之触
-			[GetSpellInfo(179864)] = 6, -- 死亡之影
-			[GetSpellInfo(179909)] = 9, -- 命运相连 (定身)
-			[GetSpellInfo(179908)] = 8, -- 命运相连
+			-- 考莫克 Kormrok
+			[GetSpellInfo(181306)] = 6, -- 爆裂冲击
+			[GetSpellInfo(181321)] = 1, -- 邪能之触
+			[GetSpellInfo(188081)] = 2, -- 重碾
+			[GetSpellInfo(181345)] = 5, -- 邪污碾压
+			[GetSpellInfo(186559)] = 6, -- 火焰之池
+			[GetSpellInfo(185519)] = 2, -- 炽热血球
+			[GetSpellInfo(181082)] = 6, -- 暗影之池
+			[GetSpellInfo(180270)] = 2, -- 暗影血球
+			[GetSpellInfo(186560)] = 6, -- 邪污之池
+			[GetSpellInfo(185521)] = 2, -- 邪污血球
+
+			-- 高阶地狱火议会 Hellfire High Council
+			[GetSpellInfo(184450)] = 5, -- 死灵印记
+			[GetSpellInfo(184652)] = 6, -- 暗影收割
+			[GetSpellInfo(184847)] = 4, -- 酸性创伤
+			[GetSpellInfo(184358)] = 5, -- 邪能狂怒
+			[GetSpellInfo(184357)] = 1, -- 污血
+			[GetSpellInfo(184355)] = 4, -- 血液沸腾
 
 			-- 基尔罗格·死眼 Kilrogg Deadeye
+			[GetSpellInfo(188929)] = 6, -- 剖心飞刀 
+			[GetSpellInfo(188852)] = 5, -- 溅血
+			[GetSpellInfo(182159)] = 2, -- 邪能腐蚀
+			[GetSpellInfo(180200)] = 4, -- 碎甲
 			[GetSpellInfo(181488)] = 3, -- 死亡幻象
-			[GetSpellInfo(188929)] = 7, -- 剖心飞刀 (target)
-			[GetSpellInfo(180389)] = 4, -- 剖心飞刀 (dot)
+			[GetSpellInfo(189612)] = 3, -- 撕裂嚎叫
+			[GetSpellInfo(180033)] = 3, -- 灰烬吐息
+			[GetSpellInfo(184067)] = 5, -- 邪能腐液
+
+			-- 血魔 Gorefiend
+			[GetSpellInfo(179864)] = 5, -- 死亡之影
+			[GetSpellInfo(181295)] = 3, -- 消化
+			[GetSpellInfo(179867)] = 2, -- 血魔的腐化
+			[GetSpellInfo(179978)] = 6, -- 毁灭之触
+			[GetSpellInfo(179995)] = 5, -- 末日井
+			[GetSpellInfo(179909)] = 6, -- 命运相连 (定身)
+			[GetSpellInfo(179908)] = 6, -- 命运相连
+			[GetSpellInfo(182601)] = 5, -- 邪能之怒
+			[GetSpellInfo(185189)] = 5, -- 邪能烈焰
+			[GetSpellInfo(180148)] = 6, -- 生命渴望
+			[GetSpellInfo(180093)] = 1, -- 灵魂箭雨
+			[GetSpellInfo(186770)] = 5, -- 灵魂之池
+
+			-- 暗影领主艾斯卡 Shadow-Lord Iskar
+			[GetSpellInfo(179202)] = 5, -- 安苏之眼
+			[GetSpellInfo(185239)] = 6, -- 安苏之光
+			[GetSpellInfo(181957)] = 5, -- 幻影之风
+			[GetSpellInfo(182325)] = 2, -- 幻影之伤
+			[GetSpellInfo(182200)] = 3, -- 邪能飞轮
+			[GetSpellInfo(185747)] = 3, -- 邪能光束锁定
+			[GetSpellInfo(179219)] = 4, -- 幻影邪能炸弹
+			[GetSpellInfo(181753)] = 7, -- 邪能炸弹
+			[GetSpellInfo(187990)] = 4, -- 幻影腐蚀
+			[GetSpellInfo(187344)] = 1, -- 幻影焚化
+			[GetSpellInfo(185510)] = 2, -- 暗影之缚
 
 			-- 永恒者索克雷萨 Soulbound Construct
 			[GetSpellInfo(182038)] = 3, -- 粉碎防御
-			[GetSpellInfo(188666)] = 7, -- 无尽饥渴
-			[GetSpellInfo(189627)] = 7, -- 易爆的邪能宝珠
-			[GetSpellInfo(180415)] = 4, -- 邪能牢笼
-
-			-- 祖霍拉克 Xhul'horac
-			[GetSpellInfo(188208)] = 7, -- 点燃
-			[GetSpellInfo(186073)] = 7, -- 邪能炙烤
-			[GetSpellInfo(186407)] = 8, -- 魔能喷涌
-			[GetSpellInfo(186500)] = 9, -- 邪能锁链
-			[GetSpellInfo(186063)] = 7, -- 虚空消耗
-			[GetSpellInfo(186333)] = 8, -- 灵能涌动
+			[GetSpellInfo(189627)] = 5, -- 易爆的邪能宝珠
+			[GetSpellInfo(189540)] = 2, -- 压倒能量
+			[GetSpellInfo(182218)] = 5, -- 邪炽残渣
+			[GetSpellInfo(180415)] = 1, -- 邪能牢笼
+			[GetSpellInfo(182769)] = 6, -- 魅影重重
+			[GetSpellInfo(182900)] = 4, -- 恶毒鬼魅
+			[GetSpellInfo(184124)] = 3, -- 堕落者之赐
+			[GetSpellInfo(184239)] = 4, -- 暗言术：恶
+			[GetSpellInfo(190922)] = 2, -- 无拘之力
 
 			-- 邪能领主扎昆 Fel Lord Zakuun
-			[GetSpellInfo(181508)] = 9, -- 毁灭之种
-			[GetSpellInfo(181653)] = 7, -- 邪能水晶
-			[GetSpellInfo(179428)] = 8, -- 轰鸣的裂隙
-			[GetSpellInfo(182008)] = 3, -- 潜伏能量
-			[GetSpellInfo(179407)] = 6, -- 魂不附体
-			[GetSpellInfo(179711)] = 4, -- 玷污
+			[GetSpellInfo(181508)] = 6, -- 毁灭之种
+			[GetSpellInfo(179428)] = 5, -- 轰鸣的裂隙
+			[GetSpellInfo(182008)] = 2, -- 潜伏能量
+			[GetSpellInfo(189260)] = 3, -- 破碎之魂
+			[GetSpellInfo(179407)] = 1, -- 魂不附体
+			[GetSpellInfo(189030)] = 6, -- 玷污
+			--[GetSpellInfo(179711)] = 6, -- 玷污
+			--[GetSpellInfo(189031)] = 6, -- 玷污
+			--[GetSpellInfo(189032)] = 6, -- 玷污
+			[GetSpellInfo(181653)] = 5, -- 邪能水晶
+			[GetSpellInfo(188998)] = 2, -- 枯竭灵魂
 
-			-- 考莫克 Kormrok
-			[GetSpellInfo(187819)] = 7, -- 邪污碾压
-			[GetSpellInfo(181345)] = 7, -- 攫取之手 (坦克)
+			-- 祖霍拉克 Xhul'horac
+			[GetSpellInfo(186134)] = 2, -- 邪蚀
+			[GetSpellInfo(186135)] = 2, -- 邪能炙烤
+			[GetSpellInfo(186407)] = 7, -- 魔能喷涌
+			[GetSpellInfo(186333)] = 7, -- 灵能涌动
+			[GetSpellInfo(185656)] = 1, -- 邪影屠戮
+			[GetSpellInfo(186500)] = 6, -- 邪能锁链
+			[GetSpellInfo(186448)] = 4, -- 邪焰乱舞
+			[GetSpellInfo(188208)] = 3, -- 点燃
+			[GetSpellInfo(186547)] = 5, -- 黑洞
+			[GetSpellInfo(186785)] = 4, -- 凋零凝视
+			[GetSpellInfo(186073)] = 3, -- 邪能炙烤
+			[GetSpellInfo(186063)] = 3, -- 虚空消耗
 
 			-- 暴君维哈里 Tyrant Velhari
-			[GetSpellInfo(180166)] = 6, -- 裂伤之触
-			[GetSpellInfo(180166)] = 6, -- 裂伤之触
-			[GetSpellInfo(182459)] = 7, -- 谴责法令
-			[GetSpellInfo(180526)] = 7, -- 腐蚀序列
-
-			-- 暗影领主艾斯卡 Shadow-Lord Iskar
-			[GetSpellInfo(181957)] = 9, -- 幻影之风
-			[GetSpellInfo(182200)] = 4, -- 邪能飞轮
-			[GetSpellInfo(182178)] = 4, -- 邪能飞轮
-			[GetSpellInfo(182325)] = 2, -- 幻影之伤
-			[GetSpellInfo(185239)] = 1, -- 安苏之光
-			[GetSpellInfo(185510)] = 3, -- 暗影之缚
-			[GetSpellInfo(182600)] = 2, -- 邪能焚化
-			[GetSpellInfo(179219)] = 3, -- 幻影邪能炸弹
-			[GetSpellInfo(181753)] = 3, -- 邪能炸弹
+			[GetSpellInfo(180166)] = 5, -- 裂伤之触
+			[GetSpellInfo(180128)] = 6, -- 谴责法令
+			[GetSpellInfo(180526)] = 6, -- 腐蚀序列
+			[GetSpellInfo(180000)] = 4, -- 凋零契印
+			[GetSpellInfo(181683)] = 1, -- 抑制光环
+			[GetSpellInfo(179987)] = 1, -- 蔑视光环
+			[GetSpellInfo(179993)] = 1, -- 怨恨光环
+			[GetSpellInfo(180604)] = 3, -- 亵渎之地
 
 			-- 玛诺洛斯 Mannoroth
-			[GetSpellInfo(181275)] = 8, -- 军团诅咒
-			[GetSpellInfo(181099)] = 7, -- 末日印记
+			[GetSpellInfo(181099)] = 6, -- 末日印记
+			[GetSpellInfo(181275)] = 3, -- 军团诅咒
+			[GetSpellInfo(181119)] = 4, -- 末日之刺
+			[GetSpellInfo(182171)] = 2, -- 玛诺洛斯之血
+			[GetSpellInfo(181359)] = 5, -- 巨力冲击
+			[GetSpellInfo(184252)] = 3, -- 穿刺之伤
 			[GetSpellInfo(181597)] = 4, -- 玛诺洛斯凝视
-			[GetSpellInfo(182006)] = 4, -- 强化玛诺洛斯凝视
 			[GetSpellInfo(181841)] = 6, -- 暗影之力
+			[GetSpellInfo(182113)] = 1, -- 徘徊力场
 			[GetSpellInfo(182088)] = 6, -- 强化暗影之力
-
-			-- 高阶地狱火议会 Hellfire High Council
-			[GetSpellInfo(184360)] = 7, -- 堕落狂怒
-			[GetSpellInfo(184449)] = 5, -- 死灵印记
-			[GetSpellInfo(185065)] = 5, -- 死灵印记
-			[GetSpellInfo(184450)] = 5, -- 死灵印记
-			[GetSpellInfo(185066)] = 5, -- 死灵印记
-			[GetSpellInfo(184676)] = 5, -- 死灵印记
-			[GetSpellInfo(184652)] = 3, -- 暗影收割
+			[GetSpellInfo(182006)] = 4, -- 强化玛诺洛斯凝视
+			[GetSpellInfo(182031)] = 3, -- 凝视暗影
+			[GetSpellInfo(186362)] = 6, -- 古尔丹之怒
+			[GetSpellInfo(190482)] = 2, -- 186362
 
 			-- 阿克蒙德 Archimonde
-			[GetSpellInfo(184964)] = 7, -- 枷锁酷刑
-			[GetSpellInfo(186123)] = 6, -- 精炼混乱
-			[GetSpellInfo(185014)] = 6, -- 聚焦混乱
-			[GetSpellInfo(186952)] = 8, -- 虚空放逐
-			[GetSpellInfo(189891)] = 8, -- 虚空撕裂
-			[GetSpellInfo(186961)] = 8, -- 虚空放逐
-			[GetSpellInfo(183634)] = 7, -- 暗影冲击
-			[GetSpellInfo(189895)] = 6, -- 虚空之星锁定
-			[GetSpellInfo(190049)] = 4, -- 虚空腐化
+			[GetSpellInfo(183634)] = 6, -- 邪影爆裂
+			[GetSpellInfo(183828)] = 4, -- 死亡烙印
+			[GetSpellInfo(183963)] = 1, -- 纳鲁之光
+			[GetSpellInfo(182879)] = 6, -- 魔火锁定
+			[GetSpellInfo(182878)] = 2, -- 魔火
+			[GetSpellInfo(183864)] = 3, -- 暗影冲击
+			[GetSpellInfo(184964)] = 6, -- 枷锁酷刑
+			[GetSpellInfo(186123)] = 5, -- 精炼混乱
+			[GetSpellInfo(185014)] = 5, -- 聚焦混乱
+			[GetSpellInfo(186961)] = 6, -- 虚空放逐
+			[GetSpellInfo(189891)] = 3, -- 虚空撕裂
+			[GetSpellInfo(187047)] = 2, -- 吞噬生命
+			[GetSpellInfo(190341)] = 2, -- 虚空腐化
+			[GetSpellInfo(187255)] = 3, -- 虚空风暴
+			[GetSpellInfo(189895)] = 5, -- 虚空之星锁定
+			[GetSpellInfo(190400)] = 3, -- 军团之触
+			[GetSpellInfo(187050)] = 6, -- 军团标记
+			[GetSpellInfo(190706)] = 2, -- 混沌之源
 		},
 
 
