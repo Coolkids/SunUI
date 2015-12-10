@@ -62,6 +62,9 @@ S.ItemUpgrade = setmetatable ({
 	[505] = 16,
 	[506] = 20,
 	[507] = 24, 
+	[529] = 0,
+	[530] = 5, 
+	[531] = 10, 
 },{__index=function() return 0 end})
 
 S.DiffIDToString = setmetatable ({
