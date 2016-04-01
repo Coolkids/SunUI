@@ -13,7 +13,7 @@ local function Hook_FriendsList_Update()
 		for i=1, numBNetOnline, 1 do
 			local _, realName, _, _, toonName, toonID, client, _, _, _, _, _, _, _, _ = BNGetFriendInfo(i);
 			if client == BNET_CLIENT_WOW then
-				local _, _, _, realmName, _, _, _, class, _, zoneName, level, _ = BNGetToonInfo(toonID);
+				local _, _, _, realmName, _, _, _, class, _, zoneName, level, _ = BNGetGameAccountInfo(toonID);
 				for k,v in pairs(LOCALIZED_CLASS_NAMES_MALE) do if class == v then class = k end end
 				if GetLocale() ~= "enUS" then
 					for k,v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do if class == v then class = k end end
@@ -27,7 +27,7 @@ local function Hook_FriendsList_Update()
 					nameString:SetText(realName.." ("..toonName..", L"..level..")");
 					nameString:SetTextColor(classc.r, classc.g, classc.b);
 				end
-				if CanCooperateWithToon(toonID) ~= true then
+				if CanCooperateWithGameAccount(toonID) ~= true then
 					local nameString = _G["FriendsFrameFriendsScrollFrameButton"..(i-friendOffset).."Info"];
 					if nameString then
 						nameString:SetText(zoneName.." ("..realmName..")");
