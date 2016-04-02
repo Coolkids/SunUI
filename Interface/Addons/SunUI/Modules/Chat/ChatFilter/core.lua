@@ -303,7 +303,7 @@ local function ChatFilter_Rubbish(self, event, msg, player, _, _, _, flag, _, _,
 			if (Config.FilterRaidAlert and msg:find(L["RaidAlert"])) then return true end
 			if (GetFriendInfo(player)) then return end
 			for i = 1, select(2, BNGetNumFriends()) do
-				local toon = BNGetNumFriendGameAccount(i)
+				local toon = BNGetNumFriendGameAccounts(i)
 				for j = 1, toon do
 					local _, rName, rGame = BNGetFriendGameAccountInfo(i, j)
 					if (rName == player and rGame == "WoW") then return end
