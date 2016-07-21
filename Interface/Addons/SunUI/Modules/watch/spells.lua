@@ -703,9 +703,9 @@ ns.watchers ={
 			-- 风领主之击
 			{ spellID = 205320, unitID = "target", caster = "player", filter = "DEBUFF"}, 
 			-- 轮回之触
-			{ spellID =  115080 unitID = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID = 115080, unitID = "target", caster = "player", filter = "DEBUFF"},
 			-- 无影脚
-			{ spellID =  196723 unitID = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID = 196723, unitID = "target", caster = "player", filter = "DEBUFF"},
 			-- 扫堂腿
 			{ spellID = 119381, unitID = "target", caster = "player", filter = "DEBUFF"},
 
@@ -1089,13 +1089,13 @@ ns.watchers ={
 			-- 暗影之刃
 			{ spellID = 121471, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 敏锐大师
-			{ spellID =  31665, unitID = "player", caster = "player", filter = "BUFF"}
+			{ spellID =  31665, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 敏锐
-			{ spellID = 193538, unitID = "player", caster = "player", filter = "BUFF"}
+			{ spellID = 193538, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 欺凌
-			{ spellID = 115192, unitID = "player", caster = "player", filter = "BUFF"}
+			{ spellID = 115192, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 暗影笼罩
-			{ spellID = 206237, unitID = "player", caster = "player", filter = "BUFF"}
+			{ spellID = 206237, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 暗影之舞
 			{ spellID = 185422, unitID = "player", caster = "player", filter = "BUFF"},
 
