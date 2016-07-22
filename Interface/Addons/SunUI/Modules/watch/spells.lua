@@ -25,7 +25,113 @@ FG["filger_position"] = {
 }
 
 ns.watchers ={
-	["DEATHKNIGHT"] = { 		--[死骑]
+	["DEMONHUNTER"] = { 		--[恶魔猎手DH]
+		{
+			name = "玩家buff",
+			direction = "LEFT",
+			size = 28,
+			setpoint = {unpack(FG["filger_position"].playerbuff)},
+			mode = "ICON",
+			-- 痛苦使者
+			{ spellID =  212988, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 贪吃魔
+			{ spellID =  227330, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 献祭光环
+			{ spellID =  178740, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 灵魂盛宴
+			{ spellID =  207693, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 强化结界
+			{ spellID =  218256, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 黑暗
+			{ spellID =  209426, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 恶魔变形
+			{ spellID =  187827, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 恶魔尖刺
+			{ spellID =  203819, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 灵魂壁障
+			{ spellID =  227225, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 灵魂残片
+			{ spellID =  203981, unitID = "player", caster = "player", filter = "BUFF" },
+
+			-- 疾影
+			{ spellID =  212800, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 混乱之刃
+			{ spellID =  211048, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 虚空行走
+			{ spellID =  196555, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 准备就绪
+			{ spellID =  203650, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 势如破竹
+			{ spellID =  208628, unitID = "player", caster = "player", filter = "BUFF" },
+		},
+		{
+			name = "目标debuff",
+			direction = "RIGHT",
+			size = 28,
+			setpoint = {unpack(FG["filger_position"].targetdebuff)},
+			mode = "ICON",
+
+			-- 烈火烙印
+			{ spellID = 207744, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 猛烈的死亡
+			{ spellID = 212818, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 脆弱
+			{ spellID = 224509, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 烈焰咒符
+			{ spellID = 204598, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 沉默咒符
+			{ spellID = 204490, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 锁链咒符
+			{ spellID = 204843, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 悲苦咒符
+			{ spellID = 207685, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 烈火烙印
+			{ spellID = 207744, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 灵魂切削
+			{ spellID = 207407, unitID = "target", caster = "player", filter = "DEBUFF" },
+
+
+			-- 混乱新星
+			{ spellID = 179057, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 复仇回避
+			{ spellID = 178813, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 涅墨西斯
+			{ spellID = 206491, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 血滴子
+			{ spellID = 207690, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 战刃大师
+			{ spellID = 213405, unitID = "target", caster = "player", filter = "DEBUFF" },
+		},
+		{
+			name = "玩家技能CD",
+			direction = "LEFT",
+			size = 28,
+			setpoint = {unpack(FG["filger_position"].playercd)},
+			mode = "ICON",
+
+			-- 恶魔变形
+			{ spellID =  187827, filter = "CD" },
+			-- 幻影打击
+			{ spellID =  196718, filter = "CD" },
+			-- 锁链咒符
+			{ spellID =  202138, filter = "CD" },
+			-- 灵魂切割
+			{ spellID =  207407, filter = "CD" },
+
+
+			-- 物品
+			-- 手套
+			{ slotID = 10, filter = "CD" },
+			-- 腰带
+			{ slotID =  6, filter = "CD" },
+			-- 披风
+			{ slotID = 15, filter = "CD" },
+			-- 饰品
+			{ slotID = 13, filter = "CD" },
+			{ slotID = 14, filter = "CD" },
+		},
+	},
+	["DEATHKNIGHT"] = { 		--[死骑DK]
 		{
 			name = "玩家buff",
 			direction = "LEFT",
@@ -164,7 +270,7 @@ ns.watchers ={
 			{ slotID = 14, filter = "CD" },
 		},
 	},
-	["DRUID"] = {		-- [德鲁伊]
+	["DRUID"] = {		-- [德鲁伊XD]
 		{
 			name = "玩家buff",
 			direction = "LEFT",
@@ -330,7 +436,7 @@ ns.watchers ={
 			{ slotID = 14, filter = "CD" },
 		},
 	},
-	["HUNTER"] = {		-- [猎人]
+	["HUNTER"] = {		-- [猎人LR]
 		{
 			name = "玩家buff",
 			direction = "LEFT",
@@ -456,7 +562,7 @@ ns.watchers ={
 			{ slotID = 14, filter = "CD" },
 		},
 	},
-	["MAGE"] = {		--[法师]
+	["MAGE"] = {		--[法师FS]
 		{
 			name = "玩家buff",
 			direction = "LEFT",
@@ -610,7 +716,7 @@ ns.watchers ={
 			{ slotID = 14, filter = "CD" },
 		},
 	},
-	["MONK"] = {		--[武僧]
+	["MONK"] = {		--[武僧WS]
 		{
 			name = "玩家buff",
 			direction = "LEFT",
@@ -757,7 +863,7 @@ ns.watchers ={
 			{ slotID = 14, filter = "CD" },
 		},
 	},
-	["PALADIN"] = {		--[骑士]
+	["PALADIN"] = {		--[骑士QS]
 		{
 			name = "玩家buff",
 			direction = "LEFT",
@@ -906,7 +1012,7 @@ ns.watchers ={
 			{ slotID = 14, filter = "CD" },
 		},
 	},
-	["PRIEST"] = {		--[牧师]
+	["PRIEST"] = {		--[牧师MS]
 		{
 			name = "玩家buff",
 			direction = "LEFT",
@@ -1055,7 +1161,7 @@ ns.watchers ={
 			{ slotID = 14, filter = "CD" },
 		},
 	},
-	["ROGUE"] = {		--[盗贼]
+	["ROGUE"] = {		--[盗贼DZ]
 		{
 			name = "玩家buff",
 			direction = "LEFT",
@@ -1218,7 +1324,7 @@ ns.watchers ={
 			{ slotID = 14, filter = "CD" },
 		},
 	},
-	["SHAMAN"] = {		--[萨满]
+	["SHAMAN"] = {		--[萨满SM]
 		{
 			name = "玩家buff",
 			direction = "LEFT",
@@ -1367,7 +1473,7 @@ ns.watchers ={
 			{ slotID = 14, filter = "CD" },
 		},
 	},
-	["WARLOCK"] = {		--[术士]
+	["WARLOCK"] = {		--[术士SS]
 		{
 			name = "玩家buff",
 			direction = "LEFT",
@@ -1461,7 +1567,7 @@ ns.watchers ={
 			{ slotID = 14, filter = "CD" },
 		},
 	},
-	["WARRIOR"] = { 		--[战士]
+	["WARRIOR"] = { 		--[战士ZS]
 		{
 			name = "玩家buff",
 			direction = "LEFT",
