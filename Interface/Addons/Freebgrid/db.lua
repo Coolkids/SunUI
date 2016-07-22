@@ -293,6 +293,7 @@ local Indicators_class_default = {
 		["RC"] = {},
 		["BR"] = {},
 		["Cen"] = {},
+	},
 	}
 }
 
