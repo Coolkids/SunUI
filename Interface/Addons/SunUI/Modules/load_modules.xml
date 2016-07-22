@@ -5,7 +5,7 @@
   <Include file="actionbar\load_actionbar.xml"/>
   <Include file="bags\load_bags.xml"/>
   <Include file="buff\load_buff.xml"/>
-  <Include file="buffreminder\load.xml"/>
+  <!--Include file="buffreminder\load.xml"/-->
   <Include file="chat\load_chat.xml"/>
   <Include file="loot\load_loot.xml"/>
   <Include file="map\load_map.xml"/>
