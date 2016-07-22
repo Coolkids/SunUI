@@ -1,38 +1,38 @@
-ÓÉÓÚ¸öÈË¾«Á¦ÓĞÏŞËùÒÔÏÖÔÚ×ö×îĞ¡Î¬¶ÈµÄSunUIÎ¬»¤¹¤×÷
-ÏÂÃæ½éÉÜ²å¼ş×é³É
-©¸©¤Interface
-    ©À©¤Addons
-       ©À©¤!BaudErrorFrame                    ´íÎóÊÕ¼¯²å¼ş
-       ©À©¤Aurora                             ½çÃæÃÀ»¯
-       ©À©¤Freebgrid                          ÍÅ¶Ó¿ò
-       ©À©¤Freebgrid_Config                   ÍÅ¶Ó¿òÉèÖÃ
-       ©À©¤Kui_Media                          kuiĞÕÃû°æ
-       ©À©¤Kui_Nameplates                     kuiĞÕÃû°æ
-       ©À©¤Kui_Nameplates_Core                kuiĞÕÃû°æ
-       ©À©¤Kui_Nameplates_Core_Config         kuiĞÕÃû°æ
-       ©À©¤SunUI                              SunUIÖ÷Ìå
-       ©¸©¤xCT+                               xctÉËº¦ÌáÊ¾
-
-
-ÎÊ:ÎªÊ²Ã´ÒªÔö¼ÓKui_Nameplates/xCT+
-´ğ:ÒòÎª²»ÏëÔÚ»¨¾«Á¦Î¬»¤Ò»Ğ©ºÜ¸´ÔÓµÄ²å¼şËùÓĞ¾ÍÑ¡ÓÃ2¸ö×Ô¼º¾õµÃ²»´íµÄ¸øÄãÃÇ.
-  ÉèÖÃ¶¼ÓĞÍ¼ĞÎ»¯½çÃæ ²»¹ıÊÇÓ¢ÎÄ,ÔİÊ±²»»á¿¼ÂÇÈ¥ºº»¯,Èç¹û²»Ï²»¶¿ÉÒÔ×Ô¼ºÈ¥Ìæ»»µô.
-  Õâ2¸ö²å¼şµÄ¸üĞÂµØÖ·:
-  http://mods.curse.com/addons/wow/kuinameplates
-  http://mods.curse.com/addons/wow/xct-plus
-  
-ÎÊ:ÎªÊ²Ã´ÒªÓÃAurora
-´ğ:Ã¿´Î´ó°æ±¾¸üĞÂÃÀ»¯Î¬»¤ËãÊÇ×îÒªÃüµÄ,ËùÒÔ´Ó½ñÒÔºó,ÃÀ»¯¹¤×÷½»¸øÎ°´óµÄHaleth/Lightsword´óÉñÃÇÈ¥Íê³É..
-  ¸üĞÂµØÖ·:
-  http://www.wowinterface.com/downloads/info18589-Aurora.html
-
-ÎÊ:ÉÏÃæµÄ¼¸¸ö²å¼ş¶¼¿ÉÒÔ×Ô¼º¸üĞÂÃ´?
-´ğ:¿ÉÒÔ·ÅĞÄ¸üĞÂ,ÍêÈ«Ã»ÎÊÌâ,SunUI¸úËûÃÇÊÇÏà»¥¶ÀÁ¢.
-
-ÎÊ:RayWatch±¨´íÔõÃ´°ì
-´ğ:1.Èç¹ûÄÜÕı³£ÓÃÇëÎŞÊÓ
-   2.²»ÄÜÕı³£Ê¹ÓÃÇëÁªÏµÎÒ
-   3.ÎÒ¿ÉÒÔÉ¾³ıËüÃ´. ¿ÉÒÔ,É¾³ıwatchÎÄ¼ş¼Ğ
-   
-ÎÊ:ÍÆ¼öbuff/debuff¼ÆÊ±Ê¹ÓÃNugRunning
-´ğ:ÏÂÔØµØÖ·http://www.wowinterface.com/downloads/info10440-NugRunning.html
+ç”±äºä¸ªäººç²¾åŠ›æœ‰é™æ‰€ä»¥ç°åœ¨åšæœ€å°ç»´åº¦çš„SunUIç»´æŠ¤å·¥ä½œ<br/>
+ä¸‹é¢ä»‹ç»æ’ä»¶ç»„æˆ<br/>
+â””â”€Interface<br/>
+    â”œâ”€Addons<br/>
+       â”œâ”€!BaudErrorFrame                    é”™è¯¯æ”¶é›†æ’ä»¶<br/>
+       â”œâ”€Aurora                             ç•Œé¢ç¾åŒ–<br/>
+       â”œâ”€Freebgrid                          å›¢é˜Ÿæ¡†<br/>
+       â”œâ”€Freebgrid_Config                   å›¢é˜Ÿæ¡†è®¾ç½®<br/>
+       â”œâ”€Kui_Media                          kuiå§“åç‰ˆ<br/>
+       â”œâ”€Kui_Nameplates                     kuiå§“åç‰ˆ<br/>
+       â”œâ”€Kui_Nameplates_Core                kuiå§“åç‰ˆ<br/>
+       â”œâ”€Kui_Nameplates_Core_Config         kuiå§“åç‰ˆ<br/>
+       â”œâ”€SunUI                              SunUIä¸»ä½“<br/>
+       â””â”€xCT+                               xctä¼¤å®³æç¤º<br/>
+<br/>
+<br/>
+é—®:ä¸ºä»€ä¹ˆè¦å¢åŠ Kui_Nameplates/xCT+<br/>
+ç­”:å› ä¸ºä¸æƒ³åœ¨èŠ±ç²¾åŠ›ç»´æŠ¤ä¸€äº›å¾ˆå¤æ‚çš„æ’ä»¶æ‰€æœ‰å°±é€‰ç”¨2ä¸ªè‡ªå·±è§‰å¾—ä¸é”™çš„ç»™ä½ ä»¬.<br/>
+  è®¾ç½®éƒ½æœ‰å›¾å½¢åŒ–ç•Œé¢ ä¸è¿‡æ˜¯è‹±æ–‡,æš‚æ—¶ä¸ä¼šè€ƒè™‘å»æ±‰åŒ–,å¦‚æœä¸å–œæ¬¢å¯ä»¥è‡ªå·±å»æ›¿æ¢æ‰.<br/>
+  è¿™2ä¸ªæ’ä»¶çš„æ›´æ–°åœ°å€:<br/>
+  http://mods.curse.com/addons/wow/kuinameplates<br/>
+  http://mods.curse.com/addons/wow/xct-plus<br/>
+  <br/>
+é—®:ä¸ºä»€ä¹ˆè¦ç”¨Aurora<br/>
+ç­”:æ¯æ¬¡å¤§ç‰ˆæœ¬æ›´æ–°ç¾åŒ–ç»´æŠ¤ç®—æ˜¯æœ€è¦å‘½çš„,æ‰€ä»¥ä»ä»Šä»¥å,ç¾åŒ–å·¥ä½œäº¤ç»™ä¼Ÿå¤§çš„Haleth/Lightswordå¤§ç¥ä»¬å»å®Œæˆ..<br/>
+  æ›´æ–°åœ°å€:<br/>
+  http://www.wowinterface.com/downloads/info18589-Aurora.html<br/>
+<br/>
+é—®:ä¸Šé¢çš„å‡ ä¸ªæ’ä»¶éƒ½å¯ä»¥è‡ªå·±æ›´æ–°ä¹ˆ?<br/>
+ç­”:å¯ä»¥æ”¾å¿ƒæ›´æ–°,å®Œå…¨æ²¡é—®é¢˜,SunUIè·Ÿä»–ä»¬æ˜¯ç›¸äº’ç‹¬ç«‹.<br/>
+<br/>
+é—®:RayWatchæŠ¥é”™æ€ä¹ˆåŠ<br/>
+ç­”:1.å¦‚æœèƒ½æ­£å¸¸ç”¨è¯·æ— è§†<br/>
+   2.ä¸èƒ½æ­£å¸¸ä½¿ç”¨è¯·è”ç³»æˆ‘<br/>
+   3.æˆ‘å¯ä»¥åˆ é™¤å®ƒä¹ˆ. å¯ä»¥,åˆ é™¤watchæ–‡ä»¶å¤¹<br/>
+   <br/>
+é—®:æ¨èbuff/debuffè®¡æ—¶ä½¿ç”¨NugRunning<br/>
+ç­”:ä¸‹è½½åœ°å€http://www.wowinterface.com/downloads/info10440-NugRunning.html<br/>
