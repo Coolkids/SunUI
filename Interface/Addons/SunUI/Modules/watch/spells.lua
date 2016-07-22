@@ -1470,7 +1470,7 @@ ns.watchers ={
 			mode = "ICON",
 
 			-- 命令怒吼
-			{ spellID =  97436, unitID = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  97463, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 压制!
 			{ spellID =  60503, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 粉碎防御
@@ -2008,7 +2008,7 @@ ns.watchers ={
 			{ spellID =  77764, unitID = "player", caster = "all",    filter = "BUFF"},
 			{ spellID =  77761, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 命令怒吼
-			{ spellID =  97436, unitID = "player", caster = "all",    filter = "BUFF"},
+			{ spellID =  97463, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 灵魂链接图腾
 			{ spellID =  98007, unitID = "player", caster = "all",    filter = "BUFF"}, 
 			-- 风行图腾
