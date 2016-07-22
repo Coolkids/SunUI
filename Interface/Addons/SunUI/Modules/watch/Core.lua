@@ -10,7 +10,7 @@ local watcherPrototype = {}
 local _G = _G
 local UnitBuff = UnitBuff
 local UnitDebuff = UnitDebuff
-local CooldownFrame_SetTimer = CooldownFrame_SetTimer
+local CooldownFrame_Set = CooldownFrame_Set
 
 local function Round(v, decimals)
 	if not decimals then decimals = 0 end
@@ -116,10 +116,10 @@ function watcherPrototype:UpdateButton(button, index, icon, count, duration, exp
 	if button.cooldown then
 		if filter:find("CD") then
 			button.cooldown:SetReverse(false)
-			CooldownFrame_SetTimer(button.cooldown, expires, duration, 1)
+			CooldownFrame_Set(button.cooldown, expires, duration, 1)
 		else
 			button.cooldown:SetReverse(true)
-			CooldownFrame_SetTimer(button.cooldown, expires - duration, duration, 1)
+			CooldownFrame_Set(button.cooldown, expires - duration, duration, 1)
 		end
 	end
 	if filter:find("CD") then

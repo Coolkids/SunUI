@@ -1,4 +1,18 @@
-﻿v3.2.5
+﻿v3.2.9
+Nothing seems broken, TOC bump.
+
+v3.2.8
+*Might* have somehow not added Mogu runes in the last version. If I didn't, I'm an idiot. But added now.
+Reworked the purchase loop. Now there's a ~0.5 second delay in between purchases, should prevent any "Item is busy" issues.
+
+v3.2.7
+Added Mogu runes support. Now should fix purchasing currencies with currencies.
+
+v3.2.6
+Fixed purchasing currencies with currencies. Hopefully at least.
+Minor adjustments, tiny bit of prep for a possible future improvement.
+
+v3.2.5
 Updated TOC.
 
 v3.2.4

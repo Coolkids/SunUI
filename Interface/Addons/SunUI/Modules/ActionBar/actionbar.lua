@@ -771,8 +771,7 @@ function AB:Initialize()
 	self:CreateStanceBar()
 	self:CreateExitVehicle()
 	self:CreateExitTaxi()
-	self:CreateDraenorZoneAbilityBar()
-
+	--self:CreateDraenorZoneAbilityBar() 未知
 	self:UpdateAutoHide()
 	self:CreateCooldown()
 	self:initCooldownFlash()

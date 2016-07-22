@@ -278,7 +278,7 @@ local StartTimer = function(name, spellId, cd)
 		bar:SetNormalTexture(icon)
 		bar:GetNormalTexture():SetTexCoord(0.1, 0.9, 0.1, 0.9)
 		bar.cooldown:SetReverse(false)
-		CooldownFrame_SetTimer(bar.cooldown, GetTime(), cd, 1)
+		CooldownFrame_Set(bar.cooldown, GetTime(), cd, 1)
 	end
 
 	bar:EnableMouse(true)

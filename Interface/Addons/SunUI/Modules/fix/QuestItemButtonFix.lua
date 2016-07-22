@@ -63,7 +63,7 @@ end
 function Fix_ItemButton_UpdateCooldown(itemButton)
 	local start, duration, enable = GetQuestLogSpecialItemCooldown(itemButton.questLogIndex)
 	if ( start ) then
-		CooldownFrame_SetTimer(itemButton.cooldown, start, duration, enable)
+		CooldownFrame_Set(itemButton.cooldown, start, duration, enable)
 		if ( duration > 0 and enable == 0 ) then
 			SetItemButtonTextureVertexColor(itemButton, 0.4, 0.4, 0.4)
 		else

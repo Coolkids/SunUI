@@ -89,9 +89,9 @@ local function ApplyChatStyle(self)
 	_G[f.."EditBoxLanguage"]:StripTextures()
 	A:CreateBD(_G[f.."EditBoxLanguage"], 0.6)
 	local x=({_G[f.."EditBox"]:GetRegions()})
-	x[9]:SetAlpha(0)
-	x[10]:SetAlpha(0)
-	x[11]:SetAlpha(0)
+	for i=5,#x do
+    x[i]:SetAlpha(0)
+	end
 
 	A:CreateBD(self.editBox)
 

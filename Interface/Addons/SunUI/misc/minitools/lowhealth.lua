@@ -15,14 +15,16 @@ f.tex:SetBlendMode("ADD")
 
 f.tex.anim = f.tex:CreateAnimationGroup()
 
-f.tex.anim.fadeout = f.tex.anim:CreateAnimation("ALPHA")
-f.tex.anim.fadeout:SetChange(-1)
+f.tex.anim.fadeout = f.tex.anim:CreateAnimation("ALPHA", "FadeOut")
 f.tex.anim.fadeout:SetOrder(1)
+f.tex.anim.fadeout:SetFromAlpha(1)
+f.tex.anim.fadeout:SetToAlpha(0)
 f.tex.anim.fadeout:SetDuration(0.5)
 
-f.tex.anim.fadein = f.tex.anim:CreateAnimation("ALPHA")
-f.tex.anim.fadein:SetChange(1)
+f.tex.anim.fadein = f.tex.anim:CreateAnimation("ALPHA", "FadeIn")
 f.tex.anim.fadein:SetOrder(2)
+f.tex.anim.fadein:SetFromAlpha(0)
+f.tex.anim.fadein:SetToAlpha(1)
 f.tex.anim.fadein:SetDuration(0.5)
 
 f.tex.anim:SetLooping("REPEAT")

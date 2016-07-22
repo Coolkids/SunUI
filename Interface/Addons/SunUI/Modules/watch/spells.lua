@@ -1064,7 +1064,7 @@ ns.watchers ={
 			mode = "ICON",
 
 			-- 消失
-			{ spellID =  11327, unitID = "player", caster = "player", filter = "BUFF"}
+			{ spellID =  11327, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 闪避
 			{ spellID =   5277, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 疾跑

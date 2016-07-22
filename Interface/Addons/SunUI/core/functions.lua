@@ -1,8 +1,8 @@
 ﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 local LSM = LibStub("LibSharedMedia-3.0")
-
+local Unfit = LibStub("Unfit-1.0")
 S["RegisteredModules"] = {}
-S.resolution           = GetCVar("gxResolution")
+S.resolution           = ({GetScreenResolutions()})[GetCurrentResolution()] or GetCVar("gxWindowedResolution")
 S.screenheight         = tonumber(string.match(S.resolution, "%d+x(%d+)"))
 S.screenwidth          = tonumber(string.match(S.resolution, "(%d+)x+%d"))
 S.mult                 = 1
@@ -120,7 +120,7 @@ function S:UIScale()
 		S.ResScale = 1
 	end
 
-	self.mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/self.global.general.uiscale
+	self.mult = 768/string.match(S.resolution, "%d+x(%d+)")/self.global.general.uiscale
 end
 
 function S:Scale(x)
@@ -495,7 +495,7 @@ function S:GetScreenQuadrant(frame)
 
 	return point
 end
-
+--[[
 local Unusable
 
 if S.myclass == "DEATHKNIGHT" then
@@ -526,7 +526,7 @@ for class = 1, 2 do
 	local subs = {GetAuctionItemSubClasses(class)}
 	for i, subclass in ipairs(Unusable[class]) do
 		if subs[subclass] then
-			Unusable[subs[subclass]] = true
+			Unusable[subs[subclass\]\] = true
 		end
 	end
 	Unusable[class] = nil
@@ -544,6 +544,15 @@ function S:IsItemUnusable(...)
 		local subclass, _, slot = select(7, GetItemInfo(...))
 		return S:IsClassUnusable(subclass, slot)
 	end
+end
+--]]
+
+function S:IsClassUnusable(subclass, slot)
+	return Unfit:IsClassUnusable(S.myclass, subclass, slot)
+end
+
+function S:IsItemUnusable(...)
+	return Unfit:IsClassUnusable(...)
 end
 
 function S:AddBlankTabLine(cat, ...)
@@ -807,4 +816,22 @@ function S:CheckChat(warning)
 		return "PARTY"
 	end
 	return "SAY"
+end
+
+function S:GetSpell(k)
+  if GetSpellInfo(k) then
+    return GetSpellInfo(k)
+  else
+    S:Print("法术ID无效", k)
+    return ""
+  end
+end
+
+function S:GetSpell(k)
+  if GetSpellInfo(k) then
+    return GetSpellInfo(k)
+  else
+    S:Print("法术ID无效", k)
+    return k
+  end
 end

@@ -2,7 +2,6 @@
 local A = S:NewModule("Skins", "AceEvent-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
 A.modName = L["插件美化"]
-
 A.SkinFuncs = {}
 A.SkinFuncs["SunUI"] = {}
 

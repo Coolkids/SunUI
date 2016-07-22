@@ -229,7 +229,7 @@ function B:UpdateSlot(bagID, slotID)
 	
 	local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
 	
-	CooldownFrame_SetTimer(slot.cooldown, start, duration, enable)
+	CooldownFrame_Set(slot.cooldown, start, duration, enable)
 	if duration > 0 then
 		slot.cooldown:Show()
 	else
@@ -388,7 +388,7 @@ function B:UpdateCooldowns()
 	for _, bagID in ipairs(self.BagIDs) do
 		for slotID = 1, GetContainerNumSlots(bagID) do
 			local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
-			CooldownFrame_SetTimer(self.Bags[bagID][slotID].cooldown, start, duration, enable)
+			CooldownFrame_Set(self.Bags[bagID][slotID].cooldown, start, duration, enable)
 			if duration > 0 then
 				self.Bags[bagID][slotID].cooldown:Show()
 			else
@@ -744,7 +744,7 @@ function B:UpdateReagentSlot(slotID)
 	
 	local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
 	
-	CooldownFrame_SetTimer(slot.Cooldown, start, duration, enable)
+	CooldownFrame_Set(slot.Cooldown, start, duration, enable)
 	if duration > 0 then
 		slot.Cooldown:Show()
 	else

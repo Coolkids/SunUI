@@ -153,6 +153,7 @@ function MT:FixDurabilityFrame()
 	DurabilityFrame.OnShow  = function() end
 end
 --头盔披风
+--[[
 function MT:CreateHELM()
 	local GameTooltip = GameTooltip
 	local helmcb = CreateFrame("CheckButton", nil, PaperDollFrame)
@@ -199,6 +200,7 @@ function MT:CreateHELM()
 	A:ReskinCheck(helmcb)
 	A:ReskinCheck(cloakcb)
 end
+]]
 function MT:banRaidMessage()
 	if self.db.HideRaidWarn then
 		_G["RaidWarningFrame"]:ClearAllPoints()

@@ -206,7 +206,7 @@ function AB:UpdateShapeshiftCDAlpha()
 	end
 end
 
-function AB:CooldownFrame_SetTimer(self, start, duration, enable, charges, maxCharges)
+function AB:CooldownFrame_Set(self, start, duration, enable, charges, maxCharges)
 	if not self.ex then
 		self.ex = CreateFrame("Cooldown", nil, self)
 		self.ex:SetAllPoints(self)
@@ -231,5 +231,5 @@ function AB:CreateCooldown()
 		self:SecureHook(cooldown, "SetCooldown", "OnSetCooldown")
 	end
 
-	self:SecureHook("CooldownFrame_SetTimer")
+	self:SecureHook("CooldownFrame_Set")
 end

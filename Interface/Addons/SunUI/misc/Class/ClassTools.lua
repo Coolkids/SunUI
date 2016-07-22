@@ -142,7 +142,7 @@ function CT:SPELL_UPDATE_COOLDOWN()
 	end
 	if self.Frame.Cooldown then
 		self.Frame.Cooldown:SetReverse(false)
-		CooldownFrame_SetTimer(self.Frame.Cooldown, start, duration, 1)
+		CooldownFrame_Set(self.Frame.Cooldown, start, duration, 1)
 	end
 	self:UNIT_HEALTH("", "target" )
 end

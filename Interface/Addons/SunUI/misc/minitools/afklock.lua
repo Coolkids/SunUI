@@ -1,8 +1,7 @@
 ﻿local S, L, P = unpack(select(2, ...)) --Import: Engine, Locales, ProfileDB, local
 
 local AL = S:GetModule("MiniTools")
-local resolution = GetCVar('gxResolution')
-local screenheight = tonumber(string.match(resolution, "%d+x(%d+)"))
+local screenheight = tonumber(string.match(S.resolution, "%d+x(%d+)"))
 local isAfk = false
 local altztop = CreateFrame("Frame", nil, WorldFrame)
 local outaltz = CreateFrame("Frame", nil, altztop)

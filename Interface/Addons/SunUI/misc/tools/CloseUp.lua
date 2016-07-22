@@ -1,4 +1,6 @@
-﻿local _G = getfenv(0)
+--http://mods.curse.com/addons/wow/close-up
+
+local _G = getfenv(0)
 local GetCursorPosition = GetCursorPosition
 local function nada() end
 local Model_OnMouseDown = _G.Model_OnMouseDown
@@ -88,6 +90,18 @@ local function Apply(model, w, h, x, y, sigh, norotate)
 		if _G[model.."RotateLeftButton"] then
 			_G[model.."RotateLeftButton"]:Hide()
 		end
+		if gmodel.RotateRightButton then
+			gmodel.RotateRightButton:Hide()
+		end
+		if gmodel.RotateLeftButton then
+			gmodel.RotateLeftButton:Hide()
+		end
+	end
+	if _G[model.."ControlFrame"] then
+		_G[model.."ControlFrame"]:Hide()
+		_G[model.."ControlFrame"]:EnableMouse(false)
+		_G[model.."ControlFrame"]:SetScript("OnEnter", nada)
+		_G[model.."ControlFrame"].Show = nada
 	end
 	if w then gmodel:SetWidth(w) end
 	if h then gmodel:SetHeight(h) end
@@ -145,14 +159,27 @@ local function DoAH()
 	end)
 	local a,b,c,d,e = tb:GetPoint()
 	tb:SetPoint(a,b,c,d,e-30)
-	newbutton("CloseUpAHResetButton", du, "R", 20, 22, nil, "Reset", function() du:Dress() end):SetPoint("RIGHT", tb, "LEFT", 0, 0)
+	newbutton("CloseUpAHResetButton", du, "R", 20, 22, nil, "Reset", function() Model_Reset(du) end):SetPoint("RIGHT", tb, "LEFT", 0, 0)
 	newbutton("CloseUpAHUndressButton", du, "U", 20, 22, nil, "Undress", function() du:Undress() end):SetPoint("LEFT", tb, "RIGHT", 0, 0)
 	ToggleBG(true)
+	if _G["SideDressUpModelControlFrame"] then
+		_G["SideDressUpModelControlFrame"]:Hide()
+		_G["SideDressUpModelControlFrame"]:EnableMouse(false)
+		_G["SideDressUpModelControlFrame"]:SetScript("OnEnter", nada)
+		_G["SideDressUpModelControlFrame"].Show = nada
+	end
 end
-local function DoIns()
-	Apply("InspectModelFrame")
+local function DoPet()
+	if PetJournalPetCardModelFrame then
+		Apply("PetJournalPetCardModelFrame")
+		if _G["MountJournal"] and _G["MountJournal"].MountDisplay and _G["MountJournal"].MountDisplay.ModelFrame then
+			if not MountJournalModelFrame then
+				MountJournalModelFrame = _G["MountJournal"].MountDisplay.ModelFrame
+			end
+			Apply("MountJournalModelFrame")
+		end
+	end
 end
-
 -- now apply the changes
 -- need an event frame since 2 of the models are from LoD addons
 local f = CreateFrame("Frame")
@@ -161,12 +188,19 @@ f:SetScript("OnEvent", function(this, event, a1)
 	if a1 == "Blizzard_AuctionUI" then
 		DoAH()
 	elseif a1 == "Blizzard_InspectUI" then
-		DoIns()
+		Apply("InspectModelFrame")
+	elseif a1 == "Blizzard_PetJournal" then
+		DoPet()
 	end
 end)
 -- in case Blizzard_AuctionUI or Blizzard_InspectUI were loaded early
-if AuctionDressUpModel then DoAH() end
-if InspectModelFrame then DoIns() end
+if AuctionDressUpModel then
+	DoAH()
+end
+if InspectModelFrame then 
+	Apply("InspectModelFrame")
+end
+DoPet()
 
 -- main dressing room model with undress buttons
 do
@@ -186,7 +220,11 @@ do
 		m:Show()
 		ToggleBG(true)
 	end)
-	
+	if _G["DressUpFrameResetButton"] and _G["DressUpModel"] then
+		_G["DressUpFrameResetButton"]:SetScript("OnClick", function()
+			Model_Reset(_G["DressUpModel"])
+		end)
+	end
 	-- convert default close button into set target button
 	newbutton(nil, nil, "Tar", w, h, tb, "Target", function()
 		if UnitExists("target") and UnitIsVisible("target") then 
@@ -212,9 +250,11 @@ Apply("CharacterModelFrame")
 Apply("TabardModel", nil, nil, nil, nil, "TabardCharacterModel")
 Apply("PetModelFrame")
 Apply("PetStableModel")
-Apply("SpellBookCompanionModelFrame")
-Apply("TransmogrifyModelFrame")
 Apply("QuestNPCModel", nil, nil, nil, nil, nil, true)
 Apply("TutorialNPCModel", nil, nil, nil, nil, nil, true)
-PetPaperDollPetInfo:SetFrameStrata("HIGH")
+if _G["PetPaperDollPetInfo"] then
+	PetPaperDollPetInfo:SetFrameStrata("HIGH")
+end
 Apply("CompanionModelFrame")
+
+

@@ -32,7 +32,7 @@ A.heal = {
 	[62618] = true,  -- 真言术:障
 	[98008] = true,  -- 灵魂链接图腾
 	[31821] = true,  -- 虔诚光环
-	[724]   = true,  -- 光明之泉
+	--[724]   = true,  -- 光明之泉
 	[15286] = true,  -- 吸血鬼的拥抱 *
 }
 A.cl = {		
@@ -45,9 +45,9 @@ A.givelist = {
 	[33206]  = true, 	-- 痛苦压制
 	[47788]  = true, 	-- 守护之魂
 	[1022]   = true,	-- 保护之手
-	[1038]   = true,	-- 拯救之手
+	--[1038]   = true,	-- 拯救之手
 	[6940]   = true,	-- 牺牲之手
-	[114039] = true,	-- 纯净之手
+	--[114039] = true,	-- 纯净之手
 	[1044]   = true,	-- 自由之手
 }
 A.resurrect = {
@@ -127,38 +127,38 @@ end
 function A:Info()
 	local baomingstring = L["保命技能通告"]..":\n"
 	for k,v in pairs(self.baoming) do
-		baomingstring = baomingstring..GetSpellInfo(k)..", "
+		baomingstring = baomingstring..S:GetSpell(k)..", "
 	end
 	baomingstring = baomingstring.."\n"
 	
 	local healstring = L["团队减伤通告"]..":\n"
 	for k,v in pairs(self.heal) do
-		healstring = healstring..GetSpellInfo(k)..", "
+		healstring = healstring..S:GetSpell(k)..", "
 	end
 	healstring = healstring.."\n"
 	
 	local clstring = L["治疗大招通告"]..":\n"
 	for k,v in pairs(self.cl) do
-		clstring = clstring..GetSpellInfo(k)..", "
+		clstring = clstring..S:GetSpell(k)..", "
 	end
 	clstring = clstring.."\n"
 	
 	
 	local giveliststring = L["给出大招通告"]..":\n"
 	for k,v in pairs(self.givelist) do
-		giveliststring = giveliststring..GetSpellInfo(k)..", "
+		giveliststring = giveliststring..S:GetSpell(k)..", "
 	end
 	giveliststring = giveliststring.."\n"
 	
 	local restring = L["复活技能通告"]..":\n"
 	for k,v in pairs(self.resurrect) do
-		restring = restring..GetSpellInfo(k)..", "
+		restring = restring..S:GetSpell(k)..", "
 	end
 	restring = restring.."\n"
 	
 	local misstring = L["误导通告"]..":\n"
 	for k,v in pairs(self.mislead) do
-		misstring = misstring..GetSpellInfo(k)..", "
+		misstring = misstring..S:GetSpell(k)..", "
 	end
 	misstring = misstring.."\n"
 	return baomingstring..healstring..clstring..giveliststring..restring..misstring

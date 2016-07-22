@@ -25,23 +25,27 @@ local function CreateFlash()
 	
 	PMinimap.texture.anim = PMinimap.texture:CreateAnimationGroup()
 	
-	PMinimap.texture.anim.fadeout = PMinimap.texture.anim:CreateAnimation("ALPHA")
-	PMinimap.texture.anim.fadeout:SetChange(-1)
+	PMinimap.texture.anim.fadeout = PMinimap.texture.anim:CreateAnimation("ALPHA", "FadeOut")
+	PMinimap.texture.anim.fadeout:SetFromAlpha(1)
+	PMinimap.texture.anim.fadeout:SetToAlpha(0)
 	PMinimap.texture.anim.fadeout:SetOrder(1)
 	PMinimap.texture.anim.fadeout:SetDuration(3)
 
-	PMinimap.texture.anim.fade = PMinimap.texture.anim:CreateAnimation("ALPHA")
-	PMinimap.texture.anim.fade:SetChange(0)
+	PMinimap.texture.anim.fade = PMinimap.texture.anim:CreateAnimation("ALPHA", "FadeOut")
+	PMinimap.texture.anim.fade:SetFromAlpha(0)
+	PMinimap.texture.anim.fade:SetToAlpha(0)
 	PMinimap.texture.anim.fade:SetOrder(2)
 	PMinimap.texture.anim.fade:SetDuration(2)
 	
-	PMinimap.texture.anim.fadein = PMinimap.texture.anim:CreateAnimation("ALPHA")
-	PMinimap.texture.anim.fadein:SetChange(1)
+	PMinimap.texture.anim.fadein = PMinimap.texture.anim:CreateAnimation("ALPHA", "FadeIn")
+	PMinimap.texture.anim.fadein:SetFromAlpha(0)
+	PMinimap.texture.anim.fadein:SetToAlpha(1)
 	PMinimap.texture.anim.fadein:SetOrder(3)
 	PMinimap.texture.anim.fadein:SetDuration(3)
 	
-	PMinimap.texture.anim.fade2 = PMinimap.texture.anim:CreateAnimation("ALPHA")
-	PMinimap.texture.anim.fade2:SetChange(0)
+	PMinimap.texture.anim.fade2 = PMinimap.texture.anim:CreateAnimation("ALPHA", "FadeIn")
+	PMinimap.texture.anim.fade2:SetFromAlpha(1)
+	PMinimap.texture.anim.fade2:SetToAlpha(1)
 	PMinimap.texture.anim.fade2:SetOrder(4)
 	PMinimap.texture.anim.fade2:SetDuration(2)
 	
@@ -274,52 +278,6 @@ local function Difficultyflag()
 	end
 	rd:SetScript("OnEvent", diff)
 end
-
---团队工具
---[[function MAP:CreateRaidTools()
-	local wm = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
-	wm:SetParent(UIParent) 
-	wm:SetFrameLevel(3)
-	wm:ClearAllPoints() 
-	wm:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", -5, -5)
-	wm:SetSize(20, 20)
-	
-	CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButtonLeft:SetAlpha(0) 
-	CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButtonMiddle:SetAlpha(0) 
-	CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButtonRight:SetAlpha(0) 
-	wm:RegisterEvent("PLAYER_ENTERING_WORLD") 
-	wm:RegisterEvent("GROUP_ROSTER_UPDATE") 
-	wm:HookScript("OnEvent", function(self) 
-		local raid =  IsInRaid()
-		if (raid and (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player"))) or (GetNumSubgroupMembers() > 0 and not raid) then 
-			self:Show()
-		else 
-			--test
-			self:Hide() 
-		end 
-	end) 
-
-	local wmmenuFrame = CreateFrame("Frame", "wmRightClickMenu", UIParent, "UIDropDownMenuTemplate") 
-	local wmmenuList = { 
-	{text = READY_CHECK, 
-	func = function() DoReadyCheck() end}, 
-	{text = ROLE_POLL, 
-	func = function() InitiateRolePoll() end}, 
-	{text = CONVERT_TO_RAID, 
-	func = function() ConvertToRaid() end}, 
-	{text = CONVERT_TO_PARTY, 
-	func = function() ConvertToParty() end}, 
-	} 
-
-	wm:SetScript('OnMouseUp', function(self, button) 
-		wm:StopMovingOrSizing() 
-		if (button=="RightButton") then 
-			EasyMenu(wmmenuList, wmmenuFrame, "cursor", -150, 0, "MENU", 2) 
-		end 
-	end)
-	local A = S:GetModule("Skins")
-	A:Reskin(wm, false, true)
-end ]]
 
 function MAP:Initialize()
 	SkinMiniMap()
