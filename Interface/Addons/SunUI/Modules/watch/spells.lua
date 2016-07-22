@@ -34,39 +34,58 @@ ns.watchers ={
 			mode = "ICON",
 
 			-- 反魔法护罩
-			{ spellID =  48707, unitId = "player", caster = "player", filter = "BUFF" },
+			{ spellID =  48707, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 冰封之韧
-			{ spellID =  48792, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 巫妖之躯
-			{ spellID =  49039, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 不洁之力
-			{ spellID =  53365, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 杀戮机器
-			{ spellID =  51124, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 冰霜之柱
-			{ spellID =  51271, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 冰冻之雾
-			{ spellID =  59052, unitId = "player", caster = "player", filter = "BUFF" },
+			{ spellID =  48792, unitID = "player", caster = "player", filter = "BUFF" },
+
+			-- 白骨风暴
+			{ spellID = 194844, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 白骨之盾
-			{ spellID =  49222, unitId = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 185181, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 吸血鬼之血
-			{ spellID =  55233, unitId = "player", caster = "player", filter = "BUFF" },
+			{ spellID =  55233, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 符文分流
-			{ spellID = 171049, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 鲜血护盾
-			{ spellID =  77535, unitId = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 194679, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 赤色天灾
+			{ spellID =  81141, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 符文刃舞
-			{ spellID =  81256, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 血之气息
-			{ spellID =  50421, unitId = "player", caster = "player", filter = "BUFF" },
+			{ spellID =  81256, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 灵魂呑噬
+			{ spellID = 213003, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 鲜血护盾
+			{ spellID =  77535, unitID = "player", caster = "player", filter = "BUFF" },
+
 			-- 末日突降
-			{ spellID =  81340, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 黑暗突变
-			{ spellID =  63560, unitId = "pet",    caster = "player", filter = "BUFF" },
-			-- 暗影灌注
-			{ spellID =  91342, unitId = "pet",    caster = "player", filter = "BUFF" },
-			-- 大地之墓的意志
-			{ spellID = 157335, unitId = "player", caster = "player", filter = "DEBUFF"},
+			{ spellID =  81340, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 血肉之盾
+			{ spellID = 207319, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 亵渎
+			{ spellID = 218100, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 坏疽
+			{ spellID = 216974, unitID = "player", caster = "player", filter = "BUFF" },
+
+			-- 邪能之风
+			{ spellID = 187147, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 冷酷严冬
+			{ spellID = 196770, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 寒冰之盾
+			{ spellID = 207203, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 不洁之力
+			{ spellID =  53365, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 杀戮机器
+			{ spellID =  51124, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 湮灭
+			{ spellID = 207256, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 白霜
+			{ spellID =  59052, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 冰霜之柱
+			{ spellID =  51271, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 风暴汇聚
+			{ spellID = 211805, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 冰冻灵魂
+			{ spellID = 204957, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 冰冷之爪
+			{ spellID = 194879, unitID = "player", caster = "player", filter = "BUFF" },
 		},
 		{
 			name = "目标debuff",
@@ -75,24 +94,41 @@ ns.watchers ={
 			setpoint = {unpack(FG["filger_position"].targetdebuff)},
 			mode = "ICON",
 
-			-- 血之疫病
-			{ spellID =  55078, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 冰霜疫病
-			{ spellID =  55095, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 死疽
-			{ spellID = 155159, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 亵渎
-			{ spellID = 156004, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 灵魂收割(鲜血)
-			{ spellID = 114866, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 灵魂收割(邪恶)
-			{ spellID = 130736, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 灵魂收割(冰霜)
-			{ spellID = 130735, unitId = "target", caster = "player", filter = "DEBUFF" },
 			-- 窒息
-			{ spellID = 108194, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 黑暗模拟
-			{ spellID =  77606, unitId = "target", caster = "player", filter = "DEBUFF" },
+			{ spellID = 211562, unitID = "target", caster = "player", filter = "DEBUFF" },
+
+			-- 灵魂收割
+			{ spellID = 130736, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 诸界之灾
+			{ spellID = 191748, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 溃烂之伤
+			{ spellID = 194310, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 传染
+			{ spellID = 191728, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 传染
+			{ spellID = 191729, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 死亡
+			{ spellID = 191730, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 恶性瘟疫
+			{ spellID = 191587, unitID = "target", caster = "player", filter = "DEBUFF" },
+
+			-- 血之疫病
+			{ spellID =  55078, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 血之镜像
+			{ spellID = 206997, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 鲜血印记
+			{ spellID = 206940, unitID = "target", caster = "player", filter = "DEBUFF" },
+
+			-- 冰霜疫病
+			{ spellID =  55095, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 锋锐之霜
+			{ spellID =  51714, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 凛冬将至
+			{ spellID = 221794, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 苍白行者
+			{ spellID = 212764, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 迷惑
+			{ spellID = 207167, unitID = "target", caster = "player", filter = "DEBUFF" },
 		},
 		{
 			name = "玩家技能CD",
@@ -103,8 +139,6 @@ ns.watchers ={
 
 			-- 枯萎凋零
 			{ spellID =  43265, filter = "CD" },
-			-- 吸血瘟疫
-			{ spellID = 123693, filter = "CD" },
 			-- 召唤石像鬼
 			{ spellID =  49206, filter = "CD" },
 			-- 复活盟友
@@ -139,67 +173,72 @@ ns.watchers ={
 			mode = "ICON",
 
 			-- 化身：生命之树
-			{ spellID = 117679, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID = 117679, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 化身：艾露恩之眷
-			{ spellID = 102560, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID = 102560, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 化身：丛林之王
-			{ spellID = 102543, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 化身：乌索克之子
-			{ spellID = 102558, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 生存本能
-			{ spellID =  61336, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 树皮术
-			{ spellID =  22812, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 野蛮防御(熊)
-			{ spellID = 132402, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 尖牙与利爪(熊)
-			{ spellID = 135286, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 粉碎(熊)
-			{ spellID = 158792, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 原始愈合(熊)
-			{ spellID = 177969, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 巨熊之力(熊)
-			{ spellID = 159233, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 鬃毛倒竖(熊)
-			{ spellID = 155835, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 野蛮咆哮(猫)
-			{ spellID =  52610, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 野蛮咆哮雕文(猫)
-			{ spellID = 174544, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 野性之心(猫)
-			{ spellID = 108293, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 掠食者的迅捷(猫)
-			{ spellID =  69369, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 猛虎之怒(猫)
-			{ spellID =   5217, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 狂暴
-			{ spellID = 106951, unitId = "player", caster = "player", filter = "BUFF" },
-			{ spellID =  50334, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 超凡之盟
-			{ spellID = 112071, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 星辰坠落
-			{ spellID =  48505, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 落日余晖
-			{ spellID = 155592, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 月光增效
-			{ spellID = 164547, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 日光增效
-			{ spellID = 164545, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 回春雕文
-			{ spellID =  96206, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 节能施法
-			{ spellID =  16870, unitId = "player", caster = "player", filter = "BUFF" },
-			{ spellID = 135700, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 自然迅捷
-			{ spellID = 132158, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 相生
-			{ spellID = 100977, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 铁木树皮
-			{ spellID = 102342, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 自然的守护
-			{ spellID = 124974, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID = 102543, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 野性本能
+			{ spellID = 210649, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 化身：乌索克的守护者
+			{ spellID = 102558, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 急奔
-			{ spellID =   1850, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID =   1850, unitID = "player", caster = "player", filter = "BUFF"},
+
+			-- 树皮术
+			{ spellID =  22812, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 加尼尔的精华
+			{ spellID = 208253, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 铁木树皮
+			{ spellID = 102342, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 激活
+			{ spellID =  29166, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 节能施法
+			{ spellID =  16870, unitID = "player", caster = "player", filter = "BUFF"},
+			{ spellID = 135700, unitID = "player", caster = "player", filter = "BUFF"},
+
+			-- 血污毛皮
+			{ spellID = 201671, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 铁鬃
+			{ spellID = 192081, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 裂伤(熊)
+			{ spellID =  93622, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 乌索尔印记
+			{ spellID = 192083, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 生存本能
+			{ spellID =  61336, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 沉睡者之怒(神器)
+			{ spellID = 200851, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 艾露恩的卫士
+			{ spellID = 213680, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 狂奔怒吼
+			{ spellID =  77761, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 热血咆哮
+			{ spellID = 214998, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 粉碎
+			{ spellID = 158792, unitID = "player", caster = "player", filter = "BUFF"},
+
+			-- 狂奔怒吼
+			{ spellID =  77764, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 掠食者的迅捷(猫)
+			{ spellID =  69369, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 猛虎之怒(猫)
+			{ spellID =   5217, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 阿莎曼的能量
+			{ spellID = 210583, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 血之气息(猫)
+			{ spellID = 210664, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 野蛮咆哮(猫)
+			{ spellID =  52610, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 血腥爪击(猫)
+			{ spellID = 145152, unitID = "player", caster = "player", filter = "BUFF"},
+
+			-- 月光增效
+			{ spellID = 164547, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 日光增效
+			{ spellID = 164545, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 艾露恩的战士
+			{ spellID = 202425, unitID = "player", caster = "player", filter = "BUFF"},
 		},
 		{
 			name = "目标debuff",
@@ -209,53 +248,54 @@ ns.watchers ={
 			mode = "ICON",
 
 			-- 生命绽放
-			{ spellID =  33763, unitId = "target", caster = "player", filter = "BUFF"  },
+			{ spellID =  33763, unitID = "target", caster = "player", filter = "BUFF"  },
 			-- 野性成长
-			{ spellID =  48438, unitId = "target", caster = "player", filter = "BUFF"  },
+			{ spellID =  48438, unitID = "target", caster = "player", filter = "BUFF"  },
 			-- 回春术
-			{ spellID =    774, unitId = "target", caster = "player", filter = "BUFF"  },
+			{ spellID =    774, unitID = "target", caster = "player", filter = "BUFF"  },
 			-- 回春术(萌芽)
-			{ spellID = 155777, unitId = "target", caster = "player", filter = "BUFF" },
+			{ spellID = 155777, unitID = "target", caster = "player", filter = "BUFF"  },
 			-- 愈合
-			{ spellID =   8936, unitId = "target", caster = "player", filter = "BUFF"  },
+			{ spellID =   8936, unitID = "target", caster = "player", filter = "BUFF"  },
 			-- 生命之种
-			{ spellID =  48504, unitId = "target", caster = "player", filter = "BUFF"  },
+			{ spellID =  48504, unitID = "target", caster = "player", filter = "BUFF"  },
 			-- 塞纳里奥结界
-			{ spellID = 102351, unitId = "target", caster = "player", filter = "BUFF"  },
+			{ spellID = 102351, unitID = "target", caster = "player", filter = "BUFF"  },
 			-- 铁木树皮
-			{ spellID = 102342, unitId = "target", caster = "player", filter = "BUFF"  },
-			-- 挫志咆哮(熊)
-			{ spellID =     99, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 割伤(熊)
-			{ spellID =  33745, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 割裂(猫)
-			{ spellID =   1079, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 斜掠(猫)
-			{ spellID = 155722, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 割碎(猫)
-			{ spellID =  22570, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID = 102342, unitID = "target", caster = "player", filter = "BUFF"  },
+			-- 春暖花开
+			{ spellID = 207386, unitID = "target", caster = "player", filter = "BUFF"  },
+			-- 激活
+			{ spellID =  29166, unitID = "target", caster = "player", filter = "BUFF"  },
+
 			-- 痛击
-			{ spellID = 106830, unitId = "target", caster = "player", filter = "DEBUFF" },
-			{ spellID =  77758, unitId = "target", caster = "player", filter = "DEBUFF" },
+			{ spellID = 192090, unitID = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID = 106830, unitID = "target", caster = "player", filter = "DEBUFF"},
+
+			-- 割裂(猫)
+			{ spellID =   1079, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 迸裂创伤
+			{ spellID = 210670, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 斜掠(猫)
+			{ spellID = 155722, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 割碎(猫)
+			{ spellID = 203132, unitID = "target", caster = "player", filter = "DEBUFF"},
 			-- 感染伤口
-			{ spellID =  58180, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID =  58180, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 阿莎曼的狂乱(神器)
+			{ spellID = 210723, unitID = "target", caster = "player", filter = "DEBUFF"},
+
 			-- 阳炎术
-			{ spellID = 164815, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID = 164815, unitID = "target", caster = "player", filter = "DEBUFF"},
 			-- 月火术
-			{ spellID = 164812, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 星辰耀斑
-			{ spellID = 152221, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 精灵之火
-			{ spellID =    770, unitId = "target", caster = "player", filter = "DEBUFF" },
-			{ spellID = 102355, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 旋风
-			{ spellID =  33786, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID = 164812, unitID = "target", caster = "player", filter = "DEBUFF"},
+
 			-- 日光术
-			{ spellID =  81261, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID =  81261, unitID = "target", caster = "all",    filter = "DEBUFF"},
 			-- 纠缠根须
-			{ spellID =    339, unitId = "target", caster = "all",    filter = "DEBUFF"},
+			{ spellID =    339, unitID = "target", caster = "all",    filter = "DEBUFF"},
 			-- 群体缠绕
-			{ spellID = 102359, unitId = "target", caster = "all",    filter = "DEBUFF"},
+			{ spellID = 102359, unitID = "target", caster = "all",    filter = "DEBUFF"},
 		},
 		{
 			name = "玩家技能CD",
@@ -264,12 +304,6 @@ ns.watchers ={
 			setpoint = {unpack(FG["filger_position"].playercd)},
 			mode = "ICON",
 			
-			-- 狂暴
-			{ spellID =  50334, filter = "CD" },
-			-- 猛虎之怒
-			{ spellID =   5217, filter = "CD" },
-			-- 狂暴回复
-			{ spellID =  22842, filter = "CD" },
 			-- 复生
 			{ spellID =  20484, filter = "CD" },
 			-- 树皮术
@@ -284,13 +318,6 @@ ns.watchers ={
 			{spellID  = 102560, filter = "CD" },
 			-- 化身：丛林之王
 			{spellID  = 102543, filter = "CD" },
-			-- 自然的守护
-			{ spellID = 124974, filter = "CD" },
-			-- 超凡之盟
-			{ spellID = 112071, filter = "CD" },
-			-- 自然迅捷
-			{ spellID = 132158, filter = "CD" },
-
 			-- 物品
 			-- 手套
 			{ slotID = 10, filter = "CD" },
@@ -311,36 +338,44 @@ ns.watchers ={
 			setpoint = {unpack(FG["filger_position"].playerbuff)},
 			mode = "ICON",
 			
-			-- 误导
-			{ spellID =  34477, unitId = "player", caster = "player", filter = "BUFF" },
-			{ spellID =  35079, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 威慑
-			{ spellID = 148467, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 急速射击
-			{ spellID =   3045, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 集中火力
-			{ spellID =  82692, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 灵魂治愈
-			{ spellID =  90361, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 迅疾如风
-			{ spellID = 118922, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 狩猎刺激
-			{ spellID =  34720, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 治疗宠物
-			{ spellID =    136, unitId = "pet",    caster = "player", filter = "BUFF"},
-			-- 狂乱
-			{ spellID =  19615, unitId = "pet",    caster = "pet",    filter = "BUFF" },
+			-- 标记目标
+			{ spellID = 223138, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 灵巧打击
+			{ spellID = 227272, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 灵龟守护
+			{ spellID = 186265, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 治疗之壳
+			{ spellID = 203924, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 荷枪实弹
+			{ spellID = 194594, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 伪装
+			{ spellID = 199483, unitID = "player", caster = "player", filter = "BUFF"},
+
+			-- 野性守护
+			{ spellID = 193530, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 凶暴野兽
+			{ spellID = 120694, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 狂野怒火
-			{ spellID =  19574, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 稳固集中
-			{ spellID = 177668, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 眼镜蛇打击
-			{ spellID =  53257, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 狂轰乱炸
-			{ spellID =  82921, unitId = "player", caster = "player", filter = "BUFF"},
-			-- T17 威猛射击
-			{ spellID = 168980, unitId = "player", caster = "player", filter = "BUFF"},
-			{ spellID = 167165, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  19574, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 误导
+			{ spellID =  35079, unitID = "player", caster = "player", filter = "BUFF"},
+
+			-- 喷毒眼镜蛇
+			{ spellID = 194407, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 猫鼬撕咬
+			{ spellID = 190931, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 猫鼬本能
+			{ spellID = 204333, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 迅猛龙本能
+			{ spellID = 204321, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 猎豹本能
+			{ spellID = 204324, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 莫克纳萨战术
+			{ spellID = 201081, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 啸天者守护
+			{ spellID = 203927, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 雄鹰守护
+			{ spellID = 186289, unitID = "player", caster = "player", filter = "BUFF"},
 		},
 		{
 			name = "目标debuff",
@@ -349,28 +384,51 @@ ns.watchers ={
 			setpoint = {unpack(FG["filger_position"].targetdebuff)},
 			mode = "ICON",
 			
-			-- 冰冻陷阱
-			{ spellID =   3355, unitId = "target", caster = "all",    filter = "DEBUFF"},
-			-- 翼龙钉刺
-			{ spellID =  19386, unitId = "target", caster = "all",    filter = "DEBUFF"},
-			-- 束缚射击
-			{ spellID = 117405, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 毒蛇釘刺
-			{ spellID = 118253, unitId = "target", caster = "player", filter = "DEBUFF"},
+			-- 误导
+			{ spellID = 211138, unitID = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID =  34477, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 猎人印记
+			{ spellID = 185365, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 易伤
+			{ spellID = 187131, unitID = "target", caster = "player", filter = "DEBUFF"},
 			-- 黑箭
-			{ spellID =   3674, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 爆炸射击
-			{ spellID =  53301, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 险境求生
-			{ spellID = 136634, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 寒冰弹
-			{ spellID = 162546, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 毒液弹
-			{ spellID = 162543, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID = 194599, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 精确瞄准
+			{ spellID =  63468, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 稳定瞄准
+			{ spellID = 199803, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 夺命黑鸦
+			{ spellID = 131894, unitID = "target", caster = "player", filter = "DEBUFF"},
+
+			-- 翼龙钉刺
+			{ spellID =  19386, unitID = "target", caster = "all",    filter = "DEBUFF"},
+			-- 毒蛇釘刺
+			{ spellID = 118253, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 冰冻陷阱
+			{ spellID =   3355, unitID = "target", caster = "all",    filter = "DEBUFF"},
+			-- 焦油陷阱
+			{ spellID = 135299, unitID = "target", caster = "all",    filter = "DEBUFF"},
 			-- 爆炸陷阱
-			{ spellID =  13812, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 黑鸦
-			{ spellID = 131894, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID =  13812, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 精钢陷阱
+			{ spellID = 162487, unitID = "target", caster = "all",    filter = "DEBUFF"},
+			{ spellID = 162480, unitID = "target", caster = "all",    filter = "DEBUFF"},
+			-- 游侠之网
+			{ spellID = 200108, unitID = "target", caster = "all",    filter = "DEBUFF"},
+			-- 铁蒺藜
+			{ spellID = 194279, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 裂痕
+			{ spellID = 185855, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 龙焰手雷
+			{ spellID = 194858, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 黏性炸弹
+			{ spellID = 191241, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 利刃留痕
+			{ spellID = 204081, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 野兽狡诈
+			{ spellID = 191397, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 野兽狂野
+			{ spellID = 191413, unitID = "target", caster = "player", filter = "DEBUFF"},
 		},
 		{
 			name = "玩家技能CD",
@@ -379,20 +437,10 @@ ns.watchers ={
 			setpoint = {unpack(FG["filger_position"].playercd)},
 			mode = "ICON",
 			
-			-- 奇美拉射击
-			{ spellID =  53209, filter = "CD" },
-			-- 急速射击
-			{ spellID =   3045, filter = "CD" },
-			-- 爆炸射击
-			{ spellID =  53301, filter = "CD" },
 			-- 黑箭
-			{ spellID =   3674, filter = "CD" },
-			-- 主人的召唤
-			{ spellID =  53271, filter = "CD" },
+			{ spellID = 194599, filter = "CD" },
 			-- 假死
 			{ spellID =   5384, filter = "CD" },
-			-- 凶暴野兽
-			{ spellID = 120679, filter = "CD" },
 			-- 黑鸦
 			{ spellID = 131894, filter = "CD" },
 
@@ -416,44 +464,62 @@ ns.watchers ={
 			setpoint = {unpack(FG["filger_position"].playerbuff)},
 			mode = "ICON",
 			
-			-- 寒冰屏障
-			{ spellID =  45438, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 隐形术
-			{ spellID =  32612, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 强化隐形术
-			{ spellID = 110960, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 冰冷血脉
-			{ spellID =  12472, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 奥术强化
-			{ spellID =  12042, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 寒冰护体
-			{ spellID =  11426, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 寒冰结界
-			{ spellID = 111264, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 热力迸发
-			{ spellID =  48107, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 炎爆术
-			{ spellID =  48108, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 浮冰
-			{ spellID = 108839, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 操控时间
-			{ spellID = 110909, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 时光护盾
-			{ spellID = 115610, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 炽热疾速
-			{ spellID = 108843, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 能量符文
-			{ spellID = 116014, unitId = "player", caster = "player", filter = "BUFF"},
+			-- 冰枪御体
+			{ spellID = 195391, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 冰刺
+			{ spellID = 205473, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 寒冰指
-			{ spellID =  44544, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  44544, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 冰冷智慧
-			{ spellID =  57761, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 奥术飞弹
-			{ spellID =  79683, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 魔法增益
-			{ spellID = 159916, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 奥术充能
-			{ spellID =  36032, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID = 190446, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 连锁反应 
+			{ spellID = 195418, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 寒冰屏障
+			{ spellID =  45438, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 隐形术
+			{ spellID =  32612, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 寒冰护体
+			{ spellID =  11426, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 浮冰
+			{ spellID = 108839, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 冰冷血脉
+			{ spellID =  12472, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 极寒之心
+			{ spellID = 195446, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 冰川尖刺
+			{ spellID = 199844, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 咒术洪流
+			{ spellID = 116267, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 刺骨冰寒
+			{ spellID = 205766, unitID = "player", caster = "player", filter = "BUFF"},
+
+			-- 炽烈之咒
+			{ spellID = 194329, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 强化烟火之术
+			{ spellID = 157644, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 热力迸发
+			{ spellID =  48107, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 炽热连击!
+			{ spellID =  48108, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 烧焦的大地
+			{ spellID = 227482, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 燃烧
+			{ spellID = 190319, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 火疗闪烁
+			{ spellID = 194316, unitID = "player", caster = "player", filter = "BUFF"},
+
+			-- 奥术强化
+			{ spellID =  12042, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 能量符文
+			{ spellID = 116014, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 奥术飞弹!
+			{ spellID =  79683, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 气定神闲
+			{ spellID = 205025, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 加速
+			{ spellID = 198924, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 强化隐形术
+			{ spellID = 110960, unitID = "player", caster = "player", filter = "BUFF"},
 		},
 		{
 			name = "目标debuff",
@@ -474,32 +540,47 @@ ns.watchers ={
 			{ spellID = 161353, unitId = "target", caster = "all",    filter = "DEBUFF" },
 			{ spellID = 161355, unitId = "target", caster = "all",    filter = "DEBUFF" },
 			{ spellID = 126819, unitId = "target", caster = "all",    filter = "DEBUFF" },
-			-- 龙息术
-			{ spellID =  31661, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 冰霜之颌
-			{ spellID = 102051, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 冰霜新星
-			{ spellID =    122, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 冲击波
-			{ spellID = 157981, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 减速
-			{ spellID =  31589, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 点燃
-			{ spellID =  12654, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 活动炸弹
-			{ spellID =  44457, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 虚空风暴
-			{ spellID = 114923, unitId = "target", caster = "player", filter = "DEBUFF"},
+
+			-- 冰冻术
+			{ spellID =  33395, unitID = "target", caster = "pet",    filter = "DEBUFF"},
 			-- 寒冰炸弹
-			{ spellID = 112948, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 炎爆术
-			{ spellID =  11366, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 燃烧
-			{ spellID =  83853, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID = 112948, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 冰霜新星
+			{ spellID =    122, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 冰冻
+			{ spellID = 205708, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 冰川尖刺
+			{ spellID = 228600, unitID = "target", caster = "player", filter = "DEBUFF"},
 			-- 冰锥术
-			{ spellID =    120, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 霜火之箭
-			{ spellID =  44614, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID = 212792, unitID = "target", caster = "player", filter = "DEBUFF"},
+
+			-- 点燃
+			{ spellID =  12654, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 龙息术
+			{ spellID =  31661, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 爆裂熔炉
+			{ spellID = 194522, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 烈焰风暴
+			{ spellID =   2120, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 活动炸弹
+			{ spellID = 217694, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 冲击波
+			{ spellID = 157981, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 洪荒烈火
+			{ spellID = 226757, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 流星灼烧
+			{ spellID = 155158, unitID = "target", caster = "player", filter = "DEBUFF"},
+
+			-- 减速
+			{ spellID =  31589, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 虚空风暴
+			{ spellID = 114923, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 艾露尼斯的印记
+			{ spellID = 224968, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 奥术侵蚀
+			{ spellID = 210134, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 大法师之触
+			{ spellID = 210824, unitID = "target", caster = "player", filter = "DEBUFF"},
 		},
 		{
 			name = "玩家技能CD",
@@ -510,24 +591,12 @@ ns.watchers ={
 			
 			-- 镜像术
 			{ spellID = 55342, filter = "CD" },
-			-- 隐形术
-			{ spellID =    66, filter = "CD" },
-			-- 燃火
-			{ spellID = 11129, filter = "CD" },
 			-- 唤醒
 			{ spellID = 12051, filter = "CD" },
-			-- 秘法强化
-			{ spellID = 12042, filter = "CD" },
-			-- 急速冷却
-			{ spellID = 11958, filter = "CD" },
-			-- 深度冻结
-			{ spellID = 44572, filter = "CD" },
 			-- 冰冷血脉
 			{ spellID = 12472, filter = "CD" },
 			-- 寒冰屏障
 			{ spellID = 45438, filter = "CD" },
-			-- 冰霜之球
-			{ spellID = 84714, filter = "CD" },
 
 			-- 物品
 			-- 手套
@@ -549,44 +618,63 @@ ns.watchers ={
 			setpoint = {unpack(FG["filger_position"].playerbuff)},
 			mode = "ICON",
 			
-			-- 金钟罩
-			{ spellID = 115295, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 躯不坏
-			{ spellID = 122278, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 壮胆酒
-			{ spellID = 120954, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 飘渺酒
-			{ spellID = 115308, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 虎眼酒
-			{ spellID = 116740, unitId = "player", caster = "player", filter = "BUFF" },
+			-- 转化力量 
+			{ spellID = 195321, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 真气突
+			{ spellID = 199085, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 风火雷电
+			{ spellID = 137639, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 幻灭踢!
+			{ spellID = 116768, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 业报之触
-			{ spellID = 125174, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID = 125174, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 碧玉疾风(踏风)
+			{ spellID = 116847, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 迅如猛虎
+			{ spellID = 116841, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 猛虎之眼
+			{ spellID = 196608, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 连击
+			{ spellID = 196741, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 屏气凝神
+			{ spellID = 152173, unitID = "player", caster = "player", filter = "BUFF"},
+
 			-- 散魔功
-			{ spellID = 122783, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 豪能酒
-			{ spellID = 115288, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 势如破竹
-			{ spellID = 119085, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 猛虎连击
-			{ spellID = 120273, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 猛虎之力
-			{ spellID = 125359, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 踏风连击：幻灭踢
-			{ spellID = 116768, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 踏风连击：猛虎掌
-			{ spellID = 118864, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 酒醒入定
-			{ spellID = 115307, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 活力之雾
-			{ spellID = 118674, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 青龙之忱
-			{ spellID = 127722, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 雷神聚光茶
-			{ spellID = 116680, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 真气破
-			{ spellID = 159407, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 生死簿
-			{ spellID = 121125, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID = 122783, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 力贯千钧
+			{ spellID = 129914, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 躯不坏
+			{ spellID = 122278, unitID = "player", caster = "player", filter = "BUFF"},
+
+			-- 铁骨酒
+			{ spellID = 215479, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 利涉大川
+			{ spellID = 213177, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 壮胆酒
+			{ spellID = 120954, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 胆略
+			{ spellID = 213341, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 幻灭连击
+			{ spellID = 228563, unitID = "player", caster = "player", filter = "BUFF"},
+
+			-- 精华之泉
+			{ spellID = 191840, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 生生不息
+			{ spellID = 197919, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 升腾状态
+			{ spellID = 197206, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 碧玉疾风(织雾)
+			{ spellID = 196725, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 法力茶
+			{ spellID = 197908, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 雷光聚神茶
+			{ spellID = 116680, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 玉珑的祝福
+			{ spellID = 199668, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 作茧缚命
+			{ spellID = 116849, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 脚步轻盈
+			{ spellID = 199407, unitID = "player", caster = "player", filter = "BUFF"},
 		},
 		{
 			name = "目标debuff",
@@ -596,27 +684,42 @@ ns.watchers ={
 			mode = "ICON",
 			
 			-- 复苏之雾
-			{ spellID = 119611, unitId = "target", caster = "player", filter = "BUFF"  },
+			{ spellID = 119611, unitID = "target", caster = "player", filter = "BUFF"  },
 			-- 氤氲之雾 
-			{ spellID = 132120, unitId = "target", caster = "player", filter = "BUFF"  },
-			-- 禅意珠   
-			{ spellID = 124081, unitId = "target", caster = "player", filter = "BUFF"  }, 
+			{ spellID = 124682, unitID = "target", caster = "player", filter = "BUFF"  },
 			-- 作茧缚命   
-			{ spellID = 116849, unitId = "target", caster = "player", filter = "BUFF"  },
+			{ spellID = 116849, unitID = "target", caster = "player", filter = "BUFF"  },
+			-- 赤精之歌
+			{ spellID = 198909, unitID = "target", caster = "player", filter = "DEBUFF"}, 
+
 			-- 火焰之息
-			{ spellID = 123725, unitId = "target", caster = "player", filter = "DEBUFF"}, 
-			-- 旭日东升踢
-			{ spellID = 130320, unitId = "target", caster = "player", filter = "DEBUFF"}, 
-			-- 幻灭踢
-			{ spellID = 128531, unitId = "target", caster = "player", filter = "DEBUFF"}, 
+			{ spellID = 123725, unitID = "target", caster = "player", filter = "DEBUFF"}, 
+			-- 神鹤印记
+			{ spellID = 228287, unitID = "target", caster = "player", filter = "DEBUFF"}, 
+			-- 致死之伤
+			{ spellID = 115864, unitID = "target", caster = "player", filter = "DEBUFF"}, 
+			-- 业报之触
+			{ spellID = 122470, unitID = "target", caster = "player", filter = "DEBUFF"}, 
+			-- 风领主之击
+			{ spellID = 205320, unitID = "target", caster = "player", filter = "DEBUFF"}, 
+			-- 轮回之触
+			{ spellID = 115080, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 无影脚
+			{ spellID = 196723, unitID = "target", caster = "player", filter = "DEBUFF"},
 			-- 扫堂腿
-			{ spellID = 119381, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 金钢震
-			{ spellID = 116095, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 风火雷电
-			{ spellID = 138130, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID = 119381, unitID = "target", caster = "player", filter = "DEBUFF"},
+
+			-- 月之暗面
+			{ spellID = 213063, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 醉酿投
+			{ spellID = 121253, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 爆炸酒桶
+			{ spellID = 214326, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 猛虎之眼
+			{ spellID = 196608, unitID = "target", caster = "player", filter = "DEBUFF"},
+
 			-- 分筋错骨
-			{ spellID = 115078, unitId = "target", caster = "all",    filter = "DEBUFF"},
+			{ spellID = 115078, unitID = "target", caster = "all",    filter = "DEBUFF"},
 		},
 		{
 			name = "玩家技能CD",
@@ -662,50 +765,68 @@ ns.watchers ={
 			setpoint = {unpack(FG["filger_position"].playerbuff)},
 			mode = "ICON",
 
-			-- 虔诚光环
-			{ spellID =  31821, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 圣盾术
-			{ spellID =    642, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 远古列王守卫
-			{ spellID =  86659, unitId = "player", caster = "player", filter = "BUFF"},
 			-- 神圣复仇者
-			{ spellID = 105809, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID = 105809, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 复仇之怒
-			{ spellID =  31884, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 炽热防御者
-			{ spellID =  31850, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 圣佑术
-			{ spellID =    498, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 圣光之速
-			{ spellID =  85499, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 圣洁护盾
-			{ spellID =  20925, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 正义盾击
-			{ spellID =  53600, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  31884, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 守备官
+			{ spellID = 200376, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 虔诚光环
+			{ spellID =  31821, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 提尔的保护
+			{ spellID = 221200, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 白银之手骑士
+			{ spellID = 221422, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 圣光灌注
-			{ spellID =  54149, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 荣耀堡垒
-			{ spellID = 114637, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 无私治愈
-			{ spellID = 114250, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  54149, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 神圣意志
-			{ spellID =  90174, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 大十字军
-			{ spellID =  85416, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 破晓
-			{ spellID =  88819, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 法网恢恢
-			{ spellID =  87173, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 远古列王的圣光
-			{ spellID =  86678, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID = 216411, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 提尔的拯救
+			{ spellID = 200652, unitID = "player", caster = "player", filter = "BUFF"},
+			{ spellID = 200654, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 白银之手的力量
+			{ spellID = 200656, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 狂热殉道者
+			{ spellID = 223316, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 圣佑术
+			{ spellID =    498, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 律法之则
+			{ spellID = 214202, unitID = "player", caster = "player", filter = "BUFF"},
+
+
+			-- 圣盾术
+			{ spellID =    642, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 正义盾击
+			{ spellID = 132403, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 秩序壁垒
+			{ spellID = 209388, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 圣光护盾
+			{ spellID = 204150, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 痛苦真理
+			{ spellID = 209332, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 炽热防御者
+			{ spellID =  31850, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 远古列王守卫
+			{ spellID =  86659, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 泰坦之光
+			{ spellID = 209540, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 炽天使
-			{ spellID = 152262, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 最终审判
-			{ spellID = 157048, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 玛尔拉德的真理
-			{ spellID = 156990, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 莉亚德琳的公正
-			{ spellID = 156989, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID = 152262, unitID = "player", caster = "player", filter = "BUFF"},
+
+			-- 正义之火
+			{ spellID = 209785, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 神圣意志
+			{ spellID = 223819, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 复仇之盾
+			{ spellID = 184662, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 狂热
+			{ spellID = 217020, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 以眼还眼
+			{ spellID = 205191, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 征伐
+			{ spellID = 224668, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 光明圣印
+			{ spellID = 202273, unitID = "player", caster = "player", filter = "BUFF"},
 		},
 		{
 			name = "目标debuff",
@@ -714,42 +835,46 @@ ns.watchers ={
 			setpoint = {unpack(FG["filger_position"].targetdebuff)},
 			mode = "ICON",
 
+			-- 赋予信仰
+			{ spellID = 223306, unitID = "target", caster = "player", filter = "BUFF"  },
+			-- 白银之手骑士
+			{ spellID = 211422, unitID = "target", caster = "player", filter = "BUFF"  },
+			-- 美德道标
+			{ spellID = 200025, unitID = "target", caster = "player", filter = "BUFF"  },
+			-- 圣光道标
+			{ spellID =  53563, unitID = "target", caster = "all"   , filter = "BUFF"  },
+			-- 信仰道标
+			{ spellID = 156910, unitID = "target", caster = "all"   , filter = "BUFF"  },
+
 			-- 忏悔
-			{ spellID =  20066, unitId = "target", caster = "all",    filter = "DEBUFF" },
-			-- 自律
-			{ spellID =  25771, unitId = "target", caster = "all",    filter = "DEBUFF" },
-			-- 制裁之錘
-			{ spellID =    853, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 制裁之拳
-			{ spellID = 105593, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 罪孽如山
-			{ spellID = 110300, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 公正圣印
-			{ spellID =  20170, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 谴责
-			{ spellID =   2812, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 谴罚
-			{ spellID =  31803, unitId = "target", caster = "player", filter = "DEBUFF" },
+			{ spellID =  20066, unitID = "target", caster = "all",    filter = "DEBUFF"},
 			-- 复仇者之盾
-			{ spellID =  31935, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 眩晕—之盾(雕纹)
-			{ spellID =  63529, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 处决审判
-			{ spellID = 114916, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 纯净之手
-			{ spellID = 114039, unitId = "target", caster = "player", filter = "BUFF"   },
-			-- 永恒之火
-			{ spellID = 156322, unitId = "target", caster = "player", filter = "BUFF"   },
-			-- 圣光救赎
-			{ spellID = 157128, unitId = "target", caster = "player", filter = "BUFF"   },
-			-- 洞察道标
-			{ spellID = 157007, unitId = "target", caster = "player", filter = "BUFF"   },
-			-- 光辉治疗
-			{ spellID =  86273, unitId = "target", caster = "player", filter = "BUFF"   },
-			-- 圣洁护盾
-			{ spellID =  65148, unitId = "target", caster = "player", filter = "BUFF" },
-			{ spellID = 148039, unitId = "target", caster = "player", filter = "BUFF" },
-			{ spellID =  20925, unitId = "target", caster = "player", filter = "BUFF" },
+			{ spellID =  31935, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 提尔之眼(神器)
+			{ spellID = 209202, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 奉献
+			{ spellID = 204242, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 自律
+			{ spellID =  25771, unitID = "target", caster = "all",    filter = "DEBUFF"},
+			-- 制裁之錘
+			{ spellID =    853, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 祝福之錘
+			{ spellID = 204301, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 圣光审判
+			{ spellID = 196941, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 盲目之光
+			{ spellID = 105421, unitID = "target", caster = "player", filter = "DEBUFF"},
+
+			-- 审判
+			{ spellID = 197277, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 灰烬觉醒
+			{ spellID = 205273, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 妨害之手
+			{ spellID = 183218, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 愤怒之剑
+			{ spellID = 202270, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 处决宣判
+			{ spellID = 213757, unitID = "target", caster = "player", filter = "DEBUFF"},
 		},
 		{
 			name = "玩家技能CD",
@@ -789,46 +914,62 @@ ns.watchers ={
 			setpoint = {unpack(FG["filger_position"].playerbuff)},
 			mode = "ICON",
 
-			-- 消散
-			{ spellID =  47585, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 能量灌注
-			{ spellID =  10060, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 灵魂护壳
-			{ spellID = 109964, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 大天使
-			{ spellID =  81700, unitId = "player", caster = "player", filter = "BUFF"},
-			--天使之壁
-			{ spellID = 114214, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 吸血鬼的拥抱
-			{ spellID =  15286, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 渐隐术
-			{ spellID =    586, unitId = "player", caster = "player", filter = "BUFF"},
 			-- 争分夺秒
-			{ spellID =  59889, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID = 197763, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 全神贯注
+			{ spellID =  47536, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 救赎
+			{ spellID = 194384, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 能量灌注
+			{ spellID =  10060, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 专注意志
-			{ spellID =  45242, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  45242, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 阴影面之力
+			{ spellID = 198069, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 渐隐术
+			{ spellID =    586, unitID = "player", caster = "player", filter = "BUFF"},
+
+			-- 纳鲁之能
+			{ spellID = 196490, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 圣洁
+			{ spellID = 197030, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 希望象征
+			{ spellID =  64901, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 圣光回响
+			{ spellID =  77489, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 愈合祷言
-			{ spellID =  41635, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 神圣洞察
-			{ spellID = 123266, unitId = "player", caster = "player", filter = "BUFF" },
-			{ spellID = 123267, unitId = "player", caster = "player", filter = "BUFF" },
-			{ spellID = 124430, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 光明涌动
-			{ spellID = 114255, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 黑暗涌动
-			{ spellID =  87160, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  41635, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 图雷之光
+			{ spellID = 208065, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 神圣化身
+			{ spellID = 200183, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 图雷的祝福
+			{ spellID = 196644, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 圣光涌动
+			{ spellID = 114255, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 愈合祷言
+			{ spellID =  64843, unitID = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  64844, unitID = "player", caster = "player", filter = "BUFF"},
+
 			-- 妙手回春
-			{ spellID =  63735, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 心灵尖刺雕文
-			{ spellID =  81292, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 命运多舛
-			{ spellID = 123254, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 福音传播
-			{ spellID =  81661, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 愈合之语
-			{ spellID = 155362, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 愈合之语(十层)
-			{ spellID = 155363, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  63735, unitID = "player", caster = "player", filter = "BUFF"},
+
+			-- 消散
+			{ spellID =  47585, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 暗中生长
+			{ spellID = 194205, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 吸血鬼的拥抱
+			{ spellID =  15286, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 虚空形态
+			{ spellID = 194249, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 延宕狂乱
+			{ spellID = 197937, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 虚空洪流
+			{ spellID = 205065, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 疯入膏肓
+			{ spellID = 193223, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 虚空射线
+			{ spellID = 205372, unitID = "player", caster = "player", filter = "BUFF"},
 		},
 		{
 			name = "目标debuff",
@@ -837,44 +978,42 @@ ns.watchers ={
 			setpoint = {unpack(FG["filger_position"].targetdebuff)},
 			mode = "ICON",
 
-			-- 束缚亡灵
-			{ spellID =   9484, unitId = "target", caster = "all",    filter = "DEBUFF"},
 			-- 真言术：盾
-			{ spellID =     17, unitId = "target", caster = "all",    filter = "BUFF"  },
-			-- 恢复
-			{ spellID =    139, unitId = "target", caster = "player", filter = "BUFF"  },
-			-- 静
-			{ spellID =  88684, unitId = "target", caster = "player", filter = "BUFF"  },
-			-- 愈合祷言
-			{ spellID =  41635, unitId = "target", caster = "player", filter = "BUFF"  },
-			-- 守护之魂
-			{ spellID =  47788, unitId = "target", caster = "player", filter = "BUFF"  },
-			-- 痛苦压制
-			{ spellID =  33206, unitId = "target", caster = "player", filter = "BUFF"  },
-			-- 神圣之火
-			{ spellID =  14914, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 真言术：慰
-			{ spellID = 129250, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID =     17, unitID = "target", caster = "all",    filter = "BUFF"  },
 			-- 意志洞悉
-			{ spellID = 152118, unitId = "target", caster = "all",    filter = "BUFF"  },
+			{ spellID = 152118, unitID = "target", caster = "all",    filter = "BUFF"  },
+			-- 救赎
+			{ spellID = 194384, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 痛苦压制
+			{ spellID =  33206, unitID = "target", caster = "player", filter = "BUFF"  },
+			-- 净化邪恶
+			{ spellID = 204213, unitID = "target", caster = "player", filter = "DEBUFF"},
+
+
+			-- 恢复
+			{ spellID =    139, unitID = "target", caster = "player", filter = "BUFF"  },
+			-- 愈合祷言
+			{ spellID =  41635, unitID = "target", caster = "player", filter = "BUFF"  },
+			-- 守护之魂
+			{ spellID =  47788, unitID = "target", caster = "player", filter = "BUFF"  },
+			-- 神圣之火
+			{ spellID =  14914, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 圣言术：罚
+			{ spellID = 200200, unitID = "target", caster = "player", filter = "DEBUFF"},
+
 			-- 暗言术：痛
-			{ spellID =    589, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 暗言术：乱
-			{ spellID = 132573, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID =    589, unitID = "target", caster = "player", filter = "DEBUFF"},
 			-- 吸血鬼之触
-			{ spellID =  34914, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 噬灵疫病
-			{ spellID = 158831, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 虚弱灵魂
-			{ spellID =   6788, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 虚空熵能
-			{ spellID = 155361, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID =  34914, unitID = "target", caster = "player", filter = "DEBUFF"},
+
+			-- 精神控制
+			{ spellID =    605, unitID = "target", caster = "all",    filter = "DEBUFF"},
 			-- 心灵尖啸
-			{ spellID =   8122, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 心灵惊骇
-			{ spellID =  64044, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID =   8122, unitID = "target", caster = "all",    filter = "DEBUFF"},
 			-- 沉默
-			{ spellID =  15487, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID =  15487, unitID = "target", caster = "all",    filter = "DEBUFF"},
+			-- 束缚亡灵
+			{ spellID =   9484, unitID = "target", caster = "all",    filter = "DEBUFF"},
 		},
 		{
 			name = "玩家技能CD",
@@ -924,46 +1063,79 @@ ns.watchers ={
 			setpoint = {unpack(FG["filger_position"].playerbuff)},
 			mode = "ICON",
 
-			-- 切割
-			{ spellID =   5171, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 恢复
-			{ spellID =  73651, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 冲动
-			{ spellID =  13750, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 闪避
-			{ spellID =   5277, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 毒伤
-			{ spellID =  32645, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 暗影之舞
-			{ spellID =  51713, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 暗影斗篷
-			{ spellID =  31224, unitId = "player", caster = "player", filter = "BUFF"},
 			-- 消失
-			{ spellID =   1856, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 备战就绪
-			{ spellID =  74001, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 战斗洞察
-			{ spellID =  74002, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 装死
-			{ spellID =  45182, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 剑刃乱舞
-			{ spellID =  13877, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  11327, unitID = "player", caster = "player", filter = "BUFF"}
+			-- 闪避
+			{ spellID =   5277, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 疾跑
-			{ spellID =   2983, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID =   2983, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 暗影斗篷
+			{ spellID =  31224, unitID = "player", caster = "player", filter = "BUFF"},
+
+			-- 黑暗之拥
+			{ spellID = 197603, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 死亡标志
+			{ spellID = 212283, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 死亡
+			{ spellID = 227151, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 终结技:刺骨
+			{ spellID = 197496, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 终结技:夜刃
+			{ spellID = 197498, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 赤喉之咬
+			{ spellID = 220901, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 猩红之瓶
+			{ spellID = 185311, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 暗影之刃
+			{ spellID = 121471, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 敏锐大师
+			{ spellID =  31665, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 敏锐
+			{ spellID = 193538, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 欺凌
+			{ spellID = 115192, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 暗影笼罩
+			{ spellID = 206237, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 暗影之舞
+			{ spellID = 185422, unitID = "player", caster = "player", filter = "BUFF"},
+
+			-- 恐惧之刃诅咒(神器)
+			{ spellID = 202665, unitID = "player", caster = "player", filter="DEBUFF"},
+			-- 可乘之机
+			{ spellID = 195627, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 切割
+			{ spellID =   5171, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 佯攻
-			{ spellID =   1966, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 诡诈
-			{ spellID = 115192, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 预感
-			{ spellID = 115189, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 初步洞悉
-			{ spellID =  84745, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 中等洞悉
-			{ spellID =  84746, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 深度洞悉
-			{ spellID =  84747, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 盲点
-			{ spellID = 121153, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID =   1966, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 冲动
+			{ spellID =  13750, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 迷离时刻
+			{ spellID = 202776, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 还击
+			{ spellID = 199754, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 精准定位
+			{ spellID = 193359, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 大乱斗
+			{ spellID = 193358, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 暗鲨涌动
+			{ spellID = 193357, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 强势连击
+			{ spellID = 193356, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 骷髅黑帆
+			{ spellID = 199603, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 埋藏的宝藏
+			{ spellID = 199600, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 影舞步
+			{ spellID =  51690, unitID = "player", caster = "player", filter = "BUFF"},
+
+			-- 毒伤
+			{ spellID =  32645, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 暗影伏击
+			{ spellID = 192432, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 深谋远虑
+			{ spellID = 193641, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 装死
+			{ spellID =  45182, unitID = "player", caster = "player", filter = "BUFF"},
 		},
 		{
 			name = "目标debuff",
@@ -973,43 +1145,58 @@ ns.watchers ={
 			mode = "ICON",
 
 			-- 闷棍
-			{ spellID =   6770, unitId = "target", caster = "all",    filter = "DEBUFF"},
+			{ spellID =   6770, unitID = "target", caster = "all",    filter = "DEBUFF"},
 			-- 致盲
-			{ spellID =   2094, unitId = "target", caster = "all",    filter = "DEBUFF"},
-			-- 锁喉 - 沉默
-			{ spellID =   1330, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID =   2094, unitID = "target", caster = "all",    filter = "DEBUFF"},
 			-- 肾击
-			{ spellID =    408, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 锁喉
-			{ spellID =    703, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID =    408, unitID = "target", caster = "player", filter = "DEBUFF"},
 			-- 偷袭
-			{ spellID =   1833, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 割裂
-			{ spellID =   1943, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 凿击
-			{ spellID =   1776, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 要害打击
-			{ spellID =  84617, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 仇杀
-			{ spellID =  79140, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 出血
-			{ spellID =  16511, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 洞悉弱点
-			{ spellID =  91021, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 致命药膏
-			{ spellID =   2818, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 减速药膏
-			{ spellID =   3409, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 致伤药膏
-			{ spellID =   8680, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 吸血药膏
-			{ spellID = 112961, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 猩红风暴
-			{ spellID = 122233, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 致命投掷
-			{ spellID =  26679, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID =   1833, unitID = "target", caster = "player", filter = "DEBUFF"},
+
+			-- 夜刃
+			{ spellID = 195452, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 暗夜恐怖
+			{ spellID = 207760, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 赤喉之咬
+			{ spellID = 209786, unitID = "target", caster = "player", filter = "DEBUFF"},
 			-- 死亡标志
-			{ spellID = 137619, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID = 137619, unitID = "target", caster = "player", filter = "DEBUFF"},
+
+			-- 凿击
+			{ spellID =   1776, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 手枪射地击
+			{ spellID = 185763, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 正中眉心
+			{ spellID = 199804, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 鬼魅攻击
+			{ spellID = 196937, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 谈判
+			{ spellID = 199743, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 贿赂
+			{ spellID = 199740, unitID = "target", caster = "player", filter = "DEBUFF"},
+
+			-- 苦痛药膏
+			{ spellID = 200803, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 君王之灾(神器)
+			{ spellID = 192759, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 毒素冲动
+			{ spellID = 192425, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 遇刺者之血
+			{ spellID = 192925, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 割裂
+			{ spellID =   1943, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 锁喉
+			{ spellID =    703, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 宿敌
+			{ spellID =  79140, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 致命药膏
+			{ spellID =   2818, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 减速药膏
+			{ spellID =   3409, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 出血
+			{ spellID =  16511, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 内出血
+			{ spellID = 154953, unitID = "target", caster = "player", filter = "DEBUFF"},
 		},
 		{
 			name = "玩家技能CD",
@@ -1018,10 +1205,6 @@ ns.watchers ={
 			setpoint = {unpack(FG["filger_position"].playercd)},
 			mode = "ICON",
 
-			-- 殺戮盛筵
-			{ spellID =  51690, filter = "CD" },
-			-- 冲动
-			{ spellID =  13750, filter = "CD" },
 
 			-- 物品
 			-- 手套
@@ -1043,59 +1226,83 @@ ns.watchers ={
 			setpoint = {unpack(FG["filger_position"].playerbuff)},
 			mode = "ICON",
 
-			-- 漩涡武器
-			{ spellID =  53817, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 闪电之盾
-			{ spellID =    324, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 萨满之怒
-			{ spellID =  30823, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 元素掌握
-			{ spellID =  16166, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 升腾
-			{ spellID = 114050, unitId = "player", caster = "player", filter = "BUFF" },
-			{ spellID = 114051, unitId = "player", caster = "player", filter = "BUFF" },
-			{ spellID = 114052, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 灵魂行者的恩赐
-			{ spellID =  79206, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 怒火释放
-			{ spellID = 118470, unitId = "player", caster = "player", filter = "BUFF" },
-			{ spellID = 118472, unitId = "player", caster = "player", filter = "BUFF" },
-			{ spellID = 118473, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 火焰释放
-			{ spellID = 165462, unitId = "player", caster = "player", filter = "BUFF" },
-			{ spellID =  73683, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 生命释放
-			{ spellID =  73685, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 风之释放
-			{ spellID =  73681, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 元素融合
-			{ spellID = 157174, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 元素专注
-			{ spellID = 167205, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 石壁
-			{ spellID = 114893, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 先祖指引
-			{ spellID = 108281, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 星界转移
-			{ spellID = 108271, unitId = "player", caster = "player", filter = "BUFF"},
 			-- 熔岩奔腾
-			{ spellID =  77762, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  77762, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 元素集中
+			{ spellID =  16246, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 漩涡之力
+			{ spellID = 191877, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 风暴守护者
+			{ spellID = 205495, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 元素掌握
+			{ spellID =  16166, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 冰怒
+			{ spellID = 210714, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 元素冲击
-			{ spellID = 118522, unitId = "player", caster = "player", filter = "BUFF" },
-			{ spellID = 173183, unitId = "player", caster = "player", filter = "BUFF" },
-			{ spellID = 173184, unitId = "player", caster = "player", filter = "BUFF" },
-			{ spellID = 173185, unitId = "player", caster = "player", filter = "BUFF" },
-			{ spellID = 173187, unitId = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 118522, unitID = "player", caster = "player", filter = "BUFF"},
+			{ spellID = 173183, unitID = "player", caster = "player", filter = "BUFF"},
+			{ spellID = 173184, unitID = "player", caster = "player", filter = "BUFF"},
+
 			-- 潮汐奔涌
-			{ spellID =  53390, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  53390, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 潮汐之母的抚慰
+			{ spellID = 209950, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 女王赦令
+			{ spellID = 208899, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 女王崛起
+			{ spellID = 207288, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 治疗之雨
-			{ spellID =  73920, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  73920, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 暴雨图腾
-			{ spellID = 157504, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID = 157504, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 迷雾幽灵
+			{ spellID = 207527, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 先祖指引
+			{ spellID = 108281, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 星界转移
+			{ spellID = 108271, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 灵魂行者的恩赐
+			{ spellID =  79206, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 生命释放
+			{ spellID =  73685, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 十万火急
+			{ spellID = 208416, unitID = "player", caster = "player", filter = "BUFF"},
+
+			-- 升腾
+			{ spellID = 114050, unitID = "player", caster = "player", filter = "BUFF"},
+			{ spellID = 114051, unitID = "player", caster = "player", filter = "BUFF"},
+			{ spellID = 114052, unitID = "player", caster = "player", filter = "BUFF"},
+
+			-- 闪电之盾
+			{ spellID =    324, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 风暴使者
+			{ spellID = 201846, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 毁灭之风
+			{ spellID = 204945, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 毁灭闪电
+			{ spellID = 187878, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 集束风暴
+			{ spellID = 198300, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 毁灭释放
+			{ spellID = 165462, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 风暴之鞭
+			{ spellID = 195222, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 火舌
+			{ spellID = 194084, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 冰封
+			{ spellID = 196834, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 山崩
+			{ spellID = 202004, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 风歌
+			{ spellID = 201898, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 疾风打击
+			{ spellID = 198293, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 幽魂步
-			{ spellID =  58875, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 元素回响
-			{ spellID = 159103, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  58875, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 灼热之手
+			{ spellID = 215785, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 石拳
+			{ spellID = 218825, unitID = "player", caster = "player", filter = "BUFF"},
 		},
 		{
 			name = "目标debuff",
@@ -1104,22 +1311,31 @@ ns.watchers ={
 			setpoint = {unpack(FG["filger_position"].targetdebuff)},
 			mode = "ICON",
 
-			-- 大地之盾
-			{ spellID =    974, unitId = "target", caster = "player", filter = "BUFF"  },
 			-- 激流
-			{ spellID =  61295, unitId = "target", caster = "player", filter = "BUFF"  },
-			-- 大地震击
-			{ spellID =   8042, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID =  61295, unitID = "target", caster = "player", filter = "BUFF"  },
+			-- 女王的恩赐
+			{ spellID = 207778, unitID = "target", caster = "player", filter = "BUFF"  },
+			-- 先祖活力
+			{ spellID = 207400, unitID = "target", caster = "player", filter = "BUFF"  },
+
 			-- 烈焰震击
-			{ spellID =   8050, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID =   8050, unitID = "target", caster = "player", filter = "DEBUFF"},
 			-- 冰霜震击
-			{ spellID =   8056, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 风暴打击
-			{ spellID =  17364, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 风切
-			{ spellID = 115356, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID = 190840, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 引雷针
+			{ spellID = 197209, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 岩浆图腾
+			{ spellID = 192226, unitID = "target", caster = "player", filter = "DEBUFF"},
+
+			-- 冰封打击
+			{ spellID = 147732, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 大地之刺
+			{ spellID = 188089, unitID = "target", caster = "player", filter = "DEBUFF"},
+
 			-- 妖术
-			{ spellID =  51514, unitId = "target", caster = "all",    filter = "DEBUFF"},
+			{ spellID =  51514, unitID = "target", caster = "all",    filter = "DEBUFF"},
+			-- 静电充能
+			{ spellID = 118905, unitID = "target", caster = "all",    filter = "DEBUFF"},
 		},
 		{
 			name = "玩家技能CD",
@@ -1159,44 +1375,26 @@ ns.watchers ={
 			setpoint = {unpack(FG["filger_position"].playerbuff)},
 			mode = "ICON",
 
-			-- 暗影冥思
-			{ spellID =  17941, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 黑暗灵魂:易爆
-			{ spellID = 113858, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 黑暗灵魂:学识
-			{ spellID = 113861, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 黑暗灵魂:哀难
-			{ spellID = 113860, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 灵魂燃烧
-			{ spellID =  74434, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 熔火之心
-			{ spellID = 140074, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 爆燃
-			{ spellID = 117828, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 火焰之雨
-			{ spellID = 104232, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 灵魂交换
-			{ spellID =  86211, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 黑暗交易
-			{ spellID = 110913, unitId = "player", caster = "player", filter = "BUFF" },
 			-- 不灭决心
-			{ spellID = 104773, unitId = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 104773, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 牺牲契约
-			{ spellID = 108416, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 黑暗再生
-			{ spellID = 108359, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 基尔加丹的狡诈
-			{ spellID = 137587, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 献祭光环
-			{ spellID = 104025, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 鬼魅灵魂
-			{ spellID = 157698, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 硫磺烈火
-			{ spellID = 108683, unitId = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 108416, unitID = "player", caster = "player", filter = "BUFF" },
+
+			-- 暗影冥思
+			{ spellID = 196098, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 延绵恐惧
+			{ spellID = 199281, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 灵魂榨取
+			{ spellID = 108366, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 逆风收割者
+			{ spellID = 216708, unitID = "player", caster = "player", filter = "BUFF" },
+
 			-- 恶魔协同
-			{ spellID = 171982, unitId = "player", caster = "pet",    filter = "BUFF" },
-			-- 恶魔箭
-			{ spellID = 157695, unitId = "player", caster = "player", filter = "DEBUFF"},
+			{ spellID = 171982, unitID = "player", caster = "pet",    filter = "BUFF" },
+			-- 爆燃
+			{ spellID = 117828, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 混沌燃烧
+			{ spellID = 196546, unitID = "player", caster = "player", filter = "BUFF" },
 		},
 		{
 			name = "目标debuff",
@@ -1206,36 +1404,42 @@ ns.watchers ={
 			mode = "ICON",
 
 			-- 恐惧
-			{ spellID = 118699, unitId = "target", caster = "all",    filter = "DEBUFF" },
+			{ spellID = 118699, unitID = "target", caster = "all",    filter = "DEBUFF" },
 			-- 放逐术
-			{ spellID =    710, unitId = "target", caster = "all",    filter = "DEBUFF" },
+			{ spellID =    710, unitID = "target", caster = "all",    filter = "DEBUFF" },
 			-- 恐惧嚎叫
-			{ spellID =   5484, unitId = "target", caster = "all",    filter = "DEBUFF" },
+			{ spellID =   5484, unitID = "target", caster = "all",    filter = "DEBUFF" },
 			-- 死亡缠绕
-			{ spellID =   6789, unitId = "target", caster = "player", filter = "DEBUFF" },
+			{ spellID =   6789, unitID = "target", caster = "player", filter = "DEBUFF" },
 			-- 奴役恶魔
-			{ spellID =   1098, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 献祭
-			{ spellID = 157736, unitId = "target", caster = "player", filter = "DEBUFF" },
-			{ spellID = 108686, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 痛楚
-			{ spellID =    980, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 痛苦无常
-			{ spellID =  30108, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 鬼影缠身
-			{ spellID =  48181, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 腐蚀之种
-			{ spellID =  27243, unitId = "target", caster = "player", filter = "DEBUFF" },
-			{ spellID = 114790, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 腐蚀术
-			{ spellID = 146739, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 末日降临
-			{ spellID =    603, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 古尔丹之手
-			{ spellID =  47960, unitId = "target", caster = "player", filter = "DEBUFF" },
+			{ spellID =   1098, unitID = "target", caster = "player", filter = "DEBUFF" },
 
-			-- 披风
-			{ spellID = 146198, unitId = "target", caster = "player", filter = "DEBUFF" },
+			-- 痛楚
+			{ spellID =    980, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 痛苦无常
+			{ spellID =  30108, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 鬼影缠身
+			{ spellID =  48181, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 腐蚀术
+			{ spellID = 146739, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 腐蚀之种
+			{ spellID =  27243, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 诡异魅影
+			{ spellID = 205179, unitID = "target", caster = "player", filter = "DEBUFF" },
+
+			-- 末日降临
+			{ spellID =    603, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 暗影烈焰
+			{ spellID = 205181, unitID = "target", caster = "player", filter = "DEBUFF" },
+
+
+			-- 浩劫
+			{ spellID =  80240, unitId = "target", caster = "player", filter = "DEBUFF" },
+			-- 献祭
+			{ spellID = 157736, unitID = "target", caster = "player", filter = "DEBUFF" },
+			{ spellID = 108686, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 灭杀
+			{ spellID = 196414, unitID = "target", caster = "player", filter = "DEBUFF" },
 		},
 		{
 			name = "玩家技能CD",
@@ -1244,8 +1448,6 @@ ns.watchers ={
 			setpoint = {unpack(FG["filger_position"].playercd)},
 			mode = "ICON",
 
-			-- 黑暗灵魂
-			{ spellID =  77801, filter = "CD" },
 
 			-- 物品
 			-- 手套
@@ -1267,56 +1469,73 @@ ns.watchers ={
 			setpoint = {unpack(FG["filger_position"].playerbuff)},
 			mode = "ICON",
 
-			-- 盾墙
-			{ spellID =    871, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 破釜沉舟
-			{ spellID =  12975, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 狂怒回复
-			{ spellID =  55694, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 盾牌格挡
-			{ spellID = 132404, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 盾牌屏障
-			{ spellID = 112048, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 盾牌冲锋
-			{ spellID = 169667, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 法术反射
-			{ spellID =  23920, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 剑在人在
-			{ spellID = 118038, unitId = "player", caster = "player", filter = "BUFF"},
+			-- 命令怒吼
+			{ spellID =  97436, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 压制!
+			{ spellID =  60503, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 粉碎防御
+			{ spellID = 209706, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 防御姿态
+			{ spellID = 197690, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 战吼
+			{ spellID =   1719, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 扎卡兹的腐化之血
+			{ spellID = 209567, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 怒火聚焦
+			{ spellID = 207982, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 战术优势
+			{ spellID = 209484, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 狂暴之怒
-			{ spellID =  18499, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 天神下凡
-			{ spellID = 107574, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 鲁莽
-			{ spellID =   1719, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 横扫攻击
-			{ spellID =  12328, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 乘胜追击
-			{ spellID =  32216, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 怒击
-			{ spellID = 131116, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 血脉贲张
-			{ spellID =  46916, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 剑盾猛攻
-			{ spellID =  50227, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 最后通牒
-			{ spellID = 122510, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 激怒
-			{ spellID =  12880, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 狂战士
-			{ spellID = 166588, unitId = "player", caster = "player", filter = "BUFF" },
-			-- 绞肉机
-			{ spellID =  85739, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  18499, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 剑在人在
+			{ spellID = 118038, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 剑刃风暴
+			{ spellID = 227847, unitID = "player", caster = "player", filter = "BUFF"},
+
+			-- 血之气息
+			{ spellID = 206333, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 血肉顺劈
+			{ spellID =  85739, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 浴血奋战
-			{ spellID =  12292, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 粗暴打断
-			{ spellID =  86663, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 猝死
-			{ spellID =  52437, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 破坏者
-			{ spellID = 152277, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 不屈打击
-			{ spellID = 169685, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  12292, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 激怒
+			{ spellID = 184362, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 狂暴
+			{ spellID = 200953, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 战争疤痕
+			{ spellID = 200954, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 巨龙怒吼
+			{ spellID = 118000, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 狂怒回复
+			{ spellID = 184364, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 狂乱
+			{ spellID = 202539, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 无匹之力
+			{ spellID = 200977, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 天神下凡
+			{ spellID = 107574, unitID = "player", caster = "player", filter = "BUFF"},
+
+			-- 盾墙
+			{ spellID =    871, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 破釜沉舟
+			{ spellID =  12975, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 盾牌格挡
+			{ spellID = 132404, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 奈萨里奥之怒
+			{ spellID = 203524, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 法术反射
+			{ spellID =  23920, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 无视痛苦
+			{ spellID = 190456, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 狂暴复兴
+			{ spellID = 202289, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 怒火聚焦
+			{ spellID = 204488, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 怒火聚焦
+			{ spellID = 122510, unitID = "player", caster = "player", filter = "BUFF"},
+
+			-- 乘胜追击
+			{ spellID =  32216, unitID = "player", caster = "player", filter = "BUFF"},
 		},
 		{
 			name = "目标debuff",
@@ -1325,28 +1544,35 @@ ns.watchers ={
 			setpoint = {unpack(FG["filger_position"].targetdebuff)},
 			mode = "ICON",
 
-			-- 震荡波
-			{ spellID =  132168, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 断筋
-			{ spellID =    1715, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 挫志怒吼
-			{ spellID =    1160, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 刺耳怒吼
-			{ spellID =   12323, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 破胆怒吼
-			{ spellID =    5246, unitId = "target", caster = "player", filter = "DEBUFF"},
+			-- 致死之伤
+			{ spellID = 115804, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 创伤
+			{ spellID = 215537, unitID = "target", caster = "player", filter = "DEBUFF"},
 			-- 巨人打击
-			{ spellID =  167105, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 风暴之锤
-			{ spellID =  132169, unitId = "target", caster = "player", filter = "DEBUFF" },
+			{ spellID = 208086, unitID = "target", caster = "player", filter = "DEBUFF"},
 			-- 撕裂
-			{ spellID =     772, unitId = "target", caster = "player", filter = "DEBUFF"},
-			-- 重伤
-			{ spellID =  115767, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID =    772, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 破胆怒吼
+			{ spellID =   5246, unitID = "target", caster = "player", filter = "DEBUFF"},
+
 			-- 浴血奋战
-			{ spellID =  113344, unitId = "target", caster = "player", filter = "DEBUFF" },
-			-- 剑刃风暴
-			{ spellID =   46924, unitId = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID = 113344, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 奥丁之怒
+			{ spellID = 205546, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 刺耳怒吼
+			{ spellID =  12323, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 风暴之锤
+			{ spellID = 132169, unitID = "target", caster = "player", filter = "DEBUFF"},
+
+			-- 震荡波
+			{ spellID = 132168, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 挫志怒吼
+			{ spellID =   1160, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 重伤
+			{ spellID = 115767, unitID = "target", caster = "player", filter = "DEBUFF"},
+
+			-- 断筋
+			{ spellID =   1715, unitID = "target", caster = "player", filter = "DEBUFF"},
 		},
 		{
 			name = "玩家技能CD",
@@ -1355,24 +1581,14 @@ ns.watchers ={
 			setpoint = {unpack(FG["filger_position"].playercd)},
 			mode = "ICON",
 
-			-- 鲁莽
-			{ spellID =   1719, filter = "CD" },
-			-- 浴血奋战
-			{ spellID =  12292, filter = "CD" },
 			-- 盾墙
 			{ spellID =    871, filter = "CD" },
-			-- 集结呐喊
-			{ spellID =  97462, filter = "CD" },
 			-- 破胆怒吼
 			{ spellID =   5246, filter = "CD" },
 			-- 天神下凡
 			{ spellID = 107574, filter = "CD" },
-			-- 狂怒回复
-			{ spellID =  55694, filter = "CD" },
 			-- 剑在人在
 			{ spellID = 118038, filter = "CD" },
-			-- 错愕怒吼
-			{ spellID = 107566, filter = "CD" },
 			-- 剑刃风暴
 			{ spellID =  46924, filter = "CD" },
 			-- 英勇飞跃
@@ -1721,125 +1937,92 @@ ns.watchers ={
 			mode = "ICON",
 
 			-- 英勇
-			{ spellID =  80353, unitId = "player", caster = "all",    filter = "BUFF"}, 
+			{ spellID =  80353, unitID = "player", caster = "all",    filter = "BUFF"}, 
 			-- 嗜血
-			{ spellID =   2825, unitId = "player", caster = "all",    filter = "BUFF"},
+			{ spellID =   2825, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 时间扭曲
-			{ spellID =  32182, unitId = "player", caster = "all",    filter = "BUFF"}, 
+			{ spellID =  32182, unitID = "player", caster = "all",    filter = "BUFF"}, 
 			-- 上古狂乱(熔火犬)
-			{ spellID =  90355, unitId = "player", caster = "all",    filter = "BUFF"}, 
+			{ spellID =  90355, unitID = "player", caster = "all",    filter = "BUFF"}, 
 			-- 虛空之风(虚空鳐)
-			{ spellID = 160452, unitId = "player", caster = "all",    filter = "BUFF"}, 
+			{ spellID = 160452, unitID = "player", caster = "all",    filter = "BUFF"}, 
 			-- 暴怒之鼓(25%)
-			{ spellID = 146555, unitId = "player", caster = "all",    filter = "BUFF"},
+			{ spellID = 146555, unitID = "player", caster = "all",    filter = "BUFF"},
 
 			-- 种族
 			-- 狂暴 
-			{ spellID =  26297, unitId = "player", caster = "player", filter = "BUFF" },
+			{ spellID =  26297, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 石像形态 
-			{ spellID =  65116, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  65116, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 血性狂怒 
-			{ spellID =  20572, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  20572, unitID = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  33697, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 疾步夜行 
-			{ spellID =  68992, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  68992, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 纳鲁的赐福 
-			{ spellID =  28880, unitId = "player", caster = "all",    filter = "BUFF"},
+			{ spellID =  28880, unitID = "player", caster = "all",    filter = "BUFF"},
 
 			-- Other
-			-- 保护之手
-			{ spellID =   1022, unitId = "player", caster = "all",    filter = "BUFF"},
-			-- 自由之手
-			{ spellID =   1044, unitId = "player", caster = "all",    filter = "BUFF"},
-			-- 牺牲之手
-			{ spellID =   6940, unitId = "player", caster = "all",    filter = "BUFF"},
-			-- 纯净之手
-			{ spellID = 114039, unitId = "player", caster = "all",    filter = "BUFF"},
-			-- 拯救之手
-			{ spellID =   1038, unitId = "player", caster = "all",    filter = "BUFF"},
+
+			-- 破咒祝福
+			{ spellID = 204018, unitID = "player", caster = "all",    filter = "BUFF"},
+			-- 拯救祝福
+			{ spellID = 204013, unitID = "player", caster = "all",    filter = "BUFF"},
+			-- 保护祝福
+			{ spellID =   1022, unitID = "player", caster = "all",    filter = "BUFF"},
+			-- 自由祝福
+			{ spellID =   1044, unitID = "player", caster = "all",    filter = "BUFF"},
+			-- 牺牲祝福
+			{ spellID =   6940, unitID = "player", caster = "all",    filter = "BUFF"},
+			-- 强效王者祝福
+			{ spellID = 203538, unitID = "player", caster = "all",    filter = "BUFF"},
+			-- 强效智慧祝福
+			{ spellID = 203539, unitID = "player", caster = "all",    filter = "BUFF"},
+			-- 强效力量祝福
+			{ spellID = 203528, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 虔诚光环
-			{ spellID =  31821, unitId = "player", caster = "all",    filter = "BUFF"},
-			-- 光明之泉恢复
-			{ spellID =   7001, unitId = "player", caster = "all",    filter = "BUFF"},
+			{ spellID =  31821, unitID = "player", caster = "all",    filter = "BUFF"},
+			-- 黑暗
+			{ spellID = 209426, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 漂浮术
-			{ spellID =   1706, unitId = "player", caster = "all",    filter = "BUFF"},
+			{ spellID =   1706, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 身心合一
-			{ spellID =  65081, unitId = "player", caster = "all",    filter = "BUFF"},
+			{ spellID =  65081, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 天堂之羽
-			{ spellID = 121557, unitId = "player", caster = "all",    filter = "BUFF"},
-			-- 防护恐惧结界
-			{ spellID =   6346, unitId = "player", caster = "all",    filter = "BUFF"},
+			{ spellID = 121557, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 吸血鬼的拥抱
-			{ spellID =  15286, unitId = "player", caster = "all",    filter = "BUFF"}, 
+			{ spellID =  15286, unitID = "player", caster = "all",    filter = "BUFF"}, 
 			-- 真言术：障
-			{ spellID =  81782, unitId = "player", caster = "all",    filter = "BUFF"}, 
+			{ spellID =  81782, unitID = "player", caster = "all",    filter = "BUFF"}, 
 			-- 神圣赞美诗
-			{ spellID =  64844, unitId = "player", caster = "all",    filter = "BUFF" }, 
-			{ spellID =  64843, unitId = "player", caster = "all",    filter = "BUFF" }, 
+			{ spellID =  64843, unitID = "player", caster = "all",    filter = "BUFF"}, 
 			-- 守护之魂
-			{ spellID =  47788, unitId = "player", caster = "all",    filter = "BUFF"},
+			{ spellID =  47788, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 痛苦压制
-			{ spellID =  33206, unitId = "player", caster = "all",    filter = "BUFF"},
+			{ spellID =  33206, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 铁木树皮
-			{ spellID = 102342, unitId = "player", caster = "all",    filter = "BUFF"},
+			{ spellID = 102342, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 宁静
-			{ spellID =    740, unitId = "player", caster = "all",    filter = "BUFF"},
-			-- 警戒
-			{ spellID = 114030, unitId = "player", caster = "all",    filter = "BUFF"},
+			{ spellID =    740, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 狂奔怒吼
-			{ spellID = 106898, unitId = "player", caster = "all",    filter = "BUFF" },
-			{ spellID =  77764, unitId = "player", caster = "all",    filter = "BUFF" },
-			-- 根基图腾效果
-			{ spellID =   8178, unitId = "player", caster = "all",    filter = "BUFF"},
+			{ spellID =  77764, unitID = "player", caster = "all",    filter = "BUFF"},
+			{ spellID =  77761, unitID = "player", caster = "all",    filter = "BUFF"},
+			-- 命令怒吼
+			{ spellID =  97436, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 灵魂链接图腾
-			{ spellID =  98007, unitId = "player", caster = "all",    filter = "BUFF"}, 
+			{ spellID =  98007, unitID = "player", caster = "all",    filter = "BUFF"}, 
 			-- 风行图腾
-			{ spellID = 114896, unitId = "player", caster = "all",    filter = "BUFF"},
+			{ spellID = 114896, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 作茧缚命
-			{ spellID = 116849, unitId = "player", caster = "all",    filter = "BUFF"},
-			-- 禅悟冥想
-			{ spellID = 115176, unitId = "player", caster = "all",    filter = "BUFF"},
-			-- 迅如猛虎
-			{ spellID = 116841, unitId = "player", caster = "all",    filter = "BUFF"},
-			-- 集结呐喊
-			{ spellID =  97463, unitId = "player", caster = "all",    filter = "BUFF"},
-			-- 群体反射
-			{ spellID = 114028, unitId = "player", caster = "all",    filter = "BUFF"},
-			-- 潜伏帷幕
-			{ spellID = 114018, unitId = "player", caster = "all",    filter = "BUFF"}, 
-			-- 烟雾弹
-			{ spellID =  88611, unitId = "player", caster = "all",    filter = "BUFF"},
+			{ spellID = 116849, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 缓落术
-			{ spellID =    130, unitId = "player", caster = "all",    filter = "BUFF"},
-			-- 魔法增益
-			{ spellID = 159916, unitId = "player", caster = "all",    filter = "BUFF"},
-			-- 反魔法领域
-			{ spellID =  50461, unitId = "player", caster = "all",    filter = "BUFF"}, 
-			-- 灵狐守护
-			{ spellID = 172106, unitId = "player", caster = "all",    filter = "BUFF"},
-			-- 豹群守护
-			{ spellID =  13159, unitId = "player", caster = "all",    filter = "BUFF"},
-
-			-- 鲜血充能
-			{ spellID = 114851, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID =    130, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 爆燃冲刺
-			{ spellID = 111400, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 地狱烈焰
-			{ spellID =   1949, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 蒸馏：虎眼酒
-			{ spellID = 125195, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 飘渺酒
-			{ spellID = 128939, unitId = "player", caster = "player", filter = "BUFF"},
-			-- 法力茶
-			{ spellID = 115867, unitId = "player", caster = "player", filter = "BUFF"},
+			{ spellID = 111400, unitID = "player", caster = "player", filter = "BUFF"},
 
-			-- 轻度醉拳
-			{ spellID = 124275, unitId = "player", caster = "all",  filter = "DEBUFF"},
-			-- 中度醉拳
-			{ spellID = 124274, unitId = "player", caster = "all",  filter = "DEBUFF"},
-			-- 重度醉拳
-			{ spellID = 124273, unitId = "player", caster = "all",  filter = "DEBUFF"},
+
 			-- 火箭鞋漏油
-			{ spellID =94794, unitId = "player", caster = "player", filter = "DEBUFF"},
+			{ spellID =94794, unitID = "player", caster = "player", filter = "DEBUFF"},
 		},
 		{ 
 			name = "玩家PVPDebuff",
@@ -1850,237 +2033,173 @@ ns.watchers ={
 
 			-- 死亡骑士
 			-- 撕扯
-			{ spellID =  91800, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  91800, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 蛮兽打击
-			{ spellID =  91797, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  91797, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 窒息
-			{ spellID = 108194, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 冷酷严冬
-			{ spellID = 115001, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID = 108194, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 绞袭
-			{ spellID =  47476, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 黑暗模拟
-			{ spellID =  77606, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  47476, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 寒冰锁链
-			{ spellID =  45524, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 冻疮
-			{ spellID =  50435, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  45524, unitID = "player", caster = "all", filter = "DEBUFF" },
 
 			-- 德鲁伊
 			-- 旋风
-			{ spellID =  33786, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 蛮力猛击
-			{ spellID =   5211, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  33786, unitID = "player", caster = "all", filter = "DEBUFF" },
+			-- 斜掠(猫)
+			{ spellID = 163505, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 割碎
-			{ spellID = 163505, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 割碎
-			{ spellID =  22570, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 惊魂咆哮
-			{ spellID =     99, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  22570, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 日光术
-			{ spellID =  78675, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 精灵沉默
-			{ spellID = 114238, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  78675, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 纠缠根须
-			{ spellID =    339, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =    339, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 无法移动
-			{ spellID =  45334, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  45334, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 感染伤口
-			{ spellID =  58180, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  58180, unitID = "player", caster = "all", filter = "DEBUFF" },
 
 			-- 猎人
 			-- 胁迫
-			{ spellID =  24394, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 束缚射击
-			{ spellID = 117526, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  24394, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 冰冻陷阱
-			{ spellID =   3355, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =   3355, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 翼龙钉刺
-			{ spellID =  19386, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  19386, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 险境求生
-			{ spellID = 136634, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID = 136634, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 震荡射击
-			{ spellID =   5116, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 冰霜陷阱
-			{ spellID =  61394, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 诱捕
-			{ spellID = 135373, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =   5116, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 虚空震击 (虚空鳐)
-			{ spellID =  44957, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  44957, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 冰霜吐息 (奇美拉)
-			{ spellID =  54644, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  54644, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 碎踝 (鳄魚)
-			{ spellID =  50433, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  50433, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 时间扭曲 
-			{ spellID =  35346, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 音爆 (蝙蝠)
-			{ spellID =  50519, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  35346, unitID = "player", caster = "all", filter = "DEBUFF" },
+			-- 诱捕
+			{ spellID = 135373, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 冰冻术
-			{ spellID =  33395, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  33395, unitID = "player", caster = "all", filter = "DEBUFF" },
 
 			-- 法师
-			-- 深度冻结
-			{ spellID =  44572, unitId = "player", caster = "all", filter = "DEBUFF" },
 			-- 变形术
-			{ spellID =    118, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =    118, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 冰霜之环
-			{ spellID =  82691, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  82691, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 龙息术
-			{ spellID =  31661, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 冰霜之颌
-			{ spellID = 102051, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  31661, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 冰霜新星
-			{ spellID =    122, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 寒冰结界
-			{ spellID = 111340, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =    122, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 冰锥术
-			{ spellID =    120, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =    120, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 减速
-			{ spellID =  31589, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 寒冰箭
-			{ spellID =    116, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 霜火箭
-			{ spellID =  44614, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  31589, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 冰冻
-			{ spellID =   7321, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =   7321, unitID = "player", caster = "all", filter = "DEBUFF" },
 
 			-- 武僧
 			-- 分筋错骨
-			{ spellID = 115078, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID = 115078, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 扫堂腿
-			{ spellID = 119381, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 怒雷破
-			{ spellID = 120086, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 蛮牛冲
-			{ spellID = 119392, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 金刚震
-			{ spellID = 116706, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID = 119381, unitID = "player", caster = "all", filter = "DEBUFF" },
 
 			-- 圣骑士
 			-- 制裁之锤
-			{ spellID =    853, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 制裁之拳
-			{ spellID = 105593, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =    853, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 忏悔
-			{ spellID =  20066, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  20066, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 盲目之光
-			{ spellID = 105421, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID = 105421, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 复仇者之盾
-			{ spellID =  31935, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 眩晕—之盾(雕纹)
-			{ spellID =  63529, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 公正圣印
-			{ spellID =  20170, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 罪孽如山
-			{ spellID = 110300, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 谴责
-			{ spellID =   2812, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  31935, unitID = "player", caster = "all", filter = "DEBUFF" },
 
 			-- 牧师
-			-- 统御意志
-			{ spellID =    605, unitId = "player", caster = "all", filter = "DEBUFF" },
 			-- 心灵尖啸
-			{ spellID =   8122, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =   8122, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 心灵惊骇
-			{ spellID =  64044, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  64044, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 罪与罚
-			{ spellID =  87204, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  87204, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 沉默
-			{ spellID =  15487, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 虚空触须
-			{ spellID = 114404, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 心灵震爆雕文
-			{ spellID =  87194, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  15487, unitID = "player", caster = "all", filter = "DEBUFF" },
 
 			-- 盗贼
 			-- 肾击
-			{ spellID =    408, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =    408, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 偷袭
-			{ spellID =   1833, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =   1833, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 闷棍
-			{ spellID =   6770, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =   6770, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 致盲
-			{ spellID =   2094, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =   2094, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 凿击
-			{ spellID =   1776, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =   1776, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 锁喉 - 沉默
-			{ spellID =   1330, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =   1330, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 致命投掷
-			{ spellID =  26679, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  26679, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 减速药膏
-			{ spellID =   3409, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =   3409, unitID = "player", caster = "all", filter = "DEBUFF" },
 
 			-- 萨满
 			-- 妖术
-			{ spellID =  51514, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  51514, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 静电充能
-			{ spellID = 118905, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID = 118905, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 粉碎
-			{ spellID = 118345, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID = 118345, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 地震术
-			{ spellID =  77505, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  77505, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 陷地
-			{ spellID =  64695, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  64695, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 地缚术
-			{ spellID =   3600, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 冰霜震击
-			{ spellID =   8056, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 冰冻
-			{ spellID =   8056, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 雷霆风暴
-			{ spellID =  63685, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =   3600, unitID = "player", caster = "all", filter = "DEBUFF" },
 
 			-- 术士
 			-- 暗影之怒
-			{ spellID =  30283, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  30283, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 巨斧投掷 (恶魔守卫)
-			{ spellID =  89766, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  89766, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 恐惧
-			{ spellID = 118699, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID = 118699, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 恐惧嚎叫
-			{ spellID =   5484, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 鲜血恐惧
-			{ spellID = 137143, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =   5484, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 死亡缠绕
-			{ spellID =   6789, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =   6789, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 诱惑 (魅魔)
-			{ spellID =   6358, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =   6358, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 迷魅 
-			{ spellID = 115268, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID = 115268, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 痛苦无常
-			{ spellID =  31117, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  31117, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 燃烧
-			{ spellID =  17962, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 暗影烈焰
-			{ spellID =  47960, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  17962, unitID = "player", caster = "all", filter = "DEBUFF" },
 
 			-- 战士
 			-- 风暴之锤
-			{ spellID = 132169, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID = 132169, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 震荡波
-			{ spellID = 132168, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 战神
-			{ spellID = 105771, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID = 132168, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 错愕怒吼
-			{ spellID = 107566, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID = 107566, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 破胆怒吼
-			{ spellID =   5246, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =   5246, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 断筋
-			{ spellID =   1715, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =   1715, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 刺耳怒吼
-			{ spellID =  12323, unitId = "player", caster = "all", filter = "DEBUFF" },
-			-- 巨人打击
-			{ spellID =  86346, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  12323, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 冲锋昏迷
-			{ spellID =   7922, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =   7922, unitID = "player", caster = "all", filter = "DEBUFF" },
 
 			-- 种族天赋
 			-- 战争践踏
-			{ spellID =  20549, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  20549, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 震山掌
-			{ spellID = 107079, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID = 107079, unitID = "player", caster = "all", filter = "DEBUFF" },
 			-- 奥术洪流
-			{ spellID =  28730, unitId = "player", caster = "all", filter = "DEBUFF" },
+			{ spellID =  28730, unitID = "player", caster = "all", filter = "DEBUFF" },
 		},
 		{ 
 			name = "玩家Debuff",
