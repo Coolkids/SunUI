@@ -43,22 +43,21 @@ ns.auras_buffs = {
 		--------------------------战士---------------
 		[GetSpellInfo(871)]     = 2,	-- 盾墙
 		[GetSpellInfo(12975)]   = 2,	-- 破釜沉舟
-		[GetSpellInfo(97462)]   = 2,	-- 集结呐喊
-		[GetSpellInfo(2565)]    = 2,	-- 盾牌格挡
-		[GetSpellInfo(112048)]  = 2,	-- 盾牌屏障
+		[GetSpellInfo(97463)]   = 2,	-- 命令怒吼
+		[GetSpellInfo(132404)]  = 2,	-- 盾牌格挡
+		[GetSpellInfo(190456)]  = 2,	-- 无视痛苦
 		--------------------------骑士---------------
 		[GetSpellInfo(642)]     = 2,	-- 圣盾术
 		[GetSpellInfo(86659)]   = 2,	-- 远古列王守卫
 		[GetSpellInfo(31821)]   = 2,	-- 虔诚光环
 		[GetSpellInfo(31850)]   = 2,	-- 炽热防御者
 		[GetSpellInfo(498)]     = 2,	-- 圣佑术
-		[GetSpellInfo(1022)]    = 2,	-- 保护之手
-		[GetSpellInfo(1038)]    = 2,	-- 拯救之手
-		[GetSpellInfo(6940)]    = 2,	-- 牺牲之手
-		[GetSpellInfo(114039)]  = 2,	-- 纯净之手
+		[GetSpellInfo(1022)]    = 2,	-- 保护祝福
+		[GetSpellInfo(204018)]  = 2,	-- 破咒祝福
+		[GetSpellInfo(204013)]  = 2,	-- 拯救祝福
+		[GetSpellInfo(6940)]    = 2,	-- 牺牲祝福
 		--------------------------DK---------------
 		[GetSpellInfo(48707)]   = 2,	-- 反魔法护罩
-		[GetSpellInfo(50461)]   = 2,	-- 反魔法领域
 		[GetSpellInfo(48792)]   = 2,	-- 冰封之韧
 		[GetSpellInfo(55233)]   = 2,	-- 吸血鬼之血
 		[GetSpellInfo(81256)]   = 2,	-- 符文刃舞
@@ -67,19 +66,16 @@ ns.auras_buffs = {
 		[GetSpellInfo(22812)]   = 2,	-- 树皮术
 		[GetSpellInfo(22842)]   = 2,	-- 狂暴回复
 		[GetSpellInfo(61336)]   = 2,	-- 生存本能
-		[GetSpellInfo(155835)]  = 2,	-- 鬃毛倒竖
 		[GetSpellInfo(102342)]  = 2,	-- 铁木树皮
-		[GetSpellInfo(132402)]  = 2,	-- 野蛮防御
+		[GetSpellInfo(192081)]  = 2,	-- 铁鬃
+		[GetSpellInfo(200851)]  = 2,	-- 沉睡者之怒(神器)
+		[GetSpellInfo(192083)]  = 2,	-- 乌索尔印记
 		------------------------牧师--------------------
 		[GetSpellInfo(33206)]   = 2,	-- 痛苦压制
 		[GetSpellInfo(47788)]   = 2,	-- 守护之魂
 		[GetSpellInfo(62618)]   = 2,	-- 真言术:障
 		------------------------武僧--------------------
 		[GetSpellInfo(116849)]  = 2,	-- 作茧缚命
-		[GetSpellInfo(115176)]  = 2,	-- 禅悟冥想
-		[GetSpellInfo(122783)]  = 2,	-- 散魔功
-		[GetSpellInfo(115308)]  = 2,	-- 飘渺酒
-		[GetSpellInfo(115295)]  = 2,	-- 金钟罩
 		[GetSpellInfo(115203)]  = 2,	-- 壮胆酒
 		[GetSpellInfo(122278)]  = 2,	-- 躯不坏
 		------------------------橙戒-------------------
