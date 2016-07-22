@@ -15,16 +15,8 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	EncounterJournalInsetBg:Hide()
 	EncounterJournalEncounterFrameInfoModelFrameShadow:Hide()
 	EncounterJournalEncounterFrameInfoModelFrame.dungeonBG:Hide()
-	EncounterJournalEncounterFrameInfoDifficultyUpLeft:SetAlpha(0)
-	EncounterJournalEncounterFrameInfoDifficultyUpRIGHT:SetAlpha(0)
-	EncounterJournalEncounterFrameInfoDifficultyDownLeft:SetAlpha(0)
-	EncounterJournalEncounterFrameInfoDifficultyDownRIGHT:SetAlpha(0)
 	select(5, EncounterJournalEncounterFrameInfoDifficulty:GetRegions()):Hide()
 	select(6, EncounterJournalEncounterFrameInfoDifficulty:GetRegions()):Hide()
-	EncounterJournalEncounterFrameInfoLootScrollFrameFilterToggleUpLeft:SetAlpha(0)
-	EncounterJournalEncounterFrameInfoLootScrollFrameFilterToggleUpRIGHT:SetAlpha(0)
-	EncounterJournalEncounterFrameInfoLootScrollFrameFilterToggleDownLeft:SetAlpha(0)
-	EncounterJournalEncounterFrameInfoLootScrollFrameFilterToggleDownRIGHT:SetAlpha(0)
 	select(5, EncounterJournalEncounterFrameInfoLootScrollFrameFilterToggle:GetRegions()):Hide()
 	select(6, EncounterJournalEncounterFrameInfoLootScrollFrameFilterToggle:GetRegions()):Hide()
 
@@ -45,7 +37,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		self:GetFontString():SetTextColor(1, 1, 1)
 	end
 
-	for _, tabName in pairs({"EncounterJournalInstanceSelectSuggestTab", "EncounterJournalInstanceSelectDungeonTab", "EncounterJournalInstanceSelectRaidTab"}) do
+	for _, tabName in pairs({"EncounterJournalInstanceSelectSuggestTab", "EncounterJournalInstanceSelectDungeonTab", "EncounterJournalInstanceSelectRaidTab", "EncounterJournalInstanceSelectLootJournalTab"}) do
 		local tab = _G[tabName]
 		local text = tab:GetFontString()
 
@@ -283,11 +275,6 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	F.CreateBD(EncounterJournalSearchResults)
 	EncounterJournalSearchResults:SetBackdropColor(.15, .15, .15, .9)
 
-	EncounterJournalSearchBoxSearchButton1BotLeftCorner:Hide()
-	EncounterJournalSearchBoxSearchButton1BotRightCorner:Hide()
-	EncounterJournalSearchBoxSearchButton1BottomBorder:Hide()
-	EncounterJournalSearchBoxSearchButton1LeftBorder:Hide()
-	EncounterJournalSearchBoxSearchButton1RightBorder:Hide()
 
 	local function resultOnEnter(self)
 		self.hl:Show()
