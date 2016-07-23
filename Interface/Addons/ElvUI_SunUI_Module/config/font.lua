@@ -30,5 +30,6 @@ V.general.dmgfont = "SunUI Font"
 V.general.namefont = "SunUI Font"
 V.general.chatBubbleFont = "SunUI Font"
 
-
+SetCVar("floatingCombatTextCombatHealing" ,1)
+SetCVar("floatingCombatTextCombatDamage" ,1)
 
