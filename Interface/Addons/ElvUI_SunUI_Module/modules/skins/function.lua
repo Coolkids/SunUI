@@ -131,3 +131,22 @@ function E:CreateFS(parent, fontSize, justify, fontname, fontStyle)
 
     return f
 end
+
+hooksecurefunc(getmetatable(ActionButton1Cooldown).__index, 'SetCooldown', function(self, start, duration)
+	if self.noOCC then return end
+	--start timer
+	if start > 0 and duration > MIN_DURATION then
+		local timer = self.timer or E:CreateCooldownTimer(self)
+		timer.start = start
+		timer.duration = duration
+		timer.enabled = true
+		timer.nextUpdate = 0
+		if timer.fontScale >= MIN_SCALE then timer:Show() end
+	--stop timer
+	else
+		local timer = self.timer
+		if timer then
+			E:Cooldown_StopTimer(timer)
+		end
+	end
+end)
