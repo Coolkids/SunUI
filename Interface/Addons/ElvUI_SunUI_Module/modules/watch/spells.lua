@@ -465,7 +465,7 @@ ns.watchers ={
 			size = 28,
 
 			-- 命令怒吼
-			{ spellID =  97436, unitID = "player", caster = "player", filter = "BUFF"},
+			{ spellID =  97463, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 压制!
 			{ spellID =  60503, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 粉碎防御
@@ -3005,7 +3005,7 @@ ns.watchers ={
 			{ spellID =  77764, unitID = "player", caster = "all",    filter = "BUFF"},
 			{ spellID =  77761, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 命令怒吼
-			{ spellID =  97436, unitID = "player", caster = "all",    filter = "BUFF"},
+			{ spellID =  97463, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 灵魂链接图腾
 			{ spellID =  98007, unitID = "player", caster = "all",    filter = "BUFF"}, 
 			-- 风行图腾
@@ -3191,7 +3191,7 @@ ns.watchers ={
 			-- 洛克莫拉的碎片          (吸收, 使用)
 			{ spellID = 214366, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 督军的坚韧              (生命/精通, 触发)
-			{ spellID = 241624, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 214624, unitID = "player", caster = "player", filter = "BUFF" },
 
 
 			-------------------------------WOD-----------------------------------------
