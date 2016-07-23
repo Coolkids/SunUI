@@ -1443,6 +1443,8 @@ ns.watchers ={
 			-- 愈合祷言
 			{ spellID =  64843, unitID = "player", caster = "player", filter = "BUFF"},
 			{ spellID =  64844, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 救赎之魂
+			{ spellID =  27827, unitID = "player", caster = "player", filter = "BUFF"},
 
 			-- 妙手回春
 			{ spellID =  63735, unitID = "player", caster = "player", filter = "BUFF"},
