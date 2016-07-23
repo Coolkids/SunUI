@@ -1,0 +1,24 @@
+## Interface: 70000
+## Author: Elv
+## Version: 1.04
+## Title: |cff1784d1ElvUI Config|r
+## Notes: Options for ElvUI.
+## RequiredDeps: ElvUI
+## LoadOnDemand: 1
+
+Libraries\Load_Libraries.xml
+locales\load_locales.xml
+core.lua
+actionbars.lua
+auras.lua
+bags.lua
+chat.lua
+datatexts.lua 
+DataBars.lua
+filters.lua
+skins.lua
+tooltip.lua
+unitframes.lua
+tag_info.lua
+nameplates.lua
+profiles.lua
