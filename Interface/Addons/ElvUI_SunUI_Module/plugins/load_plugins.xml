@@ -1,0 +1,27 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Include file="Announce\load.xml"/>
+	<Include file="Automation\load.xml"/>
+	<Include file="ClassTools\load.xml"/>
+	<!-- Include file="Cooldowns\load.xml"/ -->
+	
+	<Include file="FriendsMenuXP\load.xml"/>
+	<Include file="RaidTools\load_rltools.xml"/>
+	
+	
+	
+	<Include file="BuyEmAll\load.xml"/>
+	<!-- Script file="CurrencyCap.lua"/ -->
+	<!--Script file="lowhealth.lua"/ -->
+	
+	<Script file="AlreadyKnown.lua"/>
+	<Script file="CloseUp.lua"/>
+	
+	<Script file="DragEmAll.lua"/>
+	<Script file="Focuser.lua"/>
+	
+	<Script file="notifications.lua"/>
+	<Script file="smallthings.lua"/>
+	<Script file="SR.lua"/>
+	
+	
+</Ui>

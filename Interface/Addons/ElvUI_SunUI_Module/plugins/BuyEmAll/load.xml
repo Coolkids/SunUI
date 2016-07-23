@@ -1,0 +1,13 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file='Localization.deDE.lua'/>
+	<Script file='Localization.enUS.lua'/>
+	<Script file='Localization.esES.lua'/>
+	<Script file='Localization.frFR.lua'/>
+	<Script file='Localization.koKR.lua'/>
+	<Script file='Localization.ptBR.lua'/>
+	<Script file='Localization.ruRU.lua'/>
+	<Script file='Localization.zhCN.lua'/>
+	<Script file='Localization.zhTW.lua'/>
+	<Script file='BuyEmAll.lua'/>
+	<Include file="BuyEmAll.xml"/>
+</Ui>
