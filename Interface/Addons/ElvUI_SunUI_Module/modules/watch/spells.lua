@@ -2974,11 +2974,11 @@ ns.watchers ={
 			-- 牺牲祝福
 			{ spellID =   6940, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 强效王者祝福
-			{ spellID = 203538, unitID = "player", caster = "all",    filter = "BUFF"},
+			--{ spellID = 203538, unitID = "player", caster = "all",  filter = "BUFF"},
 			-- 强效智慧祝福
-			{ spellID = 203539, unitID = "player", caster = "all",    filter = "BUFF"},
+			--{ spellID = 203539, unitID = "player", caster = "all",  filter = "BUFF"},
 			-- 强效力量祝福
-			{ spellID = 203528, unitID = "player", caster = "all",    filter = "BUFF"},
+			--{ spellID = 203528, unitID = "player", caster = "all",  filter = "BUFF"},
 			-- 虔诚光环
 			{ spellID =  31821, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 黑暗
