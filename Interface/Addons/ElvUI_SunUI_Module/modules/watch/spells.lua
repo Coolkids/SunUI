@@ -1363,7 +1363,7 @@ ns.watchers ={
 			-- 混乱新星
 			{ spellID = 179057, unitID = "target", caster = "player", filter = "DEBUFF" },
 			-- 复仇回避
-			{ spellID = 178813, unitID = "target", caster = "player", filter = "DEBUFF" },
+			{ spellID = 198813, unitID = "target", caster = "player", filter = "DEBUFF" },
 			-- 涅墨西斯
 			{ spellID = 206491, unitID = "target", caster = "player", filter = "DEBUFF" },
 			-- 血滴子
