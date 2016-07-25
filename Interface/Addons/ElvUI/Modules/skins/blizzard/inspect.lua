@@ -94,11 +94,11 @@ local function LoadSkin()
 		slot.backdrop:SetAllPoints()
 
 		hooksecurefunc(slot.IconBorder, 'SetVertexColor', function(self, r, g, b)
-			self:GetParent():SetBackdropBorderColor(r,g,b)
+			self:GetParent().backdrop:SetBackdropBorderColor(r,g,b)
 			self:SetTexture("")
 		end)
 		hooksecurefunc(slot.IconBorder, 'Hide', function(self)
-			self:GetParent():SetBackdropBorderColor(unpack(E.media.bordercolor))
+			self:GetParent().backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
 		end)
 	end
 

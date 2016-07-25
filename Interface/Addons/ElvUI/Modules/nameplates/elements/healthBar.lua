@@ -1,7 +1,29 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local mod = E:GetModule('NamePlates')
 local LSM = LibStub("LibSharedMedia-3.0")
+
+--Cache global variables
+--Lua functions
 local max = math.max
+--WoW API / Variables
+local CreateAnimationGroup = CreateAnimationGroup
+local CreateFrame = CreateFrame
+local IsInGroup = IsInGroup
+local IsInRaid = IsInRaid
+local UnitClass = UnitClass
+local UnitDetailedThreatSituation = UnitDetailedThreatSituation
+local UnitGetIncomingHeals = UnitGetIncomingHeals
+local UnitGetTotalAbsorbs = UnitGetTotalAbsorbs
+local UnitGetTotalHealAbsorbs = UnitGetTotalHealAbsorbs
+local UnitHealth = UnitHealth
+local UnitHealthMax = UnitHealthMax
+local UnitIsConnected = UnitIsConnected
+local UnitIsTapDenied = UnitIsTapDenied
+local UnitIsUnit = UnitIsUnit
+local UnitPlayerControlled = UnitPlayerControlled
+local UnitReaction = UnitReaction
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS
+local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS
 
 function mod:UpdateElement_HealthColor(frame)
 	if(not frame.HealthBar:IsShown()) then return end
@@ -17,13 +39,14 @@ function mod:UpdateElement_HealthColor(frame)
 		else
 			--Try to color it by class.
 			local _, class = UnitClass(frame.displayedUnit);
-			local classColor = RAID_CLASS_COLORS[class];
-			if ( (frame.UnitType == "FRIENDLY_PLAYER" or frame.UnitType == "HEALER" or frame.UnitType == "ENEMY_PLAYER" or frame.UnitType == "PLAYER") and classColor and not frame.inVehicle ) then
+			local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class];
+			local useClassColor = self.db.units[frame.UnitType].healthbar.useClassColor
+			if ( ( (frame.UnitType == "FRIENDLY_PLAYER" and useClassColor) or (frame.UnitType == "HEALER" and useClassColor) or (frame.UnitType == "ENEMY_PLAYER" and useClassColor) or frame.UnitType == "PLAYER") and classColor and not frame.inVehicle ) then
 				-- Use class colors for players if class color option is turned on
 				r, g, b = classColor.r, classColor.g, classColor.b;
 			elseif ( not UnitPlayerControlled(frame.unit) and UnitIsTapDenied(frame.unit) ) then
 				-- Use grey if not a player and can't get tap on unit
-				r, g, b = self.db.reactions.tapped.r, self.db.reactions.tapped.g, self.db.reactions.tapped.b	
+				r, g, b = self.db.reactions.tapped.r, self.db.reactions.tapped.g, self.db.reactions.tapped.b
 			else
 				-- Use color based on the type of unit (neutral, etc.)
 				local isTanking, status = UnitDetailedThreatSituation("player", frame.unit)
@@ -41,15 +64,15 @@ function mod:UpdateElement_HealthColor(frame)
 							r, g, b = self.db.threat.badTransition.r, self.db.threat.badTransition.g, self.db.threat.badTransition.b
 						else
 							r, g, b = self.db.threat.goodTransition.r, self.db.threat.goodTransition.g, self.db.threat.goodTransition.b
-						end			
-						scale = 1			
+						end
+						scale = 1
 					elseif(status == 1) then --not tanking but threat higher than tank
 						if(E:GetPlayerRole() == "TANK") then
 							r, g, b = self.db.threat.goodTransition.r, self.db.threat.goodTransition.g, self.db.threat.goodTransition.b
 						else
 							r, g, b = self.db.threat.badTransition.r, self.db.threat.badTransition.g, self.db.threat.badTransition.b
-						end			
-						scale = 1		
+						end
+						scale = 1
 					else -- not tanking at all
 						if(E:GetPlayerRole() == "TANK") then
 							--Check if it is being tanked by an offtank.
@@ -67,10 +90,12 @@ function mod:UpdateElement_HealthColor(frame)
 							else
 								r, g, b = self.db.threat.goodColor.r, self.db.threat.goodColor.g, self.db.threat.goodColor.b
 								scale = self.db.threat.goodScale
-							end	
+							end
 						end
 					end
-				else
+				end
+
+				if (not status) or (status and not self.db.threat.useThreatColor) then
 					--By Reaction
 					local reactionType = UnitReaction(frame.unit, "player")
 					if(reactionType == 4) then
@@ -89,7 +114,7 @@ function mod:UpdateElement_HealthColor(frame)
 		frame.HealthBar:SetStatusBarColor(r, g, b);
 		frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b = r, g, b;
 	end
-	
+
 	if(not frame.isTarget or not self.db.useTargetScale) then
 		frame.ThreatScale = scale
 		self:SetFrameScale(frame, scale)
@@ -125,7 +150,7 @@ function mod:UpdateElement_HealPrediction(frame)
 		overHealAbsorb = true
 		myCurrentHealAbsorb = health
 	end
-	
+
 	local maxOverflow = 1
 	if(health - myCurrentHealAbsorb + allIncomingHeal > maxHealth * maxOverflow) then
 		allIncomingHeal = maxHealth * maxOverflow - health + myCurrentHealAbsorb
@@ -157,7 +182,6 @@ function mod:UpdateElement_HealPrediction(frame)
 	else
 		myCurrentHealAbsorb = 0
 	end
-	
 
 	frame.PersonalHealPrediction:SetMinMaxValues(0, maxHealth)
 	frame.PersonalHealPrediction:SetValue(myIncomingHeal)
@@ -171,11 +195,11 @@ function mod:UpdateElement_HealPrediction(frame)
 	frame.AbsorbBar:SetMinMaxValues(0, maxHealth)
 	frame.AbsorbBar:SetValue(totalAbsorb)
 	frame.AbsorbBar:Show()
-	
+
 	local previousTexture = frame.HealthBar:GetStatusBarTexture();
 	previousTexture = UpdateFillBar(frame.HealthBar, previousTexture, frame.PersonalHealPrediction , myIncomingHeal);
 	previousTexture = UpdateFillBar(frame.HealthBar, previousTexture, frame.HealPrediction, allIncomingHeal);
-	previousTexture = UpdateFillBar(frame.HealthBar, previousTexture, frame.AbsorbBar, totalAbsorb);	
+	previousTexture = UpdateFillBar(frame.HealthBar, previousTexture, frame.AbsorbBar, totalAbsorb);
 end
 
 
@@ -186,14 +210,22 @@ end
 
 function mod:UpdateElement_Health(frame)
 	local health = UnitHealth(frame.displayedUnit);
+	local _, maxHealth = frame.HealthBar:GetMinMaxValues()
+
 	frame.HealthBar:SetValue(health)
+
+	if self.db.units[frame.UnitType].healthbar.text.enable then
+		frame.HealthBar.text:SetText(E:GetFormattedText(self.db.units[frame.UnitType].healthbar.text.format, health, maxHealth))
+	else
+		frame.HealthBar.text:SetText("")
+	end
 end
 
 function mod:ConfigureElement_HealthBar(frame, configuring)
 	local healthBar = frame.HealthBar
 	local absorbBar = frame.AbsorbBar
 	local isShown = healthBar:IsShown()
-	
+
 	--Position
 	healthBar:SetPoint("BOTTOM", frame, "BOTTOM", 0, self.db.units[frame.UnitType].castbar.height + 3)
 	if(UnitIsUnit(frame.unit, "target") and not frame.isTarget) then
@@ -210,12 +242,15 @@ function mod:ConfigureElement_HealthBar(frame, configuring)
 		healthBar:Show()
 	end
 	absorbBar:Hide()
+
+	healthBar.text:SetAllPoints(healthBar)
+	healthBar.text:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)	
 end
 
 function mod:ConstructElement_HealthBar(parent)
 	local frame = CreateFrame("StatusBar", "$parentHealthBar", parent)
 	self:StyleFrame(frame)
-	
+
 	parent.AbsorbBar = CreateFrame("StatusBar", "$parentAbsorbBar", frame)
 	parent.AbsorbBar:SetStatusBarTexture(LSM:Fetch("background", "ElvUI Blank"))
 	parent.AbsorbBar:SetStatusBarColor(1, 1, 0, 0.25)
@@ -223,18 +258,19 @@ function mod:ConstructElement_HealthBar(parent)
 	parent.HealPrediction = CreateFrame("StatusBar", "$parentHealPrediction", frame)
 	parent.HealPrediction:SetStatusBarTexture(LSM:Fetch("background", "ElvUI Blank"))
 	parent.HealPrediction:SetStatusBarColor(0, 1, 0, 0.25)
-	
+
 	parent.PersonalHealPrediction = CreateFrame("StatusBar", "$parentPersonalHealPrediction", frame)
 	parent.PersonalHealPrediction:SetStatusBarTexture(LSM:Fetch("background", "ElvUI Blank"))
 	parent.PersonalHealPrediction:SetStatusBarColor(0, 1, 0.5, 0.25)
-		
-	
+
+	frame.text = frame:CreateFontString(nil, "OVERLAY")
+	frame.text:SetWordWrap(false)
 	frame.scale = CreateAnimationGroup(frame)
-	
+
 	frame.scale.width = frame.scale:CreateAnimation("Width")
 	frame.scale.width:SetDuration(0.2)
 	frame.scale.height = frame.scale:CreateAnimation("Height")
-	frame.scale.height:SetDuration(0.2)	
+	frame.scale.height:SetDuration(0.2)
 	frame:Hide()
 	return frame
 end

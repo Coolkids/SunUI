@@ -1,0 +1,8 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">\
+  <Script file='init.lua'/>
+  <Script file='toolkits.lua'/>
+  <Script file='skins_sunui.lua'/>
+	<Script file='function.lua'/>
+	<Script file='cooldown.lua'/>
+	<Script file='setcvar.lua'/>
+</Ui>

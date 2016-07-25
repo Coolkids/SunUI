@@ -115,6 +115,8 @@ function UF:Update_PlayerFrame(frame, db)
 		frame.INFO_PANEL_HEIGHT = frame.USE_INFO_PANEL and db.infoPanel.height or 0
 
 		frame.BOTTOM_OFFSET = UF:GetHealthBottomOffset(frame)
+
+		frame.VARIABLES_SET = true
 	end
 
 	frame.colors = ElvUF.colors
@@ -207,5 +209,6 @@ local f = CreateFrame("Frame")
 f:RegisterEvent("PLAYER_ENTERING_WORLD")
 f:SetScript("OnEvent", function(self, event)
 	self:UnregisterEvent(event)
+	if not E.db.unitframe.units.player.enable then return end
 	UpdateClassBar()
 end)

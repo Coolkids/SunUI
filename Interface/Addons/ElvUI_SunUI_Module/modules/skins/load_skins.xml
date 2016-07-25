@@ -1,6 +1,4 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-  <Script file='toolkits.lua'/>
-  <Script file='skins_sunui.lua'/>
 	<Script file='skins.lua'/>
-	<Script file='function.lua'/>
+	<Include file='addons\addons.xml'/>
 </Ui>

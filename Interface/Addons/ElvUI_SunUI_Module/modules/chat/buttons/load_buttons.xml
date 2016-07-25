@@ -1,0 +1,10 @@
+﻿<!-- -->
+
+
+
+
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file = "collectorbutton.lua"/>
+	<Script file = "channel.lua"/>
+	<Script file = "ChatEmotion.lua"/>
+</Ui>

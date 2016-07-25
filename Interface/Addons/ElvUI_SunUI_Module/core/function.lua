@@ -1,13 +1,5 @@
 local E, L, V, P, G = unpack(ElvUI); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 
-local MIN_SCALE = 0.5
-
-local ICON_SIZE = 36 --the normal size for an icon (don't change this)
-local FONT_SIZE = 20 --the base font size to use at a scale of 1
-local MIN_SCALE = 0.5 --the minimum scale we want to show cooldown counts at, anything below this will be hidden
-local MIN_DURATION = 1.5 --the minimum duration to show cooldown text for
-local threshold
-
 local smoothing = {}
 local function Smooth(self, value)
 	if value ~= self:GetValue() or value == 0 then
@@ -140,21 +132,51 @@ function E:CreateFS(parent, fontSize, justify, fontname, fontStyle)
     return f
 end
 
-hooksecurefunc(getmetatable(ActionButton1Cooldown).__index, 'SetCooldown', function(self, start, duration)
-	if self.noOCC then return end
-	--start timer
-	if start > 0 and duration > MIN_DURATION then
-		local timer = self.timer or E:CreateCooldownTimer(self)
-		timer.start = start
-		timer.duration = duration
-		timer.enabled = true
-		timer.nextUpdate = 0
-		if timer.fontScale >= MIN_SCALE then timer:Show() end
-	--stop timer
-	else
-		local timer = self.timer
-		if timer then
-			E:Cooldown_StopTimer(timer)
-		end
+function E:Print(...)
+	print(E["media"].hexvaluecolor.."ElvUI-SunUIMod"..':|r', ...)
+end
+
+
+function E:FadeOutFrame(p, t, show)  --隐藏  show为false时候为完全隐藏
+	if type(p) == "table" then 
+		if p:GetAlpha()>0 then
+			local fadeInfo = {}
+			fadeInfo.mode = "OUT"
+			fadeInfo.timeToFade = t or 1.5
+			if not show then
+				fadeInfo.finishedFunc = function() p:Hide() end 
+			end
+			fadeInfo.startAlpha = p:GetAlpha()
+			fadeInfo.endAlpha = 0
+			UIFrameFade(p, fadeInfo)
+		end 
+		return
 	end
-end)
+	if not _G[p] then print("SunUI:没有发现"..p.."这个框体")return end
+	if _G[p]:GetAlpha()>0 then
+		local fadeInfo = {}
+		fadeInfo.mode = "OUT"
+		fadeInfo.timeToFade = t or 1.5
+		if not show then
+			fadeInfo.finishedFunc = function() _G[p]:Hide() end 
+		end
+		fadeInfo.startAlpha = _G[p]:GetAlpha()
+		fadeInfo.endAlpha = 0
+		UIFrameFade(_G[p], fadeInfo)
+	end 
+end
+
+function E:FormatTime(s)
+	local day, hour, minute = 86400, 3600, 60
+	if s >= day then
+		--return format("%dd", floor(s/day + 0.5)), s % day
+		return format(COOLDOWN_DURATION_DAYS, floor(s/day + 0.5)), s % day
+	elseif s >= hour then
+		--return format("%dh", floor(s/hour + 0.5)), s % hour
+		return format(COOLDOWN_DURATION_HOURS, floor(s/hour + 0.5)), s % hour
+	elseif s >= minute then
+		--return format("%dm", floor(s/minute + 0.5)), s % minute
+		return format(COOLDOWN_DURATION_MIN, floor(s/minute + 0.5)), s % minute
+	end
+	return format("%ds", s), (s * 100 - floor(s * 100))/100
+end

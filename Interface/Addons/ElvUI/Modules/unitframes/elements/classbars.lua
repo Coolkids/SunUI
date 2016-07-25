@@ -18,6 +18,7 @@ local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
 
 function UF:Configure_ClassBar(frame, cur)
+	if not frame.VARIABLES_SET then return end
 	local bars = frame[frame.ClassBar]
 	if not bars then return end
 
@@ -334,8 +335,7 @@ function UF:UpdateClassBar(cur, max, hasMaxChanged, powerType, event)
 	local db = frame.db
 	if not db then return; end
 
-	local isShown = self:IsShown()
-	if cur == 0 and db.classbar.autoHide or max == nil then
+	if not frame.USE_CLASSBAR or (cur == 0 and db.classbar.autoHide) or max == nil then
 		self:Hide()
 	else
 		self:Show()
@@ -440,7 +440,7 @@ function UF:PostUpdateAdditionalPower(unit, min, max, event)
 	local frame = self.origParent or self:GetParent()
 	local db = frame.db
 
-	if ((min ~= max or (not db.classbar.autoHide and frame.USE_CLASSBAR)) and (event ~= "ElementDisable")) then
+	if frame.USE_CLASSBAR and ((min ~= max or (not db.classbar.autoHide)) and (event ~= "ElementDisable")) then
 		if db.classbar.additionalPowerText then
 			local powerValue = frame.Power.value
 			local powerValueText = powerValue:GetText()

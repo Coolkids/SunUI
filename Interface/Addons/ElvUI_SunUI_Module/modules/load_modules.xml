@@ -4,7 +4,7 @@
   
   
   <Include file='actionbats\load_actionbats.xml'/>
-	
+	<Include file='chat\load_chat.xml'/>
 	
 	<Include file='quest\load_quest.xml'/>
 	<Include file='tooltip\load_tooltip.xml'/>

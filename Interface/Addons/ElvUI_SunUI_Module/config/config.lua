@@ -5,6 +5,10 @@ P["quest_sunui"]={
 	["autoquest"] = true
 }
 
+P["Chat_SunUI"]={
+	ChannelBar = true,
+}
+
 P["Notifications"]={
 	Notification = true,
 	playSounds = false,

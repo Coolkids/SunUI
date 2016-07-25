@@ -44,11 +44,19 @@ P['unitframe'].statusbar = "SunUI Normal"
 P['unitframe'].font = 'SunUI Font'
 P['unitframe'].fontSize = 12
 P['unitframe'].fontOutline = 'OUTLINE'
+P['unitframe'].smoothbars = true
 
+P["unitframe"].units.targettarget.height = 30
+P["unitframe"].units.target.height = 40
+P["unitframe"].units.focus.height = 30
+P["unitframe"].units.player.height = 40
+P["unitframe"].colors.healthclass = true
+P["unitframe"].colors.transparentPower = true
+P["unitframe"].colors.transparentHealth = true
+				
 P["actionbar"].font = 'SunUI Font'
 P["actionbar"].fontSize = 10
 P["actionbar"].fontOutline = 'OUTLINE'
-
 
 P['tooltip'].font = "SunUI Font"
 P['tooltip'].fontOutline = "NONE"
