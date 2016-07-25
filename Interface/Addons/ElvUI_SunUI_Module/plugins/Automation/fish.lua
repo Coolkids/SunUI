@@ -5,6 +5,7 @@ local knowFish = false
 local spell = GetSpellInfo(131474)
 local isPole = false
 local holder = CreateFrame("Frame", nil, UIParent);
+local weaponSubTypesList = "鱼竿"
 -- Lure library
 local fishlure = {
 	-- {	["id"] = 34832,
@@ -161,7 +162,6 @@ local function IsFishPole()
 	local itemId = GetInventoryItemID("player", 16)
 	if itemId then
 		local subclass = select(7, GetItemInfo(itemId))
-		local weaponSubTypesList = select(17, GetAuctionItemSubClasses(1))
 		if subclass == weaponSubTypesList then
 			return true
 		else
@@ -225,6 +225,7 @@ function F:PLAYER_ENTERING_WORLD()
 		knowFish = true
 	end
 	isPole = IsFishPole()
+	--E:Print(isPole)
 	if isPole and knowFish then
 		UpdateLureInventory()
 		self:HookWorldFrame()
@@ -256,6 +257,7 @@ function F:BAG_UPDATE()
 end
 
 function F:Initialize()
+	weaponSubTypesList = select(7,GetItemInfo(6256))
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
 end

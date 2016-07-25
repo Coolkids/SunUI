@@ -50,3 +50,15 @@ P["RaidCD"] = {
 	MaxNumber = 30,
 	RowDirection = "right",
 }
+
+--PowerBar设置 就是屏幕中间的那个条条
+P["PowerBar"]={    
+	Open = true,    --开关
+	Width = 200,	--宽度
+	Height = 5,		--高度
+	Fade = true,	--脱离战斗渐隐
+	HealthPower = true,    --开启血量/魔法值
+	DisableText = true,		--开启血量/魔法值文字 true为隐藏文字 false为开启文字
+	HealthPowerPer = true,		--血量百分比化
+	ManaPowerPer = true,		--魔法值百分比化
+}
