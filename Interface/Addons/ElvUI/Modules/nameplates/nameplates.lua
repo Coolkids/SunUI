@@ -217,6 +217,7 @@ function mod:SetTargetFrame(frame)
 		frame.isTarget = true
 		if(self.db.units[frame.UnitType].healthbar.enable ~= true) then
 			frame.Name:ClearAllPoints()
+			frame.NPCTitle:ClearAllPoints()
 			frame.Level:ClearAllPoints()
 			frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b = nil, nil, nil
 			frame.CastBar:Hide()
@@ -378,10 +379,12 @@ function mod:NAME_PLATE_UNIT_REMOVED(event, unit, frame, ...)
 	frame.UnitFrame.AbsorbBar:Hide()
 	frame.UnitFrame.HealPrediction:Hide()
 	frame.UnitFrame.PersonalHealPrediction:Hide()
-	frame.UnitFrame.Name:ClearAllPoints()
 	frame.UnitFrame.Level:ClearAllPoints()
 	frame.UnitFrame.Level:SetText("")
+	frame.UnitFrame.Name:ClearAllPoints()
 	frame.UnitFrame.Name:SetText("")
+	frame.UnitFrame.NPCTitle:ClearAllPoints()
+	frame.UnitFrame.NPCTitle:SetText("")
 	frame.UnitFrame:Hide()
 	frame.UnitFrame.isTarget = nil
 	frame.UnitFrame.displayedUnit = nil
@@ -553,7 +556,7 @@ function mod:OnEvent(event, unit, ...)
 		end
 	elseif ( event == "UNIT_ENTERED_VEHICLE" or event == "UNIT_EXITED_VEHICLE" or event == "UNIT_PET" ) then
 		mod:UpdateInVehicle(self)
-		mod:UpdateElement_All(self)
+		mod:UpdateElement_All(self, unit, true)
 	else
 		mod:UpdateElement_Cast(self, event, unit, ...)
 	end
@@ -634,6 +637,10 @@ function mod:UpdateCVars()
 	E:LockCVar("nameplateShowFriendlyMinions", self.db.units.FRIENDLY_PLAYER.minions == true and "1" or "0")
 	E:LockCVar("nameplateShowEnemyMinions", self.db.units.ENEMY_PLAYER.minions == true and "1" or "0")
 	E:LockCVar("nameplateShowEnemyMinus", self.db.units.ENEMY_NPC.minors == true and "1" or "0")
+
+	E:LockCVar("nameplateMaxDistance", self.db.loadDistance)
+	E:LockCVar("nameplateOtherTopInset", self.db.clampToScreen and "0.08" or "-1")
+	E:LockCVar("nameplateOtherBottomInset", self.db.clampToScreen and "0.1" or "-1")
 end
 
 local function CopySettings(from, to)
@@ -713,7 +720,6 @@ end
 function mod:Initialize()
 	self.db = E.db["nameplates"]
 	if E.private["nameplates"].enable ~= true then return end
-	E.NamePlates = mod
 
 	self:UpdateVehicleStatus()
 
@@ -761,6 +767,5 @@ function mod:Initialize()
 
 	E.NamePlates = self
 end
-
 
 E:RegisterModule(mod:GetName())

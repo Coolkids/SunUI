@@ -40,6 +40,11 @@ for power, color in next, PowerBarColor do
 	end
 end
 
+local color = {
+
+
+}
+
 ------------------------------------------------------------------------
 ------holder :锚点
 ------holder.health: 血量
@@ -61,7 +66,7 @@ local maxPowerNumber = setmetatable ({
 	["MONK"] = 6,			--武僧  do
 	["DEATHKNIGHT"] = 6,	--DK    do
 	["PALADIN"] = 5,		--圣骑士  do
-	["ROGUE"] = 5,			--连击点 盗贼/野德
+	["ROGUE"] = 8,			--连击点 盗贼/野德
 	["DRUID"] = 5,			--日/月能
 	["WARLOCK"] = 5,		--术士
 	["MAGE"] = 4,			--法师
@@ -75,12 +80,20 @@ local powerTypeList = setmetatable ({
 	["PRIEST"] = SPELL_POWER_SHADOW_ORBS,
 	["MONK"] = SPELL_POWER_CHI,
 	["PALADIN"] = SPELL_POWER_HOLY_POWER,
+	["ROGUE"] = SPELL_POWER_COMBO_POINTS,
+	["DRUID"] = SPELL_POWER_COMBO_POINTS,
+	["MAGE"] = SPELL_POWER_ARCANE_CHARGES,
+	["WARLOCK"] = SPELL_POWER_SOUL_SHARDS,
 }, {__index=function() return nil end})
 
 local powerType2List = setmetatable ({
 	["PRIEST"] = "SHADOW_ORBS",
 	["MONK"] = "CHI",
 	["PALADIN"] = "HOLY_POWER",
+	["ROGUE"] = "COMBO_POINTS",
+	["DRUID"] = "COMBO_POINTS",
+	["MAGE"] = "ARCANE_CHARGES",
+	["WARLOCK"] = "SOUL_SHARDS",
 }, {__index=function() return nil end})
 
 function PB:GetOptions()
@@ -317,7 +330,6 @@ function PB:CreateCommonPowerBar()
 		self.holder.power[i]:SetSize((self.db.Width-space*(maxBar-1))/maxBar, self.db.Height)
 		self.holder.power[i]:SetStatusBarTexture(P["media"].normal)
 		self.holder.power[i]:SetStatusBarColor(.86,.22,1) --TODO 后期颜色处理 萨满/术士/日月能/DK已经处理
-		self.holder.power[i]:CreateShadow(0.6)
 		self.holder.power[i]:Hide()
 		if (i == 1) then
 			self.holder.power[i]:SetPoint("LEFT", self.holder.power, "LEFT")
@@ -372,15 +384,6 @@ function PB:CommonPowerBarEvent()
 end
 
 function PB:DEATHKNIGHT()
-	RuneFrame.Show = RuneFrame.Hide
-	RuneFrame:Hide()
-	local runes = {
-		{1, 0, 0},   -- blood
-		{0, .5, 0},  -- unholy
-		{0, 1, 1},   -- frost
-		{.9, .1, 1}, -- death
-	}
-	local runemap = { 1, 2, 5, 6, 3, 4 }
 	local function OnUpdate(self, elapsed)
 		local duration = self.duration + elapsed
 		if(duration >= self.max) then
@@ -390,100 +393,76 @@ function PB:DEATHKNIGHT()
 			return self:SetValue(duration)
 		end
 	end
-	local function UpdateType(self, rid, alt)
-		local rune = self[runemap[rid]]
-		local colors = runes[GetRuneType(rid) or alt]
-		local r, g, b = colors[1], colors[2], colors[3]
-		rune:SetStatusBarColor(r, g, b)
-	end
-	local function OnEvent(self, event, unit)
+	
+	local function OnEvent(self, event, rid)
 		if event == "RUNE_POWER_UPDATE" or "PLAYER_ENTERING_WORLD" then 
-			for i=1, 6 do
-				local rune = self[runemap[i]]
-				if(rune) then
-					local start, duration, runeReady = GetRuneCooldown(i)
-					if(runeReady) then
-						rune:SetMinMaxValues(0, 1)
-						rune:SetValue(1)
-						rune:SetScript("OnUpdate", nil)
-					else
-						if start then
-							rune.duration = GetTime() - start
-							rune.max = duration
-							rune:SetMinMaxValues(1, duration)
-							rune:SetScript("OnUpdate", OnUpdate)
-						end
-					end
+			local rune = self[rid]
+			if(rune) then
+				local start, duration, runeReady = GetRuneCooldown(rid)
+					if(not start) then
+					-- As of 6.2.0 GetRuneCooldown returns nil values when zoning
+					return
 				end
-			end
-		end
-		if event == "RUNE_TYPE_UPDATE" then
-			for i=1, 6 do
-				UpdateType(self, i, math.floor((runemap[i]+1)/2))
+				if(runeReady) then
+					rune:SetMinMaxValues(0, 1)
+					rune:SetValue(1)
+					rune:SetScript("OnUpdate", nil)
+				else
+					rune.duration = GetTime() - start
+					rune.max = duration
+					rune:SetMinMaxValues(1, duration)
+					rune:SetScript("OnUpdate", OnUpdate)
+				end
 			end
 		end
 	end
 	
 	for i=1,6 do
 		self.holder.power[i]:Show()
-		UpdateType(self.holder.power, i, math.floor((runemap[i]+1)/2))
 	end
 	self.holder.power:RegisterEvent("RUNE_POWER_UPDATE")
-	self.holder.power:RegisterEvent("RUNE_TYPE_UPDATE")
+	self.holder.power:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self.holder.power:SetScript("OnEvent", OnEvent)
 end
 
 function PB:CreateCombatPoint()
-	--盗贼跟小德都会把power作为连击点
-	self.holder.power:RegisterEvent("UNIT_COMBO_POINTS")
-	self.holder.power:RegisterEvent("PLAYER_TARGET_CHANGED")
-	self.holder.power:SetScript("OnEvent", function(self, event)
-		if event == "UNIT_COMBO_POINTS" or event == "PLAYER_TARGET_CHANGED" then
-			local cp = GetComboPoints('player', 'target')
-			for i=1, MAX_COMBO_POINTS do
-				if(i <= cp) then
+	self.holder.power:RegisterEvent("UNIT_POWER")
+	self.holder.power:RegisterEvent("UNIT_DISPLAYPOWER")
+	self.holder.power:RegisterEvent("PLAYER_ENTERING_WORLD")
+
+	self.holder.power:SetScript("OnEvent", function(self,event,unit, powerType)
+		if event == "PLAYER_ENTERING_WORLD" then
+			local maxPower = UnitPowerMax("player", SPELL_POWER_COMBO_POINTS, true)
+			local power = UnitPower("player", SPELL_POWER_COMBO_POINTS, true)
+			--print(maxPower.."  "..power.."  "..numEmbers.."  "..numBars)
+			for i = 1, maxp do
+				if(i <= power) then
 					self[i]:Show()
 				else
 					self[i]:Hide()
 				end
+			end	
+		end
+		if (event == "UNIT_POWER" or event == "UNIT_DISPLAYPOWER" or event == "PLAYER_ENTERING_WORLD") then
+			if ( event == "UNIT_POWER" or event == "UNIT_DISPLAYPOWER") then
+				if(unit ~= "player" or powerType ~= "COMBO_POINTS") then return end
+				local maxPower = UnitPowerMax("player", SPELL_POWER_COMBO_POINTS, true)
+				local power = UnitPower("player", SPELL_POWER_COMBO_POINTS, true)
+				--print(maxPower.."  "..power.."  "..numEmbers.."  "..numBars)
+				for i = 1, maxp do
+					if(i <= power) then
+						self[i]:Show()
+					else
+						self[i]:Hide()
+					end
+				end	
 			end
 		end
 	end)
 end
 
 function PB:ROGUE()
-	------------------------------------------------------------------------------
-	-------from NGA - chuan45 33539090--------------------------------------------
-	------------------------------------------------------------------------------
-	self.holder.power.anticipationBar = CreateFrame("Frame", nil, self.holder.power)
-	self.holder.power.anticipationBar:SetAllPoints(self.holder.power)
-	for i = 1, 5 do
-		self.holder.power.anticipationBar[i] = CreateFrame("StatusBar", nil, anticipationBar)
-		self.holder.power.anticipationBar[i]:SetStatusBarTexture(P["media"].normal)
-		self.holder.power.anticipationBar[i]:GetStatusBarTexture():SetHorizTile(false)
-		self.holder.power.anticipationBar[i]:SetFrameLevel(self.holder.power[i]:GetFrameLevel()+1)
-		self.holder.power.anticipationBar[i]:SetSize(((self.db.Width-2*4)/5)/1.2, self.db.Height/1.5)
-		self.holder.power.anticipationBar[i]:SetPoint("CENTER", self.holder.power[i], 0, 0)
-		if i ~= 5 then 
-			self.holder.power.anticipationBar[i]:SetStatusBarColor(0.8, 0.2, 0.2)
-		else
-			self.holder.power.anticipationBar[i]:SetStatusBarColor(102/255, 204/255, 102/255)
-		end
-		self.holder.power.anticipationBar[i]:CreateShadow()
-		self.holder.power.anticipationBar[i]:Hide()
-	end
-	self.holder.power.anticipationBar:RegisterEvent("UNIT_AURA")
-	self.holder.power.anticipationBar:SetScript("OnEvent", function(self, event, unit)
-		if unit ~= "player" then return end
-		local count = select(4, UnitBuff("player", GetSpellInfo(115189))) or 0
-		for i = 1, 5 do
-			if i <= count then
-				self[i]:Show()
-			else
-				self[i]:Hide()
-			end
-		end
-	end)
+	
 end
 
 function PB:DRUID()
@@ -618,12 +597,6 @@ end
 function PB:WARLOCK()
 	local SPELL_POWER_SOUL_SHARDS = SPELL_POWER_SOUL_SHARDS
 	local LATEST_SPEC = 0
-
-	local Colors = {
-		[1] = {148/255, 130/255, 201/255, 1},
-		[2] = {95/255, 222/255,  95/255, 1},
-		[3] = {222/255, 95/255,  95/255, 1},
-	}
 	
 	self.holder.power:RegisterEvent("UNIT_POWER")
 	self.holder.power:RegisterEvent("UNIT_DISPLAYPOWER")
@@ -637,14 +610,12 @@ function PB:WARLOCK()
 			for i = 1, maxp do
 				if(i <= power) then
 					self[i]:Show()
-					self[i]:SetStatusBarColor(Colors[1][1], Colors[1][2], Colors[1][3])
 				else
-					self[i]:SetStatusBarColor(Colors[1][1], Colors[1][2], Colors[1][3])
 					self[i]:Hide()
 				end
 			end	
 		end
-		if (event == "UNIT_POWER" or event == "UNIT_DISPLAYPOWER" or event == "PLAYER_ENTERING_WORLD") then
+		if (event == "UNIT_POWER" or event == "UNIT_DISPLAYPOWER") then
 			if ( event == "UNIT_POWER" or event == "UNIT_DISPLAYPOWER") then
 				if(unit ~= "player" or powerType ~= "SOUL_SHARDS") then return end
 				local maxPower = UnitPowerMax("player", SPELL_POWER_SOUL_SHARDS, true)
@@ -664,16 +635,36 @@ function PB:WARLOCK()
 end
 
 function PB:MAGE()
-	self.holder.power:RegisterEvent("UNIT_AURA")
+	self.holder.power:RegisterEvent("UNIT_POWER")
+	self.holder.power:RegisterEvent("UNIT_DISPLAYPOWER")
+	self.holder.power:RegisterEvent("PLAYER_ENTERING_WORLD")
 
-	self.holder.power:SetScript("OnEvent",function(self,event,unit)
-		if unit ~= "player" then return end
-		local num = select(4, UnitDebuff("player", GetSpellInfo(36032))) or 0
-		for i = 1,4 do
-			if i <= num then
-				self[i]:Show()
-			else
-				self[i]:Hide()
+	self.holder.power:SetScript("OnEvent", function(self,event,unit, powerType)
+		if event == "PLAYER_ENTERING_WORLD" then
+			local maxPower = UnitPowerMax("player", SPELL_POWER_ARCANE_CHARGES, true)
+			local power = UnitPower("player", SPELL_POWER_ARCANE_CHARGES, true)
+			--print(maxPower.."  "..power.."  "..numEmbers.."  "..numBars)
+			for i = 1, maxp do
+				if(i <= power) then
+					self[i]:Show()
+				else
+					self[i]:Hide()
+				end
+			end	
+		end
+		if (event == "UNIT_POWER" or event == "UNIT_DISPLAYPOWER" or event == "PLAYER_ENTERING_WORLD") then
+			if ( event == "UNIT_POWER" or event == "UNIT_DISPLAYPOWER") then
+				if(unit ~= "player" or powerType ~= "ARCANE_CHARGES") then return end
+				local maxPower = UnitPowerMax("player", SPELL_POWER_ARCANE_CHARGES, true)
+				local power = UnitPower("player", SPELL_POWER_ARCANE_CHARGES, true)
+				--print(maxPower.."  "..power.."  "..numEmbers.."  "..numBars)
+				for i = 1, maxp do
+					if(i <= power) then
+						self[i]:Show()
+					else
+						self[i]:Hide()
+					end
+				end	
 			end
 		end
 	end)
@@ -754,28 +745,37 @@ end
 
 function PB:ColorPowerBar(i)
 	local bar = self.holder.power
-	if E.myclass == "PRIEST" then 			--DK
+	if E.myclass == "PRIEST" then 			
 		bar[i]:SetStatusBarColor(.86,.22,1)
-	elseif E.myclass == "ROGUE" or E.myclass == "DRUID" then				--盗贼
-		if i ~= 5 then 
-			bar[i]:SetStatusBarColor(0.9, 0.9, 0)
-		else
-			bar[i]:SetStatusBarColor(1, 0.2, 0.2)
-		end
-	elseif E.myclass == "MONK" then				--小德
+	elseif E.myclass == "ROGUE" or E.myclass == "DRUID" then
+		
+			if i ~= 5 and i ~= 6 and i ~= 8 then
+				bar[i]:SetStatusBarColor(0.9, 0.9, 0)
+			elseif i == 5 then
+				bar[i]:SetStatusBarColor(1, 0.2, 0.2)
+			elseif i == 6 then
+				bar[i]:SetStatusBarColor(148/255, 130/255, 201/255)
+			elseif i == 8 then
+				bar[i]:SetStatusBarColor(0, 181/255, 181/255)
+			end
+		
+		
+	elseif E.myclass == "DEATHKNIGHT" then
+		bar[i]:SetStatusBarColor(0, 181/255, 181/255)
+	elseif E.myclass == "WARLOCK" then
+		bar[i]:SetStatusBarColor(148/255, 130/255, 201/255)
+	elseif E.myclass == "MONK" then				
 		bar[i]:SetStatusBarColor(0.0, 1.00 , 0.59)
-	elseif E.myclass == "PALADIN" then				--术士
+	elseif E.myclass == "PALADIN" then				
 		bar[i]:SetStatusBarColor(0.9, 0.9, 0)
-	elseif E.myclass == "MAGE" then				--萨满
+	elseif E.myclass == "MAGE" then				
 		bar[i]:SetStatusBarColor(E.myclasscolor.r, E.myclasscolor.g, E.myclasscolor.b)
 	end
 	local A = E:GetModule("Skins-SunUI")
-	if E.myclass == "WARLOCK" or E.myclass ~= "DEATHKNIGHT" or E.myclass ~= "SHAMAN" then
+	if E.myclass ~= "DEATHKNIGHT" or E.myclass ~= "SHAMAN" then
 		A:CreateMark(bar[i])
 	end
-	if E.myclass == "WARLOCK" then
-		E:SmoothBar(bar[i])
-	end
+	A:CreateShadow2(bar[i], 0.6)
 end
 
 function PB:UpdateSize()
@@ -861,15 +861,52 @@ end
 function PB:ACTIVE_TALENT_GROUP_CHANGED()
 	local bar = self.holder.power
 	local spec = GetSpecialization() or -1
-	if E.myclass == "PRIEST" and spec ~= 3 then
-		for i = 1,5 do
+	if E.myclass == "PRIEST" and spec ~= SPEC_PRIEST_SHADOW then
+		for i = 1,maxp do
 			bar[i]:Hide()
 		end
-		bar:UnregisterAllEvents()
-	elseif E.myclass == "PRIEST" and spec == 3 then
+		bar:UnregisterEvent("UNIT_POWER")
+		bar:UnregisterEvent("UNIT_DISPLAYPOWER")
+	elseif E.myclass == "PRIEST" and spec == SPEC_PRIEST_SHADOW then
 		bar:RegisterEvent("UNIT_POWER")
 		bar:RegisterEvent("UNIT_DISPLAYPOWER")
 	end
+	if E.myclass == "PALADIN" and spec ~= SPEC_PALADIN_RETRIBUTION then
+		for i = 1,maxp do
+			bar[i]:Hide()
+		end
+		bar:UnregisterEvent("UNIT_POWER")
+		bar:UnregisterEvent("UNIT_DISPLAYPOWER")
+	elseif E.myclass == "PALADIN" and spec == SPEC_PALADIN_RETRIBUTION then
+		bar:RegisterEvent("UNIT_POWER")
+		bar:RegisterEvent("UNIT_DISPLAYPOWER")
+	end
+	
+	if E.myclass == "MAGE" and spec ~= SPEC_MAGE_ARCANE then
+		for i = 1,maxp do
+			bar[i]:Hide()
+		end
+		bar:UnregisterEvent("UNIT_POWER")
+		bar:UnregisterEvent("UNIT_DISPLAYPOWER")
+	elseif E.myclass == "MAGE" and spec == SPEC_MAGE_ARCANE then
+		bar:RegisterEvent("UNIT_POWER")
+		bar:RegisterEvent("UNIT_DISPLAYPOWER")
+	end
+	
+	if E.myclass == "MONK" and spec ~= SPEC_MONK_WINDWALKER then
+		for i = 1,maxp do
+			bar[i]:Hide()
+		end
+		bar:UnregisterEvent("UNIT_POWER")
+		bar:UnregisterEvent("UNIT_DISPLAYPOWER")
+	elseif E.myclass == "MONK" and spec == SPEC_MONK_WINDWALKER then
+		bar:RegisterEvent("UNIT_POWER")
+		bar:RegisterEvent("UNIT_DISPLAYPOWER")
+	end
+	
+	
+	
+	
 	if E.myclass == "DRUID" and spec ~= 1 then
 		self.holder.eb:Hide()
 		self.holder.eb:UnregisterAllEvents()
@@ -880,14 +917,6 @@ function PB:ACTIVE_TALENT_GROUP_CHANGED()
 		self.holder.eb:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
 		self.holder.eb:RegisterEvent("PLAYER_ENTERING_WORLD")
 		self.holder.eb:RegisterEvent("PLAYER_REGEN_DISABLED")
-	end
-	if E.myclass == "MAGE" and spec ~= 1 then
-		for i = 1,4 do
-			bar[i]:Hide()
-		end
-		bar:UnregisterEvent("UNIT_AURA")
-	elseif E.myclass == "MAGE"  and spec == 1 then
-		bar:RegisterEvent("UNIT_AURA")
 	end
 end
 

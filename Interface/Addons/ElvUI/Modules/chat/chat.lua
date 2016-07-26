@@ -1030,7 +1030,17 @@ function GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, a
 			if ( not classColorTable ) then
 				return arg2;
 			end
-			CH.ClassNames[name:lower()] = englishClass
+			if name and name ~= '' then
+				CH.ClassNames[name:lower()] = englishClass
+				if realm and realm ~= '' then
+					CH.ClassNames[name.."-"..gsub(realm,"[%s%-]","")] = englishClass
+				else
+					local _, myRealm = UnitFullName("player")
+					if myRealm and myRealm ~= "" then
+						CH.ClassNames[name.."-"..gsub(myRealm,"[%s%-]","")] = englishClass
+					end
+				end
+			end
 			return format("\124cff%.2x%.2x%.2x", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255)..arg2.."\124r"
 		end
 	end
@@ -1630,6 +1640,9 @@ function CH:CheckKeyword(message)
 				classColorTable = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[CH.ClassNames[lowerCaseWord]] or RAID_CLASS_COLORS[CH.ClassNames[lowerCaseWord]];
 				tempWord = word:gsub("%p", "")
 				word = word:gsub(tempWord, format("\124cff%.2x%.2x%.2x", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255)..tempWord.."\124r")
+			elseif(CH.ClassNames[word]) then
+				classColorTable = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[CH.ClassNames[word]] or RAID_CLASS_COLORS[CH.ClassNames[word]];
+				word = word:gsub(word:gsub("%-","%%-"), format("\124cff%.2x%.2x%.2x", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255)..word.."\124r")
 			end
 		end
 
