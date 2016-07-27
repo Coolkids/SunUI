@@ -62,7 +62,7 @@ local color = {
 ]]
 ------------------------------------------------------------------------
 local maxPowerNumber = setmetatable ({
-	["PRIEST"] = 5,    		--暗牧  do
+	["PRIEST"] = 1,    		--暗牧  do
 	["MONK"] = 6,			--武僧  do
 	["DEATHKNIGHT"] = 6,	--DK    do
 	["PALADIN"] = 5,		--圣骑士  do
@@ -77,7 +77,7 @@ local maxPowerNumber = setmetatable ({
 local maxp = 0
 
 local powerTypeList = setmetatable ({
-	["PRIEST"] = SPELL_POWER_SHADOW_ORBS,
+	--["PRIEST"] = SPELL_POWER_SHADOW_ORBS,
 	["MONK"] = SPELL_POWER_CHI,
 	["PALADIN"] = SPELL_POWER_HOLY_POWER,
 	["ROGUE"] = SPELL_POWER_COMBO_POINTS,
@@ -87,7 +87,7 @@ local powerTypeList = setmetatable ({
 }, {__index=function() return nil end})
 
 local powerType2List = setmetatable ({
-	["PRIEST"] = "SHADOW_ORBS",
+	--["PRIEST"] = "INSANITY",
 	["MONK"] = "CHI",
 	["PALADIN"] = "HOLY_POWER",
 	["ROGUE"] = "COMBO_POINTS",
@@ -95,6 +95,18 @@ local powerType2List = setmetatable ({
 	["MAGE"] = "ARCANE_CHARGES",
 	["WARLOCK"] = "SOUL_SHARDS",
 }, {__index=function() return nil end})
+
+
+local powerType3List = setmetatable ({
+	["PRIEST"] = "INSANITY",
+	["DRUID"] = "LUNAR_POWER",
+}, {__index=function() return nil end})
+
+local needSkin = setmetatable ({
+	["SHAMAN"] = false,
+	["DEATHKNIGHT"] = false,
+	["PRIEST"] = false,
+}, {__index=function() return true end})
 
 function PB:GetOptions()
 	local options = {
@@ -218,10 +230,20 @@ function PB:CreateMainFrame()
 	E:CreateMover(self.holder, "PowerBarMover", "PowerBar", nil, nil, nil, "ALL")
 	self.holder.power = CreateFrame("Statusbar", nil, self.holder)
 	self.holder.power:SetAllPoints()
+	self.holder.skin = CreateFrame("Statusbar", nil, self.holder)
+	self.holder.skin:SetAllPoints()
+	local temp = CreateFrame("Frame", nil, self.holder.power)
+	temp:SetAllPoints()
+	temp:SetFrameLevel(self.holder.power:GetFrameLevel()+1)
+	
+	
+	self.holder.power.text = E:CreateFS(temp)
+	self.holder.power.text:SetPoint("CENTER")
+	self.holder.power.text:SetText("")
 	
 	local A = E:GetModule("Skins-SunUI")
-	if E.myclass ~= "SHAMAN" and E.myclass ~= "DEATHKNIGHT" then
-		A:CreateBD(self.holder, 0.6)
+	if needSkin[E.myclass] then
+		A:CreateBD(self.holder.skin, 0.6)
 	end
 end
 
@@ -377,7 +399,7 @@ local function Common_OnEvent(self, event, unit, powerType)
 end
 
 function PB:CommonPowerBarEvent()
-	self.holder.power:RegisterEvent("UNIT_POWER")
+	self.holder.power:RegisterEvent("UNIT_POWER_FREQUENT")
 	self.holder.power:RegisterEvent("UNIT_DISPLAYPOWER")
 	self.holder.power:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self.holder.power:SetScript("OnEvent", Common_OnEvent)
@@ -425,46 +447,6 @@ function PB:DEATHKNIGHT()
 	self.holder.power:SetScript("OnEvent", OnEvent)
 end
 
-function PB:CreateCombatPoint()
-	self.holder.power:RegisterEvent("UNIT_POWER")
-	self.holder.power:RegisterEvent("UNIT_DISPLAYPOWER")
-	self.holder.power:RegisterEvent("PLAYER_ENTERING_WORLD")
-
-	self.holder.power:SetScript("OnEvent", function(self,event,unit, powerType)
-		if event == "PLAYER_ENTERING_WORLD" then
-			local maxPower = UnitPowerMax("player", SPELL_POWER_COMBO_POINTS, true)
-			local power = UnitPower("player", SPELL_POWER_COMBO_POINTS, true)
-			--print(maxPower.."  "..power.."  "..numEmbers.."  "..numBars)
-			for i = 1, maxp do
-				if(i <= power) then
-					self[i]:Show()
-				else
-					self[i]:Hide()
-				end
-			end	
-		end
-		if (event == "UNIT_POWER" or event == "UNIT_DISPLAYPOWER" or event == "PLAYER_ENTERING_WORLD") then
-			if ( event == "UNIT_POWER" or event == "UNIT_DISPLAYPOWER") then
-				if(unit ~= "player" or powerType ~= "COMBO_POINTS") then return end
-				local maxPower = UnitPowerMax("player", SPELL_POWER_COMBO_POINTS, true)
-				local power = UnitPower("player", SPELL_POWER_COMBO_POINTS, true)
-				--print(maxPower.."  "..power.."  "..numEmbers.."  "..numBars)
-				for i = 1, maxp do
-					if(i <= power) then
-						self[i]:Show()
-					else
-						self[i]:Hide()
-					end
-				end	
-			end
-		end
-	end)
-end
-
-function PB:ROGUE()
-	
-end
-
 function PB:DRUID()
 	local ECLIPSE_BAR_SOLAR_BUFF_ID = ECLIPSE_BAR_SOLAR_BUFF_ID
 	local ECLIPSE_BAR_LUNAR_BUFF_ID = ECLIPSE_BAR_LUNAR_BUFF_ID
@@ -472,200 +454,43 @@ function PB:DRUID()
 	local MOONKIN_FORM = MOONKIN_FORM
 	local showBar, showCombatBar = false, false
 	local A = E:GetModule("Skins-SunUI")
-	self.holder.eb = CreateFrame('Frame', nil, self.holder)
+	self.holder.eb = CreateFrame('StatusBar', nil, self.holder)
+	self.holder.eb:SetStatusBarTexture(P["media"].normal)
 	self.holder.eb:SetSize(self.db.Width, self.db.Height)
+	self.holder.eb:SetMinMaxValues(0, 100)
+	self.holder.eb:SetValue(0)
 	self.holder.eb:SetAllPoints()
-	self.holder.eb:CreateShadow()
+	A:CreateShadow2(self.holder.eb, 0.6)
+	E:SmoothBar(self.holder.eb)
+	A:CreateMark(self.holder.eb)
+	self.holder.eb:SetStatusBarColor(0.9, 0.9, 0)
 	
-	self.holder.eb.LunarBar = CreateFrame('StatusBar', nil, self.holder.eb)
-	self.holder.eb.LunarBar:SetPoint('LEFT', self.holder.eb, 'LEFT')
-	self.holder.eb.LunarBar:SetSize(self.db.Width, self.db.Height)
-	self.holder.eb.LunarBar:SetStatusBarTexture(P["media"].normal)
-	self.holder.eb.LunarBar:SetStatusBarColor(0.27, 0.47, 0.74)
+	local temp = CreateFrame("Frame", nil, self.holder.eb)
+	temp:SetAllPoints()
+	temp:SetFrameLevel(self.holder.eb:GetFrameLevel()+1)
 	
-	E:SmoothBar(self.holder.eb.LunarBar)
-	A:CreateMark(self.holder.eb.LunarBar)
-
-	self.holder.eb.SolarBar = CreateFrame('StatusBar', nil, self.holder.eb)
-	self.holder.eb.SolarBar:SetPoint('LEFT', self.holder.eb.LunarBar:GetStatusBarTexture(), 'RIGHT', 0, 0)
-	self.holder.eb.SolarBar:SetPoint('TOPRIGHT', self.holder.eb, 'TOPRIGHT', 0, 0)
-	self.holder.eb.SolarBar:SetSize(self.db.Width, self.db.Height)
-	self.holder.eb.SolarBar:SetStatusBarTexture(P["media"].normal)
-	self.holder.eb.SolarBar:SetStatusBarColor(0.9, 0.6, 0.3)
-
-	local help = CreateFrame('Frame', nil, self.holder.eb)
-	help:SetAllPoints(self.holder.eb)
-	help:SetFrameLevel(self.holder.eb:GetFrameLevel()+1)
-	local ebInd = help:CreateFontString(nil, "OVERLAY")
-	ebInd:FontTemplate(nil, nil, "OUTLINEMONOCHROME")
-	ebInd:SetPoint('CENTER', help, 'CENTER', 0, 0)
-	ebInd:SetJustifyV("MIDDLE")
-	self.holder.eb.LunarBar.text = ebInd
-	self.holder.eb:RegisterEvent("ECLIPSE_DIRECTION_CHANGE")
-	self.holder.eb:RegisterEvent("PLAYER_TALENT_UPDATE")
-	self.holder.eb:RegisterEvent("UNIT_POWER")
-	self.holder.eb:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
-	self.holder.eb:RegisterEvent("PLAYER_ENTERING_WORLD")
-	self.holder.eb:RegisterEvent("PLAYER_REGEN_DISABLED")
+	
+	self.holder.eb.text = E:CreateFS(temp)
+	self.holder.eb.text:SetPoint("CENTER")
+	self.holder.eb.text:SetText("")
+	
 	self.holder.eb:SetScript("OnEvent", function(self, event, unit, powerType)
-		if event == "ECLIPSE_DIRECTION_CHANGE" or event == "PLAYER_ENTERING_WORLD" then
-			local dir = GetEclipseDirection()
-			if dir=="sun" then
-				ebInd:SetTextColor(68/255, 120/255, 188/255)
-				fx = ">>"
-			elseif dir=="moon" then
-				ebInd:SetTextColor(229/255, 153/255, 76/255)
-				fx = "<<"
-			end
-		end
-		if event == "PLAYER_TALENT_UPDATE" or event == "UPDATE_SHAPESHIFT_FORM" or event == "PLAYER_REGEN_DISABLED" then
-			local form = GetShapeshiftFormID()
-			if(not form) then
-				showBar = false
-				showCombatBar = false
-			elseif(form == MOONKIN_FORM) then
-				showBar = true
-				showCombatBar = false
-			elseif(form ==CAT_FORM) then
-				showBar = false
-				showCombatBar = true
-			else
-				showBar = false
-				showCombatBar = false
-			end
-
-			if showBar then
-				self:Show()
-			else
-				self:Hide()
-			end
+		if event == "UNIT_POWER_FREQUENT" then
+			if(unit ~= "player" or (powerType and powerType ~= 'LUNAR_POWER')) then return end
 			
-			if showCombatBar then
-				PB.holder.power:Show()
-			else
-				PB.holder.power:Hide()
-			end
+			local maxPower = UnitPowerMax("player", powerType, true)
+			local power = UnitPower("player", powerType, true)
 			
-		end
-		if event == "UNIT_POWER" then
-			if(unit ~= "player" or (powerType and powerType ~= 'ECLIPSE')) then return end
-
-			local power = UnitPower('player', SPELL_POWER_ECLIPSE)
-			local maxPower = UnitPowerMax('player', SPELL_POWER_ECLIPSE)
-			
-			local dir, fx = GetEclipseDirection(), ""
-			if dir=="sun" then
-				fx = ">>"
-			elseif dir=="moon" then
-				fx = "<<"
-			end
-			
-			if(self.LunarBar) then
-				self.LunarBar:SetMinMaxValues(-maxPower, maxPower)
-				self.LunarBar:SetValue(power)
-				self.LunarBar.text:SetText(fx.." "..(power))
-			end
-
-			if(self.SolarBar) then
-				self.SolarBar:SetPoint('LEFT', self.LunarBar:GetStatusBarTexture(), 'RIGHT', 0, 0)
-				self.SolarBar:SetPoint('TOPRIGHT', self, 'TOPRIGHT', 0, 0)
-				--self.SolarBar:SetMinMaxValues(-maxPower, maxPower)
-				--self.SolarBar:SetValue(power * -1)
-			end
+			self:SetMinMaxValues(0, maxPower)
+			self:SetValue(power)
+			self.text:SetFormattedText("%d", power*100/maxPower)
 		end
 		if event == "PLAYER_ENTERING_WORLD" then 
-			local power = UnitPower('player', SPELL_POWER_ECLIPSE)
-			local maxPower = UnitPowerMax('player', SPELL_POWER_ECLIPSE)
-
-			if(self.LunarBar) then
-				self.LunarBar:SetMinMaxValues(-maxPower, maxPower)
-				self.LunarBar:SetValue(power)
-				self.LunarBar.text:SetText(power)
-			end
-
-			if(self.SolarBar) then
-				self.SolarBar:SetPoint('LEFT', self.LunarBar:GetStatusBarTexture(), 'RIGHT', 0, 0)
-				self.SolarBar:SetPoint('TOPRIGHT', self, 'TOPRIGHT', 0, 0)
-			end
-		end
-	end)
-
-
-
-end
-
-function PB:WARLOCK()
-	local SPELL_POWER_SOUL_SHARDS = SPELL_POWER_SOUL_SHARDS
-	local LATEST_SPEC = 0
-	
-	self.holder.power:RegisterEvent("UNIT_POWER")
-	self.holder.power:RegisterEvent("UNIT_DISPLAYPOWER")
-	self.holder.power:RegisterEvent("PLAYER_ENTERING_WORLD")
-	
-	self.holder.power:SetScript("OnEvent", function(self,event,unit, powerType)
-		if event == "PLAYER_ENTERING_WORLD" then
-			local maxPower = UnitPowerMax("player", SPELL_POWER_SOUL_SHARDS, true)
-			local power = UnitPower("player", SPELL_POWER_SOUL_SHARDS, true)
-			--print(maxPower.."  "..power.."  "..numEmbers.."  "..numBars)
-			for i = 1, maxp do
-				if(i <= power) then
-					self[i]:Show()
-				else
-					self[i]:Hide()
-				end
-			end	
-		end
-		if (event == "UNIT_POWER" or event == "UNIT_DISPLAYPOWER") then
-			if ( event == "UNIT_POWER" or event == "UNIT_DISPLAYPOWER") then
-				if(unit ~= "player" or powerType ~= "SOUL_SHARDS") then return end
-				local maxPower = UnitPowerMax("player", SPELL_POWER_SOUL_SHARDS, true)
-				local power = UnitPower("player", SPELL_POWER_SOUL_SHARDS, true)
-				--print(maxPower.."  "..power.."  "..numEmbers.."  "..numBars)
-				for i = 1, maxp do
-					if(i <= power) then
-						self[i]:Show()
-					else
-						self[i]:Hide()
-					end
-				end	
-			end
-		end
-	end)
-
-end
-
-function PB:MAGE()
-	self.holder.power:RegisterEvent("UNIT_POWER")
-	self.holder.power:RegisterEvent("UNIT_DISPLAYPOWER")
-	self.holder.power:RegisterEvent("PLAYER_ENTERING_WORLD")
-
-	self.holder.power:SetScript("OnEvent", function(self,event,unit, powerType)
-		if event == "PLAYER_ENTERING_WORLD" then
-			local maxPower = UnitPowerMax("player", SPELL_POWER_ARCANE_CHARGES, true)
-			local power = UnitPower("player", SPELL_POWER_ARCANE_CHARGES, true)
-			--print(maxPower.."  "..power.."  "..numEmbers.."  "..numBars)
-			for i = 1, maxp do
-				if(i <= power) then
-					self[i]:Show()
-				else
-					self[i]:Hide()
-				end
-			end	
-		end
-		if (event == "UNIT_POWER" or event == "UNIT_DISPLAYPOWER" or event == "PLAYER_ENTERING_WORLD") then
-			if ( event == "UNIT_POWER" or event == "UNIT_DISPLAYPOWER") then
-				if(unit ~= "player" or powerType ~= "ARCANE_CHARGES") then return end
-				local maxPower = UnitPowerMax("player", SPELL_POWER_ARCANE_CHARGES, true)
-				local power = UnitPower("player", SPELL_POWER_ARCANE_CHARGES, true)
-				--print(maxPower.."  "..power.."  "..numEmbers.."  "..numBars)
-				for i = 1, maxp do
-					if(i <= power) then
-						self[i]:Show()
-					else
-						self[i]:Hide()
-					end
-				end	
-			end
+			local maxPower = UnitPowerMax("player", 'LUNAR_POWER', true)
+			local power = UnitPower("player", 'LUNAR_POWER', true)
+			self:SetMinMaxValues(0, maxPower)
+			self:SetValue(power)
+			self.text:SetFormattedText("%d", power*100/maxPower)
 		end
 	end)
 end
@@ -743,23 +568,51 @@ function PB:SHAMAN()
 	end)
 end
 
+function PB:PRIEST()
+	local A = E:GetModule("Skins-SunUI")
+	A:CreateMark(self.holder.power[1])
+	E:SmoothBar(self.holder.power[1])
+	self.holder.power:RegisterEvent("UNIT_POWER_FREQUENT")
+	self.holder.power:RegisterEvent("UNIT_DISPLAYPOWER")
+	self.holder.power:RegisterEvent("PLAYER_ENTERING_WORLD")
+	self.holder.power:Show()
+
+	self.holder.power:SetScript("OnEvent", function(self, event, unit, powerType)
+		if not self[1].isShow then
+			self[1]:Show()
+			self[1].isShow = true
+		end
+		
+		if event == "PLAYER_ENTERING_WORLD" then
+			local maxPower = UnitPowerMax("player", SPELL_POWER_SHADOW_ORBS, true)
+			local power = UnitPower("player", SPELL_POWER_SHADOW_ORBS, true)
+			self[1]:SetMinMaxValues(0, maxPower)
+			self[1]:SetValue(power)	
+			--self.text:SetFormattedText("%d", power*100/maxPower)
+		end
+		if unit ~= "player" and powerType ~= "INSANITY" then return end
+		local maxPower = UnitPowerMax("player", SPELL_POWER_SHADOW_ORBS, true)
+		local power = UnitPower("player", SPELL_POWER_SHADOW_ORBS, true)
+		self[1]:SetMinMaxValues(0, maxPower)
+		self[1]:SetValue(power)	
+		--self.text:SetFormattedText("%d", power*100/maxPower)
+	end)
+end
+
 function PB:ColorPowerBar(i)
 	local bar = self.holder.power
 	if E.myclass == "PRIEST" then 			
 		bar[i]:SetStatusBarColor(.86,.22,1)
 	elseif E.myclass == "ROGUE" or E.myclass == "DRUID" then
-		
-			if i ~= 5 and i ~= 6 and i ~= 8 then
-				bar[i]:SetStatusBarColor(0.9, 0.9, 0)
-			elseif i == 5 then
-				bar[i]:SetStatusBarColor(1, 0.2, 0.2)
-			elseif i == 6 then
-				bar[i]:SetStatusBarColor(148/255, 130/255, 201/255)
-			elseif i == 8 then
-				bar[i]:SetStatusBarColor(0, 181/255, 181/255)
-			end
-		
-		
+		if i ~= 5 and i ~= 6 and i ~= 8 then
+			bar[i]:SetStatusBarColor(0.9, 0.9, 0)
+		elseif i == 5 then
+			bar[i]:SetStatusBarColor(1, 0.2, 0.2)
+		elseif i == 6 then
+			bar[i]:SetStatusBarColor(148/255, 130/255, 201/255)
+		elseif i == 8 then
+			bar[i]:SetStatusBarColor(0, 181/255, 181/255)
+		end
 	elseif E.myclass == "DEATHKNIGHT" then
 		bar[i]:SetStatusBarColor(0, 181/255, 181/255)
 	elseif E.myclass == "WARLOCK" then
@@ -776,29 +629,6 @@ function PB:ColorPowerBar(i)
 		A:CreateMark(bar[i])
 	end
 	A:CreateShadow2(bar[i], 0.6)
-end
-
-function PB:UpdateSize()
-	local maxBar = self:CheckMaxBarNumber()
-	
-	self.holder:SetSize(self.db.Width, self.db.Height)
-	
-	for k, v in ipairs(self.holder.power) do 
-		if v then 
-			v:SetSize((self.db.Width-space*(maxBar-1))/maxBar, self.db.Height)
-		end
-	end
-	if self.holder.power.anticipationBar then
-		for k, v in ipairs(self.holder.power.anticipationBar) do 
-			if v then 
-				v:SetSize(((self.db.Width-2*4)/5)/1.2, self.db.Height/1.5)
-			end
-		end
-	end
-	if self.holder.eb then
-		self.holder.eb.LunarBar:SetSize(self.db.Width, self.db.Height)
-		self.holder.eb.SolarBar:SetSize(self.db.Width, self.db.Height)
-	end
 end
 
 local function FaderUpdate()
@@ -865,20 +695,20 @@ function PB:ACTIVE_TALENT_GROUP_CHANGED()
 		for i = 1,maxp do
 			bar[i]:Hide()
 		end
-		bar:UnregisterEvent("UNIT_POWER")
+		bar:UnregisterEvent("UNIT_POWER_FREQUENT")
 		bar:UnregisterEvent("UNIT_DISPLAYPOWER")
 	elseif E.myclass == "PRIEST" and spec == SPEC_PRIEST_SHADOW then
-		bar:RegisterEvent("UNIT_POWER")
+		bar:RegisterEvent("UNIT_POWER_FREQUENT")
 		bar:RegisterEvent("UNIT_DISPLAYPOWER")
 	end
 	if E.myclass == "PALADIN" and spec ~= SPEC_PALADIN_RETRIBUTION then
 		for i = 1,maxp do
 			bar[i]:Hide()
 		end
-		bar:UnregisterEvent("UNIT_POWER")
+		bar:UnregisterEvent("UNIT_POWER_FREQUENT")
 		bar:UnregisterEvent("UNIT_DISPLAYPOWER")
 	elseif E.myclass == "PALADIN" and spec == SPEC_PALADIN_RETRIBUTION then
-		bar:RegisterEvent("UNIT_POWER")
+		bar:RegisterEvent("UNIT_POWER_FREQUENT")
 		bar:RegisterEvent("UNIT_DISPLAYPOWER")
 	end
 	
@@ -886,10 +716,10 @@ function PB:ACTIVE_TALENT_GROUP_CHANGED()
 		for i = 1,maxp do
 			bar[i]:Hide()
 		end
-		bar:UnregisterEvent("UNIT_POWER")
+		bar:UnregisterEvent("UNIT_POWER_FREQUENT")
 		bar:UnregisterEvent("UNIT_DISPLAYPOWER")
 	elseif E.myclass == "MAGE" and spec == SPEC_MAGE_ARCANE then
-		bar:RegisterEvent("UNIT_POWER")
+		bar:RegisterEvent("UNIT_POWER_FREQUENT")
 		bar:RegisterEvent("UNIT_DISPLAYPOWER")
 	end
 	
@@ -897,27 +727,29 @@ function PB:ACTIVE_TALENT_GROUP_CHANGED()
 		for i = 1,maxp do
 			bar[i]:Hide()
 		end
-		bar:UnregisterEvent("UNIT_POWER")
+		bar:UnregisterEvent("UNIT_POWER_FREQUENT")
 		bar:UnregisterEvent("UNIT_DISPLAYPOWER")
 	elseif E.myclass == "MONK" and spec == SPEC_MONK_WINDWALKER then
-		bar:RegisterEvent("UNIT_POWER")
+		bar:RegisterEvent("UNIT_POWER_FREQUENT")
 		bar:RegisterEvent("UNIT_DISPLAYPOWER")
 	end
 	
 	
-	
+
 	
 	if E.myclass == "DRUID" and spec ~= 1 then
 		self.holder.eb:Hide()
+		self.holder.skin:Show()
 		self.holder.eb:UnregisterAllEvents()
 	elseif E.myclass == "DRUID" and spec == 1 then
-		self.holder.eb:RegisterEvent("ECLIPSE_DIRECTION_CHANGE")
-		self.holder.eb:RegisterEvent("PLAYER_TALENT_UPDATE")
-		self.holder.eb:RegisterEvent("UNIT_POWER")
-		self.holder.eb:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
+		self.holder.eb:Show()
+		self.holder.skin:Hide()
+		self.holder.eb:RegisterEvent("UNIT_POWER_FREQUENT")
+		self.holder.eb:RegisterEvent("UNIT_DISPLAYPOWER")
 		self.holder.eb:RegisterEvent("PLAYER_ENTERING_WORLD")
-		self.holder.eb:RegisterEvent("PLAYER_REGEN_DISABLED")
 	end
+	
+	
 end
 
 function PB:PLAYER_ENTERING_WORLD()
@@ -942,25 +774,19 @@ function PB:Initialize()
 	self:CreateManaFrame() 						--mana条
 	self:CreateCommonPowerBar()					--power
 	self:SetHealthManaScript()					--设置hp/mana
-	if self:ChechCommonClass() then         	--牧师/圣骑士/武僧
+	if self:ChechCommonClass() then         	--圣骑士/武僧/法师/术士/连击点
 		self:CommonPowerBarEvent()
-	elseif E.myclass == "DEATHKNIGHT" then 			--DK
+	end
+	if E.myclass == "DEATHKNIGHT" then 			--DK
 		self:DEATHKNIGHT()
-	elseif E.myclass == "ROGUE" then				--盗贼
-		self:CreateCombatPoint()
-		self:ROGUE()
 	elseif E.myclass == "DRUID" then				--小德
-		self:CreateCombatPoint()
 		self:DRUID()
-	elseif E.myclass == "WARLOCK" then				--术士
-		self:WARLOCK()
 	elseif E.myclass == "SHAMAN" then				--萨满
 		self:SHAMAN()
-	elseif E.myclass == "MAGE" then					--法师
-		self:MAGE()
+	elseif E.myclass == "PRIEST" then
+		self:PRIEST()
 	end
 	self:UpdateEnable()
-	
 end
 
 E:RegisterModule(PB:GetName())

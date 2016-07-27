@@ -4,6 +4,7 @@ local mod = E:NewModule("SetCVarMod", "AceEvent-3.0")
 
 function mod:PLAYER_ENTERING_WORLD()
 	--E:Print(GetCVar("floatingCombatTextCombatDamage"))
+	SetCVar("scriptErrors", 1)
 	if GetCVar("floatingCombatTextCombatDamage") ~= 1 then
 		SetCVar("floatingCombatTextCombatHealing", 1)
 		SetCVar("floatingCombatTextCombatDamage", 1)
