@@ -5,6 +5,7 @@ local mod=E:NewModule("SunUI-Modules", 'AceTimer-3.0', 'AceHook-3.0', 'AceEvent-
 function mod:Initialize()
 	self.db = E.db.SunUI_Modules
 	mod:initCooldownFlash()
+	mod:CreateMiniFlash()
 end
 
 function mod:GetOptions()
