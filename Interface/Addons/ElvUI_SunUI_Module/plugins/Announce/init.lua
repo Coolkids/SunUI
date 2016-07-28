@@ -2,7 +2,6 @@
 local A = E:NewModule("Announce", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 
 A.modName = "施法通告"
-A.order = 15
 
 A.baoming = {
 	[871]    = true,	-- 盾墙
@@ -64,6 +63,7 @@ function A:GetOptions()
 	local options = {
 		type = "group",
 		name = A.modName,
+		order = -94,
 		childGroups = "tree",
 		get = function(info) return E.db.Announce[ info[#info] ] end,
 		set = function(info, value) E.db.Announce[ info[#info] ] = value end,
@@ -73,25 +73,26 @@ function A:GetOptions()
 				name = "",guiInline = true,
 				args = {
 					Open = {
-					type = "toggle",
-					name = "施法通告",
-					desc = "只是通告自己施放的法术",
-					order = 1,
-					get = function(info) return self.db.Open end,
-					set = function(info, value) 
-						self.db.Open = value
-						self:UpdateSet() 
-					end,
+						type = "toggle",
+						name = "施法通告",
+						desc = "只是通告自己施放的法术",
+						order = 1,
+						get = function(info) return E.db.Announce.Open end,
+						set = function(info, value) 
+							E.db.Announce.Open = value
+							A:UpdateSet()
+						end,
 					},
 				}
 			},
 			group2 = {
-				type = "group", order = 2, guiInline = true, disabled = function(info) return not self.db.Open end,
+				type = "group", order = 2, guiInline = true, disabled = function(info) return not E.db.Announce.Open end,
 				name = "",
 				args = {
 					Interrupt = {
 						type = "toggle",
-						name = "打断通告",
+						name = "打断通告[ElvUI自带 默认为无]",
+						desc = "打断通告[ElvUI自带 默认为无]\n请注意是否与ElvUI自带冲突",
 						order = 1,
 					},
 					Channel = {
@@ -126,47 +127,51 @@ function A:GetOptions()
 						order = 7,
 					},
 				}
-			}
+			},
+			test_temp = {
+				type = "description",
+				name = A:Info(),
+			},
 		}
 	}
 	return options
 end
 
 function A:Info()
-	local baomingstring = "保命技能通告"..":\n"
+	local baomingstring = "ElvUI自带打断通告 在一般 > 一般> 打断通告 里面默认无\n保命技能通告"..":\n"
 	for k,v in pairs(self.baoming) do
-		baomingstring = baomingstring..S:GetSpell(k)..", "
+		baomingstring = baomingstring..E:GetSpell(k)..", "
 	end
 	baomingstring = baomingstring.."\n"
 	
 	local healstring = "团队减伤通告"..":\n"
 	for k,v in pairs(self.heal) do
-		healstring = healstring..S:GetSpell(k)..", "
+		healstring = healstring..E:GetSpell(k)..", "
 	end
 	healstring = healstring.."\n"
 	
 	local clstring = "治疗大招通告"..":\n"
 	for k,v in pairs(self.cl) do
-		clstring = clstring..S:GetSpell(k)..", "
+		clstring = clstring..E:GetSpell(k)..", "
 	end
 	clstring = clstring.."\n"
 	
 	
 	local giveliststring = "给出大招通告"..":\n"
 	for k,v in pairs(self.givelist) do
-		giveliststring = giveliststring..S:GetSpell(k)..", "
+		giveliststring = giveliststring..E:GetSpell(k)..", "
 	end
 	giveliststring = giveliststring.."\n"
 	
 	local restring = "复活技能通告"..":\n"
 	for k,v in pairs(self.resurrect) do
-		restring = restring..S:GetSpell(k)..", "
+		restring = restring..E:GetSpell(k)..", "
 	end
 	restring = restring.."\n"
 	
 	local misstring = "误导通告"..":\n"
 	for k,v in pairs(self.mislead) do
-		misstring = misstring..S:GetSpell(k)..", "
+		misstring = misstring..E:GetSpell(k)..", "
 	end
 	misstring = misstring.."\n"
 	return baomingstring..healstring..clstring..giveliststring..restring..misstring

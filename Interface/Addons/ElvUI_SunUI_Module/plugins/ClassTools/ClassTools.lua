@@ -101,7 +101,7 @@ function CT:initFrame()
 		self.Frame.Icon:SetAllPoints(self.Frame)
 		
 		self.Frame:CreateShadow()
-		E:CreateMover(self.Frame, "ClassToolsMover", "斩杀提示", nil, nil, nil, "ALL")
+		E:CreateMover(self.Frame, "ClassToolsMover", "斩杀提示", nil, nil, nil, "ALL,SunUI")
 	end
 end
 

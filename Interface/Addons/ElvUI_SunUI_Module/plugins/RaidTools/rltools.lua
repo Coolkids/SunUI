@@ -44,7 +44,7 @@ function RT:initButton()
 			E:HideAnima(self.mainFrame)
 		end
 	end)
-	E:CreateMover(self.mainButton, "RLToolsMover", RT.L.RAIDCHECK_RAIDTOOL, nil, nil, nil,"ALL")
+	E:CreateMover(self.mainButton, "RLToolsMover", RT.L.RAIDCHECK_RAIDTOOL, nil, nil, nil,"ALL,SunUI")
 	--主界面
 	self.mainFrame = CreateFrame("Button", nil, self.mainButton)
 	self.mainFrame:SetSize(226, 166)

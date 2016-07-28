@@ -1,0 +1,9 @@
+﻿<!-- -->
+
+
+
+
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="LibCooldown.lua"/>
+	<Script file="CooldownFlash.lua"/>
+</Ui>

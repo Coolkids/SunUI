@@ -1,5 +1,9 @@
 local E, L, V, P, G = unpack(ElvUI); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local LSM = LibStub("LibSharedMedia-3.0")
+local tsort, tinsert = table.sort, table.insert
+
+table.insert(E.ConfigModeLayouts, "SunUI")
+E.ConfigModeLocalizedStrings.SunUI = "SunUI"
 
 P["media"]={
 	font = "SunUI Font",

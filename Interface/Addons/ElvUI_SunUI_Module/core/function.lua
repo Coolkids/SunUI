@@ -194,3 +194,12 @@ function E:ShortValue(v)
 	end
 end
 ]]
+
+function E:GetSpell(k)
+  if GetSpellInfo(k) then
+    return GetSpellInfo(k)
+  else
+    E:Print("法术ID无效", k)
+    return ""
+  end
+end

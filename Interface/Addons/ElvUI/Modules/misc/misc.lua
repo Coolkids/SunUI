@@ -93,6 +93,8 @@ function M:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, _, sourceGUID, _, _, _, _, d
 		end
 	elseif E.db.general.interruptAnnounce == "SAY" then
 		SendChatMessage(format(interruptMsg, destName, spellID, spellName), "SAY")
+	elseif E.db.general.interruptAnnounce == "EMOTE" then
+		SendChatMessage(format(interruptMsg, destName, spellID, spellName), "EMOTE")
 	end
 end
 
@@ -113,18 +115,26 @@ local function AttemptAutoRepair(playerOverride)
 
 			--Delay this a bit so we have time to catch the outcome of first repair attempt
 			C_Timer_After(0.5, function()
-				if autoRepair == 'GUILD' and autoRepairStatus == "GUILD_REPAIR_FAILED" then
-					AttemptAutoRepair(true) --Try using player money instead
-				elseif autoRepair == 'GUILD' then
-					E:Print(L["Your items have been repaired using guild bank funds for: "]..E:FormatMoney(cost, "SMART", true)) --Amount, style, textOnly
-				elseif autoRepair == "PLAYER" and autoRepairStatus == "PLAYER_REPAIR_SUCCESS" then
-					E:Print(L["You don't have enough money to repair."])
+				if autoRepair == 'GUILD' then
+					if autoRepairStatus == "GUILD_REPAIR_FAILED" then
+						AttemptAutoRepair(true) --Try using player money instead
+					else
+						E:Print(L["Your items have been repaired using guild bank funds for: "]..E:FormatMoney(cost, "SMART", true)) --Amount, style, textOnly
+					end
 				elseif autoRepair == "PLAYER" then
-					E:Print(L["Your items have been repaired for: "]..E:FormatMoney(cost, "SMART", true)) --Amount, style, textOnly
+					if autoRepairStatus == "PLAYER_REPAIR_FAILED" then
+						E:Print(L["You don't have enough money to repair."])
+					else
+						E:Print(L["Your items have been repaired for: "]..E:FormatMoney(cost, "SMART", true)) --Amount, style, textOnly
+					end
 				end
 			end)
 		end
 	end
+end
+
+local function VendorGrays()
+	E:GetModule('Bags'):VendorGrays(nil, true)
 end
 
 function M:UI_ERROR_MESSAGE(event, messageType)
@@ -143,7 +153,7 @@ end
 
 function M:MERCHANT_SHOW()
 	if E.db.general.vendorGrays then
-		E:GetModule('Bags'):VendorGrays(nil, true)
+		C_Timer_After(0.5, VendorGrays)
 	end
 
 	local autoRepair = E.db.general.autoRepair

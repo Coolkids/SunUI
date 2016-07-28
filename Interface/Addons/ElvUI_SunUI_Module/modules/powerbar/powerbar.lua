@@ -110,98 +110,68 @@ local needSkin = setmetatable ({
 
 function PB:GetOptions()
 	local options = {
-		group1 = {
-			type = "group", order = 1,
-			name = "",guiInline = true,
-			args = {
-				Open = {
-					type = "toggle",
-					name = L["启用职业能量条"],
-					order = 1,
-					get = function() return self.db.Open end,
-					set = function(_, value)
-						self.db.Open = value
-						self:UpdateEnable()
-					end,
-				},
-			}
-		},
-		group2 = {
-			type = "group", order = 2, guiInline = true, disabled = function(info) return not self.db.Open end,
-			name = "",
-			args = {
-				Width = {
-					type = "input",
-					name = L["框体宽度"],
-					order = 1,
-					get = function() return tostring(self.db.Width) end,
-					set = function(_, value)
-						self.db.Width = tonumber(value)
-						self:UpdateSize()
-					end,
-				},
-				Height = {
-					type = "input",
-					name = L["框体高度"],
-					order = 2,
-					get = function() return tostring(self.db.Height) end,
-					set = function(_, value) 
-						self.db.Height = tonumber(value)
-						self:UpdateSize()
-					end,
-				},
-				Fade = {
-					type = "toggle",
-					name = L["渐隐"],
-					order = 4,
-					get = function() return self.db.Fade end,
-					set = function(_, value)
-						self.db.Fade = value
-						self:UpdateFade()
-					end,
-				},
-				HealthPower = {
-					type = "toggle",
-					name = L["生命值"],
-					order = 5,
-					get = function() return self.db.HealthPower end,
-					set = function(_, value)
-						self.db.HealthPower = value
-						self:SetHealthManaScript()
-					end,
-				},
-				DisableText = {
-					type = "toggle",
-					name = L["不显示文字"],
-					order = 6,
-					get = function() return self.db.DisableText end,
-					set = function(_, value)
-						self.db.DisableText = value
-					end,
-				},
-				HealthPowerPer = {
-					type = "toggle",
-					name = L["生命值用百分比替代"],
-					order = 7,
-					disabled = function() return self.db.DisableText end,
-					get = function() return self.db.HealthPowerPer end,
-					set = function(_, value)
-						self.db.HealthPowerPer = value
-					end,
-				},
-				
-				ManaPowerPer = {
-					type = "toggle",
-					name = L["魔法值用百分比替代"],
-					order = 8,
-					disabled = function() return self.db.DisableText end,
-					get = function() return self.db.ManaPowerPer end,
-					set = function(_, value)
-						self.db.ManaPowerPer = value
-					end,
-				},
-			}
-		},
+		type = "group",
+		name = "职业能量条",
+		order = -96,
+		get = function(info) return E.db.PowerBar[ info[#info] ] end,
+		set = function(info, value) E.db.PowerBar[ info[#info] ] = value 
+			PB:UpdateConfig()
+		end,
+		args = {
+			Open = {
+				type = "toggle",
+				name = "启用职业能量条",
+				order = 1,
+			},
+			group2 = {
+				type = "group", order = 2, guiInline = true, disabled = function(info) return not E.db.PowerBar.Open end,
+				name = "",
+				args = {
+					Width = {
+						type = "input",
+						name = "框体宽度",
+						order = 1,
+						get = function() return tostring(E.db.PowerBar.Width) end,
+						set = function(_, value) E.db.PowerBar.Width = tonumber(value) end,
+					},
+					Height = {
+						type = "input",
+						name = "框体高度",
+						order = 2,
+						get = function() return tostring(E.db.PowerBar.Height) end,
+						set = function(_, value) E.db.PowerBar.Height = tonumber(value) end,
+					},
+					Fade = {
+						type = "toggle",
+						name = "渐隐",
+						order = 4,
+					},
+					HealthPower = {
+						type = "toggle",
+						name = "生命值",
+						order = 5,
+					},
+					DisableText = {
+						type = "toggle",
+						name = "不显示文字",
+						order = 6,
+					},
+					HealthPowerPer = {
+						type = "toggle",
+						name = "生命值用百分比替代",
+						order = 7,
+						disabled = function() return E.db.PowerBar.DisableText end,
+					},
+					
+					ManaPowerPer = {
+						type = "toggle",
+						name = "魔法值用百分比替代",
+						order = 8,
+						disabled = function() return E.db.PowerBar.DisableText end,
+					},
+				}
+			},
+		}
 	}
 	return options
 end
@@ -227,7 +197,7 @@ function PB:CreateMainFrame()
 	self.holder = CreateFrame("Statusbar", nil, oUF_PetBattleFrameHider)
 	self.holder:SetSize(self.db.Width, self.db.Height)
 	self.holder:SetPoint("CENTER", "UIParent", "CENTER", 0, -120)
-	E:CreateMover(self.holder, "PowerBarMover", "PowerBar", nil, nil, nil, "ALL")
+	E:CreateMover(self.holder, "PowerBarMover", "PowerBar", nil, nil, nil, "ALL,SunUI")
 	self.holder.power = CreateFrame("Statusbar", nil, self.holder)
 	self.holder.power:SetAllPoints()
 	self.holder.skin = CreateFrame("Statusbar", nil, self.holder)
@@ -765,6 +735,10 @@ function PB:UpdateEnable()
 		self:UnregisterAllEvents()
 		self:On_Hide()
 	end
+end
+
+function PB:UpdateConfig()
+	self:UpdateEnable()
 end
 
 function PB:Initialize()

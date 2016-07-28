@@ -62,3 +62,9 @@ P["PowerBar"]={
 	HealthPowerPer = true,		--血量百分比化
 	ManaPowerPer = true,		--魔法值百分比化
 }
+
+P["SunUI_Modules"]={
+	CooldownFlashSize = 48,
+	CooldownFlash = true,
+
+}

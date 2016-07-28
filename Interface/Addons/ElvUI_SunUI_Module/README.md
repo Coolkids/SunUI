@@ -22,6 +22,8 @@ http://git.tukui.org/Elv/elvui
 11.原来聊天除掉广告过滤的所有功能<br/>
 12.powerbar<br/>
 13.DBM美化<br/>
+14.gui界面<br/>
+15.玩家姓名职业着色<br/>
 <br/>
 未完工:<br/>
 1.冷却计时(有可能抛弃掉)<br/>

@@ -1,10 +1,12 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
   <!-- 最先加载核心API -->
+  <Script file='modules.lua'/>
   <Include file='skins\load_skins.xml'/>
   
   
   <Include file='actionbats\load_actionbats.xml'/>
 	<Include file='chat\load_chat.xml'/>
+	<Include file='cooldowns\load_cooldowns.xml'/>
 	<Include file='powerbar\load_powerbar.xml'/>
 	<Include file='quest\load_quest.xml'/>
 	<Include file='tooltip\load_tooltip.xml'/>

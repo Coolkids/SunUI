@@ -14,11 +14,12 @@
 	<!--Script file="lowhealth.lua"/ -->
 	
 	<Script file="AlreadyKnown.lua"/>
+	<Script file="ClassColors.lua"/>
 	<Script file="CloseUp.lua"/>
 	
 	<Script file="DragEmAll.lua"/>
 	<Script file="Focuser.lua"/>
-	
+	<Script file="FriendColor.lua"/>
 	<Script file="notifications.lua"/>
 	<Script file="smallthings.lua"/>
 	<Script file="SR.lua"/>

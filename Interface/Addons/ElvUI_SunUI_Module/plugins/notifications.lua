@@ -459,7 +459,7 @@ function N:Initialize()
 	self:initDate()
 	A:CreateBD(f)
 	A:CreateBG(icon)
-	E:CreateMover(f, "NotificationsMover", "通知", nil, nil, nil, "ALL")
+	E:CreateMover(f, "NotificationsMover", "通知", nil, nil, nil, "ALL,SunUI")
 	self:UpdateSet()
 end
 
