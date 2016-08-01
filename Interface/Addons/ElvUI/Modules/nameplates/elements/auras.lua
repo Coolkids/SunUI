@@ -83,7 +83,7 @@ function mod:UpdateElement_Auras(frame)
 			while ( frameNum <= maxDebuffs ) do
 				local name, _, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, _, spellId, _, isBossAura = UnitDebuff(frame.displayedUnit, index, filter);
 				if ( name ) then
-					if (unitCaster == mod.playerUnitToken and not frame.Debuffs.shownIDs[spellId] and duration > 0 and duration <= self.db.units[frame.UnitType].debuffs.filters.maxDuration) then
+					if (unitCaster == mod.playerUnitToken and not frame.Debuffs.shownIDs[spellId] and (duration > 0 or (duration == 0 and spellId == 146739)) and duration <= self.db.units[frame.UnitType].debuffs.filters.maxDuration) then
 						local debuffFrame = frame.Debuffs.icons[frameNum];
 						mod:SetAura(debuffFrame, index, name, filter, icon, count, debuffType, duration, expirationTime, unitCaster, canStealOrPurge, spellId, isBossAura)
 						frameNum = frameNum + 1;

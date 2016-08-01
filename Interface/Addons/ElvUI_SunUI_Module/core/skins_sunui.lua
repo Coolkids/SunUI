@@ -153,6 +153,7 @@ function A:CreatePulse(frame, speed, alpha, mult)
 end
 
 local function StartGlow(f)
+	if f.IsEnabled == nil then return end
 	if not f:IsEnabled() then return end
 	f:SetBackdropColor(r, g, b, .2)
 	f:SetBackdropBorderColor(r, g, b)

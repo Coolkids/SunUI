@@ -57,6 +57,31 @@ P["unitframe"].units.player.height = 40
 P["unitframe"].colors.healthclass = true
 P["unitframe"].colors.transparentPower = true
 P["unitframe"].colors.transparentHealth = true
+
+P["unitframe"].units.player.buffs.enable = false
+P["unitframe"].units.player.debuffs.enable = true
+P["unitframe"].units.player.aurabar.enable = false
+
+P["unitframe"].units.target.buffs.enable = true
+P["unitframe"].units.target.debuffs.enable = true
+P["unitframe"].units.target.aurabar.enable = false
+
+P["unitframe"].units.targettarget.buffs.enable = false
+P["unitframe"].units.targettarget.debuffs.enable = false
+
+
+P["unitframe"].units.targettargettarget.buffs.enable = false
+P["unitframe"].units.targettargettarget.debuffs.enable = false
+
+
+P["unitframe"].units.focus.buffs.enable = false
+P["unitframe"].units.focus.debuffs.enable = false
+
+
+P["unitframe"].units.focustarget.buffs.enable = false
+P["unitframe"].units.focustarget.debuffs.enable = false
+
+
 				
 P["actionbar"].font = 'SunUI Font'
 P["actionbar"].fontSize = 10
