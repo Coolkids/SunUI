@@ -200,6 +200,8 @@ ns.watchers ={
 			{ spellID = 194594, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 伪装
 			{ spellID = 199483, unitID = "player", caster = "player", filter = "BUFF"},
+			-- 百发百中
+			{ spellID = 193526, unitID = "player", caster = "player", filter = "BUFF"},
 
 			-- 野性守护
 			{ spellID = 193530, unitID = "player", caster = "player", filter = "BUFF"},
@@ -248,6 +250,8 @@ ns.watchers ={
 			{ spellID = 199803, unitID = "target", caster = "player", filter = "DEBUFF"},
 			-- 夺命黑鸦
 			{ spellID = 131894, unitID = "target", caster = "player", filter = "DEBUFF"},
+			-- 震荡射击
+			{ spellID =   5116, unitID = "target", caster = "player", filter = "DEBUFF"},
 
 			-- 翼龙钉刺
 			{ spellID =  19386, unitID = "target", caster = "all",    filter = "DEBUFF"},
@@ -1166,7 +1170,7 @@ ns.watchers ={
 			-- 白骨风暴
 			{ spellID = 194844, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 白骨之盾
-			{ spellID = 185181, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 195181, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 吸血鬼之血
 			{ spellID =  55233, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 符文分流
@@ -1322,6 +1326,8 @@ ns.watchers ={
 			{ spellID =  227225, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 灵魂残片
 			{ spellID =  203981, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 邪焰斗蓬
+			{ spellID =  217741, unitID = "player", caster = "player", filter = "BUFF" },
 
 			-- 疾影
 			{ spellID =  212800, unitID = "player", caster = "player", filter = "BUFF" },
@@ -1358,7 +1364,8 @@ ns.watchers ={
 			{ spellID = 207744, unitID = "target", caster = "player", filter = "DEBUFF" },
 			-- 灵魂切削
 			{ spellID = 207407, unitID = "target", caster = "player", filter = "DEBUFF" },
-
+			-- 禁锢
+			{ spellID = 217832, unitID = "target", caster = "player", filter = "DEBUFF" },
 
 			-- 混乱新星
 			{ spellID = 179057, unitID = "target", caster = "player", filter = "DEBUFF" },
