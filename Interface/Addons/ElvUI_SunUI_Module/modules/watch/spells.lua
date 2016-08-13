@@ -1326,8 +1326,6 @@ ns.watchers ={
 			{ spellID =  227225, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 灵魂残片
 			{ spellID =  203981, unitID = "player", caster = "player", filter = "BUFF" },
-			-- 邪焰斗蓬
-			{ spellID =  217741, unitID = "player", caster = "player", filter = "BUFF" },
 
 			-- 疾影
 			{ spellID =  212800, unitID = "player", caster = "player", filter = "BUFF" },
@@ -1348,6 +1346,9 @@ ns.watchers ={
 
 			-- 烈火烙印
 			{ spellID = 207744, unitID = "target", caster = "player", filter = "DEBUFF" },
+			{ spellID = 207771, unitID = "target", caster = "player", filter = "DEBUFF" },
+			-- 锋锐之刺
+			{ spellID = 210003, unitID = "target", caster = "player", filter = "DEBUFF" },
 			-- 猛烈的死亡
 			{ spellID = 212818, unitID = "target", caster = "player", filter = "DEBUFF" },
 			-- 脆弱
@@ -1392,6 +1393,8 @@ ns.watchers ={
 			{ spellID =  202138, filter = "CD" },
 			-- 灵魂切割
 			{ spellID =  207407, filter = "CD" },
+			-- 复仇回避
+			{ spellID =  198793, filter = "CD" },
 
 
 			-- 物品
@@ -3037,6 +3040,43 @@ ns.watchers ={
 			setpoint = {unpack(enbuff)},
 			size = 28,
 
+			-- LEG橙装
+			-- 萨瓦里克的杰作
+			{ spellID = 207472, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 塞弗斯的秘密
+			{ spellID = 208052, unitID = "player", caster = "player", filter = "BUFF" },
+			-- WS
+			-- 扭曲观察者科里度斯的凝视
+			{ spellID = 217474, unitID = "player", caster = "player", filter = "BUFF" },
+			-- DH
+			-- 邪焰斗蓬
+			{ spellID = 217741, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 背叛者的牢笼
+			{ spellID = 217500, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 无尽饥渴
+			{ spellID = 216758, unitID = "player", caster = "player", filter = "BUFF" },
+			-- QS
+			-- 伊特伦迪,银月之珠
+			{ spellID = 207589, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 纳斯雷兹的低语
+			{ spellID = 207635, unitID = "player", caster = "player", filter = "BUFF" },
+			-- DZ
+			-- 恐惧魔王的谎言
+			{ spellID = 208692, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 绿皮的浸水腕轮
+			{ spellID = 209423, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 瓦莉拉的意志
+			{ spellID = 208403, unitID = "player", caster = "player", filter = "BUFF" },
+			-- FS
+			-- 瓦丝琪之握
+			{ spellID = 208147, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 扎奈苏的旅程
+			{ spellID = 226852, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 玛瑟里顿之力
+			{ spellID = 214404, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 贝洛瓦尔的最后一博
+			{ spellID = 207283, unitID = "player", caster = "player", filter = "BUFF" },
+
 			-- 药水
 			-------------------------------MOP----------------------------------------
 			-- WOD护甲药水
@@ -3113,8 +3153,6 @@ ns.watchers ={
 			-- 传家宝
 			-- 恶魔克星                (力量, 触发)
 			{ spellID = 201405, unitID = "player", caster = "player", filter = "BUFF" },
-
-
 
 
 			-- 暗月卡牌
