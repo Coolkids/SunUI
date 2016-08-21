@@ -82,7 +82,7 @@ local function SetTemplate(f, t, glossTex, ignoreUpdates, forcePixelMode)
 		  insets = { left = -E.mult, right = -E.mult, top = -E.mult, bottom = -E.mult}
 		})
 	end
-
+	
 	if not f.backdropTexture and t ~= 'Transparent' then
 		local backdropTexture = f:CreateTexture(nil, "BORDER")
 		backdropTexture:SetDrawLayer("BACKGROUND", 1)

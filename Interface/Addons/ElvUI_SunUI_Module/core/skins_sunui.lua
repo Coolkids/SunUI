@@ -230,13 +230,16 @@ function A:ReskinScroll(f)
 	if not f then return end
 	local frame = f:GetName()
 
-	if _G[frame.."Track"] then _G[frame.."Track"]:Hide() end
-	if _G[frame.."BG"] then _G[frame.."BG"]:Hide() end
-	if _G[frame.."Top"] then _G[frame.."Top"]:Hide() end
-	if _G[frame.."Middle"] then _G[frame.."Middle"]:Hide() end
-	if _G[frame.."Bottom"] then _G[frame.."Bottom"]:Hide() end
+	local track = (f.trackBG or f.Background) or (_G[frame.."Track"] or _G[frame.."BG"])
+	if track then track:Hide() end
+	local top = (f.ScrollBarTop or f.Top) or _G[frame.."Top"]
+	if top then top:Hide() end
+	local middle = (f.ScrollBarMiddle or f.Middle) or _G[frame.."Middle"]
+	if middle then middle:Hide() end
+	local bottom = (f.ScrollBarBottom or f.Bottom) or _G[frame.."Bottom"]
+	if bottom then bottom:Hide() end
 
-	local bu = _G[frame.."ThumbTexture"]
+	local bu = f.ThumbTexture or f.thumbTexture or _G[frame.."ThumbTexture"]
 	bu:SetAlpha(0)
 	bu:Width(17)
 
@@ -247,8 +250,8 @@ function A:ReskinScroll(f)
 	A:CreateBackdropTexture(f)
 	f.backdropTexture:SetInside(bu.bg, 1, 1)
 
-	local up = _G[frame.."ScrollUpButton"]
-	local down = _G[frame.."ScrollDownButton"]
+	local up = f.ScrollUpButton or f.UpButton or _G[(frame or parent).."ScrollUpButton"]
+	local down = f.ScrollDownButton or f.DownButton or _G[(frame or parent).."ScrollDownButton"]
 
 	up:Width(17)
 	down:Width(17)

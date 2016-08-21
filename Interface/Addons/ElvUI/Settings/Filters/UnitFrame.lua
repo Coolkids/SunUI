@@ -144,7 +144,7 @@ G.unitframe.aurafilters['TurtleBuffs'] = {
 		--Priest
 			[33206] = Defaults(3), -- Pain Suppression
 			[47788] = Defaults(), -- Guardian Spirit
-			[62618] = Defaults(), -- Power Word: Barrier
+			[81782] = Defaults(), -- Power Word: Barrier
 			[47585] = Defaults(5), -- Dispersion
 		--Warlock
 			[104773] = Defaults(), -- Unending Resolve
@@ -223,7 +223,7 @@ G.unitframe.aurafilters['PlayerBuffs'] = {
 		--Priest
 			[33206] = Defaults(), -- Pain Suppression
 			[47788] = Defaults(), -- Guardian Spirit
-			[62618] = Defaults(), -- Power Word: Barrier
+			[81782] = Defaults(), -- Power Word: Barrier
 			[47585] = Defaults(), -- Dispersion
 			--[6346] = Defaults(), -- Fear Ward
 			[10060] = Defaults(), -- Power Infusion
@@ -950,6 +950,7 @@ P['unitframe']['filters'] = {
 G.unitframe.ChannelTicks = {
 	--Warlock
 	[SpellName(689)] = 6, -- "Drain Life"
+	[SpellName(198590)] = 6, -- "Drain Soul"
 	-- [SpellName(108371)] = 6, -- "Harvest Life"
 	[SpellName(5740)] = 4, -- "Rain of Fire"
 	[SpellName(755)] = 6, -- Health Funnel
@@ -963,8 +964,6 @@ G.unitframe.ChannelTicks = {
 	--Mage
 	[SpellName(5143)] = 5, -- "Arcane Missiles"
 	[SpellName(12051)] = 3, -- "Evocation"
-	--Monk
-	[SpellName(115175)] = 9, -- "Smoothing Mist"
 }
 
 local priestTier17 = {115560,115561,115562,115563,115564}
@@ -991,6 +990,7 @@ end)
 G.unitframe.ChannelTicksSize = {
 	--Warlock
 	[SpellName(689)] = 1, -- "Drain Life"
+	[SpellName(198590)] = 1, -- "Drain Soul"
 }
 
 --Spells Effected By Haste

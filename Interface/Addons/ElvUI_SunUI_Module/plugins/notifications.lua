@@ -275,20 +275,20 @@ function N:PLAYER_REGEN_ENABLED()
 	local current, max
 
 	for i = 1, 11 do
-			if GetInventoryItemLink("player", Slots[i][1]) ~= nil then
-					current, max = GetInventoryItemDurability(Slots[i][1])
-					if current then 
-							Slots[i][3] = current/max
-					end
+		if GetInventoryItemLink("player", Slots[i][1]) ~= nil then
+			current, max = GetInventoryItemDurability(Slots[i][1])
+			if current then 
+					Slots[i][3] = current/max
 			end
+		end
 	end
 	table.sort(Slots, function(a, b) return a[3] < b[3] end)
 	local value = floor(Slots[1][3]*100)
 
 	if showRepair and value < 20 then
-			showRepair = false
-			E:Delay(30, ResetRepairNotification)
-			self:Notification(MINIMAP_TRACKING_REPAIR, format("你的%s栏位需要修理, 当前耐久为%d.",Slots[1][2],value))
+		showRepair = false
+		E:Delay(30, ResetRepairNotification)
+		self:Notification(MINIMAP_TRACKING_REPAIR, format("你的%s栏位需要修理, 当前耐久为%d.",Slots[1][2],value))
 	end
 end
 
@@ -367,7 +367,7 @@ end
 
 function N:PLAYER_LOGIN()
 	self:Notification("欢迎您回来", "SunUI已经加载", nil, nil, .08, .92, .08, .92)
-	if S.level < 98 then return end
+	if E.level < 98 then return end
 	local killbossnum = GetNumSavedWorldBosses()
 	local namelist = "您已击杀";
 	if killbossnum == 0 then
@@ -380,8 +380,6 @@ function N:PLAYER_LOGIN()
 		end
 		self:Notification("击杀提醒", namelist, nil, "INTERFACE\\ICONS\\SPELL_FROST_ARCTICWINDS", .08, .92, .08, .92)
 	end
-	
-	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 end
 
 function N:VIGNETTE_ADDED(event, vignetteInstanceID)
@@ -431,7 +429,6 @@ E.Options.args.Notification = N:GetOptions()
 
 function N:UpdateSet()
 	if self.db.Notification then
-		self:RegisterEvent("PLAYER_ENTERING_WORLD")
 		self:RegisterEvent("UPDATE_PENDING_MAIL")
 		self:RegisterEvent("PLAYER_REGEN_ENABLED")
 		self:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES")
@@ -440,7 +437,6 @@ function N:UpdateSet()
 		self:RegisterEvent("VIGNETTE_ADDED")
 		self:RegisterEvent("RESURRECT_REQUEST")
 	else
-		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 		self:UnregisterEvent("UPDATE_PENDING_MAIL")
 		self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 		self:UnregisterEvent("CALENDAR_UPDATE_PENDING_INVITES")
@@ -461,6 +457,7 @@ function N:Initialize()
 	A:CreateBG(icon)
 	E:CreateMover(f, "NotificationsMover", "通知", nil, nil, nil, "ALL,SunUI")
 	self:UpdateSet()
+	self:PLAYER_LOGIN()
 end
 
 E:RegisterModule(N:GetName())

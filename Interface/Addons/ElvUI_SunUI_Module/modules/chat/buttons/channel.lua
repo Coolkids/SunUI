@@ -1,6 +1,14 @@
 ﻿local E, L, V, P, G = unpack(ElvUI); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local B = E:GetModule("Chat-SunUI")
 
+local customChannelName
+
+if E.zone == "zhCN" then 
+	customChannelName = "大脚世界频道"
+elseif E.zone == "zhTW" then
+	customChannelName = "大腳世界頻道"
+end
+
 function B:BigFootChannel()
 	local A = E:GetModule("Skins-SunUI")
 	local button = CreateFrame("Button", "ButtonP", CollectorButton)
@@ -14,7 +22,7 @@ function B:BigFootChannel()
 	button:SetScript("OnMouseUp", function(self)
 		local channels = {GetChannelList()}
 		local isInCustomChannel = false
-		local customChannelName = "大脚世界频道"
+		
 		for i =1, #channels do
 			if channels[i] == customChannelName then
 				isInCustomChannel = true
@@ -32,7 +40,6 @@ function B:BigFootChannel()
 	end)
 	button:SetScript("OnEnter",  function(self)
 		local channels = {GetChannelList()}
-		local customChannelName = "大脚世界频道"
 		local inchannel = "关闭"
 		for i =1, #channels do
 				if channels[i] == customChannelName then

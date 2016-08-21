@@ -36,7 +36,7 @@ P["media"].backdropfadecolor = P["media"].backdropfadecolor
 P["media"].font = LSM:Fetch("font", P["media"].font)
 P["general"].bordercolor = { r = 0.1,g = 0.1,b = 0.1 }
 P["general"].backdropcolor = { r = 0.1,g = 0.1,b = 0.1 }
-P["general"].backdropfadecolor = { r = .06,g = .06,b = .06, a = 0.8 }   --调整底部透明度
+P["general"].backdropfadecolor = { r = .06,g = .06,b = .06, a = 0.7 }   --调整底部透明度
 P["general"].valuecolor = {r = 23/255,g = 132/255,b = 209/255}
 P['general'].bottomPanel = false
 P["tooltip"].cursorAnchor = true

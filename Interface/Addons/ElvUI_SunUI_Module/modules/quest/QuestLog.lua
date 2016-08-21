@@ -262,7 +262,7 @@ function Q:QQI_CreateMacro()
 			self:QQI_UpdateMacro()
 		end
 	else
-		print(": No global macro space. Please delete a macro to create space.")
+		--print(": No global macro space. Please delete a macro to create space.")
 		spaceNeeded = true
 	end
 end

@@ -259,6 +259,13 @@ function mod:SetTargetFrame(frame)
 	end
 
 	mod:ClassBar_Update(frame)
+
+	--WoW shows nameplates for any unit which is in combat with you, even when nameplateShowAll is set to 0
+	if frame.isTarget then
+		frame:Show()
+	elseif self.db.onlyShowTarget then
+		frame:Hide()
+	end
 end
 
 function mod:StyleFrame(frame, useMainFrame)
@@ -355,7 +362,13 @@ function mod:NAME_PLATE_UNIT_ADDED(event, unit, frame)
 	self:ConfigureElement_NPCTitle(frame.UnitFrame)
 	self:RegisterEvents(frame.UnitFrame, unit)
 	self:UpdateElement_All(frame.UnitFrame, unit)
-	frame.UnitFrame:Show()
+
+	-- WoW shows nameplates for all units that are in combat with you, even if nameplateShowAll is set to 0.
+	if ((self.db.onlyShowTarget and frame.UnitFrame.isTarget) or not self.db.onlyShowTarget) then
+		frame.UnitFrame:Show()
+	else
+		frame.UnitFrame:Hide()
+	end
 end
 
 function mod:NAME_PLATE_UNIT_REMOVED(event, unit, frame, ...)
@@ -717,6 +730,10 @@ function mod:PLAYER_REGEN_ENABLED()
 	end
 end
 
+function mod:TogglePlayerMouse()
+	self.PlayerFrame__:EnableMouse(not self.db.units.PLAYER.clickthrough)
+end
+
 function mod:Initialize()
 	self.db = E.db["nameplates"]
 	if E.private["nameplates"].enable ~= true then return end
@@ -762,6 +779,7 @@ function mod:Initialize()
 	self:NAME_PLATE_UNIT_REMOVED("NAME_PLATE_UNIT_REMOVED", "player", self.PlayerFrame__)
 	E:CreateMover(self.PlayerFrame__, "PlayerNameplate", L["Player Nameplate"])
 	self:TogglePlayerDisplayType()
+	self.PlayerFrame__:EnableMouse(not self.db.units.PLAYER.clickthrough)
 
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 

@@ -49,6 +49,7 @@ local function LoadSkin()
 			end
 			button:SetTemplate("Default", true)
 			button:StyleButton()
+			button.IconBorder:SetAlpha(0)
 
 			local icon = button.icon
 			icon:SetInside()

@@ -1,12 +1,11 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local M = E:GetModule('Misc');
 local CH = E:GetModule("Chat");
-local numChildren = -1
 
 --Cache global variables
 --Lua functions
 local select, unpack, type = select, unpack, type
-local strlower = strlower
+local strlower, find = strlower, string.find
 --WoW API / Variables
 local CreateFrame = CreateFrame
 
@@ -171,18 +170,14 @@ function M:IsChatBubble(frame)
 	for i = 1, frame:GetNumRegions() do
 		local region = select(i, frame:GetRegions())
 
-		if (region.GetTexture and region:GetTexture() and type(region:GetTexture() == "string") and strlower(region:GetTexture()) == "interface\\tooltips\\chatbubble-background") then return true end;
+		if region.GetTexture and region:GetTexture() and type(region:GetTexture() == "string") then
+			if find(strlower(region:GetTexture()), "chatbubble%-background") then return true end;
+		end
 	end
 	return false
 end
 
-function M:HookBubbles(...)
-	for index = 1, select('#', ...) do
-		local frame = select(index, ...)
-		if M:IsChatBubble(frame) and not frame.isBubblePowered then M:SkinBubble(frame) end
-	end
-end
-
+local numChildren = 0
 function M:LoadChatBubbles()
 	if E.private.general.bubbles == false then
 		E.private.general.chatBubbles = 'disabled'
@@ -201,8 +196,14 @@ function M:LoadChatBubbles()
 
 		local count = WorldFrame:GetNumChildren()
 		if(count ~= numChildren) then
+			for i = numChildren + 1, count do
+				local frame = select(i, WorldFrame:GetChildren())
+				
+				if M:IsChatBubble(frame) then
+					M:SkinBubble(frame)
+				end
+			end
 			numChildren = count
-			M:HookBubbles(WorldFrame:GetChildren())
 		end
 	end)
 end

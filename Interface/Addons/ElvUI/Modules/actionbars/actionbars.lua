@@ -269,16 +269,36 @@ function AB:PositionAndSizeBar(barName)
 		RegisterStateDriver(bar, "page", page);
 		bar:SetAttribute("page", page)
 
-		RegisterStateDriver(bar.vehicleFix, "vehicleFix", "[vehicleui] 1;0")
-		bar.vehicleFix:SetAttribute("_onstate-vehicleFix", [[
-			local bar = self:GetParent()
-			local ParsedText = SecureCmdOptionParse(self:GetParent():GetAttribute("page"))
+		if barName == "bar1" then
+			RegisterStateDriver(bar.vehicleFix, "vehicleFix", "[vehicleui] 1;0")
+			bar.vehicleFix:SetAttribute("_onstate-vehicleFix", [[
+				local bar = self:GetParent()
+				local ParsedText = SecureCmdOptionParse(self:GetParent():GetAttribute("page"))
 
-			if newstate == 1 then
-				if(HasVehicleActionBar()) then
-					bar:SetAttribute("state", 12)
-					bar:ChildUpdate("state", 12)
-					self:GetFrameRef("MainMenuBarArtFrame"):SetAttribute("actionpage", 12) --Update MainMenuBarArtFrame too. See http://www.tukui.org/forums/topic.php?id=35332
+				if newstate == 1 then
+					if(HasVehicleActionBar()) then
+						bar:SetAttribute("state", 12)
+						bar:ChildUpdate("state", 12)
+						self:GetFrameRef("MainMenuBarArtFrame"):SetAttribute("actionpage", 12) --Update MainMenuBarArtFrame too. See http://www.tukui.org/forums/topic.php?id=35332
+					else
+						if HasTempShapeshiftActionBar() and self:GetAttribute("hasTempBar") then
+							ParsedText = GetTempShapeshiftBarIndex() or ParsedText
+						end
+
+						if ParsedText ~= 0 then
+							bar:SetAttribute("state", ParsedText)
+							bar:ChildUpdate("state", ParsedText)
+							self:GetFrameRef("MainMenuBarArtFrame"):SetAttribute("actionpage", ParsedText)
+						else
+							local newCondition = bar:GetAttribute("newCondition")
+							if newCondition then
+								newstate = SecureCmdOptionParse(newCondition)
+								bar:SetAttribute("state", newstate)
+								bar:ChildUpdate("state", newstate)
+								self:GetFrameRef("MainMenuBarArtFrame"):SetAttribute("actionpage", newstate)
+							end
+						end
+					end
 				else
 					if HasTempShapeshiftActionBar() and self:GetAttribute("hasTempBar") then
 						ParsedText = GetTempShapeshiftBarIndex() or ParsedText
@@ -298,26 +318,8 @@ function AB:PositionAndSizeBar(barName)
 						end
 					end
 				end
-			else
-				if HasTempShapeshiftActionBar() and self:GetAttribute("hasTempBar") then
-					ParsedText = GetTempShapeshiftBarIndex() or ParsedText
-				end
-
-				if ParsedText ~= 0 then
-					bar:SetAttribute("state", ParsedText)
-					bar:ChildUpdate("state", ParsedText)
-					self:GetFrameRef("MainMenuBarArtFrame"):SetAttribute("actionpage", ParsedText)
-				else
-					local newCondition = bar:GetAttribute("newCondition")
-					if newCondition then
-						newstate = SecureCmdOptionParse(newCondition)
-						bar:SetAttribute("state", newstate)
-						bar:ChildUpdate("state", newstate)
-						self:GetFrameRef("MainMenuBarArtFrame"):SetAttribute("actionpage", newstate)
-					end
-				end
-			end
-		]]);	
+			]]);
+		end
 
 		if not bar.initialized then
 			bar.initialized = true;
@@ -610,6 +612,7 @@ function AB:StyleButton(button, noBackdrop, useMasque)
 	local normal2 = button:GetNormalTexture()
 	local shine = _G[name.."Shine"];
 	local combat = InCombatLockdown()
+	local color = self.db.fontColor
 
 	if not button.noBackdrop then
 		button.noBackdrop = noBackdrop;
@@ -631,6 +634,7 @@ function AB:StyleButton(button, noBackdrop, useMasque)
 		count:ClearAllPoints();
 		count:Point("BOTTOMRIGHT", 0, 2);
 		count:FontTemplate(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
+		count:SetTextColor(color.r, color.g, color.b)
 	end
 
 	if not button.noBackdrop and not button.backdrop and not button.useMasque then
@@ -649,6 +653,7 @@ function AB:StyleButton(button, noBackdrop, useMasque)
 
 	if self.db.hotkeytext then
 		hotkey:FontTemplate(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
+		hotkey:SetTextColor(color.r, color.g, color.b)
 	end
 
 	--Extra Action Button
@@ -1071,6 +1076,15 @@ function AB:VehicleFix()
 		bar.backdrop:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", -offset, offset)
 	end
 end
+
+local color
+--Update text color when button is updated
+function AB:LAB_ButtonUpdate(button)
+	color = AB.db.fontColor
+	button.Count:SetTextColor(color.r, color.g, color.b)
+	button.HotKey:SetTextColor(color.r, color.g, color.b)
+end
+LAB.RegisterCallback(AB, "OnButtonUpdate", AB.LAB_ButtonUpdate)
 
 function AB:Initialize()
 	self.db = E.db.actionbar

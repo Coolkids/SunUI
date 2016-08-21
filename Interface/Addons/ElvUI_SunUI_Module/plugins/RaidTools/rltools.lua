@@ -1,5 +1,6 @@
 local E, L, V, P, G = unpack(ElvUI); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local RT = E:NewModule("RLTools", "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
+local RU = E:GetModule('RaidUtility');
 function RT:CreateText(parent, text, point)
 	local texture = E:CreateFS(parent)
 	texture:SetText(text)
@@ -268,5 +269,11 @@ function RT:Initialize()
 	self:RegisterEvent("GROUP_ROSTER_UPDATE")  
 end
 
+function RU:ToggleRaidUtil()
+	self:UnregisterAllEvents()
+	RaidUtilityPanel:Hide()	
+	RaidUtility_ShowButton:Hide()	
+	return;
+end
 
 E:RegisterModule(RT:GetName())

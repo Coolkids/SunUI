@@ -5,6 +5,7 @@
   
   
   <Include file='actionbats\load_actionbats.xml'/>
+  <Include file='bags\load_bags.xml'/>
 	<Include file='chat\load_chat.xml'/>
 	<Include file='cooldowns\load_cooldowns.xml'/>
 	<Include file='map\load_map.xml'/>

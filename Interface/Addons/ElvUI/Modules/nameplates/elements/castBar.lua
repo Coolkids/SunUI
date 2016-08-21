@@ -73,7 +73,7 @@ function mod:UpdateElement_Cast(frame, event, ...)
 		if ( frame.CastBar.Spark ) then
 			frame.CastBar.Spark:Show();
 		end
-		frame.CastBar.Name:SetText(text)
+		frame.CastBar.Name:SetText(name)
 		frame.CastBar.value = (GetTime() - (startTime / 1000));
 		frame.CastBar.maxValue = (endTime - startTime) / 1000;
 		frame.CastBar:SetMinMaxValues(0, frame.CastBar.maxValue);
@@ -136,7 +136,7 @@ function mod:UpdateElement_Cast(frame, event, ...)
 				return;
 			end
 			frame.canInterrupt = not notInterruptible
-			frame.CastBar.Name:SetText(text)
+			frame.CastBar.Name:SetText(name)
 			frame.CastBar.value = (GetTime() - (startTime / 1000));
 			frame.CastBar.maxValue = (endTime - startTime) / 1000;
 			frame.CastBar:SetMinMaxValues(0, frame.CastBar.maxValue);
@@ -157,7 +157,7 @@ function mod:UpdateElement_Cast(frame, event, ...)
 			return;
 		end
 
-		frame.CastBar.Name:SetText(text)
+		frame.CastBar.Name:SetText(name)
 		frame.CastBar.value = (endTime / 1000) - GetTime();
 		frame.CastBar.maxValue = (endTime - startTime) / 1000;
 		frame.CastBar:SetMinMaxValues(0, frame.CastBar.maxValue);
@@ -184,7 +184,7 @@ function mod:UpdateElement_Cast(frame, event, ...)
 				frame.CastBar:Hide();
 				return;
 			end
-			frame.CastBar.Name:SetText(text)
+			frame.CastBar.Name:SetText(name)
 			frame.CastBar.value = ((endTime / 1000) - GetTime());
 			frame.CastBar.maxValue = (endTime - startTime) / 1000;
 			frame.CastBar:SetMinMaxValues(0, frame.CastBar.maxValue);
@@ -231,8 +231,8 @@ function mod:ConfigureElement_CastBar(frame)
 	end
 	castBar.Icon.texture:SetTexCoord(unpack(E.TexCoords))
 
-	castBar.Name:SetPoint("TOPLEFT", castBar, "BOTTOMLEFT", 0, -E.Border*3)
 	castBar.Time:SetPoint("TOPRIGHT", castBar, "BOTTOMRIGHT", 0, -E.Border*3)
+	castBar.Name:SetPoint("TOPLEFT", castBar, "BOTTOMLEFT", 0, -E.Border*3)
 	castBar.Name:SetPoint("TOPRIGHT", castBar.Time, "TOPLEFT")
 
 	castBar.Name:SetJustifyH("LEFT")
@@ -241,6 +241,17 @@ function mod:ConfigureElement_CastBar(frame)
 	castBar.Time:SetJustifyH("RIGHT")
 	castBar.Time:SetJustifyV("TOP")
 	castBar.Time:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
+
+	if (self.db.units[frame.UnitType].castbar.hideSpellName) then
+		castBar.Name:Hide()
+	else
+		castBar.Name:Show()
+	end
+	if (self.db.units[frame.UnitType].castbar.hideTime) then
+		castBar.Time:Hide()
+	else
+		castBar.Time:Show()
+	end
 
 	--Texture
 	castBar:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.statusbar))

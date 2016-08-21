@@ -34,8 +34,8 @@ function mod:GetOptions()
 						disabled = function(info) return not E.db.SunUI_Modules.CooldownFlash end,
 						get = function() return tostring(E.db.SunUI_Modules.CooldownFlashSize) end,
 						set = function(_, value) 
-							self.db.CooldownFlashSize = tonumber(value) 
-							mod:UpdateSetCoolDownFlashUpdate()
+							E.db.SunUI_Modules.CooldownFlashSize = tonumber(value) 
+							mod:UpdateCoolDownFlashSize()
 						end,
 					},
 				}

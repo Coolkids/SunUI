@@ -185,8 +185,14 @@ local function CheckForDoubleClick()
 	return false
 end
 local function OnMouseDown(...)
+	--E:Print(...)
 	local button = select(2, ...)
-	if button == "RightButton" and not InCombatLockdown() and CheckForDoubleClick() and knowFish and isPole then
+	local combat = InCombatLockdown()
+	if combat then
+		--E:Print(123)
+		return;
+	end
+	if button == "RightButton" and CheckForDoubleClick() and knowFish and isPole then
 		local hasMainHandEnchant=GetWeaponEnchantInfo()
 		if hasMainHandEnchant then
 			btn:SetAttribute("type", "spell")
@@ -209,16 +215,27 @@ local function OnMouseDown(...)
 			btn:SetAttribute("type", "spell")
 			btn:SetAttribute('spell', spell)
 		end
-			OverrideClick()
+		OverrideClick()
 	end
 end
 
 function F:HookWorldFrame()
 	if not self:IsHooked(WorldFrame, "OnMouseDown") then
-		--print("Hook")
+		print("Hook")
 		self:HookScript(WorldFrame, "OnMouseDown", OnMouseDown)
 	end
+	self:RegisterEvent("BAG_UPDATE")
 end
+
+function F:UnhookWorldFrame()
+	if self:IsHooked(WorldFrame, "OnMouseDown") then
+		print("UnHook")
+		self:Unhook(WorldFrame, "OnMouseDown")
+	end
+	self:UnregisterEvent("BAG_UPDATE")
+	ClearOverrideBindings(btn)
+end
+
 function F:PLAYER_ENTERING_WORLD()
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	if(IsSpellKnown(131474)) then
@@ -232,23 +249,38 @@ function F:PLAYER_ENTERING_WORLD()
 	end
 end
 
+function F:PLAYER_REGEN_DISABLED()  --进入战斗
+	self:UnregisterEvent("PLAYER_EQUIPMENT_CHANGED")
+	self:UnhookWorldFrame()
+end
+
+function F:PLAYER_REGEN_ENABLED() --脱离战斗
+	self:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
+end
+
 function F:PLAYER_EQUIPMENT_CHANGED()
-	if InCombatLockdown() then return end
+	local combat = InCombatLockdown()
+	if combat then 
+		self:UnhookWorldFrame()
+		return;
+	end
 	isPole = IsFishPole()
+	
+	--E:Print(isPole)
+	if not isPole then
+		self:UnhookWorldFrame()
+		return;
+	end
+	
 	if(IsSpellKnown(131474)) then
 		knowFish = true
 	end
-	if not InCombatLockdown() and knowFish and isPole then
+	
+	if not combat and knowFish and isPole then
 		self:HookWorldFrame()
 		UpdateLureInventory()
-		self:RegisterEvent("BAG_UPDATE")
 	else
-		--print("UnHook")
-		ClearOverrideBindings(btn)
-		if self:IsHooked(WorldFrame, "OnMouseDown") then
-			self:Unhook(WorldFrame, "OnMouseDown")
-		end
-		self:UnregisterEvent("BAG_UPDATE")
+		self:UnhookWorldFrame()
 	end
 end
 
@@ -260,6 +292,8 @@ function F:Initialize()
 	weaponSubTypesList = select(7,GetItemInfo(6256))
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
+	self:RegisterEvent("PLAYER_REGEN_DISABLED") --进入战斗
+	self:RegisterEvent("PLAYER_REGEN_ENABLED") --脱离战斗
 end
 
 E:RegisterModule(F:GetName())

@@ -1,4 +1,5 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file='DBM.lua'/>
 	<Script file='other.lua'/>
+	<Script file='NugRunning.lua'/>
 </Ui>

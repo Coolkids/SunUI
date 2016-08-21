@@ -37,15 +37,5 @@ http://git.tukui.org/Elv/elvui
 配置下floatingCombatTextCombatDamage属性 PS:本插件默认会配置这个属性<br/>
 <br/>
 powerbar设置方法<br/>
-ElvUI_SunUI_Module\config\config.lua<br/>
-P["PowerBar"]={    <br/>
-	Open = true,    --开关   <br/>
-	Width = 200,	--宽度   <br/>
-	Height = 5,		--高度   <br/>
-	Fade = true,	--脱离战斗渐隐   <br/>
-	HealthPower = true,    --开启血量/魔法值   <br/>
-	DisableText = true,		--开启血量/魔法值文字 true为隐藏文字 false为开启文字   <br/>
-	HealthPowerPer = true,		--血量百分比化   <br/>
-	ManaPowerPer = true,		--魔法值百分比化    <br/>
-}  <br/>
-<br/>
+/ec内寻找<br/>
+
