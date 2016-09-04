@@ -4,6 +4,7 @@ local addon = CreateFrame("Frame")
 local cata = select(4, GetBuildInfo()) >= 40000
 local mop  = select(4, GetBuildInfo()) >= 50000
 local wod  = select(4, GetBuildInfo()) >= 60000
+local leg  = select(4, GetBuildInfo()) >= 70000
 
 -- Based on the frame list from NDragIt by Nemes.
 -- These frames are hooked on login.
@@ -54,11 +55,7 @@ local frames = {
   ["VideoOptionsFrame"] = false,
   ["AudioOptionsFrame"] = false,
   ["BankFrame"] = false,
-  --["WorldMapTitleButton"] = true,
- -- ["WorldMapPositioningGuide"] = true,
-  --["TicketStatusFrame"] = false,
   ["StaticPopup1"] = false,
-  --["GhostFrame"] = false,
   ["EncounterJournal"] = false, -- only in 4.2
   ["RaidParentFrame"] = false,
   ["TutorialFrame"] = false,
@@ -70,12 +67,17 @@ local frames = {
   ["PVEFrame"] = false, -- dungeon finder + challenges
   ["GuildInviteFrame"] = false,
   ["QuestLogPopupDetailFrame"] = false,
+
+  -- WOD
+  ["AddonList"] = false,
+  ["SplashFrame"] = false,
+
   -- AddOns
   ["LudwigFrame"] = false,
-  ["AddonList"] = false,
+
 }
 
-if not mop then
+if not wod then
   -- Dungeon Finder was changed in 5.0, this would break the new interface
   frames["LFGParentFrame"] = false
   frames["LFDQueueFrame"] = true
@@ -83,7 +85,7 @@ if not mop then
   frames["LFRBrowseFrame"] = true
 end
 
-if wod then
+if leg then
   frames["WorldMapFrame"] = false
   frames["WorldMapTitleButton"] = true
   frames["QuestMapFrame"] = true
@@ -104,13 +106,13 @@ local lodFrames = {
   Blizzard_TrainerUI = { ["ClassTrainerFrame"] = false },
   Blizzard_GuildBankUI = { ["GuildBankFrame"] = false, ["GuildBankEmblemFrame"] = true },
   Blizzard_TimeManager = { ["TimeManagerFrame"] = false },
-  Blizzard_AchievementUI = { ["AchievementFrame"] = false, ["AchievementFrameHeader"] = true, ["AchievementFrameCategoriesContainer"] = "AchievementFrame" },
+  Blizzard_AchievementUI = { ["AchievementFrame"] = false, ["AchievementFrameHeader"] = false,  ["AchievementFrame.searchBox"] = false, ["AchievementFrameCategoriesContainer"] = "AchievementFrame" },
   Blizzard_TokenUI = { ["TokenFrame"] = true },
   Blizzard_ItemSocketingUI = { ["ItemSocketingFrame"] = false },
   --Blizzard_GlyphUI = { ["GlyphFrame"] = true },
   Blizzard_BarbershopUI = { ["BarberShopFrame"] = false },
   Blizzard_Calendar = { ["CalendarFrame"] = false, ["CalendarCreateEventFrame"] = true },
-  Blizzard_GuildUI = { ["GuildFrame"] = false, ["GuildRosterFrame"] = true },
+  Blizzard_GuildUI = { ["GuildFrame"] = false, ["GuildRosterFrame"] = true, ["GuildFrame.TitleMouseover"] = true },
   Blizzard_ReforgingUI = { ["ReforgingFrame"] = false, ["ReforgingFrameInvisibleButton"] = true, ["ReforgingFrame.InvisibleButton"] = true },
   Blizzard_ArchaeologyUI = { ["ArchaeologyFrame"] = false },
   Blizzard_LookingForGuildUI = { ["LookingForGuildFrame"] = false },
@@ -119,14 +121,21 @@ local lodFrames = {
   Blizzard_EncounterJournal = { ["EncounterJournal"] = false }, -- as of 4.3
   Blizzard_GarrisonUI = { ["GarrisonLandingPage"] = false, ["GarrisonLandingPageReport"] = true, ["GarrisonMissionFrame"] = false, ["GarrisonMissionFrame.MissionTab"] = true, ["GarrisonBuildingFrame"] = false, GarrisonRecruiterFrame = false,GarrisonRecruitSelectFrame = false, GarrisonCapacitiveDisplayFrame = false, GarrisonShipyardFrame = false},
 
+  -- New frames in LEG
+  Blizzard_TalkingHeadUI= { ["TalkingHeadFrame"] = false},
+  Blizzard_OrderHallUI= { ["OrderHallMissionFrame"] = false, ["OrderHallMissionFrame.MissionTab"] = true,["OrderHallTalentFrame"] = false},
+  Blizzard_ArtifactUI= { ["ArtifactFrame"] = false},
+
   -- New frames in MoP
   Blizzard_Collections = { ["CollectionsJournal"] = false },
   Blizzard_BlackMarketUI = { ["BlackMarketFrame"] = false }, -- UNTESTED
   Blizzard_ChallengesUI = { ["ChallengesLeaderboardFrame"] = false }, -- UNTESTED
   Blizzard_ItemUpgradeUI = { ["ItemUpgradeFrame"] = false, }, -- UNTESTED
-
-  --Blizzard_PVPUI = { ["PVPUIFrame"] = false },
 }
+
+if not leg then
+  lodFrames["Blizzard_PVPUI"] = { ["PVPUIFrame"] = false }
+end
 
 local parentFrame = {}
 local hooked = {}
@@ -165,73 +174,4 @@ function addon:HookFrames(list)
   for name, child in pairs(list) do
     self:HookFrame(name, child)
   end
-end
-
-function addon:HookFrame(name, moveParent)
-  -- find frame
-  -- name may contain dots for children, e.g. ReforgingFrame.InvisibleButton
-  local frame = _G
-  local s
-  for s in string.gmatch(name, "%w+") do
-    if frame then
-      frame = frame[s]
-    end
-  end
-  -- check if frame was found
-  if frame == _G then
-    frame = nil
-  end
-
-  local parent
-  if frame and not hooked[name] then
-    if moveParent then
-      if type(moveParent) == "string" then
-        parent = _G[moveParent]
-      else
-        parent = frame:GetParent()
-      end
-      if not parent then
-        print("Parent frame not found: " .. name)
-        return
-      end
-      parentFrame[frame] = parent
-    end
-    if parent then
-      parent:SetMovable(true)
-      parent:SetClampedToScreen(false)
-    end
-    frame:EnableMouse(true)
-    frame:SetMovable(true)
-    frame:SetClampedToScreen(false)
-    self:HookScript(frame, "OnMouseDown", MouseDownHandler)
-    self:HookScript(frame, "OnMouseUp", MouseUpHandler)
-    hooked[name] = true
-  end
-end
-
-function addon:HookScript(frame, script, handler)
-  if not frame.GetScript then return end
-  local oldHandler = frame:GetScript(script)
-  if oldHandler then
-    frame:SetScript(script, function(...)
-      handler(...)
-      oldHandler(...)
-    end)
-  else
-    frame:SetScript(script, handler)
-  end
-end
-
-addon:SetScript("OnEvent", function(f, e, ...) f[e](f, ...) end)
-addon:RegisterEvent("PLAYER_LOGIN")
-addon:RegisterEvent("ADDON_LOADED")
-
--- Hook bag frames
--- This is buggy in MoP
-if not mop then
-  hooksecurefunc("ContainerFrame_GenerateFrame", function(frame, size, id)
-    if id <= NUM_BAG_FRAMES or id == KEYRING_CONTAINER then
-      addon:HookFrame(frame:GetName())
-    end
-  end)
 end
