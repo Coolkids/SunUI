@@ -175,3 +175,72 @@ function addon:HookFrames(list)
     self:HookFrame(name, child)
   end
 end
+
+function addon:HookFrame(name, moveParent)
+  -- find frame
+  -- name may contain dots for children, e.g. ReforgingFrame.InvisibleButton
+  local frame = _G
+  local s
+  for s in string.gmatch(name, "%w+") do
+    if frame then
+      frame = frame[s]
+    end
+  end
+  -- check if frame was found
+  if frame == _G then
+    frame = nil
+  end
+
+  local parent
+  if frame and not hooked[name] then
+    if moveParent then
+      if type(moveParent) == "string" then
+        parent = _G[moveParent]
+      else
+        parent = frame:GetParent()
+      end
+      if not parent then
+        print("Parent frame not found: " .. name)
+        return
+      end
+      parentFrame[frame] = parent
+    end
+    if parent then
+      parent:SetMovable(true)
+      parent:SetClampedToScreen(false)
+    end
+    frame:EnableMouse(true)
+    frame:SetMovable(true)
+    frame:SetClampedToScreen(false)
+    self:HookScript(frame, "OnMouseDown", MouseDownHandler)
+    self:HookScript(frame, "OnMouseUp", MouseUpHandler)
+    hooked[name] = true
+  end
+end
+
+function addon:HookScript(frame, script, handler)
+  if not frame.GetScript then return end
+  local oldHandler = frame:GetScript(script)
+  if oldHandler then
+    frame:SetScript(script, function(...)
+      handler(...)
+      oldHandler(...)
+    end)
+  else
+    frame:SetScript(script, handler)
+  end
+end
+
+addon:SetScript("OnEvent", function(f, e, ...) f[e](f, ...) end)
+addon:RegisterEvent("PLAYER_LOGIN")
+addon:RegisterEvent("ADDON_LOADED")
+
+-- Hook bag frames
+-- This is buggy in MoP
+if not leg then
+  hooksecurefunc("ContainerFrame_GenerateFrame", function(frame, size, id)
+    if id <= NUM_BAG_FRAMES or id == KEYRING_CONTAINER then
+      addon:HookFrame(frame:GetName())
+    end
+  end)
+end
