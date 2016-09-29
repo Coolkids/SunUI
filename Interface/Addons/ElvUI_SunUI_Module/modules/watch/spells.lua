@@ -1166,6 +1166,8 @@ ns.watchers ={
 			{ spellID =  48707, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 冰封之韧
 			{ spellID =  48792, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 黑暗援助
+			{ spellID = 101568, unitID = "player", caster = "player", filter = "BUFF" },
 
 			-- 白骨风暴
 			{ spellID = 194844, unitID = "player", caster = "player", filter = "BUFF" },
@@ -1192,6 +1194,8 @@ ns.watchers ={
 			{ spellID = 218100, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 坏疽
 			{ spellID = 216974, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 灵魂收割
+			{ spellID = 215711, unitID = "player", caster = "player", filter = "BUFF" },
 
 			-- 邪能之风
 			{ spellID = 187147, unitID = "player", caster = "player", filter = "BUFF" },
@@ -1233,7 +1237,6 @@ ns.watchers ={
 			{ spellID = 194310, unitID = "target", caster = "player", filter = "DEBUFF" },
 			-- 传染
 			{ spellID = 191728, unitID = "target", caster = "player", filter = "DEBUFF" },
-			-- 传染
 			{ spellID = 191729, unitID = "target", caster = "player", filter = "DEBUFF" },
 			-- 死亡
 			{ spellID = 191730, unitID = "target", caster = "player", filter = "DEBUFF" },
@@ -1285,6 +1288,8 @@ ns.watchers ={
 			{ spellID =  49028, filter = "CD" },
 			-- 符文武器增效
 			{ spellID =  47568, filter = "CD" },
+			-- 天启
+			{ spellID = 220143, filter = "CD" },
 
 			-- 物品
 			-- 手套
@@ -1326,9 +1331,15 @@ ns.watchers ={
 			{ spellID =  227225, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 灵魂残片
 			{ spellID =  203981, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 虹吸能量
+			{ spellID =  218561, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 恶魔之魂
+			{ spellID =  163073, unitID = "player", caster = "player", filter = "BUFF" },
 
 			-- 疾影
 			{ spellID =  212800, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 黑暗
+			{ spellID =  209426, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 混乱之刃
 			{ spellID =  211048, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 虚空行走
@@ -1713,6 +1724,12 @@ ns.watchers ={
 
 			-- 心智 [尤格萨隆]
 			{ spellID =  63050, unitID = "player", caster = "all", filter = "DEBUFF"},
+
+			------------------------------------LEG----------------------------------
+			-- 翡翠梦魇
+			
+			-- 暗夜要塞
+
 			------------------------------------MOP----------------------------------
 			-- 魔古山宝库 896
 			
@@ -2983,12 +3000,6 @@ ns.watchers ={
 			{ spellID =   1044, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 牺牲祝福
 			{ spellID =   6940, unitID = "player", caster = "all",    filter = "BUFF"},
-			-- 强效王者祝福
-			--{ spellID = 203538, unitID = "player", caster = "all",  filter = "BUFF"},
-			-- 强效智慧祝福
-			--{ spellID = 203539, unitID = "player", caster = "all",  filter = "BUFF"},
-			-- 强效力量祝福
-			--{ spellID = 203528, unitID = "player", caster = "all",  filter = "BUFF"},
 			-- 虔诚光环
 			{ spellID =  31821, unitID = "player", caster = "all",    filter = "BUFF"},
 			-- 黑暗
@@ -3153,9 +3164,24 @@ ns.watchers ={
 			-- 传家宝
 			-- 恶魔克星                (力量, 触发)
 			{ spellID = 201405, unitID = "player", caster = "player", filter = "BUFF" },
+			-- 净化火焰                (敏捷, 触发)
+			{ spellID = 201408, unitID = "player", caster = "player", filter = "BUFF" },
 
 
 			-- 暗月卡牌
+
+			-- 暗月卡牌:统御           (爆击, 触发)
+			{ spellID = 191545, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 191546, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 191547, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 191548, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 191549, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 191550, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 191551, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 191552, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 191553, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 191554, unitID = "player", caster = "player", filter = "BUFF" },
+
 			-- 骑士徽章                (爆击, 触发)
 			{ spellID = 162917, unitID = "player", caster = "player", filter = "BUFF" },
 			-- 战争之颅                (爆击, 触发)
@@ -3285,6 +3311,11 @@ ns.watchers ={
 			{ spellID = 126597, unitID = "player", caster = "player", filter = "BUFF" },
 
 			-- 物理力量DPS
+			-------------------------------LEG-----------------------------------------
+			--  科林的冷冻铬银杯垫     (攻强, 触发)
+			{ spellID = 127928, unitID = "player", caster = "player", filter = "BUFF" },
+
+
 			-------------------------------WOD-----------------------------------------
 			-- 熔炉主管的徽记          (溅射, 触发)
 			{ spellID = 177096, unitID = "player", caster = "player", filter = "BUFF" },
