@@ -72,6 +72,9 @@ local frames = {
   ["AddonList"] = false,
   ["SplashFrame"] = false,
 
+  -- LEG
+  ["ObliterumForgeFrame"] = false,
+  
   -- AddOns
   ["LudwigFrame"] = false,
 
