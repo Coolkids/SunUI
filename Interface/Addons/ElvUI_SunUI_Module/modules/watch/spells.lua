@@ -1246,7 +1246,7 @@ ns.watchers ={
 			-- 血之疫病
 			{ spellID =  55078, unitID = "target", caster = "player", filter = "DEBUFF" },
 			-- 血之镜像
-			{ spellID = 206997, unitID = "target", caster = "player", filter = "DEBUFF" },
+			{ spellID = 206977, unitID = "target", caster = "player", filter = "DEBUFF" },
 			-- 鲜血印记
 			{ spellID = 206940, unitID = "target", caster = "player", filter = "DEBUFF" },
 
@@ -1290,6 +1290,9 @@ ns.watchers ={
 			{ spellID =  47568, filter = "CD" },
 			-- 天启
 			{ spellID = 220143, filter = "CD" },
+			-- 黑暗突变
+			{ spellID =  63560, filter = "CD" },
+
 
 			-- 物品
 			-- 手套
@@ -3040,7 +3043,8 @@ ns.watchers ={
 			-- 爆燃冲刺
 			{ spellID = 111400, unitID = "player", caster = "player", filter = "BUFF"},
 
-
+			-- 枯法者指挥官
+			{ spellID = 227261, unitID = "player", caster = "player", filter = "BUFF"},
 			-- 火箭鞋漏油
 			{ spellID =94794, unitID = "player", caster = "player", filter = "DEBUFF"},
 		},
@@ -3314,7 +3318,10 @@ ns.watchers ={
 			-------------------------------LEG-----------------------------------------
 			--  科林的冷冻铬银杯垫     (攻强, 触发)
 			{ spellID = 127928, unitID = "player", caster = "player", filter = "BUFF" },
-
+			-- 安格博达的回忆         (随机, 触发)
+			{ spellID = 214802, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 214803, unitID = "player", caster = "player", filter = "BUFF" },
+			{ spellID = 214807, unitID = "player", caster = "player", filter = "BUFF" },
 
 			-------------------------------WOD-----------------------------------------
 			-- 熔炉主管的徽记          (溅射, 触发)
