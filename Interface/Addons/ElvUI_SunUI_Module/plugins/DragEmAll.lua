@@ -71,9 +71,6 @@ local frames = {
   -- WOD
   ["AddonList"] = false,
   ["SplashFrame"] = false,
-
-  -- LEG
-  ["ObliterumForgeFrame"] = false,
   
   -- AddOns
   ["LudwigFrame"] = false,
@@ -128,7 +125,8 @@ local lodFrames = {
   Blizzard_TalkingHeadUI= { ["TalkingHeadFrame"] = false},
   Blizzard_OrderHallUI= { ["OrderHallMissionFrame"] = false, ["OrderHallMissionFrame.MissionTab"] = true,["OrderHallTalentFrame"] = false},
   Blizzard_ArtifactUI= { ["ArtifactFrame"] = false},
-
+  Blizzard_ObliterumUI = { ["ObliterumForgeFrame"] = false},   --会和Easy_Obliterate插件冲突而无法移动
+  
   -- New frames in MoP
   Blizzard_Collections = { ["CollectionsJournal"] = false },
   Blizzard_BlackMarketUI = { ["BlackMarketFrame"] = false }, -- UNTESTED
