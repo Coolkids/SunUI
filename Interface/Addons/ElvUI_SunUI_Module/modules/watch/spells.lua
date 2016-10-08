@@ -709,7 +709,8 @@ ns.watchers ={
 			{ spellID = 207400, unitID = "target", caster = "player", filter = "BUFF"  },
 
 			-- 烈焰震击
-			{ spellID =   8050, unitID = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID = 188388, unitID = "target", caster = "player", filter = "DEBUFF"},
+			{ spellID = 188389, unitID = "target", caster = "player", filter = "DEBUFF"},
 			-- 冰霜震击
 			{ spellID = 190840, unitID = "target", caster = "player", filter = "DEBUFF"},
 			-- 引雷针
